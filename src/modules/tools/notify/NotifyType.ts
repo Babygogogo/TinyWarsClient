@@ -34,9 +34,6 @@ namespace TwnsNotifyType {
         McrCreateSelfPlayerIndexChanged,
         McrCreatePresetWarRuleIdChanged,
 
-        McrJoinTargetRoomIdChanged,
-        McrJoinedPreviewingRoomIdChanged,
-
         MfrCreateSelfCoIdChanged,
         MfrCreateTeamIndexChanged,
         MfrCreateSelfPlayerIndexChanged,
@@ -204,8 +201,6 @@ namespace TwnsNotifyType {
         MsgMcrGetRoomStaticInfoFailed,
         MsgMcrGetRoomPlayerInfo,
         MsgMcrGetRoomPlayerInfoFailed,
-        MsgMcrGetJoinedRoomIdArray,
-        MsgMcrGetJoinableRoomIdArray,
         MsgMcrExitRoom,
         MsgMcrJoinRoom,
         MsgMcrDeleteRoom,

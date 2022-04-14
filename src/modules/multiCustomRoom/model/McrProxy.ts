@@ -8,7 +8,7 @@
 // import McrJoinModel         from "./McrJoinModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace McrProxy {
+namespace Twns.MultiCustomRoom.McrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
@@ -24,8 +24,6 @@ namespace McrProxy {
             { msgCode: NetMessageCodes.MsgMcrSetSelfSettings,           callback: _onMsgMcrSetSelfSettings },
             { msgCode: NetMessageCodes.MsgMcrGetRoomStaticInfo,         callback: _onMsgMcrGetRoomStaticInfo },
             { msgCode: NetMessageCodes.MsgMcrGetRoomPlayerInfo,         callback: _onMsgMcrGetRoomPlayerInfo },
-            { msgCode: NetMessageCodes.MsgMcrGetJoinableRoomIdArray,    callback: _onMsgMcrGetJoinableRoomIdArray },
-            { msgCode: NetMessageCodes.MsgMcrGetJoinedRoomIdArray,      callback: _onMsgMcrGetJoinedRoomIdArray },
             { msgCode: NetMessageCodes.MsgMcrStartWar,                  callback: _onMsgMcrStartWar },
         ], null);
     }
@@ -177,37 +175,6 @@ namespace McrProxy {
                 McrModel.setRoomPlayerInfo(roomId, data.roomPlayerInfo ?? null);
             }
             Notify.dispatch(NotifyType.MsgMcrGetRoomPlayerInfoFailed, data);
-        }
-    }
-
-    export function reqMcrGetJoinableRoomIdArray(roomFilter: Types.Undefinable<CommonProto.MultiCustomRoom.IMcrRoomFilter>): void {
-        NetManager.send({
-            MsgMcrGetJoinableRoomIdArray: { c: {
-                roomFilter,
-            }, },
-        });
-    }
-    function _onMsgMcrGetJoinableRoomIdArray(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMcrGetJoinableRoomIdArray.IS;
-        if (!data.errorCode) {
-            McrModel.setJoinableRoomIdArray(data.roomIdArray || []);
-            McrJoinModel.updateOnMsgMcrGetJoinableRoomIdArray();
-            Notify.dispatch(NotifyType.MsgMcrGetJoinableRoomIdArray, data);
-        }
-    }
-
-    export function reqMcrGetJoinedRoomIdArray(): void {
-        NetManager.send({
-            MsgMcrGetJoinedRoomIdArray: { c: {
-            }, }
-        });
-    }
-    function _onMsgMcrGetJoinedRoomIdArray(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMcrGetJoinedRoomIdArray.IS;
-        if (!data.errorCode) {
-            McrModel.setJoinedRoomIdArray(data.roomIdArray || []);
-            McrJoinModel.updateOnMsgMcrGetJoinedRoomIdArray();
-            Notify.dispatch(NotifyType.MsgMcrGetJoinedRoomIdArray, data);
         }
     }
 

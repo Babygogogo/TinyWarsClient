@@ -44,9 +44,9 @@ namespace TwnsSpmMainMenuPanel {
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.MsgUserLogout,                       callback: this._onMsgUserLogout },
-                { type: NotifyType.MsgMcrGetJoinedRoomIdArray,          callback: this._onMsgMcrGetJoinedRoomIdArray },
+                { type: NotifyType.MsgMcrGetRoomPlayerInfo,             callback: this._onNotifyMsgMcrGetRoomPlayerInfo },
                 { type: NotifyType.MsgMfrGetJoinedRoomIdArray,          callback: this._onMsgMfrGetJoinedRoomIdArray },
-                { type: NotifyType.MsgCcrGetJoinedRoomIdArray,         callback: this._onMsgCcrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgCcrGetJoinedRoomIdArray,          callback: this._onMsgCcrGetJoinedRoomInfoList },
                 { type: NotifyType.MsgMrrGetJoinedRoomIdArray,          callback: this._onMsgMrrGetMyRoomPublicInfoList },
                 { type: NotifyType.MsgMpwCommonGetWarProgressInfo,      callback: this._onMsgMpwCommonGetWarProgressInfo },
                 { type: NotifyType.MsgMpwWatchGetRequestedWarIdArray,   callback: this._onMsgMpwWatchGetRequestedWarIdArray },
@@ -97,7 +97,7 @@ namespace TwnsSpmMainMenuPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmWarListPanel, void 0);
         }
 
-        private _onMsgMcrGetJoinedRoomIdArray(): void {
+        private _onNotifyMsgMcrGetRoomPlayerInfo(): void {
             this._updateBtnMultiPlayer();
         }
         private _onMsgMfrGetJoinedRoomIdArray(): void {

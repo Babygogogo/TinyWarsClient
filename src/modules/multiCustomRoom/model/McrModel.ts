@@ -14,10 +14,12 @@
 // import WarMapModel                          from "../../warMap/model/WarMapModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace McrModel {
+namespace Twns.MultiCustomRoom.McrModel {
     import IMcrRoomStaticInfo                       = CommonProto.MultiCustomRoom.IMcrRoomStaticInfo;
     import IMcrRoomPlayerInfo                       = CommonProto.MultiCustomRoom.IMcrRoomPlayerInfo;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
+    import McrRoomFilter                            = Types.McrRoomFilter;
+    import ConfigManager                            = Config.ConfigManager;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
@@ -26,12 +28,9 @@ namespace McrModel {
         reqData : (roomId: number) => McrProxy.reqMcrGetRoomStaticInfo(roomId),
     });
     const _roomPlayerInfoAccessor = Helpers.createCachedDataAccessor<number, IMcrRoomStaticInfo>({
-        dataExpireTime  : 30,
+        // dataExpireTime  : 30,
         reqData         : (roomId: number) => McrProxy.reqMcrGetRoomPlayerInfo(roomId),
     });
-
-    const _joinableRoomIdSet    = new Set<number>();
-    const _joinedRoomIdSet      = new Set<number>();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for rooms.
@@ -50,28 +49,70 @@ namespace McrModel {
         _roomPlayerInfoAccessor.setData(roomId, info);
     }
 
-    export function setJoinableRoomIdArray(roomIdArray: number[]): void {
-        _joinableRoomIdSet.clear();
-        for (const roomId of roomIdArray || []) {
-            _joinableRoomIdSet.add(roomId);
+    export async function getUnjoinedRoomIdSet(roomFilter: McrRoomFilter | null): Promise<Set<number>> {
+        const unjoinedRoomIdArray   : number[] = [];
+        const selfUserId            = UserModel.getSelfUserId();
+        if (selfUserId == null) {
+            return new Set();
         }
-    }
-    export function getUnjoinedRoomIdSet(): Set<number> {
-        return _joinableRoomIdSet;
-    }
 
-    export function setJoinedRoomIdArray(roomIdArray: number[]): void {
-        _joinedRoomIdSet.clear();
-        for (const roomId of roomIdArray || []) {
-            _joinedRoomIdSet.add(roomId);
+        const allRoomIdArray        = _roomPlayerInfoAccessor.getRequestedKeyArray();
+        const roomPlayerInfoArray   = Helpers.getNonNullElements(await Promise.all(allRoomIdArray.map(v => getRoomPlayerInfo(v))));
+        for (const roomPlayerInfo of roomPlayerInfoArray) {
+            const playerDataList = roomPlayerInfo.playerDataList ?? [];
+            if ((playerDataList.length < Helpers.getExisted(roomPlayerInfo.playersCountUnneutral))  &&
+                (playerDataList.every(v => v.userId !== selfUserId))
+            ) {
+                unjoinedRoomIdArray.push(Helpers.getExisted(roomPlayerInfo.roomId));
+            }
         }
+
+        return (roomFilter == null)
+            ? new Set(unjoinedRoomIdArray)
+            : getFilteredRoomIdSet(unjoinedRoomIdArray, roomFilter);
     }
-    export function getJoinedRoomIdSet(): Set<number> {
-        return _joinedRoomIdSet;
+    export async function getJoinedRoomIdSet(roomFilter: McrRoomFilter | null): Promise<Set<number>> {
+        const joinedRoomIdArray : number[] = [];
+        const selfUserId        = UserModel.getSelfUserId();
+        if (selfUserId == null) {
+            return new Set();
+        }
+
+        const allRoomIdArray        = _roomPlayerInfoAccessor.getRequestedKeyArray();
+        const roomPlayerInfoArray   = Helpers.getNonNullElements(await Promise.all(allRoomIdArray.map(v => getRoomPlayerInfo(v))));
+        for (const roomPlayerInfo of roomPlayerInfoArray) {
+            if (roomPlayerInfo.playerDataList?.some(v => v.userId === selfUserId)) {
+                joinedRoomIdArray.push(Helpers.getExisted(roomPlayerInfo.roomId));
+            }
+        }
+
+        return (roomFilter == null)
+            ? new Set(joinedRoomIdArray)
+            : getFilteredRoomIdSet(joinedRoomIdArray, roomFilter);
+    }
+    async function getFilteredRoomIdSet(roomIdArray: number[], filter: McrRoomFilter): Promise<Set<number>> {
+        const [roomStaticInfoArray, roomPlayerInfoArray] = await Promise.all([
+            await Promise.all(roomIdArray.map(v => getRoomStaticInfo(v))),
+            await Promise.all(roomIdArray.map(v => getRoomPlayerInfo(v))),
+        ]);
+        const filteredRoomIdSet = new Set<number>();
+        for (let i = 0; i < roomIdArray.length; ++i) {
+            const roomId = roomIdArray[i];
+            if (await checkIsMeetFilter({
+                roomId,
+                roomStaticInfo  : roomStaticInfoArray[i],
+                roomPlayerInfo  : roomPlayerInfoArray[i],
+                filter,
+            })) {
+                filteredRoomIdSet.add(roomId);
+            }
+        }
+
+        return filteredRoomIdSet;
     }
 
     export async function checkIsRed(): Promise<boolean> {
-        for (const roomId of getJoinedRoomIdSet()) {
+        for (const roomId of await getJoinedRoomIdSet(null)) {
             if (await checkIsRedForRoom(roomId)) {
                 return true;
             }
@@ -158,7 +199,7 @@ namespace McrModel {
         }
 
         return {
-            gameConfig              : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+            gameConfig              : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
             playersCountUnneutral,
             roomOwnerPlayerIndex    : Helpers.getExisted(roomPlayerInfo.ownerPlayerIndex),
             callbackOnExitRoom      : () => {
@@ -290,10 +331,119 @@ namespace McrModel {
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
         const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         return {
-            gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+            gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
             warRule,
             warType     : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.McwFog : Types.WarType.McwStd,
         };
+    }
+
+    async function checkIsMeetFilter({ roomId, roomPlayerInfo, roomStaticInfo, filter }: {
+        roomId          : number;
+        roomPlayerInfo  : IMcrRoomPlayerInfo | null;
+        roomStaticInfo  : IMcrRoomStaticInfo | null;
+        filter          : Types.Undefinable<McrRoomFilter>;
+    }): Promise<boolean> {
+        if (roomPlayerInfo == null) {
+            return false;
+        }
+
+        if (filter == null) {
+            return true;
+        }
+
+        {
+            const filterRoomId = filter.roomId;
+            if ((filterRoomId != null) && (roomId !== filterRoomId)) {
+                return false;
+            }
+        }
+
+        const warRule = roomStaticInfo?.settingsForCommon?.warRule;
+        {
+            const filterHasFog = filter.hasFog;
+            if ((filterHasFog != null) && ((!!warRule?.ruleForGlobalParams?.hasFogByDefault) !== filterHasFog)) {
+                return false;
+            }
+        }
+
+        const playerDataList = roomPlayerInfo.playerDataList ?? [];
+        {
+            const filterUserIdInRoom = filter.userIdInRoom;
+            if ((filterUserIdInRoom != null) && (!playerDataList.some(v => v.userId === filterUserIdInRoom))) {
+                return false;
+            }
+        }
+
+        {
+            const filterUserIdNotInRoom = filter.userIdNotInRoom;
+            if ((filterUserIdNotInRoom != null) && (playerDataList.some(v => v.userId === filterUserIdNotInRoom))) {
+                return false;
+            }
+        }
+
+        {
+            const filterCoName = filter.coName?.trim();
+            if (filterCoName) {
+                const configVersion = roomStaticInfo?.settingsForCommon?.configVersion;
+                if (configVersion == null) {
+                    return false;
+                }
+
+                const gameConfig = await ConfigManager.getGameConfig(configVersion);
+                if (gameConfig == null) {
+                    return false;
+                }
+
+                const lowerCaseName = filterCoName.toLowerCase();
+                if (!playerDataList.some(v => {
+                    const coId = v.coId;
+                    const name = coId == null ? null : gameConfig.getCoBasicCfg(coId)?.name;
+                    return (name != null) && (name.toLowerCase().includes(lowerCaseName));
+                })) {
+                    return false;
+                }
+            }
+        }
+
+        {
+            const filterMapName = filter.mapName?.trim();
+            if (filterMapName) {
+                const mapId = roomStaticInfo?.settingsForMcw?.mapId;
+                if (mapId == null) {
+                    return false;
+                }
+
+                const mapRawData    = await WarMapModel.getRawData(mapId);
+                const lowerCaseName = filterMapName.toLowerCase();
+                if (!(mapRawData?.mapNameArray || []).some(v => {
+                    const name = v.text;
+                    return (!!name) && (name.toLowerCase().includes(lowerCaseName));
+                })) {
+                    return false;
+                }
+            }
+        }
+
+        {
+            const filterUserNickname = filter.userNickname?.trim();
+            if (filterUserNickname) {
+                const lowerCaseName = filterUserNickname.toLowerCase();
+                let hasPlayer       = false;
+                for (const playerInfo of playerDataList) {
+                    const userId    = playerInfo.userId;
+                    const nickname  = (userId == null ? null : await UserModel.getUserBriefInfo(userId))?.nickname;
+                    if ((nickname != null) && (nickname.toLowerCase().includes(lowerCaseName))) {
+                        hasPlayer = true;
+                        break;
+                    }
+                }
+                if (!hasPlayer) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
 

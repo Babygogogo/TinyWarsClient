@@ -6,7 +6,7 @@ namespace TwnsLobbyModel {
             Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars(),
             Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars(),
             Twns.MultiPlayerWar.MpwModel.checkIsRedForMyCcwWars(),
-            McrModel.checkIsRed(),
+            Twns.MultiCustomRoom.McrModel.checkIsRed(),
             MfrModel.checkIsRed(),
             CcrModel.checkIsRed(),
             WwModel.checkIsRed(),
@@ -23,7 +23,7 @@ namespace TwnsLobbyModel {
     export async function checkIsRedForMultiCustomMode(): Promise<boolean> {
         return Helpers.checkIsAnyPromiseTrue([
             Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars(),
-            McrModel.checkIsRed(),
+            Twns.MultiCustomRoom.McrModel.checkIsRed(),
         ]);
     }
 

@@ -124,7 +124,7 @@ namespace TwnsMcrCreateSettingsPanel {
         }
         private _onTouchedBtnConfirm(): void {
             const data = McrCreateModel.getData();
-            McrProxy.reqCreateRoom(data);
+            Twns.MultiCustomRoom.McrProxy.reqCreateRoom(data);
 
             this._btnConfirm.enabled = false;
             this._resetTimeoutForBtnConfirm();

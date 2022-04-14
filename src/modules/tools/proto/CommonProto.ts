@@ -23032,6 +23032,9 @@ declare namespace CommonProto {
 
             /** McrRoomPlayerInfo playerDataList */
             playerDataList?: (CommonProto.Structure.IDataForPlayerInRoom[]|null);
+
+            /** McrRoomPlayerInfo playersCountUnneutral */
+            playersCountUnneutral?: (number|null);
         }
 
         /** Represents a McrRoomPlayerInfo. */
@@ -23051,6 +23054,9 @@ declare namespace CommonProto {
 
             /** McrRoomPlayerInfo playerDataList. */
             public playerDataList: CommonProto.Structure.IDataForPlayerInRoom[];
+
+            /** McrRoomPlayerInfo playersCountUnneutral. */
+            public playersCountUnneutral: number;
 
             /**
              * Creates a new McrRoomPlayerInfo instance using the specified properties.
@@ -23575,6 +23581,9 @@ declare namespace CommonProto {
 
             /** MfrRoomPlayerInfo playerDataList */
             playerDataList?: (CommonProto.Structure.IDataForPlayerInRoom[]|null);
+
+            /** MfrRoomPlayerInfo playersCountUnneutral */
+            playersCountUnneutral?: (number|null);
         }
 
         /** Represents a MfrRoomPlayerInfo. */
@@ -23594,6 +23603,9 @@ declare namespace CommonProto {
 
             /** MfrRoomPlayerInfo playerDataList. */
             public playerDataList: CommonProto.Structure.IDataForPlayerInRoom[];
+
+            /** MfrRoomPlayerInfo playersCountUnneutral. */
+            public playersCountUnneutral: number;
 
             /**
              * Creates a new MfrRoomPlayerInfo instance using the specified properties.
@@ -24136,6 +24148,9 @@ declare namespace CommonProto {
 
             /** CcrRoomPlayerInfo playerDataList */
             playerDataList?: (CommonProto.Structure.IDataForPlayerInRoom[]|null);
+
+            /** CcrRoomPlayerInfo playersCountUnneutral */
+            playersCountUnneutral?: (number|null);
         }
 
         /** Represents a CcrRoomPlayerInfo. */
@@ -24155,6 +24170,9 @@ declare namespace CommonProto {
 
             /** CcrRoomPlayerInfo playerDataList. */
             public playerDataList: CommonProto.Structure.IDataForPlayerInRoom[];
+
+            /** CcrRoomPlayerInfo playersCountUnneutral. */
+            public playersCountUnneutral: number;
 
             /**
              * Creates a new CcrRoomPlayerInfo instance using the specified properties.
@@ -28688,12 +28706,6 @@ declare namespace CommonProto {
             /** MessageContainer MsgMcrStartWar */
             MsgMcrStartWar?: (CommonProto.NetMessage.IMsgMcrStartWar|null);
 
-            /** MessageContainer MsgMcrGetJoinedRoomIdArray */
-            MsgMcrGetJoinedRoomIdArray?: (CommonProto.NetMessage.IMsgMcrGetJoinedRoomIdArray|null);
-
-            /** MessageContainer MsgMcrGetJoinableRoomIdArray */
-            MsgMcrGetJoinableRoomIdArray?: (CommonProto.NetMessage.IMsgMcrGetJoinableRoomIdArray|null);
-
             /** MessageContainer MsgMcrGetRoomStaticInfo */
             MsgMcrGetRoomStaticInfo?: (CommonProto.NetMessage.IMsgMcrGetRoomStaticInfo|null);
 
@@ -29081,12 +29093,6 @@ declare namespace CommonProto {
 
             /** MessageContainer MsgMcrStartWar. */
             public MsgMcrStartWar?: (CommonProto.NetMessage.IMsgMcrStartWar|null);
-
-            /** MessageContainer MsgMcrGetJoinedRoomIdArray. */
-            public MsgMcrGetJoinedRoomIdArray?: (CommonProto.NetMessage.IMsgMcrGetJoinedRoomIdArray|null);
-
-            /** MessageContainer MsgMcrGetJoinableRoomIdArray. */
-            public MsgMcrGetJoinableRoomIdArray?: (CommonProto.NetMessage.IMsgMcrGetJoinableRoomIdArray|null);
 
             /** MessageContainer MsgMcrGetRoomStaticInfo. */
             public MsgMcrGetRoomStaticInfo?: (CommonProto.NetMessage.IMsgMcrGetRoomStaticInfo|null);
@@ -45182,285 +45188,6 @@ declare namespace CommonProto {
             }
         }
 
-        /** Properties of a MsgMcrGetJoinedRoomIdArray. */
-        interface IMsgMcrGetJoinedRoomIdArray {
-
-            /** MsgMcrGetJoinedRoomIdArray c */
-            c?: (CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.IC|null);
-
-            /** MsgMcrGetJoinedRoomIdArray s */
-            s?: (CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.IS|null);
-        }
-
-        /** Represents a MsgMcrGetJoinedRoomIdArray. */
-        class MsgMcrGetJoinedRoomIdArray implements IMsgMcrGetJoinedRoomIdArray {
-
-            /**
-             * Constructs a new MsgMcrGetJoinedRoomIdArray.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: CommonProto.NetMessage.IMsgMcrGetJoinedRoomIdArray);
-
-            /** MsgMcrGetJoinedRoomIdArray c. */
-            public c?: (CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.IC|null);
-
-            /** MsgMcrGetJoinedRoomIdArray s. */
-            public s?: (CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.IS|null);
-
-            /**
-             * Creates a new MsgMcrGetJoinedRoomIdArray instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns MsgMcrGetJoinedRoomIdArray instance
-             */
-            public static create(properties?: CommonProto.NetMessage.IMsgMcrGetJoinedRoomIdArray): CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray;
-
-            /**
-             * Encodes the specified MsgMcrGetJoinedRoomIdArray message. Does not implicitly {@link CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.verify|verify} messages.
-             * @param message MsgMcrGetJoinedRoomIdArray message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: CommonProto.NetMessage.IMsgMcrGetJoinedRoomIdArray, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified MsgMcrGetJoinedRoomIdArray message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.verify|verify} messages.
-             * @param message MsgMcrGetJoinedRoomIdArray message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: CommonProto.NetMessage.IMsgMcrGetJoinedRoomIdArray, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a MsgMcrGetJoinedRoomIdArray message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns MsgMcrGetJoinedRoomIdArray
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray;
-
-            /**
-             * Decodes a MsgMcrGetJoinedRoomIdArray message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns MsgMcrGetJoinedRoomIdArray
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray;
-
-            /**
-             * Verifies a MsgMcrGetJoinedRoomIdArray message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a MsgMcrGetJoinedRoomIdArray message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns MsgMcrGetJoinedRoomIdArray
-             */
-            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray;
-
-            /**
-             * Creates a plain object from a MsgMcrGetJoinedRoomIdArray message. Also converts values to other types if specified.
-             * @param message MsgMcrGetJoinedRoomIdArray
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this MsgMcrGetJoinedRoomIdArray to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        namespace MsgMcrGetJoinedRoomIdArray {
-
-            /** Properties of a C. */
-            interface IC {
-            }
-
-            /** Represents a C. */
-            class C implements IC {
-
-                /**
-                 * Constructs a new C.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.IC);
-
-                /**
-                 * Creates a new C instance using the specified properties.
-                 * @param [properties] Properties to set
-                 * @returns C instance
-                 */
-                public static create(properties?: CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.IC): CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.C;
-
-                /**
-                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.C.verify|verify} messages.
-                 * @param message C message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                public static encode(message: CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
-
-                /**
-                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.C.verify|verify} messages.
-                 * @param message C message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                public static encodeDelimited(message: CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
-
-                /**
-                 * Decodes a C message from the specified reader or buffer.
-                 * @param reader Reader or buffer to decode from
-                 * @param [length] Message length if known beforehand
-                 * @returns C
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {protobuf.util.ProtocolError} If required fields are missing
-                 */
-                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.C;
-
-                /**
-                 * Decodes a C message from the specified reader or buffer, length delimited.
-                 * @param reader Reader or buffer to decode from
-                 * @returns C
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {protobuf.util.ProtocolError} If required fields are missing
-                 */
-                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.C;
-
-                /**
-                 * Verifies a C message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a C message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns C
-                 */
-                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.C;
-
-                /**
-                 * Creates a plain object from a C message. Also converts values to other types if specified.
-                 * @param message C
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.C, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this C to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a S. */
-            interface IS {
-
-                /** S errorCode */
-                errorCode?: (number|null);
-
-                /** S roomIdArray */
-                roomIdArray?: (number[]|null);
-            }
-
-            /** Represents a S. */
-            class S implements IS {
-
-                /**
-                 * Constructs a new S.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.IS);
-
-                /** S errorCode. */
-                public errorCode: number;
-
-                /** S roomIdArray. */
-                public roomIdArray: number[];
-
-                /**
-                 * Creates a new S instance using the specified properties.
-                 * @param [properties] Properties to set
-                 * @returns S instance
-                 */
-                public static create(properties?: CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.IS): CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.S;
-
-                /**
-                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.S.verify|verify} messages.
-                 * @param message S message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                public static encode(message: CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-                /**
-                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.S.verify|verify} messages.
-                 * @param message S message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                public static encodeDelimited(message: CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-                /**
-                 * Decodes a S message from the specified reader or buffer.
-                 * @param reader Reader or buffer to decode from
-                 * @param [length] Message length if known beforehand
-                 * @returns S
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {protobuf.util.ProtocolError} If required fields are missing
-                 */
-                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.S;
-
-                /**
-                 * Decodes a S message from the specified reader or buffer, length delimited.
-                 * @param reader Reader or buffer to decode from
-                 * @returns S
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {protobuf.util.ProtocolError} If required fields are missing
-                 */
-                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.S;
-
-                /**
-                 * Verifies a S message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a S message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns S
-                 */
-                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.S;
-
-                /**
-                 * Creates a plain object from a S message. Also converts values to other types if specified.
-                 * @param message S
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: CommonProto.NetMessage.MsgMcrGetJoinedRoomIdArray.S, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this S to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-        }
-
         /** Properties of a MsgMcrGetRoomStaticInfo. */
         interface IMsgMcrGetRoomStaticInfo {
 
@@ -46034,291 +45761,6 @@ declare namespace CommonProto {
                  * @returns Plain object
                  */
                 public static toObject(message: CommonProto.NetMessage.MsgMcrGetRoomPlayerInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this S to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-        }
-
-        /** Properties of a MsgMcrGetJoinableRoomIdArray. */
-        interface IMsgMcrGetJoinableRoomIdArray {
-
-            /** MsgMcrGetJoinableRoomIdArray c */
-            c?: (CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.IC|null);
-
-            /** MsgMcrGetJoinableRoomIdArray s */
-            s?: (CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.IS|null);
-        }
-
-        /** Represents a MsgMcrGetJoinableRoomIdArray. */
-        class MsgMcrGetJoinableRoomIdArray implements IMsgMcrGetJoinableRoomIdArray {
-
-            /**
-             * Constructs a new MsgMcrGetJoinableRoomIdArray.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: CommonProto.NetMessage.IMsgMcrGetJoinableRoomIdArray);
-
-            /** MsgMcrGetJoinableRoomIdArray c. */
-            public c?: (CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.IC|null);
-
-            /** MsgMcrGetJoinableRoomIdArray s. */
-            public s?: (CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.IS|null);
-
-            /**
-             * Creates a new MsgMcrGetJoinableRoomIdArray instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns MsgMcrGetJoinableRoomIdArray instance
-             */
-            public static create(properties?: CommonProto.NetMessage.IMsgMcrGetJoinableRoomIdArray): CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray;
-
-            /**
-             * Encodes the specified MsgMcrGetJoinableRoomIdArray message. Does not implicitly {@link CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.verify|verify} messages.
-             * @param message MsgMcrGetJoinableRoomIdArray message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: CommonProto.NetMessage.IMsgMcrGetJoinableRoomIdArray, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified MsgMcrGetJoinableRoomIdArray message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.verify|verify} messages.
-             * @param message MsgMcrGetJoinableRoomIdArray message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: CommonProto.NetMessage.IMsgMcrGetJoinableRoomIdArray, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a MsgMcrGetJoinableRoomIdArray message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns MsgMcrGetJoinableRoomIdArray
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray;
-
-            /**
-             * Decodes a MsgMcrGetJoinableRoomIdArray message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns MsgMcrGetJoinableRoomIdArray
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray;
-
-            /**
-             * Verifies a MsgMcrGetJoinableRoomIdArray message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a MsgMcrGetJoinableRoomIdArray message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns MsgMcrGetJoinableRoomIdArray
-             */
-            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray;
-
-            /**
-             * Creates a plain object from a MsgMcrGetJoinableRoomIdArray message. Also converts values to other types if specified.
-             * @param message MsgMcrGetJoinableRoomIdArray
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this MsgMcrGetJoinableRoomIdArray to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        namespace MsgMcrGetJoinableRoomIdArray {
-
-            /** Properties of a C. */
-            interface IC {
-
-                /** C roomFilter */
-                roomFilter?: (CommonProto.MultiCustomRoom.IMcrRoomFilter|null);
-            }
-
-            /** Represents a C. */
-            class C implements IC {
-
-                /**
-                 * Constructs a new C.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.IC);
-
-                /** C roomFilter. */
-                public roomFilter?: (CommonProto.MultiCustomRoom.IMcrRoomFilter|null);
-
-                /**
-                 * Creates a new C instance using the specified properties.
-                 * @param [properties] Properties to set
-                 * @returns C instance
-                 */
-                public static create(properties?: CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.IC): CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.C;
-
-                /**
-                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.C.verify|verify} messages.
-                 * @param message C message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                public static encode(message: CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
-
-                /**
-                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.C.verify|verify} messages.
-                 * @param message C message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                public static encodeDelimited(message: CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
-
-                /**
-                 * Decodes a C message from the specified reader or buffer.
-                 * @param reader Reader or buffer to decode from
-                 * @param [length] Message length if known beforehand
-                 * @returns C
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {protobuf.util.ProtocolError} If required fields are missing
-                 */
-                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.C;
-
-                /**
-                 * Decodes a C message from the specified reader or buffer, length delimited.
-                 * @param reader Reader or buffer to decode from
-                 * @returns C
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {protobuf.util.ProtocolError} If required fields are missing
-                 */
-                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.C;
-
-                /**
-                 * Verifies a C message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a C message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns C
-                 */
-                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.C;
-
-                /**
-                 * Creates a plain object from a C message. Also converts values to other types if specified.
-                 * @param message C
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.C, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this C to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a S. */
-            interface IS {
-
-                /** S errorCode */
-                errorCode?: (number|null);
-
-                /** S roomIdArray */
-                roomIdArray?: (number[]|null);
-            }
-
-            /** Represents a S. */
-            class S implements IS {
-
-                /**
-                 * Constructs a new S.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.IS);
-
-                /** S errorCode. */
-                public errorCode: number;
-
-                /** S roomIdArray. */
-                public roomIdArray: number[];
-
-                /**
-                 * Creates a new S instance using the specified properties.
-                 * @param [properties] Properties to set
-                 * @returns S instance
-                 */
-                public static create(properties?: CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.IS): CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.S;
-
-                /**
-                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.S.verify|verify} messages.
-                 * @param message S message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                public static encode(message: CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-                /**
-                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.S.verify|verify} messages.
-                 * @param message S message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                public static encodeDelimited(message: CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-                /**
-                 * Decodes a S message from the specified reader or buffer.
-                 * @param reader Reader or buffer to decode from
-                 * @param [length] Message length if known beforehand
-                 * @returns S
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {protobuf.util.ProtocolError} If required fields are missing
-                 */
-                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.S;
-
-                /**
-                 * Decodes a S message from the specified reader or buffer, length delimited.
-                 * @param reader Reader or buffer to decode from
-                 * @returns S
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {protobuf.util.ProtocolError} If required fields are missing
-                 */
-                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.S;
-
-                /**
-                 * Verifies a S message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a S message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns S
-                 */
-                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.S;
-
-                /**
-                 * Creates a plain object from a S message. Also converts values to other types if specified.
-                 * @param message S
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: CommonProto.NetMessage.MsgMcrGetJoinableRoomIdArray.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this S to JSON.

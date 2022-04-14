@@ -303,7 +303,7 @@ namespace TwnsChatPanel {
                 ++indexForSort;
             }
             for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.McrRoom)) {
-                if (await McrModel.getRoomStaticInfo(toRoomId)) {
+                if (await Twns.MultiCustomRoom.McrModel.getRoomStaticInfo(toRoomId)) {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
                         panel       : this,
@@ -613,7 +613,7 @@ namespace TwnsChatPanel {
             } else if (toCategory === ChatCategory.McrRoom) {
                 labelType.text = `${Lang.getText(LangTextType.B0443)} #${toTarget}`;
                 labelName.text = ``;
-                McrModel.getRoomStaticInfo(toTarget).then(async (v) => {
+                Twns.MultiCustomRoom.McrModel.getRoomStaticInfo(toTarget).then(async (v) => {
                     if (v == null) {
                         labelName.text = ``;
                     } else {

@@ -101,9 +101,9 @@ namespace TwnsPanelConfig {
         McrCreateMapListPanel               : PanelConfig<TwnsMcrCreateMapListPanel.OpenData>;
         McrCreateSearchMapPanel             : PanelConfig<TwnsMcrCreateSearchMapPanel.OpenData>;
         McrCreateSettingsPanel              : PanelConfig<TwnsMcrCreateSettingsPanel.OpenData>;
-        McrJoinRoomListPanel                : PanelConfig<TwnsMcrJoinRoomListPanel.OpenData>;
+        McrJoinRoomListPanel                : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrJoinRoomListPanel>;
         McrMainMenuPanel                    : PanelConfig<TwnsMcrMainMenuPanel.OpenData>;
-        McrMyRoomListPanel                  : PanelConfig<TwnsMcrMyRoomListPanel.OpenData>;
+        McrMyRoomListPanel                  : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrMyRoomListPanel>;
         McrRoomInfoPanel                    : PanelConfig<TwnsMcrRoomInfoPanel.OpenData>;
         McrSearchRoomPanel                  : PanelConfig<TwnsMcrSearchRoomPanel.OpenData>;
 
@@ -795,7 +795,7 @@ namespace TwnsPanelConfig {
             },
 
             McrJoinRoomListPanel: {
-                cls         : TwnsMcrJoinRoomListPanel?.McrJoinRoomListPanel,
+                cls         : Twns.MultiCustomRoom?.McrJoinRoomListPanel,
                 skinName    : `resource/skins/multiCustomRoom/McrJoinRoomListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -809,7 +809,7 @@ namespace TwnsPanelConfig {
             },
 
             McrMyRoomListPanel: {
-                cls         : TwnsMcrMyRoomListPanel?.McrMyRoomListPanel,
+                cls         : Twns.MultiCustomRoom?.McrMyRoomListPanel,
                 skinName    : `resource/skins/multiCustomRoom/McrMyRoomListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,

@@ -66,17 +66,19 @@ namespace TwnsMcrSearchRoomPanel {
         }
 
         private _onTouchedBtnReset(): void {
-            McrProxy.reqMcrGetJoinableRoomIdArray(null);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrJoinRoomListPanel, { filter: null });
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
-            McrProxy.reqMcrGetJoinableRoomIdArray({
-                roomId          : getNumber(this._inputReplayId.text),
-                mapName         : this._inputMapName.text || null,
-                userNickname    : this._inputUserNickname.text || null,
-                coName          : this._inputCoName.text || null,
-                hasFog          : this._hasFog,
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrJoinRoomListPanel, {
+                filter  : {
+                    roomId          : getNumber(this._inputReplayId.text),
+                    mapName         : this._inputMapName.text || null,
+                    userNickname    : this._inputUserNickname.text || null,
+                    coName          : this._inputCoName.text || null,
+                    hasFog          : this._hasFog,
+                },
             });
             this.close();
         }

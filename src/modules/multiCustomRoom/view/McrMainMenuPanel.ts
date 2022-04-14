@@ -59,7 +59,6 @@ namespace TwnsMcrMainMenuPanel {
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.MsgUserLogout,                       callback: this._onNotifyMsgUserLogout },
-                { type: NotifyType.MsgMcrGetJoinedRoomIdArray,          callback: this._onNotifyMsgMcrGetJoinedRoomIdArray },
                 { type: NotifyType.MsgMcrGetRoomPlayerInfo,             callback: this._onNotifyMsgMcrGetRoomPlayerInfo },
                 { type: NotifyType.MsgMcrGetRoomStaticInfo,             callback: this._onNotifyMsgMcrGetRoomStaticInfo },
                 { type: NotifyType.MsgMfrGetJoinedRoomIdArray,          callback: this._onMsgMfrGetJoinedRoomIdArray },
@@ -97,7 +96,7 @@ namespace TwnsMcrMainMenuPanel {
             this.close();
             TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
             TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrJoinRoomListPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrJoinRoomListPanel, { filter: null });
         }
         private _onTouchedBtnMyRoom(): void {
             this.close();
@@ -132,9 +131,6 @@ namespace TwnsMcrMainMenuPanel {
 
         private _onNotifyMsgUserLogout(): void {
             this.close();
-        }
-        private _onNotifyMsgMcrGetJoinedRoomIdArray(): void {
-            this._updateBtnMultiPlayer();
         }
         private _onNotifyMsgMcrGetRoomPlayerInfo(): void {
             this._updateBtnMultiPlayer();
@@ -284,7 +280,7 @@ namespace TwnsMcrMainMenuPanel {
         }
 
         private async _updateBtnMyRoom(): Promise<void> {
-            this._btnMyRoom.setRedVisible(await McrModel.checkIsRed());
+            this._btnMyRoom.setRedVisible(await Twns.MultiCustomRoom.McrModel.checkIsRed());
         }
 
         private async _updateBtnContinueWar(): Promise<void> {
