@@ -641,7 +641,7 @@ namespace TwnsCommonDamageCalculatorPanel {
             const counterDamageDict = new Map<number, { range: DamageRange | null, possibility: number }>();
             for (const info of revisedAttackDamageInfoArray) {
                 const unitHp        = Math.max(calculatorData.defenderData.unitHp - info.damage, 0);
-                const normalizedHp  = WarCommonHelpers.getNormalizedHp(unitHp);
+                const normalizedHp  = Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp);
                 if (counterDamageDict.has(normalizedHp)) {
                     Helpers.getExisted(counterDamageDict.get(normalizedHp)).possibility += info.possibility;
                     continue;
@@ -919,7 +919,7 @@ namespace TwnsCommonDamageCalculatorPanel {
     function getTileDefenseAmountForUnit(gameConfig: GameConfig, unitType: UnitType, unitHp: number, tileType: TileType): number {
         const tileTemplateCfg = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(tileType));
         return gameConfig.checkIsUnitTypeInCategory(unitType, tileTemplateCfg.defenseUnitCategory)
-            ? tileTemplateCfg.defenseAmount * WarCommonHelpers.getNormalizedHp(unitHp) / WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp)
+            ? tileTemplateCfg.defenseAmount * Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp) / Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp)
             : 0;
     }
     function getCoSkillIdArray(gameConfig: GameConfig, coId: number, skillType: CoSkillType | null): number[] {
@@ -1155,7 +1155,7 @@ namespace TwnsCommonDamageCalculatorPanel {
         const defenseBonusMultiplier    = getDefenseBonusMultiplier(calculatorData);
         return Math.max(0, Math.floor(0.000001 +
             (cfgAttackDamage * attackBonusMultiplier + luckValue)   *
-            (WarCommonHelpers.getNormalizedHp(attackerHp) / 10)     *
+            (Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(attackerHp) / 10)     *
             defenseBonusMultiplier
         ));
     }

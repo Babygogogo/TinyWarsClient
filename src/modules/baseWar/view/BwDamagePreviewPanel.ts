@@ -212,10 +212,10 @@ namespace TwnsBwDamagePreviewPanel {
                     const attackerSkinId                    = attackerUnit.getSkinId();
                     const targetSkinId                      = target.getSkinId();
                     group.visible                           = true;
-                    labelAttackTitle.textColor              = WarCommonHelpers.getTextColorForSkinId(attackerSkinId);
-                    labelAttackTitle.stroke                 = WarCommonHelpers.getTextStrokeForSkinId(attackerSkinId);
-                    labelCounterTitle.textColor             = WarCommonHelpers.getTextColorForSkinId(targetSkinId);
-                    labelCounterTitle.stroke                = WarCommonHelpers.getTextStrokeForSkinId(targetSkinId);
+                    labelAttackTitle.textColor              = Twns.WarHelpers.WarCommonHelpers.getTextColorForSkinId(attackerSkinId);
+                    labelAttackTitle.stroke                 = Twns.WarHelpers.WarCommonHelpers.getTextStrokeForSkinId(attackerSkinId);
+                    labelCounterTitle.textColor             = Twns.WarHelpers.WarCommonHelpers.getTextColorForSkinId(targetSkinId);
+                    labelCounterTitle.stroke                = Twns.WarHelpers.WarCommonHelpers.getTextStrokeForSkinId(targetSkinId);
                     labelAttackValue.text                   = `${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}`;
                     labelCounterValue.text                  = `${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
                 }

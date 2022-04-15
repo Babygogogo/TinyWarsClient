@@ -158,6 +158,10 @@ namespace Twns.BaseWar {
                         unitMap.removeUnitLoaded(unit.getUnitId());
                     }
 
+                    if (unit.getHasLoadedCo()) {
+                        war.getTileMap().getView().updateCoZone();
+                    }
+
                     unit.getLoaderUnit()?.updateView();
                     war.getActionPlanner().setStateIdle();
                     Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as NotifyData.BwUnitChanged);
@@ -580,7 +584,7 @@ namespace Twns.BaseWar {
             this._labelTitle.text       = Lang.getText(LangTextType.B0367);
             this._labelValue.text       = Lang.getUnitActionStateText(data.unit.getActionState()) ?? CommonConstants.ErrorTextForUndefined;
             this._groupExtra.visible    = false;
-            this._btnModify.visible     = WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
+            this._btnModify.visible     = WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
         }
         private _updateViewAsAttackRange(): void {
             const data                  = this._getData();
@@ -607,7 +611,7 @@ namespace Twns.BaseWar {
             this._labelTitle.text       = Lang.getText(LangTextType.B0347);
             this._labelValue.text       = currentValue == null ? `--` : `${currentValue} / ${maxValue}`;
             this._groupExtra.visible    = false;
-            this._btnModify.visible     = (WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) && (currentValue != null);
+            this._btnModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) && (currentValue != null);
         }
         private _updateViewAsFlareAmmo(): void {
             const data                  = this._getData();
@@ -617,7 +621,7 @@ namespace Twns.BaseWar {
             this._labelTitle.text       = Lang.getText(LangTextType.B0349);
             this._labelValue.text       = currentValue == null ? `--` : `${currentValue} / ${maxValue}`;
             this._groupExtra.visible    = false;
-            this._btnModify.visible     = (WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) && (currentValue != null);
+            this._btnModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) && (currentValue != null);
         }
         private _updateViewAsFuel(): void {
             const data                  = this._getData();
@@ -626,7 +630,7 @@ namespace Twns.BaseWar {
             const maxValue              = unit.getMaxFuel();
             this._labelTitle.text       = Lang.getText(LangTextType.B0342);
             this._labelValue.text       = `${currentValue} / ${maxValue}`;
-            this._btnModify.visible     = WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
+            this._btnModify.visible     = WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
 
             const fuelConsumption   = unit.getFuelConsumptionPerTurn();
             const groupExtra        = this._groupExtra;
@@ -642,7 +646,7 @@ namespace Twns.BaseWar {
             this._labelTitle.text       = Lang.getText(LangTextType.B0421);
             this._labelValue.text       = data.unit.getHasLoadedCo() ? Lang.getText(LangTextType.B0012) : Lang.getText(LangTextType.B0013);
             this._groupExtra.visible    = false;
-            this._btnModify.visible     = WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
+            this._btnModify.visible     = WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
         }
         private _updateViewAsHp(): void {
             const data                  = this._getData();
@@ -652,7 +656,7 @@ namespace Twns.BaseWar {
             this._labelTitle.text       = Lang.getText(LangTextType.B0339);
             this._labelValue.text       = `${currentValue} / ${maxValue}`;
             this._groupExtra.visible    = false;
-            this._btnModify.visible     = WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
+            this._btnModify.visible     = WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
         }
         private _updateViewAsIsDiving(): void {
             const data                  = this._getData();
@@ -660,7 +664,7 @@ namespace Twns.BaseWar {
             this._labelTitle.text       = Lang.getText(LangTextType.B0371);
             this._labelValue.text       = unit.getIsDiving() ? Lang.getText(LangTextType.B0012) : Lang.getText(LangTextType.B0013);
             this._groupExtra.visible    = false;
-            this._btnModify.visible     = (WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) && (unit.checkIsDiver());
+            this._btnModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) && (unit.checkIsDiver());
         }
         private _updateViewAsMovement(): void {
             const data                  = this._getData();
@@ -680,7 +684,7 @@ namespace Twns.BaseWar {
             this._labelTitle.text       = Lang.getText(LangTextType.B0350);
             this._labelValue.text       = currentValue == null ? `--` : `${currentValue} / ${maxValue}`;
             this._groupExtra.visible    = false;
-            this._btnModify.visible     = (WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) && (currentValue != null);
+            this._btnModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) && (currentValue != null);
         }
         private _updateViewAsProduceMaterial(): void {
             const data                  = this._getData();
@@ -689,7 +693,7 @@ namespace Twns.BaseWar {
             const maxValue              = unit.getMaxProduceMaterial();
             this._labelTitle.text       = Lang.getText(LangTextType.B0348);
             this._labelValue.text       = currentValue == null ? `--` : `${currentValue} / ${maxValue}`;
-            this._btnModify.visible     = (WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) && (currentValue != null);
+            this._btnModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) && (currentValue != null);
 
             const groupExtra = this._groupExtra;
             if (currentValue == null) {
@@ -714,7 +718,7 @@ namespace Twns.BaseWar {
             this._labelTitle.text       = Lang.getText(LangTextType.B0370);
             this._labelValue.text       = `${currentValue} / ${maxValue}`;
             this._groupExtra.visible    = false;
-            this._btnModify.visible     = WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
+            this._btnModify.visible     = WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
         }
         private _updateViewAsVision(): void {
             const data                  = this._getData();
@@ -729,7 +733,7 @@ namespace Twns.BaseWar {
             const data              = this._getData();
             const war               = data.war;
             this._labelTitle.text   = Lang.getText(LangTextType.B0698);
-            this._btnModify.visible = WarCommonHelpers.checkCanCheatInWar(war.getWarType());
+            this._btnModify.visible = WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType());
 
             const unit          = data.unit;
             const maxValue      = unit.getMaxLoadUnitsCount();
@@ -749,14 +753,14 @@ namespace Twns.BaseWar {
             const data                  = this._getData();
             this._labelTitle.text       = Lang.getText(LangTextType.B0720);
             this._labelValue.text       = Lang.getUnitAiModeName(data.unit.getAiMode()) ?? CommonConstants.ErrorTextForUndefined;
-            this._btnModify.visible     = WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
+            this._btnModify.visible     = WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
             this._groupExtra.visible    = false;
         }
 
         private _modifyAsActionState(): void {
             const data  = this._getData();
             const war   = data.war;
-            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) {
                 return;
             }
 
@@ -779,7 +783,7 @@ namespace Twns.BaseWar {
         private _modifyAsBuildMaterial(): void {
             const { unit, war } = this._getData();
             const maxValue      = unit.getMaxBuildMaterial();
-            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType()) || (maxValue == null)) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType()) || (maxValue == null)) {
                 return;
             }
 
@@ -800,7 +804,7 @@ namespace Twns.BaseWar {
         private _modifyAsFlareAmmo(): void {
             const { unit, war } = this._getData();
             const maxValue      = unit.getFlareMaxAmmo();
-            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType()) || (maxValue == null)) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType()) || (maxValue == null)) {
                 return;
             }
 
@@ -820,7 +824,7 @@ namespace Twns.BaseWar {
         }
         private _modifyAsFuel(): void {
             const data = this._getData();
-            if (!WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) {
                 return;
             }
 
@@ -844,7 +848,7 @@ namespace Twns.BaseWar {
         private _modifyAsHasLoadedCo(): void {
             const data  = this._getData();
             const war   = data.war;
-            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) {
                 return;
             }
 
@@ -863,7 +867,7 @@ namespace Twns.BaseWar {
         }
         private _modifyAsHp(): void {
             const data = this._getData();
-            if (!WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) {
                 return;
             }
 
@@ -886,7 +890,7 @@ namespace Twns.BaseWar {
         }
         private _modifyAsIsDiving(): void {
             const data = this._getData();
-            if (!WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) {
                 return;
             }
 
@@ -908,7 +912,7 @@ namespace Twns.BaseWar {
             const data      = this._getData();
             const unit      = data.unit;
             const maxValue  = unit.getPrimaryWeaponMaxAmmo();
-            if (!WarCommonHelpers.checkCanCheatInWar(data.war.getWarType()) || (maxValue == null)) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType()) || (maxValue == null)) {
                 return;
             }
 
@@ -931,7 +935,7 @@ namespace Twns.BaseWar {
             const data      = this._getData();
             const unit      = data.unit;
             const maxValue  = unit.getMaxProduceMaterial();
-            if (!WarCommonHelpers.checkCanCheatInWar(data.war.getWarType()) || (maxValue == null)) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType()) || (maxValue == null)) {
                 return;
             }
 
@@ -956,7 +960,7 @@ namespace Twns.BaseWar {
         private _modifyAsPromotion(): void {
             const { unit, war } = this._getData();
             const maxValue      = unit.getMaxPromotion();
-            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType()) || (maxValue == null)) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType()) || (maxValue == null)) {
                 return;
             }
 
@@ -981,7 +985,7 @@ namespace Twns.BaseWar {
         private _modifyAsLoadUnit(): void {
             const data  = this._getData();
             const war   = data.war;
-            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) {
                 return;
             }
 
@@ -1030,7 +1034,7 @@ namespace Twns.BaseWar {
         }
         private _modifyAsAiMode(): void {
             const data = this._getData();
-            if (!WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) {
                 return;
             }
 
@@ -1146,7 +1150,7 @@ namespace Twns.BaseWar {
                     version     : UserModel.getSelfSettingsTextureVersion(),
                     themeType   : Types.TileThemeType.Clear,
                     skinId      : CommonConstants.UnitAndTileNeutralSkinId,
-                    objectType  : Twns.Config.ConfigManager.getTileObjectTypeByTileType(targetTileType),
+                    objectType  : Config.ConfigManager.getTileObjectTypeByTileType(targetTileType),
                     isDark      : false,
                     shapeId     : 0,
                     tickCount   : Timer.getTileAnimationTickCount(),

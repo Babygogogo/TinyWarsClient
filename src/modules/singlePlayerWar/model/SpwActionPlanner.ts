@@ -744,8 +744,8 @@ namespace TwnsSpwActionPlanner {
             const hasAmmo               = (!!unit.getPrimaryWeaponCurrentAmmo()) || (unit.checkHasSecondaryWeapon());
             const mapSize               = this.getMapSize();
             const unitMap               = this._getUnitMap();
-            const newArea               = WarCommonHelpers.createAttackableAreaForUnit({
-                movableArea: WarCommonHelpers.createMovableArea({
+            const newArea               = Twns.WarHelpers.WarCommonHelpers.createAttackableAreaForUnit({
+                movableArea: Twns.WarHelpers.WarCommonHelpers.createMovableArea({
                     origin          : unit.getGridIndex(),
                     maxMoveCost     : unit.getFinalMoveRange(),
                     mapSize,

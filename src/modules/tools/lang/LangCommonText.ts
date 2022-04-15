@@ -1332,6 +1332,10 @@ namespace TwnsLangCommonText {
             `存档不存在，无法读取`,
             `The game data doesn't exist and can not be loaded.`,
         ],
+        [LangTextType.A0304]: [
+            `自动保存失败`,
+            `Auto save failed.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

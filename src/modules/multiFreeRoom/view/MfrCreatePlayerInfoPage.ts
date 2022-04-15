@@ -132,7 +132,7 @@ namespace TwnsMfrCreatePlayerInfoPage {
             this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(Helpers.getExisted(settingsForCommon.warRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
 
             const playerData            = Helpers.getExisted(initialWarData.playerManager?.players?.find(v => v.playerIndex === playerIndex));
-            this._imgSkin.source        = WarCommonHelpers.getImageSourceForCoHeadFrame(playerData.unitAndTileSkinId);
+            this._imgSkin.source        = Twns.WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(playerData.unitAndTileSkinId);
 
             const coId                  = Helpers.getExisted(playerData.coId);
             const gameConfig            = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));

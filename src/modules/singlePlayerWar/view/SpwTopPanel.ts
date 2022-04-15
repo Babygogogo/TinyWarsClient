@@ -315,7 +315,7 @@ namespace TwnsSpwTopPanel {
         private _updateImgSkinAndCo(): void {
             const war               = this._getOpenData().war;
             const player            = war.getPlayerInTurn();
-            this._imgSkin.source    = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
+            this._imgSkin.source    = Twns.WarHelpers.WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
             this._imgCo.source      = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
         }
 
@@ -404,7 +404,7 @@ namespace TwnsSpwTopPanel {
         protected _onDataChanged(): void {
             const data              = this._getData();
             const player            = data.war.getPlayer(data.playerIndex);
-            this._imgSkin.source    = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
+            this._imgSkin.source    = Twns.WarHelpers.WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
             this._updateImgCo();
             this._updateLabelFundAndAddFund();
             this._updateLabelEnergy();

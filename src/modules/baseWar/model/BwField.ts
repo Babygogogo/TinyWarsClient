@@ -42,8 +42,8 @@ namespace Twns.BaseWar {
                 throw Helpers.newError(`Empty data.`, ClientErrorCode.BwField_Init_00);
             }
 
-            const mapSize = WarCommonHelpers.getMapSize(data.tileMap);
-            if (!WarCommonHelpers.checkIsValidMapSize(mapSize)) {
+            const mapSize = Twns.WarHelpers.WarCommonHelpers.getMapSize(data.tileMap);
+            if (!Twns.WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
                 throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwField_Init_01);
             }
 
@@ -90,7 +90,7 @@ namespace Twns.BaseWar {
             gameConfig              : GameConfig;
             playersCountUnneutral   : number;
         }): void {
-            const mapSize = WarCommonHelpers.getMapSize(data.tileMap);
+            const mapSize = Twns.WarHelpers.WarCommonHelpers.getMapSize(data.tileMap);
             this.getFogMap().fastInit({
                 data                : data.fogMap,
                 mapSize,

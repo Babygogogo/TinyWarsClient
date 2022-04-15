@@ -51,7 +51,7 @@ namespace Twns.WarMap {
         public showMapByWarData(warData: ISerialWar, config: GameConfig, players?: Types.Undefinable<ISerialPlayer[]>): void {
             const field     = Helpers.getExisted(warData.field);
             const tileMap   = Helpers.getExisted(field.tileMap);
-            const mapSize   = WarCommonHelpers.getMapSize(tileMap);
+            const mapSize   = Twns.WarHelpers.WarCommonHelpers.getMapSize(tileMap);
             this.width      = GRID_WIDTH * mapSize.width;
             this.height     = GRID_HEIGHT * mapSize.height;
 

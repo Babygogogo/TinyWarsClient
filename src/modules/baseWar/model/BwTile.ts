@@ -676,7 +676,7 @@ namespace Twns.BaseWar {
                 const cfg = gameConfig.getCoSkillCfg(skillId)?.selfTileIncome;
                 if ((cfg)                                                       &&
                     (gameConfig.checkIsTileTypeInCategory(tileType, cfg[1]))    &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap,
@@ -749,7 +749,7 @@ namespace Twns.BaseWar {
                 if ((cfg)                                                       &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))    &&
                     (gameConfig.checkIsTileTypeInCategory(tileType, cfg[2]))    &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap,
@@ -785,7 +785,7 @@ namespace Twns.BaseWar {
             for (const skillId of player.getCoCurrentSkills()) {
                 const cfg = gameConfig.getCoSkillCfg(skillId)?.selfRepairAmountBonus;
                 if ((cfg)                                               &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap,
@@ -829,7 +829,7 @@ namespace Twns.BaseWar {
             const productionCost        = Math.floor(unit.getProductionFinalCost() * modifier.costMultiplierPct / 100);
             const currentHp             = unit.getCurrentHp();
             const normalizedMaxHp       = unit.getNormalizedMaxHp();
-            const normalizedCurrentHp   = WarCommonHelpers.getNormalizedHp(currentHp);
+            const normalizedCurrentHp   = Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(currentHp);
             const normalizedRepairHp    = Math.min(
                 normalizedMaxHp - normalizedCurrentHp,
                 cfgNormalizedRepairHp + modifier.amountModifier,
@@ -895,7 +895,7 @@ namespace Twns.BaseWar {
                     const tileCategory = skillCfg[2];
                     if ((tileCategory != null)                                          &&
                         (gameConfig.checkIsTileTypeInCategory(tileType, tileCategory))  &&
-                        (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex,
                             coSkillAreaType         : skillCfg[0],
                             getCoGridIndexArrayOnMap,

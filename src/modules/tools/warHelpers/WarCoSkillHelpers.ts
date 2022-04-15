@@ -183,7 +183,7 @@ namespace WarCoSkillHelpers {
 
             const tileType = tile.getType();
             if ((!gameConfig.checkIsTileTypeInCategory(tileType, cfg[1]))   ||
-                (!WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                (!Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                     gridIndex,
                     coSkillAreaType         : cfg[0],
                     getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -240,7 +240,7 @@ namespace WarCoSkillHelpers {
                 const currentHp = unit.getCurrentHp();
                 if ((unit.getPlayerIndex() === playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -306,7 +306,7 @@ namespace WarCoSkillHelpers {
                 if ((unit.getTeamIndex() !== teamIndex)                             &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, unitCategory))  &&
                     (gameConfig.checkIsTileTypeInCategory(tileType, tileCategory))  &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -366,7 +366,7 @@ namespace WarCoSkillHelpers {
                 const gridIndex = unit.getGridIndex();
                 if ((unit.getPlayerIndex() === playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -418,7 +418,7 @@ namespace WarCoSkillHelpers {
                 const gridIndex = unit.getGridIndex();
                 if ((unit.getPlayerIndex() !== playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -476,7 +476,7 @@ namespace WarCoSkillHelpers {
                 const gridIndex = unit.getGridIndex();
                 if ((unit.getPlayerIndex() === playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -551,7 +551,7 @@ namespace WarCoSkillHelpers {
                 const gridIndex = unit.getGridIndex();
                 if ((unit.getPlayerIndex() !== playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -626,7 +626,7 @@ namespace WarCoSkillHelpers {
                 const currentAmmo   = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo());
                 if ((unit.getPlayerIndex() === playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -682,7 +682,7 @@ namespace WarCoSkillHelpers {
                 const currentAmmo   = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo());
                 if ((unit.getPlayerIndex() !== playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -794,7 +794,7 @@ namespace WarCoSkillHelpers {
                 const gridIndex = unit.getGridIndex();
                 if ((unit.getPlayerIndex() === playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -845,7 +845,7 @@ namespace WarCoSkillHelpers {
                 const gridIndex = unit.getGridIndex();
                 if ((unit.getPlayerIndex() === playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -891,7 +891,7 @@ namespace WarCoSkillHelpers {
                 const currentAmmo   = Helpers.getExisted(unit.getFlareCurrentAmmo(), ClientErrorCode.WarCoSkillHelpers_ExeSelfFlareAmmoGain_00);
                 if ((unit.getPlayerIndex() === playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,

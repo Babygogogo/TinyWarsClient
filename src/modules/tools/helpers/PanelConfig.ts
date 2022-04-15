@@ -156,7 +156,7 @@ namespace TwnsPanelConfig {
         MmWarRulePanel                      : PanelConfig<TwnsMmWarRulePanel.OpenData>;
 
         MpwSpectatePanel                    : PanelConfig<TwnsMpwSpectatePanel.OpenData>;
-        MpwSidePanel                        : PanelConfig<TwnsMpwSidePanel.OpenData>;
+        MpwSidePanel                        : PanelConfig<Twns.MultiPlayerWar.OpenDataForMpwSidePanel>;
         MpwTopPanel                         : PanelConfig<TwnsMpwTopPanel.OpenData>;
         MpwWarMenuPanel                     : PanelConfig<TwnsMpwWarMenuPanel.OpenData>;
 
@@ -184,7 +184,7 @@ namespace TwnsPanelConfig {
         SpmWarListPanel                     : PanelConfig<TwnsSpmWarListPanel.OpenData>;
 
         SpwLoadWarPanel                     : PanelConfig<TwnsSpwLoadWarPanel.OpenData>;
-        SpwSidePanel                        : PanelConfig<TwnsSpwSidePanel.OpenData>;
+        SpwSidePanel                        : PanelConfig<Twns.SinglePlayerWar.OpenDataForSpwSidePanel>;
         SpwTopPanel                         : PanelConfig<TwnsSpwTopPanel.OpenData>;
         SpwWarMenuPanel                     : PanelConfig<TwnsSpwWarMenuPanel.OpenData>;
 
@@ -1115,7 +1115,7 @@ namespace TwnsPanelConfig {
             },
 
             MpwSidePanel: {
-                cls         : TwnsMpwSidePanel?.MpwSidePanel,
+                cls         : Twns.MultiPlayerWar?.MpwSidePanel,
                 skinName    : `resource/skins/multiPlayerWar/MpwSidePanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1263,7 +1263,7 @@ namespace TwnsPanelConfig {
             },
 
             SpwSidePanel: {
-                cls         : TwnsSpwSidePanel?.SpwSidePanel,
+                cls         : Twns.SinglePlayerWar?.SpwSidePanel,
                 skinName    : `resource/skins/singlePlayerWar/SpwSidePanel.exml`,
                 layer       : LayerType.Hud0,
             },

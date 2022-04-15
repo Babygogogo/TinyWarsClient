@@ -15,14 +15,14 @@
 // import TwnsSpwWarMenuPanel      from "./SpwWarMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpwSidePanel {
+namespace Twns.SinglePlayerWar {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
-    export type OpenData = {
-        war     : TwnsSpwWar.SpwWar;
+    export type OpenDataForSpwSidePanel = {
+        war : TwnsSpwWar.SpwWar;
     };
-    export class SpwSidePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class SpwSidePanel extends TwnsUiPanel.UiPanel<OpenDataForSpwSidePanel> {
         private readonly _groupLeft!    : eui.Group;
         private readonly _btnCop!       : TwnsUiButton.UiButton;
         private readonly _btnScop!      : TwnsUiButton.UiButton;
@@ -128,7 +128,7 @@ namespace TwnsSpwSidePanel {
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
                 actionPlanner.setStateIdle();
 
-                const gridIndex = WarCommonHelpers.getIdleUnitGridIndex(war);
+                const gridIndex = WarHelpers.WarCommonHelpers.getIdleUnitGridIndex(war);
                 if (!gridIndex) {
                     SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 } else {
@@ -148,7 +148,7 @@ namespace TwnsSpwSidePanel {
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
                 actionPlanner.setStateIdle();
 
-                const gridIndex = WarCommonHelpers.getIdleBuildingGridIndex(war);
+                const gridIndex = WarHelpers.WarCommonHelpers.getIdleBuildingGridIndex(war);
                 if (!gridIndex) {
                     SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 } else {
@@ -168,7 +168,7 @@ namespace TwnsSpwSidePanel {
             } else {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0036),
-                    content : this._getHintForEndTurn(),
+                    content : WarHelpers.WarCommonHelpers.getHintForEndTurn(war),
                     callback: () => this._getOpenData().war.getActionPlanner().setStateRequestingPlayerEndTurn(),
                 });
             }
@@ -273,7 +273,7 @@ namespace TwnsSpwSidePanel {
                 btn.visible = false;
             } else {
                 btn.visible = true;
-                btn.icon    = WarCommonHelpers.getIdleUnitGridIndex(war) == null ? `commonIcon0018` : `commonIcon0015`;
+                btn.icon    = WarHelpers.WarCommonHelpers.getIdleUnitGridIndex(war) == null ? `commonIcon0018` : `commonIcon0015`;
             }
         }
 
@@ -289,7 +289,7 @@ namespace TwnsSpwSidePanel {
                 btn.visible = false;
             } else {
                 btn.visible = true;
-                btn.icon    = WarCommonHelpers.getIdleBuildingGridIndex(war) == null ? `commonIcon0019` : `commonIcon0016`;
+                btn.icon    = WarHelpers.WarCommonHelpers.getIdleBuildingGridIndex(war) == null ? `commonIcon0019` : `commonIcon0016`;
             }
         }
 
@@ -303,55 +303,6 @@ namespace TwnsSpwSidePanel {
                 && (!actionPlanner.checkIsStateRequesting())
                 && (war.checkIsHumanInTurn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Util functions.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _getHintForEndTurn(): string {
-            const war           = this._getOpenData().war;
-            const playerIndex   = war.getPlayerIndexInTurn();
-            const unitMap       = war.getUnitMap();
-            const hints         = new Array<string>();
-
-            if (playerIndex != null) {
-                {
-                    let idleUnitsCount = 0;
-                    for (const unit of unitMap.getAllUnitsOnMap()) {
-                        if ((unit.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle)) {
-                            ++idleUnitsCount;
-                        }
-                    }
-                    (idleUnitsCount) && (hints.push(Lang.getFormattedText(LangTextType.F0006, idleUnitsCount)));
-                }
-
-                {
-                    const idleBuildingsDict = new Map<Types.TileType, Types.GridIndex[]>();
-                    for (const tile of war.getTileMap().getAllTiles()) {
-                        if ((tile.checkIsUnitProducerForPlayer(playerIndex)) && (!unitMap.getUnitOnMap(tile.getGridIndex()))) {
-                            const tileType  = tile.getType();
-                            const gridIndex = tile.getGridIndex();
-                            if (!idleBuildingsDict.has(tileType)) {
-                                idleBuildingsDict.set(tileType, [gridIndex]);
-                            } else {
-                                Helpers.getExisted(idleBuildingsDict.get(tileType)).push(gridIndex);
-                            }
-                        }
-                    }
-                    const textArrayForBuildings: string[] = [];
-                    for (const [tileType, gridIndexArray] of idleBuildingsDict) {
-                        textArrayForBuildings.push(Lang.getFormattedText(
-                            LangTextType.F0007, gridIndexArray.length,
-                            Lang.getTileName(tileType),
-                            gridIndexArray.map(v => `(${v.x}, ${v.y})`).join(`, `)),
-                        );
-                    }
-                    (textArrayForBuildings.length) && (hints.push(textArrayForBuildings.join(`\n`)));
-                }
-            }
-
-            hints.push(Lang.getText(LangTextType.A0024));
-            return hints.join(`\n\n`);
         }
     }
 }

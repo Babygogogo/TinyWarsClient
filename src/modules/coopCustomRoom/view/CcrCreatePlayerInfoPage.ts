@@ -275,7 +275,7 @@ namespace TwnsCcrCreatePlayerInfoPage {
 
             const isSelfPlayer      = CcrCreateModel.getSelfPlayerIndex() === playerIndex;
             const isHumanPlayer     = playerRule.fixedCoIdInCcw == null;
-            this._imgSkin.source    = WarCommonHelpers.getImageSourceForCoHeadFrame(
+            this._imgSkin.source    = Twns.WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(
                 isSelfPlayer
                     ? CcrCreateModel.getSelfUnitAndTileSkinId()
                     : (isHumanPlayer ? null : CcrCreateModel.getAiSkinId(playerIndex))

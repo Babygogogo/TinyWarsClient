@@ -20,7 +20,7 @@ namespace TwnsMeFogMap {
                     continue;
                 }
 
-                const visibilityArray = WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                const visibilityArray = Twns.WarHelpers.WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
                 if (visibilityArray != null) {
                     serialMapsFromPath.push({
                         playerIndex,

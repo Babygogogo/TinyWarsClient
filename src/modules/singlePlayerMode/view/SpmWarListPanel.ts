@@ -230,7 +230,7 @@ namespace TwnsSpmWarListPanel {
                 return null;
             }
 
-            const mapId = WarCommonHelpers.getMapId(warData);
+            const mapId = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
             if (mapId != null) {
                 return {
                     gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)),
@@ -300,7 +300,7 @@ namespace TwnsSpmWarListPanel {
             }
 
             const warRule   = Helpers.getExisted(warData.settingsForCommon?.warRule);
-            const mapId     = WarCommonHelpers.getMapId(warData);
+            const mapId     = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
             return { dataArrayForListSettings: [
                 {
                     settingsType    : WarBasicSettingsType.MapName,
@@ -353,7 +353,7 @@ namespace TwnsSpmWarListPanel {
             return {
                 gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
                 warRule     : Helpers.getExisted(settingsForCommon.warRule),
-                warType     : WarCommonHelpers.getWarType(warData),
+                warType     : Twns.WarHelpers.WarCommonHelpers.getWarType(warData),
             };
         }
 
@@ -454,14 +454,14 @@ namespace TwnsSpmWarListPanel {
 
             } else {
                 const warData   = slotData.warData;
-                labelType.text  = `#${slotIndex} ${Lang.getWarTypeName(WarCommonHelpers.getWarType(warData))}`;
+                labelType.text  = `#${slotIndex} ${Lang.getWarTypeName(Twns.WarHelpers.WarCommonHelpers.getWarType(warData))}`;
 
                 const slotExtraData = slotData.extraData;
                 const slotComment   = slotExtraData.slotComment;
                 if (slotComment) {
                     labelName.text = slotComment;
                 } else {
-                    const mapId     = WarCommonHelpers.getMapId(warData);
+                    const mapId     = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
                     labelName.text  = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
                         : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);

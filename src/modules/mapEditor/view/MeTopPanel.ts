@@ -150,7 +150,7 @@ namespace TwnsMeTopPanel {
         private _onNotifyLanguageChanged(): void  {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyTimeTick(): void {
+        private async _onNotifyTimeTick(): Promise<void> {
             const autoSaveTime = UserModel.getSelfMapEditorAutoSaveTime();
             if ((!autoSaveTime) || (Timer.getServerTimestamp() % autoSaveTime !== 0)) {
                 return;
@@ -166,7 +166,14 @@ namespace TwnsMeTopPanel {
                 return;
             }
 
-            MeProxy.reqMeSubmitMap(slotIndex, war.serializeForMap(), false);
+            const mapRawData = war.serializeForMap();
+            if ((ProtoManager.encodeAsMapRawData(mapRawData).byteLength > CommonConstants.MapMaxFileSize)   ||
+                (await MeUtility.getSevereErrorCodeForMapRawData(mapRawData))
+            ) {
+                FloatText.show(Lang.getText(LangTextType.A0304));
+            } else {
+                MeProxy.reqMeSubmitMap(slotIndex, mapRawData, false);
+            }
         }
         private _onNotifyTileAnimationTick(): void {
             this._tileView.updateOnAnimationTick();
@@ -582,21 +589,21 @@ namespace TwnsMeTopPanel {
         }
     }
 
-    function getTextColorForDrawerMode(mode: DrawerMode): number {
-        switch (mode) {
-            case DrawerMode.Preview                 : return 0xffffff;
-            case DrawerMode.DrawUnit                : return 0x00ff00;
-            case DrawerMode.DrawTileBase            : return 0x00ff00;
-            case DrawerMode.DrawTileObject          : return 0x00ff00;
-            case DrawerMode.DrawTileDecorator       : return 0x00ff00;
-            case DrawerMode.DeleteUnit              : return 0xff0000;
-            case DrawerMode.DeleteTileDecorator     : return 0xff0000;
-            case DrawerMode.DeleteTileObject        : return 0xff0000;
-            case DrawerMode.AddTileToLocation       : return 0x00ff00;
-            case DrawerMode.DeleteTileFromLocation  : return 0xff0000;
-            default                                 : return 0xffffff;
-        }
-    }
+    // function getTextColorForDrawerMode(mode: DrawerMode): number {
+    //     switch (mode) {
+    //         case DrawerMode.Preview                 : return 0xffffff;
+    //         case DrawerMode.DrawUnit                : return 0x00ff00;
+    //         case DrawerMode.DrawTileBase            : return 0x00ff00;
+    //         case DrawerMode.DrawTileObject          : return 0x00ff00;
+    //         case DrawerMode.DrawTileDecorator       : return 0x00ff00;
+    //         case DrawerMode.DeleteUnit              : return 0xff0000;
+    //         case DrawerMode.DeleteTileDecorator     : return 0xff0000;
+    //         case DrawerMode.DeleteTileObject        : return 0xff0000;
+    //         case DrawerMode.AddTileToLocation       : return 0x00ff00;
+    //         case DrawerMode.DeleteTileFromLocation  : return 0xff0000;
+    //         default                                 : return 0xffffff;
+    //     }
+    // }
 }
 
 // export default TwnsMeTopPanel;

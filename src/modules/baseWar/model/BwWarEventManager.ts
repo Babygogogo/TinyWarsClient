@@ -206,7 +206,7 @@ namespace TwnsBwWarEventManager {
             }
 
             const extraData = Helpers.getExisted(action.extraData, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_01);
-            WarCommonHelpers.handleCommonExtraDataForWarActions({
+            Twns.WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war             : this._getWar(),
                 commonExtraData : Helpers.getExisted(extraData.commonExtraData, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_02),
                 isFastExecute,
@@ -297,7 +297,7 @@ namespace TwnsBwWarEventManager {
                 const unitType              = Helpers.getExisted(unitData.unitType);
                 const moveType              = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.moveType);
                 const rawGridIndex          = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
-                if (WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
+                if (Twns.WarHelpers.WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
                     gameConfig,

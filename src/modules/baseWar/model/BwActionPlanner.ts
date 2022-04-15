@@ -135,7 +135,7 @@ namespace TwnsBwActionPlanner {
 
             const currentState = this.getState();
             if ((nextState === currentState)                                                                &&
-                ((nextState === State.ExecutingAction) || (WarCommonHelpers.checkIsStateRequesting(nextState)))
+                ((nextState === State.ExecutingAction) || (Twns.WarHelpers.WarCommonHelpers.checkIsStateRequesting(nextState)))
             ) {
                 return;
             }
@@ -231,7 +231,7 @@ namespace TwnsBwActionPlanner {
             }
 
             if ((nextState === this.getState())                                                                 &&
-                ((nextState === State.ExecutingAction) || (WarCommonHelpers.checkIsStateRequesting(nextState)))
+                ((nextState === State.ExecutingAction) || (Twns.WarHelpers.WarCommonHelpers.checkIsStateRequesting(nextState)))
             ) {
                 // Do noting.
             } else {
@@ -507,14 +507,14 @@ namespace TwnsBwActionPlanner {
                     // Do nothing.
                 } else {
                     const movableArea = Helpers.getExisted(this.getMovableArea());
-                    if (WarCommonHelpers.checkAreaHasGrid(movableArea, gridIndex)) {
+                    if (Twns.WarHelpers.WarCommonHelpers.checkAreaHasGrid(movableArea, gridIndex)) {
                         this._updateMovePathByDestination(gridIndex);
                     } else {
                         const attackableArea = Helpers.getExisted(this.getAttackableArea());
-                        if (!WarCommonHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
+                        if (!Twns.WarHelpers.WarCommonHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
                             // Do nothing.
                         } else {
-                            const newPath = WarCommonHelpers.createShortestMovePath(movableArea, attackableArea[gridIndex.x][gridIndex.y].movePathDestination);
+                            const newPath = Twns.WarHelpers.WarCommonHelpers.createShortestMovePath(movableArea, attackableArea[gridIndex.x][gridIndex.y].movePathDestination);
                             if (focusUnit.checkCanAttackTargetAfterMovePath(newPath, gridIndex)) {
                                 this._setMovePath(newPath);
                             } else {
@@ -530,14 +530,14 @@ namespace TwnsBwActionPlanner {
                     // Do nothing.
                 } else {
                     const movableArea = Helpers.getExisted(this.getMovableArea());
-                    if (WarCommonHelpers.checkAreaHasGrid(movableArea, gridIndex)) {
+                    if (Twns.WarHelpers.WarCommonHelpers.checkAreaHasGrid(movableArea, gridIndex)) {
                         this._updateMovePathByDestination(gridIndex);
                     } else {
                         const attackableArea = Helpers.getExisted(this.getAttackableArea());
-                        if (!WarCommonHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
+                        if (!Twns.WarHelpers.WarCommonHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
                             // Do nothing.
                         } else {
-                            const newPath = WarCommonHelpers.createShortestMovePath(movableArea, attackableArea[gridIndex.x][gridIndex.y].movePathDestination);
+                            const newPath = Twns.WarHelpers.WarCommonHelpers.createShortestMovePath(movableArea, attackableArea[gridIndex.x][gridIndex.y].movePathDestination);
                             if (focusUnit.checkCanAttackTargetAfterMovePath(newPath, gridIndex)) {
                                 this._setMovePath(newPath);
                             } else {
@@ -609,7 +609,7 @@ namespace TwnsBwActionPlanner {
                 throw Helpers.newError(`BwActionPlanner._setStateChoosingActionOnTap() error 2, currState: ${currState}`);
 
             } else if (currState === State.MakingMovePath) {
-                if (WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
+                if (Twns.WarHelpers.WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                     this._updateMovePathByDestination(gridIndex);
                     SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                 } else {
@@ -625,7 +625,7 @@ namespace TwnsBwActionPlanner {
                 }
 
             } else if (currState === State.ChoosingAction) {
-                if (WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
+                if (Twns.WarHelpers.WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                     this._updateMovePathByDestination(gridIndex);
                     SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
                 } else {
@@ -1230,7 +1230,7 @@ namespace TwnsBwActionPlanner {
         private _setStateChoosingActionOnDragEnded(gridIndex: GridIndex): void {
             const currState = this.getState();
             if (currState === State.MakingMovePath) {
-                if (WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
+                if (Twns.WarHelpers.WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                     this._updateMovePathByDestination(gridIndex);
                 } else {
                     throw Helpers.newError(`BwActionPlanner._setStateChoosingActionOnDragEnded() error 1, currState: ${currState}`);
@@ -1275,7 +1275,7 @@ namespace TwnsBwActionPlanner {
         }
 
         public checkIsStateRequesting(): boolean {
-            return WarCommonHelpers.checkIsStateRequesting(this.getState());
+            return Twns.WarHelpers.WarCommonHelpers.checkIsStateRequesting(this.getState());
         }
 
         public getFocusUnit(): BwUnit | null {
@@ -1347,7 +1347,7 @@ namespace TwnsBwActionPlanner {
 
         protected _resetMovableArea(): void {
             const unit = Helpers.getExisted(this.getFocusUnit());
-            this._movableArea = WarCommonHelpers.createMovableArea({
+            this._movableArea = Twns.WarHelpers.WarCommonHelpers.createMovableArea({
                 origin          : unit.getGridIndex(),
                 maxMoveCost     : unit.getFinalMoveRange(),
                 mapSize         : this._getWar().getTileMap().getMapSize(),
@@ -1365,7 +1365,7 @@ namespace TwnsBwActionPlanner {
             const beginningGridIndex    = focusUnit.getGridIndex();
             const hasAmmo               = (!!focusUnit.getPrimaryWeaponCurrentAmmo()) || (focusUnit.checkHasSecondaryWeapon());
             const unitMap               = this._getUnitMap();
-            this._setAttackableArea(WarCommonHelpers.createAttackableAreaForUnit({
+            this._setAttackableArea(Twns.WarHelpers.WarCommonHelpers.createAttackableAreaForUnit({
                 movableArea     : Helpers.getExisted(this.getMovableArea()),
                 mapSize         : this.getMapSize(),
                 minAttackRange  : focusUnit.getMinAttackRange(),
@@ -1422,7 +1422,7 @@ namespace TwnsBwActionPlanner {
         // Functions for move path.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected _resetMovePathAsShortest(destination: GridIndex): void {
-            this._setMovePath(WarCommonHelpers.createShortestMovePath(Helpers.getExisted(this.getMovableArea()), destination));
+            this._setMovePath(Twns.WarHelpers.WarCommonHelpers.createShortestMovePath(Helpers.getExisted(this.getMovableArea()), destination));
         }
         private _setMovePath(movePath: MovePathNode[]): void {
             this._movePath = movePath;
@@ -1505,8 +1505,8 @@ namespace TwnsBwActionPlanner {
             const hasAmmo               = (!!unit.getPrimaryWeaponCurrentAmmo()) || (unit.checkHasSecondaryWeapon());
             const mapSize               = this.getMapSize();
             const unitMap               = this._getUnitMap();
-            const newArea               = WarCommonHelpers.createAttackableAreaForUnit({
-                movableArea: WarCommonHelpers.createMovableArea({
+            const newArea               = Twns.WarHelpers.WarCommonHelpers.createAttackableAreaForUnit({
+                movableArea: Twns.WarHelpers.WarCommonHelpers.createMovableArea({
                     origin          : unit.getGridIndex(),
                     maxMoveCost     : unit.getFinalMoveRange(),
                     mapSize,
@@ -1543,7 +1543,7 @@ namespace TwnsBwActionPlanner {
         }
         private _addTileForPreviewAttackableArea(tile: Twns.BaseWar.BwTile): void {
             const mapSize   = this.getMapSize();
-            const newArea   = WarCommonHelpers.createAttackableAreaForTile(tile, mapSize);
+            const newArea   = Twns.WarHelpers.WarCommonHelpers.createAttackableAreaForTile(tile, mapSize);
             this.getTilesForPreviewingAttackableArea().add(tile);
             if (!this._areaForPreviewAttack.length) {
                 this._areaForPreviewAttack = newArea;
@@ -1578,7 +1578,7 @@ namespace TwnsBwActionPlanner {
         }
         private _setUnitForPreviewingMovableArea(unit: BwUnit): void {
             this._unitForPreviewMove = unit;
-            this._areaForPreviewMove = WarCommonHelpers.createMovableArea({
+            this._areaForPreviewMove = Twns.WarHelpers.WarCommonHelpers.createMovableArea({
                 origin          : unit.getGridIndex(),
                 maxMoveCost     : unit.getFinalMoveRange(),
                 mapSize         : this._getWar().getTileMap().getMapSize(),
@@ -1638,7 +1638,7 @@ namespace TwnsBwActionPlanner {
         protected abstract _getNextStateOnTapWhenIdle(gridIndex: GridIndex): State;
         private _getNextStateOnTapWhenMakingMovePath(gridIndex: GridIndex): State {
             const existingUnit = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
-            if (WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
+            if (Twns.WarHelpers.WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                 if (!existingUnit) {
                     if (!UserModel.getSelfSettingsIsSetPathMode()) {
                         return State.ChoosingAction;
@@ -1726,7 +1726,7 @@ namespace TwnsBwActionPlanner {
                 // return State.MakingMovePath;
                 const existingUnit      = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
                 const selfPlayerIndex   = this._getWar().getPlayerIndexInTurn();
-                if (WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
+                if (Twns.WarHelpers.WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                     if (!existingUnit) {
                         if (!UserModel.getSelfSettingsIsSetPathMode()) {
                             return State.ChoosingAction;
@@ -1842,7 +1842,7 @@ namespace TwnsBwActionPlanner {
             }
         }
         private _getNextStateOnDragEndedWhenMakingMovePath(gridIndex: GridIndex): State {
-            if (WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
+            if (Twns.WarHelpers.WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                 const existingUnit = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
                 if (!existingUnit) {
                     if (!UserModel.getSelfSettingsIsSetPathMode()) {
@@ -2019,7 +2019,7 @@ namespace TwnsBwActionPlanner {
 
         protected _checkCanFocusUnitOnMapAttackTarget(gridIndex: GridIndex): boolean {
             const attackableArea = Helpers.getExisted(this.getAttackableArea());
-            if (!WarCommonHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
+            if (!Twns.WarHelpers.WarCommonHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
                 return false;
             } else {
                 const focusUnit = Helpers.getExisted(this.getFocusUnit());
@@ -2027,7 +2027,7 @@ namespace TwnsBwActionPlanner {
                     return true;
                 } else {
                     return focusUnit.checkCanAttackTargetAfterMovePath(
-                        WarCommonHelpers.createShortestMovePath(Helpers.getExisted(this.getMovableArea()), attackableArea[gridIndex.x][gridIndex.y].movePathDestination),
+                        Twns.WarHelpers.WarCommonHelpers.createShortestMovePath(Helpers.getExisted(this.getMovableArea()), attackableArea[gridIndex.x][gridIndex.y].movePathDestination),
                         gridIndex
                     );
                 }

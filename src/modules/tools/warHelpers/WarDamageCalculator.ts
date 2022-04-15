@@ -190,7 +190,7 @@ namespace WarDamageCalculator {
             : 0;
         return Math.max(0, Math.floor(0.000001 +
             (baseAttackDamage * attackBonusMultiplier + luckValue)  *
-            (WarCommonHelpers.getNormalizedHp(attackerHp) / 10)     *
+            (Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(attackerHp) / 10)     *
             defenseBonusMultiplier
         ));
     }

@@ -276,7 +276,7 @@ namespace TwnsBwWarInfoPanel {
             const playerIndex           = data.playerIndex;
             const war                   = data.war;
             const player                = war.getPlayer(playerIndex);
-            this._imgSkin.source        = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
+            this._imgSkin.source        = Twns.WarHelpers.WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
             this._imgCo.source          = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
             this._labelPlayerName.text  = `P${playerIndex}`;
         }

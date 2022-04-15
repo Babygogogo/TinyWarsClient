@@ -181,7 +181,7 @@ namespace WarActionReviser {
         const cost      = Math.floor(
             cfgCost
             * (skillCfg ? skillCfg[5] : 100)
-            * WarCommonHelpers.getNormalizedHp(unitHp)
+            * Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp)
             * modifier
             / 100
             / CommonConstants.UnitHpNormalizer
@@ -402,9 +402,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (Twns.WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackTile_04);
         }
 
@@ -441,9 +441,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (Twns.WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackUnit_03);
         }
 
@@ -473,7 +473,7 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const unitMap       = war.getUnitMap();
         const focusUnit     = Helpers.getExisted(unitMap.getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitBeLoaded_02);
         const rawPathNodes  = rawPath ? rawPath.nodes || [] : [];
@@ -506,9 +506,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (Twns.WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitBuildTile_02);
         }
 
@@ -538,9 +538,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (Twns.WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitCaptureTile_02);
         }
 
@@ -570,9 +570,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (Twns.WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitDive_02);
         }
 
@@ -601,9 +601,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (Twns.WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitDropUnit_02);
         }
 
@@ -636,7 +636,7 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const unitMap       = war.getUnitMap();
         const focusUnit     = Helpers.getExisted(unitMap.getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitJoinUnit_02);
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
@@ -665,9 +665,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (Twns.WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_02);
         }
 
@@ -706,9 +706,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (Twns.WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchSilo_02);
         }
 
@@ -748,9 +748,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (Twns.WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitLoadCo_02);
         }
 
@@ -779,9 +779,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (Twns.WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_02);
         }
 
@@ -820,9 +820,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (Twns.WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitSupplyUnit_02);
         }
 
@@ -852,9 +852,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (Twns.WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitSurface_02);
         }
 
@@ -883,9 +883,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (Twns.WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitUseCoSkill_02);
         }
 
@@ -922,9 +922,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = Twns.WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (Twns.WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitWait_02);
         }
 

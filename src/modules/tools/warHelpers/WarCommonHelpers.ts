@@ -15,7 +15,7 @@
 // import WarVisibilityHelpers from "./WarVisibilityHelpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace WarCommonHelpers {
+namespace Twns.WarHelpers.WarCommonHelpers {
     import GridIndex        = Types.GridIndex;
     import MovableArea      = Types.MovableArea;
     import AttackableArea   = Types.AttackableArea;
@@ -25,12 +25,13 @@ namespace WarCommonHelpers {
     import TileType         = Types.TileType;
     import WarType          = Types.WarType;
     import Visibility       = Types.Visibility;
+    import LangTextType     = TwnsLangTextType.LangTextType;
     import CoSkillAreaType  = Types.CoSkillAreaType;
     import ISerialUnit      = WarSerialization.ISerialUnit;
     import ISerialWar       = WarSerialization.ISerialWar;
     import WarSerialization = CommonProto.WarSerialization;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import GameConfig       = Twns.Config.GameConfig;
+    import GameConfig       = Config.GameConfig;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;
@@ -111,7 +112,7 @@ namespace WarCommonHelpers {
 
         return area;
     }
-    export function createAttackableAreaForTile(tile: Twns.BaseWar.BwTile, mapSize: MapSize): AttackableArea {
+    export function createAttackableAreaForTile(tile: BaseWar.BwTile, mapSize: MapSize): AttackableArea {
         const area          : AttackableArea = [];
         const tileType      = tile.getType();
         const tileGridIndex = tile.getGridIndex();
@@ -266,7 +267,7 @@ namespace WarCommonHelpers {
     }
 
     export function getRevisedPath({ war, rawPath, launchUnitId }: {
-        war             : Twns.BaseWar.BwWar;
+        war             : BaseWar.BwWar;
         rawPath         : Types.Undefinable<CommonProto.Structure.IMovePath>;
         launchUnitId    : Types.Undefinable<number>;
     }): Types.MovePath {
@@ -355,7 +356,7 @@ namespace WarCommonHelpers {
         };
     }
 
-    export function checkIsPathDestinationOccupiedByOtherVisibleUnit(war: Twns.BaseWar.BwWar, rawPath: GridIndex[]): boolean {
+    export function checkIsPathDestinationOccupiedByOtherVisibleUnit(war: BaseWar.BwWar, rawPath: GridIndex[]): boolean {
         if (rawPath.length == 1) {
             return false;
         } else {
@@ -377,7 +378,7 @@ namespace WarCommonHelpers {
         }
     }
 
-    export function createDistanceMap(tileMap: Twns.BaseWar.BwTileMap, unit: Twns.BaseWar.BwUnit, destination: GridIndex): { distanceMap: (number | null)[][], maxDistance: number } {
+    export function createDistanceMap(tileMap: BaseWar.BwTileMap, unit: BaseWar.BwUnit, destination: GridIndex): { distanceMap: (number | null)[][], maxDistance: number } {
         const area          : MovableArea = [];
         const availableGrids: AvailableMovableGrid[] = [];
         _updateAvailableGrids({
@@ -421,7 +422,7 @@ namespace WarCommonHelpers {
         return { distanceMap, maxDistance};
     }
 
-    export function findNearestCapturableTile(tileMap: Twns.BaseWar.BwTileMap, unitMap: Twns.BaseWar.BwUnitMap, unit: Twns.BaseWar.BwUnit): Twns.BaseWar.BwTile | null {
+    export function findNearestCapturableTile(tileMap: BaseWar.BwTileMap, unitMap: BaseWar.BwUnitMap, unit: BaseWar.BwUnit): BaseWar.BwTile | null {
         const area          : MovableArea = [];
         const availableGrids: AvailableMovableGrid[] = [];
         _updateAvailableGrids({
@@ -633,7 +634,7 @@ namespace WarCommonHelpers {
      * You must call unitMap.addUnitOnMap() or unitMap.addUnitLoaded() after calling this function.
      */
     export function moveUnit({ war, pathNodes, launchUnitId, fuelConsumption }: {
-        war             : Twns.BaseWar.BwWar;
+        war             : BaseWar.BwWar;
         pathNodes       : GridIndex[];
         launchUnitId    : Types.Undefinable<number>;
         fuelConsumption : number;
@@ -665,7 +666,7 @@ namespace WarCommonHelpers {
         }
     }
     export async function moveExtraUnit({ war, movingUnitAndPath, aiming, deleteViewAfterMoving }: {
-        war                     : Twns.BaseWar.BwWar;
+        war                     : BaseWar.BwWar;
         movingUnitAndPath       : Types.Undefinable<CommonProto.Structure.IMovingUnitAndPath>;
         aiming                  : GridIndex | null;
         deleteViewAfterMoving   : boolean;
@@ -689,7 +690,7 @@ namespace WarCommonHelpers {
         const movingUnitView    = unitMap.getUnitById(Helpers.getExisted(movingUnitData.unitId, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_01))?.getView();
         (movingUnitView) && (unitMapView.removeUnit(movingUnitView));
 
-        const virtualUnit = new Twns.BaseWar.BwUnit();
+        const virtualUnit = new BaseWar.BwUnit();
         virtualUnit.init(movingUnitData, war.getGameConfig());
         virtualUnit.startRunning(war);
         virtualUnit.startRunningView();
@@ -834,7 +835,7 @@ namespace WarCommonHelpers {
      * @return the war view is vibrated or not
      */
     export function handleCommonExtraDataForWarActions({ war, commonExtraData, isFastExecute }: {
-        war                 : Twns.BaseWar.BwWar;
+        war                 : BaseWar.BwWar;
         commonExtraData     : CommonProto.Structure.ICommonExtraDataForWarAction;
         isFastExecute       : boolean;
     }): boolean {
@@ -899,7 +900,7 @@ namespace WarCommonHelpers {
             }
         }
 
-        const tempRemovedUnits = new Map<number, Twns.BaseWar.BwUnit>();  // 此临时变量仅用于优化性能，在后续把部队加回来的过程中可以直接从这里取，而不必重新创建
+        const tempRemovedUnits = new Map<number, BaseWar.BwUnit>();  // 此临时变量仅用于优化性能，在后续把部队加回来的过程中可以直接从这里取，而不必重新创建
         if ((movingUnitId != null) && (movingUnit)) {
             unitMap.removeUnitById(movingUnitId, true);
             tempRemovedUnits.set(movingUnitId, movingUnit);
@@ -920,7 +921,7 @@ namespace WarCommonHelpers {
             }
         }
 
-        const updatedViewUnits = new Set<Twns.BaseWar.BwUnit>();
+        const updatedViewUnits = new Set<BaseWar.BwUnit>();
         for (const unitData of unitArrayAfterAction) {
             const unitId        = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_06);
             // const existingUnit  = unitMap.getUnitById(unitId);
@@ -957,7 +958,7 @@ namespace WarCommonHelpers {
                 }
 
             } else {
-                const unit = new Twns.BaseWar.BwUnit();
+                const unit = new BaseWar.BwUnit();
                 unit.init(unitData, gameConfig);
 
                 if (unit.getLoaderUnitId() == null) {
@@ -1012,7 +1013,7 @@ namespace WarCommonHelpers {
         }
     }
 
-    export function getAdjacentPlasmas(tileMap: Twns.BaseWar.BwTileMap, origin: GridIndex): GridIndex[] {
+    export function getAdjacentPlasmas(tileMap: BaseWar.BwTileMap, origin: GridIndex): GridIndex[] {
         const plasmas           = [origin];
         const mapSize           = tileMap.getMapSize();
         const mapHeight         = mapSize.height;
@@ -1040,7 +1041,7 @@ namespace WarCommonHelpers {
         return gridIndex.x * mapHeight + gridIndex.y;
     }
 
-    export function getIdleBuildingGridIndex(war: Twns.BaseWar.BwWar): Types.GridIndex | null {
+    export function getIdleBuildingGridIndex(war: BaseWar.BwWar): Types.GridIndex | null {
         const playerIndex               = war.getPlayerIndexInTurn();
         const field                     = war.getField();
         const tileMap                   = field.getTileMap();
@@ -1083,7 +1084,7 @@ namespace WarCommonHelpers {
 
         return null;
     }
-    export function getIdleUnitGridIndex(war: Twns.BaseWar.BwWar): Types.GridIndex | null {
+    export function getIdleUnitGridIndex(war: BaseWar.BwWar): Types.GridIndex | null {
         const playerIndex               = war.getPlayerIndexInTurn();
         const field                     = war.getField();
         const unitMap                   = field.getUnitMap();
@@ -1281,6 +1282,67 @@ namespace WarCommonHelpers {
             case 5  : return 1;
             default : throw Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.WarCommonHelpers_GetTextStrokeForSkinId_00);
         }
+    }
+
+    export function getHintForEndTurn(war: BaseWar.BwWar): string {
+        const playerIndex   = war.getPlayerIndexInTurn();
+        const unitMap       = war.getUnitMap();
+        const hints         = new Array<string>();
+        {
+            let idleUnitsCount = 0;
+            for (const unit of unitMap.getAllUnitsOnMap()) {
+                if ((unit.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle)) {
+                    ++idleUnitsCount;
+                }
+            }
+            (idleUnitsCount) && (hints.push(Lang.getFormattedText(LangTextType.F0006, idleUnitsCount)));
+        }
+
+        {
+            const player            = war.getPlayer(playerIndex);
+            const idleBuildingsDict = new Map<Types.TileType, GridIndex[]>();
+            const gameConfig        = war.getGameConfig();
+            const currentFund       = player.getFund();
+            for (const tile of war.getTileMap().getAllTiles()) {
+                const gridIndex = tile.getGridIndex();
+                if ((!tile.checkIsUnitProducerForPlayer(playerIndex)) || (unitMap.getUnitOnMap(gridIndex))) {
+                    continue;
+                }
+
+                const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex) ?? null;
+                const unitCategory      = Helpers.getExisted(skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory());
+                const minNormalizedHp   = skillCfg ? getNormalizedHp(skillCfg[3]) : getNormalizedHp(CommonConstants.UnitMaxHp);
+                for (const unitType of gameConfig.getUnitTypesByCategory(unitCategory) ?? []) {
+                    const costModifier  = player.getUnitCostModifier(gridIndex, false, unitType);
+                    const cfgCost       = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost);
+                    const minCost       = skillCfg
+                        ? Math.floor(cfgCost * costModifier * minNormalizedHp * skillCfg[5] / CommonConstants.UnitHpNormalizer / 100)
+                        : Math.floor(cfgCost * costModifier);
+                    if (minCost <= currentFund) {
+                        const tileType = tile.getType();
+                        if (!idleBuildingsDict.has(tileType)) {
+                            idleBuildingsDict.set(tileType, [gridIndex]);
+                        } else {
+                            Helpers.getExisted(idleBuildingsDict.get(tileType)).push(gridIndex);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            const textArrayForBuildings: string[] = [];
+            for (const [tileType, gridIndexArray] of idleBuildingsDict) {
+                textArrayForBuildings.push(Lang.getFormattedText(
+                    LangTextType.F0007, gridIndexArray.length,
+                    Lang.getTileName(tileType),
+                    gridIndexArray.map(v => `(${v.x}, ${v.y})`).join(`, `)),
+                );
+            }
+            (textArrayForBuildings.length) && (hints.push(textArrayForBuildings.join(`\n`)));
+        }
+
+        hints.push(Lang.getText(LangTextType.A0024));
+        return hints.join(`\n\n`);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

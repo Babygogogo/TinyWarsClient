@@ -77,7 +77,7 @@ namespace MeModel {
 
         mapRawData = mapRawData || await MeUtility.createDefaultMapRawData(slotIndex);
         _war = new MeWar();
-        await _war.initWithMapEditorData(
+        _war.initWithMapEditorData(
             {
                 mapRawData,
                 slotIndex

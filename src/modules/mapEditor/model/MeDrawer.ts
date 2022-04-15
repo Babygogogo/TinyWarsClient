@@ -610,8 +610,14 @@ namespace TwnsMeDrawer {
             }
         }
         private _handleDeleteUnit(gridIndex: GridIndex): void {
-            if (this._getWar().getUnitMap().getUnitOnMap(gridIndex)) {
-                WarDestructionHelpers.destroyUnitOnMap(this._getWar(), gridIndex, true);
+            const unit = this._getWar().getUnitMap().getUnitOnMap(gridIndex);
+            if (unit) {
+                const war = this._getWar();
+                WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+                if (unit.getHasLoadedCo()) {
+                    war.getTileMap().getView().updateCoZone();
+                }
+
                 Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as NotifyData.BwUnitChanged);
             }
         }

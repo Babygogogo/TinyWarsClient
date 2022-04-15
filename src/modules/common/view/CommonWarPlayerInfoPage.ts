@@ -235,7 +235,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             const playerIndex           = playerInfo.playerIndex;
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
             this._labelTeamIndex.text   = Lang.getPlayerTeamName(playerInfo.teamIndex) || CommonConstants.ErrorTextForUndefined;
-            this._imgSkin.source        = WarCommonHelpers.getImageSourceForCoHeadFrame(playerInfo.unitAndTileSkinId);
+            this._imgSkin.source        = Twns.WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(playerInfo.unitAndTileSkinId);
 
             const coId              = playerInfo.coId;
             const labelCo           = this._labelCo;

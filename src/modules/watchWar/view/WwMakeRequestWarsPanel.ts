@@ -382,7 +382,7 @@ namespace TwnsWwMakeRequestWarsPanel {
             if (warSettings == null) {
                 label.text = CommonConstants.ErrorTextForUndefined;
             } else {
-                label.text = Lang.getWarTypeName(WarCommonHelpers.getWarTypeByMpwWarSettings(warSettings)) ?? CommonConstants.ErrorTextForUndefined;
+                label.text = Lang.getWarTypeName(Twns.WarHelpers.WarCommonHelpers.getWarTypeByMpwWarSettings(warSettings)) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
 

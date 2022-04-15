@@ -60,22 +60,33 @@ namespace TwnsMeConfirmSaveMapPanel {
                 groupNeedReview.visible         = false;
                 labelReviewDescTitle.visible    = false;
                 labelReviewDesc.text            = Lang.getText(LangTextType.A0261);
+                return;
+            }
 
-            } else if (mapRawData.warRuleArray?.some(v => !checkIsValidAvailability(v.ruleAvailability))) {
+            const severeErrorCode = await MeUtility.getSevereErrorCodeForMapRawData(mapRawData);
+            if (severeErrorCode) {
+                btnConfirm.visible              = false;
+                groupNeedReview.visible         = false;
+                labelReviewDescTitle.visible    = true;
+                labelReviewDesc.text            = Lang.getErrorText(severeErrorCode);
+                return;
+            }
+
+            if (mapRawData.warRuleArray?.some(v => !checkIsValidAvailability(v.ruleAvailability))) {
                 this._mapRawData                = mapRawData;
                 btnConfirm.visible              = true;
                 groupNeedReview.visible         = false;
                 labelReviewDescTitle.visible    = true;
                 labelReviewDesc.text            = Lang.getText(LangTextType.A0298);
-
-            } else {
-                const errorCode                 = await MeUtility.getErrorCodeForMapRawData(mapRawData);
-                this._mapRawData                = mapRawData;
-                btnConfirm.visible              = true;
-                groupNeedReview.visible         = !errorCode;
-                labelReviewDescTitle.visible    = !!errorCode;
-                labelReviewDesc.text            = errorCode ? Lang.getErrorText(errorCode) : Lang.getText(LangTextType.A0285);
+                return;
             }
+
+            const errorCode                 = await MeUtility.getErrorCodeForMapRawData(mapRawData);
+            this._mapRawData                = mapRawData;
+            btnConfirm.visible              = true;
+            groupNeedReview.visible         = !errorCode;
+            labelReviewDescTitle.visible    = !!errorCode;
+            labelReviewDesc.text            = errorCode ? Lang.getErrorText(errorCode) : Lang.getText(LangTextType.A0285);
         }
         protected _onClosing(): void {
             // nothing to do

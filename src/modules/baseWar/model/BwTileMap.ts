@@ -40,7 +40,7 @@ namespace Twns.BaseWar {
             const tiles     = Helpers.getExisted(data.tiles, ClientErrorCode.BwTileMap_Init_01);
             const mapWidth  = mapSize.width;
             const mapHeight = mapSize.height;
-            if ((!WarCommonHelpers.checkIsValidMapSize(mapSize)) ||
+            if ((!Twns.WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) ||
                 (mapWidth * mapHeight !== tiles.length)
             ) {
                 throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwTileMap_Init_02);

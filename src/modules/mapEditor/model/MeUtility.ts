@@ -447,7 +447,7 @@ namespace MeUtility {
 
             const loaderUnitId = unit.getLoaderUnitId();
             if (loaderUnitId != null) {
-                unit.setLoaderUnitId(Helpers.getExisted(allUnits.get(loaderUnitId)).newUnitId);
+                unit.setLoaderUnitId(Helpers.getExisted(allUnits.get(loaderUnitId), ClientErrorCode.MeUtility_ReviseAllUnitIds_00).newUnitId);
             }
         }
         unitMap.setNextUnitId(nextUnitId);
@@ -848,7 +848,7 @@ namespace MeUtility {
         return ClientErrorCode.NoError;
     }
     function getErrorCodeForUnitArray(unitArray: Types.Undefinable<CommonProto.WarSerialization.ISerialUnit[]>): ClientErrorCode {
-        if (!WarCommonHelpers.checkIsUnitIdCompact(unitArray)) {
+        if (!Twns.WarHelpers.WarCommonHelpers.checkIsUnitIdCompact(unitArray)) {
             return ClientErrorCode.MapRawDataValidation03;
         }
 
@@ -895,6 +895,27 @@ namespace MeUtility {
 
         if (Math.max(...playerIndexSet) !== playersCountUnneutral) {
             return ClientErrorCode.MapRawDataValidation08;
+        }
+
+        return ClientErrorCode.NoError;
+    }
+
+    export async function getSevereErrorCodeForMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
+        try {
+            const war = new MeWar();
+            war.initWithMapEditorData(
+                {
+                    mapRawData,
+                    slotIndex: 0,
+                },
+                await Twns.Config.ConfigManager.getLatestGameConfig()
+            );
+            war.setIsMapModified(false);
+            war.setIsReviewingMap(false);
+            war.startRunning()
+                .startRunningView();
+        } catch (e) {
+            return (e as Types.CustomError).errorCode ?? ClientErrorCode.MeUtility_GetErrorCodeForMapRawData_00;
         }
 
         return ClientErrorCode.NoError;

@@ -106,6 +106,8 @@ namespace TwnsMrrRoomInfoPanel {
             this._sclSkinId.setItemRenderer(SkinIdRenderer);
             this._sclReady.setItemRenderer(ReadyRenderer);
             this._btnBanCo.setRedVisible(true);
+
+            MrrProxy.reqMrrGetRoomPublicInfo(this._getOpenData().roomId);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._isTabInitialized = false;
@@ -645,7 +647,7 @@ namespace TwnsMrrRoomInfoPanel {
             const data = this.data;
             if (data) {
                 const skinId            = data.skinId;
-                this._imgColor.source   = WarCommonHelpers.getImageSourceForSkinId(skinId, MrrSelfSettingsModel.getUnitAndTileSkinId() === skinId);
+                this._imgColor.source   = Twns.WarHelpers.WarCommonHelpers.getImageSourceForSkinId(skinId, MrrSelfSettingsModel.getUnitAndTileSkinId() === skinId);
             }
         }
     }

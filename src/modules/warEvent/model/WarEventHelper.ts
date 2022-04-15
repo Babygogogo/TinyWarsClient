@@ -554,7 +554,7 @@ namespace WarEventHelper {
                 return false;
             }
 
-            if (WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
+            if (Twns.WarHelpers.WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                 unitData,
                 playersCountUnneutral,
                 gameConfig,
@@ -3340,7 +3340,7 @@ namespace WarEventHelper {
             return (v.canBeBlockedByUnit != null)
                 && (v.needMovableTile != null)
                 && (unitData.loaderUnitId == null)
-                && (!WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
+                && (!Twns.WarHelpers.WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
                     playersCountUnneutral,

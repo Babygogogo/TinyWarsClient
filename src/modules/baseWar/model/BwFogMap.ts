@@ -62,7 +62,7 @@ namespace TwnsBwFogMap {
                 throw Helpers.newError(`Invalid forceExpireTurnIndex: ${forceExpireTurnIndex}`, ClientErrorCode.BwFogMap_Init_03);
             }
 
-            if (!WarCommonHelpers.checkIsValidMapSize(mapSize)) {
+            if (!Twns.WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
                 throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwFogMap_Init_04);
             }
 
@@ -101,7 +101,7 @@ namespace TwnsBwFogMap {
             const mapSize               = this.getMapSize();
             const serialMapsFromPath    : IDataForFogMapFromPath[] = [];
             for (const [playerIndex, map] of this._getAllMapsFromPath()) {
-                const visibilityArray = WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                const visibilityArray = Twns.WarHelpers.WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
                 if (visibilityArray != null) {
                     serialMapsFromPath.push({
                         playerIndex,
@@ -129,7 +129,7 @@ namespace TwnsBwFogMap {
                     (player.getAliveState() === Types.PlayerAliveState.Alive)   &&
                     (targetTeamIndexes.has(player.getTeamIndex()))
                 ) {
-                    const visibilityArray = WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                    const visibilityArray = Twns.WarHelpers.WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
                     if (visibilityArray != null) {
                         mapsFromPath.push({
                             playerIndex,

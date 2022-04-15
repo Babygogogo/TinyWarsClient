@@ -120,7 +120,7 @@ namespace TwnsBwProduceUnitPanel {
             const actionPlanner     = war.getActionPlanner();
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex) ?? null;
             const unitCategory      = Helpers.getExisted(skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory());
-            const minNormalizedHp   = skillCfg ? WarCommonHelpers.getNormalizedHp(skillCfg[3]) : WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
+            const minNormalizedHp   = skillCfg ? Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(skillCfg[3]) : Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
             for (const unitType of gameConfig.getUnitTypesByCategory(unitCategory) ?? []) {
                 const unit = new Twns.BaseWar.BwUnit();

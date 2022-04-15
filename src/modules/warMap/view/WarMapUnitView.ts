@@ -97,10 +97,10 @@ namespace Twns.WarMap {
             }
 
             const hp            = unitData.currentHp;
-            const normalizedHp  = hp == null ? null : WarCommonHelpers.getNormalizedHp(hp);
+            const normalizedHp  = hp == null ? null : Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(hp);
             const imgHp         = this._imgHp;
             if ((normalizedHp == null)                                                      ||
-                (normalizedHp >= WarCommonHelpers.getNormalizedHp(this._getUnitTemplateCfg().maxHp))
+                (normalizedHp >= Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(this._getUnitTemplateCfg().maxHp))
             ) {
                 imgHp.visible = false;
             } else {

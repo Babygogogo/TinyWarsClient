@@ -102,7 +102,7 @@ namespace Twns.BaseWar {
             this.getCommonSettingManager().init({
                 settings                : settingsForCommon,
                 allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(dataForWarEventManager?.warEventFullData),
-                playersCountUnneutral   : WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),
+                playersCountUnneutral   : Twns.WarHelpers.WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),
                 gameConfig,
             });
 

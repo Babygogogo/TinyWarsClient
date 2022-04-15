@@ -39,7 +39,7 @@ namespace Twns.BaseWar {
             }
 
             const nextUnitId = Helpers.getExisted(data.nextUnitId, ClientErrorCode.BwUnitMap_Init_01);
-            if (!WarCommonHelpers.checkIsValidMapSize(mapSize)) {
+            if (!Twns.WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
                 throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwUnitMap_Init_02);
             }
 

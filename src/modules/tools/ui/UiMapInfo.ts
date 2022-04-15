@@ -191,7 +191,7 @@ namespace TwnsUiMapInfo {
             const warData = data.warData;
             if (warData) {
                 const tileMapData           = Helpers.getExisted(warData.field?.tileMap);
-                const mapSize               = WarCommonHelpers.getMapSize(tileMapData);
+                const mapSize               = Twns.WarHelpers.WarCommonHelpers.getMapSize(tileMapData);
                 labelMapName.text           = `--`;
                 labelMapId.text             = `--`;
                 labelPlayersCount.text      = `${Helpers.getExisted(warData.playerManager?.players).length - 1}`;
