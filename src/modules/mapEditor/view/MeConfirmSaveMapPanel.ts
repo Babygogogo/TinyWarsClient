@@ -55,15 +55,7 @@ namespace TwnsMeConfirmSaveMapPanel {
             const labelReviewDescTitle  = this._labelReviewDescTitle;
             const labelReviewDesc       = this._labelReviewDesc;
             const mapRawData            = Helpers.getExisted(MeModel.getWar()).serializeForMap();
-            if (ProtoManager.encodeAsMapRawData(mapRawData).byteLength > CommonConstants.MapMaxFileSize) {
-                btnConfirm.visible              = false;
-                groupNeedReview.visible         = false;
-                labelReviewDescTitle.visible    = false;
-                labelReviewDesc.text            = Lang.getText(LangTextType.A0261);
-                return;
-            }
-
-            const severeErrorCode = await MeUtility.getSevereErrorCodeForMapRawData(mapRawData);
+            const severeErrorCode       = await MeUtility.getSevereErrorCodeForMapRawData(mapRawData);
             if (severeErrorCode) {
                 btnConfirm.visible              = false;
                 groupNeedReview.visible         = false;

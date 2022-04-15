@@ -901,6 +901,10 @@ namespace MeUtility {
     }
 
     export async function getSevereErrorCodeForMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
+        if (ProtoManager.encodeAsMapRawData(mapRawData).byteLength > CommonConstants.MapMaxFileSize) {
+            return ClientErrorCode.MeUtility_GetSevereErrorCodeForMapRawData_00;
+        }
+
         try {
             const war = new MeWar();
             war.initWithMapEditorData(
@@ -910,12 +914,10 @@ namespace MeUtility {
                 },
                 await Twns.Config.ConfigManager.getLatestGameConfig()
             );
-            war.setIsMapModified(false);
-            war.setIsReviewingMap(false);
             war.startRunning()
                 .startRunningView();
         } catch (e) {
-            return (e as Types.CustomError).errorCode ?? ClientErrorCode.MeUtility_GetErrorCodeForMapRawData_00;
+            return (e as Types.CustomError).errorCode ?? ClientErrorCode.MeUtility_GetSevereErrorCodeForMapRawData_01;
         }
 
         return ClientErrorCode.NoError;

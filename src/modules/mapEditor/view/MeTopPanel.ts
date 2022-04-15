@@ -167,9 +167,7 @@ namespace TwnsMeTopPanel {
             }
 
             const mapRawData = war.serializeForMap();
-            if ((ProtoManager.encodeAsMapRawData(mapRawData).byteLength > CommonConstants.MapMaxFileSize)   ||
-                (await MeUtility.getSevereErrorCodeForMapRawData(mapRawData))
-            ) {
+            if (await MeUtility.getSevereErrorCodeForMapRawData(mapRawData)) {
                 FloatText.show(Lang.getText(LangTextType.A0304));
             } else {
                 MeProxy.reqMeSubmitMap(slotIndex, mapRawData, false);

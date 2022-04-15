@@ -289,6 +289,10 @@ namespace TwnsLangErrorText {
             `合作模式下，至少要有两个势力由真人玩家控制`,
             `There must be at least 2 human players in the Coop Mode.`,
         ],
+        [ClientErrorCode.MeUtility_GetSevereErrorCodeForMapRawData_00]: [
+            `地图文件体积太大，无法保存`,
+            `This map is too large to be saved.`,
+        ],
     };
 }
 
