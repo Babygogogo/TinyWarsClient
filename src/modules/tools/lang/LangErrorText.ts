@@ -261,6 +261,10 @@ namespace TwnsLangErrorText {
             `尚未设置预设规则的可用性`,
             `The availability of the preset rule has not been set.`,
         ],
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_00]: [
+            `势力规则的数量与实际存在的势力数量不相同，请检查预设规则`,
+            `The number of force rules is not the same as the number of forces. Please check the preset rules.`,
+        ],
         [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_02]: [
             `势力的队伍设置不合法`,
             `The team settings are invalid.`,

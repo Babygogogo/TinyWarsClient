@@ -188,7 +188,7 @@ namespace MeUtility {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function createISerialWar(data: CommonProto.Map.IMapEditorData): WarSerialization.ISerialWar {
-        const mapRawData        = Helpers.getExisted(data.mapRawData);
+        const mapRawData        = Helpers.deepClone(Helpers.getExisted(data.mapRawData));
         const warRuleArray      = mapRawData.warRuleArray;
         const unitDataArray     = mapRawData.unitDataArray || [];
         const warRule           = (warRuleArray ? warRuleArray[0] : null) || WarRuleHelpers.createDefaultWarRule(0, CommonConstants.WarMaxPlayerIndex);
