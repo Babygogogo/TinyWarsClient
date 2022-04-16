@@ -85,7 +85,7 @@ namespace Twns.WarEvent {
             if (unitArray.length > CommonConstants.WarEventActionAddUnitMaxCount) {
                 FloatText.show(Lang.getText(LangTextType.A0189));
             } else {
-                unitArray.push(WarEventHelper.getDefaultAddUnitData());
+                unitArray.push(Twns.WarHelpers.WarEventHelpers.getDefaultAddUnitData());
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }

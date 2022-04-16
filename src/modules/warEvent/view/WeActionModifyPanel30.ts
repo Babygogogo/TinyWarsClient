@@ -582,11 +582,11 @@ namespace TwnsWeActionModifyPanel30 {
             const openData          = this._getOpenData();
             const action            = openData.action;
             const war               = openData.war;
-            const errorTip          = WarEventHelper.getErrorTipForAction(openData.fullData, action, war);
+            const errorTip          = Twns.WarHelpers.WarEventHelpers.getErrorTipForAction(openData.fullData, action, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = WarEventHelper.getDescForAction(action, war) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = Twns.WarHelpers.WarEventHelpers.getDescForAction(action, war) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelPlayerIndex(): void {
             const playerIndexArray      = this._getAction().conPlayerIndexArray;

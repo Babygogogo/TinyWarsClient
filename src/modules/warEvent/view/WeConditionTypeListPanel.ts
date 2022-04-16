@@ -70,7 +70,7 @@ namespace TwnsWeConditionTypeListPanel {
             const fullData  = openData.fullData;
             const war       = openData.war;
             const dataArray: DataForTypeRenderer[] = [];
-            for (const newConditionType of WarEventHelper.getConditionTypeArray()) {
+            for (const newConditionType of Twns.WarHelpers.WarEventHelpers.getConditionTypeArray()) {
                 dataArray.push({
                     war,
                     fullData,
@@ -113,9 +113,9 @@ namespace TwnsWeConditionTypeListPanel {
             const data          = this._getData();
             const conditionType = data.newConditionType;
             const condition     = data.condition;
-            if (conditionType !== WarEventHelper.getConditionType(condition)) {
-                WarEventHelper.resetCondition(condition, conditionType);
-                WarEventHelper.openConditionModifyPanel({ fullData: data.fullData, condition, war: data.war });
+            if (conditionType !== Twns.WarHelpers.WarEventHelpers.getConditionType(condition)) {
+                Twns.WarHelpers.WarEventHelpers.resetCondition(condition, conditionType);
+                Twns.WarHelpers.WarEventHelpers.openConditionModifyPanel({ fullData: data.fullData, condition, war: data.war });
                 TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionTypeListPanel);
 
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
@@ -149,7 +149,7 @@ namespace TwnsWeConditionTypeListPanel {
                 labelUsing.visible  = false;
                 labelSwitch.visible = false;
             } else {
-                const isUsing       = WarEventHelper.getConditionType(data.condition) === data.newConditionType;
+                const isUsing       = Twns.WarHelpers.WarEventHelpers.getConditionType(data.condition) === data.newConditionType;
                 labelUsing.visible  = isUsing;
                 labelSwitch.visible = !isUsing;
             }

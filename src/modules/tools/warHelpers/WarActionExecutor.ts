@@ -598,6 +598,7 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged(false);
+        war.getView().updatePersistentText();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

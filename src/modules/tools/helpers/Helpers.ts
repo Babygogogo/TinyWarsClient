@@ -267,7 +267,7 @@ namespace Helpers {
             languageTypeSet.add(languageType);
 
             const text = data.text;
-            if (text == null) {
+            if ((text == null) || (text !== text.trim())) {
                 return false;
             }
 

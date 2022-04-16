@@ -194,7 +194,7 @@ namespace SpmModel {
 
         if (warData.warEventManager == null) {
             warData.warEventManager = {
-                warEventFullData    : WarEventHelper.trimAndCloneWarEventFullData(mapRawData?.warEventFullData, settingsForCommon.warRule.warEventIdArray),
+                warEventFullData    : Twns.WarHelpers.WarEventHelpers.trimAndCloneWarEventFullData(mapRawData?.warEventFullData, settingsForCommon.warRule.warEventIdArray),
                 calledCountList     : [],
             };
         }

@@ -6,7 +6,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeWarEventManager {
-    import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
+    import BwWarEventManager        = Twns.BaseWar.BwWarEventManager;
     import ISerialWarEventManager   = CommonProto.WarSerialization.ISerialWarEventManager;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
 
@@ -15,6 +15,7 @@ namespace TwnsMeWarEventManager {
             this._setWarEventFullData(getRevisedWarEventFullData(data.warEventFullData));
             this._setCalledCountList(null);
             this._setCustomCounterArray(null);
+            this._setOngoingPersistentActionIdSet(new Set());
         }
     }
 

@@ -791,6 +791,7 @@ namespace Types {
         PlayBgm,
         SetForceFogCode,
         SetCustomCounter,
+        StopPersistentAction,
 
         DeprecatedSetPlayerAliveState,
         DeprecatedSetPlayerFund,
@@ -803,6 +804,8 @@ namespace Types {
 
         SetTileType,
         SetTileState,
+
+        PersistentShowText,
     }
 
     // eslint-disable-next-line no-shadow

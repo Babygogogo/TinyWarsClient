@@ -466,12 +466,14 @@ namespace Lang {
             case WarEventActionType.SetCustomCounter                : return getText(LangTextType.B0800);
             case WarEventActionType.SimpleDialogue                  : return getText(LangTextType.B0728);
             case WarEventActionType.PlayBgm                         : return getText(LangTextType.B0750);
+            case WarEventActionType.StopPersistentAction            : return getText(LangTextType.B0887);
             case WarEventActionType.DeprecatedSetPlayerAliveState   : return getText(LangTextType.B0618);
             case WarEventActionType.DeprecatedSetPlayerFund         : return getText(LangTextType.B0752);
             case WarEventActionType.DeprecatedSetPlayerCoEnergy     : return getText(LangTextType.B0756);
             case WarEventActionType.SetPlayerAliveState             : return getText(LangTextType.B0618);
             case WarEventActionType.SetPlayerState                  : return getText(LangTextType.B0810);
             case WarEventActionType.SetPlayerCoEnergy               : return getText(LangTextType.B0756);
+            case WarEventActionType.PersistentShowText              : return getText(LangTextType.B0888);
             default                                                 : return null;
         }
     }

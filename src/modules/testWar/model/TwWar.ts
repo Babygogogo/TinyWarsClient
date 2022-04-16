@@ -16,7 +16,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.TestWar {
-    import BwWarEventManager    = TwnsBwWarEventManager.BwWarEventManager;
+    import BwWarEventManager    = Twns.BaseWar.BwWarEventManager;
     import TwPlayerManager      = TwnsTwPlayerManager.TwPlayerManager;
     import TwField              = TwnsTwField.TwField;
     import WarSerialization     = CommonProto.WarSerialization;
@@ -205,7 +205,7 @@ namespace Twns.TestWar {
             seedRandomInitialState  : seedRandomState,
             seedRandomCurrentState  : seedRandomState,
             warEventManager         : {
-                warEventFullData    : WarEventHelper.trimAndCloneWarEventFullData(mapRawData.warEventFullData, warRule.warEventIdArray),
+                warEventFullData    : Twns.WarHelpers.WarEventHelpers.trimAndCloneWarEventFullData(mapRawData.warEventFullData, warRule.warEventIdArray),
                 calledCountList     : [],
             },
             executedActionManager   : {

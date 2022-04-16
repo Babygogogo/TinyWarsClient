@@ -70,14 +70,14 @@ namespace TwnsWeEventListPanel {
 
         private _onTouchedBtnAddEvent(): void {
             const fullData  = Helpers.getExisted(this._getOpenData().war.getWarEventManager().getWarEventFullData());
-            const eventId   = WarEventHelper.addEvent(fullData);
+            const eventId   = Twns.WarHelpers.WarEventHelpers.addEvent(fullData);
             if (eventId != null) {
-                const subNodeId = WarEventHelper.createAndReplaceSubNodeInEvent({ fullData, eventId });
+                const subNodeId = Twns.WarHelpers.WarEventHelpers.createAndReplaceSubNodeInEvent({ fullData, eventId });
                 if (subNodeId != null) {
-                    WarEventHelper.addDefaultCondition(fullData, subNodeId);
+                    Twns.WarHelpers.WarEventHelpers.addDefaultCondition(fullData, subNodeId);
                 }
 
-                WarEventHelper.addDefaultAction(fullData, eventId);
+                Twns.WarHelpers.WarEventHelpers.addDefaultAction(fullData, eventId);
 
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
@@ -88,7 +88,7 @@ namespace TwnsWeEventListPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0188),
                 callback: () => {
-                    const result = WarEventHelper.checkAndDeleteUnusedComponents(Helpers.getExisted(openData.war.getWarEventManager().getWarEventFullData()));
+                    const result = Twns.WarHelpers.WarEventHelpers.checkAndDeleteUnusedComponents(Helpers.getExisted(openData.war.getWarEventManager().getWarEventFullData()));
                     FloatText.show(Lang.getFormattedText(LangTextType.F0063, result.deletedNodesCount, result.deletedConditionsCount, result.deletedActionsCount));
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
@@ -312,7 +312,7 @@ namespace TwnsWeEventListPanel {
             const eventId                   = data.eventId;
             const event                     = Helpers.getExisted(fullData.eventArray?.find(v => v.eventId === eventId));
             const prefixArray               = data.prefixArray;
-            const errorTip                  = WarEventHelper.getErrorTipForEvent(fullData, event);
+            const errorTip                  = Twns.WarHelpers.WarEventHelpers.getErrorTipForEvent(fullData, event);
             const labelError                = this._labelError;
             labelError.text                 = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor            = errorTip ? ColorValue.Red : ColorValue.Green;
@@ -324,7 +324,7 @@ namespace TwnsWeEventListPanel {
             const eventId                   = data.eventId;
             const event                     = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()?.eventArray?.find(v => v.eventId === eventId));
             const prefixArray               = data.prefixArray;
-            const errorTip                  = WarEventHelper.getErrorTipForEventCallCountInPlayerTurn(event);
+            const errorTip                  = Twns.WarHelpers.WarEventHelpers.getErrorTipForEventCallCountInPlayerTurn(event);
             const labelError                = this._labelError;
             labelError.text                 = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor            = errorTip ? ColorValue.Red : ColorValue.Green;
@@ -336,7 +336,7 @@ namespace TwnsWeEventListPanel {
             const eventId                   = data.eventId;
             const event                     = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()?.eventArray?.find(v => v.eventId === eventId));
             const prefixArray               = data.prefixArray;
-            const errorTip                  = WarEventHelper.getErrorTipForEventCallCountTotal(event);
+            const errorTip                  = Twns.WarHelpers.WarEventHelpers.getErrorTipForEventCallCountTotal(event);
             const labelError                = this._labelError;
             labelError.text                 = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor            = errorTip ? ColorValue.Red : ColorValue.Green;
@@ -349,7 +349,7 @@ namespace TwnsWeEventListPanel {
             const nodeId                    = data.nodeId;
             const node                      = Helpers.getExisted(fullData.conditionNodeArray?.find(v => v.nodeId === nodeId));
             const prefixArray               = data.prefixArray;
-            const errorTip                  = WarEventHelper.getErrorTipForConditionNode(fullData, node);
+            const errorTip                  = Twns.WarHelpers.WarEventHelpers.getErrorTipForConditionNode(fullData, node);
             const labelError                = this._labelError;
             labelError.text                 = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor            = errorTip ? ColorValue.Red : ColorValue.Green;
@@ -363,12 +363,12 @@ namespace TwnsWeEventListPanel {
             const conditionId               = data.conditionId;
             const condition                 = Helpers.getExisted(fullData.conditionArray?.find(v => v.WecCommonData?.conditionId === conditionId));
             const prefixArray               = data.prefixArray;
-            const errorTip                  = WarEventHelper.getErrorTipForCondition(fullData, condition, war);
+            const errorTip                  = Twns.WarHelpers.WarEventHelpers.getErrorTipForCondition(fullData, condition, war);
             const labelError                = this._labelError;
             labelError.text                 = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor            = errorTip ? ColorValue.Red : ColorValue.Green;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
-            this._labelDesc.text            = `${WarEventHelper.getDescForCondition(condition)}`;
+            this._labelDesc.text            = `${Twns.WarHelpers.WarEventHelpers.getDescForCondition(condition)}`;
             this._updatePositionForBtnModifyAndGroupDesc(prefixArray.length);
         }
         private _updateForAction(data: DataForWarEventDescRenderer): void {                     // DONE
@@ -377,12 +377,12 @@ namespace TwnsWeEventListPanel {
             const actionId                  = data.actionId;
             const action                    = Helpers.getExisted(fullData.actionArray?.find(v => v.WeaCommonData?.actionId === actionId));
             const prefixArray               = data.prefixArray;
-            const errorTip                  = WarEventHelper.getErrorTipForAction(fullData, action, war);
+            const errorTip                  = Twns.WarHelpers.WarEventHelpers.getErrorTipForAction(fullData, action, war);
             const labelError                = this._labelError;
             labelError.text                 = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor            = errorTip ? ColorValue.Red : ColorValue.Green;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
-            this._labelDesc.text            = `${WarEventHelper.getDescForAction(action, war)}`;
+            this._labelDesc.text            = `${Twns.WarHelpers.WarEventHelpers.getDescForAction(action, war)}`;
             this._updatePositionForBtnModifyAndGroupDesc(prefixArray.length);
         }
         private _updatePositionForBtnModifyAndGroupDesc(prefixArrayLength: number): void {

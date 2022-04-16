@@ -88,7 +88,7 @@ namespace Twns.WarEvent {
             if (dialogueArray.length > CommonConstants.WarEventActionDialogueMaxCount) {
                 FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
-                dialogueArray.push(WarEventHelper.getDefaultSimpleCoDialogueData(this._getOpenData().war.getGameConfig()));
+                dialogueArray.push(Twns.WarHelpers.WarEventHelpers.getDefaultSimpleCoDialogueData(this._getOpenData().war.getGameConfig()));
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -116,7 +116,7 @@ namespace Twns.WarEvent {
             const openData          = this._getOpenData();
             const action            = openData.action;
             const dialogueAction    = Helpers.getExisted(action.WeaSimpleDialogue);
-            const errorTip          = WarEventHelper.getErrorTipForAction(openData.fullData, action, openData.war);
+            const errorTip          = Twns.WarHelpers.WarEventHelpers.getErrorTipForAction(openData.fullData, action, openData.war);
             if (errorTip) {
                 FloatText.show(errorTip);
                 return;
@@ -232,7 +232,7 @@ namespace Twns.WarEvent {
             if (dialogueArray.length > CommonConstants.WarEventActionDialogueMaxCount) {
                 FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
-                dialogueArray.splice(dialogueArray.indexOf(data.dataForDialogue), 0, WarEventHelper.getDefaultSimpleCoDialogueData(data.war.getGameConfig()));
+                dialogueArray.splice(dialogueArray.indexOf(data.dataForDialogue), 0, Twns.WarHelpers.WarEventHelpers.getDefaultSimpleCoDialogueData(data.war.getGameConfig()));
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -512,7 +512,7 @@ namespace Twns.WarEvent {
 
         private _updateLabelError(): void {
             const data      = this._getData();
-            const errorTips = WarEventHelper.getErrorTipForWeaSimpleDialogueData(data.dataForDialogue, data.war.getGameConfig());
+            const errorTips = Twns.WarHelpers.WarEventHelpers.getErrorTipForWeaSimpleDialogueData(data.dataForDialogue, data.war.getGameConfig());
             const label     = this._labelError;
             if (errorTips) {
                 label.textColor = ColorValue.Red;

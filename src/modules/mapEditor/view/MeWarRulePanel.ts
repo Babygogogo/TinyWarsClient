@@ -32,7 +32,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeWarRulePanel {
-    import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
+    import BwWarEventManager        = Twns.BaseWar.BwWarEventManager;
     import MeField                  = TwnsMeField.MeField;
     import MeWar                    = Twns.MapEditor.MeWar;
     import LangTextType             = TwnsLangTextType.LangTextType;

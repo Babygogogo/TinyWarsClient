@@ -23,7 +23,7 @@ namespace TwnsSpwWar {
         private readonly _playerManager         = new TwnsSpwPlayerManager.SpwPlayerManager();
         private readonly _field                 = new TwnsSpwField.SpwField();
         private readonly _commonSettingManager  = new BwCommonSettingManager();
-        private readonly _warEventManager       = new TwnsBwWarEventManager.BwWarEventManager();
+        private readonly _warEventManager       = new Twns.BaseWar.BwWarEventManager();
 
         private _saveSlotIndex?     : number;
         private _saveSlotExtraData? : ISpmWarSaveSlotExtraData;
@@ -162,7 +162,7 @@ namespace TwnsSpwWar {
         public getCommonSettingManager(): BwCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager {
+        public getWarEventManager(): Twns.BaseWar.BwWarEventManager {
             return this._warEventManager;
         }
 

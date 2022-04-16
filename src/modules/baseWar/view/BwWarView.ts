@@ -10,7 +10,7 @@
 // import TwnsUiZoomableComponent  from "../../tools/ui/UiZoomableComponent";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwWarView {
+namespace Twns.BaseWar {
     import NotifyType   = TwnsNotifyType.NotifyType;
     import GridIndex    = Types.GridIndex;
     import Point        = Types.Point;
@@ -36,18 +36,20 @@ namespace TwnsBwWarView {
     ]);
 
     export class BwWarView extends eui.Group {
-        private _fieldContainer     = new TwnsUiZoomableComponent.UiZoomableComponent();
-        private _weatherContainer   = new eui.Group();
-
-        private _padding = Helpers.getExisted(PADDINGS.get(PaddingType.Default));
+        private _fieldContainer         = new TwnsUiZoomableComponent.UiZoomableComponent();
+        private _weatherContainer       = new eui.Group();
+        private _labelPersistentText    = new TwnsUiLabel.UiLabel();
 
         private _isShowingVibration = false;
         private _vibrationMaxOffset = 4;
         private _vibrationTimeoutId : number | null = null;
 
+        private _war? : BwWar;
+
         private _notifyListeners: Notify.Listener[] = [
-            { type: NotifyType.BwFieldZoomed,  callback: this._onNotifyBwFieldZoomed },
-            { type: NotifyType.BwFieldDragged, callback: this._onNotifyBwFieldDragged },
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.BwFieldZoomed,   callback: this._onNotifyBwFieldZoomed },
+            { type: NotifyType.BwFieldDragged,  callback: this._onNotifyBwFieldDragged },
         ];
         private _uiListeners: Types.UiListener[] = [
             { ui: this,     callback: this._onEnterFrame,   eventType: egret.Event.ENTER_FRAME },
@@ -69,14 +71,24 @@ namespace TwnsBwWarView {
             weatherContainer.touchThrough   = true;
             resetContainer(weatherContainer);
             this.addChild(weatherContainer);
+
+            {
+                const labelPersistentText               = this._labelPersistentText;
+                labelPersistentText.size                = 16;
+                labelPersistentText.stroke              = 2;
+                labelPersistentText.top                 = 110;
+                labelPersistentText.horizontalCenter    = 0;
+                labelPersistentText.textAlign           = egret.HorizontalAlign.CENTER;
+                this.addChild(labelPersistentText);
+            }
         }
 
-        public init(war: Twns.BaseWar.BwWar): void {
+        public init(war: BaseWar.BwWar): void {
             const gridSize          = CommonConstants.GridSize;
             const mapSize           = war.getTileMap().getMapSize();
             const fieldContainer    = this._fieldContainer;
             const padding           = getPadding(war);
-            this._padding           = padding;
+            this._war               = war;
             fieldContainer.setBoundarySpacings(padding.left, padding.right, padding.top, padding.bottom);
             fieldContainer.removeAllContents();
             fieldContainer.setContentWidth(mapSize.width * gridSize.width);
@@ -87,7 +99,7 @@ namespace TwnsBwWarView {
             this._weatherContainer.addChild(war.getWeatherManager().getView());
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        public fastInit(war: Twns.BaseWar.BwWar): void {
+        public fastInit(war: BaseWar.BwWar): void {
             // nothing to do
         }
 
@@ -98,6 +110,8 @@ namespace TwnsBwWarView {
             }
 
             this._fieldContainer.setMouseWheelListenerEnabled(true);
+
+            this.updatePersistentText();
         }
         public stopRunning(): void {
             Notify.removeEventListeners(this._notifyListeners, this);
@@ -198,9 +212,32 @@ namespace TwnsBwWarView {
             }
         }
 
+        public updatePersistentText(): void {
+            const war   = this._war;
+            const label = this._labelPersistentText;
+            if (!war?.getIsRunning()) {
+                label.text = ``;
+                return;
+            }
+
+            const warEventManager   = war.getWarEventManager();
+            const textArray         : string[] = [];
+            for (const actionId of warEventManager.getOngoingPersistentActionIdSet()) {
+                const action = warEventManager.getWarEventAction(actionId).WeaPersistentShowText;
+                if (action) {
+                    textArray.push(Lang.getLanguageText({ textArray: action.textArray }) ?? CommonConstants.ErrorTextForUndefined);
+                }
+            }
+            label.text = textArray.join(`\n`);
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(): void {
+            this.updatePersistentText();
+        }
+
         private _onNotifyBwFieldZoomed(e: egret.Event): void {
             const data = e.data as NotifyData.BwFieldZoomed;
             this._fieldContainer.setZoomByTouches(data.current, data.previous);
@@ -222,10 +259,10 @@ namespace TwnsBwWarView {
         container.bottom    = 0;
     }
 
-    function getPadding(war: Twns.BaseWar.BwWar): Padding {
-        if (war instanceof Twns.ReplayWar.RwWar) {
+    function getPadding(war: BaseWar.BwWar): Padding {
+        if (war instanceof ReplayWar.RwWar) {
             return Helpers.getExisted(PADDINGS.get(PaddingType.Replay));
-        } else if (war instanceof Twns.MapEditor.MeWar) {
+        } else if (war instanceof MapEditor.MeWar) {
             return Helpers.getExisted(PADDINGS.get(PaddingType.MapEditor));
         } else {
             return Helpers.getExisted(PADDINGS.get(PaddingType.Default));

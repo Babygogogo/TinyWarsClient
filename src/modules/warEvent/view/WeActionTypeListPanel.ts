@@ -73,7 +73,7 @@ namespace TwnsWeActionTypeListPanel {
             const war       = openData.war;
 
             const dataArray: DataForTypeRenderer[] = [];
-            for (const newActionType of WarEventHelper.getActionTypeArray()) {
+            for (const newActionType of Twns.WarHelpers.WarEventHelpers.getActionTypeArray()) {
                 dataArray.push({
                     war,
                     fullData,
@@ -120,9 +120,9 @@ namespace TwnsWeActionTypeListPanel {
 
             const actionType    = data.newActionType;
             const action        = data.action;
-            if (actionType !== WarEventHelper.getActionType(action)) {
-                WarEventHelper.resetAction(action, actionType);
-                WarEventHelper.openActionModifyPanel(data.war, data.fullData, action);
+            if (actionType !== Twns.WarHelpers.WarEventHelpers.getActionType(action)) {
+                Twns.WarHelpers.WarEventHelpers.resetAction(action, actionType);
+                Twns.WarHelpers.WarEventHelpers.openActionModifyPanel(data.war, data.fullData, action);
                 TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionTypeListPanel);
 
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
@@ -156,7 +156,7 @@ namespace TwnsWeActionTypeListPanel {
                 labelUsing.visible  = false;
                 labelSwitch.visible = false;
             } else {
-                const isUsing       = WarEventHelper.getActionType(data.action) === data.newActionType;
+                const isUsing       = Twns.WarHelpers.WarEventHelpers.getActionType(data.action) === data.newActionType;
                 labelUsing.visible  = isUsing;
                 labelSwitch.visible = !isUsing;
             }

@@ -811,14 +811,14 @@ namespace MeUtility {
         const warRuleError = WarRuleHelpers.getErrorCodeForWarRuleArray({
             ruleList                : mapRawData.warRuleArray,
             playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),
-            allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(mapRawData.warEventFullData),
+            allWarEventIdArray      : Twns.WarHelpers.WarEventHelpers.getAllWarEventIdArray(mapRawData.warEventFullData),
             gameConfig,
         });
         if (warRuleError) {
             return warRuleError;
         }
 
-        const warEventError = WarEventHelper.getErrorCodeForWarEventFullData(mapRawData, gameConfig);
+        const warEventError = Twns.WarHelpers.WarEventHelpers.getErrorCodeForWarEventFullData(mapRawData, gameConfig);
         if (warEventError) {
             return warEventError;
         }

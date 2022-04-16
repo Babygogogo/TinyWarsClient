@@ -38,7 +38,7 @@ namespace Twns.ReplayWar {
         private readonly _playerManager         = new TwnsRwPlayerManager.RwPlayerManager();
         private readonly _field                 = new TwnsRwField.RwField();
         private readonly _commonSettingManager  = new Twns.BaseWar.BwCommonSettingManager();
-        private readonly _warEventManager       = new TwnsBwWarEventManager.BwWarEventManager();
+        private readonly _warEventManager       = new Twns.BaseWar.BwWarEventManager();
 
         private _settingsForMcw?                    : CommonProto.WarSettings.ISettingsForMcw | null;
         private _settingsForScw?                    : CommonProto.WarSettings.ISettingsForScw | null;
@@ -85,7 +85,7 @@ namespace Twns.ReplayWar {
         public getCommonSettingManager(): Twns.BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager {
+        public getWarEventManager(): Twns.BaseWar.BwWarEventManager {
             return this._warEventManager;
         }
 
@@ -476,6 +476,7 @@ namespace Twns.ReplayWar {
             this._fastInitView();
             this.startRunning().startRunningView();
             this.updateTilesAndUnitsOnVisibilityChanged(false);
+            this.getView().updatePersistentText();
             SoundManager.playCoBgmWithWar(this, false);
 
             FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);

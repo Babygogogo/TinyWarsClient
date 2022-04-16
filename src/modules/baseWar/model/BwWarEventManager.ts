@@ -14,7 +14,7 @@
 // import TwnsBwWar            from "./BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwWarEventManager {
+namespace Twns.BaseWar {
     import ISerialWarEventManager           = CommonProto.WarSerialization.ISerialWarEventManager;
     import IDataForWarEventCalledCount      = CommonProto.WarSerialization.IDataForWarEventCalledCount;
     import IWarEventFullData                = CommonProto.Map.IWarEventFullData;
@@ -22,32 +22,45 @@ namespace TwnsBwWarEventManager {
     import IWarActionSystemCallWarEvent     = CommonProto.WarAction.IWarActionSystemCallWarEvent;
     import ICustomCounter                   = CommonProto.WarSerialization.ICustomCounter;
     import ClientErrorCode                  = TwnsClientErrorCode.ClientErrorCode;
-    import BwUnitMap                        = Twns.BaseWar.BwUnitMap;
-    import BwWar                            = Twns.BaseWar.BwWar;
+    import WarEventHelpers                  = WarHelpers.WarEventHelpers;
 
     export class BwWarEventManager {
-        private _war?                   : BwWar;
-        private _warEventFullData?      : IWarEventFullData | null;
-        private _calledCountList?       : IDataForWarEventCalledCount[] | null;
-        private _customCounterArray?    : ICustomCounter[] | null;
+        private _war?                           : BwWar;
+        private _warEventFullData?              : IWarEventFullData | null;
+        private _calledCountList?               : IDataForWarEventCalledCount[] | null;
+        private _customCounterArray?            : ICustomCounter[] | null;
+        private _ongoingPersistentActionIdSet?  : Set<number>;
 
         public init(data: Types.Undefinable<ISerialWarEventManager>): void {
             if (!data) {
                 this._setWarEventFullData(null);
                 this._setCalledCountList(null);
                 this._setCustomCounterArray(null);
+                this._setOngoingPersistentActionIdSet(new Set());
             } else {
                 const customCounterArray = data.customCounterArray ?? null;
-                if ((customCounterArray) && (!Twns.Config.ConfigManager.checkIsValidCustomCounterArray(customCounterArray))) {
+                if ((customCounterArray) && (!Config.ConfigManager.checkIsValidCustomCounterArray(customCounterArray))) {
                     throw Helpers.newError(`BwWarEventManager.init() invalid customCounterArray.`, ClientErrorCode.BwWarEventManager_Init_00);
                 }
 
                 // TODO: validate the data.
-                const warEventFullData = Helpers.deepClone(data.warEventFullData) ?? null;
+                const warEventFullData                  = Helpers.deepClone(data.warEventFullData) ?? null;
+                const ongoingPersistentActionIdArray    = data.ongoingPersistentActionIdArray ?? [];
+                const ongoingPersistentActionIdSet      = new Set(ongoingPersistentActionIdArray);
+                if (ongoingPersistentActionIdArray.length !== ongoingPersistentActionIdSet.size) {
+                    throw Helpers.newError(`BwWarEventMAnager.init() invalid ongoingPersistentActionIdArray.`, ClientErrorCode.BwWarEventManager_Init_01);
+                }
+                for (const actionId of ongoingPersistentActionIdSet) {
+                    const action = warEventFullData?.actionArray?.find(v => v.WeaCommonData?.actionId === actionId);
+                    if ((action == null) || (!WarEventHelpers.checkIsPersistentAction(action))) {
+                        throw Helpers.newError(`BwWarEventMAnager.init() invalid ongoingPersistentActionIdArray.`, ClientErrorCode.BwWarEventManager_Init_02);
+                    }
+                }
 
                 this._setWarEventFullData(warEventFullData);
                 this._setCalledCountList(Helpers.deepClone(data.calledCountList) ?? null);
                 this._setCustomCounterArray(Helpers.deepClone(customCounterArray));
+                this._setOngoingPersistentActionIdSet(ongoingPersistentActionIdSet);
             }
         }
         public fastInit(data: ISerialWarEventManager): void {
@@ -56,16 +69,18 @@ namespace TwnsBwWarEventManager {
 
         public serialize(): ISerialWarEventManager {
             return {
-                warEventFullData    : this.getWarEventFullData(),
-                calledCountList     : this._getCalledCountList(),
-                customCounterArray  : this._getCustomCounterArray(),
-        };
+                warEventFullData                : this.getWarEventFullData(),
+                calledCountList                 : this._getCalledCountList(),
+                customCounterArray              : this._getCustomCounterArray(),
+                ongoingPersistentActionIdArray  : [...this.getOngoingPersistentActionIdSet()],
+            };
         }
         public serializeForCreateSfw(): ISerialWarEventManager {
             return Helpers.deepClone({
-                warEventFullData    : this.getWarEventFullData(),
-                calledCountList     : this._getCalledCountList(),
-                customCounterArray  : this._getCustomCounterArray(),
+                warEventFullData                : this.getWarEventFullData(),
+                calledCountList                 : this._getCalledCountList(),
+                customCounterArray              : this._getCustomCounterArray(),
+                ongoingPersistentActionIdArray  : [...this.getOngoingPersistentActionIdSet()],
             });
         }
         public serializeForCreateMfr(): ISerialWarEventManager {
@@ -158,11 +173,11 @@ namespace TwnsBwWarEventManager {
         }
 
         private _setCustomCounter(counterId: number, counterValue: number): void {
-            if (!Twns.Config.ConfigManager.checkIsValidCustomCounterId(counterId)) {
+            if (!Config.ConfigManager.checkIsValidCustomCounterId(counterId)) {
                 throw Helpers.newError(`BwWarEventManager._setCustomCounter() invalid counterId: ${counterId}`, ClientErrorCode.BwWarEventManager_SetCustomCounter_00);
             }
 
-            if (!Twns.Config.ConfigManager.checkIsValidCustomCounterValue(counterValue)) {
+            if (!Config.ConfigManager.checkIsValidCustomCounterValue(counterValue)) {
                 throw Helpers.newError(`BwWarEventManager._setCustomCounter() invalid counterValue: ${counterValue}`, ClientErrorCode.BwWarEventManager_SetCustomCounter_01);
             }
 
@@ -185,11 +200,21 @@ namespace TwnsBwWarEventManager {
             }
         }
         private _getCustomCounter(counterId: number): number {
-            if (!Twns.Config.ConfigManager.checkIsValidCustomCounterId(counterId)) {
+            if (!Config.ConfigManager.checkIsValidCustomCounterId(counterId)) {
                 throw Helpers.newError(`BwWarEventManager._getCustomCounter() invalid counterId: ${counterId}`, ClientErrorCode.BwWarEventManager_GetCustomCounter_00);
             }
 
             return this._getCustomCounterArray()?.find(v => v.customCounterId === counterId)?.customCounterValue ?? 0;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for persistent actions.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        protected _setOngoingPersistentActionIdSet(actionIdArray: Set<number>): void {
+            this._ongoingPersistentActionIdSet = actionIdArray;
+        }
+        public getOngoingPersistentActionIdSet(): Set<number> {
+            return Helpers.getExisted(this._ongoingPersistentActionIdSet, ClientErrorCode.BwWarEventManager_GetOngoingPersistentActionIdSet_00);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,7 +231,7 @@ namespace TwnsBwWarEventManager {
             }
 
             const extraData = Helpers.getExisted(action.extraData, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_01);
-            Twns.WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
+            WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war             : this._getWar(),
                 commonExtraData : Helpers.getExisted(extraData.commonExtraData, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_02),
                 isFastExecute,
@@ -231,12 +256,14 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaDeprecatedSetPlayerAliveState)   { await this._callActionDeprecatedSetPlayerAliveStateWithExtraData(action.WeaDeprecatedSetPlayerAliveState, isFastExecute); }
             else if (action.WeaDeprecatedSetPlayerFund)         { await this._callActionDeprecatedSetPlayerFundWithExtraData(action.WeaDeprecatedSetPlayerFund, isFastExecute); }
             else if (action.WeaDeprecatedSetPlayerCoEnergy)     { await this._callActionDeprecatedSetPlayerCoEnergyWithExtraData(action.WeaDeprecatedSetPlayerCoEnergy, isFastExecute); }
+            else if (action.WeaStopPersistentAction)            { await this._callActionStopPersistentActionWithExtraData(action.WeaStopPersistentAction, isFastExecute); }
             else if (action.WeaSetPlayerAliveState)             { await this._callActionSetPlayerAliveStateWithExtraData(action.WeaSetPlayerAliveState, isFastExecute); }
             else if (action.WeaSetPlayerState)                  { await this._callActionSetPlayerStateWithExtraData(action.WeaSetPlayerState, isFastExecute); }
             else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithExtraData(action.WeaSetUnitState, isFastExecute); }
             else if (action.WeaSetTileType)                     { await this._callActionSetTileTypeWithExtraData(action.WeaSetTileType, isFastExecute); }
             else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithExtraData(action.WeaSetTileState, isFastExecute); }
+            else if (action.WeaPersistentShowText)              { await this._callActionPersistentShowTextWithExtraData(action.WeaPersistentShowText, isFastExecute, warEventActionId); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -256,12 +283,14 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaDeprecatedSetPlayerAliveState)   { await this._callActionDeprecatedSetPlayerAliveStateWithoutExtraData(action.WeaDeprecatedSetPlayerAliveState, isFastExecute); }
             else if (action.WeaDeprecatedSetPlayerFund)         { await this._callActionDeprecatedSetPlayerFundWithoutExtraData(action.WeaDeprecatedSetPlayerFund, isFastExecute); }
             else if (action.WeaDeprecatedSetPlayerCoEnergy)     { await this._callActionDeprecatedSetPlayerCoEnergyWithoutExtraData(action.WeaDeprecatedSetPlayerCoEnergy, isFastExecute); }
+            else if (action.WeaStopPersistentAction)            { await this._callActionStopPersistentActionWithoutExtraData(action.WeaStopPersistentAction, isFastExecute); }
             else if (action.WeaSetPlayerAliveState)             { await this._callActionSetPlayerAliveStateWithoutExtraData(action.WeaSetPlayerAliveState, isFastExecute); }
             else if (action.WeaSetPlayerState)                  { await this._callActionSetPlayerStateWithoutExtraData(action.WeaSetPlayerState, isFastExecute); }
             else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithoutExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithoutExtraData(action.WeaSetUnitState, isFastExecute); }
             else if (action.WeaSetTileType)                     { await this._callActionSetTileTypeWithoutExtraData(action.WeaSetTileType, isFastExecute); }
             else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithoutExtraData(action.WeaSetTileState, isFastExecute); }
+            else if (action.WeaPersistentShowText)              { await this._callActionPersistentShowTextWithoutExtraData(action.WeaPersistentShowText, isFastExecute, warEventActionId); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -297,7 +326,7 @@ namespace TwnsBwWarEventManager {
                 const unitType              = Helpers.getExisted(unitData.unitType);
                 const moveType              = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.moveType);
                 const rawGridIndex          = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
-                if (Twns.WarHelpers.WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
+                if (WarHelpers.WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
                     gameConfig,
@@ -331,7 +360,7 @@ namespace TwnsBwWarEventManager {
                 revisedUnitData.gridIndex   = gridIndex;
                 revisedUnitData.unitId      = unitId;
 
-                const unit = new Twns.BaseWar.BwUnit();
+                const unit = new BwUnit();
                 unit.init(revisedUnitData, gameConfig);
 
                 unit.startRunning(war);
@@ -571,7 +600,7 @@ namespace TwnsBwWarEventManager {
             }
 
             const playerAliveState = Helpers.getExisted(action.playerAliveState);
-            if (!Twns.Config.ConfigManager.checkIsValidPlayerAliveState(playerAliveState)) {
+            if (!Config.ConfigManager.checkIsValidPlayerAliveState(playerAliveState)) {
                 throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`);
             }
 
@@ -616,13 +645,28 @@ namespace TwnsBwWarEventManager {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionStopPersistentActionWithExtraData(action: WarEvent.IWeaStopPersistentAction, isFastExecute: boolean): Promise<void> {
+            const actionIdSet = this.getOngoingPersistentActionIdSet();
+            for (const actionId of action.actionIdArray ?? []) {
+                actionIdSet.delete(actionId);
+            }
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionStopPersistentActionWithoutExtraData(action: WarEvent.IWeaStopPersistentAction, isFastExecute: boolean): Promise<void> {
+            const actionIdSet = this.getOngoingPersistentActionIdSet();
+            for (const actionId of action.actionIdArray ?? []) {
+                actionIdSet.delete(actionId);
+            }
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private async _callActionSetPlayerAliveStateWithExtraData(action: WarEvent.IWeaSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
             // nothing to do
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private async _callActionSetPlayerAliveStateWithoutExtraData(action: WarEvent.IWeaSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
             const playerAliveState = Helpers.getExisted(action.playerAliveState);
-            if (!Twns.Config.ConfigManager.checkIsValidPlayerAliveState(playerAliveState)) {
+            if (!Config.ConfigManager.checkIsValidPlayerAliveState(playerAliveState)) {
                 throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`);
             }
 
@@ -918,7 +962,7 @@ namespace TwnsBwWarEventManager {
                     if (unitMap.getUnitOnMap(gridIndex)) {
                         if (actDestroyUnit) {
                             WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
-                        } else if (gameConfig.getTileTemplateCfgByType(Twns.Config.ConfigManager.getTileType(actBaseType, actObjectType))?.maxHp != null) {
+                        } else if (gameConfig.getTileTemplateCfgByType(Config.ConfigManager.getTileType(actBaseType, actObjectType))?.maxHp != null) {
                             continue;
                         }
                     }
@@ -1038,6 +1082,15 @@ namespace TwnsBwWarEventManager {
                     }
                 }
             }
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionPersistentShowTextWithExtraData(action: WarEvent.IWeaPersistentShowText, isFastExecute: boolean, actionId: number): Promise<void> {
+            this.getOngoingPersistentActionIdSet().add(actionId);
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionPersistentShowTextWithoutExtraData(action: WarEvent.IWeaPersistentShowText, isFastExecute: boolean, actionId: number): Promise<void> {
+            this.getOngoingPersistentActionIdSet().add(actionId);
         }
 
         public getCallableWarEventId(): number | null {                                // DONE
@@ -1442,72 +1495,66 @@ namespace TwnsBwWarEventManager {
             const war                   = this._getWar();
             const unitMap               = war.getUnitMap();
             const tileMap               = war.getTileMap();
-            const mapSize               = tileMap.getMapSize();
-            const mapWidth              = mapSize.width;
-            const mapHeight             = mapSize.height;
             let unitsCount              = 0;
-            for (let x = 0; x < mapWidth; ++x) {
-                for (let y = 0; y < mapHeight; ++y) {
-                    const gridIndex : Types.GridIndex = { x, y };
-                    const unit      = unitMap.getUnitOnMap(gridIndex);
-                    const tile      = tileMap.getTile(gridIndex);
-                    if ((unit == null)                                                                                          ||
-                        ((unitTypeArray.length) && (unitTypeArray.indexOf(unit.getUnitType()) < 0))                             ||
-                        ((playerIndexArray.length) && (playerIndexArray.indexOf(unit.getPlayerIndex()) < 0))                    ||
-                        ((teamIndexArray.length) && (teamIndexArray.indexOf(unit.getTeamIndex()) < 0))                          ||
-                        ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
-                        ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))                  ||
-                        ((actionStateArray.length) && (actionStateArray.indexOf(unit.getActionState()) < 0))                    ||
-                        ((hasLoadedCo != null) && (unit.getHasLoadedCo() !== hasLoadedCo))
-                    ) {
-                        continue;
-                    }
-
-                    if ((hp != null)                            &&
-                        (!Helpers.checkIsMeetValueComparator({
-                            comparator  : hpComparator,
-                            targetValue : hp,
-                            actualValue : unit.getCurrentHp(),
-                        }))
-                    ) {
-                        continue;
-                    }
-
-                    if ((promotion != null)                     &&
-                        (!Helpers.checkIsMeetValueComparator({
-                            comparator  : promotionComparator,
-                            targetValue : promotion,
-                            actualValue : unit.getCurrentPromotion(),
-                        }))
-                    ) {
-                        continue;
-                    }
-
-                    if ((fuelPct != null)                       &&
-                        (!Helpers.checkIsMeetValueComparator({
-                            comparator  : fuelPctComparator,
-                            targetValue : fuelPct * 100,
-                            actualValue : unit.getCurrentFuel() * 100 / unit.getMaxFuel(),
-                        }))
-                    ) {
-                        continue;
-                    }
-
-                    if (priAmmoPct != null) {
-                        const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
-                        if ((maxAmmo == null)   ||
-                            (!Helpers.checkIsMeetValueComparator({
-                                comparator  : priAmmoPctComparator,
-                                targetValue : priAmmoPct * 100,
-                                actualValue : Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_01) * 100 / maxAmmo
-                            }))
-                        ) {
-                            continue;
-                        }
-                    }
-
-                    ++unitsCount;
+            for (const unit of unitMap.getAllUnits()) {
+                const gridIndex = unit.getGridIndex();
+                const tile      = tileMap.getTile(gridIndex);
+                if ((unit == null)                                                                                          ||
+                    ((unitTypeArray.length) && (unitTypeArray.indexOf(unit.getUnitType()) < 0))                             ||
+                    ((playerIndexArray.length) && (playerIndexArray.indexOf(unit.getPlayerIndex()) < 0))                    ||
+                    ((teamIndexArray.length) && (teamIndexArray.indexOf(unit.getTeamIndex()) < 0))                          ||
+                    ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
+                    ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))                  ||
+                    ((actionStateArray.length) && (actionStateArray.indexOf(unit.getActionState()) < 0))                    ||
+                    ((hasLoadedCo != null) && (unit.getHasLoadedCo() !== hasLoadedCo))
+                ) {
+                    continue;
                 }
+
+                if ((hp != null)                            &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : hpComparator,
+                        targetValue : hp,
+                        actualValue : unit.getCurrentHp(),
+                    }))
+                ) {
+                    continue;
+                }
+
+                if ((promotion != null)                     &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : promotionComparator,
+                        targetValue : promotion,
+                        actualValue : unit.getCurrentPromotion(),
+                    }))
+                ) {
+                    continue;
+                }
+
+                if ((fuelPct != null)                       &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : fuelPctComparator,
+                        targetValue : fuelPct * 100,
+                        actualValue : unit.getCurrentFuel() * 100 / unit.getMaxFuel(),
+                    }))
+                ) {
+                    continue;
+                }
+
+                if (priAmmoPct != null) {
+                    const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
+                    if ((maxAmmo == null)   ||
+                        (!Helpers.checkIsMeetValueComparator({
+                            comparator  : priAmmoPctComparator,
+                            targetValue : priAmmoPct * 100,
+                            actualValue : Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_01) * 100 / maxAmmo
+                        }))
+                    ) {
+                        continue;
+                    }
+                }
+
+                ++unitsCount;
             }
 
             return Helpers.checkIsMeetValueComparator({
@@ -1579,7 +1626,7 @@ namespace TwnsBwWarEventManager {
     function getGridIndexForAddUnit({ origin, unitMap, tileMap, moveType, needMovableTile, canBeBlockedByUnit }: {
         origin              : Types.GridIndex;
         unitMap             : BwUnitMap;
-        tileMap             : Twns.BaseWar.BwTileMap;
+        tileMap             : BwTileMap;
         moveType            : Types.MoveType;
         needMovableTile     : boolean;
         canBeBlockedByUnit  : boolean;

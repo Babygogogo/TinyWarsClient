@@ -37,7 +37,7 @@ namespace Twns.BaseWar {
         private readonly _executedActionManager = new BaseWar.BwExecutedActionManager();
         private readonly _randomNumberManager   = new TwnsBwRandomNumberManager.BwRandomNumberManager();
         private readonly _drawVoteManager       = new TwnsBwDrawVoteManager.BwDrawVoteManager();
-        private readonly _view                  = new TwnsBwWarView.BwWarView();
+        private readonly _view                  = new BaseWar.BwWarView();
 
         private _gameConfig             : GameConfig | null = null;
         private _warId                  : number | null = null;
@@ -54,7 +54,7 @@ namespace Twns.BaseWar {
         public abstract getPlayerManager(): BwPlayerManager;
         public abstract getField(): BwField;
         public abstract getCommonSettingManager(): BwCommonSettingManager;
-        public abstract getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager;
+        public abstract getWarEventManager(): BaseWar.BwWarEventManager;
         public abstract getBootRestTime(playerIndex: number): number | null;
         public abstract getSettingsBootTimerParams(): number[];
         public abstract getIsExecuteActionsWithExtraData(): boolean;
@@ -101,8 +101,8 @@ namespace Twns.BaseWar {
             const dataForWarEventManager = data.warEventManager;
             this.getCommonSettingManager().init({
                 settings                : settingsForCommon,
-                allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(dataForWarEventManager?.warEventFullData),
-                playersCountUnneutral   : Twns.WarHelpers.WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),
+                allWarEventIdArray      : WarHelpers.WarEventHelpers.getAllWarEventIdArray(dataForWarEventManager?.warEventFullData),
+                playersCountUnneutral   : WarHelpers.WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),
                 gameConfig,
             });
 
@@ -138,7 +138,7 @@ namespace Twns.BaseWar {
         protected _fastInitView(): void {
             this.getView().fastInit(this);
         }
-        public getView(): TwnsBwWarView.BwWarView {
+        public getView(): BaseWar.BwWarView {
             return this._view;
         }
 

@@ -137,7 +137,7 @@ namespace TwnsWeNodeReplacePanel {
             const conditionIdArray  = (candidateNode.conditionIdArray || []).concat();
             const subNodeIdArray    = (candidateNode.subNodeIdArray || []).concat();
             if (parentNodeId == null) {
-                if (WarEventHelper.createAndReplaceSubNodeInEvent({
+                if (Twns.WarHelpers.WarEventHelpers.createAndReplaceSubNodeInEvent({
                     fullData,
                     eventId         : data.eventId,
                     isAnd,
@@ -147,12 +147,12 @@ namespace TwnsWeNodeReplacePanel {
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             } else {
-                if (WarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: candidateNodeId }).nodeIdSet.has(parentNodeId)) {
+                if (Twns.WarHelpers.WarEventHelpers.getAllSubNodesAndConditionsForNode({ fullData, nodeId: candidateNodeId }).nodeIdSet.has(parentNodeId)) {
                     FloatText.show(Lang.getText(LangTextType.A0179));
                     return;
                 }
 
-                if (WarEventHelper.cloneAndReplaceNodeInParentNode({
+                if (Twns.WarHelpers.WarEventHelpers.cloneAndReplaceNodeInParentNode({
                     fullData,
                     parentNodeId,
                     nodeIdForClone  : candidateNodeId,
@@ -172,7 +172,7 @@ namespace TwnsWeNodeReplacePanel {
             const fullData      = data.fullData;
             const newNodeId     = data.candidateNodeId;
             if (parentNodeId == null) {
-                if (WarEventHelper.replaceSubNodeInEvent({
+                if (Twns.WarHelpers.WarEventHelpers.replaceSubNodeInEvent({
                     fullData,
                     eventId     : data.eventId,
                     newNodeId,
@@ -180,12 +180,12 @@ namespace TwnsWeNodeReplacePanel {
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             } else {
-                if (WarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: newNodeId }).nodeIdSet.has(parentNodeId)) {
+                if (Twns.WarHelpers.WarEventHelpers.getAllSubNodesAndConditionsForNode({ fullData, nodeId: newNodeId }).nodeIdSet.has(parentNodeId)) {
                     FloatText.show(Lang.getText(LangTextType.A0179));
                     return;
                 }
 
-                if (WarEventHelper.replaceSubNodeInParentNode({
+                if (Twns.WarHelpers.WarEventHelpers.replaceSubNodeInParentNode({
                     fullData,
                     parentNodeId,
                     oldNodeId   : data.srcNodeId,

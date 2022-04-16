@@ -1336,6 +1336,22 @@ namespace TwnsLangCommonText {
             `自动保存失败`,
             `Auto save failed.`,
         ],
+        [LangTextType.A0305]: [
+            `未指定事件动作ID`,
+            `No event action ID is specified.`,
+        ],
+        [LangTextType.A0306]: [
+            `存在重复的事件动作ID`,
+            `There are duplicated event action IDs.`,
+        ],
+        [LangTextType.A0307]: [
+            `指定的事件动作ID无效`,
+            `There is invalid event action ID.`,
+        ],
+        [LangTextType.A0308]: [
+            `指定的文本不合法`,
+            `The specified text is not valid.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -4872,6 +4888,18 @@ namespace TwnsLangCommonText {
             `秒`,
             `Second`,
         ],
+        [LangTextType.B0887]: [
+            `停止持续性动作`,
+            `Stop Persistent Event Actions`,
+        ],
+        [LangTextType.B0888]: [
+            `持续性显示文本`,
+            `Persistently Show Text`,
+        ],
+        [LangTextType.B0889]: [
+            `动作ID`,
+            `Action ID`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -5678,6 +5706,14 @@ namespace TwnsLangCommonText {
         [LangTextType.F0129]: [
             `找到坐标为 %s%s 的所有地块，并修改其类型。`,
             `Get all terrains that the coordinate is %s%s, then modify their type.`,
+        ],
+        [LangTextType.F0130]: [
+            `停止ID为 %s 的持续性事件动作。`,
+            `Stop the persistent event actions whose ID is: %s.`,
+        ],
+        [LangTextType.F0131]: [
+            `持续性显示文字: %s`,
+            `Persistently show text: %s`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

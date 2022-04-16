@@ -120,7 +120,7 @@ namespace TwnsWeConditionReplacePanel {
 
         private _onTouchedBtnCopy(): void {          // DONE
             const data = this._getData();
-            if (WarEventHelper.cloneAndReplaceConditionInParentNode({
+            if (Twns.WarHelpers.WarEventHelpers.cloneAndReplaceConditionInParentNode({
                 fullData                : data.fullData,
                 parentNodeId            : data.parentNodeId,
                 conditionIdForDelete    : data.srcConditionId,
@@ -132,7 +132,7 @@ namespace TwnsWeConditionReplacePanel {
         }
         private _onTouchedBtnSelect(): void {        // DONE
             const data = this._getData();
-            if (WarEventHelper.replaceConditionInParentNode({
+            if (Twns.WarHelpers.WarEventHelpers.replaceConditionInParentNode({
                 fullData        : data.fullData,
                 parentNodeId    : data.parentNodeId,
                 oldConditionId  : data.srcConditionId,
@@ -167,7 +167,7 @@ namespace TwnsWeConditionReplacePanel {
             if (condition == null) {
                 label.text = Lang.getText(LangTextType.A0160);
             } else {
-                label.text = WarEventHelper.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
+                label.text = Twns.WarHelpers.WarEventHelpers.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateBtnSelect(): void {

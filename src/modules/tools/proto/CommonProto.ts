@@ -8390,6 +8390,96 @@ declare namespace CommonProto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a WeaStopPersistentAction. */
+        interface IWeaStopPersistentAction {
+
+            /** WeaStopPersistentAction actionIdArray */
+            actionIdArray?: (number[]|null);
+        }
+
+        /** Represents a WeaStopPersistentAction. */
+        class WeaStopPersistentAction implements IWeaStopPersistentAction {
+
+            /**
+             * Constructs a new WeaStopPersistentAction.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.WarEvent.IWeaStopPersistentAction);
+
+            /** WeaStopPersistentAction actionIdArray. */
+            public actionIdArray: number[];
+
+            /**
+             * Creates a new WeaStopPersistentAction instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns WeaStopPersistentAction instance
+             */
+            public static create(properties?: CommonProto.WarEvent.IWeaStopPersistentAction): CommonProto.WarEvent.WeaStopPersistentAction;
+
+            /**
+             * Encodes the specified WeaStopPersistentAction message. Does not implicitly {@link CommonProto.WarEvent.WeaStopPersistentAction.verify|verify} messages.
+             * @param message WeaStopPersistentAction message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.WarEvent.IWeaStopPersistentAction, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified WeaStopPersistentAction message, length delimited. Does not implicitly {@link CommonProto.WarEvent.WeaStopPersistentAction.verify|verify} messages.
+             * @param message WeaStopPersistentAction message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.WarEvent.IWeaStopPersistentAction, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a WeaStopPersistentAction message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns WeaStopPersistentAction
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarEvent.WeaStopPersistentAction;
+
+            /**
+             * Decodes a WeaStopPersistentAction message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns WeaStopPersistentAction
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarEvent.WeaStopPersistentAction;
+
+            /**
+             * Verifies a WeaStopPersistentAction message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a WeaStopPersistentAction message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns WeaStopPersistentAction
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.WarEvent.WeaStopPersistentAction;
+
+            /**
+             * Creates a plain object from a WeaStopPersistentAction message. Also converts values to other types if specified.
+             * @param message WeaStopPersistentAction
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.WarEvent.WeaStopPersistentAction, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this WeaStopPersistentAction to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a WeaDeprecatedSetPlayerAliveState. */
         interface IWeaDeprecatedSetPlayerAliveState {
 
@@ -9572,6 +9662,96 @@ declare namespace CommonProto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a WeaPersistentShowText. */
+        interface IWeaPersistentShowText {
+
+            /** WeaPersistentShowText textArray */
+            textArray?: (CommonProto.Structure.ILanguageText[]|null);
+        }
+
+        /** Represents a WeaPersistentShowText. */
+        class WeaPersistentShowText implements IWeaPersistentShowText {
+
+            /**
+             * Constructs a new WeaPersistentShowText.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.WarEvent.IWeaPersistentShowText);
+
+            /** WeaPersistentShowText textArray. */
+            public textArray: CommonProto.Structure.ILanguageText[];
+
+            /**
+             * Creates a new WeaPersistentShowText instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns WeaPersistentShowText instance
+             */
+            public static create(properties?: CommonProto.WarEvent.IWeaPersistentShowText): CommonProto.WarEvent.WeaPersistentShowText;
+
+            /**
+             * Encodes the specified WeaPersistentShowText message. Does not implicitly {@link CommonProto.WarEvent.WeaPersistentShowText.verify|verify} messages.
+             * @param message WeaPersistentShowText message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.WarEvent.IWeaPersistentShowText, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified WeaPersistentShowText message, length delimited. Does not implicitly {@link CommonProto.WarEvent.WeaPersistentShowText.verify|verify} messages.
+             * @param message WeaPersistentShowText message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.WarEvent.IWeaPersistentShowText, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a WeaPersistentShowText message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns WeaPersistentShowText
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarEvent.WeaPersistentShowText;
+
+            /**
+             * Decodes a WeaPersistentShowText message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns WeaPersistentShowText
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarEvent.WeaPersistentShowText;
+
+            /**
+             * Verifies a WeaPersistentShowText message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a WeaPersistentShowText message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns WeaPersistentShowText
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.WarEvent.WeaPersistentShowText;
+
+            /**
+             * Creates a plain object from a WeaPersistentShowText message. Also converts values to other types if specified.
+             * @param message WeaPersistentShowText
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.WarEvent.WeaPersistentShowText, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this WeaPersistentShowText to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a WarEventAction. */
         interface IWarEventAction {
 
@@ -9611,6 +9791,9 @@ declare namespace CommonProto {
             /** WarEventAction WeaSetCustomCounter */
             WeaSetCustomCounter?: (CommonProto.WarEvent.IWeaSetCustomCounter|null);
 
+            /** WarEventAction WeaStopPersistentAction */
+            WeaStopPersistentAction?: (CommonProto.WarEvent.IWeaStopPersistentAction|null);
+
             /** WarEventAction WeaSetPlayerAliveState */
             WeaSetPlayerAliveState?: (CommonProto.WarEvent.IWeaSetPlayerAliveState|null);
 
@@ -9628,6 +9811,9 @@ declare namespace CommonProto {
 
             /** WarEventAction WeaSetTileState */
             WeaSetTileState?: (CommonProto.WarEvent.IWeaSetTileState|null);
+
+            /** WarEventAction WeaPersistentShowText */
+            WeaPersistentShowText?: (CommonProto.WarEvent.IWeaPersistentShowText|null);
         }
 
         /** Represents a WarEventAction. */
@@ -9675,6 +9861,9 @@ declare namespace CommonProto {
             /** WarEventAction WeaSetCustomCounter. */
             public WeaSetCustomCounter?: (CommonProto.WarEvent.IWeaSetCustomCounter|null);
 
+            /** WarEventAction WeaStopPersistentAction. */
+            public WeaStopPersistentAction?: (CommonProto.WarEvent.IWeaStopPersistentAction|null);
+
             /** WarEventAction WeaSetPlayerAliveState. */
             public WeaSetPlayerAliveState?: (CommonProto.WarEvent.IWeaSetPlayerAliveState|null);
 
@@ -9692,6 +9881,9 @@ declare namespace CommonProto {
 
             /** WarEventAction WeaSetTileState. */
             public WeaSetTileState?: (CommonProto.WarEvent.IWeaSetTileState|null);
+
+            /** WarEventAction WeaPersistentShowText. */
+            public WeaPersistentShowText?: (CommonProto.WarEvent.IWeaPersistentShowText|null);
 
             /**
              * Creates a new WarEventAction instance using the specified properties.
@@ -13654,6 +13846,9 @@ declare namespace CommonProto {
 
             /** SerialWarEventManager customCounterArray */
             customCounterArray?: (CommonProto.WarSerialization.ICustomCounter[]|null);
+
+            /** SerialWarEventManager ongoingPersistentActionIdArray */
+            ongoingPersistentActionIdArray?: (number[]|null);
         }
 
         /** Represents a SerialWarEventManager. */
@@ -13673,6 +13868,9 @@ declare namespace CommonProto {
 
             /** SerialWarEventManager customCounterArray. */
             public customCounterArray: CommonProto.WarSerialization.ICustomCounter[];
+
+            /** SerialWarEventManager ongoingPersistentActionIdArray. */
+            public ongoingPersistentActionIdArray: number[];
 
             /**
              * Creates a new SerialWarEventManager instance using the specified properties.

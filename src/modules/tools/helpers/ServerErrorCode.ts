@@ -3142,6 +3142,17 @@ export const enum ServerErrorCode {
     BwWarEventManager_GetCustomCounterArray_0008,
     BwWarEventManager_GetCustomCounterArray_0009,
 
+    BwWarEventManager_GetOngoingPersistentActionIdArray_0000,
+    BwWarEventManager_GetOngoingPersistentActionIdArray_0001,
+    BwWarEventManager_GetOngoingPersistentActionIdArray_0002,
+    BwWarEventManager_GetOngoingPersistentActionIdArray_0003,
+    BwWarEventManager_GetOngoingPersistentActionIdArray_0004,
+    BwWarEventManager_GetOngoingPersistentActionIdArray_0005,
+    BwWarEventManager_GetOngoingPersistentActionIdArray_0006,
+    BwWarEventManager_GetOngoingPersistentActionIdArray_0007,
+    BwWarEventManager_GetOngoingPersistentActionIdArray_0008,
+    BwWarEventManager_GetOngoingPersistentActionIdArray_0009,
+
     BwWarEventManager_SetCustomCounter_0000,
     BwWarEventManager_SetCustomCounter_0001,
     BwWarEventManager_SetCustomCounter_0002,

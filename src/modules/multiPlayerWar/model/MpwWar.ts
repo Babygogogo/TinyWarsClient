@@ -25,7 +25,7 @@ namespace Twns.MultiPlayerWar {
         private readonly _playerManager         = new TwnsMpwPlayerManager.MpwPlayerManager();
         private readonly _field                 = new TwnsMpwField.MpwField();
         private readonly _commonSettingManager  = new Twns.BaseWar.BwCommonSettingManager();
-        private readonly _warEventManager       = new TwnsBwWarEventManager.BwWarEventManager();
+        private readonly _warEventManager       = new Twns.BaseWar.BwWarEventManager();
 
         public getField(): TwnsMpwField.MpwField {
             return this._field;
@@ -36,7 +36,7 @@ namespace Twns.MultiPlayerWar {
         public getCommonSettingManager(): Twns.BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager {
+        public getWarEventManager(): Twns.BaseWar.BwWarEventManager {
             return this._warEventManager;
         }
 

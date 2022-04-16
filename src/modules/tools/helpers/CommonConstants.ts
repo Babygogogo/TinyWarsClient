@@ -63,6 +63,7 @@ namespace CommonConstants {
     export const WarEventActionDialogueTextMaxLength                    = 300;
     export const WarEventActionDialogueMaxCount                         = 100;
     export const WarEventActionDialogueNameMaxLength                    = 30;
+    export const WarEventActionPersistentShowTextMaxLength              = 100;
     export const WarEventActionSetCustomCounterMaxDeltaValue            = 10000000;
     export const WarEventActionSetCustomCounterMaxMultiplierPercentage  = 10000;
     export const WarEventActionSetPlayerFundMaxDeltaValue               = 10000000;

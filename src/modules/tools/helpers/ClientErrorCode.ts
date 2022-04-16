@@ -1223,6 +1223,17 @@ namespace TwnsClientErrorCode {
         BwWarEventManager_GetCustomCounter_08,
         BwWarEventManager_GetCustomCounter_09,
 
+        BwWarEventManager_GetOngoingPersistentActionIdSet_00,
+        BwWarEventManager_GetOngoingPersistentActionIdSet_01,
+        BwWarEventManager_GetOngoingPersistentActionIdSet_02,
+        BwWarEventManager_GetOngoingPersistentActionIdSet_03,
+        BwWarEventManager_GetOngoingPersistentActionIdSet_04,
+        BwWarEventManager_GetOngoingPersistentActionIdSet_05,
+        BwWarEventManager_GetOngoingPersistentActionIdSet_06,
+        BwWarEventManager_GetOngoingPersistentActionIdSet_07,
+        BwWarEventManager_GetOngoingPersistentActionIdSet_08,
+        BwWarEventManager_GetOngoingPersistentActionIdSet_09,
+
         BwWarEventManager_CallWarEvent_00,
         BwWarEventManager_CallWarEvent_01,
         BwWarEventManager_CallWarEvent_02,
