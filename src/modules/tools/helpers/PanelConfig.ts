@@ -173,8 +173,8 @@ namespace TwnsPanelConfig {
         RwReplayListPanel                   : PanelConfig<TwnsRwReplayListPanel.OpenData>;
         RwReplayProgressPanel               : PanelConfig<TwnsRwReplayProgressPanel.OpenData>;
         RwSearchReplayPanel                 : PanelConfig<TwnsRwSearchReplayPanel.OpenData>;
-        RwTopPanel                          : PanelConfig<TwnsRwTopPanel.OpenData>;
-        RwWarMenuPanel                      : PanelConfig<TwnsRwWarMenuPanel.OpenData>;
+        RwTopPanel                          : PanelConfig<Twns.ReplayWar.OpenDataForRwTopPanel>;
+        RwWarMenuPanel                      : PanelConfig<Twns.ReplayWar.OpenDataForRwWarMenuPanel>;
 
         ScrCreateMapListPanel               : PanelConfig<TwnsScrCreateMapListPanel.OpenData>;
         ScrCreateSearchMapPanel             : PanelConfig<TwnsScrCreateSearchMapPanel.OpenData>;
@@ -1212,13 +1212,13 @@ namespace TwnsPanelConfig {
             },
 
             RwTopPanel: {
-                cls         : TwnsRwTopPanel?.RwTopPanel,
+                cls         : Twns.ReplayWar?.RwTopPanel,
                 skinName    : `resource/skins/replayWar/RwTopPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             RwWarMenuPanel: {
-                cls         : TwnsRwWarMenuPanel?.RwWarMenuPanel,
+                cls         : Twns.ReplayWar?.RwWarMenuPanel,
                 skinName    : `resource/skins/replayWar/RwWarMenuPanel.exml`,
                 layer       : LayerType.Hud0,
             },

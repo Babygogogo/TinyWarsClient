@@ -30,7 +30,7 @@
 // import TwnsRwWar                        from "../model/RwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsRwWarMenuPanel {
+namespace Twns.ReplayWar {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
@@ -41,8 +41,8 @@ namespace TwnsRwWarMenuPanel {
         Advanced,
     }
 
-    export type OpenData = void;
-    export class RwWarMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForRwWarMenuPanel = void;
+    export class RwWarMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForRwWarMenuPanel> {
         private readonly _group!                : eui.Group;
         private readonly _listCommand!          : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
         private readonly _labelNoCommand!       : TwnsUiLabel.UiLabel;
@@ -91,7 +91,7 @@ namespace TwnsRwWarMenuPanel {
             // nothing to do
         }
 
-        private _getWar(): Twns.ReplayWar.RwWar {
+        private _getWar(): ReplayWar.RwWar {
             return Helpers.getExisted(RwModel.getWar());
         }
 
@@ -213,7 +213,7 @@ namespace TwnsRwWarMenuPanel {
             return Helpers.getNonNullElements([
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandRate(),
-                // this._createCommandChat(),
+                this._createCommandChat(),
                 this._createCommandGotoRwReplayListPanel(),
                 this._createCommandGotoLobby(),
             ]);
@@ -324,7 +324,7 @@ namespace TwnsRwWarMenuPanel {
                         return;
                     }
 
-                    const errorCode = await (new Twns.TestWar.TwWar()).getErrorCodeForInit(warData, war.getGameConfig());
+                    const errorCode = await (new TestWar.TwWar()).getErrorCodeForInit(warData, war.getGameConfig());
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
@@ -403,8 +403,8 @@ namespace TwnsRwWarMenuPanel {
     }
 
     type DataForPlayerRenderer = {
-        war     : Twns.ReplayWar.RwWar;
-        player  : Twns.BaseWar.BwPlayer;
+        war     : ReplayWar.RwWar;
+        player  : BaseWar.BwPlayer;
     };
 
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
@@ -474,9 +474,9 @@ namespace TwnsRwWarMenuPanel {
             ];
         }
         private _createDataColor(
-            war         : Twns.ReplayWar.RwWar,
+            war         : ReplayWar.RwWar,
             playerIndex : number,
-            player      : Twns.BaseWar.BwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(LangTextType.B0397),
@@ -485,9 +485,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataFund(
-            war         : Twns.ReplayWar.RwWar,
+            war         : ReplayWar.RwWar,
             playerIndex : number,
-            player      : Twns.BaseWar.BwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0032),
@@ -496,9 +496,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataBuildings(
-            war         : Twns.ReplayWar.RwWar,
+            war         : ReplayWar.RwWar,
             playerIndex : number,
-            player      : Twns.BaseWar.BwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const info = this._getTilesCountAndIncome(war, playerIndex);
             return {
@@ -508,9 +508,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataCoName(
-            war         : Twns.ReplayWar.RwWar,
+            war         : ReplayWar.RwWar,
             playerIndex : number,
-            player      : Twns.BaseWar.BwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const cfg = war.getGameConfig().getCoBasicCfg(player.getCoId());
             return {
@@ -522,9 +522,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataEnergy(
-            war         : Twns.ReplayWar.RwWar,
+            war         : ReplayWar.RwWar,
             playerIndex : number,
-            player      : Twns.BaseWar.BwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue         = player.getCoCurrentEnergy();
             const powerEnergy       = player.getCoPowerEnergy();
@@ -542,9 +542,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataUnitAndValue(
-            war         : Twns.ReplayWar.RwWar,
+            war         : ReplayWar.RwWar,
             playerIndex : number,
-            player      : Twns.BaseWar.BwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const unitsCountAndValue = this._getUnitsCountAndValue(war, playerIndex);
             return {
@@ -554,9 +554,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataInitialFund(
-            war         : Twns.ReplayWar.RwWar,
+            war         : ReplayWar.RwWar,
             playerIndex : number,
-            player      : Twns.BaseWar.BwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
             return {
@@ -566,9 +566,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataIncomeMultiplier(
-            war         : Twns.ReplayWar.RwWar,
+            war         : ReplayWar.RwWar,
             playerIndex : number,
-            player      : Twns.BaseWar.BwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex);
             return {
@@ -578,9 +578,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataEnergyAddPctOnLoadCo(
-            war         : Twns.ReplayWar.RwWar,
+            war         : ReplayWar.RwWar,
             playerIndex : number,
-            player      : Twns.BaseWar.BwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
             return {
@@ -590,9 +590,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataEnergyGrowthMultiplier(
-            war         : Twns.ReplayWar.RwWar,
+            war         : ReplayWar.RwWar,
             playerIndex : number,
-            player      : Twns.BaseWar.BwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsEnergyGrowthMultiplier(playerIndex);
             return {
@@ -602,9 +602,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataMoveRangeModifier(
-            war         : Twns.ReplayWar.RwWar,
+            war         : ReplayWar.RwWar,
             playerIndex : number,
-            player      : Twns.BaseWar.BwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsMoveRangeModifier(playerIndex);
             return {
@@ -614,9 +614,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataAttackPowerModifier(
-            war         : Twns.ReplayWar.RwWar,
+            war         : ReplayWar.RwWar,
             playerIndex : number,
-            player      : Twns.BaseWar.BwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsAttackPowerModifier(playerIndex);
             return {
@@ -626,9 +626,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataVisionRangeModifier(
-            war         : Twns.ReplayWar.RwWar,
+            war         : ReplayWar.RwWar,
             playerIndex : number,
-            player      : Twns.BaseWar.BwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex);
             return {
@@ -638,9 +638,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataLuckLowerLimit(
-            war         : Twns.ReplayWar.RwWar,
+            war         : ReplayWar.RwWar,
             playerIndex : number,
-            player      : Twns.BaseWar.BwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
             return {
@@ -650,9 +650,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataLuckUpperLimit(
-            war         : Twns.ReplayWar.RwWar,
+            war         : ReplayWar.RwWar,
             playerIndex : number,
-            player      : Twns.BaseWar.BwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
             return {
@@ -662,7 +662,7 @@ namespace TwnsRwWarMenuPanel {
             };
         }
 
-        private _getTilesCountAndIncome(war: Twns.ReplayWar.RwWar, playerIndex: number): { count: number, income: number } {
+        private _getTilesCountAndIncome(war: ReplayWar.RwWar, playerIndex: number): { count: number, income: number } {
             let count   = 0;
             let income  = 0;
             for (const tile of war.getTileMap().getAllTiles()) {
@@ -674,7 +674,7 @@ namespace TwnsRwWarMenuPanel {
             return { count, income };
         }
 
-        private _getUnitsCountAndValue(war: Twns.ReplayWar.RwWar, playerIndex: number): { count: number, value: number } {
+        private _getUnitsCountAndValue(war: ReplayWar.RwWar, playerIndex: number): { count: number, value: number } {
             const unitMap   = war.getUnitMap();
             let count       = 0;
             let value       = 0;

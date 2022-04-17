@@ -4900,6 +4900,14 @@ namespace TwnsLangCommonText {
             `动作ID`,
             `Action ID`,
         ],
+        [LangTextType.B0890]: [
+            `自动`,
+            `Auto`,
+        ],
+        [LangTextType.B0891]: [
+            `视野`,
+            `POV`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [

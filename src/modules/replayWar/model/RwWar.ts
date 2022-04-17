@@ -37,8 +37,8 @@ namespace Twns.ReplayWar {
     export class RwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new TwnsRwPlayerManager.RwPlayerManager();
         private readonly _field                 = new TwnsRwField.RwField();
-        private readonly _commonSettingManager  = new Twns.BaseWar.BwCommonSettingManager();
-        private readonly _warEventManager       = new Twns.BaseWar.BwWarEventManager();
+        private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
+        private readonly _warEventManager       = new BaseWar.BwWarEventManager();
 
         private _settingsForMcw?                    : CommonProto.WarSettings.ISettingsForMcw | null;
         private _settingsForScw?                    : CommonProto.WarSettings.ISettingsForScw | null;
@@ -47,6 +47,7 @@ namespace Twns.ReplayWar {
         private _settingsForMfw?                    : CommonProto.WarSettings.ISettingsForMfw | null;
 
         private _replayId?                          : number;
+        private _visionTeamIndex                    : number | null = null;
         private _pauseTimeMs                        = 1000;
         private _isAutoReplay                       = false;
         private _nextActionId                       = 0;
@@ -82,10 +83,10 @@ namespace Twns.ReplayWar {
         public getPlayerManager(): TwnsRwPlayerManager.RwPlayerManager {
             return this._playerManager;
         }
-        public getCommonSettingManager(): Twns.BaseWar.BwCommonSettingManager {
+        public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getWarEventManager(): Twns.BaseWar.BwWarEventManager {
+        public getWarEventManager(): BaseWar.BwWarEventManager {
             return this._warEventManager;
         }
 
@@ -93,7 +94,7 @@ namespace Twns.ReplayWar {
             // No need to update units.
 
             const tileMap       = this.getTileMap();
-            const visibleTiles  = WarVisibilityHelpers.getAllTilesVisibleToTeam(this, this.getPlayerInTurn().getTeamIndex());
+            const visibleTiles  = WarVisibilityHelpers.getAllTilesVisibleToTeam(this, this.getVisionTeamIndex() ?? this.getPlayerInTurn().getTeamIndex());
             for (const tile of tileMap.getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
 
@@ -325,6 +326,25 @@ namespace Twns.ReplayWar {
         }
         public setReplayId(replayId: number): void {
             this._replayId = replayId;
+        }
+
+        public getVisionTeamIndex(): number | null {
+            return this._visionTeamIndex;
+        }
+        private _setVisionTeamIndex(index: number | null) {
+            this._visionTeamIndex = index;
+        }
+        public tickVisionTeamIndex(): number | null {
+            const teamIndexArray = [...new Set(this.getPlayerManager().getAllPlayers().map(v => v.getTeamIndex()))].sort((v1, v2) => v1 - v2);
+            Helpers.deleteElementFromArray(teamIndexArray, CommonConstants.WarNeutralTeamIndex);
+
+            const currentVisionTeamIndex    = this.getVisionTeamIndex();
+            const newVisionTeamIndex        = currentVisionTeamIndex == null
+                ? (teamIndexArray[0] ?? null)
+                : (teamIndexArray.find(v => v > currentVisionTeamIndex) ?? null);
+            this._setVisionTeamIndex(newVisionTeamIndex);
+
+            return newVisionTeamIndex;
         }
 
         public getPauseTimeMs(): number {
