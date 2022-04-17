@@ -76,7 +76,7 @@ namespace Twns.BaseWar {
                 const labelPersistentText               = this._labelPersistentText;
                 labelPersistentText.size                = 16;
                 labelPersistentText.stroke              = 2;
-                labelPersistentText.top                 = 110;
+                labelPersistentText.top                 = 60;
                 labelPersistentText.horizontalCenter    = 0;
                 labelPersistentText.textAlign           = egret.HorizontalAlign.CENTER;
                 this.addChild(labelPersistentText);

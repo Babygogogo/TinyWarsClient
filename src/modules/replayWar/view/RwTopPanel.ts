@@ -29,6 +29,7 @@ namespace TwnsRwTopPanel {
     export class RwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupPlayer!          : eui.Group;
         private readonly _labelPlayer!          : TwnsUiLabel.UiLabel;
+        private readonly _labelFundTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelFund!            : TwnsUiLabel.UiLabel;
 
         private readonly _groupPauseTime!       : eui.Group;
@@ -47,11 +48,12 @@ namespace TwnsRwTopPanel {
         private readonly _labelPowerEnergy!     : TwnsUiLabel.UiLabel;
         private readonly _labelZoneEnergy!      : TwnsUiLabel.UiLabel;
         private readonly _btnChat!              : TwnsUiButton.UiButton;
+        private readonly _btnRewindBegin!       : TwnsUiButton.UiButton;
         private readonly _btnFastRewind!        : TwnsUiButton.UiButton;
         private readonly _btnFastForward!       : TwnsUiButton.UiButton;
+        private readonly _btnForwardEnd!        : TwnsUiButton.UiButton;
         private readonly _btnPlay!              : TwnsUiButton.UiButton;
         private readonly _btnPause!             : TwnsUiButton.UiButton;
-        private readonly _btnUnitList!          : TwnsUiButton.UiButton;
         private readonly _btnMenu!              : TwnsUiButton.UiButton;
 
         protected _onOpening(): void {
@@ -75,10 +77,11 @@ namespace TwnsRwTopPanel {
                 { ui: this._groupProgress,      callback: this._onTouchedGroupProgress },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
                 { ui: this._btnFastRewind,      callback: this._onTouchedBtnFastRewind },
+                { ui: this._btnRewindBegin,     callback: this._onTouchedBtnRewindBegin },
                 { ui: this._btnFastForward,     callback: this._onTouchedBtnFastForward, },
+                { ui: this._btnForwardEnd,      callback: this._onTouchedBtnForwardEnd, },
                 { ui: this._btnPlay,            callback: this._onTouchedBtnPlay, },
                 { ui: this._btnPause,           callback: this._onTouchedBtnPause, },
-                { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
             ]);
         }
@@ -191,6 +194,23 @@ namespace TwnsRwTopPanel {
                 this._updateView();
             }
         }
+        private async _onTouchedBtnRewindBegin(): Promise<void> {
+            const war = this._getWar();
+            war.setIsAutoReplay(false);
+
+            if (!war.getIsRunning()) {
+                FloatText.show(Lang.getText(LangTextType.A0040));
+            } else if (war.getIsExecutingAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0044));
+            } else if (war.checkIsInBeginning()) {
+                FloatText.show(Lang.getText(LangTextType.A0042));
+            } else {
+                await Helpers.checkAndCallLater();
+                await war.loadCheckpoint(0);
+                await Helpers.checkAndCallLater();
+                this._updateView();
+            }
+        }
         private async _onTouchedBtnFastForward(): Promise<void> {
             const war = this._getWar();
             war.setIsAutoReplay(false);
@@ -208,6 +228,23 @@ namespace TwnsRwTopPanel {
                 this._updateView();
             }
         }
+        private async _onTouchedBtnForwardEnd(): Promise<void> {
+            const war = this._getWar();
+            war.setIsAutoReplay(false);
+
+            if (!war.getIsRunning()) {
+                FloatText.show(Lang.getText(LangTextType.A0040));
+            } else if (war.getIsExecutingAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0044));
+            } else if (war.checkIsInEnd()) {
+                FloatText.show(Lang.getText(LangTextType.A0043));
+            } else {
+                await Helpers.checkAndCallLater();
+                await war.loadCheckpoint(war.getAllCheckpointInfoArray().length - 1);
+                await Helpers.checkAndCallLater();
+                this._updateView();
+            }
+        }
         private _onTouchedBtnPlay(): void {
             const war = this._getWar();
             if (war.checkIsInEnd()) {
@@ -218,11 +255,6 @@ namespace TwnsRwTopPanel {
         }
         private _onTouchedBtnPause(): void {
             this._getWar().setIsAutoReplay(false);
-        }
-        private _onTouchedBtnUnitList(): void {
-            const war = this._getWar();
-            war.getField().getActionPlanner().setStateIdle();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitListPanel, { war });
         }
         private _onTouchedBtnMenu(): void {
             const actionPlanner = this._getWar().getActionPlanner();
@@ -252,6 +284,7 @@ namespace TwnsRwTopPanel {
             this._labelTurnTitle.text       = Lang.getText(LangTextType.B0091);
             this._labelActionTitle.text     = Lang.getText(LangTextType.B0090);
             this._labelPauseTimeTitle.text  = Lang.getText(LangTextType.B0846);
+            this._labelFundTitle.text       = `${Lang.getText(LangTextType.B0032)}: `;
         }
 
         private _updateLabelPauseTime(): void {

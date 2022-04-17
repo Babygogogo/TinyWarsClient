@@ -172,7 +172,7 @@ namespace TwnsWwMakeRequestWarsPanel {
                 });
             }
 
-            return dataArray;
+            return dataArray.sort((v1, v2) => v2.warId - v1.warId);
         }
 
         private async _initTabSettings(): Promise<void> {
