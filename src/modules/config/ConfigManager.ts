@@ -391,6 +391,16 @@ namespace Twns.Config.ConfigManager {
         return `unit_${textForVersion}_${textForType}_${textForDark}_${textForMoving}_${textForSkin}_${textForFrame}`;
     }
 
+    export function getWeatherImageSource(weatherType: Types.WeatherType): string {
+        switch (weatherType) {
+            case Types.WeatherType.Clear        : return `commonIcon0026`;
+            case Types.WeatherType.Rainy        : return `commonIcon0027`;
+            case Types.WeatherType.Sandstorm    : return `commonIcon0028`;
+            case Types.WeatherType.Snowy        : return `commonIcon0022`;
+            default                             : throw Helpers.newError(`ConfigManager.getWeatherImageSource() invalid weatherType: ${weatherType}`);
+        }
+    }
+
     export function getDialogueBackgroundImage(backgroundId: number): string {
         return `resource/assets/texture/background/dialogueBackground${Helpers.getNumText(backgroundId, 4)}.jpg`;
     }

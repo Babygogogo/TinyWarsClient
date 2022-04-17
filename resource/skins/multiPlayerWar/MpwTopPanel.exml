@@ -7,8 +7,19 @@
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
                                  source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" alpha="0.9" />
             <e:Group y="0" right="20">
-                <TwnsUiLabel:UiLabel id="_labelWeather" text="Sandstorm" size="14" x="10" textColor="0xFFFFFF" y="24"
-                                     maxTextWidth="68" height="30" verticalAlign="middle" />
+                <TwnsUiButton:UiButton id="_btnWeather" label="" x="10" width="50" y="10" height="40">
+                    <TwnsUiButton:skinName>
+                        <e:Skin states="up,down,disabled">
+                            <e:Image left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0000" />
+                            <e:Image id="iconDisplay" horizontalCenter="0" verticalCenter="0" x="10" y="10" scaleX="0.8"
+                                     scaleY="0.8" source="commonIcon0027" />
+                            <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                                                 horizontalCenter="0" maxTextWidth="70" />
+                            <TwnsUiImage:UiImage id="_imgRed" width="20" height="20" source="uncompressedCircle0009"
+                                                 right="0" top="0" />
+                        </e:Skin>
+                    </TwnsUiButton:skinName>
+                </TwnsUiButton:UiButton>
                 <e:Group id="_groupTimer" x="270" verticalCenter="0" width="90">
                     <TwnsUiImage:UiImage x="10" y="10" scaleX="0.7" scaleY="0.7" source="commonIcon0008" />
                     <TwnsUiLabel:UiLabel id="_labelTimer" text="999:00:00" size="14" x="0" textColor="0xFFFFFF" y="14"
