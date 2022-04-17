@@ -55,7 +55,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         // ConditionType.WecPlayerIndexInTurnGreaterThan,
         // ConditionType.WecPlayerIndexInTurnLessThan,
         // ConditionType.WecPlayerAliveStateEqualTo,
-        ConditionType.WecPlayerState,
+        ConditionType.WecPlayerPresence,
 
         // ConditionType.WecEventCalledCountTotalEqualTo,
         // ConditionType.WecEventCalledCountTotalGreaterThan,
@@ -1194,7 +1194,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             || (checkIsValidWecEventCalledCountTotalLessThan(condition.WecEventCalledCountTotalLessThan))
             || (checkIsValidWecEventCalledCount(condition.WecEventCalledCount, mapRawData.warEventFullData))
             || (checkIsValidWecPlayerAliveStateEqualTo(condition.WecPlayerAliveStateEqualTo, playersCountUnneutral))
-            || (checkIsValidWecPlayerState(condition.WecPlayerState, playersCountUnneutral))
+            || (checkIsValidWecPlayerPresence(condition.WecPlayerPresence, playersCountUnneutral, gameConfig))
             || (checkIsValidWecTurnIndexEqualTo(condition.WecTurnIndexEqualTo))
             || (checkIsValidWecTurnIndexGreaterThan(condition.WecTurnIndexGreaterThan))
             || (checkIsValidWecTurnIndexLessThan(condition.WecTurnIndexLessThan))
@@ -1296,7 +1296,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWecPlayerState(condition: Types.Undefinable<CommonProto.WarEvent.IWecPlayerState>, playersCountUnneutral: number): boolean {
+    function checkIsValidWecPlayerPresence(condition: Types.Undefinable<CommonProto.WarEvent.IWecPlayerPresence>, playersCountUnneutral: number, gameConfig: GameConfig): boolean {
         if (condition == null) {
             return false;
         }
@@ -1372,6 +1372,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
                     skillTypeSet.add(skillType);
                 }
+            }
+        }
+
+        {
+            const coCategoryIdArray = condition.coCategoryIdArray;
+            if ((coCategoryIdArray?.length) && (!gameConfig.checkIsValidCoCategoryIdSubset(coCategoryIdArray))) {
+                return false;
             }
         }
 
@@ -1876,13 +1883,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // description
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function getDescForCondition(con: IWarEventCondition): string | null {
+    export function getDescForCondition(con: IWarEventCondition, gameConfig: GameConfig): string | null {
         return (getDescForWecEventCalledCountTotalEqualTo(con.WecEventCalledCountTotalEqualTo))
             || (getDescForWecEventCalledCountTotalGreaterThan(con.WecEventCalledCountTotalGreaterThan))
             || (getDescForWecEventCalledCountTotalLessThan(con.WecEventCalledCountTotalLessThan))
             || (getDescForWecEventCalledCount(con.WecEventCalledCount))
             || (getDescForWecPlayerAliveStateEqualTo(con.WecPlayerAliveStateEqualTo))
-            || (getDescForWecPlayerState(con.WecPlayerState))
+            || (getDescForWecPlayerPresence(con.WecPlayerPresence, gameConfig))
             || (getDescForWecPlayerIndexInTurnEqualTo(con.WecPlayerIndexInTurnEqualTo))
             || (getDescForWecPlayerIndexInTurnGreaterThan(con.WecPlayerIndexInTurnGreaterThan))
             || (getDescForWecPlayerIndexInTurnLessThan(con.WecPlayerIndexInTurnLessThan))
@@ -1951,7 +1958,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0041 : LangTextType.F0042, data.playerIndexEqualTo, Lang.getPlayerAliveStateName(Helpers.getExisted(data.aliveStateEqualTo)))
             : null;
     }
-    function getDescForWecPlayerState(data: Types.Undefinable<WarEvent.IWecPlayerState>): string | null {
+    function getDescForWecPlayerPresence(data: Types.Undefinable<WarEvent.IWecPlayerPresence>, gameConfig: GameConfig): string | null {
         if (data == null) {
             return null;
         }
@@ -1981,11 +1988,17 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? Lang.getFormattedText(LangTextType.F0102, coUsingSkillTypeArray.map(v => Lang.getCoSkillTypeName(v)).join(`/`))
             : null;
 
+        const coCategoryIdArray         = data.coCategoryIdArray;
+        const textForCoCategoryIdArray  = coCategoryIdArray?.length
+            ? Lang.getFormattedText(LangTextType.F0132, coCategoryIdArray.map(v => gameConfig.getCoCategoryCfg(v)?.name).join(`/`))
+            : null;
+
         const textArrayForSubCondition = Helpers.getNonNullElements([
             textForAliveStateArray,
             textForFund,
             textForEnergyPercentage,
             textForCoUsingSkillTypeArray,
+            textForCoCategoryIdArray,
         ]);
         return Lang.getFormattedText(
             LangTextType.F0098,
@@ -2923,7 +2936,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         else if (condition.WecEventCalledCountTotalLessThan)    { return getErrorTipForWecEventCalledCountTotalLessThan(condition.WecEventCalledCountTotalLessThan); }
         else if (condition.WecEventCalledCount)                 { return getErrorTipForWecEventCalledCount(condition.WecEventCalledCount, fullData); }
         else if (condition.WecPlayerAliveStateEqualTo)          { return getErrorTipForWecPlayerAliveStateEqualTo(condition.WecPlayerAliveStateEqualTo); }
-        else if (condition.WecPlayerState)                      { return getErrorTipForWecPlayerState(condition.WecPlayerState, war); }
+        else if (condition.WecPlayerPresence)                   { return getErrorTipForWecPlayerPresence(condition.WecPlayerPresence, war); }
         else if (condition.WecPlayerIndexInTurnEqualTo)         { return getErrorTipForWecPlayerIndexInTurnEqualTo(condition.WecPlayerIndexInTurnEqualTo); }
         else if (condition.WecPlayerIndexInTurnGreaterThan)     { return getErrorTipForWecPlayerIndexInTurnGreaterThan(condition.WecPlayerIndexInTurnGreaterThan); }
         else if (condition.WecPlayerIndexInTurnLessThan)        { return getErrorTipForWecPlayerIndexInTurnLessThan(condition.WecPlayerIndexInTurnLessThan); }
@@ -3008,7 +3021,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return null;
     }
-    function getErrorTipForWecPlayerState(data: WarEvent.IWecPlayerState, war: BwWar): string | null {
+    function getErrorTipForWecPlayerPresence(data: WarEvent.IWecPlayerPresence, war: BwWar): string | null {
         if (data.playersCount == null) {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0229));
         }
@@ -3045,6 +3058,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         if (data.coUsingSkillTypeArray?.some(v => !Config.ConfigManager.checkIsValidCoSkillType(v))) {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0785));
+        }
+
+        const gameConfig = war.getGameConfig();
+        {
+            const coCategoryIdArray = data.coCategoryIdArray;
+            if ((coCategoryIdArray) && (!gameConfig.checkIsValidCoCategoryIdSubset(coCategoryIdArray))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0425));
+            }
         }
 
         return null;
@@ -4244,7 +4265,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         else if (condition.WecEventCalledCountTotalLessThan)    { return ConditionType.WecEventCalledCountTotalLessThan; }
         else if (condition.WecEventCalledCount)                 { return ConditionType.WecEventCalledCount; }
         else if (condition.WecPlayerAliveStateEqualTo)          { return ConditionType.WecPlayerAliveStateEqualTo; }
-        else if (condition.WecPlayerState)                      { return ConditionType.WecPlayerState; }
+        else if (condition.WecPlayerPresence)                   { return ConditionType.WecPlayerPresence; }
         else if (condition.WecTurnPhaseEqualTo)                 { return ConditionType.WecTurnPhaseEqualTo; }
         else if (condition.WecWeatherAndFog)                    { return ConditionType.WecWeatherAndFog; }
         else if (condition.WecTilePlayerIndexEqualTo)           { return ConditionType.WecTilePlayerIndexEqualTo; }
@@ -4351,8 +4372,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 playerIndexEqualTo  : CommonConstants.WarFirstPlayerIndex,
                 aliveStateEqualTo   : PlayerAliveState.Alive,
             };
-        } else if (conditionType === ConditionType.WecPlayerState) {
-            condition.WecPlayerState = {
+        } else if (conditionType === ConditionType.WecPlayerPresence) {
+            condition.WecPlayerPresence = {
                 playersCount                : 0,
                 playersCountComparator      : Types.ValueComparator.EqualTo,
                 playerIndexArray            : null,
@@ -4362,6 +4383,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 energyPercentage            : null,
                 energyPercentageComparator  : Types.ValueComparator.EqualTo,
                 coUsingSkillTypeArray       : null,
+                coCategoryIdArray           : null,
             };
         } else if (conditionType === ConditionType.WecTilePlayerIndexEqualTo) {
             condition.WecTilePlayerIndexEqualTo = {
@@ -4461,7 +4483,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         else if (condition.WecPlayerIndexInTurnGreaterThan)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel11, { fullData, condition, war }); }
         else if (condition.WecPlayerIndexInTurnLessThan)        { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel12, { fullData, condition, war }); }
         else if (condition.WecPlayerAliveStateEqualTo)          { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel13, { fullData, condition, war }); }
-        else if (condition.WecPlayerState)                      { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel14, { fullData, condition, war }); }
+        else if (condition.WecPlayerPresence)                   { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel14, { fullData, condition, war }); }
 
         else if (condition.WecEventCalledCountTotalEqualTo)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel20, { fullData, condition, war }); }
         else if (condition.WecEventCalledCountTotalGreaterThan) { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel21, { fullData, condition, war }); }

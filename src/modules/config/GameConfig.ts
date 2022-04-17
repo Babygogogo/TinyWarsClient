@@ -20,6 +20,7 @@ namespace Twns.Config {
     import MoveCostCfg          = Types.MoveCostCfg;
     import UnitPromotionCfg     = Types.UnitPromotionCfg;
     import PlayerRankCfg        = Types.PlayerRankCfg;
+    import CoCategoryCfg        = Types.CoCategoryCfg;
     import CoSkillCfg           = Types.CoSkillCfg;
     import CoSkillType          = Types.CoSkillType;
     import WeatherCfg           = Types.WeatherCfg;
@@ -39,6 +40,7 @@ namespace Twns.Config {
         private readonly _visionBonusCfgDict        : Map<UnitType, { [tileType: number]: VisionBonusCfg }>;
         private readonly _buildableTileCfgDict      : Map<UnitType, { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } }>;
         private readonly _playerRankCfgDict         : Map<number, PlayerRankCfg>;
+        private readonly _coCategoryCfgDict         : Map<number, CoCategoryCfg>;
         private readonly _coBasicCfgDict            : Map<number, CoBasicCfg>;
         private readonly _coSkillCfgDict            : Map<number, CoSkillCfg>;
         private readonly _weatherCfgDict            : Map<WeatherType, WeatherCfg>;
@@ -66,6 +68,7 @@ namespace Twns.Config {
             this._visionBonusCfgDict        = _destructVisionBonusCfg(rawConfig.VisionBonus);
             this._buildableTileCfgDict      = _destructBuildableTileCfg(rawConfig.BuildableTile);
             this._playerRankCfgDict         = _destructPlayerRankCfg(rawConfig.PlayerRank);
+            this._coCategoryCfgDict         = _destructCoCategoryCfg(rawConfig.CoCategory);
             this._coBasicCfgDict            = _destructCoBasicCfg(rawConfig.CoBasic);
             this._coSkillCfgDict            = _destructCoSkillCfg(rawConfig.CoSkill);
             this._weatherCfgDict            = _destructWeatherCfg(rawConfig.Weather);
@@ -218,6 +221,24 @@ namespace Twns.Config {
             }
 
             return cfgArray.sort((v1, v2) => v1.sortWeight - v2.sortWeight).map(v => v.avatarId);
+        }
+
+        public getCoCategoryCfg(categoryId: number): CoCategoryCfg | null {
+            return this._coCategoryCfgDict.get(categoryId) ?? null;
+        }
+        public getEnabledCoCategoryIdArray(): number[] {
+            const coCategoryIdSet = new Set<number>();
+            for (const [, coBasicCfg] of this._coBasicCfgDict) {
+                const coCategoryId = coBasicCfg.categoryId;
+                if ((coCategoryId != null) && (coBasicCfg.isEnabled)) {
+                    coCategoryIdSet.add(coCategoryId);
+                }
+            }
+            return [...coCategoryIdSet].sort((v1, v2) => Helpers.getExisted(this.getCoCategoryCfg(v1)?.name).localeCompare(Helpers.getExisted(this.getCoCategoryCfg(v2)?.name), "zh"));
+        }
+        public checkIsValidCoCategoryIdSubset(coCategoryIdArray: number[]): boolean {
+            return (coCategoryIdArray.length === new Set(coCategoryIdArray).size)
+                && (coCategoryIdArray.every(v => this.getCoCategoryCfg(v) != null));
         }
 
         public checkHasCo(coId: number): boolean {
@@ -438,6 +459,13 @@ namespace Twns.Config {
         const dst = new Map<number, PlayerRankCfg>();
         for (const d of data) {
             dst.set(d.minScore, d);
+        }
+        return dst;
+    }
+    function _destructCoCategoryCfg(data: CoCategoryCfg[]): Map<number, CoCategoryCfg> {
+        const dst = new Map<number, CoCategoryCfg>();
+        for (const d of data) {
+            dst.set(d.categoryId, d);
         }
         return dst;
     }

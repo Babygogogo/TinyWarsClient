@@ -368,7 +368,7 @@ namespace TwnsWeEventListPanel {
             labelError.text                 = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor            = errorTip ? ColorValue.Red : ColorValue.Green;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
-            this._labelDesc.text            = `${Twns.WarHelpers.WarEventHelpers.getDescForCondition(condition)}`;
+            this._labelDesc.text            = `${Twns.WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig())}`;
             this._updatePositionForBtnModifyAndGroupDesc(prefixArray.length);
         }
         private _updateForAction(data: DataForWarEventDescRenderer): void {                     // DONE

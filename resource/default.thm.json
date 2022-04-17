@@ -40,6 +40,7 @@
 		"resource/skins/common/CommonBanCoPanel.exml",
 		"resource/skins/common/CommonBlockPanel.exml",
 		"resource/skins/common/CommonChangeVersionPanel.exml",
+		"resource/skins/common/CommonChooseCoCategoryIdPanel.exml",
 		"resource/skins/component/button/ButtonBlue001.exml",
 		"resource/skins/common/CommonChooseCoPanel.exml",
 		"resource/skins/common/CommonChooseCoSkillTypePanel.exml",

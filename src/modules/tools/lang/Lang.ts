@@ -443,7 +443,7 @@ namespace Lang {
             case WarEventConditionType.WecEventCalledCount                  : return getText(LangTextType.B0789);
             case WarEventConditionType.WecWeatherAndFog                     : return getText(LangTextType.B0794);
             case WarEventConditionType.WecPlayerAliveStateEqualTo           : return getText(LangTextType.B0515);
-            case WarEventConditionType.WecPlayerState                       : return getText(LangTextType.B0786);
+            case WarEventConditionType.WecPlayerPresence                    : return getText(LangTextType.B0786);
             case WarEventConditionType.WecTilePlayerIndexEqualTo            : return getText(LangTextType.B0716);
             case WarEventConditionType.WecTileTypeEqualTo                   : return getText(LangTextType.B0717);
             case WarEventConditionType.WecTilePresence                      : return getText(LangTextType.B0779);

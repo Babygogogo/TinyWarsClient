@@ -1157,7 +1157,7 @@ namespace Twns.BaseWar {
             else if (condition.WecEventCalledCountTotalLessThan)    { return this._checkIsMeetConEventCalledCountTotalLessThan(condition.WecEventCalledCountTotalLessThan); }
             else if (condition.WecEventCalledCount)                 { return this._checkIsMeetConEventCalledCount(condition.WecEventCalledCount); }
             else if (condition.WecPlayerAliveStateEqualTo)          { return this._checkIsMeetConPlayerAliveStateEqualTo(condition.WecPlayerAliveStateEqualTo); }
-            else if (condition.WecPlayerState)                      { return this._checkIsMeetConPlayerState(condition.WecPlayerState); }
+            else if (condition.WecPlayerPresence)                   { return this._checkIsMeetConPlayerPresence(condition.WecPlayerPresence); }
             else if (condition.WecPlayerIndexInTurnEqualTo)         { return this._checkIsMeetConPlayerIndexInTurnEqualTo(condition.WecPlayerIndexInTurnEqualTo); }
             else if (condition.WecPlayerIndexInTurnGreaterThan)     { return this._checkIsMeetConPlayerIndexInTurnGreaterThan(condition.WecPlayerIndexInTurnGreaterThan); }
             else if (condition.WecPlayerIndexInTurnLessThan)        { return this._checkIsMeetConPlayerIndexInTurnLessThan(condition.WecPlayerIndexInTurnLessThan); }
@@ -1253,16 +1253,19 @@ namespace Twns.BaseWar {
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
-        private _checkIsMeetConPlayerState(condition: WarEvent.IWecPlayerState): boolean {
+        private _checkIsMeetConPlayerPresence(condition: WarEvent.IWecPlayerPresence): boolean {
             const playerIndexArray              = condition.playerIndexArray ?? [];
             const aliveStateArray               = condition.aliveStateArray ?? [];
             const coUsingSkillTypeArray         = condition.coUsingSkillTypeArray ?? [];
+            const coCategoryIdArray             = condition.coCategoryIdArray ?? [];
             const targetFund                    = condition.fund;
             const fundComparator                = Helpers.getExisted(condition.fundComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_00);
             const targetEnergyPercentage        = condition.energyPercentage;
             const energyPercentageComparator    = Helpers.getExisted(condition.energyPercentageComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_01);
+            const war                           = this._getWar();
+            const gameConfig                    = war.getGameConfig();
             let playersCount                    = 0;
-            for (const [playerIndex, player] of this._getWar().getPlayerManager().getAllPlayersDict()) {
+            for (const [playerIndex, player] of war.getPlayerManager().getAllPlayersDict()) {
                 if (((playerIndexArray.length) && (playerIndexArray.indexOf(playerIndex) < 0))                              ||
                     ((aliveStateArray.length) && (aliveStateArray.indexOf(player.getAliveState()) < 0))                     ||
                     ((coUsingSkillTypeArray.length) && (coUsingSkillTypeArray.indexOf(player.getCoUsingSkillType()) < 0))
@@ -1276,6 +1279,13 @@ namespace Twns.BaseWar {
                     actualValue : player.getFund(),
                 }))) {
                     continue;
+                }
+
+                if (coCategoryIdArray.length) {
+                    const categoryId = gameConfig.getCoBasicCfg(player.getCoId())?.categoryId;
+                    if ((categoryId == null) || (coCategoryIdArray.indexOf(categoryId) < 0)) {
+                        continue;
+                    }
                 }
 
                 if (targetEnergyPercentage != null) {

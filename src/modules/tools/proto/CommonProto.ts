@@ -1601,11 +1601,110 @@ declare namespace CommonProto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a CoCategoryCfg. */
+        interface ICoCategoryCfg {
+
+            /** CoCategoryCfg categoryId */
+            categoryId?: (number|null);
+
+            /** CoCategoryCfg name */
+            name?: (string|null);
+        }
+
+        /** Represents a CoCategoryCfg. */
+        class CoCategoryCfg implements ICoCategoryCfg {
+
+            /**
+             * Constructs a new CoCategoryCfg.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.Config.ICoCategoryCfg);
+
+            /** CoCategoryCfg categoryId. */
+            public categoryId: number;
+
+            /** CoCategoryCfg name. */
+            public name: string;
+
+            /**
+             * Creates a new CoCategoryCfg instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns CoCategoryCfg instance
+             */
+            public static create(properties?: CommonProto.Config.ICoCategoryCfg): CommonProto.Config.CoCategoryCfg;
+
+            /**
+             * Encodes the specified CoCategoryCfg message. Does not implicitly {@link CommonProto.Config.CoCategoryCfg.verify|verify} messages.
+             * @param message CoCategoryCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.Config.ICoCategoryCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified CoCategoryCfg message, length delimited. Does not implicitly {@link CommonProto.Config.CoCategoryCfg.verify|verify} messages.
+             * @param message CoCategoryCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.Config.ICoCategoryCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a CoCategoryCfg message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns CoCategoryCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.Config.CoCategoryCfg;
+
+            /**
+             * Decodes a CoCategoryCfg message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns CoCategoryCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.Config.CoCategoryCfg;
+
+            /**
+             * Verifies a CoCategoryCfg message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a CoCategoryCfg message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns CoCategoryCfg
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.Config.CoCategoryCfg;
+
+            /**
+             * Creates a plain object from a CoCategoryCfg message. Also converts values to other types if specified.
+             * @param message CoCategoryCfg
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.Config.CoCategoryCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this CoCategoryCfg to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a CoBasicCfg. */
         interface ICoBasicCfg {
 
             /** CoBasicCfg coId */
             coId?: (number|null);
+
+            /** CoBasicCfg categoryId */
+            categoryId?: (number|null);
 
             /** CoBasicCfg name */
             name?: (string|null);
@@ -1682,6 +1781,9 @@ declare namespace CommonProto {
 
             /** CoBasicCfg coId. */
             public coId: number;
+
+            /** CoBasicCfg categoryId. */
+            public categoryId: number;
 
             /** CoBasicCfg name. */
             public name: string;
@@ -2447,6 +2549,9 @@ declare namespace CommonProto {
             /** FullConfig PlayerRank */
             PlayerRank?: (CommonProto.Config.IPlayerRankCfg[]|null);
 
+            /** FullConfig CoCategory */
+            CoCategory?: (CommonProto.Config.ICoCategoryCfg[]|null);
+
             /** FullConfig CoBasic */
             CoBasic?: (CommonProto.Config.ICoBasicCfg[]|null);
 
@@ -2504,6 +2609,9 @@ declare namespace CommonProto {
 
             /** FullConfig PlayerRank. */
             public PlayerRank: CommonProto.Config.IPlayerRankCfg[];
+
+            /** FullConfig CoCategory. */
+            public CoCategory: CommonProto.Config.ICoCategoryCfg[];
 
             /** FullConfig CoBasic. */
             public CoBasic: CommonProto.Config.ICoBasicCfg[];
@@ -5825,139 +5933,145 @@ declare namespace CommonProto {
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a WecPlayerState. */
-        interface IWecPlayerState {
+        /** Properties of a WecPlayerPresence. */
+        interface IWecPlayerPresence {
 
-            /** WecPlayerState playersCount */
+            /** WecPlayerPresence playersCount */
             playersCount?: (number|null);
 
-            /** WecPlayerState playersCountComparator */
+            /** WecPlayerPresence playersCountComparator */
             playersCountComparator?: (number|null);
 
-            /** WecPlayerState playerIndexArray */
+            /** WecPlayerPresence playerIndexArray */
             playerIndexArray?: (number[]|null);
 
-            /** WecPlayerState aliveStateArray */
+            /** WecPlayerPresence aliveStateArray */
             aliveStateArray?: (number[]|null);
 
-            /** WecPlayerState fund */
+            /** WecPlayerPresence fund */
             fund?: (number|null);
 
-            /** WecPlayerState fundComparator */
+            /** WecPlayerPresence fundComparator */
             fundComparator?: (number|null);
 
-            /** WecPlayerState energyPercentage */
+            /** WecPlayerPresence energyPercentage */
             energyPercentage?: (number|null);
 
-            /** WecPlayerState energyPercentageComparator */
+            /** WecPlayerPresence energyPercentageComparator */
             energyPercentageComparator?: (number|null);
 
-            /** WecPlayerState coUsingSkillTypeArray */
+            /** WecPlayerPresence coUsingSkillTypeArray */
             coUsingSkillTypeArray?: (number[]|null);
+
+            /** WecPlayerPresence coCategoryIdArray */
+            coCategoryIdArray?: (number[]|null);
         }
 
-        /** Represents a WecPlayerState. */
-        class WecPlayerState implements IWecPlayerState {
+        /** Represents a WecPlayerPresence. */
+        class WecPlayerPresence implements IWecPlayerPresence {
 
             /**
-             * Constructs a new WecPlayerState.
+             * Constructs a new WecPlayerPresence.
              * @param [properties] Properties to set
              */
-            constructor(properties?: CommonProto.WarEvent.IWecPlayerState);
+            constructor(properties?: CommonProto.WarEvent.IWecPlayerPresence);
 
-            /** WecPlayerState playersCount. */
+            /** WecPlayerPresence playersCount. */
             public playersCount: number;
 
-            /** WecPlayerState playersCountComparator. */
+            /** WecPlayerPresence playersCountComparator. */
             public playersCountComparator: number;
 
-            /** WecPlayerState playerIndexArray. */
+            /** WecPlayerPresence playerIndexArray. */
             public playerIndexArray: number[];
 
-            /** WecPlayerState aliveStateArray. */
+            /** WecPlayerPresence aliveStateArray. */
             public aliveStateArray: number[];
 
-            /** WecPlayerState fund. */
+            /** WecPlayerPresence fund. */
             public fund: number;
 
-            /** WecPlayerState fundComparator. */
+            /** WecPlayerPresence fundComparator. */
             public fundComparator: number;
 
-            /** WecPlayerState energyPercentage. */
+            /** WecPlayerPresence energyPercentage. */
             public energyPercentage: number;
 
-            /** WecPlayerState energyPercentageComparator. */
+            /** WecPlayerPresence energyPercentageComparator. */
             public energyPercentageComparator: number;
 
-            /** WecPlayerState coUsingSkillTypeArray. */
+            /** WecPlayerPresence coUsingSkillTypeArray. */
             public coUsingSkillTypeArray: number[];
 
+            /** WecPlayerPresence coCategoryIdArray. */
+            public coCategoryIdArray: number[];
+
             /**
-             * Creates a new WecPlayerState instance using the specified properties.
+             * Creates a new WecPlayerPresence instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns WecPlayerState instance
+             * @returns WecPlayerPresence instance
              */
-            public static create(properties?: CommonProto.WarEvent.IWecPlayerState): CommonProto.WarEvent.WecPlayerState;
+            public static create(properties?: CommonProto.WarEvent.IWecPlayerPresence): CommonProto.WarEvent.WecPlayerPresence;
 
             /**
-             * Encodes the specified WecPlayerState message. Does not implicitly {@link CommonProto.WarEvent.WecPlayerState.verify|verify} messages.
-             * @param message WecPlayerState message or plain object to encode
+             * Encodes the specified WecPlayerPresence message. Does not implicitly {@link CommonProto.WarEvent.WecPlayerPresence.verify|verify} messages.
+             * @param message WecPlayerPresence message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: CommonProto.WarEvent.IWecPlayerState, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: CommonProto.WarEvent.IWecPlayerPresence, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified WecPlayerState message, length delimited. Does not implicitly {@link CommonProto.WarEvent.WecPlayerState.verify|verify} messages.
-             * @param message WecPlayerState message or plain object to encode
+             * Encodes the specified WecPlayerPresence message, length delimited. Does not implicitly {@link CommonProto.WarEvent.WecPlayerPresence.verify|verify} messages.
+             * @param message WecPlayerPresence message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: CommonProto.WarEvent.IWecPlayerState, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: CommonProto.WarEvent.IWecPlayerPresence, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a WecPlayerState message from the specified reader or buffer.
+             * Decodes a WecPlayerPresence message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns WecPlayerState
+             * @returns WecPlayerPresence
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarEvent.WecPlayerState;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarEvent.WecPlayerPresence;
 
             /**
-             * Decodes a WecPlayerState message from the specified reader or buffer, length delimited.
+             * Decodes a WecPlayerPresence message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns WecPlayerState
+             * @returns WecPlayerPresence
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarEvent.WecPlayerState;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarEvent.WecPlayerPresence;
 
             /**
-             * Verifies a WecPlayerState message.
+             * Verifies a WecPlayerPresence message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a WecPlayerState message from a plain object. Also converts values to their respective internal types.
+             * Creates a WecPlayerPresence message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns WecPlayerState
+             * @returns WecPlayerPresence
              */
-            public static fromObject(object: { [k: string]: any }): CommonProto.WarEvent.WecPlayerState;
+            public static fromObject(object: { [k: string]: any }): CommonProto.WarEvent.WecPlayerPresence;
 
             /**
-             * Creates a plain object from a WecPlayerState message. Also converts values to other types if specified.
-             * @param message WecPlayerState
+             * Creates a plain object from a WecPlayerPresence message. Also converts values to other types if specified.
+             * @param message WecPlayerPresence
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: CommonProto.WarEvent.WecPlayerState, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: CommonProto.WarEvent.WecPlayerPresence, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this WecPlayerState to JSON.
+             * Converts this WecPlayerPresence to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -6662,8 +6776,8 @@ declare namespace CommonProto {
             /** WarEventCondition WecPlayerAliveStateEqualTo */
             WecPlayerAliveStateEqualTo?: (CommonProto.WarEvent.IWecPlayerAliveStateEqualTo|null);
 
-            /** WarEventCondition WecPlayerState */
-            WecPlayerState?: (CommonProto.WarEvent.IWecPlayerState|null);
+            /** WarEventCondition WecPlayerPresence */
+            WecPlayerPresence?: (CommonProto.WarEvent.IWecPlayerPresence|null);
 
             /** WarEventCondition WecTilePlayerIndexEqualTo */
             WecTilePlayerIndexEqualTo?: (CommonProto.WarEvent.IWecTilePlayerIndexEqualTo|null);
@@ -6738,8 +6852,8 @@ declare namespace CommonProto {
             /** WarEventCondition WecPlayerAliveStateEqualTo. */
             public WecPlayerAliveStateEqualTo?: (CommonProto.WarEvent.IWecPlayerAliveStateEqualTo|null);
 
-            /** WarEventCondition WecPlayerState. */
-            public WecPlayerState?: (CommonProto.WarEvent.IWecPlayerState|null);
+            /** WarEventCondition WecPlayerPresence. */
+            public WecPlayerPresence?: (CommonProto.WarEvent.IWecPlayerPresence|null);
 
             /** WarEventCondition WecTilePlayerIndexEqualTo. */
             public WecTilePlayerIndexEqualTo?: (CommonProto.WarEvent.IWecTilePlayerIndexEqualTo|null);

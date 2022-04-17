@@ -66,6 +66,10 @@ namespace Types {
         minScore    : number;
         rank        : number;
     }
+    export interface CoCategoryCfg extends CommonProto.Config.ICoCategoryCfg {
+        categoryId          : number;
+        name                : string;
+    }
     export interface CoBasicCfg extends CommonProto.Config.ICoBasicCfg {
         coId                : number;
         name                : string;
@@ -99,6 +103,7 @@ namespace Types {
         VisionBonus     : VisionBonusCfg[];
         BuildableTile   : BuildableTileCfg[];
         PlayerRank      : PlayerRankCfg[];
+        CoCategory      : CoCategoryCfg[];
         CoBasic         : CoBasicCfg[];
         CoSkill         : CoSkillCfg[];
         Weather         : WeatherCfg[];
@@ -770,7 +775,7 @@ namespace Types {
         WecEventCalledCount,
 
         WecPlayerAliveStateEqualTo,
-        WecPlayerState,
+        WecPlayerPresence,
 
         WecTilePlayerIndexEqualTo,
         WecTileTypeEqualTo,

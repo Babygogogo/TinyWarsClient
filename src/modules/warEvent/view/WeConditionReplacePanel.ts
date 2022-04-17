@@ -15,17 +15,18 @@
 // import WarEventHelper           from "../model/WarEventHelper";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeConditionReplacePanel {
+namespace Twns.WarEvent {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
 
-    export type OpenData = {
+    export type OpenDataForWeConditionReplacePanel = {
+        gameConfig      : Config.GameConfig;
         fullData        : IWarEventFullData;
         parentNodeId    : number;
         conditionId     : number;
     };
-    export class WeConditionReplacePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeConditionReplacePanel extends TwnsUiPanel.UiPanel<OpenDataForWeConditionReplacePanel> {
         private readonly _listCondition!    : TwnsUiScrollList.UiScrollList<DataForConditionRenderer>;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelNoCondition! : TwnsUiLabel.UiLabel;
@@ -71,10 +72,12 @@ namespace TwnsWeConditionReplacePanel {
             const parentNodeId      = openData.parentNodeId;
             const srcConditionId    = openData.conditionId;
             const fullData          = openData.fullData;
+            const gameConfig        = openData.gameConfig;
 
             const dataArray: DataForConditionRenderer[] = [];
             for (const condition of openData.fullData.conditionArray || []) {
                 dataArray.push({
+                    gameConfig,
                     parentNodeId,
                     srcConditionId,
                     candidateConditionId : Helpers.getExisted(condition.WecCommonData?.conditionId),
@@ -88,10 +91,11 @@ namespace TwnsWeConditionReplacePanel {
     }
 
     type DataForConditionRenderer = {
-        parentNodeId        : number;
-        srcConditionId      : number;
-        candidateConditionId: number;
-        fullData            : IWarEventFullData;
+        gameConfig              : Config.GameConfig;
+        parentNodeId            : number;
+        srcConditionId          : number;
+        candidateConditionId    : number;
+        fullData                : IWarEventFullData;
     };
     class ConditionRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForConditionRenderer> {
         private readonly _labelConditionId! : TwnsUiLabel.UiLabel;
@@ -120,7 +124,7 @@ namespace TwnsWeConditionReplacePanel {
 
         private _onTouchedBtnCopy(): void {          // DONE
             const data = this._getData();
-            if (Twns.WarHelpers.WarEventHelpers.cloneAndReplaceConditionInParentNode({
+            if (WarHelpers.WarEventHelpers.cloneAndReplaceConditionInParentNode({
                 fullData                : data.fullData,
                 parentNodeId            : data.parentNodeId,
                 conditionIdForDelete    : data.srcConditionId,
@@ -132,7 +136,7 @@ namespace TwnsWeConditionReplacePanel {
         }
         private _onTouchedBtnSelect(): void {        // DONE
             const data = this._getData();
-            if (Twns.WarHelpers.WarEventHelpers.replaceConditionInParentNode({
+            if (WarHelpers.WarEventHelpers.replaceConditionInParentNode({
                 fullData        : data.fullData,
                 parentNodeId    : data.parentNodeId,
                 oldConditionId  : data.srcConditionId,
@@ -167,7 +171,7 @@ namespace TwnsWeConditionReplacePanel {
             if (condition == null) {
                 label.text = Lang.getText(LangTextType.A0160);
             } else {
-                label.text = Twns.WarHelpers.WarEventHelpers.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
+                label.text = WarHelpers.WarEventHelpers.getDescForCondition(condition, data.gameConfig) || CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateBtnSelect(): void {

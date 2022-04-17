@@ -4485,8 +4485,8 @@ namespace TwnsLangCommonText {
             `Activating CO Skill Type`,
         ],
         [LangTextType.B0786]: [
-            `玩家状态...`,
-            `Players' State ...`
+            `特定玩家数量统计...`,
+            `Player Presence ...`
         ],
         [LangTextType.B0787]: [
             `CO能量百分比`,
@@ -5714,6 +5714,10 @@ namespace TwnsLangCommonText {
         [LangTextType.F0131]: [
             `持续性显示文字: %s`,
             `Persistently show text: %s`,
+        ],
+        [LangTextType.F0132]: [
+            `CO是 %s`,
+            `the CO is %s`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

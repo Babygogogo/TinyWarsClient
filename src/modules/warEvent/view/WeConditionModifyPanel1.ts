@@ -16,19 +16,19 @@
 // import TwnsWeConditionTypeListPanel from "./WeConditionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeConditionModifyPanel1 {
+namespace Twns.WarEvent {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
     import LangTextType             = TwnsLangTextType.LangTextType;
 
-    export type OpenData = {
-        war         : Twns.BaseWar.BwWar;
+    export type OpenDataForWeConditionModifyPanel1 = {
+        war         : BaseWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
     /** WecTurnIndexEqualTo */
-    export class WeConditionModifyPanel1 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeConditionModifyPanel1 extends TwnsUiPanel.UiPanel<OpenDataForWeConditionModifyPanel1> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
         private readonly _btnType!          : TwnsUiButton.UiButton;
@@ -113,11 +113,12 @@ namespace TwnsWeConditionModifyPanel1 {
         private _updateLabelDescAndLabelError(): void {
             const openData          = this._getOpenData();
             const condition         = openData.condition;
-            const errorTip          = Twns.WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, openData.war);
+            const war               = openData.war;
+            const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = Twns.WarHelpers.WarEventHelpers.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateImgIsNot(): void {
             this._imgIsNot.visible = !!this._getCondition().WecTurnIndexEqualTo?.isNot;
