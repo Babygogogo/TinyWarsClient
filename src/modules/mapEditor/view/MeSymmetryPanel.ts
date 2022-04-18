@@ -76,7 +76,7 @@ namespace TwnsMeSymmetryPanel {
         private readonly _btnUpRightDownLeft2!          : TwnsUiButton.UiButton;
         private readonly _btnDownLeftUpRight2!          : TwnsUiButton.UiButton;
 
-        private _asymmetricalCounters   : MeUtility.AsymmetricalCounters | null = null;
+        private _asymmetricalCounters   : Twns.MapEditor.MeHelpers.AsymmetricalCounters | null = null;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -113,7 +113,7 @@ namespace TwnsMeSymmetryPanel {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this._asymmetricalCounters  = MeUtility.getAsymmetricalCounters(this._getWar());
+            this._asymmetricalCounters  = Twns.MapEditor.MeHelpers.getAsymmetricalCounters(this._getWar());
 
             this._updateGroupLeftRight();
             this._updateGroupUpDown();
@@ -662,7 +662,7 @@ namespace TwnsMeSymmetryPanel {
     function autoFillTile(war: Twns.BaseWar.BwWar, dstGridIndex: GridIndex, symmetryType: SymmetryType): void {
         const tileMap               = war.getTileMap();
         const dstTile               = tileMap.getTile(dstGridIndex);
-        const srcTile               = tileMap.getTile(Helpers.getExisted(MeUtility.getSymmetricalGridIndex(dstGridIndex, symmetryType, tileMap.getMapSize())));
+        const srcTile               = tileMap.getTile(Helpers.getExisted(Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(dstGridIndex, symmetryType, tileMap.getMapSize())));
         const tileData              = Helpers.deepClone(srcTile.serialize());
         const decoratorType         = srcTile.getDecoratorType();
         const decoratorShapeId      = srcTile.getDecoratorShapeId();

@@ -472,7 +472,7 @@ namespace TwnsMeWarMenuPanel {
                 name    : Lang.getText(LangTextType.B0325),
                 callback: async () => {
                     const mapRawData    = war.serializeForMap();
-                    const errorCode     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
+                    const errorCode     = await Twns.MapEditor.MeHelpers.getErrorCodeForMapRawData(mapRawData);
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
@@ -507,7 +507,7 @@ namespace TwnsMeWarMenuPanel {
                 name    : Lang.getText(LangTextType.B0557),
                 callback: async () => {
                     const mapRawData    = war.serializeForMap();
-                    const errorCode     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
+                    const errorCode     = await Twns.MapEditor.MeHelpers.getErrorCodeForMapRawData(mapRawData);
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;

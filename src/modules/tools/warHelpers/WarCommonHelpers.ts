@@ -900,7 +900,8 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             }
         }
 
-        const tempRemovedUnits = new Map<number, BaseWar.BwUnit>();  // 此临时变量仅用于优化性能，在后续把部队加回来的过程中可以直接从这里取，而不必重新创建
+        // 先把unitArrayAfterAction涉及的部队全部从地图上移除，然后再重新加回来，否则如果遇到有部队互相交换了位置之类的复杂情况就会报错（因为尝试把A移动到B所在位置时，B仍然占着位置，A就无法移动过去）
+        const tempRemovedUnits = new Map<number, BaseWar.BwUnit>();
         if ((movingUnitId != null) && (movingUnit)) {
             unitMap.removeUnitById(movingUnitId, true);
             tempRemovedUnits.set(movingUnitId, movingUnit);
@@ -912,7 +913,6 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             }
         }
         for (const unitData of unitArrayAfterAction) {
-            // 先把涉及的部队全部从地图上移除，然后再加回来，否则如果遇到有部队互相交换了位置之类的复杂情况就会报错（因为尝试把A移动到B所在位置时，B仍然占着位置，A就无法移动过去）
             const unitId    = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_05);
             const unit      = unitMap.getUnitById(unitId);
             if (unit) {
@@ -924,15 +924,8 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         const updatedViewUnits = new Set<BaseWar.BwUnit>();
         for (const unitData of unitArrayAfterAction) {
             const unitId        = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_06);
-            // const existingUnit  = unitMap.getUnitById(unitId);
             const existingUnit  = tempRemovedUnits.get(unitId);
             if (existingUnit) {
-                // if (existingUnit.getLoaderUnitId() == null) {
-                //     unitMap.removeUnitOnMap(existingUnit.getGridIndex(), true);
-                // } else {
-                //     unitMap.removeUnitLoaded(unitId);
-                // }
-
                 const existingUnitData = existingUnit.serialize();
                 existingUnit.init(unitData, gameConfig);
                 if (existingUnit.getLoaderUnitId() == null) {
@@ -969,6 +962,27 @@ namespace Twns.WarHelpers.WarCommonHelpers {
                 unit.startRunning(war);
                 unit.startRunningView();
                 updatedViewUnits.add(unit);
+            }
+        }
+        // 暂时移除的部队中，如果没有出现在unitArrayAfterAction中，则要原样加回来，否则会出现类似装载了部队的运输船原地待机后被装载物假性消失的问题
+        for (const [unitId, unit] of tempRemovedUnits) {
+            if (unitArrayAfterAction.some(v => v.unitId === unitId)) {
+                continue;
+            }
+
+            if (unit.getLoaderUnitId() == null) {
+                unitMap.setUnitOnMap(unit);
+
+                unit.updateView();
+                updatedViewUnits.add(unit);
+            } else {
+                unitMap.setUnitLoaded(unit);
+
+                const loaderUnit = unitMap.getUnitOnMap(unit.getGridIndex());
+                if (loaderUnit) {
+                    loaderUnit.updateView();
+                    updatedViewUnits.add(loaderUnit);
+                }
             }
         }
 

@@ -690,6 +690,12 @@ namespace Helpers {
         }
     }
 
+    export function assert(condition: boolean, errorCode: ClientErrorCode): asserts condition {
+        if (!condition) {
+            throw newError(`Assertion failed!`, errorCode);
+        }
+    }
+
     export function getDefined<T>(value: T | undefined, errorCode: ClientErrorCode): T {
         if (value === undefined) {
             throw newError(`Undefined value.`, errorCode);

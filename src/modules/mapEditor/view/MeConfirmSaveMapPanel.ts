@@ -55,7 +55,7 @@ namespace TwnsMeConfirmSaveMapPanel {
             const labelReviewDescTitle  = this._labelReviewDescTitle;
             const labelReviewDesc       = this._labelReviewDesc;
             const mapRawData            = Helpers.getExisted(MeModel.getWar()).serializeForMap();
-            const severeErrorCode       = await MeUtility.getSevereErrorCodeForMapRawData(mapRawData);
+            const severeErrorCode       = await Twns.MapEditor.MeHelpers.getSevereErrorCodeForMapRawData(mapRawData);
             if (severeErrorCode) {
                 btnConfirm.visible              = false;
                 groupNeedReview.visible         = false;
@@ -73,7 +73,7 @@ namespace TwnsMeConfirmSaveMapPanel {
                 return;
             }
 
-            const errorCode                 = await MeUtility.getErrorCodeForMapRawData(mapRawData);
+            const errorCode                 = await Twns.MapEditor.MeHelpers.getErrorCodeForMapRawData(mapRawData);
             this._mapRawData                = mapRawData;
             btnConfirm.visible              = true;
             groupNeedReview.visible         = !errorCode;

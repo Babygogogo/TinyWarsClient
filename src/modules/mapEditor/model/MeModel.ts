@@ -75,7 +75,7 @@ namespace MeModel {
             unloadWar();
         }
 
-        mapRawData = mapRawData || await MeUtility.createDefaultMapRawData(slotIndex);
+        mapRawData = mapRawData || await Twns.MapEditor.MeHelpers.createDefaultMapRawData(slotIndex);
         _war = new MeWar();
         _war.initWithMapEditorData(
             {

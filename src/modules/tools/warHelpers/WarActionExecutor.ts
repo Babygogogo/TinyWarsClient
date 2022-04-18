@@ -1965,7 +1965,7 @@ namespace WarActionExecutor {
         if (actionExtraData) {
             Twns.WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitWait_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitDropUnit_00),
                 isFastExecute   : true,
             });
         } else {
@@ -2008,7 +2008,7 @@ namespace WarActionExecutor {
         const gridVisualEffect  = war.getGridVisualEffect();
         const unitMap           = war.getUnitMap();
         if (actionExtraData) {
-            const commonExtraData   = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitWait_00);
+            const commonExtraData   = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitDropUnit_00);
             const movingUnitAndPath = commonExtraData.movingUnitAndPath;
             const movingUnitView    = await Twns.WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
@@ -2023,7 +2023,7 @@ namespace WarActionExecutor {
             if (lastNode) {
                 if (lastNode.isVisible) {
                     if (actionExtraData.isDropBlocked) {
-                        gridVisualEffect.showEffectBlock(Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitWait_01));
+                        gridVisualEffect.showEffectBlock(Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitDropUnit_01));
                     }
                 } else {
                     (movingUnitView) && (unitMapView.removeUnit(movingUnitView));
@@ -2763,7 +2763,7 @@ namespace WarActionExecutor {
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitWait_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitProduceUnit_00);
             await Twns.WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
                 movingUnitAndPath       : commonExtraData.movingUnitAndPath,
@@ -2801,7 +2801,7 @@ namespace WarActionExecutor {
                 const gridIndex         = focusUnit.getGridIndex();
                 const producedUnitId    = unitMap.getNextUnitId();
                 const producedUnit      = new BwUnit();
-                const unitType          = Helpers.getExisted(focusUnit.getProduceUnitType(), ClientErrorCode.WarActionExecutor_NormalExeUnitProduceUnit_00);
+                const unitType          = Helpers.getExisted(focusUnit.getProduceUnitType(), ClientErrorCode.WarActionExecutor_NormalExeUnitProduceUnit_01);
                 producedUnit.init({
                     gridIndex,
                     playerIndex     : focusUnit.getPlayerIndex(),

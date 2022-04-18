@@ -214,7 +214,7 @@ namespace TwnsMeDrawer {
                 }
 
                 const gridIndex = tile.getGridIndex();
-                const shapeId   = MeUtility.getAutoRoadShapeId(tileMap, gridIndex);
+                const shapeId   = Twns.MapEditor.MeHelpers.getAutoRoadShapeId(tileMap, gridIndex);
                 if (shapeId !== tile.getObjectShapeId()) {
                     tile.init({
                         gridIndex       : tile.getGridIndex(),
@@ -248,7 +248,7 @@ namespace TwnsMeDrawer {
                 }
 
                 const gridIndex = tile.getGridIndex();
-                const shapeId   = MeUtility.getAutoBridgeShapeId(tileMap, gridIndex);
+                const shapeId   = Twns.MapEditor.MeHelpers.getAutoBridgeShapeId(tileMap, gridIndex);
                 if (shapeId !== tile.getObjectShapeId()) {
                     tile.init({
                         gridIndex       : tile.getGridIndex(),
@@ -277,7 +277,7 @@ namespace TwnsMeDrawer {
                 }
 
                 const gridIndex = tile.getGridIndex();
-                const shapeId   = MeUtility.getAutoPlasmaShapeId(tileMap, gridIndex);
+                const shapeId   = Twns.MapEditor.MeHelpers.getAutoPlasmaShapeId(tileMap, gridIndex);
                 if (shapeId !== tile.getObjectShapeId()) {
                     tile.init({
                         gridIndex       : tile.getGridIndex(),
@@ -306,7 +306,7 @@ namespace TwnsMeDrawer {
                 }
 
                 const gridIndex = tile.getGridIndex();
-                const shapeId   = MeUtility.getAutoPipeShapeId(tileMap, gridIndex);
+                const shapeId   = Twns.MapEditor.MeHelpers.getAutoPipeShapeId(tileMap, gridIndex);
                 if (shapeId !== tile.getObjectShapeId()) {
                     tile.init({
                         gridIndex       : tile.getGridIndex(),
@@ -331,7 +331,7 @@ namespace TwnsMeDrawer {
             const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
                 const gridIndex         = tile.getGridIndex();
-                const targetBaseData    = MeUtility.getAutoTileDecoratorTypeAndShapeId(tileMap, gridIndex);
+                const targetBaseData    = Twns.MapEditor.MeHelpers.getAutoTileDecoratorTypeAndShapeId(tileMap, gridIndex);
                 const decoratorType     = targetBaseData.decoratorType;
                 const decoratorShapeId  = targetBaseData.shapeId;
                 tile.init({
@@ -417,7 +417,7 @@ namespace TwnsMeDrawer {
             Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
-            const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
+            const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
             if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 const t2 = tileMap.getTile(symGridIndex);
                 t2.init({
@@ -464,7 +464,7 @@ namespace TwnsMeDrawer {
             Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
-            const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
+            const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
             if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 const t2 = tileMap.getTile(symGridIndex);
                 t2.init({
@@ -520,7 +520,7 @@ namespace TwnsMeDrawer {
             Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
-            const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
+            const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
             if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 if ((isAttackableTile) && (unitMap.getUnitOnMap(symGridIndex))) {
                     return;
@@ -582,7 +582,7 @@ namespace TwnsMeDrawer {
             Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
-            const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
+            const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
             if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 const t2 = tileMap.getTile(symGridIndex);
                 t2.deleteTileDecorator();
@@ -600,7 +600,7 @@ namespace TwnsMeDrawer {
             Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
-            const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
+            const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
             if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 const t2 = tileMap.getTile(symGridIndex);
                 t2.deleteTileObject();

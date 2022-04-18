@@ -167,7 +167,7 @@ namespace TwnsMeTopPanel {
             }
 
             const mapRawData = war.serializeForMap();
-            if (await MeUtility.getSevereErrorCodeForMapRawData(mapRawData)) {
+            if (await Twns.MapEditor.MeHelpers.getSevereErrorCodeForMapRawData(mapRawData)) {
                 FloatText.show(Lang.getText(LangTextType.A0304));
             } else {
                 MeProxy.reqMeSubmitMap(slotIndex, mapRawData, false);
@@ -281,7 +281,7 @@ namespace TwnsMeTopPanel {
                     war.stopRunning();
                     await war.initWithMapEditorData(
                         {
-                            mapRawData: (data ? data.mapRawData : null) || await MeUtility.createDefaultMapRawData(slotIndex),
+                            mapRawData: (data ? data.mapRawData : null) || await Twns.MapEditor.MeHelpers.createDefaultMapRawData(slotIndex),
                             slotIndex,
                         },
                         war.getGameConfig()

@@ -17,7 +17,7 @@ namespace TwnsMePlayerManager {
             const maxPlayerIndex    = (this._getWar().getField() as MeField).getMaxPlayerIndex();
             const players           : ISerialPlayer[] = [];
             for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= maxPlayerIndex; ++playerIndex) {
-                players.push(MeUtility.createDefaultISerialPlayer(playerIndex));
+                players.push(Twns.MapEditor.MeHelpers.createDefaultISerialPlayer(playerIndex));
             }
 
             return {

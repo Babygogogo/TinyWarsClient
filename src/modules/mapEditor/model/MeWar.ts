@@ -24,10 +24,10 @@ namespace Twns.MapEditor {
     import ILanguageText            = CommonProto.Structure.ILanguageText;
     import GameConfig               = Config.GameConfig;
 
-    export class MeWar extends Twns.BaseWar.BwWar {
+    export class MeWar extends BaseWar.BwWar {
         private readonly _playerManager         = new TwnsMePlayerManager.MePlayerManager();
         private readonly _field                 = new TwnsMeField.MeField();
-        private readonly _commonSettingManager  = new Twns.MapEditor.MeCommonSettingManager();
+        private readonly _commonSettingManager  = new MapEditor.MeCommonSettingManager();
         private readonly _drawer                = new TwnsMeDrawer.MeDrawer();
         private readonly _warEventManager       = new TwnsMeWarEventManager.MeWarEventManager();
 
@@ -48,7 +48,7 @@ namespace Twns.MapEditor {
             this._initView();
         }
         public initWithMapEditorData(data: CommonProto.Map.IMapEditorData, gameConfig: GameConfig): void {
-            this.init(MeUtility.createISerialWar(data), gameConfig);
+            this.init(MapEditor.MeHelpers.createISerialWar(data), gameConfig);
 
             const mapRawData = Helpers.getExisted(data.mapRawData);
             this.setMapSlotIndex(Helpers.getExisted(data.slotIndex));
@@ -56,18 +56,18 @@ namespace Twns.MapEditor {
             this.setMapDesignerUserId(Helpers.getExisted(mapRawData.designerUserId));
             this.setMapDesignerName(Helpers.getExisted(mapRawData.designerName));
             this.setMapNameArray(Helpers.getExisted(mapRawData.mapNameArray));
-            this._setWarRuleArray(MeUtility.createRevisedWarRuleArrayForMeWar(mapRawData.warRuleArray));
+            this._setWarRuleArray(MapEditor.MeHelpers.createRevisedWarRuleArrayForMeWar(mapRawData.warRuleArray));
             this.setMapTag(mapRawData.mapTag || {});
         }
 
-        public startRunning(): Twns.BaseWar.BwWar {
+        public startRunning(): BaseWar.BwWar {
             super.startRunning();
 
             this.getDrawer().startRunning(this);
 
             return this;
         }
-        public stopRunning(): Twns.BaseWar.BwWar {
+        public stopRunning(): BaseWar.BwWar {
             super.stopRunning();
 
             this.getDrawer().stopRunning();
@@ -79,7 +79,7 @@ namespace Twns.MapEditor {
             const unitMap               = this.getUnitMap();
             const mapSize               = unitMap.getMapSize();
             const playersCountUnneutral = this.getPlayersCountUnneutral();
-            MeUtility.reviseAllUnitIds(unitMap);
+            MapEditor.MeHelpers.reviseAllUnitIds(unitMap);
 
             return {
                 designerName            : this.getMapDesignerName(),
@@ -126,7 +126,7 @@ namespace Twns.MapEditor {
         public getField(): TwnsMeField.MeField {
             return this._field;
         }
-        public getCommonSettingManager(): Twns.MapEditor.MeCommonSettingManager {
+        public getCommonSettingManager(): MapEditor.MeCommonSettingManager {
             return this._commonSettingManager;
         }
         public getWarEventManager(): TwnsMeWarEventManager.MeWarEventManager {

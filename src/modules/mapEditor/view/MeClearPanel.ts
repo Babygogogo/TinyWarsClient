@@ -78,7 +78,7 @@ namespace TwnsMeClearPanel {
                 war.stopRunning();
                 await war.initWithMapEditorData(
                     {
-                        mapRawData  : MeUtility.clearMap(war.serializeForMap(), width, height),
+                        mapRawData  : Twns.MapEditor.MeHelpers.clearMap(war.serializeForMap(), width, height),
                         slotIndex   : war.getMapSlotIndex(),
                     },
                     war.getGameConfig()
