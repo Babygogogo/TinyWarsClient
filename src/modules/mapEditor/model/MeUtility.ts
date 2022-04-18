@@ -34,6 +34,7 @@ namespace MeUtility {
     import TileDecoratorType    = Types.TileDecoratorType;
     import IMapRawData          = CommonProto.Map.IMapRawData;
     import WarSerialization     = CommonProto.WarSerialization;
+    import IWarRule             = CommonProto.WarRule.IWarRule;
     import ISerialTile          = WarSerialization.ISerialTile;
     import ISerialUnit          = WarSerialization.ISerialUnit;
     import ISerialPlayer        = WarSerialization.ISerialPlayer;
@@ -191,19 +192,7 @@ namespace MeUtility {
         const mapRawData        = Helpers.deepClone(Helpers.getExisted(data.mapRawData));
         const warRuleArray      = mapRawData.warRuleArray;
         const unitDataArray     = mapRawData.unitDataArray || [];
-        const warRule           = (warRuleArray ? warRuleArray[0] : null) || WarRuleHelpers.createDefaultWarRule(0, CommonConstants.WarMaxPlayerIndex);
-        const ruleForPlayers    = Helpers.getExisted(warRule.ruleForPlayers);
-        if (ruleForPlayers.playerRuleDataArray == null) {
-            ruleForPlayers.playerRuleDataArray = WarRuleHelpers.createDefaultPlayerRuleList(CommonConstants.WarMaxPlayerIndex);
-        } else {
-            const playerRules = ruleForPlayers.playerRuleDataArray;
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
-                if (playerRules.find(v => v.playerIndex === playerIndex) == null) {
-                    playerRules.push(WarRuleHelpers.createDefaultPlayerRule(playerIndex));
-                }
-            }
-        }
-
+        const warRule           = createRevisedWarRuleForMeWar(warRuleArray ? warRuleArray[0] : null);
         return {
             settingsForCommon   : {
                 configVersion   : Twns.Config.ConfigManager.getLatestConfigVersion(),
@@ -269,6 +258,43 @@ namespace MeUtility {
             restTimeToBoot              : 0,
             unitAndTileSkinId           : playerIndex,
         };
+    }
+
+    export function createRevisedWarRuleArrayForMeWar(warRuleArray: Types.Undefinable<IWarRule[]>): IWarRule[] {
+        if (!warRuleArray?.length) {
+            return [createRevisedWarRuleForMeWar(null)];
+        } else {
+            const revisedWarRuleArray: IWarRule[] = [];
+            for (const warRule of warRuleArray) {
+                revisedWarRuleArray.push(createRevisedWarRuleForMeWar(warRule));
+            }
+            return revisedWarRuleArray;
+        }
+    }
+    function createRevisedWarRuleForMeWar(warRule: Types.Undefinable<IWarRule>): IWarRule {
+        if (warRule == null) {
+            return WarRuleHelpers.createDefaultWarRule(0, CommonConstants.WarMaxPlayerIndex);
+        } else {
+            const newRule           = Helpers.deepClone(warRule);
+            newRule.ruleForPlayers  = createRevisedRuleForPlayersForMeWar(newRule.ruleForPlayers);
+            return newRule;
+        }
+    }
+    function createRevisedRuleForPlayersForMeWar(ruleForPlayers: Types.Undefinable<CommonProto.WarRule.IRuleForPlayers>): CommonProto.WarRule.IRuleForPlayers {
+        const playerRuleArray = ruleForPlayers?.playerRuleDataArray;
+        if (playerRuleArray == null) {
+            return {
+                playerRuleDataArray : WarRuleHelpers.createDefaultPlayerRuleList(CommonConstants.WarMaxPlayerIndex),
+            };
+        } else {
+            const revisedPlayerRuleArray: CommonProto.WarRule.IDataForPlayerRule[] = [];
+            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+                revisedPlayerRuleArray.push(Helpers.deepClone(playerRuleArray.find(v => v.playerIndex === playerIndex)) ?? WarRuleHelpers.createDefaultPlayerRule(playerIndex));
+            }
+            return {
+                playerRuleDataArray : revisedPlayerRuleArray,
+            };
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

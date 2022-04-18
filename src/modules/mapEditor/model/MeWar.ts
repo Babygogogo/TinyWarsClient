@@ -48,8 +48,7 @@ namespace Twns.MapEditor {
             this._initView();
         }
         public initWithMapEditorData(data: CommonProto.Map.IMapEditorData, gameConfig: GameConfig): void {
-            const warData = MeUtility.createISerialWar(data);
-            this.init(warData, gameConfig);
+            this.init(MeUtility.createISerialWar(data), gameConfig);
 
             const mapRawData = Helpers.getExisted(data.mapRawData);
             this.setMapSlotIndex(Helpers.getExisted(data.slotIndex));
@@ -57,7 +56,7 @@ namespace Twns.MapEditor {
             this.setMapDesignerUserId(Helpers.getExisted(mapRawData.designerUserId));
             this.setMapDesignerName(Helpers.getExisted(mapRawData.designerName));
             this.setMapNameArray(Helpers.getExisted(mapRawData.mapNameArray));
-            this._setWarRuleArray(Helpers.getExisted(mapRawData.warRuleArray || [Helpers.getExisted(warData.settingsForCommon?.warRule)]));
+            this._setWarRuleArray(MeUtility.createRevisedWarRuleArrayForMeWar(mapRawData.warRuleArray));
             this.setMapTag(mapRawData.mapTag || {});
         }
 
