@@ -31,7 +31,7 @@ namespace TwnsSpwWar {
         public abstract serialize(): CommonProto.WarSerialization.ISerialWar;
 
         public updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void {
-            const teamIndexes   = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const teamIndexes   = this.getPlayerManager().getWatcherTeamIndexesForSelf();
             const visibleUnits  = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, teamIndexes);
             for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
                 if (!isFastExecute) {

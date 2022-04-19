@@ -5,7 +5,7 @@ namespace TwnsTwPlayerManager {
     import BwPlayerManager = Twns.BaseWar.BwPlayerManager;
 
     export class TwPlayerManager extends BwPlayerManager {
-        public getAliveWatcherTeamIndexesForSelf(): Set<number> {
+        public getWatcherTeamIndexesForSelf(): Set<number> {
             return new Set();
         }
     }

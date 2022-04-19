@@ -74,7 +74,7 @@ namespace TwnsMeTopPanel {
         private readonly _labelLocationTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelLocation!                : TwnsUiLabel.UiLabel;
 
-        private _unitView   = new TwnsBwUnitView.BwUnitView();
+        private _unitView   = new Twns.BaseWar.BwUnitView();
         private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
         protected _onOpening(): void {

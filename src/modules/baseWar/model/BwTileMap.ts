@@ -25,7 +25,7 @@ namespace Twns.BaseWar {
         private _locationVisibleFlags   = 0;
         private _war?                   : Twns.BaseWar.BwWar;
 
-        private readonly _view  = new TwnsBwTileMapView.BwTileMapView();
+        private readonly _view  = new Twns.BaseWar.BwTileMapView();
 
         public init({ data, gameConfig, mapSize, playersCountUnneutral }: {
             data                    : Types.Undefinable<ISerialTileMap>;
@@ -157,7 +157,7 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getView(): TwnsBwTileMapView.BwTileMapView {
+        public getView(): Twns.BaseWar.BwTileMapView {
             return this._view;
         }
 

@@ -5,7 +5,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsHrwFogMap {
-    export class HrwFogMap extends TwnsBwFogMap.BwFogMap {
+    export class HrwFogMap extends Twns.BaseWar.BwFogMap {
         public startRunning(war: Twns.BaseWar.BwWar): void {
             this._setWar(war);
 

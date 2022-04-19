@@ -4,7 +4,7 @@
 // import TwnsRwWar            from "./RwWar";
 
 namespace TwnsRwFogMap {
-    export class RwFogMap extends TwnsBwFogMap.BwFogMap {
+    export class RwFogMap extends Twns.BaseWar.BwFogMap {
         public startRunning(war: Twns.ReplayWar.RwWar): void {
             this._setWar(war);
 

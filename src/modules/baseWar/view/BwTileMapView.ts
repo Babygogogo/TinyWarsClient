@@ -11,7 +11,7 @@
 // import TwnsBwTileView       from "./BwTileView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwTileMapView {
+namespace Twns.BaseWar {
     import NotifyType   = TwnsNotifyType.NotifyType;
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
@@ -45,7 +45,7 @@ namespace TwnsBwTileMapView {
             { type: NotifyType.UserSettingsOpacitySettingsChanged,  callback: this._onNotifyUserSettingsOpacitySettingsChanged },
         ];
 
-        private _tileMap?: Twns.BaseWar.BwTileMap;
+        private _tileMap?: BaseWar.BwTileMap;
 
         public constructor() {
             super();
@@ -64,7 +64,7 @@ namespace TwnsBwTileMapView {
             this._updateOpacityForTileLayers();
         }
 
-        public init(tileMap: Twns.BaseWar.BwTileMap): void {
+        public init(tileMap: BaseWar.BwTileMap): void {
             this._tileMap = tileMap;
 
             {
@@ -159,7 +159,7 @@ namespace TwnsBwTileMapView {
 
             this._updateBorderLayer();
         }
-        public fastInit(tileMap: Twns.BaseWar.BwTileMap): void {
+        public fastInit(tileMap: BaseWar.BwTileMap): void {
             this._tileMap = tileMap;
         }
 
@@ -337,7 +337,7 @@ namespace TwnsBwTileMapView {
             const mapHeight             = mapSize.height;
             const playerManager         = war.getPlayerManager();
             const playersCount          = playerManager.getTotalPlayersCount(false);
-            const watcherTeamIndexes    = playerManager.getAliveWatcherTeamIndexesForSelf();
+            const watcherTeamIndexes    = playerManager.getWatcherTeamIndexesForSelf();
             const unitMap               = war.getUnitMap();
             const areaImgDict           = this._coZoneAreaImageDict;
             const borderImgArray        = this._coZoneBorderImageArray;

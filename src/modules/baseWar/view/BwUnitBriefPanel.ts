@@ -20,18 +20,18 @@
 // import TwnsBwUnitView           from "./BwUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwUnitBriefPanel {
-    import BwWar                = Twns.BaseWar.BwWar;
+namespace Twns.BaseWar {
+    import BwWar                = BaseWar.BwWar;
     import NotifyType           = TwnsNotifyType.NotifyType;
-    import BwUnit               = Twns.BaseWar.BwUnit;
+    import BwUnit               = BaseWar.BwUnit;
 
     const _CELL_WIDTH           = 70;
 
-    export type OpenData = {
+    export type OpenDataForBwUnitBriefPanel = {
         war : BwWar;
     };
     // eslint-disable-next-line no-shadow
-    export class BwUnitBriefPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwUnitBriefPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitBriefPanel> {
         private readonly _group!        : eui.Group;
         private readonly _btnExpand!    : TwnsUiButton.UiButton;
         private readonly _btnNarrow!    : TwnsUiButton.UiButton;
@@ -158,7 +158,7 @@ namespace TwnsBwUnitBriefPanel {
             const unitMap       = war.getUnitMap();
             const gridIndex     = war.getCursor().getGridIndex();
             const unitOnMap     = unitMap.getUnitOnMap(gridIndex);
-            const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
 
             if ((unitOnMap)                                         &&
                 (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
@@ -277,7 +277,7 @@ namespace TwnsBwUnitBriefPanel {
         private readonly _imgHp!        : TwnsUiImage.UiImage;
         private readonly _imgFuel!      : TwnsUiImage.UiImage;
         private readonly _imgState!     : TwnsUiImage.UiImage;
-        private readonly _unitView      = new TwnsBwUnitView.BwUnitView();
+        private readonly _unitView      = new Twns.BaseWar.BwUnitView();
 
         private _unit               : BwUnit | null = null;
         private _isChildrenCreated  = false;

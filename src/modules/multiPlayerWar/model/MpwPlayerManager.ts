@@ -4,14 +4,13 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import UserModel            from "../../user/model/UserModel";
 
-namespace TwnsMpwPlayerManager {
-    import BwPlayerManager = Twns.BaseWar.BwPlayerManager;
-
-    export class MpwPlayerManager extends BwPlayerManager {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.MultiPlayerWar {
+    export class MpwPlayerManager extends BaseWar.BwPlayerManager {
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
-        public getPlayerLoggedIn(): Twns.BaseWar.BwPlayer | null {
+        public getPlayerLoggedIn(): BaseWar.BwPlayer | null {
             const userId = Helpers.getExisted(UserModel.getSelfUserId());
             for (const [, player] of this.getAllPlayersDict()) {
                 if (player.getUserId() === userId) {
@@ -26,8 +25,18 @@ namespace TwnsMpwPlayerManager {
             return this.getPlayerLoggedIn()?.getPlayerIndex() ?? null;
         }
 
-        public getAliveWatcherTeamIndexesForSelf(): Set<number> {
-            return this.getAliveWatcherTeamIndexes(Helpers.getExisted(UserModel.getSelfUserId()));
+        public getWatcherTeamIndexesForSelf(): Set<number> {
+            const watcherUserId = Helpers.getExisted(UserModel.getSelfUserId());
+            const indexes       = new Set<number>();
+            this.forEachPlayer(false, player => {
+                if ((player.getUserId() === watcherUserId)                  ||
+                    (player.getWatchOngoingSrcUserIds().has(watcherUserId))
+                ) {
+                    indexes.add(player.getTeamIndex());
+                }
+            });
+
+            return indexes;
         }
     }
 }

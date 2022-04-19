@@ -7,20 +7,21 @@
 // import TwnsBwPlayer         from "./BwPlayer";
 // import TwnsBwWar            from "./BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
     import WarSerialization         = CommonProto.WarSerialization;
     import ISerialPlayerManager     = WarSerialization.ISerialPlayerManager;
     import ISerialPlayer            = WarSerialization.ISerialPlayer;
     import PlayerAliveState         = Types.PlayerAliveState;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar                    = Twns.BaseWar.BwWar;
+    import BwWar                    = BaseWar.BwWar;
     import GameConfig               = Config.GameConfig;
 
     export abstract class BwPlayerManager {
-        private _players        = new Map<number, Twns.BaseWar.BwPlayer>();
+        private _players        = new Map<number, BaseWar.BwPlayer>();
         private _war?           : BwWar;
 
-        public abstract getAliveWatcherTeamIndexesForSelf(): Set<number>;
+        public abstract getWatcherTeamIndexesForSelf(): Set<number>;
 
         public init(data: Types.Undefinable<ISerialPlayerManager>, gameConfig: GameConfig): void {
             if (data == null) {
@@ -35,7 +36,7 @@ namespace Twns.BaseWar {
                 throw Helpers.newError(`Invalid playerArray.`, ClientErrorCode.BwPlayerManager_Init_01);
             }
 
-            const newPlayerMap  = new Map<number, Twns.BaseWar.BwPlayer>();
+            const newPlayerMap  = new Map<number, BaseWar.BwPlayer>();
             const skinIdSet     = new Set<number>();
             for (const playerData of playerArray) {
                 const playerIndex = playerData.playerIndex;
@@ -49,7 +50,7 @@ namespace Twns.BaseWar {
                 }
                 skinIdSet.add(skinId);
 
-                const player = new Twns.BaseWar.BwPlayer();
+                const player = new BaseWar.BwPlayer();
                 player.init(playerData, gameConfig);
 
                 newPlayerMap.set(playerIndex, player);
@@ -125,21 +126,21 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
-        public getPlayer(playerIndex: number): Twns.BaseWar.BwPlayer {
+        public getPlayer(playerIndex: number): BaseWar.BwPlayer {
             return Helpers.getExisted(this._players.get(playerIndex));
         }
-        public getAllPlayersDict(): Map<number, Twns.BaseWar.BwPlayer> {
+        public getAllPlayersDict(): Map<number, BaseWar.BwPlayer> {
             return this._players;
         }
-        public getAllPlayers(): Twns.BaseWar.BwPlayer[] {
-            const players: Twns.BaseWar.BwPlayer[] = [];
+        public getAllPlayers(): BaseWar.BwPlayer[] {
+            const players: BaseWar.BwPlayer[] = [];
             for (const [, player] of this.getAllPlayersDict()) {
                 players.push(player);
             }
             return players;
         }
 
-        public getPlayerByUserId(userId: number): Twns.BaseWar.BwPlayer | null {
+        public getPlayerByUserId(userId: number): BaseWar.BwPlayer | null {
             for (const [, player] of this._players) {
                 if (player.getUserId() === userId) {
                     return player;
@@ -148,7 +149,7 @@ namespace Twns.BaseWar {
             return null;
         }
 
-        public getPlayerInTurn(): Twns.BaseWar.BwPlayer {
+        public getPlayerInTurn(): BaseWar.BwPlayer {
             return this.getPlayer(this._getWar().getPlayerIndexInTurn());
         }
 
@@ -228,25 +229,12 @@ namespace Twns.BaseWar {
             return (p1 != null) && (p2 != null) && (p1.getTeamIndex() === p2.getTeamIndex());
         }
 
-        public forEachPlayer(includeNeutral: boolean, func: (p: Twns.BaseWar.BwPlayer) => void): void {
+        public forEachPlayer(includeNeutral: boolean, func: (p: BaseWar.BwPlayer) => void): void {
             for (const [playerIndex, player] of this._players) {
                 ((includeNeutral) || (playerIndex !== 0)) && (func(player));
             }
         }
 
-        public getAliveWatcherTeamIndexes(watcherUserId: number): Set<number> {
-            const indexes = new Set<number>();
-            this.forEachPlayer(false, player => {
-                if (player.getAliveState() !== PlayerAliveState.Dead) {
-                    if ((player.getUserId() === watcherUserId)                  ||
-                        (player.getWatchOngoingSrcUserIds().has(watcherUserId))
-                    ) {
-                        indexes.add(player.getTeamIndex());
-                    }
-                }
-            });
-            return indexes;
-        }
         public checkHasAliveWatcherTeam(watcherUserId: number): boolean {
             for (const [playerIndex, player] of this._players) {
                 if ((playerIndex !== CommonConstants.WarNeutralPlayerIndex) &&

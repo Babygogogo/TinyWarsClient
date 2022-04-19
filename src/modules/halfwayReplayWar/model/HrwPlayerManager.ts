@@ -15,7 +15,7 @@ namespace TwnsHrwPlayerManager {
             }
             this._watcherTeamIndexes = teamIndexes;
         }
-        public getAliveWatcherTeamIndexesForSelf(): Set<number> {
+        public getWatcherTeamIndexesForSelf(): Set<number> {
             return Helpers.getExisted(this._watcherTeamIndexes, ClientErrorCode.HrwPlayerManager_GetAliveWatcherTeamIndexesForSelf_00);
         }
     }

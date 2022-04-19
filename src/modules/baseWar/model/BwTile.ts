@@ -100,12 +100,12 @@ namespace Twns.BaseWar {
             const baseType      = Helpers.getExisted(data.baseType, ClientErrorCode.BwTile_Deserialize_03) as TileBaseType;
             const playerIndex   = data.playerIndex;
             if ((playerIndex == null)                                                           ||
-                (!Twns.Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType))
+                (!Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType))
             ) {
                 throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTile_Deserialize_04);
             }
 
-            const templateCfg       = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(Twns.Config.ConfigManager.getTileType(baseType, objectType)));
+            const templateCfg       = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(Config.ConfigManager.getTileType(baseType, objectType)));
             const maxBuildPoint     = templateCfg.maxBuildPoint;
             const currentBuildPoint = data.currentBuildPoint;
             if (maxBuildPoint == null) {
@@ -156,18 +156,18 @@ namespace Twns.BaseWar {
             }
 
             const baseShapeId = data.baseShapeId;
-            if (!Twns.Config.ConfigManager.checkIsValidTileBaseShapeId(baseType, baseShapeId)) {
+            if (!Config.ConfigManager.checkIsValidTileBaseShapeId(baseType, baseShapeId)) {
                 throw Helpers.newError(`Invalid baseShapeId: ${baseShapeId}`, ClientErrorCode.BwTile_Deserialize_11);
             }
 
             const objectShapeId = data.objectShapeId;
-            if (!Twns.Config.ConfigManager.checkIsValidTileObjectShapeId(objectType, objectShapeId)) {
+            if (!Config.ConfigManager.checkIsValidTileObjectShapeId(objectType, objectShapeId)) {
                 throw Helpers.newError(`Invalid objectShapeId: ${objectShapeId}`, ClientErrorCode.BwTile_Deserialize_12);
             }
 
             const decoratorType     = data.decoratorType ?? null;
             const decoratorShapeId  = data.decoratorShapeId ?? null;
-            if (!Twns.Config.ConfigManager.checkIsValidTileDecoratorShapeId(decoratorType, decoratorShapeId)) {
+            if (!Config.ConfigManager.checkIsValidTileDecoratorShapeId(decoratorType, decoratorShapeId)) {
                 throw Helpers.newError(`Invalid decoratorType/shapeId: ${decoratorType}, ${decoratorShapeId}`, ClientErrorCode.BwTile_Deserialize_13);
             }
 
@@ -176,7 +176,7 @@ namespace Twns.BaseWar {
             if ((customCrystalData != null) && (tileType !== TileType.CustomCrystal)) {
                 throw Helpers.newError(`CustomCrystalData is present while the tile is not CustomCrystal.`, ClientErrorCode.BwTile_Deserialize_14);
             }
-            if ((customCrystalData != null) && (!Twns.Config.ConfigManager.checkIsValidCustomCrystalData(customCrystalData))) {
+            if ((customCrystalData != null) && (!Config.ConfigManager.checkIsValidCustomCrystalData(customCrystalData))) {
                 throw Helpers.newError(`Invalid customCrystalData.`, ClientErrorCode.BwTile_Deserialize_15);
             }
 
@@ -184,7 +184,7 @@ namespace Twns.BaseWar {
             if ((customCannonData != null) && (tileType !== TileType.CustomCannon)) {
                 throw Helpers.newError(`CustomCannonData is present while the tile is not CustomCannon.`, ClientErrorCode.BwTile_Deserialize_16);
             }
-            if ((customCannonData != null) && (!Twns.Config.ConfigManager.checkIsValidCustomCannonData(customCannonData))) {
+            if ((customCannonData != null) && (!Config.ConfigManager.checkIsValidCustomCannonData(customCannonData))) {
                 throw Helpers.newError(`Invalid customCannonData.`, ClientErrorCode.BwTile_Deserialize_17);
             }
 
@@ -192,7 +192,7 @@ namespace Twns.BaseWar {
             if ((customLaserTurretData != null) && (tileType !== TileType.CustomLaserTurret)) {
                 throw Helpers.newError(`CustomLaserTurretData is present while the tile is not CustomLaserTurret.`, ClientErrorCode.BwTile_Deserialize_18);
             }
-            if ((customLaserTurretData != null) && (!Twns.Config.ConfigManager.checkIsValidCustomLaserTurretData(customLaserTurretData))) {
+            if ((customLaserTurretData != null) && (!Config.ConfigManager.checkIsValidCustomLaserTurretData(customLaserTurretData))) {
                 throw Helpers.newError(`Invalid customLaserTurretData.`, ClientErrorCode.BwTile_Deserialize_19);
             }
 
@@ -261,7 +261,7 @@ namespace Twns.BaseWar {
         public serializeForCreateSfw(): ISerialTile {
             const war       = this.getWar();
             const gridIndex = this.getGridIndex();
-            if (WarVisibilityHelpers.checkIsTileVisibleToTeams(war, gridIndex, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf())) {
+            if (WarVisibilityHelpers.checkIsTileVisibleToTeams(war, gridIndex, war.getPlayerManager().getWatcherTeamIndexesForSelf())) {
                 return this.serialize();
 
             } else {
@@ -598,7 +598,7 @@ namespace Twns.BaseWar {
             objectType      : TileObjectType;
             playerIndex     : number;
         }): void {
-            if (!Twns.Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType)) {
+            if (!Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType)) {
                 throw Helpers.newError(`Invalid playerIndex: ${playerIndex}, baseType: ${baseType}, objectType: ${objectType}`);
             }
 
@@ -676,7 +676,7 @@ namespace Twns.BaseWar {
                 const cfg = gameConfig.getCoSkillCfg(skillId)?.selfTileIncome;
                 if ((cfg)                                                       &&
                     (gameConfig.checkIsTileTypeInCategory(tileType, cfg[1]))    &&
-                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap,
@@ -717,7 +717,7 @@ namespace Twns.BaseWar {
         // Functions for move cost.
         ////////////////////////////////////////////////////////////////////////////////
         private _getMoveCostCfg(): { [moveType: number]: Types.MoveCostCfg } {
-            return Helpers.getExisted(this.getGameConfig().getMoveCostCfg(Twns.Config.ConfigManager.getTileType(this.getBaseType(), this.getObjectType())));
+            return Helpers.getExisted(this.getGameConfig().getMoveCostCfg(Config.ConfigManager.getTileType(this.getBaseType(), this.getObjectType())));
         }
 
         public getMoveCostByMoveType(moveType: Types.MoveType): number | null {
@@ -749,7 +749,7 @@ namespace Twns.BaseWar {
                 if ((cfg)                                                       &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))    &&
                     (gameConfig.checkIsTileTypeInCategory(tileType, cfg[2]))    &&
-                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap,
@@ -785,7 +785,7 @@ namespace Twns.BaseWar {
             for (const skillId of player.getCoCurrentSkills()) {
                 const cfg = gameConfig.getCoSkillCfg(skillId)?.selfRepairAmountBonus;
                 if ((cfg)                                               &&
-                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap,
@@ -829,7 +829,7 @@ namespace Twns.BaseWar {
             const productionCost        = Math.floor(unit.getProductionFinalCost() * modifier.costMultiplierPct / 100);
             const currentHp             = unit.getCurrentHp();
             const normalizedMaxHp       = unit.getNormalizedMaxHp();
-            const normalizedCurrentHp   = Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(currentHp);
+            const normalizedCurrentHp   = WarHelpers.WarCommonHelpers.getNormalizedHp(currentHp);
             const normalizedRepairHp    = Math.min(
                 normalizedMaxHp - normalizedCurrentHp,
                 cfgNormalizedRepairHp + modifier.amountModifier,
@@ -895,7 +895,7 @@ namespace Twns.BaseWar {
                     const tileCategory = skillCfg[2];
                     if ((tileCategory != null)                                          &&
                         (gameConfig.checkIsTileTypeInCategory(tileType, tileCategory))  &&
-                        (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex,
                             coSkillAreaType         : skillCfg[0],
                             getCoGridIndexArrayOnMap,

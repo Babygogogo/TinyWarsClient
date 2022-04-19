@@ -10,7 +10,7 @@
 // import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwFogMap {
+namespace Twns.BaseWar {
     import ForceFogCode             = Types.ForceFogCode;
     import GridIndex                = Types.GridIndex;
     import MapSize                  = Types.MapSize;
@@ -19,7 +19,7 @@ namespace TwnsBwFogMap {
     import ISerialFogMap            = WarSerialization.ISerialFogMap;
     import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar                    = Twns.BaseWar.BwWar;
+    import BwWar                    = BaseWar.BwWar;
 
     export abstract class BwFogMap {
         private _forceFogCode?              : ForceFogCode;
@@ -62,7 +62,7 @@ namespace TwnsBwFogMap {
                 throw Helpers.newError(`Invalid forceExpireTurnIndex: ${forceExpireTurnIndex}`, ClientErrorCode.BwFogMap_Init_03);
             }
 
-            if (!Twns.WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
+            if (!WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
                 throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwFogMap_Init_04);
             }
 
@@ -101,7 +101,7 @@ namespace TwnsBwFogMap {
             const mapSize               = this.getMapSize();
             const serialMapsFromPath    : IDataForFogMapFromPath[] = [];
             for (const [playerIndex, map] of this._getAllMapsFromPath()) {
-                const visibilityArray = Twns.WarHelpers.WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                const visibilityArray = WarHelpers.WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
                 if (visibilityArray != null) {
                     serialMapsFromPath.push({
                         playerIndex,
@@ -120,7 +120,7 @@ namespace TwnsBwFogMap {
         public serializeForCreateSfw(): ISerialFogMap {
             const mapSize           = this.getMapSize();
             const war               = this._getWar();
-            const targetTeamIndexes = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const targetTeamIndexes = war.getPlayerManager().getWatcherTeamIndexesForSelf();
             const mapsFromPath       : IDataForFogMapFromPath[] = [];
 
             for (const [playerIndex, map] of this._getAllMapsFromPath()) {
@@ -129,7 +129,7 @@ namespace TwnsBwFogMap {
                     (player.getAliveState() === Types.PlayerAliveState.Alive)   &&
                     (targetTeamIndexes.has(player.getTeamIndex()))
                 ) {
-                    const visibilityArray = Twns.WarHelpers.WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                    const visibilityArray = WarHelpers.WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
                     if (visibilityArray != null) {
                         mapsFromPath.push({
                             playerIndex,
@@ -257,7 +257,7 @@ namespace TwnsBwFogMap {
                 }
             }
         }
-        public updateMapFromPathsByUnitAndPath(unit: Twns.BaseWar.BwUnit, path: GridIndex[]): void {
+        public updateMapFromPathsByUnitAndPath(unit: BaseWar.BwUnit, path: GridIndex[]): void {
             const playerIndex   = unit.getPlayerIndex();
             const mapSize       = this.getMapSize();
             const mapFromPath   = this._getMapFromPath(playerIndex);

@@ -10,7 +10,7 @@ namespace TwnsMeFogMap {
     import ISerialFogMap            = WarSerialization.ISerialFogMap;
     import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
 
-    export class MeFogMap extends TwnsBwFogMap.BwFogMap {
+    export class MeFogMap extends Twns.BaseWar.BwFogMap {
         public serializeForCreateSfw(): ISerialFogMap {
             const mapSize           = this.getMapSize();
             const maxPlayerIndex    = (this._getWar().getField() as TwnsMeField.MeField).getMaxPlayerIndex();

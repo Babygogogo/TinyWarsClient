@@ -11,7 +11,7 @@
 // import CommonConstants      from "../../tools/helpers/CommonConstants";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwUnitView {
+namespace Twns.BaseWar {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import UnitAnimationType    = Types.UnitAnimationType;
     import GridIndex            = Types.GridIndex;
@@ -158,7 +158,7 @@ namespace TwnsBwUnitView {
             const war                   = unit.getWar();
             const playerIndex           = unit.getPlayerIndex();
             const unitType              = unit.getUnitType();
-            const watcherTeamIndexes    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const watcherTeamIndexes    = war.getPlayerManager().getWatcherTeamIndexesForSelf();
             const isAlwaysVisible       = watcherTeamIndexes.has(unit.getTeamIndex());
             const tween                 = egret.Tween.get(this);
             if (isAlwaysVisible) {
@@ -418,7 +418,7 @@ namespace TwnsBwUnitView {
                         this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${strForSkinId}`);
                     }
                 } else {
-                    if (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(unit.getTeamIndex())) {
+                    if (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(unit.getTeamIndex())) {
                         this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${strForSkinId}`);
                     } else {
                         if (unit.getLoadedUnitsCount() > 0) {

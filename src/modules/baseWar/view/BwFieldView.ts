@@ -8,13 +8,13 @@
 // import TwnsBwUnitMapView            from "./BwUnitMapView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwFieldView {
+namespace Twns.BaseWar {
     export class BwFieldView extends egret.DisplayObjectContainer {
         private _field?                 : Twns.BaseWar.BwField;
 
-        private _tileMapView?           : TwnsBwTileMapView.BwTileMapView;
-        private _actionPlannerView?     : TwnsBwActionPlannerView.BwActionPlannerView;
-        private _unitMapView?           : TwnsBwUnitMapView.BwUnitMapView;
+        private _tileMapView?           : Twns.BaseWar.BwTileMapView;
+        private _actionPlannerView?     : Twns.BaseWar.BwActionPlannerView;
+        private _unitMapView?           : Twns.BaseWar.BwUnitMapView;
         private _cursorView?            : TwnsBwCursorView.BwCursorView;
         private _gridVisionEffectView?  : TwnsBwGridVisualEffectView.BwGridVisualEffectView;
 
@@ -46,10 +46,10 @@ namespace TwnsBwFieldView {
             // nothing to do
         }
 
-        private _getUnitMapView(): TwnsBwUnitMapView.BwUnitMapView {
+        private _getUnitMapView(): Twns.BaseWar.BwUnitMapView {
             return Helpers.getExisted(this._unitMapView);
         }
-        private _getTileMapView(): TwnsBwTileMapView.BwTileMapView {
+        private _getTileMapView(): Twns.BaseWar.BwTileMapView {
             return Helpers.getExisted(this._tileMapView);
         }
 

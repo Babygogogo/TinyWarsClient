@@ -15,17 +15,17 @@ namespace TwnsPanelConfig {
         BwBackgroundPanel                   : PanelConfig<TwnsBwBackgroundPanel.OpenData>;
         BwBeginTurnPanel                    : PanelConfig<TwnsBwBeginTurnPanel.OpenData>;
         BwCaptureProgressPanel              : PanelConfig<TwnsBwCaptureProgressPanel.OpenData>;
-        BwDamagePreviewPanel                : PanelConfig<TwnsBwDamagePreviewPanel.OpenData>;
+        BwDamagePreviewPanel                : PanelConfig<Twns.BaseWar.OpenDataForBwDamagePreviewPanel>;
         BwDialoguePanel                     : PanelConfig<TwnsBwDialoguePanel.OpenData>;
-        BwProduceUnitPanel                  : PanelConfig<TwnsBwProduceUnitPanel.OpenData>;
+        BwProduceUnitPanel                  : PanelConfig<Twns.BaseWar.OpenDataForBwProduceUnitPanel>;
         BwSimpleDialoguePanel               : PanelConfig<TwnsBwSimpleDialoguePanel.OpenData>;
         BwTileBriefPanel                    : PanelConfig<TwnsBwTileBriefPanel.OpenData>;
         BwTileDetailPanel                   : PanelConfig<TwnsBwTileDetailPanel.OpenData>;
-        BwUnitActionsPanel                  : PanelConfig<TwnsBwUnitActionsPanel.OpenData>;
-        BwUnitBriefPanel                    : PanelConfig<TwnsBwUnitBriefPanel.OpenData>;
+        BwUnitActionsPanel                  : PanelConfig<Twns.BaseWar.OpenDataForBwUnitActionsPanel>;
+        BwUnitBriefPanel                    : PanelConfig<Twns.BaseWar.OpenDataForBwUnitBriefPanel>;
         BwUnitDetailPanel                   : PanelConfig<Twns.BaseWar.OpenDataForBwUnitDetailPanel>;
-        BwUnitListPanel                     : PanelConfig<TwnsBwUnitListPanel.OpenData>;
-        BwWarInfoPanel                      : PanelConfig<TwnsBwWarInfoPanel.OpenData>;
+        BwUnitListPanel                     : PanelConfig<Twns.BaseWar.OpenDataForBwUnitListPanel>;
+        BwWarInfoPanel                      : PanelConfig<Twns.BaseWar.OpenDataForBwWarInfoPanel>;
         BwWarPanel                          : PanelConfig<TwnsBwWarPanel.OpenData>;
 
         BroadcastAddMessagePanel            : PanelConfig<TwnsBroadcastAddMessagePanel.OpenData>;
@@ -298,7 +298,7 @@ namespace TwnsPanelConfig {
             },
 
             BwDamagePreviewPanel: {
-                cls         : TwnsBwDamagePreviewPanel?.BwDamagePreviewPanel,
+                cls         : Twns.BaseWar?.BwDamagePreviewPanel,
                 skinName    : `resource/skins/baseWar/BwDamagePreviewPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
@@ -311,7 +311,7 @@ namespace TwnsPanelConfig {
             },
 
             BwProduceUnitPanel: {
-                cls         : TwnsBwProduceUnitPanel?.BwProduceUnitPanel,
+                cls         : Twns.BaseWar?.BwProduceUnitPanel,
                 skinName    : `resource/skins/baseWar/BwProduceUnitPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
@@ -338,14 +338,14 @@ namespace TwnsPanelConfig {
             },
 
             BwUnitActionsPanel: {
-                cls         : TwnsBwUnitActionsPanel?.BwUnitActionsPanel,
+                cls         : Twns.BaseWar?.BwUnitActionsPanel,
                 skinName    : `resource/skins/baseWar/BwUnitActionsPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             BwUnitBriefPanel: {
-                cls         : TwnsBwUnitBriefPanel?.BwUnitBriefPanel,
+                cls         : Twns.BaseWar?.BwUnitBriefPanel,
                 skinName    : `resource/skins/baseWar/BwUnitBriefPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
@@ -359,14 +359,14 @@ namespace TwnsPanelConfig {
             },
 
             BwUnitListPanel: {
-                cls         : TwnsBwUnitListPanel?.BwUnitListPanel,
+                cls         : Twns.BaseWar?.BwUnitListPanel,
                 skinName    : `resource/skins/baseWar/BwUnitListPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             BwWarInfoPanel: {
-                cls         : TwnsBwWarInfoPanel?.BwWarInfoPanel,
+                cls         : Twns.BaseWar?.BwWarInfoPanel,
                 skinName    : `resource/skins/baseWar/BwWarInfoPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,

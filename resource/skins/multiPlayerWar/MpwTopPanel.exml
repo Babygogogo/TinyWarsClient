@@ -7,6 +7,28 @@
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
                                  source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" alpha="0.9" />
             <e:Group y="0" right="20">
+                <e:Group id="_groupVisionTeam" x="-52" width="60" height="40" y="20">
+                    <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0"
+                                         anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0" x="10"
+                                         y="10" locked="true" />
+                    <e:Group horizontalCenter="0" verticalCenter="0">
+                        <TwnsUiLabel:UiLabel id="_labelVisionTeamTitle" text="POV" size="12" x="0" textColor="0xFFFFFF"
+                                             y="14" maxTextWidth="200" />
+                        <TwnsUiLabel:UiLabel id="_labelVisionTeam" text="Team A" size="12" x="0" textColor="0xFFFFFF"
+                                             y="0" maxTextWidth="200" />
+                        <e:layout>
+                            <e:VerticalLayout gap="2" />
+                        </e:layout>
+                    </e:Group>
+                </e:Group>
+                <e:Group id="_groupTimer" x="270" verticalCenter="0" width="90">
+                    <TwnsUiImage:UiImage x="10" y="10" scaleX="0.7" scaleY="0.7" source="commonIcon0008" />
+                    <TwnsUiLabel:UiLabel id="_labelTimer" text="999:00:00" size="14" x="0" textColor="0xFFFFFF" y="14"
+                                         maxTextWidth="63" />
+                    <e:layout>
+                        <e:HorizontalLayout verticalAlign="middle" gap="4" />
+                    </e:layout>
+                </e:Group>
                 <TwnsUiButton:UiButton id="_btnWeather" label="" x="10" width="50" y="10" height="40">
                     <TwnsUiButton:skinName>
                         <e:Skin states="up,down,disabled">
@@ -20,14 +42,6 @@
                         </e:Skin>
                     </TwnsUiButton:skinName>
                 </TwnsUiButton:UiButton>
-                <e:Group id="_groupTimer" x="270" verticalCenter="0" width="90">
-                    <TwnsUiImage:UiImage x="10" y="10" scaleX="0.7" scaleY="0.7" source="commonIcon0008" />
-                    <TwnsUiLabel:UiLabel id="_labelTimer" text="999:00:00" size="14" x="0" textColor="0xFFFFFF" y="14"
-                                         maxTextWidth="63" />
-                    <e:layout>
-                        <e:HorizontalLayout verticalAlign="middle" gap="4" />
-                    </e:layout>
-                </e:Group>
                 <TwnsUiButton:UiButton id="_btnChat" label="" x="0" width="50" y="0" height="40">
                     <TwnsUiButton:skinName>
                         <e:Skin states="up,down,disabled">
@@ -55,7 +69,7 @@
                     </TwnsUiButton:skinName>
                 </TwnsUiButton:UiButton>
                 <e:layout>
-                    <e:HorizontalLayout gap="16" verticalAlign="middle" />
+                    <e:HorizontalLayout gap="10" verticalAlign="middle" />
                 </e:layout>
             </e:Group>
         </e:Group>

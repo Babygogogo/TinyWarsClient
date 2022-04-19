@@ -44,6 +44,11 @@ namespace Twns.MultiPlayerWar {
     };
     export class MpwTopPanel extends TwnsUiPanel.UiPanel<OpenDataForMpwTopPanel> {
         private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForListPlayer>;
+
+        private readonly _groupVisionTeam!      : eui.Group;
+        private readonly _labelVisionTeamTitle! : TwnsUiLabel.UiLabel;
+        private readonly _labelVisionTeam!      : TwnsUiLabel.UiLabel;
+
         private readonly _btnWeather!           : TwnsUiButton.UiButton;
         private readonly _groupTimer!           : eui.Group;
         private readonly _labelTimer!           : TwnsUiLabel.UiLabel;
@@ -86,6 +91,7 @@ namespace Twns.MultiPlayerWar {
                 { type: NotifyType.MsgUserGetOnlineState,           callback: this._onNotifyMsgUserGetOnlineState },
             ]);
             this._setUiListenerArray([
+                { ui: this._groupVisionTeam,    callback: this._onTouchedGroupVisionTeam },
                 { ui: this._btnWeather,         callback: this._onTouchedBtnWeather },
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
                 { ui: this._groupCo,            callback: this._onTouchedGroupCo },
@@ -180,6 +186,16 @@ namespace Twns.MultiPlayerWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks for touch.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onTouchedGroupVisionTeam(): void {
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+
+            const war = this._getOpenData().war;
+            war.tickVisionTeamIndex();
+            war.updateTilesAndUnitsOnVisibilityChanged(false);
+
+            this._updateGroupVisionTeam();
+        }
+
         private _onTouchedBtnWeather(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                 title  : Lang.getText(LangTextType.B0705),
@@ -238,6 +254,7 @@ namespace Twns.MultiPlayerWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateComponentsForLanguage();
+
             this._updateListPlayer();
             this._updateImgSkinAndCo();
             this._updateLabelPlayerState();
@@ -251,7 +268,7 @@ namespace Twns.MultiPlayerWar {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._updateBtnWeather();
+            this._updateGroupVisionTeam();
             this._updateLabelPlayerState();
             this._updateLabelTurnIndex();
         }
@@ -287,6 +304,22 @@ namespace Twns.MultiPlayerWar {
             this._labelTurnIndex.text = `${Lang.getText(LangTextType.B0191)} ${this._getOpenData().war.getTurnManager().getTurnIndex()}`;
         }
 
+        private _updateGroupVisionTeam(): void {
+            const war   = this._getOpenData().war;
+            const group = this._groupVisionTeam;
+            if (!war.checkCanTickVisionTeamIndex()) {
+                group.visible = false;
+            } else {
+                group.visible = true;
+
+                const teamIndex                 = war.getVisionTeamIndex();
+                this._labelVisionTeamTitle.text = Lang.getText(LangTextType.B0891);
+                this._labelVisionTeam.text      = teamIndex == null
+                    ? Lang.getText(LangTextType.B0890)
+                    : (Lang.getPlayerTeamName(teamIndex) ?? CommonConstants.ErrorTextForUndefined);
+            }
+        }
+
         private _updateBtnWeather(): void {
             this._btnWeather.icon = Config.ConfigManager.getWeatherImageSource(this._getOpenData().war.getWeatherManager().getCurrentWeatherType());
         }
@@ -314,7 +347,7 @@ namespace Twns.MultiPlayerWar {
             const labelFund     = this._labelFund;
             const labelAddFund  = this._labelAddFund;
             if ((war.getFogMap().checkHasFogCurrently())                                                        &&
-                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
+                (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
             ) {
                 labelFund.text      = `????`;
                 labelAddFund.text   = `(+??)`;
@@ -490,7 +523,7 @@ namespace Twns.MultiPlayerWar {
             const labelFund     = this._labelFund;
             const labelAddFund  = this._labelAddFund;
             if ((war.getFogMap().checkHasFogCurrently())                                                &&
-                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(player.getTeamIndex()))
+                (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(player.getTeamIndex()))
             ) {
                 labelFund.text      = `????`;
                 labelAddFund.text   = `(+??)`;

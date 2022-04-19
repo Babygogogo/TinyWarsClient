@@ -315,7 +315,7 @@ namespace Twns.BaseWar {
         public getTurnManager(): BwTurnManager {
             return this._turnManager;
         }
-        public getFogMap(): TwnsBwFogMap.BwFogMap {
+        public getFogMap(): BaseWar.BwFogMap {
             return this.getField().getFogMap();
         }
         public getUnitMap(): BwUnitMap {
@@ -324,7 +324,7 @@ namespace Twns.BaseWar {
         public getTileMap(): BwTileMap {
             return this.getField().getTileMap();
         }
-        public getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {
+        public getActionPlanner(): Twns.BaseWar.BwActionPlanner {
             return this.getField().getActionPlanner();
         }
         public getGridVisualEffect(): TwnsBwGridVisualEffect.BwGridVisualEffect {
@@ -339,10 +339,6 @@ namespace Twns.BaseWar {
         }
         public getTurnPhaseCode(): Types.TurnPhaseCode {
             return this.getTurnManager().getPhaseCode();
-        }
-
-        public getWatcherTeamIndexes(watcherUserId: number): Set<number> {
-            return this.getPlayerManager().getAliveWatcherTeamIndexes(watcherUserId);
         }
 
         public getWeatherManager(): TwnsBwWeatherManager.BwWeatherManager {

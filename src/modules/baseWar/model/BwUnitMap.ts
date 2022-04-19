@@ -20,13 +20,13 @@ namespace Twns.BaseWar {
     import GameConfig       = Config.GameConfig;
 
     export class BwUnitMap {
-        private _war?           : Twns.BaseWar.BwWar;
+        private _war?           : BaseWar.BwWar;
         private _nextUnitId?    : number;
-        private _map?           : (Twns.BaseWar.BwUnit | null)[][];
+        private _map?           : (BaseWar.BwUnit | null)[][];
         private _mapSize?       : Types.MapSize;
-        private _loadedUnits?   : Map<number, Twns.BaseWar.BwUnit>;
+        private _loadedUnits?   : Map<number, BaseWar.BwUnit>;
 
-        private readonly _view  = new TwnsBwUnitMapView.BwUnitMapView();
+        private readonly _view  = new Twns.BaseWar.BwUnitMapView();
 
         public init({ data, gameConfig, mapSize, playersCountUnneutral }: {
             data                    : Types.Undefinable<ISerialUnitMap>;
@@ -39,16 +39,16 @@ namespace Twns.BaseWar {
             }
 
             const nextUnitId = Helpers.getExisted(data.nextUnitId, ClientErrorCode.BwUnitMap_Init_01);
-            if (!Twns.WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
+            if (!WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
                 throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwUnitMap_Init_02);
             }
 
             const mapWidth      = mapSize.width;
-            const map           = Helpers.createEmptyMap<Twns.BaseWar.BwUnit>(mapWidth);
-            const loadedUnits   = new Map<number, Twns.BaseWar.BwUnit>();
-            const allUnits      = new Map<number, Twns.BaseWar.BwUnit>();
+            const map           = Helpers.createEmptyMap<BaseWar.BwUnit>(mapWidth);
+            const loadedUnits   = new Map<number, BaseWar.BwUnit>();
+            const allUnits      = new Map<number, BaseWar.BwUnit>();
             for (const unitData of data.units || []) {
-                const unit = new Twns.BaseWar.BwUnit();
+                const unit = new BaseWar.BwUnit();
                 unit.init(unitData, gameConfig);
 
                 const gridIndex = unit.getGridIndex();
@@ -128,7 +128,7 @@ namespace Twns.BaseWar {
             this.init({ data, gameConfig, mapSize, playersCountUnneutral });
         }
 
-        public startRunning(war: Twns.BaseWar.BwWar): void {
+        public startRunning(war: BaseWar.BwWar): void {
             this._setWar(war);
             this._forEachUnitOnMap(unit => unit.startRunning(war));
             this._forEachUnitLoaded(unit => unit.startRunning(war));
@@ -158,7 +158,7 @@ namespace Twns.BaseWar {
             const nextUnitId    = this.getNextUnitId();
             const war           = this.getWar();
             const units         : ISerialUnit[] = [];
-            const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
             for (const unit of WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
                 units.push(unit.serializeForCreateSfw());
 
@@ -178,7 +178,7 @@ namespace Twns.BaseWar {
             const nextUnitId    = this.getNextUnitId();
             const war           = this.getWar();
             const units         : ISerialUnit[] = [];
-            const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
             for (const unit of WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
                 units.push(unit.serializeForCreateMfr());
 
@@ -195,24 +195,24 @@ namespace Twns.BaseWar {
             };
         }
 
-        private _setMap(map: (Twns.BaseWar.BwUnit | null)[][]): void {
+        private _setMap(map: (BaseWar.BwUnit | null)[][]): void {
             this._map = map;
         }
-        private _getMap(): (Twns.BaseWar.BwUnit | null)[][] {
+        private _getMap(): (BaseWar.BwUnit | null)[][] {
             return Helpers.getExisted(this._map);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getView(): TwnsBwUnitMapView.BwUnitMapView {
+        public getView(): Twns.BaseWar.BwUnitMapView {
             return this._view;
         }
 
-        private _setWar(war: Twns.BaseWar.BwWar): void {
+        private _setWar(war: BaseWar.BwWar): void {
             this._war = war;
         }
-        public getWar(): Twns.BaseWar.BwWar {
+        public getWar(): BaseWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 
@@ -230,7 +230,7 @@ namespace Twns.BaseWar {
             this._nextUnitId = id;
         }
 
-        public getUnit(gridIndex: GridIndex, unitId: Types.Undefinable<number>): Twns.BaseWar.BwUnit | null {
+        public getUnit(gridIndex: GridIndex, unitId: Types.Undefinable<number>): BaseWar.BwUnit | null {
             if (unitId == null) {
                 return this.getUnitOnMap(gridIndex);
             } else {
@@ -247,7 +247,7 @@ namespace Twns.BaseWar {
                 }
             }
         }
-        public getUnitById(unitId: number): Twns.BaseWar.BwUnit | null {
+        public getUnitById(unitId: number): BaseWar.BwUnit | null {
             const unitLoaded = this.getUnitLoadedById(unitId);
             if (unitLoaded) {
                 return unitLoaded;
@@ -263,10 +263,10 @@ namespace Twns.BaseWar {
             }
         }
 
-        public getUnitOnMap(gridIndex: GridIndex): Twns.BaseWar.BwUnit | null {
+        public getUnitOnMap(gridIndex: GridIndex): BaseWar.BwUnit | null {
             return this._getMap()[gridIndex.x][gridIndex.y] ?? null;
         }
-        public getVisibleUnitOnMap(gridIndex: GridIndex): Twns.BaseWar.BwUnit | null {
+        public getVisibleUnitOnMap(gridIndex: GridIndex): BaseWar.BwUnit | null {
             const unit = this.getUnitOnMap(gridIndex);
             if (unit == null) {
                 return null;
@@ -285,18 +285,18 @@ namespace Twns.BaseWar {
                 : null;
         }
 
-        public getUnitLoadedById(unitId: number): Twns.BaseWar.BwUnit | null {
+        public getUnitLoadedById(unitId: number): BaseWar.BwUnit | null {
             return this.getLoadedUnits().get(unitId) ?? null;
         }
-        private _setLoadedUnits(units: Map<number, Twns.BaseWar.BwUnit>): void {
+        private _setLoadedUnits(units: Map<number, BaseWar.BwUnit>): void {
             this._loadedUnits = units;
         }
-        public getLoadedUnits(): Map<number, Twns.BaseWar.BwUnit> {
+        public getLoadedUnits(): Map<number, BaseWar.BwUnit> {
             return Helpers.getExisted(this._loadedUnits);
         }
-        public getUnitsLoadedByLoader(loader: Twns.BaseWar.BwUnit, isRecursive: boolean): Twns.BaseWar.BwUnit[] {
-            const units: Twns.BaseWar.BwUnit[] = [];
-            this._forEachUnitLoaded((unit: Twns.BaseWar.BwUnit) => {
+        public getUnitsLoadedByLoader(loader: BaseWar.BwUnit, isRecursive: boolean): BaseWar.BwUnit[] {
+            const units: BaseWar.BwUnit[] = [];
+            this._forEachUnitLoaded((unit: BaseWar.BwUnit) => {
                 if (unit.getLoaderUnitId() === loader.getUnitId()) {
                     units.push(unit);
                     (isRecursive) && (units.push(...this.getUnitsLoadedByLoader(unit, isRecursive)));
@@ -305,23 +305,23 @@ namespace Twns.BaseWar {
             return units;
         }
 
-        public getAllUnitsOnMap(): Twns.BaseWar.BwUnit[] {
-            const units: Twns.BaseWar.BwUnit[] = [];
+        public getAllUnitsOnMap(): BaseWar.BwUnit[] {
+            const units: BaseWar.BwUnit[] = [];
             this._forEachUnitOnMap(unit => units.push(unit));
             return units;
         }
-        public getAllUnitsLoaded(): Twns.BaseWar.BwUnit[] {
-            const units: Twns.BaseWar.BwUnit[] = [];
+        public getAllUnitsLoaded(): BaseWar.BwUnit[] {
+            const units: BaseWar.BwUnit[] = [];
             this._forEachUnitLoaded(unit => units.push(unit));
             return units;
         }
-        public getAllUnits(): Twns.BaseWar.BwUnit[] {
+        public getAllUnits(): BaseWar.BwUnit[] {
             const units = this.getAllUnitsOnMap();
             this._forEachUnitLoaded(unit => units.push(unit));
             return units;
         }
 
-        public setUnitLoaded(unit: Twns.BaseWar.BwUnit): void {
+        public setUnitLoaded(unit: BaseWar.BwUnit): void {
             const loadedUnits = this.getLoadedUnits();
             if (loadedUnits == null) {
                 throw Helpers.newError(`BwUnitMap.setUnitLoaded() the map is not initialized.`);
@@ -345,7 +345,7 @@ namespace Twns.BaseWar {
             loadedUnits.delete(unitId);
         }
 
-        public setUnitOnMap(unit: Twns.BaseWar.BwUnit): void {
+        public setUnitOnMap(unit: BaseWar.BwUnit): void {
             const mapSize   = this.getMapSize();
             const map       = this._getMap();
             if ((!mapSize) || (!map)) {
@@ -396,18 +396,18 @@ namespace Twns.BaseWar {
             }
         }
 
-        private _forEachUnit(func: (unit: Twns.BaseWar.BwUnit) => any): void {
+        private _forEachUnit(func: (unit: BaseWar.BwUnit) => any): void {
             this._forEachUnitOnMap(func);
             this._forEachUnitLoaded(func);
         }
-        private _forEachUnitOnMap(func: (unit: Twns.BaseWar.BwUnit) => any): void {
+        private _forEachUnitOnMap(func: (unit: BaseWar.BwUnit) => any): void {
             for (const column of this._getMap()) {
                 for (const unit of column) {
                     (unit) && (func(unit));
                 }
             }
         }
-        private _forEachUnitLoaded(func: (unit: Twns.BaseWar.BwUnit) => any): void {
+        private _forEachUnitLoaded(func: (unit: BaseWar.BwUnit) => any): void {
             for (const [, unit] of this.getLoadedUnits()) {
                 func(unit);
             }
@@ -471,8 +471,8 @@ namespace Twns.BaseWar {
             return list;
         }
 
-        public getAllCoUnits(playerIndex: number): Twns.BaseWar.BwUnit[] {
-            const coUnits: Twns.BaseWar.BwUnit[] = [];
+        public getAllCoUnits(playerIndex: number): BaseWar.BwUnit[] {
+            const coUnits: BaseWar.BwUnit[] = [];
             for (const [, unit] of this.getLoadedUnits()) {
                 if ((unit.getPlayerIndex() === playerIndex) && (unit.getHasLoadedCo())) {
                     coUnits.push(unit);

@@ -21,27 +21,29 @@ namespace Twns.MultiPlayerWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import WarAction                = CommonProto.WarAction;
 
-    export abstract class MpwWar extends Twns.BaseWar.BwWar {
-        private readonly _playerManager         = new TwnsMpwPlayerManager.MpwPlayerManager();
+    export abstract class MpwWar extends BaseWar.BwWar {
+        private readonly _playerManager         = new MultiPlayerWar.MpwPlayerManager();
         private readonly _field                 = new TwnsMpwField.MpwField();
-        private readonly _commonSettingManager  = new Twns.BaseWar.BwCommonSettingManager();
-        private readonly _warEventManager       = new Twns.BaseWar.BwWarEventManager();
+        private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
+        private readonly _warEventManager       = new BaseWar.BwWarEventManager();
+
+        private _visionTeamIndex    : number | null = null;
 
         public getField(): TwnsMpwField.MpwField {
             return this._field;
         }
-        public getPlayerManager(): TwnsMpwPlayerManager.MpwPlayerManager {
+        public getPlayerManager(): MultiPlayerWar.MpwPlayerManager {
             return this._playerManager;
         }
-        public getCommonSettingManager(): Twns.BaseWar.BwCommonSettingManager {
+        public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getWarEventManager(): Twns.BaseWar.BwWarEventManager {
+        public getWarEventManager(): BaseWar.BwWarEventManager {
             return this._warEventManager;
         }
 
         public updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void {
-            const watcherTeamIndexes    = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const watcherTeamIndexes    = this.getPlayerManager().getWatcherTeamIndexesForSelf();
             const visibleUnitsOnMap     = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, watcherTeamIndexes);
             for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
                 if (visibleUnitsOnMap.has(unit)) {
@@ -72,6 +74,26 @@ namespace Twns.MultiPlayerWar {
 
             if (!isFastExecute) {
                 tileMap.getView().updateCoZone();
+            }
+
+            this._handleVisionTeamIndex(watcherTeamIndexes, isFastExecute);
+        }
+        private _handleVisionTeamIndex(watcherTeamIndexes: Set<number>, isFastExecute: boolean): void {
+            const visionTeamIndex = this.getVisionTeamIndex();
+            if (visionTeamIndex == null) {
+                return;
+            }
+            if ((watcherTeamIndexes.size === 1) && (watcherTeamIndexes.values().next().value === visionTeamIndex)) {
+                return;
+            }
+
+            const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeams(this, new Set([visionTeamIndex]));
+            for (const tile of this.getTileMap().getAllTiles()) {
+                tile.setHasFog(!visibleTiles.has(tile));
+
+                if (!isFastExecute) {
+                    tile.flushDataToView();
+                }
             }
         }
 
@@ -197,8 +219,30 @@ namespace Twns.MultiPlayerWar {
         public getPlayerIndexLoggedIn(): number | null {
             return this.getPlayerManager().getPlayerIndexLoggedIn();
         }
-        public getPlayerLoggedIn(): Twns.BaseWar.BwPlayer | null {
+        public getPlayerLoggedIn(): BaseWar.BwPlayer | null {
             return this.getPlayerManager().getPlayerLoggedIn();
+        }
+
+        public getVisionTeamIndex(): number | null {
+            return this._visionTeamIndex;
+        }
+        private _setVisionTeamIndex(index: number | null): void {
+            this._visionTeamIndex = index;
+        }
+        public checkCanTickVisionTeamIndex(): boolean {
+            return this.getPlayerManager().getWatcherTeamIndexesForSelf().size > 1;
+        }
+        public tickVisionTeamIndex(): number | null {
+            const teamIndexArray = [...this.getPlayerManager().getWatcherTeamIndexesForSelf()].sort((v1, v2) => v1 - v2);
+            Helpers.deleteElementFromArray(teamIndexArray, CommonConstants.WarNeutralTeamIndex);
+
+            const currentVisionTeamIndex    = this.getVisionTeamIndex();
+            const newVisionTeamIndex        = currentVisionTeamIndex == null
+                ? (teamIndexArray[0] ?? null)
+                : (teamIndexArray.find(v => v > currentVisionTeamIndex) ?? null);
+            this._setVisionTeamIndex(newVisionTeamIndex);
+
+            return newVisionTeamIndex;
         }
     }
 }

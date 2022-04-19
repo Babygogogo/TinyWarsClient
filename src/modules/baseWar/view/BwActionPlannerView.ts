@@ -12,7 +12,7 @@
 // import TwnsBwUnitView       from "./BwUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwActionPlannerView {
+namespace Twns.BaseWar {
     import NotifyType   = TwnsNotifyType.NotifyType;
     import State        = Types.ActionPlannerState;
     import GridIndex    = Types.GridIndex;
@@ -92,7 +92,7 @@ namespace TwnsBwActionPlannerView {
     const ALPHA_FOR_VISIBLE_GRIDS_NORMAL    = 0.6;
 
     export class BwActionPlannerView extends egret.DisplayObjectContainer {
-        private _actionPlanner?                 : TwnsBwActionPlanner.BwActionPlanner;
+        private _actionPlanner?                 : Twns.BaseWar.BwActionPlanner;
 
         private _conForGrids                    = new egret.DisplayObjectContainer();
         private _conForMovableGrids             = new egret.DisplayObjectContainer();
@@ -106,7 +106,7 @@ namespace TwnsBwActionPlannerView {
         private readonly _imgForMoveDestination = new TwnsUiImage.UiImage(_MOVABLE_GRID_FRAMES[0]);
 
         private _conForUnits            = new egret.DisplayObjectContainer();
-        private _focusUnitViews         = new Map<number, TwnsBwUnitView.BwUnitView>();
+        private _focusUnitViews         = new Map<number, Twns.BaseWar.BwUnitView>();
 
         private _notifyEvents: Notify.Listener[] = [
             { type: NotifyType.GridAnimationTick,       callback: this._onNotifyGridAnimationTick },
@@ -128,7 +128,7 @@ namespace TwnsBwActionPlannerView {
             this.addChild(this._conForUnits);
         }
 
-        public init(actionPlanner: TwnsBwActionPlanner.BwActionPlanner): void {
+        public init(actionPlanner: Twns.BaseWar.BwActionPlanner): void {
             this._actionPlanner = actionPlanner;
             this._initConForMovableGrids();
             this._initConForMoveDestination();
@@ -136,7 +136,7 @@ namespace TwnsBwActionPlannerView {
             this._initConForMovePath();
             this._initConForVisibleGrids();
         }
-        public fastInit(actionPlanner: TwnsBwActionPlanner.BwActionPlanner): void {
+        public fastInit(actionPlanner: Twns.BaseWar.BwActionPlanner): void {
             this._actionPlanner = actionPlanner;
         }
 
@@ -149,7 +149,7 @@ namespace TwnsBwActionPlannerView {
             Notify.removeEventListeners(this._notifyEvents, this);
         }
 
-        private _getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {
+        private _getActionPlanner(): Twns.BaseWar.BwActionPlanner {
             return Helpers.getExisted(this._actionPlanner);
         }
 
@@ -808,7 +808,7 @@ namespace TwnsBwActionPlannerView {
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _addUnitView(unit: Twns.BaseWar.BwUnit, gridIndex: GridIndex, alpha = 1): void {
-            const view = new TwnsBwUnitView.BwUnitView().init(unit).startRunningView();
+            const view = new Twns.BaseWar.BwUnitView().init(unit).startRunningView();
             // view.alpha = alpha;
             _resetUnitViewXy(view, gridIndex);
             view.showUnitAnimation(Types.UnitAnimationType.Move);
@@ -839,7 +839,7 @@ namespace TwnsBwActionPlannerView {
         }
     }
 
-    function _resetUnitViewXy(view: TwnsBwUnitView.BwUnitView, gridIndex: GridIndex): void {
+    function _resetUnitViewXy(view: Twns.BaseWar.BwUnitView, gridIndex: GridIndex): void {
         view.x  = gridIndex.x * _GRID_WIDTH;
         view.y  = gridIndex.y * _GRID_HEIGHT;
     }

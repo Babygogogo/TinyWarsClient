@@ -3,7 +3,7 @@
 // import TwnsBwWar    from "../../baseWar/model/BwWar";
 
 namespace TwnsTwFogMap {
-    import BwFogMap = TwnsBwFogMap.BwFogMap;
+    import BwFogMap = Twns.BaseWar.BwFogMap;
     import BwWar    = Twns.BaseWar.BwWar;
 
     export class TwFogMap extends BwFogMap {

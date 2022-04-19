@@ -52,7 +52,7 @@ namespace Twns.BaseWar {
         private _primaryWeaponCurrentAmmo?  : number | null;
         private _aiMode?                    : UnitAiMode | null;
 
-        private readonly _view              = new TwnsBwUnitView.BwUnitView();
+        private readonly _view              = new Twns.BaseWar.BwUnitView();
         private _war?                       : BwWar;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -212,7 +212,7 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
-        public getView(): TwnsBwUnitView.BwUnitView {
+        public getView(): Twns.BaseWar.BwUnitView {
             return this._view;
         }
 

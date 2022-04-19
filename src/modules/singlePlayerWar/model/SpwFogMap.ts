@@ -4,13 +4,13 @@
 // import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 
 namespace TwnsSpwFogMap {
-    import BwFogMap = TwnsBwFogMap.BwFogMap;
+    import BwFogMap = Twns.BaseWar.BwFogMap;
 
     export class SpwFogMap extends BwFogMap {
         public startRunning(war: Twns.BaseWar.BwWar): void {
             this._setWar(war);
 
-            const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
             const visibleUnits  = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes);
             for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
                 unit.setViewVisible(visibleUnits.has(unit));

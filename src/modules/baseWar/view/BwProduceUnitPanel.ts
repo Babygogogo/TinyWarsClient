@@ -25,18 +25,18 @@
 // import TwnsBwUnitView           from "./BwUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwProduceUnitPanel {
+namespace Twns.BaseWar {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import UnitType             = Types.UnitType;
     import GridIndex            = Types.GridIndex;
-    import BwWar                = Twns.BaseWar.BwWar;
+    import BwWar                = BaseWar.BwWar;
 
-    export type OpenData = {
+    export type OpenDataForBwProduceUnitPanel = {
         gridIndex   : GridIndex;
         war         : BwWar;
     };
-    export class BwProduceUnitPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwProduceUnitPanel extends TwnsUiPanel.UiPanel<OpenDataForBwProduceUnitPanel> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _listUnit!     : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
@@ -120,10 +120,10 @@ namespace TwnsBwProduceUnitPanel {
             const actionPlanner     = war.getActionPlanner();
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex) ?? null;
             const unitCategory      = Helpers.getExisted(skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory());
-            const minNormalizedHp   = skillCfg ? Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(skillCfg[3]) : Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
+            const minNormalizedHp   = skillCfg ? WarHelpers.WarCommonHelpers.getNormalizedHp(skillCfg[3]) : WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
             for (const unitType of gameConfig.getUnitTypesByCategory(unitCategory) ?? []) {
-                const unit = new Twns.BaseWar.BwUnit();
+                const unit = new BaseWar.BwUnit();
                 unit.init({
                     gridIndex,
                     unitId      : -1,
@@ -189,12 +189,12 @@ namespace TwnsBwProduceUnitPanel {
 
     type DataForUnitRenderer = {
         unitType                : UnitType;
-        unit                    : Twns.BaseWar.BwUnit;
+        unit                    : BaseWar.BwUnit;
         minCost                 : number;
         cfgCost                 : number;
         costModifier            : number;
         currentFund             : number;
-        actionPlanner           : TwnsBwActionPlanner.BwActionPlanner;
+        actionPlanner           : Twns.BaseWar.BwActionPlanner;
         gridIndex               : GridIndex;
         unitProductionSkillCfg  : number[] | null;
     };
@@ -209,7 +209,7 @@ namespace TwnsBwProduceUnitPanel {
         private readonly _imgProduce!   : TwnsUiImage.UiImage;
         private readonly _labelProduce! : TwnsUiLabel.UiLabel;
 
-        private readonly _unitView      = new TwnsBwUnitView.BwUnitView();
+        private readonly _unitView      = new BaseWar.BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

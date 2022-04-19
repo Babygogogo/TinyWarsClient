@@ -141,7 +141,7 @@ namespace Twns.BaseWar {
         public serializeForCreateSfw(): ISerialPlayer {
             const war                   = this._getWar();
             const playerIndex           = this.getPlayerIndex();
-            const shouldShowFund        = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(this.getTeamIndex()));
+            const shouldShowFund        = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getWatcherTeamIndexesForSelf().has(this.getTeamIndex()));
             return {
                 playerIndex,
                 fund                        : shouldShowFund ? this.getFund() : 0,
@@ -281,7 +281,7 @@ namespace Twns.BaseWar {
             return Helpers.getExisted(this._coCurrentEnergy);
         }
         public getCoMaxEnergy(): number {
-            return this._getRevisedEnergy(Twns.WarHelpers.WarCommonHelpers.getCoMaxEnergy(this._getCoBasicCfg()));
+            return this._getRevisedEnergy(WarHelpers.WarCommonHelpers.getCoMaxEnergy(this._getCoBasicCfg()));
         }
         public getCoZoneExpansionEnergyList(): number[] | null {
             const cfg = this._getCoBasicCfg();
@@ -475,7 +475,7 @@ namespace Twns.BaseWar {
                 const cfg = gameConfig.getCoSkillCfg(skillId)?.selfUnitCost;
                 if ((cfg)                                                                   &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
-                    ((hasLoadedCo) || (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    ((hasLoadedCo) || (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap,

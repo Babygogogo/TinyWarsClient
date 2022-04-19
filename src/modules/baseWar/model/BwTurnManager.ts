@@ -123,7 +123,7 @@ namespace Twns.BaseWar {
             this._setPhaseCode(TurnPhaseCode.Main);
 
             const extraData = Helpers.getExisted(action.extraData, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_01);
-            Twns.WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
+            WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war             : this.getWar(),
                 commonExtraData : Helpers.getExisted(extraData.commonExtraData, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_02),
                 isFastExecute,
@@ -166,7 +166,7 @@ namespace Twns.BaseWar {
             this._setPhaseCode(TurnPhaseCode.WaitBeginTurn);
 
             const extraData = Helpers.getExisted(action.extraData, ClientErrorCode.BwTurnManager_EndPhaseMainWithExtraData_01);
-            Twns.WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
+            WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war             : this.getWar(),
                 commonExtraData : Helpers.getExisted(extraData.commonExtraData, ClientErrorCode.BwTurnManager_EndPhaseMainWithExtraData_02),
                 isFastExecute,
@@ -244,7 +244,7 @@ namespace Twns.BaseWar {
                 (unit.getPlayerIndex() === playerIndex) && (allUnitsOnMap.push(unit));
             }
 
-            const visibleUnits      = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleUnits      = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
             const tileMap           = war.getTileMap();
             const gridVisionEffect  = war.getGridVisualEffect();
             for (const unit of allUnitsOnMap.sort(sorterForRepairUnits)) {
@@ -310,7 +310,7 @@ namespace Twns.BaseWar {
             const player            = war.getPlayer(playerIndex);
             const unitMap           = war.getUnitMap();
             const mapSize           = unitMap.getMapSize();
-            const visibleUnits      = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleUnits      = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
             const gridVisionEffect  = war.getGridVisualEffect();
             const allUnitsLoaded    : BwUnit[] = [];
             for (const unit of unitMap.getAllUnitsLoaded()) {
@@ -409,7 +409,7 @@ namespace Twns.BaseWar {
             if (player.getCoId()) {
                 const gameConfig                = war.getGameConfig();
                 const coZoneRadius              = player.getCoZoneRadius();
-                const visibleUnits              = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                const visibleUnits              = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
                 const unitMap                   = war.getUnitMap();
                 const gridVisionEffect          = war.getGridVisualEffect();
                 const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
@@ -423,7 +423,7 @@ namespace Twns.BaseWar {
                             const unitGridIndex = unit.getGridIndex();
                             if ((unit.getPlayerIndex() === playerIndex)                         &&
                                 (gameConfig.checkIsUnitTypeInCategory(unitType, recoverCfg[1])) &&
-                                (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                                (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                                     gridIndex               : unitGridIndex,
                                     coSkillAreaType         : recoverCfg[0],
                                     getCoGridIndexArrayOnMap,
@@ -474,7 +474,7 @@ namespace Twns.BaseWar {
                             const unitGridIndex = unit.getGridIndex();
                             if ((unit.getPlayerIndex() === playerIndex)                         &&
                                 (gameConfig.checkIsUnitTypeInCategory(unitType, recoverCfg[1])) &&
-                                (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                                (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                                     gridIndex               : unitGridIndex,
                                     coSkillAreaType         : recoverCfg[0],
                                     getCoGridIndexArrayOnMap,
@@ -509,7 +509,7 @@ namespace Twns.BaseWar {
                             const unitGridIndex = unit.getGridIndex();
                             if ((unit.getPlayerIndex() === playerIndex)                         &&
                                 (gameConfig.checkIsUnitTypeInCategory(unitType, recoverCfg[1])) &&
-                                (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                                (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                                     gridIndex               : unitGridIndex,
                                     coSkillAreaType         : recoverCfg[0],
                                     getCoGridIndexArrayOnMap,
@@ -1022,7 +1022,7 @@ namespace Twns.BaseWar {
 
         if (!isFastExecute) {
             const mapSize           = war.getTileMap().getMapSize();
-            const attackableArea    = Twns.WarHelpers.WarCommonHelpers.createAttackableAreaForTile(tile, mapSize);
+            const attackableArea    = WarHelpers.WarCommonHelpers.createAttackableAreaForTile(tile, mapSize);
             for (let x = 0; x < mapSize.width; ++x) {
                 const column = attackableArea[x];
                 if (column == null) {
@@ -1167,7 +1167,7 @@ namespace Twns.BaseWar {
 
         if (!isFastExecute) {
             const mapSize           = war.getTileMap().getMapSize();
-            const attackableArea    = Twns.WarHelpers.WarCommonHelpers.createAttackableAreaForTile(tile, mapSize);
+            const attackableArea    = WarHelpers.WarCommonHelpers.createAttackableAreaForTile(tile, mapSize);
             for (let x = 0; x < mapSize.width; ++x) {
                 const column = attackableArea[x];
                 if (column == null) {
@@ -1357,7 +1357,7 @@ namespace Twns.BaseWar {
 
         if (!isFastExecute) {
             const mapSize           = war.getTileMap().getMapSize();
-            const attackableArea    = Twns.WarHelpers.WarCommonHelpers.createAttackableAreaForTile(tile, mapSize);
+            const attackableArea    = WarHelpers.WarCommonHelpers.createAttackableAreaForTile(tile, mapSize);
             for (let x = 0; x < mapSize.width; ++x) {
                 const column = attackableArea[x];
                 if (column == null) {
@@ -1456,7 +1456,7 @@ namespace Twns.BaseWar {
 
         if (!isFastExecute) {
             const mapSize           = war.getTileMap().getMapSize();
-            const attackableArea    = Twns.WarHelpers.WarCommonHelpers.createAttackableAreaForTile(tile, mapSize);
+            const attackableArea    = WarHelpers.WarCommonHelpers.createAttackableAreaForTile(tile, mapSize);
             for (let x = 0; x < mapSize.width; ++x) {
                 const column = attackableArea[x];
                 if (column == null) {

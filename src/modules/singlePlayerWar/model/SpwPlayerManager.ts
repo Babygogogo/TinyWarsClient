@@ -30,7 +30,7 @@ namespace TwnsSpwPlayerManager {
             return playerIndexes;
         }
 
-        public getAliveWatcherTeamIndexesForSelf(): Set<number> {
+        public getWatcherTeamIndexesForSelf(): Set<number> {
             const humanPlayers = this.getHumanPlayers();
             if (!humanPlayers.length) {
                 return this.getAliveTeamIndexes(false);

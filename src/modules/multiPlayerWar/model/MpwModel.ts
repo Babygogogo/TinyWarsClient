@@ -854,7 +854,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
             }
         } else {
             if (war.getIsRunning()) {
-                if (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().size) {
+                if (!war.getPlayerManager().getWatcherTeamIndexesForSelf().size) {
                     war.setIsEnded(true);
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0035),

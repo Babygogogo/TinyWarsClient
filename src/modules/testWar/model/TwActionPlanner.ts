@@ -7,7 +7,7 @@
 namespace TwnsTwActionPlanner {
     import GridIndex    = Types.GridIndex;
     import State        = Types.ActionPlannerState;
-    export class TwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
+    export class TwActionPlanner extends Twns.BaseWar.BwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting requesting state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,40 +105,40 @@ namespace TwnsTwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getActionUnitBeLoaded(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitBeLoaded(): Twns.BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitJoin(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitJoin(): Twns.BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitUseCoSuperPower(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitUseCoSuperPower(): Twns.BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitUseCoPower(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitUseCoPower(): Twns.BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitLoadCo(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitLoadCo(): Twns.BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitCapture(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitCapture(): Twns.BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitDive(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitDive(): Twns.BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitSurface(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitSurface(): Twns.BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitBuildTile(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitBuildTile(): Twns.BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitSupply(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitSupply(): Twns.BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitProduceUnit(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitProduceUnit(): Twns.BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitWait(hasOtherAction: boolean): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitWait(hasOtherAction: boolean): Twns.BaseWar.DataForUnitAction[] {
             return [];
         }
     }

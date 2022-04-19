@@ -13,15 +13,15 @@
 // import TwnsBwWar                from "../model/BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwDamagePreviewPanel {
+namespace Twns.BaseWar {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import BwWar            = Twns.BaseWar.BwWar;
+    import BwWar            = BaseWar.BwWar;
 
-    export type OpenData = {
+    export type OpenDataForBwDamagePreviewPanel = {
         war: BwWar;
     };
-    export class BwDamagePreviewPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwDamagePreviewPanel extends TwnsUiPanel.UiPanel<OpenDataForBwDamagePreviewPanel> {
         private readonly _group!                : eui.Group;
         private readonly _labelAttackTitle!     : TwnsUiLabel.UiLabel;
         private readonly _labelAttackValue!     : TwnsUiLabel.UiLabel;
@@ -91,7 +91,7 @@ namespace TwnsBwDamagePreviewPanel {
             const defenderPlayer        = defenderUnit.getPlayer();
             const defenderPlayerIndex   = defenderUnit.getPlayerIndex();
             const hasFog                = war.getFogMap().checkHasFogCurrently();
-            const watcherTeamIndexes    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const watcherTeamIndexes    = war.getPlayerManager().getWatcherTeamIndexesForSelf();
             const canSeeHiddenInfo1     = (!hasFog) || (watcherTeamIndexes.has(attackerPlayer.getTeamIndex()));
             const canSeeHiddenInfo2     = (!hasFog) || (watcherTeamIndexes.has(defenderPlayer.getTeamIndex()));
             const coSkillType1          = attackerPlayer.getCoUsingSkillType();
@@ -212,10 +212,10 @@ namespace TwnsBwDamagePreviewPanel {
                     const attackerSkinId                    = attackerUnit.getSkinId();
                     const targetSkinId                      = target.getSkinId();
                     group.visible                           = true;
-                    labelAttackTitle.textColor              = Twns.WarHelpers.WarCommonHelpers.getTextColorForSkinId(attackerSkinId);
-                    labelAttackTitle.stroke                 = Twns.WarHelpers.WarCommonHelpers.getTextStrokeForSkinId(attackerSkinId);
-                    labelCounterTitle.textColor             = Twns.WarHelpers.WarCommonHelpers.getTextColorForSkinId(targetSkinId);
-                    labelCounterTitle.stroke                = Twns.WarHelpers.WarCommonHelpers.getTextStrokeForSkinId(targetSkinId);
+                    labelAttackTitle.textColor              = WarHelpers.WarCommonHelpers.getTextColorForSkinId(attackerSkinId);
+                    labelAttackTitle.stroke                 = WarHelpers.WarCommonHelpers.getTextStrokeForSkinId(attackerSkinId);
+                    labelCounterTitle.textColor             = WarHelpers.WarCommonHelpers.getTextColorForSkinId(targetSkinId);
+                    labelCounterTitle.stroke                = WarHelpers.WarCommonHelpers.getTextStrokeForSkinId(targetSkinId);
                     labelAttackValue.text                   = `${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}`;
                     labelCounterValue.text                  = `${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
                 }

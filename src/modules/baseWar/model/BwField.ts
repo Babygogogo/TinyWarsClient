@@ -18,9 +18,9 @@ namespace Twns.BaseWar {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import ISerialField         = CommonProto.WarSerialization.ISerialField;
     import BwCursor             = TwnsBwCursor.BwCursor;
-    import BwFogMap             = TwnsBwFogMap.BwFogMap;
+    import BwFogMap             = BaseWar.BwFogMap;
     import BwGridVisualEffect   = TwnsBwGridVisualEffect.BwGridVisualEffect;
-    import BwFieldView          = TwnsBwFieldView.BwFieldView;
+    import BwFieldView          = Twns.BaseWar.BwFieldView;
     import GameConfig           = Config.GameConfig;
 
     export abstract class BwField {
@@ -31,7 +31,7 @@ namespace Twns.BaseWar {
         public abstract getFogMap(): BwFogMap;
         public abstract getTileMap(): BwTileMap;
         public abstract getUnitMap(): BwUnitMap;
-        public abstract getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner;
+        public abstract getActionPlanner(): Twns.BaseWar.BwActionPlanner;
 
         public init({ data, gameConfig, playersCountUnneutral }: {
             data                    : Types.Undefinable<ISerialField>;
@@ -42,8 +42,8 @@ namespace Twns.BaseWar {
                 throw Helpers.newError(`Empty data.`, ClientErrorCode.BwField_Init_00);
             }
 
-            const mapSize = Twns.WarHelpers.WarCommonHelpers.getMapSize(data.tileMap);
-            if (!Twns.WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
+            const mapSize = WarHelpers.WarCommonHelpers.getMapSize(data.tileMap);
+            if (!WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
                 throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwField_Init_01);
             }
 
@@ -90,7 +90,7 @@ namespace Twns.BaseWar {
             gameConfig              : GameConfig;
             playersCountUnneutral   : number;
         }): void {
-            const mapSize = Twns.WarHelpers.WarCommonHelpers.getMapSize(data.tileMap);
+            const mapSize = WarHelpers.WarCommonHelpers.getMapSize(data.tileMap);
             this.getFogMap().fastInit({
                 data                : data.fogMap,
                 mapSize,

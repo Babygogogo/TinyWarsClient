@@ -26,7 +26,7 @@
 // import TwnsBwWar                from "../model/BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwWarInfoPanel {
+namespace Twns.BaseWar {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
@@ -53,10 +53,10 @@ namespace TwnsBwWarInfoPanel {
         LuckUpperLimit,
     }
 
-    export type OpenData = {
-        war : Twns.BaseWar.BwWar;
+    export type OpenDataForBwWarInfoPanel = {
+        war : BaseWar.BwWar;
     };
-    export class BwWarInfoPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwWarInfoPanel extends TwnsUiPanel.UiPanel<OpenDataForBwWarInfoPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -242,7 +242,7 @@ namespace TwnsBwWarInfoPanel {
     // PlayerRenderer
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForPlayerRenderer = {
-        war             : Twns.BaseWar.BwWar;
+        war             : BaseWar.BwWar;
         playerIndex     : number;
         playerRule      : IDataForPlayerRule;
         infoTypeArray   : InfoType[];
@@ -276,7 +276,7 @@ namespace TwnsBwWarInfoPanel {
             const playerIndex           = data.playerIndex;
             const war                   = data.war;
             const player                = war.getPlayer(playerIndex);
-            this._imgSkin.source        = Twns.WarHelpers.WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
+            this._imgSkin.source        = WarHelpers.WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
             this._imgCo.source          = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
             this._labelPlayerName.text  = `P${playerIndex}`;
         }
@@ -302,7 +302,7 @@ namespace TwnsBwWarInfoPanel {
     // InfoRenderer
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForInfoRenderer = {
-        war                 : Twns.BaseWar.BwWar;
+        war                 : BaseWar.BwWar;
         infoType            : InfoType;
         playerIndex         : number;
         playerRenderer      : PlayerRenderer;
@@ -716,7 +716,7 @@ namespace TwnsBwWarInfoPanel {
             const labelValue        = this._labelValue;
             labelValue.textColor    = 0xFFFFFF;
             if ((war.getFogMap().checkHasFogCurrently())                                                    &&
-                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(player.getTeamIndex()))
+                (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(player.getTeamIndex()))
             ) {
                 labelValue.text = `????`;
             } else {
@@ -734,7 +734,7 @@ namespace TwnsBwWarInfoPanel {
             const labelValue        = this._labelValue;
             labelValue.textColor    = 0xFFFFFF;
             if ((war.getFogMap().checkHasFogCurrently())                                                                    &&
-                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(war.getPlayer(playerIndex).getTeamIndex()))
+                (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(war.getPlayer(playerIndex).getTeamIndex()))
             ) {
                 labelValue.text = `????`;
             } else {
@@ -751,7 +751,7 @@ namespace TwnsBwWarInfoPanel {
             const labelValue        = this._labelValue;
             labelValue.textColor    = 0xFFFFFF;
             if ((war.getFogMap().checkHasFogCurrently())                                                                    &&
-                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(war.getPlayer(playerIndex).getTeamIndex()))
+                (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(war.getPlayer(playerIndex).getTeamIndex()))
             ) {
                 labelValue.text = `????`;
             } else {
@@ -962,7 +962,7 @@ namespace TwnsBwWarInfoPanel {
             default                                 : return null;
         }
     }
-    function checkCanModifyPlayerInfo(war: Twns.BaseWar.BwWar): boolean {
+    function checkCanModifyPlayerInfo(war: BaseWar.BwWar): boolean {
         const warType = war.getWarType();
         return (warType === Types.WarType.ScwFog)
             || (warType === Types.WarType.ScwStd)

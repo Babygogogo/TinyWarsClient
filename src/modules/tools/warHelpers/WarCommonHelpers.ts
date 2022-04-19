@@ -670,7 +670,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         movingUnitAndPath       : Types.Undefinable<CommonProto.Structure.IMovingUnitAndPath>;
         aiming                  : GridIndex | null;
         deleteViewAfterMoving   : boolean;
-    }): Promise<TwnsBwUnitView.BwUnitView | null> {
+    }): Promise<Twns.BaseWar.BwUnitView | null> {
         if (movingUnitAndPath == null) {
             return null;
         }

@@ -331,7 +331,7 @@ namespace Twns.ReplayWar {
         public getVisionTeamIndex(): number | null {
             return this._visionTeamIndex;
         }
-        private _setVisionTeamIndex(index: number | null) {
+        private _setVisionTeamIndex(index: number | null): void {
             this._visionTeamIndex = index;
         }
         public tickVisionTeamIndex(): number | null {

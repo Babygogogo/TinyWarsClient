@@ -300,7 +300,7 @@ namespace Twns.SinglePlayerWar {
             const labelFund     = this._labelFund;
             const labelAddFund  = this._labelAddFund;
             if ((war.getFogMap().checkHasFogCurrently())                                                        &&
-                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
+                (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
             ) {
                 labelFund.text      = `????`;
                 labelAddFund.text   = `(+??)`;
@@ -458,7 +458,7 @@ namespace Twns.SinglePlayerWar {
             const labelFund     = this._labelFund;
             const labelAddFund  = this._labelAddFund;
             if ((war.getFogMap().checkHasFogCurrently())                                                &&
-                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(player.getTeamIndex()))
+                (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(player.getTeamIndex()))
             ) {
                 labelFund.text      = `????`;
                 labelAddFund.text   = `(+??)`;

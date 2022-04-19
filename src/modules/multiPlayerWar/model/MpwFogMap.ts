@@ -5,11 +5,11 @@
 // import TwnsMpwWar           from "./MpwWar";
 
 namespace TwnsMpwFogMap {
-    export class MpwFogMap extends TwnsBwFogMap.BwFogMap {
+    export class MpwFogMap extends Twns.BaseWar.BwFogMap {
         public startRunning(war: Twns.MultiPlayerWar.MpwWar): void {
             this._setWar(war);
 
-            const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
             for (const tile of war.getTileMap().getAllTiles()) {
                 if (visibleTiles.has(tile)) {
                     tile.setHasFog(false);

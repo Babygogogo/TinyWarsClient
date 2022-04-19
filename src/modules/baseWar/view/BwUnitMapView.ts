@@ -11,7 +11,7 @@
 // import TwnsBwUnitView       from "./BwUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwUnitMapView {
+namespace Twns.BaseWar {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import UnitCategory         = Types.UnitCategory;
     import ActionPlannerState   = Types.ActionPlannerState;
@@ -29,7 +29,7 @@ namespace TwnsBwUnitMapView {
             { type: NotifyType.UserSettingsOpacitySettingsChanged,  callback: this._onNotifyUserSettingsOpacitySettingsChanged },
         ];
 
-        private _unitMap    : Twns.BaseWar.BwUnitMap | null = null;
+        private _unitMap    : BaseWar.BwUnitMap | null = null;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers.
@@ -43,7 +43,7 @@ namespace TwnsBwUnitMapView {
             this._updateOpacityForAllLayers();
         }
 
-        public init(unitMap: Twns.BaseWar.BwUnitMap): void {
+        public init(unitMap: BaseWar.BwUnitMap): void {
             this._setUnitMap(unitMap);
 
             this._clearAllUnits();
@@ -62,17 +62,17 @@ namespace TwnsBwUnitMapView {
             Notify.removeEventListeners(this._notifyListeners, this);
         }
 
-        private _getUnitMap(): Twns.BaseWar.BwUnitMap {
+        private _getUnitMap(): BaseWar.BwUnitMap {
             return Helpers.getExisted(this._unitMap);
         }
-        private _setUnitMap(unitMap: Twns.BaseWar.BwUnitMap): void {
+        private _setUnitMap(unitMap: BaseWar.BwUnitMap): void {
             this._unitMap = unitMap;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public addUnit(view: TwnsBwUnitView.BwUnitView, needResetZOrder: boolean): void {
+        public addUnit(view: Twns.BaseWar.BwUnitView, needResetZOrder: boolean): void {
             const model = Helpers.getExisted(view.getUnit());
 
             view.x = _GRID_WIDTH * model.getGridX();
@@ -84,7 +84,7 @@ namespace TwnsBwUnitMapView {
             (needResetZOrder) && (this._resetZOrderForLayer(layer));
         }
 
-        public removeUnit(view: TwnsBwUnitView.BwUnitView): void {
+        public removeUnit(view: Twns.BaseWar.BwUnitView): void {
             (view.parent) && (view.parent.removeChild(view));
         }
 
@@ -193,7 +193,7 @@ namespace TwnsBwUnitMapView {
 
         private _resetZOrderForLayer(layer: egret.DisplayObjectContainer): void {
             const viewsCount    = layer.numChildren;
-            const views         = new Array<TwnsBwUnitView.BwUnitView>(viewsCount);
+            const views         = new Array<Twns.BaseWar.BwUnitView>(viewsCount);
             for (let i = 0; i < viewsCount; ++i) {
                 views[i] = layer.getChildAt(i) as any;
             }
@@ -211,7 +211,7 @@ namespace TwnsBwUnitMapView {
         private _updateAnimationsOnTick(layer: egret.DisplayObjectContainer): void {
             const viewsCount = layer.numChildren;
             for (let i = 0; i < viewsCount; ++i) {
-                const view = layer.getChildAt(i) as TwnsBwUnitView.BwUnitView;
+                const view = layer.getChildAt(i) as Twns.BaseWar.BwUnitView;
                 view.tickUnitAnimationFrame();
             }
         }
@@ -219,7 +219,7 @@ namespace TwnsBwUnitMapView {
         private _updateIndicatorOnTick(layer: egret.DisplayObjectContainer): void {
             const viewsCount = layer.numChildren;
             for (let i = 0; i < viewsCount; ++i) {
-                const view = layer.getChildAt(i) as TwnsBwUnitView.BwUnitView;
+                const view = layer.getChildAt(i) as Twns.BaseWar.BwUnitView;
                 view.tickStateAnimationFrame();
             }
         }
@@ -240,7 +240,7 @@ namespace TwnsBwUnitMapView {
         private _resetVisibleForAllUnitsOnMap(): void {
             const unitMap       = this._getUnitMap();
             const war           = unitMap.getWar();
-            const visibleUnits  = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleUnits  = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
             for (const unit of unitMap.getAllUnitsOnMap()) {
                 unit.setViewVisible(visibleUnits.has(unit));
             }

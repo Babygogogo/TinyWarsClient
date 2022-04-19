@@ -44,7 +44,6 @@ namespace Twns.HalfwayReplayWar {
         private _settingsForMfw?                    : CommonProto.WarSettings.ISettingsForMfw | null;
         private _settingsForMrw?                    : CommonProto.WarSettings.ISettingsForMrw | null;
         private _settingsForCcw?                    : CommonProto.WarSettings.ISettingsForCcw | null;
-        private _watcherTeamIndexes?                : Set<number>;
 
         private _pauseTimeMs                        = 1000;
         private _isAutoReplay                       = false;
@@ -76,10 +75,6 @@ namespace Twns.HalfwayReplayWar {
             return false;
         }
 
-        public getWatcherTeamIndexes(): Set<number> {
-            return Helpers.getExisted(this._watcherTeamIndexes, ClientErrorCode.HrwWar_GetWatcherTeamIndexes_00);
-        }
-
         public getField(): TwnsHrwField.HrwField {
             return this._field;
         }
@@ -94,7 +89,7 @@ namespace Twns.HalfwayReplayWar {
         }
 
         public updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void {
-            const watcherTeamIndexes    = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const watcherTeamIndexes    = this.getPlayerManager().getWatcherTeamIndexesForSelf();
             const visibleUnitsOnMap     = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, watcherTeamIndexes);
             for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
                 if (visibleUnitsOnMap.has(unit)) {

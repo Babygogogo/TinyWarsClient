@@ -21,16 +21,16 @@
 // import TwnsBwUnitView           from "./BwUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwUnitListPanel {
+namespace Twns.BaseWar {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import BwWar            = Twns.BaseWar.BwWar;
+    import BwWar            = BaseWar.BwWar;
     import BwCursor         = TwnsBwCursor.BwCursor;
 
-    export type OpenData = {
+    export type OpenDataForBwUnitListPanel = {
         war : BwWar;
     };
-    export class BwUnitListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwUnitListPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitListPanel> {
         private readonly _group!            : eui.Group;
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
         private readonly _labelCountName!   : TwnsUiLabel.UiLabel;
@@ -152,7 +152,7 @@ namespace TwnsBwUnitListPanel {
     const _IMAGE_SOURCE_FLARE       = `c03_t99_s02_f02`;
 
     type DataForUnitRenderer = {
-        unit    : Twns.BaseWar.BwUnit;
+        unit    : BaseWar.BwUnit;
         cursor  : BwCursor;
     };
     class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
@@ -166,7 +166,7 @@ namespace TwnsBwUnitListPanel {
         private readonly _imgHp!            : TwnsUiImage.UiImage;
         private readonly _imgFuel!          : TwnsUiImage.UiImage;
         private readonly _imgState!         : TwnsUiImage.UiImage;
-        private readonly _unitView          = new TwnsBwUnitView.BwUnitView();
+        private readonly _unitView          = new BaseWar.BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

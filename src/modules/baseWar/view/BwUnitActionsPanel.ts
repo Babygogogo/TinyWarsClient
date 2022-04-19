@@ -17,18 +17,18 @@
 // import TwnsBwUnitView           from "./BwUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwUnitActionsPanel {
+namespace Twns.BaseWar {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import UnitActionType   = Types.UnitActionType;
-    import BwWar            = Twns.BaseWar.BwWar;
+    import BwWar            = BaseWar.BwWar;
 
-    export type OpenData = {
+    export type OpenDataForBwUnitActionsPanel = {
         war         : BwWar;
         destination : Types.GridIndex;
-        actionList  : TwnsBwActionPlanner.DataForUnitAction[];
+        actionList  : Twns.BaseWar.DataForUnitAction[];
     };
-    export class BwUnitActionsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwUnitActionsPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitActionsPanel> {
         private readonly _group!        : eui.Group;
         private readonly _listAction!   : TwnsUiScrollList.UiScrollList<DataForUnitActionRenderer>;
 
@@ -80,7 +80,7 @@ namespace TwnsBwUnitActionsPanel {
                         costForProduceUnit  : data.costForProduceUnit ?? null,
                     });
                 } else {
-                    const unitForProduce = new Twns.BaseWar.BwUnit();
+                    const unitForProduce = new BaseWar.BwUnit();
                     unitForProduce.init({
                         gridIndex   : { x: -1, y: -1 },
                         unitId      : -1,
@@ -151,7 +151,7 @@ namespace TwnsBwUnitActionsPanel {
         war                 : BwWar;
         actionType          : UnitActionType;
         callback            : () => void;
-        unit?               : Twns.BaseWar.BwUnit;
+        unit?               : BaseWar.BwUnit;
         costForProduceUnit  : number | null;
         isLastAction?       : boolean;
     };
@@ -161,7 +161,7 @@ namespace TwnsBwUnitActionsPanel {
         private readonly _conUnitView!      : eui.Group;
         private readonly _imgBottomLine!    : TwnsUiImage.UiImage;
 
-        private readonly _unitView      = new TwnsBwUnitView.BwUnitView();
+        private readonly _unitView      = new BaseWar.BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

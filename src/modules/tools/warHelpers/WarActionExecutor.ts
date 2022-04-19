@@ -978,7 +978,7 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                const allVisibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                const allVisibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
                 await focusUnit.moveViewAlongPath({
                     pathNodes,
                     isDiving    : focusUnit.getIsDiving(),
@@ -1334,7 +1334,7 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                const allVisibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                const allVisibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
                 await focusUnit.moveViewAlongPath({
                     pathNodes,
                     isDiving    : focusUnit.getIsDiving(),
@@ -1941,7 +1941,7 @@ namespace WarActionExecutor {
                     unitType            : focusUnit.getUnitType(),
                     unitPlayerIndex     : focusUnit.getPlayerIndex(),
                     gridIndex           : endingGridIndex,
-                    observerTeamIndexes : war.getPlayerManager().getAliveWatcherTeamIndexesForSelf(),
+                    observerTeamIndexes : war.getPlayerManager().getWatcherTeamIndexesForSelf(),
                     isDiving            : false,
                 })) {
                     gridVisualEffect.showEffectDive(endingGridIndex);
@@ -1979,7 +1979,7 @@ namespace WarActionExecutor {
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
-            const shouldUpdateFogMap    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
+            const shouldUpdateFogMap    = war.getPlayerManager().getWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
             const unitsForDrop          : BwUnit[] = [];
             for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
                 const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
@@ -2054,7 +2054,7 @@ namespace WarActionExecutor {
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
-            const shouldUpdateFogMap    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
+            const shouldUpdateFogMap    = war.getPlayerManager().getWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
             const fogMap                = war.getFogMap();
             const unitsForDrop          : BwUnit[] = [];
             for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
@@ -2451,7 +2451,7 @@ namespace WarActionExecutor {
                 isBlocked   : path.isBlocked,
                 aiming      : null,
             });
-            if ((isFlareSucceeded) && (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex()))) {
+            if ((isFlareSucceeded) && (war.getPlayerManager().getWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex()))) {
                 if (targetGridIndex == null) {
                     throw Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_03);
                 }
@@ -3065,7 +3065,7 @@ namespace WarActionExecutor {
                     unitType            : focusUnit.getUnitType(),
                     unitPlayerIndex     : focusUnit.getPlayerIndex(),
                     gridIndex           : endingGridIndex,
-                    observerTeamIndexes : war.getPlayerManager().getAliveWatcherTeamIndexesForSelf(),
+                    observerTeamIndexes : war.getPlayerManager().getWatcherTeamIndexesForSelf(),
                     isDiving            : false,
                 })) {
                     gridVisualEffect.showEffectSurface(endingGridIndex);

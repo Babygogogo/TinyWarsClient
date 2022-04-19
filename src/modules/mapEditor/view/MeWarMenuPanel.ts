@@ -717,7 +717,7 @@ namespace TwnsMeWarMenuPanel {
         private readonly _labelNum!     : TwnsUiLabel.UiLabel;
         private readonly _conUnitView!  : eui.Group;
 
-        private _unitView   = new TwnsBwUnitView.BwUnitView();
+        private _unitView   = new Twns.BaseWar.BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

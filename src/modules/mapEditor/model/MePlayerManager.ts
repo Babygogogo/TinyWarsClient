@@ -38,7 +38,7 @@ namespace TwnsMePlayerManager {
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
-        public getAliveWatcherTeamIndexesForSelf(): Set<number> {
+        public getWatcherTeamIndexesForSelf(): Set<number> {
             return this.getAliveTeamIndexes(false);
         }
     }
