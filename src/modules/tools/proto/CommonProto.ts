@@ -22771,6 +22771,9 @@ declare namespace CommonProto {
 
             /** CommonExtraDataForWarAction visibilityArrayFromPathsAfterAction */
             visibilityArrayFromPathsAfterAction?: (number[]|null);
+
+            /** CommonExtraDataForWarAction hiddenUnitIdArray */
+            hiddenUnitIdArray?: (number[]|null);
         }
 
         /** Represents a CommonExtraDataForWarAction. */
@@ -22802,6 +22805,9 @@ declare namespace CommonProto {
 
             /** CommonExtraDataForWarAction visibilityArrayFromPathsAfterAction. */
             public visibilityArrayFromPathsAfterAction: number[];
+
+            /** CommonExtraDataForWarAction hiddenUnitIdArray. */
+            public hiddenUnitIdArray: number[];
 
             /**
              * Creates a new CommonExtraDataForWarAction instance using the specified properties.

@@ -903,16 +903,25 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         // 先把unitArrayAfterAction涉及的部队全部从地图上移除，然后再重新加回来，否则如果遇到有部队互相交换了位置之类的复杂情况就会报错（因为尝试把A移动到B所在位置时，B仍然占着位置，A就无法移动过去）
         const tempRemovedUnits      = new Map<number, BaseWar.BwUnit>(); // 此临时变量仅用于优化性能，在后续把部队加回来的过程中可以直接从这里取，而不必重新创建
         const tempRemovedLoadedUnits: BaseWar.BwUnit[] = [];
-        // 由于后端没有明确告诉前端哪些部队在动作过后消失，所以只能前端假定movingUnit和其搭载的部队会消失，在这里预先移除它们。若实际上没有消失，则unitArrayAfterAction会包含它们，从而可以重新加回来。
-        if ((movingUnitId != null) && (movingUnit)) {
-            unitMap.removeUnitById(movingUnitId, true);
-            tempRemovedUnits.set(movingUnitId, movingUnit);
+        const hiddenUnitIdArray     = commonExtraData.hiddenUnitIdArray ?? [];
+        if (hiddenUnitIdArray.length) {
+            for (const unitId of hiddenUnitIdArray) {
+                unitMap.removeUnitById(unitId, true);
+            }
+        } else {
+            // 由于后端没有明确告诉前端哪些部队在动作过后消失，所以只能前端假定movingUnit和其搭载的部队会消失，在这里预先移除它们。若实际上没有消失，则unitArrayAfterAction会包含它们，从而可以重新加回来。
+            // 但实际上存在一种特殊情况，比如装载了部队的运输部队原地待机或装载co，那么由于被装载的部队没有发生变化，所以unitArrayAfterAction不会包含它们，导致动作执行完后，被装载的部队假性消失
+            // 等当前进行中的局全部结束后，就可以通过hiddenUnitIdArray来准确移除消失的部队，不用假定movingUnit消失，从而可以删掉这些代码
+            if ((movingUnitId != null) && (movingUnit)) {
+                unitMap.removeUnitById(movingUnitId, true);
+                tempRemovedUnits.set(movingUnitId, movingUnit);
 
-            for (const loadedUnit of unitMap.getUnitsLoadedByLoader(movingUnit, true)) {
-                const loadedUnitId = loadedUnit.getUnitId();
-                unitMap.removeUnitLoaded(loadedUnitId);
-                tempRemovedUnits.set(loadedUnitId, loadedUnit);
-                tempRemovedLoadedUnits.push(loadedUnit);
+                for (const loadedUnit of unitMap.getUnitsLoadedByLoader(movingUnit, true)) {
+                    const loadedUnitId = loadedUnit.getUnitId();
+                    unitMap.removeUnitLoaded(loadedUnitId);
+                    tempRemovedUnits.set(loadedUnitId, loadedUnit);
+                    tempRemovedLoadedUnits.push(loadedUnit);
+                }
             }
         }
         for (const unitData of unitArrayAfterAction) {
@@ -967,17 +976,22 @@ namespace Twns.WarHelpers.WarCommonHelpers {
                 updatedViewUnits.add(unit);
             }
         }
-        // HACK：临时处理 类似装载了部队的运输船原地待机后被装载物假性消失的问题
-        if ((movingUnitId != null) && (unitMap.getUnitById(movingUnitId) != null)) {
-            let hasAdd = false;
-            for (const loadedUnit of tempRemovedLoadedUnits) {
-                if (unitMap.getUnitById(loadedUnit.getUnitId()) == null) {
-                    unitMap.setUnitLoaded(loadedUnit);
-                    hasAdd = true;
+        if (hiddenUnitIdArray.length) {
+            // nothing to do
+        } else {
+            // HACK：临时处理 类似装载了部队的运输船原地待机后被装载物假性消失的问题
+            // 等当前进行中的局全部结束后，就可以通过hiddenUnitIdArray完成相同逻辑，从而可以删掉这些代码
+            if ((movingUnitId != null) && (unitMap.getUnitById(movingUnitId) != null)) {
+                let hasAdd = false;
+                for (const loadedUnit of tempRemovedLoadedUnits) {
+                    if (unitMap.getUnitById(loadedUnit.getUnitId()) == null) {
+                        unitMap.setUnitLoaded(loadedUnit);
+                        hasAdd = true;
+                    }
                 }
-            }
-            if (hasAdd) {
-                unitMap.getUnitById(movingUnitId)?.updateView();
+                if (hasAdd) {
+                    unitMap.getUnitById(movingUnitId)?.updateView();
+                }
             }
         }
 
