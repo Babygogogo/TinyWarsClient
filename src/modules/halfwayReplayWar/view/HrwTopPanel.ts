@@ -19,14 +19,14 @@
 // import TwnsRwWarMenuPanel       from "./RwWarMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsHrwTopPanel {
+namespace Twns.HalfwayReplayWar {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
-    export type OpenData = {
-        war : Twns.HalfwayReplayWar.HrwWar;
+    export type OpenDataForHrwTopPanel = {
+        war : HalfwayReplayWar.HrwWar;
     };
-    export class HrwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class HrwTopPanel extends TwnsUiPanel.UiPanel<OpenDataForHrwTopPanel> {
         private readonly _groupPlayer!          : eui.Group;
         private readonly _labelPlayer!          : TwnsUiLabel.UiLabel;
         private readonly _labelFundTitle!       : TwnsUiLabel.UiLabel;
@@ -35,6 +35,10 @@ namespace TwnsHrwTopPanel {
         private readonly _groupPauseTime!       : eui.Group;
         private readonly _labelPauseTimeTitle!  : TwnsUiLabel.UiLabel;
         private readonly _labelPauseTime!       : TwnsUiLabel.UiLabel;
+
+        private readonly _groupVisionTeam!      : TwnsUiButton.UiButton;
+        private readonly _labelVisionTeamTitle! : TwnsUiLabel.UiLabel;
+        private readonly _labelVisionTeam!      : TwnsUiLabel.UiLabel;
 
         private readonly _groupProgress!        : eui.Group;
         private readonly _labelTurnTitle!       : TwnsUiLabel.UiLabel;
@@ -47,7 +51,6 @@ namespace TwnsHrwTopPanel {
         private readonly _labelCurrEnergy!      : TwnsUiLabel.UiLabel;
         private readonly _labelPowerEnergy!     : TwnsUiLabel.UiLabel;
         private readonly _labelZoneEnergy!      : TwnsUiLabel.UiLabel;
-        private readonly _btnChat!              : TwnsUiButton.UiButton;
         private readonly _btnFastRewind!        : TwnsUiButton.UiButton;
         private readonly _btnRewindBegin!       : TwnsUiButton.UiButton;
         private readonly _btnFastForward!       : TwnsUiButton.UiButton;
@@ -65,17 +68,13 @@ namespace TwnsHrwTopPanel {
                 { type: NotifyType.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
                 { type: NotifyType.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: NotifyType.ReplayAutoReplayChanged,        callback: this._onNotifyReplayAutoReplayChanged },
-                { type: NotifyType.MsgChatGetAllReadProgressList,  callback: this._onMsgChatUpdateReadProgressList },
-                { type: NotifyType.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
-                { type: NotifyType.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
-                { type: NotifyType.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
             ]);
             this._setUiListenerArray([
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
                 { ui: this._groupCo,            callback: this._onTouchedGroupCo },
                 { ui: this._groupPauseTime,     callback: this._onTouchedGroupPauseTime },
                 { ui: this._groupProgress,      callback: this._onTouchedGroupProgress },
-                { ui: this._btnChat,            callback: this._onTouchedBtnChat },
+                { ui: this._groupVisionTeam,    callback: this._onTouchedGroupVisionTeam },
                 { ui: this._btnFastRewind,      callback: this._onTouchedBtnFastRewind },
                 { ui: this._btnRewindBegin,     callback: this._onTouchedBtnRewindBegin },
                 { ui: this._btnFastForward,     callback: this._onTouchedBtnFastForward, },
@@ -92,7 +91,7 @@ namespace TwnsHrwTopPanel {
             // nothing to do
         }
 
-        private _getWar(): Twns.HalfwayReplayWar.HrwWar {
+        private _getWar(): HalfwayReplayWar.HrwWar {
             return this._getOpenData().war;
         }
 
@@ -121,18 +120,6 @@ namespace TwnsHrwTopPanel {
         }
         private _onNotifyReplayAutoReplayChanged(): void {
             this._updateView();
-        }
-        private _onMsgChatUpdateReadProgressList(): void {
-            this._updateBtnChat();
-        }
-        private _onMsgChatUpdateReadProgress(): void {
-            this._updateBtnChat();
-        }
-        private _onMsgChatGetAllMessages(): void {
-            this._updateBtnChat();
-        }
-        private _onMsgChatAddMessage(): void {
-            this._updateBtnChat();
         }
 
         private _onTouchedGroupPlayer(): void {
@@ -175,9 +162,14 @@ namespace TwnsHrwTopPanel {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.HrwReplayProgressPanel, { war });
             }
         }
-        private _onTouchedBtnChat(): void {
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.HrwWarMenuPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {});
+        private _onTouchedGroupVisionTeam(): void {
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+
+            const war = this._getWar();
+            war.tickVisionTeamIndex();
+            war.updateTilesAndUnitsOnVisibilityChanged(false);
+
+            this._updateLabelVisionTeam();
         }
         private async _onTouchedBtnFastRewind(): Promise<void> {
             const war = this._getWar();
@@ -272,6 +264,7 @@ namespace TwnsHrwTopPanel {
         private _updateView(): void {
             this._updateComponentsForLanguage();
             this._updateLabelPauseTime();
+            this._updateLabelVisionTeam();
             this._updateLabelTurn();
             this._updateLabelAction();
             this._updateLabelPlayer();
@@ -279,18 +272,25 @@ namespace TwnsHrwTopPanel {
             this._updateLabelCo();
             this._updateBtnPlay();
             this._updateBtnPause();
-            this._updateBtnChat();
         }
 
         private _updateComponentsForLanguage(): void {
             this._labelTurnTitle.text       = Lang.getText(LangTextType.B0091);
             this._labelActionTitle.text     = Lang.getText(LangTextType.B0090);
             this._labelPauseTimeTitle.text  = Lang.getText(LangTextType.B0846);
+            this._labelVisionTeamTitle.text = Lang.getText(LangTextType.B0891);
             this._labelFundTitle.text       = `${Lang.getText(LangTextType.B0032)}: `;
         }
 
         private _updateLabelPauseTime(): void {
             this._labelPauseTime.text = `${this._getWar().getPauseTimeMs()}`;
+        }
+
+        private _updateLabelVisionTeam(): void {
+            const teamIndex             = this._getWar().getVisionTeamIndex();
+            this._labelVisionTeam.text  = teamIndex == null
+                ? Lang.getText(LangTextType.B0890)
+                : (Lang.getPlayerTeamName(teamIndex) ?? CommonConstants.ErrorTextForUndefined);
         }
 
         private _updateLabelTurn(): void {
@@ -351,10 +351,6 @@ namespace TwnsHrwTopPanel {
 
         private _updateBtnPause(): void {
             this._btnPause.visible = this._getWar().getIsAutoReplay();
-        }
-
-        private _updateBtnChat(): void {
-            this._btnChat.setRedVisible(ChatModel.checkHasUnreadMessage());
         }
     }
 }

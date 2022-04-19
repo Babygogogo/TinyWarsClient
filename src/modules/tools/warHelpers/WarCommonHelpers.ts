@@ -670,7 +670,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         movingUnitAndPath       : Types.Undefinable<CommonProto.Structure.IMovingUnitAndPath>;
         aiming                  : GridIndex | null;
         deleteViewAfterMoving   : boolean;
-    }): Promise<Twns.BaseWar.BwUnitView | null> {
+    }): Promise<BaseWar.BwUnitView | null> {
         if (movingUnitAndPath == null) {
             return null;
         }
@@ -944,6 +944,14 @@ namespace Twns.WarHelpers.WarCommonHelpers {
                     unitMap.setUnitOnMap(existingUnit);
                 } else {
                     unitMap.setUnitLoaded(existingUnit);
+
+                    if (!isFastExecute) {
+                        const loaderUnit = unitMap.getUnitOnMap(existingUnit.getGridIndex());
+                        if (loaderUnit) {
+                            loaderUnit.updateView();
+                            updatedViewUnits.add(loaderUnit);
+                        }
+                    }
                 }
                 existingUnit.startRunning(war);
                 existingUnit.startRunningView();
@@ -970,6 +978,14 @@ namespace Twns.WarHelpers.WarCommonHelpers {
                     unitMap.setUnitOnMap(unit);
                 } else {
                     unitMap.setUnitLoaded(unit);
+
+                    if (!isFastExecute) {
+                        const loaderUnit = unitMap.getUnitOnMap(unit.getGridIndex());
+                        if (loaderUnit) {
+                            loaderUnit.updateView();
+                            updatedViewUnits.add(loaderUnit);
+                        }
+                    }
                 }
                 unit.startRunning(war);
                 unit.startRunningView();

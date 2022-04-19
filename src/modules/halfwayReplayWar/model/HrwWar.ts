@@ -37,14 +37,15 @@ namespace Twns.HalfwayReplayWar {
     export class HrwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new TwnsHrwPlayerManager.HrwPlayerManager();
         private readonly _field                 = new TwnsHrwField.HrwField();
-        private readonly _commonSettingManager  = new Twns.BaseWar.BwCommonSettingManager();
-        private readonly _warEventManager       = new Twns.BaseWar.BwWarEventManager();
+        private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
+        private readonly _warEventManager       = new BaseWar.BwWarEventManager();
 
         private _settingsForMcw?                    : CommonProto.WarSettings.ISettingsForMcw | null;
         private _settingsForMfw?                    : CommonProto.WarSettings.ISettingsForMfw | null;
         private _settingsForMrw?                    : CommonProto.WarSettings.ISettingsForMrw | null;
         private _settingsForCcw?                    : CommonProto.WarSettings.ISettingsForCcw | null;
 
+        private _visionTeamIndex                    : number | null = null;
         private _pauseTimeMs                        = 1000;
         private _isAutoReplay                       = false;
         private _nextActionId                       = 0;
@@ -81,10 +82,10 @@ namespace Twns.HalfwayReplayWar {
         public getPlayerManager(): TwnsHrwPlayerManager.HrwPlayerManager {
             return this._playerManager;
         }
-        public getCommonSettingManager(): Twns.BaseWar.BwCommonSettingManager {
+        public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getWarEventManager(): Twns.BaseWar.BwWarEventManager {
+        public getWarEventManager(): BaseWar.BwWarEventManager {
             return this._warEventManager;
         }
 
@@ -120,6 +121,26 @@ namespace Twns.HalfwayReplayWar {
 
             if (!isFastExecute) {
                 tileMap.getView().updateCoZone();
+            }
+
+            this._handleVisionTeamIndex(watcherTeamIndexes, isFastExecute);
+        }
+        private _handleVisionTeamIndex(watcherTeamIndexes: Set<number>, isFastExecute: boolean): void {
+            const visionTeamIndex = this.getVisionTeamIndex();
+            if (visionTeamIndex == null) {
+                return;
+            }
+            if ((watcherTeamIndexes.size === 1) && (watcherTeamIndexes.values().next().value === visionTeamIndex)) {
+                return;
+            }
+
+            const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeams(this, new Set([visionTeamIndex]));
+            for (const tile of this.getTileMap().getAllTiles()) {
+                tile.setHasFog(!visibleTiles.has(tile));
+
+                if (!isFastExecute) {
+                    tile.flushDataToView();
+                }
             }
         }
 
@@ -322,6 +343,25 @@ namespace Twns.HalfwayReplayWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getVisionTeamIndex(): number | null {
+            return this._visionTeamIndex;
+        }
+        private _setVisionTeamIndex(index: number | null): void {
+            this._visionTeamIndex = index;
+        }
+        public tickVisionTeamIndex(): number | null {
+            const teamIndexArray = [...this.getPlayerManager().getWatcherTeamIndexesForSelf()].sort((v1, v2) => v1 - v2);
+            Helpers.deleteElementFromArray(teamIndexArray, CommonConstants.WarNeutralTeamIndex);
+
+            const currentVisionTeamIndex    = this.getVisionTeamIndex();
+            const newVisionTeamIndex        = currentVisionTeamIndex == null
+                ? (teamIndexArray[0] ?? null)
+                : (teamIndexArray.find(v => v > currentVisionTeamIndex) ?? null);
+            this._setVisionTeamIndex(newVisionTeamIndex);
+
+            return newVisionTeamIndex;
+        }
+
         public getPauseTimeMs(): number {
             return this._pauseTimeMs;
         }

@@ -91,7 +91,7 @@ namespace TwnsPanelConfig {
         CommonServerStatusPanel             : PanelConfig<TwnsCommonServerStatusPanel.OpenData>;
 
         HrwReplayProgressPanel              : PanelConfig<TwnsHrwReplayProgressPanel.OpenData>;
-        HrwTopPanel                         : PanelConfig<TwnsHrwTopPanel.OpenData>;
+        HrwTopPanel                         : PanelConfig<Twns.HalfwayReplayWar.OpenDataForHrwTopPanel>;
         HrwWarMenuPanel                     : PanelConfig<TwnsHrwWarMenuPanel.OpenData>;
 
         LobbyBackgroundPanel                : PanelConfig<TwnsLobbyBackgroundPanel.OpenData>;
@@ -741,7 +741,7 @@ namespace TwnsPanelConfig {
             },
 
             HrwTopPanel: {
-                cls         : TwnsHrwTopPanel?.HrwTopPanel,
+                cls         : Twns.HalfwayReplayWar?.HrwTopPanel,
                 skinName    : `resource/skins/halfwayReplayWar/HrwTopPanel.exml`,
                 layer       : LayerType.Hud0,
             },

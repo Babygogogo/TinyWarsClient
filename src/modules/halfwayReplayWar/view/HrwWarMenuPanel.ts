@@ -212,6 +212,7 @@ namespace TwnsHrwWarMenuPanel {
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return Helpers.getNonNullElements([
                 this._createCommandOpenAdvancedMenu(),
+                this._createCommandChat(),
                 this._createCommandGotoOngoingWar(),
                 this._createCommandGotoLobby(),
             ]);
@@ -232,6 +233,16 @@ namespace TwnsHrwWarMenuPanel {
                 callback: () => {
                     this._menuType = MenuType.Advanced;
                     this._updateListCommand();
+                },
+            };
+        }
+
+        private _createCommandChat(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(LangTextType.B0383),
+                callback: () => {
+                    this.close();
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {});
                 },
             };
         }
