@@ -256,7 +256,7 @@ namespace TwnsPanelConfig {
         WeConditionReplacePanel             : PanelConfig<Twns.WarEvent.OpenDataForWeConditionReplacePanel>;
         WeConditionTypeListPanel            : PanelConfig<TwnsWeConditionTypeListPanel.OpenData>;
         WeDialogueBackgroundPanel           : PanelConfig<Twns.WarEvent.OpenDataForWeDialogueBackgroundPanel>;
-        WeEventListPanel                    : PanelConfig<TwnsWeEventListPanel.OpenData>;
+        WeEventListPanel                    : PanelConfig<Twns.WarEvent.OpenDataForWeEventListPanel>;
         WeEventRenamePanel                  : PanelConfig<TwnsWeEventRenamePanel.OpenData>;
         WeNodeReplacePanel                  : PanelConfig<TwnsWeNodeReplacePanel.OpenData>;
 
@@ -1690,7 +1690,7 @@ namespace TwnsPanelConfig {
             },
 
             WeEventListPanel: {
-                cls         : TwnsWeEventListPanel?.WeEventListPanel,
+                cls         : Twns.WarEvent?.WeEventListPanel,
                 skinName    : `resource/skins/warEvent/WeEventListPanel.exml`,
                 layer       : LayerType.Hud0,
             },

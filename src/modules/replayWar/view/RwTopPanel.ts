@@ -24,7 +24,7 @@ namespace Twns.ReplayWar {
     import LangTextType         = TwnsLangTextType.LangTextType;
 
     export type OpenDataForRwTopPanel = {
-        war : Twns.ReplayWar.RwWar;
+        war : ReplayWar.RwWar;
     };
     export class RwTopPanel extends TwnsUiPanel.UiPanel<OpenDataForRwTopPanel> {
         private readonly _groupPlayer!          : eui.Group;
@@ -91,7 +91,7 @@ namespace Twns.ReplayWar {
             // nothing to do
         }
 
-        private _getWar(): Twns.ReplayWar.RwWar {
+        private _getWar(): ReplayWar.RwWar {
             return this._getOpenData().war;
         }
 
