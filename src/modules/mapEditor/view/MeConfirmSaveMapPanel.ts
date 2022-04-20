@@ -15,12 +15,12 @@
 // import MeUtility                from "../model/MeUtility";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeConfirmSaveMapPanel {
+namespace Twns.MapEditor {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
-    export type OpenData = void;
-    export class MeConfirmSaveMapPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeConfirmSaveMapPanel = void;
+    export class MeConfirmSaveMapPanel extends TwnsUiPanel.UiPanel<OpenDataForMeConfirmSaveMapPanel> {
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelContent!         : TwnsUiLabel.UiLabel;
         private readonly _labelReviewDescTitle! : TwnsUiLabel.UiLabel;
@@ -55,12 +55,12 @@ namespace TwnsMeConfirmSaveMapPanel {
             const labelReviewDescTitle  = this._labelReviewDescTitle;
             const labelReviewDesc       = this._labelReviewDesc;
             const mapRawData            = Helpers.getExisted(MeModel.getWar()).serializeForMap();
-            const severeErrorCode       = await Twns.MapEditor.MeHelpers.getSevereErrorCodeForMapRawData(mapRawData);
-            if (severeErrorCode) {
+            const criticalErrorCode     = await MapEditor.MeHelpers.getCriticalErrorCodeForMapRawData(mapRawData);
+            if (criticalErrorCode) {
                 btnConfirm.visible              = false;
                 groupNeedReview.visible         = false;
                 labelReviewDescTitle.visible    = true;
-                labelReviewDesc.text            = Lang.getErrorText(severeErrorCode);
+                labelReviewDesc.text            = Lang.getErrorText(criticalErrorCode);
                 return;
             }
 
@@ -73,7 +73,7 @@ namespace TwnsMeConfirmSaveMapPanel {
                 return;
             }
 
-            const errorCode                 = await Twns.MapEditor.MeHelpers.getErrorCodeForMapRawData(mapRawData);
+            const errorCode                 = await MapEditor.MeHelpers.getErrorCodeForMapRawData(mapRawData);
             this._mapRawData                = mapRawData;
             btnConfirm.visible              = true;
             groupNeedReview.visible         = !errorCode;

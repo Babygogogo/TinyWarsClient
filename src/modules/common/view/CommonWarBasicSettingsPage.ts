@@ -97,8 +97,8 @@ namespace TwnsCommonWarBasicSettingsPage {
             }
 
             const settingsType = data.settingsType;
-            if (settingsType === WarBasicSettingsType.MapName) {
-                this._modifyAsMapName();
+            if (settingsType === WarBasicSettingsType.MapId) {
+                this._modifyAsMapId();
             } else if (settingsType === WarBasicSettingsType.WarName) {
                 this._modifyAsWarName();
             } else if (settingsType === WarBasicSettingsType.WarPassword) {
@@ -129,23 +129,41 @@ namespace TwnsCommonWarBasicSettingsPage {
                 throw Helpers.newError(`CommonWarBasicSettingsPage.SettingsRenderer._onTouchedBtnModify() invalid settingsType: ${settingsType}`);
             }
         }
-        private _onTouchedBtnHelp(): void {
-            const settingsType = this._getData().settingsType;
-            if (settingsType === WarBasicSettingsType.HasFog) {
+        private async _onTouchedBtnHelp(): Promise<void> {
+            const data          = this._getData();
+            const settingsType  = data.settingsType;
+            if (settingsType === WarBasicSettingsType.MapId) {
+                const mapId     = data.currentValue;
+                const mapDesc   = (typeof mapId == "number")
+                    ? (await WarMapModel.getRawData(mapId))?.mapExtraText?.mapDescription
+                    : (null);
+                if (mapDesc == null) {
+                    FloatText.show(Lang.getText(LangTextType.B0894));
+                } else {
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                        title   : Lang.getText(LangTextType.B0893),
+                        content : Lang.getLanguageText({ textArray: mapDesc }) ?? CommonConstants.ErrorTextForUndefined,
+                    });
+                }
+
+            } else if (settingsType === WarBasicSettingsType.HasFog) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                     title  : Lang.getText(LangTextType.B0020),
                     content: Lang.getText(LangTextType.R0002),
                 });
+
             } else if (settingsType === WarBasicSettingsType.Weather) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                     title  : Lang.getText(LangTextType.B0705),
                     content: Lang.getText(LangTextType.R0009),
                 });
+
             } else if (settingsType === WarBasicSettingsType.TurnsLimit) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                     title  : Lang.getText(LangTextType.B0842),
                     content: Lang.getText(LangTextType.R0012),
                 });
+
             } else if (settingsType === WarBasicSettingsType.TimerType) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                     title  : Lang.getText(LangTextType.B0574),
@@ -163,8 +181,8 @@ namespace TwnsCommonWarBasicSettingsPage {
             this._labelTitle.text   = Lang.getWarBasicSettingsName(settingsType) || CommonConstants.ErrorTextForUndefined;
             this._btnModify.visible = data.callbackOnModify != null;
 
-            if (settingsType === WarBasicSettingsType.MapName) {
-                this._updateViewAsMapName();
+            if (settingsType === WarBasicSettingsType.MapId) {
+                this._updateViewAsMapId();
             } else if (settingsType === WarBasicSettingsType.WarName) {
                 this._updateViewAsWarName();
             } else if (settingsType === WarBasicSettingsType.WarPassword) {
@@ -195,10 +213,17 @@ namespace TwnsCommonWarBasicSettingsPage {
                 throw Helpers.newError(`CommonWarBasicSettingsPage.SettingsRenderer._updateView() invalid settingsType: ${settingsType}.`);
             }
         }
-        private _updateViewAsMapName(): void {
-            const data              = this._getData();
-            this._labelValue.text   = `${data.currentValue}`;
-            this._btnHelp.visible   = false;
+        private async _updateViewAsMapId(): Promise<void> {
+            const mapId         = this._getData().currentValue;
+            const labelValue    = this._labelValue;
+            const btnHelp       = this._btnHelp;
+            if (typeof mapId !== "number") {
+                labelValue.text = `--`;
+                btnHelp.visible = false;
+            } else {
+                labelValue.text = (await WarMapModel.getMapNameInCurrentLanguage(mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                btnHelp.visible = !!(await WarMapModel.getRawData(mapId))?.mapExtraText?.mapDescription?.length;
+            }
         }
         private _updateViewAsWarName(): void {
             const data              = this._getData();
@@ -276,7 +301,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             this._btnHelp.visible   = false;
         }
 
-        private _modifyAsMapName(): void {
+        private _modifyAsMapId(): void {
             // nothing to do
         }
         private _modifyAsWarName(): void {

@@ -24,7 +24,7 @@
 // import TwnsScrCreateSaveSlotsPanel          from "./ScrCreateSaveSlotsPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsScrCreateSettingsPanel {
+namespace Twns.SingleCustomRoom {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import ScrCreateAdvancedSettingsPage            = TwnsScrCreateAdvancedSettingsPage.ScrCreateAdvancedSettingsPage;
@@ -36,8 +36,8 @@ namespace TwnsScrCreateSettingsPanel {
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export type OpenData = void;
-    export class ScrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForScrCreateSettingsPanel = void;
+    export class ScrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenDataForScrCreateSettingsPanel> {
         private readonly _groupNavigator!       : eui.Group;
         private readonly _labelSinglePlayer!    : TwnsUiLabel.UiLabel;
         private readonly _labelCustomMode!      : TwnsUiLabel.UiLabel;
@@ -186,8 +186,8 @@ namespace TwnsScrCreateSettingsPanel {
             const openData  : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
                     {
-                        settingsType    : WarBasicSettingsType.MapName,
-                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(ScrCreateModel.getMapId()),
+                        settingsType    : WarBasicSettingsType.MapId,
+                        currentValue    : ScrCreateModel.getMapId(),
                         warRule,
                         callbackOnModify: null,
                     },

@@ -36,6 +36,7 @@ namespace Twns.MapEditor {
         private _mapDesignerUserId? : number;
         private _mapDesignerName?   : string;
         private _mapNameList?       : ILanguageText[];
+        private _mapDescArray?      : ILanguageText[];
         private _isReviewingMap     = false;
         private _warRuleList        : IWarRule[] = [];
         private _isMapModified      = false;
@@ -56,6 +57,7 @@ namespace Twns.MapEditor {
             this.setMapDesignerUserId(Helpers.getExisted(mapRawData.designerUserId));
             this.setMapDesignerName(Helpers.getExisted(mapRawData.designerName));
             this.setMapNameArray(Helpers.getExisted(mapRawData.mapNameArray));
+            this.setMapDescArray(mapRawData.mapExtraText?.mapDescription ?? []);
             this._setWarRuleArray(MapEditor.MeHelpers.createRevisedWarRuleArrayForMeWar(mapRawData.warRuleArray));
             this.setMapTag(mapRawData.mapTag || {});
         }
@@ -94,6 +96,9 @@ namespace Twns.MapEditor {
                 warRuleArray            : this.getRevisedWarRuleArray(playersCountUnneutral),
                 mapTag                  : this.getMapTag(),
                 warEventFullData        : this.getWarEventManager().getWarEventFullData(),
+                mapExtraText            : {
+                    mapDescription      : this.getMapDescArray(),
+                },
             };
         }
 
@@ -260,6 +265,13 @@ namespace Twns.MapEditor {
         }
         public setMapNameArray(value: ILanguageText[]): void {
             this._mapNameList = value;
+        }
+
+        public getMapDescArray(): ILanguageText[] {
+            return Helpers.getExisted(this._mapDescArray);
+        }
+        public setMapDescArray(value: ILanguageText[]): void {
+            this._mapDescArray = value;
         }
 
         public getIsReviewingMap(): boolean {

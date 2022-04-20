@@ -77,7 +77,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
 
         private async _onTouchedBtnConfirm(): Promise<void> {
             const warId = this._getOpenData().warId;
-            if (await WwModel.getWatchIncomingInfo(warId) == null) {
+            if (await Twns.WatchWar.WwModel.getWatchIncomingInfo(warId) == null) {
                 this.close();
                 return;
             }
@@ -116,7 +116,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
             const warId             = this._getOpenData().warId;
             const playerInfoList    = (await Twns.MultiPlayerWar.MpwModel.getWarProgressInfo(warId))?.playerInfoList;
             const dataList          : DataForRequesterRenderer[] = [];
-            for (const info of (await WwModel.getWatchIncomingInfo(warId))?.srcUserInfoArray || []) {
+            for (const info of (await Twns.WatchWar.WwModel.getWatchIncomingInfo(warId))?.srcUserInfoArray || []) {
                 const userId = info.userId;
                 if (userId != null) {
                     dataList.push({

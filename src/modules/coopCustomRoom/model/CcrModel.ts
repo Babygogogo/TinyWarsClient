@@ -229,8 +229,8 @@ namespace Twns.CoopCustomRoom.CcrModel {
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
-                    settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForCcw.mapId)),
+                    settingsType    : WarBasicSettingsType.MapId,
+                    currentValue    : Helpers.getExisted(settingsForCcw.mapId),
                     warRule,
                     callbackOnModify: null,
                 },

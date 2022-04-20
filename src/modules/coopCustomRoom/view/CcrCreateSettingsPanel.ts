@@ -157,8 +157,8 @@ namespace Twns.CoopCustomRoom {
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
                     {
-                        settingsType    : WarBasicSettingsType.MapName,
-                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(CcrCreateModel.getMapId()),
+                        settingsType    : WarBasicSettingsType.MapId,
+                        currentValue    : CcrCreateModel.getMapId(),
                         warRule,
                         callbackOnModify: null,
                     },

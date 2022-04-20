@@ -73,7 +73,7 @@ namespace TwnsWwHandleRequestDetailPanel {
 
         private async _onTouchedBtnConfirm(): Promise<void> {
             const warId = this._getOpenData().warId;
-            if (await WwModel.getWatchIncomingInfo(warId) == null) {
+            if (await Twns.WatchWar.WwModel.getWatchIncomingInfo(warId) == null) {
                 this.close();
                 return;
             }
@@ -117,7 +117,7 @@ namespace TwnsWwHandleRequestDetailPanel {
         private async _generateDataForListPlayer(): Promise<DataForRequesterRenderer[]> {
             const warId             = this._getOpenData().warId;
             const playerInfoList    = (await Twns.MultiPlayerWar.MpwModel.getWarProgressInfo(warId))?.playerInfoList;
-            const watchInfo         = await WwModel.getWatchIncomingInfo(warId);
+            const watchInfo         = await Twns.WatchWar.WwModel.getWatchIncomingInfo(warId);
             const dataList          : DataForRequesterRenderer[] = [];
             for (const userId of watchInfo?.requestSrcUserIdArray || []) {
                 const info = watchInfo?.srcUserInfoArray?.find(v => v.userId === userId);

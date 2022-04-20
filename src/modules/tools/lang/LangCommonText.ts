@@ -4912,6 +4912,14 @@ namespace TwnsLangCommonText {
             `地图审核`,
             `Map Review`,
         ],
+        [LangTextType.B0893]: [
+            `地图描述`,
+            `Map Description`,
+        ],
+        [LangTextType.B0894]: [
+            `无描述`,
+            `No Description`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [

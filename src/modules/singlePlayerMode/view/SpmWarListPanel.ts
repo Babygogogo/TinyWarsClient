@@ -26,7 +26,7 @@
 // import TwnsSpmMainMenuPanel                 from "./SpmMainMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpmWarListPanel {
+namespace Twns.SinglePlayerMode {
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
@@ -35,8 +35,8 @@ namespace TwnsSpmWarListPanel {
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
-    export type OpenData = void;
-    export class SpmWarListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForSpmWarListPanel = void;
+    export class SpmWarListPanel extends TwnsUiPanel.UiPanel<OpenDataForSpmWarListPanel> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
@@ -230,10 +230,10 @@ namespace TwnsSpmWarListPanel {
                 return null;
             }
 
-            const mapId = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
+            const mapId = WarHelpers.WarCommonHelpers.getMapId(warData);
             if (mapId != null) {
                 return {
-                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)),
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)),
                     mapInfo     : { mapId },
                 };
             }
@@ -241,7 +241,7 @@ namespace TwnsSpmWarListPanel {
             const initialWarData = warData.settingsForSfw?.initialWarData;
             if (initialWarData) {
                 return {
-                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(initialWarData.settingsForCommon?.configVersion)),
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(initialWarData.settingsForCommon?.configVersion)),
                     warInfo     : {
                         warData : initialWarData,
                         players : warData.playerManager?.players,
@@ -281,7 +281,7 @@ namespace TwnsSpmWarListPanel {
             }
 
             return {
-                gameConfig              : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+                gameConfig              : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
                 playersCountUnneutral   : WarRuleHelpers.getPlayersCountUnneutral(warRule),
                 roomOwnerPlayerIndex    : null,
                 callbackOnDeletePlayer  : null,
@@ -300,12 +300,12 @@ namespace TwnsSpmWarListPanel {
             }
 
             const warRule   = Helpers.getExisted(warData.settingsForCommon?.warRule);
-            const mapId     = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
+            const mapId     = WarHelpers.WarCommonHelpers.getMapId(warData);
             return { dataArrayForListSettings: [
                 {
-                    settingsType    : WarBasicSettingsType.MapName,
+                    settingsType    : WarBasicSettingsType.MapId,
                     warRule,
-                    currentValue    : mapId == null ? Lang.getText(LangTextType.B0321) : await WarMapModel.getMapNameInCurrentLanguage(mapId),
+                    currentValue    : mapId,
                     callbackOnModify: null,
                 },
                 {
@@ -351,9 +351,9 @@ namespace TwnsSpmWarListPanel {
 
             const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
             return {
-                gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+                gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
                 warRule     : Helpers.getExisted(settingsForCommon.warRule),
-                warType     : Twns.WarHelpers.WarCommonHelpers.getWarType(warData),
+                warType     : WarHelpers.WarCommonHelpers.getWarType(warData),
             };
         }
 
@@ -454,14 +454,14 @@ namespace TwnsSpmWarListPanel {
 
             } else {
                 const warData   = slotData.warData;
-                labelType.text  = `#${slotIndex} ${Lang.getWarTypeName(Twns.WarHelpers.WarCommonHelpers.getWarType(warData))}`;
+                labelType.text  = `#${slotIndex} ${Lang.getWarTypeName(WarHelpers.WarCommonHelpers.getWarType(warData))}`;
 
                 const slotExtraData = slotData.extraData;
                 const slotComment   = slotExtraData.slotComment;
                 if (slotComment) {
                     labelName.text = slotComment;
                 } else {
-                    const mapId     = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
+                    const mapId     = WarHelpers.WarCommonHelpers.getMapId(warData);
                     labelName.text  = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
                         : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);

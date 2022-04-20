@@ -24,7 +24,7 @@
 // import TwnsMrrMainMenuPanel                 from "./MrrMainMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMrrPreviewMapListPanel {
+namespace Twns.MultiRankRoom {
     import OpenDataForCommonWarAdvancedSettingsPage     = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage        = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage              = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
@@ -33,10 +33,10 @@ namespace TwnsMrrPreviewMapListPanel {
     import WarBasicSettingsType                         = Types.WarBasicSettingsType;
     import ClientErrorCode                              = TwnsClientErrorCode.ClientErrorCode;
 
-    export type OpenData = {
+    export type OpenDataForMrrPreviewMapListPanel = {
         hasFog: boolean;
     };
-    export class MrrPreviewMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MrrPreviewMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForMrrPreviewMapListPanel> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
 
@@ -227,7 +227,7 @@ namespace TwnsMrrPreviewMapListPanel {
             return mapId == null
                 ? null
                 : {
-                    gameConfig  : await Twns.Config.ConfigManager.getLatestGameConfig(),
+                    gameConfig  : await Config.ConfigManager.getLatestGameConfig(),
                     mapInfo     : { mapId },
                 };
         }
@@ -257,8 +257,8 @@ namespace TwnsMrrPreviewMapListPanel {
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings    : [
                     {
-                        settingsType    : WarBasicSettingsType.MapName,
-                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(mapId),
+                        settingsType    : WarBasicSettingsType.MapId,
+                        currentValue    : mapId,
                         warRule,
                         callbackOnModify: null,
                     },
@@ -339,7 +339,7 @@ namespace TwnsMrrPreviewMapListPanel {
             }
 
             return {
-                gameConfig  : await Twns.Config.ConfigManager.getLatestGameConfig(),
+                gameConfig  : await Config.ConfigManager.getLatestGameConfig(),
                 warRule     : warRuleArray[0],
                 warType     : hasFog ? Types.WarType.MrwFog : Types.WarType.MrwStd,
             };

@@ -132,6 +132,7 @@
 		"resource/skins/mapEditor/MeMfwAdvancedSettingsPage.exml",
 		"resource/skins/mapEditor/MeMfwBasicSettingsPage.exml",
 		"resource/skins/mapEditor/MeMfwSettingsPanel.exml",
+		"resource/skins/mapEditor/MeModifyMapDescPanel.exml",
 		"resource/skins/mapEditor/MeModifyMapNamePanel.exml",
 		"resource/skins/mapEditor/MeResizePanel.exml",
 		"resource/skins/mapEditor/MeSimAdvancedSettingsPage.exml",

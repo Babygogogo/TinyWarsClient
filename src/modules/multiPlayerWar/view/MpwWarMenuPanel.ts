@@ -454,7 +454,7 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private async _updateBtnSpectate(): Promise<void> {
-            const info = await WwModel.getWatchIncomingInfo(Helpers.getExisted(this._getWar().getWarId()));
+            const info = await Twns.WatchWar.WwModel.getWatchIncomingInfo(Helpers.getExisted(this._getWar().getWarId()));
             this._btnSpectate.setRedVisible(!!info?.requestSrcUserIdArray?.length);
         }
 

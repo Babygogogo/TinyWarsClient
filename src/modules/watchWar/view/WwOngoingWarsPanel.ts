@@ -141,7 +141,7 @@ namespace TwnsWwOngoingWarsPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _createDataForListWar(): DataForWarRenderer[] {
             const dataArray: DataForWarRenderer[] = [];
-            for (const warId of WwModel.getOngoingWarIdArray() || []) {
+            for (const warId of Twns.WatchWar.WwModel.getOngoingWarIdArray() || []) {
                 dataArray.push({
                     warId,
                     panel   : this,
@@ -152,19 +152,19 @@ namespace TwnsWwOngoingWarsPanel {
         }
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForWarCommonMapInfoPage> {
-            return await WwModel.createDataForCommonWarMapInfoPage(this._getSelectedWarId());
+            return await Twns.WatchWar.WwModel.createDataForCommonWarMapInfoPage(this._getSelectedWarId());
         }
 
         private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
-            return await WwModel.createDataForCommonWarPlayerInfoPage(this._getSelectedWarId());
+            return await Twns.WatchWar.WwModel.createDataForCommonWarPlayerInfoPage(this._getSelectedWarId());
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            return await WwModel.createDataForCommonWarBasicSettingsPage(this._getSelectedWarId());
+            return await Twns.WatchWar.WwModel.createDataForCommonWarBasicSettingsPage(this._getSelectedWarId());
         }
 
         private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-            return await WwModel.createDataForCommonWarAdvancedSettingsPage(this._getSelectedWarId());
+            return await Twns.WatchWar.WwModel.createDataForCommonWarAdvancedSettingsPage(this._getSelectedWarId());
         }
 
         private async _initTabSettings(): Promise<void> {

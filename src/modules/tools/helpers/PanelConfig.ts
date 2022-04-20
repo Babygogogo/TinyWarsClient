@@ -102,7 +102,7 @@ namespace TwnsPanelConfig {
 
         McrCreateMapListPanel               : PanelConfig<TwnsMcrCreateMapListPanel.OpenData>;
         McrCreateSearchMapPanel             : PanelConfig<TwnsMcrCreateSearchMapPanel.OpenData>;
-        McrCreateSettingsPanel              : PanelConfig<TwnsMcrCreateSettingsPanel.OpenData>;
+        McrCreateSettingsPanel              : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrCreateSettingsPanel>;
         McrJoinRoomListPanel                : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrJoinRoomListPanel>;
         McrMainMenuPanel                    : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrMainMenuPanel>;
         McrMyRoomListPanel                  : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrMyRoomListPanel>;
@@ -118,18 +118,19 @@ namespace TwnsPanelConfig {
         MeChooseTileObjectPanel             : PanelConfig<TwnsMeChooseTileObjectPanel.OpenData>;
         MeChooseUnitPanel                   : PanelConfig<TwnsMeChooseUnitPanel.OpenData>;
         MeClearPanel                        : PanelConfig<TwnsMeClearPanel.OpenData>;
-        MeConfirmSaveMapPanel               : PanelConfig<TwnsMeConfirmSaveMapPanel.OpenData>;
+        MeConfirmSaveMapPanel               : PanelConfig<Twns.MapEditor.OpenDataForMeConfirmSaveMapPanel>;
         MeImportPanel                       : PanelConfig<TwnsMeImportPanel.OpenData>;
         MeMapListPanel                      : PanelConfig<TwnsMeMapListPanel.OpenData>;
         MeMapTagPanel                       : PanelConfig<TwnsMeMapTagPanel.OpenData>;
         MeMfwSettingsPanel                  : PanelConfig<TwnsMeMfwSettingsPanel.OpenData>;
+        MeModifyMapDescPanel                : PanelConfig<Twns.MapEditor.OpenDataForMeModifyMapDescPanel>;
         MeModifyMapNamePanel                : PanelConfig<TwnsMeModifyMapNamePanel.OpenData>;
         MeResizePanel                       : PanelConfig<TwnsMeResizePanel.OpenData>;
         MeSimSettingsPanel                  : PanelConfig<TwnsMeSimSettingsPanel.OpenData>;
         MeSymmetryPanel                     : PanelConfig<TwnsMeSymmetryPanel.OpenData>;
-        MeTopPanel                          : PanelConfig<TwnsMeTopPanel.OpenData>;
+        MeTopPanel                          : PanelConfig<Twns.MapEditor.OpenDataForMeTopPanel>;
         MeVisibilityPanel                   : PanelConfig<TwnsMeVisibilityPanel.OpenData>;
-        MeWarMenuPanel                      : PanelConfig<TwnsMeWarMenuPanel.OpenData>;
+        MeWarMenuPanel                      : PanelConfig<Twns.MapEditor.OpenDataForMeWarMenuPanel>;
         MeWarRulePanel                      : PanelConfig<TwnsMeWarRulePanel.OpenData>;
         MeChooseLocationPanel               : PanelConfig<TwnsMeChooseLocationPanel.OpenData>;
 
@@ -157,16 +158,16 @@ namespace TwnsPanelConfig {
         MmWarRuleAvailableCoPanel           : PanelConfig<TwnsMmWarRuleAvailableCoPanel.OpenData>;
         MmWarRulePanel                      : PanelConfig<TwnsMmWarRulePanel.OpenData>;
 
-        MpwSpectatePanel                    : PanelConfig<TwnsMpwSpectatePanel.OpenData>;
+        MpwSpectatePanel                    : PanelConfig<Twns.MultiPlayerWar.OpenDataForMpwSpectatePanel>;
         MpwSidePanel                        : PanelConfig<Twns.MultiPlayerWar.OpenDataForMpwSidePanel>;
         MpwTopPanel                         : PanelConfig<Twns.MultiPlayerWar.OpenDataForMpwTopPanel>;
         MpwWarMenuPanel                     : PanelConfig<TwnsMpwWarMenuPanel.OpenData>;
 
         MrrMainMenuPanel                    : PanelConfig<Twns.MultiRankRoom.OpenDataForMrrMainMenuPanel>;
-        MrrMyRoomListPanel                  : PanelConfig<TwnsMrrMyRoomListPanel.OpenData>;
-        MrrPreviewMapListPanel              : PanelConfig<TwnsMrrPreviewMapListPanel.OpenData>;
-        MrrRoomInfoPanel                    : PanelConfig<TwnsMrrRoomInfoPanel.OpenData>;
-        MrrSetMaxConcurrentCountPanel       : PanelConfig<TwnsMrrSetMaxConcurrentCountPanel.OpenData>;
+        MrrMyRoomListPanel                  : PanelConfig<Twns.MultiRankRoom.OpenDataForMrrMyRoomListPanel>;
+        MrrPreviewMapListPanel              : PanelConfig<Twns.MultiRankRoom.OpenDataForMrrPreviewMapListPanel>;
+        MrrRoomInfoPanel                    : PanelConfig<Twns.MultiRankRoom.OpenDataForMrrRoomInfoPanel>;
+        MrrSetMaxConcurrentCountPanel       : PanelConfig<Twns.MultiRankRoom.OpenDataForMrrSetMaxConcurrentCountPanel>;
 
         MrwMyWarListPanel                   : PanelConfig<Twns.MultiRankWar.OpenDataForMrwMyWarListPanel>;
 
@@ -178,12 +179,12 @@ namespace TwnsPanelConfig {
 
         ScrCreateMapListPanel               : PanelConfig<TwnsScrCreateMapListPanel.OpenData>;
         ScrCreateSearchMapPanel             : PanelConfig<TwnsScrCreateSearchMapPanel.OpenData>;
-        ScrCreateSettingsPanel              : PanelConfig<TwnsScrCreateSettingsPanel.OpenData>;
+        ScrCreateSettingsPanel              : PanelConfig<Twns.SingleCustomRoom.OpenDataForScrCreateSettingsPanel>;
 
         SpmCreateSaveSlotsPanel             : PanelConfig<TwnsSpmCreateSaveSlotsPanel.OpenData>;
         SpmCreateSfwSaveSlotsPanel          : PanelConfig<TwnsSpmCreateSfwSaveSlotsPanel.OpenData>;
         SpmMainMenuPanel                    : PanelConfig<Twns.SinglePlayerMode.OpenDataForSpmMainMenuPanel>;
-        SpmWarListPanel                     : PanelConfig<TwnsSpmWarListPanel.OpenData>;
+        SpmWarListPanel                     : PanelConfig<Twns.SinglePlayerMode.OpenDataForSpmWarListPanel>;
 
         SpwLoadWarPanel                     : PanelConfig<TwnsSpwLoadWarPanel.OpenData>;
         SpwSidePanel                        : PanelConfig<Twns.SinglePlayerWar.OpenDataForSpwSidePanel>;
@@ -191,7 +192,7 @@ namespace TwnsPanelConfig {
         SpwWarMenuPanel                     : PanelConfig<TwnsSpwWarMenuPanel.OpenData>;
 
         SrrCreateMapListPanel               : PanelConfig<TwnsSrrCreateMapListPanel.OpenData>;
-        SrrCreateSettingsPanel              : PanelConfig<TwnsSrrCreateSettingsPanel.OpenData>;
+        SrrCreateSettingsPanel              : PanelConfig<Twns.SingleRankRoom.OpenDataForSrrCreateSettingsPanel>;
 
         UserChangeDiscordIdPanel            : PanelConfig<TwnsUserChangeDiscordIdPanel.OpenData>;
         UserChangeNicknamePanel             : PanelConfig<TwnsUserChangeNicknamePanel.OpenData>;
@@ -263,7 +264,7 @@ namespace TwnsPanelConfig {
         WarMapBuildingListPanel             : PanelConfig<Twns.WarMap.OpenDataForWarMapBuildingListPanel>;
 
         WwDeleteWatcherDetailPanel          : PanelConfig<TwnsWwDeleteWatcherDetailPanel.OpenData>;
-        WwDeleteWatcherWarsPanel            : PanelConfig<TwnsWwDeleteWatcherWarsPanel.OpenData>;
+        WwDeleteWatcherWarsPanel            : PanelConfig<Twns.WatchWar.OpenDataForWwDeleteWatcherWarsPanel>;
         WwHandleRequestDetailPanel          : PanelConfig<TwnsWwHandleRequestDetailPanel.OpenData>;
         WwHandleRequestWarsPanel            : PanelConfig<TwnsWwHandleRequestWarsPanel.OpenData>;
         WwMainMenuPanel                     : PanelConfig<Twns.WatchWar.OpenDataForWatchWarMainMenuPanel>;
@@ -804,7 +805,7 @@ namespace TwnsPanelConfig {
             },
 
             McrCreateSettingsPanel: {
-                cls         : TwnsMcrCreateSettingsPanel?.McrCreateSettingsPanel,
+                cls         : Twns.MultiCustomRoom?.McrCreateSettingsPanel,
                 skinName    : `resource/skins/multiCustomRoom/McrCreateSettingsPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -900,7 +901,7 @@ namespace TwnsPanelConfig {
             },
 
             MeConfirmSaveMapPanel: {
-                cls         : TwnsMeConfirmSaveMapPanel?.MeConfirmSaveMapPanel,
+                cls         : Twns.MapEditor?.MeConfirmSaveMapPanel,
                 skinName    : `resource/skins/mapEditor/MeConfirmSaveMapPanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -930,6 +931,12 @@ namespace TwnsPanelConfig {
                 layer       : LayerType.Hud0,
             },
 
+            MeModifyMapDescPanel: {
+                cls         : Twns.MapEditor?.MeModifyMapDescPanel,
+                skinName    : `resource/skins/mapEditor/MeModifyMapDescPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
             MeModifyMapNamePanel: {
                 cls         : TwnsMeModifyMapNamePanel?.MeModifyMapNamePanel,
                 skinName    : `resource/skins/mapEditor/MeModifyMapNamePanel.exml`,
@@ -955,7 +962,7 @@ namespace TwnsPanelConfig {
             },
 
             MeTopPanel: {
-                cls         : TwnsMeTopPanel?.MeTopPanel,
+                cls         : Twns.MapEditor?.MeTopPanel,
                 skinName    : `resource/skins/mapEditor/MeTopPanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -967,7 +974,7 @@ namespace TwnsPanelConfig {
             },
 
             MeWarMenuPanel: {
-                cls         : TwnsMeWarMenuPanel?.MeWarMenuPanel,
+                cls         : Twns.MapEditor?.MeWarMenuPanel,
                 skinName    : `resource/skins/mapEditor/MeWarMenuPanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1125,7 +1132,7 @@ namespace TwnsPanelConfig {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             MpwSpectatePanel: {
-                cls         : TwnsMpwSpectatePanel?.MpwSpectatePanel,
+                cls         : Twns.MultiPlayerWar?.MpwSpectatePanel,
                 skinName    : `resource/skins/multiPlayerWar/MpwSpectatePanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1157,28 +1164,28 @@ namespace TwnsPanelConfig {
             },
 
             MrrMyRoomListPanel: {
-                cls         : TwnsMrrMyRoomListPanel?.MrrMyRoomListPanel,
+                cls         : Twns.MultiRankRoom?.MrrMyRoomListPanel,
                 skinName    : `resource/skins/multiRankRoom/MrrMyRoomListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MrrPreviewMapListPanel: {
-                cls         : TwnsMrrPreviewMapListPanel?.MrrPreviewMapListPanel,
+                cls         : Twns.MultiRankRoom?.MrrPreviewMapListPanel,
                 skinName    : `resource/skins/multiRankRoom/MrrPreviewMapListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MrrRoomInfoPanel: {
-                cls         : TwnsMrrRoomInfoPanel?.MrrRoomInfoPanel,
+                cls         : Twns.MultiRankRoom?.MrrRoomInfoPanel,
                 skinName    : `resource/skins/multiRankRoom/MrrRoomInfoPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MrrSetMaxConcurrentCountPanel: {
-                cls         : TwnsMrrSetMaxConcurrentCountPanel?.MrrSetMaxConcurrentCountPanel,
+                cls         : Twns.MultiRankRoom?.MrrSetMaxConcurrentCountPanel,
                 skinName    : `resource/skins/multiRankRoom/MrrSetMaxConcurrentCountPanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1238,7 +1245,7 @@ namespace TwnsPanelConfig {
             },
 
             ScrCreateSettingsPanel: {
-                cls         : TwnsScrCreateSettingsPanel?.ScrCreateSettingsPanel,
+                cls         : Twns.SingleCustomRoom?.ScrCreateSettingsPanel,
                 skinName    : `resource/skins/singleCustomRoom/ScrCreateSettingsPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -1265,7 +1272,7 @@ namespace TwnsPanelConfig {
             },
 
             SpmWarListPanel: {
-                cls         : TwnsSpmWarListPanel?.SpmWarListPanel,
+                cls         : Twns.SinglePlayerMode?.SpmWarListPanel,
                 skinName    : `resource/skins/singlePlayerMode/SpmWarListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -1305,7 +1312,7 @@ namespace TwnsPanelConfig {
             },
 
             SrrCreateSettingsPanel: {
-                cls         : TwnsSrrCreateSettingsPanel?.SrrCreateSettingsPanel,
+                cls         : Twns.SingleRankRoom?.SrrCreateSettingsPanel,
                 skinName    : `resource/skins/singleRankRoom/SrrCreateSettingsPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -1722,7 +1729,7 @@ namespace TwnsPanelConfig {
             },
 
             WwDeleteWatcherWarsPanel: {
-                cls         : TwnsWwDeleteWatcherWarsPanel?.WwDeleteWatcherWarsPanel,
+                cls         : Twns.WatchWar?.WwDeleteWatcherWarsPanel,
                 skinName    : `resource/skins/watchWar/WwDeleteWatcherWarsPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,

@@ -270,7 +270,7 @@ namespace Twns.MultiCustomRoom {
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
                 (await MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
-                (await MrrModel.checkIsRed())
+                (await Twns.MultiRankRoom.MrrModel.checkIsRed())
             );
         }
 
@@ -291,7 +291,7 @@ namespace Twns.MultiCustomRoom {
         }
 
         private _updateBtnWatchWar(): void {
-            this._btnWatchWar.setRedVisible(WwModel.checkIsRed());
+            this._btnWatchWar.setRedVisible(Twns.WatchWar.WwModel.checkIsRed());
         }
     }
 }

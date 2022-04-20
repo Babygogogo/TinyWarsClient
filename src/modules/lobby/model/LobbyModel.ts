@@ -9,14 +9,14 @@ namespace Twns.Lobby.LobbyModel {
             MultiCustomRoom.McrModel.checkIsRed(),
             MultiFreeRoom.MfrModel.checkIsRed(),
             CoopCustomRoom.CcrModel.checkIsRed(),
-            WwModel.checkIsRed(),
+            Twns.WatchWar.WwModel.checkIsRed(),
         ]);
     }
 
     export async function checkIsRedForRanking(): Promise<boolean> {
         return Helpers.checkIsAnyPromiseTrue([
             MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars(),
-            MrrModel.checkIsRed(),
+            Twns.MultiRankRoom.MrrModel.checkIsRed(),
         ]);
     }
 

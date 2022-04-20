@@ -2996,6 +2996,96 @@ declare namespace CommonProto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a MapExtraText. */
+        interface IMapExtraText {
+
+            /** MapExtraText mapDescription */
+            mapDescription?: (CommonProto.Structure.ILanguageText[]|null);
+        }
+
+        /** Represents a MapExtraText. */
+        class MapExtraText implements IMapExtraText {
+
+            /**
+             * Constructs a new MapExtraText.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.Map.IMapExtraText);
+
+            /** MapExtraText mapDescription. */
+            public mapDescription: CommonProto.Structure.ILanguageText[];
+
+            /**
+             * Creates a new MapExtraText instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MapExtraText instance
+             */
+            public static create(properties?: CommonProto.Map.IMapExtraText): CommonProto.Map.MapExtraText;
+
+            /**
+             * Encodes the specified MapExtraText message. Does not implicitly {@link CommonProto.Map.MapExtraText.verify|verify} messages.
+             * @param message MapExtraText message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.Map.IMapExtraText, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MapExtraText message, length delimited. Does not implicitly {@link CommonProto.Map.MapExtraText.verify|verify} messages.
+             * @param message MapExtraText message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.Map.IMapExtraText, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MapExtraText message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MapExtraText
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.Map.MapExtraText;
+
+            /**
+             * Decodes a MapExtraText message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MapExtraText
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.Map.MapExtraText;
+
+            /**
+             * Verifies a MapExtraText message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MapExtraText message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MapExtraText
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.Map.MapExtraText;
+
+            /**
+             * Creates a plain object from a MapExtraText message. Also converts values to other types if specified.
+             * @param message MapExtraText
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.Map.MapExtraText, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MapExtraText to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a WarEventFullData. */
         interface IWarEventFullData {
 
@@ -3757,6 +3847,9 @@ declare namespace CommonProto {
 
             /** MapRawData mapTag */
             mapTag?: (CommonProto.Map.IDataForMapTag|null);
+
+            /** MapRawData mapExtraText */
+            mapExtraText?: (CommonProto.Map.IMapExtraText|null);
         }
 
         /** Represents a MapRawData. */
@@ -3806,6 +3899,9 @@ declare namespace CommonProto {
 
             /** MapRawData mapTag. */
             public mapTag?: (CommonProto.Map.IDataForMapTag|null);
+
+            /** MapRawData mapExtraText. */
+            public mapExtraText?: (CommonProto.Map.IMapExtraText|null);
 
             /**
              * Creates a new MapRawData instance using the specified properties.

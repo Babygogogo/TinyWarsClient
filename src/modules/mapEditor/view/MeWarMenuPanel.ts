@@ -43,9 +43,8 @@
 // import TwnsMeWarRulePanel           from "./MeWarRulePanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeWarMenuPanel {
+namespace Twns.MapEditor {
     import DataForDrawUnit          = TwnsMeDrawer.DataForDrawUnit;
-    import MeWar                    = Twns.MapEditor.MeWar;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import UnitType                 = Types.UnitType;
     import TileBaseType             = Types.TileBaseType;
@@ -58,8 +57,8 @@ namespace TwnsMeWarMenuPanel {
         Advanced,
     }
 
-    export type OpenData = void;
-    export class MeWarMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeWarMenuPanel = void;
+    export class MeWarMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForMeWarMenuPanel> {
         private readonly _group!                : eui.Group;
         private readonly _listCommand!          : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
         private readonly _labelNoCommand!       : TwnsUiLabel.UiLabel;
@@ -69,6 +68,9 @@ namespace TwnsMeWarMenuPanel {
 
         private readonly _btnModifyMapName!     : TwnsUiButton.UiButton;
         private readonly _labelMapName!         : TwnsUiLabel.UiLabel;
+
+        private readonly _btnMapDesc!           : TwnsUiButton.UiButton;
+        private readonly _labelMapDesc!         : TwnsUiLabel.UiLabel;
 
         private readonly _btnModifyMapDesigner! : TwnsUiButton.UiButton;
         private readonly _labelMapDesigner!     : TwnsUiLabel.UiLabel;
@@ -86,6 +88,7 @@ namespace TwnsMeWarMenuPanel {
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: NotifyType.MeMapNameChanged,                    callback: this._onNotifyMeMapNameChanged },
+                { type: NotifyType.MeMapDescChanged,                    callback: this._onNotifyMeMapDescChanged },
                 { type: NotifyType.MsgSpmCreateSfw,                     callback: this._onMsgSpmCreateSfw },
                 { type: NotifyType.MsgUserSetMapEditorAutoSaveTime,     callback: this._onNotifyMsgUserSetMapEditorAutoSaveTime },
             ]);
@@ -93,6 +96,7 @@ namespace TwnsMeWarMenuPanel {
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
                 { ui: this._btnModifyMapDesigner,   callback: this._onTouchedBtnModifyMapDesigner },
                 { ui: this._btnModifyMapName,       callback: this._onTouchedBtnModifyMapName },
+                { ui: this._btnMapDesc,             callback: this._onTouchedBtnMapDesc },
                 { ui: this._btnModifyMapSize,       callback: this._onTouchedBtnModifyMapSize },
             ]);
             this._setIsTouchMaskEnabled();
@@ -148,6 +152,10 @@ namespace TwnsMeWarMenuPanel {
             this._updateLabelMapName();
         }
 
+        private _onNotifyMeMapDescChanged(): void {
+            this._updateLabelMapDesc();
+        }
+
         private _onTouchedBtnBack(): void {
             const type = this._menuType;
             if (type === TwnsMeWarMenuType.Main) {
@@ -165,6 +173,12 @@ namespace TwnsMeWarMenuPanel {
             if (!war.getIsReviewingMap()) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.MeModifyMapNamePanel, void 0);
             }
+        }
+
+        private _onTouchedBtnMapDesc(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeModifyMapDescPanel, {
+                war : this._getWar(),
+            });
         }
 
         private _onTouchedBtnModifyMapSize(): void {
@@ -201,10 +215,12 @@ namespace TwnsMeWarMenuPanel {
             this._btnBack.setTextColor(0x00FF00);
             this._btnModifyMapDesigner.setTextColor(colorForButtons);
             this._btnModifyMapName.setTextColor(colorForButtons);
+            this._btnMapDesc.setTextColor(colorForButtons);
             this._btnModifyMapSize.setTextColor(colorForButtons);
 
             this._updateListCommand();
             this._updateLabelMapName();
+            this._updateLabelMapDesc();
             this._updateGroupMapDesigner();
             this._updateGroupMapSize();
             this._updateListTile();
@@ -226,6 +242,7 @@ namespace TwnsMeWarMenuPanel {
             this._labelMenuTitle.text                   = Lang.getText(LangTextType.B0155);
             this._labelMapInfoTitle.text                = Lang.getText(LangTextType.B0298);
             this._btnModifyMapName.label                = Lang.getText(LangTextType.B0225);
+            this._btnMapDesc.label                      = Lang.getText(LangTextType.B0893);
             this._btnModifyMapDesigner.label            = Lang.getText(LangTextType.B0163);
             this._btnModifyMapSize.label                = Lang.getText(LangTextType.B0300);
             this._btnBack.label                         = Lang.getText(LangTextType.B0146);
@@ -233,6 +250,12 @@ namespace TwnsMeWarMenuPanel {
 
         private _updateLabelMapName(): void {
             this._labelMapName.text = Lang.concatLanguageTextList(this._getWar().getMapNameArray());
+        }
+
+        private _updateLabelMapDesc(): void {
+            this._labelMapDesc.text = Lang.getLanguageText({
+                textArray   : this._getWar().getMapDescArray(),
+            }) ?? ``;
         }
 
         private _updateGroupMapDesigner(): void {
@@ -478,7 +501,7 @@ namespace TwnsMeWarMenuPanel {
                 name    : Lang.getText(LangTextType.B0325),
                 callback: async () => {
                     const mapRawData    = war.serializeForMap();
-                    const errorCode     = await Twns.MapEditor.MeHelpers.getErrorCodeForMapRawData(mapRawData);
+                    const errorCode     = await MapEditor.MeHelpers.getErrorCodeForMapRawData(mapRawData);
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
@@ -513,7 +536,7 @@ namespace TwnsMeWarMenuPanel {
                 name    : Lang.getText(LangTextType.B0557),
                 callback: async () => {
                     const mapRawData    = war.serializeForMap();
-                    const errorCode     = await Twns.MapEditor.MeHelpers.getErrorCodeForMapRawData(mapRawData);
+                    const errorCode     = await MapEditor.MeHelpers.getErrorCodeForMapRawData(mapRawData);
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
@@ -723,7 +746,7 @@ namespace TwnsMeWarMenuPanel {
         private readonly _labelNum!     : TwnsUiLabel.UiLabel;
         private readonly _conUnitView!  : eui.Group;
 
-        private _unitView   = new Twns.BaseWar.BwUnitView();
+        private _unitView   = new BaseWar.BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -749,7 +772,7 @@ namespace TwnsMeWarMenuPanel {
             this._labelNum.text    = "" + data.count;
 
             const war   = Helpers.getExisted(MeModel.getWar());
-            const unit  = new Twns.BaseWar.BwUnit();
+            const unit  = new BaseWar.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,

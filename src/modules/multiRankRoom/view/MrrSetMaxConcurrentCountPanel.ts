@@ -13,14 +13,14 @@
 // import MrrProxy             from "../model/MrrProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMrrSetMaxConcurrentCountPanel {
+namespace Twns.MultiRankRoom {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import MaxCount         = CommonConstants.RankMaxConcurrentCount;
     import MinCount         = CommonConstants.RankMinConcurrentCount;
 
-    export type OpenData = void;
-    export class MrrSetMaxConcurrentCountPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMrrSetMaxConcurrentCountPanel = void;
+    export class MrrSetMaxConcurrentCountPanel extends TwnsUiPanel.UiPanel<OpenDataForMrrSetMaxConcurrentCountPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -146,7 +146,7 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
             this.close();
         }
         private _onTouchedBtnConfirm(): void {
-            MrrProxy.reqMrrSetMaxConcurrentCount(Helpers.getExisted(this._selectedCountForStd), Helpers.getExisted(this._selectedCountForFog));
+            MultiRankRoom.MrrProxy.reqMrrSetMaxConcurrentCount(Helpers.getExisted(this._selectedCountForStd), Helpers.getExisted(this._selectedCountForFog));
 
             this.close();
         }
@@ -155,8 +155,8 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
         // Function for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _loadMaxCountAndUpdateView(): void {
-            this._selectedCountForStd = MrrModel.getMaxConcurrentCount(false);
-            this._selectedCountForFog = MrrModel.getMaxConcurrentCount(true);
+            this._selectedCountForStd = MultiRankRoom.MrrModel.getMaxConcurrentCount(false);
+            this._selectedCountForFog = MultiRankRoom.MrrModel.getMaxConcurrentCount(true);
             this._updateGroupStd();
             this._updateGroupFog();
         }

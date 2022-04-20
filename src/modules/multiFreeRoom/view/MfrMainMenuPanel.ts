@@ -239,7 +239,7 @@ namespace Twns.MultiFreeRoom {
             this._btnCoopMode.setRedVisible(await Lobby.LobbyModel.checkIsRedForMultiCoopMode());
         }
         private async _updateBtnRanking(): Promise<void> {
-            this._btnRanking.setRedVisible((await MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) || (await MrrModel.checkIsRed()));
+            this._btnRanking.setRedVisible((await MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) || (await Twns.MultiRankRoom.MrrModel.checkIsRed()));
         }
         private async _updateBtnMultiPlayer(): Promise<void> {
             this._btnMultiPlayer.setRedVisible(await Lobby.LobbyModel.checkIsRedForMultiPlayer());

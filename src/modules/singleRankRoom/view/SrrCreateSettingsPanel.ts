@@ -24,7 +24,7 @@
 // import TwnsScrCreateSaveSlotsPanel          from "./ScrCreateSaveSlotsPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSrrCreateSettingsPanel {
+namespace Twns.SingleRankRoom {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
@@ -36,8 +36,8 @@ namespace TwnsSrrCreateSettingsPanel {
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export type OpenData = void;
-    export class SrrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForSrrCreateSettingsPanel = void;
+    export class SrrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenDataForSrrCreateSettingsPanel> {
         private readonly _groupNavigator!       : eui.Group;
         private readonly _labelSinglePlayer!    : TwnsUiLabel.UiLabel;
         private readonly _labelWarRoomMode!     : TwnsUiLabel.UiLabel;
@@ -206,8 +206,8 @@ namespace TwnsSrrCreateSettingsPanel {
             const openData  : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
                     {
-                        settingsType    : WarBasicSettingsType.MapName,
-                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(SrrCreateModel.getMapId()),
+                        settingsType    : WarBasicSettingsType.MapId,
+                        currentValue    : SrrCreateModel.getMapId(),
                         warRule,
                         callbackOnModify: null,
                     },
@@ -268,7 +268,7 @@ namespace TwnsSrrCreateSettingsPanel {
             const settingsForCommon = Helpers.getExisted(SrrCreateModel.getSettingsForCommon());
             const warRule           = Helpers.getExisted(settingsForCommon.warRule);
             return {
-                gameConfig      : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+                gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
                 warRule,
                 warType         : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
             };

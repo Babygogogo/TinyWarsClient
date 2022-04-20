@@ -16,7 +16,7 @@
 // import MrrSelfSettingsModel                 from "./MrrSelfSettingsModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace MrrModel {
+namespace Twns.MultiRankRoom.MrrModel {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
@@ -29,10 +29,10 @@ namespace MrrModel {
     let _maxConcurrentCountForStd   = 0;
     let _maxConcurrentCountForFog   = 0;
     const _roomInfoAccessor         = Helpers.createCachedDataAccessor<number, IMrrRoomInfo>({
-        reqData : (roomId: number) => MrrProxy.reqMrrGetRoomPublicInfo(roomId),
+        reqData : (roomId: number) => Twns.MultiRankRoom.MrrProxy.reqMrrGetRoomPublicInfo(roomId),
     });
     const _joinedRoomIdArrayAccessor = Helpers.createCachedDataAccessor<null, number[]>({
-        reqData : () => MrrProxy.reqMrrGetJoinedRoomIdArray(),
+        reqData : () => Twns.MultiRankRoom.MrrProxy.reqMrrGetJoinedRoomIdArray(),
     });
 
     export function setMaxConcurrentCount(hasFog: boolean, count: number): void {
@@ -65,8 +65,8 @@ namespace MrrModel {
         const roomInfo  = data.roomInfo ?? null;
         setRoomInfo(roomId, roomInfo);
 
-        if (MrrSelfSettingsModel.getRoomId() === roomId) {
-            await MrrSelfSettingsModel.resetData(roomId);
+        if (Twns.MultiRankRoom.MrrSelfSettingsModel.getRoomId() === roomId) {
+            await Twns.MultiRankRoom.MrrSelfSettingsModel.resetData(roomId);
         }
     }
     export async function updateOnMsgMrrSetBannedCoIdList(data: CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IS): Promise<void> {
@@ -205,7 +205,7 @@ namespace MrrModel {
         }
 
         return {
-            gameConfig              : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+            gameConfig              : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
             playersCountUnneutral   : WarRuleHelpers.getPlayersCountUnneutral(warRule),
             roomOwnerPlayerIndex    : null,
             callbackOnExitRoom      : null,
@@ -229,8 +229,8 @@ namespace MrrModel {
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
-                    settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMrw.mapId)),
+                    settingsType    : WarBasicSettingsType.MapId,
+                    currentValue    : Helpers.getExisted(settingsForMrw.mapId),
                     warRule,
                     callbackOnModify: null,
                 },
@@ -304,7 +304,7 @@ namespace MrrModel {
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
         const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         return {
-            gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+            gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
             warRule,
             warType     : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
         };

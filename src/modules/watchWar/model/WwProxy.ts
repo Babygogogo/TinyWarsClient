@@ -47,7 +47,7 @@ namespace WwProxy {
     function _onMsgMpwWatchGetRequestableWarIdArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetRequestableWarIdArray.IS;
         if (!data.errorCode) {
-            WwModel.setRequestableWarIdArray(data.warIdArray || []);
+            Twns.WatchWar.WwModel.setRequestableWarIdArray(data.warIdArray || []);
             Notify.dispatch(NotifyType.MsgMpwWatchGetUnwatchedWarInfos, data);
         }
     }
@@ -61,7 +61,7 @@ namespace WwProxy {
     function _onMsgMpwWatchGetOngoingWarIdArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetOngoingWarIdArray.IS;
         if (!data.errorCode) {
-            WwModel.setOngoingWarIdArray(data.warIdArray || []);
+            Twns.WatchWar.WwModel.setOngoingWarIdArray(data.warIdArray || []);
             Notify.dispatch(NotifyType.MsgMpwWatchGetOngoingWarInfos, data);
         }
     }
@@ -75,7 +75,7 @@ namespace WwProxy {
     function _onMsgMpwWatchGetRequestedWarIdArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetRequestedWarIdArray.IS;
         if (!data.errorCode) {
-            WwModel.setRequestedWarIdArray(data.warIdArray || []);
+            Twns.WatchWar.WwModel.setRequestedWarIdArray(data.warIdArray || []);
             Notify.dispatch(NotifyType.MsgMpwWatchGetRequestedWarIdArray, data);
         }
     }
@@ -89,7 +89,7 @@ namespace WwProxy {
     function _onMsgMpwWatchGetWatchedWarIdArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetWatchedWarIdArray.IS;
         if (!data.errorCode) {
-            WwModel.setWatchedWarIdArray(data.warIdArray || []);
+            Twns.WatchWar.WwModel.setWatchedWarIdArray(data.warIdArray || []);
             Notify.dispatch(NotifyType.MsgMpwWatchGetWatchedWarInfos, data);
         }
     }
@@ -165,7 +165,7 @@ namespace WwProxy {
     }
     function _onMsgMpwWatchGetIncomingInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetIncomingInfo.IS;
-        WwModel.updateOnMsgMpwWatchGetIncomingInfo(data);
+        Twns.WatchWar.WwModel.updateOnMsgMpwWatchGetIncomingInfo(data);
         Notify.dispatch(NotifyType.MsgMpwWatchGetIncomingInfo, data);
     }
 
@@ -178,7 +178,7 @@ namespace WwProxy {
     }
     function _onMsgMpwWatchGetOutgoingInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
-        WwModel.updateOnMsgMpwWatchGetOutgoingInfo(data);
+        Twns.WatchWar.WwModel.updateOnMsgMpwWatchGetOutgoingInfo(data);
         Notify.dispatch(NotifyType.MsgMpwWatchGetOutgoingInfo, data);
     }
 }

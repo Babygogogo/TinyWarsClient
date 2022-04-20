@@ -140,7 +140,7 @@ namespace Twns.MultiRankRoom {
             this._updateBtnRanking();
             this._updateBtnContinueWar();
 
-            this._btnMyRoom.setRedVisible(await MrrModel.checkIsRed());
+            this._btnMyRoom.setRedVisible(await Twns.MultiRankRoom.MrrModel.checkIsRed());
         }
 
         private async _updateBtnMultiPlayer(): Promise<void> {
@@ -150,7 +150,7 @@ namespace Twns.MultiRankRoom {
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
                 (await MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
-                (await MrrModel.checkIsRed())
+                (await Twns.MultiRankRoom.MrrModel.checkIsRed())
             );
         }
 

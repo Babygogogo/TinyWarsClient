@@ -294,7 +294,7 @@ namespace Lang {
 
     export function getWarBasicSettingsName(type: Types.WarBasicSettingsType): string | null {
         switch (type) {
-            case Types.WarBasicSettingsType.MapName                 : return getText(LangTextType.B0225);
+            case Types.WarBasicSettingsType.MapId                   : return getText(LangTextType.B0225);
             case Types.WarBasicSettingsType.WarName                 : return getText(LangTextType.B0185);
             case Types.WarBasicSettingsType.WarPassword             : return getText(LangTextType.B0186);
             case Types.WarBasicSettingsType.WarComment              : return getText(LangTextType.B0187);

@@ -234,8 +234,8 @@ namespace Twns.MultiCustomRoom.McrModel {
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
-                    settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)),
+                    settingsType    : WarBasicSettingsType.MapId,
+                    currentValue    : Helpers.getExisted(settingsForMcw.mapId),
                     warRule,
                     callbackOnModify: null,
                 },

@@ -50,6 +50,7 @@ namespace CommonConstants {
     export const MapMaxFileSize                         = 50000;
     export const MapMinLocationId                       = 1;
     export const MapMaxLocationId                       = 30;
+    export const MapDescriptionMaxLength                = 1000;
 
     export const WarEventNameMaxLength                                  = 150;
     export const WarEventMaxEventsPerMap                                = 30;

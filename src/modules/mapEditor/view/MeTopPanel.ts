@@ -23,15 +23,15 @@
 // import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeTopPanel {
+namespace Twns.MapEditor {
     import MeDrawer                 = TwnsMeDrawer.MeDrawer;
-    import MeWar                    = Twns.MapEditor.MeWar;
+    import MeWar                    = MapEditor.MeWar;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import DrawerMode               = Types.MapEditorDrawerMode;
     import LangTextType             = TwnsLangTextType.LangTextType;
 
-    export type OpenData = void;
-    export class MeTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeTopPanel = void;
+    export class MeTopPanel extends TwnsUiPanel.UiPanel<OpenDataForMeTopPanel> {
         private readonly _groupMode!                    : eui.Group;
         // private readonly _labelMode!                    : TwnsUiLabel.UiLabel;
         private readonly _conUnitView!                  : eui.Group;
@@ -75,7 +75,7 @@ namespace TwnsMeTopPanel {
         private readonly _labelLocationTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelLocation!                : TwnsUiLabel.UiLabel;
 
-        private _unitView   = new Twns.BaseWar.BwUnitView();
+        private _unitView   = new BaseWar.BwUnitView();
         private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
         protected _onOpening(): void {
@@ -169,7 +169,7 @@ namespace TwnsMeTopPanel {
             }
 
             const mapRawData = war.serializeForMap();
-            if (await Twns.MapEditor.MeHelpers.getSevereErrorCodeForMapRawData(mapRawData)) {
+            if (await MapEditor.MeHelpers.getCriticalErrorCodeForMapRawData(mapRawData)) {
                 FloatText.show(Lang.getText(LangTextType.A0304));
             } else {
                 MeProxy.reqMeSubmitMap(slotIndex, mapRawData, false);
@@ -283,7 +283,7 @@ namespace TwnsMeTopPanel {
                     war.stopRunning();
                     await war.initWithMapEditorData(
                         {
-                            mapRawData: (data ? data.mapRawData : null) || await Twns.MapEditor.MeHelpers.createDefaultMapRawData(slotIndex),
+                            mapRawData: (data ? data.mapRawData : null) || await MapEditor.MeHelpers.createDefaultMapRawData(slotIndex),
                             slotIndex,
                         },
                         war.getGameConfig()
@@ -586,7 +586,7 @@ namespace TwnsMeTopPanel {
         }
         private _initUnitView(): void {
             const war   = this._getWar();
-            const unit  = new Twns.BaseWar.BwUnit();
+            const unit  = new BaseWar.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,

@@ -130,12 +130,12 @@ namespace Twns.WatchWar {
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
                 (await MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
-                (await MrrModel.checkIsRed())
+                (await Twns.MultiRankRoom.MrrModel.checkIsRed())
             );
         }
 
         private _updateBtnHandleRequest(): void {
-            this._btnHandleRequest.setRedVisible(!!WwModel.getRequestedWarIdArray()?.length);
+            this._btnHandleRequest.setRedVisible(!!Twns.WatchWar.WwModel.getRequestedWarIdArray()?.length);
         }
 
         protected async _showOpenAnimation(): Promise<void> {

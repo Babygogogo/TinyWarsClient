@@ -824,6 +824,11 @@ namespace Twns.MapEditor.MeHelpers {
             return mapNameArrayError;
         }
 
+        const mapExtraTextError = getErrorCodeForMapExtraText(mapRawData.mapExtraText);
+        if (mapExtraTextError) {
+            return mapExtraTextError;
+        }
+
         const unitArrayError = getErrorCodeForUnitArray(mapRawData.unitDataArray);
         if (unitArrayError) {
             return unitArrayError;
@@ -869,6 +874,25 @@ namespace Twns.MapEditor.MeHelpers {
             minTextCount    : 1,
         })) {
             return ClientErrorCode.MapRawDataValidation02;
+        }
+
+        return ClientErrorCode.NoError;
+    }
+    function getErrorCodeForMapExtraText(mapExtraText: Types.Undefinable<CommonProto.Map.IMapExtraText>): ClientErrorCode {
+        if (mapExtraText == null) {
+            return ClientErrorCode.NoError;
+        }
+
+        const mapDescription = mapExtraText.mapDescription;
+        if ((mapDescription?.length)                &&
+            (!Helpers.checkIsValidLanguageTextArray({
+                list            : mapDescription,
+                minTextCount    : 1,
+                minTextLength   : 1,
+                maxTextLength   : CommonConstants.MapDescriptionMaxLength,
+            }))
+        ) {
+            return ClientErrorCode.MeHelpers_GetErrorCodeForMapExtraText_00;
         }
 
         return ClientErrorCode.NoError;
@@ -926,7 +950,7 @@ namespace Twns.MapEditor.MeHelpers {
         return ClientErrorCode.NoError;
     }
 
-    export async function getSevereErrorCodeForMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
+    export async function getCriticalErrorCodeForMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
         if (ProtoManager.encodeAsMapRawData(mapRawData).byteLength > CommonConstants.MapMaxFileSize) {
             return ClientErrorCode.MeUtility_GetSevereErrorCodeForMapRawData_00;
         }

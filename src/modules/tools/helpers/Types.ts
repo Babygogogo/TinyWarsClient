@@ -835,7 +835,7 @@ namespace Types {
 
     // eslint-disable-next-line no-shadow
     export enum WarBasicSettingsType {
-        MapName,
+        MapId,
         WarName,
         WarPassword,
         WarComment,

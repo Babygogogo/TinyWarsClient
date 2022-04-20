@@ -4863,6 +4863,17 @@ namespace TwnsClientErrorCode {
         MeUtility_GetSevereErrorCodeForMapRawData_08,
         MeUtility_GetSevereErrorCodeForMapRawData_09,
 
+        MeHelpers_GetErrorCodeForMapExtraText_00,
+        MeHelpers_GetErrorCodeForMapExtraText_01,
+        MeHelpers_GetErrorCodeForMapExtraText_02,
+        MeHelpers_GetErrorCodeForMapExtraText_03,
+        MeHelpers_GetErrorCodeForMapExtraText_04,
+        MeHelpers_GetErrorCodeForMapExtraText_05,
+        MeHelpers_GetErrorCodeForMapExtraText_06,
+        MeHelpers_GetErrorCodeForMapExtraText_07,
+        MeHelpers_GetErrorCodeForMapExtraText_08,
+        MeHelpers_GetErrorCodeForMapExtraText_09,
+
         UserModel_UpdateOnMsgUserSetAvatarId_00,
         UserModel_UpdateOnMsgUserSetAvatarId_01,
         UserModel_UpdateOnMsgUserSetAvatarId_02,

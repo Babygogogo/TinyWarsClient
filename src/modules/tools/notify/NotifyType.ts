@@ -118,6 +118,7 @@ namespace TwnsNotifyType {
         MeDrawerModeChanged,
         MeTileChanged,
         MeMapNameChanged,
+        MeMapDescChanged,
         MeWarEventIdArrayChanged,
         MeBannedCoIdArrayChanged,
 

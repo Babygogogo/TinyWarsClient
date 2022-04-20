@@ -28,7 +28,7 @@
 // import TwnsMcrCreateMapListPanel            from "./McrCreateMapListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMcrCreateSettingsPanel {
+namespace Twns.MultiCustomRoom {
     import McrCreateAdvancedSettingsPage            = TwnsMcrCreateAdvancedSettingsPage.McrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
@@ -38,8 +38,8 @@ namespace TwnsMcrCreateSettingsPanel {
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export type OpenData = void;
-    export class McrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMcrCreateSettingsPanel = void;
+    export class McrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrCreateSettingsPanel> {
         private readonly _groupNavigator!           : eui.Group;
         private readonly _labelMultiPlayer!         : TwnsUiLabel.UiLabel;
         private readonly _labelCreateRoom!          : TwnsUiLabel.UiLabel;
@@ -124,7 +124,7 @@ namespace TwnsMcrCreateSettingsPanel {
         }
         private _onTouchedBtnConfirm(): void {
             const data = McrCreateModel.getData();
-            Twns.MultiCustomRoom.McrProxy.reqCreateRoom(data);
+            MultiCustomRoom.McrProxy.reqCreateRoom(data);
 
             this._btnConfirm.enabled = false;
             this._resetTimeoutForBtnConfirm();
@@ -232,8 +232,8 @@ namespace TwnsMcrCreateSettingsPanel {
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
                     {
-                        settingsType    : WarBasicSettingsType.MapName,
-                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(McrCreateModel.getMapId()),
+                        settingsType    : WarBasicSettingsType.MapId,
+                        currentValue    : McrCreateModel.getMapId(),
                         warRule,
                         callbackOnModify: null,
                     },
@@ -541,7 +541,7 @@ namespace TwnsMcrCreateSettingsPanel {
             const data = this.data;
             if (data) {
                 const skinId            = data.skinId;
-                this._imgColor.source   = Twns.WarHelpers.WarCommonHelpers.getImageSourceForSkinId(skinId, McrCreateModel.getSelfUnitAndTileSkinId() === skinId);
+                this._imgColor.source   = WarHelpers.WarCommonHelpers.getImageSourceForSkinId(skinId, McrCreateModel.getSelfUnitAndTileSkinId() === skinId);
             }
         }
     }

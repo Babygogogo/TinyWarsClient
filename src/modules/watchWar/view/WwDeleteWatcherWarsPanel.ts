@@ -28,7 +28,7 @@
 // import TwnsWwMainMenuPanel                  from "./WwMainMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWwDeleteWatcherWarsPanel {
+namespace Twns.WatchWar {
     import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
@@ -37,8 +37,8 @@ namespace TwnsWwDeleteWatcherWarsPanel {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import NotifyType                               = TwnsNotifyType.NotifyType;
 
-    export type OpenData = void;
-    export class WwDeleteWatcherWarsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForWwDeleteWatcherWarsPanel = void;
+    export class WwDeleteWatcherWarsPanel extends TwnsUiPanel.UiPanel<OpenDataForWwDeleteWatcherWarsPanel> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForWarCommonMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
@@ -131,7 +131,7 @@ namespace TwnsWwDeleteWatcherWarsPanel {
             }
 
             const warId = data.warId;
-            if (await WwModel.getWatchIncomingInfo(warId) == null) {
+            if (await WatchWar.WwModel.getWatchIncomingInfo(warId) == null) {
                 FloatText.show(Lang.getText(LangTextType.A0297));
             } else {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.WwDeleteWatcherDetailPanel, {
@@ -145,7 +145,7 @@ namespace TwnsWwDeleteWatcherWarsPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _createDataForListWar(): DataForWarRenderer[] {
             const dataArray: DataForWarRenderer[] = [];
-            for (const info of WwModel.getWatchedWarIdArray() || []) {
+            for (const info of WatchWar.WwModel.getWatchedWarIdArray() || []) {
                 dataArray.push({
                     warId: info,
                     panel   : this,
@@ -156,19 +156,19 @@ namespace TwnsWwDeleteWatcherWarsPanel {
         }
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForWarCommonMapInfoPage> {
-            return WwModel.createDataForCommonWarMapInfoPage(this._getSelectedWarId());
+            return WatchWar.WwModel.createDataForCommonWarMapInfoPage(this._getSelectedWarId());
         }
 
         private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
-            return WwModel.createDataForCommonWarPlayerInfoPage(this._getSelectedWarId());
+            return WatchWar.WwModel.createDataForCommonWarPlayerInfoPage(this._getSelectedWarId());
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            return await WwModel.createDataForCommonWarBasicSettingsPage(this._getSelectedWarId());
+            return await WatchWar.WwModel.createDataForCommonWarBasicSettingsPage(this._getSelectedWarId());
         }
 
         private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-            return WwModel.createDataForCommonWarAdvancedSettingsPage(this._getSelectedWarId());
+            return WatchWar.WwModel.createDataForCommonWarAdvancedSettingsPage(this._getSelectedWarId());
         }
 
         private async _initTabSettings(): Promise<void> {
@@ -347,7 +347,7 @@ namespace TwnsWwDeleteWatcherWarsPanel {
             const labelName = this._labelName;
             labelName.text  = ``;
 
-            const warSettings = await Twns.MultiPlayerWar.MpwModel.getWarSettings(Helpers.getExisted(this._getData().warId));
+            const warSettings = await MultiPlayerWar.MpwModel.getWarSettings(Helpers.getExisted(this._getData().warId));
             if (warSettings != null) {
                 const { settingsForMfw, settingsForCcw, settingsForMcw, settingsForMrw } = warSettings;
                 if (settingsForMfw) {

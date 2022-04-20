@@ -9,7 +9,7 @@
 // import MrrModel             from "./MrrModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace MrrSelfSettingsModel {
+namespace Twns.MultiRankRoom.MrrSelfSettingsModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import IMrrRoomInfo     = CommonProto.MultiRankRoom.IMrrRoomInfo;
@@ -25,7 +25,7 @@ namespace MrrSelfSettingsModel {
         clearUnitAndTileSkinId();
         clearAvailableCoIdArray();
 
-        const roomInfo          = Helpers.getExisted(await MrrModel.getRoomInfo(roomId));
+        const roomInfo          = Helpers.getExisted(await MultiRankRoom.MrrModel.getRoomInfo(roomId));
         const playerDataList    = roomInfo ? roomInfo.playerDataList || [] : [];
         const selfUserId        = UserModel.getSelfUserId();
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
@@ -98,7 +98,7 @@ namespace MrrSelfSettingsModel {
 
     async function generateAvailableCoIdArray(roomInfo: IMrrRoomInfo, playerIndex: number): Promise<number[]> {
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const gameConfig        = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+        const gameConfig        = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
         const settingsForMrw    = Helpers.getExisted(roomInfo.settingsForMrw);
         const dataArrayForBanCo = Helpers.getExisted(settingsForMrw.dataArrayForBanCo);
         const playerRule        = WarRuleHelpers.getPlayerRule(Helpers.getExisted(settingsForCommon.warRule), playerIndex);

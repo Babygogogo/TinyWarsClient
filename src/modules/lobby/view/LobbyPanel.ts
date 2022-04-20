@@ -290,7 +290,7 @@ namespace Twns.Lobby {
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
                 (await MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
-                (await MrrModel.checkIsRed())
+                (await Twns.MultiRankRoom.MrrModel.checkIsRed())
             );
         }
     }

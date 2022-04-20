@@ -5940,6 +5940,17 @@ export const enum ServerErrorCode {
     MapManager_GetErrorCodeForMapRawData_0008,
     MapManager_GetErrorCodeForMapRawData_0009,
 
+    MapManager_GetErrorCodeForMapExtraText_0000,
+    MapManager_GetErrorCodeForMapExtraText_0001,
+    MapManager_GetErrorCodeForMapExtraText_0002,
+    MapManager_GetErrorCodeForMapExtraText_0003,
+    MapManager_GetErrorCodeForMapExtraText_0004,
+    MapManager_GetErrorCodeForMapExtraText_0005,
+    MapManager_GetErrorCodeForMapExtraText_0006,
+    MapManager_GetErrorCodeForMapExtraText_0007,
+    MapManager_GetErrorCodeForMapExtraText_0008,
+    MapManager_GetErrorCodeForMapExtraText_0009,
+
     MapManager_InitFormalMaps_0000,
     MapManager_InitFormalMaps_0001,
     MapManager_InitFormalMaps_0002,

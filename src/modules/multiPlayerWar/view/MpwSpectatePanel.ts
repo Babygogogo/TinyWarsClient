@@ -23,12 +23,12 @@
 // import TwnsMpwWar                       from "../model/MpwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMpwSpectatePanel {
+namespace Twns.MultiPlayerWar {
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
 
-    export type OpenData = void;
-    export class MpwSpectatePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMpwSpectatePanel = void;
+    export class MpwSpectatePanel extends TwnsUiPanel.UiPanel<OpenDataForMpwSpectatePanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _group!                    : eui.Group;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
@@ -66,8 +66,8 @@ namespace TwnsMpwSpectatePanel {
             // nothing to do
         }
 
-        private _getWar(): Twns.MultiPlayerWar.MpwWar {
-            return Helpers.getExisted(Twns.MultiPlayerWar.MpwModel.getWar());
+        private _getWar(): MultiPlayerWar.MpwWar {
+            return Helpers.getExisted(MultiPlayerWar.MpwModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +94,7 @@ namespace TwnsMpwSpectatePanel {
         private async _onTouchedBtnMakeRequest(): Promise<void> {
             const war       = this._getWar();
             const warId     = Helpers.getExisted(war.getWarId());
-            const info      = await WwModel.getWatchOutgoingInfo(warId);
+            const info      = await WatchWar.WwModel.getWatchOutgoingInfo(warId);
             const userIdSet = new Set<number>();
             for (const userId of info?.ongoingDstUserIdArray ?? []) {
                 userIdSet.add(userId);
@@ -119,7 +119,7 @@ namespace TwnsMpwSpectatePanel {
 
         private async _onTouchedBtnHandleRequest(): Promise<void> {
             const warId = Helpers.getExisted(this._getWar().getWarId());
-            if ((await WwModel.getWatchIncomingInfo(warId))?.requestSrcUserIdArray?.length) {
+            if ((await WatchWar.WwModel.getWatchIncomingInfo(warId))?.requestSrcUserIdArray?.length) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.WwHandleRequestDetailPanel, {
                     warId,
                 });
@@ -130,7 +130,7 @@ namespace TwnsMpwSpectatePanel {
 
         private async _onTouchedBtnDeleteWatcher(): Promise<void> {
             const warId = Helpers.getExisted(this._getWar().getWarId());
-            if ((await WwModel.getWatchIncomingInfo(warId))?.ongoingSrcUserIdArray?.length) {
+            if ((await WatchWar.WwModel.getWatchIncomingInfo(warId))?.ongoingSrcUserIdArray?.length) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.WwDeleteWatcherDetailPanel, {
                     warId,
                 });
@@ -191,7 +191,7 @@ namespace TwnsMpwSpectatePanel {
         }
 
         private async _updateBtnHandleRequest(): Promise<void> {
-            const info = await WwModel.getWatchIncomingInfo(Helpers.getExisted(this._getWar().getWarId()));
+            const info = await WatchWar.WwModel.getWatchIncomingInfo(Helpers.getExisted(this._getWar().getWarId()));
             this._btnHandleRequest.setRedVisible(!!info?.requestSrcUserIdArray?.length);
         }
 
@@ -210,7 +210,7 @@ namespace TwnsMpwSpectatePanel {
         }
 
         private async _updateLabelIncomingRequest(): Promise<void> {
-            const info = await WwModel.getWatchIncomingInfo(Helpers.getExisted(this._getWar().getWarId()));
+            const info = await WatchWar.WwModel.getWatchIncomingInfo(Helpers.getExisted(this._getWar().getWarId()));
             this._labelIncomingRequest.text = `${info?.requestSrcUserIdArray?.length ?? 0}`;
         }
     }
