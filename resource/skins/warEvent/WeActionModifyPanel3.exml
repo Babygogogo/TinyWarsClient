@@ -130,6 +130,9 @@
                                     <TwnsUiButton:UiButton id="_btnChinese" label="Unit Type"
                                                            skinName="Skins.Component.Button.ButtonSelfAdaption001"
                                                            width="100" left="0" top="0" />
+                                    <TwnsUiButton:UiButton id="_btnDeleteChinese" label="Unit Type"
+                                                           skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                           width="100" left="0" top="30" x="10" y="10" />
                                     <TwnsUiLabel:UiLabel id="_labelChinese" text="asdf\nasdf\nasdf" size="14"
                                                          textColor="0xFFFFFF" x="110" width="840" />
                                 </e:Group>
@@ -137,6 +140,9 @@
                                     <TwnsUiButton:UiButton id="_btnEnglish" label="Unit Type"
                                                            skinName="Skins.Component.Button.ButtonSelfAdaption001"
                                                            width="100" left="0" top="0" />
+                                    <TwnsUiButton:UiButton id="_btnDeleteEnglish" label="Unit Type"
+                                                           skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                           width="100" left="0" top="30" x="10" y="10" />
                                     <TwnsUiLabel:UiLabel id="_labelEnglish" text="asdf\nasdf\nasdf" size="14"
                                                          textColor="0xFFFFFF" x="110" width="840" />
                                 </e:Group>

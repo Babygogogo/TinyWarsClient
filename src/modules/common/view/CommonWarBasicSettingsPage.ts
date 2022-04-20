@@ -353,7 +353,7 @@ namespace TwnsCommonWarBasicSettingsPage {
                 callback        : panel => {
                     const newValue = panel.getInputText() || null;
                     if (newValue != currentValue) {
-                        callback(null);
+                        callback(newValue);
                     }
                 },
             });

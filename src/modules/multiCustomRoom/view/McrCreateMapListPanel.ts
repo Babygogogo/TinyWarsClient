@@ -22,7 +22,7 @@
 // import TwnsMcrMainMenuPanel         from "./McrMainMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMcrCreateMapListPanel {
+namespace Twns.MultiCustomRoom {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IDataForMapTag           = CommonProto.Map.IDataForMapTag;
@@ -35,8 +35,8 @@ namespace TwnsMcrCreateMapListPanel {
         minRating?      : number | null;
         mapTag?         : IDataForMapTag | null;
     };
-    export type OpenData = FiltersForMapList | null;
-    export class McrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMcrCreateMapListPanel = FiltersForMapList | null;
+    export class McrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrCreateMapListPanel> {
         private readonly _groupMapView!         : eui.Group;
         private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
@@ -197,7 +197,7 @@ namespace TwnsMcrCreateMapListPanel {
             } else {
                 zoomMap.visible     = true;
                 uiMapInfo.visible   = true;
-                zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)), await Twns.Config.ConfigManager.getLatestGameConfig());
+                zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)), await Config.ConfigManager.getLatestGameConfig());
                 uiMapInfo.setData({
                     mapInfo: {
                         mapId,

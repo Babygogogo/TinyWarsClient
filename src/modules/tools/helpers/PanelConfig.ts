@@ -100,7 +100,7 @@ namespace TwnsPanelConfig {
         LobbyTopPanel                       : PanelConfig<TwnsLobbyTopPanel.OpenData>;
         LobbyTopRightPanel                  : PanelConfig<TwnsLobbyTopRightPanel.OpenData>;
 
-        McrCreateMapListPanel               : PanelConfig<TwnsMcrCreateMapListPanel.OpenData>;
+        McrCreateMapListPanel               : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrCreateMapListPanel>;
         McrCreateSearchMapPanel             : PanelConfig<TwnsMcrCreateSearchMapPanel.OpenData>;
         McrCreateSettingsPanel              : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrCreateSettingsPanel>;
         McrJoinRoomListPanel                : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrJoinRoomListPanel>;
@@ -792,7 +792,7 @@ namespace TwnsPanelConfig {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             McrCreateMapListPanel: {
-                cls         : TwnsMcrCreateMapListPanel?.McrCreateMapListPanel,
+                cls         : Twns.MultiCustomRoom?.McrCreateMapListPanel,
                 skinName    : `resource/skins/multiCustomRoom/McrCreateMapListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
