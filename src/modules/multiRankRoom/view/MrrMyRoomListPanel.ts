@@ -29,7 +29,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiRankRoom {
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
@@ -161,7 +161,7 @@ namespace Twns.MultiRankRoom {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageClass   : Twns.Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {

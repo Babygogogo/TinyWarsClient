@@ -30,7 +30,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiFreeRoom {
     import MfrCreateAdvancedSettingsPage            = TwnsMfrCreateAdvancedSettingsPage.MfrCreateAdvancedSettingsPage;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
@@ -88,8 +88,8 @@ namespace Twns.MultiFreeRoom {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
-                    pageData    : this._createDataForCommonWarBasicSettingsPage(),
+                    pageClass   : Common.CommonWarBasicSettingsPage,
+                    pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
@@ -231,22 +231,26 @@ namespace Twns.MultiFreeRoom {
                 };
         }
 
-        private _updateCommonWarBasicSettingsPage(): void {
+        private async _updateCommonWarBasicSettingsPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, this._createDataForCommonWarBasicSettingsPage());
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarBasicSettingsPage());
             }
         }
 
-        private _createDataForCommonWarBasicSettingsPage(): OpenDataForCommonWarBasicSettingsPage {
+        private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
             const warRule           = MfrCreateModel.getWarRule();
             const bootTimerParams   = MfrCreateModel.getBootTimerParams();
+            const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(MfrCreateModel.getConfigVersion()));
             const timerType         = bootTimerParams[0] as Types.BootTimerType;
+            const warEventFullData  = MfrCreateModel.getInitialWarData().warEventManager?.warEventFullData ?? null;
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
                     {
                         settingsType    : WarBasicSettingsType.WarName,
                         currentValue    : MfrCreateModel.getWarName(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -259,6 +263,8 @@ namespace Twns.MultiFreeRoom {
                         settingsType    : WarBasicSettingsType.WarPassword,
                         currentValue    : MfrCreateModel.getWarPassword(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -271,6 +277,8 @@ namespace Twns.MultiFreeRoom {
                         settingsType    : WarBasicSettingsType.WarComment,
                         currentValue    : MfrCreateModel.getWarComment(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -283,24 +291,40 @@ namespace Twns.MultiFreeRoom {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.HasFog,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.Weather,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
+                        callbackOnModify: null,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarEvent,
+                        currentValue    : null,
+                        warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.TurnsLimit,
                         currentValue    : MfrCreateModel.getTurnsLimit(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue !== "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -313,6 +337,8 @@ namespace Twns.MultiFreeRoom {
                         settingsType    : WarBasicSettingsType.TimerType,
                         currentValue    : timerType,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: async () => {
                             MfrCreateModel.tickBootTimerType();
                             this._updateCommonWarBasicSettingsPage();
@@ -325,6 +351,8 @@ namespace Twns.MultiFreeRoom {
                     settingsType    : WarBasicSettingsType.TimerRegularParam,
                     currentValue    : bootTimerParams[1],
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: () => {
                         MfrCreateModel.tickTimerRegularTime();
                         this._updateCommonWarBasicSettingsPage();
@@ -336,6 +364,8 @@ namespace Twns.MultiFreeRoom {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                         currentValue    : bootTimerParams[1],
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: number | string | null) => {
                             if (typeof newValue !== "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -348,6 +378,8 @@ namespace Twns.MultiFreeRoom {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                         currentValue    : bootTimerParams[2],
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: number | string | null) => {
                             if (typeof newValue !== "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -529,7 +561,7 @@ namespace Twns.MultiFreeRoom {
             const data = this.data;
             if (data) {
                 const skinId            = data.skinId;
-                this._imgColor.source   = Twns.WarHelpers.WarCommonHelpers.getImageSourceForSkinId(skinId, MfrCreateModel.getSelfPlayerData().unitAndTileSkinId === skinId);
+                this._imgColor.source   = WarHelpers.WarCommonHelpers.getImageSourceForSkinId(skinId, MfrCreateModel.getSelfPlayerData().unitAndTileSkinId === skinId);
             }
         }
     }

@@ -115,6 +115,7 @@
 		"bin-debug/modules/common/view/CommonServerStatusPanel.js",
 		"bin-debug/modules/baseWar/model/BwTurnManager.js",
 		"bin-debug/modules/watchWar/view/WwSearchWarPanel.js",
+		"bin-debug/modules/common/view/CommonWarEventListPanel.js",
 		"bin-debug/modules/baseWar/model/BwDrawVoteManager.js",
 		"bin-debug/modules/baseWar/model/BwRandomNumberManager.js",
 		"bin-debug/modules/baseWar/model/BwExecutedActionManager.js",

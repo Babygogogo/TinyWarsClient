@@ -24,7 +24,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiFreeWar {
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
@@ -126,7 +126,7 @@ namespace Twns.MultiFreeWar {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageClass   : Twns.Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {

@@ -11,19 +11,19 @@
 // import MeModel              from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseWarEventActionIdPanel {
+namespace Twns.Common {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import WarEventHelpers  = Twns.WarHelpers.WarEventHelpers;
+    import WarEventHelpers  = WarHelpers.WarEventHelpers;
 
-    export type OpenData = {
+    export type OpenDataForCommonChooseWarEventActionIdPanel = {
         currentActionIdArray    : number[];
         availableActionIdArray  : number[];
         warEventFullData        : CommonProto.Map.IWarEventFullData;
-        war                     : Twns.BaseWar.BwWar;
+        war                     : BaseWar.BwWar;
         callbackOnConfirm       : (actionIdArray: number[]) => void;
     };
-    export class CommonChooseWarEventActionIdPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChooseWarEventActionIdPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseWarEventActionIdPanel> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnSelectAll!     : TwnsUiButton.UiButton;
         private readonly _btnUnselectAll!   : TwnsUiButton.UiButton;
@@ -107,7 +107,7 @@ namespace TwnsCommonChooseWarEventActionIdPanel {
     type DataForCounterIdRenderer = {
         actionId            : number;
         warEventFullData    : CommonProto.Map.IWarEventFullData;
-        war                 : Twns.BaseWar.BwWar;
+        war                 : BaseWar.BwWar;
     };
     class CounterIdRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCounterIdRenderer> {
         private readonly _groupShow!        : eui.Group;
@@ -116,7 +116,7 @@ namespace TwnsCommonChooseWarEventActionIdPanel {
         protected _onDataChanged(): void {
             const data              = this._getData();
             const actionId          = data.actionId;
-            this._labelAction.text  = `A${actionId} ${WarEventHelpers.getDescForAction(Helpers.getExisted(WarEventHelpers.getAction(data.warEventFullData, actionId)), data.war)}`;
+            this._labelAction.text  = `A${actionId} ${WarEventHelpers.getDescForAction(Helpers.getExisted(WarEventHelpers.getAction(data.warEventFullData, actionId)), data.war.getGameConfig())}`;
         }
     }
 }

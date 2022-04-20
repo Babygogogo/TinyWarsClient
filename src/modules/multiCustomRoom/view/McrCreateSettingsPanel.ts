@@ -30,7 +30,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiCustomRoom {
     import McrCreateAdvancedSettingsPage            = TwnsMcrCreateAdvancedSettingsPage.McrCreateAdvancedSettingsPage;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
@@ -89,7 +89,7 @@ namespace Twns.MultiCustomRoom {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
@@ -228,6 +228,8 @@ namespace Twns.MultiCustomRoom {
             const warRule           = McrCreateModel.getWarRule();
             const bootTimerParams   = McrCreateModel.getBootTimerParams();
             const turnsLimit        = McrCreateModel.getTurnsLimit();
+            const gameConfig        = McrCreateModel.getGameConfig();
+            const warEventFullData  = (await McrCreateModel.getMapRawData()).warEventFullData ?? null;
             const timerType         = bootTimerParams[0] as Types.BootTimerType;
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
@@ -235,12 +237,16 @@ namespace Twns.MultiCustomRoom {
                         settingsType    : WarBasicSettingsType.MapId,
                         currentValue    : McrCreateModel.getMapId(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarName,
                         currentValue    : McrCreateModel.getWarName(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue == "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -253,6 +259,8 @@ namespace Twns.MultiCustomRoom {
                         settingsType    : WarBasicSettingsType.WarPassword,
                         currentValue    : McrCreateModel.getWarPassword(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue == "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -265,6 +273,8 @@ namespace Twns.MultiCustomRoom {
                         settingsType    : WarBasicSettingsType.WarComment,
                         currentValue    : McrCreateModel.getWarComment(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue == "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -277,6 +287,8 @@ namespace Twns.MultiCustomRoom {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: async () => {
                             await McrCreateModel.tickPresetWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
@@ -286,6 +298,8 @@ namespace Twns.MultiCustomRoom {
                         settingsType    : WarBasicSettingsType.HasFog,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: () => {
                             McrCreateModel.setHasFog(!McrCreateModel.getHasFog());
                             McrCreateModel.setCustomWarRuleId();
@@ -296,6 +310,8 @@ namespace Twns.MultiCustomRoom {
                         settingsType    : WarBasicSettingsType.Weather,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: () => {
                             McrCreateModel.tickDefaultWeatherType();
                             McrCreateModel.setCustomWarRuleId();
@@ -303,9 +319,19 @@ namespace Twns.MultiCustomRoom {
                         },
                     },
                     {
+                        settingsType    : WarBasicSettingsType.WarEvent,
+                        currentValue    : null,
+                        warRule,
+                        gameConfig,
+                        warEventFullData,
+                        callbackOnModify: null,
+                    },
+                    {
                         settingsType    : WarBasicSettingsType.TurnsLimit,
                         currentValue    : turnsLimit,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue !== "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -318,6 +344,8 @@ namespace Twns.MultiCustomRoom {
                         settingsType    : WarBasicSettingsType.TimerType,
                         currentValue    : timerType,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: async () => {
                             McrCreateModel.tickBootTimerType();
                             this._updateCommonWarBasicSettingsPage();
@@ -330,6 +358,8 @@ namespace Twns.MultiCustomRoom {
                     settingsType    : WarBasicSettingsType.TimerRegularParam,
                     currentValue    : bootTimerParams[1],
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: () => {
                         McrCreateModel.tickTimerRegularTime();
                         this._updateCommonWarBasicSettingsPage();
@@ -341,6 +371,8 @@ namespace Twns.MultiCustomRoom {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                         currentValue    : bootTimerParams[1],
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: number | string | null) => {
                             if ((typeof newValue == "string") || (newValue == null)) {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -353,6 +385,8 @@ namespace Twns.MultiCustomRoom {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                         currentValue    : bootTimerParams[2],
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: number | string | null) => {
                             if ((typeof newValue == "string") || (newValue == null)) {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);

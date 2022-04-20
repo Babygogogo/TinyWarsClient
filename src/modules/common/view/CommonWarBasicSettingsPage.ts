@@ -17,7 +17,7 @@
 // import TwnsCommonInputPanel     from "./CommonInputPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonWarBasicSettingsPage {
+namespace Twns.Common {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType = Types.WarBasicSettingsType;
@@ -64,10 +64,12 @@ namespace TwnsCommonWarBasicSettingsPage {
     }
 
     type DataForSettingsRenderer = {
-        settingsType    : WarBasicSettingsType;
-        currentValue    : number | string | null;
-        warRule         : CommonProto.WarRule.IWarRule;
-        callbackOnModify: ((newValue: string | number | null) => void) | null;
+        settingsType        : WarBasicSettingsType;
+        currentValue        : number | string | null;
+        warRule             : CommonProto.WarRule.IWarRule;
+        gameConfig          : Config.GameConfig;
+        warEventFullData    : CommonProto.Map.IWarEventFullData | null;
+        callbackOnModify    : ((newValue: string | number | null) => void) | null;
     };
     class SettingsRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSettingsRenderer> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
@@ -111,6 +113,8 @@ namespace TwnsCommonWarBasicSettingsPage {
                 this._modifyAsHasFog();
             } else if (settingsType === WarBasicSettingsType.Weather) {
                 this._modifyAsWeather();
+            } else if (settingsType === WarBasicSettingsType.WarEvent) {
+                this._modifyAsWarEvent();
             } else if (settingsType === WarBasicSettingsType.TurnsLimit) {
                 this._modifyAsTurnsLimit();
             } else if (settingsType === WarBasicSettingsType.TimerType) {
@@ -158,6 +162,17 @@ namespace TwnsCommonWarBasicSettingsPage {
                     content: Lang.getText(LangTextType.R0009),
                 });
 
+            } else if (settingsType === WarBasicSettingsType.WarEvent) {
+                const warEventFullData  = data.warEventFullData;
+                const warEventIdArray   = data.warRule.warEventIdArray;
+                if ((warEventFullData) && (warEventIdArray?.length)) {
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonWarEventListPanel, {
+                        warEventFullData,
+                        warEventIdArray,
+                        gameConfig          : data.gameConfig,
+                    });
+                }
+
             } else if (settingsType === WarBasicSettingsType.TurnsLimit) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                     title  : Lang.getText(LangTextType.B0842),
@@ -195,6 +210,8 @@ namespace TwnsCommonWarBasicSettingsPage {
                 this._updateViewAsHasFog();
             } else if (settingsType === WarBasicSettingsType.Weather) {
                 this._updateViewAsWeather();
+            } else if (settingsType === WarBasicSettingsType.WarEvent) {
+                this._updateViewAsWarEvent();
             } else if (settingsType === WarBasicSettingsType.TurnsLimit) {
                 this._updateViewAsTurnsLimit();
             } else if (settingsType === WarBasicSettingsType.TimerType) {
@@ -264,6 +281,14 @@ namespace TwnsCommonWarBasicSettingsPage {
             labelValue.text         = Lang.getWeatherName(weatherType);
             labelValue.textColor    = weatherType === Types.WeatherType.Clear ? 0xFFFFFF: 0xFFFF00;
             this._btnHelp.visible   = true;
+        }
+        private _updateViewAsWarEvent(): void {
+            const data              = this._getData();
+            const warEventsCount    = data.warRule.warEventIdArray?.length ?? 0;
+            const labelValue        = this._labelValue;
+            labelValue.text         = warEventsCount ? `${warEventsCount}` : `--`;
+            labelValue.textColor    = warEventsCount ? 0xFFFF00 : 0xFFFFFF;
+            this._btnHelp.visible   = (warEventsCount > 0) && (data.warEventFullData != null);
         }
         private _updateViewAsTurnsLimit(): void {
             const data              = this._getData();
@@ -386,6 +411,9 @@ namespace TwnsCommonWarBasicSettingsPage {
                     callback: () => callback(null),
                 });
             }
+        }
+        private _modifyAsWarEvent(): void {
+            // nothing to do
         }
         private _modifyAsTurnsLimit(): void {
             const data          = this._getData();

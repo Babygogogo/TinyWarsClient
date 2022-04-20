@@ -16,7 +16,7 @@
 namespace Twns.MultiFreeRoom.MfrModel {
     import IMfrRoomStaticInfo                       = CommonProto.MultiFreeRoom.IMfrRoomStaticInfo;
     import IMfrRoomPlayerInfo                       = CommonProto.MultiFreeRoom.IMfrRoomPlayerInfo;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
@@ -219,56 +219,82 @@ namespace Twns.MultiFreeRoom.MfrModel {
         const settingsForCommon = Helpers.getExisted(settingsForMfw.initialWarData?.settingsForCommon);
         const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         const bootTimerParams   = Helpers.getExisted(settingsForMfw.bootTimerParams);
+        const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
         const warPassword       = settingsForMfw.warPassword;
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
+        const warEventFullData  = settingsForMfw.initialWarData?.warEventManager?.warEventFullData ?? null;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.WarName,
                     currentValue    : settingsForMfw.warName ?? null,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarPassword,
                     currentValue    : warPassword == null ? null : (showPassword ? warPassword : `****`),
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarComment,
                     currentValue    : settingsForMfw.warComment ?? null,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
                     currentValue    : null,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
                     currentValue    : null,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarEvent,
+                    currentValue    : null,
+                    warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
                     currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             ],
@@ -278,6 +304,8 @@ namespace Twns.MultiFreeRoom.MfrModel {
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
                 warRule,
+                gameConfig,
+                warEventFullData,
                 callbackOnModify: null,
             });
         } else if (timerType === Types.BootTimerType.Incremental) {
@@ -286,12 +314,16 @@ namespace Twns.MultiFreeRoom.MfrModel {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                     currentValue    : bootTimerParams[1],
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                     currentValue    : bootTimerParams[2],
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             );

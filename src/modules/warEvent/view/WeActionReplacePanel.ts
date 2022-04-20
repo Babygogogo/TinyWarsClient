@@ -124,7 +124,7 @@ namespace Twns.WarEvent {
 
         private _onTouchedBtnCopy(): void {          // DONE
             const data = this._getData();
-            if (Twns.WarHelpers.WarEventHelpers.cloneAndReplaceActionInEvent({
+            if (WarHelpers.WarEventHelpers.cloneAndReplaceActionInEvent({
                 fullData            : data.fullData,
                 eventId             : data.eventId,
                 actionIdForDelete   : data.srcActionId,
@@ -136,7 +136,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnSelect(): void {        // DONE
             const data = this._getData();
-            if (Twns.WarHelpers.WarEventHelpers.replaceActionInEvent({
+            if (WarHelpers.WarEventHelpers.replaceActionInEvent({
                 fullData    : data.fullData,
                 eventId     : data.eventId,
                 oldActionId : data.srcActionId,
@@ -177,7 +177,7 @@ namespace Twns.WarEvent {
             if (action == null) {
                 label.text = Lang.getText(LangTextType.A0168);
             } else {
-                label.text = Twns.WarHelpers.WarEventHelpers.getDescForAction(action, data.war) || CommonConstants.ErrorTextForUndefined;
+                label.text = WarHelpers.WarEventHelpers.getDescForAction(action, data.war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateBtnSelect(): void {

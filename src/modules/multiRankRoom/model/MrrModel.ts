@@ -21,7 +21,7 @@ namespace Twns.MultiRankRoom.MrrModel {
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
     import IMrrRoomInfo                             = CommonProto.MultiRankRoom.IMrrRoomInfo;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
@@ -29,10 +29,10 @@ namespace Twns.MultiRankRoom.MrrModel {
     let _maxConcurrentCountForStd   = 0;
     let _maxConcurrentCountForFog   = 0;
     const _roomInfoAccessor         = Helpers.createCachedDataAccessor<number, IMrrRoomInfo>({
-        reqData : (roomId: number) => Twns.MultiRankRoom.MrrProxy.reqMrrGetRoomPublicInfo(roomId),
+        reqData : (roomId: number) => MultiRankRoom.MrrProxy.reqMrrGetRoomPublicInfo(roomId),
     });
     const _joinedRoomIdArrayAccessor = Helpers.createCachedDataAccessor<null, number[]>({
-        reqData : () => Twns.MultiRankRoom.MrrProxy.reqMrrGetJoinedRoomIdArray(),
+        reqData : () => MultiRankRoom.MrrProxy.reqMrrGetJoinedRoomIdArray(),
     });
 
     export function setMaxConcurrentCount(hasFog: boolean, count: number): void {
@@ -65,8 +65,8 @@ namespace Twns.MultiRankRoom.MrrModel {
         const roomInfo  = data.roomInfo ?? null;
         setRoomInfo(roomId, roomInfo);
 
-        if (Twns.MultiRankRoom.MrrSelfSettingsModel.getRoomId() === roomId) {
-            await Twns.MultiRankRoom.MrrSelfSettingsModel.resetData(roomId);
+        if (MultiRankRoom.MrrSelfSettingsModel.getRoomId() === roomId) {
+            await MultiRankRoom.MrrSelfSettingsModel.resetData(roomId);
         }
     }
     export async function updateOnMsgMrrSetBannedCoIdList(data: CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IS): Promise<void> {
@@ -224,44 +224,67 @@ namespace Twns.MultiRankRoom.MrrModel {
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
         const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         const settingsForMrw    = Helpers.getExisted(roomInfo.settingsForMrw);
+        const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
+        const mapId             = Helpers.getExisted(settingsForMrw.mapId);
+        const warEventFullData  = (await WarMapModel.getRawData(mapId))?.warEventFullData ?? null;
         const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.MapId,
-                    currentValue    : Helpers.getExisted(settingsForMrw.mapId),
+                    currentValue    : mapId,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
                     currentValue    : null,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
                     currentValue    : null,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarEvent,
+                    currentValue    : null,
+                    warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
                     currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             ],
@@ -271,6 +294,8 @@ namespace Twns.MultiRankRoom.MrrModel {
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
                 warRule,
+                gameConfig,
+                warEventFullData,
                 callbackOnModify: null,
             });
         } else if (timerType === Types.BootTimerType.Incremental) {
@@ -279,12 +304,16 @@ namespace Twns.MultiRankRoom.MrrModel {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                     currentValue    : bootTimerParams[1],
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                     currentValue    : bootTimerParams[2],
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             );

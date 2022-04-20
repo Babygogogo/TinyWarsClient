@@ -26,7 +26,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SingleCustomRoom {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import ScrCreateAdvancedSettingsPage            = TwnsScrCreateAdvancedSettingsPage.ScrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import ScrCreatePlayerInfoPage                  = TwnsScrCreatePlayerInfoPage.ScrCreatePlayerInfoPage;
@@ -70,7 +70,7 @@ namespace Twns.SingleCustomRoom {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
@@ -182,19 +182,25 @@ namespace Twns.SingleCustomRoom {
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            const warRule   = ScrCreateModel.getWarRule();
-            const openData  : OpenDataForCommonWarBasicSettingsPage = {
+            const warRule           = ScrCreateModel.getWarRule();
+            const gameConfig        = ScrCreateModel.getGameConfig();
+            const warEventFullData  = (await ScrCreateModel.getMapRawData()).warEventFullData ?? null;
+            const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
                     {
                         settingsType    : WarBasicSettingsType.MapId,
                         currentValue    : ScrCreateModel.getMapId(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: async () => {
                             await ScrCreateModel.tickPresetWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
@@ -204,6 +210,8 @@ namespace Twns.SingleCustomRoom {
                         settingsType    : WarBasicSettingsType.HasFog,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: () => {
                             ScrCreateModel.setHasFog(!ScrCreateModel.getHasFog());
                             ScrCreateModel.setCustomWarRuleId();
@@ -214,6 +222,8 @@ namespace Twns.SingleCustomRoom {
                         settingsType    : WarBasicSettingsType.Weather,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: () => {
                             ScrCreateModel.tickDefaultWeatherType();
                             ScrCreateModel.setCustomWarRuleId();
@@ -221,9 +231,19 @@ namespace Twns.SingleCustomRoom {
                         },
                     },
                     {
+                        settingsType    : WarBasicSettingsType.WarEvent,
+                        currentValue    : null,
+                        warRule,
+                        gameConfig,
+                        warEventFullData,
+                        callbackOnModify: null,
+                    },
+                    {
                         settingsType    : WarBasicSettingsType.SpmSaveSlotIndex,
                         currentValue    : ScrCreateModel.getSaveSlotIndex(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: () => {
                             TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSaveSlotsPanel, {
                                 currentSlotIndex    : ScrCreateModel.getSaveSlotIndex(),
@@ -237,6 +257,8 @@ namespace Twns.SingleCustomRoom {
                         settingsType    : WarBasicSettingsType.SpmSaveSlotComment,
                         currentValue    : ScrCreateModel.getSlotComment(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`, ClientErrorCode.ScrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_00);

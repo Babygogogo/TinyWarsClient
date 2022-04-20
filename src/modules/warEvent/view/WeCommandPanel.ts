@@ -606,7 +606,7 @@ namespace Twns.WarEvent {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
-            this._labelDesc.text    = `A${actionId} ${WarHelpers.WarEventHelpers.getDescForAction(action, war)}`;
+            this._labelDesc.text    = `A${actionId} ${WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig())}`;
 
             const group = this._groupBtn;
             group.removeChildren();

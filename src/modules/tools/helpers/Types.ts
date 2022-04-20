@@ -842,6 +842,7 @@ namespace Types {
         WarRuleTitle,
         HasFog,
         Weather,
+        WarEvent,
         TimerType,
         TimerRegularParam,
         TimerIncrementalParam1,

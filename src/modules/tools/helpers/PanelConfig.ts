@@ -72,7 +72,7 @@ namespace TwnsPanelConfig {
         CommonChooseTileTypePanel           : PanelConfig<TwnsCommonChooseTileTypePanel.OpenData>;
         CommonChooseUnitActionStatePanel    : PanelConfig<TwnsCommonChooseUnitActionStatePanel.OpenData>;
         CommonChooseUnitTypePanel           : PanelConfig<TwnsCommonChooseUnitTypePanel.OpenData>;
-        CommonChooseWarEventActionIdPanel   : PanelConfig<TwnsCommonChooseWarEventActionIdPanel.OpenData>;
+        CommonChooseWarEventActionIdPanel   : PanelConfig<Twns.Common.OpenDataForCommonChooseWarEventActionIdPanel>;
         CommonChooseWarEventIdPanel         : PanelConfig<TwnsCommonChooseWarEventIdPanel.OpenData>;
         CommonChooseWeatherTypePanel        : PanelConfig<TwnsCommonChooseWeatherTypePanel.OpenData>;
         CommonCoInfoPanel                   : PanelConfig<TwnsCommonCoInfoPanel.OpenData>;
@@ -89,6 +89,7 @@ namespace TwnsPanelConfig {
         CommonModifyWarRuleNamePanel        : PanelConfig<TwnsCommonModifyWarRuleNamePanel.OpenData>;
         CommonRankListPanel                 : PanelConfig<TwnsCommonRankListPanel.OpenData>;
         CommonServerStatusPanel             : PanelConfig<TwnsCommonServerStatusPanel.OpenData>;
+        CommonWarEventListPanel             : PanelConfig<Twns.Common.OpenDataForCommonWarEventListPanel>;
 
         HrwReplayProgressPanel              : PanelConfig<TwnsHrwReplayProgressPanel.OpenData>;
         HrwTopPanel                         : PanelConfig<Twns.HalfwayReplayWar.OpenDataForHrwTopPanel>;
@@ -212,7 +213,7 @@ namespace TwnsPanelConfig {
 
         WeActionAddUnitListPanel            : PanelConfig<Twns.WarEvent.OpenDataForWeActionAddUnitListPanel>;
         WeActionModifyPanel1                : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel1>;
-        WeActionModifyPanel2                : PanelConfig<TwnsWeActionModifyPanel2.OpenData>;
+        WeActionModifyPanel2                : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel2>;
         WeActionModifyPanel3                : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel3>;
         WeActionModifyPanel4                : PanelConfig<TwnsWeActionModifyPanel4.OpenData>;
         WeActionModifyPanel5                : PanelConfig<TwnsWeActionModifyPanel5.OpenData>;
@@ -224,11 +225,11 @@ namespace TwnsPanelConfig {
         WeActionModifyPanel21               : PanelConfig<TwnsWeActionModifyPanel21.OpenData>;
         WeActionModifyPanel22               : PanelConfig<TwnsWeActionModifyPanel22.OpenData>;
         WeActionModifyPanel23               : PanelConfig<TwnsWeActionModifyPanel23.OpenData>;
-        WeActionModifyPanel24               : PanelConfig<TwnsWeActionModifyPanel24.OpenData>;
+        WeActionModifyPanel24               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel24>;
         WeActionModifyPanel25               : PanelConfig<TwnsWeActionModifyPanel25.OpenData>;
-        WeActionModifyPanel30               : PanelConfig<TwnsWeActionModifyPanel30.OpenData>;
-        WeActionModifyPanel40               : PanelConfig<TwnsWeActionModifyPanel40.OpenData>;
-        WeActionModifyPanel41               : PanelConfig<TwnsWeActionModifyPanel41.OpenData>;
+        WeActionModifyPanel30               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel30>;
+        WeActionModifyPanel40               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel40>;
+        WeActionModifyPanel41               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel41>;
         WeActionModifyPanel50               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel50>;
         WeActionReplacePanel                : PanelConfig<Twns.WarEvent.OpenDataForWeActionReplacePanel>;
         WeActionTypeListPanel               : PanelConfig<TwnsWeActionTypeListPanel.OpenData>;
@@ -631,7 +632,7 @@ namespace TwnsPanelConfig {
             },
 
             CommonChooseWarEventActionIdPanel: {
-                cls         : TwnsCommonChooseWarEventActionIdPanel?.CommonChooseWarEventActionIdPanel,
+                cls         : Twns.Common?.CommonChooseWarEventActionIdPanel,
                 skinName    : `resource/skins/common/CommonChooseWarEventActionIdPanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -732,6 +733,12 @@ namespace TwnsPanelConfig {
                 cls         : TwnsCommonServerStatusPanel?.CommonServerStatusPanel,
                 skinName    : `resource/skins/common/CommonServerStatusPanel.exml`,
                 layer       : LayerType.Hud0,
+            },
+
+            CommonWarEventListPanel: {
+                cls         : Twns.Common?.CommonWarEventListPanel,
+                skinName    : `resource/skins/common/CommonWarEventListPanel.exml`,
+                layer       : LayerType.Hud1,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1427,7 +1434,7 @@ namespace TwnsPanelConfig {
             },
 
             WeActionModifyPanel2: {
-                cls         : TwnsWeActionModifyPanel2?.WeActionModifyPanel2,
+                cls         : Twns.WarEvent?.WeActionModifyPanel2,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel2.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1499,7 +1506,7 @@ namespace TwnsPanelConfig {
             },
 
             WeActionModifyPanel24: {
-                cls         : TwnsWeActionModifyPanel24?.WeActionModifyPanel24,
+                cls         : Twns.WarEvent?.WeActionModifyPanel24,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel24.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1511,19 +1518,19 @@ namespace TwnsPanelConfig {
             },
 
             WeActionModifyPanel30: {
-                cls         : TwnsWeActionModifyPanel30?.WeActionModifyPanel30,
+                cls         : Twns.WarEvent?.WeActionModifyPanel30,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel30.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel40: {
-                cls         : TwnsWeActionModifyPanel40?.WeActionModifyPanel40,
+                cls         : Twns.WarEvent?.WeActionModifyPanel40,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel40.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel41: {
-                cls         : TwnsWeActionModifyPanel41?.WeActionModifyPanel41,
+                cls         : Twns.WarEvent?.WeActionModifyPanel41,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel41.exml`,
                 layer       : LayerType.Hud0,
             },

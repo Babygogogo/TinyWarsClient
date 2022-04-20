@@ -24,7 +24,7 @@
 namespace Twns.CoopCustomRoom {
     import CcrCreateAdvancedSettingsPage            = TwnsCcrCreateAdvancedSettingsPage.CcrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import CcrCreatePlayerInfoPage                  = TwnsCcrCreatePlayerInfoPage.CcrCreatePlayerInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
@@ -65,7 +65,7 @@ namespace Twns.CoopCustomRoom {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
@@ -153,6 +153,8 @@ namespace Twns.CoopCustomRoom {
             const warRule           = CcrCreateModel.getWarRule();
             const turnsLimit        = CcrCreateModel.getTurnsLimit();
             const bootTimerParams   = CcrCreateModel.getBootTimerParams();
+            const gameConfig        = CcrCreateModel.getGameConfig();
+            const warEventFullData  = (await CcrCreateModel.getMapRawData()).warEventFullData ?? null;
             const timerType         = bootTimerParams[0] as Types.BootTimerType;
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
@@ -160,12 +162,16 @@ namespace Twns.CoopCustomRoom {
                         settingsType    : WarBasicSettingsType.MapId,
                         currentValue    : CcrCreateModel.getMapId(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarName,
                         currentValue    : CcrCreateModel.getWarName(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -178,6 +184,8 @@ namespace Twns.CoopCustomRoom {
                         settingsType    : WarBasicSettingsType.WarPassword,
                         currentValue    : CcrCreateModel.getWarPassword(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -190,6 +198,8 @@ namespace Twns.CoopCustomRoom {
                         settingsType    : WarBasicSettingsType.WarComment,
                         currentValue    : CcrCreateModel.getWarComment(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -202,6 +212,8 @@ namespace Twns.CoopCustomRoom {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: async () => {
                             await CcrCreateModel.tickPresetWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
@@ -211,6 +223,8 @@ namespace Twns.CoopCustomRoom {
                         settingsType    : WarBasicSettingsType.HasFog,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: () => {
                             CcrCreateModel.setHasFog(!CcrCreateModel.getHasFog());
                             CcrCreateModel.setCustomWarRuleId();
@@ -221,6 +235,8 @@ namespace Twns.CoopCustomRoom {
                         settingsType    : WarBasicSettingsType.Weather,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: () => {
                             CcrCreateModel.tickDefaultWeatherType();
                             CcrCreateModel.setCustomWarRuleId();
@@ -228,9 +244,19 @@ namespace Twns.CoopCustomRoom {
                         },
                     },
                     {
+                        settingsType    : WarBasicSettingsType.WarEvent,
+                        currentValue    : null,
+                        warRule,
+                        gameConfig,
+                        warEventFullData,
+                        callbackOnModify: null,
+                    },
+                    {
                         settingsType    : WarBasicSettingsType.TurnsLimit,
                         currentValue    : turnsLimit,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue !== "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -243,6 +269,8 @@ namespace Twns.CoopCustomRoom {
                         settingsType    : WarBasicSettingsType.TimerType,
                         currentValue    : timerType,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: async () => {
                             CcrCreateModel.tickBootTimerType();
                             this._updateCommonWarBasicSettingsPage();
@@ -255,6 +283,8 @@ namespace Twns.CoopCustomRoom {
                     settingsType    : WarBasicSettingsType.TimerRegularParam,
                     currentValue    : bootTimerParams[1],
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: () => {
                         CcrCreateModel.tickTimerRegularTime();
                         this._updateCommonWarBasicSettingsPage();
@@ -266,6 +296,8 @@ namespace Twns.CoopCustomRoom {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                         currentValue    : bootTimerParams[1],
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: number | string | null) => {
                             if (typeof newValue !== "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
@@ -278,6 +310,8 @@ namespace Twns.CoopCustomRoom {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                         currentValue    : bootTimerParams[2],
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: number | string | null) => {
                             if (typeof newValue !== "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);

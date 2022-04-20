@@ -80,6 +80,7 @@
 		"resource/skins/common/CommonWarAdvancedSettingsPage.exml",
 		"resource/skins/component/button/ButtonTriangle002.exml",
 		"resource/skins/common/CommonWarBasicSettingsPage.exml",
+		"resource/skins/common/CommonWarEventListPanel.exml",
 		"resource/skins/component/mapInfo/MapInfo001.exml",
 		"resource/skins/common/CommonWarMapInfoPage.exml",
 		"resource/skins/common/CommonWarPlayerInfoPage.exml",

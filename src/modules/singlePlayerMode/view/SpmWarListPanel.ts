@@ -32,7 +32,7 @@ namespace Twns.SinglePlayerMode {
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     export type OpenDataForSpmWarListPanel = void;
@@ -130,7 +130,7 @@ namespace Twns.SinglePlayerMode {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
@@ -299,36 +299,49 @@ namespace Twns.SinglePlayerMode {
                 return { dataArrayForListSettings: [] };
             }
 
-            const warRule   = Helpers.getExisted(warData.settingsForCommon?.warRule);
-            const mapId     = WarHelpers.WarCommonHelpers.getMapId(warData);
+            const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
+            const warRule           = Helpers.getExisted(settingsForCommon.warRule);
+            const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
+            const warEventFullData  = warData.warEventManager?.warEventFullData ?? null;
+            const mapId             = WarHelpers.WarCommonHelpers.getMapId(warData);
             return { dataArrayForListSettings: [
                 {
                     settingsType    : WarBasicSettingsType.MapId,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     currentValue    : mapId,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.SpmSaveSlotIndex,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     currentValue    : slotIndex,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.SpmSaveSlotComment,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     currentValue    : slotData?.extraData?.slotComment ?? null,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     currentValue    : null,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     currentValue    : null,
                     callbackOnModify: null,
                 },
@@ -336,6 +349,16 @@ namespace Twns.SinglePlayerMode {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
                     warRule,
+                    warEventFullData,
+                    gameConfig,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarEvent,
+                    currentValue    : null,
+                    warRule,
+                    warEventFullData,
+                    gameConfig,
                     callbackOnModify: null,
                 },
             ] };

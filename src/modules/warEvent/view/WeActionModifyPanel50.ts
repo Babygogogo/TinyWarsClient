@@ -188,7 +188,7 @@ namespace Twns.WarEvent {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateComponentsForText(): void {

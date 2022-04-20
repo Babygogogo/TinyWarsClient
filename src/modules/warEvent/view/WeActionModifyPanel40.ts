@@ -15,18 +15,18 @@
 // import WarEventHelper               from "../model/WarEventHelper";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel40 {
+namespace Twns.WarEvent {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
 
-    export type OpenData = {
-        war         : Twns.BaseWar.BwWar;
+    export type OpenDataForWeActionModifyPanel40 = {
+        war         : BaseWar.BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel40 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel40 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel40> {
         private readonly _labelTitle!                       : TwnsUiLabel.UiLabel;
         private readonly _btnType!                          : TwnsUiButton.UiButton;
         private readonly _btnClose!                         : TwnsUiButton.UiButton;
@@ -292,11 +292,11 @@ namespace TwnsWeActionModifyPanel40 {
             const openData          = this._getOpenData();
             const action            = openData.action;
             const war               = openData.war;
-            const errorTip          = Twns.WarHelpers.WarEventHelpers.getErrorTipForAction(openData.fullData, action, war);
+            const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForAction(openData.fullData, action, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = Twns.WarHelpers.WarEventHelpers.getDescForAction(action, war) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelLocation(): void {
             const locationIdArray       = this._getAction().conLocationIdArray;

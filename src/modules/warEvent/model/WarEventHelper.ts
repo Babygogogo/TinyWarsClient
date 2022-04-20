@@ -2314,13 +2314,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
         );
     }
 
-    export function getDescForAction(action: IWarEventAction, war: BwWar): string | null {
+    export function getDescForAction(action: IWarEventAction, gameConfig: GameConfig): string | null {
         // todo: add functions for other actions
         return (getDescForWeaAddUnit(action.WeaAddUnit))
-            || (getDescForWeaDialogue(action.WeaDialogue, war))
+            || (getDescForWeaDialogue(action.WeaDialogue, gameConfig))
             || (getDescForWeaSetViewpoint(action.WeaSetViewpoint))
             || (getDescForWeaSetWeather(action.WeaSetWeather))
-            || (getDescForWeaSimpleDialogue(action.WeaSimpleDialogue, war))
+            || (getDescForWeaSimpleDialogue(action.WeaSimpleDialogue, gameConfig))
             || (getDescForWeaPlayBgm(action.WeaPlayBgm))
             || (getDescForWeaSetForceFogCode(action.WeaSetForceFogCode))
             || (getDescForWeaSetCustomCounter(action.WeaSetCustomCounter))
@@ -2353,7 +2353,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return Lang.getFormattedText(LangTextType.F0059, unitNameArray.join(", "));
         }
     }
-    function getDescForWeaDialogue(data: Types.Undefinable<WarEvent.IWeaDialogue>, war: BwWar): string | null {
+    function getDescForWeaDialogue(data: Types.Undefinable<WarEvent.IWeaDialogue>, gameConfig: GameConfig): string | null {
         if (data == null) {
             return null;
         } else {
@@ -2364,7 +2364,6 @@ namespace Twns.WarHelpers.WarEventHelpers {
             }
 
             const coNameArray   : string[] = [];
-            const gameConfig    = war.getGameConfig();
             for (const coId of coIdSet) {
                 const coName = gameConfig.getCoNameAndTierText(coId);
                 (coName != null) && (coNameArray.push(coName));
@@ -2392,7 +2391,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? Lang.getFormattedText(LangTextType.F0077, weatherName)
             : Lang.getFormattedText(LangTextType.F0076, weatherName, weatherTurnsCount);
     }
-    function getDescForWeaSimpleDialogue(data: Types.Undefinable<WarEvent.IWeaSimpleDialogue>, war: BwWar): string | null {
+    function getDescForWeaSimpleDialogue(data: Types.Undefinable<WarEvent.IWeaSimpleDialogue>, gameConfig: GameConfig): string | null {
         if (data == null) {
             return null;
         } else {
@@ -2403,7 +2402,6 @@ namespace Twns.WarHelpers.WarEventHelpers {
             }
 
             const coNameArray   : string[] = [];
-            const gameConfig    = war.getGameConfig();
             for (const coId of coIdSet) {
                 const coName = gameConfig.getCoNameAndTierText(coId);
                 (coName != null) && (coNameArray.push(coName));

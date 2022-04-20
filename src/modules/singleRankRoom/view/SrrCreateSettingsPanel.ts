@@ -26,7 +26,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SingleRankRoom {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForSpmRankPage                   = TwnsSpmRankPage.OpenData;
@@ -70,7 +70,7 @@ namespace Twns.SingleRankRoom {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
@@ -202,19 +202,25 @@ namespace Twns.SingleRankRoom {
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            const warRule   = SrrCreateModel.getWarRule();
-            const openData  : OpenDataForCommonWarBasicSettingsPage = {
+            const warRule           = SrrCreateModel.getWarRule();
+            const gameConfig        = SrrCreateModel.getGameConfig();
+            const warEventFullData  = (await SrrCreateModel.getMapRawData()).warEventFullData ?? null;
+            const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
                     {
                         settingsType    : WarBasicSettingsType.MapId,
                         currentValue    : SrrCreateModel.getMapId(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: async () => {
                             await SrrCreateModel.tickPresetWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
@@ -225,18 +231,32 @@ namespace Twns.SingleRankRoom {
                         settingsType    : WarBasicSettingsType.HasFog,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.Weather,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
+                        callbackOnModify: null,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarEvent,
+                        currentValue    : null,
+                        warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.SpmSaveSlotIndex,
                         currentValue    : SrrCreateModel.getSaveSlotIndex(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: () => {
                             TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSaveSlotsPanel, {
                                 currentSlotIndex    : SrrCreateModel.getSaveSlotIndex(),
@@ -250,6 +270,8 @@ namespace Twns.SingleRankRoom {
                         settingsType    : WarBasicSettingsType.SpmSaveSlotComment,
                         currentValue    : SrrCreateModel.getSlotComment(),
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`, ClientErrorCode.SrrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_00);

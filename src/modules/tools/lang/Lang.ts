@@ -301,6 +301,7 @@ namespace Lang {
             case Types.WarBasicSettingsType.WarRuleTitle            : return getText(LangTextType.B0318);
             case Types.WarBasicSettingsType.HasFog                  : return getText(LangTextType.B0020);
             case Types.WarBasicSettingsType.Weather                 : return getText(LangTextType.B0705);
+            case Types.WarBasicSettingsType.WarEvent                : return getText(LangTextType.B0469);
             case Types.WarBasicSettingsType.TurnsLimit              : return getText(LangTextType.B0842);
             case Types.WarBasicSettingsType.TimerType               : return getText(LangTextType.B0574);
             case Types.WarBasicSettingsType.TimerRegularParam       : return getText(LangTextType.B0021);

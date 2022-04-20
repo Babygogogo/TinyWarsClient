@@ -26,7 +26,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiRankRoom {
     import OpenDataForCommonWarAdvancedSettingsPage     = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarBasicSettingsPage        = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage        = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage              = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import LangTextType                                 = TwnsLangTextType.LangTextType;
     import NotifyType                                   = TwnsNotifyType.NotifyType;
@@ -120,7 +120,7 @@ namespace Twns.MultiRankRoom {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
@@ -254,42 +254,64 @@ namespace Twns.MultiRankRoom {
             const warRule           = warRuleArray[0];
             const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
             const timerType         = bootTimerParams[0] as Types.BootTimerType;
+            const gameConfig        = await Config.ConfigManager.getLatestGameConfig();
+            const warEventFullData  = mapRawData.warEventFullData ?? null;
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings    : [
                     {
                         settingsType    : WarBasicSettingsType.MapId,
                         currentValue    : mapId,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.HasFog,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.Weather,
                         currentValue    : null,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
+                        callbackOnModify: null,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarEvent,
+                        currentValue    : null,
+                        warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.TurnsLimit,
                         currentValue    : CommonConstants.WarMaxTurnsLimit,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.TimerType,
                         currentValue    : timerType,
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                 ],
@@ -299,6 +321,8 @@ namespace Twns.MultiRankRoom {
                     settingsType    : WarBasicSettingsType.TimerRegularParam,
                     currentValue    : bootTimerParams[1],
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 });
             } else if (timerType === Types.BootTimerType.Incremental) {
@@ -307,12 +331,16 @@ namespace Twns.MultiRankRoom {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                         currentValue    : bootTimerParams[1],
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                         currentValue    : bootTimerParams[2],
                         warRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                 );

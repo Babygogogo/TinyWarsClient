@@ -19,7 +19,7 @@ namespace Twns.WatchWar.WwModel {
     import MsgMpwWatchGetIncomingInfoIs             = CommonProto.NetMessage.MsgMpwWatchGetIncomingInfo.IS;
     import MsgMpwWatchGetOutgoingInfoIs             = CommonProto.NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
     import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
@@ -182,58 +182,86 @@ namespace Twns.WatchWar.WwModel {
 
         const settingsForCommon = Helpers.getExisted(warSettings.settingsForCommon, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_01);
         const warRule           = Helpers.getExisted(settingsForCommon.warRule, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_02);
+        const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
         const { settingsForMcw, settingsForCcw, settingsForMfw, settingsForMrw } = warSettings;
         const bootTimerParams   = settingsForMcw?.bootTimerParams ?? settingsForMfw?.bootTimerParams ?? settingsForCcw?.bootTimerParams ?? CommonConstants.WarBootTimerDefaultParams;
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const mapId             = settingsForMcw?.mapId ?? settingsForMrw?.mapId ?? settingsForCcw?.mapId ?? null;
+        const warEventFullData  = (mapId != null)
+            ? ((await WarMapModel.getRawData(mapId))?.warEventFullData ?? null)
+            : (settingsForMfw?.initialWarData?.warEventManager?.warEventFullData ?? null);
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings: [
                 {
                     settingsType    : WarBasicSettingsType.MapId,
                     currentValue    : mapId,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarName,
                     currentValue    : settingsForMcw?.warName ?? settingsForMfw?.warName ?? settingsForCcw?.warName ?? `----`,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarComment,
                     currentValue    : settingsForMcw?.warComment ?? settingsForMfw?.warName ?? settingsForCcw?.warName ?? `----`,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
                     currentValue    : null,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
                     currentValue    : null,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarEvent,
+                    currentValue    : null,
+                    warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
                     currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             ],
@@ -243,6 +271,8 @@ namespace Twns.WatchWar.WwModel {
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
                 warRule,
+                gameConfig,
+                warEventFullData,
                 callbackOnModify: null,
             });
         } else if (timerType === Types.BootTimerType.Incremental) {
@@ -251,12 +281,16 @@ namespace Twns.WatchWar.WwModel {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                     currentValue    : bootTimerParams[1],
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                     currentValue    : bootTimerParams[2],
                     warRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             );
