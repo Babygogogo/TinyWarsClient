@@ -79,6 +79,12 @@ namespace ChatModel {
                     UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
+            } else if (msgToCategory === ChatCategory.MapReview) {
+                addMessage(msgToCategory, msg, msgToTarget);
+                if ((!isSentBySelf) && (showFloatText) && (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.ChatPanel))) {
+                    UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                }
+
             } else {
                 Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
             }

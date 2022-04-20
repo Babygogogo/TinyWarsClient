@@ -69,6 +69,7 @@ namespace TwnsMeTopPanel {
         private readonly _btnVisibility!                : TwnsUiButton.UiButton;
         private readonly _btnSymmetry!                  : TwnsUiButton.UiButton;
         private readonly _btnSettings!                  : TwnsUiButton.UiButton;
+        private readonly _btnChat!                      : TwnsUiButton.UiButton;
         private readonly _btnMenu!                      : TwnsUiButton.UiButton;
 
         private readonly _labelLocationTitle!           : TwnsUiLabel.UiLabel;
@@ -116,6 +117,7 @@ namespace TwnsMeTopPanel {
                 { ui: this._btnVisibility,                  callback: this._onTouchedBtnVisibility },
                 { ui: this._btnSymmetry,                    callback: this._onTouchedBtnSymmetry },
                 { ui: this._btnSettings,                    callback: this._onTouchedBtnSettings },
+                { ui: this._btnChat,                        callback: this._onTouchedBtnChat },
                 { ui: this._btnMenu,                        callback: this._onTouchedBtnMenu, },
             ]);
 
@@ -336,6 +338,14 @@ namespace TwnsMeTopPanel {
         private _onTouchedBtnSettings(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSettingsPanel,  void 0);
         }
+        private _onTouchedBtnChat(): void {
+            const war = this._getWar();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {
+                toMapReviewTarget: war.getIsReviewingMap()
+                    ? war.getMapDesignerUserId()
+                    : Helpers.getExisted(UserModel.getSelfUserId())
+            });
+        }
         private _onTouchedBtnMenu(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarMenuPanel, void 0);
         }
@@ -383,6 +393,7 @@ namespace TwnsMeTopPanel {
             this._btnVisibility.label               = Lang.getText(LangTextType.B0301);
             this._btnSymmetry.label                 = Lang.getText(LangTextType.B0306);
             this._btnSettings.label                 = Lang.getText(LangTextType.B0560);
+            this._btnChat.label                     = Lang.getText(LangTextType.B0383);
             this._btnMenu.label                     = Lang.getText(LangTextType.B0155);
             this._labelLocationTitle.text           = `${Lang.getText(LangTextType.B0764)}:`;
         }
@@ -404,6 +415,7 @@ namespace TwnsMeTopPanel {
             group.addChild(this._btnVisibility);
             group.addChild(this._btnSymmetry);
             group.addChild(this._btnSettings);
+            group.addChild(this._btnChat);
             group.addChild(this._btnMenu);
         }
 

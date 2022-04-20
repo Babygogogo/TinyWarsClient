@@ -167,6 +167,15 @@
                     </e:Skin>
                 </TwnsUiButton:skinName>
             </TwnsUiButton:UiButton>
+            <TwnsUiButton:UiButton id="_btnChat" label="聊天" width="70" height="40" scaleX="1" scaleY="1">
+                <TwnsUiButton:skinName>
+                    <e:Skin states="up,down,disabled">
+                        <e:Image width="100%" height="100%" source="uncompressedRectangle0007" scale9Grid="9,9,2,2" />
+                        <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0x00ff00" verticalCenter="0"
+                                             left="4" right="4" textAlign="center" />
+                    </e:Skin>
+                </TwnsUiButton:skinName>
+            </TwnsUiButton:UiButton>
             <TwnsUiButton:UiButton id="_btnMenu" label="菜单" width="70" height="40" scaleX="1" scaleY="1">
                 <TwnsUiButton:skinName>
                     <e:Skin states="up,down,disabled">

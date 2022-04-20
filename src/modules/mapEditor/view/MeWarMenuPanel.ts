@@ -359,7 +359,7 @@ namespace TwnsMeWarMenuPanel {
                 this._createCommandResize(),
                 this._createCommandSimulation(),
                 this._createCommandCreateMfr(),
-                this._createCommandChat(),
+                // this._createCommandChat(),
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandGotoMapListPanel(),
                 this._createCommandGotoLobby(),
@@ -385,15 +385,21 @@ namespace TwnsMeWarMenuPanel {
             };
         }
 
-        private _createCommandChat(): DataForCommandRenderer | null {
-            return {
-                name    : Lang.getText(LangTextType.B0383),
-                callback: () => {
-                    this.close();
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {});
-                },
-            };
-        }
+        // private _createCommandChat(): DataForCommandRenderer | null {
+        //     return {
+        //         name    : Lang.getText(LangTextType.B0383),
+        //         callback: () => {
+        //             const war = this._getWar();
+        //             TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {
+        //                 toMapReviewTarget: war.getIsReviewingMap()
+        //                     ? war.getMapDesignerUserId()
+        //                     : Helpers.getExisted(UserModel.getSelfUserId())
+        //             });
+
+        //             this.close();
+        //         },
+        //     };
+        // }
 
         private _createCommandGotoMapListPanel(): DataForCommandRenderer | null {
             const war = this._getWar();

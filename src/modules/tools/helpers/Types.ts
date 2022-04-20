@@ -711,6 +711,7 @@ namespace Types {
         McrRoom         = 4,
         MfrRoom         = 5,
         CcrRoom         = 6,
+        MapReview       = 7,
     }
 
     // eslint-disable-next-line no-shadow

@@ -1156,6 +1156,17 @@ export const enum ServerErrorCode {
     ActorChatMessageManager_AddToMfrRoom_0008,
     ActorChatMessageManager_AddToMfrRoom_0009,
 
+    ActorChatMessageManager_AddToMapReview_0000,
+    ActorChatMessageManager_AddToMapReview_0001,
+    ActorChatMessageManager_AddToMapReview_0002,
+    ActorChatMessageManager_AddToMapReview_0003,
+    ActorChatMessageManager_AddToMapReview_0004,
+    ActorChatMessageManager_AddToMapReview_0005,
+    ActorChatMessageManager_AddToMapReview_0006,
+    ActorChatMessageManager_AddToMapReview_0007,
+    ActorChatMessageManager_AddToMapReview_0008,
+    ActorChatMessageManager_AddToMapReview_0009,
+
     ActorChatReadProgressManager_ChatStartUpdateReadProgress_0000,
     ActorChatReadProgressManager_ChatStartUpdateReadProgress_0001,
     ActorChatReadProgressManager_ChatStartUpdateReadProgress_0002,

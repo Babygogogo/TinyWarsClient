@@ -35,10 +35,11 @@ namespace Twns.Chat {
     import NetMessage           = CommonProto.NetMessage;
 
     export type OpenDataForChatPanel = {
-        toUserId?       : number | null;
-        toMcrRoomId?    : number;
-        toMfrRoomId?    : number;
-        toCcrRoomId?    : number;
+        toUserId?           : number | null;
+        toMcrRoomId?        : number;
+        toMfrRoomId?        : number;
+        toCcrRoomId?        : number;
+        toMapReviewTarget?  : number;
     };
     export class ChatPanel extends TwnsUiPanel.UiPanel<OpenDataForChatPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
@@ -338,6 +339,16 @@ namespace Twns.Chat {
                     ++indexForSort;
                 }
             }
+            for (const [toMapReviewTarget, msgList] of ChatModel.getMessagesForCategory(ChatCategory.MapReview)) {
+                dataDict.set(indexForSort, {
+                    index       : indexForSort,
+                    panel       : this,
+                    toCategory  : ChatCategory.MapReview,
+                    toTarget    : toMapReviewTarget,
+                });
+                timestampList.push(getLatestTimestamp(indexForSort, msgList));
+                ++indexForSort;
+            }
             for (const [toUserId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.Private)) {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
@@ -379,16 +390,18 @@ namespace Twns.Chat {
             }
 
             const openData = this._getOpenData();
-            const toUserId = openData.toUserId;
-            if ((toUserId != null) && (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.Private, toTarget: toUserId }))) {
-                dataDict.set(indexForSort, {
-                    index       : indexForSort,
-                    panel       : this,
-                    toCategory  : ChatCategory.Private,
-                    toTarget    : toUserId,
-                });
-                timestampList.push(getLatestTimestamp(indexForSort, null));
-                ++indexForSort;
+            {
+                const toUserId = openData.toUserId;
+                if ((toUserId != null) && (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.Private, toTarget: toUserId }))) {
+                    dataDict.set(indexForSort, {
+                        index       : indexForSort,
+                        panel       : this,
+                        toCategory  : ChatCategory.Private,
+                        toTarget    : toUserId,
+                    });
+                    timestampList.push(getLatestTimestamp(indexForSort, null));
+                    ++indexForSort;
+                }
             }
 
             {
@@ -433,6 +446,20 @@ namespace Twns.Chat {
                 }
             }
 
+            {
+                const toMapReviewTarget = openData.toMapReviewTarget;
+                if ((toMapReviewTarget != null) && (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.MapReview, toTarget: toMapReviewTarget }))) {
+                    dataDict.set(indexForSort, {
+                        index       : indexForSort,
+                        panel       : this,
+                        toCategory  : ChatCategory.MapReview,
+                        toTarget    : toMapReviewTarget,
+                    });
+                    timestampList.push(getLatestTimestamp(indexForSort, null));
+                    ++indexForSort;
+                }
+            }
+
             timestampList.sort((a, b) => b.timestamp - a.timestamp);
 
             const dataList  : DataForChatPageRenderer[] = [];
@@ -468,11 +495,13 @@ namespace Twns.Chat {
             const openData          = this._getOpenData();
             const dataForListChat   = this._dataForListChat || [];
 
-            const toUserId  = openData.toUserId;
-            if (toUserId != null) {
-                for (const data of dataForListChat) {
-                    if ((data.toCategory === ChatCategory.Private) && (data.toTarget === toUserId)) {
-                        return data.index;
+            {
+                const toUserId  = openData.toUserId;
+                if (toUserId != null) {
+                    for (const data of dataForListChat) {
+                        if ((data.toCategory === ChatCategory.Private) && (data.toTarget === toUserId)) {
+                            return data.index;
+                        }
                     }
                 }
             }
@@ -504,6 +533,17 @@ namespace Twns.Chat {
                 if (toMfrRoomId != null) {
                     for (const data of dataForListChat) {
                         if ((data.toCategory === ChatCategory.MfrRoom) && (data.toTarget === toMfrRoomId)) {
+                            return data.index;
+                        }
+                    }
+                }
+            }
+
+            {
+                const toMapReviewTarget = openData.toMapReviewTarget;
+                if (toMapReviewTarget != null) {
+                    for (const data of dataForListChat) {
+                        if ((data.toCategory === ChatCategory.MapReview) && (data.toTarget === toMapReviewTarget)) {
                             return data.index;
                         }
                     }
@@ -582,7 +622,7 @@ namespace Twns.Chat {
             this._updateImgRed();
         }
 
-        private _updateLabels(): void {
+        private async _updateLabels(): Promise<void> {
             const data          = this._getData();
             const toCategory    = data.toCategory;
             const toTarget      = data.toTarget;
@@ -654,6 +694,10 @@ namespace Twns.Chat {
                         labelName.text = v.settingsForMfw?.warName ?? Lang.getText(LangTextType.B0555);
                     }
                 });
+
+            } else if (toCategory === ChatCategory.MapReview) {
+                labelType.text = `${Lang.getText(LangTextType.B0892)}`;
+                labelName.text = (await UserModel.getUserBriefInfo(toTarget))?.nickname ?? CommonConstants.ErrorTextForUndefined;
 
             } else {
                 throw Helpers.newError(`Invalid data.`);
