@@ -17,7 +17,7 @@ namespace Twns.MultiFreeRoom.MfrModel {
     import IMfrRoomStaticInfo                       = CommonProto.MultiFreeRoom.IMfrRoomStaticInfo;
     import IMfrRoomPlayerInfo                       = CommonProto.MultiFreeRoom.IMfrRoomPlayerInfo;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
     import MfrRoomFilter                            = Types.MfrRoomFilter;

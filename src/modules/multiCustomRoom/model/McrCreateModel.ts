@@ -65,10 +65,10 @@ namespace McrCreateModel {
         return Helpers.getExisted(getData().settingsForMcw);
     }
 
-    export function getWarRule(): CommonProto.WarRule.IWarRule {
+    export function getWarRule(): CommonProto.WarRule.ITemplateWarRule {
         return Helpers.getExisted(getSettingsForCommon().warRule);
     }
-    function setWarRule(warRule: CommonProto.WarRule.IWarRule) {
+    function setWarRule(warRule: CommonProto.WarRule.ITemplateWarRule) {
         getSettingsForCommon().warRule = warRule;
     }
 

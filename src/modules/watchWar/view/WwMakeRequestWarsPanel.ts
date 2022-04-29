@@ -31,7 +31,7 @@
 namespace TwnsWwMakeRequestWarsPanel {
     import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import LangTextType                             = TwnsLangTextType.LangTextType;
@@ -194,7 +194,7 @@ namespace TwnsWwMakeRequestWarsPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageClass   : Twns.Common.CommonWarAdvancedSettingsPage,
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);

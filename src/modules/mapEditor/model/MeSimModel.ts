@@ -40,7 +40,7 @@ namespace MeSimModel {
         return teamIndexSet.size > 1;
     }
 
-    export function getWarRule(): CommonProto.WarRule.IWarRule {
+    export function getWarRule(): CommonProto.WarRule.ITemplateWarRule {
         return Helpers.getExisted(getWarData().settingsForCommon?.warRule);
     }
 

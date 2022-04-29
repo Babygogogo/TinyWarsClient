@@ -418,7 +418,7 @@ namespace Lang {
         }
     }
 
-    export function getWarRuleNameInLanguage(warRule: CommonProto.WarRule.IWarRule): string | null {
+    export function getWarRuleNameInLanguage(warRule: CommonProto.WarRule.ITemplateWarRule): string | null {
         if (warRule.ruleId == null) {
             return getText(LangTextType.B0321);
         } else {

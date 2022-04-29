@@ -66,7 +66,7 @@ namespace Twns.Common {
     type DataForSettingsRenderer = {
         settingsType        : WarBasicSettingsType;
         currentValue        : number | string | null;
-        warRule             : CommonProto.WarRule.IWarRule;
+        warRule             : CommonProto.WarRule.ITemplateWarRule;
         gameConfig          : Config.GameConfig;
         warEventFullData    : CommonProto.Map.IWarEventFullData | null;
         callbackOnModify    : ((newValue: string | number | null) => void) | null;

@@ -291,7 +291,7 @@ namespace Twns.BaseWar {
             this._gameConfig = gameConfig;
         }
 
-        public getWarRule(): CommonProto.WarRule.IWarRule {
+        public getWarRule(): CommonProto.WarRule.ITemplateWarRule {
             return this.getCommonSettingManager().getWarRule();
         }
 
@@ -324,7 +324,7 @@ namespace Twns.BaseWar {
         public getTileMap(): BwTileMap {
             return this.getField().getTileMap();
         }
-        public getActionPlanner(): Twns.BaseWar.BwActionPlanner {
+        public getActionPlanner(): BwActionPlanner {
             return this.getField().getActionPlanner();
         }
         public getGridVisualEffect(): TwnsBwGridVisualEffect.BwGridVisualEffect {

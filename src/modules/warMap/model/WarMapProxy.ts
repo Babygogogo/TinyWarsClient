@@ -163,7 +163,7 @@ namespace WarMapProxy {
         }
     }
 
-    export function reqMmAddWarRule(mapId: number, warRule: CommonProto.WarRule.IWarRule): void {
+    export function reqMmAddWarRule(mapId: number, warRule: CommonProto.WarRule.ITemplateWarRule): void {
         NetManager.send({
             MsgMmAddWarRule: { c: {
                 mapId,

@@ -34,7 +34,7 @@ namespace Twns.MapEditor.MeHelpers {
     import TileDecoratorType    = Types.TileDecoratorType;
     import IMapRawData          = CommonProto.Map.IMapRawData;
     import WarSerialization     = CommonProto.WarSerialization;
-    import IWarRule             = CommonProto.WarRule.IWarRule;
+    import ITemplateWarRule             = CommonProto.WarRule.ITemplateWarRule;
     import ISerialTile          = WarSerialization.ISerialTile;
     import ISerialUnit          = WarSerialization.ISerialUnit;
     import ISerialPlayer        = WarSerialization.ISerialPlayer;
@@ -260,18 +260,18 @@ namespace Twns.MapEditor.MeHelpers {
         };
     }
 
-    export function createRevisedWarRuleArrayForMeWar(warRuleArray: Types.Undefinable<IWarRule[]>): IWarRule[] {
+    export function createRevisedWarRuleArrayForMeWar(warRuleArray: Types.Undefinable<ITemplateWarRule[]>): ITemplateWarRule[] {
         if (!warRuleArray?.length) {
             return [createRevisedWarRuleForMeWar(null)];
         } else {
-            const revisedWarRuleArray: IWarRule[] = [];
+            const revisedWarRuleArray: ITemplateWarRule[] = [];
             for (const warRule of warRuleArray) {
                 revisedWarRuleArray.push(createRevisedWarRuleForMeWar(warRule));
             }
             return revisedWarRuleArray;
         }
     }
-    function createRevisedWarRuleForMeWar(warRule: Types.Undefinable<IWarRule>): IWarRule {
+    function createRevisedWarRuleForMeWar(warRule: Types.Undefinable<ITemplateWarRule>): ITemplateWarRule {
         if (warRule == null) {
             return WarRuleHelpers.createDefaultWarRule(0, CommonConstants.WarMaxPlayerIndex);
         } else {

@@ -18,7 +18,7 @@
 namespace Twns.MapEditor {
     import WarAction                = CommonProto.WarAction;
     import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
-    import IWarRule                 = CommonProto.WarRule.IWarRule;
+    import ITemplateWarRule                 = CommonProto.WarRule.ITemplateWarRule;
     import IMapRawData              = CommonProto.Map.IMapRawData;
     import IDataForMapTag           = CommonProto.Map.IDataForMapTag;
     import ILanguageText            = CommonProto.Structure.ILanguageText;
@@ -38,7 +38,7 @@ namespace Twns.MapEditor {
         private _mapNameList?       : ILanguageText[];
         private _mapDescArray?      : ILanguageText[];
         private _isReviewingMap     = false;
-        private _warRuleList        : IWarRule[] = [];
+        private _warRuleList        : ITemplateWarRule[] = [];
         private _isMapModified      = false;
         private _mapTag?            : IDataForMapTag;
 
@@ -288,17 +288,17 @@ namespace Twns.MapEditor {
             this._isMapModified = hasSubmitted;
         }
 
-        public getWarRuleArray(): IWarRule[] {
+        public getWarRuleArray(): ITemplateWarRule[] {
             return this._warRuleList;
         }
-        private _setWarRuleArray(value: IWarRule[]): void {
+        private _setWarRuleArray(value: ITemplateWarRule[]): void {
             this._warRuleList = value;
         }
-        public getWarRuleByRuleId(ruleId: number): IWarRule {
+        public getWarRuleByRuleId(ruleId: number): ITemplateWarRule {
             return Helpers.getExisted(this.getWarRuleArray().find(v => v.ruleId === ruleId));
         }
-        public getRevisedWarRuleArray(playersCountUnneutral: number): IWarRule[] {
-            const ruleArray: IWarRule[] = [];
+        public getRevisedWarRuleArray(playersCountUnneutral: number): ITemplateWarRule[] {
+            const ruleArray: ITemplateWarRule[] = [];
             for (const rule of this.getWarRuleArray() || []) {
                 const revisedRule = Helpers.deepClone(rule);
                 const playerRules = Helpers.getExisted(revisedRule.ruleForPlayers);

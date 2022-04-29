@@ -24,7 +24,7 @@ namespace TwnsMeAvailableCoPanel {
 
     export type OpenData = {
         playerRule      : WarRule.IDataForPlayerRule;
-        warRule         : WarRule.IWarRule;
+        warRule         : WarRule.ITemplateWarRule;
         isReviewing     : boolean;
     };
     export class MeAvailableCoPanel extends TwnsUiPanel.UiPanel<OpenData> {

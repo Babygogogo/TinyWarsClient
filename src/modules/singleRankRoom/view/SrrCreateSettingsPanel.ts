@@ -27,7 +27,7 @@
 namespace Twns.SingleRankRoom {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForSpmRankPage                   = TwnsSpmRankPage.OpenData;
     import LangTextType                             = TwnsLangTextType.LangTextType;
@@ -75,7 +75,7 @@ namespace Twns.SingleRankRoom {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageClass   : Twns.Common.CommonWarAdvancedSettingsPage,
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
                 {

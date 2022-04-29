@@ -37,7 +37,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
     import IWarActionContainer                      = CommonProto.WarAction.IWarActionContainer;
-    import IWarRule                                 = CommonProto.WarRule.IWarRule;
+    import ITemplateWarRule                                 = CommonProto.WarRule.ITemplateWarRule;
     import IMpwWarSettings                          = CommonProto.MultiPlayerWar.IMpwWarSettings;
     import IMpwWarProgressInfo                      = CommonProto.MultiPlayerWar.IMpwWarProgressInfo;
     import ISettingsForCommon                       = CommonProto.WarSettings.ISettingsForCommon;
@@ -49,7 +49,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
     import MsgMpwCommonGetWarSettingsIs             = CommonProto.NetMessage.MsgMpwCommonGetWarSettings.IS;
     import MsgMpwCommonGetWarProgressInfoIs         = CommonProto.NetMessage.MsgMpwCommonGetWarProgressInfo.IS;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
     const _NOTIFY_LISTENERS     : Notify.Listener[] = [
@@ -188,7 +188,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
             throw Helpers.newError(`Invalid warInfo.`);
         }
     }
-    async function createDataForCommonWarBasicSettingsPageForMcw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForMcw: ISettingsForMcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    async function createDataForCommonWarBasicSettingsPageForMcw(warRule: ITemplateWarRule, settingsForCommon: ISettingsForCommon, settingsForMcw: ISettingsForMcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const bootTimerParams   = Helpers.getExisted(settingsForMcw.bootTimerParams);
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
@@ -311,7 +311,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
 
         return openData;
     }
-    async function createDataForCommonWarBasicSettingsPageForCcw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForCcw: ISettingsForCcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    async function createDataForCommonWarBasicSettingsPageForCcw(warRule: ITemplateWarRule, settingsForCommon: ISettingsForCommon, settingsForCcw: ISettingsForCcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const bootTimerParams   = Helpers.getExisted(settingsForCcw.bootTimerParams);
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
@@ -434,7 +434,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
 
         return openData;
     }
-    async function createDataForCommonWarBasicSettingsPageForMrw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForMrw: ISettingsForMrw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    async function createDataForCommonWarBasicSettingsPageForMrw(warRule: ITemplateWarRule, settingsForCommon: ISettingsForCommon, settingsForMrw: ISettingsForMrw): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
@@ -533,7 +533,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
 
         return openData;
     }
-    async function createDataForCommonWarBasicSettingsPageForMfw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForMfw: ISettingsForMfw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    async function createDataForCommonWarBasicSettingsPageForMfw(warRule: ITemplateWarRule, settingsForCommon: ISettingsForCommon, settingsForMfw: ISettingsForMfw): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const bootTimerParams   = Helpers.getExisted(settingsForMfw.bootTimerParams);
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));

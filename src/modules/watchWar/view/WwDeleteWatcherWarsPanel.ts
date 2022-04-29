@@ -31,7 +31,7 @@
 namespace Twns.WatchWar {
     import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
@@ -190,7 +190,7 @@ namespace Twns.WatchWar {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageClass   : Twns.Common.CommonWarAdvancedSettingsPage,
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);

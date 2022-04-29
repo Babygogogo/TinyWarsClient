@@ -15,17 +15,16 @@
 // import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonWarAdvancedSettingsPage {
-    import GameConfig           = Twns.Config.GameConfig;
+namespace Twns.Common {
+    import GameConfig           = Config.GameConfig;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import PlayerRuleType       = Types.PlayerRuleType;
     import WarType              = Types.WarType;
-    import IWarRule             = CommonProto.WarRule.IWarRule;
     import IDataForPlayerRule   = CommonProto.WarRule.IDataForPlayerRule;
 
     export type OpenDataForCommonWarAdvancedSettingsPage = {
-        warRule         : IWarRule;
+        warRule         : CommonProto.WarRule.ITemplateWarRule;
         warType         : WarType;
         gameConfig      : GameConfig;
     } | null;

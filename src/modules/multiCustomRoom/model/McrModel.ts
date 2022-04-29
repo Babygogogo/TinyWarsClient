@@ -21,7 +21,7 @@ namespace Twns.MultiCustomRoom.McrModel {
     import McrRoomFilter                            = Types.McrRoomFilter;
     import ConfigManager                            = Config.ConfigManager;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
     const _roomStaticInfoAccessor = Helpers.createCachedDataAccessor<number, IMcrRoomStaticInfo>({

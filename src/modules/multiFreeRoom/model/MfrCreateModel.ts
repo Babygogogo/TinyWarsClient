@@ -49,7 +49,7 @@ namespace MfrCreateModel {
     export function getData(): DataForCreateRoom {
         return _dataForCreateRoom;
     }
-    export function getWarRule(): CommonProto.WarRule.IWarRule {
+    export function getWarRule(): CommonProto.WarRule.ITemplateWarRule {
         return Helpers.getExisted(getInitialWarData().settingsForCommon?.warRule);
     }
     function getSettingsForMfw(): CommonProto.WarSettings.ISettingsForMfw {

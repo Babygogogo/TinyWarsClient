@@ -20,7 +20,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
     import ICcrRoomStaticInfo                       = CommonProto.CoopCustomRoom.ICcrRoomStaticInfo;
     import ICcrRoomPlayerInfo                       = CommonProto.CoopCustomRoom.ICcrRoomPlayerInfo;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
     export type DataForCreateRoom   = CommonProto.NetMessage.MsgCcrCreateRoom.IC;

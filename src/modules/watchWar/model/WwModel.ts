@@ -20,7 +20,7 @@ namespace Twns.WatchWar.WwModel {
     import MsgMpwWatchGetOutgoingInfoIs             = CommonProto.NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
     import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;

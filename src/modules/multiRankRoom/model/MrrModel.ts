@@ -22,7 +22,7 @@ namespace Twns.MultiRankRoom.MrrModel {
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
     import IMrrRoomInfo                             = CommonProto.MultiRankRoom.IMrrRoomInfo;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
     let _previewingRoomId           : number | null = null;

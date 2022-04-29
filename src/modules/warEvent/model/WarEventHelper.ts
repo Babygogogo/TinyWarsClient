@@ -465,7 +465,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsEveryWarEventInUse(eventDict: WarEventDict, warRuleArray: CommonProto.WarRule.IWarRule[]): boolean {  // DONE
+    function checkIsEveryWarEventInUse(eventDict: WarEventDict, warRuleArray: CommonProto.WarRule.ITemplateWarRule[]): boolean {  // DONE
         for (const [eventId] of eventDict) {
             let isInUse = false;
             for (const warRule of warRuleArray) {

@@ -67,7 +67,7 @@ namespace Twns.BaseWar {
         public getTurnsLimit(): number {
             return this.getSettingsForCommon().turnsLimit ?? CommonConstants.WarMaxTurnsLimit;
         }
-        public getWarRule(): CommonProto.WarRule.IWarRule {
+        public getWarRule(): CommonProto.WarRule.ITemplateWarRule {
             return Helpers.getExisted(this.getSettingsForCommon().warRule);
         }
 

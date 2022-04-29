@@ -3840,7 +3840,7 @@ declare namespace CommonProto {
             unitDataArray?: (CommonProto.WarSerialization.ISerialUnit[]|null);
 
             /** MapRawData warRuleArray */
-            warRuleArray?: (CommonProto.WarRule.IWarRule[]|null);
+            warRuleArray?: (CommonProto.WarRule.ITemplateWarRule[]|null);
 
             /** MapRawData warEventFullData */
             warEventFullData?: (CommonProto.Map.IWarEventFullData|null);
@@ -3892,7 +3892,7 @@ declare namespace CommonProto {
             public unitDataArray: CommonProto.WarSerialization.ISerialUnit[];
 
             /** MapRawData warRuleArray. */
-            public warRuleArray: CommonProto.WarRule.IWarRule[];
+            public warRuleArray: CommonProto.WarRule.ITemplateWarRule[];
 
             /** MapRawData warEventFullData. */
             public warEventFullData?: (CommonProto.Map.IWarEventFullData|null);
@@ -10841,211 +10841,127 @@ declare namespace CommonProto {
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a WarRule. */
-        interface IWarRule {
+        /** Properties of a TemplateWarRule. */
+        interface ITemplateWarRule {
 
-            /** WarRule ruleId */
+            /** TemplateWarRule ruleId */
             ruleId?: (number|null);
 
-            /** WarRule ruleNameArray */
+            /** TemplateWarRule ruleNameArray */
             ruleNameArray?: (CommonProto.Structure.ILanguageText[]|null);
 
-            /** WarRule ruleAvailability */
+            /** TemplateWarRule ruleAvailability */
             ruleAvailability?: (CommonProto.WarRule.IRuleAvailability|null);
 
-            /** WarRule ruleForGlobalParams */
+            /** TemplateWarRule modifiedTime */
+            modifiedTime?: (number|null);
+
+            /** TemplateWarRule ruleForGlobalParams */
             ruleForGlobalParams?: (CommonProto.WarRule.IRuleForGlobalParams|null);
 
-            /** WarRule ruleForPlayers */
+            /** TemplateWarRule ruleForPlayers */
             ruleForPlayers?: (CommonProto.WarRule.IRuleForPlayers|null);
 
-            /** WarRule warEventIdArray */
+            /** TemplateWarRule warEventIdArray */
             warEventIdArray?: (number[]|null);
         }
 
-        /** Represents a WarRule. */
-        class WarRule implements IWarRule {
+        /** Represents a TemplateWarRule. */
+        class TemplateWarRule implements ITemplateWarRule {
 
             /**
-             * Constructs a new WarRule.
+             * Constructs a new TemplateWarRule.
              * @param [properties] Properties to set
              */
-            constructor(properties?: CommonProto.WarRule.IWarRule);
+            constructor(properties?: CommonProto.WarRule.ITemplateWarRule);
 
-            /** WarRule ruleId. */
+            /** TemplateWarRule ruleId. */
             public ruleId: number;
 
-            /** WarRule ruleNameArray. */
+            /** TemplateWarRule ruleNameArray. */
             public ruleNameArray: CommonProto.Structure.ILanguageText[];
 
-            /** WarRule ruleAvailability. */
+            /** TemplateWarRule ruleAvailability. */
             public ruleAvailability?: (CommonProto.WarRule.IRuleAvailability|null);
 
-            /** WarRule ruleForGlobalParams. */
+            /** TemplateWarRule modifiedTime. */
+            public modifiedTime: number;
+
+            /** TemplateWarRule ruleForGlobalParams. */
             public ruleForGlobalParams?: (CommonProto.WarRule.IRuleForGlobalParams|null);
 
-            /** WarRule ruleForPlayers. */
+            /** TemplateWarRule ruleForPlayers. */
             public ruleForPlayers?: (CommonProto.WarRule.IRuleForPlayers|null);
 
-            /** WarRule warEventIdArray. */
+            /** TemplateWarRule warEventIdArray. */
             public warEventIdArray: number[];
 
             /**
-             * Creates a new WarRule instance using the specified properties.
+             * Creates a new TemplateWarRule instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns WarRule instance
+             * @returns TemplateWarRule instance
              */
-            public static create(properties?: CommonProto.WarRule.IWarRule): CommonProto.WarRule.WarRule;
+            public static create(properties?: CommonProto.WarRule.ITemplateWarRule): CommonProto.WarRule.TemplateWarRule;
 
             /**
-             * Encodes the specified WarRule message. Does not implicitly {@link CommonProto.WarRule.WarRule.verify|verify} messages.
-             * @param message WarRule message or plain object to encode
+             * Encodes the specified TemplateWarRule message. Does not implicitly {@link CommonProto.WarRule.TemplateWarRule.verify|verify} messages.
+             * @param message TemplateWarRule message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: CommonProto.WarRule.IWarRule, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: CommonProto.WarRule.ITemplateWarRule, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified WarRule message, length delimited. Does not implicitly {@link CommonProto.WarRule.WarRule.verify|verify} messages.
-             * @param message WarRule message or plain object to encode
+             * Encodes the specified TemplateWarRule message, length delimited. Does not implicitly {@link CommonProto.WarRule.TemplateWarRule.verify|verify} messages.
+             * @param message TemplateWarRule message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: CommonProto.WarRule.IWarRule, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: CommonProto.WarRule.ITemplateWarRule, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a WarRule message from the specified reader or buffer.
+             * Decodes a TemplateWarRule message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns WarRule
+             * @returns TemplateWarRule
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarRule.WarRule;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarRule.TemplateWarRule;
 
             /**
-             * Decodes a WarRule message from the specified reader or buffer, length delimited.
+             * Decodes a TemplateWarRule message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns WarRule
+             * @returns TemplateWarRule
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarRule.WarRule;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarRule.TemplateWarRule;
 
             /**
-             * Verifies a WarRule message.
+             * Verifies a TemplateWarRule message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a WarRule message from a plain object. Also converts values to their respective internal types.
+             * Creates a TemplateWarRule message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns WarRule
+             * @returns TemplateWarRule
              */
-            public static fromObject(object: { [k: string]: any }): CommonProto.WarRule.WarRule;
+            public static fromObject(object: { [k: string]: any }): CommonProto.WarRule.TemplateWarRule;
 
             /**
-             * Creates a plain object from a WarRule message. Also converts values to other types if specified.
-             * @param message WarRule
+             * Creates a plain object from a TemplateWarRule message. Also converts values to other types if specified.
+             * @param message TemplateWarRule
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: CommonProto.WarRule.WarRule, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: CommonProto.WarRule.TemplateWarRule, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this WarRule to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a WarRuleArray. */
-        interface IWarRuleArray {
-
-            /** WarRuleArray warRuleArray */
-            warRuleArray?: (CommonProto.WarRule.IWarRule[]|null);
-        }
-
-        /** Represents a WarRuleArray. */
-        class WarRuleArray implements IWarRuleArray {
-
-            /**
-             * Constructs a new WarRuleArray.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: CommonProto.WarRule.IWarRuleArray);
-
-            /** WarRuleArray warRuleArray. */
-            public warRuleArray: CommonProto.WarRule.IWarRule[];
-
-            /**
-             * Creates a new WarRuleArray instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns WarRuleArray instance
-             */
-            public static create(properties?: CommonProto.WarRule.IWarRuleArray): CommonProto.WarRule.WarRuleArray;
-
-            /**
-             * Encodes the specified WarRuleArray message. Does not implicitly {@link CommonProto.WarRule.WarRuleArray.verify|verify} messages.
-             * @param message WarRuleArray message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: CommonProto.WarRule.IWarRuleArray, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified WarRuleArray message, length delimited. Does not implicitly {@link CommonProto.WarRule.WarRuleArray.verify|verify} messages.
-             * @param message WarRuleArray message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: CommonProto.WarRule.IWarRuleArray, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a WarRuleArray message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns WarRuleArray
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarRule.WarRuleArray;
-
-            /**
-             * Decodes a WarRuleArray message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns WarRuleArray
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarRule.WarRuleArray;
-
-            /**
-             * Verifies a WarRuleArray message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a WarRuleArray message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns WarRuleArray
-             */
-            public static fromObject(object: { [k: string]: any }): CommonProto.WarRule.WarRuleArray;
-
-            /**
-             * Creates a plain object from a WarRuleArray message. Also converts values to other types if specified.
-             * @param message WarRuleArray
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: CommonProto.WarRule.WarRuleArray, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this WarRuleArray to JSON.
+             * Converts this TemplateWarRule to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -11148,7 +11064,7 @@ declare namespace CommonProto {
             presetWarRuleId?: (number|null);
 
             /** SettingsForCommon warRule */
-            warRule?: (CommonProto.WarRule.IWarRule|null);
+            warRule?: (CommonProto.WarRule.ITemplateWarRule|null);
 
             /** SettingsForCommon turnsLimit */
             turnsLimit?: (number|null);
@@ -11170,7 +11086,7 @@ declare namespace CommonProto {
             public presetWarRuleId: number;
 
             /** SettingsForCommon warRule. */
-            public warRule?: (CommonProto.WarRule.IWarRule|null);
+            public warRule?: (CommonProto.WarRule.ITemplateWarRule|null);
 
             /** SettingsForCommon turnsLimit. */
             public turnsLimit: number;
@@ -22299,126 +22215,6 @@ declare namespace CommonProto {
 
             /**
              * Converts this DataForUseCoSkill to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a DataForReviewWarRule. */
-        interface IDataForReviewWarRule {
-
-            /** DataForReviewWarRule mapId */
-            mapId?: (number|null);
-
-            /** DataForReviewWarRule submitterUserId */
-            submitterUserId?: (number|null);
-
-            /** DataForReviewWarRule submitTimestamp */
-            submitTimestamp?: (number|null);
-
-            /** DataForReviewWarRule reviewStatus */
-            reviewStatus?: (number|null);
-
-            /** DataForReviewWarRule reviewComment */
-            reviewComment?: (string|null);
-
-            /** DataForReviewWarRule warRuleArray */
-            warRuleArray?: (CommonProto.WarRule.IWarRuleArray|null);
-        }
-
-        /** Represents a DataForReviewWarRule. */
-        class DataForReviewWarRule implements IDataForReviewWarRule {
-
-            /**
-             * Constructs a new DataForReviewWarRule.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: CommonProto.Structure.IDataForReviewWarRule);
-
-            /** DataForReviewWarRule mapId. */
-            public mapId: number;
-
-            /** DataForReviewWarRule submitterUserId. */
-            public submitterUserId: number;
-
-            /** DataForReviewWarRule submitTimestamp. */
-            public submitTimestamp: number;
-
-            /** DataForReviewWarRule reviewStatus. */
-            public reviewStatus: number;
-
-            /** DataForReviewWarRule reviewComment. */
-            public reviewComment: string;
-
-            /** DataForReviewWarRule warRuleArray. */
-            public warRuleArray?: (CommonProto.WarRule.IWarRuleArray|null);
-
-            /**
-             * Creates a new DataForReviewWarRule instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns DataForReviewWarRule instance
-             */
-            public static create(properties?: CommonProto.Structure.IDataForReviewWarRule): CommonProto.Structure.DataForReviewWarRule;
-
-            /**
-             * Encodes the specified DataForReviewWarRule message. Does not implicitly {@link CommonProto.Structure.DataForReviewWarRule.verify|verify} messages.
-             * @param message DataForReviewWarRule message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: CommonProto.Structure.IDataForReviewWarRule, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified DataForReviewWarRule message, length delimited. Does not implicitly {@link CommonProto.Structure.DataForReviewWarRule.verify|verify} messages.
-             * @param message DataForReviewWarRule message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: CommonProto.Structure.IDataForReviewWarRule, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a DataForReviewWarRule message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns DataForReviewWarRule
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.Structure.DataForReviewWarRule;
-
-            /**
-             * Decodes a DataForReviewWarRule message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns DataForReviewWarRule
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.Structure.DataForReviewWarRule;
-
-            /**
-             * Verifies a DataForReviewWarRule message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a DataForReviewWarRule message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns DataForReviewWarRule
-             */
-            public static fromObject(object: { [k: string]: any }): CommonProto.Structure.DataForReviewWarRule;
-
-            /**
-             * Creates a plain object from a DataForReviewWarRule message. Also converts values to other types if specified.
-             * @param message DataForReviewWarRule
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: CommonProto.Structure.DataForReviewWarRule, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this DataForReviewWarRule to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -43040,7 +42836,7 @@ declare namespace CommonProto {
                 mapId?: (number|null);
 
                 /** C warRule */
-                warRule?: (CommonProto.WarRule.IWarRule|null);
+                warRule?: (CommonProto.WarRule.ITemplateWarRule|null);
             }
 
             /** Represents a C. */
@@ -43056,7 +42852,7 @@ declare namespace CommonProto {
                 public mapId: number;
 
                 /** C warRule. */
-                public warRule?: (CommonProto.WarRule.IWarRule|null);
+                public warRule?: (CommonProto.WarRule.ITemplateWarRule|null);
 
                 /**
                  * Creates a new C instance using the specified properties.
@@ -43139,7 +42935,7 @@ declare namespace CommonProto {
                 mapId?: (number|null);
 
                 /** S warRule */
-                warRule?: (CommonProto.WarRule.IWarRule|null);
+                warRule?: (CommonProto.WarRule.ITemplateWarRule|null);
             }
 
             /** Represents a S. */
@@ -43158,7 +42954,7 @@ declare namespace CommonProto {
                 public mapId: number;
 
                 /** S warRule. */
-                public warRule?: (CommonProto.WarRule.IWarRule|null);
+                public warRule?: (CommonProto.WarRule.ITemplateWarRule|null);
 
                 /**
                  * Creates a new S instance using the specified properties.

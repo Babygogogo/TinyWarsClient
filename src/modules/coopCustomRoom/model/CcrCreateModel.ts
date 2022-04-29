@@ -62,7 +62,7 @@ namespace CcrCreateModel {
     function getSettingsForCcw(): CommonProto.WarSettings.ISettingsForCcw {
         return Helpers.getExisted(getData().settingsForCcw);
     }
-    export function getWarRule(): CommonProto.WarRule.IWarRule {
+    export function getWarRule(): CommonProto.WarRule.ITemplateWarRule {
         return Helpers.getExisted(getSettingsForCommon().warRule);
     }
 

@@ -21,7 +21,7 @@ namespace TwnsCommonModifyWarRuleNamePanel {
     import ILanguageText    = CommonProto.Structure.ILanguageText;
 
     export type OpenData = {
-        rule        : CommonProto.WarRule.IWarRule;
+        rule        : CommonProto.WarRule.ITemplateWarRule;
         callback    : () => void;
     };
     export class CommonModifyWarRuleNamePanel extends TwnsUiPanel.UiPanel<OpenData> {

@@ -20,7 +20,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
 
     export type OpenData = {
         playerRule      : WarRule.IDataForPlayerRule;
-        warRule         : WarRule.IWarRule;
+        warRule         : WarRule.ITemplateWarRule;
     };
     export class MmWarRuleAvailableCoPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelAvailableCoTitle!    : TwnsUiLabel.UiLabel;

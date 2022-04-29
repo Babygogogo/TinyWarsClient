@@ -18,7 +18,7 @@ namespace WarRuleHelpers {
     import IRuleForGlobalParams = WarRule.IRuleForGlobalParams;
     import IRuleForPlayers      = WarRule.IRuleForPlayers;
     import IDataForPlayerRule   = WarRule.IDataForPlayerRule;
-    import IWarRule             = WarRule.IWarRule;
+    import ITemplateWarRule             = WarRule.ITemplateWarRule;
     import GameConfig           = Twns.Config.GameConfig;
 
     const DEFAULT_PLAYER_RULE: CommonProto.WarRule.IDataForPlayerRule = {
@@ -36,103 +36,103 @@ namespace WarRuleHelpers {
         visionRangeModifier     : 0,
     };
 
-    export function getHasFogByDefault(warRule: IWarRule): boolean {
+    export function getHasFogByDefault(warRule: ITemplateWarRule): boolean {
         return Helpers.getExisted(warRule.ruleForGlobalParams?.hasFogByDefault);
     }
-    export function setHasFogByDefault(warRule: IWarRule, hasFog: boolean): void {
+    export function setHasFogByDefault(warRule: ITemplateWarRule, hasFog: boolean): void {
         Helpers.getExisted(warRule.ruleForGlobalParams).hasFogByDefault = hasFog;
     }
 
-    export function getDefaultWeatherType(warRule: IWarRule): Types.WeatherType {
+    export function getDefaultWeatherType(warRule: ITemplateWarRule): Types.WeatherType {
         return warRule.ruleForGlobalParams?.defaultWeatherType ?? Types.WeatherType.Clear;
     }
-    export function setDefaultWeatherType(warRule: IWarRule, weatherType: Types.WeatherType): void {
+    export function setDefaultWeatherType(warRule: ITemplateWarRule, weatherType: Types.WeatherType): void {
         Helpers.getExisted(warRule.ruleForGlobalParams, ClientErrorCode.WarRuleHelpers_SetDefaultWeatherType_00).defaultWeatherType = weatherType;
     }
-    export function tickDefaultWeatherType(warRule: IWarRule, gameConfig: GameConfig): void {
+    export function tickDefaultWeatherType(warRule: ITemplateWarRule, gameConfig: GameConfig): void {
         const typeArray     = gameConfig.getAvailableWeatherTypes();
         const weatherType   = getDefaultWeatherType(warRule);
         setDefaultWeatherType(warRule, typeArray[(typeArray.indexOf(weatherType) + 1) % typeArray.length]);
     }
 
-    export function getIncomeMultiplier(warRule: IWarRule, playerIndex: number): number {
+    export function getIncomeMultiplier(warRule: ITemplateWarRule, playerIndex: number): number {
         const playerRule = getPlayerRule(warRule, playerIndex);
         return Helpers.getExisted(playerRule.incomeMultiplier);
     }
-    export function setIncomeMultiplier(warRule: IWarRule, playerIndex: number, value: number): void {
+    export function setIncomeMultiplier(warRule: ITemplateWarRule, playerIndex: number, value: number): void {
         const playerRule = getPlayerRule(warRule, playerIndex);
         playerRule.incomeMultiplier = value;
     }
 
-    export function getEnergyGrowthMultiplier(warRule: IWarRule, playerIndex: number): number {
+    export function getEnergyGrowthMultiplier(warRule: ITemplateWarRule, playerIndex: number): number {
         const playerRule = getPlayerRule(warRule, playerIndex);
         return Helpers.getExisted(playerRule.energyGrowthMultiplier);
     }
-    export function setEnergyGrowthMultiplier(warRule: IWarRule, playerIndex: number, value: number): void {
+    export function setEnergyGrowthMultiplier(warRule: ITemplateWarRule, playerIndex: number, value: number): void {
         const playerRule = getPlayerRule(warRule, playerIndex);
         playerRule.energyGrowthMultiplier = value;
     }
 
-    export function getAttackPowerModifier(warRule: IWarRule, playerIndex: number): number {
+    export function getAttackPowerModifier(warRule: ITemplateWarRule, playerIndex: number): number {
         const playerRule = getPlayerRule(warRule, playerIndex);
         return Helpers.getExisted(playerRule.attackPowerModifier);
     }
-    export function setAttackPowerModifier(warRule: IWarRule, playerIndex: number, value: number): void {
+    export function setAttackPowerModifier(warRule: ITemplateWarRule, playerIndex: number, value: number): void {
         const playerRule = getPlayerRule(warRule, playerIndex);
         playerRule.attackPowerModifier = value;
     }
 
-    export function getMoveRangeModifier(warRule: IWarRule, playerIndex: number): number {
+    export function getMoveRangeModifier(warRule: ITemplateWarRule, playerIndex: number): number {
         const playerRule = getPlayerRule(warRule, playerIndex);
         return Helpers.getExisted(playerRule.moveRangeModifier);
     }
-    export function setMoveRangeModifier(warRule: IWarRule, playerIndex: number, value: number): void {
+    export function setMoveRangeModifier(warRule: ITemplateWarRule, playerIndex: number, value: number): void {
         const playerRule = getPlayerRule(warRule, playerIndex);
         playerRule.moveRangeModifier = value;
     }
 
-    export function getVisionRangeModifier(warRule: IWarRule, playerIndex: number): number {
+    export function getVisionRangeModifier(warRule: ITemplateWarRule, playerIndex: number): number {
         const playerRule = getPlayerRule(warRule, playerIndex);
         return Helpers.getExisted(playerRule.visionRangeModifier);
     }
-    export function setVisionRangeModifier(warRule: IWarRule, playerIndex: number, value: number): void {
+    export function setVisionRangeModifier(warRule: ITemplateWarRule, playerIndex: number, value: number): void {
         const playerRule = getPlayerRule(warRule, playerIndex);
         playerRule.visionRangeModifier = value;
     }
 
-    export function getInitialFund(warRule: IWarRule, playerIndex: number): number {
+    export function getInitialFund(warRule: ITemplateWarRule, playerIndex: number): number {
         return Helpers.getExisted(getPlayerRule(warRule, playerIndex).initialFund);
     }
-    export function setInitialFund(warRule: IWarRule, playerIndex: number, value: number): void {
+    export function setInitialFund(warRule: ITemplateWarRule, playerIndex: number, value: number): void {
         getPlayerRule(warRule, playerIndex).initialFund = value;
     }
 
-    export function getEnergyAddPctOnLoadCo(warRule: IWarRule, playerIndex: number): number {
+    export function getEnergyAddPctOnLoadCo(warRule: ITemplateWarRule, playerIndex: number): number {
         return Helpers.getExisted(getPlayerRule(warRule, playerIndex).energyAddPctOnLoadCo);
     }
-    export function setEnergyAddPctOnLoadCo(warRule: IWarRule, playerIndex: number, value: number): void {
+    export function setEnergyAddPctOnLoadCo(warRule: ITemplateWarRule, playerIndex: number, value: number): void {
         getPlayerRule(warRule, playerIndex).energyAddPctOnLoadCo = value;
     }
 
-    export function getLuckLowerLimit(warRule: IWarRule, playerIndex: number): number {
+    export function getLuckLowerLimit(warRule: ITemplateWarRule, playerIndex: number): number {
         return Helpers.getExisted(getPlayerRule(warRule, playerIndex).luckLowerLimit);
     }
-    export function setLuckLowerLimit(warRule: IWarRule, playerIndex: number, value: number): void {
+    export function setLuckLowerLimit(warRule: ITemplateWarRule, playerIndex: number, value: number): void {
         getPlayerRule(warRule, playerIndex).luckLowerLimit = value;
     }
 
-    export function getLuckUpperLimit(warRule: IWarRule, playerIndex: number): number {
+    export function getLuckUpperLimit(warRule: ITemplateWarRule, playerIndex: number): number {
         return Helpers.getExisted(getPlayerRule(warRule, playerIndex).luckUpperLimit);
     }
-    export function setLuckUpperLimit(warRule: IWarRule, playerIndex: number, value: number): void {
+    export function setLuckUpperLimit(warRule: ITemplateWarRule, playerIndex: number, value: number): void {
         getPlayerRule(warRule, playerIndex).luckUpperLimit = value;
     }
 
-    export function getBannedCoIdArray(warRule: IWarRule, playerIndex: number): number[] | null {
+    export function getBannedCoIdArray(warRule: ITemplateWarRule, playerIndex: number): number[] | null {
         return getPlayerRule(warRule, playerIndex).bannedCoIdArray ?? null;
     }
     export function getAvailableCoIdArrayForPlayer({ warRule, playerIndex, gameConfig }: {
-        warRule         : IWarRule;
+        warRule         : ITemplateWarRule;
         playerIndex     : number;
         gameConfig      : GameConfig;
     }): number[] {
@@ -143,7 +143,7 @@ namespace WarRuleHelpers {
             .map(v => v.coId)
             .filter(v => !bannedCoIdSet.has(v));
     }
-    export function addBannedCoId(warRule: IWarRule, playerIndex: number, coId: number): void {
+    export function addBannedCoId(warRule: ITemplateWarRule, playerIndex: number, coId: number): void {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule.bannedCoIdArray == null) {
             playerRule.bannedCoIdArray = [coId];
@@ -154,12 +154,12 @@ namespace WarRuleHelpers {
             }
         }
     }
-    export function deleteBannedCoId(warRule: IWarRule, playerIndex: number, coId: number): void {
+    export function deleteBannedCoId(warRule: ITemplateWarRule, playerIndex: number, coId: number): void {
         const playerRule        = getPlayerRule(warRule, playerIndex);
         const bannedCoIdArray   = Helpers.getExisted(playerRule.bannedCoIdArray);
         Helpers.deleteElementFromArray(bannedCoIdArray, coId);
     }
-    export function setBannedCoIdArray(warRule: IWarRule, playerIndex: number, coIdSet: Set<number>): void {
+    export function setBannedCoIdArray(warRule: ITemplateWarRule, playerIndex: number, coIdSet: Set<number>): void {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule.bannedCoIdArray == null) {
             playerRule.bannedCoIdArray = [...coIdSet];
@@ -172,22 +172,22 @@ namespace WarRuleHelpers {
         }
     }
 
-    export function setFixedCoIdInCcw(warRule: IWarRule, playerIndex: number, coId: number | null): void {
+    export function setFixedCoIdInCcw(warRule: ITemplateWarRule, playerIndex: number, coId: number | null): void {
         const playerRule = getPlayerRule(warRule, playerIndex);
         playerRule.fixedCoIdInCcw = coId;
     }
-    export function getFixedCoIdInCcw(warRule: IWarRule, playerIndex: number): number | null {
+    export function getFixedCoIdInCcw(warRule: ITemplateWarRule, playerIndex: number): number | null {
         return getPlayerRule(warRule, playerIndex).fixedCoIdInCcw ?? null;
     }
 
-    export function setFixedCoIdInSrw(warRule: IWarRule, playerIndex: number, coId: number | null): void {
+    export function setFixedCoIdInSrw(warRule: ITemplateWarRule, playerIndex: number, coId: number | null): void {
         getPlayerRule(warRule, playerIndex).fixedCoIdInSrw = coId;
     }
-    export function getFixedCoIdInSrw(warRule: IWarRule, playerIndex: number): number | null {
+    export function getFixedCoIdInSrw(warRule: ITemplateWarRule, playerIndex: number): number | null {
         return getPlayerRule(warRule, playerIndex).fixedCoIdInSrw ?? null;
     }
 
-    export function getTeamIndex(warRule: IWarRule, playerIndex: number): number {
+    export function getTeamIndex(warRule: ITemplateWarRule, playerIndex: number): number {
         if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
             return CommonConstants.WarNeutralTeamIndex;
         }
@@ -195,11 +195,11 @@ namespace WarRuleHelpers {
         const playerRule = getPlayerRule(warRule, playerIndex);
         return Helpers.getExisted(playerRule.teamIndex);
     }
-    export function setTeamIndex(warRule: IWarRule, playerIndex: number, teamIndex: number): void {
+    export function setTeamIndex(warRule: ITemplateWarRule, playerIndex: number, teamIndex: number): void {
         const playerRule = getPlayerRule(warRule, playerIndex);
         playerRule.teamIndex = teamIndex;
     }
-    export function tickTeamIndex(warRule: IWarRule, playerIndex: number): void {
+    export function tickTeamIndex(warRule: ITemplateWarRule, playerIndex: number): void {
         setTeamIndex(
             warRule,
             playerIndex,
@@ -211,7 +211,7 @@ namespace WarRuleHelpers {
         return Helpers.getExisted(ruleForPlayers.playerRuleDataArray?.find(v => v.playerIndex === playerIndex)?.teamIndex);
     }
 
-    export function getPlayerRule(warRule: IWarRule, playerIndex: number): IDataForPlayerRule {
+    export function getPlayerRule(warRule: ITemplateWarRule, playerIndex: number): IDataForPlayerRule {
         if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
             return DEFAULT_PLAYER_RULE;
         }
@@ -219,11 +219,11 @@ namespace WarRuleHelpers {
         return Helpers.getExisted(warRule.ruleForPlayers?.playerRuleDataArray?.find(v => v.playerIndex === playerIndex));
     }
 
-    export function getPlayersCountUnneutral(warRule: IWarRule): number {
+    export function getPlayersCountUnneutral(warRule: ITemplateWarRule): number {
         return Helpers.getExisted(warRule.ruleForPlayers?.playerRuleDataArray).length;
     }
 
-    export function moveWarEventId(warRule: IWarRule, warEventId: number, deltaIndex: number): void {
+    export function moveWarEventId(warRule: ITemplateWarRule, warEventId: number, deltaIndex: number): void {
         const warEventIdArray   = Helpers.getExisted(warRule.warEventIdArray);
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
@@ -236,7 +236,7 @@ namespace WarRuleHelpers {
             warEventIdArray.splice(newIndex, 0, warEventId);
         }
     }
-    export function deleteWarEventId(warRule: IWarRule, warEventId: number): void {
+    export function deleteWarEventId(warRule: ITemplateWarRule, warEventId: number): void {
         const warEventIdArray   = Helpers.getExisted(warRule.warEventIdArray);
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
@@ -245,7 +245,7 @@ namespace WarRuleHelpers {
 
         warEventIdArray.splice(currIndex, 1);
     }
-    export function addWarEventId(warRule: IWarRule, warEventId: number): void {
+    export function addWarEventId(warRule: ITemplateWarRule, warEventId: number): void {
         if (warRule.warEventIdArray == null) {
             warRule.warEventIdArray = [];
         }
@@ -258,7 +258,7 @@ namespace WarRuleHelpers {
         warEventIdArray.push(warEventId);
     }
 
-    export function getRandomCoIdWithSettingsForCommon(warRule: IWarRule, playerIndex: number, gameConfig: GameConfig): number {
+    export function getRandomCoIdWithSettingsForCommon(warRule: ITemplateWarRule, playerIndex: number, gameConfig: GameConfig): number {
         return getRandomCoIdWithCoIdList(getAvailableCoIdArrayForPlayer({
             warRule,
             playerIndex,
@@ -277,7 +277,7 @@ namespace WarRuleHelpers {
         }
     }
 
-    export function createDefaultWarRule(ruleId: number | null, playersCount: number): IWarRule {
+    export function createDefaultWarRule(ruleId: number | null, playersCount: number): ITemplateWarRule {
         return {
             ruleId,
             ruleNameArray   : [
@@ -323,7 +323,7 @@ namespace WarRuleHelpers {
             bannedCoIdArray         : [],
         };
     }
-    export function reviseWarRule(warRule: IWarRule, playersCount: number): void {
+    export function reviseWarRule(warRule: ITemplateWarRule, playersCount: number): void {
         const ruleForPlayers = Helpers.getExisted(warRule.ruleForPlayers);
         if (!ruleForPlayers.playerRuleDataArray) {
             ruleForPlayers.playerRuleDataArray = [];
@@ -350,7 +350,7 @@ namespace WarRuleHelpers {
         }
     }
 
-    // export function checkIsValidWarRule(rule: IWarRule, warEventData: IWarEventFullData): boolean {
+    // export function checkIsValidWarRule(rule: ITemplateWarRule, warEventData: IWarEventFullData): boolean {
     //     const ruleNameArray = rule.ruleNameArray;
     //     if ((!ruleNameArray)                             ||
     //         (!Helpers.checkIsValidLanguageTextArray({
@@ -475,7 +475,7 @@ namespace WarRuleHelpers {
     // Validators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getErrorCodeForWarRule({ rule, allWarEventIdArray, gameConfig, playersCountUnneutral }: {
-        rule                    : IWarRule;
+        rule                    : ITemplateWarRule;
         allWarEventIdArray      : number[];
         gameConfig              : GameConfig;
         playersCountUnneutral   : number;
@@ -523,7 +523,7 @@ namespace WarRuleHelpers {
         return ClientErrorCode.NoError;
     }
     export function getErrorCodeForWarRuleArray({ ruleList, playersCountUnneutral, allWarEventIdArray, gameConfig }: {
-        ruleList                : Types.Undefinable<IWarRule[]>;
+        ruleList                : Types.Undefinable<ITemplateWarRule[]>;
         playersCountUnneutral   : number;
         allWarEventIdArray      : number[];
         gameConfig              : GameConfig;
@@ -537,7 +537,7 @@ namespace WarRuleHelpers {
         }
 
         const ruleIdSet         = new Set<number>();
-        const trimmedRuleArray  : IWarRule[] = [];
+        const trimmedRuleArray  : ITemplateWarRule[] = [];
         for (const rule of ruleList) {
             const ruleId = rule.ruleId;
             if ((ruleId == null) || (ruleId < 0) || (ruleId >= rulesCount) || (ruleIdSet.has(ruleId))) {

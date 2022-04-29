@@ -85,7 +85,7 @@ namespace ScrCreateModel {
     export function getSettingsForCommon(): CommonProto.WarSettings.ISettingsForCommon {
         return Helpers.getExisted(getData().settingsForCommon);
     }
-    export function getWarRule(): CommonProto.WarRule.IWarRule {
+    export function getWarRule(): CommonProto.WarRule.ITemplateWarRule {
         return Helpers.getExisted(getSettingsForCommon().warRule);
     }
 
