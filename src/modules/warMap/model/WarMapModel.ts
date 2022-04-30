@@ -8,9 +8,8 @@
 // import WarMapProxy          from "./WarMapProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace WarMapModel {
+namespace Twns.WarMap.WarMapModel {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import WarType              = Types.WarType;
     import IMapRawData          = CommonProto.Map.IMapRawData;
     import IMapBriefData        = CommonProto.Map.IMapBriefData;
     import IMapEditorData       = CommonProto.Map.IMapEditorData;
@@ -53,20 +52,20 @@ namespace WarMapModel {
         (mapRawData) && (mapRawData.mapNameArray = mapNameArray);
     }
     export async function updateOnAddWarRule(data: CommonProto.NetMessage.MsgMmAddWarRule.IS): Promise<void> {
-        const mapId     = Helpers.getExisted(data.mapId);
-        const warRule   = Helpers.getExisted(data.warRule);
-        Helpers.getExisted((await getRawData(mapId))?.warRuleArray).push(warRule);
+        const mapId             = Helpers.getExisted(data.mapId);
+        const templateWarRule   = Helpers.getExisted(data.templateWarRule);
+        Helpers.getExisted((await getRawData(mapId))?.templateWarRuleArray).push(templateWarRule);
     }
     export async function updateOnDeleteWarRule(data: CommonProto.NetMessage.MsgMmDeleteWarRule.IS): Promise<void> {
-        const mapId         = Helpers.getExisted(data.mapId);
-        const ruleId        = Helpers.getExisted(data.ruleId);
-        const warRuleArray  = Helpers.getExisted((await getRawData(mapId))?.warRuleArray);
-        const index         = warRuleArray.findIndex(v => v.ruleId === ruleId);
-        (index >= 0) && (warRuleArray.splice(index, 1));
+        const mapId                 = Helpers.getExisted(data.mapId);
+        const ruleId                = Helpers.getExisted(data.ruleId);
+        const templateWarRuleArray  = Helpers.getExisted((await getRawData(mapId))?.templateWarRuleArray);
+        const index                 = templateWarRuleArray.findIndex(v => v.ruleId === ruleId);
+        (index >= 0) && (templateWarRuleArray.splice(index, 1));
     }
     export async function updateOnSetWarRuleAvailability(data: CommonProto.NetMessage.MsgMmSetWarRuleAvailability.IS): Promise<void> {
-        const warRule               = Helpers.getExisted((await getRawData(Helpers.getExisted(data.mapId)))?.warRuleArray?.find(v => v.ruleId === data.ruleId));
-        warRule.ruleAvailability    = data.availability;
+        const templateWarRule               = Helpers.getExisted((await getRawData(Helpers.getExisted(data.mapId)))?.templateWarRuleArray?.find(v => v.ruleId === data.ruleId));
+        templateWarRule.ruleAvailability    = data.availability;
     }
 
     export async function getMapNameInCurrentLanguage(mapId: number): Promise<string | null> {

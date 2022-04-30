@@ -125,7 +125,7 @@ namespace TwnsRwReplayWarInfoPage {
             const mapId             = (await this._getReplayInfo())?.mapId;
             this._labelMapName.text = mapId == null
                 ? `----`
-                : (await WarMapModel.getMapNameInCurrentLanguage(mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                : (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId)) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private async _updateLabelTurnIndex(): Promise<void> {

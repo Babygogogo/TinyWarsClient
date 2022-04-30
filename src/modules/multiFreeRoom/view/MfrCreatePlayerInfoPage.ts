@@ -17,7 +17,7 @@
 // import MfrCreateModel           from "../model/MfrCreateModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMfrCreatePlayerInfoPage {
+namespace Twns.MultiFreeRoom {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
@@ -56,7 +56,7 @@ namespace TwnsMfrCreatePlayerInfoPage {
         }
         private _updateComponentsForRoomInfo(): void {
             const dataArray         : DataForPlayerRenderer[] = [];
-            const maxPlayerIndex    = Helpers.getExisted(MfrCreateModel.getInitialWarData().playerManager?.players).length - 1;
+            const maxPlayerIndex    = Helpers.getExisted(MultiFreeRoom.MfrCreateModel.getInitialWarData().playerManager?.players).length - 1;
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= maxPlayerIndex; ++playerIndex) {
                 dataArray.push({
                     playerIndex,
@@ -98,11 +98,11 @@ namespace TwnsMfrCreatePlayerInfoPage {
 
         private async _onTouchedGroupCo(): Promise<void> {
             const playerIndex       = this._getData().playerIndex;
-            const initialWarData    = MfrCreateModel.getInitialWarData();
+            const initialWarData    = MultiFreeRoom.MfrCreateModel.getInitialWarData();
             const coId              = initialWarData.playerManager?.players?.find(v => v.playerIndex === playerIndex)?.coId;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
-                    gameConfig   : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(initialWarData.settingsForCommon?.configVersion)),
+                    gameConfig   : await Config.ConfigManager.getGameConfig(Helpers.getExisted(initialWarData.settingsForCommon?.configVersion)),
                     coId,
                 });
             }
@@ -126,22 +126,22 @@ namespace TwnsMfrCreatePlayerInfoPage {
 
         private async _updateComponentsForSettings(): Promise<void> {
             const playerIndex           = this._getData().playerIndex;
-            const initialWarData        = MfrCreateModel.getInitialWarData();
+            const initialWarData        = MultiFreeRoom.MfrCreateModel.getInitialWarData();
             const settingsForCommon     = Helpers.getExisted(initialWarData.settingsForCommon);
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(Helpers.getExisted(settingsForCommon.warRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
 
             const playerData            = Helpers.getExisted(initialWarData.playerManager?.players?.find(v => v.playerIndex === playerIndex));
-            this._imgSkin.source        = Twns.WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(playerData.unitAndTileSkinId);
+            this._imgSkin.source        = WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(playerData.unitAndTileSkinId);
 
             const coId                  = Helpers.getExisted(playerData.coId);
-            const gameConfig            = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+            const gameConfig            = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
             const coCfg                 = gameConfig.getCoBasicCfg(coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
 
-            const userInfo              = MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await UserModel.getUserPublicInfo(Helpers.getExisted(UserModel.getSelfUserId())) : null;
+            const userInfo              = MultiFreeRoom.MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await UserModel.getUserPublicInfo(Helpers.getExisted(UserModel.getSelfUserId())) : null;
             const labelNickname         = this._labelNickname;
             if (userInfo) {
                 labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;

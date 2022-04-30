@@ -14,15 +14,15 @@
 // import TwnsMmWarRulePanel       from "./MmWarRulePanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmSetWarRuleAvailabilityPanel {
+namespace Twns.MapManagement {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForMmSetWarRuleAvailabilityPanel = {
         mapId   : number;
         ruleId  : number;
     };
-    export class MmSetWarRuleAvailabilityPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MmSetWarRuleAvailabilityPanel extends TwnsUiPanel.UiPanel<OpenDataForMmSetWarRuleAvailabilityPanel> {
         private readonly _groupMcw!     : eui.Group;
         private readonly _labelMcw!     : TwnsUiLabel.UiLabel;
         private readonly _imgMcw!       : TwnsUiImage.UiImage;
@@ -75,23 +75,23 @@ namespace TwnsMmSetWarRuleAvailabilityPanel {
         }
 
         private async _onTouchedBtnConfirm(): Promise<void> {
-            const openData      = this._getOpenData();
-            const mapId         = openData.mapId;
-            const ruleId        = openData.ruleId;
-            const mapRawData    = Helpers.getExisted(await WarMapModel.getRawData(mapId));
-            const warRule       = Helpers.getExisted(Helpers.deepClone(mapRawData.warRuleArray?.find(v => v.ruleId === ruleId)));
-            const availability  : CommonProto.WarRule.IRuleAvailability = {
+            const openData          = this._getOpenData();
+            const mapId             = openData.mapId;
+            const ruleId            = openData.ruleId;
+            const mapRawData        = Helpers.getExisted(await WarMap.WarMapModel.getRawData(mapId));
+            const templateWarRule   = Helpers.getExisted(Helpers.deepClone(mapRawData.templateWarRuleArray?.find(v => v.ruleId === ruleId)));
+            const availability      : CommonProto.WarRule.IRuleAvailability = {
                 canMcw  : this._imgMcw.visible,
                 canCcw  : this._imgCcw.visible,
                 canScw  : this._imgScw.visible,
                 canSrw  : this._imgSrw.visible,
                 canMrw  : this._imgMrw.visible,
             };
-            warRule.ruleAvailability    = availability;
-            const errorCode             = WarRuleHelpers.getErrorCodeForWarRule({
-                rule                    : warRule,
+            templateWarRule.ruleAvailability    = availability;
+            const errorCode                     = WarHelpers.WarRuleHelpers.getErrorCodeForTemplateWarRule({
+                templateWarRule,
                 playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),
-                gameConfig              : await Twns.Config.ConfigManager.getLatestGameConfig(),
+                gameConfig              : await Config.ConfigManager.getLatestGameConfig(),
                 allWarEventIdArray      : Helpers.getNonNullElements(mapRawData.warEventFullData?.eventArray?.map(v => v.eventId) ?? []),
             });
             if (errorCode) {
@@ -129,7 +129,7 @@ namespace TwnsMmSetWarRuleAvailabilityPanel {
 
         private async _updateImages(): Promise<void> {
             const openData          = this._getOpenData();
-            const availability      = (await WarMapModel.getRawData(openData.mapId))?.warRuleArray?.find(v => v.ruleId === openData.ruleId)?.ruleAvailability ?? {};
+            const availability      = (await WarMap.WarMapModel.getRawData(openData.mapId))?.templateWarRuleArray?.find(v => v.ruleId === openData.ruleId)?.ruleAvailability ?? {};
             this._imgMcw.visible    = !!availability.canMcw;
             this._imgCcw.visible    = !!availability.canCcw;
             this._imgScw.visible    = !!availability.canScw;

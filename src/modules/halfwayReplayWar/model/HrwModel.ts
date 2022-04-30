@@ -43,7 +43,7 @@ namespace HrwModel {
 
         const mapId = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
         if (mapId != null) {
-            const mapRawData    = Helpers.getExisted(await WarMapModel.getRawData(mapId));
+            const mapRawData    = Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId));
             const unitDataArray = mapRawData.unitDataArray || [];
             const field         = Helpers.getExisted(warData.field);
             field.tileMap       = { tiles: mapRawData.tileDataArray };

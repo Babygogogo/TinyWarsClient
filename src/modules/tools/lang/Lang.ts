@@ -418,15 +418,6 @@ namespace Lang {
         }
     }
 
-    export function getWarRuleNameInLanguage(warRule: CommonProto.WarRule.ITemplateWarRule): string | null {
-        if (warRule.ruleId == null) {
-            return getText(LangTextType.B0321);
-        } else {
-            const ruleNameArray = warRule.ruleNameArray;
-            return ruleNameArray ? getLanguageText({ textArray: ruleNameArray }) : null;
-        }
-    }
-
     export function getWarEventConditionTypeName(type: WarEventConditionType): string | null {
         switch (type) {
             case WarEventConditionType.WecTurnIndexEqualTo                  : return getText(LangTextType.B0504);
@@ -611,7 +602,7 @@ namespace Lang {
 
         const mapId = data.mapId;
         return [
-            getFormattedText(LangTextType.F0027, mapId != null ? await WarMapModel.getMapNameInCurrentLanguage(mapId) : getText(LangTextType.B0557)),
+            getFormattedText(LangTextType.F0027, mapId != null ? await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) : getText(LangTextType.B0557)),
             ...playerArray,
             getText(LangTextType.A0125)
         ].join("\n");

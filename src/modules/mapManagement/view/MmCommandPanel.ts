@@ -65,7 +65,7 @@ namespace TwnsMmCommandPanel {
         }
 
         private async _onTouchedBtnWarRule(): Promise<void> {
-            const mapRawData = await WarMapModel.getRawData(this._getOpenData().mapId);
+            const mapRawData = await Twns.WarMap.WarMapModel.getRawData(this._getOpenData().mapId);
             if (mapRawData == null) {
                 throw Helpers.newError(`MmCommandPanel._onTouchedBtnWarRule() empty mapRawData.`);
             }
@@ -86,7 +86,7 @@ namespace TwnsMmCommandPanel {
 
         private async _updateComponentsForLanguage(): Promise<void> {
             const mapId             = this._getOpenData().mapId;
-            this._labelTitle.text   = `#${mapId} ${await WarMapModel.getMapNameInCurrentLanguage(mapId)}`;
+            this._labelTitle.text   = `#${mapId} ${await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId)}`;
             this._btnDelete.label   = Lang.getText(LangTextType.B0270);
             this._btnWarRule.label  = Lang.getText(LangTextType.B0314);
             this._btnRename.label   = Lang.getText(LangTextType.B0708);

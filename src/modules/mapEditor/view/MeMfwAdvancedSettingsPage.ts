@@ -64,15 +64,15 @@ namespace TwnsMeMfwAdvancedSettingsPage {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = Lang.getLanguageText({ textArray: MeMfwModel.getMapRawData().mapNameArray }) || CommonConstants.ErrorTextForUndefined;
+            this._labelMapName.text = Lang.getLanguageText({ textArray: Twns.MapEditor.MeMfwModel.getMapRawData().mapNameArray }) || CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + MeMfwModel.getMapRawData().playersCountUnneutral;
+            this._labelPlayersCount.text = "" + Twns.MapEditor.MeMfwModel.getMapRawData().playersCountUnneutral;
         }
 
         private _updateListPlayer(): void {
-            const playersCount  = Helpers.getExisted(MeMfwModel.getMapRawData().playersCountUnneutral);
+            const playersCount  = Helpers.getExisted(Twns.MapEditor.MeMfwModel.getMapRawData().playersCountUnneutral);
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -120,15 +120,15 @@ namespace TwnsMeMfwAdvancedSettingsPage {
             ];
         }
         private _createDataController(playerIndex: number): DataForInfoRenderer {
-            const isControlledByPlayer = MeMfwModel.getIsControlledByHuman(playerIndex);
+            const isControlledByPlayer = Twns.MapEditor.MeMfwModel.getIsControlledByHuman(playerIndex);
             return {
                 titleText               : Lang.getText(LangTextType.B0424),
                 infoText                : isControlledByPlayer ? Lang.getText(LangTextType.B0031) : Lang.getText(LangTextType.B0256),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        MeMfwModel.setIsControlledByPlayer(playerIndex, !isControlledByPlayer);
-                        MeMfwModel.setCoId(playerIndex, CommonConstants.CoEmptyId);
+                        Twns.MapEditor.MeMfwModel.setIsControlledByPlayer(playerIndex, !isControlledByPlayer);
+                        Twns.MapEditor.MeMfwModel.setCoId(playerIndex, CommonConstants.CoEmptyId);
                         this._updateView();
                     });
                 },
@@ -137,19 +137,19 @@ namespace TwnsMeMfwAdvancedSettingsPage {
         private _createDataTeamIndex(playerIndex: number): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0019),
-                infoText                : Lang.getPlayerTeamName(MeMfwModel.getTeamIndex(playerIndex)) || CommonConstants.ErrorTextForUndefined,
+                infoText                : Lang.getPlayerTeamName(Twns.MapEditor.MeMfwModel.getTeamIndex(playerIndex)) || CommonConstants.ErrorTextForUndefined,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        MeMfwModel.tickTeamIndex(playerIndex);
+                        Twns.MapEditor.MeMfwModel.tickTeamIndex(playerIndex);
                         this._updateView();
                     });
                 },
             };
         }
         private async _createDataCo(playerIndex: number): Promise<DataForInfoRenderer> {
-            const coId          = MeMfwModel.getCoId(playerIndex);
-            const gameConfig    = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(MeMfwModel.getWarData().settingsForCommon?.configVersion));
+            const coId          = Twns.MapEditor.MeMfwModel.getCoId(playerIndex);
+            const gameConfig    = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(Twns.MapEditor.MeMfwModel.getWarData().settingsForCommon?.configVersion));
             return {
                 titleText               : Lang.getText(LangTextType.B0425),
                 infoText                : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined,
@@ -158,12 +158,12 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                         gameConfig,
                         currentCoId         : coId,
-                        availableCoIdArray  : MeMfwModel.getIsControlledByHuman(playerIndex)
-                            ? WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule: MeMfwModel.getWarRule(), playerIndex, gameConfig })
+                        availableCoIdArray  : Twns.MapEditor.MeMfwModel.getIsControlledByHuman(playerIndex)
+                            ? Twns.WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({ baseWarRule: Twns.MapEditor.MeMfwModel.getInstanceWarRule(), playerIndex, gameConfig })
                             : gameConfig.getEnabledCoArray().map(v => v.coId),
                         callbackOnConfirm   : newCoId => {
                             if (newCoId !== coId) {
-                                MeMfwModel.setCoId(playerIndex, newCoId);
+                                Twns.MapEditor.MeMfwModel.setCoId(playerIndex, newCoId);
                                 this._updateView();
                             }
                         },
@@ -174,16 +174,16 @@ namespace TwnsMeMfwAdvancedSettingsPage {
         private _createDataSkinId(playerIndex: number): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0397),
-                infoText                : Lang.getUnitAndTileSkinName(MeMfwModel.getUnitAndTileSkinId(playerIndex)) || CommonConstants.ErrorTextForUndefined,
+                infoText                : Lang.getUnitAndTileSkinName(Twns.MapEditor.MeMfwModel.getUnitAndTileSkinId(playerIndex)) || CommonConstants.ErrorTextForUndefined,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    MeMfwModel.tickUnitAndTileSkinId(playerIndex);
+                    Twns.MapEditor.MeMfwModel.tickUnitAndTileSkinId(playerIndex);
                     this._updateView();
                 },
             };
         }
         private _createDataInitialFund(playerIndex: number): DataForInfoRenderer {
-            const currValue = MeMfwModel.getInitialFund(playerIndex);
+            const currValue = Twns.MapEditor.MeMfwModel.getInitialFund(playerIndex);
             return {
                 titleText               : Lang.getText(LangTextType.B0178),
                 infoText                : `${currValue}`,
@@ -199,7 +199,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                MeMfwModel.setInitialFund(playerIndex, panel.getInputValue());
+                                Twns.MapEditor.MeMfwModel.setInitialFund(playerIndex, panel.getInputValue());
                                 this._updateView();
                             },
                         });
@@ -208,7 +208,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
             };
         }
         private _createDataIncomeMultiplier(playerIndex: number): DataForInfoRenderer {
-            const currValue = MeMfwModel.getIncomeMultiplier(playerIndex);
+            const currValue = Twns.MapEditor.MeMfwModel.getIncomeMultiplier(playerIndex);
             const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
             const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
             return {
@@ -224,7 +224,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                MeMfwModel.setIncomeMultiplier(playerIndex, panel.getInputValue());
+                                Twns.MapEditor.MeMfwModel.setIncomeMultiplier(playerIndex, panel.getInputValue());
                                 this._updateView();
                             },
                         });
@@ -233,7 +233,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
             };
         }
         private _createDataEnergyAddPctOnLoadCo(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeMfwModel.getEnergyAddPctOnLoadCo(playerIndex);
+            const currValue     = Twns.MapEditor.MeMfwModel.getEnergyAddPctOnLoadCo(playerIndex);
             const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
             const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
             return {
@@ -249,7 +249,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                MeMfwModel.setEnergyAddPctOnLoadCo(playerIndex, panel.getInputValue());
+                                Twns.MapEditor.MeMfwModel.setEnergyAddPctOnLoadCo(playerIndex, panel.getInputValue());
                                 this._updateView();
                             },
                         });
@@ -258,7 +258,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
             };
         }
         private _createDataEnergyGrowthMultiplier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeMfwModel.getEnergyGrowthMultiplier(playerIndex);
+            const currValue     = Twns.MapEditor.MeMfwModel.getEnergyGrowthMultiplier(playerIndex);
             const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
             const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
             return {
@@ -274,7 +274,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                MeMfwModel.setEnergyGrowthMultiplier(playerIndex, panel.getInputValue());
+                                Twns.MapEditor.MeMfwModel.setEnergyGrowthMultiplier(playerIndex, panel.getInputValue());
                                 this._updateView();
                             },
                         });
@@ -283,7 +283,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
             };
         }
         private _createDataMoveRangeModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeMfwModel.getMoveRangeModifier(playerIndex);
+            const currValue     = Twns.MapEditor.MeMfwModel.getMoveRangeModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
             return {
@@ -299,7 +299,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                MeMfwModel.setMoveRangeModifier(playerIndex, panel.getInputValue());
+                                Twns.MapEditor.MeMfwModel.setMoveRangeModifier(playerIndex, panel.getInputValue());
                                 this._updateView();
                             },
                         });
@@ -308,7 +308,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
             };
         }
         private _createDataAttackPowerModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeMfwModel.getAttackPowerModifier(playerIndex);
+            const currValue     = Twns.MapEditor.MeMfwModel.getAttackPowerModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
             const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
             return {
@@ -324,7 +324,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                MeMfwModel.setAttackPowerModifier(playerIndex, panel.getInputValue());
+                                Twns.MapEditor.MeMfwModel.setAttackPowerModifier(playerIndex, panel.getInputValue());
                                 this._updateView();
                             },
                         });
@@ -333,7 +333,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
             };
         }
         private _createDataVisionRangeModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeMfwModel.getVisionRangeModifier(playerIndex);
+            const currValue     = Twns.MapEditor.MeMfwModel.getVisionRangeModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
             return {
@@ -349,7 +349,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                MeMfwModel.setVisionRangeModifier(playerIndex, panel.getInputValue());
+                                Twns.MapEditor.MeMfwModel.setVisionRangeModifier(playerIndex, panel.getInputValue());
                                 this._updateView();
                             },
                         });
@@ -358,7 +358,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
             };
         }
         private _createDataLuckLowerLimit(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeMfwModel.getLuckLowerLimit(playerIndex);
+            const currValue     = Twns.MapEditor.MeMfwModel.getLuckLowerLimit(playerIndex);
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
@@ -375,12 +375,12 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const value         = panel.getInputValue();
-                                const upperLimit    = MeMfwModel.getLuckUpperLimit(playerIndex);
+                                const upperLimit    = Twns.MapEditor.MeMfwModel.getLuckUpperLimit(playerIndex);
                                 if (value <= upperLimit) {
-                                    MeMfwModel.setLuckLowerLimit(playerIndex, value);
+                                    Twns.MapEditor.MeMfwModel.setLuckLowerLimit(playerIndex, value);
                                 } else {
-                                    MeMfwModel.setLuckUpperLimit(playerIndex, value);
-                                    MeMfwModel.setLuckLowerLimit(playerIndex, upperLimit);
+                                    Twns.MapEditor.MeMfwModel.setLuckUpperLimit(playerIndex, value);
+                                    Twns.MapEditor.MeMfwModel.setLuckLowerLimit(playerIndex, upperLimit);
                                 }
                                 this._updateView();
                             },
@@ -390,7 +390,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
             };
         }
         private _createDataLuckUpperLimit(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeMfwModel.getLuckUpperLimit(playerIndex);
+            const currValue     = Twns.MapEditor.MeMfwModel.getLuckUpperLimit(playerIndex);
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
@@ -407,12 +407,12 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
                                 const value         = panel.getInputValue();
-                                const lowerLimit    = MeMfwModel.getLuckLowerLimit(playerIndex);
+                                const lowerLimit    = Twns.MapEditor.MeMfwModel.getLuckLowerLimit(playerIndex);
                                 if (value >= lowerLimit) {
-                                    MeMfwModel.setLuckUpperLimit(playerIndex, value);
+                                    Twns.MapEditor.MeMfwModel.setLuckUpperLimit(playerIndex, value);
                                 } else {
-                                    MeMfwModel.setLuckLowerLimit(playerIndex, value);
-                                    MeMfwModel.setLuckUpperLimit(playerIndex, lowerLimit);
+                                    Twns.MapEditor.MeMfwModel.setLuckLowerLimit(playerIndex, value);
+                                    Twns.MapEditor.MeMfwModel.setLuckUpperLimit(playerIndex, lowerLimit);
                                 }
                                 this._updateView();
                             },

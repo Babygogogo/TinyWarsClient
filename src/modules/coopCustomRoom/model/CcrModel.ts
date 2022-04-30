@@ -133,9 +133,9 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 return true;
             }
 
-            if ((playerDataList.length === WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForCommon?.warRule)))  &&
-                (playerDataList.every(v => v.isReady))                                                                                              &&
-                (selfPlayerData)                                                                                                                    &&
+            if ((playerDataList.length === WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForCommon?.instanceWarRule)))  &&
+                (playerDataList.every(v => v.isReady))                                                                                                                      &&
+                (selfPlayerData)                                                                                                                                            &&
                 (roomPlayerInfo.ownerPlayerIndex === selfPlayerData.playerIndex)
             ) {
                 return true;
@@ -157,7 +157,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
         return (selfPlayerData != null)
             && (selfPlayerData.playerIndex === roomPlayerInfo.ownerPlayerIndex)
-            && (playerDataList.length == WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForCommon?.warRule)))
+            && (playerDataList.length == WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForCommon?.instanceWarRule)))
             && (playerDataList.every(v => v.isReady));
     }
 
@@ -176,8 +176,8 @@ namespace Twns.CoopCustomRoom.CcrModel {
         }
 
         const settingsForCommon     = Helpers.getExisted(roomStaticInfo.settingsForCommon);
-        const warRule               = Helpers.getExisted(settingsForCommon.warRule);
-        const playersCountUnneutral = WarRuleHelpers.getPlayersCountUnneutral(warRule);
+        const instanceWarRule       = Helpers.getExisted(settingsForCommon.instanceWarRule);
+        const playersCountUnneutral = WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(instanceWarRule);
         const playerDataList        = roomPlayerInfo.playerDataList || [];
         const playerInfoArray       : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
@@ -187,7 +187,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
 
             playerInfoArray.push({
                 playerIndex,
-                teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
+                teamIndex           : WarHelpers.WarRuleHelpers.getTeamIndex(instanceWarRule, playerIndex),
                 isAi                : (userId == null) && (!!isReady),
                 userId,
                 coId                : playerData?.coId ?? null,
@@ -221,12 +221,12 @@ namespace Twns.CoopCustomRoom.CcrModel {
         }
 
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
+        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
         const settingsForCcw    = Helpers.getExisted(roomInfo.settingsForCcw);
         const bootTimerParams   = Helpers.getExisted(settingsForCcw.bootTimerParams);
         const mapId             = Helpers.getExisted(settingsForCcw.mapId);
         const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
-        const warEventFullData  = (await WarMapModel.getRawData(mapId))?.warEventFullData ?? null;
+        const warEventFullData  = (await WarMap.WarMapModel.getRawData(mapId))?.warEventFullData ?? null;
         const warPassword       = settingsForCcw.warPassword;
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
@@ -234,7 +234,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.MapId,
                     currentValue    : mapId,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -242,7 +242,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.WarName,
                     currentValue    : settingsForCcw.warName ?? null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -250,7 +250,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.WarPassword,
                     currentValue    : warPassword == null ? null : (showPassword ? warPassword : `****`),
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -258,7 +258,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.WarComment,
                     currentValue    : settingsForCcw.warComment ?? null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -266,7 +266,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -274,7 +274,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -282,7 +282,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -290,7 +290,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.WarEvent,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -298,7 +298,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
                     currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -306,7 +306,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -317,7 +317,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
             openData.dataArrayForListSettings.push({
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
-                warRule,
+                instanceWarRule,
                 gameConfig,
                 warEventFullData,
                 callbackOnModify: null,
@@ -327,7 +327,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                     currentValue    : bootTimerParams[1],
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -335,7 +335,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                     currentValue    : bootTimerParams[2],
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -359,11 +359,11 @@ namespace Twns.CoopCustomRoom.CcrModel {
         }
 
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
+        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
         return {
             gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
-            warRule,
-            warType     : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.CcwFog : Types.WarType.CcwStd,
+            instanceWarRule,
+            warType     : instanceWarRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.CcwFog : Types.WarType.CcwStd,
         };
     }
 
@@ -388,10 +388,10 @@ namespace Twns.CoopCustomRoom.CcrModel {
             }
         }
 
-        const warRule = roomStaticInfo?.settingsForCommon?.warRule;
+        const instanceWarRule = roomStaticInfo?.settingsForCommon?.instanceWarRule;
         {
             const filterHasFog = filter.hasFog;
-            if ((filterHasFog != null) && ((!!warRule?.ruleForGlobalParams?.hasFogByDefault) !== filterHasFog)) {
+            if ((filterHasFog != null) && ((!!instanceWarRule?.ruleForGlobalParams?.hasFogByDefault) !== filterHasFog)) {
                 return false;
             }
         }
@@ -443,7 +443,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                     return false;
                 }
 
-                const mapRawData    = await WarMapModel.getRawData(mapId);
+                const mapRawData    = await WarMap.WarMapModel.getRawData(mapId);
                 const lowerCaseName = filterMapName.toLowerCase();
                 if (!(mapRawData?.mapNameArray || []).some(v => {
                     const name = v.text;

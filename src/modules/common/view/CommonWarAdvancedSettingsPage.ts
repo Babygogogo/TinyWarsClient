@@ -24,7 +24,7 @@ namespace Twns.Common {
     import IDataForPlayerRule   = CommonProto.WarRule.IDataForPlayerRule;
 
     export type OpenDataForCommonWarAdvancedSettingsPage = {
-        warRule         : CommonProto.WarRule.ITemplateWarRule;
+        instanceWarRule : CommonProto.WarRule.IInstanceWarRule;
         warType         : WarType;
         gameConfig      : GameConfig;
     } | null;
@@ -80,7 +80,7 @@ namespace Twns.Common {
             }
 
             const gameConfig        = openData.gameConfig;
-            const playerRuleArray   = Helpers.getExisted(openData.warRule?.ruleForPlayers?.playerRuleDataArray);
+            const playerRuleArray   = Helpers.getExisted(openData.instanceWarRule?.ruleForPlayers?.playerRuleDataArray);
             const dataArray         : DataForPlayerRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playerRuleArray.length; ++playerIndex) {
                 dataArray.push({

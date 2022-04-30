@@ -18,7 +18,7 @@
 namespace Twns.MapEditor {
     import WarAction                = CommonProto.WarAction;
     import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
-    import ITemplateWarRule                 = CommonProto.WarRule.ITemplateWarRule;
+    import ITemplateWarRule         = CommonProto.WarRule.ITemplateWarRule;
     import IMapRawData              = CommonProto.Map.IMapRawData;
     import IDataForMapTag           = CommonProto.Map.IDataForMapTag;
     import ILanguageText            = CommonProto.Structure.ILanguageText;
@@ -29,18 +29,18 @@ namespace Twns.MapEditor {
         private readonly _field                 = new TwnsMeField.MeField();
         private readonly _commonSettingManager  = new MapEditor.MeCommonSettingManager();
         private readonly _drawer                = new TwnsMeDrawer.MeDrawer();
-        private readonly _warEventManager       = new TwnsMeWarEventManager.MeWarEventManager();
+        private readonly _warEventManager       = new BaseWar.BwWarEventManager();
 
-        private _mapModifiedTime?   : number;
-        private _mapSlotIndex?      : number;
-        private _mapDesignerUserId? : number;
-        private _mapDesignerName?   : string;
-        private _mapNameList?       : ILanguageText[];
-        private _mapDescArray?      : ILanguageText[];
-        private _isReviewingMap     = false;
-        private _warRuleList        : ITemplateWarRule[] = [];
-        private _isMapModified      = false;
-        private _mapTag?            : IDataForMapTag;
+        private _mapModifiedTime?       : number;
+        private _mapSlotIndex?          : number;
+        private _mapDesignerUserId?     : number;
+        private _mapDesignerName?       : string;
+        private _mapNameList?           : ILanguageText[];
+        private _mapDescArray?          : ILanguageText[];
+        private _isReviewingMap         = false;
+        private _templateWarRuleArray   : ITemplateWarRule[] = [];
+        private _isMapModified          = false;
+        private _mapTag?                : IDataForMapTag;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig);
@@ -58,7 +58,7 @@ namespace Twns.MapEditor {
             this.setMapDesignerName(Helpers.getExisted(mapRawData.designerName));
             this.setMapNameArray(Helpers.getExisted(mapRawData.mapNameArray));
             this.setMapDescArray(mapRawData.mapExtraText?.mapDescription ?? []);
-            this._setWarRuleArray(MapEditor.MeHelpers.createRevisedWarRuleArrayForMeWar(mapRawData.warRuleArray));
+            this._setTemplateWarRuleArray(MapEditor.MeHelpers.createRevisedTemplateWarRuleArrayForMeWar(mapRawData.templateWarRuleArray));
             this.setMapTag(mapRawData.mapTag || {});
         }
 
@@ -93,7 +93,7 @@ namespace Twns.MapEditor {
                 modifiedTime            : Timer.getServerTimestamp(),
                 tileDataArray           : this.getTileMap().serialize().tiles,
                 unitDataArray           : unitMap.serialize().units,
-                warRuleArray            : this.getRevisedWarRuleArray(playersCountUnneutral),
+                templateWarRuleArray    : this.getRevisedTemplateWarRuleArray(playersCountUnneutral),
                 mapTag                  : this.getMapTag(),
                 warEventFullData        : this.getWarEventManager().getWarEventFullData(),
                 mapExtraText            : {
@@ -134,7 +134,7 @@ namespace Twns.MapEditor {
         public getCommonSettingManager(): MapEditor.MeCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getWarEventManager(): TwnsMeWarEventManager.MeWarEventManager {
+        public getWarEventManager(): BaseWar.BwWarEventManager {
             return this._warEventManager;
         }
 
@@ -288,50 +288,50 @@ namespace Twns.MapEditor {
             this._isMapModified = hasSubmitted;
         }
 
-        public getWarRuleArray(): ITemplateWarRule[] {
-            return this._warRuleList;
+        public getTemplateWarRuleArray(): ITemplateWarRule[] {
+            return this._templateWarRuleArray;
         }
-        private _setWarRuleArray(value: ITemplateWarRule[]): void {
-            this._warRuleList = value;
+        private _setTemplateWarRuleArray(value: ITemplateWarRule[]): void {
+            this._templateWarRuleArray = value;
         }
-        public getWarRuleByRuleId(ruleId: number): ITemplateWarRule {
-            return Helpers.getExisted(this.getWarRuleArray().find(v => v.ruleId === ruleId));
+        private _getTemplateWarRule(ruleId: number): ITemplateWarRule {
+            return Helpers.getExisted(this.getTemplateWarRuleArray().find(v => v.ruleId === ruleId));
         }
-        public getRevisedWarRuleArray(playersCountUnneutral: number): ITemplateWarRule[] {
-            const ruleArray: ITemplateWarRule[] = [];
-            for (const rule of this.getWarRuleArray() || []) {
-                const revisedRule = Helpers.deepClone(rule);
+        public getRevisedTemplateWarRuleArray(playersCountUnneutral: number): ITemplateWarRule[] {
+            const revisedTemplateWarRuleArray: ITemplateWarRule[] = [];
+            for (const templateWarRule of this.getTemplateWarRuleArray() || []) {
+                const revisedRule = Helpers.deepClone(templateWarRule);
                 const playerRules = Helpers.getExisted(revisedRule.ruleForPlayers);
                 playerRules.playerRuleDataArray = Helpers.getExisted(playerRules.playerRuleDataArray).filter(v => {
                     const playerIndex = Helpers.getExisted(v.playerIndex);
                     return (playerIndex <= playersCountUnneutral)
                         && (playerIndex >= CommonConstants.WarFirstPlayerIndex);
                 }).sort((v1, v2) => Helpers.getExisted(v1.playerIndex) - Helpers.getExisted(v2.playerIndex));
-                ruleArray.push(revisedRule);
+                revisedTemplateWarRuleArray.push(revisedRule);
             }
 
-            return ruleArray;
+            return revisedTemplateWarRuleArray;
         }
 
-        public addWarRule(): void {
-            const ruleList = this.getWarRuleArray();
-            ruleList.push(WarRuleHelpers.createDefaultWarRule(ruleList.length, CommonConstants.WarMaxPlayerIndex));
+        public addTemplateWarRule(): void {
+            const templateWarRuleArray = this.getTemplateWarRuleArray();
+            templateWarRuleArray.push(WarHelpers.WarRuleHelpers.createDefaultTemplateWarRule(templateWarRuleArray.length, CommonConstants.WarMaxPlayerIndex));
         }
-        public deleteWarRule(ruleId: number): void {
-            const ruleList  = this.getWarRuleArray();
-            const ruleIndex = ruleList.findIndex(v => v.ruleId === ruleId);
+        public deleteTemplateWarRule(templateWarRuleId: number): void {
+            const templateWarRuleArray  = this.getTemplateWarRuleArray();
+            const ruleIndex             = templateWarRuleArray.findIndex(v => v.ruleId === templateWarRuleId);
             if (ruleIndex >= 0) {
-                ruleList.splice(ruleIndex, 1);
-                for (let index = ruleIndex; index < ruleList.length; ++index) {
-                    const rule  = ruleList[index];
-                    rule.ruleId = Helpers.getExisted(rule.ruleId) - 1;
+                templateWarRuleArray.splice(ruleIndex, 1);
+                for (let i = ruleIndex; i < templateWarRuleArray.length; ++i) {
+                    const templateWarRule   = templateWarRuleArray[i];
+                    templateWarRule.ruleId  = Helpers.getExisted(templateWarRule.ruleId) - 1;
                 }
             }
         }
         public setWarRuleNameList(ruleId: number, nameArray: ILanguageText[]): void {
-            const rule = this.getWarRuleByRuleId(ruleId);
-            if (rule) {
-                rule.ruleNameArray = nameArray;
+            const templateWarRule = this._getTemplateWarRule(ruleId);
+            if (templateWarRule) {
+                templateWarRule.ruleNameArray = nameArray;
             }
         }
 

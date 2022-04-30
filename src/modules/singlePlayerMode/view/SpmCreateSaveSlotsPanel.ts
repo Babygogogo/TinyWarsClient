@@ -83,7 +83,7 @@ namespace TwnsSpmCreateSaveSlotsPanel {
             for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
-                    slotInfo    : await SpmModel.getSlotFullData(slotIndex),
+                    slotInfo    : await Twns.SinglePlayerMode.SpmModel.getSlotFullData(slotIndex),
                     callback,
                 });
             }
@@ -148,7 +148,7 @@ namespace TwnsSpmCreateSaveSlotsPanel {
                     const mapId         = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
+                        : (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
                 }
             }
         }

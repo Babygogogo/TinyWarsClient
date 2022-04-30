@@ -11,11 +11,10 @@
 // import WarMapModel          from "../../warMap/model/WarMapModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace McrCreateModel {
+namespace Twns.MultiCustomRoom.McrCreateModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import BootTimerType    = Types.BootTimerType;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import GameConfig       = Twns.Config.GameConfig;
+    import GameConfig       = Config.GameConfig;
 
     const REGULAR_TIME_LIMITS = [
         60 * 60 * 24 * 1,   // 1 day
@@ -30,6 +29,10 @@ namespace McrCreateModel {
     const _dataForCreateRoom: DataForCreateRoom = {
         settingsForCommon       : {
             turnsLimit          : CommonConstants.WarMaxTurnsLimit,
+            instanceWarRule     : {
+                templateRuleId          : null,
+                templateModifiedTime    : null,
+            },
         },
         settingsForMcw          : {},
 
@@ -40,20 +43,20 @@ namespace McrCreateModel {
     let _gameConfig: GameConfig | null = null;
 
     export async function getMapRawData(): Promise<CommonProto.Map.IMapRawData> {
-        return Helpers.getExisted(await WarMapModel.getRawData(getMapId()));
+        return Helpers.getExisted(await WarMap.WarMapModel.getRawData(getMapId()));
     }
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
         setMapId(mapId);
-        setConfigVersion(Helpers.getExisted(Twns.Config.ConfigManager.getLatestConfigVersion()));
-        setGameConfig(await Twns.Config.ConfigManager.getLatestGameConfig());
+        setConfigVersion(Helpers.getExisted(Config.ConfigManager.getLatestConfigVersion()));
+        setGameConfig(await Config.ConfigManager.getLatestGameConfig());
         setWarName("");
         setWarPassword("");
         setWarComment("");
         setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
         setTurnsLimit(CommonConstants.WarMaxTurnsLimit);
         setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
-        await resetDataByWarRuleId(Helpers.getExisted((await getMapRawData()).warRuleArray?.find(v => v.ruleAvailability?.canMcw)?.ruleId));
+        await resetDataByTemplateWarRuleId(Helpers.getExisted((await getMapRawData()).templateWarRuleArray?.find(v => v.ruleAvailability?.canMcw)?.ruleId));
     }
     export function getData(): DataForCreateRoom {
         return _dataForCreateRoom;
@@ -65,11 +68,11 @@ namespace McrCreateModel {
         return Helpers.getExisted(getData().settingsForMcw);
     }
 
-    export function getWarRule(): CommonProto.WarRule.ITemplateWarRule {
-        return Helpers.getExisted(getSettingsForCommon().warRule);
+    export function getInstanceWarRule(): CommonProto.WarRule.IInstanceWarRule {
+        return Helpers.getExisted(getSettingsForCommon().instanceWarRule);
     }
-    function setWarRule(warRule: CommonProto.WarRule.ITemplateWarRule) {
-        getSettingsForCommon().warRule = warRule;
+    function setInstanceWarRule(instanceWarRule: CommonProto.WarRule.IInstanceWarRule) {
+        getSettingsForCommon().instanceWarRule = instanceWarRule;
     }
 
     export function getMapId(): number {
@@ -89,72 +92,54 @@ namespace McrCreateModel {
         _gameConfig = config;
     }
 
-    export async function resetDataByWarRuleId(ruleId: number | null): Promise<void> {
-        if (ruleId == null) {
-            await resetDataByCustomWarRuleId();
+    export async function resetDataByTemplateWarRuleId(templateWarRuleId: number | null): Promise<void> {
+        const mapRawData = await getMapRawData();
+        if (templateWarRuleId == null) {
+            const instanceWarRule = WarHelpers.WarRuleHelpers.createDefaultInstanceWarRule(Helpers.getExisted(mapRawData.playersCountUnneutral));
+            setInstanceWarRule(instanceWarRule);
         } else {
-            await resetDataByPresetWarRuleId(ruleId);
+            const templateWarRule = Helpers.getExisted(mapRawData.templateWarRuleArray?.find(r => r.ruleId === templateWarRuleId));
+            setInstanceWarRule(WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRule, mapRawData.warEventFullData));
         }
-    }
-    async function resetDataByCustomWarRuleId(): Promise<void> {
-        const warRule = WarRuleHelpers.createDefaultWarRule(null, Helpers.getExisted((await getMapRawData()).playersCountUnneutral));
-        setWarRule(warRule);
-        setCustomWarRuleId();
 
-        const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
-            warRule,
+        const availableCoIdArray = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+            baseWarRule     : getInstanceWarRule(),
             playerIndex     : getSelfPlayerIndex(),
             gameConfig      : getGameConfig(),
         });
         if (availableCoIdArray.indexOf(getSelfCoId()) < 0) {
-            setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
+            setSelfCoId(WarHelpers.WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
         }
 
-        Notify.dispatch(NotifyType.McrCreateTeamIndexChanged);
-    }
-    async function resetDataByPresetWarRuleId(ruleId: number): Promise<void> {
-        const warRule = Helpers.getExisted((await getMapRawData()).warRuleArray?.find(r => r.ruleId === ruleId));
-        setWarRule(Helpers.deepClone(warRule));
-        setPresetWarRuleId(ruleId);
-
-        const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
-            warRule,
-            playerIndex     : getSelfPlayerIndex(),
-            gameConfig      : getGameConfig(),
-        });
-        if (availableCoIdArray.indexOf(getSelfCoId()) < 0) {
-            setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
-        }
-
-        Notify.dispatch(NotifyType.McrCreateTeamIndexChanged);
-    }
-    function setPresetWarRuleId(ruleId: number | null): void {
-        getWarRule().ruleId                     = ruleId;
-        getSettingsForCommon().presetWarRuleId  = ruleId;
         Notify.dispatch(NotifyType.McrCreatePresetWarRuleIdChanged);
+        Notify.dispatch(NotifyType.McrCreateTeamIndexChanged);
     }
     export function setCustomWarRuleId(): void {
-        setPresetWarRuleId(null);
+        const instanceWarRule                   = getInstanceWarRule();
+        instanceWarRule.templateRuleId          = null;
+        instanceWarRule.templateModifiedTime    = null;
+
+        Notify.dispatch(NotifyType.McrCreatePresetWarRuleIdChanged);
     }
-    export function getPresetWarRuleId(): number | null {
-        return Helpers.getDefined(getSettingsForCommon().presetWarRuleId, ClientErrorCode.McrCreateModel_GetPresetWarRuleId_00);
+    export function getTemplateWarRuleId(): number | null {
+        return getInstanceWarRule().templateRuleId ?? null;
     }
-    export async function tickPresetWarRuleId(): Promise<void> {
-        const currWarRuleId = getPresetWarRuleId();
-        const warRuleArray  = Helpers.getExisted((await getMapRawData()).warRuleArray);
-        if (currWarRuleId == null) {
-            await resetDataByWarRuleId(Helpers.getExisted(warRuleArray.find(v => v.ruleAvailability?.canMcw)?.ruleId));
+    export async function tickTemplateWarRuleId(): Promise<void> {
+        const currTemplateWarRuleId = getTemplateWarRuleId();
+        const templateWarRuleArray  = Helpers.getExisted((await getMapRawData()).templateWarRuleArray);
+        if (currTemplateWarRuleId == null) {
+            await resetDataByTemplateWarRuleId(Helpers.getExisted(templateWarRuleArray.find(v => v.ruleAvailability?.canMcw)?.ruleId));
         } else {
-            const warRuleIdList: number[] = [];
-            for (let ruleId = currWarRuleId + 1; ruleId < warRuleArray.length; ++ruleId) {
-                warRuleIdList.push(ruleId);
+            const templateWarRuleIdArray: number[] = [];
+            for (let ruleId = currTemplateWarRuleId + 1; ruleId < templateWarRuleArray.length; ++ruleId) {
+                templateWarRuleIdArray.push(ruleId);
             }
-            for (let ruleId = 0; ruleId < currWarRuleId; ++ruleId) {
-                warRuleIdList.push(ruleId);
+            for (let ruleId = 0; ruleId < currTemplateWarRuleId; ++ruleId) {
+                templateWarRuleIdArray.push(ruleId);
             }
-            for (const ruleId of warRuleIdList) {
-                if (warRuleArray.find(v => v.ruleId === ruleId)?.ruleAvailability?.canMcw) {
-                    await resetDataByWarRuleId(ruleId);
+            for (const ruleId of templateWarRuleIdArray) {
+                if (templateWarRuleArray.find(v => v.ruleId === ruleId)?.ruleAvailability?.canMcw) {
+                    await resetDataByTemplateWarRuleId(ruleId);
                     return;
                 }
             }
@@ -226,14 +211,14 @@ namespace McrCreateModel {
     }
 
     export function setHasFog(hasFog: boolean): void {
-        Helpers.getExisted(getWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
+        Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
     }
     export function getHasFog(): boolean {
-        return Helpers.getExisted(getWarRule().ruleForGlobalParams?.hasFogByDefault);
+        return Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault);
     }
 
     export function tickDefaultWeatherType(): void {
-        WarRuleHelpers.tickDefaultWeatherType(getWarRule(), getGameConfig());
+        WarHelpers.WarRuleHelpers.tickDefaultWeatherType(getInstanceWarRule(), getGameConfig());
     }
 
     export function setBootTimerParams(params: number[]): void {
@@ -272,87 +257,87 @@ namespace McrCreateModel {
     }
 
     export function tickTeamIndex(playerIndex: number): void {
-        WarRuleHelpers.tickTeamIndex(getWarRule(), playerIndex);
+        WarHelpers.WarRuleHelpers.tickTeamIndex(getInstanceWarRule(), playerIndex);
         Notify.dispatch(NotifyType.McrCreateTeamIndexChanged);
     }
     export function getTeamIndex(playerIndex: number): number {
-        return WarRuleHelpers.getTeamIndex(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getTeamIndex(getInstanceWarRule(), playerIndex);
     }
 
     export function setInitialFund(playerIndex: number, fund: number): void {
-        WarRuleHelpers.setInitialFund(getWarRule(), playerIndex, fund);
+        WarHelpers.WarRuleHelpers.setInitialFund(getInstanceWarRule(), playerIndex, fund);
     }
     export function getInitialFund(playerIndex: number): number {
-        return WarRuleHelpers.getInitialFund(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getInitialFund(getInstanceWarRule(), playerIndex);
     }
 
     export function setIncomeMultiplier(playerIndex: number, multiplier: number): void {
-        WarRuleHelpers.setIncomeMultiplier(getWarRule(), playerIndex, multiplier);
+        WarHelpers.WarRuleHelpers.setIncomeMultiplier(getInstanceWarRule(), playerIndex, multiplier);
     }
     export function getIncomeMultiplier(playerIndex: number): number {
-        return WarRuleHelpers.getIncomeMultiplier(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getIncomeMultiplier(getInstanceWarRule(), playerIndex);
     }
 
     export function setEnergyAddPctOnLoadCo(playerIndex: number, percentage: number): void {
-        WarRuleHelpers.setEnergyAddPctOnLoadCo(getWarRule(), playerIndex, percentage);
+        WarHelpers.WarRuleHelpers.setEnergyAddPctOnLoadCo(getInstanceWarRule(), playerIndex, percentage);
     }
     export function getEnergyAddPctOnLoadCo(playerIndex: number): number {
-        return WarRuleHelpers.getEnergyAddPctOnLoadCo(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getEnergyAddPctOnLoadCo(getInstanceWarRule(), playerIndex);
     }
 
     export function setEnergyGrowthMultiplier(playerIndex: number, multiplier: number): void {
-        WarRuleHelpers.setEnergyGrowthMultiplier(getWarRule(), playerIndex, multiplier);
+        WarHelpers.WarRuleHelpers.setEnergyGrowthMultiplier(getInstanceWarRule(), playerIndex, multiplier);
     }
     export function getEnergyGrowthMultiplier(playerIndex: number): number {
-        return WarRuleHelpers.getEnergyGrowthMultiplier(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getEnergyGrowthMultiplier(getInstanceWarRule(), playerIndex);
     }
 
     export function getBannedCoIdArray(playerIndex: number): number[] | null {
-        return WarRuleHelpers.getBannedCoIdArray(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getBannedCoIdArray(getInstanceWarRule(), playerIndex);
     }
     export function addBannedCoId(playerIndex: number, coId: number): void {
-        WarRuleHelpers.addBannedCoId(getWarRule(), playerIndex, coId);
+        WarHelpers.WarRuleHelpers.addBannedCoId(getInstanceWarRule(), playerIndex, coId);
     }
     export function deleteBannedCoId(playerIndex: number, coId: number): void {
-        WarRuleHelpers.deleteBannedCoId(getWarRule(), playerIndex, coId);
+        WarHelpers.WarRuleHelpers.deleteBannedCoId(getInstanceWarRule(), playerIndex, coId);
     }
     export function setBannedCoIdArray(playerIndex: number, coIdSet: Set<number>): void {
-        WarRuleHelpers.setBannedCoIdArray(getWarRule(), playerIndex, coIdSet);
+        WarHelpers.WarRuleHelpers.setBannedCoIdArray(getInstanceWarRule(), playerIndex, coIdSet);
     }
 
     export function setLuckLowerLimit(playerIndex: number, limit: number): void {
-        WarRuleHelpers.setLuckLowerLimit(getWarRule(), playerIndex, limit);
+        WarHelpers.WarRuleHelpers.setLuckLowerLimit(getInstanceWarRule(), playerIndex, limit);
     }
     export function getLuckLowerLimit(playerIndex: number): number {
-        return WarRuleHelpers.getLuckLowerLimit(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getLuckLowerLimit(getInstanceWarRule(), playerIndex);
     }
 
     export function setLuckUpperLimit(playerIndex: number, limit: number): void {
-        WarRuleHelpers.setLuckUpperLimit(getWarRule(), playerIndex, limit);
+        WarHelpers.WarRuleHelpers.setLuckUpperLimit(getInstanceWarRule(), playerIndex, limit);
     }
     export function getLuckUpperLimit(playerIndex: number): number {
-        return WarRuleHelpers.getLuckUpperLimit(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getLuckUpperLimit(getInstanceWarRule(), playerIndex);
     }
 
     export function setMoveRangeModifier(playerIndex: number, modifier: number): void {
-        WarRuleHelpers.setMoveRangeModifier(getWarRule(), playerIndex, modifier);
+        WarHelpers.WarRuleHelpers.setMoveRangeModifier(getInstanceWarRule(), playerIndex, modifier);
     }
     export function getMoveRangeModifier(playerIndex: number): number {
-        return WarRuleHelpers.getMoveRangeModifier(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getMoveRangeModifier(getInstanceWarRule(), playerIndex);
     }
 
     export function setAttackPowerModifier(playerIndex: number, modifier: number): void {
-        WarRuleHelpers.setAttackPowerModifier(getWarRule(), playerIndex, modifier);
+        WarHelpers.WarRuleHelpers.setAttackPowerModifier(getInstanceWarRule(), playerIndex, modifier);
     }
     export function getAttackPowerModifier(playerIndex: number): number {
-        return WarRuleHelpers.getAttackPowerModifier(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getAttackPowerModifier(getInstanceWarRule(), playerIndex);
     }
 
     export function setVisionRangeModifier(playerIndex: number, modifier: number): void {
-        WarRuleHelpers.setVisionRangeModifier(getWarRule(), playerIndex, modifier);
+        WarHelpers.WarRuleHelpers.setVisionRangeModifier(getInstanceWarRule(), playerIndex, modifier);
     }
     export function getVisionRangeModifier(playerIndex: number): number {
-        return WarRuleHelpers.getVisionRangeModifier(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getVisionRangeModifier(getInstanceWarRule(), playerIndex);
     }
 }
 

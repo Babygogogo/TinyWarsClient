@@ -78,7 +78,7 @@ namespace TwnsCommonWarMapInfoPage {
                         },
                     });
 
-                    const mapRawData = await WarMapModel.getRawData(mapId);
+                    const mapRawData = await Twns.WarMap.WarMapModel.getRawData(mapId);
                     if (mapRawData) {
                         zoomMap.showMapByMapData(mapRawData, openData.gameConfig);
                     } else {

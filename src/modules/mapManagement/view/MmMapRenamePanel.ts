@@ -77,7 +77,7 @@ namespace TwnsMmMapRenamePanel {
             this._updateComponentsForLanguage();
 
             const openData          = this._getOpenData();
-            const nameArray         = (await WarMapModel.getRawData(openData.mapId))?.mapNameArray;
+            const nameArray         = (await Twns.WarMap.WarMapModel.getRawData(openData.mapId))?.mapNameArray;
             this._inputChinese.text = Lang.getLanguageText({ textArray: nameArray, languageType: Types.LanguageType.Chinese, useAlternate: false }) ?? ``;
             this._inputEnglish.text = Lang.getLanguageText({ textArray: nameArray, languageType: Types.LanguageType.English, useAlternate: false }) ?? ``;
         }

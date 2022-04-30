@@ -367,7 +367,7 @@ namespace Twns.MultiCustomRoom {
             const settingsForMcw    = (await McrModel.getRoomStaticInfo(this._getData().roomId))?.settingsForMcw;
             this._labelName.text    = (settingsForMcw == null)
                 ? ``
-                : (settingsForMcw.warName || (await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)))) ?? CommonConstants.ErrorTextForUndefined;
+                : (settingsForMcw.warName || (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)))) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private async _updateImgRed(): Promise<void> {

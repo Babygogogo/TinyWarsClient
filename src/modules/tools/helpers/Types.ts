@@ -218,6 +218,8 @@ namespace Types {
         warData     : CommonProto.WarSerialization.ISerialWar;
     };
 
+    export type BaseWarRule = CommonProto.WarRule.IInstanceWarRule | CommonProto.WarRule.ITemplateWarRule;
+
     export type ReplayCheckpointInfo = {
         checkpointId: number;
         nextActionId: number;

@@ -17,7 +17,7 @@
 // import TwnsUserPanel            from "../../user/view/UserPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonMapWarStatisticsPanel {
+namespace Twns.Common {
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = TwnsNotifyType.NotifyType;
     import WarType      = Types.WarType;
@@ -35,10 +35,10 @@ namespace TwnsCommonMapWarStatisticsPanel {
         WarType.SrwFog,
     ];
 
-    export type OpenData = {
+    export type OpenDataForCommonMapWarStatisticsPanel = {
         mapId   : number;
     };
-    export class CommonMapWarStatisticsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonMapWarStatisticsPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonMapWarStatisticsPanel> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _group!                : eui.Group;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
@@ -52,8 +52,8 @@ namespace TwnsCommonMapWarStatisticsPanel {
         private readonly _listStatistics!       : TwnsUiScrollList.UiScrollList<DataForStatistics>;
         private readonly _labelNoData!          : TwnsUiLabel.UiLabel;
 
-        private _ruleId     = 0;
-        private _warType    = WarType.MrwStd;
+        private _templateWarRuleId  = 0;
+        private _warType            = WarType.MrwStd;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -71,8 +71,8 @@ namespace TwnsCommonMapWarStatisticsPanel {
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             const mapId     = this._getOpenData().mapId;
-            this._ruleId    = (await getNextRuleId(mapId, -1)) ?? Helpers.getExisted(Helpers.getExisted((await WarMapModel.getRawData(mapId))?.warRuleArray)[0].ruleId);
-            this._warType   = (await getNextWarType(WarType.Undefined, mapId, this._ruleId)) ?? WarType.MrwStd;
+            this._templateWarRuleId    = (await getNextRuleId(mapId, -1)) ?? Helpers.getExisted(Helpers.getExisted((await WarMap.WarMapModel.getRawData(mapId))?.templateWarRuleArray)[0].ruleId);
+            this._warType   = (await getNextWarType(WarType.Undefined, mapId, this._templateWarRuleId)) ?? WarType.MrwStd;
             this._updateView();
         }
         protected _onClosing(): void {
@@ -88,7 +88,7 @@ namespace TwnsCommonMapWarStatisticsPanel {
 
         private async _onTouchedBtnRule(): Promise<void> {
             const mapId         = this._getOpenData().mapId;
-            const nextRuleId    = await getNextRuleId(mapId, this._ruleId);
+            const nextRuleId    = await getNextRuleId(mapId, this._templateWarRuleId);
             if (nextRuleId == null) {
                 FloatText.show(Lang.getText(LangTextType.A0302));
                 return;
@@ -100,13 +100,13 @@ namespace TwnsCommonMapWarStatisticsPanel {
                 return;
             }
 
-            this._ruleId    = nextRuleId;
+            this._templateWarRuleId    = nextRuleId;
             this._warType   = nextWarType;
             this._updateView();
         }
 
         private async _onTouchedBtnWarType(): Promise<void> {
-            const nextWarType = await getNextWarType(this._warType, this._getOpenData().mapId, this._ruleId);
+            const nextWarType = await getNextWarType(this._warType, this._getOpenData().mapId, this._templateWarRuleId);
             if (nextWarType == null) {
                 FloatText.show(Lang.getText(LangTextType.A0302));
                 return;
@@ -138,14 +138,15 @@ namespace TwnsCommonMapWarStatisticsPanel {
 
         private async _updateLabelTitle(): Promise<void> {
             const mapId             = this._getOpenData().mapId;
-            const mapName           = await WarMapModel.getMapNameInCurrentLanguage(this._getOpenData().mapId);
+            const mapName           = await WarMap.WarMapModel.getMapNameInCurrentLanguage(this._getOpenData().mapId);
             this._labelTitle.text   = `${Lang.getText(LangTextType.B0876)} #${mapId} ${mapName}`;
         }
 
         private async _updateLabelRule(): Promise<void> {
-            const ruleId            = this._ruleId;
-            const rule              = (await WarMapModel.getRawData(this._getOpenData().mapId))?.warRuleArray?.find(v => v.ruleId === ruleId);
-            this._labelRule.text    = `#${ruleId} ${rule ? Lang.getWarRuleNameInLanguage(rule) ?? CommonConstants.ErrorTextForUndefined : CommonConstants.ErrorTextForUndefined}`;
+            const templateWarRuleId = this._templateWarRuleId;
+            const templateWarRule   = (await WarMap.WarMapModel.getRawData(this._getOpenData().mapId))?.templateWarRuleArray?.find(v => v.ruleId === templateWarRuleId);
+            const ruleName          = templateWarRule ? Lang.getLanguageText({ textArray: templateWarRule.ruleNameArray }) ?? CommonConstants.ErrorTextForUndefined : CommonConstants.ErrorTextForUndefined;
+            this._labelRule.text    = `#${templateWarRuleId} ${ruleName}`;
         }
 
         private _updateLabelWarType(): void {
@@ -153,8 +154,8 @@ namespace TwnsCommonMapWarStatisticsPanel {
         }
 
         private async _updateComponentsForListStatistics(): Promise<void> {
-            const statisticsForRuleArray    = (await WarMapModel.getBriefData(this._getOpenData().mapId))?.mapExtraData?.mapWarStatistics?.statisticsForRuleArray;
-            const statisticsForTurnArray    = statisticsForRuleArray?.find(v => v.ruleId === this._ruleId && v.warType === this._warType)?.statisticsForTurnArray;
+            const statisticsForRuleArray    = (await WarMap.WarMapModel.getBriefData(this._getOpenData().mapId))?.mapExtraData?.mapWarStatistics?.statisticsForRuleArray;
+            const statisticsForTurnArray    = statisticsForRuleArray?.find(v => v.ruleId === this._templateWarRuleId && v.warType === this._warType)?.statisticsForTurnArray;
             const labelNoData               = this._labelNoData;
             const listStatistics            = this._listStatistics;
             if (!statisticsForTurnArray?.length) {
@@ -335,7 +336,7 @@ namespace TwnsCommonMapWarStatisticsPanel {
     }
 
     async function getRuleIdArray(mapId: number, ruleId: number): Promise<number[]> {
-        const ruleIdFullArray   = (await WarMapModel.getRawData(mapId))?.warRuleArray?.map(v => Helpers.getExisted(v.ruleId)).sort((v1, v2) => v1 - v2) ?? [];
+        const ruleIdFullArray   = (await WarMap.WarMapModel.getRawData(mapId))?.templateWarRuleArray?.map(v => Helpers.getExisted(v.ruleId)).sort((v1, v2) => v1 - v2) ?? [];
         const ruleIdArray       : number[] = [];
         const index             = ruleIdFullArray.indexOf(ruleId);
         for (let i = index + 1; i < ruleIdFullArray.length; ++i) {
@@ -348,7 +349,7 @@ namespace TwnsCommonMapWarStatisticsPanel {
     }
 
     async function getNextWarType(warType: WarType, mapId: number, ruleId: number): Promise<WarType | null> {
-        const statisticsForRuleArray = (await WarMapModel.getBriefData(mapId))?.mapExtraData?.mapWarStatistics?.statisticsForRuleArray;
+        const statisticsForRuleArray = (await WarMap.WarMapModel.getBriefData(mapId))?.mapExtraData?.mapWarStatistics?.statisticsForRuleArray;
         for (const newWarType of getWarTypeArray(warType)) {
             if (statisticsForRuleArray?.find(v => (v.ruleId === ruleId) && (v.warType === newWarType))?.statisticsForTurnArray?.length) {
                 return newWarType;

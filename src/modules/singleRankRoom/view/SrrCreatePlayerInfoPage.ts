@@ -19,7 +19,7 @@
 // import ScrCreateModel               from "../model/ScrCreateModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSrrCreatePlayerInfoPage {
+namespace Twns.SingleRankRoom {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
 
@@ -57,7 +57,7 @@ namespace TwnsSrrCreatePlayerInfoPage {
             // nothing to do
         }
         private async _updateComponentsForPlayerInfo(): Promise<void> {
-            const mapRawData    = await SrrCreateModel.getMapRawData();
+            const mapRawData    = await Twns.SingleRankRoom.SrrCreateModel.getMapRawData();
             const listPlayer    = this._listPlayer;
             if (mapRawData) {
                 listPlayer.bindData(this._createDataForListPlayer(Helpers.getExisted(mapRawData.playersCountUnneutral)));
@@ -112,7 +112,7 @@ namespace TwnsSrrCreatePlayerInfoPage {
         protected _onDataChanged(): void {
             this._updateComponentsForSettings();
 
-            this._btnChangeCo.visible = SrrCreateModel.getPlayerRule(this._getData().playerIndex).fixedCoIdInSrw == null;
+            this._btnChangeCo.visible = Twns.SingleRankRoom.SrrCreateModel.getPlayerRule(this._getData().playerIndex).fixedCoIdInSrw == null;
         }
 
         private async _onTouchedGroupCo(): Promise<void> {
@@ -120,35 +120,35 @@ namespace TwnsSrrCreatePlayerInfoPage {
             const coId          = playerData ? playerData.coId : null;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
-                    gameConfig      : SrrCreateModel.getGameConfig(),
+                    gameConfig      : Twns.SingleRankRoom.SrrCreateModel.getGameConfig(),
                     coId,
                 });
             }
         }
 
         private async _onTouchedBtnChangeSkinId(): Promise<void> {
-            SrrCreateModel.tickUnitAndTileSkinId(this._getData().playerIndex);
+            Twns.SingleRankRoom.SrrCreateModel.tickUnitAndTileSkinId(this._getData().playerIndex);
         }
 
         private async _onTouchedBtnChangeCo(): Promise<void> {
-            const roomInfo  = SrrCreateModel.getData();
+            const roomInfo  = Twns.SingleRankRoom.SrrCreateModel.getData();
             if (!roomInfo) {
                 return;
             }
 
             const playerIndex   = this._getData().playerIndex;
-            const currentCoId   = SrrCreateModel.getCoId(playerIndex);
+            const currentCoId   = Twns.SingleRankRoom.SrrCreateModel.getCoId(playerIndex);
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
-                gameConfig          : SrrCreateModel.getGameConfig(),
+                gameConfig          : Twns.SingleRankRoom.SrrCreateModel.getGameConfig(),
                 currentCoId,
-                availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
-                    warRule         : SrrCreateModel.getWarRule(),
+                availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                    baseWarRule         : Twns.SingleRankRoom.SrrCreateModel.getInstanceWarRule(),
                     playerIndex,
-                    gameConfig      : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion)),
+                    gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion)),
                 }),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
-                        SrrCreateModel.setCoId(playerIndex, newCoId);
+                        Twns.SingleRankRoom.SrrCreateModel.setCoId(playerIndex, newCoId);
                     }
                 },
             });
@@ -171,7 +171,7 @@ namespace TwnsSrrCreatePlayerInfoPage {
         }
 
         private async _updateComponentsForSettings(): Promise<void> {
-            const roomInfo  = SrrCreateModel.getData();
+            const roomInfo  = Twns.SingleRankRoom.SrrCreateModel.getData();
             if (!roomInfo) {
                 return;
             }
@@ -179,16 +179,16 @@ namespace TwnsSrrCreatePlayerInfoPage {
             const playerIndex           = this._getData().playerIndex;
             const settingsForCommon     = Helpers.getExisted(roomInfo.settingsForCommon);
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(Helpers.getExisted(settingsForCommon.warRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
 
             const playerData            = this._getPlayerData();
-            this._imgSkin.source        = Twns.WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(Helpers.getExisted(playerData.unitAndTileSkinId));
+            this._imgSkin.source        = WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(Helpers.getExisted(playerData.unitAndTileSkinId));
             this._labelPlayerType.text  = playerData.userId == null
                 ? Lang.getText(LangTextType.B0607)
                 : Lang.getText(LangTextType.B0031);
 
             const coId                  = Helpers.getExisted(playerData.coId);
-            const gameConfig            = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+            const gameConfig            = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
             const coCfg                 = gameConfig.getCoBasicCfg(coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
@@ -196,7 +196,7 @@ namespace TwnsSrrCreatePlayerInfoPage {
         }
 
         private _getPlayerData(): CommonProto.Structure.IDataForPlayerInRoom {
-            return SrrCreateModel.getPlayerInfo(this._getData().playerIndex);
+            return Twns.SingleRankRoom.SrrCreateModel.getPlayerInfo(this._getData().playerIndex);
         }
     }
 }

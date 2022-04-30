@@ -233,11 +233,11 @@ namespace TwnsLangErrorText {
             `势力颜色不合法`,
             `The colors of the forces are invalid.`,
         ],
-        [ClientErrorCode.MapRawDataValidation04]: [
+        [ClientErrorCode.MeHelpers_GetErrorCodeForPlayersCountUnneutral_00]: [
             `势力数量不合法`,
             `The number of the forces is not valid.`,
         ],
-        [ClientErrorCode.MapRawDataValidation07]: [
+        [ClientErrorCode.MeHelpers_GetErrorCodeForPlayersCountUnneutral_03]: [
             `势力颜色不合法`,
             `The colors of the forces are invalid.`,
         ],
@@ -257,7 +257,7 @@ namespace TwnsLangErrorText {
             `存在未被任何规则使用的事件`,
             `There is a redundant event that is not used in any rules.`,
         ],
-        [ClientErrorCode.WarRuleValidation02]: [
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForTemplateWarRule_02]: [
             `尚未设置预设规则的可用性`,
             `The availability of the preset rule has not been set.`,
         ],

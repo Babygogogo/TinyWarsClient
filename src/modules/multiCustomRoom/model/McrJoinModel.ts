@@ -25,7 +25,7 @@ namespace Twns.MultiCustomRoom.McrJoinModel {
             return {
                 roomId          : roomStaticInfo.roomId,
                 isReady         : false,
-                coId            : WarRuleHelpers.getRandomCoIdWithSettingsForCommon(Helpers.getExisted(settingsForCommon.warRule), playerIndex, await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion))),
+                coId            : WarHelpers.WarRuleHelpers.getRandomCoIdWithSettingsForCommon(Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex, await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion))),
                 playerIndex,
                 unitAndTileSkinId,
             };
@@ -33,7 +33,7 @@ namespace Twns.MultiCustomRoom.McrJoinModel {
     }
 
     function generateAvailablePlayerIndexList(roomStaticInfo: IMcrRoomStaticInfo, roomPlayerInfo: IMcrRoomPlayerInfo): number[] {
-        const playersCount      = WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForCommon?.warRule));
+        const playersCount      = WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForCommon?.instanceWarRule));
         const playerInfoList    = Helpers.getExisted(roomPlayerInfo.playerDataList);
         const indexes           : number[] = [];
         for (let i = 1; i <= playersCount; ++i) {

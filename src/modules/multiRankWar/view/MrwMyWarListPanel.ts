@@ -340,7 +340,7 @@ namespace Twns.MultiRankWar {
             if (warSettings == null) {
                 labelName.text  = ``;
             } else {
-                labelName.text  = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(warSettings.settingsForMrw?.mapId)) || CommonConstants.ErrorTextForUndefined;
+                labelName.text  = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(warSettings.settingsForMrw?.mapId)) || CommonConstants.ErrorTextForUndefined;
             }
         }
 

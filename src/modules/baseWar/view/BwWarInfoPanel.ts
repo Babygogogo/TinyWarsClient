@@ -131,7 +131,7 @@ namespace Twns.BaseWar {
                 labelMapName.text       = ``;
                 labelMapDesigner.text   = ``;
             } else {
-                const briefInfo         = Helpers.getExisted(await WarMapModel.getBriefData(mapId), ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_00);
+                const briefInfo         = Helpers.getExisted(await WarMap.WarMapModel.getBriefData(mapId), ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_00);
                 labelMapName.text       = Helpers.getExisted(Lang.getLanguageText({ textArray: briefInfo.mapNameArray }), ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_01);
                 labelMapDesigner.text   = `${Lang.getText(LangTextType.B0251)}: ${Helpers.getExisted(briefInfo.designerName, ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_02)}`;
             }
@@ -152,7 +152,7 @@ namespace Twns.BaseWar {
 
         private _updateListPlayer(infoTypeArray: InfoType[]): void {
             const war               = this._getOpenData().war;
-            const playerRuleArray   = Helpers.getExisted(war.getWarRule().ruleForPlayers?.playerRuleDataArray, ClientErrorCode.BwWarInfoPanel_UpdateListPlayer_00);
+            const playerRuleArray   = Helpers.getExisted(war.getInstanceWarRule().ruleForPlayers?.playerRuleDataArray, ClientErrorCode.BwWarInfoPanel_UpdateListPlayer_00);
             const dataArray         : DataForPlayerRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playerRuleArray.length; ++playerIndex) {
                 dataArray.push({
@@ -388,8 +388,8 @@ namespace Twns.BaseWar {
                 content : Lang.getFormattedText(LangTextType.F0072, playerIndex),
                 callback: () => {
                     const playersCountUnneutral = war.getPlayerManager().getTotalPlayersCount(false);
-                    const warRule               = war.getWarRule();
-                    WarRuleHelpers.setTeamIndex(warRule, playerIndex, (WarRuleHelpers.getTeamIndex(warRule, playerIndex) % playersCountUnneutral) + 1);
+                    const instanceWarRule       = war.getInstanceWarRule();
+                    WarHelpers.WarRuleHelpers.setTeamIndex(instanceWarRule, playerIndex, (WarHelpers.WarRuleHelpers.getTeamIndex(instanceWarRule, playerIndex) % playersCountUnneutral) + 1);
                     this._updateView();
                 },
             });
@@ -462,7 +462,7 @@ namespace Twns.BaseWar {
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    WarRuleHelpers.setInitialFund(war.getWarRule(), playerIndex, panel.getInputValue());
+                    WarHelpers.WarRuleHelpers.setInitialFund(war.getInstanceWarRule(), playerIndex, panel.getInputValue());
                     this._updateView();
                 },
             });
@@ -479,7 +479,7 @@ namespace Twns.BaseWar {
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    WarRuleHelpers.setIncomeMultiplier(war.getWarRule(), playerIndex, panel.getInputValue());
+                    WarHelpers.WarRuleHelpers.setIncomeMultiplier(war.getInstanceWarRule(), playerIndex, panel.getInputValue());
                     this._updateView();
                 },
             });
@@ -496,7 +496,7 @@ namespace Twns.BaseWar {
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    WarRuleHelpers.setEnergyAddPctOnLoadCo(war.getWarRule(), playerIndex, panel.getInputValue());
+                    WarHelpers.WarRuleHelpers.setEnergyAddPctOnLoadCo(war.getInstanceWarRule(), playerIndex, panel.getInputValue());
                     this._updateView();
                 },
             });
@@ -513,7 +513,7 @@ namespace Twns.BaseWar {
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    WarRuleHelpers.setEnergyGrowthMultiplier(war.getWarRule(), playerIndex, panel.getInputValue());
+                    WarHelpers.WarRuleHelpers.setEnergyGrowthMultiplier(war.getInstanceWarRule(), playerIndex, panel.getInputValue());
                     this._updateView();
                 },
             });
@@ -530,7 +530,7 @@ namespace Twns.BaseWar {
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    WarRuleHelpers.setMoveRangeModifier(war.getWarRule(), playerIndex, panel.getInputValue());
+                    WarHelpers.WarRuleHelpers.setMoveRangeModifier(war.getInstanceWarRule(), playerIndex, panel.getInputValue());
                     this._updateView();
                 },
             });
@@ -547,7 +547,7 @@ namespace Twns.BaseWar {
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    WarRuleHelpers.setAttackPowerModifier(war.getWarRule(), playerIndex, panel.getInputValue());
+                    WarHelpers.WarRuleHelpers.setAttackPowerModifier(war.getInstanceWarRule(), playerIndex, panel.getInputValue());
                     this._updateView();
                 },
             });
@@ -564,7 +564,7 @@ namespace Twns.BaseWar {
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    WarRuleHelpers.setVisionRangeModifier(war.getWarRule(), playerIndex, panel.getInputValue());
+                    WarHelpers.WarRuleHelpers.setVisionRangeModifier(war.getInstanceWarRule(), playerIndex, panel.getInputValue());
                     this._updateView();
                 },
             });
@@ -581,15 +581,15 @@ namespace Twns.BaseWar {
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const value         = panel.getInputValue();
-                    const upperLimit    = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
-                    const warRule       = war.getWarRule();
+                    const value             = panel.getInputValue();
+                    const upperLimit        = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
+                    const instanceWarRule   = war.getInstanceWarRule();
                     if (value <= upperLimit) {
-                        WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
+                        WarHelpers.WarRuleHelpers.setLuckLowerLimit(instanceWarRule, playerIndex, value);
                         this._updateView();
                     } else {
-                        WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
-                        WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, upperLimit);
+                        WarHelpers.WarRuleHelpers.setLuckUpperLimit(instanceWarRule, playerIndex, value);
+                        WarHelpers.WarRuleHelpers.setLuckLowerLimit(instanceWarRule, playerIndex, upperLimit);
                         playerRenderer.refreshListInfo();
                     }
                 },
@@ -607,15 +607,15 @@ namespace Twns.BaseWar {
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const value         = panel.getInputValue();
-                    const lowerLimit    = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
-                    const warRule       = war.getWarRule();
+                    const value             = panel.getInputValue();
+                    const lowerLimit        = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
+                    const instanceWarRule   = war.getInstanceWarRule();
                     if (value >= lowerLimit) {
-                        WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
+                        WarHelpers.WarRuleHelpers.setLuckUpperLimit(instanceWarRule, playerIndex, value);
                         this._updateView();
                     } else {
-                        WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
-                        WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
+                        WarHelpers.WarRuleHelpers.setLuckLowerLimit(instanceWarRule, playerIndex, value);
+                        WarHelpers.WarRuleHelpers.setLuckUpperLimit(instanceWarRule, playerIndex, lowerLimit);
                         playerRenderer.refreshListInfo();
                     }
                 },
@@ -802,7 +802,7 @@ namespace Twns.BaseWar {
         private _updateViewAsInitialFund(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getInitialFund(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getInitialFund(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
@@ -814,7 +814,7 @@ namespace Twns.BaseWar {
         private _updateViewAsIncomeMultiplier(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getIncomeMultiplier(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getIncomeMultiplier(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
@@ -826,7 +826,7 @@ namespace Twns.BaseWar {
         private _updateViewAsEnergyAddPctOnLoadCo(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getEnergyAddPctOnLoadCo(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getEnergyAddPctOnLoadCo(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
@@ -838,7 +838,7 @@ namespace Twns.BaseWar {
         private _updateViewAsEnergyGrowthMultiplier(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getEnergyGrowthMultiplier(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getEnergyGrowthMultiplier(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
@@ -850,7 +850,7 @@ namespace Twns.BaseWar {
         private _updateViewAsMoveRangeModifier(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getMoveRangeModifier(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getMoveRangeModifier(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
@@ -862,7 +862,7 @@ namespace Twns.BaseWar {
         private _updateViewAsAttackPowerModifier(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getAttackPowerModifier(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getAttackPowerModifier(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
@@ -874,7 +874,7 @@ namespace Twns.BaseWar {
         private _updateViewAsVisionRangeModifier(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getVisionRangeModifier(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getVisionRangeModifier(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
@@ -886,7 +886,7 @@ namespace Twns.BaseWar {
         private _updateViewAsLuckLowerLimit(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getLuckLowerLimit(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getLuckLowerLimit(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
@@ -898,7 +898,7 @@ namespace Twns.BaseWar {
         private _updateViewAsLuckUpperLimit(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getLuckUpperLimit(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getLuckUpperLimit(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);

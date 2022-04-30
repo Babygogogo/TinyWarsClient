@@ -45,7 +45,7 @@ namespace TwnsMmTagChangePanel {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            const briefData         = Helpers.getExisted(await WarMapModel.getBriefData(this._getOpenData().mapId));
+            const briefData         = Helpers.getExisted(await Twns.WarMap.WarMapModel.getBriefData(this._getOpenData().mapId));
             this._imgFog.visible    = !!(briefData.mapTag || {}).fog;
         }
         protected _onClosing(): void {
@@ -65,7 +65,7 @@ namespace TwnsMmTagChangePanel {
 
         private async _onTouchedBtnWarRule(): Promise<void> {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MmWarRulePanel, {
-                mapRawData      : Helpers.getExisted(await WarMapModel.getRawData(this._getOpenData().mapId)),
+                mapRawData      : Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(this._getOpenData().mapId)),
             });
             this.close();
         }

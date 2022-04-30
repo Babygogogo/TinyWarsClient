@@ -23,8 +23,8 @@ namespace Twns.CoopCustomRoom.CcrJoinModel {
             return {
                 roomId          : roomStaticInfo.roomId,
                 isReady         : false,
-                coId            : WarRuleHelpers.getRandomCoIdWithSettingsForCommon(
-                    Helpers.getExisted(settingsForCommon.warRule),
+                coId            : WarHelpers.WarRuleHelpers.getRandomCoIdWithSettingsForCommon(
+                    Helpers.getExisted(settingsForCommon.instanceWarRule),
                     playerIndex,
                     await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion))
                 ),
@@ -35,10 +35,10 @@ namespace Twns.CoopCustomRoom.CcrJoinModel {
     }
 
     function generateAvailablePlayerIndexList(roomStaticInfo: ICcrRoomStaticInfo, roomPlayerInfo: ICcrRoomPlayerInfo): number[] {
-        const playersCount      = WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForCommon?.warRule));
-        const playerInfoList    = Helpers.getExisted(roomPlayerInfo.playerDataList);
-        const indexes           : number[] = [];
-        for (let i = 1; i <= playersCount; ++i) {
+        const playersCountUnneutral = WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForCommon?.instanceWarRule));
+        const playerInfoList        = Helpers.getExisted(roomPlayerInfo.playerDataList);
+        const indexes               : number[] = [];
+        for (let i = 1; i <= playersCountUnneutral; ++i) {
             if (playerInfoList.every(v => v.playerIndex !== i)) {
                 indexes.push(i);
             }

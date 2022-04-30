@@ -35,8 +35,8 @@
 namespace Twns.CoopCustomRoom {
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
-    import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import NetMessage                               = CommonProto.NetMessage;
@@ -113,12 +113,12 @@ namespace Twns.CoopCustomRoom {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : Twns.Common.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : Twns.Common.CommonWarAdvancedSettingsPage,
+                    pageClass   : Common.CommonWarAdvancedSettingsPage,
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
@@ -166,8 +166,8 @@ namespace Twns.CoopCustomRoom {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                         gameConfig,
                         currentCoId,
-                        availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
-                            warRule         : Helpers.getExisted(settingsForCommon.warRule),
+                        availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                            baseWarRule         : Helpers.getExisted(settingsForCommon.instanceWarRule),
                             playerIndex,
                             gameConfig,
                         }),
@@ -270,7 +270,7 @@ namespace Twns.CoopCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private async _initSclPlayerIndex(): Promise<void> {
             const roomId                = this._getOpenData().roomId;
-            const playersCountUnneutral = Helpers.getExisted((await WarMapModel.getRawData(Helpers.getExisted((await CcrModel.getRoomStaticInfo(roomId))?.settingsForCcw?.mapId)))?.playersCountUnneutral);
+            const playersCountUnneutral = Helpers.getExisted((await WarMap.WarMapModel.getRawData(Helpers.getExisted((await CcrModel.getRoomStaticInfo(roomId))?.settingsForCcw?.mapId)))?.playersCountUnneutral);
             const dataArray             : DataForPlayerIndexRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
@@ -527,8 +527,8 @@ namespace Twns.CoopCustomRoom {
             } else {
                 const settingsForCommon     = Helpers.getExisted(roomStaticInfo.settingsForCommon);
                 const currCoId              = Helpers.getExisted(selfPlayerData.coId);
-                const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
-                    warRule         : Helpers.getExisted(settingsForCommon.warRule),
+                const availableCoIdArray    = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                    baseWarRule     : Helpers.getExisted(settingsForCommon.instanceWarRule),
                     playerIndex     : newPlayerIndex,
                     gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
                 });
@@ -536,7 +536,7 @@ namespace Twns.CoopCustomRoom {
                     roomId,
                     playerIndex         : newPlayerIndex,
                     unitAndTileSkinId   : selfPlayerData.unitAndTileSkinId,
-                    coId                : availableCoIdArray.indexOf(currCoId) >= 0 ? currCoId : WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray),
+                    coId                : availableCoIdArray.indexOf(currCoId) >= 0 ? currCoId : WarHelpers.WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray),
                 });
             }
         }
@@ -564,7 +564,7 @@ namespace Twns.CoopCustomRoom {
             }
 
             const playerIndex       = data.playerIndex;
-            const teamIndex         = WarRuleHelpers.getTeamIndex(Helpers.getExisted(roomStaticInfo.settingsForCommon?.warRule), playerIndex);
+            const teamIndex         = WarHelpers.WarRuleHelpers.getTeamIndex(Helpers.getExisted(roomStaticInfo.settingsForCommon?.instanceWarRule), playerIndex);
             this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(teamIndex) || CommonConstants.ErrorTextForUndefined})`;
         }
         private async _updateState(): Promise<void> {
@@ -644,7 +644,7 @@ namespace Twns.CoopCustomRoom {
                 const selfUserId        = UserModel.getSelfUserId();
                 const playerDataList    = roomPlayerInfo ? roomPlayerInfo.playerDataList : null;
                 const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
-                this._imgColor.source   = Twns.WarHelpers.WarCommonHelpers.getImageSourceForSkinId(skinId, (!!selfPlayerData) && (selfPlayerData.unitAndTileSkinId === skinId));
+                this._imgColor.source   = WarHelpers.WarCommonHelpers.getImageSourceForSkinId(skinId, (!!selfPlayerData) && (selfPlayerData.unitAndTileSkinId === skinId));
             }
         }
     }

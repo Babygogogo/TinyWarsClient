@@ -32,7 +32,7 @@ namespace WarMapProxy {
     function _onMsgMapGetEnabledMapIdArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMapGetEnabledMapIdArray.IS;
         if (!data.errorCode) {
-            WarMapModel.resetEnabledMapIdArray(data.mapIdArray || []);
+            Twns.WarMap.WarMapModel.resetEnabledMapIdArray(data.mapIdArray || []);
             Notify.dispatch(NotifyType.MsgMapGetEnabledMapIdArray, data);
         }
     }
@@ -46,7 +46,7 @@ namespace WarMapProxy {
     }
     function _onMsgMapGetBriefData(e: egret.Event): void {
         const data  = e.data as NetMessage.MsgMapGetBriefData.IS;
-        WarMapModel.setBriefData(Helpers.getExisted(data.mapId), data.mapBriefData ?? null);
+        Twns.WarMap.WarMapModel.setBriefData(Helpers.getExisted(data.mapId), data.mapBriefData ?? null);
         Notify.dispatch(NotifyType.MsgMapGetBriefData, data);
     }
 
@@ -59,7 +59,7 @@ namespace WarMapProxy {
     }
     function _onMsgMapGetRawData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMapGetRawData.IS;
-        WarMapModel.setRawData(Helpers.getExisted(data.mapId), data.mapRawData ?? null);
+        Twns.WarMap.WarMapModel.setRawData(Helpers.getExisted(data.mapId), data.mapRawData ?? null);
         Notify.dispatch(NotifyType.MsgMapGetRawData, data);
     }
 
@@ -79,7 +79,7 @@ namespace WarMapProxy {
     async function _onMsgMmSetWarRuleAvailability(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMmSetWarRuleAvailability.IS;
         if (!data.errorCode) {
-            await WarMapModel.updateOnSetWarRuleAvailability(data);
+            await Twns.WarMap.WarMapModel.updateOnSetWarRuleAvailability(data);
             Notify.dispatch(NotifyType.MsgMmSetWarRuleAvailability, data);
         }
     }
@@ -107,7 +107,7 @@ namespace WarMapProxy {
     function _onMsgMmGetReviewingMaps(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMmGetReviewingMaps.IS;
         if (!data.errorCode) {
-            WarMapModel.setMmReviewingMaps(data.maps || []);
+            Twns.WarMap.WarMapModel.setMmReviewingMaps(data.maps || []);
             Notify.dispatch(NotifyType.MsgMmGetReviewingMaps, data);
         }
     }
@@ -158,23 +158,23 @@ namespace WarMapProxy {
     async function _onMsgMmSetMapName(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMmSetMapName.IS;
         if (!data.errorCode) {
-            await WarMapModel.updateOnSetMapName(data);
+            await Twns.WarMap.WarMapModel.updateOnSetMapName(data);
             Notify.dispatch(NotifyType.MsgMmSetMapName, data);
         }
     }
 
-    export function reqMmAddWarRule(mapId: number, warRule: CommonProto.WarRule.ITemplateWarRule): void {
+    export function reqMmAddWarRule(mapId: number, templateWarRule: CommonProto.WarRule.ITemplateWarRule): void {
         NetManager.send({
             MsgMmAddWarRule: { c: {
                 mapId,
-                warRule,
+                templateWarRule,
             } },
         });
     }
     async function _onMsgMmAddWarRule(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMmAddWarRule.IS;
         if (!data.errorCode) {
-            await WarMapModel.updateOnAddWarRule(data);
+            await Twns.WarMap.WarMapModel.updateOnAddWarRule(data);
             Notify.dispatch(NotifyType.MsgMmAddWarRule, data);
         }
     }
@@ -190,7 +190,7 @@ namespace WarMapProxy {
     async function _onMsgMmDeleteWarRule(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMmDeleteWarRule.IS;
         if (!data.errorCode) {
-            await WarMapModel.updateOnDeleteWarRule(data);
+            await Twns.WarMap.WarMapModel.updateOnDeleteWarRule(data);
             Notify.dispatch(NotifyType.MsgMmDeleteWarRule, data);
         }
     }

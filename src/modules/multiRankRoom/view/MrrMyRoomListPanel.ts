@@ -370,7 +370,7 @@ namespace Twns.MultiRankRoom {
 
             const roomInfo          = await MultiRankRoom.MrrModel.getRoomInfo(roomId);
             this._labelName.text    = roomInfo
-                ? (await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(roomInfo.settingsForMrw?.mapId)) ?? CommonConstants.ErrorTextForUndefined)
+                ? (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(roomInfo.settingsForMrw?.mapId)) ?? CommonConstants.ErrorTextForUndefined)
                 : ``;
         }
 

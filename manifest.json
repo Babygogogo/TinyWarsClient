@@ -165,7 +165,6 @@
 		"bin-debug/modules/mapEditor/model/MeProxy.js",
 		"bin-debug/modules/mapEditor/model/MeSimModel.js",
 		"bin-debug/modules/baseWar/view/BwCursorView.js",
-		"bin-debug/modules/mapEditor/model/MeWarEventManager.js",
 		"bin-debug/modules/mapEditor/view/MeAddWarEventToRulePanel.js",
 		"bin-debug/modules/mapEditor/view/MeAvailableCoPanel.js",
 		"bin-debug/modules/mapEditor/view/MeChooseLocationPanel.js",

@@ -345,7 +345,7 @@ namespace Twns.CoopCustomWar {
                     labelName.text = warName;
                 } else {
                     const mapId     = Helpers.getExisted(settingsForCcw.mapId);
-                    const mapName   = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                    const mapName   = Helpers.getExisted(await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
                     labelName.text  = mapName;
                 }
             }

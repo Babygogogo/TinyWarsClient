@@ -345,7 +345,7 @@ namespace Twns.MultiCustomWar {
                     labelName.text = warName;
                 } else {
                     const mapId     = Helpers.getExisted(settingsForMcw.mapId);
-                    const mapName   = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                    const mapName   = Helpers.getExisted(await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
                     labelName.text  = mapName;
                 }
             }

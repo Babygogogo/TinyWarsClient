@@ -135,16 +135,16 @@ namespace TwnsMmTagListPanel {
             (mapDesigner)       && (mapDesigner = mapDesigner.toLowerCase());
 
             const promiseArray: Promise<void>[] = [];
-            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+            for (const mapId of Twns.WarMap.WarMapModel.getEnabledMapIdArray()) {
                 promiseArray.push((async () => {
-                    const mapBriefData = await WarMapModel.getBriefData(mapId);
+                    const mapBriefData = await Twns.WarMap.WarMapModel.getBriefData(mapId);
                     if (mapBriefData == null) {
                         return;
                     }
 
                     const mapName           = Helpers.getExisted(Lang.getLanguageText({ textArray: mapBriefData.mapNameArray }));
-                    const averageRating     = await WarMapModel.getAverageRating(mapId);
-                    const actualPlayedTimes = await WarMapModel.getTotalPlayedTimes(mapId);
+                    const averageRating     = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
+                    const actualPlayedTimes = await Twns.WarMap.WarMapModel.getTotalPlayedTimes(mapId);
                     if ((!mapBriefData.mapExtraData?.isEnabled)                                                                 ||
                         ((mapNameForFilter) && (mapName.toLowerCase().indexOf(mapNameForFilter) < 0))                           ||
                         ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))                    ||
@@ -168,13 +168,13 @@ namespace TwnsMmTagListPanel {
         }
 
         private async _showMap(mapId: number): Promise<void> {
-            const mapRawData                = Helpers.getExisted(await WarMapModel.getRawData(mapId));
-            const rating                    = await WarMapModel.getAverageRating(mapId);
-            this._labelMapName.text         = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
+            const mapRawData                = Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId));
+            const rating                    = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
+            this._labelMapName.text         = Lang.getFormattedText(LangTextType.F0000, await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text        = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
             this._labelPlayersCount.text    = Lang.getFormattedText(LangTextType.F0002, mapRawData.playersCountUnneutral);
             this._labelRating.text          = Lang.getFormattedText(LangTextType.F0003, rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001));
-            this._labelPlayedTimes.text     = Lang.getFormattedText(LangTextType.F0004, await WarMapModel.getTotalPlayedTimes(mapId));
+            this._labelPlayedTimes.text     = Lang.getFormattedText(LangTextType.F0004, await Twns.WarMap.WarMapModel.getTotalPlayedTimes(mapId));
             this._groupInfo.visible         = true;
             this._groupInfo.alpha           = 1;
             egret.Tween.removeTweens(this._groupInfo);
@@ -208,7 +208,7 @@ namespace TwnsMmTagListPanel {
             this.currentState   = mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
             this._labelId.text  = `ID: ${mapId}`;
             labelName.text      = ``;
-            WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v ?? CommonConstants.ErrorTextForUndefined);
+            Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v ?? CommonConstants.ErrorTextForUndefined);
         }
 
         private _onTouchTapBtnChoose(): void {

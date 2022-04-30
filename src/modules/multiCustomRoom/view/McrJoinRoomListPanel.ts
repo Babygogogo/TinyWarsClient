@@ -404,7 +404,7 @@ namespace Twns.MultiCustomRoom {
             if (warName) {
                 this._labelName.text = warName;
             } else {
-                WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)).then(v => this._labelName.text = v || CommonConstants.ErrorTextForUndefined);
+                Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)).then(v => this._labelName.text = v || CommonConstants.ErrorTextForUndefined);
             }
         }
 

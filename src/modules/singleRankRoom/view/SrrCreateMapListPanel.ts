@@ -140,7 +140,7 @@ namespace TwnsSrrCreateMapListPanel {
             const selectedMapId = this.getSelectedMapId();
             if (selectedMapId != null) {
                 this.close();
-                await SrrCreateModel.resetDataByMapId(selectedMapId);
+                await Twns.SingleRankRoom.SrrCreateModel.resetDataByMapId(selectedMapId);
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.SrrCreateSettingsPanel, void 0);
             }
         }
@@ -195,17 +195,17 @@ namespace TwnsSrrCreateMapListPanel {
             (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
 
             const promiseArray: Promise<void>[] = [];
-            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+            for (const mapId of Twns.WarMap.WarMapModel.getEnabledMapIdArray()) {
                 promiseArray.push((async () => {
-                    const mapBriefData = await WarMapModel.getBriefData(mapId);
+                    const mapBriefData = await Twns.WarMap.WarMapModel.getBriefData(mapId);
                     if (mapBriefData == null) {
                         return;
                     }
 
                     const mapExtraData  = Helpers.getExisted(mapBriefData.mapExtraData);
                     const mapTag        = mapBriefData.mapTag || {};
-                    const realMapName   = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                    const rating        = await WarMapModel.getAverageRating(mapId);
+                    const realMapName   = Helpers.getExisted(await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
+                    const rating        = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
                     if ((!mapBriefData.ruleAvailability?.canSrw)                                                ||
                         (!mapExtraData.isEnabled)                                                               ||
                         ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                         ||
@@ -361,7 +361,7 @@ namespace TwnsSrrCreateMapListPanel {
 
         protected _onDataChanged(): void {
             const data          = this._getData();
-            WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v || CommonConstants.ErrorTextForUndefined);
+            Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v || CommonConstants.ErrorTextForUndefined);
         }
 
         public onItemTapEvent(): void {

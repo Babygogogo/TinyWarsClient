@@ -33,8 +33,8 @@
 namespace Twns.MultiFreeRoom {
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
-    import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import NetMessage                               = CommonProto.NetMessage;
@@ -111,12 +111,12 @@ namespace Twns.MultiFreeRoom {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : Twns.Common.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : Twns.Common.CommonWarAdvancedSettingsPage,
+                    pageClass   : Common.CommonWarAdvancedSettingsPage,
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
@@ -163,8 +163,8 @@ namespace Twns.MultiFreeRoom {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                         gameConfig,
                         currentCoId         : selfPlayerData.coId ?? null,
-                        availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
-                            warRule         : Helpers.getExisted(settingsForCommon.warRule),
+                        availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                            baseWarRule         : Helpers.getExisted(settingsForCommon.instanceWarRule),
                             playerIndex,
                             gameConfig,
                         }),
@@ -532,15 +532,15 @@ namespace Twns.MultiFreeRoom {
             } else {
                 const settingsForCommon     = Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon);
                 const currCoId              = Helpers.getExisted(selfPlayerData.coId);
-                const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
-                    warRule         : Helpers.getExisted(settingsForCommon.warRule),
+                const availableCoIdArray    = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                    baseWarRule         : Helpers.getExisted(settingsForCommon.instanceWarRule),
                     playerIndex     : newPlayerIndex,
                     gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
                 });
                 MfrProxy.reqMfrSetSelfSettings({
                     roomId,
                     playerIndex : newPlayerIndex,
-                    coId        : availableCoIdArray.indexOf(currCoId) >= 0 ? currCoId : WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray),
+                    coId        : availableCoIdArray.indexOf(currCoId) >= 0 ? currCoId : WarHelpers.WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray),
                 });
             }
         }
@@ -570,7 +570,7 @@ namespace Twns.MultiFreeRoom {
             }
 
             const playerIndex       = data.playerIndex;
-            const teamIndex         = Helpers.getExisted(WarRuleHelpers.getTeamIndex(Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.settingsForCommon?.warRule), playerIndex));
+            const teamIndex         = Helpers.getExisted(WarHelpers.WarRuleHelpers.getTeamIndex(Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.settingsForCommon?.instanceWarRule), playerIndex));
             this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(teamIndex)})`;
         }
         private async _updateState(): Promise<void> {
@@ -622,7 +622,7 @@ namespace Twns.MultiFreeRoom {
                 const selfUserId        = UserModel.getSelfUserId();
                 const playerDataList    = roomPlayerInfo ? roomPlayerInfo.playerDataList : null;
                 const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
-                this._imgColor.source   = Twns.WarHelpers.WarCommonHelpers.getImageSourceForSkinId(skinId, (!!selfPlayerData) && (selfPlayerData.unitAndTileSkinId === skinId));
+                this._imgColor.source   = WarHelpers.WarCommonHelpers.getImageSourceForSkinId(skinId, (!!selfPlayerData) && (selfPlayerData.unitAndTileSkinId === skinId));
             }
         }
     }

@@ -16,7 +16,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.TestWar {
-    import BwWarEventManager    = Twns.BaseWar.BwWarEventManager;
+    import BwWarEventManager    = BaseWar.BwWarEventManager;
     import TwPlayerManager      = TwnsTwPlayerManager.TwPlayerManager;
     import TwField              = TwnsTwField.TwField;
     import WarSerialization     = CommonProto.WarSerialization;
@@ -187,13 +187,12 @@ namespace Twns.TestWar {
     async function _createDataForCreateTwWar(mapRawData: IMapRawData, gameConfig: GameConfig): Promise<ISerialWar> {
         const dataForPlayerManager  = await _createInitialPlayerManagerDataForTw(mapRawData, gameConfig);
         const fieldData             = await _createInitialFieldData(mapRawData);
-        const warRule               = (mapRawData.warRuleArray || [])[0];
+        const instanceWarRule       = WarHelpers.WarRuleHelpers.createInstanceWarRule((mapRawData.templateWarRuleArray || [])[0], mapRawData.warEventFullData);
         const seedRandomState       = new Math.seedrandom("" + Math.random(), { state: true }).state();
         return {
             settingsForCommon       : {
                 configVersion       : Config.ConfigManager.getLatestConfigVersion(),
-                warRule,
-                presetWarRuleId     : warRule.ruleId,
+                instanceWarRule,
             },
 
             warId                   : -1,
@@ -205,7 +204,6 @@ namespace Twns.TestWar {
             seedRandomInitialState  : seedRandomState,
             seedRandomCurrentState  : seedRandomState,
             warEventManager         : {
-                warEventFullData    : Twns.WarHelpers.WarEventHelpers.trimAndCloneWarEventFullData(mapRawData.warEventFullData, warRule.warEventIdArray),
                 calledCountList     : [],
             },
             executedActionManager   : {
@@ -242,17 +240,17 @@ namespace Twns.TestWar {
             unitAndTileSkinId   : 0,
         })];
 
-        const warRule           = (mapRawData.warRuleArray || [])[0];
-        const ruleForPlayers    = Helpers.getExisted(warRule.ruleForPlayers);
-        const ruleAvailability  = Helpers.getExisted(warRule.ruleAvailability);
-        if ((WarRuleHelpers.getErrorCodeForRuleForPlayers({ ruleForPlayers, gameConfig, playersCountUnneutral, ruleAvailability })) ||
+        const templateWarRule   = (mapRawData.templateWarRuleArray || [])[0];
+        const ruleForPlayers    = Helpers.getExisted(templateWarRule.ruleForPlayers);
+        const ruleAvailability  = Helpers.getExisted(templateWarRule.ruleAvailability);
+        if ((WarHelpers.WarRuleHelpers.getErrorCodeForRuleForPlayers({ ruleForPlayers, gameConfig, playersCountUnneutral, ruleAvailability })) ||
             ((ruleForPlayers.playerRuleDataArray || []).length !== playersCountUnneutral)
         ) {
             throw Helpers.newError(`Invalid ruleForPlayers.`, ClientErrorCode.TwWar_CreateInitialPlayerManagerDataForTw_01);
         }
 
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
-            const teamIndex = WarRuleHelpers.getTeamIndexByRuleForPlayers(ruleForPlayers, playerIndex);
+            const teamIndex = WarHelpers.WarRuleHelpers.getTeamIndexByRuleForPlayers(ruleForPlayers, playerIndex);
             players.push(_createInitialSinglePlayerData({
                 playerIndex,
                 teamIndex,

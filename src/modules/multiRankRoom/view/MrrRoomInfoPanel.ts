@@ -35,10 +35,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiRankRoom {
-    import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import NetMessage                               = CommonProto.NetMessage;
@@ -124,12 +124,12 @@ namespace Twns.MultiRankRoom {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : Twns.Common.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : Twns.Common.CommonWarAdvancedSettingsPage,
+                    pageClass   : Common.CommonWarAdvancedSettingsPage,
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
@@ -265,7 +265,7 @@ namespace Twns.MultiRankRoom {
         private async _initSclPlayerIndex(): Promise<void> {
             const roomId                = this._getOpenData().roomId;
             const roomInfo              = Helpers.getExisted(await MultiRankRoom.MrrModel.getRoomInfo(roomId));
-            const playersCountUnneutral = Helpers.getExisted((await WarMapModel.getRawData(Helpers.getExisted(roomInfo.settingsForMrw?.mapId)))?.playersCountUnneutral);
+            const playersCountUnneutral = Helpers.getExisted((await WarMap.WarMapModel.getRawData(Helpers.getExisted(roomInfo.settingsForMrw?.mapId)))?.playersCountUnneutral);
             const dataArray             : DataForPlayerIndexRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
@@ -587,7 +587,7 @@ namespace Twns.MultiRankRoom {
             const data = this.data;
             if (data) {
                 const playerIndex       = data.playerIndex;
-                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(Helpers.getExisted((await MultiRankRoom.MrrModel.getRoomInfo(data.roomId))?.settingsForCommon?.warRule), playerIndex))})`;
+                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(Helpers.getExisted((await MultiRankRoom.MrrModel.getRoomInfo(data.roomId))?.settingsForCommon?.instanceWarRule), playerIndex))})`;
             }
         }
         private async _updateState(): Promise<void> {

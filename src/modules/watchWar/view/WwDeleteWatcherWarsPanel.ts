@@ -359,7 +359,7 @@ namespace Twns.WatchWar {
                         labelName.text = warName;
                     } else {
                         const mapId     = settingsForMcw.mapId;
-                        labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                        labelName.text  = (mapId == null ? null : await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
                     }
 
                 } else if (settingsForCcw) {
@@ -368,12 +368,12 @@ namespace Twns.WatchWar {
                         labelName.text = warName;
                     } else {
                         const mapId     = settingsForCcw.mapId;
-                        labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                        labelName.text  = (mapId == null ? null : await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
                     }
 
                 } else if (settingsForMrw) {
                     const mapId     = settingsForMrw.mapId;
-                    labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                    labelName.text  = (mapId == null ? null : await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
                 }
             }
         }

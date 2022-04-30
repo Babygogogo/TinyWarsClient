@@ -305,7 +305,7 @@ namespace Twns.MapEditor {
             if (!war.getIsReviewingMap()) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarRulePanel, void 0);
             } else {
-                if (war.getWarRuleArray().length) {
+                if (war.getTemplateWarRuleArray().length) {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarRulePanel, void 0);
                 } else {
                     FloatText.show(Lang.getText(LangTextType.A0100));

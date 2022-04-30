@@ -413,7 +413,7 @@ namespace TwnsRwReplayListPanel {
                 labelType.text  = Lang.getWarTypeName(Helpers.getExisted(replayBriefInfo.warType)) ?? CommonConstants.ErrorTextForUndefined;
                 labelName.text  = mapId == null
                     ? `----`
-                    : await WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined;
+                    : await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
 

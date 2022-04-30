@@ -66,7 +66,7 @@ namespace TwnsMmAcceptMapPanel {
                 });
                 this.close();
             };
-            if (!war.getWarRuleArray().some(v => v.ruleAvailability?.canMrw)) {
+            if (!war.getTemplateWarRuleArray().some(v => v.ruleAvailability?.canMrw)) {
                 callback();
             } else {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {

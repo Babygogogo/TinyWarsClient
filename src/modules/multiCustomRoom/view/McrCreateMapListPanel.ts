@@ -120,7 +120,7 @@ namespace Twns.MultiCustomRoom {
             const selectedMapId = this._getSelectedMapId();
             if (selectedMapId != null) {
                 this.close();
-                await McrCreateModel.resetDataByMapId(selectedMapId);
+                await Twns.MultiCustomRoom.McrCreateModel.resetDataByMapId(selectedMapId);
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.McrCreateSettingsPanel, void 0);
             }
         }
@@ -152,18 +152,18 @@ namespace Twns.MultiCustomRoom {
             const { playersCount, playedTimes, minRating }  = mapFilters;
             const promiseArray                              : Promise<void>[] = [];
 
-            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+            for (const mapId of Twns.WarMap.WarMapModel.getEnabledMapIdArray()) {
                 promiseArray.push((async () => {
-                    const mapBriefData = await WarMapModel.getBriefData(mapId);
+                    const mapBriefData = await Twns.WarMap.WarMapModel.getBriefData(mapId);
                     if (mapBriefData == null) {
                         return;
                     }
 
                     const mapExtraData      = Helpers.getExisted(mapBriefData.mapExtraData);
                     const mapTag            = mapBriefData.mapTag || {};
-                    const realMapName       = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                    const rating            = await WarMapModel.getAverageRating(mapId);
-                    const actualPlayedTimes = await WarMapModel.getTotalPlayedTimes(mapId);
+                    const realMapName       = Helpers.getExisted(await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
+                    const rating            = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
+                    const actualPlayedTimes = await Twns.WarMap.WarMapModel.getTotalPlayedTimes(mapId);
                     if ((!mapBriefData.ruleAvailability?.canMcw)                                                            ||
                         (!mapExtraData.isEnabled)                                                                           ||
                         ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                                     ||
@@ -197,7 +197,7 @@ namespace Twns.MultiCustomRoom {
             } else {
                 zoomMap.visible     = true;
                 uiMapInfo.visible   = true;
-                zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)), await Config.ConfigManager.getLatestGameConfig());
+                zoomMap.showMapByMapData(Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId)), await Config.ConfigManager.getLatestGameConfig());
                 uiMapInfo.setData({
                     mapInfo: {
                         mapId,
@@ -305,7 +305,7 @@ namespace Twns.MultiCustomRoom {
         protected async _onDataChanged(): Promise<void> {
             const label = this._labelName;
             label.text  = ``;
-            label.text  = await WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId) ?? CommonConstants.ErrorTextForUndefined;
+            label.text  = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _onTouchTapBtnChoose(): void {

@@ -19,12 +19,11 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeAvailableCoPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import WarRule          = CommonProto.WarRule;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
     export type OpenData = {
-        playerRule      : WarRule.IDataForPlayerRule;
-        warRule         : WarRule.ITemplateWarRule;
+        playerRule      : CommonProto.WarRule.IDataForPlayerRule;
+        templateWarRule : CommonProto.WarRule.ITemplateWarRule;
         isReviewing     : boolean;
     };
     export class MeAvailableCoPanel extends TwnsUiPanel.UiPanel<OpenData> {
@@ -96,7 +95,7 @@ namespace TwnsMeAvailableCoPanel {
                 });
             } else {
                 const openData = this._getOpenData();
-                WarRuleHelpers.setBannedCoIdArray(openData.warRule, Helpers.getExisted(openData.playerRule.playerIndex), bannedCoIdSet);
+                Twns.WarHelpers.WarRuleHelpers.setBannedCoIdArray(openData.templateWarRule, Helpers.getExisted(openData.playerRule.playerIndex), bannedCoIdSet);
                 Notify.dispatch(NotifyType.MeBannedCoIdArrayChanged);
                 this.close();
             }

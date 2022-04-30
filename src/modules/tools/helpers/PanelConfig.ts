@@ -85,8 +85,8 @@ namespace TwnsPanelConfig {
         CommonInputPanel                    : PanelConfig<TwnsCommonInputPanel.OpenData>;
         CommonInputIntegerPanel             : PanelConfig<TwnsCommonInputIntegerPanel.OpenData>;
         CommonJoinRoomPasswordPanel         : PanelConfig<TwnsCommonJoinRoomPasswordPanel.OpenData>;
-        CommonMapWarStatisticsPanel         : PanelConfig<TwnsCommonMapWarStatisticsPanel.OpenData>;
-        CommonModifyWarRuleNamePanel        : PanelConfig<TwnsCommonModifyWarRuleNamePanel.OpenData>;
+        CommonMapWarStatisticsPanel         : PanelConfig<Twns.Common.OpenDataForCommonMapWarStatisticsPanel>;
+        CommonModifyWarRuleNamePanel        : PanelConfig<Twns.Common.OpenDataForCommonModifyWarRuleNamePanel>;
         CommonRankListPanel                 : PanelConfig<TwnsCommonRankListPanel.OpenData>;
         CommonServerStatusPanel             : PanelConfig<TwnsCommonServerStatusPanel.OpenData>;
         CommonWarEventListPanel             : PanelConfig<Twns.Common.OpenDataForCommonWarEventListPanel>;
@@ -107,7 +107,7 @@ namespace TwnsPanelConfig {
         McrJoinRoomListPanel                : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrJoinRoomListPanel>;
         McrMainMenuPanel                    : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrMainMenuPanel>;
         McrMyRoomListPanel                  : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrMyRoomListPanel>;
-        McrRoomInfoPanel                    : PanelConfig<TwnsMcrRoomInfoPanel.OpenData>;
+        McrRoomInfoPanel                    : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrRoomInfoPanel>;
         McrSearchRoomPanel                  : PanelConfig<TwnsMcrSearchRoomPanel.OpenData>;
 
         McwMyWarListPanel                   : PanelConfig<Twns.MultiCustomWar.OpenDataForMcwMyWarListPanel>;
@@ -123,16 +123,16 @@ namespace TwnsPanelConfig {
         MeImportPanel                       : PanelConfig<TwnsMeImportPanel.OpenData>;
         MeMapListPanel                      : PanelConfig<TwnsMeMapListPanel.OpenData>;
         MeMapTagPanel                       : PanelConfig<TwnsMeMapTagPanel.OpenData>;
-        MeMfwSettingsPanel                  : PanelConfig<TwnsMeMfwSettingsPanel.OpenData>;
+        MeMfwSettingsPanel                  : PanelConfig<Twns.MapEditor.OpenDataForMeMfwSettingsPanel>;
         MeModifyMapDescPanel                : PanelConfig<Twns.MapEditor.OpenDataForMeModifyMapDescPanel>;
         MeModifyMapNamePanel                : PanelConfig<TwnsMeModifyMapNamePanel.OpenData>;
         MeResizePanel                       : PanelConfig<TwnsMeResizePanel.OpenData>;
-        MeSimSettingsPanel                  : PanelConfig<TwnsMeSimSettingsPanel.OpenData>;
+        MeSimSettingsPanel                  : PanelConfig<Twns.MapEditor.OpenDataForMeSimSettingsPanel>;
         MeSymmetryPanel                     : PanelConfig<TwnsMeSymmetryPanel.OpenData>;
         MeTopPanel                          : PanelConfig<Twns.MapEditor.OpenDataForMeTopPanel>;
         MeVisibilityPanel                   : PanelConfig<TwnsMeVisibilityPanel.OpenData>;
         MeWarMenuPanel                      : PanelConfig<Twns.MapEditor.OpenDataForMeWarMenuPanel>;
-        MeWarRulePanel                      : PanelConfig<TwnsMeWarRulePanel.OpenData>;
+        MeWarRulePanel                      : PanelConfig<Twns.MapEditor.OpenDataForMeWarRulePanel>;
         MeChooseLocationPanel               : PanelConfig<TwnsMeChooseLocationPanel.OpenData>;
 
         MfrCreateSettingsPanel              : PanelConfig<Twns.MultiFreeRoom.OpenDataForMfrCreateSettingsPanel>;
@@ -152,12 +152,12 @@ namespace TwnsPanelConfig {
         MmMapRenamePanel                    : PanelConfig<TwnsMmMapRenamePanel.OpenData>;
         MmRejectMapPanel                    : PanelConfig<TwnsMmRejectMapPanel.OpenData>;
         MmReviewListPanel                   : PanelConfig<TwnsMmReviewListPanel.OpenData>;
-        MmSetWarRuleAvailabilityPanel       : PanelConfig<TwnsMmSetWarRuleAvailabilityPanel.OpenData>;
+        MmSetWarRuleAvailabilityPanel       : PanelConfig<Twns.MapManagement.OpenDataForMmSetWarRuleAvailabilityPanel>;
         MmTagChangePanel                    : PanelConfig<TwnsMmTagChangePanel.OpenData>;
         MmTagListPanel                      : PanelConfig<TwnsMmTagListPanel.OpenData>;
         MmTagSearchPanel                    : PanelConfig<TwnsMmTagSearchPanel.OpenData>;
-        MmWarRuleAvailableCoPanel           : PanelConfig<TwnsMmWarRuleAvailableCoPanel.OpenData>;
-        MmWarRulePanel                      : PanelConfig<TwnsMmWarRulePanel.OpenData>;
+        MmWarRuleAvailableCoPanel           : PanelConfig<Twns.MapManagement.OpenDataForMmWarRuleAvailableCoPanel>;
+        MmWarRulePanel                      : PanelConfig<Twns.MapManagement.OpenDataForMmWarRulePanel>;
 
         MpwSpectatePanel                    : PanelConfig<Twns.MultiPlayerWar.OpenDataForMpwSpectatePanel>;
         MpwSidePanel                        : PanelConfig<Twns.MultiPlayerWar.OpenDataForMpwSidePanel>;
@@ -712,13 +712,13 @@ namespace TwnsPanelConfig {
             },
 
             CommonMapWarStatisticsPanel: {
-                cls         : TwnsCommonMapWarStatisticsPanel?.CommonMapWarStatisticsPanel,
+                cls         : Twns.Common?.CommonMapWarStatisticsPanel,
                 skinName    : `resource/skins/common/CommonMapWarStatisticsPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonModifyWarRuleNamePanel: {
-                cls         : TwnsCommonModifyWarRuleNamePanel?.CommonModifyWarRuleNamePanel,
+                cls         : Twns.Common?.CommonModifyWarRuleNamePanel,
                 skinName    : `resource/skins/common/CommonModifyWarRuleNamePanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -840,7 +840,7 @@ namespace TwnsPanelConfig {
             },
 
             McrRoomInfoPanel: {
-                cls         : TwnsMcrRoomInfoPanel?.McrRoomInfoPanel,
+                cls         : Twns.MultiCustomRoom?.McrRoomInfoPanel,
                 skinName    : `resource/skins/multiCustomRoom/McrRoomInfoPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -933,7 +933,7 @@ namespace TwnsPanelConfig {
             },
 
             MeMfwSettingsPanel: {
-                cls         : TwnsMeMfwSettingsPanel?.MeMfwSettingsPanel,
+                cls         : Twns.MapEditor?.MeMfwSettingsPanel,
                 skinName    : `resource/skins/mapEditor/MeMfwSettingsPanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -957,7 +957,7 @@ namespace TwnsPanelConfig {
             },
 
             MeSimSettingsPanel: {
-                cls         : TwnsMeSimSettingsPanel?.MeSimSettingsPanel,
+                cls         : Twns.MapEditor?.MeSimSettingsPanel,
                 skinName    : `resource/skins/mapEditor/MeSimSettingsPanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -987,7 +987,7 @@ namespace TwnsPanelConfig {
             },
 
             MeWarRulePanel: {
-                cls         : TwnsMeWarRulePanel?.MeWarRulePanel,
+                cls         : Twns.MapEditor?.MeWarRulePanel,
                 skinName    : `resource/skins/mapEditor/MeWarRulePanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1101,7 +1101,7 @@ namespace TwnsPanelConfig {
             },
 
             MmSetWarRuleAvailabilityPanel: {
-                cls         : TwnsMmSetWarRuleAvailabilityPanel?.MmSetWarRuleAvailabilityPanel,
+                cls         : Twns.MapManagement?.MmSetWarRuleAvailabilityPanel,
                 skinName    : `resource/skins/mapManagement/MmSetWarRuleAvailabilityPanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1126,13 +1126,13 @@ namespace TwnsPanelConfig {
             },
 
             MmWarRuleAvailableCoPanel: {
-                cls         : TwnsMmWarRuleAvailableCoPanel?.MmWarRuleAvailableCoPanel,
+                cls         : Twns.MapManagement?.MmWarRuleAvailableCoPanel,
                 skinName    : `resource/skins/mapManagement/MmWarRuleAvailableCoPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MmWarRulePanel: {
-                cls         : TwnsMmWarRulePanel?.MmWarRulePanel,
+                cls         : Twns.MapManagement?.MmWarRulePanel,
                 skinName    : `resource/skins/mapManagement/MmWarRulePanel.exml`,
                 layer       : LayerType.Hud0,
             },

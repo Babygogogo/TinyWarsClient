@@ -59,12 +59,12 @@ namespace TwnsSpmRankPage {
                 return;
             }
 
-            const mapRawData    = await WarMapModel.getRawData(mapId);
+            const mapRawData    = await Twns.WarMap.WarMapModel.getRawData(mapId);
             const dataArray     : DataForRuleRenderer[] = [];
-            for (const rule of mapRawData?.warRuleArray?.filter(v => v.ruleAvailability?.canSrw) ?? []) {
+            for (const templateWarRule of mapRawData?.templateWarRuleArray?.filter(v => v.ruleAvailability?.canSrw) ?? []) {
                 dataArray.push({
                     mapId,
-                    ruleId  : Helpers.getExisted(rule.ruleId),
+                    ruleId  : Helpers.getExisted(templateWarRule.ruleId),
                 });
             }
             listRule.bindData(dataArray.sort((v1, v2) => v1.ruleId - v2.ruleId));
@@ -130,7 +130,7 @@ namespace TwnsSpmRankPage {
             const hasPrivilege  = selfPrivilege?.isAdmin ?? selfPrivilege?.isMapCommittee ?? false;
             const dataArray     : DataForUserRenderer[] = [];
 
-            for (const rankData of (await SpmModel.getRankData(mapId))?.find(v => v.ruleId === ruleId)?.infoArray ?? []) {
+            for (const rankData of (await Twns.SinglePlayerMode.SpmModel.getRankData(mapId))?.find(v => v.ruleId === ruleId)?.infoArray ?? []) {
                 const score = Helpers.getExisted(rankData.score);
                 dataArray.push({
                     index       : 0,
@@ -217,7 +217,7 @@ namespace TwnsSpmRankPage {
             if (!data.canReplay) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId: data.userId });
             } else {
-                const replayData = await SpmModel.getReplayData(data.rankId);
+                const replayData = await Twns.SinglePlayerMode.SpmModel.getReplayData(data.rankId);
                 (replayData) && (FlowManager.gotoReplayWar(replayData, -1));
             }
         }

@@ -114,7 +114,7 @@ namespace FlowManager {
         UserProxy.init();
         UserModel.init();
         WarMapProxy.init();
-        WarMapModel.init();
+        Twns.WarMap.WarMapModel.init();
         Twns.MultiCustomRoom.McrProxy.init();
         Twns.MultiRankRoom.MrrProxy.init();
         Twns.MultiFreeRoom.MfrProxy.init();
@@ -124,8 +124,8 @@ namespace FlowManager {
         RwModel.init();
         HrwModel.init();
         SpmProxy.init();
-        SpmModel.init();
-        ScrCreateModel.init();
+        Twns.SinglePlayerMode.SpmModel.init();
+        Twns.SingleCustomRoom.ScrCreateModel.init();
         SpwModel.init();
         MeProxy.init();
         MeModel.init();
@@ -329,7 +329,7 @@ namespace FlowManager {
         HrwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
-        MfrCreateModel.resetDataByInitialWarData(warData);
+        Twns.MultiFreeRoom.MfrCreateModel.resetDataByInitialWarData(warData);
         TwnsPanelManager.closeAllPanelsExcept([
             TwnsPanelConfig.Dict.BroadcastPanel,
             TwnsPanelConfig.Dict.LobbyTopRightPanel,

@@ -1192,8 +1192,8 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         }
     }
     export function getWarType(warData: ISerialWar): WarType {
-        const warRule   = warData.settingsForCommon?.warRule;
-        const hasFog    = warRule ? WarRuleHelpers.getHasFogByDefault(warRule) : null;
+        const instanceWarRule   = warData.settingsForCommon?.instanceWarRule;
+        const hasFog            = instanceWarRule ? WarHelpers.WarRuleHelpers.getHasFogByDefault(instanceWarRule) : null;
         if (hasFog == null) {
             return WarType.Undefined;
         }
@@ -1217,8 +1217,8 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         }
     }
     export function getWarTypeByMpwWarSettings(warInfo: CommonProto.MultiPlayerWar.IMpwWarSettings): WarType {
-        const warRule   = warInfo.settingsForCommon?.warRule;
-        const hasFog    = warRule ? WarRuleHelpers.getHasFogByDefault(warRule) : null;
+        const instanceWarRule   = warInfo.settingsForCommon?.instanceWarRule;
+        const hasFog            = instanceWarRule ? WarHelpers.WarRuleHelpers.getHasFogByDefault(instanceWarRule) : null;
         if (hasFog == null) {
             return WarType.Undefined;
         }

@@ -91,7 +91,7 @@ namespace TwnsCommonJoinRoomPasswordPanel {
             } else {
                 const mapId = openData.mapId;
                 if (mapId != null) {
-                    label.text = await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
+                    label.text = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
                 } else {
                     label.text = Lang.getText(LangTextType.B0555);
                 }

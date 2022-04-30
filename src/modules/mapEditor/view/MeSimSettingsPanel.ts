@@ -20,14 +20,14 @@
 // import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeSimSettingsPanel {
+namespace Twns.MapEditor {
     import MeSimAdvancedSettingsPage    = TwnsMeSimAdvancedSettingsPage.MeSimAdvancedSettingsPage;
-    import MeSimBasicSettingsPage       = TwnsMeSimBasicSettingsPage.MeSimBasicSettingsPage;
+    import MeSimBasicSettingsPage       = MapEditor.MeSimBasicSettingsPage;
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
 
-    export type OpenData = void;
-    export class MeSimSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeSimSettingsPanel = void;
+    export class MeSimSettingsPanel extends TwnsUiPanel.UiPanel<OpenDataForMeSimSettingsPanel> {
         private readonly _tabSettings!      : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnBack!          : TwnsUiButton.UiButton;
@@ -71,8 +71,8 @@ namespace TwnsMeSimSettingsPanel {
         }
 
         private async _onTouchedBtnConfirm(): Promise<void> {
-            const warData   = MeSimModel.getWarData();
-            const errorCode = await (new Twns.TestWar.TwWar()).getErrorCodeForInit(warData, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
+            const warData   = Twns.MapEditor.MeSimModel.getWarData();
+            const errorCode = await (new TestWar.TwWar()).getErrorCodeForInit(warData, await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
             } else {

@@ -25,7 +25,7 @@ namespace Twns.CoopCustomRoom {
     import CcrCreateAdvancedSettingsPage            = TwnsCcrCreateAdvancedSettingsPage.CcrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import CcrCreatePlayerInfoPage                  = TwnsCcrCreatePlayerInfoPage.CcrCreatePlayerInfoPage;
+    import CcrCreatePlayerInfoPage                  = CoopCustomRoom.CcrCreatePlayerInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
@@ -101,7 +101,7 @@ namespace Twns.CoopCustomRoom {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrCreateMapListPanel, null);
         }
         private _onTouchedBtnConfirm(): void {
-            const data = CcrCreateModel.getData();
+            const data = CoopCustomRoom.CcrCreateModel.getData();
             CcrProxy.reqCreateRoom(data);
 
             this._btnConfirm.enabled = false;
@@ -150,103 +150,103 @@ namespace Twns.CoopCustomRoom {
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            const warRule           = CcrCreateModel.getWarRule();
-            const turnsLimit        = CcrCreateModel.getTurnsLimit();
-            const bootTimerParams   = CcrCreateModel.getBootTimerParams();
-            const gameConfig        = CcrCreateModel.getGameConfig();
-            const warEventFullData  = (await CcrCreateModel.getMapRawData()).warEventFullData ?? null;
+            const instanceWarRule   = CoopCustomRoom.CcrCreateModel.getInstanceWarRule();
+            const turnsLimit        = CoopCustomRoom.CcrCreateModel.getTurnsLimit();
+            const bootTimerParams   = CoopCustomRoom.CcrCreateModel.getBootTimerParams();
+            const gameConfig        = CoopCustomRoom.CcrCreateModel.getGameConfig();
+            const warEventFullData  = (await CoopCustomRoom.CcrCreateModel.getMapRawData()).warEventFullData ?? null;
             const timerType         = bootTimerParams[0] as Types.BootTimerType;
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
                     {
                         settingsType    : WarBasicSettingsType.MapId,
-                        currentValue    : CcrCreateModel.getMapId(),
-                        warRule,
+                        currentValue    : CoopCustomRoom.CcrCreateModel.getMapId(),
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarName,
-                        currentValue    : CcrCreateModel.getWarName(),
-                        warRule,
+                        currentValue    : CoopCustomRoom.CcrCreateModel.getWarName(),
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            CcrCreateModel.setWarName(newValue);
+                            CoopCustomRoom.CcrCreateModel.setWarName(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarPassword,
-                        currentValue    : CcrCreateModel.getWarPassword(),
-                        warRule,
+                        currentValue    : CoopCustomRoom.CcrCreateModel.getWarPassword(),
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            CcrCreateModel.setWarPassword(newValue);
+                            CoopCustomRoom.CcrCreateModel.setWarPassword(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarComment,
-                        currentValue    : CcrCreateModel.getWarComment(),
-                        warRule,
+                        currentValue    : CoopCustomRoom.CcrCreateModel.getWarComment(),
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            CcrCreateModel.setWarComment(newValue);
+                            CoopCustomRoom.CcrCreateModel.setWarComment(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: async () => {
-                            await CcrCreateModel.tickPresetWarRuleId();
+                            await CoopCustomRoom.CcrCreateModel.tickTemplateWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.HasFog,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: () => {
-                            CcrCreateModel.setHasFog(!CcrCreateModel.getHasFog());
-                            CcrCreateModel.setCustomWarRuleId();
+                            CoopCustomRoom.CcrCreateModel.setHasFog(!CoopCustomRoom.CcrCreateModel.getHasFog());
+                            CoopCustomRoom.CcrCreateModel.setCustomWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.Weather,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: () => {
-                            CcrCreateModel.tickDefaultWeatherType();
-                            CcrCreateModel.setCustomWarRuleId();
+                            CoopCustomRoom.CcrCreateModel.tickDefaultWeatherType();
+                            CoopCustomRoom.CcrCreateModel.setCustomWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarEvent,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
@@ -254,25 +254,25 @@ namespace Twns.CoopCustomRoom {
                     {
                         settingsType    : WarBasicSettingsType.TurnsLimit,
                         currentValue    : turnsLimit,
-                        warRule,
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue !== "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            CcrCreateModel.setTurnsLimit(newValue);
+                            CoopCustomRoom.CcrCreateModel.setTurnsLimit(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.TimerType,
                         currentValue    : timerType,
-                        warRule,
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: async () => {
-                            CcrCreateModel.tickBootTimerType();
+                            CoopCustomRoom.CcrCreateModel.tickBootTimerType();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
@@ -282,11 +282,11 @@ namespace Twns.CoopCustomRoom {
                 openData.dataArrayForListSettings.push({
                     settingsType    : WarBasicSettingsType.TimerRegularParam,
                     currentValue    : bootTimerParams[1],
-                    warRule,
+                    instanceWarRule: instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: () => {
-                        CcrCreateModel.tickTimerRegularTime();
+                        CoopCustomRoom.CcrCreateModel.tickTimerRegularTime();
                         this._updateCommonWarBasicSettingsPage();
                     },
                 });
@@ -295,28 +295,28 @@ namespace Twns.CoopCustomRoom {
                     {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                         currentValue    : bootTimerParams[1],
-                        warRule,
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: number | string | null) => {
                             if (typeof newValue !== "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            CcrCreateModel.setTimerIncrementalInitialTime(newValue);
+                            CoopCustomRoom.CcrCreateModel.setTimerIncrementalInitialTime(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                         currentValue    : bootTimerParams[2],
-                        warRule,
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: number | string | null) => {
                             if (typeof newValue !== "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            CcrCreateModel.setTimerIncrementalIncrementalValue(newValue);
+                            CoopCustomRoom.CcrCreateModel.setTimerIncrementalIncrementalValue(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
@@ -329,11 +329,11 @@ namespace Twns.CoopCustomRoom {
         }
 
         private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
-            const mapId = CcrCreateModel.getMapId();
+            const mapId = CoopCustomRoom.CcrCreateModel.getMapId();
             return mapId == null
                 ? null
                 : {
-                    gameConfig  : CcrCreateModel.getGameConfig(),
+                    gameConfig  : CoopCustomRoom.CcrCreateModel.getGameConfig(),
                     mapInfo     : { mapId },
                 };
         }

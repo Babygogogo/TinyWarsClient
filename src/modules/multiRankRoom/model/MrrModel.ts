@@ -22,7 +22,7 @@ namespace Twns.MultiRankRoom.MrrModel {
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
     import IMrrRoomInfo                             = CommonProto.MultiRankRoom.IMrrRoomInfo;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
     let _previewingRoomId           : number | null = null;
@@ -186,13 +186,13 @@ namespace Twns.MultiRankRoom.MrrModel {
         }
 
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
+        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
         const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
         for (const playerInfo of (roomInfo.playerDataList || [])) {
             const playerIndex = Helpers.getExisted(playerInfo.playerIndex);
             playerInfoArray.push({
                 playerIndex,
-                teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
+                teamIndex           : WarHelpers.WarRuleHelpers.getTeamIndex(instanceWarRule, playerIndex),
                 isAi                : false,
                 userId              : playerInfo.userId ?? null,
                 coId                : playerInfo.coId ?? null,
@@ -206,7 +206,7 @@ namespace Twns.MultiRankRoom.MrrModel {
 
         return {
             gameConfig              : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
-            playersCountUnneutral   : WarRuleHelpers.getPlayersCountUnneutral(warRule),
+            playersCountUnneutral   : WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(instanceWarRule),
             roomOwnerPlayerIndex    : null,
             callbackOnExitRoom      : null,
             callbackOnDeletePlayer  : null,
@@ -222,11 +222,11 @@ namespace Twns.MultiRankRoom.MrrModel {
         }
 
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
+        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
         const settingsForMrw    = Helpers.getExisted(roomInfo.settingsForMrw);
         const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
         const mapId             = Helpers.getExisted(settingsForMrw.mapId);
-        const warEventFullData  = (await WarMapModel.getRawData(mapId))?.warEventFullData ?? null;
+        const warEventFullData  = (await WarMap.WarMapModel.getRawData(mapId))?.warEventFullData ?? null;
         const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
@@ -234,7 +234,7 @@ namespace Twns.MultiRankRoom.MrrModel {
                 {
                     settingsType    : WarBasicSettingsType.MapId,
                     currentValue    : mapId,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -242,7 +242,7 @@ namespace Twns.MultiRankRoom.MrrModel {
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -250,7 +250,7 @@ namespace Twns.MultiRankRoom.MrrModel {
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -258,7 +258,7 @@ namespace Twns.MultiRankRoom.MrrModel {
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -266,7 +266,7 @@ namespace Twns.MultiRankRoom.MrrModel {
                 {
                     settingsType    : WarBasicSettingsType.WarEvent,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -274,7 +274,7 @@ namespace Twns.MultiRankRoom.MrrModel {
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
                     currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -282,7 +282,7 @@ namespace Twns.MultiRankRoom.MrrModel {
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -293,7 +293,7 @@ namespace Twns.MultiRankRoom.MrrModel {
             openData.dataArrayForListSettings.push({
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
-                warRule,
+                instanceWarRule,
                 gameConfig,
                 warEventFullData,
                 callbackOnModify: null,
@@ -303,7 +303,7 @@ namespace Twns.MultiRankRoom.MrrModel {
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                     currentValue    : bootTimerParams[1],
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -311,7 +311,7 @@ namespace Twns.MultiRankRoom.MrrModel {
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                     currentValue    : bootTimerParams[2],
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -331,11 +331,11 @@ namespace Twns.MultiRankRoom.MrrModel {
         }
 
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
+        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
         return {
-            gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
-            warRule,
-            warType     : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
+            gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+            instanceWarRule,
+            warType         : instanceWarRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
         };
     }
 }

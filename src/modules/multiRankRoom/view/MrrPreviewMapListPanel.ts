@@ -25,7 +25,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiRankRoom {
-    import OpenDataForCommonWarAdvancedSettingsPage     = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage     = Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage        = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage              = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import LangTextType                                 = TwnsLangTextType.LangTextType;
@@ -125,7 +125,7 @@ namespace Twns.MultiRankRoom {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : Twns.Common.CommonWarAdvancedSettingsPage,
+                    pageClass   : Common.CommonWarAdvancedSettingsPage,
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
@@ -188,9 +188,9 @@ namespace Twns.MultiRankRoom {
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
             const promiseArray: Promise<CommonProto.Map.IMapRawData | null>[] = [];
-            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+            for (const mapId of WarMap.WarMapModel.getEnabledMapIdArray()) {
                 promiseArray.push((async (): Promise<CommonProto.Map.IMapRawData | null> => {
-                    const mapBriefData = await WarMapModel.getBriefData(mapId);
+                    const mapBriefData = await WarMap.WarMapModel.getBriefData(mapId);
                     if (mapBriefData == null) {
                         return null;
                     }
@@ -198,7 +198,7 @@ namespace Twns.MultiRankRoom {
                     if ((mapBriefData.mapExtraData?.isEnabled)  &&
                         (mapBriefData.ruleAvailability?.canMrw)
                     ) {
-                        return await WarMapModel.getRawData(mapId);
+                        return await WarMap.WarMapModel.getRawData(mapId);
                     }
 
                     return null;
@@ -208,7 +208,7 @@ namespace Twns.MultiRankRoom {
             const hasFog    = this._getOpenData().hasFog;
             const dataArray : DataForMapNameRenderer[] = [];
             for (const mapRawData of await Promise.all(promiseArray)) {
-                if (mapRawData?.warRuleArray?.some(v => {
+                if (mapRawData?.templateWarRuleArray?.some(v => {
                     return (v.ruleAvailability?.canMrw) && (hasFog === v.ruleForGlobalParams?.hasFogByDefault);
                 })) {
                     dataArray.push({
@@ -238,20 +238,20 @@ namespace Twns.MultiRankRoom {
                 return null;
             }
 
-            const mapRawData = await WarMapModel.getRawData(mapId);
+            const mapRawData = await WarMap.WarMapModel.getRawData(mapId);
             if (mapRawData == null) {
                 return null;
             }
 
-            const hasFog        = this._getOpenData().hasFog;
-            const warRuleArray  = mapRawData.warRuleArray?.filter(v => {
+            const hasFog                = this._getOpenData().hasFog;
+            const templateWarRuleArray  = mapRawData.templateWarRuleArray?.filter(v => {
                 return (v.ruleAvailability?.canMrw) && (hasFog === v.ruleForGlobalParams?.hasFogByDefault);
             });
-            if ((warRuleArray == null) || (!warRuleArray.length)) {
+            if ((templateWarRuleArray == null) || (!templateWarRuleArray.length)) {
                 return null;
             }
 
-            const warRule           = warRuleArray[0];
+            const instanceWarRule   = WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRuleArray[0], mapRawData.warEventFullData);
             const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
             const timerType         = bootTimerParams[0] as Types.BootTimerType;
             const gameConfig        = await Config.ConfigManager.getLatestGameConfig();
@@ -261,7 +261,7 @@ namespace Twns.MultiRankRoom {
                     {
                         settingsType    : WarBasicSettingsType.MapId,
                         currentValue    : mapId,
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
@@ -269,7 +269,7 @@ namespace Twns.MultiRankRoom {
                     {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
@@ -277,7 +277,7 @@ namespace Twns.MultiRankRoom {
                     {
                         settingsType    : WarBasicSettingsType.HasFog,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
@@ -285,7 +285,7 @@ namespace Twns.MultiRankRoom {
                     {
                         settingsType    : WarBasicSettingsType.Weather,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
@@ -293,7 +293,7 @@ namespace Twns.MultiRankRoom {
                     {
                         settingsType    : WarBasicSettingsType.WarEvent,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
@@ -301,7 +301,7 @@ namespace Twns.MultiRankRoom {
                     {
                         settingsType    : WarBasicSettingsType.TurnsLimit,
                         currentValue    : CommonConstants.WarMaxTurnsLimit,
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
@@ -309,7 +309,7 @@ namespace Twns.MultiRankRoom {
                     {
                         settingsType    : WarBasicSettingsType.TimerType,
                         currentValue    : timerType,
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
@@ -320,7 +320,7 @@ namespace Twns.MultiRankRoom {
                 openData.dataArrayForListSettings.push({
                     settingsType    : WarBasicSettingsType.TimerRegularParam,
                     currentValue    : bootTimerParams[1],
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -330,7 +330,7 @@ namespace Twns.MultiRankRoom {
                     {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                         currentValue    : bootTimerParams[1],
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
@@ -338,7 +338,7 @@ namespace Twns.MultiRankRoom {
                     {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                         currentValue    : bootTimerParams[2],
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
@@ -357,19 +357,19 @@ namespace Twns.MultiRankRoom {
                 return null;
             }
 
-            const mapRawData    = Helpers.getExisted(await WarMapModel.getRawData(mapId));
-            const hasFog        = this._getOpenData().hasFog;
-            const warRuleArray  = mapRawData.warRuleArray?.filter(v => {
+            const mapRawData            = Helpers.getExisted(await WarMap.WarMapModel.getRawData(mapId));
+            const hasFog                = this._getOpenData().hasFog;
+            const templateWarRuleArray  = mapRawData.templateWarRuleArray?.filter(v => {
                 return (v.ruleAvailability?.canMrw) && (hasFog === v.ruleForGlobalParams?.hasFogByDefault);
             });
-            if ((warRuleArray == null) || (!warRuleArray.length)) {
+            if ((templateWarRuleArray == null) || (!templateWarRuleArray.length)) {
                 return null;
             }
 
             return {
-                gameConfig  : await Config.ConfigManager.getLatestGameConfig(),
-                warRule     : warRuleArray[0],
-                warType     : hasFog ? Types.WarType.MrwFog : Types.WarType.MrwStd,
+                gameConfig      : await Config.ConfigManager.getLatestGameConfig(),
+                instanceWarRule : WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRuleArray[0], mapRawData.warEventFullData),
+                warType         : hasFog ? Types.WarType.MrwFog : Types.WarType.MrwStd,
             };
         }
 
@@ -465,7 +465,7 @@ namespace Twns.MultiRankRoom {
         }
 
         protected async _onDataChanged(): Promise<void> {
-            this._labelName.text = (await WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId)) || `??`;
+            this._labelName.text = (await WarMap.WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId)) || `??`;
         }
 
         private _onTouchTapBtnChoose(): void {

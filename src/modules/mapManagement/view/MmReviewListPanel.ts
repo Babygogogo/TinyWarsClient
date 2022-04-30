@@ -80,7 +80,7 @@ namespace TwnsMmReviewListPanel {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onMsgMmGetReviewingMaps(): void {
-            const newData               = this._createDataForListMap(WarMapModel.getMmReviewingMaps());
+            const newData               = this._createDataForListMap(Twns.WarMap.WarMapModel.getMmReviewingMaps());
             this._dataForListMap        = newData;
             this._labelLoading.visible  = false;
 

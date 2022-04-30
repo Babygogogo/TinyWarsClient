@@ -21,7 +21,7 @@ namespace TwnsMeAddWarEventToRulePanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
-        warRule         : CommonProto.WarRule.ITemplateWarRule;
+        templateWarRule : CommonProto.WarRule.ITemplateWarRule;
         warEventArray   : CommonProto.WarEvent.IWarEvent[];
     };
     export class MeAddWarEventToRulePanel extends TwnsUiPanel.UiPanel<OpenData>{
@@ -64,15 +64,15 @@ namespace TwnsMeAddWarEventToRulePanel {
             this._btnClose.label        = Lang.getText(LangTextType.B0146);
         }
         private _updateListMessageAndLabelNoMessage(): void {
-            const openData      = this._getOpenData();
-            const warRule       = openData.warRule;
-            const warEventArray = openData.warEventArray;
-            const dataArray     : DataForWarEventRenderer[] = [];
+            const openData          = this._getOpenData();
+            const templateWarRule   = openData.templateWarRule;
+            const warEventArray     = openData.warEventArray;
+            const dataArray         : DataForWarEventRenderer[] = [];
             for (const warEvent of warEventArray) {
                 dataArray.push({
                     warEventId      : Helpers.getExisted(warEvent.eventId),
                     warEventArray,
-                    warRule,
+                    templateWarRule,
                 });
             }
 
@@ -84,7 +84,7 @@ namespace TwnsMeAddWarEventToRulePanel {
     type DataForWarEventRenderer = {
         warEventId      : number;
         warEventArray   : CommonProto.WarEvent.IWarEvent[];
-        warRule         : CommonProto.WarRule.ITemplateWarRule;
+        templateWarRule : CommonProto.WarRule.ITemplateWarRule;
     };
     class WarEventRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarEventRenderer> {
         private readonly _labelId!      : TwnsUiLabel.UiLabel;
@@ -114,14 +114,14 @@ namespace TwnsMeAddWarEventToRulePanel {
         private _onTouchedBtnAdd(): void {
             const data = this.data;
             if (data) {
-                WarRuleHelpers.addWarEventId(data.warRule, data.warEventId);
+                Twns.WarHelpers.WarRuleHelpers.addWarEventId(data.templateWarRule, data.warEventId);
                 Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
         private _onTouchedBtnDelete(): void {
             const data = this.data;
             if (data) {
-                WarRuleHelpers.deleteWarEventId(data.warRule, data.warEventId);
+                Twns.WarHelpers.WarRuleHelpers.deleteWarEventId(data.templateWarRule, data.warEventId);
                 Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
@@ -150,7 +150,7 @@ namespace TwnsMeAddWarEventToRulePanel {
         private _updateBtnAddAndBtnDelete(): void {
             const data = this.data;
             if (data) {
-                const isAdded               = (data.warRule.warEventIdArray || []).indexOf(data.warEventId) >= 0;
+                const isAdded               = (data.templateWarRule.warEventIdArray || []).indexOf(data.warEventId) >= 0;
                 this._btnAdd.visible        = !isAdded;
                 this._btnDelete.visible     = isAdded;
             }

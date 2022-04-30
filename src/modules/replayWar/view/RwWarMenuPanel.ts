@@ -176,8 +176,8 @@ namespace Twns.ReplayWar {
         private async _updateGroupInfo(): Promise<void> {
             const war                   = this._getWar();
             const mapId                 = war.getMapId();
-            this._labelMapName.text     = mapId == null ? `----` : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || "----");
-            this._labelMapDesigner.text = mapId == null ? `----` : (await WarMapModel.getDesignerName(mapId) || "----");
+            this._labelMapName.text     = mapId == null ? `----` : (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || "----");
+            this._labelMapDesigner.text = mapId == null ? `----` : (await Twns.WarMap.WarMapModel.getDesignerName(mapId) || "----");
             this._labelWarId.text       = `${war.getReplayId()}`;
             this._labelTurnIndex.text   = `${war.getTurnManager().getTurnIndex()}`;
             this._labelActionId.text    = `${war.getNextActionId()} / ${war.getExecutedActionManager().getExecutedActionsCount()}`;

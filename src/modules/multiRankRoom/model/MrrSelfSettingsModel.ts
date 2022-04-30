@@ -101,7 +101,7 @@ namespace Twns.MultiRankRoom.MrrSelfSettingsModel {
         const gameConfig        = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
         const settingsForMrw    = Helpers.getExisted(roomInfo.settingsForMrw);
         const dataArrayForBanCo = Helpers.getExisted(settingsForMrw.dataArrayForBanCo);
-        const playerRule        = WarRuleHelpers.getPlayerRule(Helpers.getExisted(settingsForCommon.warRule), playerIndex);
+        const playerRule        = WarHelpers.WarRuleHelpers.getPlayerRule(Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex);
         const bannedCoIdSet     = new Set<number>(playerRule.bannedCoIdArray);
         for (const data of dataArrayForBanCo) {
             for (const coId of data.bannedCoIdList || []) {
@@ -109,7 +109,7 @@ namespace Twns.MultiRankRoom.MrrSelfSettingsModel {
             }
         }
 
-        return WarRuleHelpers.getAvailableCoIdArray(gameConfig, bannedCoIdSet);
+        return WarHelpers.WarRuleHelpers.getAvailableCoIdArray(gameConfig, bannedCoIdSet);
     }
 
     function generateAvailableSkinIdList(roomInfo: IMrrRoomInfo): number[] {

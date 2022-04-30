@@ -170,16 +170,16 @@ namespace TwnsUiMapInfo {
             const mapInfo = data.mapInfo;
             if (mapInfo) {
                 const mapId                 = mapInfo.mapId;
-                const mapRawData            = Helpers.getExisted(await WarMapModel.getRawData(mapId));
-                const rating                = await WarMapModel.getAverageRating(mapId);
+                const mapRawData            = Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId));
+                const rating                = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
                 const myRating              = UserModel.getMapRating(mapId);
-                labelMapName.text           = await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
+                labelMapName.text           = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
                 labelMapId.text             = `${mapId}`;
                 labelPlayersCount.text      = `${mapRawData.playersCountUnneutral}`;
                 labelRating.text            = rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001);
-                labelRaters.text            = `(${await WarMapModel.getTotalRatersCount(mapId)})`;
+                labelRaters.text            = `(${await Twns.WarMap.WarMapModel.getTotalRatersCount(mapId)})`;
                 labelMyRating.text          = myRating != null ? `${myRating}` : Lang.getText(LangTextType.B0001);
-                labelPlayedTimes.text       = `${await WarMapModel.getTotalPlayedTimes(mapId)}`;
+                labelPlayedTimes.text       = `${await Twns.WarMap.WarMapModel.getTotalPlayedTimes(mapId)}`;
                 labelMapSize.text           = `${mapRawData.mapWidth} x ${mapRawData.mapHeight}`;
                 imgSetMyRating.visible      = true;
                 imgWarStatistics.visible    = true;
@@ -218,7 +218,7 @@ namespace TwnsUiMapInfo {
 
             const mapInfo = data.mapInfo;
             if (mapInfo) {
-                const mapRawData    = Helpers.getExisted(await WarMapModel.getRawData(mapInfo.mapId));
+                const mapRawData    = Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapInfo.mapId));
                 labelDesigner.text  = `${prefix}${mapRawData.designerName || CommonConstants.ErrorTextForUndefined}`;
                 return;
             }

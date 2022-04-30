@@ -29,7 +29,7 @@ namespace Twns.SingleCustomRoom {
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import ScrCreateAdvancedSettingsPage            = TwnsScrCreateAdvancedSettingsPage.ScrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import ScrCreatePlayerInfoPage                  = TwnsScrCreatePlayerInfoPage.ScrCreatePlayerInfoPage;
+    import ScrCreatePlayerInfoPage                  = SingleCustomRoom.ScrCreatePlayerInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
@@ -106,14 +106,14 @@ namespace Twns.SingleCustomRoom {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.ScrCreateMapListPanel, null);
         }
         private async _onTouchedBtnConfirm(): Promise<void> {
-            const data      = ScrCreateModel.getData();
+            const data      = SingleCustomRoom.ScrCreateModel.getData();
             const callback  = () => {
                 SpmProxy.reqSpmCreateScw(data);
                 this._btnConfirm.enabled = false;
                 this._resetTimeoutForBtnConfirm();
             };
 
-            if (await SpmModel.checkIsEmpty(Helpers.getExisted(data.slotIndex))) {
+            if (await SinglePlayerMode.SpmModel.checkIsEmpty(Helpers.getExisted(data.slotIndex))) {
                 callback();
             } else {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
@@ -172,25 +172,25 @@ namespace Twns.SingleCustomRoom {
         }
 
         private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
-            const mapId = ScrCreateModel.getMapId();
+            const mapId = SingleCustomRoom.ScrCreateModel.getMapId();
             return mapId == null
                 ? null
                 : {
-                    gameConfig  : ScrCreateModel.getGameConfig(),
+                    gameConfig  : SingleCustomRoom.ScrCreateModel.getGameConfig(),
                     mapInfo     : { mapId },
                 };
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            const warRule           = ScrCreateModel.getWarRule();
-            const gameConfig        = ScrCreateModel.getGameConfig();
-            const warEventFullData  = (await ScrCreateModel.getMapRawData()).warEventFullData ?? null;
+            const instanceWarRule   = SingleCustomRoom.ScrCreateModel.getInstanceWarRule();
+            const gameConfig        = SingleCustomRoom.ScrCreateModel.getGameConfig();
+            const warEventFullData  = (await SingleCustomRoom.ScrCreateModel.getMapRawData()).warEventFullData ?? null;
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
                     {
                         settingsType    : WarBasicSettingsType.MapId,
-                        currentValue    : ScrCreateModel.getMapId(),
-                        warRule,
+                        currentValue    : SingleCustomRoom.ScrCreateModel.getMapId(),
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
@@ -198,72 +198,72 @@ namespace Twns.SingleCustomRoom {
                     {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: async () => {
-                            await ScrCreateModel.tickPresetWarRuleId();
+                            await SingleCustomRoom.ScrCreateModel.tickPresetWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.HasFog,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: () => {
-                            ScrCreateModel.setHasFog(!ScrCreateModel.getHasFog());
-                            ScrCreateModel.setCustomWarRuleId();
+                            SingleCustomRoom.ScrCreateModel.setHasFog(!SingleCustomRoom.ScrCreateModel.getHasFog());
+                            SingleCustomRoom.ScrCreateModel.setCustomWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.Weather,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: () => {
-                            ScrCreateModel.tickDefaultWeatherType();
-                            ScrCreateModel.setCustomWarRuleId();
+                            SingleCustomRoom.ScrCreateModel.tickDefaultWeatherType();
+                            SingleCustomRoom.ScrCreateModel.setCustomWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarEvent,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.SpmSaveSlotIndex,
-                        currentValue    : ScrCreateModel.getSaveSlotIndex(),
-                        warRule,
+                        currentValue    : SingleCustomRoom.ScrCreateModel.getSaveSlotIndex(),
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: () => {
                             TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSaveSlotsPanel, {
-                                currentSlotIndex    : ScrCreateModel.getSaveSlotIndex(),
+                                currentSlotIndex    : SingleCustomRoom.ScrCreateModel.getSaveSlotIndex(),
                                 callback            : slotIndex => {
-                                    ScrCreateModel.setSaveSlotIndex(slotIndex);
+                                    SingleCustomRoom.ScrCreateModel.setSaveSlotIndex(slotIndex);
                                 },
                             });
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.SpmSaveSlotComment,
-                        currentValue    : ScrCreateModel.getSlotComment(),
-                        warRule,
+                        currentValue    : SingleCustomRoom.ScrCreateModel.getSlotComment(),
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`, ClientErrorCode.ScrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_00);
                             }
-                            ScrCreateModel.setSlotComment(newValue);
+                            SingleCustomRoom.ScrCreateModel.setSlotComment(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },

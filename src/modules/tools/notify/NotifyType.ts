@@ -53,12 +53,12 @@ namespace TwnsNotifyType {
         MrrSelfSettingsCoIdChanged,
         MrrSelfSettingsSkinIdChanged,
 
-        ScrCreatePresetWarRuleIdChanged,
+        ScrCreateTemplateWarRuleIdChanged,
         ScrCreateBannedCoIdArrayChanged,
         ScrCreateWarSaveSlotChanged,
         ScrCreatePlayerInfoChanged,
 
-        SrrCreatePresetWarRuleIdChanged,
+        SrrCreateModelTemplateWarRuleIdChanged,
         SrrCreateBannedCoIdArrayChanged,
         SrrCreateWarSaveSlotChanged,
         SrrCreatePlayerInfoChanged,

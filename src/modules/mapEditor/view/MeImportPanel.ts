@@ -64,9 +64,9 @@ namespace TwnsMeImportPanel {
         private async _createDataForListMap(): Promise<DataForMapRenderer[]> {
             const dataArray     : DataForMapRenderer[] = [];
             const promiseArray  : Promise<void>[] = [];
-            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+            for (const mapId of Twns.WarMap.WarMapModel.getEnabledMapIdArray()) {
                 promiseArray.push((async () => {
-                    const mapBriefData = await WarMapModel.getBriefData(mapId);
+                    const mapBriefData = await Twns.WarMap.WarMapModel.getBriefData(mapId);
                     if (mapBriefData == null) {
                         return;
                     }
@@ -74,7 +74,7 @@ namespace TwnsMeImportPanel {
                     if (mapBriefData.mapExtraData?.isEnabled) {
                         dataArray.push({
                             mapId,
-                            mapName     : await WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined,
+                            mapName     : await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined,
                             panel       : this,
                         });
                     }
@@ -115,7 +115,7 @@ namespace TwnsMeImportPanel {
                     war.stopRunning();
                     await war.initWithMapEditorData(
                         {
-                            mapRawData  : await WarMapModel.getRawData(mapId),
+                            mapRawData  : await Twns.WarMap.WarMapModel.getRawData(mapId),
                             slotIndex   : war.getMapSlotIndex(),
                         },
                         await Twns.Config.ConfigManager.getLatestGameConfig()

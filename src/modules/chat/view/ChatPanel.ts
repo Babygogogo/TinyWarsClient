@@ -662,7 +662,7 @@ namespace Twns.Chat {
                         if (warName) {
                             labelName.text = warName;
                         } else {
-                            labelName.text = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                            labelName.text = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
                         }
                     }
                 });
@@ -679,7 +679,7 @@ namespace Twns.Chat {
                         if (warName) {
                             labelName.text = warName;
                         } else {
-                            labelName.text = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForCcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                            labelName.text = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForCcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
                         }
                     }
                 });

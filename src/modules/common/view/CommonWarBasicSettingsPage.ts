@@ -66,7 +66,7 @@ namespace Twns.Common {
     type DataForSettingsRenderer = {
         settingsType        : WarBasicSettingsType;
         currentValue        : number | string | null;
-        warRule             : CommonProto.WarRule.ITemplateWarRule;
+        instanceWarRule     : CommonProto.WarRule.IInstanceWarRule;
         gameConfig          : Config.GameConfig;
         warEventFullData    : CommonProto.Map.IWarEventFullData | null;
         callbackOnModify    : ((newValue: string | number | null) => void) | null;
@@ -139,7 +139,7 @@ namespace Twns.Common {
             if (settingsType === WarBasicSettingsType.MapId) {
                 const mapId     = data.currentValue;
                 const mapDesc   = (typeof mapId == "number")
-                    ? (await WarMapModel.getRawData(mapId))?.mapExtraText?.mapDescription
+                    ? (await WarMap.WarMapModel.getRawData(mapId))?.mapExtraText?.mapDescription
                     : (null);
                 if (mapDesc == null) {
                     FloatText.show(Lang.getText(LangTextType.B0894));
@@ -164,7 +164,7 @@ namespace Twns.Common {
 
             } else if (settingsType === WarBasicSettingsType.WarEvent) {
                 const warEventFullData  = data.warEventFullData;
-                const warEventIdArray   = data.warRule.warEventIdArray;
+                const warEventIdArray   = data.instanceWarRule.warEventFullData?.eventArray?.map(v => Helpers.getExisted(v.eventId)) ?? [];
                 if ((warEventFullData) && (warEventIdArray?.length)) {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonWarEventListPanel, {
                         warEventFullData,
@@ -238,8 +238,8 @@ namespace Twns.Common {
                 labelValue.text = `--`;
                 btnHelp.visible = false;
             } else {
-                labelValue.text = (await WarMapModel.getMapNameInCurrentLanguage(mapId)) ?? CommonConstants.ErrorTextForUndefined;
-                btnHelp.visible = !!(await WarMapModel.getRawData(mapId))?.mapExtraText?.mapDescription?.length;
+                labelValue.text = (await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                btnHelp.visible = !!(await WarMap.WarMapModel.getRawData(mapId))?.mapExtraText?.mapDescription?.length;
             }
         }
         private _updateViewAsWarName(): void {
@@ -259,16 +259,21 @@ namespace Twns.Common {
         }
         private _updateViewAsWarRuleTitle(): void {
             const data              = this._getData();
-            const warRule           = data.warRule;
+            const instanceWarRule   = data.instanceWarRule;
             const labelValue        = this._labelValue;
-            const ruleId            = warRule.ruleId;
-            labelValue.text         = `${ruleId == null ? `` : `(#${ruleId}) `}${Lang.getWarRuleNameInLanguage(warRule) || CommonConstants.ErrorTextForUndefined}`;
-            labelValue.textColor    = ruleId == null ? 0xFFFF00 : 0xFFFFFF;
+            const templateWarRuleId = instanceWarRule.templateRuleId;
+            if (templateWarRuleId == null) {
+                labelValue.text         = Lang.getText(LangTextType.B0321);
+                labelValue.textColor    = 0xFFFF00;
+            } else {
+                labelValue.text         = `(#${templateWarRuleId}) ${Lang.getLanguageText({ textArray: instanceWarRule.ruleNameArray }) ?? CommonConstants.ErrorTextForUndefined}`;
+                labelValue.textColor    = 0xFFFFFF;
+            }
             this._btnHelp.visible   = false;
         }
         private _updateViewAsHasFog(): void {
             const data              = this._getData();
-            const hasFog            = data.warRule.ruleForGlobalParams?.hasFogByDefault;
+            const hasFog            = data.instanceWarRule.ruleForGlobalParams?.hasFogByDefault;
             const labelValue        = this._labelValue;
             labelValue.text         = Lang.getText(hasFog ? LangTextType.B0012 : LangTextType.B0013);
             labelValue.textColor    = hasFog ? 0xFFFF00 : 0xFFFFFF;
@@ -276,7 +281,7 @@ namespace Twns.Common {
         }
         private _updateViewAsWeather(): void {
             const data              = this._getData();
-            const weatherType       = WarRuleHelpers.getDefaultWeatherType(data.warRule);
+            const weatherType       = WarHelpers.WarRuleHelpers.getDefaultWeatherType(data.instanceWarRule);
             const labelValue        = this._labelValue;
             labelValue.text         = Lang.getWeatherName(weatherType);
             labelValue.textColor    = weatherType === Types.WeatherType.Clear ? 0xFFFFFF: 0xFFFF00;
@@ -284,7 +289,7 @@ namespace Twns.Common {
         }
         private _updateViewAsWarEvent(): void {
             const data              = this._getData();
-            const warEventsCount    = data.warRule.warEventIdArray?.length ?? 0;
+            const warEventsCount    = data.instanceWarRule.warEventFullData?.eventArray?.length ?? 0;
             const labelValue        = this._labelValue;
             labelValue.text         = warEventsCount ? `${warEventsCount}` : `--`;
             labelValue.textColor    = warEventsCount ? 0xFFFF00 : 0xFFFFFF;
@@ -391,7 +396,7 @@ namespace Twns.Common {
         private _modifyAsHasFog(): void {
             const data      = this._getData();
             const callback  = Helpers.getExisted(data.callbackOnModify);
-            if (data.warRule.ruleId == null) {
+            if (data.instanceWarRule.templateRuleId == null) {
                 callback(null);
             } else {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
@@ -403,7 +408,7 @@ namespace Twns.Common {
         private _modifyAsWeather(): void {
             const data      = this._getData();
             const callback  = Helpers.getExisted(data.callbackOnModify);
-            if (data.warRule.ruleId == null) {
+            if (data.instanceWarRule.templateRuleId == null) {
                 callback(null);
             } else {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {

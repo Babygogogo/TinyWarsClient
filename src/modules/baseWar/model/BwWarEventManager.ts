@@ -26,25 +26,22 @@ namespace Twns.BaseWar {
 
     export class BwWarEventManager {
         private _war?                           : BwWar;
-        private _warEventFullData?              : IWarEventFullData | null;
         private _calledCountList?               : IDataForWarEventCalledCount[] | null;
         private _customCounterArray?            : ICustomCounter[] | null;
         private _ongoingPersistentActionIdSet?  : Set<number>;
 
-        public init(data: Types.Undefinable<ISerialWarEventManager>): void {
+        public init(data: Types.Undefinable<ISerialWarEventManager>, warEventFullData: Types.Undefinable<CommonProto.Map.IWarEventFullData>): void {
             if (!data) {
-                this._setWarEventFullData(null);
                 this._setCalledCountList(null);
                 this._setCustomCounterArray(null);
                 this._setOngoingPersistentActionIdSet(new Set());
             } else {
+                // TODO: validate the data.
                 const customCounterArray = data.customCounterArray ?? null;
                 if ((customCounterArray) && (!Config.ConfigManager.checkIsValidCustomCounterArray(customCounterArray))) {
                     throw Helpers.newError(`BwWarEventManager.init() invalid customCounterArray.`, ClientErrorCode.BwWarEventManager_Init_00);
                 }
 
-                // TODO: validate the data.
-                const warEventFullData                  = Helpers.deepClone(data.warEventFullData) ?? null;
                 const ongoingPersistentActionIdArray    = data.ongoingPersistentActionIdArray ?? [];
                 const ongoingPersistentActionIdSet      = new Set(ongoingPersistentActionIdArray);
                 if (ongoingPersistentActionIdArray.length !== ongoingPersistentActionIdSet.size) {
@@ -57,31 +54,30 @@ namespace Twns.BaseWar {
                     }
                 }
 
-                this._setWarEventFullData(warEventFullData);
                 this._setCalledCountList(Helpers.deepClone(data.calledCountList) ?? null);
                 this._setCustomCounterArray(Helpers.deepClone(customCounterArray));
                 this._setOngoingPersistentActionIdSet(ongoingPersistentActionIdSet);
             }
         }
         public fastInit(data: ISerialWarEventManager): void {
-            this.init(data);
+            this._setCalledCountList(Helpers.deepClone(data.calledCountList) ?? null);
+            this._setCustomCounterArray(Helpers.deepClone(data.customCounterArray ?? null));
+            this._setOngoingPersistentActionIdSet(new Set(data.ongoingPersistentActionIdArray));
         }
 
         public serialize(): ISerialWarEventManager {
             return {
-                warEventFullData                : this.getWarEventFullData(),
                 calledCountList                 : this._getCalledCountList(),
                 customCounterArray              : this._getCustomCounterArray(),
                 ongoingPersistentActionIdArray  : [...this.getOngoingPersistentActionIdSet()],
             };
         }
         public serializeForCreateSfw(): ISerialWarEventManager {
-            return Helpers.deepClone({
-                warEventFullData                : this.getWarEventFullData(),
-                calledCountList                 : this._getCalledCountList(),
-                customCounterArray              : this._getCustomCounterArray(),
+            return {
+                calledCountList                 : Helpers.deepClone(this._getCalledCountList()),
+                customCounterArray              : Helpers.deepClone(this._getCustomCounterArray()),
                 ongoingPersistentActionIdArray  : [...this.getOngoingPersistentActionIdSet()],
-            });
+            };
         }
         public serializeForCreateMfr(): ISerialWarEventManager {
             return this.serializeForCreateSfw();
@@ -98,11 +94,8 @@ namespace Twns.BaseWar {
             return Helpers.getExisted(this._war);
         }
 
-        protected _setWarEventFullData(data: IWarEventFullData | null): void {
-            this._warEventFullData = data;
-        }
         public getWarEventFullData(): IWarEventFullData | null {
-            return Helpers.getDefined(this._warEventFullData, ClientErrorCode.BwWarEventManager_GetWarEventFullData_00);
+            return this._getWar().getCommonSettingManager().getInstanceWarRule().warEventFullData ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1094,7 +1087,8 @@ namespace Twns.BaseWar {
         }
 
         public getCallableWarEventId(): number | null {                                // DONE
-            for (const warEventId of this._getWar().getCommonSettingManager().getWarRule().warEventIdArray || []) {
+            for (const warEvent of this._getWar().getCommonSettingManager().getInstanceWarRule().warEventFullData?.eventArray || []) {
+                const warEventId = Helpers.getExisted(warEvent.eventId);
                 if (this._checkCanCallWarEvent(warEventId)) {
                     return warEventId;
                 }
@@ -1209,7 +1203,8 @@ namespace Twns.BaseWar {
             const timesTotalComparator  = Helpers.getExisted(condition.timesTotalComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_01);
 
             let eventsCount = 0;
-            for (const eventId of this._getWar().getCommonSettingManager().getWarRule().warEventIdArray ?? []) {
+            for (const warEvent of this._getWar().getCommonSettingManager().getInstanceWarRule().warEventFullData?.eventArray ?? []) {
+                const eventId = Helpers.getExisted(warEvent.eventId, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_02);
                 if ((eventIdArray.length) && (eventIdArray.indexOf(eventId) < 0)) {
                     continue;
                 }
@@ -1238,8 +1233,8 @@ namespace Twns.BaseWar {
             }
 
             return Helpers.checkIsMeetValueComparator({
-                comparator  : Helpers.getExisted(condition.eventsCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_02),
-                targetValue : Helpers.getExisted(condition.eventsCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_03),
+                comparator  : Helpers.getExisted(condition.eventsCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_03),
+                targetValue : Helpers.getExisted(condition.eventsCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_04),
                 actualValue : eventsCount,
             });
         }

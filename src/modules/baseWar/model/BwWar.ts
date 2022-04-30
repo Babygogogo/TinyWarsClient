@@ -98,15 +98,21 @@ namespace Twns.BaseWar {
             this.getWeatherManager().init(data.weatherManager);
             this.getDrawVoteManager().init(data.playerManager, data.remainingVotesForDraw);
 
+            const mapSize = WarHelpers.WarCommonHelpers.getMapSize(data.field?.tileMap);
+            if (!WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
+                throw Helpers.newError(`Invalid mapSize: ${JSON.stringify(mapSize)}`, ClientErrorCode.BwWar_BaseInit_03);
+            }
+
             const dataForWarEventManager = data.warEventManager;
             this.getCommonSettingManager().init({
                 settings                : settingsForCommon,
-                allWarEventIdArray      : WarHelpers.WarEventHelpers.getAllWarEventIdArray(dataForWarEventManager?.warEventFullData),
+                warType                 : this.getWarType(),
+                mapSize,
                 playersCountUnneutral   : WarHelpers.WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),
                 gameConfig,
             });
 
-            this.getWarEventManager().init(dataForWarEventManager);
+            this.getWarEventManager().init(dataForWarEventManager, settingsForCommon.instanceWarRule?.warEventFullData);
             this.getRandomNumberManager().init({
                 isNeedSeedRandom: this.getIsNeedSeedRandom(),
                 initialState    : data.seedRandomInitialState,
@@ -291,8 +297,8 @@ namespace Twns.BaseWar {
             this._gameConfig = gameConfig;
         }
 
-        public getWarRule(): CommonProto.WarRule.ITemplateWarRule {
-            return this.getCommonSettingManager().getWarRule();
+        public getInstanceWarRule(): CommonProto.WarRule.IInstanceWarRule {
+            return this.getCommonSettingManager().getInstanceWarRule();
         }
 
         public getPlayersCountUnneutral(): number {

@@ -80,7 +80,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
             this._updateComponentsForLanguage();
 
             this._srlSaveSlot.bindData(await this._createDataForList());
-            this._listSaveSlot.selectedIndex = await SpmModel.getAvailableIndex();
+            this._listSaveSlot.selectedIndex = await Twns.SinglePlayerMode.SpmModel.getAvailableIndex();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -95,7 +95,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
             for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
-                    slotInfo    : await SpmModel.getSlotFullData(slotIndex),
+                    slotInfo    : await Twns.SinglePlayerMode.SpmModel.getSlotFullData(slotIndex),
                     warData,
                 });
             }
@@ -183,7 +183,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
                     const mapId         = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
+                        : (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
                 }
             }
         }

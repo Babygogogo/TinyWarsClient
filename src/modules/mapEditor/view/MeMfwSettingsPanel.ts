@@ -20,14 +20,14 @@
 // import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeMfwSettingsPanel {
+namespace Twns.MapEditor {
     import MeMfwAdvancedSettingsPage    = TwnsMeMfwAdvancedSettingsPage.MeMfwAdvancedSettingsPage;
-    import MeMfwBasicSettingsPage       = TwnsMeMfwBasicSettingsPage.MeMfwBasicSettingsPage;
+    import MeMfwBasicSettingsPage       = MapEditor.MeMfwBasicSettingsPage;
     import NotifyType                   = TwnsNotifyType.NotifyType;
     import LangTextType                 = TwnsLangTextType.LangTextType;
 
-    export type OpenData = void;
-    export class MeMfwSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeMfwSettingsPanel = void;
+    export class MeMfwSettingsPanel extends TwnsUiPanel.UiPanel<OpenDataForMeMfwSettingsPanel> {
         private readonly _tabSettings!      : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnBack!          : TwnsUiButton.UiButton;
@@ -70,9 +70,9 @@ namespace TwnsMeMfwSettingsPanel {
         }
 
         private async _onTouchedBtnConfirm(): Promise<void> {
-            MeMfwModel.reviseWarRuleForAi();
-            const warData   = MeMfwModel.getWarData();
-            const errorCode = await (new Twns.TestWar.TwWar().getErrorCodeForInit(warData, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion))));
+            Twns.MapEditor.MeMfwModel.reviseInstanceWarRuleForAi();
+            const warData   = Twns.MapEditor.MeMfwModel.getWarData();
+            const errorCode = await (new TestWar.TwWar().getErrorCodeForInit(warData, await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion))));
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
             } else {

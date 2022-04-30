@@ -64,7 +64,7 @@ namespace Twns.MapEditor {
                 return;
             }
 
-            if (mapRawData.warRuleArray?.some(v => !checkIsValidAvailability(v.ruleAvailability))) {
+            if (mapRawData.templateWarRuleArray?.some(v => !checkIsValidAvailability(v.ruleAvailability))) {
                 this._mapRawData                = mapRawData;
                 btnConfirm.visible              = true;
                 groupNeedReview.visible         = false;

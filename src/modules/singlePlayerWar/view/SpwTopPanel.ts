@@ -221,7 +221,7 @@ namespace Twns.SinglePlayerWar {
                 return;
             }
 
-            const slotInfo = await SpmModel.getSlotFullData(this._getOpenData().war.getSaveSlotIndex());
+            const slotInfo = await Twns.SinglePlayerMode.SpmModel.getSlotFullData(this._getOpenData().war.getSaveSlotIndex());
             if (slotInfo == null) {
                 FloatText.show(Lang.getText(LangTextType.A0303));
                 return;

@@ -218,8 +218,8 @@ namespace Twns.WarEvent {
                     const eventArray    = Helpers.getExisted(war.getWarEventManager().getWarEventFullData()?.eventArray);
                     Helpers.deleteElementFromArray(eventArray, eventArray.find(v => v.eventId === eventId));
 
-                    for (const warRule of war.getWarRuleArray() || []) {
-                        const arr = warRule.warEventIdArray;
+                    for (const templateWarRule of war.getTemplateWarRuleArray() || []) {
+                        const arr = templateWarRule.warEventIdArray;
                         if (arr) {
                             Helpers.deleteElementFromArray(arr, eventId);
                         }

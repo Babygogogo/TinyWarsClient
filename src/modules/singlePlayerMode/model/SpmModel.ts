@@ -8,7 +8,7 @@
 // import ProtoTypes       from "../../tools/proto/ProtoTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace SpmModel {
+namespace Twns.SinglePlayerMode.SpmModel {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NetMessage               = CommonProto.NetMessage;
@@ -154,11 +154,30 @@ namespace SpmModel {
         return _replayDataAccessor.getData(rankId);
     }
     async function decodeAndReviseReplayData(encodedWar: Types.Undefinable<Uint8Array>): Promise<ISerialWar | null> {
+        // TODO: 目前认定只有war room有回放，以后有可能需要扩展到其他模式
         if (encodedWar == null) {
             return null;
         }
 
-        const warData = ProtoManager.decodeAsSerialWar(encodedWar);
+        const warData               = ProtoManager.decodeAsSerialWar(encodedWar);
+        const settingsForCommon     = Helpers.getExisted(warData.settingsForCommon);
+        const srcInstanceWarRule    = settingsForCommon.instanceWarRule;
+        if (srcInstanceWarRule == null) {
+            return null;
+        }
+
+        const mapRawData = await WarMap.WarMapModel.getRawData(Helpers.getExisted(warData.settingsForSrw?.mapId));
+        if (mapRawData == null) {
+            return null;
+        }
+
+        const templateWarRule = WarHelpers.WarRuleHelpers.getTemplateWarRule(srcInstanceWarRule, mapRawData.templateWarRuleArray);
+        if (templateWarRule == null) {
+            return null;
+        }
+
+        settingsForCommon.instanceWarRule = WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRule, mapRawData.warEventFullData);
+
         if (warData.field == null) {
             warData.field = {
                 fogMap  : {
@@ -176,25 +195,8 @@ namespace SpmModel {
             };
         }
 
-        const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
-        const mapRawData        = await WarMapModel.getRawData(Helpers.getExisted(warData.settingsForSrw?.mapId));
-        if (settingsForCommon.warRule == null) {
-            if (mapRawData == null) {
-                return null;
-            }
-
-            const ruleId    = Helpers.getExisted(settingsForCommon.presetWarRuleId);
-            const warRule   = mapRawData.warRuleArray?.find(v => v.ruleId === ruleId);
-            if (warRule == null) {
-                return null;
-            }
-
-            settingsForCommon.warRule = Helpers.deepClone(warRule);
-        }
-
         if (warData.warEventManager == null) {
             warData.warEventManager = {
-                warEventFullData    : Twns.WarHelpers.WarEventHelpers.trimAndCloneWarEventFullData(mapRawData?.warEventFullData, settingsForCommon.warRule.warEventIdArray),
                 calledCountList     : [],
             };
         }

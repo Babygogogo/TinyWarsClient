@@ -34,7 +34,6 @@ namespace Twns.WarHelpers.WarEventHelpers {
     import PlayerAliveState         = Types.PlayerAliveState;
     import WarEvent                 = CommonProto.WarEvent;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
-    import IMapRawData              = CommonProto.Map.IMapRawData;
     import IWarEvent                = WarEvent.IWarEvent;
     import IWarEventAction          = WarEvent.IWarEventAction;
     import IWarEventCondition       = WarEvent.IWarEventCondition;
@@ -205,126 +204,19 @@ namespace Twns.WarHelpers.WarEventHelpers {
     type WarEventActionDict         = Map<number, IWarEventAction>;
     type WarEventConditionDict      = Map<number, IWarEventCondition>;
     type WarEventConditionNodeDict  = Map<number, IWarEventConditionNode>;
-    export function checkIsWarEventFullDataValid(mapRawData: IMapRawData, gameConfig: GameConfig): boolean {   // DONE
-        const warEventFullData = mapRawData.warEventFullData;
-        if (warEventFullData == null) {
-            return true;
-        }
-
-        const warRuleList = mapRawData.warRuleArray;
-        if (warRuleList == null) {
-            return false;
-        }
-
-        const actionDict = new Map<number, IWarEventAction>();
-        for (const action of warEventFullData.actionArray || []) {
-            const commonData = action.WeaCommonData;
-            if (commonData == null) {
-                return false;
-            }
-
-            const actionId = commonData.actionId;
-            if ((actionId == null) || (actionDict.has(actionId))) {
-                return false;
-            }
-            actionDict.set(actionId, action);
-        }
-        if (actionDict.size > CommonConstants.WarEventMaxActionsPerMap) {
-            return false;
-        }
-
-        const conditionDict = new Map<number, IWarEventCondition>();
-        for (const condition of warEventFullData.conditionArray || []) {
-            const commonData = condition.WecCommonData;
-            if (commonData == null) {
-                return false;
-            }
-
-            const conditionId = commonData.conditionId;
-            if ((conditionId == null) || (conditionDict.has(conditionId))) {
-                return false;
-            }
-            conditionDict.set(conditionId, condition);
-        }
-        if (conditionDict.size > CommonConstants.WarEventMaxConditionsPerMap) {
-            return false;
-        }
-
-        const nodeDict = new Map<number, IWarEventConditionNode>();
-        for (const node of warEventFullData.conditionNodeArray || []) {
-            const nodeId = node.nodeId;
-            if ((nodeId == null) || (nodeDict.has(nodeId))) {
-                return false;
-            }
-            nodeDict.set(nodeId, node);
-        }
-        if (nodeDict.size > CommonConstants.WarEventMaxConditionNodesPerMap) {
-            return false;
-        }
-
-        const eventDict = new Map<number, IWarEvent>();
-        for (const event of warEventFullData.eventArray || []) {
-            const eventId = event.eventId;
-            if ((eventId == null) || (eventDict.has(eventId))) {
-                return false;
-            }
-            eventDict.set(eventId, event);
-        }
-        if (eventDict.size > CommonConstants.WarEventMaxEventsPerMap) {
-            return false;
-        }
-
-        if (!checkIsEveryWarEventActionInUse(actionDict, eventDict)) {
-            return false;
-        }
-        if (!checkIsEveryWarEventConditionInUse(conditionDict, nodeDict)) {
-            return false;
-        }
-        if (!checkIsEveryWarEventConditionNodeInUse(nodeDict, eventDict)) {
-            return false;
-        }
-        if (!checkIsEveryWarEventInUse(eventDict, warRuleList)) {
-            return false;
-        }
-
-        for (const [, action] of actionDict) {
-            if (!checkIsValidWarEventAction({ action, actionDict, mapRawData, gameConfig })) {
-                return false;
-            }
-        }
-        for (const [, condition] of conditionDict) {
-            if (!checkIsValidWarEventCondition({ condition, mapRawData, gameConfig })) {
-                return false;
-            }
-        }
-        for (const [, conditionNode] of nodeDict) {
-            if (!checkIsValidWarEventConditionNode({ conditionNode, conditionDict, nodeDict })) {
-                return false;
-            }
-        }
-        for (const [, warEvent] of eventDict) {
-            if (!checkIsValidWarEvent({ warEvent, nodeDict, actionDict })) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-    export function getErrorCodeForWarEventFullData(mapRawData: IMapRawData, gameConfig: GameConfig): ClientErrorCode {   // DONE
-        const warEventFullData = mapRawData.warEventFullData;
+    export function getErrorCodeForWarEventFullData({ warEventFullData, gameConfig, mapSize, playersCountUnneutral }: {
+        warEventFullData        : Types.Undefinable<IWarEventFullData>;
+        gameConfig              : GameConfig;
+        mapSize                 : Types.MapSize;
+        playersCountUnneutral   : number;
+    }): ClientErrorCode {   // DONE
         if (warEventFullData == null) {
             return ClientErrorCode.NoError;
         }
 
-        const warRuleArray = mapRawData.warRuleArray;
-        if (warRuleArray == null) {
-            return ClientErrorCode.WarEventFullDataValidation00;
-        }
-
         const actionDict = new Map<number, IWarEventAction>();
         for (const action of warEventFullData.actionArray || []) {
-            const commonData    = action.WeaCommonData;
-            const actionId      = commonData?.actionId;
+            const actionId = action.WeaCommonData?.actionId;
             if ((actionId == null) || (actionDict.has(actionId))) {
                 return ClientErrorCode.WarEventFullDataValidation01;
             }
@@ -336,8 +228,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const conditionDict = new Map<number, IWarEventCondition>();
         for (const condition of warEventFullData.conditionArray || []) {
-            const commonData    = condition.WecCommonData;
-            const conditionId   = commonData?.conditionId;
+            const conditionId = condition.WecCommonData?.conditionId;
             if ((conditionId == null) || (conditionDict.has(conditionId))) {
                 return ClientErrorCode.WarEventFullDataValidation03;
             }
@@ -380,17 +271,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
         if (!checkIsEveryWarEventConditionNodeInUse(nodeDict, eventDict)) {
             return ClientErrorCode.WarEventFullDataValidation11;
         }
-        if (!checkIsEveryWarEventInUse(eventDict, warRuleArray)) {
-            return ClientErrorCode.WarEventFullDataValidation12;
-        }
 
         for (const [, action] of actionDict) {
-            if (!checkIsValidWarEventAction({ action, actionDict, mapRawData, gameConfig })) {
+            if (!checkIsValidWarEventAction({ action, actionDict, mapSize, gameConfig, playersCountUnneutral })) {
                 return ClientErrorCode.WarEventFullDataValidation13;
             }
         }
         for (const [, condition] of conditionDict) {
-            if (!checkIsValidWarEventCondition({ condition, mapRawData, gameConfig })) {
+            if (!checkIsValidWarEventCondition({ condition, mapSize, gameConfig, playersCountUnneutral })) {
                 return ClientErrorCode.WarEventFullDataValidation14;
             }
         }
@@ -465,47 +353,19 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsEveryWarEventInUse(eventDict: WarEventDict, warRuleArray: CommonProto.WarRule.ITemplateWarRule[]): boolean {  // DONE
-        for (const [eventId] of eventDict) {
-            let isInUse = false;
-            for (const warRule of warRuleArray) {
-                if ((warRule.warEventIdArray || []).indexOf(eventId) >= 0) {
-                    isInUse = true;
-                    break;
-                }
-            }
 
-            if (!isInUse) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    function checkIsValidWarEventAction({ action, actionDict, mapRawData, gameConfig }: {    // DONE
-        action      : IWarEventAction;
-        actionDict  : WarEventActionDict;
-        mapRawData  : IMapRawData;
-        gameConfig  : GameConfig;
+    function checkIsValidWarEventAction({ action, actionDict, mapSize, gameConfig, playersCountUnneutral }: {    // DONE
+        action                  : IWarEventAction;
+        actionDict              : WarEventActionDict;
+        mapSize                 : Types.MapSize;
+        gameConfig              : GameConfig;
+        playersCountUnneutral   : number;
     }): boolean {
         if (Object.keys(action).length !== 2) {
             return false;
         }
 
         if (action.WeaCommonData?.actionId == null) {
-            return false;
-        }
-
-        const mapHeight = mapRawData.mapHeight;
-        const mapWidth  = mapRawData.mapWidth;
-        if ((!mapHeight) || (!mapWidth)) {
-            return false;
-        }
-        const mapSize: Types.MapSize = { width: mapWidth, height: mapHeight };
-
-        const playersCountUnneutral = mapRawData.playersCountUnneutral;
-        if (playersCountUnneutral == null) {
             return false;
         }
 
@@ -1165,10 +1025,11 @@ namespace Twns.WarHelpers.WarEventHelpers {
         return true;
     }
 
-    function checkIsValidWarEventCondition({ condition, mapRawData, gameConfig }: {  // DONE
-        condition   : IWarEventCondition;
-        mapRawData  : CommonProto.Map.IMapRawData;
-        gameConfig  : GameConfig;
+    function checkIsValidWarEventCondition({ condition, mapSize, gameConfig, playersCountUnneutral }: {  // DONE
+        condition               : IWarEventCondition;
+        mapSize                 : Types.MapSize;
+        gameConfig              : GameConfig;
+        playersCountUnneutral   : number;
     }): boolean {
         if (Object.keys(condition).length !== 2) {
             return false;
@@ -1178,21 +1039,11 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return false;
         }
 
-        const playersCountUnneutral = mapRawData.playersCountUnneutral;
-        if (playersCountUnneutral == null) {
-            return false;
-        }
-
-        const mapSize = WarMapModel.getMapSize(mapRawData);
-        if (mapSize == null) {
-            return false;
-        }
-
         // TODO add more checkers when the condition types grow.
         return (checkIsValidWecEventCalledCountTotalEqualTo(condition.WecEventCalledCountTotalEqualTo))
             || (checkIsValidWecEventCalledCountTotalGreaterThan(condition.WecEventCalledCountTotalGreaterThan))
             || (checkIsValidWecEventCalledCountTotalLessThan(condition.WecEventCalledCountTotalLessThan))
-            || (checkIsValidWecEventCalledCount(condition.WecEventCalledCount, mapRawData.warEventFullData))
+            || (checkIsValidWecEventCalledCount(condition.WecEventCalledCount))
             || (checkIsValidWecPlayerAliveStateEqualTo(condition.WecPlayerAliveStateEqualTo, playersCountUnneutral))
             || (checkIsValidWecPlayerPresence(condition.WecPlayerPresence, playersCountUnneutral, gameConfig))
             || (checkIsValidWecTurnIndexEqualTo(condition.WecTurnIndexEqualTo))
@@ -1226,7 +1077,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             && (condition.countLessThan != null)
             && (condition.eventIdEqualTo != null);
     }
-    function checkIsValidWecEventCalledCount(condition: Types.Undefinable<CommonProto.WarEvent.IWecEventCalledCount>, fullData: Types.Undefinable<IWarEventFullData>): boolean {
+    function checkIsValidWecEventCalledCount(condition: Types.Undefinable<CommonProto.WarEvent.IWecEventCalledCount>): boolean {
         if (condition == null) {
             return false;
         }
@@ -1234,16 +1085,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
         {
             const eventIdArray = condition.eventIdArray;
             if (eventIdArray) {
-                const eventArray    = fullData?.eventArray ?? [];
-                const eventIdSet    = new Set<number>();
-                for (const eventId of eventIdArray) {
-                    if ((eventIdSet.has(eventId))                       ||
-                        (eventArray.every(v => v.eventId !== eventId))
-                    ) {
-                        return false;
-                    }
-
-                    eventIdSet.add(eventId);
+                if (new Set(eventIdArray).size !== eventIdArray.length) {
+                    return false;
                 }
             }
         }
