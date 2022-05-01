@@ -7,7 +7,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiCustomWar {
-    import MpwWar           = Twns.MultiPlayerWar.MpwWar;
+    import MpwWar           = MultiPlayerWar.MpwWar;
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForMcw  = CommonProto.WarSettings.ISettingsForMcw;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
@@ -17,7 +17,7 @@ namespace Twns.MultiCustomWar {
         private _settingsForMcw?: ISettingsForMcw;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(data, gameConfig);
+            this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
             this._setSettingsForMcw(Helpers.getExisted(data.settingsForMcw, ClientErrorCode.McwWar_Init_00));
 
             this._initView();
@@ -25,11 +25,6 @@ namespace Twns.MultiCustomWar {
 
         public getCanCheat(): boolean {
             return false;
-        }
-        public getWarType(): Types.WarType {
-            return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.McwFog
-                : Types.WarType.McwStd;
         }
         public getIsNeedExecutedAction(): boolean {
             return false;

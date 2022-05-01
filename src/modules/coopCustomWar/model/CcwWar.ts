@@ -10,14 +10,14 @@ namespace Twns.CoopCustomWar {
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForCcw  = CommonProto.WarSettings.ISettingsForCcw;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import MpwWar           = Twns.MultiPlayerWar.MpwWar;
+    import MpwWar           = MultiPlayerWar.MpwWar;
     import GameConfig       = Config.GameConfig;
 
     export class CcwWar extends MpwWar {
         private _settingsForCcw?: ISettingsForCcw;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(data, gameConfig);
+            this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
             this._setSettingsForCcw(Helpers.getExisted(data.settingsForCcw, ClientErrorCode.CcwWar_Init_00));
 
             this._initView();
@@ -25,11 +25,6 @@ namespace Twns.CoopCustomWar {
 
         public getCanCheat(): boolean {
             return false;
-        }
-        public getWarType(): Types.WarType {
-            return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.CcwFog
-                : Types.WarType.CcwStd;
         }
         public getIsNeedExecutedAction(): boolean {
             return false;

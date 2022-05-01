@@ -7,7 +7,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiFreeWar {
-    import MpwWar           = Twns.MultiPlayerWar.MpwWar;
+    import MpwWar           = MultiPlayerWar.MpwWar;
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForMfw  = CommonProto.WarSettings.ISettingsForMfw;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
@@ -17,7 +17,7 @@ namespace Twns.MultiFreeWar {
         private _settingsForMfw?    : ISettingsForMfw;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(data, gameConfig);
+            this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
             this._setSettingsForMfw(Helpers.getExisted(data.settingsForMfw, ClientErrorCode.MfwWar_Init_00));
 
             this._initView();
@@ -25,11 +25,6 @@ namespace Twns.MultiFreeWar {
 
         public getCanCheat(): boolean {
             return false;
-        }
-        public getWarType(): Types.WarType {
-            return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.MfwFog
-                : Types.WarType.MfwStd;
         }
         public getIsNeedExecutedAction(): boolean {
             return false;

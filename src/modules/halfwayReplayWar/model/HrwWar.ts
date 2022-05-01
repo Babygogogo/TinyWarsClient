@@ -22,7 +22,6 @@
 namespace Twns.HalfwayReplayWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import WarType                  = Types.WarType;
     import WarAction                = CommonProto.WarAction;
     import IWarActionContainer      = WarAction.IWarActionContainer;
     import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
@@ -53,7 +52,7 @@ namespace Twns.HalfwayReplayWar {
         private _checkpointDataListForCheckpointId  = new Map<number, CheckpointData>();
 
         public init(warData: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(warData, gameConfig);
+            this._baseInit(warData, gameConfig, WarHelpers.WarCommonHelpers.getWarType(warData));
             this._setSettingsForMcw(warData.settingsForMcw ?? null);
             this._setSettingsForMfw(warData.settingsForMfw ?? null);
             this._setSettingsForMrw(warData.settingsForMrw ?? null);
@@ -265,20 +264,6 @@ namespace Twns.HalfwayReplayWar {
             };
         }
 
-        public getWarType(): WarType {
-            const hasFog = this.getCommonSettingManager().getSettingsHasFogByDefault();
-            if (this._getSettingsForMcw()) {
-                return hasFog ? WarType.McwFog : WarType.McwStd;
-            } else if (this._getSettingsForMrw()) {
-                return hasFog ? WarType.MrwFog : WarType.MrwStd;
-            } else if (this._getSettingsForMfw()) {
-                return hasFog ? WarType.ScwFog : WarType.ScwStd;
-            } else if (this._getSettingsForCcw()) {
-                return hasFog ? WarType.CcwFog : WarType.CcwStd;
-            } else {
-                throw Helpers.newError(`Invalid war data.`, ClientErrorCode.HrwWar_GetWarType_00);
-            }
-        }
         public getIsNeedExecutedAction(): boolean {
             return true;
         }

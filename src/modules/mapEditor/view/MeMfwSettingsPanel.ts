@@ -70,9 +70,9 @@ namespace Twns.MapEditor {
         }
 
         private async _onTouchedBtnConfirm(): Promise<void> {
-            Twns.MapEditor.MeMfwModel.reviseInstanceWarRuleForAi();
-            const warData   = Twns.MapEditor.MeMfwModel.getWarData();
-            const errorCode = await (new TestWar.TwWar().getErrorCodeForInit(warData, await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion))));
+            MapEditor.MeMfwModel.reviseInstanceWarRuleForAi();
+            const warData   = MapEditor.MeMfwModel.getWarData();
+            const errorCode = new TestWar.TwWar().getErrorCodeForInitForMfw(warData, await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
             } else {

@@ -18,7 +18,7 @@ namespace Twns.SingleFreeWar {
         private _settingsForSfw?    : ISettingsForSfw;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(data, gameConfig);
+            this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
             this._setSettingsForSfw(Helpers.getExisted(data.settingsForSfw, ClientErrorCode.SfwWar_Init_00));
 
             this._initView();
@@ -53,12 +53,6 @@ namespace Twns.SingleFreeWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getWarType(): Types.WarType {
-            return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.SfwFog
-                : Types.WarType.SfwStd;
-        }
-
         public getMapId(): number | null {
             return null;
         }

@@ -23,12 +23,12 @@
 // import TwnsMpwWar                       from "../model/MpwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMpwWarMenuPanel {
+namespace Twns.MultiPlayerWar {
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
 
-    export type OpenData = void;
-    export class MpwWarMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMpwWarMenuPanel = void;
+    export class MpwWarMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForMpwWarMenuPanel> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _group!                : eui.Group;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
@@ -87,8 +87,8 @@ namespace TwnsMpwWarMenuPanel {
             // nothing to do
         }
 
-        private _getWar(): Twns.MultiPlayerWar.MpwWar {
-            return Helpers.getExisted(Twns.MultiPlayerWar.MpwModel.getWar());
+        private _getWar(): MultiPlayerWar.MpwWar {
+            return Helpers.getExisted(MultiPlayerWar.MpwModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +135,7 @@ namespace TwnsMpwWarMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnSync(): void {
             const war = this._getWar();
-            Twns.MultiPlayerWar.MpwProxy.reqMpwCommonSyncWar(
+            MultiPlayerWar.MpwProxy.reqMpwCommonSyncWar(
                 war,
                 war.getActionPlanner().checkIsStateRequesting()
                     ? Types.SyncWarRequestType.PlayerForce
@@ -191,7 +191,7 @@ namespace TwnsMpwWarMenuPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSfwSaveSlotsPanel, war.serializeForCreateSfw());
         }
 
-        private async _onTouchedBtnFreeMode(): Promise<void> {
+        private _onTouchedBtnFreeMode(): void {
             if (!this._checkCanDoAction()) {
                 FloatText.show(Lang.getText(LangTextType.A0239));
                 return;
@@ -204,7 +204,7 @@ namespace TwnsMpwWarMenuPanel {
             }
 
             const warData   = war.serializeForCreateMfr();
-            const errorCode = await (new Twns.TestWar.TwWar()).getErrorCodeForInit(warData, war.getGameConfig());
+            const errorCode = new TestWar.TwWar().getErrorCodeForInitForMfw(warData, war.getGameConfig());
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
                 return;
@@ -248,7 +248,7 @@ namespace TwnsMpwWarMenuPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0249),
                 callback: () => {
-                    Twns.MultiPlayerWar.MpwProxy.reqMpwGetHalfwayReplayData(Helpers.getExisted(this._getWar().getWarId()));
+                    MultiPlayerWar.MpwProxy.reqMpwGetHalfwayReplayData(Helpers.getExisted(this._getWar().getWarId()));
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0040),
@@ -454,7 +454,7 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private async _updateBtnSpectate(): Promise<void> {
-            const info = await Twns.WatchWar.WwModel.getWatchIncomingInfo(Helpers.getExisted(this._getWar().getWarId()));
+            const info = await WatchWar.WwModel.getWatchIncomingInfo(Helpers.getExisted(this._getWar().getWarId()));
             this._btnSpectate.setRedVisible(!!info?.requestSrcUserIdArray?.length);
         }
 

@@ -257,6 +257,14 @@ namespace TwnsLangErrorText {
             `存在未被任何规则使用的事件`,
             `There is a redundant event that is not used in any rules.`,
         ],
+        [ClientErrorCode.WarEventFullDataValidation13]: [
+            `存在不合法的事件动作`,
+            `There is an invalid event action.`,
+        ],
+        [ClientErrorCode.MeHelpers_GetErrorCodeForMapRawData_04]: [
+            `存在未被任何规则使用的事件`,
+            `There is a redundant event that is not used in any rules.`,
+        ],
         [ClientErrorCode.WarRuleHelpers_GetErrorCodeForTemplateWarRule_02]: [
             `尚未设置预设规则的可用性`,
             `The availability of the preset rule has not been set.`,

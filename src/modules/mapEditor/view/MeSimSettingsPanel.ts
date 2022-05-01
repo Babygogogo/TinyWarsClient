@@ -71,8 +71,8 @@ namespace Twns.MapEditor {
         }
 
         private async _onTouchedBtnConfirm(): Promise<void> {
-            const warData   = Twns.MapEditor.MeSimModel.getWarData();
-            const errorCode = await (new TestWar.TwWar()).getErrorCodeForInit(warData, await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
+            const warData   = MapEditor.MeSimModel.getWarData();
+            const errorCode = new TestWar.TwWar().getErrorCodeForInitForSfw(warData, await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
             } else {

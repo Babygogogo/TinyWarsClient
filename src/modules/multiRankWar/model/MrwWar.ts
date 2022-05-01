@@ -11,14 +11,14 @@ namespace Twns.MultiRankWar {
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForMrw  = CommonProto.WarSettings.ISettingsForMrw;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import MpwWar           = Twns.MultiPlayerWar.MpwWar;
+    import MpwWar           = MultiPlayerWar.MpwWar;
     import GameConfig       = Config.GameConfig;
 
     export class MrwWar extends MpwWar {
         private _settingsForMrw?    : ISettingsForMrw;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(data, gameConfig);
+            this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
             this._setSettingsForMrw(Helpers.getExisted(data.settingsForMrw, ClientErrorCode.MrwWar_Init_00));
 
             this._initView();
@@ -26,11 +26,6 @@ namespace Twns.MultiRankWar {
 
         public getCanCheat(): boolean {
             return false;
-        }
-        public getWarType(): Types.WarType {
-            return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.MrwFog
-                : Types.WarType.MrwStd;
         }
         public getIsNeedExecutedAction(): boolean {
             return false;

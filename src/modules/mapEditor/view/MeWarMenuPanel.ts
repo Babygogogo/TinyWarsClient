@@ -508,7 +508,7 @@ namespace Twns.MapEditor {
                     }
 
                     const cb = () => {
-                        Twns.MapEditor.MeSimModel.resetData(mapRawData, war.serializeForCreateSfw());
+                        MapEditor.MeSimModel.resetData(mapRawData, war.serializeForCreateSfw());
                         TwnsPanelManager.open(TwnsPanelConfig.Dict.MeSimSettingsPanel, void 0);
                         this.close();
                     };
@@ -543,7 +543,7 @@ namespace Twns.MapEditor {
                     }
 
                     const cb = () => {
-                        Twns.MapEditor.MeMfwModel.resetData(mapRawData, war.serializeForCreateMfr());
+                        MapEditor.MeMfwModel.resetData(mapRawData, war.serializeForCreateMfr());
                         TwnsPanelManager.open(TwnsPanelConfig.Dict.MeMfwSettingsPanel, void 0);
                         this.close();
                     };

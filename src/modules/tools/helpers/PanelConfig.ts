@@ -93,7 +93,7 @@ namespace TwnsPanelConfig {
 
         HrwReplayProgressPanel              : PanelConfig<TwnsHrwReplayProgressPanel.OpenData>;
         HrwTopPanel                         : PanelConfig<Twns.HalfwayReplayWar.OpenDataForHrwTopPanel>;
-        HrwWarMenuPanel                     : PanelConfig<TwnsHrwWarMenuPanel.OpenData>;
+        HrwWarMenuPanel                     : PanelConfig<Twns.HalfwayReplayWar.OpenDataForHrwWarMenuPanel>;
 
         LobbyBackgroundPanel                : PanelConfig<TwnsLobbyBackgroundPanel.OpenData>;
         LobbyBottomPanel                    : PanelConfig<TwnsLobbyBottomPanel.OpenData>;
@@ -162,7 +162,7 @@ namespace TwnsPanelConfig {
         MpwSpectatePanel                    : PanelConfig<Twns.MultiPlayerWar.OpenDataForMpwSpectatePanel>;
         MpwSidePanel                        : PanelConfig<Twns.MultiPlayerWar.OpenDataForMpwSidePanel>;
         MpwTopPanel                         : PanelConfig<Twns.MultiPlayerWar.OpenDataForMpwTopPanel>;
-        MpwWarMenuPanel                     : PanelConfig<TwnsMpwWarMenuPanel.OpenData>;
+        MpwWarMenuPanel                     : PanelConfig<Twns.MultiPlayerWar.OpenDataForMpwWarMenuPanel>;
 
         MrrMainMenuPanel                    : PanelConfig<Twns.MultiRankRoom.OpenDataForMrrMainMenuPanel>;
         MrrMyRoomListPanel                  : PanelConfig<Twns.MultiRankRoom.OpenDataForMrrMyRoomListPanel>;
@@ -190,7 +190,7 @@ namespace TwnsPanelConfig {
         SpwLoadWarPanel                     : PanelConfig<TwnsSpwLoadWarPanel.OpenData>;
         SpwSidePanel                        : PanelConfig<Twns.SinglePlayerWar.OpenDataForSpwSidePanel>;
         SpwTopPanel                         : PanelConfig<Twns.SinglePlayerWar.OpenDataForSpwTopPanel>;
-        SpwWarMenuPanel                     : PanelConfig<TwnsSpwWarMenuPanel.OpenData>;
+        SpwWarMenuPanel                     : PanelConfig<Twns.SinglePlayerWar.OpenDataForSpwWarMenuPanel>;
 
         SrrCreateMapListPanel               : PanelConfig<TwnsSrrCreateMapListPanel.OpenData>;
         SrrCreateSettingsPanel              : PanelConfig<Twns.SingleRankRoom.OpenDataForSrrCreateSettingsPanel>;
@@ -755,7 +755,7 @@ namespace TwnsPanelConfig {
             },
 
             HrwWarMenuPanel: {
-                cls         : TwnsHrwWarMenuPanel?.HrwWarMenuPanel,
+                cls         : Twns.HalfwayReplayWar?.HrwWarMenuPanel,
                 skinName    : `resource/skins/halfwayReplayWar/HrwWarMenuPanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1157,7 +1157,7 @@ namespace TwnsPanelConfig {
             },
 
             MpwWarMenuPanel: {
-                cls         : TwnsMpwWarMenuPanel?.MpwWarMenuPanel,
+                cls         : Twns.MultiPlayerWar?.MpwWarMenuPanel,
                 skinName    : `resource/skins/multiPlayerWar/MpwWarMenuPanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1305,7 +1305,7 @@ namespace TwnsPanelConfig {
             },
 
             SpwWarMenuPanel: {
-                cls         : TwnsSpwWarMenuPanel?.SpwWarMenuPanel,
+                cls         : Twns.SinglePlayerWar?.SpwWarMenuPanel,
                 skinName    : `resource/skins/singlePlayerWar/SpwWarMenuPanel.exml`,
                 layer       : LayerType.Hud0,
             },

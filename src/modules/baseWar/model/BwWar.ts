@@ -41,12 +41,12 @@ namespace Twns.BaseWar {
 
         private _gameConfig             : GameConfig | null = null;
         private _warId                  : number | null = null;
+        private _warType                = Types.WarType.Undefined;
         private _isRunning              = false;
         private _isExecutingAction      = false;
         private _isEnded                = false;
 
         public abstract init(data: ISerialWar, gameConfig: GameConfig): void;
-        public abstract getWarType(): Types.WarType;
         public abstract getMapId(): number | null;
         public abstract getIsNeedExecutedAction(): boolean;
         public abstract getIsNeedSeedRandom(): boolean;
@@ -87,7 +87,7 @@ namespace Twns.BaseWar {
         public abstract getDescForExeUnitUseCoSkill(action: WarAction.IWarActionUnitUseCoSkill): Promise<string | null>;
         public abstract getDescForExeUnitWait(action: WarAction.IWarActionUnitWait): Promise<string | null>;
 
-        protected _baseInit(data: ISerialWar, gameConfig: GameConfig): void {
+        protected _baseInit(data: ISerialWar, gameConfig: GameConfig, warType: Types.WarType): void {
             const settingsForCommon = Helpers.getExisted(data.settingsForCommon, ClientErrorCode.BwWar_BaseInit_00);
             const configVersion     = Helpers.getExisted(settingsForCommon.configVersion, ClientErrorCode.BwWar_BaseInit_01);
             if (configVersion !== gameConfig.getVersion()) {
@@ -103,16 +103,20 @@ namespace Twns.BaseWar {
                 throw Helpers.newError(`Invalid mapSize: ${JSON.stringify(mapSize)}`, ClientErrorCode.BwWar_BaseInit_03);
             }
 
-            const dataForWarEventManager = data.warEventManager;
+            if (warType === Types.WarType.Undefined) {
+                throw Helpers.newError(`Invalid warType: ${warType}`, ClientErrorCode.BwWar_BaseInit_04);
+            }
+
+            this._setWarType(warType);
             this.getCommonSettingManager().init({
                 settings                : settingsForCommon,
-                warType                 : this.getWarType(),
+                warType,
                 mapSize,
                 playersCountUnneutral   : WarHelpers.WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),
                 gameConfig,
             });
 
-            this.getWarEventManager().init(dataForWarEventManager, settingsForCommon.instanceWarRule?.warEventFullData);
+            this.getWarEventManager().init(data.warEventManager, settingsForCommon.instanceWarRule?.warEventFullData);
             this.getRandomNumberManager().init({
                 isNeedSeedRandom: this.getIsNeedSeedRandom(),
                 initialState    : data.seedRandomInitialState,
@@ -288,6 +292,13 @@ namespace Twns.BaseWar {
         }
         public getWarId(): number | null{
             return this._warId;
+        }
+
+        private _setWarType(warType: Types.WarType): void {
+            this._warType = warType;
+        }
+        public getWarType(): Types.WarType {
+            return this._warType;
         }
 
         public getGameConfig(): Config.GameConfig {

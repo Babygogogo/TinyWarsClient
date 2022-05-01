@@ -4537,6 +4537,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel6);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel7);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel10);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel11);
 
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel20);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel21);
@@ -4549,6 +4550,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel40);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel41);
+
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel50);
 
         if      (action.WeaAddUnit)                         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel1,  { war, fullData, action }); }
         else if (action.WeaSetCustomCounter)                { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel2,  { war, fullData, action }); }

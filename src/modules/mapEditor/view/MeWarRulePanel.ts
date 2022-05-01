@@ -566,13 +566,16 @@ namespace Twns.MapEditor {
         private _updateListWarEvent(): void {
             const dataArray         : DataForWarEventRenderer[] = [];
             const templateWarRule   = Helpers.getExisted(this._selectedRule);
-            const warEventManager   = this._getWar().getWarEventManager();
+            const war               = this._getWar();
+            const warEventManager   = war.getWarEventManager();
+            const isReviewing       = war.getIsReviewingMap();
             for (const warEventId of templateWarRule.warEventIdArray || []) {
                 dataArray.push({
-                    panel   : this,
+                    panel           : this,
                     warEventManager,
                     warEventId,
                     templateWarRule,
+                    isReviewing,
                 });
             }
             this._listWarEvent.bindData(dataArray);
@@ -1114,6 +1117,7 @@ namespace Twns.MapEditor {
         panel           : MeWarRulePanel;
         warEventManager : BwWarEventManager;
         warEventId      : number;
+        isReviewing     : boolean;
         templateWarRule : ITemplateWarRule;
     };
     class WarEventRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarEventRenderer> {
@@ -1164,6 +1168,10 @@ namespace Twns.MapEditor {
 
         protected _onDataChanged(): void {
             const data                  = this._getData();
+            const isReviewing           = data.isReviewing;
+            this._btnUp.visible         = !isReviewing;
+            this._btnDown.visible       = !isReviewing;
+            this._btnDelete.visible     = !isReviewing;
             this._labelWarEventId.text  = `${data.warEventId}`;
             this._updateLabelWarEventName();
         }

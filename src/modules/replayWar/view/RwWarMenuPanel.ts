@@ -176,8 +176,8 @@ namespace Twns.ReplayWar {
         private async _updateGroupInfo(): Promise<void> {
             const war                   = this._getWar();
             const mapId                 = war.getMapId();
-            this._labelMapName.text     = mapId == null ? `----` : (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || "----");
-            this._labelMapDesigner.text = mapId == null ? `----` : (await Twns.WarMap.WarMapModel.getDesignerName(mapId) || "----");
+            this._labelMapName.text     = mapId == null ? `----` : (await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || "----");
+            this._labelMapDesigner.text = mapId == null ? `----` : (await WarMap.WarMapModel.getDesignerName(mapId) || "----");
             this._labelWarId.text       = `${war.getReplayId()}`;
             this._labelTurnIndex.text   = `${war.getTurnManager().getTurnIndex()}`;
             this._labelActionId.text    = `${war.getNextActionId()} / ${war.getExecutedActionManager().getExecutedActionsCount()}`;
@@ -312,19 +312,14 @@ namespace Twns.ReplayWar {
             const war = this._getWar();
             return {
                 name    : Lang.getText(LangTextType.B0557),
-                callback: async () => {
+                callback: () => {
                     if (war.getPlayerManager().getAliveOrDyingTeamsCount(false) < 2) {
                         FloatText.show(Lang.getText(LangTextType.A0199));
                         return;
                     }
 
-                    const warData = war.serializeForCreateMfr();
-                    if (warData == null) {
-                        FloatText.show(Lang.getText(LangTextType.A0200));
-                        return;
-                    }
-
-                    const errorCode = await (new TestWar.TwWar()).getErrorCodeForInit(warData, war.getGameConfig());
+                    const warData   = war.serializeForCreateMfr();
+                    const errorCode = new TestWar.TwWar().getErrorCodeForInitForMfw(warData, war.getGameConfig());
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;

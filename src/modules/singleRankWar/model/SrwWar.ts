@@ -19,7 +19,7 @@ namespace Twns.SingleRankWar {
         private _settingsForSrw?    : ISettingsForSrw;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(data, gameConfig);
+            this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
             this._setSettingsForSrw(Helpers.getExisted(data.settingsForSrw, ClientErrorCode.SrwWar_Init_00));
 
             this._initView();
@@ -75,12 +75,6 @@ namespace Twns.SingleRankWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getWarType(): Types.WarType {
-            return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.SrwFog
-                : Types.WarType.SrwStd;
-        }
-
         public getMapId(): number {
             return Helpers.getExisted(this._getSettingsForSrw().mapId);
         }

@@ -25,13 +25,13 @@
 // import TwnsSpwLoadWarPanel              from "./SpwLoadWarPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpwWarMenuPanel {
+namespace Twns.SinglePlayerWar {
     import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
 
-    export type OpenData = void;
-    export class SpwWarMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForSpwWarMenuPanel = void;
+    export class SpwWarMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForSpwWarMenuPanel> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _group!                : eui.Group;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
@@ -228,7 +228,7 @@ namespace TwnsSpwWarMenuPanel {
             }
 
             const warData   = war.serializeForCreateMfr();
-            const errorCode = await (new Twns.TestWar.TwWar()).getErrorCodeForInit(warData, war.getGameConfig());
+            const errorCode = new TestWar.TwWar().getErrorCodeForInitForMfw(warData, war.getGameConfig());
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
                 return;

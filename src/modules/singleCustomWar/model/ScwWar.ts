@@ -17,7 +17,7 @@ namespace Twns.SingleCustomWar {
         private _settingsForScw?    : ISettingsForScw;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(data, gameConfig);
+            this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
             this._setSettingsForScw(Helpers.getExisted(data.settingsForScw, ClientErrorCode.ScwWar_Init_00));
 
             this._initView();
@@ -52,12 +52,6 @@ namespace Twns.SingleCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getWarType(): Types.WarType {
-            return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.ScwFog
-                : Types.WarType.ScwStd;
-        }
-
         public getMapId(): number {
             return Helpers.getExisted(this._getSettingsForScw().mapId);
         }

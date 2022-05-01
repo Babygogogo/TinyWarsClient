@@ -43,7 +43,7 @@ namespace Twns.MapEditor {
         private _mapTag?                : IDataForMapTag;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(data, gameConfig);
+            this._baseInit(data, gameConfig, Types.WarType.Me);
             this.getDrawer().init();
 
             this._initView();
@@ -104,9 +104,6 @@ namespace Twns.MapEditor {
 
         public getCanCheat(): boolean {
             return true;
-        }
-        public getWarType(): Types.WarType {
-            return Types.WarType.Me;
         }
         public getIsNeedExecutedAction(): boolean {
             return false;

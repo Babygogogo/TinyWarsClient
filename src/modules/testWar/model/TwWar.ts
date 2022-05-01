@@ -137,19 +137,29 @@ namespace Twns.TestWar {
             return null;
         }
 
-        public init(data: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(data, gameConfig);
+        public init(data: ISerialWar, gameConfig: GameConfig, warType = WarHelpers.WarCommonHelpers.getWarType(data)): void {
+            this._baseInit(data, gameConfig, warType);
         }
         public async initByMapRawData(mapRawData: IMapRawData, gameConfig: GameConfig): Promise<void> {
             this.init(await _createDataForCreateTwWar(mapRawData, gameConfig), gameConfig);
         }
 
-        public async getErrorCodeForInit(data: ISerialWar, gameConfig: GameConfig): Promise<ClientErrorCode> {
+        public getErrorCodeForInitForSfw(data: ISerialWar, gameConfig: GameConfig): ClientErrorCode {
             try {
-                this.init(data, gameConfig);
+                this.init(data, gameConfig, data.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.SfwFog : Types.WarType.SfwStd);
             } catch(e) {
                 const error = e as Types.CustomError;
-                return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInit_00;
+                return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInitForSfw_00;
+            }
+
+            return ClientErrorCode.NoError;
+        }
+        public getErrorCodeForInitForMfw(data: ISerialWar, gameConfig: GameConfig): ClientErrorCode {
+            try {
+                this.init(data, gameConfig, data.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MfwFog : Types.WarType.MfwStd);
+            } catch(e) {
+                const error = e as Types.CustomError;
+                return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInitForMfw_00;
             }
 
             return ClientErrorCode.NoError;
@@ -159,10 +169,6 @@ namespace Twns.TestWar {
                 const error = e as Types.CustomError;
                 return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInitByMapRawData_00;
             }) || ClientErrorCode.NoError;
-        }
-
-        public getWarType(): Types.WarType {
-            return Types.WarType.Test;
         }
 
         public getMapId(): number | null {
@@ -194,6 +200,7 @@ namespace Twns.TestWar {
                 configVersion       : Config.ConfigManager.getLatestConfigVersion(),
                 instanceWarRule,
             },
+            settingsForMfw          : {},
 
             warId                   : -1,
             isEnded                 : false,
