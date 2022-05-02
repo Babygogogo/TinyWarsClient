@@ -32,7 +32,7 @@ namespace TwnsNotifyType {
         McrCreateSelfCoIdChanged,
         McrCreateSelfSkinIdChanged,
         McrCreateSelfPlayerIndexChanged,
-        McrCreatePresetWarRuleIdChanged,
+        McrCreateTemplateWarRuleIdChanged,
 
         MfrCreateSelfCoIdChanged,
         MfrCreateTeamIndexChanged,
@@ -45,7 +45,7 @@ namespace TwnsNotifyType {
         CcrCreateSelfCoIdChanged,
         CcrCreateSelfSkinIdChanged,
         CcrCreateSelfPlayerIndexChanged,
-        CcrCreatePresetWarRuleIdChanged,
+        CcrCreateTemplateWarRuleIdChanged,
 
         MrrMyRoomAdded,
         MrrMyRoomDeleted,

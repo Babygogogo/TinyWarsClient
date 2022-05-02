@@ -27,7 +27,7 @@
 namespace Twns.SingleCustomRoom {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import ScrCreateAdvancedSettingsPage            = TwnsScrCreateAdvancedSettingsPage.ScrCreateAdvancedSettingsPage;
+    import ScrCreateAdvancedSettingsPage            = SingleCustomRoom.ScrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import ScrCreatePlayerInfoPage                  = SingleCustomRoom.ScrCreatePlayerInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
@@ -202,7 +202,7 @@ namespace Twns.SingleCustomRoom {
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: async () => {
-                            await SingleCustomRoom.ScrCreateModel.tickPresetWarRuleId();
+                            await SingleCustomRoom.ScrCreateModel.tickTemplateWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },

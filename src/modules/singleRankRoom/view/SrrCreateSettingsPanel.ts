@@ -222,7 +222,7 @@ namespace Twns.SingleRankRoom {
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: async () => {
-                            await SingleRankRoom.SrrCreateModel.tickPresetWarRuleId();
+                            await SingleRankRoom.SrrCreateModel.tickTemplateWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                             this._updateCommonWarAdvancedSettingsPage();
                         },

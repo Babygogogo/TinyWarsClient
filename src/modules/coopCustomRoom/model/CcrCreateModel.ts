@@ -28,8 +28,7 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
         settingsForCommon       : {
             turnsLimit          : CommonConstants.WarMaxTurnsLimit,
             instanceWarRule     : {
-                templateRuleId          : null,
-                templateModifiedTime    : null,
+                templateWarRuleId   : null,
             },
         },
         settingsForCcw          : {},
@@ -119,18 +118,17 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
             setSelfCoId(WarHelpers.WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
         }
 
-        Notify.dispatch(NotifyType.CcrCreatePresetWarRuleIdChanged);
+        Notify.dispatch(NotifyType.CcrCreateTemplateWarRuleIdChanged);
         Notify.dispatch(NotifyType.CcrCreateTeamIndexChanged);
     }
     export function setCustomWarRuleId(): void {
-        const instanceWarRule                   = getInstanceWarRule();
-        instanceWarRule.templateRuleId          = null;
-        instanceWarRule.templateModifiedTime    = null;
+        const instanceWarRule               = getInstanceWarRule();
+        instanceWarRule.templateWarRuleId   = null;
 
-        Notify.dispatch(NotifyType.CcrCreatePresetWarRuleIdChanged);
+        Notify.dispatch(NotifyType.CcrCreateTemplateWarRuleIdChanged);
     }
     export function getTemplateWarRuleId(): number | null {
-        return getInstanceWarRule().templateRuleId ?? null;
+        return getInstanceWarRule().templateWarRuleId ?? null;
     }
     export async function tickTemplateWarRuleId(): Promise<void> {
         const currTemplateWarRuleId = getTemplateWarRuleId();
@@ -138,19 +136,14 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
         if (currTemplateWarRuleId == null) {
             await resetDataByTemplateWarRuleId(Helpers.getExisted(templateWarRuleArray.find(v => v.ruleAvailability?.canCcw)?.ruleId));
         } else {
-            const warRuleIdList: number[] = [];
-            for (let ruleId = currTemplateWarRuleId + 1; ruleId < templateWarRuleArray.length; ++ruleId) {
-                warRuleIdList.push(ruleId);
-            }
-            for (let ruleId = 0; ruleId < currTemplateWarRuleId; ++ruleId) {
-                warRuleIdList.push(ruleId);
-            }
-            for (const ruleId of warRuleIdList) {
-                if (templateWarRuleArray.find(v => v.ruleId === ruleId)?.ruleAvailability?.canCcw) {
-                    await resetDataByTemplateWarRuleId(ruleId);
-                    return;
+            const newTemplateWarRuleId = Helpers.getNonNullElements(templateWarRuleArray.filter(v => v.ruleAvailability?.canCcw).map(v => v.ruleId)).sort((v1, v2) => {
+                if (v1 > currTemplateWarRuleId) {
+                    return (v2 <= currTemplateWarRuleId) ? -1 : v1 - v2;
+                } else {
+                    return (v2 > currTemplateWarRuleId) ? 1 : v1 - v2;
                 }
-            }
+            })[0];
+            await resetDataByTemplateWarRuleId(newTemplateWarRuleId);
         }
     }
 

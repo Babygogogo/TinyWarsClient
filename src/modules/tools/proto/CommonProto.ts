@@ -3850,6 +3850,9 @@ declare namespace CommonProto {
 
             /** MapRawData mapExtraText */
             mapExtraText?: (CommonProto.Map.IMapExtraText|null);
+
+            /** MapRawData nextTemplateWarRuleId */
+            nextTemplateWarRuleId?: (number|null);
         }
 
         /** Represents a MapRawData. */
@@ -3902,6 +3905,9 @@ declare namespace CommonProto {
 
             /** MapRawData mapExtraText. */
             public mapExtraText?: (CommonProto.Map.IMapExtraText|null);
+
+            /** MapRawData nextTemplateWarRuleId. */
+            public nextTemplateWarRuleId: number;
 
             /**
              * Creates a new MapRawData instance using the specified properties.
@@ -10853,9 +10859,6 @@ declare namespace CommonProto {
             /** TemplateWarRule ruleAvailability */
             ruleAvailability?: (CommonProto.WarRule.IRuleAvailability|null);
 
-            /** TemplateWarRule modifiedTime */
-            modifiedTime?: (number|null);
-
             /** TemplateWarRule ruleForGlobalParams */
             ruleForGlobalParams?: (CommonProto.WarRule.IRuleForGlobalParams|null);
 
@@ -10883,9 +10886,6 @@ declare namespace CommonProto {
 
             /** TemplateWarRule ruleAvailability. */
             public ruleAvailability?: (CommonProto.WarRule.IRuleAvailability|null);
-
-            /** TemplateWarRule modifiedTime. */
-            public modifiedTime: number;
 
             /** TemplateWarRule ruleForGlobalParams. */
             public ruleForGlobalParams?: (CommonProto.WarRule.IRuleForGlobalParams|null);
@@ -10970,11 +10970,8 @@ declare namespace CommonProto {
         /** Properties of an InstanceWarRule. */
         interface IInstanceWarRule {
 
-            /** InstanceWarRule templateRuleId */
-            templateRuleId?: (number|null);
-
-            /** InstanceWarRule templateModifiedTime */
-            templateModifiedTime?: (number|null);
+            /** InstanceWarRule templateWarRuleId */
+            templateWarRuleId?: (number|null);
 
             /** InstanceWarRule ruleNameArray */
             ruleNameArray?: (CommonProto.Structure.ILanguageText[]|null);
@@ -10998,11 +10995,8 @@ declare namespace CommonProto {
              */
             constructor(properties?: CommonProto.WarRule.IInstanceWarRule);
 
-            /** InstanceWarRule templateRuleId. */
-            public templateRuleId: number;
-
-            /** InstanceWarRule templateModifiedTime. */
-            public templateModifiedTime: number;
+            /** InstanceWarRule templateWarRuleId. */
+            public templateWarRuleId: number;
 
             /** InstanceWarRule ruleNameArray. */
             public ruleNameArray: CommonProto.Structure.ILanguageText[];

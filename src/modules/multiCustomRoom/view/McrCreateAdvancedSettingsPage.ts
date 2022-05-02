@@ -20,7 +20,7 @@
 // import McrCreateModel           from "../model/McrCreateModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMcrCreateAdvancedSettingsPage {
+namespace Twns.MultiCustomRoom {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import PlayerRuleType       = Types.PlayerRuleType;
@@ -42,8 +42,8 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
 
         protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.McrCreatePresetWarRuleIdChanged,    callback: this._onNotifyMcrCreatePresetWarRuleIdChanged },
+                { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.McrCreateTemplateWarRuleIdChanged,   callback: this._onNotifyMcrCreateTemplateWarRuleIdChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnReset,       callback: this._onTouchedBtnReset },
@@ -57,7 +57,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             this.top    = 0;
             this.bottom = 0;
 
-            this._initialWarRuleId  = Twns.MultiCustomRoom.McrCreateModel.getTemplateWarRuleId();
+            this._initialWarRuleId  = MultiCustomRoom.McrCreateModel.getTemplateWarRuleId();
 
             this._updateComponentsForLanguage();
             this._initListSetting();
@@ -72,18 +72,18 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyMcrCreatePresetWarRuleIdChanged(): void {
+        private _onNotifyMcrCreateTemplateWarRuleIdChanged(): void {
             this._updateBtnReset();
             this._updateBtnCustomize();
         }
         private _onTouchedBtnReset(): void {
-            Twns.MultiCustomRoom.McrCreateModel.resetDataByTemplateWarRuleId(this._initialWarRuleId);
+            MultiCustomRoom.McrCreateModel.resetDataByTemplateWarRuleId(this._initialWarRuleId);
         }
         private _onTouchedBtnCustomize(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
-                    Twns.MultiCustomRoom.McrCreateModel.setCustomWarRuleId();
+                    MultiCustomRoom.McrCreateModel.setCustomWarRuleId();
                 },
             });
         }
@@ -97,10 +97,10 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
         }
 
         private _updateBtnReset(): void {
-            this._btnReset.visible = (this._initialWarRuleId != null) && (Twns.MultiCustomRoom.McrCreateModel.getTemplateWarRuleId() == null);
+            this._btnReset.visible = (this._initialWarRuleId != null) && (MultiCustomRoom.McrCreateModel.getTemplateWarRuleId() == null);
         }
         private _updateBtnCustomize(): void {
-            this._btnCustomize.visible = Twns.MultiCustomRoom.McrCreateModel.getTemplateWarRuleId() != null;
+            this._btnCustomize.visible = MultiCustomRoom.McrCreateModel.getTemplateWarRuleId() != null;
         }
 
         private _initListSetting(): void {
@@ -120,7 +120,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
         }
 
         private async _updateListPlayer(): Promise<void> {
-            const playersCount  = Helpers.getExisted((await Twns.MultiCustomRoom.McrCreateModel.getMapRawData()).playersCountUnneutral);
+            const playersCount  = Helpers.getExisted((await MultiCustomRoom.McrCreateModel.getMapRawData()).playersCountUnneutral);
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -233,8 +233,8 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                 { ui: this._inputValue, callback: this._onFocusOutInputValue, eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.McrCreatePresetWarRuleIdChanged,    callback: this._onNotifyMcrCreatePresetWarRuleIdChanged },
-                { type: NotifyType.McrCreateBannedCoIdArrayChanged,    callback: this._onNotifyMcrCreateBannedCoIdArrayChanged },
+                { type: NotifyType.McrCreateTemplateWarRuleIdChanged,   callback: this._onNotifyMcrCreateTemplateWarRuleIdChanged },
+                { type: NotifyType.McrCreateBannedCoIdArrayChanged,     callback: this._onNotifyMcrCreateBannedCoIdArrayChanged },
             ]);
             this._labelValue.touchEnabled = true;
         }
@@ -252,7 +252,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
-                    Twns.MultiCustomRoom.McrCreateModel.setCustomWarRuleId();
+                    MultiCustomRoom.McrCreateModel.setCustomWarRuleId();
                 },
             });
         }
@@ -270,7 +270,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                 this._updateComponentsForValue();
             }
         }
-        private _onNotifyMcrCreatePresetWarRuleIdChanged(): void {
+        private _onNotifyMcrCreateTemplateWarRuleIdChanged(): void {
             this._updateBtnCustom();
             this._updateComponentsForValue();
         }
@@ -279,7 +279,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
         }
 
         private _updateBtnCustom(): void {
-            this._btnCustom.visible = Twns.MultiCustomRoom.McrCreateModel.getTemplateWarRuleId() != null;
+            this._btnCustom.visible = MultiCustomRoom.McrCreateModel.getTemplateWarRuleId() != null;
         }
         private _updateComponentsForValue(): void {
             const data = this.data;
@@ -307,18 +307,18 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
 
             const labelValue                    = this._labelValue;
             labelValue.visible                  = true;
-            labelValue.text                     = Lang.getPlayerTeamName(Twns.MultiCustomRoom.McrCreateModel.getTeamIndex(playerIndex)) || CommonConstants.ErrorTextForUndefined;
+            labelValue.text                     = Lang.getPlayerTeamName(MultiCustomRoom.McrCreateModel.getTeamIndex(playerIndex)) || CommonConstants.ErrorTextForUndefined;
             labelValue.textColor                = 0xFFFFFF;
-            this._callbackForTouchLabelValue    = () => Twns.MultiCustomRoom.McrCreateModel.tickTeamIndex(playerIndex);
+            this._callbackForTouchLabelValue    = () => MultiCustomRoom.McrCreateModel.tickTeamIndex(playerIndex);
         }
         private _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): void {
             this._inputValue.visible            = false;
             this._callbackForFocusOutInputValue = null;
 
             const labelValue                    = this._labelValue;
-            const currValue                     = (Twns.MultiCustomRoom.McrCreateModel.getBannedCoIdArray(playerIndex) || []).length;
-            const gameConfig                    = Twns.MultiCustomRoom.McrCreateModel.getGameConfig();
-            const selfCoId                      = playerIndex === Twns.MultiCustomRoom.McrCreateModel.getSelfPlayerIndex() ? Twns.MultiCustomRoom.McrCreateModel.getSelfCoId() : null;
+            const currValue                     = (MultiCustomRoom.McrCreateModel.getBannedCoIdArray(playerIndex) || []).length;
+            const gameConfig                    = MultiCustomRoom.McrCreateModel.getGameConfig();
+            const selfCoId                      = playerIndex === MultiCustomRoom.McrCreateModel.getSelfPlayerIndex() ? MultiCustomRoom.McrCreateModel.getSelfCoId() : null;
             labelValue.visible                  = true;
             labelValue.text                     = `${currValue}`;
             labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
@@ -326,12 +326,12 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                 playerIndex,
                 gameConfig,
                 fullCoIdArray       : gameConfig.getEnabledCoArray().map(v => v.coId),
-                bannedCoIdArray     : Twns.MultiCustomRoom.McrCreateModel.getBannedCoIdArray(playerIndex) || [],
+                bannedCoIdArray     : MultiCustomRoom.McrCreateModel.getBannedCoIdArray(playerIndex) || [],
                 maxBanCount         : null,
                 selfCoId,
                 callbackOnConfirm   : (bannedCoIdSet) => {
                     const callback = () => {
-                        Twns.MultiCustomRoom.McrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
+                        MultiCustomRoom.McrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
                         Notify.dispatch(NotifyType.McrCreateBannedCoIdArrayChanged);
                         TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBanCoPanel);
                     };
@@ -341,7 +341,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                         TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0057),
                             callback: () => {
-                                Twns.MultiCustomRoom.McrCreateModel.setSelfCoId(CommonConstants.CoEmptyId);
+                                MultiCustomRoom.McrCreateModel.setSelfCoId(CommonConstants.CoEmptyId);
                                 callback();
                             },
                         });
@@ -354,7 +354,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = Twns.MultiCustomRoom.McrCreateModel.getInitialFund(playerIndex);
+            const currValue                     = MultiCustomRoom.McrCreateModel.getInitialFund(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
@@ -369,7 +369,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    Twns.MultiCustomRoom.McrCreateModel.setInitialFund(playerIndex, value);
+                    MultiCustomRoom.McrCreateModel.setInitialFund(playerIndex, value);
                 }
             };
         }
@@ -378,7 +378,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = Twns.MultiCustomRoom.McrCreateModel.getIncomeMultiplier(playerIndex);
+            const currValue                     = MultiCustomRoom.McrCreateModel.getIncomeMultiplier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
@@ -393,7 +393,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    Twns.MultiCustomRoom.McrCreateModel.setIncomeMultiplier(playerIndex, value);
+                    MultiCustomRoom.McrCreateModel.setIncomeMultiplier(playerIndex, value);
                 }
             };
         }
@@ -402,7 +402,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = Twns.MultiCustomRoom.McrCreateModel.getEnergyAddPctOnLoadCo(playerIndex);
+            const currValue                     = MultiCustomRoom.McrCreateModel.getEnergyAddPctOnLoadCo(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
@@ -417,7 +417,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    Twns.MultiCustomRoom.McrCreateModel.setEnergyAddPctOnLoadCo(playerIndex, value);
+                    MultiCustomRoom.McrCreateModel.setEnergyAddPctOnLoadCo(playerIndex, value);
                 }
             };
         }
@@ -426,7 +426,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = Twns.MultiCustomRoom.McrCreateModel.getEnergyGrowthMultiplier(playerIndex);
+            const currValue                     = MultiCustomRoom.McrCreateModel.getEnergyGrowthMultiplier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
@@ -441,7 +441,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    Twns.MultiCustomRoom.McrCreateModel.setEnergyGrowthMultiplier(playerIndex, value);
+                    MultiCustomRoom.McrCreateModel.setEnergyGrowthMultiplier(playerIndex, value);
                 }
             };
         }
@@ -450,7 +450,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = Twns.MultiCustomRoom.McrCreateModel.getMoveRangeModifier(playerIndex);
+            const currValue                     = MultiCustomRoom.McrCreateModel.getMoveRangeModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
@@ -465,7 +465,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    Twns.MultiCustomRoom.McrCreateModel.setMoveRangeModifier(playerIndex, value);
+                    MultiCustomRoom.McrCreateModel.setMoveRangeModifier(playerIndex, value);
                 }
             };
         }
@@ -474,7 +474,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = Twns.MultiCustomRoom.McrCreateModel.getAttackPowerModifier(playerIndex);
+            const currValue                     = MultiCustomRoom.McrCreateModel.getAttackPowerModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
@@ -489,7 +489,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    Twns.MultiCustomRoom.McrCreateModel.setAttackPowerModifier(playerIndex, value);
+                    MultiCustomRoom.McrCreateModel.setAttackPowerModifier(playerIndex, value);
                 }
             };
         }
@@ -498,7 +498,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = Twns.MultiCustomRoom.McrCreateModel.getVisionRangeModifier(playerIndex);
+            const currValue                     = MultiCustomRoom.McrCreateModel.getVisionRangeModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
@@ -513,7 +513,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    Twns.MultiCustomRoom.McrCreateModel.setVisionRangeModifier(playerIndex, value);
+                    MultiCustomRoom.McrCreateModel.setVisionRangeModifier(playerIndex, value);
                 }
             };
         }
@@ -522,7 +522,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = Twns.MultiCustomRoom.McrCreateModel.getLuckLowerLimit(playerIndex);
+            const currValue                     = MultiCustomRoom.McrCreateModel.getLuckLowerLimit(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
@@ -534,11 +534,11 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                 if ((isNaN(value))                                          ||
                     (value > CommonConstants.WarRuleLuckMaxLimit)           ||
                     (value < CommonConstants.WarRuleLuckMinLimit)           ||
-                    (value > Twns.MultiCustomRoom.McrCreateModel.getLuckUpperLimit(playerIndex))
+                    (value > MultiCustomRoom.McrCreateModel.getLuckUpperLimit(playerIndex))
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    Twns.MultiCustomRoom.McrCreateModel.setLuckLowerLimit(playerIndex, value);
+                    MultiCustomRoom.McrCreateModel.setLuckLowerLimit(playerIndex, value);
                 }
             };
         }
@@ -547,7 +547,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = Twns.MultiCustomRoom.McrCreateModel.getLuckUpperLimit(playerIndex);
+            const currValue                     = MultiCustomRoom.McrCreateModel.getLuckUpperLimit(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
@@ -559,11 +559,11 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                 if ((isNaN(value))                                          ||
                     (value > CommonConstants.WarRuleLuckMaxLimit)           ||
                     (value < CommonConstants.WarRuleLuckMinLimit)           ||
-                    (value < Twns.MultiCustomRoom.McrCreateModel.getLuckLowerLimit(playerIndex))
+                    (value < MultiCustomRoom.McrCreateModel.getLuckLowerLimit(playerIndex))
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    Twns.MultiCustomRoom.McrCreateModel.setLuckUpperLimit(playerIndex, value);
+                    MultiCustomRoom.McrCreateModel.setLuckUpperLimit(playerIndex, value);
                 }
             };
         }

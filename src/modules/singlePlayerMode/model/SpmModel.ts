@@ -53,9 +53,24 @@ namespace Twns.SinglePlayerMode.SpmModel {
         return _slotFullDataAccessor.getData(slotIndex);
     }
 
-
     export async function checkIsEmpty(slotIndex: number): Promise<boolean> {
         return await _slotFullDataAccessor.getData(slotIndex) == null;
+    }
+    export async function getEmptySlotIndexArray(): Promise<number[]> {
+        const promiseArray: Promise<boolean>[] = [];
+        for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
+            promiseArray.push(checkIsEmpty(slotIndex));
+        }
+
+        const emptyResultArray      = await Promise.all(promiseArray);
+        const emptySlotIndexArray   : number[] = [];
+        for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
+            if (emptyResultArray[slotIndex]) {
+                emptySlotIndexArray.push(slotIndex);
+            }
+        }
+
+        return emptySlotIndexArray;
     }
     export async function getAvailableIndex(): Promise<number> {
         for (let index = 0; index < CommonConstants.SpwSaveSlotMaxCount; ++index) {
@@ -171,7 +186,7 @@ namespace Twns.SinglePlayerMode.SpmModel {
             return null;
         }
 
-        const templateWarRule = WarHelpers.WarRuleHelpers.getTemplateWarRule(srcInstanceWarRule, mapRawData.templateWarRuleArray);
+        const templateWarRule = WarHelpers.WarRuleHelpers.getTemplateWarRule(srcInstanceWarRule.templateWarRuleId, mapRawData.templateWarRuleArray);
         if (templateWarRule == null) {
             return null;
         }

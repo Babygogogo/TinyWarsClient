@@ -78,12 +78,11 @@ namespace Twns.MapEditor.MeMfwModel {
         }
     }
     export function setCustomWarRuleId(): void {
-        const instanceWarRule                   = getInstanceWarRule();
-        instanceWarRule.templateRuleId          = null;
-        instanceWarRule.templateModifiedTime    = null;
+        const instanceWarRule               = getInstanceWarRule();
+        instanceWarRule.templateWarRuleId   = null;
     }
     export function getTemplateWarRuleId(): number | null {
-        return getInstanceWarRule().templateRuleId ?? null;
+        return getInstanceWarRule().templateWarRuleId ?? null;
     }
     export async function tickTemplateWarRuleId(): Promise<void> {
         const currTemplateWarRuleId = getTemplateWarRuleId();
@@ -91,19 +90,14 @@ namespace Twns.MapEditor.MeMfwModel {
         if (currTemplateWarRuleId == null) {
             await resetDataByTemplateWarRuleId(Helpers.getExisted(templateWarRuleArray[0].ruleId));
         } else {
-            const templateWarRuleIdArray: number[] = [];
-            for (let ruleId = currTemplateWarRuleId + 1; ruleId < templateWarRuleArray.length; ++ruleId) {
-                templateWarRuleIdArray.push(ruleId);
-            }
-            for (let ruleId = 0; ruleId < currTemplateWarRuleId; ++ruleId) {
-                templateWarRuleIdArray.push(ruleId);
-            }
-            for (const ruleId of templateWarRuleIdArray) {
-                if (templateWarRuleArray.find(v => v.ruleId === ruleId)?.ruleAvailability?.canMcw) {
-                    await resetDataByTemplateWarRuleId(ruleId);
-                    return;
+            const newTemplateWarRuleId = Helpers.getNonNullElements(templateWarRuleArray.map(v => v.ruleId)).sort((v1, v2) => {
+                if (v1 > currTemplateWarRuleId) {
+                    return (v2 <= currTemplateWarRuleId) ? -1 : v1 - v2;
+                } else {
+                    return (v2 > currTemplateWarRuleId) ? 1 : v1 - v2;
                 }
-            }
+            })[0];
+            await resetDataByTemplateWarRuleId(newTemplateWarRuleId);
         }
     }
 

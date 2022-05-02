@@ -231,7 +231,7 @@ namespace Twns.CoopCustomRoom {
                         });
                     };
 
-                    if (instanceWarRule.templateRuleId == null) {
+                    if (instanceWarRule.templateWarRuleId == null) {
                         callback();
                     } else {
                         TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {

@@ -320,8 +320,7 @@ namespace Twns.MapEditor {
             if (ruleIndex >= 0) {
                 templateWarRuleArray.splice(ruleIndex, 1);
                 for (let i = ruleIndex; i < templateWarRuleArray.length; ++i) {
-                    const templateWarRule   = templateWarRuleArray[i];
-                    templateWarRule.ruleId  = Helpers.getExisted(templateWarRule.ruleId) - 1;
+                    templateWarRuleArray[i].ruleId = i;
                 }
             }
         }

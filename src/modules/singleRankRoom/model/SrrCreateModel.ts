@@ -38,8 +38,7 @@ namespace Twns.SingleRankRoom.SrrCreateModel {
         settingsForCommon   : {
             configVersion   : null,
             instanceWarRule : {
-                templateRuleId          : null,
-                templateModifiedTime    : null,
+                templateWarRuleId   : null,
             },
         },
         mapId               : 0,
@@ -107,27 +106,22 @@ namespace Twns.SingleRankRoom.SrrCreateModel {
         Notify.dispatch(NotifyType.SrrCreateModelTemplateWarRuleIdChanged);
     }
     function getTemplateWarRuleId(): number | null {
-        return getInstanceWarRule().templateRuleId ?? null;
+        return getInstanceWarRule().templateWarRuleId ?? null;
     }
-    export async function tickPresetWarRuleId(): Promise<void> {
+    export async function tickTemplateWarRuleId(): Promise<void> {
         const templateWarRuleArray  = Helpers.getExisted((await getMapRawData()).templateWarRuleArray);
         const currTemplateWarRuleId = getTemplateWarRuleId();
         if (currTemplateWarRuleId == null) {
             await resetDataByTemplateWarRuleId(Helpers.getExisted(templateWarRuleArray.find(v => v.ruleAvailability?.canSrw)?.ruleId));
         } else {
-            const warRuleIdList: number[] = [];
-            for (let ruleId = currTemplateWarRuleId + 1; ruleId < templateWarRuleArray.length; ++ruleId) {
-                warRuleIdList.push(ruleId);
-            }
-            for (let ruleId = 0; ruleId < currTemplateWarRuleId; ++ruleId) {
-                warRuleIdList.push(ruleId);
-            }
-            for (const ruleId of warRuleIdList) {
-                if (templateWarRuleArray.find(v => v.ruleId === ruleId)?.ruleAvailability?.canSrw) {
-                    await resetDataByTemplateWarRuleId(ruleId);
-                    return;
+            const newTemplateWarRuleId = Helpers.getNonNullElements(templateWarRuleArray.filter(v => v.ruleAvailability?.canSrw).map(v => v.ruleId)).sort((v1, v2) => {
+                if (v1 > currTemplateWarRuleId) {
+                    return (v2 <= currTemplateWarRuleId) ? -1 : v1 - v2;
+                } else {
+                    return (v2 > currTemplateWarRuleId) ? 1 : v1 - v2;
                 }
-            }
+            })[0];
+            await resetDataByTemplateWarRuleId(newTemplateWarRuleId);
         }
     }
 

@@ -283,7 +283,6 @@ namespace Twns.WarHelpers.WarRuleHelpers {
     export function createDefaultTemplateWarRule(ruleId: number, playersCount: number): ITemplateWarRule {
         return {
             ruleId,
-            modifiedTime    : Timer.getServerTimestamp(),
             ruleNameArray   : [
                 { languageType: LanguageType.Chinese, text: Lang.getText(LangTextType.B0001, LanguageType.Chinese) },
                 { languageType: LanguageType.English, text: Lang.getText(LangTextType.B0001, LanguageType.English) },
@@ -307,9 +306,8 @@ namespace Twns.WarHelpers.WarRuleHelpers {
     }
     export function createDefaultInstanceWarRule(playersCount: number): IInstanceWarRule {
         return {
-            templateRuleId          : null,
-            templateModifiedTime    : null,
-            ruleNameArray   : [
+            templateWarRuleId   : null,
+            ruleNameArray       : [
                 { languageType: LanguageType.Chinese, text: Lang.getText(LangTextType.B0001, LanguageType.Chinese) },
                 { languageType: LanguageType.English, text: Lang.getText(LangTextType.B0001, LanguageType.English) },
             ],
@@ -683,21 +681,14 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         return availability != null;
     }
 
-    export function getTemplateWarRule(instanceWarRule: IInstanceWarRule, templateWarRuleArray: Types.Undefinable<ITemplateWarRule[]>): ITemplateWarRule | null {
-        const templateRuleId = instanceWarRule.templateRuleId;
-        if (templateRuleId == null) {
-            return null;
-        }
-
-        const templateWarRule = templateWarRuleArray?.find(v => v.ruleId === templateRuleId);
-        return ((templateWarRule != null) && ((templateWarRule.modifiedTime ?? 0) === (instanceWarRule.templateModifiedTime ?? 0)))
-            ? templateWarRule
-            : null;
+    export function getTemplateWarRule(templateWarRuleId: Types.Undefinable<number>, templateWarRuleArray: Types.Undefinable<ITemplateWarRule[]>): ITemplateWarRule | null {
+        return templateWarRuleId == null
+            ? null
+            : (templateWarRuleArray?.find(v => v.ruleId === templateWarRuleId) ?? null);
     }
     export function createInstanceWarRule(templateWarRule: ITemplateWarRule, warEventFullData: Types.Undefinable<CommonProto.Map.IWarEventFullData>): IInstanceWarRule {
         return {
-            templateRuleId          : templateWarRule.ruleId,
-            templateModifiedTime    : templateWarRule.modifiedTime,
+            templateWarRuleId       : templateWarRule.ruleId,
             ruleNameArray           : Helpers.deepClone(templateWarRule.ruleNameArray),
 
             ruleForGlobalParams     : Helpers.deepClone(templateWarRule.ruleForGlobalParams),

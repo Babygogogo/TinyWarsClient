@@ -261,7 +261,7 @@ namespace Twns.Common {
             const data              = this._getData();
             const instanceWarRule   = data.instanceWarRule;
             const labelValue        = this._labelValue;
-            const templateWarRuleId = instanceWarRule.templateRuleId;
+            const templateWarRuleId = instanceWarRule.templateWarRuleId;
             if (templateWarRuleId == null) {
                 labelValue.text         = Lang.getText(LangTextType.B0321);
                 labelValue.textColor    = 0xFFFF00;
@@ -396,7 +396,7 @@ namespace Twns.Common {
         private _modifyAsHasFog(): void {
             const data      = this._getData();
             const callback  = Helpers.getExisted(data.callbackOnModify);
-            if (data.instanceWarRule.templateRuleId == null) {
+            if (data.instanceWarRule.templateWarRuleId == null) {
                 callback(null);
             } else {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
@@ -408,7 +408,7 @@ namespace Twns.Common {
         private _modifyAsWeather(): void {
             const data      = this._getData();
             const callback  = Helpers.getExisted(data.callbackOnModify);
-            if (data.instanceWarRule.templateRuleId == null) {
+            if (data.instanceWarRule.templateWarRuleId == null) {
                 callback(null);
             } else {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {

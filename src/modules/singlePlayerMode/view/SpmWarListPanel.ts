@@ -103,7 +103,7 @@ namespace Twns.SinglePlayerMode {
         }
 
         private async _onTouchedBtnNextStep(): Promise<void> {
-            const slotData = await Twns.SinglePlayerMode.SpmModel.getSlotFullData(Twns.SinglePlayerMode.SpmModel.getPreviewingSlotIndex());
+            const slotData = await SinglePlayerMode.SpmModel.getSlotFullData(SinglePlayerMode.SpmModel.getPreviewingSlotIndex());
             if (slotData != null) {
                 FlowManager.gotoSinglePlayerWar({
                     slotIndex       : slotData.slotIndex,
@@ -161,7 +161,7 @@ namespace Twns.SinglePlayerMode {
             listWar.clear();
 
             const dataArray         = await this._createDataForListWar();
-            const slotIndex         = Twns.SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
+            const slotIndex         = SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
             labelLoading.visible    = false;
             labelNoWar.visible      = !dataArray.length;
             listWar.bindData(dataArray);
@@ -171,7 +171,7 @@ namespace Twns.SinglePlayerMode {
         private _updateComponentsForPreviewingWarInfo(): void {
             const groupTab      = this._groupTab;
             const btnNextStep   = this._btnNextStep;
-            const slotIndex     = Twns.SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
+            const slotIndex     = SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
             if (slotIndex == null) {
                 groupTab.visible    = false;
                 btnNextStep.visible = false;
@@ -211,9 +211,10 @@ namespace Twns.SinglePlayerMode {
         }
 
         private async _createDataForListWar(): Promise<DataForWarRenderer[]> {
-            const dataArray: DataForWarRenderer[] = [];
+            const emptySlotIndexArray   = await SinglePlayerMode.SpmModel.getEmptySlotIndexArray();
+            const dataArray             : DataForWarRenderer[] = [];
             for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
-                if (!await Twns.SinglePlayerMode.SpmModel.checkIsEmpty(slotIndex)) {
+                if (emptySlotIndexArray.indexOf(slotIndex) < 0) {
                     dataArray.push({
                         slotIndex,
                     });
@@ -224,8 +225,8 @@ namespace Twns.SinglePlayerMode {
         }
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const slotIndex = Twns.SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
-            const warData   = slotIndex == null ? null : (await Twns.SinglePlayerMode.SpmModel.getSlotFullData(slotIndex))?.warData;
+            const slotIndex = SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
+            const warData   = slotIndex == null ? null : (await SinglePlayerMode.SpmModel.getSlotFullData(slotIndex))?.warData;
             if (warData == null) {
                 return null;
             }
@@ -253,8 +254,8 @@ namespace Twns.SinglePlayerMode {
         }
 
         private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
-            const slotIndex = Twns.SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
-            const slotData  = slotIndex == null ? null : await Twns.SinglePlayerMode.SpmModel.getSlotFullData(slotIndex);
+            const slotIndex = SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
+            const slotData  = slotIndex == null ? null : await SinglePlayerMode.SpmModel.getSlotFullData(slotIndex);
             const warData   = slotData?.warData;
             if (warData == null) {
                 return null;
@@ -292,8 +293,8 @@ namespace Twns.SinglePlayerMode {
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            const slotIndex = Twns.SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
-            const slotData  = slotIndex == null ? null : await Twns.SinglePlayerMode.SpmModel.getSlotFullData(slotIndex);
+            const slotIndex = SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
+            const slotData  = slotIndex == null ? null : await SinglePlayerMode.SpmModel.getSlotFullData(slotIndex);
             const warData   = slotData?.warData;
             if (warData == null) {
                 return { dataArrayForListSettings: [] };
@@ -365,8 +366,8 @@ namespace Twns.SinglePlayerMode {
         }
 
         private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-            const slotIndex = Twns.SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
-            const slotData  = slotIndex == null ? null : await Twns.SinglePlayerMode.SpmModel.getSlotFullData(slotIndex);
+            const slotIndex = SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
+            const slotData  = slotIndex == null ? null : await SinglePlayerMode.SpmModel.getSlotFullData(slotIndex);
             const warData   = slotData?.warData;
             if (warData == null) {
                 return null;
@@ -465,7 +466,7 @@ namespace Twns.SinglePlayerMode {
 
         protected async _onDataChanged(): Promise<void> {
             const slotIndex         = this._getData().slotIndex;
-            const slotData          = await Twns.SinglePlayerMode.SpmModel.getSlotFullData(slotIndex);
+            const slotData          = await SinglePlayerMode.SpmModel.getSlotFullData(slotIndex);
             const labelType         = this._labelType;
             const labelName         = this._labelName;
             const labelTimestamp    = this._labelTimestamp;
@@ -496,7 +497,7 @@ namespace Twns.SinglePlayerMode {
         }
 
         public onItemTapEvent(): void {
-            Twns.SinglePlayerMode.SpmModel.setPreviewingSlotIndex(this._getData().slotIndex);
+            SinglePlayerMode.SpmModel.setPreviewingSlotIndex(this._getData().slotIndex);
         }
     }
 }

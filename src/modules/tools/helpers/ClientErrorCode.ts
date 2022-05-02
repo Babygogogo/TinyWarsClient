@@ -4759,17 +4759,6 @@ namespace TwnsClientErrorCode {
         MfrJoinModel_GetTargetRoomId_08,
         MfrJoinModel_GetTargetRoomId_09,
 
-        McrCreateModel_GetPresetWarRuleId_00,
-        McrCreateModel_GetPresetWarRuleId_01,
-        McrCreateModel_GetPresetWarRuleId_02,
-        McrCreateModel_GetPresetWarRuleId_03,
-        McrCreateModel_GetPresetWarRuleId_04,
-        McrCreateModel_GetPresetWarRuleId_05,
-        McrCreateModel_GetPresetWarRuleId_06,
-        McrCreateModel_GetPresetWarRuleId_07,
-        McrCreateModel_GetPresetWarRuleId_08,
-        McrCreateModel_GetPresetWarRuleId_09,
-
         WarMapModel_UpdateOnSetMapName_00,
         WarMapModel_UpdateOnSetMapName_01,
         WarMapModel_UpdateOnSetMapName_02,

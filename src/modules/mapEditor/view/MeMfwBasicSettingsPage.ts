@@ -124,7 +124,7 @@ namespace Twns.MapEditor {
         private async _updateLabelWarRule(): Promise<void> {
             const labelWarRule      = this._labelWarRule;
             const instanceWarRule   = Helpers.getExisted(MapEditor.MeMfwModel.getWarData().settingsForCommon?.instanceWarRule);
-            const templateWarRuleId = instanceWarRule.templateRuleId;
+            const templateWarRuleId = instanceWarRule.templateWarRuleId;
             if (templateWarRuleId == null) {
                 labelWarRule.text       = Lang.getText(LangTextType.B0321);
                 labelWarRule.textColor  = 0xFFFF00;
