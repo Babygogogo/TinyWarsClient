@@ -74,49 +74,49 @@ namespace Twns.CoopCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnRanking(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MrrMainMenuPanel, void 0);
         }
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmMainMenuPanel, void 0);
         }
         private _onTouchedBtnCreateRoom(): void {
             this.close();
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrCreateMapListPanel, {});
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyTopPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyBottomPanel);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrCreateMapListPanel, {});
         }
         private _onTouchedBtnJoinRoom(): void {
             this.close();
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrJoinRoomListPanel, { filter: null });
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyTopPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyBottomPanel);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrJoinRoomListPanel, { filter: null });
         }
         private _onTouchedBtnMyRoom(): void {
             this.close();
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrMyRoomListPanel, void 0);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyTopPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyBottomPanel);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrMyRoomListPanel, void 0);
         }
         private _onTouchedBtnContinueWar(): void {
             this.close();
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcwMyWarListPanel, void 0);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyTopPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyBottomPanel);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcwMyWarListPanel, void 0);
         }
         private _onTouchedBtnHelp(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
                 title   : Lang.getText(LangTextType.B0143),
                 content : Lang.getText(LangTextType.R0008),
             });
         }
         private _onTouchedBtnNormalMode(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrMainMenuPanel, void 0);
         }
         private _onTouchedBtnFreeMode(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MfrMainMenuPanel, void 0);
         }
 
         private _onMsgUserLogout(): void {
@@ -142,18 +142,18 @@ namespace Twns.CoopCustomRoom {
             group.right = 60;
             group.alpha = 1;
 
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnMultiPlayer,
                 beginProps  : { alpha: 0, right: -40 },
                 endProps    : { alpha: 1, right: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnRanking,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 100,
                 endProps    : { alpha: 1, right: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnSinglePlayer,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 200,
@@ -165,63 +165,63 @@ namespace Twns.CoopCustomRoom {
             groupLeft.left  = 0;
             groupLeft.alpha = 1;
 
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnCreateRoom,
                 beginProps  : { alpha: 0, left: -40 },
                 endProps    : { alpha: 1, left: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnJoinRoom,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 200 / 6 * 1,
                 endProps    : { alpha: 1, left: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnMyRoom,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 200 / 6 * 2,
                 endProps    : { alpha: 1, left: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnContinueWar,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 200 / 6 * 3,
                 endProps    : { alpha: 1, left: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnHelp,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 200 / 6 * 4,
                 endProps    : { alpha: 1, left: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNormalMode,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 200 / 6 * 5,
                 endProps    : { alpha: 1, left: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnFreeMode,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
             });
 
-            await Helpers.wait(200 + CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(200 + CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, right: 60 },
                 endProps    : { alpha: 0, right: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupLeft,
                 beginProps  : { alpha: 1, left: 0 },
                 endProps    : { alpha: 0, left: -40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {

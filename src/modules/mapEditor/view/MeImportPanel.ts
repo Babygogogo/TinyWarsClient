@@ -108,10 +108,10 @@ namespace Twns.MapEditor {
         public onItemTapEvent(): void {
             const data  = this._getData();
             const mapId = data.mapId;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0095) + `\n#${mapId} ${data.mapName}`,
                 callback: async () => {
-                    const war = Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
+                    const war = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
                     war.stopRunning();
                     await war.initWithMapEditorData(
                         {

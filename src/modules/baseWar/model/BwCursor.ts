@@ -15,8 +15,8 @@ namespace Twns.BaseWar {
     export class BwCursor {
         private _gridX              = 0;
         private _gridY              = 0;
-        private _previousGridIndex  : Types.GridIndex | null = null;
-        private _mapSize?           : Types.MapSize;
+        private _previousGridIndex  : Twns.Types.GridIndex | null = null;
+        private _mapSize?           : Twns.Types.MapSize;
         private _isMovableByTouches = true;
         private readonly _view      = new Twns.BaseWar.BwCursorView();
 
@@ -28,8 +28,8 @@ namespace Twns.BaseWar {
             { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwActionPlannerStateChanged },
         ];
 
-        public init(mapSize: Types.MapSize): void {
-            this._setMapSize(Helpers.deepClone(mapSize));
+        public init(mapSize: Twns.Types.MapSize): void {
+            this._setMapSize(Twns.Helpers.deepClone(mapSize));
             this.setGridIndex({ x: 0, y: 0 });
 
             this.getView().init(this);
@@ -67,7 +67,7 @@ namespace Twns.BaseWar {
                 const data = e.data as Twns.Notify.NotifyData.BwCursorDragged;
                 this.setGridIndex(data.draggedTo);
                 this.updateView();
-                SoundManager.playShortSfx(Types.ShortSfxCode.CursorMove01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.CursorMove01);
             }
         }
         private _onNotifyBwActionPlannerStateChanged(): void {
@@ -78,7 +78,7 @@ namespace Twns.BaseWar {
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getWar(): Twns.BaseWar.BwWar {
-            return Helpers.getExisted(this._war);
+            return Twns.Helpers.getExisted(this._war);
         }
 
         public getView(): Twns.BaseWar.BwCursorView {
@@ -88,11 +88,11 @@ namespace Twns.BaseWar {
             this.getView().updateView();
         }
 
-        private _setMapSize(size: Types.MapSize): void {
+        private _setMapSize(size: Twns.Types.MapSize): void {
             this._mapSize = size;
         }
-        public getMapSize(): Types.MapSize {
-            return Helpers.getExisted(this._mapSize);
+        public getMapSize(): Twns.Types.MapSize {
+            return Twns.Helpers.getExisted(this._mapSize);
         }
 
         public setIsVisible(visible: boolean): void {
@@ -108,21 +108,21 @@ namespace Twns.BaseWar {
         public getGridY(): number {
             return this._gridY;
         }
-        public setGridIndex(gridIndex: Types.GridIndex): void {
+        public setGridIndex(gridIndex: Twns.Types.GridIndex): void {
             this._setPreviousGridIndex(this.getGridIndex());
 
             this._gridX = gridIndex.x;
             this._gridY = gridIndex.y;
             Twns.Notify.dispatch(NotifyType.BwCursorGridIndexChanged, this);
         }
-        public getGridIndex(): Types.GridIndex {
+        public getGridIndex(): Twns.Types.GridIndex {
             return { x: this.getGridX(), y: this.getGridY() };
         }
 
-        private _setPreviousGridIndex(gridIndex: Types.GridIndex): void {
+        private _setPreviousGridIndex(gridIndex: Twns.Types.GridIndex): void {
             this._previousGridIndex = gridIndex;
         }
-        public getPreviousGridIndex(): Types.GridIndex | null {
+        public getPreviousGridIndex(): Twns.Types.GridIndex | null {
             return this._previousGridIndex;
         }
 

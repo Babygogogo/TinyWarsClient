@@ -18,7 +18,7 @@ namespace Twns.CoopCustomWar {
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
-            this._setSettingsForCcw(Helpers.getExisted(data.settingsForCcw, ClientErrorCode.CcwWar_Init_00));
+            this._setSettingsForCcw(Twns.Helpers.getExisted(data.settingsForCcw, ClientErrorCode.CcwWar_Init_00));
 
             this._initView();
         }
@@ -33,14 +33,14 @@ namespace Twns.CoopCustomWar {
             return false;
         }
         public getMapId(): number {
-            return Helpers.getExisted(this.getSettingsForCcw().mapId);
+            return Twns.Helpers.getExisted(this.getSettingsForCcw().mapId);
         }
 
         private _setSettingsForCcw(settings: ISettingsForCcw): void {
             this._settingsForCcw = settings;
         }
         public getSettingsForCcw(): ISettingsForCcw {
-            return Helpers.getExisted(this._settingsForCcw);
+            return Twns.Helpers.getExisted(this._settingsForCcw);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +61,7 @@ namespace Twns.CoopCustomWar {
 
         public getSettingsBootTimerParams(): number[] {
             const settingsForCcw = this.getSettingsForCcw();
-            return Helpers.getExisted(settingsForCcw.bootTimerParams);
+            return Twns.Helpers.getExisted(settingsForCcw.bootTimerParams);
         }
     }
 }

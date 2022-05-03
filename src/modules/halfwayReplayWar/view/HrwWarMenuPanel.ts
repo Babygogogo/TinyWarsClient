@@ -92,7 +92,7 @@ namespace Twns.HalfwayReplayWar {
         }
 
         private _getWar(): HalfwayReplayWar.HrwWar {
-            return Helpers.getExisted(Twns.HalfwayReplayWar.HrwModel.getWar());
+            return Twns.Helpers.getExisted(Twns.HalfwayReplayWar.HrwModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,20 +112,20 @@ namespace Twns.HalfwayReplayWar {
 
         private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgSpmCreateSfw.IS;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
-                    FlowManager.gotoSinglePlayerWar({
-                        slotIndex       : Helpers.getExisted(data.slotIndex),
-                        slotExtraData   : Helpers.getExisted(data.extraData),
-                        warData         : Helpers.getExisted(data.warData),
+                    Twns.FlowManager.gotoSinglePlayerWar({
+                        slotIndex       : Twns.Helpers.getExisted(data.slotIndex),
+                        slotExtraData   : Twns.Helpers.getExisted(data.extraData),
+                        warData         : Twns.Helpers.getExisted(data.warData),
                     });
                 },
             });
         }
 
         private _onNotifyMsgMpwCommonContinueWarFailed(): void {
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBlockPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonBlockPanel);
         }
 
         private _onTouchedBtnBack(): void {
@@ -136,7 +136,7 @@ namespace Twns.HalfwayReplayWar {
                 this._menuType = MenuType.Main;
                 this._updateListCommand();
             } else {
-                throw Helpers.newError(`Invalid menuType: ${type}`, ClientErrorCode.HrwWarMenuPanel_OnTouchedBtnBack_00);
+                throw Twns.Helpers.newError(`Invalid menuType: ${type}`, ClientErrorCode.HrwWarMenuPanel_OnTouchedBtnBack_00);
             }
         }
 
@@ -205,12 +205,12 @@ namespace Twns.HalfwayReplayWar {
             } else if (type === MenuType.Advanced) {
                 return this._createDataForAdvancedMenu();
             } else {
-                throw Helpers.newError(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`, ClientErrorCode.HrwWarMenuPanel_CreateDataForList_00);
+                throw Twns.Helpers.newError(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`, ClientErrorCode.HrwWarMenuPanel_CreateDataForList_00);
             }
         }
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
-            return Helpers.getNonNullElements([
+            return Twns.Helpers.getNonNullElements([
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandChat(),
                 this._createCommandGotoOngoingWar(),
@@ -219,7 +219,7 @@ namespace Twns.HalfwayReplayWar {
         }
 
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
-            return Helpers.getNonNullElements([
+            return Twns.Helpers.getNonNullElements([
                 this._createCommandSimulation(),
                 this._createCommandCreateMfr(),
                 this._createCommandUserSettings(),
@@ -242,7 +242,7 @@ namespace Twns.HalfwayReplayWar {
                 name    : Lang.getText(LangTextType.B0383),
                 callback: () => {
                     this.close();
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {});
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChatPanel, {});
                 },
             };
         }
@@ -251,12 +251,12 @@ namespace Twns.HalfwayReplayWar {
             return {
                 name    : Lang.getText(LangTextType.B0711),
                 callback: () => {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                         title   : Lang.getText(LangTextType.B0711),
                         content : Lang.getText(LangTextType.A0225),
                         callback: () => {
-                            MultiPlayerWar.MpwProxy.reqMpwCommonContinueWar(Helpers.getExisted(this._getWar().getWarId()));
-                            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
+                            MultiPlayerWar.MpwProxy.reqMpwCommonContinueWar(Twns.Helpers.getExisted(this._getWar().getWarId()));
+                            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonBlockPanel, {
                                 title   : Lang.getText(LangTextType.B0088),
                                 content : Lang.getText(LangTextType.A0040),
                             });
@@ -270,10 +270,10 @@ namespace Twns.HalfwayReplayWar {
             return {
                 name    : Lang.getText(LangTextType.B0054),
                 callback: () => {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                         title   : Lang.getText(LangTextType.B0054),
                         content : Lang.getText(LangTextType.A0025),
-                        callback: () => FlowManager.gotoLobby(),
+                        callback: () => Twns.FlowManager.gotoLobby(),
                     });
                 },
             };
@@ -287,7 +287,7 @@ namespace Twns.HalfwayReplayWar {
                     if (war.getIsExecutingAction()) {
                         FloatText.show(Lang.getText(LangTextType.A0103));
                     } else {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSfwSaveSlotsPanel, war.serializeForCreateSfw());
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmCreateSfwSaveSlotsPanel, war.serializeForCreateSfw());
                     }
                 },
             };
@@ -310,10 +310,10 @@ namespace Twns.HalfwayReplayWar {
                         return;
                     }
 
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                         content : Lang.getText(LangTextType.A0201),
                         callback: () => {
-                            FlowManager.gotoMfrCreateSettingsPanel(warData);
+                            Twns.FlowManager.gotoMfrCreateSettingsPanel(warData);
                         }
                     });
                 }
@@ -323,7 +323,7 @@ namespace Twns.HalfwayReplayWar {
             return {
                 name    : Lang.getText(LangTextType.B0560),
                 callback: () => {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSettingsPanel, void 0);
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserSettingsPanel, void 0);
                 }
             };
         }
@@ -332,7 +332,7 @@ namespace Twns.HalfwayReplayWar {
                 name    : Lang.getText(LangTextType.B0430),
                 callback: () => {
                     const isEnabled = Twns.User.UserModel.getSelfSettingsIsSetPathMode();
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                         content : Lang.getFormattedText(
                             LangTextType.F0033,
                             Lang.getText(isEnabled ? LangTextType.B0431 : LangTextType.B0432),
@@ -408,7 +408,7 @@ namespace Twns.HalfwayReplayWar {
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
                 + `  ${player === war.getPlayerInTurn() ? Lang.getText(LangTextType.B0086) : ""}`;
 
-            if (player.getAliveState() !== Types.PlayerAliveState.Alive) {
+            if (player.getAliveState() !== Twns.Types.PlayerAliveState.Alive) {
                 this._labelLost.visible = true;
                 this._listInfo.visible  = false;
             } else {
@@ -499,9 +499,9 @@ namespace Twns.HalfwayReplayWar {
             const superPowerEnergy  = player.getCoSuperPowerEnergy();
             const skillType         = player.getCoUsingSkillType();
             const hasLoadedCo       = war.getUnitMap().checkIsCoLoadedByAnyUnit(playerIndex);
-            const currEnergyText    = skillType === Types.CoSkillType.Passive
+            const currEnergyText    = skillType === Twns.Types.CoSkillType.Passive
                 ? "" + currValue
-                : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
+                : skillType === Twns.Types.CoSkillType.Power ? "COP" : "SCOP";
 
             return {
                 titleText               : Lang.getText(LangTextType.B0159),

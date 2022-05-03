@@ -45,7 +45,7 @@ namespace Twns.MapManagement {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            const briefData         = Helpers.getExisted(await Twns.WarMap.WarMapModel.getBriefData(this._getOpenData().mapId));
+            const briefData         = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getBriefData(this._getOpenData().mapId));
             this._imgFog.visible    = !!(briefData.mapTag || {}).fog;
         }
         protected _onClosing(): void {
@@ -64,8 +64,8 @@ namespace Twns.MapManagement {
         }
 
         private async _onTouchedBtnWarRule(): Promise<void> {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmWarRulePanel, {
-                mapRawData      : Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(this._getOpenData().mapId)),
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmWarRulePanel, {
+                mapRawData      : Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(this._getOpenData().mapId)),
             });
             this.close();
         }

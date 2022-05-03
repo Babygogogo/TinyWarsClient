@@ -65,14 +65,14 @@ namespace Twns.MultiCustomRoom {
         }
 
         private _onTouchedBtnReset(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrCreateMapListPanel, {});
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrCreateMapListPanel, {});
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
             const minRatingText = this._inputMinRating.text;
             const minRating     = minRatingText ? Number(minRatingText) : null;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrCreateMapListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrCreateMapListPanel, {
                 mapName     : this._inputMapName.text || null,
                 mapDesigner : this._inputDesigner.text || null,
                 playersCount: Number(this._inputPlayersCount.text) || null,
@@ -128,32 +128,32 @@ namespace Twns.MultiCustomRoom {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

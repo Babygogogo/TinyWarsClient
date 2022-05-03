@@ -110,26 +110,26 @@ namespace Twns.ReplayWar {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
         }
         private _onTouchedBtnSearch(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.RwSearchReplayPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.RwSearchReplayPanel, void 0);
         }
         private async _onTouchedBtnNextStep(): Promise<void> {
             const replayId = Twns.ReplayWar.RwModel.getPreviewingReplayId();
             if (replayId != null) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonBlockPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0040),
                 });
 
                 const data = await Twns.ReplayWar.RwModel.getReplayData(replayId);
                 if (data) {
-                    FlowManager.gotoReplayWar(data, Helpers.getExisted(replayId));
+                    Twns.FlowManager.gotoReplayWar(data, Twns.Helpers.getExisted(replayId));
                 } else {
-                    TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBlockPanel);
+                    Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonBlockPanel);
                 }
             }
         }
@@ -240,9 +240,9 @@ namespace Twns.ReplayWar {
                 return null;
             }
 
-            const replayInfo    = Helpers.getExisted(await Twns.ReplayWar.RwModel.getReplayInfo(replayId));
+            const replayInfo    = Twns.Helpers.getExisted(await Twns.ReplayWar.RwModel.getReplayInfo(replayId));
             const mapId         = replayInfo.mapId;
-            const gameConfig    = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(replayInfo.configVersion));
+            const gameConfig    = await Twns.Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(replayInfo.configVersion));
             if (mapId != null) {
                 return {
                     gameConfig,
@@ -277,12 +277,12 @@ namespace Twns.ReplayWar {
             for (const playerInfo of replayBriefInfo.playerInfoList || []) {
                 const userId = playerInfo.userId ?? null;
                 playerInfoArray.push({
-                    playerIndex         : Helpers.getExisted(playerInfo.playerIndex),
-                    teamIndex           : Helpers.getExisted(playerInfo.teamIndex),
+                    playerIndex         : Twns.Helpers.getExisted(playerInfo.playerIndex),
+                    teamIndex           : Twns.Helpers.getExisted(playerInfo.teamIndex),
                     isAi                : userId == null,
                     userId,
-                    coId                : Helpers.getExisted(playerInfo.coId),
-                    unitAndTileSkinId   : Helpers.getExisted(playerInfo.unitAndTileSkinId),
+                    coId                : Twns.Helpers.getExisted(playerInfo.coId),
+                    unitAndTileSkinId   : Twns.Helpers.getExisted(playerInfo.unitAndTileSkinId),
                     isReady             : null,
                     isInTurn            : null,
                     isDefeat            : !playerInfo.isAlive,
@@ -291,7 +291,7 @@ namespace Twns.ReplayWar {
             }
 
             return {
-                gameConfig              : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(replayBriefInfo.configVersion)),
+                gameConfig              : await Twns.Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(replayBriefInfo.configVersion)),
                 playersCountUnneutral   : playerInfoArray.length,
                 roomOwnerPlayerIndex    : null,
                 callbackOnExitRoom      : null,
@@ -302,72 +302,72 @@ namespace Twns.ReplayWar {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnSearch,
                 beginProps  : { alpha: 0, y: 40 },
                 endProps    : { alpha: 1, y: 80 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupReplayList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnSearch,
                 beginProps  : { alpha: 1, y: 80 },
                 endProps    : { alpha: 0, y: 40 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupReplayList,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -395,7 +395,7 @@ namespace Twns.ReplayWar {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
             ]);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
         }
 
         protected async _onDataChanged(): Promise<void> {
@@ -410,7 +410,7 @@ namespace Twns.ReplayWar {
             } else {
                 const mapId     = replayBriefInfo.mapId;
                 labelId.text    = `ID: ${replayBriefInfo.replayId}`;
-                labelType.text  = Lang.getWarTypeName(Helpers.getExisted(replayBriefInfo.warType)) ?? CommonConstants.ErrorTextForUndefined;
+                labelType.text  = Lang.getWarTypeName(Twns.Helpers.getExisted(replayBriefInfo.warType)) ?? CommonConstants.ErrorTextForUndefined;
                 labelName.text  = mapId == null
                     ? `----`
                     : await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined;

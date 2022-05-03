@@ -15,10 +15,10 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
     import NotifyType       = Twns.Notify.NotifyType;
-    import GridIndex        = Types.GridIndex;
-    import PlayerAliveState = Types.PlayerAliveState;
-    import CoSkillType      = Types.CoSkillType;
-    import CoType           = Types.CoType;
+    import GridIndex        = Twns.Types.GridIndex;
+    import PlayerAliveState = Twns.Types.PlayerAliveState;
+    import CoSkillType      = Twns.Types.CoSkillType;
+    import CoType           = Twns.Types.CoType;
     import GameConfig       = Config.GameConfig;
     import ISerialPlayer    = CommonProto.WarSerialization.ISerialPlayer;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
@@ -27,13 +27,13 @@ namespace Twns.BaseWar {
         private _playerIndex?               : number;
         private _fund?                      : number;
         private _hasVotedForDraw?           : boolean;
-        private _aliveState?                : Types.PlayerAliveState;
+        private _aliveState?                : Twns.Types.PlayerAliveState;
         private _restTimeToBoot?            : number;
         private _userId?                    : number | null;
         private _unitAndTileSkinId?         : number;
         private _coId?                      : number;
         private _coCurrentEnergy?           : number;
-        private _coUsingSkillType?          : Types.CoSkillType;
+        private _coUsingSkillType?          : Twns.Types.CoSkillType;
         private _coIsDestroyedInTurn?       : boolean;
         private _coPowerActivatedCount?     : number;
         private _hasTakenManualAction?      : boolean;
@@ -43,14 +43,14 @@ namespace Twns.BaseWar {
         private _war?                       : BwWar;
 
         public init(data: ISerialPlayer, gameConfig: GameConfig): void {
-            const fund              = Helpers.getExisted(data.fund, ClientErrorCode.BwPlayer_Init_00);
-            const hasVotedForDraw   = Helpers.getExisted(data.hasVotedForDraw, ClientErrorCode.BwPlayer_Init_01);
+            const fund              = Twns.Helpers.getExisted(data.fund, ClientErrorCode.BwPlayer_Init_00);
+            const hasVotedForDraw   = Twns.Helpers.getExisted(data.hasVotedForDraw, ClientErrorCode.BwPlayer_Init_01);
             const aliveState        = data.aliveState as PlayerAliveState;
             if ((aliveState !== PlayerAliveState.Alive) &&
                 (aliveState !== PlayerAliveState.Dead)  &&
                 (aliveState !== PlayerAliveState.Dying)
             ) {
-                throw Helpers.newError(`Invalid aliveState: ${aliveState}`, ClientErrorCode.BwPlayer_Init_02);
+                throw Twns.Helpers.newError(`Invalid aliveState: ${aliveState}`, ClientErrorCode.BwPlayer_Init_02);
             }
 
             const playerIndex = data.playerIndex;
@@ -58,27 +58,27 @@ namespace Twns.BaseWar {
                 (playerIndex > CommonConstants.WarMaxPlayerIndex)   ||
                 (playerIndex < CommonConstants.WarNeutralPlayerIndex)
             ) {
-                throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwPlayer_Init_03);
+                throw Twns.Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwPlayer_Init_03);
             }
 
-            const restTimeToBoot        = Helpers.getExisted(data.restTimeToBoot, ClientErrorCode.BwPlayer_Init_04);
-            const coIsDestroyedInTurn   = Helpers.getExisted(data.coIsDestroyedInTurn, ClientErrorCode.BwPlayer_Init_05);
+            const restTimeToBoot        = Twns.Helpers.getExisted(data.restTimeToBoot, ClientErrorCode.BwPlayer_Init_04);
+            const coIsDestroyedInTurn   = Twns.Helpers.getExisted(data.coIsDestroyedInTurn, ClientErrorCode.BwPlayer_Init_05);
             const unitAndTileSkinId     = data.unitAndTileSkinId;
             if ((unitAndTileSkinId == null)                                                             ||
                 ((unitAndTileSkinId === 0) && (playerIndex !== CommonConstants.WarNeutralPlayerIndex))  ||
                 ((unitAndTileSkinId !== 0) && (playerIndex === CommonConstants.WarNeutralPlayerIndex))
             ) {
-                throw Helpers.newError(`Invalid unitAndTileSkinId: ${unitAndTileSkinId}`, ClientErrorCode.BwPlayer_Init_06);
+                throw Twns.Helpers.newError(`Invalid unitAndTileSkinId: ${unitAndTileSkinId}`, ClientErrorCode.BwPlayer_Init_06);
             }
 
-            const coId              = Helpers.getExisted(data.coId, ClientErrorCode.BwPlayer_Init_07);
+            const coId              = Twns.Helpers.getExisted(data.coId, ClientErrorCode.BwPlayer_Init_07);
             const coConfig          = gameConfig.getCoBasicCfg(coId);
             const coUsingSkillType  = data.coUsingSkillType as CoSkillType;
             if ((coUsingSkillType !== CoSkillType.Passive)  &&
                 (coUsingSkillType !== CoSkillType.Power)    &&
                 (coUsingSkillType !== CoSkillType.SuperPower)
             ) {
-                throw Helpers.newError(`Invalid coUsingSkillType: ${coUsingSkillType}`, ClientErrorCode.BwPlayer_Init_08);
+                throw Twns.Helpers.newError(`Invalid coUsingSkillType: ${coUsingSkillType}`, ClientErrorCode.BwPlayer_Init_08);
             }
 
             // if (((coUsingSkillType === CoSkillType.Power)       && (!(coConfig.powerSkills || []).length))      ||
@@ -168,7 +168,7 @@ namespace Twns.BaseWar {
             this._war = war;
         }
         private _getWar(): BwWar {
-            return Helpers.getExisted(this._war);
+            return Twns.Helpers.getExisted(this._war);
         }
 
         public setFund(fund: number): void {
@@ -178,28 +178,28 @@ namespace Twns.BaseWar {
             }
         }
         public getFund(): number {
-            return Helpers.getExisted(this._fund);
+            return Twns.Helpers.getExisted(this._fund);
         }
 
         public setHasVotedForDraw(voted: boolean): void {
             this._hasVotedForDraw = voted;
         }
         public getHasVotedForDraw(): boolean {
-            return Helpers.getExisted(this._hasVotedForDraw);
+            return Twns.Helpers.getExisted(this._hasVotedForDraw);
         }
 
-        public setAliveState(alive: Types.PlayerAliveState): void {
+        public setAliveState(alive: Twns.Types.PlayerAliveState): void {
             this._aliveState = alive;
         }
-        public getAliveState(): Types.PlayerAliveState {
-            return Helpers.getExisted(this._aliveState);
+        public getAliveState(): Twns.Types.PlayerAliveState {
+            return Twns.Helpers.getExisted(this._aliveState);
         }
 
         private _setPlayerIndex(index: number): void {
             this._playerIndex = index;
         }
         public getPlayerIndex(): number {
-            return Helpers.getExisted(this._playerIndex);
+            return Twns.Helpers.getExisted(this._playerIndex);
         }
         public checkIsNeutral(): boolean {
             return this.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex;
@@ -213,14 +213,14 @@ namespace Twns.BaseWar {
             this._restTimeToBoot = seconds;
         }
         public getRestTimeToBoot(): number {
-            return Helpers.getExisted(this._restTimeToBoot);
+            return Twns.Helpers.getExisted(this._restTimeToBoot);
         }
 
         public setWatchOngoingSrcUserIds(list: number[]): void {
             this._watchOngoingSrcUserIds = new Set(list);
         }
         public getWatchOngoingSrcUserIds(): Set<number> {
-            return Helpers.getExisted(this._watchOngoingSrcUserIds);
+            return Twns.Helpers.getExisted(this._watchOngoingSrcUserIds);
         }
         public addWatchOngoingSrcUserId(userId: number): void {
             this.getWatchOngoingSrcUserIds().add(userId);
@@ -233,7 +233,7 @@ namespace Twns.BaseWar {
             this._watchRequestSrcUserIds = new Set(list);
         }
         public getWatchRequestSrcUserIds(): Set<number> {
-            return Helpers.getExisted(this._watchRequestSrcUserIds);
+            return Twns.Helpers.getExisted(this._watchRequestSrcUserIds);
         }
         public addWatchRequestSrcUserId(userId: number): void {
             this.getWatchRequestSrcUserIds().add(userId);
@@ -246,14 +246,14 @@ namespace Twns.BaseWar {
             this._userId = id;
         }
         public getUserId(): number | null {
-            return Helpers.getDefined(this._userId, ClientErrorCode.BwPlayer_GetUserId_00);
+            return Twns.Helpers.getDefined(this._userId, ClientErrorCode.BwPlayer_GetUserId_00);
         }
 
         private _setUnitAndTileSkinId(unitAndTileSkinId: number): void {
             this._unitAndTileSkinId = unitAndTileSkinId;
         }
         public getUnitAndTileSkinId(): number {
-            return Helpers.getExisted(this._unitAndTileSkinId);
+            return Twns.Helpers.getExisted(this._unitAndTileSkinId);
         }
 
         public async getNickname(): Promise<string> {
@@ -270,7 +270,7 @@ namespace Twns.BaseWar {
             }
         }
         public getCoId(): number {
-            return Helpers.getExisted(this._coId);
+            return Twns.Helpers.getExisted(this._coId);
         }
 
         public setCoCurrentEnergy(energy: number): void {
@@ -278,7 +278,7 @@ namespace Twns.BaseWar {
             Twns.Notify.dispatch(NotifyType.BwCoEnergyChanged);
         }
         public getCoCurrentEnergy(): number {
-            return Helpers.getExisted(this._coCurrentEnergy);
+            return Twns.Helpers.getExisted(this._coCurrentEnergy);
         }
         public getCoMaxEnergy(): number {
             return this._getRevisedEnergy(WarHelpers.WarCommonHelpers.getCoMaxEnergy(this._getCoBasicCfg()));
@@ -307,31 +307,31 @@ namespace Twns.BaseWar {
         }
         private _getRevisedEnergy(energy: number): number {
             const energyType = this.getCoEnergyType();
-            if (energyType === Types.CoEnergyType.Dor) {
+            if (energyType === Twns.Types.CoEnergyType.Dor) {
                 return energy;
-            } else if (energyType === Types.CoEnergyType.Trilogy) {
-                const cfg = Helpers.getExisted(this.getGlobalCoEnergyParameters(), ClientErrorCode.BwPlayer_GetRevisedEnergy_00);
+            } else if (energyType === Twns.Types.CoEnergyType.Trilogy) {
+                const cfg = Twns.Helpers.getExisted(this.getGlobalCoEnergyParameters(), ClientErrorCode.BwPlayer_GetRevisedEnergy_00);
                 return Math.floor(energy * (Math.min(cfg[1], this.getCoPowerActivatedCount()) * cfg[0] + 100) / 100);
             } else {
-                throw Helpers.newError(`Invalid energyType: ${energyType}`, ClientErrorCode.BwPlayer_GetRevisedEnergy_01);
+                throw Twns.Helpers.newError(`Invalid energyType: ${energyType}`, ClientErrorCode.BwPlayer_GetRevisedEnergy_01);
             }
         }
 
-        public getGlobalCoEnergyParameters(): Types.Undefinable<number[]> {
+        public getGlobalCoEnergyParameters(): Twns.Types.Undefinable<number[]> {
             return this._getCoBasicCfg().globalCoEnergyParameters;
         }
-        public getCoEnergyType(): Types.CoEnergyType {
-            return Helpers.getExisted(this._getCoBasicCfg().energyType, ClientErrorCode.BwPlayer_GetCoEnergyType_00);
+        public getCoEnergyType(): Twns.Types.CoEnergyType {
+            return Twns.Helpers.getExisted(this._getCoBasicCfg().energyType, ClientErrorCode.BwPlayer_GetCoEnergyType_00);
         }
         public getCoPowerActivatedCount(): number {
-            return Helpers.getExisted(this._coPowerActivatedCount, ClientErrorCode.BwPlayer_GetCoPowerActivatedCount_00);
+            return Twns.Helpers.getExisted(this._coPowerActivatedCount, ClientErrorCode.BwPlayer_GetCoPowerActivatedCount_00);
         }
         private _setCoPowerActivatedCount(count: number): void {
             this._coPowerActivatedCount = count;
         }
 
         public getHasTakenManualAction(): boolean {
-            return Helpers.getExisted(this._hasTakenManualAction);
+            return Twns.Helpers.getExisted(this._hasTakenManualAction);
         }
         public setHasTakenManualAction(hasTaken: boolean): void {
             this._hasTakenManualAction = hasTaken;
@@ -340,7 +340,7 @@ namespace Twns.BaseWar {
         public getCoZoneRadius(): number {
             const cfg       = this._getCoBasicCfg();
             const energy    = this.getCoCurrentEnergy();
-            let radius      = Helpers.getExisted(cfg.zoneRadius);
+            let radius      = Twns.Helpers.getExisted(cfg.zoneRadius);
             for (const e of cfg.zoneExpansionEnergyList || []) {
                 if (energy >= e) {
                     ++radius;
@@ -357,10 +357,10 @@ namespace Twns.BaseWar {
             return GridIndexHelpers.getMinDistance(targetGridIndex, coGridIndexOnMap) <= this.getCoZoneRadius();
         }
 
-        public getCoUsingSkillType(): Types.CoSkillType {
-            return Helpers.getExisted(this._coUsingSkillType);
+        public getCoUsingSkillType(): Twns.Types.CoSkillType {
+            return Twns.Helpers.getExisted(this._coUsingSkillType);
         }
-        public setCoUsingSkillType(skillType: Types.CoSkillType): void {
+        public setCoUsingSkillType(skillType: Twns.Types.CoSkillType): void {
             if (this._coUsingSkillType !== skillType) {
                 this._coUsingSkillType = skillType;
                 Twns.Notify.dispatch(NotifyType.BwCoUsingSkillTypeChanged);
@@ -369,18 +369,18 @@ namespace Twns.BaseWar {
         public getCoCurrentSkills(): number[] {
             return this.getCoSkills(this.getCoUsingSkillType());
         }
-        public getCoSkills(skillType: Types.CoSkillType): number[] {
+        public getCoSkills(skillType: Twns.Types.CoSkillType): number[] {
             const cfg = this._getCoBasicCfg();
             switch (skillType) {
-                case Types.CoSkillType.Passive      : return cfg.passiveSkills || [];
-                case Types.CoSkillType.Power        : return cfg.powerSkills || [];
-                case Types.CoSkillType.SuperPower   : return cfg.superPowerSkills || [];
-                default                             : throw Helpers.newError(`Invalid skillType: ${skillType}`);
+                case Twns.Types.CoSkillType.Passive      : return cfg.passiveSkills || [];
+                case Twns.Types.CoSkillType.Power        : return cfg.powerSkills || [];
+                case Twns.Types.CoSkillType.SuperPower   : return cfg.superPowerSkills || [];
+                default                             : throw Twns.Helpers.newError(`Invalid skillType: ${skillType}`);
             }
         }
         public checkCoIsUsingActiveSkill(): boolean {
             const t = this.getCoUsingSkillType();
-            return (t === Types.CoSkillType.Power) || (t === Types.CoSkillType.SuperPower);
+            return (t === Twns.Types.CoSkillType.Power) || (t === Twns.Types.CoSkillType.SuperPower);
         }
         public checkHasZoneSkillForCurrentSkills(): boolean {
             const currentSkills = this.getCoCurrentSkills();
@@ -396,7 +396,7 @@ namespace Twns.BaseWar {
                 return false;
             }
         }
-        public checkCanUseCoSkill(skillType: Types.CoSkillType): boolean {
+        public checkCanUseCoSkill(skillType: Twns.Types.CoSkillType): boolean {
             if (this.getCoType() !== CoType.Global) {
                 return false;
             }
@@ -408,11 +408,11 @@ namespace Twns.BaseWar {
             }
 
             const energy = this.getCoCurrentEnergy();
-            if (skillType === Types.CoSkillType.Power) {
+            if (skillType === Twns.Types.CoSkillType.Power) {
                 const powerEnergy = this.getCoPowerEnergy();
                 return (powerEnergy != null) && (energy >= powerEnergy);
 
-            } else if (skillType === Types.CoSkillType.SuperPower) {
+            } else if (skillType === Twns.Types.CoSkillType.SuperPower) {
                 const superPowerEnergy = this.getCoSuperPowerEnergy();
                 return (superPowerEnergy != null) && (energy >= superPowerEnergy);
 
@@ -425,18 +425,18 @@ namespace Twns.BaseWar {
                 || (!this.checkCoIsUsingActiveSkill());
         }
 
-        public updateOnUseCoSkill(skillType: Types.CoSkillType): void {
+        public updateOnUseCoSkill(skillType: Twns.Types.CoSkillType): void {
             const currentEnergy = this.getCoCurrentEnergy();
-            if (skillType === Types.CoSkillType.Power) {
-                const powerEnergy = Helpers.getExisted(this.getCoPowerEnergy(), ClientErrorCode.BwPlayer_UpdateOnUseCoSkill_00);
+            if (skillType === Twns.Types.CoSkillType.Power) {
+                const powerEnergy = Twns.Helpers.getExisted(this.getCoPowerEnergy(), ClientErrorCode.BwPlayer_UpdateOnUseCoSkill_00);
                 this.setCoCurrentEnergy(currentEnergy - powerEnergy);
 
-            } else if (skillType === Types.CoSkillType.SuperPower) {
-                const superPowerEnergy = Helpers.getExisted(this.getCoSuperPowerEnergy(), ClientErrorCode.BwPlayer_UpdateOnUseCoSkill_01);
+            } else if (skillType === Twns.Types.CoSkillType.SuperPower) {
+                const superPowerEnergy = Twns.Helpers.getExisted(this.getCoSuperPowerEnergy(), ClientErrorCode.BwPlayer_UpdateOnUseCoSkill_01);
                 this.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
 
             } else {
-                throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwPlayer_UpdateOnUseCoSkill_02);
+                throw Twns.Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwPlayer_UpdateOnUseCoSkill_02);
             }
 
             this._setCoPowerActivatedCount(this.getCoPowerActivatedCount() + 1);
@@ -444,14 +444,14 @@ namespace Twns.BaseWar {
         }
 
         public getCoIsDestroyedInTurn(): boolean {
-            return Helpers.getExisted(this._coIsDestroyedInTurn);
+            return Twns.Helpers.getExisted(this._coIsDestroyedInTurn);
         }
         public setCoIsDestroyedInTurn(isDestroyed: boolean): void {
             this._coIsDestroyedInTurn = isDestroyed;
         }
 
         public getCoMaxLoadCount(): number {
-            return Helpers.getExisted(this._getCoBasicCfg().maxLoadCount);
+            return Twns.Helpers.getExisted(this._getCoBasicCfg().maxLoadCount);
         }
         public getCoType(): CoType {
             const maxLoadCount = this.getCoMaxLoadCount();
@@ -462,14 +462,14 @@ namespace Twns.BaseWar {
             }
         }
 
-        public getUnitCostModifier(gridIndex: GridIndex, hasLoadedCo: boolean, unitType: Types.UnitType): number {
+        public getUnitCostModifier(gridIndex: GridIndex, hasLoadedCo: boolean, unitType: Twns.Types.UnitType): number {
             if (this.getCoId() === CommonConstants.CoEmptyId) {
                 return 1;
             }
 
             const coZoneRadius              = this.getCoZoneRadius();
             const gameConfig                = this._getWar().getGameConfig();
-            const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => this.getCoGridIndexListOnMap());
+            const getCoGridIndexArrayOnMap  = Twns.Helpers.createLazyFunc(() => this.getCoGridIndexListOnMap());
             let modifier                    = 1;
             for (const skillId of this.getCoCurrentSkills() || []) {
                 const cfg = gameConfig.getCoSkillCfg(skillId)?.selfUnitCost;
@@ -490,7 +490,7 @@ namespace Twns.BaseWar {
         }
 
         private _getCoBasicCfg(): CommonProto.Config.ICoBasicCfg {
-            return Helpers.getExisted(this._getWar().getGameConfig().getCoBasicCfg(this.getCoId()));
+            return Twns.Helpers.getExisted(this._getWar().getGameConfig().getCoBasicCfg(this.getCoId()));
         }
     }
 }

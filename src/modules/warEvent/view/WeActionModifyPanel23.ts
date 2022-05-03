@@ -16,7 +16,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
     import NotifyType               = Twns.Notify.NotifyType;
-    import PlayerAliveState         = Types.PlayerAliveState;
+    import PlayerAliveState         = Twns.Types.PlayerAliveState;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -75,7 +75,7 @@ namespace Twns.WarEvent {
         private _onTouchedBtnSwitchPlayerIndex(): void {
             const openData  = this._getOpenData();
             const action    = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerIndexPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChoosePlayerIndexPanel, {
                 currentPlayerIndexArray : action.playerIndexArray ?? [],
                 maxPlayerIndex          : openData.war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : playerIndexArray => {
@@ -101,7 +101,7 @@ namespace Twns.WarEvent {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -136,15 +136,15 @@ namespace Twns.WarEvent {
         }
 
         private _updateLabelPlayerState(): void {
-            this._labelPlayerState.text = Lang.getPlayerAliveStateName(Helpers.getExisted(this._getAction().playerAliveState)) || CommonConstants.ErrorTextForUndefined;
+            this._labelPlayerState.text = Lang.getPlayerAliveStateName(Twns.Helpers.getExisted(this._getAction().playerAliveState)) || CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelTips(): void {
-            this._labelTips.text = getTipsForPlayerAliveState(Helpers.getExisted(this._getAction().playerAliveState)) || CommonConstants.ErrorTextForUndefined;
+            this._labelTips.text = getTipsForPlayerAliveState(Twns.Helpers.getExisted(this._getAction().playerAliveState)) || CommonConstants.ErrorTextForUndefined;
         }
 
         private _getAction(): CommonProto.WarEvent.IWeaSetPlayerAliveState {
-            return Helpers.getExisted(this._getOpenData().action.WeaSetPlayerAliveState);
+            return Twns.Helpers.getExisted(this._getOpenData().action.WeaSetPlayerAliveState);
         }
     }
 
@@ -153,7 +153,7 @@ namespace Twns.WarEvent {
             case PlayerAliveState.Alive : return Lang.getText(LangTextType.A0214);
             case PlayerAliveState.Dying : return Lang.getText(LangTextType.A0215);
             case PlayerAliveState.Dead  : return Lang.getText(LangTextType.A0216);
-            default                     : throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`, ClientErrorCode.WeActionModifyPanel2_GetTipsForPlayerAliveState_00);
+            default                     : throw Twns.Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`, ClientErrorCode.WeActionModifyPanel2_GetTipsForPlayerAliveState_00);
         }
     }
 }

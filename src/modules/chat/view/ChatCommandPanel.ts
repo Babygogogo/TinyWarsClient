@@ -80,19 +80,19 @@ namespace Twns.Chat {
             this._updateComponentsForLanguage();
         }
         private _onTouchedBtnUserInfo(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, {
                 userId  : this._getOpenData().userId,
             });
             this.close();
         }
         private _onTouchedBtnPrivateChat(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChatPanel, {
                 toUserId    : this._getOpenData().userId,
             });
             this.close();
         }
         private _onTouchedBtnDeleteMessage(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0286),
                 callback: () => {
                     Twns.Chat.ChatProxy.reqChatDeleteMessage(this._getOpenData().messageId);
@@ -102,32 +102,32 @@ namespace Twns.Chat {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {

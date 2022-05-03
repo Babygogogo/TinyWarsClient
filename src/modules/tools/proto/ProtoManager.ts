@@ -41,10 +41,10 @@ namespace ProtoManager {
     }
 
     export function encodeAsMessageContainer(action: IMessageContainer): Uint8Array {
-        if (Helpers.getMessageName(action) != null) {
+        if (Twns.Helpers.getMessageName(action) != null) {
             return MessageContainerClass.encode(action).finish();
         } else {
-            throw Helpers.newError(`ProtoManager.encodeAsMessageContainer() invalid message! ${JSON.stringify(action)}`, ClientErrorCode.ProtoManager_EncodeAsMessageContainer_00);
+            throw Twns.Helpers.newError(`ProtoManager.encodeAsMessageContainer() invalid message! ${JSON.stringify(action)}`, ClientErrorCode.ProtoManager_EncodeAsMessageContainer_00);
         }
     }
     export function decodeAsMessageContainer(data: Uint8Array | ArrayBuffer): IMessageContainer {

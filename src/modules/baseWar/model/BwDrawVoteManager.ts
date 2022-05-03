@@ -16,13 +16,13 @@ namespace Twns.BaseWar {
         private _remainingVotes?    : number | null;
         private _war?               : BwWar;
 
-        public init(playerManagerData: Types.Undefinable<ISerialPlayerManager>, remainingVotes: Types.Undefinable<number>): void {
+        public init(playerManagerData: Twns.Types.Undefinable<ISerialPlayerManager>, remainingVotes: Twns.Types.Undefinable<number>): void {
             if (remainingVotes == null) {
                 this.setRemainingVotes(null);
             } else {
                 const maxVotes = playerManagerData?.players?.length ?? 0;
                 if (remainingVotes >= maxVotes) {
-                    throw Helpers.newError(`remainingVotes >= maxVotes.`, ClientErrorCode.BwDrawVoteManager_Init_00);
+                    throw Twns.Helpers.newError(`remainingVotes >= maxVotes.`, ClientErrorCode.BwDrawVoteManager_Init_00);
                 }
                 this.setRemainingVotes(remainingVotes);
             }
@@ -36,7 +36,7 @@ namespace Twns.BaseWar {
             this._remainingVotes = votes;
         }
         public getRemainingVotes(): number | null {
-            return Helpers.getDefined(this._remainingVotes, ClientErrorCode.BwDrawVoteManager_GetRemainingVotes_00);
+            return Twns.Helpers.getDefined(this._remainingVotes, ClientErrorCode.BwDrawVoteManager_GetRemainingVotes_00);
         }
 
         public getMaxVotes(): number {
@@ -51,7 +51,7 @@ namespace Twns.BaseWar {
             this._war = war;
         }
         private _getWar(): BwWar {
-            return Helpers.getExisted(this._war);
+            return Twns.Helpers.getExisted(this._war);
         }
     }
 }

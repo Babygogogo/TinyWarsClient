@@ -19,7 +19,7 @@ namespace Twns.SingleFreeWar {
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
-            this._setSettingsForSfw(Helpers.getExisted(data.settingsForSfw, ClientErrorCode.SfwWar_Init_00));
+            this._setSettingsForSfw(Twns.Helpers.getExisted(data.settingsForSfw, ClientErrorCode.SfwWar_Init_00));
 
             this._initView();
         }
@@ -62,14 +62,14 @@ namespace Twns.SingleFreeWar {
         }
 
         public getSettingsBootTimerParams(): number[] {
-            return [Types.BootTimerType.NoBoot];
+            return [Twns.Types.BootTimerType.NoBoot];
         }
 
         private _setSettingsForSfw(settings: ISettingsForSfw): void {
             this._settingsForSfw = settings;
         }
         private _getSettingsForSfw(): ISettingsForSfw {
-            return Helpers.getExisted(this._settingsForSfw);
+            return Twns.Helpers.getExisted(this._settingsForSfw);
         }
     }
 }

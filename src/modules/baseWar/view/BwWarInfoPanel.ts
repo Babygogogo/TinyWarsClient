@@ -104,7 +104,7 @@ namespace Twns.BaseWar {
 
             const playerRuleTypeArray   = getInfoTypeArray();
             const war                   = this._getOpenData().war;
-            this._labelTurn.text        = Helpers.getNumText(war.getTurnManager().getTurnIndex());
+            this._labelTurn.text        = Twns.Helpers.getNumText(war.getTurnManager().getTurnIndex());
             this._labelTurnsLimit.text  = `/${war.getCommonSettingManager().getTurnsLimit()}`;
             this._initListSetting(playerRuleTypeArray);
             this._updateListPlayer(playerRuleTypeArray);
@@ -131,9 +131,9 @@ namespace Twns.BaseWar {
                 labelMapName.text       = ``;
                 labelMapDesigner.text   = ``;
             } else {
-                const briefInfo         = Helpers.getExisted(await WarMap.WarMapModel.getBriefData(mapId), ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_00);
-                labelMapName.text       = Helpers.getExisted(Lang.getLanguageText({ textArray: briefInfo.mapNameArray }), ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_01);
-                labelMapDesigner.text   = `${Lang.getText(LangTextType.B0251)}: ${Helpers.getExisted(briefInfo.designerName, ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_02)}`;
+                const briefInfo         = Twns.Helpers.getExisted(await WarMap.WarMapModel.getBriefData(mapId), ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_00);
+                labelMapName.text       = Twns.Helpers.getExisted(Lang.getLanguageText({ textArray: briefInfo.mapNameArray }), ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_01);
+                labelMapDesigner.text   = `${Lang.getText(LangTextType.B0251)}: ${Twns.Helpers.getExisted(briefInfo.designerName, ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_02)}`;
             }
         }
 
@@ -152,13 +152,13 @@ namespace Twns.BaseWar {
 
         private _updateListPlayer(infoTypeArray: InfoType[]): void {
             const war               = this._getOpenData().war;
-            const playerRuleArray   = Helpers.getExisted(war.getInstanceWarRule().ruleForPlayers?.playerRuleDataArray, ClientErrorCode.BwWarInfoPanel_UpdateListPlayer_00);
+            const playerRuleArray   = Twns.Helpers.getExisted(war.getInstanceWarRule().ruleForPlayers?.playerRuleDataArray, ClientErrorCode.BwWarInfoPanel_UpdateListPlayer_00);
             const dataArray         : DataForPlayerRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playerRuleArray.length; ++playerIndex) {
                 dataArray.push({
                     war,
                     playerIndex,
-                    playerRule      : Helpers.getExisted(playerRuleArray.find(v => v.playerIndex === playerIndex), ClientErrorCode.BwWarInfoPanel_UpdateListPlayer_01),
+                    playerRule      : Twns.Helpers.getExisted(playerRuleArray.find(v => v.playerIndex === playerIndex), ClientErrorCode.BwWarInfoPanel_UpdateListPlayer_01),
                     infoTypeArray,
                 });
             }
@@ -166,32 +166,32 @@ namespace Twns.BaseWar {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -214,7 +214,7 @@ namespace Twns.BaseWar {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
         }
 
         protected _onDataChanged(): void {
@@ -255,7 +255,7 @@ namespace Twns.BaseWar {
 
         protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
         }
 
         protected _onDataChanged(): void {
@@ -277,7 +277,7 @@ namespace Twns.BaseWar {
             const war                   = data.war;
             const player                = war.getPlayer(playerIndex);
             this._imgSkin.source        = WarHelpers.WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
-            this._imgCo.source          = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
+            this._imgCo.source          = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Twns.Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
             this._labelPlayerName.text  = `P${playerIndex}`;
         }
 
@@ -319,7 +319,7 @@ namespace Twns.BaseWar {
             this._setNotifyListenerArray([
                 { type: NotifyType.TimeTick,    callback: this._onNotifyTimeTick },
             ]);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
         }
 
         protected _onDataChanged(): void {
@@ -357,7 +357,7 @@ namespace Twns.BaseWar {
             } else if (infoType === InfoType.LuckUpperLimit) {
                 this._modifyAsLuckUpperLimit();
             } else {
-                throw Helpers.newError(`Invalid infoType: ${infoType}`, ClientErrorCode.BwWarInfoPanel_InfoRenderer_OnTouchedBtnModify_00);
+                throw Twns.Helpers.newError(`Invalid infoType: ${infoType}`, ClientErrorCode.BwWarInfoPanel_InfoRenderer_OnTouchedBtnModify_00);
             }
         }
         private _onNotifyTimeTick(): void {
@@ -369,7 +369,7 @@ namespace Twns.BaseWar {
             const { playerIndex, war }  = this._getData();
             const player                = war.getPlayer(playerIndex);
             const isHuman               = player.getUserId() != null;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : isHuman ? Lang.getText(LangTextType.A0110) : Lang.getText(LangTextType.A0111),
                 callback: () => {
                     if (!isHuman) {
@@ -384,7 +384,7 @@ namespace Twns.BaseWar {
         }
         private _modifyAsTeamIndex(): void {
             const { playerIndex, war } = this._getData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getFormattedText(LangTextType.F0072, playerIndex),
                 callback: () => {
                     const playersCountUnneutral = war.getPlayerManager().getTotalPlayersCount(false);
@@ -399,7 +399,7 @@ namespace Twns.BaseWar {
             const player                                = war.getPlayer(playerIndex);
             const gameConfig                            = war.getGameConfig();
             const currentCoId                           = player.getCoId();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
                 gameConfig,
                 currentCoId,
                 availableCoIdArray  : gameConfig.getEnabledCoArray().map(v => v.coId),
@@ -420,7 +420,7 @@ namespace Twns.BaseWar {
             const minValue              = 0;
             const maxValue              = player.getCoMaxEnergy();
             const currValue             = player.getCoCurrentEnergy();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : `P${playerIndex} ${Lang.getText(LangTextType.B0159)}`,
                 currentValue    : currValue,
                 minValue,
@@ -438,7 +438,7 @@ namespace Twns.BaseWar {
             const currValue             = player.getFund();
             const maxValue              = CommonConstants.WarRuleInitialFundMaxLimit;
             const minValue              = CommonConstants.WarRuleInitialFundMinLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : `P${player.getPlayerIndex()} ${Lang.getText(LangTextType.B0032)}`,
                 currentValue    : currValue,
                 minValue,
@@ -455,7 +455,7 @@ namespace Twns.BaseWar {
             const currValue             = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
             const maxValue              = CommonConstants.WarRuleInitialFundMaxLimit;
             const minValue              = CommonConstants.WarRuleInitialFundMinLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0178),
                 currentValue    : currValue,
                 minValue,
@@ -472,7 +472,7 @@ namespace Twns.BaseWar {
             const currValue             = war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex);
             const maxValue              = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
             const minValue              = CommonConstants.WarRuleIncomeMultiplierMinLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0179),
                 currentValue    : currValue,
                 minValue,
@@ -489,7 +489,7 @@ namespace Twns.BaseWar {
             const currValue             = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
             const minValue              = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
             const maxValue              = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0180),
                 currentValue    : currValue,
                 minValue,
@@ -506,7 +506,7 @@ namespace Twns.BaseWar {
             const currValue             = war.getCommonSettingManager().getSettingsEnergyGrowthMultiplier(playerIndex);
             const minValue              = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
             const maxValue              = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0181),
                 currentValue    : currValue,
                 minValue,
@@ -523,7 +523,7 @@ namespace Twns.BaseWar {
             const currValue             = war.getCommonSettingManager().getSettingsMoveRangeModifier(playerIndex);
             const minValue              = CommonConstants.WarRuleMoveRangeModifierMinLimit;
             const maxValue              = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0182),
                 currentValue    : currValue,
                 minValue,
@@ -540,7 +540,7 @@ namespace Twns.BaseWar {
             const currValue             = war.getCommonSettingManager().getSettingsAttackPowerModifier(playerIndex);
             const minValue              = CommonConstants.WarRuleOffenseBonusMinLimit;
             const maxValue              = CommonConstants.WarRuleOffenseBonusMaxLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0183),
                 currentValue    : currValue,
                 minValue,
@@ -557,7 +557,7 @@ namespace Twns.BaseWar {
             const currValue             = war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex);
             const minValue              = CommonConstants.WarRuleVisionRangeModifierMinLimit;
             const maxValue              = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0184),
                 currentValue    : currValue,
                 minValue,
@@ -574,7 +574,7 @@ namespace Twns.BaseWar {
             const currValue                             = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
             const minValue                              = CommonConstants.WarRuleLuckMinLimit;
             const maxValue                              = CommonConstants.WarRuleLuckMaxLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0189),
                 currentValue    : currValue,
                 minValue,
@@ -600,7 +600,7 @@ namespace Twns.BaseWar {
             const currValue                             = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
             const minValue                              = CommonConstants.WarRuleLuckMinLimit;
             const maxValue                              = CommonConstants.WarRuleLuckMaxLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0190),
                 currentValue    : currValue,
                 minValue,
@@ -659,7 +659,7 @@ namespace Twns.BaseWar {
             } else if (infoType === InfoType.LuckUpperLimit) {
                 this._updateViewAsLuckUpperLimit();
             } else {
-                throw Helpers.newError(`Invalid infoType: ${infoType}`, ClientErrorCode.BwWarInfoPanel_InfoRenderer_UpdateView_00);
+                throw Twns.Helpers.newError(`Invalid infoType: ${infoType}`, ClientErrorCode.BwWarInfoPanel_InfoRenderer_UpdateView_00);
             }
         }
         private async _updateViewAsPlayer(): Promise<void> {
@@ -669,7 +669,7 @@ namespace Twns.BaseWar {
             const labelValue        = this._labelValue;
             labelValue.text         = userId == null
                 ? Lang.getText(LangTextType.B0607)
-                : Helpers.getExisted(await Twns.User.UserModel.getUserNickname(userId), ClientErrorCode.BwWarInfoPanel_InfoRenderer_UpdateViewAsPlayer_00);
+                : Twns.Helpers.getExisted(await Twns.User.UserModel.getUserNickname(userId), ClientErrorCode.BwWarInfoPanel_InfoRenderer_UpdateViewAsPlayer_00);
             labelValue.textColor    = 0xFFFFFF;
 
             const canModify         = checkCanModifyPlayerInfo(war);
@@ -786,11 +786,11 @@ namespace Twns.BaseWar {
                 label.textColor = 0xffffff;
             } else {
                 const params            = war.getSettingsBootTimerParams();
-                const textForAddTime    = params[0] === Types.BootTimerType.Incremental
+                const textForAddTime    = params[0] === Twns.Types.BootTimerType.Incremental
                     ? `(+${params[2] * war.getUnitMap().getAllUnits().filter(v => v.getPlayerIndex() === playerIndex).length}s)`
                     : ``;
 
-                label.text      = `${Helpers.getTimeDurationText2(restTime)}${textForAddTime}`;
+                label.text      = `${Twns.Helpers.getTimeDurationText2(restTime)}${textForAddTime}`;
                 label.textColor = restTime >= 30 * 60
                     ? 0xFFFFFF
                     : (restTime >= 5 * 60 ? 0xFFFF00 : 0xFF4400);
@@ -964,10 +964,10 @@ namespace Twns.BaseWar {
     }
     function checkCanModifyPlayerInfo(war: BaseWar.BwWar): boolean {
         const warType = war.getWarType();
-        return (warType === Types.WarType.ScwFog)
-            || (warType === Types.WarType.ScwStd)
-            || (warType === Types.WarType.SfwFog)
-            || (warType === Types.WarType.SfwStd);
+        return (warType === Twns.Types.WarType.ScwFog)
+            || (warType === Twns.Types.WarType.ScwStd)
+            || (warType === Twns.Types.WarType.SfwFog)
+            || (warType === Twns.Types.WarType.SfwStd);
     }
 }
 

@@ -81,7 +81,7 @@ namespace Twns.Common {
         }
 
         private _onTouchedBtnHelp(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0143),
                 content : Lang.getText(LangTextType.R0004),
             });
@@ -140,39 +140,39 @@ namespace Twns.Common {
                     renderer.setIsSelected(true);
                     this._uiCoInfo.setCoData({
                         gameConfig   : this._getOpenData().war.getGameConfig(),
-                        coId            : Helpers.getExisted(renderer.getCoId()),
+                        coId            : Twns.Helpers.getExisted(renderer.getCoId()),
                     });
                 }
             }
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: -40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: -40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -229,7 +229,7 @@ namespace Twns.Common {
             const isSelected            = !!this._isSelected;
             this._imgSelected.visible   = isSelected;
             this._imgUnselected.visible = !isSelected;
-            this._labelName.text        = `${this._gameConfig?.getCoBasicCfg(Helpers.getExisted(this._coId))?.name || CommonConstants.ErrorTextForUndefined}(${this._energy})`;
+            this._labelName.text        = `${this._gameConfig?.getCoBasicCfg(Twns.Helpers.getExisted(this._coId))?.name || CommonConstants.ErrorTextForUndefined}(${this._energy})`;
         }
     }
 }

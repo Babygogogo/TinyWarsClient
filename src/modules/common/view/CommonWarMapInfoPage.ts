@@ -23,7 +23,7 @@ namespace Twns.Common {
         };
         warInfo?    : {
             warData     : CommonProto.WarSerialization.ISerialWar;
-            players     : Types.Undefinable<CommonProto.WarSerialization.ISerialPlayer[]>;
+            players     : Twns.Types.Undefinable<CommonProto.WarSerialization.ISerialPlayer[]>;
         };
     } | null;
     export class CommonWarMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForCommonMapInfoPage> {

@@ -10,9 +10,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import TileObjectType       = Types.TileObjectType;
-    import TileBaseType         = Types.TileBaseType;
-    import TileDecoratorType    = Types.TileDecoratorType;
+    import TileObjectType       = Twns.Types.TileObjectType;
+    import TileBaseType         = Twns.Types.TileBaseType;
+    import TileDecoratorType    = Twns.Types.TileDecoratorType;
     import ISerialTile          = CommonProto.WarSerialization.ISerialTile;
 
     const {
@@ -22,7 +22,7 @@ namespace Twns.BaseWar {
 
     export type DataForTileView = {
         tileData    : ISerialTile;
-        themeType   : Types.TileThemeType;
+        themeType   : Twns.Types.TileThemeType;
         hasFog      : boolean;
         skinId      : number;
     };
@@ -63,16 +63,16 @@ namespace Twns.BaseWar {
         }
 
         public updateView(): void {
-            const data      = Helpers.getExisted(this.getData());
+            const data      = Twns.Helpers.getExisted(this.getData());
             const skinId    = data.skinId;
             const hasFog    = data.hasFog;
             const tileData  = data.tileData;
             const themeType = data.themeType;
             const version   = Twns.User.UserModel.getSelfSettingsTextureVersion();
-            const tickCount = Timer.getTileAnimationTickCount();
+            const tickCount = Twns.Timer.getTileAnimationTickCount();
 
             {
-                const objectType    = Helpers.getExisted(tileData.objectType);
+                const objectType    = Twns.Helpers.getExisted(tileData.objectType);
                 const imgObject     = this.getImgObject();
                 imgObject.visible   = true;
                 imgObject.source    = Twns.Common.CommonModel.getCachedTileObjectImageSource({
@@ -90,7 +90,7 @@ namespace Twns.BaseWar {
                 const baseType  = tileData.baseType;
                 const imgBase   = this.getImgBase();
                 if (baseType == null) {
-                    throw Helpers.newError(`BwTileView.updateView() empty baseType.`);
+                    throw Twns.Helpers.newError(`BwTileView.updateView() empty baseType.`);
                 } else if (baseType === TileBaseType.Empty) {
                     imgBase.visible = false;
                 } else {

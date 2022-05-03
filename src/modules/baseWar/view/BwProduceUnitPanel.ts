@@ -28,8 +28,8 @@
 namespace Twns.BaseWar {
     import NotifyType           = Twns.Notify.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import UnitType             = Types.UnitType;
-    import GridIndex            = Types.GridIndex;
+    import UnitType             = Twns.Types.UnitType;
+    import GridIndex            = Twns.Types.GridIndex;
     import BwWar                = BaseWar.BwWar;
 
     export type OpenDataForBwProduceUnitPanel = {
@@ -58,7 +58,7 @@ namespace Twns.BaseWar {
             });
 
             this._listUnit.setItemRenderer(UnitRenderer);
-            this._btnCancel.setShortSfxCode(Types.ShortSfxCode.None);
+            this._btnCancel.setShortSfxCode(Twns.Types.ShortSfxCode.None);
 
             Twns.Notify.dispatch(NotifyType.BwProduceUnitPanelOpened);
         }
@@ -86,7 +86,7 @@ namespace Twns.BaseWar {
         private _onTouchedBtnDetail(): void {
             const data = this._listUnit.getSelectedData();
             if (data) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitDetailPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwUnitDetailPanel, {
                     unit        : data.unit,
                     canDelete   : false,
                 });
@@ -119,7 +119,7 @@ namespace Twns.BaseWar {
             const gameConfig     = war.getGameConfig();
             const actionPlanner     = war.getActionPlanner();
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex) ?? null;
-            const unitCategory      = Helpers.getExisted(skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory());
+            const unitCategory      = Twns.Helpers.getExisted(skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory());
             const minNormalizedHp   = skillCfg ? WarHelpers.WarCommonHelpers.getNormalizedHp(skillCfg[3]) : WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
             for (const unitType of gameConfig.getUnitTypesByCategory(unitCategory) ?? []) {
@@ -133,7 +133,7 @@ namespace Twns.BaseWar {
                 unit.startRunning(war);
 
                 const costModifier  = player.getUnitCostModifier(gridIndex, false, unitType);
-                const cfgCost       = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost);
+                const cfgCost       = Twns.Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost);
                 dataList.push({
                     unitType,
                     currentFund,
@@ -153,33 +153,33 @@ namespace Twns.BaseWar {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
 
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -223,7 +223,7 @@ namespace Twns.BaseWar {
             ]);
 
             this._imgBg.touchEnabled = true;
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
             this._conUnitView.addChild(this._unitView);
         }
 
@@ -248,32 +248,32 @@ namespace Twns.BaseWar {
         }
 
         private _onTouchedImgBg(): void {
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onTouchedGroupProduce(): void {
             const data = this._getData();
             if (data.currentFund < data.minCost) {
                 FloatText.show(Lang.getText(LangTextType.B0053));
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonForbidden01);
                 return;
             }
 
-            if (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.BwProduceUnitPanel)) {
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
+            if (!Twns.PanelHelpers.getRunningPanel(Twns.PanelHelpers.PanelDict.BwProduceUnitPanel)) {
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonForbidden01);
                 return;
             }
 
             const actionPlanner = data.actionPlanner;
             if (actionPlanner.checkIsStateRequesting()) {
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonForbidden01);
                 return;
             }
 
             const skillCfg  = data.unitProductionSkillCfg;
             const unitType  = data.unitType;
             const gridIndex = data.gridIndex;
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonConfirm01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonConfirm01);
             if (!skillCfg) {
                 actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, CommonConstants.UnitMaxHp);
             } else {
@@ -288,7 +288,7 @@ namespace Twns.BaseWar {
                         rawMaxHp,
                         Math.floor(data.currentFund * CommonConstants.UnitMaxHp / (data.cfgCost * data.costModifier * skillCfg[5] / 100) / normalizer) * normalizer
                     );
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                         title           : `${Lang.getUnitName(unitType)} HP`,
                         currentValue    : maxHp,
                         maxValue        : maxHp,

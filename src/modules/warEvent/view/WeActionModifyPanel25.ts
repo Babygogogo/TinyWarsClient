@@ -77,7 +77,7 @@ namespace Twns.WarEvent {
         private _onTouchedBtnSwitchPlayerIndex(): void {
             const openData  = this._getOpenData();
             const action    = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerIndexPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChoosePlayerIndexPanel, {
                 currentPlayerIndexArray : action.playerIndexArray ?? [],
                 maxPlayerIndex          : openData.war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : playerIndexArray => {
@@ -89,7 +89,7 @@ namespace Twns.WarEvent {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -175,7 +175,7 @@ namespace Twns.WarEvent {
         }
 
         private _getAction(): CommonProto.WarEvent.IWeaSetPlayerCoEnergy {
-            return Helpers.getExisted(this._getOpenData().action.WeaSetPlayerCoEnergy);
+            return Twns.Helpers.getExisted(this._getOpenData().action.WeaSetPlayerCoEnergy);
         }
     }
 }

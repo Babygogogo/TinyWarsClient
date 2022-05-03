@@ -92,7 +92,7 @@ namespace Twns.SinglePlayerWar {
             return `${Lang.getText(LangTextType.B0451)}`;
         }
         public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | null> {
-            const playerIndex = Helpers.getExisted(action.targetPlayerIndex);
+            const playerIndex = Twns.Helpers.getExisted(action.targetPlayerIndex);
             return `p${playerIndex} ${await this.getPlayer(playerIndex).getNickname()} ${Lang.getText(LangTextType.B0450)}`;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | null> {
@@ -178,14 +178,14 @@ namespace Twns.SinglePlayerWar {
             this._saveSlotIndex = slotIndex;
         }
         public getSaveSlotIndex(): number {
-            return Helpers.getExisted(this._saveSlotIndex);
+            return Twns.Helpers.getExisted(this._saveSlotIndex);
         }
 
         public setSaveSlotExtraData(extraData: ISpmWarSaveSlotExtraData): void {
             this._saveSlotExtraData = extraData;
         }
         public getSaveSlotExtraData(): ISpmWarSaveSlotExtraData {
-            return Helpers.getExisted(this._saveSlotExtraData);
+            return Twns.Helpers.getExisted(this._saveSlotExtraData);
         }
 
         public getHumanPlayerIndexes(): number[] {

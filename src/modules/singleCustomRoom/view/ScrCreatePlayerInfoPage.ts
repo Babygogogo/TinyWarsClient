@@ -61,7 +61,7 @@ namespace Twns.SingleCustomRoom {
             const mapRawData    = await Twns.SingleCustomRoom.ScrCreateModel.getMapRawData();
             const listPlayer    = this._listPlayer;
             if (mapRawData) {
-                listPlayer.bindData(this._createDataForListPlayer(Helpers.getExisted(mapRawData.playersCountUnneutral)));
+                listPlayer.bindData(this._createDataForListPlayer(Twns.Helpers.getExisted(mapRawData.playersCountUnneutral)));
             } else {
                 listPlayer.clear();
             }
@@ -119,7 +119,7 @@ namespace Twns.SingleCustomRoom {
             const playerData    = this._getPlayerData();
             const coId          = playerData ? playerData.coId : null;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoInfoPanel, {
                     gameConfig  : Twns.SingleCustomRoom.ScrCreateModel.getGameConfig(),
                     coId,
                 });
@@ -143,13 +143,13 @@ namespace Twns.SingleCustomRoom {
             const data          = this._getData();
             const playerIndex   = data.playerIndex;
             const currentCoId   = Twns.SingleCustomRoom.ScrCreateModel.getCoId(playerIndex);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
                 gameConfig          : data.gameConfig,
                 currentCoId,
                 availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                     baseWarRule         : Twns.SingleCustomRoom.ScrCreateModel.getInstanceWarRule(),
                     playerIndex,
-                    gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion)),
+                    gameConfig      : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomInfo.settingsForCommon?.configVersion)),
                 }),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
@@ -187,18 +187,18 @@ namespace Twns.SingleCustomRoom {
             }
 
             const playerIndex           = this._getData().playerIndex;
-            const settingsForCommon     = Helpers.getExisted(roomInfo.settingsForCommon);
+            const settingsForCommon     = Twns.Helpers.getExisted(roomInfo.settingsForCommon);
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(Twns.Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
 
             const playerData            = this._getPlayerData();
-            this._imgSkin.source        = WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(Helpers.getExisted(playerData.unitAndTileSkinId));
+            this._imgSkin.source        = WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(Twns.Helpers.getExisted(playerData.unitAndTileSkinId));
             this._labelPlayerType.text  = playerData.userId == null
                 ? Lang.getText(LangTextType.B0607)
                 : Lang.getText(LangTextType.B0031);
 
-            const coId                  = Helpers.getExisted(playerData.coId);
-            const gameConfig            = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+            const coId                  = Twns.Helpers.getExisted(playerData.coId);
+            const gameConfig            = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion));
             const coCfg                 = gameConfig.getCoBasicCfg(coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;

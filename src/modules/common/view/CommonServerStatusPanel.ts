@@ -58,7 +58,7 @@ namespace Twns.Common {
             this._labelAccounts.text        = "" + data.totalAccounts;
 
             const totalOnlineTime           = data.totalOnlineTime;
-            this._labelOnlineTime.text      = totalOnlineTime == null ? CommonConstants.ErrorTextForUndefined : Helpers.getTimeDurationText(totalOnlineTime);
+            this._labelOnlineTime.text      = totalOnlineTime == null ? CommonConstants.ErrorTextForUndefined : Twns.Helpers.getTimeDurationText(totalOnlineTime);
 
             const activeAccounts            = data.activeAccounts;
             this._labelActiveAccounts.text  = activeAccounts == null ? CommonConstants.ErrorTextForUndefined : activeAccounts.join(" / ");
@@ -76,32 +76,32 @@ namespace Twns.Common {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

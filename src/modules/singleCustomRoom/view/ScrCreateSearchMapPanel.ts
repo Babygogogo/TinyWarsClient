@@ -55,12 +55,12 @@ namespace Twns.SingleCustomRoom {
         }
 
         private _onTouchedBtnReset(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ScrCreateMapListPanel, {});
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ScrCreateMapListPanel, {});
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ScrCreateMapListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ScrCreateMapListPanel, {
                 mapName     : this._inputMapName.text || null,
                 mapDesigner : this._inputDesigner.text || null,
                 playersCount: Number(this._inputPlayersCount.text) || null,

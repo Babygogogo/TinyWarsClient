@@ -14,7 +14,7 @@
 namespace Twns.Common {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = Twns.Notify.NotifyType;
-    import CoSkillType = Types.CoSkillType;
+    import CoSkillType = Twns.Types.CoSkillType;
 
     const AVAILABLE_TYPES = [
         CoSkillType.Passive,
@@ -97,7 +97,7 @@ namespace Twns.Common {
             const aliveStateArray   = openData.currentSkillTypeArray;
             const list              = this._listLocation;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => aliveStateArray.indexOf(v.coSkillType) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => aliveStateArray.indexOf(v.coSkillType) >= 0 ? i : null)));
         }
     }
 

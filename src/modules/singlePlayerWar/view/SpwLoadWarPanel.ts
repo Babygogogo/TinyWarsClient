@@ -61,7 +61,7 @@ namespace Twns.SinglePlayerWar {
         }
 
         private _onTouchedBtnHelp(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0325),
                 content : Lang.getText(LangTextType.R0006),
             });
@@ -78,7 +78,7 @@ namespace Twns.SinglePlayerWar {
             this._updateComponentsForLanguage();
 
             this._srlSaveSlot.bindData(await this._createDataForList());
-            this._listSaveSlot.selectedIndex = Helpers.getExisted(Twns.SinglePlayerWar.SpwModel.getWar()).getSaveSlotIndex();
+            this._listSaveSlot.selectedIndex = Twns.Helpers.getExisted(Twns.SinglePlayerWar.SpwModel.getWar()).getSaveSlotIndex();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -102,7 +102,7 @@ namespace Twns.SinglePlayerWar {
 
     type DataForSlotRenderer = {
         slotIndex   : number;
-        slotInfo    : Types.SpmWarSaveSlotData | null;
+        slotInfo    : Twns.Types.SpmWarSaveSlotData | null;
     };
     class SlotRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSlotRenderer> {
         private readonly _group!            : eui.Group;
@@ -129,10 +129,10 @@ namespace Twns.SinglePlayerWar {
             const data      = this._getData();
             const slotInfo  = data.slotInfo;
             if (slotInfo) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0072),
                     callback: () => {
-                        FlowManager.gotoSinglePlayerWar({
+                        Twns.FlowManager.gotoSinglePlayerWar({
                             slotIndex       : slotInfo.slotIndex,
                             warData         : slotInfo.warData,
                             slotExtraData   : slotInfo.extraData,

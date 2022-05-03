@@ -96,7 +96,7 @@ namespace Twns.MapEditor {
         }
 
         private _onTouchTapBtnBack(): void {
-            FlowManager.gotoLobby();
+            Twns.FlowManager.gotoLobby();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -154,15 +154,15 @@ namespace Twns.MapEditor {
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
                 { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
-            this._btnChoose.setShortSfxCode(Types.ShortSfxCode.None);
+            this._btnChoose.setShortSfxCode(Twns.Types.ShortSfxCode.None);
         }
 
         protected _onDataChanged(): void {
             const data                  = this._getData();
             const mapData               = data.mapData;
             const mapRawData            = mapData.mapRawData;
-            const status                = Helpers.getExisted(mapData.reviewStatus);
-            this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            const status                = Twns.Helpers.getExisted(mapData.reviewStatus);
+            this.currentState           = data.index === data.panel.getSelectedIndex() ? Twns.Types.UiState.Down : Twns.Types.UiState.Up;
             this._labelStatus.text      = Lang.getMapReviewStatusText(status) ?? CommonConstants.ErrorTextForUndefined;
             this._labelStatus.textColor = getReviewStatusTextColor(status);
             this._labelName.text        = Lang.getLanguageText({ textArray: mapRawData ? mapRawData.mapNameArray : [] }) || `(${Lang.getText(LangTextType.B0277)})`;
@@ -178,34 +178,34 @@ namespace Twns.MapEditor {
             const mapData       = data.mapData;
             const reviewStatus  = mapData.reviewStatus;
 
-            if (reviewStatus === Types.MapReviewStatus.Rejected) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+            if (reviewStatus === Twns.Types.MapReviewStatus.Rejected) {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0305),
                     content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                     callback: () => {
-                        FlowManager.gotoMapEditorWar(Helpers.getExisted(mapData.mapRawData), Helpers.getExisted(mapData.slotIndex), false);
+                        Twns.FlowManager.gotoMapEditorWar(Twns.Helpers.getExisted(mapData.mapRawData), Twns.Helpers.getExisted(mapData.slotIndex), false);
                     },
                 });
-            } else if (reviewStatus === Types.MapReviewStatus.Accepted) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+            } else if (reviewStatus === Twns.Types.MapReviewStatus.Accepted) {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0326),
                     content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                     callback: () => {
-                        FlowManager.gotoMapEditorWar(Helpers.getExisted(mapData.mapRawData), Helpers.getExisted(mapData.slotIndex), false);
+                        Twns.FlowManager.gotoMapEditorWar(Twns.Helpers.getExisted(mapData.mapRawData), Twns.Helpers.getExisted(mapData.slotIndex), false);
                     },
                 });
             } else {
-                FlowManager.gotoMapEditorWar(mapData.mapRawData, Helpers.getExisted(mapData.slotIndex), false);
+                Twns.FlowManager.gotoMapEditorWar(mapData.mapRawData, Twns.Helpers.getExisted(mapData.slotIndex), false);
             }
         }
     }
 
-    function getReviewStatusTextColor(status: Types.MapReviewStatus): number {
+    function getReviewStatusTextColor(status: Twns.Types.MapReviewStatus): number {
         switch (status) {
-            case Types.MapReviewStatus.None     : return 0xffffff;
-            case Types.MapReviewStatus.Reviewing: return 0xffff00;
-            case Types.MapReviewStatus.Rejected : return 0xff0000;
-            case Types.MapReviewStatus.Accepted : return 0x00ff00;
+            case Twns.Types.MapReviewStatus.None     : return 0xffffff;
+            case Twns.Types.MapReviewStatus.Reviewing: return 0xffff00;
+            case Twns.Types.MapReviewStatus.Rejected : return 0xff0000;
+            case Twns.Types.MapReviewStatus.Accepted : return 0x00ff00;
             default                             : return 0xffffff;
         }
     }

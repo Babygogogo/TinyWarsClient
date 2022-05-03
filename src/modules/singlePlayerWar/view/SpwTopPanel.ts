@@ -114,7 +114,7 @@ namespace Twns.SinglePlayerWar {
         private _onNotifyBwPlayerIndexInTurnChanged(): void {
             const war = this._getOpenData().war;
             this._updateView();
-            SoundManager.playCoBgmWithWar(war, false);
+            Twns.SoundManager.playCoBgmWithWar(war, false);
         }
         private _onNotifyBwTurnIndexChanged(): void {
             this._updateLabelTurnIndex();
@@ -124,7 +124,7 @@ namespace Twns.SinglePlayerWar {
         }
         private _onNotifyBwCoUsingSkillChanged(): void {
             this._updateLabelEnergy();
-            SoundManager.playCoBgmWithWar(this._getOpenData().war, false);
+            Twns.SoundManager.playCoBgmWithWar(this._getOpenData().war, false);
         }
         private _onNotifyBwForceWeatherTypeChanged(): void {
             this._updateBtnWeather();
@@ -160,7 +160,7 @@ namespace Twns.SinglePlayerWar {
         // Callbacks for touch.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnWeather(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
                 title  : Lang.getText(LangTextType.B0705),
                 content: this._getOpenData().war.getWeatherManager().getDesc(),
             });
@@ -169,25 +169,25 @@ namespace Twns.SinglePlayerWar {
         private _onTouchedGroupPlayer(): void {
             const userId = this._getOpenData().war.getPlayerInTurn().getUserId();
             if (userId != null) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, { userId });
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
             }
         }
 
         private _onTouchedGroupCo(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoListPanel, {
                 war : this._getOpenData().war,
             });
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.SpwWarMenuPanel);
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.SpwWarMenuPanel);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onTouchedGroupInfo(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoListPanel, {
                 war : this._getOpenData().war,
             });
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.SpwWarMenuPanel);
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.SpwWarMenuPanel);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onTouchedBtnSave(): void {
@@ -197,19 +197,19 @@ namespace Twns.SinglePlayerWar {
             }
 
             const war = this._getOpenData().war;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0260),
                 content : Lang.getText(LangTextType.A0071),
                 callback: () => {
                     const warType = war.getWarType();
-                    if ((warType === Types.WarType.ScwFog) || (warType === Types.WarType.ScwStd)) {
+                    if ((warType === Twns.Types.WarType.ScwFog) || (warType === Twns.Types.WarType.ScwStd)) {
                         Twns.SinglePlayerMode.SpmProxy.reqSpmSaveScw(war);
-                    } else if ((warType === Types.WarType.SfwFog) || (warType === Types.WarType.SfwStd)) {
+                    } else if ((warType === Twns.Types.WarType.SfwFog) || (warType === Twns.Types.WarType.SfwStd)) {
                         Twns.SinglePlayerMode.SpmProxy.reqSpmSaveSfw(war);
-                    } else if ((warType === Types.WarType.SrwFog) || (warType === Types.WarType.SrwStd)) {
+                    } else if ((warType === Twns.Types.WarType.SrwFog) || (warType === Twns.Types.WarType.SrwStd)) {
                         Twns.SinglePlayerMode.SpmProxy.reqSpmSaveSrw(war);
                     } else {
-                        throw Helpers.newError(`Invalid warType: ${warType}`, ClientErrorCode.SpwWarMenuPanel_OnTOuchedBtnSaveGame_00);
+                        throw Twns.Helpers.newError(`Invalid warType: ${warType}`, ClientErrorCode.SpwWarMenuPanel_OnTOuchedBtnSaveGame_00);
                     }
                 },
             });
@@ -227,11 +227,11 @@ namespace Twns.SinglePlayerWar {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0261),
                 content : Lang.getText(LangTextType.A0072),
                 callback: () => {
-                    FlowManager.gotoSinglePlayerWar({
+                    Twns.FlowManager.gotoSinglePlayerWar({
                         slotIndex       : slotInfo.slotIndex,
                         warData         : slotInfo.warData,
                         slotExtraData   : slotInfo.extraData,
@@ -241,12 +241,12 @@ namespace Twns.SinglePlayerWar {
         }
 
         private _onTouchedBtnChat(): void {
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.SpwWarMenuPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {});
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.SpwWarMenuPanel);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChatPanel, {});
         }
 
         private _onTouchedBtnSettings(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSettingsPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserSettingsPanel, void 0);
         }
 
         private _onTouchedBtnExpand(): void {
@@ -314,7 +314,7 @@ namespace Twns.SinglePlayerWar {
             const war               = this._getOpenData().war;
             const player            = war.getPlayerInTurn();
             this._imgSkin.source    = WarHelpers.WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
-            this._imgCo.source      = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
+            this._imgCo.source      = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Twns.Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelEnergy(): void {
@@ -324,9 +324,9 @@ namespace Twns.SinglePlayerWar {
                 const skillType         = player.getCoUsingSkillType();
                 const labelCurrEnergy   = this._labelCurrEnergy;
                 const currentEnergy     = player.getCoCurrentEnergy();
-                if (skillType === Types.CoSkillType.Power) {
+                if (skillType === Twns.Types.CoSkillType.Power) {
                     labelCurrEnergy.text = `${currentEnergy}(P)`;
-                } else if (skillType === Types.CoSkillType.SuperPower) {
+                } else if (skillType === Twns.Types.CoSkillType.SuperPower) {
                     labelCurrEnergy.text = `${currentEnergy}(SP)`;
                 } else {
                     labelCurrEnergy.text = `${player.getCoCurrentEnergy()}`;
@@ -373,8 +373,8 @@ namespace Twns.SinglePlayerWar {
         private _checkCanDoAction(): boolean {
             const war = this._getOpenData().war;
             return (war.checkIsHumanInTurn())                                           &&
-                (war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.Main)      &&
-                (war.getActionPlanner().getState() === Types.ActionPlannerState.Idle);
+                (war.getTurnManager().getPhaseCode() === Twns.Types.TurnPhaseCode.Main)      &&
+                (war.getActionPlanner().getState() === Twns.Types.ActionPlannerState.Idle);
         }
     }
 
@@ -440,7 +440,7 @@ namespace Twns.SinglePlayerWar {
             const data      = this._getData();
             const userId    = data.war.getPlayer(data.playerIndex).getUserId();
             if (userId != null) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, { userId });
             }
         }
 
@@ -448,7 +448,7 @@ namespace Twns.SinglePlayerWar {
             const data          = this._getData();
             const war           = data.war;
             const player        = war.getPlayer(data.playerIndex);
-            this._imgCo.source  = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
+            this._imgCo.source  = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Twns.Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelFundAndAddFund(): void {
@@ -475,9 +475,9 @@ namespace Twns.SinglePlayerWar {
             const skillType     = player.getCoUsingSkillType();
             const label         = this._labelEnergy;
             const currentEnergy = player.getCoCurrentEnergy();
-            if (skillType === Types.CoSkillType.Power) {
+            if (skillType === Twns.Types.CoSkillType.Power) {
                 label.text = `${currentEnergy}(P)`;
-            } else if (skillType === Types.CoSkillType.SuperPower) {
+            } else if (skillType === Twns.Types.CoSkillType.SuperPower) {
                 label.text = `${currentEnergy}(SP)`;
             } else {
                 label.text = `${player.getCoCurrentEnergy()}`;

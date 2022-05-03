@@ -162,7 +162,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 fullData    : openData.fullData,
                 action      : openData.action,
                 war         : openData.war,
@@ -173,7 +173,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnPlayerIndex(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerIndexPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChoosePlayerIndexPanel, {
                 currentPlayerIndexArray : action.conPlayerIndexArray ?? [],
                 maxPlayerIndex          : this._getOpenData().war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : playerIndexArray => {
@@ -184,7 +184,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnTeamIndex(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTeamIndexPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseTeamIndexPanel, {
                 currentTeamIndexArray   : action.conTeamIndexArray ?? [],
                 maxTeamIndex            : this._getOpenData().war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : teamIndexArray => {
@@ -195,7 +195,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnUnitType(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseUnitTypePanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseUnitTypePanel, {
                 gameConfig              : this._getOpenData().war.getGameConfig(),
                 currentUnitTypeArray    : action.conUnitTypeArray ?? [],
                 callbackOnConfirm       : unitTypeArray => {
@@ -206,7 +206,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnLocation(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseLocationPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseLocationPanel, {
                 currentLocationIdArray  : action.conLocationIdArray ?? [],
                 callbackOnConfirm       : locationIdArray => {
                     action.conLocationIdArray = locationIdArray;
@@ -216,8 +216,8 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnGridIndex(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseGridIndexPanel, {
-                currentGridIndexArray   : Helpers.getNonNullElements(action.conGridIndexArray?.map(v => GridIndexHelpers.convertGridIndex(v)) ?? []),
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseGridIndexPanel, {
+                currentGridIndexArray   : Twns.Helpers.getNonNullElements(action.conGridIndexArray?.map(v => GridIndexHelpers.convertGridIndex(v)) ?? []),
                 mapSize                 : this._getOpenData().war.getTileMap().getMapSize(),
                 callbackOnConfirm       : gridIndexArray => {
                     action.conGridIndexArray = gridIndexArray;
@@ -227,7 +227,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnActionState(): void {
             const condition = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseUnitActionStatePanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseUnitActionStatePanel, {
                 currentActionStateArray : condition.conActionStateArray ?? [],
                 callbackOnConfirm       : actionStateArray => {
                     condition.conActionStateArray = actionStateArray;
@@ -250,7 +250,7 @@ namespace Twns.WarEvent {
 
         private _onTouchedBtnConHpComparator(): void {
             const condition             = this._getAction();
-            condition.conHpComparator   = Helpers.getNextValueComparator(condition.conHpComparator);
+            condition.conHpComparator   = Twns.Helpers.getNextValueComparator(condition.conHpComparator);
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputConHp(): void {
@@ -268,7 +268,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnConFuelPctComparator(): void {
             const condition                 = this._getAction();
-            condition.conFuelPctComparator  = Helpers.getNextValueComparator(condition.conFuelPctComparator);
+            condition.conFuelPctComparator  = Twns.Helpers.getNextValueComparator(condition.conFuelPctComparator);
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputConFuelPct(): void {
@@ -286,7 +286,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnConPriAmmoPctComparator(): void {
             const condition                     = this._getAction();
-            condition.conPriAmmoPctComparator   = Helpers.getNextValueComparator(condition.conPriAmmoPctComparator);
+            condition.conPriAmmoPctComparator   = Twns.Helpers.getNextValueComparator(condition.conPriAmmoPctComparator);
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputConPriAmmoPct(): void {
@@ -304,7 +304,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnConPromotionComparator(): void {
             const condition                     = this._getAction();
-            condition.conPromotionComparator    = Helpers.getNextValueComparator(condition.conPromotionComparator);
+            condition.conPromotionComparator    = Twns.Helpers.getNextValueComparator(condition.conPromotionComparator);
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputConPromotion(): void {
@@ -330,12 +330,12 @@ namespace Twns.WarEvent {
         private _onTouchedBtnActActionState(): void {
             const action        = this._getAction();
             const actionState   = action.actActionState;
-            if (actionState == Types.UnitActionState.Idle) {
-                action.actActionState = Types.UnitActionState.Acted;
-            } else if (actionState === Types.UnitActionState.Acted) {
+            if (actionState == Twns.Types.UnitActionState.Idle) {
+                action.actActionState = Twns.Types.UnitActionState.Acted;
+            } else if (actionState === Twns.Types.UnitActionState.Acted) {
                 action.actActionState = null;
             } else {
-                action.actActionState = Types.UnitActionState.Idle;
+                action.actActionState = Twns.Types.UnitActionState.Idle;
             }
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
@@ -585,7 +585,7 @@ namespace Twns.WarEvent {
             const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForAction(openData.fullData, action, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
             this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelPlayerIndex(): void {
@@ -694,7 +694,7 @@ namespace Twns.WarEvent {
         }
 
         private _getAction(): CommonProto.WarEvent.IWeaSetUnitState {
-            return Helpers.getExisted(this._getOpenData().action.WeaSetUnitState);
+            return Twns.Helpers.getExisted(this._getOpenData().action.WeaSetUnitState);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {
             this._imgInnerTouchMask.visible = isEnabled;

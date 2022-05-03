@@ -3,7 +3,7 @@
 // import TwnsServerErrorCode  from "../helpers/ServerErrorCode";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsLangErrorText {
+namespace Twns.Lang {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import ServerErrorCode      = TwnsServerErrorCode.ServerErrorCode;
 

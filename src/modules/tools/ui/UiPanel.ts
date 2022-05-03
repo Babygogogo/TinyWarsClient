@@ -23,8 +23,8 @@ namespace TwnsUiPanel {
     export const EVENT_PANEL_CHILDREN_CREATED       = `EventPanelChildrenCreated`;
 
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import UiListener       = Types.UiListener;
-    import PanelConfig      = TwnsPanelConfig.PanelConfig;
+    import UiListener       = Twns.Types.UiListener;
+    import PanelConfig      = Twns.PanelHelpers.PanelConfig;
 
     export abstract class UiPanel<OpenData> extends eui.Component {
         private _isChildrenCreated      = false;
@@ -86,7 +86,7 @@ namespace TwnsUiPanel {
             this._panelConfig = config;
         }
         public getPanelConfig(): PanelConfig<OpenData> {
-            return Helpers.getExisted(this._panelConfig);
+            return Twns.Helpers.getExisted(this._panelConfig);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ namespace TwnsUiPanel {
 
             this._setOpenData(openData);
             if (!this._checkIsReadyForOpen()) {
-                throw Helpers.newError(`UiPanel2.initOnOpening() !this._checkIsReadyForOpen().`);
+                throw Twns.Helpers.newError(`UiPanel2.initOnOpening() !this._checkIsReadyForOpen().`);
             }
 
             const stage = StageManager.getStage();
@@ -130,11 +130,11 @@ namespace TwnsUiPanel {
             this._setHasSetOpenData(false);
         }
         protected _getOpenData(): OpenData {
-            return Helpers.getDefined(this._openData, ClientErrorCode.UiPanel_GetOpenData_00);
+            return Twns.Helpers.getDefined(this._openData, ClientErrorCode.UiPanel_GetOpenData_00);
         }
         public async updateWithOpenData(openData: OpenData): Promise<void> {
             if (!this._checkIsReadyForOpen()) {
-                throw Helpers.newError(`UiPanel2.updateWithOpenData() !this._checkIsReadyForOpen().`);
+                throw Twns.Helpers.newError(`UiPanel2.updateWithOpenData() !this._checkIsReadyForOpen().`);
             }
 
             const oldOpenData = this._openData ?? null;
@@ -161,7 +161,7 @@ namespace TwnsUiPanel {
         // Functions for close self.
         ////////////////////////////////////////////////////////////////////////////////
         public close(): void {
-            TwnsPanelManager.close(this.getPanelConfig());
+            Twns.PanelHelpers.close(this.getPanelConfig());
         }
 
         public async clearOnClosing(): Promise<void> {
@@ -246,7 +246,7 @@ namespace TwnsUiPanel {
             }
 
             if (this._getIsCloseOnTouchedMask()) {
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonCancel01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonCancel01);
                 this.close();
             }
         }
@@ -258,13 +258,13 @@ namespace TwnsUiPanel {
             for (const name of NAMES_FOR_BUTTON_CLOSE) {
                 const btn = (this as any)[name];
                 if (btn instanceof TwnsUiButton.UiButton) {
-                    btn.setShortSfxCode(Types.ShortSfxCode.ButtonCancel01);
+                    btn.setShortSfxCode(Twns.Types.ShortSfxCode.ButtonCancel01);
                 }
             }
             for (const name of NAMES_FOR_BUTTON_CONFIRM) {
                 const btn = (this as any)[name];
                 if (btn instanceof TwnsUiButton.UiButton) {
-                    btn.setShortSfxCode(Types.ShortSfxCode.ButtonConfirm01);
+                    btn.setShortSfxCode(Twns.Types.ShortSfxCode.ButtonConfirm01);
                 }
             }
         }

@@ -11,7 +11,7 @@ namespace Twns.MultiPlayerWar {
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
         public getPlayerLoggedIn(): BaseWar.BwPlayer | null {
-            const userId = Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
+            const userId = Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
             for (const [, player] of this.getAllPlayersDict()) {
                 if (player.getUserId() === userId) {
                     return player;
@@ -26,7 +26,7 @@ namespace Twns.MultiPlayerWar {
         }
 
         public getWatcherTeamIndexesForSelf(): Set<number> {
-            const watcherUserId = Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
+            const watcherUserId = Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
             const indexes       = new Set<number>();
             this.forEachPlayer(false, player => {
                 if ((player.getUserId() === watcherUserId)                  ||

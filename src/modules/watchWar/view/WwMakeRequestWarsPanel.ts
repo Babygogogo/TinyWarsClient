@@ -103,7 +103,7 @@ namespace Twns.WatchWar {
 
         public async setAndReviseSelectedWarId(warId: number, needScroll: boolean): Promise<void> {
             const listMap   = this._listWar;
-            const index     = Helpers.getExisted(listMap.getRandomIndex(v => v.warId === warId));
+            const index     = Twns.Helpers.getExisted(listMap.getRandomIndex(v => v.warId === warId));
             listMap.setSelectedIndex(index);
             this._updateComponentsForTargetWarInfo();
 
@@ -135,13 +135,13 @@ namespace Twns.WatchWar {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WwMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WwMainMenuPanel, void 0);
         }
 
         private _onTouchTapBtnSearch(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WwSearchWarPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WwSearchWarPanel, void 0);
         }
 
         private async _onTouchedBtnNextStep(): Promise<void> {
@@ -154,7 +154,7 @@ namespace Twns.WatchWar {
             if (await Twns.WatchWar.WwModel.getWatchOutgoingInfo(warId) == null) {
                 FloatText.show(Lang.getText(LangTextType.A0297));
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.WwMakeRequestDetailPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WwMakeRequestDetailPanel, {
                     warId,
                 });
             }
@@ -268,72 +268,72 @@ namespace Twns.WatchWar {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnSearch,
                 beginProps  : { alpha: 0, y: 40 },
                 endProps    : { alpha: 1, y: 80 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupWarList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnSearch,
                 beginProps  : { alpha: 1, y: 80 },
                 endProps    : { alpha: 0, y: 40 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupWarList,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -363,7 +363,7 @@ namespace Twns.WatchWar {
 
         public onItemTapEvent(): void {
             const data = this._getData();
-            data.panel.setAndReviseSelectedWarId(Helpers.getExisted(data.warId, ClientErrorCode.WwMakeRequestWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
+            data.panel.setAndReviseSelectedWarId(Twns.Helpers.getExisted(data.warId, ClientErrorCode.WwMakeRequestWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
         }
 
         private _updateView(): void {
@@ -377,7 +377,7 @@ namespace Twns.WatchWar {
         }
 
         private async _updateLabelType(): Promise<void> {
-            const warSettings   = await Twns.MultiPlayerWar.MpwModel.getWarSettings(Helpers.getExisted(this._getData().warId));
+            const warSettings   = await Twns.MultiPlayerWar.MpwModel.getWarSettings(Twns.Helpers.getExisted(this._getData().warId));
             const label         = this._labelType;
             if (warSettings == null) {
                 label.text = CommonConstants.ErrorTextForUndefined;
@@ -390,7 +390,7 @@ namespace Twns.WatchWar {
             const labelName = this._labelName;
             labelName.text  = ``;
 
-            const warSettings = await Twns.MultiPlayerWar.MpwModel.getWarSettings(Helpers.getExisted(this._getData().warId));
+            const warSettings = await Twns.MultiPlayerWar.MpwModel.getWarSettings(Twns.Helpers.getExisted(this._getData().warId));
             if (warSettings != null) {
                 const { settingsForMfw, settingsForCcw, settingsForMcw, settingsForMrw } = warSettings;
                 if (settingsForMfw) {

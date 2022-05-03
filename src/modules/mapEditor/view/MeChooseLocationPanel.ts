@@ -57,7 +57,7 @@ namespace Twns.MapEditor {
         }
 
         private _getWar(): Twns.MapEditor.MeWar {
-            return Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
+            return Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
         }
 
         private _onTouchedBtnSelectAllLocations(): void {
@@ -117,7 +117,7 @@ namespace Twns.MapEditor {
             const tileMap       = war.getTileMap();
             const listLocation  = this._listLocation;
             listLocation.bindData(dataArray);
-            listLocation.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => tileMap.getIsLocationVisible(v.locationId) ? i : null)));
+            listLocation.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => tileMap.getIsLocationVisible(v.locationId) ? i : null)));
         }
     }
 

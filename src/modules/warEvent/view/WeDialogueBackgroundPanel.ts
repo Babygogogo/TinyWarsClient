@@ -100,33 +100,33 @@ namespace Twns.WarEvent {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
 
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -151,7 +151,7 @@ namespace Twns.WarEvent {
             ]);
 
             this._imgBg.touchEnabled = true;
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -163,14 +163,14 @@ namespace Twns.WarEvent {
         }
 
         private _onTouchedImgBg(): void {
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onTouchedGroupSelect(): void {
             const data                  = this._getData();
             const panel                 = data.panel;
             data.action.backgroundId    = data.backgroundId;
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonConfirm01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonConfirm01);
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             panel.close();
         }

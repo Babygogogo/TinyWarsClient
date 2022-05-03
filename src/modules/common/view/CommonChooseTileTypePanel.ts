@@ -14,7 +14,7 @@
 namespace Twns.Common {
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = Twns.Notify.NotifyType;
-    import TileType     = Types.TileType;
+    import TileType     = Twns.Types.TileType;
     import GameConfig   = Twns.Config.GameConfig;
 
     export type OpenDataForCommonChooseTileTypePanel = {
@@ -85,14 +85,14 @@ namespace Twns.Common {
 
         private _updateListTileType(): void {
             const dataArray : DataForTileTypeRenderer[] = [];
-            for (const tileType of this._getOpenData().gameConfig.getTileTypesByCategory(Types.TileCategory.All) ?? []) {
+            for (const tileType of this._getOpenData().gameConfig.getTileTypesByCategory(Twns.Types.TileCategory.All) ?? []) {
                 dataArray.push({ tileType });
             }
 
             const tileTypeArray = this._getOpenData().currentTileTypeArray;
             const list          = this._listTileType;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => tileTypeArray.indexOf(v.tileType) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => tileTypeArray.indexOf(v.tileType) >= 0 ? i : null)));
         }
     }
 

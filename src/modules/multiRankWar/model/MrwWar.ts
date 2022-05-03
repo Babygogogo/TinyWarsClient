@@ -19,7 +19,7 @@ namespace Twns.MultiRankWar {
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
-            this._setSettingsForMrw(Helpers.getExisted(data.settingsForMrw, ClientErrorCode.MrwWar_Init_00));
+            this._setSettingsForMrw(Twns.Helpers.getExisted(data.settingsForMrw, ClientErrorCode.MrwWar_Init_00));
 
             this._initView();
         }
@@ -34,14 +34,14 @@ namespace Twns.MultiRankWar {
             return false;
         }
         public getMapId(): number {
-            return Helpers.getExisted(this.getSettingsForMrw().mapId);
+            return Twns.Helpers.getExisted(this.getSettingsForMrw().mapId);
         }
 
         private _setSettingsForMrw(settings: ISettingsForMrw): void {
             this._settingsForMrw = settings;
         }
         public getSettingsForMrw(): ISettingsForMrw {
-            return Helpers.getExisted(this._settingsForMrw);
+            return Twns.Helpers.getExisted(this._settingsForMrw);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

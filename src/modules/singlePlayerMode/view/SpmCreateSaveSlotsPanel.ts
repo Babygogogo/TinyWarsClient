@@ -94,7 +94,7 @@ namespace Twns.SinglePlayerMode {
 
     type DataForSlotRenderer = {
         slotIndex   : number;
-        slotInfo    : Types.SpmWarSaveSlotData | null;
+        slotInfo    : Twns.Types.SpmWarSaveSlotData | null;
         callback    : (slotIndex: number) => void;
     };
     class SlotRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSlotRenderer> {
@@ -121,7 +121,7 @@ namespace Twns.SinglePlayerMode {
         private _onTouchedImgBg(): void {
             const data = this._getData();
             data.callback(data.slotIndex);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.SpmCreateSaveSlotsPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.SpmCreateSaveSlotsPanel);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

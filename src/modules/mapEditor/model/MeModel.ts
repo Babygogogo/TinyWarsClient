@@ -11,7 +11,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor.MeModel {
     import MeWar            = Twns.MapEditor.MeWar;
-    import MapReviewStatus  = Types.MapReviewStatus;
+    import MapReviewStatus  = Twns.Types.MapReviewStatus;
     import IMapRawData      = CommonProto.Map.IMapRawData;
     import IMapEditorData   = CommonProto.Map.IMapEditorData;
 
@@ -25,7 +25,7 @@ namespace Twns.MapEditor.MeModel {
     export async function resetDataList(rawDataList: IMapEditorData[]): Promise<void> {
         MAP_DICT.clear();
         for (const data of rawDataList || []) {
-            const slotIndex = Helpers.getExisted(data.slotIndex);
+            const slotIndex = Twns.Helpers.getExisted(data.slotIndex);
             MAP_DICT.set(slotIndex, {
                 slotIndex,
                 reviewStatus    : data.reviewStatus,
@@ -69,7 +69,7 @@ namespace Twns.MapEditor.MeModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar(mapRawData: Types.Undefinable<IMapRawData>, slotIndex: number, isReview: boolean): Promise<MeWar> {
+    export async function loadWar(mapRawData: Twns.Types.Undefinable<IMapRawData>, slotIndex: number, isReview: boolean): Promise<MeWar> {
         if (_war) {
             Logger.warn(`MeManager.loadWar() another war has been loaded already!`);
             unloadWar();
@@ -111,19 +111,19 @@ namespace Twns.MapEditor.MeModel {
         };
     }
 
-    function convertBaseSeaToDecoratorShore(mapRawData: Types.Undefinable<IMapRawData>): IMapRawData | null {
+    function convertBaseSeaToDecoratorShore(mapRawData: Twns.Types.Undefinable<IMapRawData>): IMapRawData | null {
         if (mapRawData == null) {
             return null;
         }
 
         for (const tileData of mapRawData.tileDataArray || []) {
-            if (tileData.baseType !== Types.TileBaseType.Sea) {
+            if (tileData.baseType !== Twns.Types.TileBaseType.Sea) {
                 continue;
             }
 
             const shapeId = tileData.baseShapeId;
             if (shapeId) {
-                tileData.decoratorType      = Types.TileDecoratorType.Shore;
+                tileData.decoratorType      = Twns.Types.TileDecoratorType.Shore;
                 tileData.decoratorShapeId   = shapeId;
                 tileData.baseShapeId        = 0;
             }

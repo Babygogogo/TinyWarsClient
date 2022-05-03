@@ -70,14 +70,14 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 condition   : openData.condition,
             });
         }
         private _onTouchedGroupIsNot(): void {
-            const data  = Helpers.getExisted(this._getCondition().WecEventCalledCountTotalLessThan);
+            const data  = Twns.Helpers.getExisted(this._getCondition().WecEventCalledCountTotalLessThan);
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
@@ -85,8 +85,8 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnTurnEvent(): void {
             const openData              = this._getOpenData();
-            const eventArray            = Helpers.getExisted(openData.fullData.eventArray);
-            const condition             = Helpers.getExisted(openData.condition.WecEventCalledCountTotalLessThan);
+            const eventArray            = Twns.Helpers.getExisted(openData.fullData.eventArray);
+            const condition             = Twns.Helpers.getExisted(openData.condition.WecEventCalledCountTotalLessThan);
             const newIndex              = (eventArray.findIndex(v => v.eventId === condition.eventIdEqualTo) + 1) % eventArray.length;
             condition.eventIdEqualTo    = eventArray[newIndex].eventId;
 
@@ -99,7 +99,7 @@ namespace Twns.WarEvent {
             if (isNaN(value)) {
                 this._updateInputCalledCount();
             } else {
-                Helpers.getExisted(this._getCondition().WecEventCalledCountTotalLessThan).countLessThan = value;
+                Twns.Helpers.getExisted(this._getCondition().WecEventCalledCountTotalLessThan).countLessThan = value;
                 this._updateLabelDescAndLabelError();
                 this._updateInputCalledCount();
                 Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
@@ -135,7 +135,7 @@ namespace Twns.WarEvent {
             const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
             this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateImgIsNot(): void {
@@ -143,7 +143,7 @@ namespace Twns.WarEvent {
         }
         private _updateLabelEvent(): void {
             const openData          = this._getOpenData();
-            const eventId           = Helpers.getExisted(openData.condition.WecEventCalledCountTotalLessThan?.eventIdEqualTo);
+            const eventId           = Twns.Helpers.getExisted(openData.condition.WecEventCalledCountTotalLessThan?.eventIdEqualTo);
             const event             = WarHelpers.WarEventHelpers.getEvent(openData.fullData, eventId);
             this._labelEvent.text   = `#${eventId} (${event ? Lang.getLanguageText({ textArray: event.eventNameArray }) : `---`})`;
         }

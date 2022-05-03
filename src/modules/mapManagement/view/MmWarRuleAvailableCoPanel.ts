@@ -175,7 +175,7 @@ namespace Twns.MapManagement {
             this._labelName.text    = `Tier ${tier}`;
         }
         public getCoTier(): number {
-            return Helpers.getExisted(this._tier);
+            return Twns.Helpers.getExisted(this._tier);
         }
 
         public setIsCustomSwitch(isCustomSwitch: boolean): void {
@@ -195,10 +195,10 @@ namespace Twns.MapManagement {
             } else {
                 this._labelName.textColor = 0xFF0000;
             }
-            Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Types.ColorType.Origin : Types.ColorType.Gray);
+            Twns.Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Twns.Types.ColorType.Origin : Twns.Types.ColorType.Gray);
         }
         public getState(): CoTierState {
-            return Helpers.getExisted(this._state);
+            return Twns.Helpers.getExisted(this._state);
         }
     }
 
@@ -221,16 +221,16 @@ namespace Twns.MapManagement {
             this._labelName.text = `${(await Config.ConfigManager.getLatestGameConfig()).getCoBasicCfg(coId)?.name}`;
         }
         public getCoId(): number {
-            return Helpers.getExisted(this._coId);
+            return Twns.Helpers.getExisted(this._coId);
         }
 
         public setIsSelected(isSelected: boolean): void {
             this._isSelected            = isSelected;
             this._labelName.textColor   = isSelected ? 0x00ff00 : 0xff0000;
-            Helpers.changeColor(this._imgSelected, isSelected ? Types.ColorType.Origin : Types.ColorType.Gray);
+            Twns.Helpers.changeColor(this._imgSelected, isSelected ? Twns.Types.ColorType.Origin : Twns.Types.ColorType.Gray);
         }
         public getIsSelected(): boolean {
-            return Helpers.getExisted(this._isSelected);
+            return Twns.Helpers.getExisted(this._isSelected);
         }
     }
 }

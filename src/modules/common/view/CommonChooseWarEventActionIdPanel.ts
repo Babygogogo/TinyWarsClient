@@ -100,7 +100,7 @@ namespace Twns.Common {
             const counterIdArray    = this._getOpenData().currentActionIdArray;
             const list              = this._listLocation;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => counterIdArray.indexOf(v.actionId) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => counterIdArray.indexOf(v.actionId) >= 0 ? i : null)));
         }
     }
 
@@ -116,7 +116,7 @@ namespace Twns.Common {
         protected _onDataChanged(): void {
             const data              = this._getData();
             const actionId          = data.actionId;
-            this._labelAction.text  = `A${actionId} ${WarEventHelpers.getDescForAction(Helpers.getExisted(WarEventHelpers.getAction(data.warEventFullData, actionId)), data.war.getGameConfig())}`;
+            this._labelAction.text  = `A${actionId} ${WarEventHelpers.getDescForAction(Twns.Helpers.getExisted(WarEventHelpers.getAction(data.warEventFullData, actionId)), data.war.getGameConfig())}`;
         }
     }
 }

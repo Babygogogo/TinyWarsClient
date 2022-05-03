@@ -12,10 +12,10 @@
 namespace Twns.User.UserProxy {
     import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import NetMessageCodes  = Twns.Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Twns.Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgUserLogin,                    callback: _onMsgUserLogin, },
             { msgCode: NetMessageCodes.MsgUserRegister,                 callback: _onMsgUserRegister, },
             { msgCode: NetMessageCodes.MsgUserLogout,                   callback: _onMsgUserLogout, },
@@ -35,7 +35,7 @@ namespace Twns.User.UserProxy {
     }
 
     export function reqLogin(account: string, rawPassword: string, isAutoRelogin: boolean): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgUserLogin: { c: {
                 account,
                 password    : Sha1Generator.b64_sha1(rawPassword),
@@ -44,7 +44,7 @@ namespace Twns.User.UserProxy {
         });
     }
     export function reqRawLogin(account: string, password: string): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgUserLogin: { c: {
                 account,
                 password,
@@ -61,7 +61,7 @@ namespace Twns.User.UserProxy {
     }
 
     export function reqUserRegister(account: string, rawPassword: string, nickname: string): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgUserRegister: { c: {
                 account,
                 password: Sha1Generator.b64_sha1(rawPassword),
@@ -77,7 +77,7 @@ namespace Twns.User.UserProxy {
     }
 
     export function reqLogout(): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgUserLogout: { c: {
             } },
         });
@@ -90,7 +90,7 @@ namespace Twns.User.UserProxy {
     }
 
     export function reqUserGetPublicInfo(userId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgUserGetPublicInfo: { c: {
                 userId,
             } },
@@ -99,13 +99,13 @@ namespace Twns.User.UserProxy {
     function _onMsgUserGetPublicInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
         if (!data.errorCode) {
-            Twns.User.UserModel.setUserPublicInfo(Helpers.getExisted(data.userId), data.userPublicInfo ?? null);
+            Twns.User.UserModel.setUserPublicInfo(Twns.Helpers.getExisted(data.userId), data.userPublicInfo ?? null);
             Twns.Notify.dispatch(NotifyType.MsgUserGetPublicInfo, data);
         }
     }
 
     export function reqUserGetBriefInfo(userId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgUserGetBriefInfo: { c: {
                 userId,
             } },
@@ -114,13 +114,13 @@ namespace Twns.User.UserProxy {
     function _onMsgUserGetBriefInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserGetBriefInfo.IS;
         if (!data.errorCode) {
-            Twns.User.UserModel.setUserBriefInfo(Helpers.getExisted(data.userId), data.userBriefInfo ?? null);
+            Twns.User.UserModel.setUserBriefInfo(Twns.Helpers.getExisted(data.userId), data.userBriefInfo ?? null);
             Twns.Notify.dispatch(NotifyType.MsgUserGetBriefInfo, data);
         }
     }
 
     export function reqUserGetOnlineState(userId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgUserGetOnlineState: { c: {
                 userId,
             } },
@@ -135,7 +135,7 @@ namespace Twns.User.UserProxy {
     }
 
     export function reqSetNickname(nickname: string): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgUserSetNickname: { c: {
                 nickname,
             }, },
@@ -152,7 +152,7 @@ namespace Twns.User.UserProxy {
     }
 
     export function reqSetDiscordId(discordId: string): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgUserSetDiscordId: { c: {
                 discordId,
             }, },
@@ -169,7 +169,7 @@ namespace Twns.User.UserProxy {
     }
 
     export function reqUserGetOnlineUserIdArray(): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgUserGetOnlineUserIdArray: { c: {} },
         });
     }
@@ -181,7 +181,7 @@ namespace Twns.User.UserProxy {
     }
 
     export function reqUserSetPrivilege(userId: number, userPrivilege: CommonProto.User.IUserPrivilege): void {
-        NetManager.send({ MsgUserSetPrivilege: { c: {
+        Twns.Net.NetManager.send({ MsgUserSetPrivilege: { c: {
             userId,
             userPrivilege,
         } } });
@@ -195,7 +195,7 @@ namespace Twns.User.UserProxy {
     }
 
     export function reqUserSetPassword(oldRawPassword: string, newRawPassword: string): void {
-        NetManager.send({ MsgUserSetPassword: { c: {
+        Twns.Net.NetManager.send({ MsgUserSetPassword: { c: {
             oldPassword : Sha1Generator.b64_sha1(oldRawPassword),
             newPassword : Sha1Generator.b64_sha1(newRawPassword),
         } } });
@@ -208,7 +208,7 @@ namespace Twns.User.UserProxy {
     }
 
     export function reqUserSetSettings(userSettings: CommonProto.User.IUserSettings): void {
-        NetManager.send({ MsgUserSetSettings: { c: {
+        Twns.Net.NetManager.send({ MsgUserSetSettings: { c: {
             userSettings,
         } } });
     }
@@ -221,7 +221,7 @@ namespace Twns.User.UserProxy {
     }
 
     export function reqUserSetMapRating(mapId: number, rating: number): void {
-        NetManager.send({ MsgUserSetMapRating: { c: {
+        Twns.Net.NetManager.send({ MsgUserSetMapRating: { c: {
             mapId,
             rating,
         } } });
@@ -235,7 +235,7 @@ namespace Twns.User.UserProxy {
     }
 
     export function reqSetAvatarId(avatarId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgUserSetAvatarId: { c: {
                 avatarId,
             }, },
@@ -252,7 +252,7 @@ namespace Twns.User.UserProxy {
     }
 
     export function reqSetMapEditorAutoSaveTime(time: number | null): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgUserSetMapEditorAutoSaveTime: { c: {
                 time,
             }, },

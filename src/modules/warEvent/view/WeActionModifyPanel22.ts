@@ -85,7 +85,7 @@ namespace Twns.WarEvent {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -171,7 +171,7 @@ namespace Twns.WarEvent {
         }
 
         private _getAction(): CommonProto.WarEvent.IWeaDeprecatedSetPlayerCoEnergy {
-            return Helpers.getExisted(this._getOpenData().action.WeaDeprecatedSetPlayerCoEnergy);
+            return Twns.Helpers.getExisted(this._getOpenData().action.WeaDeprecatedSetPlayerCoEnergy);
         }
     }
 }

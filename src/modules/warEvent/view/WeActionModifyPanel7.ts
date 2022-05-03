@@ -56,7 +56,7 @@ namespace Twns.WarEvent {
             this._updateView();
         }
         protected _onClosing(): void {
-            SoundManager.playBgm(Types.BgmCode.MapEditor01);
+            Twns.SoundManager.playBgm(Twns.Types.BgmCode.MapEditor01);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -72,16 +72,16 @@ namespace Twns.WarEvent {
         }
 
         private _onTouchedGroupUseCoBgm(): void {
-            const action        = Helpers.getExisted(this._getOpenData().action.WeaPlayBgm);
+            const action        = Twns.Helpers.getExisted(this._getOpenData().action.WeaPlayBgm);
             action.useCoBgm     = !action.useCoBgm;
-            action.bgmCode      = Types.BgmCode.None;
+            action.bgmCode      = Twns.Types.BgmCode.None;
 
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -97,7 +97,7 @@ namespace Twns.WarEvent {
             this._updateGroupUseCoBgm();
 
             const list      = this._listBgm;
-            const bgmCode   = this._getOpenData().action.WeaPlayBgm?.bgmCode ?? Types.BgmCode.None;
+            const bgmCode   = this._getOpenData().action.WeaPlayBgm?.bgmCode ?? Twns.Types.BgmCode.None;
             list.bindData(this._createDataForListBgm());
             list.setSelectedIndex(list.getFirstIndex(v => v.bgmCode === bgmCode) ?? -1);
         }
@@ -113,7 +113,7 @@ namespace Twns.WarEvent {
         }
 
         private _updateLabelBgm(): void {
-            this._labelBgm.text = Lang.getBgmName(this._getOpenData().action.WeaPlayBgm?.bgmCode ?? Types.BgmCode.None) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelBgm.text = Lang.getBgmName(this._getOpenData().action.WeaPlayBgm?.bgmCode ?? Twns.Types.BgmCode.None) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateGroupUseCoBgm(): void {
@@ -121,32 +121,32 @@ namespace Twns.WarEvent {
         }
 
         private _createDataForListBgm(): DataForBgmRenderer[] {
-            const actionData = Helpers.getExisted(this._getOpenData().action.WeaPlayBgm);
+            const actionData = Twns.Helpers.getExisted(this._getOpenData().action.WeaPlayBgm);
             return [
-                { actionData, bgmCode: Types.BgmCode.Co0000         },
-                { actionData, bgmCode: Types.BgmCode.Co0001         },
-                { actionData, bgmCode: Types.BgmCode.Co0002         },
-                { actionData, bgmCode: Types.BgmCode.Co0003         },
-                { actionData, bgmCode: Types.BgmCode.Co0004         },
-                { actionData, bgmCode: Types.BgmCode.Co0005         },
-                { actionData, bgmCode: Types.BgmCode.Co0006         },
-                { actionData, bgmCode: Types.BgmCode.Co0007         },
-                { actionData, bgmCode: Types.BgmCode.Co0008         },
-                { actionData, bgmCode: Types.BgmCode.Co0009         },
-                { actionData, bgmCode: Types.BgmCode.Co0010         },
-                { actionData, bgmCode: Types.BgmCode.Co0011         },
-                { actionData, bgmCode: Types.BgmCode.Co0042         },
-                { actionData, bgmCode: Types.BgmCode.Co9999         },
-                { actionData, bgmCode: Types.BgmCode.Lobby01        },
-                { actionData, bgmCode: Types.BgmCode.MapEditor01    },
-                { actionData, bgmCode: Types.BgmCode.Power00        },
-                { actionData, bgmCode: Types.BgmCode.None           },
+                { actionData, bgmCode: Twns.Types.BgmCode.Co0000         },
+                { actionData, bgmCode: Twns.Types.BgmCode.Co0001         },
+                { actionData, bgmCode: Twns.Types.BgmCode.Co0002         },
+                { actionData, bgmCode: Twns.Types.BgmCode.Co0003         },
+                { actionData, bgmCode: Twns.Types.BgmCode.Co0004         },
+                { actionData, bgmCode: Twns.Types.BgmCode.Co0005         },
+                { actionData, bgmCode: Twns.Types.BgmCode.Co0006         },
+                { actionData, bgmCode: Twns.Types.BgmCode.Co0007         },
+                { actionData, bgmCode: Twns.Types.BgmCode.Co0008         },
+                { actionData, bgmCode: Twns.Types.BgmCode.Co0009         },
+                { actionData, bgmCode: Twns.Types.BgmCode.Co0010         },
+                { actionData, bgmCode: Twns.Types.BgmCode.Co0011         },
+                { actionData, bgmCode: Twns.Types.BgmCode.Co0042         },
+                { actionData, bgmCode: Twns.Types.BgmCode.Co9999         },
+                { actionData, bgmCode: Twns.Types.BgmCode.Lobby01        },
+                { actionData, bgmCode: Twns.Types.BgmCode.MapEditor01    },
+                { actionData, bgmCode: Twns.Types.BgmCode.Power00        },
+                { actionData, bgmCode: Twns.Types.BgmCode.None           },
             ];
         }
     }
 
     type DataForBgmRenderer = {
-        bgmCode     : Types.BgmCode;
+        bgmCode     : Twns.Types.BgmCode;
         actionData  : CommonProto.WarEvent.IWeaPlayBgm;
     };
     class BgmRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForBgmRenderer> {
@@ -165,7 +165,7 @@ namespace Twns.WarEvent {
                 { ui: this._groupSelect,                    callback: this._onTouchedGroupSelect },
             ]);
 
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -177,8 +177,8 @@ namespace Twns.WarEvent {
         }
 
         public onItemTapEvent(): void {
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
-            SoundManager.playBgm(this._getData().bgmCode);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            Twns.SoundManager.playBgm(this._getData().bgmCode);
         }
 
         private _onTouchedGroupSelect(): void {

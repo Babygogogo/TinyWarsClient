@@ -20,7 +20,7 @@
 namespace Twns.User {
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = Twns.Notify.NotifyType;
-    import WarType      = Types.WarType;
+    import WarType      = Twns.Types.WarType;
 
     export type OpenDataForUserPanel = {
         userId  : number;
@@ -135,39 +135,39 @@ namespace Twns.User {
         private _onTouchedBtnChat(): void {
             const userId = this._getOpenData().userId;
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: userId });
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChatPanel, { toUserId: userId });
         }
         private _onTouchedBtnSetAvatar(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetAvatarPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserSetAvatarPanel, void 0);
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {
@@ -181,8 +181,8 @@ namespace Twns.User {
                     labelRegisterTime1.text     = CommonConstants.ErrorTextForUndefined;
                     labelRegisterTime2.text     = CommonConstants.ErrorTextForUndefined;
                 } else {
-                    labelRegisterTime1.text     = Helpers.getTimestampShortText(registerTime, { hour: false, minute: false, second: false });
-                    labelRegisterTime2.text     = Helpers.getTimestampShortText(registerTime, { year: false, month: false, date: false });
+                    labelRegisterTime1.text     = Twns.Helpers.getTimestampShortText(registerTime, { hour: false, minute: false, second: false });
+                    labelRegisterTime2.text     = Twns.Helpers.getTimestampShortText(registerTime, { year: false, month: false, date: false });
                 }
 
                 const loginTime             = info.lastLoginTime;
@@ -192,8 +192,8 @@ namespace Twns.User {
                     labelLastLoginTime1.text    = CommonConstants.ErrorTextForUndefined;
                     labelLastLoginTime2.text    = CommonConstants.ErrorTextForUndefined;
                 } else {
-                    labelLastLoginTime1.text    = Helpers.getTimestampShortText(loginTime, { hour: false, minute: false, second: false });
-                    labelLastLoginTime2.text    = Helpers.getTimestampShortText(loginTime, { year: false, month: false, date: false });
+                    labelLastLoginTime1.text    = Twns.Helpers.getTimestampShortText(loginTime, { hour: false, minute: false, second: false });
+                    labelLastLoginTime2.text    = Twns.Helpers.getTimestampShortText(loginTime, { year: false, month: false, date: false });
                 }
 
                 this._labelLoginCount.text      = `${info.loginCount}`;
@@ -267,7 +267,7 @@ namespace Twns.User {
 
             const rank                          = data ? data.currentRank : null;
             this._labelStdRankRank.text         = rank == null ? `--` : `${rank}`;
-            this._labelStdRankRankSuffix.text   = Helpers.getSuffixForRank(rank) || ``;
+            this._labelStdRankRankSuffix.text   = Twns.Helpers.getSuffixForRank(rank) || ``;
         }
         private async _updateComponentsForFogRank(): Promise<void> {
             const data                      = await Twns.User.UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwFog, 2);
@@ -278,17 +278,17 @@ namespace Twns.User {
 
             const rank                          = data ? data.currentRank : null;
             this._labelFogRankRank.text         = rank == null ? `--` : `${rank}`;
-            this._labelFogRankRankSuffix.text   = Helpers.getSuffixForRank(rank) || ``;
+            this._labelFogRankRankSuffix.text   = Twns.Helpers.getSuffixForRank(rank) || ``;
         }
         private async _updateComponentsForSpmRank(): Promise<void> {
             const userId                        = this._getOpenData().userId;
             const rankScore                     = (await Twns.User.UserModel.getUserPublicInfo(userId))?.spmOverallRankScore ?? 0;
             const rankIndex                     = (await Twns.Leaderboard.LeaderboardModel.getSpmOverallRankIndex(userId)) ?? 0;
-            this._labelSpmRankScore.text        = rankScore > 0 ? Helpers.formatString(`%.2f`, rankScore) : `--`;
+            this._labelSpmRankScore.text        = rankScore > 0 ? Twns.Helpers.formatString(`%.2f`, rankScore) : `--`;
 
             const isRankValid                   = (rankIndex > 0) && (rankScore > 0);
             this._labelSpmRankRank.text         = isRankValid ? `${rankIndex}` : `--`;
-            this._labelSpmRankRankSuffix.text   = isRankValid ? Helpers.getSuffixForRank(rankIndex) || `` : ``;
+            this._labelSpmRankRankSuffix.text   = isRankValid ? Twns.Helpers.getSuffixForRank(rankIndex) || `` : ``;
         }
         private _updateSclHistoryStd(): void {
             const userId    = this._getOpenData().userId;
@@ -333,7 +333,7 @@ namespace Twns.User {
         private async _updateLabelOnlineTime(): Promise<void> {
             const info                  = await Twns.User.UserModel.getUserPublicInfo(this._getOpenData().userId);
             const onlineTime            = info ? info.onlineTime : null;
-            this._labelOnlineTime.text  = onlineTime == null ? CommonConstants.ErrorTextForUndefined : Helpers.getTimeDurationText2(onlineTime);
+            this._labelOnlineTime.text  = onlineTime == null ? CommonConstants.ErrorTextForUndefined : Twns.Helpers.getTimeDurationText2(onlineTime);
         }
     }
 
@@ -375,7 +375,7 @@ namespace Twns.User {
             this._labelWin.text     = `${winCount}`;
             this._labelLose.text    = `${loseCount}`;
             this._labelDraw.text    = `${drawCount}`;
-            this._labelRatio.text   = totalCount ? Helpers.formatString(`%.2f`, winCount / totalCount * 100) : `--`;
+            this._labelRatio.text   = totalCount ? Twns.Helpers.formatString(`%.2f`, winCount / totalCount * 100) : `--`;
         }
     }
 }

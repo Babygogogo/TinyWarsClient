@@ -89,7 +89,7 @@ namespace Twns.Common {
             const counterIdArray    = this._getOpenData().currentCustomCounterIdArray;
             const list              = this._listLocation;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => counterIdArray.indexOf(v.counterId) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => counterIdArray.indexOf(v.counterId) >= 0 ? i : null)));
         }
     }
 

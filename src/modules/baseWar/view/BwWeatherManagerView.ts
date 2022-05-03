@@ -2,7 +2,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import WeatherType      = Types.WeatherType;
+    import WeatherType      = Twns.Types.WeatherType;
 
     const RAIN_DENSITY      = 0.3;
     const RAIN_ANGLE        = 20;
@@ -68,7 +68,7 @@ namespace Twns.BaseWar {
         }
 
         private _getWeatherManager(): Twns.BaseWar.BwWeatherManager {
-            return Helpers.getExisted(this._weatherManager, ClientErrorCode.BwWeatherManagerView_GetWeatherManager_00);
+            return Twns.Helpers.getExisted(this._weatherManager, ClientErrorCode.BwWeatherManagerView_GetWeatherManager_00);
         }
         private _setWeatherManager(manager: Twns.BaseWar.BwWeatherManager): void {
             this._weatherManager = manager;

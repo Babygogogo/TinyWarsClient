@@ -67,28 +67,28 @@ namespace Twns.MapEditor {
 
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeWarMenuPanel, void 0);
         }
 
         private async _onTouchedBtnConfirm(): Promise<void> {
             const warData   = MapEditor.MeSimModel.getWarData();
-            const errorCode = new TestWar.TwWar().getErrorCodeForInitForSfw(warData, await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
+            const errorCode = new TestWar.TwWar().getErrorCodeForInitForSfw(warData, await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(warData.settingsForCommon?.configVersion)));
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSfwSaveSlotsPanel, warData);
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmCreateSfwSaveSlotsPanel, warData);
             }
         }
 
         private _onMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgSpmCreateSfw.IS;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
-                    FlowManager.gotoSinglePlayerWar({
-                        slotIndex       : Helpers.getExisted(data.slotIndex),
-                        slotExtraData   : Helpers.getExisted(data.extraData),
-                        warData         : Helpers.getExisted(data.warData),
+                    Twns.FlowManager.gotoSinglePlayerWar({
+                        slotIndex       : Twns.Helpers.getExisted(data.slotIndex),
+                        slotExtraData   : Twns.Helpers.getExisted(data.extraData),
+                        warData         : Twns.Helpers.getExisted(data.warData),
                     });
                 },
             });

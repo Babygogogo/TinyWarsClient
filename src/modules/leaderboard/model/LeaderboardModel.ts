@@ -3,10 +3,10 @@
 namespace Twns.Leaderboard.LeaderboardModel {
     import ISpmOverallSingleData    = CommonProto.Leaderboard.LeaderboardSpmOverall.ISingleData;
 
-    const _spmOverallTopDataArrayAccessor = Helpers.createCachedDataAccessor<null, ISpmOverallSingleData[]>({
+    const _spmOverallTopDataArrayAccessor = Twns.Helpers.createCachedDataAccessor<null, ISpmOverallSingleData[]>({
         reqData: () => Leaderboard.LeaderboardProxy.reqLbSpmOverallGetTopDataArray(),
     });
-    const _spmOverallRankIndexAccessor = Helpers.createCachedDataAccessor<number, number>({
+    const _spmOverallRankIndexAccessor = Twns.Helpers.createCachedDataAccessor<number, number>({
         reqData: (userId: number) => Leaderboard.LeaderboardProxy.reqLbSpmOverallGetRankIndex(userId),
     });
 

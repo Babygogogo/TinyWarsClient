@@ -135,7 +135,7 @@ namespace Twns.MultiPlayerWar {
             return `${Lang.getText(LangTextType.B0451)}`;
         }
         public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | null> {
-            const playerIndex = Helpers.getExisted(action.extraData?.targetPlayerIndex);
+            const playerIndex = Twns.Helpers.getExisted(action.extraData?.targetPlayerIndex);
             return `p${playerIndex} ${await this.getPlayer(playerIndex).getNickname()} ${Lang.getText(LangTextType.B0450)}`;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | null> {
@@ -205,7 +205,7 @@ namespace Twns.MultiPlayerWar {
             } else {
                 const restTime = this.getPlayer(playerIndex).getRestTimeToBoot();
                 if (playerIndex === this.getPlayerIndexInTurn()) {
-                    return (this.getEnterTurnTime() + restTime - Timer.getServerTimestamp()) || null;
+                    return (this.getEnterTurnTime() + restTime - Twns.Timer.getServerTimestamp()) || null;
                 } else {
                     return restTime;
                 }
@@ -234,7 +234,7 @@ namespace Twns.MultiPlayerWar {
         }
         public tickVisionTeamIndex(): number | null {
             const teamIndexArray = [...this.getPlayerManager().getWatcherTeamIndexesForSelf()].sort((v1, v2) => v1 - v2);
-            Helpers.deleteElementFromArray(teamIndexArray, CommonConstants.WarNeutralTeamIndex);
+            Twns.Helpers.deleteElementFromArray(teamIndexArray, CommonConstants.WarNeutralTeamIndex);
 
             const currentVisionTeamIndex    = this.getVisionTeamIndex();
             const newVisionTeamIndex        = currentVisionTeamIndex == null

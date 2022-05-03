@@ -28,11 +28,11 @@ namespace Twns.MultiFreeRoom.MfrJoinModel {
     }
 
     function generateAvailablePlayerIndexArray(roomStaticInfo: IMfrRoomStaticInfo, roomPlayerInfo: IMfrRoomPlayerInfo): number[] {
-        const playerDataArray   = Helpers.getExisted(roomPlayerInfo.playerDataList);
+        const playerDataArray   = Twns.Helpers.getExisted(roomPlayerInfo.playerDataList);
         const indexArray        : number[] = [];
-        for (const player of Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.playerManager?.players)) {
-            const playerIndex = Helpers.getExisted(player.playerIndex);
-            if ((player.aliveState !== Types.PlayerAliveState.Dead)         &&
+        for (const player of Twns.Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.playerManager?.players)) {
+            const playerIndex = Twns.Helpers.getExisted(player.playerIndex);
+            if ((player.aliveState !== Twns.Types.PlayerAliveState.Dead)         &&
                 (playerIndex !== CommonConstants.WarNeutralPlayerIndex)     &&
                 (playerDataArray.every(v => v.playerIndex !== playerIndex))
             ) {

@@ -64,16 +64,16 @@ namespace Twns.WarEvent {
             const chineseText   = this._inputChinese.text || ``;
             const englishText   = this._inputEnglish.text || ``;
             const textList      : ILanguageText[] = [
-                { languageType: Types.LanguageType.Chinese, text: chineseText || englishText },
-                { languageType: Types.LanguageType.English, text: englishText || chineseText },
+                { languageType: Twns.Types.LanguageType.Chinese, text: chineseText || englishText },
+                { languageType: Twns.Types.LanguageType.English, text: englishText || chineseText },
             ];
-            if (textList.every(v => Helpers.getExisted(v.text).length <= 0)) {
+            if (textList.every(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
                 FloatText.show(Lang.getText(LangTextType.A0155));
-            } else if (textList.some(v => Helpers.getExisted(v.text).length > CommonConstants.WarEventNameMaxLength)) {
+            } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > CommonConstants.WarEventNameMaxLength)) {
                 FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.WarEventNameMaxLength));
             } else {
                 const openData = this._getOpenData();
-                Helpers.getExisted(openData.war.getWarEventManager().getWarEvent(openData.warEventId)).eventNameArray = textList;
+                Twns.Helpers.getExisted(openData.war.getWarEventManager().getWarEvent(openData.warEventId)).eventNameArray = textList;
 
                 Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 this.close();
@@ -85,8 +85,8 @@ namespace Twns.WarEvent {
 
             const openData          = this._getOpenData();
             const nameArray         = openData.war.getWarEventManager().getWarEvent(openData.warEventId)?.eventNameArray;
-            this._inputChinese.text = Lang.getLanguageText({ textArray: nameArray, languageType: Types.LanguageType.Chinese, useAlternate: false }) || CommonConstants.ErrorTextForUndefined;
-            this._inputEnglish.text = Lang.getLanguageText({ textArray: nameArray, languageType: Types.LanguageType.English, useAlternate: false }) || CommonConstants.ErrorTextForUndefined;
+            this._inputChinese.text = Lang.getLanguageText({ textArray: nameArray, languageType: Twns.Types.LanguageType.Chinese, useAlternate: false }) || CommonConstants.ErrorTextForUndefined;
+            this._inputEnglish.text = Lang.getLanguageText({ textArray: nameArray, languageType: Twns.Types.LanguageType.English, useAlternate: false }) || CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateComponentsForLanguage(): void {

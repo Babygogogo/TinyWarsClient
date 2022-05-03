@@ -23,7 +23,7 @@
 namespace Twns.MultiCustomRoom {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = Twns.Notify.NotifyType;
-    import PlayerRuleType       = Types.PlayerRuleType;
+    import PlayerRuleType       = Twns.Types.PlayerRuleType;
 
     export class McrCreateAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
         private readonly _scroller!     : eui.Scroller;
@@ -80,7 +80,7 @@ namespace Twns.MultiCustomRoom {
             MultiCustomRoom.McrCreateModel.resetDataByTemplateWarRuleId(this._initialWarRuleId);
         }
         private _onTouchedBtnCustomize(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     MultiCustomRoom.McrCreateModel.setCustomWarRuleId();
@@ -120,7 +120,7 @@ namespace Twns.MultiCustomRoom {
         }
 
         private async _updateListPlayer(): Promise<void> {
-            const playersCount  = Helpers.getExisted((await MultiCustomRoom.McrCreateModel.getMapRawData()).playersCountUnneutral);
+            const playersCount  = Twns.Helpers.getExisted((await MultiCustomRoom.McrCreateModel.getMapRawData()).playersCountUnneutral);
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -158,7 +158,7 @@ namespace Twns.MultiCustomRoom {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
             if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
                     title   : `CO`,
                     content : Lang.getText(LangTextType.R0004),
                 });
@@ -249,7 +249,7 @@ namespace Twns.MultiCustomRoom {
         }
 
         private _onTouchedBtnCustom(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     MultiCustomRoom.McrCreateModel.setCustomWarRuleId();
@@ -322,7 +322,7 @@ namespace Twns.MultiCustomRoom {
             labelValue.visible                  = true;
             labelValue.text                     = `${currValue}`;
             labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
-            this._callbackForTouchLabelValue    = () => TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
+            this._callbackForTouchLabelValue    = () => Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonBanCoPanel, {
                 playerIndex,
                 gameConfig,
                 fullCoIdArray       : gameConfig.getEnabledCoArray().map(v => v.coId),
@@ -333,12 +333,12 @@ namespace Twns.MultiCustomRoom {
                     const callback = () => {
                         MultiCustomRoom.McrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
                         Twns.Notify.dispatch(NotifyType.McrCreateBannedCoIdArrayChanged);
-                        TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBanCoPanel);
+                        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonBanCoPanel);
                     };
                     if ((selfCoId == null) || (!bannedCoIdSet.has(selfCoId))) {
                         callback();
                     } else {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0057),
                             callback: () => {
                                 MultiCustomRoom.McrCreateModel.setSelfCoId(CommonConstants.CoEmptyId);

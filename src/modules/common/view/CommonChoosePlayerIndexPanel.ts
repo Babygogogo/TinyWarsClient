@@ -91,7 +91,7 @@ namespace Twns.Common {
             const playerIndexArray  = openData.currentPlayerIndexArray;
             const list              = this._listLocation;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => playerIndexArray.indexOf(v.playerIndex) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => playerIndexArray.indexOf(v.playerIndex) >= 0 ? i : null)));
         }
     }
 

@@ -11,10 +11,10 @@
 namespace Twns.WarMap.WarMapProxy {
     import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import NetMessageCodes  = Twns.Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Twns.Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgMapGetEnabledMapIdArray,      callback: _onMsgMapGetEnabledMapIdArray },
             { msgCode: NetMessageCodes.MsgMapGetBriefData,              callback: _onMsgMapGetBriefData },
             { msgCode: NetMessageCodes.MsgMapGetRawData,                callback: _onMsgMapGetRawData },
@@ -38,7 +38,7 @@ namespace Twns.WarMap.WarMapProxy {
     }
 
     export function reqGetMapBriefData(mapId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMapGetBriefData: { c: {
                 mapId,
             }, },
@@ -46,12 +46,12 @@ namespace Twns.WarMap.WarMapProxy {
     }
     function _onMsgMapGetBriefData(e: egret.Event): void {
         const data  = e.data as NetMessage.MsgMapGetBriefData.IS;
-        Twns.WarMap.WarMapModel.setBriefData(Helpers.getExisted(data.mapId), data.mapBriefData ?? null);
+        Twns.WarMap.WarMapModel.setBriefData(Twns.Helpers.getExisted(data.mapId), data.mapBriefData ?? null);
         Twns.Notify.dispatch(NotifyType.MsgMapGetBriefData, data);
     }
 
     export function reqGetMapRawData(mapId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMapGetRawData: { c: {
                 mapId,
             }, },
@@ -59,7 +59,7 @@ namespace Twns.WarMap.WarMapProxy {
     }
     function _onMsgMapGetRawData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMapGetRawData.IS;
-        Twns.WarMap.WarMapModel.setRawData(Helpers.getExisted(data.mapId), data.mapRawData ?? null);
+        Twns.WarMap.WarMapModel.setRawData(Twns.Helpers.getExisted(data.mapId), data.mapRawData ?? null);
         Twns.Notify.dispatch(NotifyType.MsgMapGetRawData, data);
     }
 
@@ -68,7 +68,7 @@ namespace Twns.WarMap.WarMapProxy {
         ruleId      : number;
         availability: CommonProto.WarRule.IRuleAvailability;
     }): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMmSetWarRuleAvailability: { c: {
                 mapId,
                 ruleId,
@@ -85,7 +85,7 @@ namespace Twns.WarMap.WarMapProxy {
     }
 
     export function reqMmSetMapEnabled(mapId: number, isEnabled: boolean): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMmSetMapEnabled: { c: {
                 mapId,
                 isEnabled,
@@ -100,7 +100,7 @@ namespace Twns.WarMap.WarMapProxy {
     }
 
     export function reqMmGetReviewingMaps(): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMmGetReviewingMaps: { c: {} },
         });
     }
@@ -119,7 +119,7 @@ namespace Twns.WarMap.WarMapProxy {
         isAccept        : boolean;
         reviewComment   : string | null;
     }): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMmReviewMap: { c: {
                 designerUserId,
                 slotIndex,
@@ -137,7 +137,7 @@ namespace Twns.WarMap.WarMapProxy {
     }
 
     export function reqMmSetMapTag(mapId: number, mapTag: CommonProto.Map.IDataForMapTag | null): void {
-        NetManager.send({ MsgMmSetMapTag: { c: {
+        Twns.Net.NetManager.send({ MsgMmSetMapTag: { c: {
             mapId,
             mapTag,
         } } });
@@ -150,7 +150,7 @@ namespace Twns.WarMap.WarMapProxy {
     }
 
     export function reqMmSetMapName(mapId: number, mapNameArray: CommonProto.Structure.ILanguageText[]): void {
-        NetManager.send({ MsgMmSetMapName: { c: {
+        Twns.Net.NetManager.send({ MsgMmSetMapName: { c: {
             mapId,
             mapNameArray,
         } } });
@@ -164,7 +164,7 @@ namespace Twns.WarMap.WarMapProxy {
     }
 
     export function reqMmAddWarRule(mapId: number, templateWarRule: CommonProto.WarRule.ITemplateWarRule): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMmAddWarRule: { c: {
                 mapId,
                 templateWarRule,
@@ -180,7 +180,7 @@ namespace Twns.WarMap.WarMapProxy {
     }
 
     export function reqMmDeleteWarRule(mapId: number, ruleId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMmDeleteWarRule: { c: {
                 mapId,
                 ruleId,

@@ -68,18 +68,18 @@ namespace Twns.BaseWar {
         }
 
         private _onTouchedBtnSkip(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0226),
                 callback: () => this.close(),
             });
         }
         private _onTouchedImgTouchMask(): void {
-            if (Helpers.getExisted(this._getOpenData().actionData.dataArray)[this._dialogueIndex + 1]) {
+            if (Twns.Helpers.getExisted(this._getOpenData().actionData.dataArray)[this._dialogueIndex + 1]) {
                 this._tickDialogue();
             } else {
                 this.close();
             }
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -173,56 +173,56 @@ namespace Twns.BaseWar {
 
             const openData              = this._getOpenData();
             const gameConfig            = openData.gameConfig;
-            const dataForCoDialogue     = Helpers.getExisted(Helpers.getExisted(openData.actionData.dataArray)[this._dialogueIndex].dataForCoDialogue);
+            const dataForCoDialogue     = Twns.Helpers.getExisted(Twns.Helpers.getExisted(openData.actionData.dataArray)[this._dialogueIndex].dataForCoDialogue);
             const groupCo1              = this._groupCo1;
             const groupCo2              = this._groupCo2;
-            const coId                  = Helpers.getExisted(dataForCoDialogue.coId);
+            const coId                  = Twns.Helpers.getExisted(dataForCoDialogue.coId);
             const coImageSource         = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
             const coName                = Lang.getLanguageText({ textArray: dataForCoDialogue.nameArray }) ?? gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined;
             const side                  = dataForCoDialogue.side;
 
-            if (side === Types.WarEventActionSimpleDialogueSide.Bottom) {
+            if (side === Twns.Types.WarEventActionSimpleDialogueSide.Bottom) {
                 this._groupDialogue1.visible    = true;
                 this._labelName1.text           = coName;
                 this._imgCo1.source             = coImageSource;
-                this._labelContent1.setRichText(Helpers.getExisted(Lang.getLanguageText({
+                this._labelContent1.setRichText(Twns.Helpers.getExisted(Lang.getLanguageText({
                     textArray   : dataForCoDialogue.textArray,
                 })).replace(/\\n/g, "\n"));
-                Helpers.changeColor(groupCo1, Types.ColorType.Origin);
-                Helpers.changeColor(groupCo2, Types.ColorType.Dark);
+                Twns.Helpers.changeColor(groupCo1, Twns.Types.ColorType.Origin);
+                Twns.Helpers.changeColor(groupCo2, Twns.Types.ColorType.Dark);
 
-            } else if (side === Types.WarEventActionSimpleDialogueSide.Top) {
+            } else if (side === Twns.Types.WarEventActionSimpleDialogueSide.Top) {
                 this._groupDialogue2.visible    = true;
                 this._labelName2.text           = coName;
                 this._imgCo2.source             = coImageSource;
-                this._labelContent2.setRichText(Helpers.getExisted(Lang.getLanguageText({
+                this._labelContent2.setRichText(Twns.Helpers.getExisted(Lang.getLanguageText({
                     textArray   : dataForCoDialogue.textArray,
                 })).replace(/\\n/g, "\n"));
-                Helpers.changeColor(groupCo1, Types.ColorType.Dark);
-                Helpers.changeColor(groupCo2, Types.ColorType.Origin);
+                Twns.Helpers.changeColor(groupCo1, Twns.Types.ColorType.Dark);
+                Twns.Helpers.changeColor(groupCo2, Twns.Types.ColorType.Origin);
 
             } else {
-                throw Helpers.newError(`BwSimpleDialoguePanel._tickDialogue() invalid side.`);
+                throw Twns.Helpers.newError(`BwSimpleDialoguePanel._tickDialogue() invalid side.`);
             }
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

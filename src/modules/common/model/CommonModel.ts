@@ -7,12 +7,12 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common.CommonModel {
-    import UnitType                 = Types.UnitType;
-    import TileThemeType            = Types.TileThemeType;
-    import TileBaseType             = Types.TileBaseType;
-    import TileDecoratorType        = Types.TileDecoratorType;
-    import TileObjectType           = Types.TileObjectType;
-    import TextureVersion           = Types.UnitAndTileTextureVersion;
+    import UnitType                 = Twns.Types.UnitType;
+    import TileThemeType            = Twns.Types.TileThemeType;
+    import TileBaseType             = Twns.Types.TileBaseType;
+    import TileDecoratorType        = Twns.Types.TileDecoratorType;
+    import TileObjectType           = Twns.Types.TileObjectType;
+    import TextureVersion           = Twns.Types.UnitAndTileTextureVersion;
     import IDataForMrwPlayerRank    = CommonProto.Structure.IDataForMrwPlayerRank;
 
     type FrameCfg = {
@@ -43,7 +43,7 @@ namespace Twns.Common.CommonModel {
         return _unitAndTileTexturePrefix;
     }
     function updateUnitAndTileTexturePrefix(): void {
-        _unitAndTileTexturePrefix = `v${Helpers.getNumText(Twns.User.UserModel.getSelfSettingsTextureVersion())}_`;
+        _unitAndTileTexturePrefix = `v${Twns.Helpers.getNumText(Twns.User.UserModel.getSelfSettingsTextureVersion())}_`;
     }
 
     export function tickTileImageSources(): void {
@@ -71,33 +71,33 @@ namespace Twns.Common.CommonModel {
             _unitImageSourceDict.set(version, new Map());
         }
 
-        const dict1 = Helpers.getExisted(_unitImageSourceDict.get(version));
+        const dict1 = Twns.Helpers.getExisted(_unitImageSourceDict.get(version));
         if (!dict1.has(isDark)) {
             dict1.set(isDark, new Map());
         }
 
-        const dict2 = Helpers.getExisted(dict1.get(isDark));
+        const dict2 = Twns.Helpers.getExisted(dict1.get(isDark));
         if (!dict2.has(isMoving)) {
             dict2.set(isMoving, new Map());
         }
 
-        const dict3 = Helpers.getExisted(dict2.get(isMoving));
+        const dict3 = Twns.Helpers.getExisted(dict2.get(isMoving));
         if (!dict3.has(skinId)) {
             dict3.set(skinId, new Map());
         }
 
-        const dict4 = Helpers.getExisted(dict3.get(skinId));
+        const dict4 = Twns.Helpers.getExisted(dict3.get(skinId));
         if (!dict4.has(unitType)) {
             dict4.set(unitType, { source: null, tick: null });
         }
 
-        const cfg = Helpers.getExisted(dict4.get(unitType));
+        const cfg = Twns.Helpers.getExisted(dict4.get(unitType));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
             cfg.source  = Twns.Config.ConfigManager.getUnitImageSource(params);
         }
 
-        return Helpers.getExisted(cfg.source);
+        return Twns.Helpers.getExisted(cfg.source);
     }
 
     export function getCachedTileBaseImageSource(params: {
@@ -114,43 +114,43 @@ namespace Twns.Common.CommonModel {
             _tileBaseImageSourceDict.set(version, new Map());
         }
 
-        const dict1 = Helpers.getExisted(_tileBaseImageSourceDict.get(version));
+        const dict1 = Twns.Helpers.getExisted(_tileBaseImageSourceDict.get(version));
         if (!dict1.has(themeType)) {
             dict1.set(themeType, new Map());
         }
 
-        const dict2 = Helpers.getExisted(dict1.get(themeType));
+        const dict2 = Twns.Helpers.getExisted(dict1.get(themeType));
         if (!dict2.has(skinId)) {
             dict2.set(skinId, new Map());
         }
 
-        const dict3 = Helpers.getExisted(dict2.get(skinId));
+        const dict3 = Twns.Helpers.getExisted(dict2.get(skinId));
         if (!dict3.has(baseType)) {
             dict3.set(baseType, new Map());
         }
 
-        const dict4 = Helpers.getExisted(dict3.get(baseType));
+        const dict4 = Twns.Helpers.getExisted(dict3.get(baseType));
         if (!dict4.has(isDark)) {
             dict4.set(isDark, new Map());
         }
 
-        const dict5 = Helpers.getExisted(dict4.get(isDark));
+        const dict5 = Twns.Helpers.getExisted(dict4.get(isDark));
         if (!dict5.has(shapeId)) {
             dict5.set(shapeId, new Map());
         }
 
-        const dict6 = Helpers.getExisted(dict5.get(shapeId));
+        const dict6 = Twns.Helpers.getExisted(dict5.get(shapeId));
         if (!dict6.has(tickCount)) {
             dict6.set(tickCount, { source: null, tick: null });
         }
 
-        const cfg = Helpers.getExisted(dict6.get(tickCount));
+        const cfg = Twns.Helpers.getExisted(dict6.get(tickCount));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
             cfg.source  = Twns.Config.ConfigManager.getTileBaseImageSource(params);
         }
 
-        return Helpers.getExisted(cfg.source);
+        return Twns.Helpers.getExisted(cfg.source);
     }
 
     export function getCachedTileDecoratorImageSource(params: {
@@ -174,43 +174,43 @@ namespace Twns.Common.CommonModel {
             _tileDecoratorImageSourceDict.set(version, new Map());
         }
 
-        const dict1 = Helpers.getExisted(_tileDecoratorImageSourceDict.get(version));
+        const dict1 = Twns.Helpers.getExisted(_tileDecoratorImageSourceDict.get(version));
         if (!dict1.has(themeType)) {
             dict1.set(themeType, new Map());
         }
 
-        const dict2 = Helpers.getExisted(dict1.get(themeType));
+        const dict2 = Twns.Helpers.getExisted(dict1.get(themeType));
         if (!dict2.has(skinId)) {
             dict2.set(skinId, new Map());
         }
 
-        const dict3 = Helpers.getExisted(dict2.get(skinId));
+        const dict3 = Twns.Helpers.getExisted(dict2.get(skinId));
         if (!dict3.has(decoratorType)) {
             dict3.set(decoratorType, new Map());
         }
 
-        const dict4 = Helpers.getExisted(dict3.get(decoratorType));
+        const dict4 = Twns.Helpers.getExisted(dict3.get(decoratorType));
         if (!dict4.has(isDark)) {
             dict4.set(isDark, new Map());
         }
 
-        const dict5 = Helpers.getExisted(dict4.get(isDark));
+        const dict5 = Twns.Helpers.getExisted(dict4.get(isDark));
         if (!dict5.has(shapeId)) {
             dict5.set(shapeId, new Map());
         }
 
-        const dict6 = Helpers.getExisted(dict5.get(shapeId));
+        const dict6 = Twns.Helpers.getExisted(dict5.get(shapeId));
         if (!dict6.has(tickCount)) {
             dict6.set(tickCount, { source: null, tick: null });
         }
 
-        const cfg = Helpers.getExisted(dict6.get(tickCount));
+        const cfg = Twns.Helpers.getExisted(dict6.get(tickCount));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
             cfg.source  = Twns.Config.ConfigManager.getTileDecoratorImageSource(params);
         }
 
-        return Helpers.getExisted(cfg.source);
+        return Twns.Helpers.getExisted(cfg.source);
     }
 
     export function getCachedTileObjectImageSource(params: {
@@ -227,43 +227,43 @@ namespace Twns.Common.CommonModel {
             _tileObjectImageSourceDict.set(version, new Map());
         }
 
-        const dict1 = Helpers.getExisted(_tileObjectImageSourceDict.get(version));
+        const dict1 = Twns.Helpers.getExisted(_tileObjectImageSourceDict.get(version));
         if (!dict1.has(themeType)) {
             dict1.set(themeType, new Map());
         }
 
-        const dict2 = Helpers.getExisted(dict1.get(themeType));
+        const dict2 = Twns.Helpers.getExisted(dict1.get(themeType));
         if (!dict2.has(skinId)) {
             dict2.set(skinId, new Map());
         }
 
-        const dict3 = Helpers.getExisted(dict2.get(skinId));
+        const dict3 = Twns.Helpers.getExisted(dict2.get(skinId));
         if (!dict3.has(objectType)) {
             dict3.set(objectType, new Map());
         }
 
-        const dict4 = Helpers.getExisted(dict3.get(objectType));
+        const dict4 = Twns.Helpers.getExisted(dict3.get(objectType));
         if (!dict4.has(isDark)) {
             dict4.set(isDark, new Map());
         }
 
-        const dict5 = Helpers.getExisted(dict4.get(isDark));
+        const dict5 = Twns.Helpers.getExisted(dict4.get(isDark));
         if (!dict5.has(shapeId)) {
             dict5.set(shapeId, new Map());
         }
 
-        const dict6 = Helpers.getExisted(dict5.get(shapeId));
+        const dict6 = Twns.Helpers.getExisted(dict5.get(shapeId));
         if (!dict6.has(tickCount)) {
             dict6.set(tickCount, { source: null, tick: null });
         }
 
-        const cfg = Helpers.getExisted(dict6.get(tickCount));
+        const cfg = Twns.Helpers.getExisted(dict6.get(tickCount));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
             cfg.source  = Twns.Config.ConfigManager.getTileObjectImageSource(params);
         }
 
-        return Helpers.getExisted(cfg.source);
+        return Twns.Helpers.getExisted(cfg.source);
     }
 
     export function setMrwRankArray(rankList: IDataForMrwPlayerRank[]): void {

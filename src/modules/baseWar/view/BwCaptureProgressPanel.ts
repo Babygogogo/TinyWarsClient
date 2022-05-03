@@ -18,7 +18,7 @@ namespace Twns.BaseWar {
         protected _onOpening(): void {
             this._setIsTouchMaskEnabled();
             this._setCallbackOnTouchedMask(() => {
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
                 egret.Tween.removeTweens(this._pbarProgress);
                 this.close();
             });

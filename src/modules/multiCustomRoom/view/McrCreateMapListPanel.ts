@@ -80,7 +80,7 @@ namespace Twns.MultiCustomRoom {
 
         public async setAndReviseSelectedMapId(newMapId: number, needScroll: boolean): Promise<void> {
             const listMap   = this._listMap;
-            const index     = Helpers.getExisted(listMap.getRandomIndex(v => v.mapId === newMapId));
+            const index     = Twns.Helpers.getExisted(listMap.getRandomIndex(v => v.mapId === newMapId));
             listMap.setSelectedIndex(index);
             this._showMap(listMap.getSelectedData()?.mapId ?? null);
 
@@ -106,14 +106,14 @@ namespace Twns.MultiCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchTapBtnSearch(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrCreateSearchMapPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrCreateSearchMapPanel, void 0);
         }
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
         }
 
         private async _onTouchedBtnNextStep(): Promise<void> {
@@ -121,7 +121,7 @@ namespace Twns.MultiCustomRoom {
             if (selectedMapId != null) {
                 this.close();
                 await Twns.MultiCustomRoom.McrCreateModel.resetDataByMapId(selectedMapId);
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.McrCreateSettingsPanel, void 0);
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrCreateSettingsPanel, void 0);
             }
         }
 
@@ -159,9 +159,9 @@ namespace Twns.MultiCustomRoom {
                         return;
                     }
 
-                    const mapExtraData      = Helpers.getExisted(mapBriefData.mapExtraData);
+                    const mapExtraData      = Twns.Helpers.getExisted(mapBriefData.mapExtraData);
                     const mapTag            = mapBriefData.mapTag || {};
-                    const realMapName       = Helpers.getExisted(await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
+                    const realMapName       = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
                     const rating            = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
                     const actualPlayedTimes = await Twns.WarMap.WarMapModel.getTotalPlayedTimes(mapId);
                     if ((!mapBriefData.ruleAvailability?.canMcw)                                                            ||
@@ -197,7 +197,7 @@ namespace Twns.MultiCustomRoom {
             } else {
                 zoomMap.visible     = true;
                 uiMapInfo.visible   = true;
-                zoomMap.showMapByMapData(Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId)), await Config.ConfigManager.getLatestGameConfig());
+                zoomMap.showMapByMapData(Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId)), await Config.ConfigManager.getLatestGameConfig());
                 uiMapInfo.setData({
                     mapInfo: {
                         mapId,
@@ -207,82 +207,82 @@ namespace Twns.MultiCustomRoom {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupMapView,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnSearch,
                 beginProps  : { alpha: 0, y: 40 },
                 endProps    : { alpha: 1, y: 80 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupMapList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._uiMapInfo,
                 beginProps  : { alpha: 0, right: -40 },
                 endProps    : { alpha: 1, right: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupMapView,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnSearch,
                 beginProps  : { alpha: 1, y: 80 },
                 endProps    : { alpha: 0, y: 40 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupMapList,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._uiMapInfo,
                 beginProps  : { alpha: 1, right: 0 },
                 endProps    : { alpha: 0, right: -40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -299,7 +299,7 @@ namespace Twns.MultiCustomRoom {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
             ]);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
         }
 
         protected async _onDataChanged(): Promise<void> {

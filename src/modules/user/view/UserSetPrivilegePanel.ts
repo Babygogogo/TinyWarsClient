@@ -81,8 +81,8 @@ namespace Twns.User {
         private _onNotifyMsgUserGetPublicInfo(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgUserGetPublicInfo.IS;
             if (data.userId === this._getUserId()) {
-                const userPublicInfo                = Helpers.getExisted(data.userPublicInfo);
-                const userPrivilege                 = Helpers.getExisted(userPublicInfo.userPrivilege);
+                const userPublicInfo                = Twns.Helpers.getExisted(data.userPublicInfo);
+                const userPrivilege                 = Twns.Helpers.getExisted(userPublicInfo.userPrivilege);
                 this._labelUserName.text            = userPublicInfo.nickname || CommonConstants.ErrorTextForUndefined;
                 this._imgCanChat.visible            = !!userPrivilege.canChat;
                 this._imgChatManager.visible        = !!userPrivilege.isChatManager;

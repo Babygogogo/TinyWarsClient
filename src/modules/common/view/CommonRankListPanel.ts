@@ -109,13 +109,13 @@ namespace Twns.Common {
 
         private _updateComponentsForStd(): void {
             const playersCount  = 2;
-            const warType       = Types.WarType.MrwStd;
+            const warType       = Twns.Types.WarType.MrwStd;
             const dataList      : DataForMrwUserRenderer[] = [];
             for (const data of Twns.Common.CommonModel.getMrwRankList() || []) {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     const userId = data.userId;
                     if (userId == null) {
-                        throw Helpers.newError(`CommonRankListPanel._updateComponentsForStd() empty userId.`);
+                        throw Twns.Helpers.newError(`CommonRankListPanel._updateComponentsForStd() empty userId.`);
                     }
 
                     dataList.push({
@@ -133,13 +133,13 @@ namespace Twns.Common {
 
         private _updateComponentsForFog(): void {
             const playersCount  = 2;
-            const warType       = Types.WarType.MrwFog;
+            const warType       = Twns.Types.WarType.MrwFog;
             const dataList      : DataForMrwUserRenderer[] = [];
             for (const data of Twns.Common.CommonModel.getMrwRankList() || []) {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     const userId = data.userId;
                     if (userId == null) {
-                        throw Helpers.newError(`CommonRankListPanel._updateComponentsForFog() empty userId.`);
+                        throw Twns.Helpers.newError(`CommonRankListPanel._updateComponentsForFog() empty userId.`);
                     }
 
                     dataList.push({
@@ -159,10 +159,10 @@ namespace Twns.Common {
             const dataArray: DataForSpmUserRenderer[] = [];
             for (const data of await Twns.Leaderboard.LeaderboardModel.getSpmOverallTopDataArray() ?? []) {
                 const length    = dataArray.length;
-                const score     = Helpers.getExisted(data.score);
+                const score     = Twns.Helpers.getExisted(data.score);
                 dataArray.push({
                     index   : length + 1,
-                    userId  : Helpers.getExisted(data.userId),
+                    userId  : Twns.Helpers.getExisted(data.userId),
                     score,
                     rank    : length === 0
                         ? 1
@@ -175,32 +175,32 @@ namespace Twns.Common {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -208,7 +208,7 @@ namespace Twns.Common {
         rank        : number;
         userId      : number;
         playersCount: number;
-        warType     : Types.WarType;
+        warType     : Twns.Types.WarType;
     };
     class MrwUserRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMrwUserRenderer> {
         private readonly _group!            : eui.Group;
@@ -231,7 +231,7 @@ namespace Twns.Common {
         private _onTouchedImgBg(): void {
             const data = this.data;
             if (data) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId: data.userId });
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, { userId: data.userId });
             }
         }
 
@@ -249,12 +249,12 @@ namespace Twns.Common {
             const labelScore        = this._labelScore;
             labelNickname.text      = Lang.getText(LangTextType.B0029);
             labelScore.text         = ``;
-            this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
+            this._labelIndex.text   = `${rank}${Twns.Helpers.getSuffixForRank(rank)}`;
             this._imgBg.alpha       = rank % 2 == 1 ? 0.2 : 0.5;
 
             const userInfo = await Twns.User.UserModel.getUserPublicInfo(data.userId);
             if (userInfo == null) {
-                throw Helpers.newError(`UserRenderer._updateView() empty userInfo.`);
+                throw Twns.Helpers.newError(`UserRenderer._updateView() empty userInfo.`);
             }
             labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
 
@@ -262,7 +262,7 @@ namespace Twns.Common {
                 return (v.playersCountUnneutral === data.playersCount) && (v.warType === data.warType);
             });
             if (rankInfo == null) {
-                throw Helpers.newError(`UserRenderer._updateView() empty rankInfo.`);
+                throw Twns.Helpers.newError(`UserRenderer._updateView() empty rankInfo.`);
             } else {
                 labelScore.text = `${rankInfo.currentScore}`;
             }
@@ -296,7 +296,7 @@ namespace Twns.Common {
         private _onTouchedImgBg(): void {
             const data = this.data;
             if (data) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId: data.userId });
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, { userId: data.userId });
             }
         }
 
@@ -309,8 +309,8 @@ namespace Twns.Common {
             const labelNickname     = this._labelNickname;
             const labelScore        = this._labelScore;
             labelNickname.text      = Lang.getText(LangTextType.B0029);
-            labelScore.text         = `${Helpers.formatString(`%.2f`, data.score)}`;
-            this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
+            labelScore.text         = `${Twns.Helpers.formatString(`%.2f`, data.score)}`;
+            this._labelIndex.text   = `${rank}${Twns.Helpers.getSuffixForRank(rank)}`;
             this._imgBg.alpha       = data.index % 2 == 1 ? 0.2 : 0.5;
 
             const userInfo          = await Twns.User.UserModel.getUserPublicInfo(data.userId);

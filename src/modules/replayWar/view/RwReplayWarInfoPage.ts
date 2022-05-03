@@ -106,13 +106,13 @@ namespace Twns.ReplayWar {
 
         private async _updateLabelWarType(): Promise<void> {
             const replayBriefInfo   = await this._getReplayInfo();
-            this._labelWarType.text = replayBriefInfo ? Lang.getWarTypeName(Helpers.getExisted(replayBriefInfo.warType)) ?? CommonConstants.ErrorTextForUndefined : `??`;
+            this._labelWarType.text = replayBriefInfo ? Lang.getWarTypeName(Twns.Helpers.getExisted(replayBriefInfo.warType)) ?? CommonConstants.ErrorTextForUndefined : `??`;
         }
 
         private async _updateLabelGlobalRating(): Promise<void> {
             const replayBriefInfo           = await this._getReplayInfo();
             const raters                    = replayBriefInfo ? replayBriefInfo.totalRaters : null;
-            this._labelGlobalRating.text    = raters ? (Helpers.getExisted(replayBriefInfo?.totalRating) / raters).toFixed(2) : Lang.getText(LangTextType.B0001);
+            this._labelGlobalRating.text    = raters ? (Twns.Helpers.getExisted(replayBriefInfo?.totalRating) / raters).toFixed(2) : Lang.getText(LangTextType.B0001);
         }
 
         private async _updateLabelMyRating(): Promise<void> {
@@ -138,7 +138,7 @@ namespace Twns.ReplayWar {
         private async _updateLabelEndTime(): Promise<void> {
             const replayBriefInfo   = await this._getReplayInfo();
             this._labelEndTime.text = replayBriefInfo
-                ? Helpers.getTimestampShortText(Helpers.getExisted(replayBriefInfo.warEndTime))
+                ? Twns.Helpers.getTimestampShortText(Twns.Helpers.getExisted(replayBriefInfo.warEndTime))
                 : `??`;
         }
 

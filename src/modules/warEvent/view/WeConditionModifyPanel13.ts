@@ -70,28 +70,28 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 condition   : openData.condition,
             });
         }
         private _onTouchedGroupIsNot(): void {
-            const data  = Helpers.getExisted(this._getCondition().WecPlayerAliveStateEqualTo);
+            const data  = Twns.Helpers.getExisted(this._getCondition().WecPlayerAliveStateEqualTo);
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDesc();
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnAliveState(): void {
-            const data              = Helpers.getExisted(this._getCondition().WecPlayerAliveStateEqualTo);
+            const data              = Twns.Helpers.getExisted(this._getCondition().WecPlayerAliveStateEqualTo);
             const currAliveState    = data.aliveStateEqualTo;
-            if (currAliveState === Types.PlayerAliveState.Alive) {
-                data.aliveStateEqualTo = Types.PlayerAliveState.Dying;
-            } else if (currAliveState === Types.PlayerAliveState.Dying) {
-                data.aliveStateEqualTo = Types.PlayerAliveState.Dead;
+            if (currAliveState === Twns.Types.PlayerAliveState.Alive) {
+                data.aliveStateEqualTo = Twns.Types.PlayerAliveState.Dying;
+            } else if (currAliveState === Twns.Types.PlayerAliveState.Dying) {
+                data.aliveStateEqualTo = Twns.Types.PlayerAliveState.Dead;
             } else {
-                data.aliveStateEqualTo = Types.PlayerAliveState.Alive;
+                data.aliveStateEqualTo = Twns.Types.PlayerAliveState.Alive;
             }
             this._updateLabelDesc();
             this._updateLabelAliveState();
@@ -102,7 +102,7 @@ namespace Twns.WarEvent {
             if (isNaN(value)) {
                 this._updateInputPlayerIndex();
             } else {
-                Helpers.getExisted(this._getCondition().WecPlayerAliveStateEqualTo).playerIndexEqualTo = value;
+                Twns.Helpers.getExisted(this._getCondition().WecPlayerAliveStateEqualTo).playerIndexEqualTo = value;
                 this._updateLabelDesc();
                 this._updateInputPlayerIndex();
                 Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
@@ -138,14 +138,14 @@ namespace Twns.WarEvent {
             const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
             this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateImgIsNot(): void {
             this._imgIsNot.visible = !!this._getCondition().WecPlayerAliveStateEqualTo?.isNot;
         }
         private _updateLabelAliveState(): void {
-            this._labelAliveState.text = Lang.getPlayerAliveStateName(Helpers.getExisted(this._getCondition().WecPlayerAliveStateEqualTo?.aliveStateEqualTo)) || CommonConstants.ErrorTextForUndefined;
+            this._labelAliveState.text = Lang.getPlayerAliveStateName(Twns.Helpers.getExisted(this._getCondition().WecPlayerAliveStateEqualTo?.aliveStateEqualTo)) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputPlayerIndex(): void {
             this._inputPlayerIndex.text = `${this._getCondition().WecPlayerAliveStateEqualTo?.playerIndexEqualTo}`;

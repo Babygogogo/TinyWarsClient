@@ -30,8 +30,8 @@
 namespace Twns.Chat {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = Twns.Notify.NotifyType;
-    import ChatCategory         = Types.ChatMessageToCategory;
-    import ChatChannel          = Types.ChatChannel;
+    import ChatCategory         = Twns.Types.ChatMessageToCategory;
+    import ChatChannel          = Twns.Types.ChatChannel;
     import NetMessage           = CommonProto.NetMessage;
 
     export type OpenDataForChatPanel = {
@@ -127,13 +127,13 @@ namespace Twns.Chat {
         }
 
         private async _onNotifyMsgChatAddMessage(e: egret.Event): Promise<void> {
-            const message       = Helpers.getExisted((e.data as NetMessage.MsgChatAddMessage.IS).message);
+            const message       = Twns.Helpers.getExisted((e.data as NetMessage.MsgChatAddMessage.IS).message);
             const fromUserId    = message.fromUserId;
             if (fromUserId === Twns.User.UserModel.getSelfUserId()) {
                 this._inputMessage.text = "";
             }
 
-            const pageData          = this._dataForListChat[Helpers.getExisted(this.getSelectedIndex())];
+            const pageData          = this._dataForListChat[Twns.Helpers.getExisted(this.getSelectedIndex())];
             const pageToCategory    = pageData.toCategory;
             if (message.toCategory === pageData.toCategory) {
                 const pageToTarget = pageData.toTarget;
@@ -165,7 +165,7 @@ namespace Twns.Chat {
             const messageId = (e.data as NetMessage.MsgChatDeleteMessage.IS).messageId;
             const list      = this._listMessage;
             if (list.getBoundDataArray()?.some(v => v.message.messageId === messageId)) {
-                const chatData  = this._dataForListChat[Helpers.getExisted(this.getSelectedIndex())];
+                const chatData  = this._dataForListChat[Twns.Helpers.getExisted(this.getSelectedIndex())];
                 const dataArray : DataForMessageRenderer[] = [];
                 for (const message of Twns.Chat.ChatModel.getMessagesForCategory(chatData.toCategory).get(chatData.toTarget) || []) {
                     dataArray.push({ message });
@@ -183,7 +183,7 @@ namespace Twns.Chat {
         }
 
         private _onTouchedBtnRefresh(): void {
-            const currTime  = Timer.getServerTimestamp();
+            const currTime  = Twns.Timer.getServerTimestamp();
             const cdTime    = Twns.Chat.ChatModel.getTimestampForNextReqAllMessages() - currTime;
             if (cdTime > 0) {
                 FloatText.show(Lang.getFormattedText(LangTextType.F0026, cdTime));
@@ -212,52 +212,52 @@ namespace Twns.Chat {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         protected override async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupChannel,
                 beginProps  : { alpha: 0, left: -40 },
                 endProps    : { alpha: 1, left: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupMessage,
                 beginProps  : { alpha: 0, right: -40 },
                 endProps    : { alpha: 1, right: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupInput,
                 beginProps  : { alpha: 0, bottom: -40 },
                 endProps    : { alpha: 1, bottom: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected override async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupChannel,
                 beginProps  : { alpha: 1, left: 0 },
                 endProps    : { alpha: 0, left: -40 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupMessage,
                 beginProps  : { alpha: 1, right: 0 },
                 endProps    : { alpha: 0, right: -40 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupInput,
                 beginProps  : { alpha: 1, bottom: 0 },
                 endProps    : { alpha: 0, bottom: -40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -268,7 +268,7 @@ namespace Twns.Chat {
         }
 
         private _updateComponentsForMessage(): void {
-            const chatData  = this._dataForListChat[Helpers.getExisted(this.getSelectedIndex())];
+            const chatData  = this._dataForListChat[Twns.Helpers.getExisted(this.getSelectedIndex())];
             const dataArray : DataForMessageRenderer[] = [];
             for (const message of Twns.Chat.ChatModel.getMessagesForCategory(chatData.toCategory).get(chatData.toTarget) || []) {
                 dataArray.push({ message });
@@ -362,9 +362,9 @@ namespace Twns.Chat {
 
             const war = MultiPlayerWar.MpwModel.getWar();
             if (war) {
-                const player = war.getPlayerManager().getPlayerByUserId(Helpers.getExisted(Twns.User.UserModel.getSelfUserId()));
-                if ((player) && (player.getAliveState() === Types.PlayerAliveState.Alive)) {
-                    const toWarAndTeam1 = Helpers.getExisted(war.getWarId()) * CommonConstants.ChatTeamDivider;
+                const player = war.getPlayerManager().getPlayerByUserId(Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId()));
+                if ((player) && (player.getAliveState() === Twns.Types.PlayerAliveState.Alive)) {
+                    const toWarAndTeam1 = Twns.Helpers.getExisted(war.getWarId()) * CommonConstants.ChatTeamDivider;
                     if (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.WarAndTeam, toTarget: toWarAndTeam1 })) {
                         dataDict.set(indexForSort, {
                             index       : indexForSort,
@@ -465,7 +465,7 @@ namespace Twns.Chat {
             const dataList  : DataForChatPageRenderer[] = [];
             let index       = 0;
             for (const v of timestampList) {
-                const data = Helpers.getExisted(dataDict.get(v.index));
+                const data = Twns.Helpers.getExisted(dataDict.get(v.index));
                 data.index = index;
                 dataList.push(data);
                 ++index;
@@ -557,7 +557,7 @@ namespace Twns.Chat {
     function getLatestTimestamp(index: number, msgList: CommonProto.Chat.IChatMessage[] | null): { index: number, timestamp: number } {
         let timestamp = 0;
         for (const msg of msgList || []) {
-            timestamp = Math.max(timestamp, Helpers.getExisted(msg.timestamp));
+            timestamp = Math.max(timestamp, Twns.Helpers.getExisted(msg.timestamp));
         }
         return {
             index,
@@ -617,7 +617,7 @@ namespace Twns.Chat {
 
         protected _onDataChanged(): void {
             const data          = this._getData();
-            this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            this.currentState   = data.index === data.panel.getSelectedIndex() ? Twns.Types.UiState.Down : Twns.Types.UiState.Up;
             this._updateLabels();
             this._updateImgRed();
         }
@@ -631,9 +631,9 @@ namespace Twns.Chat {
 
             if (toCategory === ChatCategory.PublicChannel) {
                 const languageType  = toTarget === ChatChannel.PublicCn
-                    ? Types.LanguageType.Chinese
+                    ? Twns.Types.LanguageType.Chinese
                     : (toTarget === ChatChannel.PublicEn
-                        ? Types.LanguageType.English
+                        ? Twns.Types.LanguageType.English
                         : Lang.getCurrentLanguageType()
                     );
                 labelType.text      = Lang.getText(LangTextType.B0376, languageType);
@@ -657,12 +657,12 @@ namespace Twns.Chat {
                     if (v == null) {
                         labelName.text = ``;
                     } else {
-                        const settingsForMcw    = Helpers.getExisted(v.settingsForMcw);
+                        const settingsForMcw    = Twns.Helpers.getExisted(v.settingsForMcw);
                         const warName           = settingsForMcw.warName;
                         if (warName) {
                             labelName.text = warName;
                         } else {
-                            labelName.text = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                            labelName.text = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(settingsForMcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
                         }
                     }
                 });
@@ -674,12 +674,12 @@ namespace Twns.Chat {
                     if (v == null) {
                         labelName.text = ``;
                     } else {
-                        const settingsForCcw    = Helpers.getExisted(v.settingsForCcw);
+                        const settingsForCcw    = Twns.Helpers.getExisted(v.settingsForCcw);
                         const warName           = settingsForCcw.warName;
                         if (warName) {
                             labelName.text = warName;
                         } else {
-                            labelName.text = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForCcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                            labelName.text = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(settingsForCcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
                         }
                     }
                 });
@@ -700,7 +700,7 @@ namespace Twns.Chat {
                 labelName.text = (await Twns.User.UserModel.getUserBriefInfo(toTarget))?.nickname ?? CommonConstants.ErrorTextForUndefined;
 
             } else {
-                throw Helpers.newError(`Invalid data.`);
+                throw Twns.Helpers.newError(`Invalid data.`);
             }
         }
 
@@ -721,22 +721,22 @@ namespace Twns.Chat {
         protected async _onDataChanged(): Promise<void> {
             const data                  = this._getData();
             const message               = data.message;
-            const fromUserId            = Helpers.getExisted(message.fromUserId);
+            const fromUserId            = Twns.Helpers.getExisted(message.fromUserId);
             this._labelContent.text     = message.content ?? CommonConstants.ErrorTextForUndefined;
             this._labelName.textColor   = fromUserId === Twns.User.UserModel.getSelfUserId() ? 0x00FF00 : 0xFFFFFF;
-            this._labelName.text        = `    (${Helpers.getTimestampShortText(Helpers.getExisted(message.timestamp))})`;
+            this._labelName.text        = `    (${Twns.Helpers.getTimestampShortText(Twns.Helpers.getExisted(message.timestamp))})`;
 
-            const userInfo = Helpers.getExisted(await Twns.User.UserModel.getUserPublicInfo(fromUserId));
+            const userInfo = Twns.Helpers.getExisted(await Twns.User.UserModel.getUserPublicInfo(fromUserId));
             if ((this._getIsOpening()) && (data === this._getData())) {
                 this._imgAvatar.source  = Config.ConfigManager.getUserAvatarImageSource(userInfo.avatarId ?? 1);
-                this._labelName.text    = `${userInfo.nickname || `???`}    (${Helpers.getTimestampShortText(Helpers.getExisted(message.timestamp))})`;
+                this._labelName.text    = `${userInfo.nickname || `???`}    (${Twns.Helpers.getTimestampShortText(Twns.Helpers.getExisted(message.timestamp))})`;
             }
         }
 
         public async onItemTapEvent(): Promise<void> {
             const message = this._getData().message;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatCommandPanel, {
-                messageId   : Helpers.getExisted(message.messageId),
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChatCommandPanel, {
+                messageId   : Twns.Helpers.getExisted(message.messageId),
                 userId      : message.fromUserId,
             });
         }

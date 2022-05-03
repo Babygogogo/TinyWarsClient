@@ -12,10 +12,10 @@
 namespace Twns.Common.CommonProxy {
     import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import NetMessageCodes  = Twns.Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Twns.Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgCommonHeartbeat,           callback: _onMsgCommonHeartbeat },
             { msgCode: NetMessageCodes.MsgCommonError,               callback: _onMsgCommonError, },
             { msgCode: NetMessageCodes.MsgCommonLatestConfigVersion, callback: _onMsgCommonLatestConfigVersion },
@@ -25,7 +25,7 @@ namespace Twns.Common.CommonProxy {
     }
 
     export function reqCommonHeartbeat(counter: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgCommonHeartbeat: { c: {
                 counter,
             } },
@@ -45,13 +45,13 @@ namespace Twns.Common.CommonProxy {
 
     function _onMsgCommonLatestConfigVersion(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgCommonLatestConfigVersion.IS;
-        Twns.Config.ConfigManager.setLatestConfigVersion(Helpers.getExisted(data.version));
+        Twns.Config.ConfigManager.setLatestConfigVersion(Twns.Helpers.getExisted(data.version));
 
         Twns.Notify.dispatch(NotifyType.MsgCommonLatestConfigVersion, data);
     }
 
     export function reqCommonGetServerStatus(): void {
-        NetManager.send({ MsgCommonGetServerStatus: { c: {} }, });
+        Twns.Net.NetManager.send({ MsgCommonGetServerStatus: { c: {} }, });
     }
     function _onMsgCommonGetServerStatus(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCommonGetServerStatus.IS;
@@ -61,7 +61,7 @@ namespace Twns.Common.CommonProxy {
     }
 
     export function reqGetRankList(): void {
-        NetManager.send({ MsgCommonGetRankList: { c: {} } });
+        Twns.Net.NetManager.send({ MsgCommonGetRankList: { c: {} } });
     }
     function _onMsgCommonGetRankList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCommonGetRankList.IS;

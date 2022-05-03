@@ -2,7 +2,7 @@
 // import TwnsLangTextType     from "./LangTextType";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsLangCommonText {
+namespace Twns.Lang {
     import LangTextType = TwnsLangTextType.LangTextType;
 
     export const LangCommonText: { [type: number]: string [] } = {

@@ -146,9 +146,9 @@ namespace Twns.TestWar {
 
         public getErrorCodeForInitForSfw(data: ISerialWar, gameConfig: GameConfig): ClientErrorCode {
             try {
-                this.init(data, gameConfig, data.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.SfwFog : Types.WarType.SfwStd);
+                this.init(data, gameConfig, data.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ? Twns.Types.WarType.SfwFog : Twns.Types.WarType.SfwStd);
             } catch(e) {
-                const error = e as Types.CustomError;
+                const error = e as Twns.Types.CustomError;
                 return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInitForSfw_00;
             }
 
@@ -156,9 +156,9 @@ namespace Twns.TestWar {
         }
         public getErrorCodeForInitForMfw(data: ISerialWar, gameConfig: GameConfig): ClientErrorCode {
             try {
-                this.init(data, gameConfig, data.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MfwFog : Types.WarType.MfwStd);
+                this.init(data, gameConfig, data.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ? Twns.Types.WarType.MfwFog : Twns.Types.WarType.MfwStd);
             } catch(e) {
-                const error = e as Types.CustomError;
+                const error = e as Twns.Types.CustomError;
                 return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInitForMfw_00;
             }
 
@@ -166,7 +166,7 @@ namespace Twns.TestWar {
         }
         public async getErrorCodeForInitByMapRawData(mapRawData: IMapRawData, gameConfig: GameConfig): Promise<ClientErrorCode> {
             return await this.initByMapRawData(mapRawData, gameConfig).catch(e => {
-                const error = e as Types.CustomError;
+                const error = e as Twns.Types.CustomError;
                 return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInitByMapRawData_00;
             }) || ClientErrorCode.NoError;
         }
@@ -186,7 +186,7 @@ namespace Twns.TestWar {
             return null;
         }
         public getSettingsBootTimerParams(): number[] {
-            return [Types.BootTimerType.NoBoot];
+            return [Twns.Types.BootTimerType.NoBoot];
         }
     }
 
@@ -225,18 +225,18 @@ namespace Twns.TestWar {
         return {
             turnIndex       : CommonConstants.WarFirstTurnIndex,
             playerIndex     : 0,
-            turnPhaseCode   : Types.TurnPhaseCode.WaitBeginTurn,
-            enterTurnTime   : Timer.getServerTimestamp(),
+            turnPhaseCode   : Twns.Types.TurnPhaseCode.WaitBeginTurn,
+            enterTurnTime   : Twns.Timer.getServerTimestamp(),
         };
     }
 
     async function _createInitialPlayerManagerDataForTw(mapRawData: IMapRawData, gameConfig: GameConfig): Promise<WarSerialization.ISerialPlayerManager> {
         const playersCountUnneutral = mapRawData.playersCountUnneutral;
         if ((playersCountUnneutral == null) || (playersCountUnneutral < 2)) {
-            throw Helpers.newError(`Invalid playersCountUnneutral: ${playersCountUnneutral}`, ClientErrorCode.TwWar_CreateInitialPlayerManagerDataForTw_00);
+            throw Twns.Helpers.newError(`Invalid playersCountUnneutral: ${playersCountUnneutral}`, ClientErrorCode.TwWar_CreateInitialPlayerManagerDataForTw_00);
         }
 
-        const bootTimerParams   = [Types.BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue];
+        const bootTimerParams   = [Twns.Types.BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue];
         const restTimeToBoot    = bootTimerParams[1];
         const players = [_createInitialSinglePlayerData({
             playerIndex         : 0,
@@ -248,12 +248,12 @@ namespace Twns.TestWar {
         })];
 
         const templateWarRule   = (mapRawData.templateWarRuleArray || [])[0];
-        const ruleForPlayers    = Helpers.getExisted(templateWarRule.ruleForPlayers);
-        const ruleAvailability  = Helpers.getExisted(templateWarRule.ruleAvailability);
+        const ruleForPlayers    = Twns.Helpers.getExisted(templateWarRule.ruleForPlayers);
+        const ruleAvailability  = Twns.Helpers.getExisted(templateWarRule.ruleAvailability);
         if ((WarHelpers.WarRuleHelpers.getErrorCodeForRuleForPlayers({ ruleForPlayers, gameConfig, playersCountUnneutral, ruleAvailability })) ||
             ((ruleForPlayers.playerRuleDataArray || []).length !== playersCountUnneutral)
         ) {
-            throw Helpers.newError(`Invalid ruleForPlayers.`, ClientErrorCode.TwWar_CreateInitialPlayerManagerDataForTw_01);
+            throw Twns.Helpers.newError(`Invalid ruleForPlayers.`, ClientErrorCode.TwWar_CreateInitialPlayerManagerDataForTw_01);
         }
 
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
@@ -272,7 +272,7 @@ namespace Twns.TestWar {
     }
 
     async function _createInitialFieldData(mapRawData: IMapRawData): Promise<WarSerialization.ISerialField> {
-        const tiles = Helpers.getExisted(mapRawData.tileDataArray);
+        const tiles = Twns.Helpers.getExisted(mapRawData.tileDataArray);
         const units = mapRawData.unitDataArray || [];
         return {
             tileMap     : {
@@ -283,7 +283,7 @@ namespace Twns.TestWar {
                 nextUnitId  : units.length,
             },
             fogMap  : {
-                forceFogCode: Types.ForceFogCode.None,
+                forceFogCode: Twns.Types.ForceFogCode.None,
             },
         };
     }
@@ -300,14 +300,14 @@ namespace Twns.TestWar {
         return {
             fund                        : 0,
             hasVotedForDraw             : false,
-            aliveState                  : Types.PlayerAliveState.Alive,
+            aliveState                  : Twns.Types.PlayerAliveState.Alive,
             playerIndex                 : data.playerIndex,
             restTimeToBoot              : data.restTimeToBoot,
             userId                      : data.userId,
             unitAndTileSkinId           : data.unitAndTileSkinId,
             coId                        : data.coId,
             coCurrentEnergy             : null,
-            coUsingSkillType            : Types.CoSkillType.Passive,
+            coUsingSkillType            : Twns.Types.CoSkillType.Passive,
             coPowerActivatedCount       : null,
             coIsDestroyedInTurn         : false,
             watchOngoingSrcUserIdArray  : null,

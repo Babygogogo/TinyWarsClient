@@ -5,8 +5,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiListItemRenderer {
-    import UiListener       = Types.UiListener;
-    import ShortSfxCode     = Types.ShortSfxCode;
+    import UiListener       = Twns.Types.UiListener;
+    import ShortSfxCode     = Twns.Types.ShortSfxCode;
 
     export class UiListItemRenderer<DataForRenderer> extends eui.ItemRenderer {
         private _isChildrenCreated          = false;
@@ -18,7 +18,7 @@ namespace TwnsUiListItemRenderer {
         private _notifyListenerArray        : Twns.Notify.Listener[] | null = null;
         private _uiListenerArray            : UiListener[] | null = null;
 
-        public data                         : Types.Undefinable<DataForRenderer>;
+        public data                         : Twns.Types.Undefinable<DataForRenderer>;
 
         public constructor() {
             super();
@@ -124,7 +124,7 @@ namespace TwnsUiListItemRenderer {
         }
 
         protected _getData(): DataForRenderer {
-            return Helpers.getExisted(this.data);
+            return Twns.Helpers.getExisted(this.data);
         }
         protected _checkHasData(): boolean {
             return this.data != null;

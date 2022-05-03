@@ -80,7 +80,7 @@ namespace Twns.WarEvent {
                     gameConfig,
                     parentNodeId,
                     srcConditionId,
-                    candidateConditionId : Helpers.getExisted(condition.WecCommonData?.conditionId),
+                    candidateConditionId : Twns.Helpers.getExisted(condition.WecCommonData?.conditionId),
                     fullData,
                 });
             }
@@ -131,7 +131,7 @@ namespace Twns.WarEvent {
                 conditionIdForClone     : data.candidateConditionId,
             }) != null) {
                 Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionReplacePanel);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionReplacePanel);
             }
         }
         private _onTouchedBtnSelect(): void {        // DONE
@@ -143,7 +143,7 @@ namespace Twns.WarEvent {
                 newConditionId  : data.candidateConditionId,
             })) {
                 Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionReplacePanel);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionReplacePanel);
             }
         }
         private _onNotifyLanguageChanged(): void {        // DONE

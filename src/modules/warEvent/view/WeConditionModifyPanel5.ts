@@ -64,26 +64,26 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionTypeListPanel, {
                 fullData    : openData.fullData,
                 condition   : openData.condition,
                 war         : openData.war,
             });
         }
         private _onTouchedGroupIsNot(): void {
-            const data  = Helpers.getExisted(this._getCondition().WecTurnPhaseEqualTo);
+            const data  = Twns.Helpers.getExisted(this._getCondition().WecTurnPhaseEqualTo);
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnTurnPhase(): void {
-            const data          = Helpers.getExisted(this._getCondition().WecTurnPhaseEqualTo);
+            const data          = Twns.Helpers.getExisted(this._getCondition().WecTurnPhaseEqualTo);
             const currTurnPhase = data.valueEqualTo;
-            if (currTurnPhase == Types.TurnPhaseCode.WaitBeginTurn) {
-                data.valueEqualTo = Types.TurnPhaseCode.Main;
+            if (currTurnPhase == Twns.Types.TurnPhaseCode.WaitBeginTurn) {
+                data.valueEqualTo = Twns.Types.TurnPhaseCode.Main;
             } else {
-                data.valueEqualTo = Types.TurnPhaseCode.WaitBeginTurn;
+                data.valueEqualTo = Twns.Types.TurnPhaseCode.WaitBeginTurn;
             }
             this._updateLabelDescAndLabelError();
             this._updateLabelTurnPhase();
@@ -116,14 +116,14 @@ namespace Twns.WarEvent {
             const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
             this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateImgIsNot(): void {
             this._imgIsNot.visible = !!this._getCondition().WecTurnPhaseEqualTo?.isNot;
         }
         private _updateLabelTurnPhase(): void {
-            this._labelTurnPhase.text = Lang.getTurnPhaseName(Helpers.getExisted(this._getCondition().WecTurnPhaseEqualTo?.valueEqualTo)) || CommonConstants.ErrorTextForUndefined;
+            this._labelTurnPhase.text = Lang.getTurnPhaseName(Twns.Helpers.getExisted(this._getCondition().WecTurnPhaseEqualTo?.valueEqualTo)) || CommonConstants.ErrorTextForUndefined;
         }
 
         private _getCondition(): IWarEventCondition {

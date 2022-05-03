@@ -70,14 +70,14 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionTypeListPanel, {
                 fullData    : openData.fullData,
                 condition   : openData.condition,
                 war         : openData.war,
             });
         }
         private _onTouchedGroupIsNot(): void {
-            const data  = Helpers.getExisted(this._getCondition().WecTurnIndexRemainderEqualTo);
+            const data  = Twns.Helpers.getExisted(this._getCondition().WecTurnIndexRemainderEqualTo);
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
@@ -88,7 +88,7 @@ namespace Twns.WarEvent {
             if ((isNaN(value)) || (value <= 1)) {
                 this._updateInputDivider();
             } else {
-                Helpers.getExisted(this._getCondition().WecTurnIndexRemainderEqualTo).divider = value;
+                Twns.Helpers.getExisted(this._getCondition().WecTurnIndexRemainderEqualTo).divider = value;
                 this._updateLabelDescAndLabelError();
                 this._updateInputDivider();
                 Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
@@ -96,8 +96,8 @@ namespace Twns.WarEvent {
         }
         private _onFocusOutInputRemainder(): void {
             const value = parseInt(this._inputRemainder.text);
-            const data  = Helpers.getExisted(this._getCondition().WecTurnIndexRemainderEqualTo);
-            if ((isNaN(value)) || (value >= Helpers.getExisted(data.divider))) {
+            const data  = Twns.Helpers.getExisted(this._getCondition().WecTurnIndexRemainderEqualTo);
+            if ((isNaN(value)) || (value >= Twns.Helpers.getExisted(data.divider))) {
                 this._updateInputRemainder();
             } else {
                 data.remainderEqualTo = value;
@@ -134,7 +134,7 @@ namespace Twns.WarEvent {
             const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
             this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateImgIsNot(): void {

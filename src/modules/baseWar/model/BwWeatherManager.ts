@@ -1,7 +1,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import WeatherType              = Types.WeatherType;
+    import WeatherType              = Twns.Types.WeatherType;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import ISerialWeatherManager    = CommonProto.WarSerialization.ISerialWeatherManager;
@@ -14,14 +14,14 @@ namespace Twns.BaseWar {
 
         private readonly _view = new Twns.BaseWar.BwWeatherManagerView();
 
-        public init(data: Types.Undefinable<ISerialWeatherManager>): void {
+        public init(data: Twns.Types.Undefinable<ISerialWeatherManager>): void {
             this.setForceWeatherType(data?.forceWeatherType ?? null);
             this.setExpireTurnIndex(data?.expireTurnIndex ?? null);
             this.setExpirePlayerIndex(data?.expirePlayerIndex ?? null);
 
             this.getView().init(this);
         }
-        public fastInit(data: Types.Undefinable<ISerialWeatherManager>): void {
+        public fastInit(data: Twns.Types.Undefinable<ISerialWeatherManager>): void {
             this.init(data);
         }
 
@@ -53,7 +53,7 @@ namespace Twns.BaseWar {
             this._war = war;
         }
         private _getWar(): Twns.BaseWar.BwWar {
-            return Helpers.getExisted(this._war, ClientErrorCode.BwWeatherManager_GetWar_00);
+            return Twns.Helpers.getExisted(this._war, ClientErrorCode.BwWeatherManager_GetWar_00);
         }
 
         public getView(): Twns.BaseWar.BwWeatherManagerView {
@@ -66,8 +66,8 @@ namespace Twns.BaseWar {
         public getCurrentWeatherType(): WeatherType {
             return this.getForceWeatherType() ?? this.getDefaultWeatherType();
         }
-        public getCurrentWeatherCfg(): Types.WeatherCfg {
-            return Helpers.getExisted(this._getWar().getGameConfig().getWeatherCfg(this.getCurrentWeatherType()));
+        public getCurrentWeatherCfg(): Twns.Types.WeatherCfg {
+            return Twns.Helpers.getExisted(this._getWar().getGameConfig().getWeatherCfg(this.getCurrentWeatherType()));
         }
 
         public setForceWeatherType(type: WeatherType | null): void {
@@ -77,21 +77,21 @@ namespace Twns.BaseWar {
             }
         }
         public getForceWeatherType(): WeatherType | null {
-            return Helpers.getDefined(this._forceWeatherType, ClientErrorCode.BwWeatherManager_GetForceWeatherType_00);
+            return Twns.Helpers.getDefined(this._forceWeatherType, ClientErrorCode.BwWeatherManager_GetForceWeatherType_00);
         }
 
         public setExpirePlayerIndex(playerIndex: number | null): void {
             this._expirePlayerIndex = playerIndex;
         }
         public getExpirePlayerIndex(): number | null {
-            return Helpers.getDefined(this._expirePlayerIndex, ClientErrorCode.BwWeatherManager_GetExpirePlayerIndex_00);
+            return Twns.Helpers.getDefined(this._expirePlayerIndex, ClientErrorCode.BwWeatherManager_GetExpirePlayerIndex_00);
         }
 
         public setExpireTurnIndex(turnIndex: number | null): void {
             this._expireTurnIndex = turnIndex;
         }
         public getExpireTurnIndex(): number | null {
-            return Helpers.getDefined(this._expireTurnIndex, ClientErrorCode.BwWeatherManager_GetExpireTurnIndex_00);
+            return Twns.Helpers.getDefined(this._expireTurnIndex, ClientErrorCode.BwWeatherManager_GetExpireTurnIndex_00);
         }
 
         public updateOnPlayerTurnSwitched(): void {

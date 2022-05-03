@@ -15,11 +15,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import TileType                     = Types.TileType;
-    import TileObjectType               = Types.TileObjectType;
-    import TileDecoratorType            = Types.TileDecoratorType;
-    import TileBaseType                 = Types.TileBaseType;
-    import TileTemplateCfg              = Types.TileTemplateCfg;
+    import TileType                     = Twns.Types.TileType;
+    import TileObjectType               = Twns.Types.TileObjectType;
+    import TileDecoratorType            = Twns.Types.TileDecoratorType;
+    import TileBaseType                 = Twns.Types.TileBaseType;
+    import TileTemplateCfg              = Twns.Types.TileTemplateCfg;
     import ITileCustomCrystalData       = CommonProto.WarSerialization.ITileCustomCrystalData;
     import ITileCustomCannonData        = CommonProto.WarSerialization.ITileCustomCannonData;
     import ITileCustomLaserTurretData   = CommonProto.WarSerialization.ITileCustomLaserTurretData;
@@ -78,7 +78,7 @@ namespace Twns.BaseWar {
             try {
                 this.init(data, gameConfig);
             } catch (e) {
-                return (e as Types.CustomError).errorCode ?? ClientErrorCode.BwTile_GetErrorCodeForTileData_01;
+                return (e as Twns.Types.CustomError).errorCode ?? ClientErrorCode.BwTile_GetErrorCodeForTileData_01;
             }
 
             return ClientErrorCode.NoError;
@@ -86,37 +86,37 @@ namespace Twns.BaseWar {
         public deserialize(data: ISerialTile, gameConfig: GameConfig): void {
             this._setGameConfig(gameConfig);
 
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex), ClientErrorCode.BwTile_Deserialize_00);
+            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex), ClientErrorCode.BwTile_Deserialize_00);
             const gridX     = gridIndex.x;
             const gridY     = gridIndex.y;
             if ((gridX < 0)                                                 ||
                 (gridY < 0)                                                 ||
                 ((gridX + 1) * (gridY + 1) > CommonConstants.MapMaxGridsCount)
             ) {
-                throw Helpers.newError(`Invalid gridX and/or gridY: ${gridX}, ${gridY}`, ClientErrorCode.BwTile_Deserialize_01);
+                throw Twns.Helpers.newError(`Invalid gridX and/or gridY: ${gridX}, ${gridY}`, ClientErrorCode.BwTile_Deserialize_01);
             }
 
-            const objectType    = Helpers.getExisted(data.objectType, ClientErrorCode.BwTile_Deserialize_02) as TileObjectType;
-            const baseType      = Helpers.getExisted(data.baseType, ClientErrorCode.BwTile_Deserialize_03) as TileBaseType;
+            const objectType    = Twns.Helpers.getExisted(data.objectType, ClientErrorCode.BwTile_Deserialize_02) as TileObjectType;
+            const baseType      = Twns.Helpers.getExisted(data.baseType, ClientErrorCode.BwTile_Deserialize_03) as TileBaseType;
             const playerIndex   = data.playerIndex;
             if ((playerIndex == null)                                                           ||
                 (!Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType))
             ) {
-                throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTile_Deserialize_04);
+                throw Twns.Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTile_Deserialize_04);
             }
 
-            const templateCfg       = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(Config.ConfigManager.getTileType(baseType, objectType)));
+            const templateCfg       = Twns.Helpers.getExisted(gameConfig.getTileTemplateCfgByType(Config.ConfigManager.getTileType(baseType, objectType)));
             const maxBuildPoint     = templateCfg.maxBuildPoint;
             const currentBuildPoint = data.currentBuildPoint;
             if (maxBuildPoint == null) {
                 if (currentBuildPoint != null) {
-                    throw Helpers.newError(`Invalid currentBuildPoint: ${currentBuildPoint}`, ClientErrorCode.BwTile_Deserialize_05);
+                    throw Twns.Helpers.newError(`Invalid currentBuildPoint: ${currentBuildPoint}`, ClientErrorCode.BwTile_Deserialize_05);
                 }
             } else {
                 if ((currentBuildPoint != null)                                     &&
                     ((currentBuildPoint > maxBuildPoint) || (currentBuildPoint < 0))
                 ) {
-                    throw Helpers.newError(`Invalid currentBuildPoint: ${currentBuildPoint}`, ClientErrorCode.BwTile_Deserialize_06);
+                    throw Twns.Helpers.newError(`Invalid currentBuildPoint: ${currentBuildPoint}`, ClientErrorCode.BwTile_Deserialize_06);
                 }
             }
 
@@ -124,13 +124,13 @@ namespace Twns.BaseWar {
             const currentCapturePoint   = data.currentCapturePoint;
             if (maxCapturePoint == null) {
                 if (currentCapturePoint != null) {
-                    throw Helpers.newError(`Invalid currentCapturePoint: ${currentCapturePoint}`, ClientErrorCode.BwTile_Deserialize_07);
+                    throw Twns.Helpers.newError(`Invalid currentCapturePoint: ${currentCapturePoint}`, ClientErrorCode.BwTile_Deserialize_07);
                 }
             } else {
                 if ((currentCapturePoint != null)                                       &&
                     ((currentCapturePoint > maxCapturePoint) || (currentCapturePoint < 0))
                 ) {
-                    throw Helpers.newError(`Invalid currentCapturePoint: ${currentCapturePoint}`, ClientErrorCode.BwTile_Deserialize_08);
+                    throw Twns.Helpers.newError(`Invalid currentCapturePoint: ${currentCapturePoint}`, ClientErrorCode.BwTile_Deserialize_08);
                 }
             }
 
@@ -138,62 +138,62 @@ namespace Twns.BaseWar {
             const currentHp = data.currentHp;
             if (maxHp == null) {
                 if (currentHp != null) {
-                    throw Helpers.newError(`Invalid currentHp: ${currentHp}`, ClientErrorCode.BwTile_Deserialize_09);
+                    throw Twns.Helpers.newError(`Invalid currentHp: ${currentHp}`, ClientErrorCode.BwTile_Deserialize_09);
                 }
             } else {
                 if ((currentHp != null)                     &&
                     ((currentHp > maxHp) || (currentHp < 0))
                 ) {
-                    throw Helpers.newError(`Invalid currentHp: ${currentHp}`, ClientErrorCode.BwTile_Deserialize_10);
+                    throw Twns.Helpers.newError(`Invalid currentHp: ${currentHp}`, ClientErrorCode.BwTile_Deserialize_10);
                 }
             }
 
             // 处理海岸独立的残留数据
-            if ((baseType === Types.TileBaseType.Sea) && (data.baseShapeId)) {
-                data.decoratorType      = Types.TileDecoratorType.Shore;
+            if ((baseType === Twns.Types.TileBaseType.Sea) && (data.baseShapeId)) {
+                data.decoratorType      = Twns.Types.TileDecoratorType.Shore;
                 data.decoratorShapeId   = data.baseShapeId;
                 data.baseShapeId        = 0;
             }
 
             const baseShapeId = data.baseShapeId;
             if (!Config.ConfigManager.checkIsValidTileBaseShapeId(baseType, baseShapeId)) {
-                throw Helpers.newError(`Invalid baseShapeId: ${baseShapeId}`, ClientErrorCode.BwTile_Deserialize_11);
+                throw Twns.Helpers.newError(`Invalid baseShapeId: ${baseShapeId}`, ClientErrorCode.BwTile_Deserialize_11);
             }
 
             const objectShapeId = data.objectShapeId;
             if (!Config.ConfigManager.checkIsValidTileObjectShapeId(objectType, objectShapeId)) {
-                throw Helpers.newError(`Invalid objectShapeId: ${objectShapeId}`, ClientErrorCode.BwTile_Deserialize_12);
+                throw Twns.Helpers.newError(`Invalid objectShapeId: ${objectShapeId}`, ClientErrorCode.BwTile_Deserialize_12);
             }
 
             const decoratorType     = data.decoratorType ?? null;
             const decoratorShapeId  = data.decoratorShapeId ?? null;
             if (!Config.ConfigManager.checkIsValidTileDecoratorShapeId(decoratorType, decoratorShapeId)) {
-                throw Helpers.newError(`Invalid decoratorType/shapeId: ${decoratorType}, ${decoratorShapeId}`, ClientErrorCode.BwTile_Deserialize_13);
+                throw Twns.Helpers.newError(`Invalid decoratorType/shapeId: ${decoratorType}, ${decoratorShapeId}`, ClientErrorCode.BwTile_Deserialize_13);
             }
 
             const tileType          = templateCfg.type;
             const customCrystalData = data.customCrystalData ?? null;
             if ((customCrystalData != null) && (tileType !== TileType.CustomCrystal)) {
-                throw Helpers.newError(`CustomCrystalData is present while the tile is not CustomCrystal.`, ClientErrorCode.BwTile_Deserialize_14);
+                throw Twns.Helpers.newError(`CustomCrystalData is present while the tile is not CustomCrystal.`, ClientErrorCode.BwTile_Deserialize_14);
             }
             if ((customCrystalData != null) && (!Config.ConfigManager.checkIsValidCustomCrystalData(customCrystalData))) {
-                throw Helpers.newError(`Invalid customCrystalData.`, ClientErrorCode.BwTile_Deserialize_15);
+                throw Twns.Helpers.newError(`Invalid customCrystalData.`, ClientErrorCode.BwTile_Deserialize_15);
             }
 
             const customCannonData = data.customCannonData ?? null;
             if ((customCannonData != null) && (tileType !== TileType.CustomCannon)) {
-                throw Helpers.newError(`CustomCannonData is present while the tile is not CustomCannon.`, ClientErrorCode.BwTile_Deserialize_16);
+                throw Twns.Helpers.newError(`CustomCannonData is present while the tile is not CustomCannon.`, ClientErrorCode.BwTile_Deserialize_16);
             }
             if ((customCannonData != null) && (!Config.ConfigManager.checkIsValidCustomCannonData(customCannonData))) {
-                throw Helpers.newError(`Invalid customCannonData.`, ClientErrorCode.BwTile_Deserialize_17);
+                throw Twns.Helpers.newError(`Invalid customCannonData.`, ClientErrorCode.BwTile_Deserialize_17);
             }
 
             const customLaserTurretData = data.customLaserTurretData ?? null;
             if ((customLaserTurretData != null) && (tileType !== TileType.CustomLaserTurret)) {
-                throw Helpers.newError(`CustomLaserTurretData is present while the tile is not CustomLaserTurret.`, ClientErrorCode.BwTile_Deserialize_18);
+                throw Twns.Helpers.newError(`CustomLaserTurretData is present while the tile is not CustomLaserTurret.`, ClientErrorCode.BwTile_Deserialize_18);
             }
             if ((customLaserTurretData != null) && (!Config.ConfigManager.checkIsValidCustomLaserTurretData(customLaserTurretData))) {
-                throw Helpers.newError(`Invalid customLaserTurretData.`, ClientErrorCode.BwTile_Deserialize_19);
+                throw Twns.Helpers.newError(`Invalid customLaserTurretData.`, ClientErrorCode.BwTile_Deserialize_19);
             }
 
             this._setTemplateCfg(templateCfg);
@@ -272,7 +272,7 @@ namespace Twns.BaseWar {
                     gridIndex,
                     baseType,
                     objectType,
-                    playerIndex             : objectType === Types.TileObjectType.Headquarters ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex             : objectType === Twns.Types.TileObjectType.Headquarters ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
 
                     customCrystalData       : this._customCrystalData,
                     customCannonData        : this._customCannonData,
@@ -311,11 +311,11 @@ namespace Twns.BaseWar {
             this._war = war;
         }
         public getWar(): BwWar {
-            return Helpers.getExisted(this._war);
+            return Twns.Helpers.getExisted(this._war);
         }
 
         public getGameConfig(): GameConfig {
-            return Helpers.getExisted(this._gameConfig);
+            return Twns.Helpers.getExisted(this._gameConfig);
         }
         private _setGameConfig(config: GameConfig): void {
             this._gameConfig = config;
@@ -324,8 +324,8 @@ namespace Twns.BaseWar {
         private _setTemplateCfg(cfg: TileTemplateCfg): void {
             this._templateCfg = cfg;
         }
-        private _getTemplateCfg(): Types.TileTemplateCfg {
-            return Helpers.getExisted(this._templateCfg);
+        private _getTemplateCfg(): Twns.Types.TileTemplateCfg {
+            return Twns.Helpers.getExisted(this._templateCfg);
         }
 
         public updateOnUnitLeave(): void {
@@ -354,42 +354,42 @@ namespace Twns.BaseWar {
             this._baseType = baseType;
         }
         public getBaseType(): TileBaseType {
-            return Helpers.getExisted(this._baseType);
+            return Twns.Helpers.getExisted(this._baseType);
         }
 
         private _setObjectType(objectType: TileObjectType): void {
             this._objectType = objectType;
         }
         public getObjectType(): TileObjectType {
-            return Helpers.getExisted(this._objectType);
+            return Twns.Helpers.getExisted(this._objectType);
         }
 
         private _setDecoratorType(decoratorType: TileDecoratorType | null): void {
             this._decoratorType = decoratorType;
         }
         public getDecoratorType(): TileDecoratorType | null {
-            return Helpers.getDefined(this._decoratorType, ClientErrorCode.BwTile_GetDecoratorType_00);
+            return Twns.Helpers.getDefined(this._decoratorType, ClientErrorCode.BwTile_GetDecoratorType_00);
         }
 
         private _setBaseShapeId(id: number): void {
             this._baseShapeId = id;
         }
         public getBaseShapeId(): number {
-            return Helpers.getExisted(this._baseShapeId);
+            return Twns.Helpers.getExisted(this._baseShapeId);
         }
 
         private _setObjectShapeId(id: number): void {
             this._objectShapeId = id;
         }
         public getObjectShapeId(): number {
-            return Helpers.getExisted(this._objectShapeId);
+            return Twns.Helpers.getExisted(this._objectShapeId);
         }
 
         private _setDecoratorShapeId(id: number | null): void {
             this._decoratorShapeId = id;
         }
         public getDecoratorShapeId(): number | null {
-            return Helpers.getDefined(this._decoratorShapeId, ClientErrorCode.BwTile_GetDecoratorShapeId_00);
+            return Twns.Helpers.getDefined(this._decoratorShapeId, ClientErrorCode.BwTile_GetDecoratorShapeId_00);
         }
 
         public getSkinId(): number {
@@ -404,24 +404,24 @@ namespace Twns.BaseWar {
         }
 
         public getCurrentHp(): number | null {
-            return Helpers.getDefined(this._currentHp, ClientErrorCode.BwTile_GetCurrentHp_00);
+            return Twns.Helpers.getDefined(this._currentHp, ClientErrorCode.BwTile_GetCurrentHp_00);
         }
         public setCurrentHp(hp: number | null): void {
             const maxHp = this.getMaxHp();
             if (maxHp == null) {
                 if (hp != null) {
-                    throw Helpers.newError(`Non null hp: ${hp}.`);
+                    throw Twns.Helpers.newError(`Non null hp: ${hp}.`);
                 }
             } else {
                 if ((hp == null) || (hp < 0) || (hp > maxHp)) {
-                    throw Helpers.newError(`Invalid hp: ${hp}`);
+                    throw Twns.Helpers.newError(`Invalid hp: ${hp}`);
                 }
             }
 
             this._currentHp = hp;
         }
 
-        public getArmorType(): Types.ArmorType | null {
+        public getArmorType(): Twns.Types.ArmorType | null {
             return this._getTemplateCfg().armorType ?? null;
         }
 
@@ -437,17 +437,17 @@ namespace Twns.BaseWar {
         }
 
         public getCurrentBuildPoint(): number | null {
-            return Helpers.getDefined(this._currentBuildPoint, ClientErrorCode.BwTile_GetCurrentBuildPoint_00);
+            return Twns.Helpers.getDefined(this._currentBuildPoint, ClientErrorCode.BwTile_GetCurrentBuildPoint_00);
         }
         public setCurrentBuildPoint(point: number | null): void {
             const maxPoint = this.getMaxBuildPoint();
             if (maxPoint == null) {
                 if (point != null) {
-                    throw Helpers.newError(`Non null point: ${point}`);
+                    throw Twns.Helpers.newError(`Non null point: ${point}`);
                 }
             } else {
                 if ((point == null) || (point < 0) || (point > maxPoint)) {
-                    throw Helpers.newError(`Invalid point: ${point}`);
+                    throw Twns.Helpers.newError(`Invalid point: ${point}`);
                 }
             }
 
@@ -462,17 +462,17 @@ namespace Twns.BaseWar {
         }
 
         public getCurrentCapturePoint(): number | null {
-            return Helpers.getDefined(this._currentCapturePoint, ClientErrorCode.BwTile_GetCurrentCapturePoint_00);
+            return Twns.Helpers.getDefined(this._currentCapturePoint, ClientErrorCode.BwTile_GetCurrentCapturePoint_00);
         }
         public setCurrentCapturePoint(point: number | null): void {
             const maxPoint = this.getMaxCapturePoint();
             if (maxPoint == null) {
                 if (point != null) {
-                    throw Helpers.newError(`Non null point: ${point}`);
+                    throw Twns.Helpers.newError(`Non null point: ${point}`);
                 }
             } else {
                 if ((point == null) || (point < 0) || (point > maxPoint)) {
-                    throw Helpers.newError(`Invalid point: ${point}`);
+                    throw Twns.Helpers.newError(`Invalid point: ${point}`);
                 }
             }
 
@@ -491,7 +491,7 @@ namespace Twns.BaseWar {
             this._locationFlags = flags;
         }
         public getLocationFlags(): number {
-            return Helpers.getExisted(this._locationFlags, ClientErrorCode.BwTile_GetLocationFlags_00);
+            return Twns.Helpers.getExisted(this._locationFlags, ClientErrorCode.BwTile_GetLocationFlags_00);
         }
 
         /** @param locationId range: [1-30] */
@@ -531,7 +531,7 @@ namespace Twns.BaseWar {
         // Functions for highlight.
         ////////////////////////////////////////////////////////////////////////////////
         public getIsHighlighted(): boolean {
-            return Helpers.getExisted(this._isHighlighted);
+            return Twns.Helpers.getExisted(this._isHighlighted);
         }
         public setIsHighlighted(isHighlighted: boolean): void {
             if (this._isHighlighted !== isHighlighted) {
@@ -555,7 +555,7 @@ namespace Twns.BaseWar {
                 : 0;
         }
 
-        public getDefenseUnitCategory(): Types.UnitCategory {
+        public getDefenseUnitCategory(): Twns.Types.UnitCategory {
             return this._getTemplateCfg().defenseUnitCategory;
         }
         public checkCanDefendUnit(unit: BwUnit): boolean {
@@ -569,17 +569,17 @@ namespace Twns.BaseWar {
             this._gridX = x;
         }
         public getGridX(): number {
-            return Helpers.getExisted(this._gridX);
+            return Twns.Helpers.getExisted(this._gridX);
         }
 
         private _setGridY(y: number): void {
             this._gridY = y;
         }
         public getGridY(): number {
-            return Helpers.getExisted(this._gridY);
+            return Twns.Helpers.getExisted(this._gridY);
         }
 
-        public getGridIndex(): Types.GridIndex {
+        public getGridIndex(): Twns.Types.GridIndex {
             return {
                 x   : this.getGridX(),
                 y   : this.getGridY(),
@@ -599,7 +599,7 @@ namespace Twns.BaseWar {
             playerIndex     : number;
         }): void {
             if (!Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType)) {
-                throw Helpers.newError(`Invalid playerIndex: ${playerIndex}, baseType: ${baseType}, objectType: ${objectType}`);
+                throw Twns.Helpers.newError(`Invalid playerIndex: ${playerIndex}, baseType: ${baseType}, objectType: ${objectType}`);
             }
 
             this.init({
@@ -670,7 +670,7 @@ namespace Twns.BaseWar {
             const tileType                  = this.getType();
             const gridIndex                 = this.getGridIndex();
             const coZoneRadius              = player.getCoZoneRadius();
-            const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+            const getCoGridIndexArrayOnMap  = Twns.Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             let modifierForSkill            = 1;
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const cfg = gameConfig.getCoSkillCfg(skillId)?.selfTileIncome;
@@ -702,7 +702,7 @@ namespace Twns.BaseWar {
             this._playerIndex = index;
         }
         public getPlayerIndex(): number {
-            return Helpers.getExisted(this._playerIndex);
+            return Twns.Helpers.getExisted(this._playerIndex);
         }
 
         public getPlayer(): BwPlayer {
@@ -716,11 +716,11 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for move cost.
         ////////////////////////////////////////////////////////////////////////////////
-        private _getMoveCostCfg(): { [moveType: number]: Types.MoveCostCfg } {
-            return Helpers.getExisted(this.getGameConfig().getMoveCostCfg(Config.ConfigManager.getTileType(this.getBaseType(), this.getObjectType())));
+        private _getMoveCostCfg(): { [moveType: number]: Twns.Types.MoveCostCfg } {
+            return Twns.Helpers.getExisted(this.getGameConfig().getMoveCostCfg(Config.ConfigManager.getTileType(this.getBaseType(), this.getObjectType())));
         }
 
-        public getMoveCostByMoveType(moveType: Types.MoveType): number | null {
+        public getMoveCostByMoveType(moveType: Twns.Types.MoveType): number | null {
             return this._getMoveCostCfg()[moveType]?.cost ?? null;
         }
         public getMoveCostByUnit(unit: BwUnit): number | null {
@@ -730,7 +730,7 @@ namespace Twns.BaseWar {
             const gameConfig = war.getGameConfig();
             if (((tileType === TileType.Seaport) || (tileType === TileType.TempSeaport))        &&
                 (this.getTeamIndex() !== unit.getTeamIndex())                                   &&
-                (gameConfig.checkIsUnitTypeInCategory(unitType, Types.UnitCategory.LargeNaval))
+                (gameConfig.checkIsUnitTypeInCategory(unitType, Twns.Types.UnitCategory.LargeNaval))
             ) {
                 return null;
             }
@@ -743,7 +743,7 @@ namespace Twns.BaseWar {
             const player                    = unit.getPlayer();
             const gridIndex                 = this.getGridIndex();
             const coZoneRadius              = player.getCoZoneRadius();
-            const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+            const getCoGridIndexArrayOnMap  = Twns.Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const cfg = gameConfig.getCoSkillCfg(skillId)?.selfUnitMoveCost;
                 if ((cfg)                                                       &&
@@ -766,7 +766,7 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for repair/supply unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public getRepairUnitCategory(): Types.UnitCategory | null {
+        public getRepairUnitCategory(): Twns.Types.UnitCategory | null {
             return this._getTemplateCfg().repairUnitCategory ?? null;
         }
 
@@ -779,7 +779,7 @@ namespace Twns.BaseWar {
             const gameConfig                = this.getGameConfig();
             const gridIndex                 = this.getGridIndex();
             const coZoneRadius              = player.getCoZoneRadius();
-            const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+            const getCoGridIndexArrayOnMap  = Twns.Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             let amountModifier              = 0;
             let costMultiplierPct           = 100;
             for (const skillId of player.getCoCurrentSkills()) {
@@ -815,14 +815,14 @@ namespace Twns.BaseWar {
                 && (this.getGameConfig().checkIsUnitTypeInCategory(unit.getUnitType(), category));
         }
 
-        public getRepairHpAndCostForUnit(unit: BwUnit): Types.RepairHpAndCost | null {
+        public getRepairHpAndCostForUnit(unit: BwUnit): Twns.Types.RepairHpAndCost | null {
             if (!this.checkCanRepairUnit(unit)) {
                 return null;
             }
 
             const cfgNormalizedRepairHp = this.getCfgNormalizedRepairHp();
             if (cfgNormalizedRepairHp == null) {
-                throw Helpers.newError(`Empty cfgNormalizedRepairHp`);
+                throw Twns.Helpers.newError(`Empty cfgNormalizedRepairHp`);
             }
 
             const modifier              = this.getNormalizedRepairAmountAndCostModifier();
@@ -846,7 +846,7 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for hide unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public checkCanHideUnit(unitType: Types.UnitType): boolean {
+        public checkCanHideUnit(unitType: Twns.Types.UnitType): boolean {
             const category = this.getCfgHideUnitCategory();
             return category == null
                 ? false
@@ -855,20 +855,20 @@ namespace Twns.BaseWar {
 
         public checkIsUnitHider(): boolean {
             const category = this.getCfgHideUnitCategory();
-            return (category != null) && (category != Types.UnitCategory.None);
+            return (category != null) && (category != Twns.Types.UnitCategory.None);
         }
 
-        public getCfgHideUnitCategory(): Types.UnitCategory | null {
+        public getCfgHideUnitCategory(): Twns.Types.UnitCategory | null {
             return this._getTemplateCfg().hideUnitCategory ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public getCfgProduceUnitCategory(): Types.UnitCategory | null {
+        public getCfgProduceUnitCategory(): Twns.Types.UnitCategory | null {
             return this._getTemplateCfg().produceUnitCategory ?? null;
         }
-        public getProduceUnitCategoryForPlayer(playerIndex: number): Types.UnitCategory | null {
+        public getProduceUnitCategoryForPlayer(playerIndex: number): Twns.Types.UnitCategory | null {
             if (this.getPlayerIndex() !== playerIndex) {
                 return null;
             } else {
@@ -888,7 +888,7 @@ namespace Twns.BaseWar {
             const tileType                  = this.getType();
             const coZoneRadius              = player.getCoZoneRadius();
             const gridIndex                 = this.getGridIndex();
-            const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+            const getCoGridIndexArrayOnMap  = Twns.Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const skillCfg = gameConfig.getCoSkillCfg(skillId)?.selfUnitProduction;
                 if (skillCfg) {
@@ -912,11 +912,11 @@ namespace Twns.BaseWar {
 
         public checkIsCfgUnitProducer(): boolean {
             const category = this.getCfgProduceUnitCategory();
-            return (category != null) && (category !== Types.UnitCategory.None);
+            return (category != null) && (category !== Twns.Types.UnitCategory.None);
         }
         public checkIsUnitProducerForPlayer(playerIndex: number): boolean {
             const category = this.getProduceUnitCategoryForPlayer(playerIndex);
-            return (category != null) && (category !== Types.UnitCategory.None);
+            return (category != null) && (category !== Twns.Types.UnitCategory.None);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -961,7 +961,7 @@ namespace Twns.BaseWar {
 
                 let maxModifier = Number.MIN_VALUE;
                 war.getPlayerManager().forEachPlayer(false, player => {
-                    if ((player.getAliveState() !== Types.PlayerAliveState.Dead) &&
+                    if ((player.getAliveState() !== Twns.Types.PlayerAliveState.Dead) &&
                         (teamIndexes.has(player.getTeamIndex()))
                     ) {
                         maxModifier = Math.max(maxModifier, war.getCommonSettingManager().getSettingsVisionRangeModifier(player.getPlayerIndex()));
@@ -997,7 +997,7 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for load co.
         ////////////////////////////////////////////////////////////////////////////////
-        public getLoadCoUnitCategory(): Types.UnitCategory | null {
+        public getLoadCoUnitCategory(): Twns.Types.UnitCategory | null {
             return this._getTemplateCfg().loadCoUnitCategory ?? null;
         }
 
@@ -1037,48 +1037,48 @@ namespace Twns.BaseWar {
 
         private _initCustomCrystalData(): void {
             if (this._customCrystalData == null) {
-                this._customCrystalData = Helpers.deepClone(CommonConstants.TileDefaultCrystalData);
+                this._customCrystalData = Twns.Helpers.deepClone(CommonConstants.TileDefaultCrystalData);
             }
         }
         public setCustomCrystalRadius(radius: number): void {
             this._initCustomCrystalData();
-            Helpers.getExisted(this.getCustomCrystalData()).radius = radius;
+            Twns.Helpers.getExisted(this.getCustomCrystalData()).radius = radius;
         }
         public setCustomCrystalPriority(priority: number): void {
             this._initCustomCrystalData();
-            Helpers.getExisted(this.getCustomCrystalData()).priority = priority;
+            Twns.Helpers.getExisted(this.getCustomCrystalData()).priority = priority;
         }
         public setCustomCrystalCanAffectSelf(canAffect: boolean): void {
             this._initCustomCrystalData();
-            Helpers.getExisted(this.getCustomCrystalData()).canAffectSelf = canAffect;
+            Twns.Helpers.getExisted(this.getCustomCrystalData()).canAffectSelf = canAffect;
         }
         public setCustomCrystalCanAffectAlly(canAffect: boolean): void {
             this._initCustomCrystalData();
-            Helpers.getExisted(this.getCustomCrystalData()).canAffectAlly = canAffect;
+            Twns.Helpers.getExisted(this.getCustomCrystalData()).canAffectAlly = canAffect;
         }
         public setCustomCrystalCanAffectEnemy(canAffect: boolean): void {
             this._initCustomCrystalData();
-            Helpers.getExisted(this.getCustomCrystalData()).canAffectEnemy = canAffect;
+            Twns.Helpers.getExisted(this.getCustomCrystalData()).canAffectEnemy = canAffect;
         }
         public setCustomCrystalDeltaFund(deltaFund: number): void {
             this._initCustomCrystalData();
-            Helpers.getExisted(this.getCustomCrystalData()).deltaFund = deltaFund;
+            Twns.Helpers.getExisted(this.getCustomCrystalData()).deltaFund = deltaFund;
         }
         public setCustomCrystalDeltaEnergyPercentage(percentage: number): void {
             this._initCustomCrystalData();
-            Helpers.getExisted(this.getCustomCrystalData()).deltaEnergyPercentage = percentage;
+            Twns.Helpers.getExisted(this.getCustomCrystalData()).deltaEnergyPercentage = percentage;
         }
         public setCustomCrystalDeltaHp(deltaHp: number): void {
             this._initCustomCrystalData();
-            Helpers.getExisted(this.getCustomCrystalData()).deltaHp = deltaHp;
+            Twns.Helpers.getExisted(this.getCustomCrystalData()).deltaHp = deltaHp;
         }
         public setCustomCrystalDeltaPrimaryAmmoPercentage(percentage: number): void {
             this._initCustomCrystalData();
-            Helpers.getExisted(this.getCustomCrystalData()).deltaPrimaryAmmoPercentage = percentage;
+            Twns.Helpers.getExisted(this.getCustomCrystalData()).deltaPrimaryAmmoPercentage = percentage;
         }
         public setCustomCrystalDeltaFuelPercentage(percentage: number): void {
             this._initCustomCrystalData();
-            Helpers.getExisted(this.getCustomCrystalData()).deltaFuelPercentage = percentage;
+            Twns.Helpers.getExisted(this.getCustomCrystalData()).deltaFuelPercentage = percentage;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1113,60 +1113,60 @@ namespace Twns.BaseWar {
         }
         private _initCustomCannonData(): void {
             if (this._customCannonData == null) {
-                this._customCannonData = Helpers.deepClone(CommonConstants.TileDefaultCustomCannonData);
+                this._customCannonData = Twns.Helpers.deepClone(CommonConstants.TileDefaultCustomCannonData);
             }
         }
 
         public setCustomCannonRangeForUp(radius: number): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRangeForUp_00).rangeForUp = radius;
+            Twns.Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRangeForUp_00).rangeForUp = radius;
         }
         public setCustomCannonRangeForDown(radius: number): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRangeForDown_00).rangeForDown = radius;
+            Twns.Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRangeForDown_00).rangeForDown = radius;
         }
         public setCustomCannonRangeForLeft(radius: number): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRangeForLeft_00).rangeForLeft = radius;
+            Twns.Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRangeForLeft_00).rangeForLeft = radius;
         }
         public setCustomCannonRangeForRight(radius: number): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRangeForRight_00).rangeForRight = radius;
+            Twns.Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRangeForRight_00).rangeForRight = radius;
         }
 
         public setCustomCannonPriority(priority: number): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonPriority_00).priority = priority;
+            Twns.Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonPriority_00).priority = priority;
         }
         public setCustomCannonMaxTargetCount(count: number): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonMaxTargetCount_00).maxTargetCount = count;
+            Twns.Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonMaxTargetCount_00).maxTargetCount = count;
         }
 
         public setCustomCannonCanAffectSelf(canAffect: boolean): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonCanAffectSelf_00).canAffectSelf = canAffect;
+            Twns.Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonCanAffectSelf_00).canAffectSelf = canAffect;
         }
         public setCustomCannonCanAffectAlly(canAffect: boolean): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonCanAffectAlly_00).canAffectAlly = canAffect;
+            Twns.Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonCanAffectAlly_00).canAffectAlly = canAffect;
         }
         public setCustomCannonCanAffectEnemy(canAffect: boolean): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonCanAffectEnemy_00).canAffectEnemy = canAffect;
+            Twns.Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonCanAffectEnemy_00).canAffectEnemy = canAffect;
         }
 
         public setCustomCannonDeltaHp(deltaHp: number): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonDeltaHp_00).deltaHp = deltaHp;
+            Twns.Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonDeltaHp_00).deltaHp = deltaHp;
         }
         public setCustomCannonDeltaPrimaryAmmoPercentage(percentage: number): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonDeltaPrimaryAmmoPercentage_00).deltaPrimaryAmmoPercentage = percentage;
+            Twns.Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonDeltaPrimaryAmmoPercentage_00).deltaPrimaryAmmoPercentage = percentage;
         }
         public setCustomCannonDeltaFuelPercentage(percentage: number): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonDeltaFuelPercentage_00).deltaFuelPercentage = percentage;
+            Twns.Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonDeltaFuelPercentage_00).deltaFuelPercentage = percentage;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1188,56 +1188,56 @@ namespace Twns.BaseWar {
 
         private _initCustomLaserTurretData(): void {
             if (this._customLaserTurretData == null) {
-                this._customLaserTurretData = Helpers.deepClone(CommonConstants.TileDefaultCustomLaserTurretData);
+                this._customLaserTurretData = Twns.Helpers.deepClone(CommonConstants.TileDefaultCustomLaserTurretData);
             }
         }
 
         public setCustomLaserTurretRangeForUp(radius: number): void {
             this._initCustomLaserTurretData();
-            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretRangeForUp_00).rangeForUp = radius;
+            Twns.Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretRangeForUp_00).rangeForUp = radius;
         }
         public setCustomLaserTurretRangeForDown(radius: number): void {
             this._initCustomLaserTurretData();
-            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretRangeForDown_00).rangeForDown = radius;
+            Twns.Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretRangeForDown_00).rangeForDown = radius;
         }
         public setCustomLaserTurretRangeForLeft(radius: number): void {
             this._initCustomLaserTurretData();
-            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretRangeForLeft_00).rangeForLeft = radius;
+            Twns.Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretRangeForLeft_00).rangeForLeft = radius;
         }
         public setCustomLaserTurretRangeForRight(radius: number): void {
             this._initCustomLaserTurretData();
-            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretRangeForRight_00).rangeForRight = radius;
+            Twns.Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretRangeForRight_00).rangeForRight = radius;
         }
 
         public setCustomLaserTurretPriority(priority: number): void {
             this._initCustomLaserTurretData();
-            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretPriority_00).priority = priority;
+            Twns.Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretPriority_00).priority = priority;
         }
 
         public setCustomLaserTurretCanAffectSelf(canAffect: boolean): void {
             this._initCustomLaserTurretData();
-            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretCanAffectSelf_00).canAffectSelf = canAffect;
+            Twns.Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretCanAffectSelf_00).canAffectSelf = canAffect;
         }
         public setCustomLaserTurretCanAffectAlly(canAffect: boolean): void {
             this._initCustomLaserTurretData();
-            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretCanAffectAlly_00).canAffectAlly = canAffect;
+            Twns.Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretCanAffectAlly_00).canAffectAlly = canAffect;
         }
         public setCustomLaserTurretCanAffectEnemy(canAffect: boolean): void {
             this._initCustomLaserTurretData();
-            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretCanAffectEnemy_00).canAffectEnemy = canAffect;
+            Twns.Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretCanAffectEnemy_00).canAffectEnemy = canAffect;
         }
 
         public setCustomLaserTurretDeltaHp(deltaHp: number): void {
             this._initCustomLaserTurretData();
-            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretDeltaHp_00).deltaHp = deltaHp;
+            Twns.Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretDeltaHp_00).deltaHp = deltaHp;
         }
         public setCustomLaserTurretDeltaPrimaryAmmoPercentage(percentage: number): void {
             this._initCustomLaserTurretData();
-            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretDeltaPrimaryAmmoPercentage_00).deltaPrimaryAmmoPercentage = percentage;
+            Twns.Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretDeltaPrimaryAmmoPercentage_00).deltaPrimaryAmmoPercentage = percentage;
         }
         public setCustomLaserTurretDeltaFuelPercentage(percentage: number): void {
             this._initCustomLaserTurretData();
-            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretDeltaFuelPercentage_00).deltaFuelPercentage = percentage;
+            Twns.Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretDeltaFuelPercentage_00).deltaFuelPercentage = percentage;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1250,17 +1250,17 @@ namespace Twns.BaseWar {
             return this._hasFog;
         }
 
-        public getTileThemeType(): Types.TileThemeType {
+        public getTileThemeType(): Twns.Types.TileThemeType {
             const war           = this.getWar();
             const weatherType   = war.getWeatherManager().getCurrentWeatherType();
-            if (weatherType === Types.WeatherType.Rainy) {
-                return Types.TileThemeType.Rainy;
-            } else if (weatherType === Types.WeatherType.Sandstorm) {
-                return Types.TileThemeType.Sandstorm;
-            } else if (weatherType === Types.WeatherType.Snowy) {
-                return Types.TileThemeType.Snowy;
+            if (weatherType === Twns.Types.WeatherType.Rainy) {
+                return Twns.Types.TileThemeType.Rainy;
+            } else if (weatherType === Twns.Types.WeatherType.Sandstorm) {
+                return Twns.Types.TileThemeType.Sandstorm;
+            } else if (weatherType === Twns.Types.WeatherType.Snowy) {
+                return Twns.Types.TileThemeType.Snowy;
             } else {
-                return Types.TileThemeType.Clear;
+                return Twns.Types.TileThemeType.Clear;
             }
         }
     }

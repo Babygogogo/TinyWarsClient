@@ -9,6 +9,7 @@
 // import TwnsUiImage      from "./UiImage";
 // import TwnsUiLabel      from "./UiLabel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiRadioButton {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = Twns.Notify.NotifyType;
@@ -16,9 +17,9 @@ namespace TwnsUiRadioButton {
     type DataForUiRadioButton = {
         titleTextType           : LangTextType;
         leftTextType            : LangTextType;
-        leftLangType?           : Types.LanguageType;
+        leftLangType?           : Twns.Types.LanguageType;
         rightTextType           : LangTextType;
-        rightLangType?          : Types.LanguageType;
+        rightLangType?          : Twns.Types.LanguageType;
         callbackOnLeft          : () => void;
         callbackOnRight         : () => void;
         checkerForLeftOn        : () => boolean;
@@ -91,15 +92,15 @@ namespace TwnsUiRadioButton {
                 return;
             }
 
-            this._labelTitle.text   = Lang.getText(data.titleTextType);
+            this._labelTitle.text   = Twns.Lang.getText(data.titleTextType);
 
             const isLeftOn          = data.checkerForLeftOn();
             const labelLeft         = this._labelLeft;
-            labelLeft.text          = Lang.getText(data.leftTextType, data.leftLangType);
+            labelLeft.text          = Twns.Lang.getText(data.leftTextType, data.leftLangType);
             labelLeft.textColor     = getTextColor(isLeftOn);
 
             const labelRight        = this._labelRight;
-            labelRight.text         = Lang.getText(data.rightTextType, data.rightLangType);
+            labelRight.text         = Twns.Lang.getText(data.rightTextType, data.rightLangType);
             labelRight.textColor    = getTextColor(!isLeftOn);
         }
 
@@ -108,7 +109,7 @@ namespace TwnsUiRadioButton {
             if (data) {
                 data.callbackOnLeft();
                 this.updateView();
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonConfirm01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonConfirm01);
             }
         }
         private _onTouchedImgRightOff(): void {
@@ -116,7 +117,7 @@ namespace TwnsUiRadioButton {
             if (data) {
                 data.callbackOnRight();
                 this.updateView();
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonConfirm01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonConfirm01);
             }
         }
         private _onNotifyLanguageChanged(): void {

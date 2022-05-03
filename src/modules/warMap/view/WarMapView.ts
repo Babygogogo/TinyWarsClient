@@ -17,7 +17,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarMap {
     import NotifyType       = Twns.Notify.NotifyType;
-    import MapSize          = Types.MapSize;
+    import MapSize          = Twns.Types.MapSize;
     import IMapRawData      = CommonProto.Map.IMapRawData;
     import WarSerialization = CommonProto.WarSerialization;
     import ISerialWar       = WarSerialization.ISerialWar;
@@ -39,24 +39,24 @@ namespace Twns.WarMap {
         }
 
         public showMapByMapData(mapRawData: IMapRawData, config: GameConfig): void {
-            this.width  = GRID_WIDTH  * Helpers.getExisted(mapRawData.mapWidth);
-            this.height = GRID_HEIGHT * Helpers.getExisted(mapRawData.mapHeight);
-            this._tileMapView.showTileMap(Helpers.getExisted(mapRawData.tileDataArray));
+            this.width  = GRID_WIDTH  * Twns.Helpers.getExisted(mapRawData.mapWidth);
+            this.height = GRID_HEIGHT * Twns.Helpers.getExisted(mapRawData.mapHeight);
+            this._tileMapView.showTileMap(Twns.Helpers.getExisted(mapRawData.tileDataArray));
             this._unitMapView.showUnitMap({
                 unitDataArray   : mapRawData.unitDataArray || [],
                 players         : null,
                 config,
             });
         }
-        public showMapByWarData(warData: ISerialWar, config: GameConfig, players?: Types.Undefinable<ISerialPlayer[]>): void {
-            const field     = Helpers.getExisted(warData.field);
-            const tileMap   = Helpers.getExisted(field.tileMap);
+        public showMapByWarData(warData: ISerialWar, config: GameConfig, players?: Twns.Types.Undefinable<ISerialPlayer[]>): void {
+            const field     = Twns.Helpers.getExisted(warData.field);
+            const tileMap   = Twns.Helpers.getExisted(field.tileMap);
             const mapSize   = Twns.WarHelpers.WarCommonHelpers.getMapSize(tileMap);
             this.width      = GRID_WIDTH * mapSize.width;
             this.height     = GRID_HEIGHT * mapSize.height;
 
-            players = players || Helpers.getExisted(warData.playerManager?.players);
-            this._tileMapView.showTileMap(Helpers.getExisted(tileMap.tiles), players);
+            players = players || Twns.Helpers.getExisted(warData.playerManager?.players);
+            this._tileMapView.showTileMap(Twns.Helpers.getExisted(tileMap.tiles), players);
             this._unitMapView.showUnitMap({
                 unitDataArray   : field.unitMap?.units || [],
                 players,
@@ -252,7 +252,7 @@ namespace Twns.WarMap {
     }
 
     abstract class TileLayerBase extends eui.Component {
-        private readonly _tileDataMap   : Types.WarMapTileViewData[][] = [];
+        private readonly _tileDataMap   : Twns.Types.WarMapTileViewData[][] = [];
         private readonly _imageMap      : TwnsUiImage.UiImage[][] = [];
 
         public updateWithTileDataList(tileDataArray: ISerialTile[], players?: ISerialPlayer[]): void {
@@ -268,7 +268,7 @@ namespace Twns.WarMap {
             const tileDataMap   = this._tileDataMap;
             const width         = tileDataMap.length;
             const height        = width > 0 ? tileDataMap[0].length : 0;
-            const tickCount     = Timer.getTileAnimationTickCount();
+            const tickCount     = Twns.Timer.getTileAnimationTickCount();
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
                     imageMap[x][y].source = this._getImageSource(tileDataMap[x][y], tickCount);
@@ -291,8 +291,8 @@ namespace Twns.WarMap {
             }
 
             for (const rawTileData of tileDataArray) {
-                const tileData                  = Helpers.deepClone(rawTileData) as Types.WarMapTileViewData;
-                const gridIndex                 = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
+                const tileData                  = Twns.Helpers.deepClone(rawTileData) as Twns.Types.WarMapTileViewData;
+                const gridIndex                 = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
                 tileData.skinId                 = players ? (players.find(v => v.playerIndex === tileData.playerIndex)?.unitAndTileSkinId ?? null) : null;
                 map[gridIndex.x][gridIndex.y]   = tileData;
             }
@@ -333,7 +333,7 @@ namespace Twns.WarMap {
             }
         }
 
-        protected abstract _getImageSource(tileData: Types.WarMapTileViewData, tickCount: number): string;
+        protected abstract _getImageSource(tileData: Twns.Types.WarMapTileViewData, tickCount: number): string;
         protected abstract _getImageY(gridY: number): number;
     }
 
@@ -343,8 +343,8 @@ namespace Twns.WarMap {
                 ? ``
                 : Twns.Common.CommonModel.getCachedTileBaseImageSource({
                     version     : Twns.User.UserModel.getSelfSettingsTextureVersion(),
-                    themeType   : Types.TileThemeType.Clear,
-                    baseType    : Helpers.getExisted(tileData.baseType),
+                    themeType   : Twns.Types.TileThemeType.Clear,
+                    baseType    : Twns.Helpers.getExisted(tileData.baseType),
                     shapeId     : tileData.baseShapeId || 0,
                     isDark      : false,
                     skinId      : CommonConstants.UnitAndTileNeutralSkinId,
@@ -363,7 +363,7 @@ namespace Twns.WarMap {
                 ? ``
                 : Twns.Common.CommonModel.getCachedTileDecoratorImageSource({
                     version         : Twns.User.UserModel.getSelfSettingsTextureVersion(),
-                    themeType       : Types.TileThemeType.Clear,
+                    themeType       : Twns.Types.TileThemeType.Clear,
                     decoratorType   : tileData.decoratorType ?? null,
                     shapeId         : tileData.decoratorShapeId ?? null,
                     isDark          : false,
@@ -378,16 +378,16 @@ namespace Twns.WarMap {
     }
 
     class TileObjectLayer extends TileLayerBase {
-        protected _getImageSource(tileData: Types.WarMapTileViewData, tickCount: number): string {
+        protected _getImageSource(tileData: Twns.Types.WarMapTileViewData, tickCount: number): string {
             return tileData == null
                 ? ``
                 : Twns.Common.CommonModel.getCachedTileObjectImageSource({
                     version     : Twns.User.UserModel.getSelfSettingsTextureVersion(),
-                    themeType   : Types.TileThemeType.Clear,
-                    objectType  : tileData.objectType || Types.TileObjectType.Empty,
+                    themeType   : Twns.Types.TileThemeType.Clear,
+                    objectType  : tileData.objectType || Twns.Types.TileObjectType.Empty,
                     shapeId     : tileData.objectShapeId || 0,
                     isDark      : false,
-                    skinId      : Helpers.getExisted(tileData.skinId || tileData.playerIndex),
+                    skinId      : Twns.Helpers.getExisted(tileData.skinId || tileData.playerIndex),
                     tickCount,
                 });
         }
@@ -401,7 +401,7 @@ namespace Twns.WarMap {
         let width   = 0;
         let height  = 0;
         for (const tile of tileDataArray) {
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tile.gridIndex));
+            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(tile.gridIndex));
             width           = Math.max(gridIndex.x + 1, width);
             height          = Math.max(gridIndex.y + 1, height);
         }
@@ -435,10 +435,10 @@ namespace Twns.WarMap {
         }): void {
             this._initWithDataList(_createUnitViewDataList({ unitDataArray, players, config }));
         }
-        private _initWithDataList(dataList: Types.WarMapUnitViewData[]): void {
+        private _initWithDataList(dataList: Twns.Types.WarMapUnitViewData[]): void {
             this.clear();
 
-            const tickCount = Timer.getUnitAnimationTickCount();
+            const tickCount = Twns.Timer.getUnitAnimationTickCount();
             for (const data of dataList) {
                 this._addUnit(data, tickCount);
             }
@@ -464,7 +464,7 @@ namespace Twns.WarMap {
             Twns.Notify.removeEventListeners(this._notifyListenerArray, this);
         }
         private _onNotifyUnitAnimationTick(): void {
-            const tickCount = Timer.getUnitAnimationTickCount();
+            const tickCount = Twns.Timer.getUnitAnimationTickCount();
             for (const view of this._unitViews) {
                 view.updateOnAnimationTick(tickCount);
             }
@@ -487,8 +487,8 @@ namespace Twns.WarMap {
                 unitViews.push(layer.getChildAt(i) as WarMapUnitView);
             }
             unitViews.sort((v1, v2): number => {
-                const g1 = Helpers.getExisted(GridIndexHelpers.convertGridIndex(v1.getUnitData()?.gridIndex));
-                const g2 = Helpers.getExisted(GridIndexHelpers.convertGridIndex(v2.getUnitData()?.gridIndex));
+                const g1 = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(v1.getUnitData()?.gridIndex));
+                const g2 = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(v2.getUnitData()?.gridIndex));
                 const y1 = g1.y;
                 const y2 = g2.y;
                 return y1 !== y2 ? y1 - y2 : g1.x - g2.x;
@@ -499,15 +499,15 @@ namespace Twns.WarMap {
             }
         }
 
-        private _addUnit(data: Types.WarMapUnitViewData, tickCount: number): void {
-            const unitType = Helpers.getExisted(data.unitType);
+        private _addUnit(data: Twns.Types.WarMapUnitViewData, tickCount: number): void {
+            const unitType = Twns.Helpers.getExisted(data.unitType);
             const view     = new WarMapUnitView(data, tickCount);
             this._unitViews.push(view);
 
             const config = data.gameConfig;
-            if (config.checkIsUnitTypeInCategory(unitType, Types.UnitCategory.Air)) {
+            if (config.checkIsUnitTypeInCategory(unitType, Twns.Types.UnitCategory.Air)) {
                 this._airLayer.addChild(view);
-            } else if (config.checkIsUnitTypeInCategory(unitType, Types.UnitCategory.Ground)) {
+            } else if (config.checkIsUnitTypeInCategory(unitType, Twns.Types.UnitCategory.Ground)) {
                 this._groundLayer.addChild(view);
             } else {
                 this._seaLayer.addChild(view);
@@ -519,14 +519,14 @@ namespace Twns.WarMap {
         unitDataArray   : WarSerialization.ISerialUnit[];
         players         : ISerialPlayer[] | null;
         config          : GameConfig;
-    }): Types.WarMapUnitViewData[] {
-        const dataArray: Types.WarMapUnitViewData[] = [];
+    }): Twns.Types.WarMapUnitViewData[] {
+        const dataArray: Twns.Types.WarMapUnitViewData[] = [];
         if (unitDataArray) {
             const loaderUnitIdSet = new Set<number>();
             for (const unitData of unitDataArray) {
                 const loaderUnitId = unitData.loaderUnitId;
                 if (loaderUnitId == null) {
-                    const data  = Helpers.deepClone(unitData) as Types.WarMapUnitViewData;
+                    const data  = Twns.Helpers.deepClone(unitData) as Twns.Types.WarMapUnitViewData;
                     data.gameConfig = config;
                     dataArray.push(data);
                 } else {
@@ -535,14 +535,14 @@ namespace Twns.WarMap {
             }
 
             for (const unitData of dataArray) {
-                if (loaderUnitIdSet.has(Helpers.getExisted(unitData.unitId))) {
+                if (loaderUnitIdSet.has(Twns.Helpers.getExisted(unitData.unitId))) {
                     unitData.hasLoadedUnit = true;
                 }
 
                 const playerData = players ? players.find(v => v.playerIndex === unitData.playerIndex) : null;
                 if (playerData) {
-                    unitData.coUsingSkillType   = Helpers.getExisted(playerData.coUsingSkillType);
-                    unitData.skinId             = Helpers.getExisted(playerData.unitAndTileSkinId);
+                    unitData.coUsingSkillType   = Twns.Helpers.getExisted(playerData.coUsingSkillType);
+                    unitData.skinId             = Twns.Helpers.getExisted(playerData.unitAndTileSkinId);
                 }
             }
         }

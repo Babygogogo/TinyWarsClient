@@ -51,7 +51,7 @@ namespace Twns.MapEditor {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            const { width, height }     = Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getTileMap().getMapSize();
+            const { width, height }     = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getTileMap().getMapSize();
             this._labelCurrHeight.text  = "" + height;
             this._labelCurrWidth.text   = "" + width;
             this._inputNewHeight.text   = "" + height;
@@ -68,13 +68,13 @@ namespace Twns.MapEditor {
         }
 
         private async _onTouchedBtnConfirm(): Promise<void> {
-            const width         = Helpers.getExisted(this._newWidth);
-            const height        = Helpers.getExisted(this._newHeight);
+            const width         = Twns.Helpers.getExisted(this._newWidth);
+            const height        = Twns.Helpers.getExisted(this._newHeight);
             const gridsCount    = width * height;
             if ((!gridsCount) || (gridsCount <= 0)) {
                 FloatText.show(Lang.getText(LangTextType.A0087));
             } else {
-                const war = Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
+                const war = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
                 war.stopRunning();
                 await war.initWithMapEditorData(
                     {
@@ -88,7 +88,7 @@ namespace Twns.MapEditor {
                     .startRunningView();
 
                 this.close();
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.MeWarMenuPanel);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.MeWarMenuPanel);
             }
         }
 
@@ -96,7 +96,7 @@ namespace Twns.MapEditor {
             const input = this._inputNewWidth;
             let width = Number(input.text);
             if ((isNaN(width)) || (width <= 0)) {
-                width = Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getTileMap().getMapSize().width;
+                width = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getTileMap().getMapSize().width;
             }
             this._newWidth  = width;
             input.text      = "" + width;
@@ -106,7 +106,7 @@ namespace Twns.MapEditor {
             const input = this._inputNewHeight;
             let width = Number(input.text);
             if ((isNaN(width)) || (width <= 0)) {
-                width = Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getTileMap().getMapSize().height;
+                width = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getTileMap().getMapSize().height;
             }
             this._newHeight = width;
             input.text      = "" + width;

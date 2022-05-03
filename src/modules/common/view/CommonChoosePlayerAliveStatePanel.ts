@@ -14,7 +14,7 @@
 namespace Twns.Common {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = Twns.Notify.NotifyType;
-    import PlayerAliveState = Types.PlayerAliveState;
+    import PlayerAliveState = Twns.Types.PlayerAliveState;
 
     const AVAILABLE_STATES = [
         PlayerAliveState.Alive,
@@ -97,12 +97,12 @@ namespace Twns.Common {
             const aliveStateArray   = openData.currentAliveStateArray;
             const list              = this._listLocation;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => aliveStateArray.indexOf(v.aliveState) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => aliveStateArray.indexOf(v.aliveState) >= 0 ? i : null)));
         }
     }
 
     type DataForAliveStateRenderer = {
-        aliveState  : Types.PlayerAliveState;
+        aliveState  : Twns.Types.PlayerAliveState;
     };
     class AliveStateRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForAliveStateRenderer> {
         private readonly _groupShow!    : eui.Group;

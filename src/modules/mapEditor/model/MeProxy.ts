@@ -11,10 +11,10 @@
 namespace Twns.MapEditor.MeProxy {
     import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import NetMessageCodes  = Twns.Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Twns.Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgMeGetMapDataList,     callback: _onMsgMeGetMapDataList },
             { msgCode: NetMessageCodes.MsgMeGetMapData,         callback: _onMsgMeGetMapData },
             { msgCode: NetMessageCodes.MsgMeSubmitMap,          callback: _onMsgMeSubmitMap },
@@ -22,7 +22,7 @@ namespace Twns.MapEditor.MeProxy {
     }
 
     export function reqMeGetMapDataList(): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMeGetMapDataList: { c: {} },
         });
     }
@@ -35,7 +35,7 @@ namespace Twns.MapEditor.MeProxy {
     }
 
     export function reqMeGetMapData(slotIndex: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMeGetMapData: { c: {
                 slotIndex,
             }, }
@@ -44,13 +44,13 @@ namespace Twns.MapEditor.MeProxy {
     function _onMsgMeGetMapData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMeGetMapData.IS;
         if (!data.errorCode) {
-            Twns.MapEditor.MeModel.updateData(Helpers.getExisted(data.slotIndex), Helpers.getExisted(data.data));
+            Twns.MapEditor.MeModel.updateData(Twns.Helpers.getExisted(data.slotIndex), Twns.Helpers.getExisted(data.data));
             Twns.Notify.dispatch(NotifyType.MsgMeGetData, data);
         }
     }
 
     export function reqMeSubmitMap(slotIndex: number, mapRawData: CommonProto.Map.IMapRawData, needReview: boolean): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMeSubmitMap: { c: {
                 slotIndex,
                 needReview,

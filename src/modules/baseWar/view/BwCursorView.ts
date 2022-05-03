@@ -11,8 +11,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import GridIndex            = Types.GridIndex;
-    import ActionPlannerState   = Types.ActionPlannerState;
+    import GridIndex            = Twns.Types.GridIndex;
+    import ActionPlannerState   = Twns.Types.ActionPlannerState;
     import NotifyType           = Twns.Notify.NotifyType;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
@@ -52,10 +52,10 @@ namespace Twns.BaseWar {
         private _cursor?                : BwCursor;
         private _frameIndexForImgTarget = 0;
 
-        private _currGlobalTouchPoints      = new Map<number, Types.Point>();
-        private _prevGlobalTouchPoints      = new Map<number, Types.Point>();
+        private _currGlobalTouchPoints      = new Map<number, Twns.Types.Point>();
+        private _prevGlobalTouchPoints      = new Map<number, Twns.Types.Point>();
         private _touchIdForTouchingCursor   : number | null = null;
-        private _initialGlobalTouchPoint?   : Types.Point;
+        private _initialGlobalTouchPoint?   : Twns.Types.Point;
         private _isTouchMovedOrMultiple?    : boolean;
 
         private _conForAll              = new egret.DisplayObjectContainer();
@@ -136,7 +136,7 @@ namespace Twns.BaseWar {
         }
 
         private _getCursor(): BwCursor {
-            return Helpers.getExisted(this._cursor);
+            return Twns.Helpers.getExisted(this._cursor);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,7 +145,7 @@ namespace Twns.BaseWar {
         private _onNotifyZoomableContentsMoved(): void {
             const touchPoints = this._currGlobalTouchPoints;
             if ((this._touchIdForTouchingCursor != null) && (touchPoints.size === 1)) {
-                const point         = touchPoints.values().next().value as Types.Point;
+                const point         = touchPoints.values().next().value as Twns.Types.Point;
                 const gridIndex     = this._getGridIndexByGlobalXY(point.x, point.y);
                 const currGridIndex = this._getCursor().getGridIndex();
                 if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
@@ -190,9 +190,9 @@ namespace Twns.BaseWar {
             const touchId               = e.touchPointID;
             const currGlobalTouchPoints = this._currGlobalTouchPoints;
             if (currGlobalTouchPoints.has(touchId)) {
-                const initialGlobalTouchPoint   = Helpers.getExisted(this._initialGlobalTouchPoint);
+                const initialGlobalTouchPoint   = Twns.Helpers.getExisted(this._initialGlobalTouchPoint);
                 this._isTouchMovedOrMultiple    = (this._isTouchMovedOrMultiple)
-                    || (Helpers.getSquaredPointDistance(e.stageX, e.stageY, initialGlobalTouchPoint.x, initialGlobalTouchPoint.y) > _DRAG_FIELD_SQUARED_TRIGGER_DISTANCE);
+                    || (Twns.Helpers.getSquaredPointDistance(e.stageX, e.stageY, initialGlobalTouchPoint.x, initialGlobalTouchPoint.y) > _DRAG_FIELD_SQUARED_TRIGGER_DISTANCE);
                 currGlobalTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
 
                 if (currGlobalTouchPoints.size > 1) {
@@ -238,7 +238,7 @@ namespace Twns.BaseWar {
                 if (!currGlobalTouchPoints.size) {
                     this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
                     if (!this._isTouchMovedOrMultiple) {
-                        const initialGlobalTouchPoint = Helpers.getExisted(this._initialGlobalTouchPoint);
+                        const initialGlobalTouchPoint = Twns.Helpers.getExisted(this._initialGlobalTouchPoint);
                         Twns.Notify.dispatch(NotifyType.BwCursorTapped, {
                             current : this._getCursor().getGridIndex(),
                             tappedOn: this._getGridIndexByGlobalXY(initialGlobalTouchPoint.x, initialGlobalTouchPoint.y),

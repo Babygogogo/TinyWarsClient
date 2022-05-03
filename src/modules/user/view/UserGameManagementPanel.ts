@@ -79,53 +79,53 @@ namespace Twns.User {
             this._updateComponentsForLanguage();
         }
         private _onTouchedBtnDeleteAllSpmRank(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title       : Lang.getText(LangTextType.B0879),
                 content     : Lang.getText(LangTextType.A0225),
                 callback    : () => Twns.SinglePlayerMode.SpmProxy.reqSpmDeleteAllScoreAndReplay(),
             });
         }
         private _onTouchedBtnSetPrivilege(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetPrivilegePanel, { userId: Helpers.getExisted(Twns.User.UserModel.getSelfUserId()) });
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserSetPrivilegePanel, { userId: Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId()) });
         }
         private _onTouchedBtnMapManagement(): void {
-            TwnsPanelManager.closeAllPanelsExcept([
-                TwnsPanelConfig.Dict.LobbyBackgroundPanel,
+            Twns.PanelHelpers.closeAllPanelsExcept([
+                Twns.PanelHelpers.PanelDict.LobbyBackgroundPanel,
             ]);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBackgroundPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBackgroundPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmMainMenuPanel, void 0);
         }
         private _onTouchedBtnManageBroadcast(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.BroadcastMessageListPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BroadcastMessageListPanel, void 0);
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {

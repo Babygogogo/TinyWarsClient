@@ -124,9 +124,9 @@ namespace Twns.MapEditor {
                     typeMap.set(baseType, []);
                 }
 
-                const list = Helpers.getExisted(typeMap.get(baseType));
+                const list = Twns.Helpers.getExisted(typeMap.get(baseType));
                 for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
-                    if ((baseType === Types.TileBaseType.Sea) && (shapeId !== 0)) {
+                    if ((baseType === Twns.Types.TileBaseType.Sea) && (shapeId !== 0)) {
                         continue;
                     }
 
@@ -175,7 +175,7 @@ namespace Twns.MapEditor {
         protected _onDataChanged(): void {
             const data                      = this._getData();
             const dataListForDrawTileBase   = data.dataListForDrawTileBase;
-            this._labelCategory.text        = Lang.getTileName(Twns.Config.ConfigManager.getTileType(dataListForDrawTileBase[0].baseType, Types.TileObjectType.Empty)) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelCategory.text        = Lang.getTileName(Twns.Config.ConfigManager.getTileType(dataListForDrawTileBase[0].baseType, Twns.Types.TileObjectType.Empty)) ?? CommonConstants.ErrorTextForUndefined;
 
             const dataListForTileBase   : DataForTileBaseRenderer[] = [];
             const panel                 = data.panel;
@@ -238,12 +238,12 @@ namespace Twns.MapEditor {
             if (!panel.getNeedFill()) {
                 panel.updateOnChooseTileBase(dataForDrawTileBase);
                 panel.close();
-                Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawTileBase(dataForDrawTileBase);
+                Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawTileBase(dataForDrawTileBase);
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0089),
                     callback: () => {
-                        const war           = Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
+                        const war           = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
                         const gameConfig    = war.getGameConfig();
                         for (const tile of war.getTileMap().getAllTiles()) {
                             tile.init({

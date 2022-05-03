@@ -49,7 +49,7 @@ namespace Twns.MapEditor {
         }
 
         private _getWar(): MeWar {
-            return Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
+            return Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
         }
 
         private _onNotifyLanguageChanged(): void {

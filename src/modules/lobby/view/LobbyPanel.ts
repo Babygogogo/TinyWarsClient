@@ -83,7 +83,7 @@ namespace Twns.Lobby {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedGroupDiscord(): void {
             if ((window) && (window.open)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, `Discord`),
                     callback: () => {
                         window.open(CommonConstants.DiscordUrl);
@@ -94,7 +94,7 @@ namespace Twns.Lobby {
 
         private _onTouchedGroupGithub(): void {
             if ((window) && (window.open)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, `GitHub`),
                     callback: () => {
                         window.open(CommonConstants.GithubUrl);
@@ -105,8 +105,8 @@ namespace Twns.Lobby {
 
         private _onTouchedGroupSwitchVersion(): void {
             if (window?.open) {
-                const isTest = (CommonConstants.GameVersion as any) === Types.GameVersion.Legacy;
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                const isTest = (CommonConstants.GameVersion as any) === Twns.Types.GameVersion.Legacy;
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, Lang.getText(isTest ? LangTextType.B0854 : LangTextType.B0854)),
                     callback: () => {
                         window.open(isTest ? CommonConstants.TestVersionUrl : CommonConstants.LegacyVersionUrl);
@@ -117,17 +117,17 @@ namespace Twns.Lobby {
 
         private _onTouchedBtnMultiPlayer(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrMainMenuPanel, void 0);
         }
 
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmMainMenuPanel, void 0);
         }
 
         private _onTouchedBtnRanking(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MrrMainMenuPanel, void 0);
         }
 
         private _onMsgUserLogout(): void {
@@ -176,18 +176,18 @@ namespace Twns.Lobby {
             group.alpha = 1;
             group.right = 60;
 
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnMultiPlayer,
                 beginProps  : { alpha: 0, right: -40 },
                 endProps    : { alpha: 1, right: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnRanking,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 100,
                 endProps    : { alpha: 1, right: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnSinglePlayer,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 200,
@@ -203,51 +203,51 @@ namespace Twns.Lobby {
             groupTips.alpha = 1;
             groupTips.left  = 60;
 
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupWelcome,
                 beginProps  : { alpha: 0, left: -40 },
                 endProps    : { alpha: 1, left: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupQq,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 50,
                 endProps    : { alpha: 1, left: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupDiscord,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 100,
                 endProps    : { alpha: 1, left: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupGithub,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 150,
                 endProps    : { alpha: 1, left: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupSwitchVersion,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
             });
 
-            await Helpers.wait(200 + CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(200 + CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, right: 60 },
                 endProps    : { alpha: 0, right: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTips,
                 beginProps  : { alpha: 1, left: 60 },
                 endProps    : { alpha: 0, left: 20 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateComponentsForLanguage(): Promise<void> {
@@ -268,7 +268,7 @@ namespace Twns.Lobby {
 
             const labelTips8    = this._labelTips8;
             const labelTips9    = this._labelTips9;
-            if ((CommonConstants.GameVersion as any) === Types.GameVersion.Legacy) {
+            if ((CommonConstants.GameVersion as any) === Twns.Types.GameVersion.Legacy) {
                 labelTips8.text     = `${Lang.getText(LangTextType.B0854)}:`;
                 labelTips9.textFlow = [{
                     text    : CommonConstants.TestVersionUrl,

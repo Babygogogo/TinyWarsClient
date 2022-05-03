@@ -18,7 +18,7 @@ namespace Twns.WarEvent {
     import NotifyType           = Twns.Notify.NotifyType;
     import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
     import IWarEventCondition   = CommonProto.WarEvent.IWarEventCondition;
-    import ConditionType        = Types.WarEventConditionType;
+    import ConditionType        = Twns.Types.WarEventConditionType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
     export type OpenDataForWeConditionTypeListPanel = {
@@ -116,7 +116,7 @@ namespace Twns.WarEvent {
             if (conditionType !== Twns.WarHelpers.WarEventHelpers.getConditionType(condition)) {
                 Twns.WarHelpers.WarEventHelpers.resetCondition(condition, conditionType);
                 Twns.WarHelpers.WarEventHelpers.openConditionModifyPanel({ fullData: data.fullData, condition, war: data.war });
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionTypeListPanel);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionTypeListPanel);
 
                 Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }

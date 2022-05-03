@@ -19,14 +19,14 @@ namespace Twns.CoopCustomRoom.CcrJoinModel {
         if ((playerIndex == null) || (unitAndTileSkinId == null)) {
             return null;
         } else {
-            const settingsForCommon = Helpers.getExisted(roomStaticInfo.settingsForCommon);
+            const settingsForCommon = Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon);
             return {
                 roomId          : roomStaticInfo.roomId,
                 isReady         : false,
                 coId            : WarHelpers.WarRuleHelpers.getRandomCoIdWithSettingsForCommon(
-                    Helpers.getExisted(settingsForCommon.instanceWarRule),
+                    Twns.Helpers.getExisted(settingsForCommon.instanceWarRule),
                     playerIndex,
-                    await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion))
+                    await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion))
                 ),
                 playerIndex,
                 unitAndTileSkinId,
@@ -35,8 +35,8 @@ namespace Twns.CoopCustomRoom.CcrJoinModel {
     }
 
     function generateAvailablePlayerIndexList(roomStaticInfo: ICcrRoomStaticInfo, roomPlayerInfo: ICcrRoomPlayerInfo): number[] {
-        const playersCountUnneutral = WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForCommon?.instanceWarRule));
-        const playerInfoList        = Helpers.getExisted(roomPlayerInfo.playerDataList);
+        const playersCountUnneutral = WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon?.instanceWarRule));
+        const playerInfoList        = Twns.Helpers.getExisted(roomPlayerInfo.playerDataList);
         const indexes               : number[] = [];
         for (let i = 1; i <= playersCountUnneutral; ++i) {
             if (playerInfoList.every(v => v.playerIndex !== i)) {
@@ -47,7 +47,7 @@ namespace Twns.CoopCustomRoom.CcrJoinModel {
     }
 
     function generateAvailableSkinIdList(roomPlayerInfo: ICcrRoomPlayerInfo): number[] {
-        const playerDataList    = Helpers.getExisted(roomPlayerInfo.playerDataList);
+        const playerDataList    = Twns.Helpers.getExisted(roomPlayerInfo.playerDataList);
         const idList            : number[] = [];
         for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
             if (playerDataList.every(v => v.unitAndTileSkinId !== skinId)) {

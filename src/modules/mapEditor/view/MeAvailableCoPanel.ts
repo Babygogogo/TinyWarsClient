@@ -27,7 +27,7 @@ namespace Twns.MapEditor {
         isReviewing     : boolean;
     };
     export class MeAvailableCoPanel extends TwnsUiPanel.UiPanel<OpenDataForMeAvailableCoPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
+        protected readonly _LAYER_TYPE   = Twns.Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeAvailableCoPanel;
@@ -89,13 +89,13 @@ namespace Twns.MapEditor {
         private _onTouchedBtnConfirm(): void {
             const bannedCoIdSet = this._bannedCoIdSet;
             if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0130),
                 });
             } else {
                 const openData = this._getOpenData();
-                Twns.WarHelpers.WarRuleHelpers.setBannedCoIdArray(openData.templateWarRule, Helpers.getExisted(openData.playerRule.playerIndex), bannedCoIdSet);
+                Twns.WarHelpers.WarRuleHelpers.setBannedCoIdArray(openData.templateWarRule, Twns.Helpers.getExisted(openData.playerRule.playerIndex), bannedCoIdSet);
                 Twns.Notify.dispatch(NotifyType.MeBannedCoIdArrayChanged);
                 this.close();
             }
@@ -108,7 +108,7 @@ namespace Twns.MapEditor {
                 const gameConfig    = await Twns.Config.ConfigManager.getLatestGameConfig();
                 const coIdList      = renderer.getIsCustomSwitch()
                     ? gameConfig.getEnabledCustomCoIdList()
-                    : gameConfig.getEnabledCoIdListInTier(Helpers.getExisted(renderer.getCoTier()));
+                    : gameConfig.getEnabledCoIdListInTier(Twns.Helpers.getExisted(renderer.getCoTier()));
 
                 if (renderer.getState() === CoTierState.Unavailable) {
                     for (const coId of coIdList) {
@@ -130,7 +130,7 @@ namespace Twns.MapEditor {
         private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
             if (!this._getOpenData().isReviewing) {
                 const renderer      = e.currentTarget as RendererForCoName;
-                const coId          = Helpers.getExisted(renderer.getCoId());
+                const coId          = Twns.Helpers.getExisted(renderer.getCoId());
                 const bannedCoIdSet = this._bannedCoIdSet;
 
                 if (!renderer.getIsSelected()) {
@@ -186,7 +186,7 @@ namespace Twns.MapEditor {
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
                     ? gameConfig.getEnabledCustomCoIdList()
-                    : gameConfig.getEnabledCoIdListInTier(Helpers.getExisted(renderer.getCoTier()));
+                    : gameConfig.getEnabledCoIdListInTier(Twns.Helpers.getExisted(renderer.getCoTier()));
 
                 if (includedCoIdList.every(coId => bannedCoIdSet.has(coId))) {
                     renderer.setState(CoTierState.Unavailable);
@@ -220,7 +220,7 @@ namespace Twns.MapEditor {
         private _updateGroupCoNames(): void {
             const bannedCoIdSet = this._bannedCoIdSet;
             for (const renderer of this._renderersForCoNames) {
-                renderer.setIsSelected(!bannedCoIdSet.has(Helpers.getExisted(renderer.getCoId())));
+                renderer.setIsSelected(!bannedCoIdSet.has(Twns.Helpers.getExisted(renderer.getCoId())));
             }
         }
     }
@@ -271,7 +271,7 @@ namespace Twns.MapEditor {
             } else {
                 this._labelName.textColor = 0xFF0000;
             }
-            Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Types.ColorType.Origin : Types.ColorType.Gray);
+            Twns.Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Twns.Types.ColorType.Origin : Twns.Types.ColorType.Gray);
         }
         public getState(): CoTierState | null {
             return this._state;
@@ -304,7 +304,7 @@ namespace Twns.MapEditor {
         public setIsSelected(isSelected: boolean): void {
             this._isSelected            = isSelected;
             this._labelName.textColor   = isSelected ? 0x00ff00 : 0xff0000;
-            Helpers.changeColor(this._imgSelected, isSelected ? Types.ColorType.Origin : Types.ColorType.Gray);
+            Twns.Helpers.changeColor(this._imgSelected, isSelected ? Twns.Types.ColorType.Origin : Twns.Types.ColorType.Gray);
         }
         public getIsSelected(): boolean | null {
             return this._isSelected;

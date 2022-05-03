@@ -90,7 +90,7 @@ namespace Twns.WatchWar {
             if (userIds.length <= 0) {
                 this.close();
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0083, userIds.length),
                     callback: () => {
                         Twns.WatchWar.WwProxy.reqWatchMakeRequest(warId, userIds);
@@ -129,7 +129,7 @@ namespace Twns.WatchWar {
             }
 
             const gameConfig            = await Twns.Config.ConfigManager.getGameConfig(configVersion);
-            const selfUserId            = Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
+            const selfUserId            = Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
             const ongoingDstUserIdArray = outgoingInfo.ongoingDstUserIdArray || [];
             const requestDstUserIdArray = outgoingInfo.requestDstUserIdArray || [];
             const playerInfoList        = (await Twns.MultiPlayerWar.MpwModel.getWarProgressInfo(warId))?.playerInfoList || [];
@@ -220,7 +220,7 @@ namespace Twns.WatchWar {
 
             const userId    = playerInfo.userId;
             const labelName = this._labelName;
-            const coName    = data.gameConfig.getCoNameAndTierText(Helpers.getExisted(playerInfo.coId));
+            const coName    = data.gameConfig.getCoNameAndTierText(Twns.Helpers.getExisted(playerInfo.coId));
             if (userId == null) {
                 labelName.text = `${Lang.getText(LangTextType.B0607)} ${coName}`;
             } else {

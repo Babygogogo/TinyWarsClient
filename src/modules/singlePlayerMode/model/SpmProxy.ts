@@ -14,12 +14,12 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SinglePlayerMode.SpmProxy {
     import NotifyType       = Twns.Notify.NotifyType;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import NetMessageCodes  = Twns.Net.NetMessageCodes;
     import SpwWar           = Twns.SinglePlayerWar.SpwWar;
     import SrwWar           = Twns.SingleRankWar.SrwWar;
 
     export function init(): void {
-        NetManager.addListeners([
+        Twns.Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgSpmCreateScw,                     callback: _onMsgSpmCreateScw },
             { msgCode: NetMessageCodes.MsgSpmCreateSfw,                     callback: _onMsgSpmCreateSfw },
             { msgCode: NetMessageCodes.MsgSpmCreateSrw,                     callback: _onMsgSpmCreateSrw },
@@ -36,7 +36,7 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     }
 
     export function reqSpmGetWarSaveSlotFullData(slotIndex: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgSpmGetWarSaveSlotFullData: { c: {
                 slotIndex,
             }, },
@@ -45,15 +45,15 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     function _onMsgSpmGetWarSaveSlotFullData(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.IS;
         if (!data.errorCode) {
-            const slotIndex = Helpers.getExisted(data.slotIndex);
+            const slotIndex = Twns.Helpers.getExisted(data.slotIndex);
             const slotData  = data.slotData;
             if (slotData == null) {
                 Twns.SinglePlayerMode.SpmModel.setSlotFullData(slotIndex, null);
             } else {
                 Twns.SinglePlayerMode.SpmModel.setSlotFullData(slotIndex, {
                     slotIndex,
-                    warData     : ProtoManager.decodeAsSerialWar(Helpers.getExisted(slotData.encodedWarData)),
-                    extraData   : ProtoManager.decodeAsSpmWarSaveSlotExtraData(Helpers.getExisted(slotData.encodedExtraData)),
+                    warData     : ProtoManager.decodeAsSerialWar(Twns.Helpers.getExisted(slotData.encodedWarData)),
+                    extraData   : ProtoManager.decodeAsSpmWarSaveSlotExtraData(Twns.Helpers.getExisted(slotData.encodedExtraData)),
                 });
             }
             Twns.Notify.dispatch(NotifyType.MsgSpmGetWarSaveFullData, data);
@@ -61,7 +61,7 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     }
 
     export function reqSpmCreateScw(param: Twns.SingleCustomRoom.ScrCreateModel.DataForCreateWar): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgSpmCreateScw: { c: param },
         });
     }
@@ -78,7 +78,7 @@ namespace Twns.SinglePlayerMode.SpmProxy {
         slotExtraData   : CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
         warData         : CommonProto.WarSerialization.ISerialWar;
     }): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgSpmCreateSfw: { c: {
                 slotIndex,
                 slotExtraData,
@@ -95,7 +95,7 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     }
 
     export function reqSpmCreateSrw(data: CommonProto.NetMessage.MsgSpmCreateSrw.IC): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgSpmCreateSrw: { c: data },
         });
     }
@@ -108,7 +108,7 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     }
 
     export function reqSpmSaveScw(war: SpwWar): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgSpmSaveScw: { c: {
                 slotIndex       : war.getSaveSlotIndex(),
                 slotExtraData   : war.getSaveSlotExtraData(),
@@ -125,7 +125,7 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     }
 
     export function reqSpmSaveSfw(war: SpwWar): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgSpmSaveSfw: { c: {
                 slotIndex       : war.getSaveSlotIndex(),
                 slotExtraData   : war.getSaveSlotExtraData(),
@@ -142,7 +142,7 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     }
 
     export function reqSpmSaveSrw(war: SpwWar): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgSpmSaveSrw: { c: {
                 slotIndex       : war.getSaveSlotIndex(),
                 slotExtraData   : war.getSaveSlotExtraData(),
@@ -159,7 +159,7 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     }
 
     export function reqSpmDeleteWarSaveSlot(slotIndex: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgSpmDeleteWarSaveSlot: { c: {
                 slotIndex,
             } },
@@ -168,13 +168,13 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     function _onMsgSpmDeleteWarSaveSlot(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgSpmDeleteWarSaveSlot.IS;
         if (!data.errorCode) {
-            Twns.SinglePlayerMode.SpmModel.updateOnMsgSpmDeleteWarSaveSlot(Helpers.getExisted(data.slotIndex));
+            Twns.SinglePlayerMode.SpmModel.updateOnMsgSpmDeleteWarSaveSlot(Twns.Helpers.getExisted(data.slotIndex));
             Twns.Notify.dispatch(NotifyType.MsgSpmDeleteWarSaveSlot, data);
         }
     }
 
     export function reqSpmGetRankList(mapId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgSpmGetRankList: { c: {
                 mapId,
             } },
@@ -187,7 +187,7 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     }
 
     export function reqSpmValidateSrw(war: SrwWar): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgSpmValidateSrw: { c: {
                 warData     : war.serializeForValidation(),
             } },
@@ -201,7 +201,7 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     }
 
     export function reqSpmGetReplayData(rankId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgSpmGetReplayData: { c: {
                 rankId,
             } },
@@ -214,7 +214,7 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     }
 
     export function reqSpmDeleteAllScoreAndReplay(): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgSpmDeleteAllScoreAndReplay: { c: {
             } },
         });

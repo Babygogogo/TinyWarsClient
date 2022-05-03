@@ -119,7 +119,7 @@ namespace Twns.WarEvent {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 fullData    : openData.fullData,
                 action      : openData.action,
                 war         : openData.war,
@@ -130,7 +130,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnLocation(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseLocationPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseLocationPanel, {
                 currentLocationIdArray  : action.conLocationIdArray ?? [],
                 callbackOnConfirm       : locationIdArray => {
                     action.conLocationIdArray = locationIdArray;
@@ -140,8 +140,8 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnGridIndex(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseGridIndexPanel, {
-                currentGridIndexArray   : Helpers.getNonNullElements(action.conGridIndexArray?.map(v => GridIndexHelpers.convertGridIndex(v)) ?? []),
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseGridIndexPanel, {
+                currentGridIndexArray   : Twns.Helpers.getNonNullElements(action.conGridIndexArray?.map(v => GridIndexHelpers.convertGridIndex(v)) ?? []),
                 mapSize                 : this._getOpenData().war.getTileMap().getMapSize(),
                 callbackOnConfirm       : gridIndexArray => {
                     action.conGridIndexArray = gridIndexArray;
@@ -291,7 +291,7 @@ namespace Twns.WarEvent {
 
         private _onTouchedBtnAddLocationIdArray(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseLocationPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseLocationPanel, {
                 currentLocationIdArray  : action.actAddLocationIdArray ?? [],
                 callbackOnConfirm       : locationIdArray => {
                     action.actAddLocationIdArray = locationIdArray;
@@ -302,7 +302,7 @@ namespace Twns.WarEvent {
 
         private _onTouchedBtnDeleteLocationIdArray(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseLocationPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseLocationPanel, {
                 currentLocationIdArray  : action.actDeleteLocationIdArray ?? [],
                 callbackOnConfirm       : locationIdArray => {
                     action.actDeleteLocationIdArray = locationIdArray;
@@ -361,7 +361,7 @@ namespace Twns.WarEvent {
             const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForAction(openData.fullData, action, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
             this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelLocation(): void {
@@ -425,7 +425,7 @@ namespace Twns.WarEvent {
         }
 
         private _getAction(): CommonProto.WarEvent.IWeaSetTileState {
-            return Helpers.getExisted(this._getOpenData().action.WeaSetTileState);
+            return Twns.Helpers.getExisted(this._getOpenData().action.WeaSetTileState);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {
             this._imgInnerTouchMask.visible = isEnabled;

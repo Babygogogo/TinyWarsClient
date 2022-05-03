@@ -10,8 +10,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiZoomableComponent {
     import NotifyType           = Twns.Notify.NotifyType;
-    import Point                = Types.Point;
-    import TouchPoints          = Types.TouchPoints;
+    import Point                = Twns.Types.Point;
+    import TouchPoints          = Twns.Types.TouchPoints;
 
     const MAX_CONTENT_SCALE     = 6;
 
@@ -261,7 +261,7 @@ namespace TwnsUiZoomableComponent {
                 this.setZoomByTouches(currGlobalTouchPoints, prevGlobalTouchPoints);
             } else {
                 if (prevGlobalTouchPoints.has(touchId)) {
-                    this.setDragByTouches(Helpers.getExisted(currGlobalTouchPoints.get(touchId)), Helpers.getExisted(prevGlobalTouchPoints.get(touchId)));
+                    this.setDragByTouches(Twns.Helpers.getExisted(currGlobalTouchPoints.get(touchId)), Twns.Helpers.getExisted(prevGlobalTouchPoints.get(touchId)));
                 }
             }
 
@@ -293,8 +293,8 @@ namespace TwnsUiZoomableComponent {
                 oldPoints.push(this._contents.globalToLocal(point.x, point.y));
             }
 
-            return Helpers.getPointDistance(newPoints[0].x, newPoints[0].y, newPoints[1].x, newPoints[1].y)
-                /  Helpers.getPointDistance(oldPoints[0].x, oldPoints[0].y, oldPoints[1].x, oldPoints[1].y);
+            return Twns.Helpers.getPointDistance(newPoints[0].x, newPoints[0].y, newPoints[1].x, newPoints[1].y)
+                /  Twns.Helpers.getPointDistance(oldPoints[0].x, oldPoints[0].y, oldPoints[1].x, oldPoints[1].y);
         }
 
         private _getCenterPoint(touches: TouchPoints): Point {

@@ -26,10 +26,10 @@ namespace Twns.User.UserModel {
     let _selfInfo                   : IUserSelfInfo | null = null;
     let _selfAccount                : string;
     let _selfPassword               : string | null = null;
-    const _userPublicInfoAccessor   = Helpers.createCachedDataAccessor<number, IUserPublicInfo>({
+    const _userPublicInfoAccessor   = Twns.Helpers.createCachedDataAccessor<number, IUserPublicInfo>({
         reqData                     : (userId: number) => Twns.User.UserProxy.reqUserGetPublicInfo(userId),
     });
-    const _userBriefInfoAccessor    = Helpers.createCachedDataAccessor<number, IUserBriefInfo>({
+    const _userBriefInfoAccessor    = Twns.Helpers.createCachedDataAccessor<number, IUserBriefInfo>({
         reqData                     : (userId: number) => Twns.User.UserProxy.reqUserGetBriefInfo(userId),
     });
 
@@ -160,10 +160,10 @@ namespace Twns.User.UserModel {
         const info = await getUserPublicInfo(userId);
         return info ? info.nickname ?? null : null;
     }
-    export async function getUserMrwRankScoreInfo(userId: number, warType: Types.WarType, playersCount: number): Promise<CommonProto.User.UserRankInfo.IUserMrwRankInfo | null> {
+    export async function getUserMrwRankScoreInfo(userId: number, warType: Twns.Types.WarType, playersCount: number): Promise<CommonProto.User.UserRankInfo.IUserMrwRankInfo | null> {
         return (await getUserPublicInfo(userId))?.userMrwRankInfoArray?.find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount)) ?? null;
     }
-    export async function getUserMpwStatisticsData(userId: number, warType: Types.WarType, playersCount: number): Promise<CommonProto.User.UserWarStatistics.IUserMpwStatistics | null> {
+    export async function getUserMpwStatisticsData(userId: number, warType: Twns.Types.WarType, playersCount: number): Promise<CommonProto.User.UserWarStatistics.IUserMpwStatistics | null> {
         return (await getUserPublicInfo(userId))?.userMpwStatisticsArray?.find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount)) ?? null;
     }
     export function getMapRating(mapId: number): number | null {
@@ -173,8 +173,8 @@ namespace Twns.User.UserModel {
     function getSelfSettings(): IUserSettings | null {
         return getSelfUserComplexInfo()?.userSettings ?? null;
     }
-    export function getSelfSettingsTextureVersion(): Types.UnitAndTileTextureVersion {
-        return getSelfSettings()?.unitAndTileTextureVersion ?? Types.UnitAndTileTextureVersion.V0;
+    export function getSelfSettingsTextureVersion(): Twns.Types.UnitAndTileTextureVersion {
+        return getSelfSettings()?.unitAndTileTextureVersion ?? Twns.Types.UnitAndTileTextureVersion.V0;
     }
     export function getSelfSettingsIsSetPathMode(): boolean {
         return getSelfSettings()?.isSetPathMode ?? false;
@@ -218,7 +218,7 @@ namespace Twns.User.UserModel {
 
         const currentOpacitySettings = selfSettings.opacitySettings;
         if (currentOpacitySettings == null) {
-            selfSettings.opacitySettings = Helpers.deepClone(newOpacitySettings);
+            selfSettings.opacitySettings = Twns.Helpers.deepClone(newOpacitySettings);
         } else {
             currentOpacitySettings.tileBaseOpacity      = newOpacitySettings.tileBaseOpacity ?? currentOpacitySettings.tileBaseOpacity;
             currentOpacitySettings.tileDecoratorOpacity = newOpacitySettings.tileDecoratorOpacity ?? currentOpacitySettings.tileDecoratorOpacity;
@@ -236,21 +236,21 @@ namespace Twns.User.UserModel {
         (userSelfInfo) && (setSelfInfo(userSelfInfo));
     }
     export async function updateOnMsgUserGetOnlineState(data: NetMessage.MsgUserGetOnlineState.IS): Promise<void> {
-        const userPublicInfo = await getUserPublicInfo(Helpers.getExisted(data.userId));
+        const userPublicInfo = await getUserPublicInfo(Twns.Helpers.getExisted(data.userId));
         if (userPublicInfo) {
             userPublicInfo.isOnline         = data.isOnline;
             userPublicInfo.lastActivityTime = data.lastActivityTime;
         }
     }
     export function updateOnMsgUserSetNickname(data: NetMessage.MsgUserSetNickname.IS): void {
-        setSelfNickname(Helpers.getExisted(data.nickname));
+        setSelfNickname(Twns.Helpers.getExisted(data.nickname));
     }
     export function updateOnMsgUserSetDiscordId(data: NetMessage.MsgUserSetDiscordId.IS): void {
         setSelfDiscordId(data.discordId ?? null);
     }
     export function updateOnMsgUserSetPrivilege(data: NetMessage.MsgUserSetPrivilege.IS): void {
         if (data.userId === getSelfUserId()) {
-            setSelfUserPrivilege(Helpers.getExisted(data.userPrivilege));
+            setSelfUserPrivilege(Twns.Helpers.getExisted(data.userPrivilege));
         }
     }
     export function updateOnMsgUserSetSettings(data: NetMessage.MsgUserSetSettings.IS): void {
@@ -281,7 +281,7 @@ namespace Twns.User.UserModel {
         }
     }
     export function updateOnMsgUserSetMapRating(data: NetMessage.MsgUserSetMapRating.IS): void {
-        const complexInfo       = Helpers.getExisted(getSelfUserComplexInfo());
+        const complexInfo       = Twns.Helpers.getExisted(getSelfUserComplexInfo());
         const { mapId, rating } = data;
         if (complexInfo.userMapRatingArray == null) {
             complexInfo.userMapRatingArray = [{
@@ -302,7 +302,7 @@ namespace Twns.User.UserModel {
         }
     }
     export function updateOnMsgUserSetAvatarId(data: NetMessage.MsgUserSetAvatarId.IS): void {
-        setSelfAvatarId(Helpers.getExisted(data.avatarId, ClientErrorCode.UserModel_UpdateOnMsgUserSetAvatarId_00));
+        setSelfAvatarId(Twns.Helpers.getExisted(data.avatarId, ClientErrorCode.UserModel_UpdateOnMsgUserSetAvatarId_00));
     }
     export function updateOnMsgUserSetMapEditorAutoSaveTime(data: NetMessage.MsgUserSetMapEditorAutoSaveTime.IS): void {
         setSelfMapEditorAutoSaveTime(data.time ?? null);
@@ -313,11 +313,11 @@ namespace Twns.User.UserModel {
     }
     function _onNotifyMsgUserLogout(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserLogout.IS;
-        if (data.reason === Types.LogoutType.SelfRequest) {
+        if (data.reason === Twns.Types.LogoutType.SelfRequest) {
             FloatText.show(Lang.getText(LangTextType.A0005));
-        } else if (data.reason === Types.LogoutType.LoginCollision) {
+        } else if (data.reason === Twns.Types.LogoutType.LoginCollision) {
             FloatText.show(Lang.getText(LangTextType.A0006));
-        } else if (data.reason === Types.LogoutType.NetworkFailure) {
+        } else if (data.reason === Twns.Types.LogoutType.NetworkFailure) {
             FloatText.show(Lang.getText(LangTextType.A0013));
         }
 

@@ -39,26 +39,26 @@ namespace Twns.Lobby {
         }
 
         private _onTouchedBtnSettings(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSettingsPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserSettingsPanel, void 0);
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, top: -40 },
                 endProps    : { alpha: 1, top: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, top: 0 },
                 endProps    : { alpha: 0, top: -40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

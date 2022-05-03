@@ -80,7 +80,7 @@ namespace Twns.WarEvent {
                     eventId,
                     parentNodeId,
                     srcNodeId,
-                    candidateNodeId : Helpers.getExisted(node.nodeId),
+                    candidateNodeId : Twns.Helpers.getExisted(node.nodeId),
                     fullData,
                 });
             }
@@ -132,8 +132,8 @@ namespace Twns.WarEvent {
             const fullData          = data.fullData;
             const parentNodeId      = data.parentNodeId;
             const candidateNodeId   = data.candidateNodeId;
-            const candidateNode     = Helpers.getExisted((fullData.conditionNodeArray || []).find(v => v.nodeId === candidateNodeId), ClientErrorCode.WeNodeReplacePanel_NodeRenderer_OnTouchedBtnCopy_00);
-            const isAnd             = Helpers.getExisted(candidateNode.isAnd);
+            const candidateNode     = Twns.Helpers.getExisted((fullData.conditionNodeArray || []).find(v => v.nodeId === candidateNodeId), ClientErrorCode.WeNodeReplacePanel_NodeRenderer_OnTouchedBtnCopy_00);
+            const isAnd             = Twns.Helpers.getExisted(candidateNode.isAnd);
             const conditionIdArray  = (candidateNode.conditionIdArray || []).concat();
             const subNodeIdArray    = (candidateNode.subNodeIdArray || []).concat();
             if (parentNodeId == null) {

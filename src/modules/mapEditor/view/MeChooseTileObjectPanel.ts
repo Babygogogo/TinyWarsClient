@@ -90,10 +90,10 @@ namespace Twns.MapEditor {
         }
 
         private _onTouchedBtnAdjustRoad(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content: Lang.getText(LangTextType.A0259),
                 callback: () => {
-                    const drawer = Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer();
+                    const drawer = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer();
                     drawer.autoAdjustRoads();
                     drawer.autoAdjustBridges();
                     this.close();
@@ -101,10 +101,10 @@ namespace Twns.MapEditor {
             });
         }
         private _onTouchedBtnAdjustPlasma(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content: Lang.getText(LangTextType.A0260),
                 callback: () => {
-                    const drawer = Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer();
+                    const drawer = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer();
                     drawer.autoAdjustPlasmas();
                     drawer.autoAdjustPipes();
                     this.close();
@@ -130,8 +130,8 @@ namespace Twns.MapEditor {
                         mapping.set(playerIndex, []);
                     }
 
-                    const dataListForDrawTileObject = Helpers.getExisted(mapping.get(playerIndex));
-                    const shapesCount               = Twns.User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0 ? cfg.shapesCountForV0 : cfg.shapesCount;
+                    const dataListForDrawTileObject = Twns.Helpers.getExisted(mapping.get(playerIndex));
+                    const shapesCount               = Twns.User.UserModel.getSelfSettingsTextureVersion() === Twns.Types.UnitAndTileTextureVersion.V0 ? cfg.shapesCountForV0 : cfg.shapesCount;
                     for (let shapeId = 0; shapeId < shapesCount; ++shapeId) {
                         dataListForDrawTileObject.push({
                             objectType,
@@ -227,7 +227,7 @@ namespace Twns.MapEditor {
             const data                  = this._getData();
             const dataForDrawTileObject = data.dataForDrawTileObject;
             const tileObjectType        = dataForDrawTileObject.objectType;
-            this._labelName.text        = Lang.getTileName(Twns.Config.ConfigManager.getTileType(Types.TileBaseType.Plain, tileObjectType)) || CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = Lang.getTileName(Twns.Config.ConfigManager.getTileType(Twns.Types.TileBaseType.Plain, tileObjectType)) || CommonConstants.ErrorTextForUndefined;
             this._tileView.init({
                 tileObjectType,
                 tileObjectShapeId   : dataForDrawTileObject.shapeId,
@@ -246,7 +246,7 @@ namespace Twns.MapEditor {
             const dataForDrawTileObject = data.dataForDrawTileObject;
             panel.updateOnChooseTileObject(dataForDrawTileObject);
             panel.close();
-            Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawTileObject(dataForDrawTileObject);
+            Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawTileObject(dataForDrawTileObject);
         }
     }
 }

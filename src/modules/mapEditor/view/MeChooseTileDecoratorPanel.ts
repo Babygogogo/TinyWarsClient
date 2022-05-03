@@ -87,10 +87,10 @@ namespace Twns.MapEditor {
         }
 
         private _onTouchedBtnAutoFill(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0233),
                 callback: () => {
-                    Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().autoFillTileDecorators();
+                    Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().autoFillTileDecorators();
                     this.close();
                 },
             });
@@ -112,9 +112,9 @@ namespace Twns.MapEditor {
                     typeMap.set(decoratorType, []);
                 }
 
-                const list = Helpers.getExisted(typeMap.get(decoratorType));
+                const list = Twns.Helpers.getExisted(typeMap.get(decoratorType));
                 for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
-                    if ((decoratorType === Types.TileDecoratorType.Shore) && (shapeId === 0)) {
+                    if ((decoratorType === Twns.Types.TileDecoratorType.Shore) && (shapeId === 0)) {
                         continue;
                     }
 
@@ -230,7 +230,7 @@ namespace Twns.MapEditor {
             const dataForDrawTileDecorator  = data.dataForDrawTileDecorator;
             panel.updateOnChooseTileDecorator(dataForDrawTileDecorator);
             panel.close();
-            Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawTileDecorator(dataForDrawTileDecorator);
+            Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawTileDecorator(dataForDrawTileDecorator);
         }
     }
 }

@@ -76,7 +76,7 @@ namespace Twns.MapEditor {
             if (MapEditor.MeMfwModel.getTemplateWarRuleId() == null) {
                 callback();
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0129),
                     callback: () => {
                         MapEditor.MeMfwModel.setCustomWarRuleId();
@@ -87,7 +87,7 @@ namespace Twns.MapEditor {
         }
 
         private _onTouchedBtnHelpHasFog(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
                 title  : Lang.getText(LangTextType.B0020),
                 content: Lang.getText(LangTextType.R0002),
             });
@@ -95,10 +95,10 @@ namespace Twns.MapEditor {
 
         private async _onTouchedBtnBuildings(): Promise<void> {
             const mapRawData = MapEditor.MeMfwModel.getMapRawData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WarMapBuildingListPanel, {
-                gameConfig              : await Config.ConfigManager.getGameConfig(Helpers.getExisted(MapEditor.MeMfwModel.getWarData().settingsForCommon?.configVersion)),
-                tileDataArray           : Helpers.getExisted(mapRawData.tileDataArray),
-                playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WarMapBuildingListPanel, {
+                gameConfig              : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(MapEditor.MeMfwModel.getWarData().settingsForCommon?.configVersion)),
+                tileDataArray           : Twns.Helpers.getExisted(mapRawData.tileDataArray),
+                playersCountUnneutral   : Twns.Helpers.getExisted(mapRawData.playersCountUnneutral),
             });
         }
 
@@ -123,7 +123,7 @@ namespace Twns.MapEditor {
 
         private async _updateLabelWarRule(): Promise<void> {
             const labelWarRule      = this._labelWarRule;
-            const instanceWarRule   = Helpers.getExisted(MapEditor.MeMfwModel.getWarData().settingsForCommon?.instanceWarRule);
+            const instanceWarRule   = Twns.Helpers.getExisted(MapEditor.MeMfwModel.getWarData().settingsForCommon?.instanceWarRule);
             const templateWarRuleId = instanceWarRule.templateWarRuleId;
             if (templateWarRuleId == null) {
                 labelWarRule.text       = Lang.getText(LangTextType.B0321);

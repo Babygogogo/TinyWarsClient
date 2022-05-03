@@ -8,7 +8,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace StageManager {
-    import LayerType            = Types.LayerType;
+    import LayerType            = Twns.Types.LayerType;
     import NotifyType           = Twns.Notify.NotifyType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
@@ -79,7 +79,7 @@ namespace StageManager {
     }
 
     export function getLayer(layer: LayerType): UiLayer {
-        return Helpers.getExisted(_LAYERS.get(layer));
+        return Twns.Helpers.getExisted(_LAYERS.get(layer));
     }
 
     export function setStageScale(scale: number): void {
@@ -96,7 +96,7 @@ namespace StageManager {
 
     function _addLayer(layerType: LayerType): void {
         if (_LAYERS.has(layerType)) {
-            throw Helpers.newError(`StageManager._addLayer() duplicated layer: ${layerType}.`, ClientErrorCode.StageManager_AddLayer_00);
+            throw Twns.Helpers.newError(`StageManager._addLayer() duplicated layer: ${layerType}.`, ClientErrorCode.StageManager_AddLayer_00);
         }
 
         const layer = new UiLayer();

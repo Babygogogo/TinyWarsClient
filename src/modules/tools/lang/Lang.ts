@@ -13,19 +13,19 @@
 // import TwnsLangTextType     from "./LangTextType";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace Lang {
-    import LanguageType             = Types.LanguageType;
-    import WarEventConditionType    = Types.WarEventConditionType;
-    import WarEventActionType       = Types.WarEventActionType;
-    import PlayerRuleType           = Types.PlayerRuleType;
-    import GameVersion              = Types.GameVersion;
-    import WeatherType              = Types.WeatherType;
-    import BgmCode                  = Types.BgmCode;
+namespace Twns.Lang {
+    import LanguageType             = Twns.Types.LanguageType;
+    import WarEventConditionType    = Twns.Types.WarEventConditionType;
+    import WarEventActionType       = Twns.Types.WarEventActionType;
+    import PlayerRuleType           = Twns.Types.PlayerRuleType;
+    import GameVersion              = Twns.Types.GameVersion;
+    import WeatherType              = Twns.Types.WeatherType;
+    import BgmCode                  = Twns.Types.BgmCode;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import ServerErrorCode          = TwnsServerErrorCode.ServerErrorCode;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import LangCommonText           = TwnsLangCommonText.LangCommonText;
-    import LangErrorText            = TwnsLangErrorText.LangErrorText;
+    import LangCommonText           = Twns.Lang.LangCommonText;
+    import LangErrorText            = Twns.Lang.LangErrorText;
 
     let _languageType = LanguageType.Chinese;
     export function init(): void {
@@ -52,19 +52,19 @@ namespace Lang {
         if (text != null) {
             return text;
         } else {
-            throw Helpers.newError(`Lang.getText() empty text: ${t} ${languageType}`, ClientErrorCode.Lang_GetText_00);
+            throw Twns.Helpers.newError(`Lang.getText() empty text: ${t} ${languageType}`, ClientErrorCode.Lang_GetText_00);
         }
     }
 
-    export function getFormattedText(t: LangTextType, ...params: (Types.Undefinable<number | string>)[]): string {
+    export function getFormattedText(t: LangTextType, ...params: (Twns.Types.Undefinable<number | string>)[]): string {
         if ((t < LangTextType.F0000) || (t >= LangTextType.R0000)) {
-            throw Helpers.newError(`Lang.getFormattedText() invalid t:${t}`);
+            throw Twns.Helpers.newError(`Lang.getFormattedText() invalid t:${t}`);
         }
 
         const data = getText(t);
         return data === CommonConstants.ErrorTextForLang
             ? CommonConstants.ErrorTextForLang
-            : Helpers.formatString(data, ...params);
+            : Twns.Helpers.formatString(data, ...params);
     }
 
     export function getErrorText(code: ServerErrorCode | ClientErrorCode): string {
@@ -89,124 +89,124 @@ namespace Lang {
         }
     }
 
-    export function getTileName(tileType: Types.TileType, languageType?: LanguageType): string | null {
+    export function getTileName(tileType: Twns.Types.TileType, languageType?: LanguageType): string | null {
         switch (tileType) {
-            case Types.TileType.Plain               : return getText(LangTextType.B1000, languageType);
-            case Types.TileType.River               : return getText(LangTextType.B1001, languageType);
-            case Types.TileType.Sea                 : return getText(LangTextType.B1002, languageType);
-            case Types.TileType.Beach               : return getText(LangTextType.B1003, languageType);
-            case Types.TileType.Road                : return getText(LangTextType.B1004, languageType);
-            case Types.TileType.BridgeOnPlain       : return getText(LangTextType.B1005, languageType);
-            case Types.TileType.BridgeOnRiver       : return getText(LangTextType.B1006, languageType);
-            case Types.TileType.BridgeOnBeach       : return getText(LangTextType.B1007, languageType);
-            case Types.TileType.BridgeOnSea         : return getText(LangTextType.B1008, languageType);
-            case Types.TileType.Wood                : return getText(LangTextType.B1009, languageType);
-            case Types.TileType.Mountain            : return getText(LangTextType.B1010, languageType);
-            case Types.TileType.Wasteland           : return getText(LangTextType.B1011, languageType);
-            case Types.TileType.Ruins               : return getText(LangTextType.B1012, languageType);
-            case Types.TileType.Fire                : return getText(LangTextType.B1013, languageType);
-            case Types.TileType.Rough               : return getText(LangTextType.B1014, languageType);
-            case Types.TileType.MistOnSea           : return getText(LangTextType.B1015, languageType);
-            case Types.TileType.Reef                : return getText(LangTextType.B1016, languageType);
-            case Types.TileType.Plasma              : return getText(LangTextType.B1017, languageType);
-            case Types.TileType.Pipe                : return getText(LangTextType.B1018, languageType);
-            case Types.TileType.Meteor              : return getText(LangTextType.B1019, languageType);
-            case Types.TileType.Silo                : return getText(LangTextType.B1020, languageType);
-            case Types.TileType.EmptySilo           : return getText(LangTextType.B1021, languageType);
-            case Types.TileType.Headquarters        : return getText(LangTextType.B1022, languageType);
-            case Types.TileType.City                : return getText(LangTextType.B1023, languageType);
-            case Types.TileType.CommandTower        : return getText(LangTextType.B1024, languageType);
-            case Types.TileType.Radar               : return getText(LangTextType.B1025, languageType);
-            case Types.TileType.Factory             : return getText(LangTextType.B1026, languageType);
-            case Types.TileType.Airport             : return getText(LangTextType.B1027, languageType);
-            case Types.TileType.Seaport             : return getText(LangTextType.B1028, languageType);
-            case Types.TileType.TempAirport         : return getText(LangTextType.B1029, languageType);
-            case Types.TileType.TempSeaport         : return getText(LangTextType.B1030, languageType);
-            case Types.TileType.MistOnPlain         : return getText(LangTextType.B1031, languageType);
-            case Types.TileType.MistOnRiver         : return getText(LangTextType.B1032, languageType);
-            case Types.TileType.MistOnBeach         : return getText(LangTextType.B1033, languageType);
-            case Types.TileType.Crystal             : return getText(LangTextType.B1034, languageType);
-            case Types.TileType.CustomCrystal       : return getText(LangTextType.B1035, languageType);
-            case Types.TileType.CannonDown          : return getText(LangTextType.B1036, languageType);
-            case Types.TileType.CannonLeft          : return getText(LangTextType.B1041, languageType);
-            case Types.TileType.CannonRight         : return getText(LangTextType.B1042, languageType);
-            case Types.TileType.CannonUp            : return getText(LangTextType.B1043, languageType);
-            case Types.TileType.CustomCannon        : return getText(LangTextType.B1037, languageType);
-            case Types.TileType.LaserTurret         : return getText(LangTextType.B1038, languageType);
-            case Types.TileType.CustomLaserTurret   : return getText(LangTextType.B1039, languageType);
-            case Types.TileType.PipeJoint           : return getText(LangTextType.B1040, languageType);
+            case Twns.Types.TileType.Plain               : return getText(LangTextType.B1000, languageType);
+            case Twns.Types.TileType.River               : return getText(LangTextType.B1001, languageType);
+            case Twns.Types.TileType.Sea                 : return getText(LangTextType.B1002, languageType);
+            case Twns.Types.TileType.Beach               : return getText(LangTextType.B1003, languageType);
+            case Twns.Types.TileType.Road                : return getText(LangTextType.B1004, languageType);
+            case Twns.Types.TileType.BridgeOnPlain       : return getText(LangTextType.B1005, languageType);
+            case Twns.Types.TileType.BridgeOnRiver       : return getText(LangTextType.B1006, languageType);
+            case Twns.Types.TileType.BridgeOnBeach       : return getText(LangTextType.B1007, languageType);
+            case Twns.Types.TileType.BridgeOnSea         : return getText(LangTextType.B1008, languageType);
+            case Twns.Types.TileType.Wood                : return getText(LangTextType.B1009, languageType);
+            case Twns.Types.TileType.Mountain            : return getText(LangTextType.B1010, languageType);
+            case Twns.Types.TileType.Wasteland           : return getText(LangTextType.B1011, languageType);
+            case Twns.Types.TileType.Ruins               : return getText(LangTextType.B1012, languageType);
+            case Twns.Types.TileType.Fire                : return getText(LangTextType.B1013, languageType);
+            case Twns.Types.TileType.Rough               : return getText(LangTextType.B1014, languageType);
+            case Twns.Types.TileType.MistOnSea           : return getText(LangTextType.B1015, languageType);
+            case Twns.Types.TileType.Reef                : return getText(LangTextType.B1016, languageType);
+            case Twns.Types.TileType.Plasma              : return getText(LangTextType.B1017, languageType);
+            case Twns.Types.TileType.Pipe                : return getText(LangTextType.B1018, languageType);
+            case Twns.Types.TileType.Meteor              : return getText(LangTextType.B1019, languageType);
+            case Twns.Types.TileType.Silo                : return getText(LangTextType.B1020, languageType);
+            case Twns.Types.TileType.EmptySilo           : return getText(LangTextType.B1021, languageType);
+            case Twns.Types.TileType.Headquarters        : return getText(LangTextType.B1022, languageType);
+            case Twns.Types.TileType.City                : return getText(LangTextType.B1023, languageType);
+            case Twns.Types.TileType.CommandTower        : return getText(LangTextType.B1024, languageType);
+            case Twns.Types.TileType.Radar               : return getText(LangTextType.B1025, languageType);
+            case Twns.Types.TileType.Factory             : return getText(LangTextType.B1026, languageType);
+            case Twns.Types.TileType.Airport             : return getText(LangTextType.B1027, languageType);
+            case Twns.Types.TileType.Seaport             : return getText(LangTextType.B1028, languageType);
+            case Twns.Types.TileType.TempAirport         : return getText(LangTextType.B1029, languageType);
+            case Twns.Types.TileType.TempSeaport         : return getText(LangTextType.B1030, languageType);
+            case Twns.Types.TileType.MistOnPlain         : return getText(LangTextType.B1031, languageType);
+            case Twns.Types.TileType.MistOnRiver         : return getText(LangTextType.B1032, languageType);
+            case Twns.Types.TileType.MistOnBeach         : return getText(LangTextType.B1033, languageType);
+            case Twns.Types.TileType.Crystal             : return getText(LangTextType.B1034, languageType);
+            case Twns.Types.TileType.CustomCrystal       : return getText(LangTextType.B1035, languageType);
+            case Twns.Types.TileType.CannonDown          : return getText(LangTextType.B1036, languageType);
+            case Twns.Types.TileType.CannonLeft          : return getText(LangTextType.B1041, languageType);
+            case Twns.Types.TileType.CannonRight         : return getText(LangTextType.B1042, languageType);
+            case Twns.Types.TileType.CannonUp            : return getText(LangTextType.B1043, languageType);
+            case Twns.Types.TileType.CustomCannon        : return getText(LangTextType.B1037, languageType);
+            case Twns.Types.TileType.LaserTurret         : return getText(LangTextType.B1038, languageType);
+            case Twns.Types.TileType.CustomLaserTurret   : return getText(LangTextType.B1039, languageType);
+            case Twns.Types.TileType.PipeJoint           : return getText(LangTextType.B1040, languageType);
             default                                 : return null;
         }
     }
 
-    export function getTileDecoratorName(decoratorType: Types.TileDecoratorType): string | null {
+    export function getTileDecoratorName(decoratorType: Twns.Types.TileDecoratorType): string | null {
         switch (decoratorType) {
-            case Types.TileDecoratorType.Shore : return getText(LangTextType.B0663);
-            case Types.TileDecoratorType.Empty  : return getText(LangTextType.B0001);
+            case Twns.Types.TileDecoratorType.Shore : return getText(LangTextType.B0663);
+            case Twns.Types.TileDecoratorType.Empty  : return getText(LangTextType.B0001);
             default                             : return null;
         }
     }
 
-    export function getUnitName(unitType: Types.UnitType, languageType?: LanguageType): string | null {
+    export function getUnitName(unitType: Twns.Types.UnitType, languageType?: LanguageType): string | null {
         switch (unitType) {
-            case Types.UnitType.Infantry        : return getText(LangTextType.B1200, languageType);
-            case Types.UnitType.Mech            : return getText(LangTextType.B1201, languageType);
-            case Types.UnitType.Bike            : return getText(LangTextType.B1202, languageType);
-            case Types.UnitType.Recon           : return getText(LangTextType.B1203, languageType);
-            case Types.UnitType.Flare           : return getText(LangTextType.B1204, languageType);
-            case Types.UnitType.AntiAir         : return getText(LangTextType.B1205, languageType);
-            case Types.UnitType.Tank            : return getText(LangTextType.B1206, languageType);
-            case Types.UnitType.MediumTank      : return getText(LangTextType.B1207, languageType);
-            case Types.UnitType.WarTank         : return getText(LangTextType.B1208, languageType);
-            case Types.UnitType.Artillery       : return getText(LangTextType.B1209, languageType);
-            case Types.UnitType.AntiTank        : return getText(LangTextType.B1210, languageType);
-            case Types.UnitType.Rockets         : return getText(LangTextType.B1211, languageType);
-            case Types.UnitType.Missiles        : return getText(LangTextType.B1212, languageType);
-            case Types.UnitType.Rig             : return getText(LangTextType.B1213, languageType);
-            case Types.UnitType.Fighter         : return getText(LangTextType.B1214, languageType);
-            case Types.UnitType.Bomber          : return getText(LangTextType.B1215, languageType);
-            case Types.UnitType.Duster          : return getText(LangTextType.B1216, languageType);
-            case Types.UnitType.BattleCopter    : return getText(LangTextType.B1217, languageType);
-            case Types.UnitType.TransportCopter : return getText(LangTextType.B1218, languageType);
-            case Types.UnitType.Seaplane        : return getText(LangTextType.B1219, languageType);
-            case Types.UnitType.Battleship      : return getText(LangTextType.B1220, languageType);
-            case Types.UnitType.Carrier         : return getText(LangTextType.B1221, languageType);
-            case Types.UnitType.Submarine       : return getText(LangTextType.B1222, languageType);
-            case Types.UnitType.Cruiser         : return getText(LangTextType.B1223, languageType);
-            case Types.UnitType.Lander          : return getText(LangTextType.B1224, languageType);
-            case Types.UnitType.Gunboat         : return getText(LangTextType.B1225, languageType);
+            case Twns.Types.UnitType.Infantry        : return getText(LangTextType.B1200, languageType);
+            case Twns.Types.UnitType.Mech            : return getText(LangTextType.B1201, languageType);
+            case Twns.Types.UnitType.Bike            : return getText(LangTextType.B1202, languageType);
+            case Twns.Types.UnitType.Recon           : return getText(LangTextType.B1203, languageType);
+            case Twns.Types.UnitType.Flare           : return getText(LangTextType.B1204, languageType);
+            case Twns.Types.UnitType.AntiAir         : return getText(LangTextType.B1205, languageType);
+            case Twns.Types.UnitType.Tank            : return getText(LangTextType.B1206, languageType);
+            case Twns.Types.UnitType.MediumTank      : return getText(LangTextType.B1207, languageType);
+            case Twns.Types.UnitType.WarTank         : return getText(LangTextType.B1208, languageType);
+            case Twns.Types.UnitType.Artillery       : return getText(LangTextType.B1209, languageType);
+            case Twns.Types.UnitType.AntiTank        : return getText(LangTextType.B1210, languageType);
+            case Twns.Types.UnitType.Rockets         : return getText(LangTextType.B1211, languageType);
+            case Twns.Types.UnitType.Missiles        : return getText(LangTextType.B1212, languageType);
+            case Twns.Types.UnitType.Rig             : return getText(LangTextType.B1213, languageType);
+            case Twns.Types.UnitType.Fighter         : return getText(LangTextType.B1214, languageType);
+            case Twns.Types.UnitType.Bomber          : return getText(LangTextType.B1215, languageType);
+            case Twns.Types.UnitType.Duster          : return getText(LangTextType.B1216, languageType);
+            case Twns.Types.UnitType.BattleCopter    : return getText(LangTextType.B1217, languageType);
+            case Twns.Types.UnitType.TransportCopter : return getText(LangTextType.B1218, languageType);
+            case Twns.Types.UnitType.Seaplane        : return getText(LangTextType.B1219, languageType);
+            case Twns.Types.UnitType.Battleship      : return getText(LangTextType.B1220, languageType);
+            case Twns.Types.UnitType.Carrier         : return getText(LangTextType.B1221, languageType);
+            case Twns.Types.UnitType.Submarine       : return getText(LangTextType.B1222, languageType);
+            case Twns.Types.UnitType.Cruiser         : return getText(LangTextType.B1223, languageType);
+            case Twns.Types.UnitType.Lander          : return getText(LangTextType.B1224, languageType);
+            case Twns.Types.UnitType.Gunboat         : return getText(LangTextType.B1225, languageType);
             default                             : return null;
         }
     }
 
-    export function getUnitActionName(actionType: Types.UnitActionType): string | null{
+    export function getUnitActionName(actionType: Twns.Types.UnitActionType): string | null{
         switch (actionType) {
-            case Types.UnitActionType.BeLoaded          : return getText(LangTextType.B0037);
-            case Types.UnitActionType.Join              : return getText(LangTextType.B0038);
-            case Types.UnitActionType.UseCoPower        : return getText(LangTextType.B0142);
-            case Types.UnitActionType.UseCoSuperPower   : return getText(LangTextType.B0144);
-            case Types.UnitActionType.Attack            : return getText(LangTextType.B0039);
-            case Types.UnitActionType.Capture           : return getText(LangTextType.B0040);
-            case Types.UnitActionType.Dive              : return getText(LangTextType.B0041);
-            case Types.UnitActionType.Surface           : return getText(LangTextType.B0042);
-            case Types.UnitActionType.BuildTile         : return getText(LangTextType.B0043);
-            case Types.UnitActionType.Supply            : return getText(LangTextType.B0044);
-            case Types.UnitActionType.LaunchUnit        : return getText(LangTextType.B0045);
-            case Types.UnitActionType.DropUnit          : return getText(LangTextType.B0046);
-            case Types.UnitActionType.LaunchFlare       : return getText(LangTextType.B0047);
-            case Types.UnitActionType.LaunchSilo        : return getText(LangTextType.B0048);
-            case Types.UnitActionType.LoadCo            : return getText(LangTextType.B0139);
-            case Types.UnitActionType.ProduceUnit       : return getText(LangTextType.B0049);
-            case Types.UnitActionType.Wait              : return getText(LangTextType.B0050);
+            case Twns.Types.UnitActionType.BeLoaded          : return getText(LangTextType.B0037);
+            case Twns.Types.UnitActionType.Join              : return getText(LangTextType.B0038);
+            case Twns.Types.UnitActionType.UseCoPower        : return getText(LangTextType.B0142);
+            case Twns.Types.UnitActionType.UseCoSuperPower   : return getText(LangTextType.B0144);
+            case Twns.Types.UnitActionType.Attack            : return getText(LangTextType.B0039);
+            case Twns.Types.UnitActionType.Capture           : return getText(LangTextType.B0040);
+            case Twns.Types.UnitActionType.Dive              : return getText(LangTextType.B0041);
+            case Twns.Types.UnitActionType.Surface           : return getText(LangTextType.B0042);
+            case Twns.Types.UnitActionType.BuildTile         : return getText(LangTextType.B0043);
+            case Twns.Types.UnitActionType.Supply            : return getText(LangTextType.B0044);
+            case Twns.Types.UnitActionType.LaunchUnit        : return getText(LangTextType.B0045);
+            case Twns.Types.UnitActionType.DropUnit          : return getText(LangTextType.B0046);
+            case Twns.Types.UnitActionType.LaunchFlare       : return getText(LangTextType.B0047);
+            case Twns.Types.UnitActionType.LaunchSilo        : return getText(LangTextType.B0048);
+            case Twns.Types.UnitActionType.LoadCo            : return getText(LangTextType.B0139);
+            case Twns.Types.UnitActionType.ProduceUnit       : return getText(LangTextType.B0049);
+            case Twns.Types.UnitActionType.Wait              : return getText(LangTextType.B0050);
             default                                     : return null;
         }
     }
 
-    export function getUnitAiModeName(mode: Types.UnitAiMode): string | null {
+    export function getUnitAiModeName(mode: Twns.Types.UnitAiMode): string | null {
         switch (mode) {
-            case Types.UnitAiMode.NoMove                : return getText(LangTextType.B0721);
-            case Types.UnitAiMode.Normal                : return getText(LangTextType.B0723);
-            case Types.UnitAiMode.WaitUntilCanAttack    : return getText(LangTextType.B0722);
+            case Twns.Types.UnitAiMode.NoMove                : return getText(LangTextType.B0721);
+            case Twns.Types.UnitAiMode.Normal                : return getText(LangTextType.B0723);
+            case Twns.Types.UnitAiMode.WaitUntilCanAttack    : return getText(LangTextType.B0722);
             default                                     : return null;
         }
     }
@@ -233,125 +233,125 @@ namespace Lang {
         }
     }
 
-    export function getMoveTypeName(t: Types.MoveType): string | null {
+    export function getMoveTypeName(t: Twns.Types.MoveType): string | null {
         switch (t) {
-            case Types.MoveType.Air         : return getText(LangTextType.B0117);
-            case Types.MoveType.Infantry    : return getText(LangTextType.B0112);
-            case Types.MoveType.Mech        : return getText(LangTextType.B0113);
-            case Types.MoveType.Ship        : return getText(LangTextType.B0118);
-            case Types.MoveType.Tank        : return getText(LangTextType.B0114);
-            case Types.MoveType.TireA       : return getText(LangTextType.B0115);
-            case Types.MoveType.TireB       : return getText(LangTextType.B0116);
-            case Types.MoveType.Transport   : return getText(LangTextType.B0119);
+            case Twns.Types.MoveType.Air         : return getText(LangTextType.B0117);
+            case Twns.Types.MoveType.Infantry    : return getText(LangTextType.B0112);
+            case Twns.Types.MoveType.Mech        : return getText(LangTextType.B0113);
+            case Twns.Types.MoveType.Ship        : return getText(LangTextType.B0118);
+            case Twns.Types.MoveType.Tank        : return getText(LangTextType.B0114);
+            case Twns.Types.MoveType.TireA       : return getText(LangTextType.B0115);
+            case Twns.Types.MoveType.TireB       : return getText(LangTextType.B0116);
+            case Twns.Types.MoveType.Transport   : return getText(LangTextType.B0119);
             default                         : return null;
         }
     }
 
-    export function getUnitCategoryName(t: Types.UnitCategory): string | null {
+    export function getUnitCategoryName(t: Twns.Types.UnitCategory): string | null {
         switch (t) {
-            case Types.UnitCategory.None                : return getText(LangTextType.B0001);
-            case Types.UnitCategory.All                 : return getText(LangTextType.B0120);
-            case Types.UnitCategory.Ground              : return getText(LangTextType.B0121);
-            case Types.UnitCategory.Naval               : return getText(LangTextType.B0122);
-            case Types.UnitCategory.Air                 : return getText(LangTextType.B0123);
-            case Types.UnitCategory.GroundOrNaval       : return getText(LangTextType.B0124);
-            case Types.UnitCategory.GroundOrAir         : return getText(LangTextType.B0125);
-            case Types.UnitCategory.Direct              : return getText(LangTextType.B0126);
-            case Types.UnitCategory.Indirect            : return getText(LangTextType.B0127);
-            case Types.UnitCategory.Foot                : return getText(LangTextType.B0128);
-            case Types.UnitCategory.Infantry            : return getText(LangTextType.B0129);
-            case Types.UnitCategory.Vehicle             : return getText(LangTextType.B0130);
-            case Types.UnitCategory.DirectMachine       : return getText(LangTextType.B0131);
-            case Types.UnitCategory.Transport           : return getText(LangTextType.B0132);
-            case Types.UnitCategory.LargeNaval          : return getText(LangTextType.B0133);
-            case Types.UnitCategory.Copter              : return getText(LangTextType.B0134);
-            case Types.UnitCategory.Tank                : return getText(LangTextType.B0135);
-            case Types.UnitCategory.AirExceptSeaplane   : return getText(LangTextType.B0136);
+            case Twns.Types.UnitCategory.None                : return getText(LangTextType.B0001);
+            case Twns.Types.UnitCategory.All                 : return getText(LangTextType.B0120);
+            case Twns.Types.UnitCategory.Ground              : return getText(LangTextType.B0121);
+            case Twns.Types.UnitCategory.Naval               : return getText(LangTextType.B0122);
+            case Twns.Types.UnitCategory.Air                 : return getText(LangTextType.B0123);
+            case Twns.Types.UnitCategory.GroundOrNaval       : return getText(LangTextType.B0124);
+            case Twns.Types.UnitCategory.GroundOrAir         : return getText(LangTextType.B0125);
+            case Twns.Types.UnitCategory.Direct              : return getText(LangTextType.B0126);
+            case Twns.Types.UnitCategory.Indirect            : return getText(LangTextType.B0127);
+            case Twns.Types.UnitCategory.Foot                : return getText(LangTextType.B0128);
+            case Twns.Types.UnitCategory.Infantry            : return getText(LangTextType.B0129);
+            case Twns.Types.UnitCategory.Vehicle             : return getText(LangTextType.B0130);
+            case Twns.Types.UnitCategory.DirectMachine       : return getText(LangTextType.B0131);
+            case Twns.Types.UnitCategory.Transport           : return getText(LangTextType.B0132);
+            case Twns.Types.UnitCategory.LargeNaval          : return getText(LangTextType.B0133);
+            case Twns.Types.UnitCategory.Copter              : return getText(LangTextType.B0134);
+            case Twns.Types.UnitCategory.Tank                : return getText(LangTextType.B0135);
+            case Twns.Types.UnitCategory.AirExceptSeaplane   : return getText(LangTextType.B0136);
             default                                     : return null;
         }
     }
 
-    export function getWarTypeName(type: Types.WarType): string | null {
+    export function getWarTypeName(type: Twns.Types.WarType): string | null {
         switch (type) {
-            case Types.WarType.McwStd   : return getText(LangTextType.B0417);
-            case Types.WarType.McwFog   : return getText(LangTextType.B0418);
-            case Types.WarType.Me       : return getText(LangTextType.B0419);
-            case Types.WarType.MrwStd   : return getText(LangTextType.B0415);
-            case Types.WarType.MrwFog   : return getText(LangTextType.B0416);
-            case Types.WarType.MfwStd   : return getText(LangTextType.B0812);
-            case Types.WarType.MfwFog   : return getText(LangTextType.B0813);
-            case Types.WarType.ScwStd   : return getText(LangTextType.B0610);
-            case Types.WarType.ScwFog   : return getText(LangTextType.B0611);
-            case Types.WarType.SfwStd   : return getText(LangTextType.B0612);
-            case Types.WarType.SfwFog   : return getText(LangTextType.B0613);
-            case Types.WarType.CcwStd   : return getText(LangTextType.B0725);
-            case Types.WarType.CcwFog   : return getText(LangTextType.B0726);
-            case Types.WarType.SrwStd   : return getText(LangTextType.B0257);
-            case Types.WarType.SrwFog   : return getText(LangTextType.B0817);
+            case Twns.Types.WarType.McwStd   : return getText(LangTextType.B0417);
+            case Twns.Types.WarType.McwFog   : return getText(LangTextType.B0418);
+            case Twns.Types.WarType.Me       : return getText(LangTextType.B0419);
+            case Twns.Types.WarType.MrwStd   : return getText(LangTextType.B0415);
+            case Twns.Types.WarType.MrwFog   : return getText(LangTextType.B0416);
+            case Twns.Types.WarType.MfwStd   : return getText(LangTextType.B0812);
+            case Twns.Types.WarType.MfwFog   : return getText(LangTextType.B0813);
+            case Twns.Types.WarType.ScwStd   : return getText(LangTextType.B0610);
+            case Twns.Types.WarType.ScwFog   : return getText(LangTextType.B0611);
+            case Twns.Types.WarType.SfwStd   : return getText(LangTextType.B0612);
+            case Twns.Types.WarType.SfwFog   : return getText(LangTextType.B0613);
+            case Twns.Types.WarType.CcwStd   : return getText(LangTextType.B0725);
+            case Twns.Types.WarType.CcwFog   : return getText(LangTextType.B0726);
+            case Twns.Types.WarType.SrwStd   : return getText(LangTextType.B0257);
+            case Twns.Types.WarType.SrwFog   : return getText(LangTextType.B0817);
             default                     : return null;
         }
     }
 
-    export function getWarBasicSettingsName(type: Types.WarBasicSettingsType): string | null {
+    export function getWarBasicSettingsName(type: Twns.Types.WarBasicSettingsType): string | null {
         switch (type) {
-            case Types.WarBasicSettingsType.MapId                   : return getText(LangTextType.B0225);
-            case Types.WarBasicSettingsType.WarName                 : return getText(LangTextType.B0185);
-            case Types.WarBasicSettingsType.WarPassword             : return getText(LangTextType.B0186);
-            case Types.WarBasicSettingsType.WarComment              : return getText(LangTextType.B0187);
-            case Types.WarBasicSettingsType.WarRuleTitle            : return getText(LangTextType.B0318);
-            case Types.WarBasicSettingsType.HasFog                  : return getText(LangTextType.B0020);
-            case Types.WarBasicSettingsType.Weather                 : return getText(LangTextType.B0705);
-            case Types.WarBasicSettingsType.WarEvent                : return getText(LangTextType.B0469);
-            case Types.WarBasicSettingsType.TurnsLimit              : return getText(LangTextType.B0842);
-            case Types.WarBasicSettingsType.TimerType               : return getText(LangTextType.B0574);
-            case Types.WarBasicSettingsType.TimerRegularParam       : return getText(LangTextType.B0021);
-            case Types.WarBasicSettingsType.TimerIncrementalParam1  : return getText(LangTextType.B0389);
-            case Types.WarBasicSettingsType.TimerIncrementalParam2  : return getText(LangTextType.B0390);
-            case Types.WarBasicSettingsType.SpmSaveSlotIndex        : return getText(LangTextType.B0255);
-            case Types.WarBasicSettingsType.SpmSaveSlotComment      : return getText(LangTextType.B0605);
+            case Twns.Types.WarBasicSettingsType.MapId                   : return getText(LangTextType.B0225);
+            case Twns.Types.WarBasicSettingsType.WarName                 : return getText(LangTextType.B0185);
+            case Twns.Types.WarBasicSettingsType.WarPassword             : return getText(LangTextType.B0186);
+            case Twns.Types.WarBasicSettingsType.WarComment              : return getText(LangTextType.B0187);
+            case Twns.Types.WarBasicSettingsType.WarRuleTitle            : return getText(LangTextType.B0318);
+            case Twns.Types.WarBasicSettingsType.HasFog                  : return getText(LangTextType.B0020);
+            case Twns.Types.WarBasicSettingsType.Weather                 : return getText(LangTextType.B0705);
+            case Twns.Types.WarBasicSettingsType.WarEvent                : return getText(LangTextType.B0469);
+            case Twns.Types.WarBasicSettingsType.TurnsLimit              : return getText(LangTextType.B0842);
+            case Twns.Types.WarBasicSettingsType.TimerType               : return getText(LangTextType.B0574);
+            case Twns.Types.WarBasicSettingsType.TimerRegularParam       : return getText(LangTextType.B0021);
+            case Twns.Types.WarBasicSettingsType.TimerIncrementalParam1  : return getText(LangTextType.B0389);
+            case Twns.Types.WarBasicSettingsType.TimerIncrementalParam2  : return getText(LangTextType.B0390);
+            case Twns.Types.WarBasicSettingsType.SpmSaveSlotIndex        : return getText(LangTextType.B0255);
+            case Twns.Types.WarBasicSettingsType.SpmSaveSlotComment      : return getText(LangTextType.B0605);
             default                                                 : return null;
         }
     }
 
-    export function getMapReviewStatusText(status: Types.MapReviewStatus): string | null{
+    export function getMapReviewStatusText(status: Twns.Types.MapReviewStatus): string | null{
         switch (status) {
-            case Types.MapReviewStatus.None         : return getText(LangTextType.B0273);
-            case Types.MapReviewStatus.Reviewing    : return getText(LangTextType.B0274);
-            case Types.MapReviewStatus.Rejected     : return getText(LangTextType.B0275);
-            case Types.MapReviewStatus.Accepted     : return getText(LangTextType.B0276);
+            case Twns.Types.MapReviewStatus.None         : return getText(LangTextType.B0273);
+            case Twns.Types.MapReviewStatus.Reviewing    : return getText(LangTextType.B0274);
+            case Twns.Types.MapReviewStatus.Rejected     : return getText(LangTextType.B0275);
+            case Twns.Types.MapReviewStatus.Accepted     : return getText(LangTextType.B0276);
             default                                 : return null;
         }
     }
 
-    export function getMapEditorDrawerModeText(mode: Types.MapEditorDrawerMode): string | null{
+    export function getMapEditorDrawerModeText(mode: Twns.Types.MapEditorDrawerMode): string | null{
         switch (mode) {
-            case Types.MapEditorDrawerMode.Preview                  : return getText(LangTextType.B0286);
-            case Types.MapEditorDrawerMode.DrawUnit                 : return getText(LangTextType.B0281);
-            case Types.MapEditorDrawerMode.DrawTileBase             : return getText(LangTextType.B0282);
-            case Types.MapEditorDrawerMode.DrawTileDecorator        : return getText(LangTextType.B0662);
-            case Types.MapEditorDrawerMode.DrawTileObject           : return getText(LangTextType.B0283);
-            case Types.MapEditorDrawerMode.DeleteUnit               : return getText(LangTextType.B0284);
-            case Types.MapEditorDrawerMode.DeleteTileDecorator      : return getText(LangTextType.B0661);
-            case Types.MapEditorDrawerMode.DeleteTileObject         : return getText(LangTextType.B0285);
-            case Types.MapEditorDrawerMode.AddTileToLocation        : return getText(LangTextType.B0759);
-            case Types.MapEditorDrawerMode.DeleteTileFromLocation   : return getText(LangTextType.B0760);
+            case Twns.Types.MapEditorDrawerMode.Preview                  : return getText(LangTextType.B0286);
+            case Twns.Types.MapEditorDrawerMode.DrawUnit                 : return getText(LangTextType.B0281);
+            case Twns.Types.MapEditorDrawerMode.DrawTileBase             : return getText(LangTextType.B0282);
+            case Twns.Types.MapEditorDrawerMode.DrawTileDecorator        : return getText(LangTextType.B0662);
+            case Twns.Types.MapEditorDrawerMode.DrawTileObject           : return getText(LangTextType.B0283);
+            case Twns.Types.MapEditorDrawerMode.DeleteUnit               : return getText(LangTextType.B0284);
+            case Twns.Types.MapEditorDrawerMode.DeleteTileDecorator      : return getText(LangTextType.B0661);
+            case Twns.Types.MapEditorDrawerMode.DeleteTileObject         : return getText(LangTextType.B0285);
+            case Twns.Types.MapEditorDrawerMode.AddTileToLocation        : return getText(LangTextType.B0759);
+            case Twns.Types.MapEditorDrawerMode.DeleteTileFromLocation   : return getText(LangTextType.B0760);
             default                                                 : return null;
         }
     }
 
-    export function getUnitActionStateText(state: Types.UnitActionState): string | null{
+    export function getUnitActionStateText(state: Twns.Types.UnitActionState): string | null{
         switch (state) {
-            case Types.UnitActionState.Acted    : return getText(LangTextType.B0368);
-            case Types.UnitActionState.Idle     : return getText(LangTextType.B0369);
+            case Twns.Types.UnitActionState.Acted    : return getText(LangTextType.B0368);
+            case Twns.Types.UnitActionState.Idle     : return getText(LangTextType.B0369);
             default                             : return null;
         }
     }
 
-    export function getChatChannelName(channel: Types.ChatChannel, languageType: LanguageType = getCurrentLanguageType()): string | null {
+    export function getChatChannelName(channel: Twns.Types.ChatChannel, languageType: LanguageType = getCurrentLanguageType()): string | null {
         switch (channel) {
-            case Types.ChatChannel.System   : return getText(LangTextType.B0374, languageType);
-            case Types.ChatChannel.PublicEn : return getText(LangTextType.B0373, languageType);
-            case Types.ChatChannel.PublicCn : return getText(LangTextType.B0384, languageType);
+            case Twns.Types.ChatChannel.System   : return getText(LangTextType.B0374, languageType);
+            case Twns.Types.ChatChannel.PublicEn : return getText(LangTextType.B0373, languageType);
+            case Twns.Types.ChatChannel.PublicCn : return getText(LangTextType.B0384, languageType);
             default                         : return null;
         }
     }
@@ -368,28 +368,28 @@ namespace Lang {
         }
     }
 
-    export function getCoSkillTypeName(skillType: Types.CoSkillType): string | null {
+    export function getCoSkillTypeName(skillType: Twns.Types.CoSkillType): string | null {
         switch (skillType) {
-            case Types.CoSkillType.Passive      : return getText(LangTextType.B0576);
-            case Types.CoSkillType.Power        : return getText(LangTextType.B0577);
-            case Types.CoSkillType.SuperPower   : return getText(LangTextType.B0578);
+            case Twns.Types.CoSkillType.Passive      : return getText(LangTextType.B0576);
+            case Twns.Types.CoSkillType.Power        : return getText(LangTextType.B0577);
+            case Twns.Types.CoSkillType.SuperPower   : return getText(LangTextType.B0578);
             default                             : return null;
         }
     }
 
-    export function getPlayerAliveStateName(state: Types.PlayerAliveState): string | null {
+    export function getPlayerAliveStateName(state: Twns.Types.PlayerAliveState): string | null {
         switch (state) {
-            case Types.PlayerAliveState.Alive   : return getText(LangTextType.B0471);
-            case Types.PlayerAliveState.Dead    : return getText(LangTextType.B0472);
-            case Types.PlayerAliveState.Dying   : return getText(LangTextType.B0473);
+            case Twns.Types.PlayerAliveState.Alive   : return getText(LangTextType.B0471);
+            case Twns.Types.PlayerAliveState.Dead    : return getText(LangTextType.B0472);
+            case Twns.Types.PlayerAliveState.Dying   : return getText(LangTextType.B0473);
             default                             : return null;
         }
     }
 
-    export function getTurnPhaseName(phaseCode: Types.TurnPhaseCode): string | null {
+    export function getTurnPhaseName(phaseCode: Twns.Types.TurnPhaseCode): string | null {
         switch (phaseCode) {
-            case Types.TurnPhaseCode.WaitBeginTurn  : return getText(LangTextType.B0474);
-            case Types.TurnPhaseCode.Main           : return getText(LangTextType.B0475);
+            case Twns.Types.TurnPhaseCode.WaitBeginTurn  : return getText(LangTextType.B0474);
+            case Twns.Types.TurnPhaseCode.Main           : return getText(LangTextType.B0475);
             default                                 : return null;
         }
     }
@@ -495,27 +495,27 @@ namespace Lang {
             case WeatherType.Sandstorm  : return getText(LangTextType.B0702);
             case WeatherType.Snowy      : return getText(LangTextType.B0703);
             case WeatherType.Rainy      : return getText(LangTextType.B0704);
-            default                     : throw Helpers.newError(`Invalid weatherType: ${weatherType}`, ClientErrorCode.Lang_GetWeatherName_00);
+            default                     : throw Twns.Helpers.newError(`Invalid weatherType: ${weatherType}`, ClientErrorCode.Lang_GetWeatherName_00);
         }
     }
 
-    export function getValueComparatorName(comparator: Types.ValueComparator): string | null {
+    export function getValueComparatorName(comparator: Twns.Types.ValueComparator): string | null {
         switch (comparator) {
-            case Types.ValueComparator.EqualTo          : return getText(LangTextType.B0767);
-            case Types.ValueComparator.NotEqualTo       : return getText(LangTextType.B0768);
-            case Types.ValueComparator.GreaterThan      : return getText(LangTextType.B0769);
-            case Types.ValueComparator.NotGreaterThan   : return getText(LangTextType.B0770);
-            case Types.ValueComparator.LessThan         : return getText(LangTextType.B0771);
-            case Types.ValueComparator.NotLessThan      : return getText(LangTextType.B0772);
+            case Twns.Types.ValueComparator.EqualTo          : return getText(LangTextType.B0767);
+            case Twns.Types.ValueComparator.NotEqualTo       : return getText(LangTextType.B0768);
+            case Twns.Types.ValueComparator.GreaterThan      : return getText(LangTextType.B0769);
+            case Twns.Types.ValueComparator.NotGreaterThan   : return getText(LangTextType.B0770);
+            case Twns.Types.ValueComparator.LessThan         : return getText(LangTextType.B0771);
+            case Twns.Types.ValueComparator.NotLessThan      : return getText(LangTextType.B0772);
             default                                     : return null;
         }
     }
 
-    export function getForceFogCodeName(code: Types.ForceFogCode): string | null {
+    export function getForceFogCodeName(code: Twns.Types.ForceFogCode): string | null {
         switch (code) {
-            case Types.ForceFogCode.Fog         : return getText(LangTextType.B0796);
-            case Types.ForceFogCode.Clear       : return getText(LangTextType.B0797);
-            case Types.ForceFogCode.None        : return getText(LangTextType.B0798);
+            case Twns.Types.ForceFogCode.Fog         : return getText(LangTextType.B0796);
+            case Twns.Types.ForceFogCode.Clear       : return getText(LangTextType.B0797);
+            case Twns.Types.ForceFogCode.None        : return getText(LangTextType.B0798);
             default                             : return null;
         }
     }
@@ -537,7 +537,7 @@ namespace Lang {
         }
     }
 
-    export function getStringInCurrentLanguage(nameList: Types.Undefinable<string[]>): string | null {
+    export function getStringInCurrentLanguage(nameList: Twns.Types.Undefinable<string[]>): string | null {
         if (!nameList) {
             return null;
         } else {
@@ -547,7 +547,7 @@ namespace Lang {
         }
     }
     export function getLanguageText({ textArray, languageType = getCurrentLanguageType(), useAlternate = true }: {
-        textArray       : Types.Undefinable<CommonProto.Structure.ILanguageText[]>;
+        textArray       : Twns.Types.Undefinable<CommonProto.Structure.ILanguageText[]>;
         languageType?   : LanguageType;
         useAlternate?   : boolean;
     }): string | null {
@@ -565,7 +565,7 @@ namespace Lang {
                 : null;
         }
     }
-    export function concatLanguageTextList(textList: Types.Undefinable<CommonProto.Structure.ILanguageText[]>): string {
+    export function concatLanguageTextList(textList: Twns.Types.Undefinable<CommonProto.Structure.ILanguageText[]>): string {
         const strList: string[] = [];
         for (const data of textList || []) {
             strList.push(data.text || `??`);
@@ -573,20 +573,20 @@ namespace Lang {
         return strList.join(`, `);
     }
 
-    export function getBootTimerTypeName(type: Types.BootTimerType): string | null {
+    export function getBootTimerTypeName(type: Twns.Types.BootTimerType): string | null {
         switch (type) {
-            case Types.BootTimerType.Regular    : return getText(LangTextType.B0387);
-            case Types.BootTimerType.Incremental: return getText(LangTextType.B0388);
+            case Twns.Types.BootTimerType.Regular    : return getText(LangTextType.B0387);
+            case Twns.Types.BootTimerType.Incremental: return getText(LangTextType.B0388);
             default                             : return null;
         }
     }
     export function getBootTimerDesc(params: number[]): string | null {
         params          = params || [];
-        const timerType = params[0] as Types.BootTimerType;
-        if (timerType === Types.BootTimerType.Regular) {
-            return `${getText(LangTextType.B0387)} ${Helpers.getTimeDurationText2(params[1])}`;
-        } else if (timerType === Types.BootTimerType.Incremental) {
-            return `${getText(LangTextType.B0388)} ${Helpers.getTimeDurationText2(params[1])} + ${Helpers.getTimeDurationText2(params[2])}`;
+        const timerType = params[0] as Twns.Types.BootTimerType;
+        if (timerType === Twns.Types.BootTimerType.Regular) {
+            return `${getText(LangTextType.B0387)} ${Twns.Helpers.getTimeDurationText2(params[1])}`;
+        } else if (timerType === Twns.Types.BootTimerType.Incremental) {
+            return `${getText(LangTextType.B0388)} ${Twns.Helpers.getTimeDurationText2(params[1])} + ${Twns.Helpers.getTimeDurationText2(params[2])}`;
         } else {
             return null;
         }

@@ -78,7 +78,7 @@ namespace Twns.ChangeLog {
         }
 
         private _onTouchedBtnAddMessage(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChangeLogAddPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChangeLogAddPanel, void 0);
         }
 
         private _updateView(): void {
@@ -105,32 +105,32 @@ namespace Twns.ChangeLog {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -144,14 +144,14 @@ namespace Twns.ChangeLog {
             this._setUiListenerArray([
                 { ui: this._btnModify,  callback: this._onTouchedBtnModify },
             ]);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
         }
 
         protected async _onDataChanged(): Promise<void> {
             const data              = this._getData();
             const messageId         = data.messageId;
             const createTimestamp   = data.createTimestamp;
-            this._labelIndex.text   = `#${messageId == null ? CommonConstants.ErrorTextForUndefined : Helpers.getNumText(messageId, 3)} (${createTimestamp == null ? CommonConstants.ErrorTextForUndefined : Helpers.getTimestampShortText(createTimestamp)})`;
+            this._labelIndex.text   = `#${messageId == null ? CommonConstants.ErrorTextForUndefined : Twns.Helpers.getNumText(messageId, 3)} (${createTimestamp == null ? CommonConstants.ErrorTextForUndefined : Twns.Helpers.getTimestampShortText(createTimestamp)})`;
 
             const textArray         = data.textList;
             this._labelContent.text = textArray == null
@@ -166,7 +166,7 @@ namespace Twns.ChangeLog {
 
         private _onTouchedBtnModify(): void {
             const messageId = this._getData().messageId;
-            (messageId != null) && (TwnsPanelManager.open(TwnsPanelConfig.Dict.ChangeLogModifyPanel, { messageId }));
+            (messageId != null) && (Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChangeLogModifyPanel, { messageId }));
         }
     }
 }

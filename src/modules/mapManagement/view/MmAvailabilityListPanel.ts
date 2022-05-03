@@ -118,12 +118,12 @@ namespace Twns.MapManagement {
         }
 
         private _onTouchTapBtnSearch(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAvailabilitySearchPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmAvailabilitySearchPanel, void 0);
         }
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmMainMenuPanel, void 0);
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -155,7 +155,7 @@ namespace Twns.MapManagement {
                         return;
                     }
 
-                    const mapName           = Helpers.getExisted(Lang.getLanguageText({ textArray: mapBriefData.mapNameArray }));
+                    const mapName           = Twns.Helpers.getExisted(Lang.getLanguageText({ textArray: mapBriefData.mapNameArray }));
                     const averageRating     = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
                     const actualPlayedTimes = await Twns.WarMap.WarMapModel.getTotalPlayedTimes(mapId);
                     if ((!mapBriefData.mapExtraData?.isEnabled)                                                                 ||
@@ -181,7 +181,7 @@ namespace Twns.MapManagement {
         }
 
         private async _showMap(mapId: number): Promise<void> {
-            const mapRawData                = Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId));
+            const mapRawData                = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId));
             const rating                    = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
             this._labelMapName.text         = Lang.getFormattedText(LangTextType.F0000, await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text        = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
@@ -228,7 +228,7 @@ namespace Twns.MapManagement {
         }
 
         private _onTouchTapBtnNext(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmCommandPanel, { mapId: this._getData().mapId });
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmCommandPanel, { mapId: this._getData().mapId });
         }
 
         private _onNotifyMsgMmSetMapName(e: egret.Event): void {
@@ -242,7 +242,7 @@ namespace Twns.MapManagement {
             const data          = this._getData();
             const mapId         = data.mapId;
             const labelName     = this._labelName;
-            this.currentState   = mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
+            this.currentState   = mapId === data.panel.getSelectedMapId() ? Twns.Types.UiState.Down : Twns.Types.UiState.Up;
             this._labelId.text  = `ID: ${mapId}`;
             labelName.text      = ``;
             Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v ?? CommonConstants.ErrorTextForUndefined);

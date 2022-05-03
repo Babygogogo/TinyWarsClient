@@ -25,7 +25,7 @@ namespace Twns.MultiRankRoom.MrrSelfSettingsModel {
         clearUnitAndTileSkinId();
         clearAvailableCoIdArray();
 
-        const roomInfo          = Helpers.getExisted(await MultiRankRoom.MrrModel.getRoomInfo(roomId));
+        const roomInfo          = Twns.Helpers.getExisted(await MultiRankRoom.MrrModel.getRoomInfo(roomId));
         const playerDataList    = roomInfo ? roomInfo.playerDataList || [] : [];
         const selfUserId        = Twns.User.UserModel.getSelfUserId();
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
@@ -33,20 +33,20 @@ namespace Twns.MultiRankRoom.MrrSelfSettingsModel {
             return;
         }
 
-        const selfPlayerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
+        const selfPlayerIndex       = Twns.Helpers.getExisted(selfPlayerData.playerIndex);
         const availableCoIdArray    = await generateAvailableCoIdArray(roomInfo, selfPlayerIndex);
         if (!availableCoIdArray.length) {
-            throw Helpers.newError(`Empty availableCoIdArray`, ClientErrorCode.MrrSelfSettingsModel_ResetData_00);
+            throw Twns.Helpers.newError(`Empty availableCoIdArray`, ClientErrorCode.MrrSelfSettingsModel_ResetData_00);
         }
         setAvailableCoIdArray(availableCoIdArray);
 
         if (selfPlayerData.isReady) {
-            setCoId(Helpers.getExisted(selfPlayerData.coId));
-            setUnitAndTileSkinId(Helpers.getExisted(selfPlayerData.unitAndTileSkinId));
+            setCoId(Twns.Helpers.getExisted(selfPlayerData.coId));
+            setUnitAndTileSkinId(Twns.Helpers.getExisted(selfPlayerData.unitAndTileSkinId));
         } else {
             const availableSkinIdList = generateAvailableSkinIdList(roomInfo);
             if (!availableSkinIdList.length) {
-                throw Helpers.newError(`Empty availableSkinIdList.`, ClientErrorCode.MrrSelfSettingsModel_ResetData_01);
+                throw Twns.Helpers.newError(`Empty availableSkinIdList.`, ClientErrorCode.MrrSelfSettingsModel_ResetData_01);
             }
 
             setCoId(CommonConstants.CoEmptyId);
@@ -97,11 +97,11 @@ namespace Twns.MultiRankRoom.MrrSelfSettingsModel {
     }
 
     async function generateAvailableCoIdArray(roomInfo: IMrrRoomInfo, playerIndex: number): Promise<number[]> {
-        const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const gameConfig        = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
-        const settingsForMrw    = Helpers.getExisted(roomInfo.settingsForMrw);
-        const dataArrayForBanCo = Helpers.getExisted(settingsForMrw.dataArrayForBanCo);
-        const playerRule        = WarHelpers.WarRuleHelpers.getPlayerRule(Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex);
+        const settingsForCommon = Twns.Helpers.getExisted(roomInfo.settingsForCommon);
+        const gameConfig        = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion));
+        const settingsForMrw    = Twns.Helpers.getExisted(roomInfo.settingsForMrw);
+        const dataArrayForBanCo = Twns.Helpers.getExisted(settingsForMrw.dataArrayForBanCo);
+        const playerRule        = WarHelpers.WarRuleHelpers.getPlayerRule(Twns.Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex);
         const bannedCoIdSet     = new Set<number>(playerRule.bannedCoIdArray);
         for (const data of dataArrayForBanCo) {
             for (const coId of data.bannedCoIdList || []) {
@@ -114,11 +114,11 @@ namespace Twns.MultiRankRoom.MrrSelfSettingsModel {
 
     function generateAvailableSkinIdList(roomInfo: IMrrRoomInfo): number[] {
         const usedSkinIds = new Set<number>();
-        for (const playerData of Helpers.getExisted(roomInfo.playerDataList)) {
+        for (const playerData of Twns.Helpers.getExisted(roomInfo.playerDataList)) {
             if (playerData.isReady) {
-                const skinId = Helpers.getExisted(playerData.unitAndTileSkinId);
+                const skinId = Twns.Helpers.getExisted(playerData.unitAndTileSkinId);
                 if (usedSkinIds.has(skinId)) {
-                    throw Helpers.newError(`Duplicated skinId: ${skinId}`, ClientErrorCode.MrrSelfSettingsModel_GenerateAvailableSkinIdList_00);
+                    throw Twns.Helpers.newError(`Duplicated skinId: ${skinId}`, ClientErrorCode.MrrSelfSettingsModel_GenerateAvailableSkinIdList_00);
                 }
 
                 usedSkinIds.add(skinId);

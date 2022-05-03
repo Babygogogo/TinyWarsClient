@@ -65,7 +65,7 @@ namespace Twns.MapEditor {
         }
 
         private _getWar(): Twns.MapEditor.MeWar {
-            return Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
+            return Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
         }
 
         private _onTouchedGroupTileBase(): void {
@@ -104,8 +104,8 @@ namespace Twns.MapEditor {
             const drawer        = war.getDrawer();
             const drawerMode    = drawer.getMode();
             for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
-                if (((drawerMode === Types.MapEditorDrawerMode.AddTileToLocation) && (drawer.getDataForAddTileToLocation()?.locationIdArray.some(v => v === locationId)))           ||
-                    ((drawerMode === Types.MapEditorDrawerMode.DeleteTileFromLocation) && (drawer.getDataForDeleteTileFromLocation()?.locationIdArray.some(v => v === locationId)))
+                if (((drawerMode === Twns.Types.MapEditorDrawerMode.AddTileToLocation) && (drawer.getDataForAddTileToLocation()?.locationIdArray.some(v => v === locationId)))           ||
+                    ((drawerMode === Twns.Types.MapEditorDrawerMode.DeleteTileFromLocation) && (drawer.getDataForDeleteTileFromLocation()?.locationIdArray.some(v => v === locationId)))
                 ) {
                     continue;
                 }
@@ -179,8 +179,8 @@ namespace Twns.MapEditor {
             const locationId    = data.locationId;
             const war           = data.war;
             const drawer        = war.getDrawer();
-            if (((drawer.getMode() === Types.MapEditorDrawerMode.AddTileToLocation) && (drawer.getDataForAddTileToLocation()?.locationIdArray.some(v => v === locationId)))             ||
-                ((drawer.getMode() === Types.MapEditorDrawerMode.DeleteTileFromLocation) && (drawer.getDataForDeleteTileFromLocation()?.locationIdArray.some(v => v === locationId)))
+            if (((drawer.getMode() === Twns.Types.MapEditorDrawerMode.AddTileToLocation) && (drawer.getDataForAddTileToLocation()?.locationIdArray.some(v => v === locationId)))             ||
+                ((drawer.getMode() === Twns.Types.MapEditorDrawerMode.DeleteTileFromLocation) && (drawer.getDataForDeleteTileFromLocation()?.locationIdArray.some(v => v === locationId)))
             ) {
                 FloatText.show(Lang.getText(LangTextType.A0267));
                 return;

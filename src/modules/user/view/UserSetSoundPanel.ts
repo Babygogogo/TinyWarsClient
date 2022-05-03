@@ -76,13 +76,13 @@ namespace Twns.User {
 
             this._imgBgmMute.touchEnabled       = true;
             this._imgEffectMute.touchEnabled    = true;
-            this._btnCancel.setShortSfxCode(Types.ShortSfxCode.ButtonCancel01);
-            this._btnConfirm.setShortSfxCode(Types.ShortSfxCode.ButtonConfirm01);
+            this._btnCancel.setShortSfxCode(Twns.Types.ShortSfxCode.ButtonCancel01);
+            this._btnConfirm.setShortSfxCode(Twns.Types.ShortSfxCode.ButtonConfirm01);
 
-            this._prevBgmMute                   = SoundManager.getIsBgmMute();
-            this._prevBgmVolume                 = SoundManager.getBgmVolume();
-            this._prevEffectMute                = SoundManager.getIsEffectMute();
-            this._prevEffectVolume              = SoundManager.getEffectVolume();
+            this._prevBgmMute                   = Twns.SoundManager.getIsBgmMute();
+            this._prevBgmVolume                 = Twns.SoundManager.getBgmVolume();
+            this._prevEffectMute                = Twns.SoundManager.getIsEffectMute();
+            this._prevEffectVolume              = Twns.SoundManager.getEffectVolume();
 
             this._updateView();
         }
@@ -102,80 +102,80 @@ namespace Twns.User {
 
         private _onTouchedGroupBgmVolume(e: egret.Event): void {
             const width = this._groupBgmVolume.width;
-            SoundManager.setBgmVolume(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width);
+            Twns.SoundManager.setBgmVolume(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width);
             this._updateGroupBgmVolume();
         }
         private _onTouchMoveGroupBgmVolume(e: egret.Event): void {
             const width = this._groupBgmVolume.width;
-            SoundManager.setBgmVolume(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width);
+            Twns.SoundManager.setBgmVolume(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width);
             this._updateGroupBgmVolume();
         }
         private _onTouchedGroupBgmMute(): void {
-            const soundManager = SoundManager;
-            soundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            const soundManager = Twns.SoundManager;
+            soundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
             soundManager.setIsBgmMute(!soundManager.getIsBgmMute());
             this._updateGroupBgmMute();
         }
         private _onTouchedGroupEffectVolume(e: egret.TouchEvent): void {
             const width = this._groupEffectVolume.width;
-            SoundManager.setEffectVolume(Math.max(0, Math.min(e.localX, width)) / width);
+            Twns.SoundManager.setEffectVolume(Math.max(0, Math.min(e.localX, width)) / width);
             this._updateGroupEffectVolume();
         }
         private _onTouchMoveGroupEffectVolume(e: egret.TouchEvent): void {
             const width = this._groupEffectVolume.width;
-            SoundManager.setEffectVolume(Math.max(0, Math.min(e.localX, width)) / width);
+            Twns.SoundManager.setEffectVolume(Math.max(0, Math.min(e.localX, width)) / width);
             this._updateGroupEffectVolume();
         }
         private _onTouchEndGroupEffectVolume(): void {
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchReleaseOutsideGroupEffectVolume(): void {
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupEffectMute(): void {
-            const soundManager = SoundManager;
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            const soundManager = Twns.SoundManager;
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
             soundManager.setIsEffectMute(!soundManager.getIsEffectMute());
             this._updateGroupEffectMute();
         }
         private _onTouchedBtnPrevBgm(): void {
-            SoundManager.playPreviousBgm();
+            Twns.SoundManager.playPreviousBgm();
             this._updateLabelBgmName();
         }
         private _onTouchedBtnNextBgm(): void {
-            SoundManager.playNextBgm();
+            Twns.SoundManager.playNextBgm();
             this._updateLabelBgmName();
         }
         private _onTouchedBtnCancel(): void {
             const prevBgmVolume = this._prevBgmVolume;
-            (prevBgmVolume != null) && (SoundManager.setBgmVolume(prevBgmVolume));
+            (prevBgmVolume != null) && (Twns.SoundManager.setBgmVolume(prevBgmVolume));
 
             const prevEffectVolume = this._prevEffectVolume;
-            (prevEffectVolume != null) && (SoundManager.setEffectVolume(prevEffectVolume));
+            (prevEffectVolume != null) && (Twns.SoundManager.setEffectVolume(prevEffectVolume));
 
             const prevBgmMute = this._prevBgmMute;
-            (prevBgmMute != null) && (SoundManager.setIsBgmMute(prevBgmMute));
+            (prevBgmMute != null) && (Twns.SoundManager.setIsBgmMute(prevBgmMute));
 
             const prevEffectMute = this._prevEffectMute;
-            (prevEffectMute != null) && (SoundManager.setIsEffectMute(prevEffectMute));
+            (prevEffectMute != null) && (Twns.SoundManager.setIsEffectMute(prevEffectMute));
 
             this.close();
         }
         private _onTouchedBtnDefault(): void {
-            const defaultVolume = SoundManager.DEFAULT_VOLUME;
-            const defaultMute   = SoundManager.DEFAULT_MUTE;
-            SoundManager.setBgmVolume(defaultVolume);
-            SoundManager.setEffectVolume(defaultVolume);
-            SoundManager.setIsBgmMute(defaultMute);
-            SoundManager.setIsEffectMute(defaultMute);
+            const defaultVolume = Twns.SoundManager.DEFAULT_VOLUME;
+            const defaultMute   = Twns.SoundManager.DEFAULT_MUTE;
+            Twns.SoundManager.setBgmVolume(defaultVolume);
+            Twns.SoundManager.setEffectVolume(defaultVolume);
+            Twns.SoundManager.setIsBgmMute(defaultMute);
+            Twns.SoundManager.setIsEffectMute(defaultMute);
 
             this._updateView();
         }
         private _onTouchedBtnConfirm(): void {
-            SoundManager.setBgmVolumeToStore();
-            SoundManager.setEffectVolumeToStore();
-            SoundManager.setIsBgmMuteToStore();
-            SoundManager.setIsEffectMuteToStore();
+            Twns.SoundManager.setBgmVolumeToStore();
+            Twns.SoundManager.setEffectVolumeToStore();
+            Twns.SoundManager.setIsBgmMuteToStore();
+            Twns.SoundManager.setIsEffectMuteToStore();
 
             this.close();
         }
@@ -201,56 +201,56 @@ namespace Twns.User {
         }
 
         private _updateGroupBgmMute(): void {
-            this._imgBgmMute.source = SoundManager.getIsBgmMute() ? "commonIconSound0001" : "commonIconSound0000";
+            this._imgBgmMute.source = Twns.SoundManager.getIsBgmMute() ? "commonIconSound0001" : "commonIconSound0000";
         }
         private _updateGroupEffectMute(): void {
-            this._imgEffectMute.source = SoundManager.getIsEffectMute() ? "commonIconSound0001" : "commonIconSound0000";
+            this._imgEffectMute.source = Twns.SoundManager.getIsEffectMute() ? "commonIconSound0001" : "commonIconSound0000";
         }
         private _updateGroupBgmVolume(): void {
-            const volume                = SoundManager.getBgmVolume();
+            const volume                = Twns.SoundManager.getBgmVolume();
             const pos                   = this._groupBgmVolume.width * volume;
             this._imgBgmPoint.x         = pos;
             this._imgBgmBar.width       = pos;
             this._labelBgmVolume.text   = `${Math.floor(volume * 100)}`;
         }
         private _updateGroupEffectVolume(): void {
-            const volume                    = SoundManager.getEffectVolume();
+            const volume                    = Twns.SoundManager.getEffectVolume();
             const pos                       = this._groupEffectVolume.width * volume;
             this._imgEffectPoint.x          = pos;
             this._imgEffectBar.width        = pos;
             this._labelEffectVolume.text    = `${Math.floor(volume * 100)}`;
         }
         private _updateLabelBgmName(): void {
-            this._labelBgmName.text = Lang.getBgmName(SoundManager.getPlayingBgmCode()) || CommonConstants.ErrorTextForUndefined;
+            this._labelBgmName.text = Lang.getBgmName(Twns.SoundManager.getPlayingBgmCode()) || CommonConstants.ErrorTextForUndefined;
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

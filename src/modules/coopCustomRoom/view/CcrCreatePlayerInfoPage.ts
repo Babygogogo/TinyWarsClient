@@ -49,7 +49,7 @@ namespace Twns.CoopCustomRoom {
         }
 
         private async _updateComponentsForPlayerInfo(): Promise<void> {
-            this._listPlayer.bindData(this._createDataForListPlayer(Helpers.getExisted((await CoopCustomRoom.CcrCreateModel.getMapRawData()).playersCountUnneutral)));
+            this._listPlayer.bindData(this._createDataForListPlayer(Twns.Helpers.getExisted((await CoopCustomRoom.CcrCreateModel.getMapRawData()).playersCountUnneutral)));
         }
 
         private _createDataForListPlayer(playersCountUnneutral: number): DataForPlayerRenderer[] {
@@ -103,10 +103,10 @@ namespace Twns.CoopCustomRoom {
             const settingsForCommon = CoopCustomRoom.CcrCreateModel.getSettingsForCommon();
             const coId              = (CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex() === playerIndex)
                 ? (CoopCustomRoom.CcrCreateModel.getSelfCoId())
-                : (WarHelpers.WarRuleHelpers.getPlayerRule(Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex).fixedCoIdInCcw);
+                : (WarHelpers.WarRuleHelpers.getPlayerRule(Twns.Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex).fixedCoIdInCcw);
 
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoInfoPanel, {
                     gameConfig   : CoopCustomRoom.CcrCreateModel.getGameConfig(),
                     coId,
                 });
@@ -115,11 +115,11 @@ namespace Twns.CoopCustomRoom {
 
         private async _onTouchedBtnChangeController(): Promise<void> {
             const data                  = this._getData();
-            const playerRuleArray       = Helpers.getExisted(CoopCustomRoom.CcrCreateModel.getInstanceWarRule().ruleForPlayers?.playerRuleDataArray);
+            const playerRuleArray       = Twns.Helpers.getExisted(CoopCustomRoom.CcrCreateModel.getInstanceWarRule().ruleForPlayers?.playerRuleDataArray);
             const humanPlayerIndexSet   = new Set<number>();
             const aiPlayerIndexSet      = new Set<number>();
             for (const playerRule of playerRuleArray) {
-                const playerIndex = Helpers.getExisted(playerRule.playerIndex);
+                const playerIndex = Twns.Helpers.getExisted(playerRule.playerIndex);
                 if (playerRule.fixedCoIdInCcw == null) {
                     humanPlayerIndexSet.add(playerIndex);
                 } else {
@@ -128,7 +128,7 @@ namespace Twns.CoopCustomRoom {
             }
 
             const playerIndex   = data.playerIndex;
-            const playerRule    = Helpers.getExisted(playerRuleArray.find(v => v.playerIndex === playerIndex));
+            const playerRule    = Twns.Helpers.getExisted(playerRuleArray.find(v => v.playerIndex === playerIndex));
             if (playerIndex === CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex()) {
                 if (humanPlayerIndexSet.size < 2) {
                     FloatText.show(Lang.getText(LangTextType.A0222));
@@ -148,7 +148,7 @@ namespace Twns.CoopCustomRoom {
                     if (CoopCustomRoom.CcrCreateModel.getTemplateWarRuleId() == null) {
                         callback();
                     } else {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0129),
                             callback: () => {
                                 CoopCustomRoom.CcrCreateModel.setCustomWarRuleId();
@@ -172,7 +172,7 @@ namespace Twns.CoopCustomRoom {
                     if (CoopCustomRoom.CcrCreateModel.getTemplateWarRuleId() == null) {
                         callback();
                     } else {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0129),
                             callback: () => {
                                 CoopCustomRoom.CcrCreateModel.setCustomWarRuleId();
@@ -196,9 +196,9 @@ namespace Twns.CoopCustomRoom {
             const playerIndex       = this._getData().playerIndex;
             const instanceWarRule   = CoopCustomRoom.CcrCreateModel.getInstanceWarRule();
             const playerRule        = WarHelpers.WarRuleHelpers.getPlayerRule(instanceWarRule, playerIndex);
-            const gameConfig        = await Config.ConfigManager.getGameConfig(Helpers.getExisted(CoopCustomRoom.CcrCreateModel.getData().settingsForCommon?.configVersion));
+            const gameConfig        = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(CoopCustomRoom.CcrCreateModel.getData().settingsForCommon?.configVersion));
             if (playerIndex === CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex()) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
                     gameConfig,
                     currentCoId         : CoopCustomRoom.CcrCreateModel.getSelfCoId(),
                     availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({ baseWarRule: instanceWarRule, playerIndex, gameConfig }),
@@ -218,7 +218,7 @@ namespace Twns.CoopCustomRoom {
                             coIdArray.push(cfg.coId);
                         }
 
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
                             gameConfig,
                             currentCoId         : coId,
                             availableCoIdArray  : coIdArray,
@@ -234,7 +234,7 @@ namespace Twns.CoopCustomRoom {
                     if (instanceWarRule.templateWarRuleId == null) {
                         callback();
                     } else {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0129),
                             callback: () => {
                                 CoopCustomRoom.CcrCreateModel.setCustomWarRuleId();
@@ -269,9 +269,9 @@ namespace Twns.CoopCustomRoom {
             const playerIndex           = this._getData().playerIndex;
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
 
-            const settingsForCommon     = Helpers.getExisted(roomInfo.settingsForCommon);
-            const playerRule            = WarHelpers.WarRuleHelpers.getPlayerRule(Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(Helpers.getExisted(playerRule.teamIndex)) || CommonConstants.ErrorTextForUndefined;
+            const settingsForCommon     = Twns.Helpers.getExisted(roomInfo.settingsForCommon);
+            const playerRule            = WarHelpers.WarRuleHelpers.getPlayerRule(Twns.Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex);
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(Twns.Helpers.getExisted(playerRule.teamIndex)) || CommonConstants.ErrorTextForUndefined;
 
             const isSelfPlayer      = CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex() === playerIndex;
             const isHumanPlayer     = playerRule.fixedCoIdInCcw == null;
@@ -288,7 +288,7 @@ namespace Twns.CoopCustomRoom {
                     : Lang.getText(LangTextType.B0607));
 
             const coId                      = isSelfPlayer ? CoopCustomRoom.CcrCreateModel.getSelfCoId() : (playerRule.fixedCoIdInCcw ?? null);
-            const gameConfig                = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+            const gameConfig                = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion));
             const coCfg                     = coId == null ? null : gameConfig.getCoBasicCfg(coId);
             this._labelCo.text              = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source          = coId == null ? `` : gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;

@@ -91,7 +91,7 @@ namespace Twns.Common {
             const playerIndexArray  = openData.currentEventIdArray;
             const list              = this._listLocation;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => playerIndexArray.indexOf(v.warEventId) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => playerIndexArray.indexOf(v.warEventId) >= 0 ? i : null)));
         }
     }
 

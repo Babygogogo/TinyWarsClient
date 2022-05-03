@@ -8,7 +8,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import GridIndex            = Types.GridIndex;
+    import GridIndex            = Twns.Types.GridIndex;
     import BwGridVisualEffect   = Twns.BaseWar.BwGridVisualEffect;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = CommonConstants.GridSize;
@@ -159,7 +159,7 @@ namespace Twns.BaseWar {
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 7; ++i) {
-            tween.wait(50).set({ source: `c04_t08_s07_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(50).set({ source: `c04_t08_s07_f${Twns.Helpers.getNumText(i, 2)}` });
         }
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
 
@@ -175,7 +175,7 @@ namespace Twns.BaseWar {
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 9; ++i) {
-            tween.wait(50).set({ source: `c04_t08_s01_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(50).set({ source: `c04_t08_s01_f${Twns.Helpers.getNumText(i, 2)}` });
         }
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
 
@@ -195,7 +195,7 @@ namespace Twns.BaseWar {
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 8; ++i) {
-            tween.wait(50).set({ source: `c04_t08_s02_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(50).set({ source: `c04_t08_s02_f${Twns.Helpers.getNumText(i, 2)}` });
         }
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
 
@@ -249,12 +249,12 @@ namespace Twns.BaseWar {
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 8; ++i) {
-            tween.wait(50).set({ source: `c04_t08_s02_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(50).set({ source: `c04_t08_s02_f${Twns.Helpers.getNumText(i, 2)}` });
         }
 
         tween.set({ x: EXPLOSION_OFFSET_X + pos.x, y: EXPLOSION_OFFSET_Y + pos.y, source: `c04_t08_s01_f01` });
         for (let i = 2; i <= 9; ++i) {
-            tween.wait(50).set({ source: `c04_t08_s01_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(50).set({ source: `c04_t08_s01_f${Twns.Helpers.getNumText(i, 2)}` });
         }
 
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
@@ -271,7 +271,7 @@ namespace Twns.BaseWar {
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 34; ++i) {
-            tween.wait(34).set({ source: `c04_t08_s06_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(34).set({ source: `c04_t08_s06_f${Twns.Helpers.getNumText(i, 2)}` });
         }
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
 
@@ -287,7 +287,7 @@ namespace Twns.BaseWar {
 
         const tween = egret.Tween.get(img);
         for (let i = 12; i <= 25; ++i) {
-            tween.wait(34).set({ source: `c04_t08_s06_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(34).set({ source: `c04_t08_s06_f${Twns.Helpers.getNumText(i, 2)}` });
         }
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
 
@@ -303,7 +303,7 @@ namespace Twns.BaseWar {
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 5; ++i) {
-            tween.wait(50).set({ source: `c04_t08_s08_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(50).set({ source: `c04_t08_s08_f${Twns.Helpers.getNumText(i, 2)}` });
         }
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
 

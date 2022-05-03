@@ -124,7 +124,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionTypeListPanel, {
                 fullData    : openData.fullData,
                 condition   : openData.condition,
                 war         : openData.war,
@@ -135,7 +135,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnPlayerIndex(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerIndexPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChoosePlayerIndexPanel, {
                 currentPlayerIndexArray : condition.playerIndexArray ?? [],
                 maxPlayerIndex          : this._getOpenData().war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : playerIndexArray => {
@@ -146,7 +146,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnTeamIndex(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTeamIndexPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseTeamIndexPanel, {
                 currentTeamIndexArray   : condition.teamIndexArray ?? [],
                 maxTeamIndex            : this._getOpenData().war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : teamIndexArray => {
@@ -157,7 +157,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnUnitType(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseUnitTypePanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseUnitTypePanel, {
                 gameConfig              : this._getOpenData().war.getGameConfig(),
                 currentUnitTypeArray    : condition.unitTypeArray ?? [],
                 callbackOnConfirm       : unitTypeArray => {
@@ -168,7 +168,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnLocation(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseLocationPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseLocationPanel, {
                 currentLocationIdArray  : condition.locationIdArray ?? [],
                 callbackOnConfirm       : locationIdArray => {
                     condition.locationIdArray = locationIdArray;
@@ -178,8 +178,8 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnGridIndex(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseGridIndexPanel, {
-                currentGridIndexArray   : Helpers.getNonNullElements(condition.gridIndexArray?.map(v => GridIndexHelpers.convertGridIndex(v)) ?? []),
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseGridIndexPanel, {
+                currentGridIndexArray   : Twns.Helpers.getNonNullElements(condition.gridIndexArray?.map(v => GridIndexHelpers.convertGridIndex(v)) ?? []),
                 mapSize                 : this._getOpenData().war.getTileMap().getMapSize(),
                 callbackOnConfirm       : gridIndexArray => {
                     condition.gridIndexArray = gridIndexArray;
@@ -189,7 +189,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnActionState(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseUnitActionStatePanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseUnitActionStatePanel, {
                 currentActionStateArray : condition.actionStateArray ?? [],
                 callbackOnConfirm       : actionStateArray => {
                     condition.actionStateArray = actionStateArray;
@@ -211,7 +211,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnHpComparator(): void {
             const condition         = this._getCondition();
-            condition.hpComparator  = Helpers.getNextValueComparator(condition.hpComparator);
+            condition.hpComparator  = Twns.Helpers.getNextValueComparator(condition.hpComparator);
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputHp(): void {
@@ -229,7 +229,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnFuelPctComparator(): void {
             const condition             = this._getCondition();
-            condition.fuelPctComparator = Helpers.getNextValueComparator(condition.fuelPctComparator);
+            condition.fuelPctComparator = Twns.Helpers.getNextValueComparator(condition.fuelPctComparator);
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputFuelPct(): void {
@@ -247,7 +247,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnPriAmmoPctComparator(): void {
             const condition                 = this._getCondition();
-            condition.priAmmoPctComparator  = Helpers.getNextValueComparator(condition.priAmmoPctComparator);
+            condition.priAmmoPctComparator  = Twns.Helpers.getNextValueComparator(condition.priAmmoPctComparator);
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputPriAmmoPct(): void {
@@ -265,7 +265,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnPromotionComparator(): void {
             const condition                 = this._getCondition();
-            condition.promotionComparator   = Helpers.getNextValueComparator(condition.promotionComparator);
+            condition.promotionComparator   = Twns.Helpers.getNextValueComparator(condition.promotionComparator);
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputPromotion(): void {
@@ -283,7 +283,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnUnitsCountComparator(): void {
             const condition                 = this._getCondition();
-            condition.unitsCountComparator  = Helpers.getNextValueComparator(condition.unitsCountComparator);
+            condition.unitsCountComparator  = Twns.Helpers.getNextValueComparator(condition.unitsCountComparator);
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputUnitsCount(): void {
@@ -355,7 +355,7 @@ namespace Twns.WarEvent {
             const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
             this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelPlayerIndex(): void {
@@ -415,7 +415,7 @@ namespace Twns.WarEvent {
             this._inputPromotion.text = `${this._getCondition().promotion ?? ``}`;
         }
         private _updateLabelUnitsCountComparator(): void {
-            const comparator                        = Helpers.getExisted(this._getCondition().unitsCountComparator);
+            const comparator                        = Twns.Helpers.getExisted(this._getCondition().unitsCountComparator);
             this._labelUnitsCountComparator.text    = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputUnitsCount(): void {
@@ -423,7 +423,7 @@ namespace Twns.WarEvent {
         }
 
         private _getCondition(): CommonProto.WarEvent.IWecUnitPresence {
-            return Helpers.getExisted(this._getOpenData().condition.WecUnitPresence);
+            return Twns.Helpers.getExisted(this._getOpenData().condition.WecUnitPresence);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {
             this._imgInnerTouchMask.visible = isEnabled;

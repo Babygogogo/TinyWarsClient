@@ -9,9 +9,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import TileBaseType             = Types.TileBaseType;
-    import TileDecoratorType        = Types.TileDecoratorType;
-    import TileObjectType           = Types.TileObjectType;
+    import TileBaseType             = Twns.Types.TileBaseType;
+    import TileDecoratorType        = Twns.Types.TileDecoratorType;
+    import TileObjectType           = Twns.Types.TileObjectType;
 
     const { height: GRID_HEIGHT }   = CommonConstants.GridSize;
     export type TileViewData = {
@@ -93,7 +93,7 @@ namespace Twns.MapEditor {
 
         protected _updateImages(): void {
             const version   = Twns.User.UserModel.getSelfSettingsTextureVersion();
-            const tickCount = Timer.getTileAnimationTickCount();
+            const tickCount = Twns.Timer.getTileAnimationTickCount();
 
             {
                 const objectType    = this._objectType;
@@ -104,8 +104,8 @@ namespace Twns.MapEditor {
                     imgObject.visible = true;
                     imgObject.source  = Twns.Common.CommonModel.getCachedTileObjectImageSource({
                         version,
-                        themeType   : Types.TileThemeType.Clear,
-                        skinId      : Helpers.getExisted(this._playerIndex),
+                        themeType   : Twns.Types.TileThemeType.Clear,
+                        skinId      : Twns.Helpers.getExisted(this._playerIndex),
                         objectType,
                         isDark      : false,
                         shapeId     : this._objectShapeId ?? 0,
@@ -123,11 +123,11 @@ namespace Twns.MapEditor {
                     imgBase.visible = true;
                     imgBase.source  = Twns.Common.CommonModel.getCachedTileBaseImageSource({
                         version,
-                        themeType   : Types.TileThemeType.Clear,
+                        themeType   : Twns.Types.TileThemeType.Clear,
                         skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                         baseType,
                         isDark      : false,
-                        shapeId     : Helpers.getExisted(this._baseShapeId),
+                        shapeId     : Twns.Helpers.getExisted(this._baseShapeId),
                         tickCount,
                     });
                 }
@@ -142,11 +142,11 @@ namespace Twns.MapEditor {
                     imgDecorator.visible = true;
                     imgDecorator.source  = Twns.Common.CommonModel.getCachedTileDecoratorImageSource({
                         version,
-                        themeType   : Types.TileThemeType.Clear,
+                        themeType   : Twns.Types.TileThemeType.Clear,
                         skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                         decoratorType,
                         isDark      : false,
-                        shapeId     : Helpers.getExisted(this._decoratorShapeId),
+                        shapeId     : Twns.Helpers.getExisted(this._decoratorShapeId),
                         tickCount,
                     });
                 }

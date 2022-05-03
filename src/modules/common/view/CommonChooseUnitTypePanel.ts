@@ -14,7 +14,7 @@
 namespace Twns.Common {
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = Twns.Notify.NotifyType;
-    import UnitType     = Types.UnitType;
+    import UnitType     = Twns.Types.UnitType;
     import GameConfig   = Twns.Config.GameConfig;
 
     export type OpenDataForCommonChooseUnitTypePanel = {
@@ -85,14 +85,14 @@ namespace Twns.Common {
 
         private _updateListUnitType(): void {
             const dataArray : DataForUnitTypeRenderer[] = [];
-            for (const unitType of this._getOpenData().gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
+            for (const unitType of this._getOpenData().gameConfig.getUnitTypesByCategory(Twns.Types.UnitCategory.All) ?? []) {
                 dataArray.push({ unitType });
             }
 
             const unitTypeArray = this._getOpenData().currentUnitTypeArray;
             const list          = this._listUnitType;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => unitTypeArray.indexOf(v.unitType) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => unitTypeArray.indexOf(v.unitType) >= 0 ? i : null)));
         }
     }
 

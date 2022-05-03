@@ -18,7 +18,7 @@ namespace Twns.MultiFreeWar {
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
-            this._setSettingsForMfw(Helpers.getExisted(data.settingsForMfw, ClientErrorCode.MfwWar_Init_00));
+            this._setSettingsForMfw(Twns.Helpers.getExisted(data.settingsForMfw, ClientErrorCode.MfwWar_Init_00));
 
             this._initView();
         }
@@ -40,7 +40,7 @@ namespace Twns.MultiFreeWar {
             this._settingsForMfw = settings;
         }
         public getSettingsForMfw(): ISettingsForMfw {
-            return Helpers.getExisted(this._settingsForMfw);
+            return Twns.Helpers.getExisted(this._settingsForMfw);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ namespace Twns.MultiFreeWar {
         }
 
         public getSettingsBootTimerParams(): number[] {
-            return Helpers.getExisted(this.getSettingsForMfw().bootTimerParams);
+            return Twns.Helpers.getExisted(this.getSettingsForMfw().bootTimerParams);
         }
     }
 }

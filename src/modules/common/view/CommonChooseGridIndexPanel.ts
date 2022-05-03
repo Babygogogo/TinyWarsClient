@@ -14,11 +14,11 @@
 namespace Twns.Common {
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = Twns.Notify.NotifyType;
-    import GridIndex    = Types.GridIndex;
+    import GridIndex    = Twns.Types.GridIndex;
 
     export type OpenDataForCommonChooseGridIndexPanel = {
         currentGridIndexArray   : GridIndex[];
-        mapSize                 : Types.MapSize;
+        mapSize                 : Twns.Types.MapSize;
         callbackOnConfirm       : (teamIndexArray: GridIndex[]) => void;
     };
     export class CommonChooseGridIndexPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseGridIndexPanel> {
@@ -88,7 +88,7 @@ namespace Twns.Common {
             list.bindData(gridIndexArray.sort(gridIndexSorter).map(v => { return { gridIndex: v, panel: this }; }));
         }
         private _onTouchedBtnDeleteAll(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
                     this._listLocation.clear();
@@ -176,7 +176,7 @@ namespace Twns.Common {
         }
 
         private _onTouchedBtnDelete(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
                     const data = this._getData();

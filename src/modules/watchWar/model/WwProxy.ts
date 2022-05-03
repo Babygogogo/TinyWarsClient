@@ -10,10 +10,10 @@
 namespace Twns.WatchWar.WwProxy {
     import NotifyType           = Twns.Notify.NotifyType;
     import NetMessage           = CommonProto.NetMessage;
-    import NetMessageCodes      = TwnsNetMessageCodes.NetMessageCodes;
+    import NetMessageCodes      = Twns.Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Twns.Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgMpwWatchGetRequestableWarIdArray,     callback: _onMsgMpwWatchGetRequestableWarIdArray },
             { msgCode: NetMessageCodes.MsgMpwWatchGetOngoingWarIdArray,         callback: _onMsgMpwWatchGetOngoingWarIdArray },
             { msgCode: NetMessageCodes.MsgMpwWatchGetRequestedWarIdArray,       callback: _onMsgMpwWatchGetRequestedWarIdArray },
@@ -34,7 +34,7 @@ namespace Twns.WatchWar.WwProxy {
         userNickname?           : string | null;
         playersCountUnneutral?  : number | null;
     }): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwWatchGetRequestableWarIdArray: { c: {
                 warId,
                 coName,
@@ -53,7 +53,7 @@ namespace Twns.WatchWar.WwProxy {
     }
 
     export function reqMpwWatchGetOngoingWarIdArray(): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwWatchGetOngoingWarIdArray: { c: {
             } },
         });
@@ -67,7 +67,7 @@ namespace Twns.WatchWar.WwProxy {
     }
 
     export function reqMpwWatchRequestedWarIdArray(): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwWatchGetRequestedWarIdArray: { c: {
             }, }
         });
@@ -81,7 +81,7 @@ namespace Twns.WatchWar.WwProxy {
     }
 
     export function reqMpwWatchWatchedWarIdArray(): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwWatchGetWatchedWarIdArray: { c: {
             }, }
         });
@@ -95,7 +95,7 @@ namespace Twns.WatchWar.WwProxy {
     }
 
     export function reqWatchMakeRequest(warId: number, dstUserIds: number[]): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwWatchMakeRequest: { c: {
                 warId,
                 dstUserIds,
@@ -110,7 +110,7 @@ namespace Twns.WatchWar.WwProxy {
     }
 
     export function reqWatchHandleRequest(warId: number, acceptSrcUserIds: number[], declineSrcUserIds: number[]): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwWatchHandleRequest: { c: {
                 warId,
                 acceptSrcUserIds,
@@ -126,7 +126,7 @@ namespace Twns.WatchWar.WwProxy {
     }
 
     export function reqWatchDeleteWatcher(warId: number, watcherUserIds: number[]): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwWatchDeleteWatcher: { c: {
                 warId,
                 watcherUserIds,
@@ -141,7 +141,7 @@ namespace Twns.WatchWar.WwProxy {
     }
 
     export function reqWatchContinueWar(warId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwWatchContinueWar: { c: {
                 warId,
             }, }
@@ -157,7 +157,7 @@ namespace Twns.WatchWar.WwProxy {
     }
 
     export function reqMpwWatchGetIncomingInfo(warId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwWatchGetIncomingInfo: { c: {
                 warId,
             } },
@@ -170,7 +170,7 @@ namespace Twns.WatchWar.WwProxy {
     }
 
     export function reqMpwWatchGetOutgoingInfo(warId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwWatchGetOutgoingInfo: { c: {
                 warId,
             } },

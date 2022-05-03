@@ -56,7 +56,7 @@ namespace Twns.MultiFreeRoom {
         }
         private _updateComponentsForRoomInfo(): void {
             const dataArray         : DataForPlayerRenderer[] = [];
-            const maxPlayerIndex    = Helpers.getExisted(MultiFreeRoom.MfrCreateModel.getInitialWarData().playerManager?.players).length - 1;
+            const maxPlayerIndex    = Twns.Helpers.getExisted(MultiFreeRoom.MfrCreateModel.getInitialWarData().playerManager?.players).length - 1;
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= maxPlayerIndex; ++playerIndex) {
                 dataArray.push({
                     playerIndex,
@@ -101,8 +101,8 @@ namespace Twns.MultiFreeRoom {
             const initialWarData    = MultiFreeRoom.MfrCreateModel.getInitialWarData();
             const coId              = initialWarData.playerManager?.players?.find(v => v.playerIndex === playerIndex)?.coId;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
-                    gameConfig   : await Config.ConfigManager.getGameConfig(Helpers.getExisted(initialWarData.settingsForCommon?.configVersion)),
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoInfoPanel, {
+                    gameConfig   : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(initialWarData.settingsForCommon?.configVersion)),
                     coId,
                 });
             }
@@ -127,21 +127,21 @@ namespace Twns.MultiFreeRoom {
         private async _updateComponentsForSettings(): Promise<void> {
             const playerIndex           = this._getData().playerIndex;
             const initialWarData        = MultiFreeRoom.MfrCreateModel.getInitialWarData();
-            const settingsForCommon     = Helpers.getExisted(initialWarData.settingsForCommon);
+            const settingsForCommon     = Twns.Helpers.getExisted(initialWarData.settingsForCommon);
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(Twns.Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
 
-            const playerData            = Helpers.getExisted(initialWarData.playerManager?.players?.find(v => v.playerIndex === playerIndex));
+            const playerData            = Twns.Helpers.getExisted(initialWarData.playerManager?.players?.find(v => v.playerIndex === playerIndex));
             this._imgSkin.source        = WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(playerData.unitAndTileSkinId);
 
-            const coId                  = Helpers.getExisted(playerData.coId);
-            const gameConfig            = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+            const coId                  = Twns.Helpers.getExisted(playerData.coId);
+            const gameConfig            = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion));
             const coCfg                 = gameConfig.getCoBasicCfg(coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
 
-            const userInfo              = MultiFreeRoom.MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await Twns.User.UserModel.getUserPublicInfo(Helpers.getExisted(Twns.User.UserModel.getSelfUserId())) : null;
+            const userInfo              = MultiFreeRoom.MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await Twns.User.UserModel.getUserPublicInfo(Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId())) : null;
             const labelNickname         = this._labelNickname;
             if (userInfo) {
                 labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
@@ -150,17 +150,17 @@ namespace Twns.MultiFreeRoom {
             }
 
             const rankScoreArray        = userInfo?.userMrwRankInfoArray;
-            const stdRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwStd) : null;
-            const fogRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwFog) : null;
+            const stdRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Twns.Types.WarType.MrwStd) : null;
+            const fogRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Twns.Types.WarType.MrwFog) : null;
             const stdScore              = stdRankInfo ? stdRankInfo.currentScore : null;
             const fogScore              = fogRankInfo ? fogRankInfo.currentScore : null;
             const stdRank               = stdRankInfo ? stdRankInfo.currentRank : null;
             const fogRank               = fogRankInfo ? fogRankInfo.currentRank : null;
             this._labelRankStd.text     = stdRankInfo
-                ? `${stdScore == null ? CommonConstants.RankInitialScore : stdScore} (${stdRank == null ? `--` : `${stdRank}${Helpers.getSuffixForRank(stdRank)}`})`
+                ? `${stdScore == null ? CommonConstants.RankInitialScore : stdScore} (${stdRank == null ? `--` : `${stdRank}${Twns.Helpers.getSuffixForRank(stdRank)}`})`
                 : `??`;
             this._labelRankFog.text     = fogRankInfo
-                ? `${fogScore == null ? CommonConstants.RankInitialScore : fogScore} (${fogRank == null ? `--` : `${fogRank}${Helpers.getSuffixForRank(fogRank)}`})`
+                ? `${fogScore == null ? CommonConstants.RankInitialScore : fogScore} (${fogRank == null ? `--` : `${fogRank}${Twns.Helpers.getSuffixForRank(fogRank)}`})`
                 : `??`;
         }
     }

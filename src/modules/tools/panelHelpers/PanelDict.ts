@@ -1,7 +1,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsPanelConfig {
-    import LayerType    = Types.LayerType;
+namespace Twns.PanelHelpers {
+    import LayerType    = Twns.Types.LayerType;
 
     export type PanelConfig<T> = {
         cls             : new () => TwnsUiPanel.UiPanel<T>;
@@ -11,7 +11,7 @@ namespace TwnsPanelConfig {
         needCache?      : boolean;
     };
 
-    export let Dict: {
+    export let PanelDict: {
         BwBackgroundPanel                   : PanelConfig<Twns.BaseWar.OpenDataForBwBackgroundPanel>;
         BwBeginTurnPanel                    : PanelConfig<Twns.BaseWar.OpenDataForBwBeginTurnPanel>;
         BwCaptureProgressPanel              : PanelConfig<Twns.BaseWar.OpenDataForBwCaptureProgressPanel>;
@@ -275,8 +275,8 @@ namespace TwnsPanelConfig {
         WwSearchWarPanel                    : PanelConfig<Twns.WatchWar.OpenDataForWwSearchWarPanel>;
     };
 
-    export function init(): void {
-        Dict = {
+    export function initPanelDict(): void {
+        PanelDict = {
             BwBackgroundPanel: {
                 cls         : Twns.BaseWar?.BwBackgroundPanel,
                 skinName    : `resource/skins/baseWar/BwBackgroundPanel.exml`,

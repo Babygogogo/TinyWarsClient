@@ -19,7 +19,7 @@ namespace Twns.WarEvent {
     import NotifyType           = Twns.Notify.NotifyType;
     import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
     import IWarEventAction      = CommonProto.WarEvent.IWarEventAction;
-    import ActionType           = Types.WarEventActionType;
+    import ActionType           = Twns.Types.WarEventActionType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
     export type OpenDataForWeActionTypeListPanel = {
@@ -123,7 +123,7 @@ namespace Twns.WarEvent {
             if (actionType !== Twns.WarHelpers.WarEventHelpers.getActionType(action)) {
                 Twns.WarHelpers.WarEventHelpers.resetAction(action, actionType);
                 Twns.WarHelpers.WarEventHelpers.openActionModifyPanel(data.war, data.fullData, action);
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionTypeListPanel);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel);
 
                 Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }

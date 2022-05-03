@@ -60,12 +60,12 @@ namespace Twns.MapManagement {
 
         private _onTouchedBtnModify(): void {
             const nameArray: ILanguageText[] = [
-                { languageType: Types.LanguageType.Chinese, text: (this._inputChinese.text || ``).trim() },
-                { languageType: Types.LanguageType.English, text: (this._inputEnglish.text || ``).trim() },
+                { languageType: Twns.Types.LanguageType.Chinese, text: (this._inputChinese.text || ``).trim() },
+                { languageType: Twns.Types.LanguageType.English, text: (this._inputEnglish.text || ``).trim() },
             ];
-            if (nameArray.some(v => Helpers.getExisted(v.text).length <= 0)) {
+            if (nameArray.some(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
                 FloatText.show(Lang.getText(LangTextType.A0155));
-            } else if (nameArray.some(v => Helpers.getExisted(v.text).length > CommonConstants.MapMaxNameLength)) {
+            } else if (nameArray.some(v => Twns.Helpers.getExisted(v.text).length > CommonConstants.MapMaxNameLength)) {
                 FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.MapMaxNameLength));
             } else {
                 Twns.WarMap.WarMapProxy.reqMmSetMapName(this._getOpenData().mapId, nameArray);
@@ -78,8 +78,8 @@ namespace Twns.MapManagement {
 
             const openData          = this._getOpenData();
             const nameArray         = (await Twns.WarMap.WarMapModel.getRawData(openData.mapId))?.mapNameArray;
-            this._inputChinese.text = Lang.getLanguageText({ textArray: nameArray, languageType: Types.LanguageType.Chinese, useAlternate: false }) ?? ``;
-            this._inputEnglish.text = Lang.getLanguageText({ textArray: nameArray, languageType: Types.LanguageType.English, useAlternate: false }) ?? ``;
+            this._inputChinese.text = Lang.getLanguageText({ textArray: nameArray, languageType: Twns.Types.LanguageType.Chinese, useAlternate: false }) ?? ``;
+            this._inputEnglish.text = Lang.getLanguageText({ textArray: nameArray, languageType: Twns.Types.LanguageType.English, useAlternate: false }) ?? ``;
         }
 
         private _updateComponentsForLanguage(): void {

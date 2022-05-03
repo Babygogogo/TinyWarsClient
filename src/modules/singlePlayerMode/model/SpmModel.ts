@@ -12,7 +12,7 @@ namespace Twns.SinglePlayerMode.SpmModel {
     import NotifyType               = Twns.Notify.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NetMessage               = CommonProto.NetMessage;
-    import SpmWarSaveSlotData       = Types.SpmWarSaveSlotData;
+    import SpmWarSaveSlotData       = Twns.Types.SpmWarSaveSlotData;
     import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
     import ISpmRankInfoForRule      = NetMessage.MsgSpmGetRankList.ISpmRankInfoForRule;
     import MsgSpmGetRankListIs      = NetMessage.MsgSpmGetRankList.IS;
@@ -27,11 +27,11 @@ namespace Twns.SinglePlayerMode.SpmModel {
     function _onNotifyMsgSpmValidateSrw(e: egret.Event): void {
         const data      = e.data as CommonProto.NetMessage.MsgSpmValidateSrw.IS;
         const status    = data.status;
-        if (status === Types.SpmValidateSrwStatus.ConfigVersionNotLatest) {
+        if (status === Twns.Types.SpmValidateSrwStatus.ConfigVersionNotLatest) {
             FloatText.show(Lang.getText(LangTextType.A0278));
-        } else if (status === Types.SpmValidateSrwStatus.ScoreNotHighest) {
+        } else if (status === Twns.Types.SpmValidateSrwStatus.ScoreNotHighest) {
             FloatText.show(Lang.getText(LangTextType.A0279));
-        } else if (status === Types.SpmValidateSrwStatus.ScoreTooLow) {
+        } else if (status === Twns.Types.SpmValidateSrwStatus.ScoreTooLow) {
             FloatText.show(Lang.getText(LangTextType.A0281));
         } else {
             FloatText.show(Lang.getText(LangTextType.A0280));
@@ -41,7 +41,7 @@ namespace Twns.SinglePlayerMode.SpmModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for save slots.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _slotFullDataAccessor = Helpers.createCachedDataAccessor<number, SpmWarSaveSlotData>({
+    const _slotFullDataAccessor = Twns.Helpers.createCachedDataAccessor<number, SpmWarSaveSlotData>({
         reqData : (slotIndex) => Twns.SinglePlayerMode.SpmProxy.reqSpmGetWarSaveSlotFullData(slotIndex),
     });
     let _previewingSlotIndex    : number;
@@ -92,51 +92,51 @@ namespace Twns.SinglePlayerMode.SpmModel {
     }
 
     export function updateOnMsgSpmCreateScw(data: NetMessage.MsgSpmCreateScw.IS): void {
-        const slotIndex = Helpers.getExisted(data.slotIndex);
+        const slotIndex = Twns.Helpers.getExisted(data.slotIndex);
         setSlotFullData(slotIndex, {
             slotIndex,
-            extraData       : Helpers.getExisted(data.extraData),
-            warData         : Helpers.getExisted(data.warData),
+            extraData       : Twns.Helpers.getExisted(data.extraData),
+            warData         : Twns.Helpers.getExisted(data.warData),
         });
     }
     export function updateOnMsgSpmCreateSfw(data: NetMessage.MsgSpmCreateSfw.IS): void {
-        const slotIndex = Helpers.getExisted(data.slotIndex);
+        const slotIndex = Twns.Helpers.getExisted(data.slotIndex);
         setSlotFullData(slotIndex, {
             slotIndex,
-            extraData       : Helpers.getExisted(data.extraData),
-            warData         : Helpers.getExisted(data.warData),
+            extraData       : Twns.Helpers.getExisted(data.extraData),
+            warData         : Twns.Helpers.getExisted(data.warData),
         });
     }
     export function updateOnMsgSpmCreateSrw(data: NetMessage.MsgSpmCreateSrw.IS): void {
-        const slotIndex = Helpers.getExisted(data.slotIndex);
+        const slotIndex = Twns.Helpers.getExisted(data.slotIndex);
         setSlotFullData(slotIndex, {
             slotIndex,
-            extraData       : Helpers.getExisted(data.extraData),
-            warData         : Helpers.getExisted(data.warData),
+            extraData       : Twns.Helpers.getExisted(data.extraData),
+            warData         : Twns.Helpers.getExisted(data.warData),
         });
     }
     export function updateOnMsgSpmSaveScw(data: NetMessage.MsgSpmSaveScw.IS): void {
-        const slotIndex = Helpers.getExisted(data.slotIndex);
+        const slotIndex = Twns.Helpers.getExisted(data.slotIndex);
         setSlotFullData(slotIndex, {
             slotIndex,
-            extraData       : Helpers.getExisted(data.slotExtraData),
-            warData         : Helpers.getExisted(data.warData),
+            extraData       : Twns.Helpers.getExisted(data.slotExtraData),
+            warData         : Twns.Helpers.getExisted(data.warData),
         });
     }
     export function updateOnMsgSpmSaveSfw(data: NetMessage.MsgSpmSaveSfw.IS): void {
-        const slotIndex = Helpers.getExisted(data.slotIndex);
+        const slotIndex = Twns.Helpers.getExisted(data.slotIndex);
         setSlotFullData(slotIndex, {
             slotIndex,
-            extraData       : Helpers.getExisted(data.slotExtraData),
-            warData         : Helpers.getExisted(data.warData),
+            extraData       : Twns.Helpers.getExisted(data.slotExtraData),
+            warData         : Twns.Helpers.getExisted(data.warData),
         });
     }
     export function updateOnMsgSpmSaveSrw(data: NetMessage.MsgSpmSaveSrw.IS): void {
-        const slotIndex = Helpers.getExisted(data.slotIndex);
+        const slotIndex = Twns.Helpers.getExisted(data.slotIndex);
         setSlotFullData(slotIndex, {
             slotIndex,
-            extraData       : Helpers.getExisted(data.slotExtraData),
-            warData         : Helpers.getExisted(data.warData),
+            extraData       : Twns.Helpers.getExisted(data.slotExtraData),
+            warData         : Twns.Helpers.getExisted(data.warData),
         });
     }
     export function updateOnMsgSpmDeleteWarSaveSlot(slotIndex: number): void {
@@ -146,7 +146,7 @@ namespace Twns.SinglePlayerMode.SpmModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for rank list.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _rankDataGetter = Helpers.createCachedDataAccessor<number, ISpmRankInfoForRule[]>({
+    const _rankDataGetter = Twns.Helpers.createCachedDataAccessor<number, ISpmRankInfoForRule[]>({
         reqData : (mapId: number) => Twns.SinglePlayerMode.SpmProxy.reqSpmGetRankList(mapId),
     });
 
@@ -155,33 +155,33 @@ namespace Twns.SinglePlayerMode.SpmModel {
     }
 
     export function updateOnMsgSpmGetRankList(data: MsgSpmGetRankListIs): void {
-        _rankDataGetter.setData(Helpers.getExisted(data.mapId), data.infoArray ?? []);
+        _rankDataGetter.setData(Twns.Helpers.getExisted(data.mapId), data.infoArray ?? []);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for replay data.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _replayDataAccessor = Helpers.createCachedDataAccessor<number, ISerialWar>({
+    const _replayDataAccessor = Twns.Helpers.createCachedDataAccessor<number, ISerialWar>({
         reqData : (rankId: number) => Twns.SinglePlayerMode.SpmProxy.reqSpmGetReplayData(rankId),
     });
 
     export function getReplayData(rankId: number): Promise<ISerialWar | null> {
         return _replayDataAccessor.getData(rankId);
     }
-    async function decodeAndReviseReplayData(encodedWar: Types.Undefinable<Uint8Array>): Promise<ISerialWar | null> {
+    async function decodeAndReviseReplayData(encodedWar: Twns.Types.Undefinable<Uint8Array>): Promise<ISerialWar | null> {
         // TODO: 目前认定只有war room有回放，以后有可能需要扩展到其他模式
         if (encodedWar == null) {
             return null;
         }
 
         const warData               = ProtoManager.decodeAsSerialWar(encodedWar);
-        const settingsForCommon     = Helpers.getExisted(warData.settingsForCommon);
+        const settingsForCommon     = Twns.Helpers.getExisted(warData.settingsForCommon);
         const srcInstanceWarRule    = settingsForCommon.instanceWarRule;
         if (srcInstanceWarRule == null) {
             return null;
         }
 
-        const mapRawData = await WarMap.WarMapModel.getRawData(Helpers.getExisted(warData.settingsForSrw?.mapId));
+        const mapRawData = await WarMap.WarMapModel.getRawData(Twns.Helpers.getExisted(warData.settingsForSrw?.mapId));
         if (mapRawData == null) {
             return null;
         }
@@ -196,7 +196,7 @@ namespace Twns.SinglePlayerMode.SpmModel {
         if (warData.field == null) {
             warData.field = {
                 fogMap  : {
-                    forceFogCode: Types.ForceFogCode.None,
+                    forceFogCode: Twns.Types.ForceFogCode.None,
                 },
             };
         }
@@ -204,7 +204,7 @@ namespace Twns.SinglePlayerMode.SpmModel {
         if (warData.turnManager == null) {
             warData.turnManager = {
                 turnIndex       : CommonConstants.WarFirstTurnIndex,
-                turnPhaseCode   : Types.TurnPhaseCode.WaitBeginTurn,
+                turnPhaseCode   : Twns.Types.TurnPhaseCode.WaitBeginTurn,
                 playerIndex     : CommonConstants.WarNeutralPlayerIndex,
                 enterTurnTime   : 0,
             };
@@ -219,17 +219,17 @@ namespace Twns.SinglePlayerMode.SpmModel {
         for (const playerData of warData.playerManager?.players ?? []) {
             playerData.fund                 ??= 0;
             playerData.hasVotedForDraw      ??= false;
-            playerData.aliveState           ??= Types.PlayerAliveState.Alive;
+            playerData.aliveState           ??= Twns.Types.PlayerAliveState.Alive;
             playerData.restTimeToBoot       ??= 0;
             playerData.coIsDestroyedInTurn  ??= false;
-            playerData.coUsingSkillType     ??= Types.CoSkillType.Passive;
+            playerData.coUsingSkillType     ??= Twns.Types.CoSkillType.Passive;
         }
 
         return warData;
     }
 
     export async function updateOnMsgSpmGetReplayData(data: MsgSpmGetReplayDataIs): Promise<void> {
-        _replayDataAccessor.setData(Helpers.getExisted(data.rankId), await decodeAndReviseReplayData(data.encodedWar));
+        _replayDataAccessor.setData(Twns.Helpers.getExisted(data.rankId), await decodeAndReviseReplayData(data.encodedWar));
     }
 }
 

@@ -5,15 +5,15 @@
 // import TwnsLangTextType from "../lang/LangTextType";
 // import NetManager       from "../network/NetManager";
 // import Notify           from "../notify/Notify";
-// import Twns.Notify   from "../notify/NotifyType";
+// import Notify   from "../notify/NotifyType";
 // import ProtoTypes       from "../proto/ProtoTypes";
 // import FloatText        from "./FloatText";
 // import Helpers          from "./Helpers";
 // import LocalStorage     from "./LocalStorage";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace Timer {
-    import NotifyType       = Twns.Notify.NotifyType;
+namespace Twns.Timer {
+    import NotifyType       = Notify.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
     const TILE_ANIMATION_INTERVAL_MS        = 200;
@@ -35,7 +35,7 @@ namespace Timer {
     let _gridAnimationTickCount         = 0;
 
     export function init(): void {
-        Twns.Notify.addEventListeners([
+        Notify.addEventListeners([
             { type: NotifyType.NetworkConnected,       callback: _onNotifyNetworkConnected, },
             { type: NotifyType.NetworkDisconnected,    callback: _onNotifyNetworkDisconnected, },
             { type: NotifyType.MsgCommonHeartbeat,     callback: _onMsgCommonHeartbeat, },
@@ -43,7 +43,7 @@ namespace Timer {
 
         egret.setInterval(() => {
             (_serverTimestamp) && (++_serverTimestamp);
-            Twns.Notify.dispatch(NotifyType.TimeTick);
+            Notify.dispatch(NotifyType.TimeTick);
         }, null, 1000);
 
         if (LocalStorage.getShowTileAnimation()) {
@@ -55,12 +55,12 @@ namespace Timer {
 
         egret.setInterval(() => {
             ++_gridAnimationTickCount;
-            Twns.Notify.dispatch(NotifyType.GridAnimationTick);
+            Notify.dispatch(NotifyType.GridAnimationTick);
         }, null, GRID_ANIMATION_INTERVAL_MS);
 
         egret.setInterval(() => {
             ++_unitStateIndicatorTickCount;
-            Twns.Notify.dispatch(NotifyType.UnitStateIndicatorTick);
+            Notify.dispatch(NotifyType.UnitStateIndicatorTick);
         }, null, UNIT_STATE_INDICATOR_INTERVAL_MS);
     }
 
@@ -73,8 +73,8 @@ namespace Timer {
 
         _intervalIdForTileAnimation = egret.setInterval(() => {
             ++_tileAnimationTickCount;
-            Twns.Common.CommonModel.tickTileImageSources();
-            Twns.Notify.dispatch(NotifyType.TileAnimationTick);
+            Common.CommonModel.tickTileImageSources();
+            Notify.dispatch(NotifyType.TileAnimationTick);
         }, null, TILE_ANIMATION_INTERVAL_MS);
     }
     export function stopTileAnimationTick(): void {
@@ -95,8 +95,8 @@ namespace Timer {
 
         _intervalIdForUnitAnimation = egret.setInterval(() => {
             ++_unitAnimationTickCount;
-            Twns.Common.CommonModel.tickUnitImageSources();
-            Twns.Notify.dispatch(NotifyType.UnitAnimationTick);
+            Common.CommonModel.tickUnitImageSources();
+            Notify.dispatch(NotifyType.UnitAnimationTick);
         }, null, UNIT_ANIMATION_INTERVAL_MS);
     }
     export function stopUnitAnimationTick(): void {
@@ -147,14 +147,14 @@ namespace Timer {
 
     function heartbeat(): void {
         if (!_isHeartbeatAnswered) {
-            if (!NetManager.checkCanAutoReconnect()) {
+            if (!Net.NetManager.checkCanAutoReconnect()) {
                 FloatText.show(Lang.getText(LangTextType.A0013));
             } else {
                 FloatText.show(Lang.getText(LangTextType.A0008));
-                NetManager.init();
+                Net.NetManager.init();
             }
         }
-        Twns.Common.CommonProxy.reqCommonHeartbeat(_heartbeatCounter);
+        Common.CommonProxy.reqCommonHeartbeat(_heartbeatCounter);
     }
 }
 

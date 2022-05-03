@@ -30,7 +30,7 @@ namespace Twns.BaseWar {
         protected _onOpening(): void {
             this._setIsTouchMaskEnabled();
             this._setCallbackOnTouchedMask(() => {
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
                 this._clearTimeoutForClose();
                 this.close();
             });
@@ -72,7 +72,7 @@ namespace Twns.BaseWar {
             egret.Tween.get(this)
                 .to({ alpha: 1 }, 150);
 
-            await Helpers.wait(250);
+            await Twns.Helpers.wait(250);
 
             this._resetTimeoutForClose();
         }
@@ -80,7 +80,7 @@ namespace Twns.BaseWar {
             egret.Tween.get(this)
                 .to({ alpha: 0 }, 150);
 
-            await Helpers.wait(250);
+            await Twns.Helpers.wait(250);
         }
     }
 }

@@ -80,7 +80,7 @@ namespace Twns.WarEvent {
                     war,
                     eventId,
                     srcActionId,
-                    candidateActionId: Helpers.getExisted(action.WeaCommonData?.actionId),
+                    candidateActionId: Twns.Helpers.getExisted(action.WeaCommonData?.actionId),
                     fullData,
                 });
             }
@@ -131,7 +131,7 @@ namespace Twns.WarEvent {
                 actionIdForClone    : data.candidateActionId,
             }) != null) {
                 Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionReplacePanel);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionReplacePanel);
             }
         }
         private _onTouchedBtnSelect(): void {        // DONE
@@ -143,7 +143,7 @@ namespace Twns.WarEvent {
                 newActionId : data.candidateActionId,
             })) {
                 Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionReplacePanel);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionReplacePanel);
             }
         }
         private _onNotifyLanguageChanged(): void {        // DONE

@@ -10,10 +10,10 @@
 namespace Twns.MultiFreeRoom.MfrProxy {
     import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import NetMessageCodes  = Twns.Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Twns.Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgMfrCreateRoom,                callback: _onMsgMfrCreateRoom },
             { msgCode: NetMessageCodes.MsgMfrJoinRoom,                  callback: _onMsgMfrJoinRoom },
             { msgCode: NetMessageCodes.MsgMfrDeleteRoom,                callback: _onMsgMfrDeleteRoom },
@@ -28,7 +28,7 @@ namespace Twns.MultiFreeRoom.MfrProxy {
     }
 
     export function reqCreateRoom(param: CommonProto.NetMessage.MsgMfrCreateRoom.IC): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMfrCreateRoom: { c: param },
         });
     }
@@ -40,7 +40,7 @@ namespace Twns.MultiFreeRoom.MfrProxy {
     }
 
     export function reqMfrJoinRoom(param: CommonProto.NetMessage.MsgMfrJoinRoom.IC): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMfrJoinRoom: { c: param },
         });
     }
@@ -52,7 +52,7 @@ namespace Twns.MultiFreeRoom.MfrProxy {
     }
 
     export function reqMfrDeleteRoom(roomId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMfrDeleteRoom: { c: {
                 roomId,
             } },
@@ -66,7 +66,7 @@ namespace Twns.MultiFreeRoom.MfrProxy {
     }
 
     export function reqMfrExitRoom(roomId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMfrExitRoom: { c: {
                 roomId,
             }, },
@@ -80,7 +80,7 @@ namespace Twns.MultiFreeRoom.MfrProxy {
     }
 
     export function reqMfrDeletePlayer(roomId: number, playerIndex: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMfrDeletePlayer: { c: {
                 roomId,
                 playerIndex,
@@ -95,7 +95,7 @@ namespace Twns.MultiFreeRoom.MfrProxy {
     }
 
     export function reqMfrSetReady(roomId: number, isReady: boolean): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMfrSetReady: { c: {
                 roomId,
                 isReady,
@@ -110,7 +110,7 @@ namespace Twns.MultiFreeRoom.MfrProxy {
     }
 
     export function reqMfrSetSelfSettings(data: NetMessage.MsgMfrSetSelfSettings.IC): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMfrSetSelfSettings: { c: data },
         });
     }
@@ -122,7 +122,7 @@ namespace Twns.MultiFreeRoom.MfrProxy {
     }
 
     export function reqMfrGetRoomStaticInfo(roomId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMfrGetRoomStaticInfo: { c: {
                 roomId,
             }, },
@@ -131,13 +131,13 @@ namespace Twns.MultiFreeRoom.MfrProxy {
     function _onMsgMfrGetRoomStaticInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMfrGetRoomStaticInfo.IS;
         if (!data.errorCode) {
-            MfrModel.setRoomStaticInfo(Helpers.getExisted(data.roomId), data.roomStaticInfo ?? null);
+            MfrModel.setRoomStaticInfo(Twns.Helpers.getExisted(data.roomId), data.roomStaticInfo ?? null);
             Twns.Notify.dispatch(NotifyType.MsgMfrGetRoomStaticInfo, data);
         }
     }
 
     export function reqMfrGetRoomPlayerInfo(roomId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMfrGetRoomPlayerInfo: { c: {
                 roomId,
             }, },
@@ -146,13 +146,13 @@ namespace Twns.MultiFreeRoom.MfrProxy {
     function _onMsgMfrGetRoomPlayerInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMfrGetRoomPlayerInfo.IS;
         if (!data.errorCode) {
-            MfrModel.setRoomPlayerInfo(Helpers.getExisted(data.roomId), data.roomPlayerInfo ?? null);
+            MfrModel.setRoomPlayerInfo(Twns.Helpers.getExisted(data.roomId), data.roomPlayerInfo ?? null);
             Twns.Notify.dispatch(NotifyType.MsgMfrGetRoomPlayerInfo, data);
         }
     }
 
     export function reqMfrStartWar(roomId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMfrStartWar: { c: {
                 roomId,
             }, },

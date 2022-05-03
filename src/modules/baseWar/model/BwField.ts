@@ -31,17 +31,17 @@ namespace Twns.BaseWar {
         public abstract getActionPlanner(): BaseWar.BwActionPlanner;
 
         public init({ data, gameConfig, playersCountUnneutral }: {
-            data                    : Types.Undefinable<ISerialField>;
+            data                    : Twns.Types.Undefinable<ISerialField>;
             gameConfig              : GameConfig;
             playersCountUnneutral   : number;
         }): void {
             if (data == null) {
-                throw Helpers.newError(`Empty data.`, ClientErrorCode.BwField_Init_00);
+                throw Twns.Helpers.newError(`Empty data.`, ClientErrorCode.BwField_Init_00);
             }
 
             const mapSize = WarHelpers.WarCommonHelpers.getMapSize(data.tileMap);
             if (!WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
-                throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwField_Init_01);
+                throw Twns.Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwField_Init_01);
             }
 
             this.getFogMap().init({
@@ -72,7 +72,7 @@ namespace Twns.BaseWar {
                     const gridIndex = { x, y };
                     const tile      = tileMap.getTile(gridIndex);
                     if ((tile.getMaxHp() != null) && (unitMap.getUnitOnMap(gridIndex))) {
-                        throw Helpers.newError(`There is a unit on an attackable tile.`, ClientErrorCode.BwField_Init_02);
+                        throw Twns.Helpers.newError(`There is a unit on an attackable tile.`, ClientErrorCode.BwField_Init_02);
                     }
                 }
             }

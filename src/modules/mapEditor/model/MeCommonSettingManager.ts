@@ -18,19 +18,19 @@ namespace Twns.MapEditor {
         // 在地图编辑器里，玩家数量固定为最大值（为了方便处理某些编辑逻辑），因此warRule实际上是不正确的，因此要重写init函数，去除父类中对warRule的合法性检查，否则地图会无法加载
         public init({ settings, warType, mapSize, gameConfig, playersCountUnneutral }: {
             settings                : ISettingsForCommon;
-            warType                 : Types.WarType;
-            mapSize                 : Types.MapSize;
+            warType                 : Twns.Types.WarType;
+            mapSize                 : Twns.Types.MapSize;
             gameConfig              : GameConfig;
             playersCountUnneutral   : number;
         }): void {
             const configVersion = settings.configVersion;
             if ((configVersion == null) || (configVersion !== gameConfig.getVersion())) {
-                throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.MeCommonSettingManager_Init_00);
+                throw Twns.Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.MeCommonSettingManager_Init_00);
             }
 
             const instanceWarRule = settings.instanceWarRule;
             if (instanceWarRule == null) {
-                throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.MeCommonSettingManager_Init_00);
+                throw Twns.Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.MeCommonSettingManager_Init_00);
             }
 
             instanceWarRule.warEventFullData = getRevisedWarEventFullData(instanceWarRule.warEventFullData);
@@ -48,9 +48,9 @@ namespace Twns.MapEditor {
         }
     }
 
-    function getRevisedWarEventFullData(rawData: Types.Undefinable<IWarEventFullData>): IWarEventFullData {
+    function getRevisedWarEventFullData(rawData: Twns.Types.Undefinable<IWarEventFullData>): IWarEventFullData {
         const data = rawData
-            ? Helpers.deepClone(rawData)
+            ? Twns.Helpers.deepClone(rawData)
             : {
                 actionArray         : [],
                 conditionArray      : [],

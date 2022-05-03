@@ -51,9 +51,9 @@ namespace Twns.SinglePlayerWar.SpwModel {
             unloadWar();
         }
 
-        const data  = Helpers.deepClone(warData);
+        const data  = Twns.Helpers.deepClone(warData);
         const war   = createWarByWarData(data);
-        war.init(data, await Config.ConfigManager.getGameConfig(Helpers.getExisted(data.settingsForCommon?.configVersion)));
+        war.init(data, await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(data.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         war.setSaveSlotIndex(slotIndex);
         war.setSaveSlotExtraData(slotExtraData);
@@ -125,13 +125,13 @@ namespace Twns.SinglePlayerWar.SpwModel {
 
     async function handlePlayerOrRobotAction(war: BwWar, action: IWarActionContainer): Promise<void> {
         if (war.getIsEnded()) {
-            throw Helpers.newError(`war.getIsEnded() is true.`, ClientErrorCode.SpwModel_HandlePlayerOrRobotAction_00);
+            throw Twns.Helpers.newError(`war.getIsEnded() is true.`, ClientErrorCode.SpwModel_HandlePlayerOrRobotAction_00);
         }
         if (war.getIsExecutingAction()) {
-            throw Helpers.newError(`war.getIsExecutingAction() is true.`, ClientErrorCode.SpwModel_HandlePlayerOrRobotAction_01);
+            throw Twns.Helpers.newError(`war.getIsExecutingAction() is true.`, ClientErrorCode.SpwModel_HandlePlayerOrRobotAction_01);
         }
         if (!war.getIsRunning()) {
-            throw Helpers.newError(`war.getIsRunning() is false.`, ClientErrorCode.SpwModel_HandlePlayerOrRobotAction_02);
+            throw Twns.Helpers.newError(`war.getIsRunning() is false.`, ClientErrorCode.SpwModel_HandlePlayerOrRobotAction_02);
         }
 
         await reviseAndExecute(war, action);
@@ -143,9 +143,9 @@ namespace Twns.SinglePlayerWar.SpwModel {
         }
         // TODO: show panels for srw.
 
-        const callback = () => FlowManager.gotoLobby();
+        const callback = () => Twns.FlowManager.gotoLobby();
         if (war.getDrawVoteManager().checkIsDraw()) {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
                 title   : Lang.getText(LangTextType.B0088),
                 content : Lang.getText(LangTextType.A0030),
                 callback,
@@ -153,27 +153,27 @@ namespace Twns.SinglePlayerWar.SpwModel {
         } else {
             const humanPlayerArray = (war.getPlayerManager() as SpwPlayerManager).getHumanPlayers();
             if (humanPlayerArray.length <= 0) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0035),
                     callback,
                 });
             } else {
-                if (humanPlayerArray.every(v => v.getAliveState() === Types.PlayerAliveState.Dead)) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                if (humanPlayerArray.every(v => v.getAliveState() === Twns.Types.PlayerAliveState.Dead)) {
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0023),
                         callback,
                     });
                 } else {
                     if (war instanceof SrwWar) {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
                             title   : Lang.getText(LangTextType.B0088),
                             content : Lang.getFormattedText(LangTextType.F0127, war.calculateTotalScore()),
                             callback: () => {
                                 callback();
 
-                                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                                     content : Lang.getText(LangTextType.A0277),
                                     callback: () => {
                                         Twns.SinglePlayerMode.SpmProxy.reqSpmValidateSrw(war);
@@ -182,7 +182,7 @@ namespace Twns.SinglePlayerWar.SpwModel {
                             },
                         });
                     } else {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
                             title   : Lang.getText(LangTextType.B0088),
                             content : Lang.getText(LangTextType.A0022),
                             callback,
@@ -218,7 +218,7 @@ namespace Twns.SinglePlayerWar.SpwModel {
         // Handle the WaitBeginTurn phase.
         const turnPhaseCode = war.getTurnPhaseCode();
         const playerManager = war.getPlayerManager();
-        if (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn) {
+        if (turnPhaseCode === Twns.Types.TurnPhaseCode.WaitBeginTurn) {
             await handleSystemBeginTurn(war);
             await checkAndHandleSystemActions(war);
             return true;
@@ -228,7 +228,7 @@ namespace Twns.SinglePlayerWar.SpwModel {
         const playersCount = playerManager.getTotalPlayersCount(false);
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
             const player = playerManager.getPlayer(playerIndex);
-            if (player.getAliveState() === Types.PlayerAliveState.Dying) {
+            if (player.getAliveState() === Twns.Types.PlayerAliveState.Dying) {
                 await handleSystemDestroyPlayerForce(war, playerIndex);
                 await checkAndHandleSystemActions(war);
                 return true;
@@ -253,8 +253,8 @@ namespace Twns.SinglePlayerWar.SpwModel {
         // Handle the booted players (make them dying or end turn).
         const remainingVotesForDraw = war.getDrawVoteManager().getRemainingVotes();
         if (war.checkIsBoot()) {
-            if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_00);
+            if (turnPhaseCode !== Twns.Types.TurnPhaseCode.Main) {
+                throw Twns.Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_00);
             }
 
             if (!playerInTurn.getHasTakenManualAction()) {
@@ -277,7 +277,7 @@ namespace Twns.SinglePlayerWar.SpwModel {
         // Handle system vote for draw.
         if ((remainingVotesForDraw)                                                                             &&
             (!hasVotedForDraw)                                                                                  &&
-            ((playerInTurn.checkIsNeutral()) || (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead))
+            ((playerInTurn.checkIsNeutral()) || (playerInTurn.getAliveState() === Twns.Types.PlayerAliveState.Dead))
         ) {
             await handleSystemVoteForDraw(war, true);
             await checkAndHandleSystemActions(war);
@@ -286,10 +286,10 @@ namespace Twns.SinglePlayerWar.SpwModel {
 
         // Handle system end turn.
         if ((playerInTurn.checkIsNeutral())                                 ||
-            (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead)
+            (playerInTurn.getAliveState() === Twns.Types.PlayerAliveState.Dead)
         ) {
-            if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_01);
+            if (turnPhaseCode !== Twns.Types.TurnPhaseCode.Main) {
+                throw Twns.Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_01);
             }
 
             await handleSystemEndTurn(war);
@@ -368,7 +368,7 @@ namespace Twns.SinglePlayerWar.SpwModel {
         } else if (warData.settingsForSrw) {
             return new SrwWar();
         } else {
-            throw Helpers.newError(`Invalid warData.`, ClientErrorCode.SpwModel_CreateWarByWarData_00);
+            throw Twns.Helpers.newError(`Invalid warData.`, ClientErrorCode.SpwModel_CreateWarByWarData_00);
         }
     }
 }

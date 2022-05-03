@@ -59,12 +59,12 @@ namespace Twns.ChangeLog {
             const chineseText   = this._inputChinese.text || ``;
             const englishText   = this._inputEnglish.text || ``;
             const textList      : ILanguageText[] = [
-                { languageType: Types.LanguageType.Chinese, text: chineseText || englishText },
-                { languageType: Types.LanguageType.English, text: englishText || chineseText },
+                { languageType: Twns.Types.LanguageType.Chinese, text: chineseText || englishText },
+                { languageType: Twns.Types.LanguageType.English, text: englishText || chineseText },
             ];
-            if (textList.every(v => Helpers.getExisted(v.text).length <= 0)) {
+            if (textList.every(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
                 FloatText.show(Lang.getText(LangTextType.A0155));
-            } else if (textList.some(v => Helpers.getExisted(v.text).length > CommonConstants.ChangeLogTextMaxLength)) {
+            } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > CommonConstants.ChangeLogTextMaxLength)) {
                 FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.ChangeLogTextMaxLength));
             } else {
                 Twns.ChangeLog.ChangeLogProxy.reqChangeLogAddMessage(textList);

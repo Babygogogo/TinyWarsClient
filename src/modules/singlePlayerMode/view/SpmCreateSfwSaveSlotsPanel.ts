@@ -63,7 +63,7 @@ namespace Twns.SinglePlayerMode {
         }
 
         private _onTouchedBtnHelp(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0325),
                 content : Lang.getText(LangTextType.R0006),
             });
@@ -106,7 +106,7 @@ namespace Twns.SinglePlayerMode {
 
     type DataForSlotRenderer = {
         slotIndex   : number;
-        slotInfo    : Types.SpmWarSaveSlotData | null;
+        slotInfo    : Twns.Types.SpmWarSaveSlotData | null;
         warData     : ISerialWar;
     };
     class SlotRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSlotRenderer> {
@@ -133,7 +133,7 @@ namespace Twns.SinglePlayerMode {
         private _onTouchedImgBg(): void {
             const data      = this._getData();
             const callback  = () => {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
                     title       : Lang.getText(LangTextType.B0088),
                     maxChars    : CommonConstants.SpmSaveSlotCommentMaxLength,
                     currentValue: ``,
@@ -145,14 +145,14 @@ namespace Twns.SinglePlayerMode {
                             slotExtraData   : { slotComment: panel.getInputText() },
                             warData         : data.warData,
                         });
-                        TwnsPanelManager.close(TwnsPanelConfig.Dict.SpmCreateSfwSaveSlotsPanel);
+                        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.SpmCreateSfwSaveSlotsPanel);
                     }
                 });
             };
             if (!data.slotInfo) {
                 callback();
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0070),
                     callback,
                 });

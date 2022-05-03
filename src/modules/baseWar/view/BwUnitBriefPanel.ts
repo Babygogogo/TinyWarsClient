@@ -84,8 +84,8 @@ namespace Twns.BaseWar {
         }
         private _onNotifyBwActionPlannerStateSet(): void {
             const planner = this._getOpenData().war.getActionPlanner();
-            if ((planner.getPreviousState() === Types.ActionPlannerState.ExecutingAction) &&
-                (planner.getState() !== Types.ActionPlannerState.ExecutingAction)
+            if ((planner.getPreviousState() === Twns.Types.ActionPlannerState.ExecutingAction) &&
+                (planner.getState() !== Twns.Types.ActionPlannerState.ExecutingAction)
             ) {
                 this._updateView();
             }
@@ -123,10 +123,10 @@ namespace Twns.BaseWar {
         }
 
         private _onCellTouchTap(e: egret.TouchEvent): void {
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
             for (let i = 0; i < this._cellList.length; ++i) {
                 if (this._cellList[i] === e.currentTarget) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitDetailPanel, {
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwUnitDetailPanel, {
                         unit        : this._unitList[i],
                         canDelete   : this._getOpenData().war.getCanCheat(),
                     });
@@ -240,24 +240,24 @@ namespace Twns.BaseWar {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, bottom: -40 },
                 endProps    : { alpha: 1, bottom: 0 },
                 tweenTime   : 50,
             });
 
-            await Helpers.wait(50);
+            await Twns.Helpers.wait(50);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, bottom: 0 },
                 endProps    : { alpha: 0, bottom: -40 },
                 tweenTime   : 50,
             });
 
-            await Helpers.wait(50);
+            await Twns.Helpers.wait(50);
         }
     }
 
@@ -321,7 +321,7 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             if (this._isChildrenCreated) {
-                const unit = Helpers.getExisted(this._unit);
+                const unit = Twns.Helpers.getExisted(this._unit);
                 this._unitView.init(unit).startRunningView();
                 this._labelHp.text      = `${unit.getCurrentHp()}`;
                 this._labelFuel.text    = `${unit.getCurrentFuel()}`;

@@ -12,7 +12,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.CoopCustomRoom.CcrCreateModel {
     import NotifyType               = Twns.Notify.NotifyType;
-    import BootTimerType            = Types.BootTimerType;
+    import BootTimerType            = Twns.Types.BootTimerType;
     import GameConfig               = Config.GameConfig;
 
     export type DataForCreateRoom   = CommonProto.NetMessage.MsgCcrCreateRoom.IC;
@@ -41,12 +41,12 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
     let _gameConfig: GameConfig | null = null;
 
     export async function getMapRawData(): Promise<CommonProto.Map.IMapRawData> {
-        return Helpers.getExisted(await WarMap.WarMapModel.getRawData(getMapId()));
+        return Twns.Helpers.getExisted(await WarMap.WarMapModel.getRawData(getMapId()));
     }
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
         setMapId(mapId);
-        setConfigVersion(Helpers.getExisted(Config.ConfigManager.getLatestConfigVersion()));
+        setConfigVersion(Twns.Helpers.getExisted(Config.ConfigManager.getLatestConfigVersion()));
         setGameConfig(await Config.ConfigManager.getLatestGameConfig());
         setWarName("");
         setWarPassword("");
@@ -54,23 +54,23 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
         setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
         setTurnsLimit(CommonConstants.WarMaxTurnsLimit);
         setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
-        await resetDataByTemplateWarRuleId(Helpers.getExisted((await getMapRawData()).templateWarRuleArray?.find(v => v.ruleAvailability?.canCcw)?.ruleId));
+        await resetDataByTemplateWarRuleId(Twns.Helpers.getExisted((await getMapRawData()).templateWarRuleArray?.find(v => v.ruleAvailability?.canCcw)?.ruleId));
     }
     export function getData(): DataForCreateRoom {
         return _dataForCreateRoom;
     }
     export function getSettingsForCommon(): CommonProto.WarSettings.ISettingsForCommon {
-        return Helpers.getExisted(getData().settingsForCommon);
+        return Twns.Helpers.getExisted(getData().settingsForCommon);
     }
     function getSettingsForCcw(): CommonProto.WarSettings.ISettingsForCcw {
-        return Helpers.getExisted(getData().settingsForCcw);
+        return Twns.Helpers.getExisted(getData().settingsForCcw);
     }
     export function getInstanceWarRule(): CommonProto.WarRule.IInstanceWarRule {
-        return Helpers.getExisted(getSettingsForCommon().instanceWarRule);
+        return Twns.Helpers.getExisted(getSettingsForCommon().instanceWarRule);
     }
 
     export function getMapId(): number {
-        return Helpers.getExisted(getSettingsForCcw().mapId);
+        return Twns.Helpers.getExisted(getSettingsForCcw().mapId);
     }
     function setMapId(mapId: number): void {
         getSettingsForCcw().mapId = mapId;
@@ -83,16 +83,16 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
         _gameConfig = config;
     }
     export function getGameConfig(): GameConfig {
-        return Helpers.getExisted(_gameConfig);
+        return Twns.Helpers.getExisted(_gameConfig);
     }
 
     export async function resetDataByTemplateWarRuleId(templateWarRuleId: number): Promise<void> {
         const mapRawData            = await getMapRawData();
-        const templateWarRule       = Helpers.getExisted(mapRawData.templateWarRuleArray?.find(r => r.ruleId === templateWarRuleId));
+        const templateWarRule       = Twns.Helpers.getExisted(mapRawData.templateWarRuleArray?.find(r => r.ruleId === templateWarRuleId));
         const humanPlayerIndexArray : number[] = [];
         const aiPlayerIndexArray    : number[] = [];
-        for (const playerRule of Helpers.getExisted(templateWarRule.ruleForPlayers?.playerRuleDataArray)) {
-            const playerIndex = Helpers.getExisted(playerRule.playerIndex);
+        for (const playerRule of Twns.Helpers.getExisted(templateWarRule.ruleForPlayers?.playerRuleDataArray)) {
+            const playerIndex = Twns.Helpers.getExisted(playerRule.playerIndex);
             if (playerRule.fixedCoIdInCcw == null) {
                 humanPlayerIndexArray.push(playerIndex);
             } else {
@@ -132,11 +132,11 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
     }
     export async function tickTemplateWarRuleId(): Promise<void> {
         const currTemplateWarRuleId = getTemplateWarRuleId();
-        const templateWarRuleArray  = Helpers.getExisted((await getMapRawData()).templateWarRuleArray);
+        const templateWarRuleArray  = Twns.Helpers.getExisted((await getMapRawData()).templateWarRuleArray);
         if (currTemplateWarRuleId == null) {
-            await resetDataByTemplateWarRuleId(Helpers.getExisted(templateWarRuleArray.find(v => v.ruleAvailability?.canCcw)?.ruleId));
+            await resetDataByTemplateWarRuleId(Twns.Helpers.getExisted(templateWarRuleArray.find(v => v.ruleAvailability?.canCcw)?.ruleId));
         } else {
-            const newTemplateWarRuleId = Helpers.getNonNullElements(templateWarRuleArray.filter(v => v.ruleAvailability?.canCcw).map(v => v.ruleId)).sort((v1, v2) => {
+            const newTemplateWarRuleId = Twns.Helpers.getNonNullElements(templateWarRuleArray.filter(v => v.ruleAvailability?.canCcw).map(v => v.ruleId)).sort((v1, v2) => {
                 if (v1 > currTemplateWarRuleId) {
                     return (v2 <= currTemplateWarRuleId) ? -1 : v1 - v2;
                 } else {
@@ -148,7 +148,7 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
     }
 
     export function getTurnsLimit(): number {
-        return Helpers.getExisted(getSettingsForCommon().turnsLimit);
+        return Twns.Helpers.getExisted(getSettingsForCommon().turnsLimit);
     }
     export function setTurnsLimit(turnsLimit: number): void {
         getSettingsForCommon().turnsLimit = turnsLimit;
@@ -185,7 +185,7 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
     //     setSelfPlayerIndex(getSelfPlayerIndex() % BwWarRuleHelper.getPlayersCount(getWarRule()) + 1);
     // }
     export function getSelfPlayerIndex(): number {
-        return Helpers.getExisted(getData().selfPlayerIndex);
+        return Twns.Helpers.getExisted(getData().selfPlayerIndex);
     }
 
     export function setSelfCoId(coId: number): void {
@@ -195,7 +195,7 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
         }
     }
     export function getSelfCoId(): number {
-        return Helpers.getExisted(getData().selfCoId);
+        return Twns.Helpers.getExisted(getData().selfCoId);
     }
 
     export function setSelfUnitAndTileSkinId(skinId: number): void {
@@ -205,7 +205,7 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
         }
     }
     export function getSelfUnitAndTileSkinId(): number {
-        return Helpers.getExisted(getData().selfUnitAndTileSkinId);
+        return Twns.Helpers.getExisted(getData().selfUnitAndTileSkinId);
     }
     export function tickUnitAndTileSkinId(playerIndex: number): void {
         if (playerIndex === getSelfPlayerIndex()) {
@@ -226,10 +226,10 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
         }
     }
     function getAiSkinInfoArray(): CommonProto.NetMessage.MsgCcrCreateRoom.IAiSkinInfo[] {
-        return Helpers.getExisted(getData().aiSkinInfoArray);
+        return Twns.Helpers.getExisted(getData().aiSkinInfoArray);
     }
     export function getAiSkinId(playerIndex: number): number {
-        return Helpers.getExisted(getAiSkinInfoArray().find(v => v.playerIndex === playerIndex)?.unitAndTileSkinId);
+        return Twns.Helpers.getExisted(getAiSkinInfoArray().find(v => v.playerIndex === playerIndex)?.unitAndTileSkinId);
     }
     export function setAiSkinId(playerIndex: number, skinId: number): void {
         const infoArray = getAiSkinInfoArray();
@@ -258,10 +258,10 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
     }
 
     export function setHasFog(hasFog: boolean): void {
-        Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
+        Twns.Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
     }
     export function getHasFog(): boolean {
-        return Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault);
+        return Twns.Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault);
     }
 
     export function tickDefaultWeatherType(): void {
@@ -272,7 +272,7 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
         getSettingsForCcw().bootTimerParams = params;
     }
     export function getBootTimerParams(): number[] {
-        return Helpers.getExisted(getSettingsForCcw().bootTimerParams);
+        return Twns.Helpers.getExisted(getSettingsForCcw().bootTimerParams);
     }
     export function tickBootTimerType(): void {
         const params = getBootTimerParams();

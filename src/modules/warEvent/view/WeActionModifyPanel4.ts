@@ -74,7 +74,7 @@ namespace Twns.WarEvent {
         }
 
         private _onTouchedGroupNeedFocus(): void {
-            const action            = Helpers.getExisted(this._getOpenData().action.WeaSetViewpoint);
+            const action            = Twns.Helpers.getExisted(this._getOpenData().action.WeaSetViewpoint);
             action.needFocusEffect  = !action.needFocusEffect;
 
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
@@ -82,7 +82,7 @@ namespace Twns.WarEvent {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -91,7 +91,7 @@ namespace Twns.WarEvent {
 
         private _onFocusOutInputGridX(): void {
             const data      = this._getOpenData();
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.action.WeaSetViewpoint?.gridIndex));
+            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.action.WeaSetViewpoint?.gridIndex));
             const newGridX  = Math.max(0, Math.min(parseInt(this._inputGridX.text) || 0, data.war.getTileMap().getMapSize().width - 1));
             if (newGridX !== gridIndex.x) {
                 gridIndex.x = newGridX;
@@ -100,7 +100,7 @@ namespace Twns.WarEvent {
         }
         private _onFocusOutInputGridY(): void {
             const data      = this._getOpenData();
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.action.WeaSetViewpoint?.gridIndex));
+            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.action.WeaSetViewpoint?.gridIndex));
             const newGridY  = Math.max(0, Math.min(parseInt(this._inputGridY.text) || 0, data.war.getTileMap().getMapSize().height - 1));
             if (newGridY !== gridIndex.y) {
                 gridIndex.y = newGridY;
@@ -136,7 +136,7 @@ namespace Twns.WarEvent {
         private _updateComponentsForGridIndex(): void {
             const inputX    = this._inputGridX;
             const inputY    = this._inputGridY;
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(this._getOpenData().action.WeaSetViewpoint?.gridIndex));
+            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(this._getOpenData().action.WeaSetViewpoint?.gridIndex));
             inputX.text     = `${gridIndex.x}`;
             inputY.text     = `${gridIndex.y}`;
         }

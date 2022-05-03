@@ -78,8 +78,8 @@ namespace Twns.MapManagement {
             const openData          = this._getOpenData();
             const mapId             = openData.mapId;
             const ruleId            = openData.ruleId;
-            const mapRawData        = Helpers.getExisted(await WarMap.WarMapModel.getRawData(mapId));
-            const templateWarRule   = Helpers.getExisted(Helpers.deepClone(mapRawData.templateWarRuleArray?.find(v => v.ruleId === ruleId)));
+            const mapRawData        = Twns.Helpers.getExisted(await WarMap.WarMapModel.getRawData(mapId));
+            const templateWarRule   = Twns.Helpers.getExisted(Twns.Helpers.deepClone(mapRawData.templateWarRuleArray?.find(v => v.ruleId === ruleId)));
             const availability      : CommonProto.WarRule.IRuleAvailability = {
                 canMcw  : this._imgMcw.visible,
                 canCcw  : this._imgCcw.visible,
@@ -90,9 +90,9 @@ namespace Twns.MapManagement {
             templateWarRule.ruleAvailability    = availability;
             const errorCode                     = WarHelpers.WarRuleHelpers.getErrorCodeForTemplateWarRule({
                 templateWarRule,
-                playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),
+                playersCountUnneutral   : Twns.Helpers.getExisted(mapRawData.playersCountUnneutral),
                 gameConfig              : await Config.ConfigManager.getLatestGameConfig(),
-                allWarEventIdArray      : Helpers.getNonNullElements(mapRawData.warEventFullData?.eventArray?.map(v => v.eventId) ?? []),
+                allWarEventIdArray      : Twns.Helpers.getNonNullElements(mapRawData.warEventFullData?.eventArray?.map(v => v.eventId) ?? []),
             });
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));

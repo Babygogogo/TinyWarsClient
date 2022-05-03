@@ -88,7 +88,7 @@ namespace Twns.WatchWar {
 
         public async setAndReviseSelectedWarId(warId: number, needScroll: boolean): Promise<void> {
             const listMap   = this._listWar;
-            const index     = Helpers.getExisted(listMap.getRandomIndex(v => v.warId === warId));
+            const index     = Twns.Helpers.getExisted(listMap.getRandomIndex(v => v.warId === warId));
             listMap.setSelectedIndex(index);
             this._updateComponentsForTargetWarInfo();
 
@@ -114,25 +114,25 @@ namespace Twns.WatchWar {
         }
 
         private _onNotifyMsgMpwWatchContinueWar(e: egret.Event): void {
-            FlowManager.gotoMultiPlayerWar(Helpers.getExisted((e.data as CommonProto.NetMessage.MsgMpwWatchContinueWar.IS).war, ClientErrorCode.WwOngoingWarsPanel_OnNotifyMsgMpwWatchContinueWar_00));
+            Twns.FlowManager.gotoMultiPlayerWar(Twns.Helpers.getExisted((e.data as CommonProto.NetMessage.MsgMpwWatchContinueWar.IS).war, ClientErrorCode.WwOngoingWarsPanel_OnNotifyMsgMpwWatchContinueWar_00));
         }
 
         private _onNotifyMsgMpwWatchContinueWarFailed(): void {
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBlockPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonBlockPanel);
             Twns.WatchWar.WwProxy.reqMpwWatchGetOngoingWarIdArray();
         }
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WwMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WwMainMenuPanel, void 0);
         }
 
         private _onTouchedBtnNextStep(): void {
             const data = this._listWar.getSelectedData();
             if (data) {
-                Twns.WatchWar.WwProxy.reqWatchContinueWar(Helpers.getExisted(data.warId, ClientErrorCode.WwOngoingWarsPanel_OnTouchedBtnNextStep_00));
+                Twns.WatchWar.WwProxy.reqWatchContinueWar(Twns.Helpers.getExisted(data.warId, ClientErrorCode.WwOngoingWarsPanel_OnTouchedBtnNextStep_00));
             }
         }
 
@@ -243,62 +243,62 @@ namespace Twns.WatchWar {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupWarList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupWarList,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -327,7 +327,7 @@ namespace Twns.WatchWar {
 
         public onItemTapEvent(): void {
             const data = this._getData();
-            data.panel.setAndReviseSelectedWarId(Helpers.getExisted(data.warId, ClientErrorCode.WwOngoingWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
+            data.panel.setAndReviseSelectedWarId(Twns.Helpers.getExisted(data.warId, ClientErrorCode.WwOngoingWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
         }
 
         private _updateView(): void {
@@ -343,7 +343,7 @@ namespace Twns.WatchWar {
             const labelName = this._labelName;
             labelName.text  = ``;
 
-            const warInfo = await Twns.MultiPlayerWar.MpwModel.getWarSettings(Helpers.getExisted(this._getData().warId));
+            const warInfo = await Twns.MultiPlayerWar.MpwModel.getWarSettings(Twns.Helpers.getExisted(this._getData().warId));
             if (warInfo != null) {
                 const { settingsForMfw, settingsForCcw, settingsForMcw, settingsForMrw } = warInfo;
                 if (settingsForMfw) {

@@ -11,10 +11,10 @@
 namespace Twns.MultiRankRoom.MrrProxy {
     import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import NetMessageCodes  = Twns.Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Twns.Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgMrrGetMaxConcurrentCount,     callback: _onMsgMrrGetMaxConcurrentCount },
             { msgCode: NetMessageCodes.MsgMrrGetRoomPublicInfo,         callback: _onMsgMrrGetRoomPublicInfo },
             { msgCode: NetMessageCodes.MsgMrrGetJoinedRoomIdArray,      callback: _onMsgMrrGetJoinedRoomIdArray },
@@ -26,19 +26,19 @@ namespace Twns.MultiRankRoom.MrrProxy {
     }
 
     export function reqMrrGetMaxConcurrentCount(): void {
-        NetManager.send({ MsgMrrGetMaxConcurrentCount: { c: {} } });
+        Twns.Net.NetManager.send({ MsgMrrGetMaxConcurrentCount: { c: {} } });
     }
     function _onMsgMrrGetMaxConcurrentCount(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMrrGetMaxConcurrentCount.IS;
         if (!data.errorCode) {
-            Twns.MultiRankRoom.MrrModel.setMaxConcurrentCount(false, Helpers.getExisted(data.maxCountForStd));
-            Twns.MultiRankRoom.MrrModel.setMaxConcurrentCount(true, Helpers.getExisted(data.maxCountForFog));
+            Twns.MultiRankRoom.MrrModel.setMaxConcurrentCount(false, Twns.Helpers.getExisted(data.maxCountForStd));
+            Twns.MultiRankRoom.MrrModel.setMaxConcurrentCount(true, Twns.Helpers.getExisted(data.maxCountForFog));
             Twns.Notify.dispatch(NotifyType.MsgMrrGetMaxConcurrentCount, data);
         }
     }
 
     export function reqMrrGetRoomPublicInfo(roomId: number): void {
-        NetManager.send({ MsgMrrGetRoomPublicInfo: { c: {
+        Twns.Net.NetManager.send({ MsgMrrGetRoomPublicInfo: { c: {
             roomId,
         } }, });
     }
@@ -49,7 +49,7 @@ namespace Twns.MultiRankRoom.MrrProxy {
     }
 
     export function reqMrrGetJoinedRoomIdArray(): void {
-        NetManager.send({ MsgMrrGetJoinedRoomIdArray: { c: {
+        Twns.Net.NetManager.send({ MsgMrrGetJoinedRoomIdArray: { c: {
         }, }, });
     }
     function _onMsgMrrGetJoinedRoomIdArray(e: egret.Event): void {
@@ -59,7 +59,7 @@ namespace Twns.MultiRankRoom.MrrProxy {
     }
 
     export function reqMrrSetBannedCoIdList(roomId: number, bannedCoIdList: number[]): void {
-        NetManager.send({ MsgMrrSetBannedCoIdList: { c: {
+        Twns.Net.NetManager.send({ MsgMrrSetBannedCoIdList: { c: {
             roomId,
             bannedCoIdList,
         } }, });
@@ -73,7 +73,7 @@ namespace Twns.MultiRankRoom.MrrProxy {
     }
 
     export function reqMrrSetMaxConcurrentCount(maxCountForStd: number, maxCountForFog: number): void {
-        NetManager.send({ MsgMrrSetMaxConcurrentCount: { c: {
+        Twns.Net.NetManager.send({ MsgMrrSetMaxConcurrentCount: { c: {
             maxCountForStd,
             maxCountForFog,
         } }, });
@@ -81,14 +81,14 @@ namespace Twns.MultiRankRoom.MrrProxy {
     function _onMsgMrrSetMaxConcurrentCount(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMrrSetMaxConcurrentCount.IS;
         if (!data.errorCode) {
-            Twns.MultiRankRoom.MrrModel.setMaxConcurrentCount(false, Helpers.getExisted(data.maxCountForStd));
-            Twns.MultiRankRoom.MrrModel.setMaxConcurrentCount(true, Helpers.getExisted(data.maxCountForFog));
+            Twns.MultiRankRoom.MrrModel.setMaxConcurrentCount(false, Twns.Helpers.getExisted(data.maxCountForStd));
+            Twns.MultiRankRoom.MrrModel.setMaxConcurrentCount(true, Twns.Helpers.getExisted(data.maxCountForFog));
             Twns.Notify.dispatch(NotifyType.MsgMrrSetMaxConcurrentCount, data);
         }
     }
 
     export function reqMrrSetSelfSettings(roomId: number, coId: number, unitAndTileSkinId: number): void {
-        NetManager.send({ MsgMrrSetSelfSettings: { c: {
+        Twns.Net.NetManager.send({ MsgMrrSetSelfSettings: { c: {
             roomId,
             coId,
             unitAndTileSkinId,

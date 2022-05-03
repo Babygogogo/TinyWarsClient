@@ -19,7 +19,7 @@
 namespace Twns.MultiRankRoom.MrrModel {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import NotifyType                               = Twns.Notify.NotifyType;
-    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
+    import WarBasicSettingsType                     = Twns.Types.WarBasicSettingsType;
     import IMrrRoomInfo                             = CommonProto.MultiRankRoom.IMrrRoomInfo;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
@@ -28,10 +28,10 @@ namespace Twns.MultiRankRoom.MrrModel {
     let _previewingRoomId           : number | null = null;
     let _maxConcurrentCountForStd   = 0;
     let _maxConcurrentCountForFog   = 0;
-    const _roomInfoAccessor         = Helpers.createCachedDataAccessor<number, IMrrRoomInfo>({
+    const _roomInfoAccessor         = Twns.Helpers.createCachedDataAccessor<number, IMrrRoomInfo>({
         reqData : (roomId: number) => MultiRankRoom.MrrProxy.reqMrrGetRoomPublicInfo(roomId),
     });
-    const _joinedRoomIdArrayAccessor = Helpers.createCachedDataAccessor<null, number[]>({
+    const _joinedRoomIdArrayAccessor = Twns.Helpers.createCachedDataAccessor<null, number[]>({
         reqData : () => MultiRankRoom.MrrProxy.reqMrrGetJoinedRoomIdArray(),
     });
 
@@ -61,7 +61,7 @@ namespace Twns.MultiRankRoom.MrrModel {
     }
 
     export async function updateOnMsgMrrGetRoomPublicInfo(data: CommonProto.NetMessage.MsgMrrGetRoomPublicInfo.IS): Promise<void> {
-        const roomId    = Helpers.getExisted(data.roomId);
+        const roomId    = Twns.Helpers.getExisted(data.roomId);
         const roomInfo  = data.roomInfo ?? null;
         setRoomInfo(roomId, roomInfo);
 
@@ -70,13 +70,13 @@ namespace Twns.MultiRankRoom.MrrModel {
         }
     }
     export async function updateOnMsgMrrSetBannedCoIdList(data: CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IS): Promise<void> {
-        const roomId    = Helpers.getExisted(data.roomId);
+        const roomId    = Twns.Helpers.getExisted(data.roomId);
         const roomInfo  = await getRoomInfo(roomId);
         if (!roomInfo) {
             return;
         }
 
-        const settingsForMrw    = Helpers.getExisted(roomInfo.settingsForMrw);
+        const settingsForMrw    = Twns.Helpers.getExisted(roomInfo.settingsForMrw);
         const srcPlayerIndex    = data.playerIndex;
         const bannedCoIdList    = data.bannedCoIdList;
         if (settingsForMrw.dataArrayForBanCo == null) {
@@ -98,7 +98,7 @@ namespace Twns.MultiRankRoom.MrrModel {
         }
     }
     export async function updateOnMsgMrrSetSelfSettings(data: CommonProto.NetMessage.MsgMrrSetSelfSettings.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
+        const roomInfo = await getRoomInfo(Twns.Helpers.getExisted(data.roomId));
         if (!roomInfo) {
             return;
         }
@@ -135,7 +135,7 @@ namespace Twns.MultiRankRoom.MrrModel {
         }
     }
     export function updateOnMsgMrrDeleteRoomByServer(data: CommonProto.NetMessage.MsgMrrDeleteRoomByServer.IS): void {
-        setRoomInfo(Helpers.getExisted(data.roomId), null);
+        setRoomInfo(Twns.Helpers.getExisted(data.roomId), null);
     }
 
     export async function checkIsRed(): Promise<boolean> {
@@ -143,7 +143,7 @@ namespace Twns.MultiRankRoom.MrrModel {
         for (const roomId of await getJoinedRoomIdArray() ?? []) {
             promiseArray.push(checkIsRedForRoom(roomId));
         }
-        return Helpers.checkIsAnyPromiseTrue(promiseArray);
+        return Twns.Helpers.checkIsAnyPromiseTrue(promiseArray);
     }
     export async function checkIsRedForRoom(roomId: number): Promise<boolean> {
         const roomInfo = await getRoomInfo(roomId);
@@ -185,11 +185,11 @@ namespace Twns.MultiRankRoom.MrrModel {
             return null;
         }
 
-        const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
+        const settingsForCommon = Twns.Helpers.getExisted(roomInfo.settingsForCommon);
+        const instanceWarRule   = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule);
         const playerInfoArray   : Twns.Common.PlayerInfo[] = [];
         for (const playerInfo of (roomInfo.playerDataList || [])) {
-            const playerIndex = Helpers.getExisted(playerInfo.playerIndex);
+            const playerIndex = Twns.Helpers.getExisted(playerInfo.playerIndex);
             playerInfoArray.push({
                 playerIndex,
                 teamIndex           : WarHelpers.WarRuleHelpers.getTeamIndex(instanceWarRule, playerIndex),
@@ -197,7 +197,7 @@ namespace Twns.MultiRankRoom.MrrModel {
                 userId              : playerInfo.userId ?? null,
                 coId                : playerInfo.coId ?? null,
                 unitAndTileSkinId   : playerInfo.unitAndTileSkinId ?? null,
-                isReady             : Helpers.getExisted(playerInfo.isReady),
+                isReady             : Twns.Helpers.getExisted(playerInfo.isReady),
                 isInTurn            : null,
                 isDefeat            : null,
                 restTimeToBoot      : null,
@@ -205,7 +205,7 @@ namespace Twns.MultiRankRoom.MrrModel {
         }
 
         return {
-            gameConfig              : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+            gameConfig              : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)),
             playersCountUnneutral   : WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(instanceWarRule),
             roomOwnerPlayerIndex    : null,
             callbackOnExitRoom      : null,
@@ -221,14 +221,14 @@ namespace Twns.MultiRankRoom.MrrModel {
             return { dataArrayForListSettings: [] };
         }
 
-        const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
-        const settingsForMrw    = Helpers.getExisted(roomInfo.settingsForMrw);
-        const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
-        const mapId             = Helpers.getExisted(settingsForMrw.mapId);
+        const settingsForCommon = Twns.Helpers.getExisted(roomInfo.settingsForCommon);
+        const instanceWarRule   = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule);
+        const settingsForMrw    = Twns.Helpers.getExisted(roomInfo.settingsForMrw);
+        const gameConfig        = Twns.Helpers.getExisted(await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)));
+        const mapId             = Twns.Helpers.getExisted(settingsForMrw.mapId);
         const warEventFullData  = (await WarMap.WarMapModel.getRawData(mapId))?.warEventFullData ?? null;
         const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
-        const timerType         = bootTimerParams[0] as Types.BootTimerType;
+        const timerType         = bootTimerParams[0] as Twns.Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
@@ -289,7 +289,7 @@ namespace Twns.MultiRankRoom.MrrModel {
                 },
             ],
         };
-        if (timerType === Types.BootTimerType.Regular) {
+        if (timerType === Twns.Types.BootTimerType.Regular) {
             openData.dataArrayForListSettings.push({
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
@@ -298,7 +298,7 @@ namespace Twns.MultiRankRoom.MrrModel {
                 warEventFullData,
                 callbackOnModify: null,
             });
-        } else if (timerType === Types.BootTimerType.Incremental) {
+        } else if (timerType === Twns.Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
@@ -318,7 +318,7 @@ namespace Twns.MultiRankRoom.MrrModel {
                 },
             );
         } else {
-            throw Helpers.newError(`MrrModel.createDataForCommonWarBasicSettingsPage() invalid timerType: ${timerType}`, ClientErrorCode.MrrModel_CreateDataForCommonWarBasicSettingsPage_00);
+            throw Twns.Helpers.newError(`MrrModel.createDataForCommonWarBasicSettingsPage() invalid timerType: ${timerType}`, ClientErrorCode.MrrModel_CreateDataForCommonWarBasicSettingsPage_00);
         }
 
         return openData;
@@ -330,12 +330,12 @@ namespace Twns.MultiRankRoom.MrrModel {
             return null;
         }
 
-        const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
+        const settingsForCommon = Twns.Helpers.getExisted(roomInfo.settingsForCommon);
+        const instanceWarRule   = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule);
         return {
-            gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+            gameConfig      : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)),
             instanceWarRule,
-            warType         : instanceWarRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
+            warType         : instanceWarRule.ruleForGlobalParams?.hasFogByDefault ? Twns.Types.WarType.MrwFog : Twns.Types.WarType.MrwStd,
         };
     }
 }

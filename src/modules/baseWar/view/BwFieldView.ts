@@ -47,10 +47,10 @@ namespace Twns.BaseWar {
         }
 
         private _getUnitMapView(): BaseWar.BwUnitMapView {
-            return Helpers.getExisted(this._unitMapView);
+            return Twns.Helpers.getExisted(this._unitMapView);
         }
         private _getTileMapView(): BaseWar.BwTileMapView {
-            return Helpers.getExisted(this._tileMapView);
+            return Twns.Helpers.getExisted(this._tileMapView);
         }
 
         public setUnitsVisible(visible: boolean): void {

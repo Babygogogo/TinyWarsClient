@@ -33,7 +33,7 @@ namespace Twns.SinglePlayerMode {
     import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
+    import WarBasicSettingsType                     = Twns.Types.WarBasicSettingsType;
 
     export type OpenDataForSpmWarListPanel = void;
     export class SpmWarListPanel extends TwnsUiPanel.UiPanel<OpenDataForSpmWarListPanel> {
@@ -97,15 +97,15 @@ namespace Twns.SinglePlayerMode {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmMainMenuPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
         }
 
         private async _onTouchedBtnNextStep(): Promise<void> {
             const slotData = await SinglePlayerMode.SpmModel.getSlotFullData(SinglePlayerMode.SpmModel.getPreviewingSlotIndex());
             if (slotData != null) {
-                FlowManager.gotoSinglePlayerWar({
+                Twns.FlowManager.gotoSinglePlayerWar({
                     slotIndex       : slotData.slotIndex,
                     warData         : slotData.warData,
                     slotExtraData   : slotData.extraData,
@@ -234,7 +234,7 @@ namespace Twns.SinglePlayerMode {
             const mapId = WarHelpers.WarCommonHelpers.getMapId(warData);
             if (mapId != null) {
                 return {
-                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)),
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(warData.settingsForCommon?.configVersion)),
                     mapInfo     : { mapId },
                 };
             }
@@ -242,7 +242,7 @@ namespace Twns.SinglePlayerMode {
             const initialWarData = warData.settingsForSfw?.initialWarData;
             if (initialWarData) {
                 return {
-                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(initialWarData.settingsForCommon?.configVersion)),
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(initialWarData.settingsForCommon?.configVersion)),
                     warInfo     : {
                         warData : initialWarData,
                         players : warData.playerManager?.players,
@@ -261,28 +261,28 @@ namespace Twns.SinglePlayerMode {
                 return null;
             }
 
-            const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
-            const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
+            const settingsForCommon = Twns.Helpers.getExisted(warData.settingsForCommon);
+            const instanceWarRule   = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule);
             const playerInfoArray   : Twns.Common.PlayerInfo[] = [];
-            for (const playerInfo of Helpers.getExisted(warData.playerManager?.players)) {
-                const playerIndex   = Helpers.getExisted(playerInfo.playerIndex);
+            for (const playerInfo of Twns.Helpers.getExisted(warData.playerManager?.players)) {
+                const playerIndex   = Twns.Helpers.getExisted(playerInfo.playerIndex);
                 const userId        = playerInfo.userId ?? null;
                 playerInfoArray.push({
                     playerIndex,
                     teamIndex           : WarHelpers.WarRuleHelpers.getTeamIndex(instanceWarRule, playerIndex),
                     isAi                : userId == null,
                     userId,
-                    coId                : Helpers.getExisted(playerInfo.coId),
-                    unitAndTileSkinId   : Helpers.getExisted(playerInfo.unitAndTileSkinId),
+                    coId                : Twns.Helpers.getExisted(playerInfo.coId),
+                    unitAndTileSkinId   : Twns.Helpers.getExisted(playerInfo.unitAndTileSkinId),
                     isReady             : null,
                     isInTurn            : null,
-                    isDefeat            : playerInfo.aliveState === Types.PlayerAliveState.Dead,
+                    isDefeat            : playerInfo.aliveState === Twns.Types.PlayerAliveState.Dead,
                     restTimeToBoot      : playerInfo.restTimeToBoot ?? null,
                 });
             }
 
             return {
-                gameConfig              : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+                gameConfig              : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)),
                 playersCountUnneutral   : WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(instanceWarRule),
                 roomOwnerPlayerIndex    : null,
                 callbackOnDeletePlayer  : null,
@@ -300,9 +300,9 @@ namespace Twns.SinglePlayerMode {
                 return { dataArrayForListSettings: [] };
             }
 
-            const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
-            const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
-            const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
+            const settingsForCommon = Twns.Helpers.getExisted(warData.settingsForCommon);
+            const instanceWarRule   = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule);
+            const gameConfig        = Twns.Helpers.getExisted(await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)));
             const warEventFullData  = instanceWarRule.warEventFullData ?? null;
             const mapId             = WarHelpers.WarCommonHelpers.getMapId(warData);
             return { dataArrayForListSettings: [
@@ -373,71 +373,71 @@ namespace Twns.SinglePlayerMode {
                 return null;
             }
 
-            const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
+            const settingsForCommon = Twns.Helpers.getExisted(warData.settingsForCommon);
             return {
-                gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
-                instanceWarRule : Helpers.getExisted(settingsForCommon.instanceWarRule),
+                gameConfig      : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)),
+                instanceWarRule : Twns.Helpers.getExisted(settingsForCommon.instanceWarRule),
                 warType         : WarHelpers.WarCommonHelpers.getWarType(warData),
             };
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupWarList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupWarList,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -461,7 +461,7 @@ namespace Twns.SinglePlayerMode {
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
         }
 
         protected async _onDataChanged(): Promise<void> {
@@ -492,7 +492,7 @@ namespace Twns.SinglePlayerMode {
                 }
 
                 const timestamp     = slotExtraData.timestamp;
-                labelTimestamp.text = timestamp == null ? `` : Helpers.getTimestampShortText(timestamp);
+                labelTimestamp.text = timestamp == null ? `` : Twns.Helpers.getTimestampShortText(timestamp);
             }
         }
 

@@ -3,7 +3,7 @@
 // import TwnsClientErrorCode  from "./ClientErrorCode";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace Types {
+namespace Twns.Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Config types.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -196,7 +196,7 @@ namespace Types {
         skinId?             : number;
         hasLoadedUnit?      : boolean;
         coUsingSkillType?   : CoSkillType;
-        gameConfig              : Twns.Config.GameConfig;
+        gameConfig          : Config.GameConfig;
     }
 
     export interface WarMapTileViewData extends CommonProto.WarSerialization.ISerialTile {

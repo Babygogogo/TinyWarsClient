@@ -200,7 +200,7 @@ namespace Twns.BaseWar {
 
         public resetLocationLayer(): void {
             const locationIdArray   : number[] = [];
-            const tileMap           = Helpers.getExisted(this._tileMap);
+            const tileMap           = Twns.Helpers.getExisted(this._tileMap);
             for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
                 if (tileMap.getIsLocationVisible(locationId)) {
                     locationIdArray.push(locationId);
@@ -213,7 +213,7 @@ namespace Twns.BaseWar {
             const layer     = this._locationLayer;
             for (let y = 0; y < height; ++y) {
                 for (let x = 0; x < width; ++x) {
-                    const gridIndex : Types.GridIndex = { x, y };
+                    const gridIndex : Twns.Types.GridIndex = { x, y };
                     const tile      = tileMap.getTile(gridIndex);
                     layer.getChildAt(GridIndexHelpers.getGridId(gridIndex, mapSize)).visible = locationIdArray.some(v => tile.getHasLocationFlag(v));
                 }
@@ -222,7 +222,7 @@ namespace Twns.BaseWar {
 
         private _initCoZoneContainer(): void {
             const container     = this._coZoneContainer;
-            const tileMap       = Helpers.getExisted(this._tileMap);
+            const tileMap       = Twns.Helpers.getExisted(this._tileMap);
             const mapSize       = tileMap.getMapSize();
             const mapWidth      = mapSize.width;
             const mapHeight     = mapSize.height;
@@ -236,8 +236,8 @@ namespace Twns.BaseWar {
                         imageDict.set(playerIndex, []);
                     }
 
-                    const imgSource = `c08_t03_s${Helpers.getNumText(playerManager.getPlayer(playerIndex).getUnitAndTileSkinId())}_f01`;
-                    const matrix    = Helpers.getExisted(imageDict.get(playerIndex));
+                    const imgSource = `c08_t03_s${Twns.Helpers.getNumText(playerManager.getPlayer(playerIndex).getUnitAndTileSkinId())}_f01`;
+                    const matrix    = Twns.Helpers.getExisted(imageDict.get(playerIndex));
                     for (let x = 0; x < mapWidth; ++x) {
                         if (matrix[x] == null) {
                             matrix[x] = [];
@@ -330,7 +330,7 @@ namespace Twns.BaseWar {
             }
         }
         public updateCoZone(): void {
-            const tileMap               = Helpers.getExisted(this._tileMap);
+            const tileMap               = Twns.Helpers.getExisted(this._tileMap);
             const war                   = tileMap.getWar();
             const mapSize               = tileMap.getMapSize();
             const mapWidth              = mapSize.width;
@@ -363,7 +363,7 @@ namespace Twns.BaseWar {
                             }));
                     });
 
-                const matrix = Helpers.getExisted(areaImgDict.get(playerIndex));
+                const matrix = Twns.Helpers.getExisted(areaImgDict.get(playerIndex));
                 for (let x = 0; x < mapWidth; ++x) {
                     for (let y = 0; y < mapHeight; ++y) {
                         matrix[x][y].visible = (gridIndexList.length > 0) && (radius >= GridIndexHelpers.getMinDistance({ x, y }, gridIndexList));
@@ -417,7 +417,7 @@ namespace Twns.BaseWar {
         }
 
         private _onNotifyBwTileLocationFlagSet(e: egret.Event): void {
-            const tileMap   = Helpers.getExisted(this._tileMap);
+            const tileMap   = Twns.Helpers.getExisted(this._tileMap);
             const tile      = e.data as Twns.Notify.NotifyData.BwTileLocationFlagSet;
             const img       = this._locationLayer.getChildAt(GridIndexHelpers.getGridId(tile.getGridIndex(), tileMap.getMapSize()));
             for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {

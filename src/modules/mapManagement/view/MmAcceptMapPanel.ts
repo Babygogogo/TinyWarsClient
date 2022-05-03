@@ -69,7 +69,7 @@ namespace Twns.MapManagement {
             if (!war.getTemplateWarRuleArray().some(v => v.ruleAvailability?.canMrw)) {
                 callback();
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0296),
                     callback,
                 });

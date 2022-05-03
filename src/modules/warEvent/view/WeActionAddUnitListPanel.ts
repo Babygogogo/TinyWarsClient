@@ -67,7 +67,7 @@ namespace Twns.WarEvent {
             const dataForAddUnit    = openData.dataForAddUnit;
 
             const dataArray: DataForTypeRenderer[] = [];
-            for (const newUnitType of openData.gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
+            for (const newUnitType of openData.gameConfig.getUnitTypesByCategory(Twns.Types.UnitCategory.All) ?? []) {
                 dataArray.push({
                     newUnitType,
                     dataForAddUnit,
@@ -78,7 +78,7 @@ namespace Twns.WarEvent {
     }
 
     type DataForTypeRenderer = {
-        newUnitType     : Types.UnitType;
+        newUnitType     : Twns.Types.UnitType;
         dataForAddUnit  : IDataForAddUnit;
     };
     class TypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTypeRenderer> {
@@ -102,7 +102,7 @@ namespace Twns.WarEvent {
         private _onTouchedSelf(): void {
             const data = this._getData();
             resetUnitType(data.dataForAddUnit, data.newUnitType);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionAddUnitListPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionAddUnitListPanel);
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onNotifyLanguageChanged(): void {        // DONE
@@ -124,8 +124,8 @@ namespace Twns.WarEvent {
         }
     }
 
-    function resetUnitType(data: IDataForAddUnit, unitType: Types.UnitType): void {
-        const unitData = Helpers.getExisted(data.unitData);
+    function resetUnitType(data: IDataForAddUnit, unitType: Twns.Types.UnitType): void {
+        const unitData = Twns.Helpers.getExisted(data.unitData);
         if (unitData.unitType !== unitType) {
             unitData.unitType                   = unitType;
             unitData.primaryWeaponCurrentAmmo   = null;

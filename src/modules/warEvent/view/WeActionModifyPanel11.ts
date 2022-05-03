@@ -72,9 +72,9 @@ namespace Twns.WarEvent {
             const action            = this._getAction();
             const openData          = this._getOpenData();
             const warEventFullData  = openData.fullData;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseWarEventActionIdPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseWarEventActionIdPanel, {
                 currentActionIdArray    : action.actionIdArray ?? [],
-                availableActionIdArray  : warEventFullData.actionArray?.filter(v => WarEventHelpers.checkIsPersistentAction(v)).map(v => Helpers.getExisted(v.WeaCommonData?.actionId)) ?? [],
+                availableActionIdArray  : warEventFullData.actionArray?.filter(v => WarEventHelpers.checkIsPersistentAction(v)).map(v => Twns.Helpers.getExisted(v.WeaCommonData?.actionId)) ?? [],
                 warEventFullData,
                 war                     : openData.war,
                 callbackOnConfirm       : actionIdArray => {
@@ -86,7 +86,7 @@ namespace Twns.WarEvent {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -118,7 +118,7 @@ namespace Twns.WarEvent {
             const errorTip          = WarEventHelpers.getErrorTipForAction(openData.fullData, action, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
             this._labelDesc.text    = WarEventHelpers.getDescForAction(action, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
 
@@ -128,7 +128,7 @@ namespace Twns.WarEvent {
         }
 
         private _getAction(): CommonProto.WarEvent.IWeaStopPersistentAction {
-            return Helpers.getExisted(this._getOpenData().action.WeaStopPersistentAction);
+            return Twns.Helpers.getExisted(this._getOpenData().action.WeaStopPersistentAction);
         }
     }
 }

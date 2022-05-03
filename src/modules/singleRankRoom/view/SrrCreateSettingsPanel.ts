@@ -32,7 +32,7 @@ namespace Twns.SingleRankRoom {
     import OpenDataForSpmRankPage                   = Twns.SinglePlayerMode.OpenDataForSpmRankPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = Twns.Notify.NotifyType;
-    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
+    import WarBasicSettingsType                     = Twns.Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -108,7 +108,7 @@ namespace Twns.SingleRankRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.SrrCreateMapListPanel, null);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SrrCreateMapListPanel, null);
         }
         private async _onTouchedBtnConfirm(): Promise<void> {
             const data      = SingleRankRoom.SrrCreateModel.getData();
@@ -118,10 +118,10 @@ namespace Twns.SingleRankRoom {
                 this._resetTimeoutForBtnConfirm();
             };
 
-            if (await SinglePlayerMode.SpmModel.checkIsEmpty(Helpers.getExisted(data.slotIndex))) {
+            if (await SinglePlayerMode.SpmModel.checkIsEmpty(Twns.Helpers.getExisted(data.slotIndex))) {
                 callback();
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0070),
                     callback,
                 });
@@ -133,10 +133,10 @@ namespace Twns.SingleRankRoom {
         }
         private _onNotifyMsgSpmCreateSrw(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgSpmCreateSrw.IS;
-            FlowManager.gotoSinglePlayerWar({
-                warData         : Helpers.getExisted(data.warData),
-                slotExtraData   : Helpers.getExisted(data.extraData),
-                slotIndex       : Helpers.getExisted(data.slotIndex),
+            Twns.FlowManager.gotoSinglePlayerWar({
+                warData         : Twns.Helpers.getExisted(data.warData),
+                slotExtraData   : Twns.Helpers.getExisted(data.extraData),
+                slotIndex       : Twns.Helpers.getExisted(data.slotIndex),
             });
         }
         private _onNotifySrrCreateWarSaveSlotChanged(): void {
@@ -258,7 +258,7 @@ namespace Twns.SingleRankRoom {
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: () => {
-                            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSaveSlotsPanel, {
+                            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmCreateSaveSlotsPanel, {
                                 currentSlotIndex    : SingleRankRoom.SrrCreateModel.getSaveSlotIndex(),
                                 callback            : slotIndex => {
                                     SingleRankRoom.SrrCreateModel.setSaveSlotIndex(slotIndex);
@@ -274,7 +274,7 @@ namespace Twns.SingleRankRoom {
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
-                                throw Helpers.newError(`Invalid newValue: ${newValue}`, ClientErrorCode.SrrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_00);
+                                throw Twns.Helpers.newError(`Invalid newValue: ${newValue}`, ClientErrorCode.SrrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_00);
                             }
                             SingleRankRoom.SrrCreateModel.setSlotComment(newValue);
                             this._updateCommonWarBasicSettingsPage();
@@ -287,12 +287,12 @@ namespace Twns.SingleRankRoom {
         }
 
         private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-            const settingsForCommon = Helpers.getExisted(SingleRankRoom.SrrCreateModel.getSettingsForCommon());
-            const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
+            const settingsForCommon = Twns.Helpers.getExisted(SingleRankRoom.SrrCreateModel.getSettingsForCommon());
+            const instanceWarRule   = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule);
             return {
-                gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+                gameConfig      : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)),
                 instanceWarRule,
-                warType         : instanceWarRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
+                warType         : instanceWarRule.ruleForGlobalParams?.hasFogByDefault ? Twns.Types.WarType.MrwFog : Twns.Types.WarType.MrwStd,
             };
         }
 
@@ -300,52 +300,52 @@ namespace Twns.SingleRankRoom {
         // Opening/closing animations.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnConfirm,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnConfirm,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 

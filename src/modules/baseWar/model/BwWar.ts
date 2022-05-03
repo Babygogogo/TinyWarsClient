@@ -41,7 +41,7 @@ namespace Twns.BaseWar {
 
         private _gameConfig             : GameConfig | null = null;
         private _warId                  : number | null = null;
-        private _warType                = Types.WarType.Undefined;
+        private _warType                = Twns.Types.WarType.Undefined;
         private _isRunning              = false;
         private _isExecutingAction      = false;
         private _isEnded                = false;
@@ -87,11 +87,11 @@ namespace Twns.BaseWar {
         public abstract getDescForExeUnitUseCoSkill(action: WarAction.IWarActionUnitUseCoSkill): Promise<string | null>;
         public abstract getDescForExeUnitWait(action: WarAction.IWarActionUnitWait): Promise<string | null>;
 
-        protected _baseInit(data: ISerialWar, gameConfig: GameConfig, warType: Types.WarType): void {
-            const settingsForCommon = Helpers.getExisted(data.settingsForCommon, ClientErrorCode.BwWar_BaseInit_00);
-            const configVersion     = Helpers.getExisted(settingsForCommon.configVersion, ClientErrorCode.BwWar_BaseInit_01);
+        protected _baseInit(data: ISerialWar, gameConfig: GameConfig, warType: Twns.Types.WarType): void {
+            const settingsForCommon = Twns.Helpers.getExisted(data.settingsForCommon, ClientErrorCode.BwWar_BaseInit_00);
+            const configVersion     = Twns.Helpers.getExisted(settingsForCommon.configVersion, ClientErrorCode.BwWar_BaseInit_01);
             if (configVersion !== gameConfig.getVersion()) {
-                throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.BwWar_BaseInit_02);
+                throw Twns.Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.BwWar_BaseInit_02);
             }
 
             this._setGameConfig(gameConfig);
@@ -100,11 +100,11 @@ namespace Twns.BaseWar {
 
             const mapSize = WarHelpers.WarCommonHelpers.getMapSize(data.field?.tileMap);
             if (!WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
-                throw Helpers.newError(`Invalid mapSize: ${JSON.stringify(mapSize)}`, ClientErrorCode.BwWar_BaseInit_03);
+                throw Twns.Helpers.newError(`Invalid mapSize: ${JSON.stringify(mapSize)}`, ClientErrorCode.BwWar_BaseInit_03);
             }
 
-            if (warType === Types.WarType.Undefined) {
-                throw Helpers.newError(`Invalid warType: ${warType}`, ClientErrorCode.BwWar_BaseInit_04);
+            if (warType === Twns.Types.WarType.Undefined) {
+                throw Twns.Helpers.newError(`Invalid warType: ${warType}`, ClientErrorCode.BwWar_BaseInit_04);
             }
 
             this._setWarType(warType);
@@ -250,7 +250,7 @@ namespace Twns.BaseWar {
             const aliveTeamIndexSet = new Set<number>();
             let hasAliveHumanPlayer = false;
             for (const [, player] of this.getPlayerManager().getAllPlayersDict()) {
-                if ((player.checkIsNeutral()) || (player.getAliveState() === Types.PlayerAliveState.Dead)) {
+                if ((player.checkIsNeutral()) || (player.getAliveState() === Twns.Types.PlayerAliveState.Dead)) {
                     continue;
                 }
 
@@ -280,11 +280,11 @@ namespace Twns.BaseWar {
             const restTimeToBoot    = player.getRestTimeToBoot();
             const enterTurnTime     = this.getEnterTurnTime();
             const bootTimeParams    = this.getSettingsBootTimerParams();
-            return (bootTimeParams[0] !== Types.BootTimerType.NoBoot)
+            return (bootTimeParams[0] !== Twns.Types.BootTimerType.NoBoot)
                 && (player.getUserId() != null)
-                && (player.getAliveState() === Types.PlayerAliveState.Alive)
+                && (player.getAliveState() === Twns.Types.PlayerAliveState.Alive)
                 && (!player.checkIsNeutral())
-                && (Timer.getServerTimestamp() > enterTurnTime + restTimeToBoot);
+                && (Twns.Timer.getServerTimestamp() > enterTurnTime + restTimeToBoot);
         }
 
         private _setWarId(warId: number | null): void {
@@ -294,15 +294,15 @@ namespace Twns.BaseWar {
             return this._warId;
         }
 
-        private _setWarType(warType: Types.WarType): void {
+        private _setWarType(warType: Twns.Types.WarType): void {
             this._warType = warType;
         }
-        public getWarType(): Types.WarType {
+        public getWarType(): Twns.Types.WarType {
             return this._warType;
         }
 
         public getGameConfig(): Config.GameConfig {
-            return Helpers.getExisted(this._gameConfig);
+            return Twns.Helpers.getExisted(this._gameConfig);
         }
         private _setGameConfig(gameConfig: GameConfig): void {
             this._gameConfig = gameConfig;
@@ -354,7 +354,7 @@ namespace Twns.BaseWar {
         public getEnterTurnTime(): number {
             return this.getTurnManager().getEnterTurnTime();
         }
-        public getTurnPhaseCode(): Types.TurnPhaseCode {
+        public getTurnPhaseCode(): Twns.Types.TurnPhaseCode {
             return this.getTurnManager().getPhaseCode();
         }
 

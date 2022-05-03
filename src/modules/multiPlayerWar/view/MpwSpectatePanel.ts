@@ -67,7 +67,7 @@ namespace Twns.MultiPlayerWar {
         }
 
         private _getWar(): MultiPlayerWar.MpwWar {
-            return Helpers.getExisted(MultiPlayerWar.MpwModel.getWar());
+            return Twns.Helpers.getExisted(MultiPlayerWar.MpwModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +93,7 @@ namespace Twns.MultiPlayerWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private async _onTouchedBtnMakeRequest(): Promise<void> {
             const war       = this._getWar();
-            const warId     = Helpers.getExisted(war.getWarId());
+            const warId     = Twns.Helpers.getExisted(war.getWarId());
             const info      = await WatchWar.WwModel.getWatchOutgoingInfo(warId);
             const userIdSet = new Set<number>();
             for (const userId of info?.ongoingDstUserIdArray ?? []) {
@@ -103,11 +103,11 @@ namespace Twns.MultiPlayerWar {
                 userIdSet.add(userId);
             }
 
-            const selfUserId = Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
+            const selfUserId = Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
             for (const [, player] of war.getPlayerManager().getAllPlayersDict()) {
                 const userId = player.getUserId();
                 if ((userId != null) && (userId !== selfUserId) && (!userIdSet.has(userId))) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.WwMakeRequestDetailPanel, {
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WwMakeRequestDetailPanel, {
                         warId,
                     });
                     return;
@@ -118,9 +118,9 @@ namespace Twns.MultiPlayerWar {
         }
 
         private async _onTouchedBtnHandleRequest(): Promise<void> {
-            const warId = Helpers.getExisted(this._getWar().getWarId());
+            const warId = Twns.Helpers.getExisted(this._getWar().getWarId());
             if ((await WatchWar.WwModel.getWatchIncomingInfo(warId))?.requestSrcUserIdArray?.length) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.WwHandleRequestDetailPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WwHandleRequestDetailPanel, {
                     warId,
                 });
             } else {
@@ -129,9 +129,9 @@ namespace Twns.MultiPlayerWar {
         }
 
         private async _onTouchedBtnDeleteWatcher(): Promise<void> {
-            const warId = Helpers.getExisted(this._getWar().getWarId());
+            const warId = Twns.Helpers.getExisted(this._getWar().getWarId());
             if ((await WatchWar.WwModel.getWatchIncomingInfo(warId))?.ongoingSrcUserIdArray?.length) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.WwDeleteWatcherDetailPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WwDeleteWatcherDetailPanel, {
                     warId,
                 });
             } else {
@@ -143,32 +143,32 @@ namespace Twns.MultiPlayerWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private _updateView(): void {
@@ -191,7 +191,7 @@ namespace Twns.MultiPlayerWar {
         }
 
         private async _updateBtnHandleRequest(): Promise<void> {
-            const info = await WatchWar.WwModel.getWatchIncomingInfo(Helpers.getExisted(this._getWar().getWarId()));
+            const info = await WatchWar.WwModel.getWatchIncomingInfo(Twns.Helpers.getExisted(this._getWar().getWarId()));
             this._btnHandleRequest.setRedVisible(!!info?.requestSrcUserIdArray?.length);
         }
 
@@ -210,7 +210,7 @@ namespace Twns.MultiPlayerWar {
         }
 
         private async _updateLabelIncomingRequest(): Promise<void> {
-            const info = await WatchWar.WwModel.getWatchIncomingInfo(Helpers.getExisted(this._getWar().getWarId()));
+            const info = await WatchWar.WwModel.getWatchIncomingInfo(Twns.Helpers.getExisted(this._getWar().getWarId()));
             this._labelIncomingRequest.text = `${info?.requestSrcUserIdArray?.length ?? 0}`;
         }
     }

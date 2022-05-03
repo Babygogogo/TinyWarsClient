@@ -66,7 +66,7 @@ namespace Twns.Broadcast {
         }
 
         private _onTouchedBtnAddMessage(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.BroadcastAddMessagePanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BroadcastAddMessagePanel, void 0);
         }
 
         private _updateView(): void {
@@ -98,32 +98,32 @@ namespace Twns.Broadcast {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -142,7 +142,7 @@ namespace Twns.Broadcast {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
 
             this._updateComponentsForLanguage();
         }
@@ -155,17 +155,17 @@ namespace Twns.Broadcast {
                 return;
             }
 
-            this._labelIndex.text   = `#${messageId}    ${Helpers.getTimestampShortText(Helpers.getExisted(messageData.startTime))} ~ ${Helpers.getTimestampShortText(Helpers.getExisted(messageData.endTime))}`;
+            this._labelIndex.text   = `#${messageId}    ${Twns.Helpers.getTimestampShortText(Twns.Helpers.getExisted(messageData.startTime))} ~ ${Twns.Helpers.getTimestampShortText(Twns.Helpers.getExisted(messageData.endTime))}`;
 
             const textArray         = messageData.textList;
             this._labelContent.text = [
-                `${Lang.getText(LangTextType.B0455)}: ${Lang.getLanguageText({ textArray, languageType: Types.LanguageType.Chinese, useAlternate: false }) ?? `----`}`,
-                `${Lang.getText(LangTextType.B0456)}: ${Lang.getLanguageText({ textArray, languageType: Types.LanguageType.English, useAlternate: false }) ?? `----`}`,
+                `${Lang.getText(LangTextType.B0455)}: ${Lang.getLanguageText({ textArray, languageType: Twns.Types.LanguageType.Chinese, useAlternate: false }) ?? `----`}`,
+                `${Lang.getText(LangTextType.B0456)}: ${Lang.getLanguageText({ textArray, languageType: Twns.Types.LanguageType.English, useAlternate: false }) ?? `----`}`,
             ].join(`\n\n`);
         }
 
         private _onTouchedBtnDelete(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0220),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {

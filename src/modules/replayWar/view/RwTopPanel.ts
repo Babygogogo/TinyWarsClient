@@ -106,7 +106,7 @@ namespace Twns.ReplayWar {
         }
         private _onNotifyBwPlayerIndexInTurnChanged(): void {
             this._updateView();
-            SoundManager.playCoBgmWithWar(this._getWar(), false);
+            Twns.SoundManager.playCoBgmWithWar(this._getWar(), false);
         }
         private _onNotifyBwNextActionIdChanged(): void {
             this._updateLabelAction();
@@ -116,7 +116,7 @@ namespace Twns.ReplayWar {
         }
         private _onNotifyBwCoUsingSkillChanged(): void {
             this._updateLabelCo();
-            SoundManager.playCoBgmWithWar(this._getWar(), false);
+            Twns.SoundManager.playCoBgmWithWar(this._getWar(), false);
         }
         private _onNotifyReplayAutoReplayChanged(): void {
             this._updateView();
@@ -124,19 +124,19 @@ namespace Twns.ReplayWar {
 
         private _onTouchedGroupPlayer(): void {
             const userId = this._getWar().getPlayerInTurn().getUserId();
-            (userId) && (TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId }));
+            (userId) && (Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, { userId }));
         }
         private _onTouchedGroupCo(): void {
             const war = this._getWar();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoListPanel, { war });
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoListPanel, { war });
         }
         private _onTouchedGroupPauseTime(): void {
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
 
             const war       = this._getWar();
             const minValue  = 0;
             const maxValue  = 5000;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0846),
                 minValue,
                 maxValue,
@@ -149,7 +149,7 @@ namespace Twns.ReplayWar {
             });
         }
         private _onTouchedGroupProgress(): void {
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
 
             const war = this._getWar();
             if (war.getIsAutoReplay()) {
@@ -162,11 +162,11 @@ namespace Twns.ReplayWar {
             } else if (war.getIsExecutingAction()) {
                 FloatText.show(Lang.getText(LangTextType.A0044));
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.RwReplayProgressPanel, { war });
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.RwReplayProgressPanel, { war });
             }
         }
         private _onTouchedGroupVisionTeam(): void {
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
 
             const war = this._getWar();
             war.tickVisionTeamIndex();
@@ -185,9 +185,9 @@ namespace Twns.ReplayWar {
             } else if (war.checkIsInBeginning()) {
                 FloatText.show(Lang.getText(LangTextType.A0042));
             } else {
-                await Helpers.checkAndCallLater();
+                await Twns.Helpers.checkAndCallLater();
                 await war.loadPreviousCheckpoint();
-                await Helpers.checkAndCallLater();
+                await Twns.Helpers.checkAndCallLater();
                 this._updateView();
             }
         }
@@ -202,9 +202,9 @@ namespace Twns.ReplayWar {
             } else if (war.checkIsInBeginning()) {
                 FloatText.show(Lang.getText(LangTextType.A0042));
             } else {
-                await Helpers.checkAndCallLater();
+                await Twns.Helpers.checkAndCallLater();
                 await war.loadCheckpoint(0);
-                await Helpers.checkAndCallLater();
+                await Twns.Helpers.checkAndCallLater();
                 this._updateView();
             }
         }
@@ -219,9 +219,9 @@ namespace Twns.ReplayWar {
             } else if (war.checkIsInEnd()) {
                 FloatText.show(Lang.getText(LangTextType.A0043));
             } else {
-                await Helpers.checkAndCallLater();
+                await Twns.Helpers.checkAndCallLater();
                 await war.loadNextCheckpoint();
-                await Helpers.checkAndCallLater();
+                await Twns.Helpers.checkAndCallLater();
                 this._updateView();
             }
         }
@@ -236,9 +236,9 @@ namespace Twns.ReplayWar {
             } else if (war.checkIsInEnd()) {
                 FloatText.show(Lang.getText(LangTextType.A0043));
             } else {
-                await Helpers.checkAndCallLater();
+                await Twns.Helpers.checkAndCallLater();
                 await war.loadCheckpoint(war.getAllCheckpointInfoArray().length - 1);
-                await Helpers.checkAndCallLater();
+                await Twns.Helpers.checkAndCallLater();
                 this._updateView();
             }
         }
@@ -258,7 +258,7 @@ namespace Twns.ReplayWar {
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.RwWarMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.RwWarMenuPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -330,9 +330,9 @@ namespace Twns.ReplayWar {
                 this._labelCo.text  = `${coId == null ? "----" : war.getGameConfig().getCoBasicCfg(coId)?.name}`;
 
                 const skillType = player.getCoUsingSkillType();
-                if (skillType === Types.CoSkillType.Power) {
+                if (skillType === Twns.Types.CoSkillType.Power) {
                     this._labelCurrEnergy.text = "COP";
-                } else if (skillType === Types.CoSkillType.SuperPower) {
+                } else if (skillType === Twns.Types.CoSkillType.SuperPower) {
                     this._labelCurrEnergy.text = "SCOP";
                 } else {
                     const energy                = player.getCoCurrentEnergy();

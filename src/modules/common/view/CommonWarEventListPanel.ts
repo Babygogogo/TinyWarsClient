@@ -20,8 +20,8 @@
 namespace Twns.Common {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = Twns.Notify.NotifyType;
-    import ColorValue           = Types.ColorValue;
-    import WarEventDescType     = Types.WarEventDescType;
+    import ColorValue           = Twns.Types.ColorValue;
+    import WarEventDescType     = Twns.Types.WarEventDescType;
     import WarEventFullData     = CommonProto.Map.IWarEventFullData;
 
     export type OpenDataForCommonWarEventListPanel = {
@@ -59,7 +59,7 @@ namespace Twns.Common {
 
         public setAndReviseSelectedEventId(newEventId: number, needScroll: boolean): void {
             const listWarEventId    = this._listWarEventId;
-            const index             = Helpers.getExisted(listWarEventId.getRandomIndex(v => v.eventId === newEventId));
+            const index             = Twns.Helpers.getExisted(listWarEventId.getRandomIndex(v => v.eventId === newEventId));
             listWarEventId.setSelectedIndex(index);
             this._updateListWarEventDetailAndLabelNoEvent();
 
@@ -319,7 +319,7 @@ namespace Twns.Common {
         private _updateForEvent(data: DataForWarEventDetailRenderer): void {                      // DONE
             const fullData                  = data.warEventFullData;
             const eventId                   = data.eventId;
-            const event                     = Helpers.getExisted(fullData.eventArray?.find(v => v.eventId === eventId));
+            const event                     = Twns.Helpers.getExisted(fullData.eventArray?.find(v => v.eventId === eventId));
             const prefixArray               = data.prefixArray;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
             this._labelDesc.text                = `${Lang.getLanguageText({ textArray: event.eventNameArray })}`;
@@ -327,7 +327,7 @@ namespace Twns.Common {
         }
         private _updateForEventCallCountInPlayerTurn(data: DataForWarEventDetailRenderer): void { // DONE
             const eventId                   = data.eventId;
-            const event                     = Helpers.getExisted(data.warEventFullData.eventArray?.find(v => v.eventId === eventId));
+            const event                     = Twns.Helpers.getExisted(data.warEventFullData.eventArray?.find(v => v.eventId === eventId));
             const prefixArray               = data.prefixArray;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
             this._labelDesc.text            = `${Lang.getText(LangTextType.B0476)}: ${event.maxCallCountInPlayerTurn}`;
@@ -335,7 +335,7 @@ namespace Twns.Common {
         }
         private _updateForEventCallCountTotal(data: DataForWarEventDetailRenderer): void {        // DONE
             const eventId                   = data.eventId;
-            const event                     = Helpers.getExisted(data.warEventFullData.eventArray?.find(v => v.eventId === eventId));
+            const event                     = Twns.Helpers.getExisted(data.warEventFullData.eventArray?.find(v => v.eventId === eventId));
             const prefixArray               = data.prefixArray;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
             this._labelDesc.text            = `${Lang.getText(LangTextType.B0477)}: ${event.maxCallCountTotal}`;
@@ -344,7 +344,7 @@ namespace Twns.Common {
         private _updateForConditionNode(data: DataForWarEventDetailRenderer): void {              // DONE
             const fullData                  = data.warEventFullData;
             const nodeId                    = data.nodeId;
-            const node                      = Helpers.getExisted(fullData.conditionNodeArray?.find(v => v.nodeId === nodeId));
+            const node                      = Twns.Helpers.getExisted(fullData.conditionNodeArray?.find(v => v.nodeId === nodeId));
             const prefixArray               = data.prefixArray;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
             this._labelDesc.text            = `${node.isAnd ? Lang.getText(LangTextType.A0162) : Lang.getText(LangTextType.A0163)}`;
@@ -353,7 +353,7 @@ namespace Twns.Common {
         private _updateForCondition(data: DataForWarEventDetailRenderer): void {                  // DONE
             const fullData                  = data.warEventFullData;
             const conditionId               = data.conditionId;
-            const condition                 = Helpers.getExisted(fullData.conditionArray?.find(v => v.WecCommonData?.conditionId === conditionId));
+            const condition                 = Twns.Helpers.getExisted(fullData.conditionArray?.find(v => v.WecCommonData?.conditionId === conditionId));
             const prefixArray               = data.prefixArray;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
             this._labelDesc.text            = `${WarHelpers.WarEventHelpers.getDescForCondition(condition, data.gameConfig)}`;
@@ -362,7 +362,7 @@ namespace Twns.Common {
         private _updateForAction(data: DataForWarEventDetailRenderer): void {                     // DONE
             const fullData                  = data.warEventFullData;
             const actionId                  = data.actionId;
-            const action                    = Helpers.getExisted(fullData.actionArray?.find(v => v.WeaCommonData?.actionId === actionId));
+            const action                    = Twns.Helpers.getExisted(fullData.actionArray?.find(v => v.WeaCommonData?.actionId === actionId));
             const prefixArray               = data.prefixArray;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
             this._labelDesc.text            = `${WarHelpers.WarEventHelpers.getDescForAction(action, data.gameConfig)}`;

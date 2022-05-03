@@ -29,7 +29,7 @@ namespace FloatText {
         if ((_dataArray.length > 0) && (_timeoutIdForLock == null)) {
             _timeoutIdForLock = egret.setTimeout(onTimerComplete, null, LOCK_TIME_MS);
 
-            const layer     = StageManager.getLayer(Types.LayerType.Notify2);
+            const layer     = StageManager.getLayer(Twns.Types.LayerType.Notify2);
             const floatText = new UiFloatText(_dataArray.splice(0, 1)[0]);
             layer.addChild(floatText);
             floatText.y      = START_Y;

@@ -13,7 +13,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiCustomRoom.McrCreateModel {
     import NotifyType       = Twns.Notify.NotifyType;
-    import BootTimerType    = Types.BootTimerType;
+    import BootTimerType    = Twns.Types.BootTimerType;
     import GameConfig       = Config.GameConfig;
 
     const REGULAR_TIME_LIMITS = [
@@ -42,12 +42,12 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
     let _gameConfig: GameConfig | null = null;
 
     export async function getMapRawData(): Promise<CommonProto.Map.IMapRawData> {
-        return Helpers.getExisted(await WarMap.WarMapModel.getRawData(getMapId()));
+        return Twns.Helpers.getExisted(await WarMap.WarMapModel.getRawData(getMapId()));
     }
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
         setMapId(mapId);
-        setConfigVersion(Helpers.getExisted(Config.ConfigManager.getLatestConfigVersion()));
+        setConfigVersion(Twns.Helpers.getExisted(Config.ConfigManager.getLatestConfigVersion()));
         setGameConfig(await Config.ConfigManager.getLatestGameConfig());
         setWarName("");
         setWarPassword("");
@@ -55,27 +55,27 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
         setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
         setTurnsLimit(CommonConstants.WarMaxTurnsLimit);
         setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
-        await resetDataByTemplateWarRuleId(Helpers.getExisted((await getMapRawData()).templateWarRuleArray?.find(v => v.ruleAvailability?.canMcw)?.ruleId));
+        await resetDataByTemplateWarRuleId(Twns.Helpers.getExisted((await getMapRawData()).templateWarRuleArray?.find(v => v.ruleAvailability?.canMcw)?.ruleId));
     }
     export function getData(): DataForCreateRoom {
         return _dataForCreateRoom;
     }
     export function getSettingsForCommon(): CommonProto.WarSettings.ISettingsForCommon {
-        return Helpers.getExisted(getData().settingsForCommon);
+        return Twns.Helpers.getExisted(getData().settingsForCommon);
     }
     export function getSettingsForMcw(): CommonProto.WarSettings.ISettingsForMcw {
-        return Helpers.getExisted(getData().settingsForMcw);
+        return Twns.Helpers.getExisted(getData().settingsForMcw);
     }
 
     export function getInstanceWarRule(): CommonProto.WarRule.IInstanceWarRule {
-        return Helpers.getExisted(getSettingsForCommon().instanceWarRule);
+        return Twns.Helpers.getExisted(getSettingsForCommon().instanceWarRule);
     }
     function setInstanceWarRule(instanceWarRule: CommonProto.WarRule.IInstanceWarRule) {
         getSettingsForCommon().instanceWarRule = instanceWarRule;
     }
 
     export function getMapId(): number {
-        return Helpers.getExisted(getSettingsForMcw().mapId);
+        return Twns.Helpers.getExisted(getSettingsForMcw().mapId);
     }
     function setMapId(mapId: number): void {
         getSettingsForMcw().mapId = mapId;
@@ -85,7 +85,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
         getSettingsForCommon().configVersion = version;
     }
     export function getGameConfig(): GameConfig {
-        return Helpers.getExisted(_gameConfig);
+        return Twns.Helpers.getExisted(_gameConfig);
     }
     function setGameConfig(config: GameConfig): void {
         _gameConfig = config;
@@ -94,10 +94,10 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
     export async function resetDataByTemplateWarRuleId(templateWarRuleId: number | null): Promise<void> {
         const mapRawData = await getMapRawData();
         if (templateWarRuleId == null) {
-            const instanceWarRule = WarHelpers.WarRuleHelpers.createDefaultInstanceWarRule(Helpers.getExisted(mapRawData.playersCountUnneutral));
+            const instanceWarRule = WarHelpers.WarRuleHelpers.createDefaultInstanceWarRule(Twns.Helpers.getExisted(mapRawData.playersCountUnneutral));
             setInstanceWarRule(instanceWarRule);
         } else {
-            const templateWarRule = Helpers.getExisted(mapRawData.templateWarRuleArray?.find(r => r.ruleId === templateWarRuleId));
+            const templateWarRule = Twns.Helpers.getExisted(mapRawData.templateWarRuleArray?.find(r => r.ruleId === templateWarRuleId));
             setInstanceWarRule(WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRule, mapRawData.warEventFullData));
         }
 
@@ -124,11 +124,11 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
     }
     export async function tickTemplateWarRuleId(): Promise<void> {
         const currTemplateWarRuleId = getTemplateWarRuleId();
-        const templateWarRuleArray  = Helpers.getExisted((await getMapRawData()).templateWarRuleArray);
+        const templateWarRuleArray  = Twns.Helpers.getExisted((await getMapRawData()).templateWarRuleArray);
         if (currTemplateWarRuleId == null) {
-            await resetDataByTemplateWarRuleId(Helpers.getExisted(templateWarRuleArray.find(v => v.ruleAvailability?.canMcw)?.ruleId));
+            await resetDataByTemplateWarRuleId(Twns.Helpers.getExisted(templateWarRuleArray.find(v => v.ruleAvailability?.canMcw)?.ruleId));
         } else {
-            const newTemplateWarRuleId = Helpers.getNonNullElements(templateWarRuleArray.filter(v => v.ruleAvailability?.canMcw).map(v => v.ruleId)).sort((v1, v2) => {
+            const newTemplateWarRuleId = Twns.Helpers.getNonNullElements(templateWarRuleArray.filter(v => v.ruleAvailability?.canMcw).map(v => v.ruleId)).sort((v1, v2) => {
                 if (v1 > currTemplateWarRuleId) {
                     return (v2 <= currTemplateWarRuleId) ? -1 : v1 - v2;
                 } else {
@@ -140,7 +140,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
     }
 
     export function getTurnsLimit(): number {
-        return Helpers.getExisted(getSettingsForCommon().turnsLimit);
+        return Twns.Helpers.getExisted(getSettingsForCommon().turnsLimit);
     }
     export function setTurnsLimit(turnsLimit: number): void {
         getSettingsForCommon().turnsLimit = turnsLimit;
@@ -177,7 +177,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
     //     setSelfPlayerIndex(getSelfPlayerIndex() % BwWarRuleHelper.getPlayersCount(getWarRule()) + 1);
     // }
     export function getSelfPlayerIndex(): number {
-        return Helpers.getExisted(getData().selfPlayerIndex);
+        return Twns.Helpers.getExisted(getData().selfPlayerIndex);
     }
 
     export function setSelfCoId(coId: number): void {
@@ -187,7 +187,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
         }
     }
     export function getSelfCoId(): number {
-        return Helpers.getExisted(getData().selfCoId);
+        return Twns.Helpers.getExisted(getData().selfCoId);
     }
 
     export function setSelfUnitAndTileSkinId(skinId: number): void {
@@ -200,14 +200,14 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
         setSelfUnitAndTileSkinId(getSelfUnitAndTileSkinId() % CommonConstants.UnitAndTileMaxSkinId + 1);
     }
     export function getSelfUnitAndTileSkinId(): number {
-        return Helpers.getExisted(getData().selfUnitAndTileSkinId);
+        return Twns.Helpers.getExisted(getData().selfUnitAndTileSkinId);
     }
 
     export function setHasFog(hasFog: boolean): void {
-        Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
+        Twns.Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
     }
     export function getHasFog(): boolean {
-        return Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault);
+        return Twns.Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault);
     }
 
     export function tickDefaultWeatherType(): void {
@@ -218,7 +218,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
         getSettingsForMcw().bootTimerParams = params;
     }
     export function getBootTimerParams(): number[] {
-        return Helpers.getExisted(getSettingsForMcw().bootTimerParams);
+        return Twns.Helpers.getExisted(getSettingsForMcw().bootTimerParams);
     }
     export function tickBootTimerType(): void {
         const params = getBootTimerParams();

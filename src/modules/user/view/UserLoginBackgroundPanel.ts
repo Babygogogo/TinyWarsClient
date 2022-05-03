@@ -72,7 +72,7 @@ namespace Twns.User {
         }
         private _onNotifyUnitAnimationTick(): void {
             const group = this._groupUnits;
-            const tick  = Timer.getUnitAnimationTickCount();
+            const tick  = Twns.Timer.getUnitAnimationTickCount();
             for (let i = group.numChildren - 1; i >= 0; --i) {
                 ((group.getChildAt(i) as eui.Component).getChildAt(0) as Twns.WarMap.WarMapUnitView).updateOnAnimationTick(tick);
             }
@@ -81,13 +81,13 @@ namespace Twns.User {
             // this._initGroupUnits();
         }
         private _onTouchedSelf(): void {
-            SoundManager.init();
+            Twns.SoundManager.init();
         }
         private _onTouchedBtnVersion(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChangeVersionPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChangeVersionPanel, void 0);
         }
         private _onTouchedBtnSound(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetSoundPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserSetSoundPanel, void 0);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -99,74 +99,74 @@ namespace Twns.User {
             const listLanguage  = this._listLanguage;
             const languageType  = Lang.getCurrentLanguageType();
             const dataArray     : DataForLanguageRenderer[] = [
-                { languageType: Types.LanguageType.Chinese },
-                { languageType: Types.LanguageType.English },
+                { languageType: Twns.Types.LanguageType.Chinese },
+                { languageType: Twns.Types.LanguageType.English },
             ];
             listLanguage.bindData(dataArray);
             listLanguage.setSelectedIndex(dataArray.findIndex(v => v.languageType === languageType));
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgBackground,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._listLanguage,
                 waitTime    : 1400,
                 beginProps  : { left: -40, alpha: 0 },
                 endProps    : { left: 0, alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupRightButton,
                 waitTime    : 1500,
                 beginProps  : { right: -40, alpha: 0 },
                 endProps    : { right: 0, alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._labelVersion,
                 waitTime    : 1600,
                 beginProps  : { right: -20, alpha: 0 },
                 endProps    : { right: 20, alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupCopyright,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
                 waitTime    : 1700,
             });
 
-            await Helpers.wait(1700 + CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(1700 + CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgBackground,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._listLanguage,
                 beginProps  : { left: 0, alpha: 1 },
                 endProps    : { left: -40, alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._labelVersion,
                 beginProps  : { right: 20, alpha: 1 },
                 endProps    : { right: -20, alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupRightButton,
                 beginProps  : { right: 0, alpha: 1 },
                 endProps    : { right: -40, alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupCopyright,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         // private _initGroupUnits(): void {
@@ -195,7 +195,7 @@ namespace Twns.User {
     }
 
     type DataForLanguageRenderer = {
-        languageType: Types.LanguageType;
+        languageType: Twns.Types.LanguageType;
     };
     class LanguageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForLanguageRenderer> {
         private readonly _labelLanguage!    : TwnsUiLabel.UiLabel;

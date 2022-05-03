@@ -18,7 +18,7 @@ namespace Twns.SingleCustomWar {
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
-            this._setSettingsForScw(Helpers.getExisted(data.settingsForScw, ClientErrorCode.ScwWar_Init_00));
+            this._setSettingsForScw(Twns.Helpers.getExisted(data.settingsForScw, ClientErrorCode.ScwWar_Init_00));
 
             this._initView();
         }
@@ -53,7 +53,7 @@ namespace Twns.SingleCustomWar {
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getMapId(): number {
-            return Helpers.getExisted(this._getSettingsForScw().mapId);
+            return Twns.Helpers.getExisted(this._getSettingsForScw().mapId);
         }
 
         public getCanCheat(): boolean {
@@ -61,14 +61,14 @@ namespace Twns.SingleCustomWar {
         }
 
         public getSettingsBootTimerParams(): number[] {
-            return [Types.BootTimerType.NoBoot];
+            return [Twns.Types.BootTimerType.NoBoot];
         }
 
         private _setSettingsForScw(settings: ISettingsForScw): void {
             this._settingsForScw = settings;
         }
         private _getSettingsForScw(): ISettingsForScw {
-            return Helpers.getExisted(this._settingsForScw);
+            return Twns.Helpers.getExisted(this._settingsForScw);
         }
     }
 }

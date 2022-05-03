@@ -17,15 +17,15 @@
 namespace WarRobot {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import IWarActionContainer  = CommonProto.WarAction.IWarActionContainer;
-    import WeaponType           = Types.WeaponType;
-    import GridIndex            = Types.GridIndex;
-    import MovableArea          = Types.MovableArea;
-    import MovePathNode         = Types.MovePathNode;
-    import TileType             = Types.TileType;
-    import UnitType             = Types.UnitType;
-    import UnitActionState      = Types.UnitActionState;
-    import UnitAiMode           = Types.UnitAiMode;
-    import CoSkillType          = Types.CoSkillType;
+    import WeaponType           = Twns.Types.WeaponType;
+    import GridIndex            = Twns.Types.GridIndex;
+    import MovableArea          = Twns.Types.MovableArea;
+    import MovePathNode         = Twns.Types.MovePathNode;
+    import TileType             = Twns.Types.TileType;
+    import UnitType             = Twns.Types.UnitType;
+    import UnitActionState      = Twns.Types.UnitActionState;
+    import UnitAiMode           = Twns.Types.UnitAiMode;
+    import CoSkillType          = Twns.Types.CoSkillType;
     import BwUnit               = Twns.BaseWar.BwUnit;
     import BwTile               = Twns.BaseWar.BwTile;
     import BwWar                = Twns.BaseWar.BwWar;
@@ -53,7 +53,7 @@ namespace WarRobot {
     type CommonParams = {
         war                     : BwWar;
         playerIndexInTurn       : number;
-        mapSize                 : Types.MapSize;
+        mapSize                 : Twns.Types.MapSize;
         unitsInfoDict           : Map<number, UnitsInfo>;
         unitValueRatio          : number;
         visibleUnits            : Set<BwUnit>;
@@ -362,7 +362,7 @@ namespace WarRobot {
     // Helpers.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function getCommonParams(war: BwWar): Promise<CommonParams> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const playerIndexInTurn     = war.getPlayerIndexInTurn();
         const unitsInfoDict         = await getUnitsInfoDict(war);
@@ -404,7 +404,7 @@ namespace WarRobot {
                     moveCostDict.set(unit, new Map());
                 }
 
-                const subMap = Helpers.getExisted(moveCostDict.get(unit), ClientErrorCode.SpwRobot_GetCachedMoveCost_00);
+                const subMap = Twns.Helpers.getExisted(moveCostDict.get(unit), ClientErrorCode.SpwRobot_GetCachedMoveCost_00);
                 if (!subMap.has(tile)) {
                     subMap.set(tile, tile.getMoveCostByUnit(unit));
                 }
@@ -415,7 +415,7 @@ namespace WarRobot {
     }
 
     async function getUnitsInfoDict(war: BwWar): Promise<Map<number, UnitsInfo>> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const unitsInfoDict = new Map<number, UnitsInfo>();
         for (const unit of war.getUnitMap().getAllUnits()) {
@@ -431,7 +431,7 @@ namespace WarRobot {
                     idleCountOnMap  : isOnMap && isIdle ? 1 : 0,
                 });
             } else {
-                const info          = Helpers.getExisted(unitsInfoDict.get(playerIndex), ClientErrorCode.SpwRobot_GetUnitsInfoDict_00);
+                const info          = Twns.Helpers.getExisted(unitsInfoDict.get(playerIndex), ClientErrorCode.SpwRobot_GetUnitsInfoDict_00);
                 info.value          += value;
                 info.allCountOnMap  += isOnMap ? 1 : 0;
                 info.idleCountOnMap += isOnMap && isIdle ? 1 : 0;
@@ -451,7 +451,7 @@ namespace WarRobot {
     }
 
     async function getUnitValueRatio(war: BwWar, unitsInfoDict: Map<number, UnitsInfo>, playerIndexInTurn: number): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const playerManager = war.getPlayerManager();
         const playerInTurn  = playerManager.getPlayer(playerIndexInTurn);
@@ -471,7 +471,7 @@ namespace WarRobot {
     }
 
     async function getGlobalOffenseBonuses(war: BwWar): Promise<Map<number, number>> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const globalOffenseBonuses  = new Map<number, number>();
         const commonSettingManager  = war.getCommonSettingManager();
@@ -496,7 +496,7 @@ namespace WarRobot {
                 continue;
             }
 
-            const currentBonus = Helpers.getExisted(globalOffenseBonuses.get(playerIndex), ClientErrorCode.SpwRobot_GetGlobalOffenseBonuses_00);
+            const currentBonus = Twns.Helpers.getExisted(globalOffenseBonuses.get(playerIndex), ClientErrorCode.SpwRobot_GetGlobalOffenseBonuses_00);
             globalOffenseBonuses.set(playerIndex, currentBonus + bonus);
         }
 
@@ -504,7 +504,7 @@ namespace WarRobot {
     }
 
     async function getGlobalDefenseBonuses(war: BwWar): Promise<Map<number, number>> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const globalDefenseBonuses = new Map<number, number>();
         for (let playerIndex = war.getPlayerManager().getTotalPlayersCount(false); playerIndex > CommonConstants.WarNeutralPlayerIndex; --playerIndex) {
@@ -522,7 +522,7 @@ namespace WarRobot {
                 continue;
             }
 
-            const currentBonus = Helpers.getExisted(globalDefenseBonuses.get(playerIndex), ClientErrorCode.SpwRobot_GetGlobalDefenseBonuses_00);
+            const currentBonus = Twns.Helpers.getExisted(globalDefenseBonuses.get(playerIndex), ClientErrorCode.SpwRobot_GetGlobalDefenseBonuses_00);
             globalDefenseBonuses.set(playerIndex, currentBonus + bonus);
         }
 
@@ -530,7 +530,7 @@ namespace WarRobot {
     }
 
     async function getLuckValues(war: BwWar): Promise<Map<number, number>> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const luckValues            = new Map<number, number>();
         const commonSettingManager  = war.getCommonSettingManager();
@@ -544,7 +544,7 @@ namespace WarRobot {
     }
 
     async function checkCanUnitWaitOnGrid(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex): Promise<boolean> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const unitGridIndex = unit.getGridIndex();
         return (GridIndexHelpers.checkIsEqual(unitGridIndex, gridIndex))
@@ -582,7 +582,7 @@ namespace WarRobot {
         passableGridIndex   : GridIndex | null;
         blockedGridIndex    : GridIndex | null;
     }): Promise<MovableArea> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const moveRange         = unit.getFinalMoveRange();
         const currentFuel       = unit.getCurrentFuel();
@@ -644,11 +644,11 @@ namespace WarRobot {
     // Damage map generators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function getAttackInfo(commonParams: CommonParams, attacker: BwUnit, targetUnit: BwUnit): Promise<AttackInfo> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const attackerGridIndex             = attacker.getGridIndex();
         const attackerPlayerIndex           = attacker.getPlayerIndex();
-        const luckValue                     = Helpers.getExisted(commonParams.luckValues.get(attackerPlayerIndex), ClientErrorCode.SpwRobot_GetAttackInfo_00);
+        const luckValue                     = Twns.Helpers.getExisted(commonParams.luckValues.get(attackerPlayerIndex), ClientErrorCode.SpwRobot_GetAttackInfo_00);
         const targetArmorType               = targetUnit.getArmorType();
         const attackerCurrentHp             = attacker.getCurrentHp();
         const attackerMaxFuel               = attacker.getMaxFuel();
@@ -696,7 +696,7 @@ namespace WarRobot {
         } else {
             const loaderUnit = unitMap.getUnitOnMap(attackerGridIndex);
             if ((loaderUnit == null) || (loaderUnit === attacker)) {
-                throw Helpers.newError(`Invalid loaderUnit.`, ClientErrorCode.SpwRobot_GetAttackInfo_01);
+                throw Twns.Helpers.newError(`Invalid loaderUnit.`, ClientErrorCode.SpwRobot_GetAttackInfo_01);
             }
 
             if ((!attacker.checkCanAttackAfterMove())       ||
@@ -740,23 +740,23 @@ namespace WarRobot {
     }
 
     async function createDamageMap(commonParams: CommonParams, targetUnit: BwUnit, isDiving: boolean): Promise<DamageMapData[][]> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const targetPlayerIndex                         = targetUnit.getPlayerIndex();
-        const globalDefenseBonus                        = Helpers.getExisted(commonParams.globalDefenseBonuses.get(targetPlayerIndex), ClientErrorCode.SpwRobot_CreateDamageMap_00);
+        const globalDefenseBonus                        = Twns.Helpers.getExisted(commonParams.globalDefenseBonuses.get(targetPlayerIndex), ClientErrorCode.SpwRobot_CreateDamageMap_00);
         const { war, mapSize, globalOffenseBonuses }    = commonParams;
         const { width: mapWidth, height: mapHeight }    = mapSize;
         const unitMap                                   = war.getUnitMap();
         const tileMap                                   = war.getTileMap();
-        const damageMap                                 = Helpers.createEmptyMap<DamageMapData>(mapWidth);
+        const damageMap                                 = Twns.Helpers.createEmptyMap<DamageMapData>(mapWidth);
         const targetTeamIndex                           = targetUnit.getTeamIndex();
 
         for (const attacker of unitMap.getAllUnits()) {
-            await Helpers.checkAndCallLater();
+            await Twns.Helpers.checkAndCallLater();
 
             const beginningGridIndex        = attacker.getGridIndex();
             const attackerPlayerIndex       = attacker.getPlayerIndex();
-            const globalOffenseBonus        = Helpers.getExisted(globalOffenseBonuses.get(attackerPlayerIndex), ClientErrorCode.SpwRobot_CreateDamageMap_01);
+            const globalOffenseBonus        = Twns.Helpers.getExisted(globalOffenseBonuses.get(attackerPlayerIndex), ClientErrorCode.SpwRobot_CreateDamageMap_01);
             const promotionAttackBonus      = attacker.getPromotionAttackBonus();
             const attackerFinalMoveRange    = attacker.getFinalMoveRange();
             const minAttackRange            = attacker.getMinAttackRange();
@@ -776,7 +776,7 @@ namespace WarRobot {
                 continue;
             }
 
-            await Helpers.checkAndCallLater();
+            await Twns.Helpers.checkAndCallLater();
             const movableArea = Twns.WarHelpers.WarCommonHelpers.createMovableArea({
                 origin          : beginningGridIndex,
                 maxMoveCost     : Math.min(attackerFinalMoveRange, fuel),
@@ -795,7 +795,7 @@ namespace WarRobot {
                 },
             });
 
-            await Helpers.checkAndCallLater();
+            await Twns.Helpers.checkAndCallLater();
             const attackableArea = Twns.WarHelpers.WarCommonHelpers.createAttackableAreaForUnit({
                 movableArea,
                 mapSize,
@@ -808,7 +808,7 @@ namespace WarRobot {
                 }
             });
 
-            await Helpers.checkAndCallLater();
+            await Twns.Helpers.checkAndCallLater();
             const attackBonus = globalOffenseBonus + promotionAttackBonus;
             for (let x = 0; x < mapWidth; ++x) {
                 const column = attackableArea[x];
@@ -958,7 +958,7 @@ namespace WarRobot {
         //     * (unit.getProductionFinalCost() / 6000 / Math.max(1, _unitValueRatio))
         //     * (unit.getHasLoadedCo() ? 2 : 1);
 
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const data = damageMap ? damageMap[gridIndex.x][gridIndex.y] : null;
         if (data == null) {
@@ -982,7 +982,7 @@ namespace WarRobot {
     }
 
     async function getScoreForThreatEnemies(commonParams: CommonParams, attackerUnit: BwUnit, gridIndex: GridIndex, scoreDictForThreatEnemy: Map<BwUnit, number>): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const war           = commonParams.war;
         const unitMap       = war.getUnitMap();
@@ -998,7 +998,7 @@ namespace WarRobot {
         const tileMap           = war.getTileMap();
         const attackerTeamIndex = attackerUnit.getTeamIndex();
 
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
         const movableArea = Twns.WarHelpers.WarCommonHelpers.createMovableArea({
             origin          : gridIndex,
             maxMoveCost     : attackerUnit.getFinalMoveRange(),
@@ -1017,7 +1017,7 @@ namespace WarRobot {
             },
         });
 
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
         const attackableArea = Twns.WarHelpers.WarCommonHelpers.createAttackableAreaForUnit({
             movableArea,
             mapSize,
@@ -1029,14 +1029,14 @@ namespace WarRobot {
             }
         });
 
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
         const scalerForUnitValueRatio   = Math.pow(Math.max(1, commonParams.unitValueRatio), 1);
         const mapWidth                  = mapSize.width;
         const mapHeight                 = mapSize.height;
         const normalizedHp              = attackerUnit.getNormalizedCurrentHp();
         const attackerPlayerIndex       = attackerUnit.getPlayerIndex();
-        const luckValue                 = Helpers.getExisted(commonParams.luckValues.get(attackerPlayerIndex), ClientErrorCode.SpwRobot_GetScoreForThreatEnemies_00);
-        const globalOffenseBonus        = Helpers.getExisted(commonParams.globalOffenseBonuses.get(attackerPlayerIndex), ClientErrorCode.SpwRobot_GetScoreForThreatEnemies_01);
+        const luckValue                 = Twns.Helpers.getExisted(commonParams.luckValues.get(attackerPlayerIndex), ClientErrorCode.SpwRobot_GetScoreForThreatEnemies_00);
+        const globalOffenseBonus        = Twns.Helpers.getExisted(commonParams.globalOffenseBonuses.get(attackerPlayerIndex), ClientErrorCode.SpwRobot_GetScoreForThreatEnemies_01);
         const globalDefenseBonuses      = commonParams.globalDefenseBonuses;
         const attackBonus               = globalOffenseBonus + attackerUnit.getPromotionAttackBonus();
         let totalScore                  = 0;
@@ -1059,7 +1059,7 @@ namespace WarRobot {
                 }
 
                 if (scoreDictForThreatEnemy.has(targetUnit)) {
-                    totalScore += Helpers.getExisted(scoreDictForThreatEnemy.get(targetUnit), ClientErrorCode.SpwRobot_GetScoreForThreatEnemies_02);
+                    totalScore += Twns.Helpers.getExisted(scoreDictForThreatEnemy.get(targetUnit), ClientErrorCode.SpwRobot_GetScoreForThreatEnemies_02);
                     continue;
                 }
 
@@ -1074,7 +1074,7 @@ namespace WarRobot {
                     continue;
                 }
 
-                const globalDefenseBonus    = Helpers.getExisted(globalDefenseBonuses.get(targetUnit.getPlayerIndex()), ClientErrorCode.SpwRobot_GetScoreForThreatEnemies_03);
+                const globalDefenseBonus    = Twns.Helpers.getExisted(globalDefenseBonuses.get(targetUnit.getPlayerIndex()), ClientErrorCode.SpwRobot_GetScoreForThreatEnemies_03);
                 const damage                = Math.floor(
                     (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
                     * normalizedHp
@@ -1098,7 +1098,7 @@ namespace WarRobot {
     }
 
     async function getScoreForDistanceToCapturableBuildings(commonParams: CommonParams, unit: BwUnit, movableArea: MovableArea): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const { war, mapSize }                          = commonParams;
         const { width: mapWidth, height: mapHeight }    = mapSize;
@@ -1317,7 +1317,7 @@ namespace WarRobot {
         damageMap               : DamageMapData[][] | null | undefined;
         scoreDictForThreatEnemy : Map<BwUnit, number>;
     }): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const [scoreForBeThreatened, scoreForThreatEnemies] = await Promise.all([
             getScoreForBeThreatened(commonParams, unit, gridIndex, damageMap),
@@ -1336,7 +1336,7 @@ namespace WarRobot {
             {
                 const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
                 if ((maxAmmo) && (unit.checkIsPrimaryWeaponAmmoInShort())) {
-                    const currentAmmo   = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.SpwRobot_GetScoreForPosition_00);
+                    const currentAmmo   = Twns.Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.SpwRobot_GetScoreForPosition_00);
                     totalScore          += ((maxAmmo - currentAmmo) / maxAmmo * 10 + (currentAmmo <= 0 ? 40 : 0)) * passiveScaler;
                 }
             }
@@ -1349,7 +1349,7 @@ namespace WarRobot {
             if (_IS_NEED_VISIBILITY) {
                 const maxAmmo = unit.getFlareMaxAmmo();
                 if ((maxAmmo) && (war.getFogMap().checkHasFogCurrently())) {
-                    const currentAmmo   = Helpers.getExisted(unit.getFlareCurrentAmmo(), ClientErrorCode.SpwRobot_GetScoreForPosition_01);
+                    const currentAmmo   = Twns.Helpers.getExisted(unit.getFlareCurrentAmmo(), ClientErrorCode.SpwRobot_GetScoreForPosition_01);
                     totalScore          += ((maxAmmo - currentAmmo) / maxAmmo * 10 + (currentAmmo <= 0 ? 40 : 0)) * passiveScaler;
                 }
             }
@@ -1373,7 +1373,7 @@ namespace WarRobot {
             }
         }
 
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const moveType      = unit.getMoveType();
         const movableArea   = Twns.WarHelpers.WarCommonHelpers.createMovableArea({
@@ -1392,7 +1392,7 @@ namespace WarRobot {
     }
 
     async function getScoreForMovePath(commonParams: CommonParams, movingUnit: BwUnit, movePath: MovePathNode[]): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         if (!_IS_NEED_VISIBILITY) {
             return 0;
@@ -1414,12 +1414,12 @@ namespace WarRobot {
     }
 
     async function getScoreForActionUnitBeLoaded(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const { war }   = commonParams;
-        const loader    = Helpers.getExisted(war.getUnitMap().getUnitOnMap(gridIndex), ClientErrorCode.SpwRobot_GetScoreForActionUnitBeLoaded_00);
+        const loader    = Twns.Helpers.getExisted(war.getUnitMap().getUnitOnMap(gridIndex), ClientErrorCode.SpwRobot_GetScoreForActionUnitBeLoaded_00);
         if (!loader.checkCanLoadUnit(unit)) {
-            throw Helpers.newError(`Can't load the unit.`, ClientErrorCode.SpwRobot_GetScoreForActionUnitBeLoaded_01);
+            throw Twns.Helpers.newError(`Can't load the unit.`, ClientErrorCode.SpwRobot_GetScoreForActionUnitBeLoaded_01);
         }
 
         const passiveScaler = unit.getProductionCfgCost() / 1000 / Math.max(1, commonParams.unitValueRatio) * (unit.getHasLoadedCo() ? 2 : 1);
@@ -1432,7 +1432,7 @@ namespace WarRobot {
             {
                 const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
                 if (maxAmmo) {
-                    const currentAmmo   = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.SpwRobot_GetScoreForActionUnitBeLoaded_02);
+                    const currentAmmo   = Twns.Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.SpwRobot_GetScoreForActionUnitBeLoaded_02);
                     totalScore          += ((maxAmmo - currentAmmo) / maxAmmo * 10 + (currentAmmo <= 0 ? 40 : 0)) * passiveScaler;
                 }
             }
@@ -1445,7 +1445,7 @@ namespace WarRobot {
             if (_IS_NEED_VISIBILITY) {
                 const maxAmmo = unit.getFlareMaxAmmo();
                 if ((maxAmmo) && (war.getFogMap().checkHasFogCurrently())) {
-                    const currentAmmo   = Helpers.getExisted(unit.getFlareCurrentAmmo(), ClientErrorCode.SpwRobot_GetScoreForActionUnitBeLoaded_03);
+                    const currentAmmo   = Twns.Helpers.getExisted(unit.getFlareCurrentAmmo(), ClientErrorCode.SpwRobot_GetScoreForActionUnitBeLoaded_03);
                     totalScore          += ((maxAmmo - currentAmmo) / maxAmmo * 10 + (currentAmmo <= 0 ? 40 : 0)) * passiveScaler;
                 }
             }
@@ -1455,10 +1455,10 @@ namespace WarRobot {
     }
 
     async function getScoreForActionUnitJoin(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const { war }       = commonParams;
-        const targetUnit    = Helpers.getExisted(war.getUnitMap().getUnitOnMap(gridIndex), ClientErrorCode.SpwRobot_GetScoreForActionUnitJoin_00);
+        const targetUnit    = Twns.Helpers.getExisted(war.getUnitMap().getUnitOnMap(gridIndex), ClientErrorCode.SpwRobot_GetScoreForActionUnitJoin_00);
         if (targetUnit.getActionState() === UnitActionState.Idle) {
             return -9999;
         }
@@ -1488,7 +1488,7 @@ namespace WarRobot {
         focusUnitGridIndex      : GridIndex;
         battleDamageInfoArray   : CommonProto.Structure.IBattleDamageInfo[];
     }): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const focusTeamIndex            = focusUnit.getTeamIndex();
         const { war, unitValueRatio }   = commonParams;
@@ -1501,16 +1501,16 @@ namespace WarRobot {
 
         let totalScore = 0;
         for (const battleDamageInfo of battleDamageInfoArray) {
-            const damage        = Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_00);
+            const damage        = Twns.Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_00);
             const tileGridIndex = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
             if (tileGridIndex != null) {
                 const tile2 = tileMap.getTile(tileGridIndex);
                 if (!tileHpDict.has(tile2)) {
-                    const tileHp2 = Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_01);
+                    const tileHp2 = Twns.Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_01);
                     tileHpDict.set(tile2, tileHp2);
                 }
 
-                const tileHp2           = Helpers.getExisted(tileHpDict.get(tile2), ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_02);
+                const tileHp2           = Twns.Helpers.getExisted(tileHpDict.get(tile2), ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_02);
                 const tileTeamIndex2    = tile2.getTeamIndex();
                 const actualDamage      = Math.min(tileHp2, damage);
                 tileHpDict.set(tile2, tileHp2 - actualDamage);
@@ -1521,15 +1521,15 @@ namespace WarRobot {
 
             const unitId2 = battleDamageInfo.targetUnitId;
             if (unitId2 != null) {
-                const unit2 = Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_03);
+                const unit2 = Twns.Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_03);
                 if (!unitHpDict.has(unit2)) {
                     unitHpDict.set(unit2, unit2.getCurrentHp());
                 }
 
-                const unitHp2               = Helpers.getExisted(unitHpDict.get(unit2), ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_04);
+                const unitHp2               = Twns.Helpers.getExisted(unitHpDict.get(unit2), ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_04);
                 const unitTeamIndex2        = unit2.getTeamIndex();
-                const unitId1               = Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_05);
-                const unit1                 = Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_06);
+                const unitId1               = Twns.Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_05);
+                const unit1                 = Twns.Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_06);
                 const unitType1             = unit1.getUnitType();
                 const unitProductionCost2   = unit2.getProductionCfgCost();
                 const unitType2             = unit2.getUnitType();
@@ -1583,18 +1583,18 @@ namespace WarRobot {
                 continue;
             }
 
-            throw Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_09);
+            throw Twns.Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_09);
         }
 
         return totalScore;
     }
 
     async function getScoreForActionUnitCaptureTile(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const tile                  = commonParams.war.getTileMap().getTile(gridIndex);
-        const currentCapturePoint   = Helpers.getExisted(tile.getCurrentCapturePoint(), ClientErrorCode.SpwRobot_GetScoreForActionUnitCaptureTile_00 );
-        const captureAmount         = Helpers.getExisted(unit.getCaptureAmount(gridIndex), ClientErrorCode.SpwRobot_GetScoreAndActionUnitCaptureTile_01);
+        const currentCapturePoint   = Twns.Helpers.getExisted(tile.getCurrentCapturePoint(), ClientErrorCode.SpwRobot_GetScoreForActionUnitCaptureTile_00 );
+        const captureAmount         = Twns.Helpers.getExisted(unit.getCaptureAmount(gridIndex), ClientErrorCode.SpwRobot_GetScoreAndActionUnitCaptureTile_01);
         if (captureAmount >= currentCapturePoint) {
             return 99999999;
         }
@@ -1609,19 +1609,19 @@ namespace WarRobot {
     }
 
     async function getScoreForActionUnitDive(unit: BwUnit): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         return unit.checkIsFuelInShort() ? -10 : 10;
     }
 
     async function getScoreForActionUnitDropUnit(unit: BwUnit, dropDestinations: CommonProto.Structure.IDropDestination[]): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         return dropDestinations.length * 100;
     }
 
     async function getScoreForActionUnitLaunchSilo(commonParams: CommonParams, unitValueMap: number[][], targetGridIndex: GridIndex): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         let score = 9999;
         for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize: commonParams.mapSize })) {
@@ -1632,9 +1632,9 @@ namespace WarRobot {
     }
 
     async function getScoreForActionUnitLaunchFlare(commonParams: CommonParams, unit: BwUnit, targetGridIndex: GridIndex): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
-        const flareRadius                       = Helpers.getExisted(unit.getFlareRadius(), ClientErrorCode.SpwRobot_GetScoreForUnitLaunchFlare_00);
+        const flareRadius                       = Twns.Helpers.getExisted(unit.getFlareRadius(), ClientErrorCode.SpwRobot_GetScoreForUnitLaunchFlare_00);
         const { war, mapSize, visibleUnits }    = commonParams;
         const unitMap                           = war.getUnitMap();
         let score                               = 0;
@@ -1649,13 +1649,13 @@ namespace WarRobot {
     }
 
     async function getScoreForActionUnitSurface(unit: BwUnit): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         return unit.checkIsFuelInShort() ? 10 : -10;
     }
 
     async function getScoreForActionUnitWait(): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         // const tile = war.getTileMap().getTile(gridIndex);
         // if ((tile.getMaxCapturePoint()) && (tile.getTeamIndex() !== unit.getTeamIndex())) {
@@ -1667,9 +1667,9 @@ namespace WarRobot {
     }
 
     async function getScoreForActionUnitLoadCo(unit: BwUnit): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
-        if (unit.getUnitType() !== Types.UnitType.Tank) {
+        if (unit.getUnitType() !== Twns.Types.UnitType.Tank) {
             return -9999;
         } else {
             return unit.getCurrentHp() * 100;
@@ -1678,7 +1678,7 @@ namespace WarRobot {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async function getScoreForActionUnitUseCoSkill(unit: BwUnit): Promise<number> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         return 999999999;
     }
@@ -1690,7 +1690,7 @@ namespace WarRobot {
         idleFactoriesCount          : number;
         getMinTurnsCountForAttack   : (attackerUnit: BwUnit, targetGridIndex: GridIndex) => Promise<number | null>;
     }): Promise<number | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const war = commonParams.war;
         if (((!_IS_NEED_VISIBILITY) || (!war.getFogMap().checkHasFogCurrently()))               &&
@@ -1727,21 +1727,21 @@ namespace WarRobot {
         }
 
         if (producingUnitType !== UnitType.Infantry) {
-            const unitCfg               = Helpers.getExisted(war.getGameConfig().getUnitTemplateCfg(UnitType.Infantry), ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_00);
+            const unitCfg               = Twns.Helpers.getExisted(war.getGameConfig().getUnitTemplateCfg(UnitType.Infantry), ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_00);
             const restFactoriesCount    = tileType === TileType.Factory ? idleFactoriesCount - 1 : idleFactoriesCount;
             if (restFactoriesCount * unitCfg.productionCost > restFund) {
                 return null;
             }
         }
 
-        let score                           = Helpers.getExisted(_PRODUCTION_CANDIDATES[tileType][producingUnitType], ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_01);
+        let score                           = Twns.Helpers.getExisted(_PRODUCTION_CANDIDATES[tileType][producingUnitType], ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_01);
         const producingTeamIndex            = producingUnit.getTeamIndex();
         const producingUnitCurrentHp        = producingUnit.getCurrentHp();
         const producingUnitMaxAttackRange   = producingUnit.getFinalMaxAttackRange();
         const producingUnitMoveRange        = producingUnit.getFinalMoveRange();
         const mapSize                       = tileMap.getMapSize();
         const unitValueRatio                = commonParams.unitValueRatio;
-        const getProducingUnitMovableArea   = Helpers.createLazyFunc(() => {
+        const getProducingUnitMovableArea   = Twns.Helpers.createLazyFunc(() => {
             return Twns.WarHelpers.WarCommonHelpers.createMovableArea({
                 origin          : producingGridIndex,
                 maxMoveCost     : Number.MAX_SAFE_INTEGER,
@@ -1770,7 +1770,7 @@ namespace WarRobot {
                 const baseDamage = producingUnit.getBaseDamage(unit.getArmorType());
                 if (baseDamage != null) {
                     const movableArea = getProducingUnitMovableArea();
-                    const minDistance = Helpers.getNonNullElements(GridIndexHelpers.getGridsWithinDistance(
+                    const minDistance = Twns.Helpers.getNonNullElements(GridIndexHelpers.getGridsWithinDistance(
                         { origin: unitGridIndex, minDistance: 0, maxDistance: producingUnitMaxAttackRange, mapSize }                ).map(g => {
                         const column = movableArea[g.x];
                         return (column ? column[g.y] : null)?.totalMoveCost;
@@ -1815,7 +1815,7 @@ namespace WarRobot {
     // The available action generators for units.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function getScoreAndActionUnitBeLoaded(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const unitGridIndex = unit.getGridIndex();
         if (GridIndexHelpers.checkIsEqual(gridIndex, unitGridIndex)) {
@@ -1842,7 +1842,7 @@ namespace WarRobot {
     }
 
     async function getScoreAndActionUnitJoin(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const unitGridIndex = unit.getGridIndex();
         if (GridIndexHelpers.checkIsEqual(gridIndex, unitGridIndex)) {
@@ -1869,7 +1869,7 @@ namespace WarRobot {
     }
 
     async function getScoreAndActionUnitAttack(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const unitGridIndex = unit.getGridIndex();
         const minRange      = unit.getMinAttackRange();
@@ -1895,7 +1895,7 @@ namespace WarRobot {
             }
 
             promiseArray.push((async () => {
-                await Helpers.checkAndCallLater();
+                await Twns.Helpers.checkAndCallLater();
 
                 const battleDamageInfoArray = WarDamageCalculator.getEstimatedBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
                 return {
@@ -1932,7 +1932,7 @@ namespace WarRobot {
     }
 
     async function getScoreAndActionUnitCaptureTile(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const tile = commonParams.war.getTileMap().getTile(gridIndex);
         if (!unit.checkCanCaptureTile(tile)) {
@@ -1954,7 +1954,7 @@ namespace WarRobot {
     }
 
     async function getScoreAndActionUnitDive(unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         if (!unit.checkCanDive()) {
             return null;
@@ -1980,7 +1980,7 @@ namespace WarRobot {
         gridIndex       : GridIndex;
         pathNodes       : MovePathNode[];
     }): Promise<ScoreAndAction | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         if ((!unit.getCfgCanDropLoadedUnit()) || (unit.getLoadedUnitsCount() <= 0)) {
             return null;
@@ -2046,7 +2046,7 @@ namespace WarRobot {
     }
 
     async function getScoreAndActionUnitLaunchSilo(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const { war }   = commonParams;
         const tile      = war.getTileMap().getTile(gridIndex);
@@ -2055,7 +2055,7 @@ namespace WarRobot {
         }
 
         const { width: mapWidth, height: mapHeight }    = commonParams.mapSize;
-        const unitValueMap                              = Helpers.createEmptyMap<number>(mapWidth, mapHeight);
+        const unitValueMap                              = Twns.Helpers.createEmptyMap<number>(mapWidth, mapHeight);
         const teamIndex                                 = unit.getTeamIndex();
         const unitMap                                   = war.getUnitMap();
         for (let x = 0; x < mapWidth; ++x) {
@@ -2107,7 +2107,7 @@ namespace WarRobot {
     }
 
     async function getScoreAndActionUnitLaunchFlare(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const { war, mapSize } = commonParams;
         if ((!_IS_NEED_VISIBILITY)                      ||
@@ -2118,7 +2118,7 @@ namespace WarRobot {
             return null;
         }
 
-        const flareMaxRange     = Helpers.getExisted(unit.getFlareMaxRange(), ClientErrorCode.SpwRobot_GetScoreAndActionUnitLaunchFlare_00);
+        const flareMaxRange     = Twns.Helpers.getExisted(unit.getFlareMaxRange(), ClientErrorCode.SpwRobot_GetScoreAndActionUnitLaunchFlare_00);
         const promiseArray      : Promise<ScoreAndAction | null>[] = [];
         for (const targetGridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: gridIndex, minDistance: 0, maxDistance: flareMaxRange, mapSize })) {
             promiseArray.push((async () => {
@@ -2141,7 +2141,7 @@ namespace WarRobot {
     }
 
     async function getScoreAndActionUnitSurface(unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         if (!unit.checkCanSurface()) {
             return null;
@@ -2162,7 +2162,7 @@ namespace WarRobot {
     }
 
     async function getScoreAndActionUnitWait(unit: BwUnit, pathNodes: MovePathNode[]): Promise<ScoreAndAction> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const score = await getScoreForActionUnitWait();
         return {
@@ -2179,7 +2179,7 @@ namespace WarRobot {
     }
 
     async function getScoreAndActionUnitLoadCo(unit: BwUnit, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         if (!unit.checkCanLoadCoAfterMovePath(pathNodes)) {
             return null;
@@ -2199,11 +2199,11 @@ namespace WarRobot {
     }
 
     async function getScoreAndActionUnitUseCoSkill(commonParams: CommonParams, unit: BwUnit, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const war               = commonParams.war;
         const playerIndexInTurn = commonParams.playerIndexInTurn;
-        const unitsInfo         = Helpers.getExisted(commonParams.unitsInfoDict.get(playerIndexInTurn), ClientErrorCode.SpwRobot_GetScoreAndActionUnitUseCoSkill_00);
+        const unitsInfo         = Twns.Helpers.getExisted(commonParams.unitsInfoDict.get(playerIndexInTurn), ClientErrorCode.SpwRobot_GetScoreAndActionUnitUseCoSkill_00);
         const player            = war.getPlayer(playerIndexInTurn);
         const idleUnitsCount    = unitsInfo.idleCountOnMap;
         const allUnitsCount     = unitsInfo.allCountOnMap;
@@ -2231,9 +2231,9 @@ namespace WarRobot {
             }
         }
 
-        if (unit.checkCanUseCoSkill(Types.CoSkillType.Power)) {
+        if (unit.checkCanUseCoSkill(Twns.Types.CoSkillType.Power)) {
             const canResetState = player.getCoSkills(CoSkillType.Power).map(v => gameConfig.getCoSkillCfg(v)).some(v => v?.selfUnitActionState != null);
-            if ((player.getCoCurrentEnergy() > Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetScoreAndActionUnitUseCoSkill_01) * 1.1)  ||
+            if ((player.getCoCurrentEnergy() > Twns.Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetScoreAndActionUnitUseCoSkill_01) * 1.1)  ||
                 ((canResetState) && (idleUnitsCount > 0))                       ||
                 ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
             ) {
@@ -2258,7 +2258,7 @@ namespace WarRobot {
     }
 
     async function getBestScoreAndActionForUnitAndPath(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const scoreAndActionForUnitBeLoaded = await getScoreAndActionUnitBeLoaded(commonParams, unit, gridIndex, pathNodes);
         if (scoreAndActionForUnitBeLoaded) {
@@ -2321,7 +2321,7 @@ namespace WarRobot {
     // }
 
     async function getBestScoreAndActionForCandidateUnit(commonParams: CommonParams, candidateUnit: BwUnit): Promise<ScoreAndAction | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         if (!candidateUnit.checkCanAiDoAction()) {
             return null;
@@ -2393,7 +2393,7 @@ namespace WarRobot {
         idleFactoriesCount          : number;
         getMinTurnsCountForAttack   : (attackerUnit: BwUnit, targetGridIndex: GridIndex) => Promise<number | null>;
     }): Promise<ScoreAndAction | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const war           = commonParams.war;
         const unitCategory  = war.getTileMap().getTile(gridIndex).getProduceUnitCategoryForPlayer(commonParams.playerIndexInTurn);
@@ -2440,7 +2440,7 @@ namespace WarRobot {
     }
 
     async function getBestActionPlayerProduceUnit(commonParams: CommonParams): Promise<IWarActionContainer | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const { war, playerIndexInTurn } = commonParams;
         if (playerIndexInTurn === CommonConstants.WarNeutralPlayerIndex) {
@@ -2479,7 +2479,7 @@ namespace WarRobot {
             }
 
             if (!movableAreaDict.has(attackerUnit)) {
-                await Helpers.checkAndCallLater();
+                await Twns.Helpers.checkAndCallLater();
                 movableAreaDict.set(attackerUnit, Twns.WarHelpers.WarCommonHelpers.createMovableArea({
                     origin          : attackerUnit.getGridIndex(),
                     maxMoveCost     : Number.MAX_SAFE_INTEGER,
@@ -2490,8 +2490,8 @@ namespace WarRobot {
                 }));
             }
 
-            const movableArea   = Helpers.getExisted(movableAreaDict.get(attackerUnit), ClientErrorCode.SpwRobot_GetBestActionPlayerProduceUnit_00);
-            const minDistance   = Helpers.getNonNullElements(GridIndexHelpers.getGridsWithinDistance(
+            const movableArea   = Twns.Helpers.getExisted(movableAreaDict.get(attackerUnit), ClientErrorCode.SpwRobot_GetBestActionPlayerProduceUnit_00);
+            const minDistance   = Twns.Helpers.getNonNullElements(GridIndexHelpers.getGridsWithinDistance(
                 { origin: targetGridIndex, minDistance: 0, maxDistance: maxAttackRange, mapSize }        ).map(g => {
                 const column = movableArea[g.x];
                 return (column ? column[g.y] : null)?.totalMoveCost;
@@ -2503,7 +2503,7 @@ namespace WarRobot {
                     moveRangeDict.set(attackerUnit, attackerUnit.getFinalMoveRange());
                 }
 
-                const moveRange = Helpers.getExisted(moveRangeDict.get(attackerUnit), ClientErrorCode.SpwRobot_GetBestActionPlayerProduceUnit_01);
+                const moveRange = Twns.Helpers.getExisted(moveRangeDict.get(attackerUnit), ClientErrorCode.SpwRobot_GetBestActionPlayerProduceUnit_01);
                 return (moveRange <= 0
                     ? (minDistance <= 0 ? 1 : null)
                     : Math.max(
@@ -2519,7 +2519,7 @@ namespace WarRobot {
             if (!minTurnsCountDict.has(attackerUnit)) {
                 minTurnsCountDict.set(attackerUnit, new Map([[gridId, await rawGetMinTurnsCountForAttack(attackerUnit, targetGridIndex)]]));
             } else {
-                const dict = Helpers.getExisted(minTurnsCountDict.get(attackerUnit), ClientErrorCode.SpwRobot_GetBestActionPlayerProduceUnit_02);
+                const dict = Twns.Helpers.getExisted(minTurnsCountDict.get(attackerUnit), ClientErrorCode.SpwRobot_GetBestActionPlayerProduceUnit_02);
                 if (!dict.has(gridId)) {
                     dict.set(gridId, await rawGetMinTurnsCountForAttack(attackerUnit, targetGridIndex));
                 }
@@ -2561,7 +2561,7 @@ namespace WarRobot {
 
     // Phase 1: 发动co技能
     async function getCandidateUnitsForPhase1(commonParams: CommonParams): Promise<BwUnit[]> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const playerIndexInTurn = commonParams.playerIndexInTurn;
         const unitMap           = commonParams.war.getUnitMap();
@@ -2609,8 +2609,8 @@ namespace WarRobot {
         const player            = war.getPlayer(playerIndexInTurn);
         const coType            = player.getCoType();
 
-        if (coType === Types.CoType.Global) {
-            const unitsInfo         = Helpers.getExisted(commonParams.unitsInfoDict.get(playerIndexInTurn), ClientErrorCode.SpwRobot_GetActionForPhase1_00);
+        if (coType === Twns.Types.CoType.Global) {
+            const unitsInfo         = Twns.Helpers.getExisted(commonParams.unitsInfoDict.get(playerIndexInTurn), ClientErrorCode.SpwRobot_GetActionForPhase1_00);
             const allUnitsCount     = unitsInfo.allCountOnMap;
             const idleUnitsCount    = unitsInfo.idleCountOnMap;
             const gameConfig        = war.getGameConfig();
@@ -2628,9 +2628,9 @@ namespace WarRobot {
                     };
                 }
 
-            } else if (player.checkCanUseCoSkill(Types.CoSkillType.Power)) {
+            } else if (player.checkCanUseCoSkill(Twns.Types.CoSkillType.Power)) {
                 const canResetState = player.getCoSkills(CoSkillType.Power).map(v => gameConfig.getCoSkillCfg(v)).some(v => v?.selfUnitActionState != null);
-                if ((player.getCoCurrentEnergy() > Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetActionForPhase1_01) * 1.1)   ||
+                if ((player.getCoCurrentEnergy() > Twns.Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetActionForPhase1_01) * 1.1)   ||
                     ((canResetState) && (idleUnitsCount > 0))                                                                                               ||
                     ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
                 ) {
@@ -2648,7 +2648,7 @@ namespace WarRobot {
             }
         }
 
-        if (coType === Types.CoType.Zoned) {
+        if (coType === Twns.Types.CoType.Zoned) {
             const bestActionDict = commonParams.bestActionDict;
             for (const unit of await getCandidateUnitsForPhase1(commonParams)) {
                 {
@@ -3153,7 +3153,7 @@ namespace WarRobot {
 
     // Phase 8: 操作剩余任意部队
     async function getCandidateUnitsForPhase8(commonParams: CommonParams): Promise<BwUnit[]> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         const playerIndexInTurn = commonParams.playerIndexInTurn;
         const unitMap           = commonParams.war.getUnitMap();
@@ -3194,7 +3194,7 @@ namespace WarRobot {
         });
     }
     async function getActionForPhase8(commonParams: CommonParams): Promise<IWarActionContainer | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // const bestActionDict = commonParams.bestActionDict;
@@ -3299,14 +3299,14 @@ namespace WarRobot {
 
     // Phase 9: 生产部队
     async function getActionForPhase9(commonParams: CommonParams): Promise<IWarActionContainer | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         return await getBestActionPlayerProduceUnit(commonParams);
     }
 
     // Phase 11: 投票和局
     async function getActionForPhase11(commonParams: CommonParams): Promise<IWarActionContainer | null> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         if (commonParams.war.getDrawVoteManager().getRemainingVotes() == null) {
             return null;
@@ -3321,7 +3321,7 @@ namespace WarRobot {
 
     // Phase 12: 结束回合
     async function getActionForPhase12(): Promise<IWarActionContainer> {
-        await Helpers.checkAndCallLater();
+        await Twns.Helpers.checkAndCallLater();
 
         return {
             WarActionPlayerEndTurn: {},
@@ -3344,7 +3344,7 @@ namespace WarRobot {
     async function doGetNextAction(war: BwWar): Promise<IWarActionContainer> {
         const commonParams = await getCommonParams(war);
         if (war.getPlayerIndexInTurn() === CommonConstants.WarNeutralPlayerIndex) {
-            throw Helpers.newError(`Invalid playerIndexInTurn.`, ClientErrorCode.SpwRobot_DoGetNextAction_00);
+            throw Twns.Helpers.newError(`Invalid playerIndexInTurn.`, ClientErrorCode.SpwRobot_DoGetNextAction_00);
         }
 
         for (const func of funcArray) {
@@ -3354,12 +3354,12 @@ namespace WarRobot {
             }
         }
 
-        throw Helpers.newError(`No available action?!`, ClientErrorCode.SpwRobot_DoGetNextAction_01);
+        throw Twns.Helpers.newError(`No available action?!`, ClientErrorCode.SpwRobot_DoGetNextAction_01);
     }
 
     export async function getNextAction(war: BwWar): Promise<IWarActionContainer> {
         if (_calculatingWars.has(war)) {
-            throw Helpers.newError(`Calculating.`, ClientErrorCode.SpwRobot_GetNextAction_00);
+            throw Twns.Helpers.newError(`Calculating.`, ClientErrorCode.SpwRobot_GetNextAction_00);
         }
 
         _calculatingWars.add(war);

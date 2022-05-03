@@ -49,7 +49,7 @@ namespace Twns.MapManagement {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            FlowManager.gotoLobby();
+            Twns.FlowManager.gotoLobby();
         }
         private _onMsgUserLogout(): void {
             this.close();
@@ -76,21 +76,21 @@ namespace Twns.MapManagement {
                     name    : Lang.getText(LangTextType.B0295),
                     callback: (): void => {
                         this.close();
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MmReviewListPanel, void 0);
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmReviewListPanel, void 0);
                     },
                 },
                 {
                     name    : Lang.getText(LangTextType.B0193),
                     callback: (): void => {
                         this.close();
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAvailabilityListPanel, {});
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmAvailabilityListPanel, {});
                     },
                 },
                 {
                     name    : Lang.getText(LangTextType.B0444),
                     callback: (): void => {
                         this.close();
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MmTagListPanel, null);
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmTagListPanel, null);
                     },
                 },
             ];

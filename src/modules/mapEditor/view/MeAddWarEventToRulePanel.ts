@@ -70,7 +70,7 @@ namespace Twns.MapEditor {
             const dataArray         : DataForWarEventRenderer[] = [];
             for (const warEvent of warEventArray) {
                 dataArray.push({
-                    warEventId      : Helpers.getExisted(warEvent.eventId),
+                    warEventId      : Twns.Helpers.getExisted(warEvent.eventId),
                     warEventArray,
                     templateWarRule,
                 });

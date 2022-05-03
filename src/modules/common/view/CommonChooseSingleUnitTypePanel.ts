@@ -18,7 +18,7 @@
 namespace Twns.Common {
     import NotifyType           = Twns.Notify.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import UnitType             = Types.UnitType;
+    import UnitType             = Twns.Types.UnitType;
     import GameConfig           = Twns.Config.GameConfig;
 
     export type OpenDataForCommonChooseSingleUnitTypePanel = {
@@ -86,32 +86,32 @@ namespace Twns.Common {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -150,7 +150,7 @@ namespace Twns.Common {
             if (newUnitType !== data.currentUnitType) {
                 data.callback(newUnitType);
 
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonChooseSingleUnitTypePanel);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonChooseSingleUnitTypePanel);
             }
         }
 
@@ -158,7 +158,7 @@ namespace Twns.Common {
             this._updateComponentsForLanguage();
         }
         private _onNotifyUnitAnimationTick(): void {
-            this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
+            this._unitView.updateOnAnimationTick(Twns.Timer.getUnitAnimationTickCount());
         }
 
         private _updateComponentsForLanguage(): void {

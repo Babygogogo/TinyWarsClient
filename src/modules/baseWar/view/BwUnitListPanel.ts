@@ -134,9 +134,9 @@ namespace Twns.BaseWar {
         const unitB     = b.unit;
         const stateA    = unitA.getActionState();
         const stateB    = unitB.getActionState();
-        if ((stateA === Types.UnitActionState.Idle) && (stateB !== Types.UnitActionState.Idle)) {
+        if ((stateA === Twns.Types.UnitActionState.Idle) && (stateB !== Twns.Types.UnitActionState.Idle)) {
             return -1;
-        } else if ((stateA !== Types.UnitActionState.Idle) && (stateB === Types.UnitActionState.Idle)) {
+        } else if ((stateA !== Twns.Types.UnitActionState.Idle) && (stateB === Twns.Types.UnitActionState.Idle)) {
             return 1;
         } else {
             return unitA.getUnitType() - unitB.getUnitType();
@@ -171,7 +171,7 @@ namespace Twns.BaseWar {
                 { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
                 { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
 
             this._imgHp.source      = Twns.Common.CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;
             this._imgFuel.source    = Twns.Common.CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FUEL;
@@ -208,13 +208,13 @@ namespace Twns.BaseWar {
                     current : gridIndex,
                     tappedOn: gridIndex,
                 } as Twns.Notify.NotifyData.BwCursorTapped);
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwUnitListPanel);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.BwUnitListPanel);
             } else {
                 cursor.setGridIndex(gridIndex);
                 cursor.updateView();
                 war.getView().tweenGridToCentralArea(gridIndex);
                 war.getGridVisualEffect().showEffectAiming(gridIndex, 800);
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
             }
         }
 

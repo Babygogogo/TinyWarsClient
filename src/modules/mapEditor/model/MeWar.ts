@@ -43,7 +43,7 @@ namespace Twns.MapEditor {
         private _mapTag?                : IDataForMapTag;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(data, gameConfig, Types.WarType.Me);
+            this._baseInit(data, gameConfig, Twns.Types.WarType.Me);
             this.getDrawer().init();
 
             this._initView();
@@ -51,12 +51,12 @@ namespace Twns.MapEditor {
         public initWithMapEditorData(data: CommonProto.Map.IMapEditorData, gameConfig: GameConfig): void {
             this.init(MapEditor.MeHelpers.createISerialWar(data), gameConfig);
 
-            const mapRawData = Helpers.getExisted(data.mapRawData);
-            this.setMapSlotIndex(Helpers.getExisted(data.slotIndex));
-            this.setMapModifiedTime(Helpers.getExisted(mapRawData.modifiedTime));
-            this.setMapDesignerUserId(Helpers.getExisted(mapRawData.designerUserId));
-            this.setMapDesignerName(Helpers.getExisted(mapRawData.designerName));
-            this.setMapNameArray(Helpers.getExisted(mapRawData.mapNameArray));
+            const mapRawData = Twns.Helpers.getExisted(data.mapRawData);
+            this.setMapSlotIndex(Twns.Helpers.getExisted(data.slotIndex));
+            this.setMapModifiedTime(Twns.Helpers.getExisted(mapRawData.modifiedTime));
+            this.setMapDesignerUserId(Twns.Helpers.getExisted(mapRawData.designerUserId));
+            this.setMapDesignerName(Twns.Helpers.getExisted(mapRawData.designerName));
+            this.setMapNameArray(Twns.Helpers.getExisted(mapRawData.mapNameArray));
             this.setMapDescArray(mapRawData.mapExtraText?.mapDescription ?? []);
             this._setTemplateWarRuleArray(MapEditor.MeHelpers.createRevisedTemplateWarRuleArrayForMeWar(mapRawData.templateWarRuleArray));
             this.setMapTag(mapRawData.mapTag || {});
@@ -90,7 +90,7 @@ namespace Twns.MapEditor {
                 mapWidth                : mapSize.width,
                 mapHeight               : mapSize.height,
                 playersCountUnneutral,
-                modifiedTime            : Timer.getServerTimestamp(),
+                modifiedTime            : Twns.Timer.getServerTimestamp(),
                 tileDataArray           : this.getTileMap().serialize().tiles,
                 unitDataArray           : unitMap.serialize().units,
                 templateWarRuleArray    : this.getRevisedTemplateWarRuleArray(playersCountUnneutral),
@@ -119,7 +119,7 @@ namespace Twns.MapEditor {
             return null;
         }
         public getSettingsBootTimerParams(): number[] {
-            return [Types.BootTimerType.NoBoot];
+            return [Twns.Types.BootTimerType.NoBoot];
         }
 
         public getPlayerManager(): Twns.MapEditor.MePlayerManager {
@@ -233,39 +233,39 @@ namespace Twns.MapEditor {
             this._mapModifiedTime = time;
         }
         public getMapModifiedTime(): number {
-            return Helpers.getExisted(this._mapModifiedTime);
+            return Twns.Helpers.getExisted(this._mapModifiedTime);
         }
 
         public getMapSlotIndex(): number {
-            return Helpers.getExisted(this._mapSlotIndex);
+            return Twns.Helpers.getExisted(this._mapSlotIndex);
         }
         public setMapSlotIndex(value: number): void {
             this._mapSlotIndex = value;
         }
 
         public getMapDesignerUserId(): number {
-            return Helpers.getExisted(this._mapDesignerUserId);
+            return Twns.Helpers.getExisted(this._mapDesignerUserId);
         }
         public setMapDesignerUserId(value: number): void {
             this._mapDesignerUserId = value;
         }
 
         public getMapDesignerName(): string {
-            return Helpers.getExisted(this._mapDesignerName);
+            return Twns.Helpers.getExisted(this._mapDesignerName);
         }
         public setMapDesignerName(value: string): void {
             this._mapDesignerName = value;
         }
 
         public getMapNameArray(): ILanguageText[] {
-            return Helpers.getExisted(this._mapNameList);
+            return Twns.Helpers.getExisted(this._mapNameList);
         }
         public setMapNameArray(value: ILanguageText[]): void {
             this._mapNameList = value;
         }
 
         public getMapDescArray(): ILanguageText[] {
-            return Helpers.getExisted(this._mapDescArray);
+            return Twns.Helpers.getExisted(this._mapDescArray);
         }
         public setMapDescArray(value: ILanguageText[]): void {
             this._mapDescArray = value;
@@ -292,18 +292,18 @@ namespace Twns.MapEditor {
             this._templateWarRuleArray = value;
         }
         private _getTemplateWarRule(ruleId: number): ITemplateWarRule {
-            return Helpers.getExisted(this.getTemplateWarRuleArray().find(v => v.ruleId === ruleId));
+            return Twns.Helpers.getExisted(this.getTemplateWarRuleArray().find(v => v.ruleId === ruleId));
         }
         public getRevisedTemplateWarRuleArray(playersCountUnneutral: number): ITemplateWarRule[] {
             const revisedTemplateWarRuleArray: ITemplateWarRule[] = [];
             for (const templateWarRule of this.getTemplateWarRuleArray() || []) {
-                const revisedRule = Helpers.deepClone(templateWarRule);
-                const playerRules = Helpers.getExisted(revisedRule.ruleForPlayers);
-                playerRules.playerRuleDataArray = Helpers.getExisted(playerRules.playerRuleDataArray).filter(v => {
-                    const playerIndex = Helpers.getExisted(v.playerIndex);
+                const revisedRule = Twns.Helpers.deepClone(templateWarRule);
+                const playerRules = Twns.Helpers.getExisted(revisedRule.ruleForPlayers);
+                playerRules.playerRuleDataArray = Twns.Helpers.getExisted(playerRules.playerRuleDataArray).filter(v => {
+                    const playerIndex = Twns.Helpers.getExisted(v.playerIndex);
                     return (playerIndex <= playersCountUnneutral)
                         && (playerIndex >= CommonConstants.WarFirstPlayerIndex);
-                }).sort((v1, v2) => Helpers.getExisted(v1.playerIndex) - Helpers.getExisted(v2.playerIndex));
+                }).sort((v1, v2) => Twns.Helpers.getExisted(v1.playerIndex) - Twns.Helpers.getExisted(v2.playerIndex));
                 revisedTemplateWarRuleArray.push(revisedRule);
             }
 
@@ -332,7 +332,7 @@ namespace Twns.MapEditor {
         }
 
         public getMapTag(): IDataForMapTag {
-            return Helpers.getExisted(this._mapTag);
+            return Twns.Helpers.getExisted(this._mapTag);
         }
         public setMapTag(mapTag: IDataForMapTag): void {
             this._mapTag = mapTag;

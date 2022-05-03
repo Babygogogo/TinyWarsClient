@@ -11,12 +11,12 @@ namespace Twns.HalfwayReplayWar {
         public initWatcherTeamIndexes(warData: CommonProto.WarSerialization.ISerialWar): void {
             const teamIndexes = new Set<number>();
             for (const data of warData.executedActionManager?.halfwayReplayActionArray ?? []) {
-                teamIndexes.add(Helpers.getExisted(data.teamIndex, ClientErrorCode.HrwPlayerManager_InitWatcherTeamIndexes_00));
+                teamIndexes.add(Twns.Helpers.getExisted(data.teamIndex, ClientErrorCode.HrwPlayerManager_InitWatcherTeamIndexes_00));
             }
             this._watcherTeamIndexes = teamIndexes;
         }
         public getWatcherTeamIndexesForSelf(): Set<number> {
-            return Helpers.getExisted(this._watcherTeamIndexes, ClientErrorCode.HrwPlayerManager_GetAliveWatcherTeamIndexesForSelf_00);
+            return Twns.Helpers.getExisted(this._watcherTeamIndexes, ClientErrorCode.HrwPlayerManager_GetAliveWatcherTeamIndexesForSelf_00);
         }
     }
 }

@@ -20,7 +20,7 @@
 namespace Twns.Common {
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = Twns.Notify.NotifyType;
-    import WarType      = Types.WarType;
+    import WarType      = Twns.Types.WarType;
 
     const WarTypeFullArray = [
         WarType.MrwStd,
@@ -71,7 +71,7 @@ namespace Twns.Common {
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             const mapId     = this._getOpenData().mapId;
-            this._templateWarRuleId    = (await getNextRuleId(mapId, -1)) ?? Helpers.getExisted(Helpers.getExisted((await WarMap.WarMapModel.getRawData(mapId))?.templateWarRuleArray)[0].ruleId);
+            this._templateWarRuleId    = (await getNextRuleId(mapId, -1)) ?? Twns.Helpers.getExisted(Twns.Helpers.getExisted((await WarMap.WarMapModel.getRawData(mapId))?.templateWarRuleArray)[0].ruleId);
             this._warType   = (await getNextWarType(WarType.Undefined, mapId, this._templateWarRuleId)) ?? WarType.MrwStd;
             this._updateView();
         }
@@ -168,12 +168,12 @@ namespace Twns.Common {
             const fullStatisticsArray   : number[] = [];
             let totalGames              = 0;
             for (const info of statisticsForTurnArray) {
-                const turnGames         = Helpers.getExisted(info.totalGames);
-                const statisticsArray   = Helpers.getExisted(info.gameResultArray);
+                const turnGames         = Twns.Helpers.getExisted(info.totalGames);
+                const statisticsArray   = Twns.Helpers.getExisted(info.gameResultArray);
                 dataArray.push({
                     index           : 0,
                     isLast          : false,
-                    turnIndex       : Helpers.getExisted(info.turnIndex),
+                    turnIndex       : Twns.Helpers.getExisted(info.turnIndex),
                     totalGames      : 0,
                     turnGames,
                     statisticsArray,
@@ -184,7 +184,7 @@ namespace Twns.Common {
                     fullStatisticsArray[i] = (fullStatisticsArray[i] ?? 0) + statisticsArray[i];
                 }
             }
-            dataArray.sort((v1, v2) => Helpers.getExisted(v1.turnIndex) - Helpers.getExisted(v2.turnIndex));
+            dataArray.sort((v1, v2) => Twns.Helpers.getExisted(v1.turnIndex) - Twns.Helpers.getExisted(v2.turnIndex));
 
             let index = 0;
             for (const data of dataArray) {
@@ -206,32 +206,32 @@ namespace Twns.Common {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -336,7 +336,7 @@ namespace Twns.Common {
     }
 
     async function getRuleIdArray(mapId: number, ruleId: number): Promise<number[]> {
-        const ruleIdFullArray   = (await WarMap.WarMapModel.getRawData(mapId))?.templateWarRuleArray?.map(v => Helpers.getExisted(v.ruleId)).sort((v1, v2) => v1 - v2) ?? [];
+        const ruleIdFullArray   = (await WarMap.WarMapModel.getRawData(mapId))?.templateWarRuleArray?.map(v => Twns.Helpers.getExisted(v.ruleId)).sort((v1, v2) => v1 - v2) ?? [];
         const ruleIdArray       : number[] = [];
         const index             = ruleIdFullArray.indexOf(ruleId);
         for (let i = index + 1; i < ruleIdFullArray.length; ++i) {

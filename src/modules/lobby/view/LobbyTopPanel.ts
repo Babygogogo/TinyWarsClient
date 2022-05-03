@@ -64,31 +64,31 @@ namespace Twns.Lobby {
         }
 
         private _onTouchedGroupUserInfo(): void {
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.UserOnlineUsersPanel);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.ChatPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, {
-                userId: Helpers.getExisted(Twns.User.UserModel.getSelfUserId()),
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.UserOnlineUsersPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.ChatPanel);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, {
+                userId: Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId()),
             });
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, top: -40 },
                 endProps    : { alpha: 1, top: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, top: 0 },
                 endProps    : { alpha: 0, top: -40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private _updateView(): void {

@@ -20,7 +20,7 @@ namespace Twns.WarEvent {
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import BwWar                    = Twns.BaseWar.BwWar;
-    import WeatherType              = Types.WeatherType;
+    import WeatherType              = Twns.Types.WeatherType;
 
     export type OpenDataForWeActionModifyPanel5 = {
         war         : BwWar;
@@ -71,7 +71,7 @@ namespace Twns.WarEvent {
         }
 
         private _onTouchedBtnWeather(): void {
-            const action            = Helpers.getExisted(this._getOpenData().action.WeaSetWeather);
+            const action            = Twns.Helpers.getExisted(this._getOpenData().action.WeaSetWeather);
             const weatherType = action.weatherType;
             if (weatherType === WeatherType.Clear) {
                 action.weatherType = WeatherType.Rainy;
@@ -88,7 +88,7 @@ namespace Twns.WarEvent {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -96,7 +96,7 @@ namespace Twns.WarEvent {
         }
 
         private _onFocusOutInputTurns(): void {
-            const data = Helpers.getExisted(this._getOpenData().action.WeaSetWeather);
+            const data = Twns.Helpers.getExisted(this._getOpenData().action.WeaSetWeather);
             const newTurns  = Math.min(parseInt(this._inputTurns.text)) || 0;
             if (newTurns !== data.weatherTurnsCount) {
                 data.weatherTurnsCount = newTurns;
@@ -126,7 +126,7 @@ namespace Twns.WarEvent {
         }
 
         private _updateLabelWeather(): void {
-            this._labelWeather.text = Lang.getWeatherName(Helpers.getExisted(this._getOpenData().action.WeaSetWeather?.weatherType));
+            this._labelWeather.text = Lang.getWeatherName(Twns.Helpers.getExisted(this._getOpenData().action.WeaSetWeather?.weatherType));
         }
 
         private _updateInputTurns(): void {

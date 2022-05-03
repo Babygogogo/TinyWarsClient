@@ -136,7 +136,7 @@ namespace Twns.Common {
             let index           = 0;
             for (const coId of this._getOpenData().availableCoIdArray) {
                 dataArray.push({
-                    coBasicCfg  : Helpers.getExisted(gameConfig.getCoBasicCfg(coId)),
+                    coBasicCfg  : Twns.Helpers.getExisted(gameConfig.getCoBasicCfg(coId)),
                     index,
                     panel       : this,
                 });
@@ -159,32 +159,32 @@ namespace Twns.Common {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: -40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: -40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -198,7 +198,7 @@ namespace Twns.Common {
 
         protected _onDataChanged(): void {
             const data              = this._getData();
-            this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            this.currentState       = data.index === data.panel.getSelectedIndex() ? Twns.Types.UiState.Down : Twns.Types.UiState.Up;
             this._labelName.text    = data.coBasicCfg.name ?? CommonConstants.ErrorTextForUndefined;
         }
 

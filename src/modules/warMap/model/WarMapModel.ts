@@ -16,10 +16,10 @@ namespace Twns.WarMap.WarMapModel {
 
     let _reviewingMaps          : IMapEditorData[];
     const _enabledMapIdArray    : number[] = [];
-    const _rawDataAccessor      = Helpers.createCachedDataAccessor<number, IMapRawData>({
+    const _rawDataAccessor      = Twns.Helpers.createCachedDataAccessor<number, IMapRawData>({
         reqData                 : (mapId: number) => Twns.WarMap.WarMapProxy.reqGetMapRawData(mapId),
     });
-    const _briefDataGetter      = Helpers.createCachedDataAccessor<number, IMapBriefData>({
+    const _briefDataGetter      = Twns.Helpers.createCachedDataAccessor<number, IMapBriefData>({
         reqData                 : (mapId: number) => Twns.WarMap.WarMapProxy.reqGetMapBriefData(mapId),
     });
 
@@ -43,8 +43,8 @@ namespace Twns.WarMap.WarMapModel {
     }
 
     export async function updateOnSetMapName(data: CommonProto.NetMessage.MsgMmSetMapName.IS): Promise<void> {
-        const mapId         = Helpers.getExisted(data.mapId, ClientErrorCode.WarMapModel_UpdateOnSetMapName_00);
-        const mapNameArray  = Helpers.getExisted(data.mapNameArray, ClientErrorCode.WarMapModel_UpdateOnSetMapName_01);
+        const mapId         = Twns.Helpers.getExisted(data.mapId, ClientErrorCode.WarMapModel_UpdateOnSetMapName_00);
+        const mapNameArray  = Twns.Helpers.getExisted(data.mapNameArray, ClientErrorCode.WarMapModel_UpdateOnSetMapName_01);
         const mapBriefData  = await getBriefData(mapId);
         (mapBriefData) && (mapBriefData.mapNameArray = mapNameArray);
 
@@ -52,19 +52,19 @@ namespace Twns.WarMap.WarMapModel {
         (mapRawData) && (mapRawData.mapNameArray = mapNameArray);
     }
     export async function updateOnAddWarRule(data: CommonProto.NetMessage.MsgMmAddWarRule.IS): Promise<void> {
-        const mapId             = Helpers.getExisted(data.mapId);
-        const templateWarRule   = Helpers.getExisted(data.templateWarRule);
-        Helpers.getExisted((await getRawData(mapId))?.templateWarRuleArray).push(templateWarRule);
+        const mapId             = Twns.Helpers.getExisted(data.mapId);
+        const templateWarRule   = Twns.Helpers.getExisted(data.templateWarRule);
+        Twns.Helpers.getExisted((await getRawData(mapId))?.templateWarRuleArray).push(templateWarRule);
     }
     export async function updateOnDeleteWarRule(data: CommonProto.NetMessage.MsgMmDeleteWarRule.IS): Promise<void> {
-        const mapId                 = Helpers.getExisted(data.mapId);
-        const ruleId                = Helpers.getExisted(data.ruleId);
-        const templateWarRuleArray  = Helpers.getExisted((await getRawData(mapId))?.templateWarRuleArray);
+        const mapId                 = Twns.Helpers.getExisted(data.mapId);
+        const ruleId                = Twns.Helpers.getExisted(data.ruleId);
+        const templateWarRuleArray  = Twns.Helpers.getExisted((await getRawData(mapId))?.templateWarRuleArray);
         const index                 = templateWarRuleArray.findIndex(v => v.ruleId === ruleId);
         (index >= 0) && (templateWarRuleArray.splice(index, 1));
     }
     export async function updateOnSetWarRuleAvailability(data: CommonProto.NetMessage.MsgMmSetWarRuleAvailability.IS): Promise<void> {
-        const templateWarRule               = Helpers.getExisted((await getRawData(Helpers.getExisted(data.mapId)))?.templateWarRuleArray?.find(v => v.ruleId === data.ruleId));
+        const templateWarRule               = Twns.Helpers.getExisted((await getRawData(Twns.Helpers.getExisted(data.mapId)))?.templateWarRuleArray?.find(v => v.ruleId === data.ruleId));
         templateWarRule.ruleAvailability    = data.availability;
     }
 
@@ -80,7 +80,7 @@ namespace Twns.WarMap.WarMapModel {
         return (await getRawData(mapId))?.designerName ?? null;
     }
     export async function getTotalPlayedTimes(mapId: number): Promise<number> {
-        const mapBriefData  = Helpers.getExisted(await getBriefData(mapId));
+        const mapBriefData  = Twns.Helpers.getExisted(await getBriefData(mapId));
         let totalTimes      = 0;
         for (const statisticsForRule of mapBriefData.mapExtraData?.mapWarStatistics?.statisticsForRuleArray ?? []) {
             for (const info of statisticsForRule.statisticsForTurnArray ?? []) {
@@ -95,7 +95,7 @@ namespace Twns.WarMap.WarMapModel {
         const mapExtraData = mapBriefData ? mapBriefData.mapExtraData : null;
         const totalRaters  = mapExtraData ? mapExtraData.totalRaters : null;
         return totalRaters
-            ? (Helpers.getExisted(mapExtraData?.totalRating) / totalRaters)
+            ? (Twns.Helpers.getExisted(mapExtraData?.totalRating) / totalRaters)
             : null;
     }
     export async function getTotalRatersCount(mapId: number): Promise<number | null> {
@@ -105,7 +105,7 @@ namespace Twns.WarMap.WarMapModel {
 
     export function updateRawDataDict(dataList: IMapRawData[]): void {
         for (const data of dataList || []) {
-            setRawData(Helpers.getExisted(data.mapId), data);
+            setRawData(Twns.Helpers.getExisted(data.mapId), data);
         }
     }
     export function getRawData(mapId: number): Promise<IMapRawData | null> {
@@ -135,7 +135,7 @@ namespace Twns.WarMap.WarMapModel {
         return _reviewingMaps;
     }
 
-    export function getMapSize(mapRawData: IMapRawData): Types.MapSize | null {
+    export function getMapSize(mapRawData: IMapRawData): Twns.Types.MapSize | null {
         const { mapWidth, mapHeight } = mapRawData;
         return (mapWidth == null) || (mapHeight == null)
              ? null

@@ -16,7 +16,7 @@
 namespace Twns.Common {
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = Twns.Notify.NotifyType;
-    import GameVersion  = Types.GameVersion;
+    import GameVersion  = Twns.Types.GameVersion;
 
     export type OpenDataForCommonChangeVersionPanel = void;
     export class CommonChangeVersionPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChangeVersionPanel> {
@@ -71,7 +71,7 @@ namespace Twns.Common {
 
             const url = getUrlForGameVersion(selectedVersion);
             if (url == null) {
-                throw Helpers.newError(`CommonChangeVersionPanel._onTouchedBtnConfirm() empty url.`);
+                throw Twns.Helpers.newError(`CommonChangeVersionPanel._onTouchedBtnConfirm() empty url.`);
             } else {
                 window.open(url);
             }
@@ -114,32 +114,32 @@ namespace Twns.Common {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -172,7 +172,7 @@ namespace Twns.Common {
 
             const data = this.data;
             if (data == null) {
-                throw Helpers.newError(`CommonChangeVersionPanel.VersionRenderer._updateView() empty data.`);
+                throw Twns.Helpers.newError(`CommonChangeVersionPanel.VersionRenderer._updateView() empty data.`);
             }
 
             const gameVersion       = data.gameVersion;

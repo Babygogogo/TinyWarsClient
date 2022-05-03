@@ -10,10 +10,10 @@
 namespace Twns.Broadcast.BroadcastProxy {
     import NotifyType       = Twns.Notify.NotifyType;
     import ILanguageText    = CommonProto.Structure.ILanguageText;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import NetMessageCodes  = Twns.Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Twns.Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgBroadcastAddMessage,              callback: _onMsgBroadcastAddMessage },
             { msgCode: NetMessageCodes.MsgBroadcastDeleteMessage,           callback: _onMsgBroadcastDeleteMessage, },
             { msgCode: NetMessageCodes.MsgBroadcastDoBroadcast,             callback: _onMsgBroadcastDoBroadcast },
@@ -23,7 +23,7 @@ namespace Twns.Broadcast.BroadcastProxy {
     }
 
     export function reqBroadcastAddMessage(textList: ILanguageText[], startTime: number, endTime: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgBroadcastAddMessage: { c: {
                 textList,
                 startTime,
@@ -39,7 +39,7 @@ namespace Twns.Broadcast.BroadcastProxy {
     }
 
     export function reqBroadcastDeleteMessage(messageId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgBroadcastDeleteMessage: { c: {
                 messageId,
             } },
@@ -53,7 +53,7 @@ namespace Twns.Broadcast.BroadcastProxy {
     }
 
     export function reqBroadcastDoBroadcast(): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgBroadcastDoBroadcast: { c: {
             } },
         });
@@ -66,7 +66,7 @@ namespace Twns.Broadcast.BroadcastProxy {
     }
 
     export function reqBroadcastGetAllMessageIdArray(): void {
-        NetManager.send({ MsgBroadcastGetAllMessageIdArray: { c: {
+        Twns.Net.NetManager.send({ MsgBroadcastGetAllMessageIdArray: { c: {
         } }, });
     }
     function _onMsgBroadcastGetAllMessageIdArray(e: egret.Event): void {
@@ -78,14 +78,14 @@ namespace Twns.Broadcast.BroadcastProxy {
     }
 
     export function reqBroadcastGetMessageData(messageId: number): void {
-        NetManager.send({ MsgBroadcastGetMessageData: { c: {
+        Twns.Net.NetManager.send({ MsgBroadcastGetMessageData: { c: {
             messageId,
         } } });
     }
     function _onMsgBroadcastGetMessageData(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgBroadcastGetMessageData.IS;
         if (!data.errorCode) {
-            Twns.Broadcast.BroadcastModel.setMessageData(Helpers.getExisted(data.messageId), data.messageData ?? null);
+            Twns.Broadcast.BroadcastModel.setMessageData(Twns.Helpers.getExisted(data.messageId), data.messageData ?? null);
             Twns.Notify.dispatch(NotifyType.MsgBroadcastGetMessageData, data);
         }
     }

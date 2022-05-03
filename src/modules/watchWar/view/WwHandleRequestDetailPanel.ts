@@ -87,7 +87,7 @@ namespace Twns.WatchWar {
                     declineUserIds.push(data.userId);
                 }
             }
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getFormattedText(LangTextType.F0082, acceptUserIds.length, declineUserIds.length),
                 callback: () => {
                     Twns.WatchWar.WwProxy.reqWatchHandleRequest(warId, acceptUserIds, declineUserIds);

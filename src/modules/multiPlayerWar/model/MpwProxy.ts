@@ -17,10 +17,10 @@ namespace Twns.MultiPlayerWar.MpwProxy {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = Twns.Notify.NotifyType;
     import NetMessage           = CommonProto.NetMessage;
-    import NetMessageCodes      = TwnsNetMessageCodes.NetMessageCodes;
+    import NetMessageCodes      = Twns.Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Twns.Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgMpwCommonBroadcastGameStart,      callback: _onMsgMpwCommonBroadcastGameStart },
             { msgCode: NetMessageCodes.MsgMpwCommonHandleBoot,              callback: _onMsgMpwCommonHandleBoot },
             { msgCode: NetMessageCodes.MsgMpwCommonContinueWar,             callback: _onMsgMpwCommonContinueWar },
@@ -36,18 +36,18 @@ namespace Twns.MultiPlayerWar.MpwProxy {
     function _onMsgMpwCommonBroadcastGameStart(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwCommonBroadcastGameStart.IS;
         Lang.getGameStartDesc(data).then(desc => {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0392),
                 content : desc,
                 callback: () => {
-                    reqMpwCommonContinueWar(Helpers.getExisted(data.warId));
+                    reqMpwCommonContinueWar(Twns.Helpers.getExisted(data.warId));
                 },
             });
         });
     }
 
     export function reqMpwCommonContinueWar(warId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwCommonContinueWar: { c: {
                 warId,
             }, },
@@ -62,8 +62,8 @@ namespace Twns.MultiPlayerWar.MpwProxy {
         }
     }
 
-    export function reqMpwCommonSyncWar(war: BaseWar.BwWar, requestType: Types.SyncWarRequestType): void {
-        NetManager.send({
+    export function reqMpwCommonSyncWar(war: BaseWar.BwWar, requestType: Twns.Types.SyncWarRequestType): void {
+        Twns.Net.NetManager.send({
             MsgMpwCommonSyncWar: { c: {
                 warId               : war.getWarId(),
                 executedActionsCount: war.getExecutedActionManager().getExecutedActionsCount(),
@@ -80,7 +80,7 @@ namespace Twns.MultiPlayerWar.MpwProxy {
     }
 
     export function reqMpwCommonGetWarSettings(warId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwCommonGetWarSettings: { c: {
                 warId
             } },
@@ -93,7 +93,7 @@ namespace Twns.MultiPlayerWar.MpwProxy {
     }
 
     export function reqMpwCommonGetWarProgressInfo(warId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwCommonGetWarProgressInfo: { c: {
                 warId
             } },
@@ -106,7 +106,7 @@ namespace Twns.MultiPlayerWar.MpwProxy {
     }
 
     export function reqMpwGetHalfwayReplayData(warId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwGetHalfwayReplayData: { c: {
                 warId,
             } },
@@ -122,7 +122,7 @@ namespace Twns.MultiPlayerWar.MpwProxy {
     }
 
     export function reqMpwCommonHandleBoot(warId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwCommonHandleBoot: { c: {
                 warId,
             }, },
@@ -136,7 +136,7 @@ namespace Twns.MultiPlayerWar.MpwProxy {
     }
 
     export function reqMpwExecuteWarAction(war: BaseWar.BwWar, actionContainer: CommonProto.WarAction.IWarActionContainer): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMpwExecuteWarAction: { c: {
                 warId           : war.getWarId(),
                 actionContainer,
@@ -146,7 +146,7 @@ namespace Twns.MultiPlayerWar.MpwProxy {
     function _onMsgMpwExecuteWarAction(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwExecuteWarAction.IS;
         if (!data.errorCode) {
-            MpwModel.updateOnMsgMpwExecuteWarAction(Helpers.getExisted(data.actionContainer), Helpers.getExisted(data.warId));
+            MpwModel.updateOnMsgMpwExecuteWarAction(Twns.Helpers.getExisted(data.actionContainer), Twns.Helpers.getExisted(data.warId));
             Twns.Notify.dispatch(NotifyType.MsgMpwExecuteWarAction, data);
         }
     }

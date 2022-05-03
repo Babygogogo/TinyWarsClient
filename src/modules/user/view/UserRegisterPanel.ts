@@ -48,7 +48,7 @@ namespace Twns.User {
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
 
-            this._btnRegister.setShortSfxCode(Types.ShortSfxCode.ButtonConfirm01);
+            this._btnRegister.setShortSfxCode(Twns.Types.ShortSfxCode.ButtonConfirm01);
 
             this._updateComponentsForLanguage();
         }
@@ -63,7 +63,7 @@ namespace Twns.User {
             const data = e.data as CommonProto.NetMessage.MsgUserRegister.IS;
             FloatText.show(Lang.getText(LangTextType.A0004));
 
-            const account   = Helpers.getExisted(data.account, ClientErrorCode.UserRegisterPanel_OnMsgUserRegister_00);
+            const account   = Twns.Helpers.getExisted(data.account, ClientErrorCode.UserRegisterPanel_OnMsgUserRegister_00);
             const password  = this._inputPassword.text;
             LocalStorage.setAccount(account);
             LocalStorage.setPassword(password);
@@ -79,11 +79,11 @@ namespace Twns.User {
             const account  = this._inputAccount.text;
             const password = this._inputPassword.text;
             const nickname = this._inputNickname.text;
-            if (!Helpers.checkIsAccountValid(account)) {
+            if (!Twns.Helpers.checkIsAccountValid(account)) {
                 FloatText.show(Lang.getText(LangTextType.A0001));
-            } else if (!Helpers.checkIsPasswordValid(password)) {
+            } else if (!Twns.Helpers.checkIsPasswordValid(password)) {
                 FloatText.show(Lang.getText(LangTextType.A0003));
-            } else if (!Helpers.checkIsNicknameValid(nickname)) {
+            } else if (!Twns.Helpers.checkIsNicknameValid(nickname)) {
                 FloatText.show(Lang.getText(LangTextType.A0002));
             } else {
                 Twns.User.UserProxy.reqUserRegister(account, password, nickname);
@@ -101,33 +101,33 @@ namespace Twns.User {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
 
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

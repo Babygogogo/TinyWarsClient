@@ -67,14 +67,14 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionTypeListPanel, {
                 fullData    : openData.fullData,
                 condition   : openData.condition,
                 war         : openData.war,
             });
         }
         private _onTouchedGroupIsNot(): void {
-            const data  = Helpers.getExisted(this._getCondition().WecPlayerIndexInTurnEqualTo);
+            const data  = Twns.Helpers.getExisted(this._getCondition().WecPlayerIndexInTurnEqualTo);
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
@@ -85,7 +85,7 @@ namespace Twns.WarEvent {
             if (isNaN(value)) {
                 this._updateInputPlayerIndex();
             } else {
-                Helpers.getExisted(this._getCondition().WecPlayerIndexInTurnEqualTo).valueEqualTo = value;
+                Twns.Helpers.getExisted(this._getCondition().WecPlayerIndexInTurnEqualTo).valueEqualTo = value;
                 this._updateLabelDescAndLabelError();
                 this._updateInputPlayerIndex();
                 Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
@@ -117,7 +117,7 @@ namespace Twns.WarEvent {
             const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
             this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateImgIsNot(): void {

@@ -5,8 +5,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.TestWar {
-    import GridIndex    = Types.GridIndex;
-    import State        = Types.ActionPlannerState;
+    import GridIndex    = Twns.Types.GridIndex;
+    import State        = Twns.Types.ActionPlannerState;
     export class TwActionPlanner extends Twns.BaseWar.BwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting requesting state.
@@ -31,7 +31,7 @@ namespace Twns.TestWar {
             // nothing to do
         }
 
-        public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: Types.UnitType, unitHp: number): void {
+        public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: Twns.Types.UnitType, unitHp: number): void {
             // nothing to do
         }
 

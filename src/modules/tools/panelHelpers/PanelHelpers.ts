@@ -1,7 +1,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsPanelManager {
-    import PanelConfig      = TwnsPanelConfig.PanelConfig;
+namespace Twns.PanelHelpers {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     const _IS_CACHE_ENABLED = true;
@@ -34,14 +33,14 @@ namespace TwnsPanelManager {
             );
     }
     async function openViaRunningPanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel.UiPanel<T>> {
-        const panel = Helpers.getExisted(getRunningPanel(config), ClientErrorCode.PanelManager_OpenViaRunningPanel_00);
+        const panel = Twns.Helpers.getExisted(getRunningPanel(config), ClientErrorCode.PanelManager_OpenViaRunningPanel_00);
         await panel.updateWithOpenData(openData);
 
         Logger.warn(`Panel opened via running: ${config.skinName}`);
         return panel;
     }
     async function openViaCachedPanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel.UiPanel<T>> {
-        const panel     = Helpers.getExisted(getCachedPanel(config), ClientErrorCode.PanelManager_OpenViaCachedPanel_00);
+        const panel     = Twns.Helpers.getExisted(getCachedPanel(config), ClientErrorCode.PanelManager_OpenViaCachedPanel_00);
         const layerType = config.layer;
         if (config.isExclusive) {
             closeAllPanelsInLayerExcept(layerType, [config]);
@@ -163,14 +162,14 @@ namespace TwnsPanelManager {
             const func = async (): Promise<void> => {
                 const funcList = _queueDict.get(config);
                 if (!funcList) {
-                    throw Helpers.newError(`PanelManager.addToQueue() exception queueing 1!!`, ClientErrorCode.PanelManager_AddToQueue_00);
+                    throw Twns.Helpers.newError(`PanelManager.addToQueue() exception queueing 1!!`, ClientErrorCode.PanelManager_AddToQueue_00);
                 } else {
                     if (funcList[0] !== func) {
-                        throw Helpers.newError(`PanelManager.addToQueue() exception queueing 2!!`, ClientErrorCode.PanelManager_AddToQueue_01);
+                        throw Twns.Helpers.newError(`PanelManager.addToQueue() exception queueing 2!!`, ClientErrorCode.PanelManager_AddToQueue_01);
                     } else {
                         const result = await rawFunc();
                         if (funcList.shift() !== func) {
-                            throw Helpers.newError(`PanelManager.addToQueue() exception queueing 3!!`, ClientErrorCode.PanelManager_AddToQueue_02);
+                            throw Twns.Helpers.newError(`PanelManager.addToQueue() exception queueing 3!!`, ClientErrorCode.PanelManager_AddToQueue_02);
                         }
                         resolve(result);
 

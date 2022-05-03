@@ -141,39 +141,39 @@ namespace Twns.User {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
     type DataForUserRenderer = {
         index       : number;
-        userId      : Types.Undefinable<number>;
-        nickname    : Types.Undefinable<string>;
+        userId      : Twns.Types.Undefinable<number>;
+        nickname    : Twns.Types.Undefinable<string>;
     };
     class UserRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUserRenderer> {
         private readonly _imgBg!        : TwnsUiImage.UiImage;
@@ -201,7 +201,7 @@ namespace Twns.User {
             if (data) {
                 const userId = data.userId;
                 if (userId != null) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, { userId });
                 }
             }
         }

@@ -87,8 +87,8 @@ namespace Twns.BaseWar {
         }
         private _onNotifyBwActionPlannerStateChanged(): void {
             const planner = this._getOpenData().war.getActionPlanner();
-            if ((planner.getPreviousState() === Types.ActionPlannerState.ExecutingAction) &&
-                (planner.getState() !== Types.ActionPlannerState.ExecutingAction)
+            if ((planner.getPreviousState() === Twns.Types.ActionPlannerState.ExecutingAction) &&
+                (planner.getState() !== Twns.Types.ActionPlannerState.ExecutingAction)
             ) {
                 this._updateView();
             }
@@ -110,8 +110,8 @@ namespace Twns.BaseWar {
         private _onTouchedThis(): void {
             const war   = this._getOpenData().war;
             const tile  = war.getTileMap().getTile(war.getCursor().getGridIndex());
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileDetailPanel, { tile });
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwTileDetailPanel, { tile });
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -187,24 +187,24 @@ namespace Twns.BaseWar {
         // }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, bottom: -40 },
                 endProps    : { alpha: 1, bottom: 0 },
                 tweenTime   : 50,
             });
 
-            await Helpers.wait(50);
+            await Twns.Helpers.wait(50);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, bottom: 0 },
                 endProps    : { alpha: 0, bottom: -40 },
                 tweenTime   : 50,
             });
 
-            await Helpers.wait(50);
+            await Twns.Helpers.wait(50);
         }
     }
 }

@@ -18,13 +18,13 @@
 namespace Twns.MapEditor {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = Twns.Notify.NotifyType;
-    import DrawerMode           = Types.MapEditorDrawerMode;
-    import GridIndex            = Types.GridIndex;
-    import SymmetryType         = Types.SymmetryType;
-    import UnitType             = Types.UnitType;
-    import TileBaseType         = Types.TileBaseType;
-    import TileDecoratorType    = Types.TileDecoratorType;
-    import TileObjectType       = Types.TileObjectType;
+    import DrawerMode           = Twns.Types.MapEditorDrawerMode;
+    import GridIndex            = Twns.Types.GridIndex;
+    import SymmetryType         = Twns.Types.SymmetryType;
+    import UnitType             = Twns.Types.UnitType;
+    import TileBaseType         = Twns.Types.TileBaseType;
+    import TileDecoratorType    = Twns.Types.TileDecoratorType;
+    import TileObjectType       = Twns.Types.TileObjectType;
 
     export type DataForDrawTileObject = {
         objectType  : TileObjectType;
@@ -94,7 +94,7 @@ namespace Twns.MapEditor {
             this._war = war;
         }
         private _getWar(): Twns.MapEditor.MeWar {
-            return Helpers.getExisted(this._war);
+            return Twns.Helpers.getExisted(this._war);
         }
 
         private _setMode(mode: DrawerMode): void {
@@ -209,7 +209,7 @@ namespace Twns.MapEditor {
             const tileMap       = war.getTileMap();
             const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
-                if (tile.getType() !== Types.TileType.Road) {
+                if (tile.getType() !== Twns.Types.TileType.Road) {
                     continue;
                 }
 
@@ -239,10 +239,10 @@ namespace Twns.MapEditor {
             const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
                 const tileType = tile.getType();
-                if ((tileType !== Types.TileType.BridgeOnBeach) &&
-                    (tileType !== Types.TileType.BridgeOnPlain) &&
-                    (tileType !== Types.TileType.BridgeOnRiver) &&
-                    (tileType !== Types.TileType.BridgeOnSea)
+                if ((tileType !== Twns.Types.TileType.BridgeOnBeach) &&
+                    (tileType !== Twns.Types.TileType.BridgeOnPlain) &&
+                    (tileType !== Twns.Types.TileType.BridgeOnRiver) &&
+                    (tileType !== Twns.Types.TileType.BridgeOnSea)
                 ) {
                     continue;
                 }
@@ -272,7 +272,7 @@ namespace Twns.MapEditor {
             const tileMap       = war.getTileMap();
             const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
-                if (tile.getType() !== Types.TileType.Plasma) {
+                if (tile.getType() !== Twns.Types.TileType.Plasma) {
                     continue;
                 }
 
@@ -301,7 +301,7 @@ namespace Twns.MapEditor {
             const tileMap       = war.getTileMap();
             const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
-                if (tile.getType() !== Types.TileType.Pipe) {
+                if (tile.getType() !== Twns.Types.TileType.Pipe) {
                     continue;
                 }
 
@@ -386,7 +386,7 @@ namespace Twns.MapEditor {
                 // nothing to do
 
             } else {
-                throw Helpers.newError(`MeDrawer._handleAction() invalid mode.`);
+                throw Twns.Helpers.newError(`MeDrawer._handleAction() invalid mode.`);
             }
 
             this._getWar().setIsMapModified(true);
@@ -395,7 +395,7 @@ namespace Twns.MapEditor {
             const war               = this._getWar();
             const tileMap           = war.getTileMap();
             const tile              = tileMap.getTile(gridIndex);
-            const targetBaseData    = Helpers.getExisted(this.getDrawTargetTileBaseData());
+            const targetBaseData    = Twns.Helpers.getExisted(this.getDrawTargetTileBaseData());
             const baseType          = targetBaseData.baseType;
             const baseShapeId       = targetBaseData.shapeId;
             const gameConfig        = war.getGameConfig();
@@ -443,7 +443,7 @@ namespace Twns.MapEditor {
             const tileMap           = war.getTileMap();
             const gameConfig        = war.getGameConfig();
             const tile              = tileMap.getTile(gridIndex);
-            const targetBaseData    = Helpers.getExisted(this.getDrawTargetTileDecoratorData());
+            const targetBaseData    = Twns.Helpers.getExisted(this.getDrawTargetTileDecoratorData());
             const decoratorType     = targetBaseData.decoratorType;
             const decoratorShapeId  = targetBaseData.shapeId;
             tile.init({
@@ -491,7 +491,7 @@ namespace Twns.MapEditor {
             const tileMap           = war.getTileMap();
             const unitMap           = war.getUnitMap();
             const tile              = tileMap.getTile(gridIndex);
-            const targetObjectData  = Helpers.getExisted(this.getDrawTargetTileObjectData());
+            const targetObjectData  = Twns.Helpers.getExisted(this.getDrawTargetTileObjectData());
             const baseType          = tile.getBaseType();
             const objectType        = targetObjectData.objectType;
             const isAttackableTile  = !!gameConfig.getTileTemplateCfgByType(Twns.Config.ConfigManager.getTileType(baseType, objectType))?.maxHp;
@@ -557,7 +557,7 @@ namespace Twns.MapEditor {
 
             const unitMap       = war.getUnitMap();
             const unitId        = unitMap.getNextUnitId();
-            const targetUnit    = Helpers.getExisted(this.getDrawTargetUnit());
+            const targetUnit    = Twns.Helpers.getExisted(this.getDrawTargetUnit());
             const unit          = new Twns.BaseWar.BwUnit();
             unit.init({
                 gridIndex,

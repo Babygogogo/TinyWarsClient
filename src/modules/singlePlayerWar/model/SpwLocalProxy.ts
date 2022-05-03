@@ -5,8 +5,8 @@
 // import SpwModel     from "./SpwModel";
 
 namespace Twns.SinglePlayerWar.SpwLocalProxy {
-    import GridIndex    = Types.GridIndex;
-    import UnitType     = Types.UnitType;
+    import GridIndex    = Twns.Types.GridIndex;
+    import UnitType     = Twns.Types.UnitType;
     import IMovePath    = CommonProto.Structure.IMovePath;
     import BwWar        = Twns.BaseWar.BwWar;
 
@@ -42,7 +42,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
         });
     }
 
-    export function reqPlayerUseCoSkill(war: BwWar, skillType: Types.CoSkillType): void {
+    export function reqPlayerUseCoSkill(war: BwWar, skillType: Twns.Types.CoSkillType): void {
         Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerUseCoSkill   : {
@@ -144,7 +144,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
         war             : BwWar;
         path            : IMovePath;
         launchUnitId    : number | null;
-        dropDestinations: Types.DropDestination[];
+        dropDestinations: Twns.Types.DropDestination[];
     }): void {
         Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -240,7 +240,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
 
     export function reqUnitUseCoSkill({ war, skillType, path, launchUnitId }: {
         war             : BwWar;
-        skillType       : Types.CoSkillType;
+        skillType       : Twns.Types.CoSkillType;
         path            : IMovePath;
         launchUnitId    : number | null;
     }): void {

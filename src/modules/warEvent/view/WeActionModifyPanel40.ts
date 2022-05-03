@@ -124,7 +124,7 @@ namespace Twns.WarEvent {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 fullData    : openData.fullData,
                 action      : openData.action,
                 war         : openData.war,
@@ -135,7 +135,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnLocation(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseLocationPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseLocationPanel, {
                 currentLocationIdArray  : action.conLocationIdArray ?? [],
                 callbackOnConfirm       : locationIdArray => {
                     action.conLocationIdArray = locationIdArray;
@@ -145,8 +145,8 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnGridIndex(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseGridIndexPanel, {
-                currentGridIndexArray   : Helpers.getNonNullElements(action.conGridIndexArray?.map(v => GridIndexHelpers.convertGridIndex(v)) ?? []),
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseGridIndexPanel, {
+                currentGridIndexArray   : Twns.Helpers.getNonNullElements(action.conGridIndexArray?.map(v => GridIndexHelpers.convertGridIndex(v)) ?? []),
                 mapSize                 : this._getOpenData().war.getTileMap().getMapSize(),
                 callbackOnConfirm       : gridIndexArray => {
                     action.conGridIndexArray = gridIndexArray;
@@ -179,9 +179,9 @@ namespace Twns.WarEvent {
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActTileBase(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTileBasePanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseTileBasePanel, {
                 callback    : (baseType, baseShapeId) => {
-                    const tileData          = Helpers.getExisted(this._getAction().actTileData);
+                    const tileData          = Twns.Helpers.getExisted(this._getAction().actTileData);
                     tileData.baseType       = baseType;
                     tileData.baseShapeId    = baseShapeId;
                     Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
@@ -195,9 +195,9 @@ namespace Twns.WarEvent {
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActTileDecorator(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTileDecoratorPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseTileDecoratorPanel, {
                 callback: (decoratorType, decoratorShapeId) => {
-                    const tileData              = Helpers.getExisted(this._getAction().actTileData);
+                    const tileData              = Twns.Helpers.getExisted(this._getAction().actTileData);
                     tileData.decoratorType      = decoratorType;
                     tileData.decoratorShapeId   = decoratorShapeId;
                     Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
@@ -205,7 +205,7 @@ namespace Twns.WarEvent {
             });
         }
         private _onTouchedBtnDeleteActTileDecorator(): void {
-            const tileData              = Helpers.getExisted(this._getAction().actTileData);
+            const tileData              = Twns.Helpers.getExisted(this._getAction().actTileData);
             tileData.decoratorType      = null;
             tileData.decoratorShapeId   = null;
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
@@ -217,9 +217,9 @@ namespace Twns.WarEvent {
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActTileObject(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTileObjectPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseTileObjectPanel, {
                 callback: (objectType, objectShapeId, playerIndex) => {
-                    const tileData          = Helpers.getExisted(this._getAction().actTileData);
+                    const tileData          = Twns.Helpers.getExisted(this._getAction().actTileData);
                     tileData.objectType     = objectType;
                     tileData.objectShapeId  = objectShapeId;
                     tileData.playerIndex    = playerIndex;
@@ -228,14 +228,14 @@ namespace Twns.WarEvent {
             });
         }
         private _onTouchedBtnDeleteActTileObject(): void {
-            const tileData          = Helpers.getExisted(this._getAction().actTileData);
-            tileData.objectType     = Types.TileObjectType.Empty;
+            const tileData          = Twns.Helpers.getExisted(this._getAction().actTileData);
+            tileData.objectType     = Twns.Types.TileObjectType.Empty;
             tileData.objectShapeId  = null;
             tileData.playerIndex    = CommonConstants.WarNeutralPlayerIndex;
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActIsHighlighted(): void {
-            const tileData          = Helpers.getExisted(this._getAction().actTileData);
+            const tileData          = Twns.Helpers.getExisted(this._getAction().actTileData);
             const actIsHighlighted  = tileData.isHighlighted;
             if (actIsHighlighted === true) {
                 tileData.isHighlighted = false;
@@ -295,7 +295,7 @@ namespace Twns.WarEvent {
             const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForAction(openData.fullData, action, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
             this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelLocation(): void {
@@ -320,7 +320,7 @@ namespace Twns.WarEvent {
             this._labelDestroyUnit.text = Lang.getText(this._getAction().actDestroyUnit ? LangTextType.B0012 : LangTextType.B0013);
         }
         private _updateTileView(): void {
-            const tileData  = Helpers.getExisted(this._getAction().actTileData);
+            const tileData  = Twns.Helpers.getExisted(this._getAction().actTileData);
             const tileView  = this._tileView;
             tileView.init({
                 tileBaseType        : tileData.baseType ?? null,
@@ -329,7 +329,7 @@ namespace Twns.WarEvent {
                 tileObjectShapeId   : tileData.objectShapeId ?? null,
                 tileDecoratorType   : tileData.decoratorType ?? null,
                 tileDecoratorShapeId: tileData.decoratorShapeId ?? null,
-                playerIndex         : Helpers.getExisted(tileData.playerIndex),
+                playerIndex         : Twns.Helpers.getExisted(tileData.playerIndex),
             });
             tileView.updateView();
         }
@@ -357,7 +357,7 @@ namespace Twns.WarEvent {
 
 
         private _getAction(): CommonProto.WarEvent.IWeaSetTileType {
-            return Helpers.getExisted(this._getOpenData().action.WeaSetTileType);
+            return Twns.Helpers.getExisted(this._getOpenData().action.WeaSetTileType);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {
             this._imgInnerTouchMask.visible = isEnabled;

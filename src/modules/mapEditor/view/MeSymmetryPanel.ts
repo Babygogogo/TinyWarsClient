@@ -16,8 +16,8 @@ namespace Twns.MapEditor {
     import MeWar        = Twns.MapEditor.MeWar;
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = Twns.Notify.NotifyType;
-    import SymmetryType = Types.SymmetryType;
-    import GridIndex    = Types.GridIndex;
+    import SymmetryType = Twns.Types.SymmetryType;
+    import GridIndex    = Twns.Types.GridIndex;
 
     export type OpenDataForMeSymmetryPanel = void;
     export class MeSymmetryPanel extends TwnsUiPanel.UiPanel<OpenDataForMeSymmetryPanel> {
@@ -126,7 +126,7 @@ namespace Twns.MapEditor {
         }
 
         private _getWar(): MeWar {
-            return Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
+            return Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
         }
 
         private _onTouchedGroupLeftRightBox(): void {
@@ -176,7 +176,7 @@ namespace Twns.MapEditor {
         }
 
         private _onTouchedBtnUpDown1(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0864),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -195,7 +195,7 @@ namespace Twns.MapEditor {
             });
         }
         private _onTouchedBtnDownUp1(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0865),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -214,7 +214,7 @@ namespace Twns.MapEditor {
             });
         }
         private _onTouchedBtnLeftRight1(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0866),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -233,7 +233,7 @@ namespace Twns.MapEditor {
             });
         }
         private _onTouchedBtnRightLeft1(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0867),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -261,7 +261,7 @@ namespace Twns.MapEditor {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0868),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -285,7 +285,7 @@ namespace Twns.MapEditor {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0869),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -309,7 +309,7 @@ namespace Twns.MapEditor {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0870),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -333,7 +333,7 @@ namespace Twns.MapEditor {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0871),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -349,7 +349,7 @@ namespace Twns.MapEditor {
         }
 
         private _onTouchedBtnUpDown2(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0864),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -368,7 +368,7 @@ namespace Twns.MapEditor {
             });
         }
         private _onTouchedBtnDownUp2(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0865),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -387,7 +387,7 @@ namespace Twns.MapEditor {
             });
         }
         private _onTouchedBtnLeftRight2(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0866),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -406,7 +406,7 @@ namespace Twns.MapEditor {
             });
         }
         private _onTouchedBtnRightLeft2(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0867),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -434,7 +434,7 @@ namespace Twns.MapEditor {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0868),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -458,7 +458,7 @@ namespace Twns.MapEditor {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0869),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -482,7 +482,7 @@ namespace Twns.MapEditor {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0870),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -506,7 +506,7 @@ namespace Twns.MapEditor {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0871),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -662,8 +662,8 @@ namespace Twns.MapEditor {
     function autoFillTile(war: Twns.BaseWar.BwWar, dstGridIndex: GridIndex, symmetryType: SymmetryType): void {
         const tileMap               = war.getTileMap();
         const dstTile               = tileMap.getTile(dstGridIndex);
-        const srcTile               = tileMap.getTile(Helpers.getExisted(Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(dstGridIndex, symmetryType, tileMap.getMapSize())));
-        const tileData              = Helpers.deepClone(srcTile.serialize());
+        const srcTile               = tileMap.getTile(Twns.Helpers.getExisted(Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(dstGridIndex, symmetryType, tileMap.getMapSize())));
+        const tileData              = Twns.Helpers.deepClone(srcTile.serialize());
         const decoratorType         = srcTile.getDecoratorType();
         const decoratorShapeId      = srcTile.getDecoratorShapeId();
         const objectType            = srcTile.getObjectType();

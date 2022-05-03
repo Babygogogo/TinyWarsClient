@@ -112,7 +112,7 @@ namespace Twns.Common {
             if (!input.text) {
                 input.text = `${openData.currentValue}`;
             } else {
-                input.text = `${Helpers.getValueInRange({
+                input.text = `${Twns.Helpers.getValueInRange({
                     minValue    : openData.minValue,
                     maxValue    : openData.maxValue,
                     rawValue    : parseFloat(input.text) || 0,
@@ -125,32 +125,32 @@ namespace Twns.Common {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: -40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: -40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -161,7 +161,7 @@ namespace Twns.Common {
         private _updateOnTouchedButtonsForChangeValue(deltaValue: number): void {
             const input     = this._input;
             const openData  = this._getOpenData();
-            input.text      = `${Helpers.getValueInRange({
+            input.text      = `${Twns.Helpers.getValueInRange({
                 minValue    : openData.minValue,
                 maxValue    : openData.maxValue,
                 rawValue    : (parseFloat(input.text) || 0) + deltaValue,

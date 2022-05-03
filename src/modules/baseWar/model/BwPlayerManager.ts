@@ -12,7 +12,7 @@ namespace Twns.BaseWar {
     import WarSerialization         = CommonProto.WarSerialization;
     import ISerialPlayerManager     = WarSerialization.ISerialPlayerManager;
     import ISerialPlayer            = WarSerialization.ISerialPlayer;
-    import PlayerAliveState         = Types.PlayerAliveState;
+    import PlayerAliveState         = Twns.Types.PlayerAliveState;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import BwWar                    = BaseWar.BwWar;
     import GameConfig               = Config.GameConfig;
@@ -23,9 +23,9 @@ namespace Twns.BaseWar {
 
         public abstract getWatcherTeamIndexesForSelf(): Set<number>;
 
-        public init(data: Types.Undefinable<ISerialPlayerManager>, gameConfig: GameConfig): void {
+        public init(data: Twns.Types.Undefinable<ISerialPlayerManager>, gameConfig: GameConfig): void {
             if (data == null) {
-                throw Helpers.newError(`Empty data.`, ClientErrorCode.BwPlayerManager_Init_00);
+                throw Twns.Helpers.newError(`Empty data.`, ClientErrorCode.BwPlayerManager_Init_00);
             }
 
             const playerArray = data.players;
@@ -33,7 +33,7 @@ namespace Twns.BaseWar {
                 (playerArray.length < 3)                                    ||
                 (playerArray.length > CommonConstants.WarMaxPlayerIndex + 1)
             ) {
-                throw Helpers.newError(`Invalid playerArray.`, ClientErrorCode.BwPlayerManager_Init_01);
+                throw Twns.Helpers.newError(`Invalid playerArray.`, ClientErrorCode.BwPlayerManager_Init_01);
             }
 
             const newPlayerMap  = new Map<number, BaseWar.BwPlayer>();
@@ -41,12 +41,12 @@ namespace Twns.BaseWar {
             for (const playerData of playerArray) {
                 const playerIndex = playerData.playerIndex;
                 if ((playerIndex == null) || (newPlayerMap.has(playerIndex))) {
-                    throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwPlayerManager_Init_02);
+                    throw Twns.Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwPlayerManager_Init_02);
                 }
 
                 const skinId = playerData.unitAndTileSkinId;
                 if ((skinId == null) || (skinIdSet.has(skinId))) {
-                    throw Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.BwPlayerManager_Init_03);
+                    throw Twns.Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.BwPlayerManager_Init_03);
                 }
                 skinIdSet.add(skinId);
 
@@ -57,17 +57,17 @@ namespace Twns.BaseWar {
             }
 
             if (!newPlayerMap.has(CommonConstants.WarNeutralPlayerIndex)) {
-                throw Helpers.newError(`No WarNeutralPlayerIndex.`, ClientErrorCode.BwPlayerManager_Init_04);
+                throw Twns.Helpers.newError(`No WarNeutralPlayerIndex.`, ClientErrorCode.BwPlayerManager_Init_04);
             }
 
             for (const [playerIndex] of newPlayerMap) {
                 if ((playerIndex > CommonConstants.WarNeutralPlayerIndex) && (!newPlayerMap.has(playerIndex - 1))) {
-                    throw Helpers.newError(`Non-continuous`, ClientErrorCode.BwPlayerManager_Init_05);
+                    throw Twns.Helpers.newError(`Non-continuous`, ClientErrorCode.BwPlayerManager_Init_05);
                 }
             }
 
             if ((newPlayerMap.size < 3) || (newPlayerMap.size > CommonConstants.WarMaxPlayerIndex + 1)) {
-                throw Helpers.newError(`Invalid playersCount: ${newPlayerMap.size}`, ClientErrorCode.BwPlayerManager_Init_06);
+                throw Twns.Helpers.newError(`Invalid playersCount: ${newPlayerMap.size}`, ClientErrorCode.BwPlayerManager_Init_06);
             }
 
             const playerMap = this.getAllPlayersDict();
@@ -78,8 +78,8 @@ namespace Twns.BaseWar {
         }
         public fastInit(data: ISerialPlayerManager, gameConfig: GameConfig): void {
             for (const playerData of data ? data.players || [] : []) {
-                const playerIndex   = Helpers.getExisted(playerData.playerIndex, ClientErrorCode.BwPlayerManager_FastInit_00);
-                const player        = Helpers.getExisted(this.getPlayer(playerIndex), ClientErrorCode.BwPlayerManager_FastInit_01);
+                const playerIndex   = Twns.Helpers.getExisted(playerData.playerIndex, ClientErrorCode.BwPlayerManager_FastInit_00);
+                const player        = Twns.Helpers.getExisted(this.getPlayer(playerIndex), ClientErrorCode.BwPlayerManager_FastInit_01);
                 player.init(playerData, gameConfig);
             }
         }
@@ -120,14 +120,14 @@ namespace Twns.BaseWar {
             this._war = war;
         }
         protected _getWar(): BwWar {
-            return Helpers.getExisted(this._war);
+            return Twns.Helpers.getExisted(this._war);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
         public getPlayer(playerIndex: number): BaseWar.BwPlayer {
-            return Helpers.getExisted(this._players.get(playerIndex));
+            return Twns.Helpers.getExisted(this._players.get(playerIndex));
         }
         public getAllPlayersDict(): Map<number, BaseWar.BwPlayer> {
             return this._players;
@@ -214,7 +214,7 @@ namespace Twns.BaseWar {
                 ) {
                     const teamIndex = player.getTeamIndex();
                     if (teamIndex == null) {
-                        throw Helpers.newError(`BwPlayerManager.getAliveTeamIndexes() empty teamIndex.`);
+                        throw Twns.Helpers.newError(`BwPlayerManager.getAliveTeamIndexes() empty teamIndex.`);
                     } else {
                         indexes.add(teamIndex);
                     }

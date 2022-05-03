@@ -54,7 +54,7 @@ class Main extends egret.DisplayObjectContainer {
             // egret.ticker.resume();
         };
 
-        FlowManager.startGame(this.stage);
+        Twns.FlowManager.startGame(this.stage);
     }
 }
 

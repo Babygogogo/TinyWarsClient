@@ -12,11 +12,11 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Chat.ChatProxy {
     import NetMessage       = CommonProto.NetMessage;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import NetMessageCodes  = Twns.Net.NetMessageCodes;
     import NotifyType       = Twns.Notify.NotifyType;
 
     export function init(): void {
-        NetManager.addListeners([
+        Twns.Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgChatAddMessage,               callback: _onMsgChatAddMessage },
             { msgCode: NetMessageCodes.MsgChatGetAllMessages,           callback: _onMsgChatGetAllMessages },
             { msgCode: NetMessageCodes.MsgChatUpdateReadProgress,       callback: _onMsgChatUpdateReadProgress },
@@ -27,10 +27,10 @@ namespace Twns.Chat.ChatProxy {
 
     export function reqChatAddMessage(
         content     : string,
-        toCategory  : Types.ChatMessageToCategory,
+        toCategory  : Twns.Types.ChatMessageToCategory,
         toTarget    : number,
     ): void {
-        NetManager.send({ MsgChatAddMessage: { c: {
+        Twns.Net.NetManager.send({ MsgChatAddMessage: { c: {
             toCategory,
             toTarget,
             content,
@@ -39,13 +39,13 @@ namespace Twns.Chat.ChatProxy {
     function _onMsgChatAddMessage(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChatAddMessage.IS;
         if (!data.errorCode) {
-            Twns.Chat.ChatModel.updateOnAddMessage(Helpers.getExisted(data.message), true);
+            Twns.Chat.ChatModel.updateOnAddMessage(Twns.Helpers.getExisted(data.message), true);
             Twns.Notify.dispatch(NotifyType.MsgChatAddMessage, data);
         }
     }
 
     export function reqGetAllMessages(): void {
-        NetManager.send({ MsgChatGetAllMessages: { c: {} } });
+        Twns.Net.NetManager.send({ MsgChatGetAllMessages: { c: {} } });
     }
     function _onMsgChatGetAllMessages(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChatGetAllMessages.IS;
@@ -56,11 +56,11 @@ namespace Twns.Chat.ChatProxy {
     }
 
     export function reqUpdateReadProgress(
-        toCategory  : Types.ChatMessageToCategory,
+        toCategory  : Twns.Types.ChatMessageToCategory,
         toTarget    : number,
-        timestamp   = Timer.getServerTimestamp(),
+        timestamp   = Twns.Timer.getServerTimestamp(),
     ): void {
-        NetManager.send({ MsgChatUpdateReadProgress: { c: {
+        Twns.Net.NetManager.send({ MsgChatUpdateReadProgress: { c: {
             progress: {
                 toCategory,
                 toTarget,
@@ -71,13 +71,13 @@ namespace Twns.Chat.ChatProxy {
     function _onMsgChatUpdateReadProgress(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChatUpdateReadProgress.IS;
         if (!data.errorCode) {
-            Twns.Chat.ChatModel.setReadProgress(Helpers.getExisted(data.progress));
+            Twns.Chat.ChatModel.setReadProgress(Twns.Helpers.getExisted(data.progress));
             Twns.Notify.dispatch(NotifyType.MsgChatUpdateReadProgress, data);
         }
     }
 
     export function reqGetAllReadProgressList(): void {
-        NetManager.send({ MsgChatGetAllReadProgressList: { c: {} } });
+        Twns.Net.NetManager.send({ MsgChatGetAllReadProgressList: { c: {} } });
     }
     function _onMsgChatGetAllReadProgressList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChatGetAllReadProgressList.IS;
@@ -88,12 +88,12 @@ namespace Twns.Chat.ChatProxy {
     }
 
     export function reqChatDeleteMessage(messageId: number): void {
-        NetManager.send({ MsgChatDeleteMessage: { c: { messageId } } });
+        Twns.Net.NetManager.send({ MsgChatDeleteMessage: { c: { messageId } } });
     }
     function _onMsgChatDeleteMessage(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChatDeleteMessage.IS;
         if (!data.errorCode) {
-            Twns.Chat.ChatModel.updateOnDeleteMessage(Helpers.getExisted(data.messageId));
+            Twns.Chat.ChatModel.updateOnDeleteMessage(Twns.Helpers.getExisted(data.messageId));
             Twns.Notify.dispatch(NotifyType.MsgChatDeleteMessage, data);
         }
     }

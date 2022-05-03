@@ -7,7 +7,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import GridIndex                = Types.GridIndex;
+    import GridIndex                = Twns.Types.GridIndex;
     import NotifyType               = Twns.Notify.NotifyType;
 
     export class BwGridVisualEffect {

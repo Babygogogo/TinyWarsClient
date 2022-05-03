@@ -117,7 +117,7 @@ namespace Twns.User {
         }
         private _onTouchedPanelMask(): void {
             StageManager.setStageScale(this._prevScale || CommonConstants.StageMinScale);
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonCancel01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonCancel01);
 
             this.close();
         }
@@ -142,36 +142,36 @@ namespace Twns.User {
             const pos                   = width * (scale - StageMinScale) / (StageMaxScale - StageMinScale);
             this._imgScalePoint.x       = pos;
             this._imgScaleBar.width     = pos;
-            this._labelScale.text       = `${Helpers.formatString("%.2f", 10000 / scale)}%`;
+            this._labelScale.text       = `${Twns.Helpers.formatString("%.2f", 10000 / scale)}%`;
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

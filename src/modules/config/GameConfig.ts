@@ -1,32 +1,32 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Config {
-    import TileType             = Types.TileType;
-    import UnitType             = Types.UnitType;
-    import WeatherType          = Types.WeatherType;
-    import UnitCategory         = Types.UnitCategory;
-    import TileCategory         = Types.TileCategory;
-    import WeaponType           = Types.WeaponType;
-    import UnitTemplateCfg      = Types.UnitTemplateCfg;
-    import TileTemplateCfg      = Types.TileTemplateCfg;
-    import DamageChartCfg       = Types.DamageChartCfg;
-    import BuildableTileCfg     = Types.BuildableTileCfg;
-    import VisionBonusCfg       = Types.VisionBonusCfg;
-    import CoBasicCfg           = Types.CoBasicCfg;
-    import SystemCfg            = Types.SystemCfg;
-    import TileCategoryCfg      = Types.TileCategoryCfg;
-    import CoType               = Types.CoType;
-    import UnitCategoryCfg      = Types.UnitCategoryCfg;
-    import MoveCostCfg          = Types.MoveCostCfg;
-    import UnitPromotionCfg     = Types.UnitPromotionCfg;
-    import PlayerRankCfg        = Types.PlayerRankCfg;
-    import CoCategoryCfg        = Types.CoCategoryCfg;
-    import CoSkillCfg           = Types.CoSkillCfg;
-    import CoSkillType          = Types.CoSkillType;
-    import WeatherCfg           = Types.WeatherCfg;
-    import WeatherCategory      = Types.WeatherCategory;
-    import WeatherCategoryCfg   = Types.WeatherCategoryCfg;
-    import UserAvatarCfg        = Types.UserAvatarCfg;
+    import TileType             = Twns.Types.TileType;
+    import UnitType             = Twns.Types.UnitType;
+    import WeatherType          = Twns.Types.WeatherType;
+    import UnitCategory         = Twns.Types.UnitCategory;
+    import TileCategory         = Twns.Types.TileCategory;
+    import WeaponType           = Twns.Types.WeaponType;
+    import UnitTemplateCfg      = Twns.Types.UnitTemplateCfg;
+    import TileTemplateCfg      = Twns.Types.TileTemplateCfg;
+    import DamageChartCfg       = Twns.Types.DamageChartCfg;
+    import BuildableTileCfg     = Twns.Types.BuildableTileCfg;
+    import VisionBonusCfg       = Twns.Types.VisionBonusCfg;
+    import CoBasicCfg           = Twns.Types.CoBasicCfg;
+    import SystemCfg            = Twns.Types.SystemCfg;
+    import TileCategoryCfg      = Twns.Types.TileCategoryCfg;
+    import CoType               = Twns.Types.CoType;
+    import UnitCategoryCfg      = Twns.Types.UnitCategoryCfg;
+    import MoveCostCfg          = Twns.Types.MoveCostCfg;
+    import UnitPromotionCfg     = Twns.Types.UnitPromotionCfg;
+    import PlayerRankCfg        = Twns.Types.PlayerRankCfg;
+    import CoCategoryCfg        = Twns.Types.CoCategoryCfg;
+    import CoSkillCfg           = Twns.Types.CoSkillCfg;
+    import CoSkillType          = Twns.Types.CoSkillType;
+    import WeatherCfg           = Twns.Types.WeatherCfg;
+    import WeatherCategory      = Twns.Types.WeatherCategory;
+    import WeatherCategoryCfg   = Twns.Types.WeatherCategoryCfg;
+    import UserAvatarCfg        = Twns.Types.UserAvatarCfg;
 
     export class GameConfig {
         private readonly _version                   : string;
@@ -53,7 +53,7 @@ namespace Twns.Config {
         private _availableCoArray   : CoBasicCfg[] | null = null;
         private _coTierArray        : number[] | null = null;
 
-        public constructor(version: string, rawConfig: Types.FullConfig) {
+        public constructor(version: string, rawConfig: Twns.Types.FullConfig) {
             const unitPromotionCfg          = _destructUnitPromotionCfg(rawConfig.UnitPromotion);
             const damageChartCfg            = _destructDamageChartCfg(rawConfig.DamageChart);
 
@@ -208,7 +208,7 @@ namespace Twns.Config {
         }
         public getRankName(rankScore: number): string | null {
             const cfg = this.getPlayerRankCfg(rankScore);
-            return cfg ? Helpers.getExisted(Lang.getStringInCurrentLanguage(cfg.nameList)) : null;
+            return cfg ? Twns.Helpers.getExisted(Lang.getStringInCurrentLanguage(cfg.nameList)) : null;
         }
 
         public getAvailableUserAvatarIdArray(): number[] {
@@ -234,7 +234,7 @@ namespace Twns.Config {
                     coCategoryIdSet.add(coCategoryId);
                 }
             }
-            return [...coCategoryIdSet].sort((v1, v2) => Helpers.getExisted(this.getCoCategoryCfg(v1)?.name).localeCompare(Helpers.getExisted(this.getCoCategoryCfg(v2)?.name), "zh"));
+            return [...coCategoryIdSet].sort((v1, v2) => Twns.Helpers.getExisted(this.getCoCategoryCfg(v1)?.name).localeCompare(Twns.Helpers.getExisted(this.getCoCategoryCfg(v2)?.name), "zh"));
         }
         public checkIsValidCoCategoryIdSubset(coCategoryIdArray: number[]): boolean {
             return (coCategoryIdArray.length === new Set(coCategoryIdArray).size)
@@ -264,15 +264,15 @@ namespace Twns.Config {
         }
         public getCoBustImageSource(coId: number): string | null {
             const imgNumber = this.getCoBasicCfg(coId)?.image;
-            return (imgNumber != null) ? `coBust${Helpers.getNumText(imgNumber, 4)}` : null;
+            return (imgNumber != null) ? `coBust${Twns.Helpers.getNumText(imgNumber, 4)}` : null;
         }
         public getCoHeadImageSource(coId: number): string | null {
             const imgNumber = this.getCoBasicCfg(coId)?.image;
-            return (imgNumber != null) ? `coHead${Helpers.getNumText(imgNumber, 4)}` : null;
+            return (imgNumber != null) ? `coHead${Twns.Helpers.getNumText(imgNumber, 4)}` : null;
         }
         public getCoEyeImageSource(coId: number, isAlive: boolean): string | null {
             const imgNumber = this.getCoBasicCfg(coId)?.image;
-            return (imgNumber != null) ? `coEye${isAlive ? `Normal` : `Grey`}${Helpers.getNumText(imgNumber, 4)}` : null;
+            return (imgNumber != null) ? `coEye${isAlive ? `Normal` : `Grey`}${Twns.Helpers.getNumText(imgNumber, 4)}` : null;
         }
 
         public getEnabledCoArray(): CoBasicCfg[] {
@@ -374,7 +374,7 @@ namespace Twns.Config {
     }
 
     function _destructSystemCfg(data: SystemCfg): SystemCfg {
-        return Helpers.deepClone(data);
+        return Twns.Helpers.deepClone(data);
     }
     function _destructTileCategoryCfg(data: TileCategoryCfg[]): Map<TileCategory, TileCategoryCfg> {
         const dst = new Map<TileCategory, TileCategoryCfg>();

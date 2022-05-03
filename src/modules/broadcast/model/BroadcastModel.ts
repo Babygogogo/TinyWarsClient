@@ -9,7 +9,7 @@ namespace Twns.Broadcast.BroadcastModel {
     import IBroadcastMessage    = CommonProto.Broadcast.IBroadcastMessage;
 
     const _allMessageIdArray    : number[] = [];
-    const _messageDataAccessor  = Helpers.createCachedDataAccessor<number, IBroadcastMessage>({
+    const _messageDataAccessor  = Twns.Helpers.createCachedDataAccessor<number, IBroadcastMessage>({
         reqData : (messageId: number) => Twns.Broadcast.BroadcastProxy.reqBroadcastGetMessageData(messageId),
     });
 
@@ -29,14 +29,14 @@ namespace Twns.Broadcast.BroadcastModel {
     }
 
     export async function getOngoingMessageIdArray(): Promise<number[]> {
-        const currTime      = Timer.getServerTimestamp();
+        const currTime      = Twns.Timer.getServerTimestamp();
         const promiseArray  : Promise<number | null>[] = [];
         for (const messageId of getAllMessageIdArray()) {
             promiseArray.push((async () => {
                 const messageData = await getMessageData(messageId);
                 if ((messageData)                                           &&
-                    (Helpers.getExisted(messageData.startTime) <= currTime) &&
-                    (Helpers.getExisted(messageData.endTime) >= currTime)
+                    (Twns.Helpers.getExisted(messageData.startTime) <= currTime) &&
+                    (Twns.Helpers.getExisted(messageData.endTime) >= currTime)
                 ) {
                     return messageId;
                 } else {
@@ -44,7 +44,7 @@ namespace Twns.Broadcast.BroadcastModel {
                 }
             })());
         }
-        return Helpers.getNonNullElements(await Promise.all(promiseArray));
+        return Twns.Helpers.getNonNullElements(await Promise.all(promiseArray));
     }
 }
 

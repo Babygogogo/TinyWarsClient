@@ -76,7 +76,7 @@ namespace Twns.MultiCustomWar {
 
         public setAndReviseSelectedWarId(newWarId: number, needScroll: boolean): void {
             const listWar   = this._listWar;
-            const index     = Helpers.getExisted(listWar.getRandomIndex(v => v.warId === newWarId));
+            const index     = Twns.Helpers.getExisted(listWar.getRandomIndex(v => v.warId === newWarId));
             listWar.setSelectedIndex(index);
             this._updateComponentsForPreviewingWarInfo();
 
@@ -94,15 +94,15 @@ namespace Twns.MultiCustomWar {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
         }
 
         private _onTouchedBtnNextStep(): void {
             const warId = this._listWar.getSelectedData()?.warId;
             if (warId != null) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonBlockPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0040),
                 });
@@ -223,7 +223,7 @@ namespace Twns.MultiCustomWar {
             return mapId == null
                 ? null
                 : {
-                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(warSettings?.settingsForCommon?.configVersion)),
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(warSettings?.settingsForCommon?.configVersion)),
                     mapInfo     : { mapId },
                 };
         }
@@ -241,62 +241,62 @@ namespace Twns.MultiCustomWar {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupWarList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupWarList,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -339,13 +339,13 @@ namespace Twns.MultiCustomWar {
             if (warSettings == null) {
                 labelName.text  = ``;
             } else {
-                const settingsForMcw    = Helpers.getExisted(warSettings.settingsForMcw);
+                const settingsForMcw    = Twns.Helpers.getExisted(warSettings.settingsForMcw);
                 const warName           = settingsForMcw.warName;
                 if (warName) {
                     labelName.text = warName;
                 } else {
-                    const mapId     = Helpers.getExisted(settingsForMcw.mapId);
-                    const mapName   = Helpers.getExisted(await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
+                    const mapId     = Twns.Helpers.getExisted(settingsForMcw.mapId);
+                    const mapName   = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
                     labelName.text  = mapName;
                 }
             }
@@ -379,7 +379,7 @@ namespace Twns.MultiCustomWar {
                 return;
             }
 
-            const playerIndexInTurn = Helpers.getExisted(warProgressInfo.playerIndexInTurn);
+            const playerIndexInTurn = Twns.Helpers.getExisted(warProgressInfo.playerIndexInTurn);
             const playerInfo        = warProgressInfo.playerInfoList?.find(v => v.playerIndex === playerIndexInTurn);
             if (playerInfo?.userId !== userId) {
                 label.text = ``;
@@ -390,11 +390,11 @@ namespace Twns.MultiCustomWar {
             const restTimeToBoot    = playerInfo.restTimeToBoot;
             const restTime          = (restTimeToBoot == null) || (enterTurnTime == null)
                 ? null
-                : Math.max(0, restTimeToBoot + enterTurnTime - Timer.getServerTimestamp());
+                : Math.max(0, restTimeToBoot + enterTurnTime - Twns.Timer.getServerTimestamp());
             if (restTime == null) {
                 label.text      = ``;
             } else {
-                label.text      = Helpers.getTimeDurationText2(restTime);
+                label.text      = Twns.Helpers.getTimeDurationText2(restTime);
                 label.textColor = restTime >= 30 * 60
                     ? 0xFFFFFF
                     : (restTime >= 5 * 60 ? 0xFFFF00 : 0xFF4400);

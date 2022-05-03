@@ -65,18 +65,18 @@ namespace Twns.BaseWar {
         }
 
         private _onTouchedBtnSkip(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0226),
                 callback: () => this.close(),
             });
         }
         private _onTouchedImgTouchMask(): void {
-            if (Helpers.getExisted(this._getOpenData().actionData.dataArray)[this._dialogueIndex + 1]) {
+            if (Twns.Helpers.getExisted(this._getOpenData().actionData.dataArray)[this._dialogueIndex + 1]) {
                 this._tickDialogue();
             } else {
                 this.close();
             }
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -175,36 +175,36 @@ namespace Twns.BaseWar {
             const imgCo1                                = this._imgCo1;
             const imgCo2                                = this._imgCo2;
             const openData                              = this._getOpenData();
-            const { dataForCoDialogue, dataForAside }   = Helpers.getExisted(openData.actionData.dataArray)[this._dialogueIndex];
+            const { dataForCoDialogue, dataForAside }   = Twns.Helpers.getExisted(openData.actionData.dataArray)[this._dialogueIndex];
 
             if (dataForCoDialogue) {
                 const { side, nameArray }   = dataForCoDialogue;
-                const coId                  = Helpers.getExisted(dataForCoDialogue.coId);
+                const coId                  = Twns.Helpers.getExisted(dataForCoDialogue.coId);
                 const gameConfig            = openData.gameConfig;
                 const coImageSource         = gameConfig.getCoBustImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
                 const coName                = Lang.getLanguageText({ textArray: nameArray }) ?? gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined;
 
-                if (side === Types.WarEventActionDialogueSide.Left) {
+                if (side === Twns.Types.WarEventActionDialogueSide.Left) {
                     groupName1.visible  = true;
                     groupName2.visible  = false;
                     labelName1.text     = coName;
                     imgCo1.source       = coImageSource;
-                    Helpers.changeColor(imgCo1, Types.ColorType.Origin);
-                    Helpers.changeColor(imgCo2, Types.ColorType.Dark);
+                    Twns.Helpers.changeColor(imgCo1, Twns.Types.ColorType.Origin);
+                    Twns.Helpers.changeColor(imgCo2, Twns.Types.ColorType.Dark);
 
-                } else if (side === Types.WarEventActionDialogueSide.Right) {
+                } else if (side === Twns.Types.WarEventActionDialogueSide.Right) {
                     groupName1.visible  = false;
                     groupName2.visible  = true;
                     labelName2.text     = coName;
                     imgCo2.source       = coImageSource;
-                    Helpers.changeColor(imgCo1, Types.ColorType.Dark);
-                    Helpers.changeColor(imgCo2, Types.ColorType.Origin);
+                    Twns.Helpers.changeColor(imgCo1, Twns.Types.ColorType.Dark);
+                    Twns.Helpers.changeColor(imgCo2, Twns.Types.ColorType.Origin);
 
                 } else {
-                    throw Helpers.newError(`BwDialoguePanel._updateComponentsForDialogue() invalid side.`);
+                    throw Twns.Helpers.newError(`BwDialoguePanel._updateComponentsForDialogue() invalid side.`);
                 }
 
-                labelContent.setRichText(Helpers.getExisted(Lang.getLanguageText({
+                labelContent.setRichText(Twns.Helpers.getExisted(Lang.getLanguageText({
                     textArray   : dataForCoDialogue.textArray,
                 })).replace(/\\n/g, "\n"));
 
@@ -214,29 +214,29 @@ namespace Twns.BaseWar {
                 imgCo1.source       = ``;
                 imgCo2.source       = ``;
 
-                labelContent.setRichText(Helpers.getExisted(Lang.getLanguageText({
+                labelContent.setRichText(Twns.Helpers.getExisted(Lang.getLanguageText({
                     textArray   : dataForAside.textArray,
                 })).replace(/\\n/g, "\n"));
             }
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

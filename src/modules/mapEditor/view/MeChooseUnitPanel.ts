@@ -95,13 +95,13 @@ namespace Twns.MapEditor {
 
         private async _createDataForListUnit(): Promise<DataForCategoryRenderer[]> {
             const mapping = new Map<number, DataForDrawUnit[]>();
-            for (const unitType of (await Twns.Config.ConfigManager.getLatestGameConfig()).getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
+            for (const unitType of (await Twns.Config.ConfigManager.getLatestGameConfig()).getUnitTypesByCategory(Twns.Types.UnitCategory.All) ?? []) {
                 for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                     if (!mapping.has(playerIndex)) {
                         mapping.set(playerIndex, []);
                     }
 
-                    Helpers.getExisted(mapping.get(playerIndex)).push({
+                    Twns.Helpers.getExisted(mapping.get(playerIndex)).push({
                         playerIndex,
                         unitType,
                     });
@@ -191,7 +191,7 @@ namespace Twns.MapEditor {
             const data              = this._getData();
             const dataForDrawUnit   = data.dataForDrawUnit;
             const unitType          = dataForDrawUnit.unitType;
-            const war               = Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
+            const war               = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
             this._labelName.text    = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
 
             const unitView  = this._unitView;
@@ -213,7 +213,7 @@ namespace Twns.MapEditor {
             const dataForDrawUnit   = data.dataForDrawUnit;
             panel.updateOnChooseUnit(dataForDrawUnit);
             panel.close();
-            Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawUnit(dataForDrawUnit);
+            Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawUnit(dataForDrawUnit);
         }
     }
 }

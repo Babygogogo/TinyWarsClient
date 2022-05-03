@@ -72,19 +72,19 @@ namespace Twns.WarEvent {
         private _onTouchedBtnHasFog(): void {
             const action        = this.getAction();
             const forceFogCode  = action.forceFogCode;
-            if (forceFogCode === Types.ForceFogCode.Fog) {
-                action.forceFogCode = Types.ForceFogCode.Clear;
-            } else if (forceFogCode === Types.ForceFogCode.Clear) {
-                action.forceFogCode = Types.ForceFogCode.None;
+            if (forceFogCode === Twns.Types.ForceFogCode.Fog) {
+                action.forceFogCode = Twns.Types.ForceFogCode.Clear;
+            } else if (forceFogCode === Twns.Types.ForceFogCode.Clear) {
+                action.forceFogCode = Twns.Types.ForceFogCode.None;
             } else {
-                action.forceFogCode = Types.ForceFogCode.Fog;
+                action.forceFogCode = Twns.Types.ForceFogCode.Fog;
             }
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -122,7 +122,7 @@ namespace Twns.WarEvent {
         }
 
         private _updateLabelHasFog(): void {
-            this._labelHasFog.text = Lang.getForceFogCodeName(Helpers.getExisted(this.getAction().forceFogCode)) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelHasFog.text = Lang.getForceFogCodeName(Twns.Helpers.getExisted(this.getAction().forceFogCode)) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateInputTurns(): void {
@@ -130,7 +130,7 @@ namespace Twns.WarEvent {
         }
 
         private getAction(): CommonProto.WarEvent.IWeaSetForceFogCode {
-            return Helpers.getExisted(this._getOpenData().action.WeaSetForceFogCode);
+            return Twns.Helpers.getExisted(this._getOpenData().action.WeaSetForceFogCode);
         }
     }
 }

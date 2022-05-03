@@ -89,7 +89,7 @@ namespace Twns.Common {
             const locationIdArray   = this._getOpenData().currentLocationIdArray;
             const listLocation      = this._listLocation;
             listLocation.bindData(dataArray);
-            listLocation.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => locationIdArray.indexOf(v.locationId) >= 0 ? i : null)));
+            listLocation.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => locationIdArray.indexOf(v.locationId) >= 0 ? i : null)));
         }
     }
 

@@ -10,10 +10,10 @@
 namespace Twns.ReplayWar.RwProxy {
     import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import NetMessageCodes  = Twns.Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Twns.Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgReplayGetReplayIdArray,   callback: _onMsgReplayGetReplayIdArray },
             { msgCode: NetMessageCodes.MsgReplayGetData,            callback: _onMsgReplayGetData },
             { msgCode: NetMessageCodes.MsgReplayGetReplayInfo,      callback: _onMsgReplayGetReplayInfo },
@@ -23,7 +23,7 @@ namespace Twns.ReplayWar.RwProxy {
     }
 
     export function reqReplayGetReplayIdArray(replayFilter: CommonProto.Replay.IReplayFilter | null): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgReplayGetReplayIdArray: { c: {
                 replayFilter,
             }, },
@@ -38,7 +38,7 @@ namespace Twns.ReplayWar.RwProxy {
     }
 
     export function reqReplayGetData(replayId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgReplayGetData: { c: {
                 replayId,
             }, },
@@ -53,7 +53,7 @@ namespace Twns.ReplayWar.RwProxy {
     }
 
     export function reqReplayGetReplayInfo(replayId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgReplayGetReplayInfo: { c: {
                 replayId,
             }, },
@@ -62,13 +62,13 @@ namespace Twns.ReplayWar.RwProxy {
     function _onMsgReplayGetReplayInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgReplayGetReplayInfo.IS;
         if (!data.errorCode) {
-            Twns.ReplayWar.RwModel.setReplayInfo(Helpers.getExisted(data.replayId), data.replayInfo ?? null);
+            Twns.ReplayWar.RwModel.setReplayInfo(Twns.Helpers.getExisted(data.replayId), data.replayInfo ?? null);
             Twns.Notify.dispatch(NotifyType.MsgReplayGetBriefInfo, data);
         }
     }
 
     export function reqReplayGetSelfRating(replayId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgReplayGetSelfRating: { c: {
                 replayId,
             }, },
@@ -77,13 +77,13 @@ namespace Twns.ReplayWar.RwProxy {
     function _onMsgReplayGetSelfRating(e: egret.Event): void {
         const data = e.data as NetMessage.MsgReplayGetSelfRating.IS;
         if (!data.errorCode) {
-            Twns.ReplayWar.RwModel.setReplaySelfRating(Helpers.getExisted(data.replayId), data.rating ?? null);
+            Twns.ReplayWar.RwModel.setReplaySelfRating(Twns.Helpers.getExisted(data.replayId), data.rating ?? null);
             Twns.Notify.dispatch(NotifyType.MsgReplayGetSelfRating, data);
         }
     }
 
     export function reqReplaySetSelfRating(replayId: number, rating: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgReplaySetSelfRating: { c: {
                 replayId,
                 rating,

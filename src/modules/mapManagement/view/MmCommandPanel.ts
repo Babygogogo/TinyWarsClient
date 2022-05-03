@@ -55,7 +55,7 @@ namespace Twns.MapManagement {
         }
 
         private _onTouchedBtnDelete(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0080),
                 callback: () => {
                     Twns.WarMap.WarMapProxy.reqMmSetMapEnabled(this._getOpenData().mapId, false);
@@ -67,17 +67,17 @@ namespace Twns.MapManagement {
         private async _onTouchedBtnWarRule(): Promise<void> {
             const mapRawData = await Twns.WarMap.WarMapModel.getRawData(this._getOpenData().mapId);
             if (mapRawData == null) {
-                throw Helpers.newError(`MmCommandPanel._onTouchedBtnWarRule() empty mapRawData.`);
+                throw Twns.Helpers.newError(`MmCommandPanel._onTouchedBtnWarRule() empty mapRawData.`);
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmWarRulePanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmWarRulePanel, {
                 mapRawData,
             });
             this.close();
         }
 
         private _onTouchedBtnRename(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmMapRenamePanel, { mapId: this._getOpenData().mapId });
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmMapRenamePanel, { mapId: this._getOpenData().mapId });
         }
 
         private _onTouchedBtnCancel(): void {

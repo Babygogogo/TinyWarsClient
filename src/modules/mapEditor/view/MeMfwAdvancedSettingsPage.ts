@@ -72,7 +72,7 @@ namespace Twns.MapEditor {
         }
 
         private _updateListPlayer(): void {
-            const playersCount  = Helpers.getExisted(Twns.MapEditor.MeMfwModel.getMapRawData().playersCountUnneutral);
+            const playersCount  = Twns.Helpers.getExisted(Twns.MapEditor.MeMfwModel.getMapRawData().playersCountUnneutral);
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -149,13 +149,13 @@ namespace Twns.MapEditor {
         }
         private async _createDataCo(playerIndex: number): Promise<DataForInfoRenderer> {
             const coId          = Twns.MapEditor.MeMfwModel.getCoId(playerIndex);
-            const gameConfig    = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(Twns.MapEditor.MeMfwModel.getWarData().settingsForCommon?.configVersion));
+            const gameConfig    = await Twns.Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(Twns.MapEditor.MeMfwModel.getWarData().settingsForCommon?.configVersion));
             return {
                 titleText               : Lang.getText(LangTextType.B0425),
                 infoText                : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
                         gameConfig,
                         currentCoId         : coId,
                         availableCoIdArray  : Twns.MapEditor.MeMfwModel.getIsControlledByHuman(playerIndex)
@@ -192,7 +192,7 @@ namespace Twns.MapEditor {
                     this._confirmUseCustomRule(() => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                         const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0178),
                             currentValue    : currValue,
                             minValue,
@@ -217,7 +217,7 @@ namespace Twns.MapEditor {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0179),
                             currentValue    : currValue,
                             minValue,
@@ -242,7 +242,7 @@ namespace Twns.MapEditor {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0180),
                             currentValue    : currValue,
                             minValue,
@@ -267,7 +267,7 @@ namespace Twns.MapEditor {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0181),
                             currentValue    : currValue,
                             minValue,
@@ -292,7 +292,7 @@ namespace Twns.MapEditor {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0182),
                             currentValue    : currValue,
                             minValue,
@@ -317,7 +317,7 @@ namespace Twns.MapEditor {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0183),
                             currentValue    : currValue,
                             minValue,
@@ -342,7 +342,7 @@ namespace Twns.MapEditor {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0184),
                             currentValue    : currValue,
                             minValue,
@@ -367,7 +367,7 @@ namespace Twns.MapEditor {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0189),
                             currentValue    : currValue,
                             minValue,
@@ -399,7 +399,7 @@ namespace Twns.MapEditor {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0190),
                             currentValue    : currValue,
                             minValue,
