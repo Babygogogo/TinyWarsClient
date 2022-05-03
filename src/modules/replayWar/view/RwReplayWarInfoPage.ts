@@ -3,7 +3,7 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiTabPage        from "../../tools/ui/UiTabPage";
@@ -11,9 +11,9 @@
 // import RwModel              from "../model/RwModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsRwReplayWarInfoPage {
+namespace Twns.ReplayWar {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
     export type OpenDataForRwReplayWarInfoPage = {
         replayId: number;
@@ -117,7 +117,7 @@ namespace TwnsRwReplayWarInfoPage {
 
         private async _updateLabelMyRating(): Promise<void> {
             const replayId              = this._getOpenData()?.replayId;
-            const rating                = replayId == null ? null : await RwModel.getReplaySelfRating(replayId);
+            const rating                = replayId == null ? null : await Twns.ReplayWar.RwModel.getReplaySelfRating(replayId);
             this._labelMyRating.text    = rating == null ? Lang.getText(LangTextType.B0001) : `${rating}`;
         }
 
@@ -146,7 +146,7 @@ namespace TwnsRwReplayWarInfoPage {
             const replayId = this._getOpenData()?.replayId;
             return replayId == null
                 ? null
-                : await RwModel.getReplayInfo(replayId);
+                : await Twns.ReplayWar.RwModel.getReplayInfo(replayId);
         }
     }
 }

@@ -17,10 +17,7 @@
 namespace Twns.BaseWar {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import ISerialField         = CommonProto.WarSerialization.ISerialField;
-    import BwCursor             = TwnsBwCursor.BwCursor;
-    import BwFogMap             = BaseWar.BwFogMap;
-    import BwGridVisualEffect   = TwnsBwGridVisualEffect.BwGridVisualEffect;
-    import BwFieldView          = Twns.BaseWar.BwFieldView;
+    import BwGridVisualEffect   = Twns.BaseWar.BwGridVisualEffect;
     import GameConfig           = Config.GameConfig;
 
     export abstract class BwField {
@@ -31,7 +28,7 @@ namespace Twns.BaseWar {
         public abstract getFogMap(): BwFogMap;
         public abstract getTileMap(): BwTileMap;
         public abstract getUnitMap(): BwUnitMap;
-        public abstract getActionPlanner(): Twns.BaseWar.BwActionPlanner;
+        public abstract getActionPlanner(): BaseWar.BwActionPlanner;
 
         public init({ data, gameConfig, playersCountUnneutral }: {
             data                    : Types.Undefinable<ISerialField>;

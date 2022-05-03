@@ -2,7 +2,7 @@
 // import CommonConstants      from "../../tools/helpers/CommonConstants";
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 // import UserModel            from "../../user/model/UserModel";
@@ -10,7 +10,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiRankRoom.MrrSelfSettingsModel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import IMrrRoomInfo     = CommonProto.MultiRankRoom.IMrrRoomInfo;
 
@@ -27,7 +27,7 @@ namespace Twns.MultiRankRoom.MrrSelfSettingsModel {
 
         const roomInfo          = Helpers.getExisted(await MultiRankRoom.MrrModel.getRoomInfo(roomId));
         const playerDataList    = roomInfo ? roomInfo.playerDataList || [] : [];
-        const selfUserId        = UserModel.getSelfUserId();
+        const selfUserId        = Twns.User.UserModel.getSelfUserId();
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
         if ((roomInfo.timeForStartSetSelfSettings == null) || (selfPlayerData == null)) {
             return;
@@ -63,7 +63,7 @@ namespace Twns.MultiRankRoom.MrrSelfSettingsModel {
     export function setCoId(coId: number): void {
         if (_coId !== coId) {
             _coId = coId;
-            Notify.dispatch(NotifyType.MrrSelfSettingsCoIdChanged);
+            Twns.Notify.dispatch(NotifyType.MrrSelfSettingsCoIdChanged);
         }
     }
     export function getCoId(): number | null {
@@ -76,7 +76,7 @@ namespace Twns.MultiRankRoom.MrrSelfSettingsModel {
     export function setUnitAndTileSkinId(skinId: number): void {
         if (_unitAndTileSkinId !== skinId) {
             _unitAndTileSkinId = skinId;
-            Notify.dispatch(NotifyType.MrrSelfSettingsSkinIdChanged);
+            Twns.Notify.dispatch(NotifyType.MrrSelfSettingsSkinIdChanged);
         }
     }
     export function getUnitAndTileSkinId(): number | null {

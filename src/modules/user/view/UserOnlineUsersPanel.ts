@@ -3,7 +3,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -15,12 +15,12 @@
 // import TwnsUserPanel            from "../../user/view/UserPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserOnlineUsersPanel {
+namespace Twns.User {
     import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+    import NotifyType   = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class UserOnlineUsersPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserOnlineUsersPanel = void;
+    export class UserOnlineUsersPanel extends TwnsUiPanel.UiPanel<OpenDataForUserOnlineUsersPanel> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _group!                : eui.Group;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
@@ -49,7 +49,7 @@ namespace TwnsUserOnlineUsersPanel {
 
             this._listUser.setItemRenderer(UserRenderer);
 
-            UserProxy.reqUserGetOnlineUserIdArray();
+            Twns.User.UserProxy.reqUserGetOnlineUserIdArray();
 
             this._updateView();
             this._updateComponentsForLanguage();
@@ -97,7 +97,7 @@ namespace TwnsUserOnlineUsersPanel {
                     dataArray.push({
                         index   : 0,
                         userId,
-                        nickname: (await UserModel.getUserBriefInfo(userId))?.nickname,
+                        nickname: (await Twns.User.UserModel.getUserBriefInfo(userId))?.nickname,
                     });
                 })());
             }

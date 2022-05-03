@@ -5,7 +5,7 @@
 // import TwnsMeMapListPanel           from "../../mapEditor/view/MeMapListPanel";
 // import Helpers                      from "../../tools/helpers/Helpers";
 // import Types                        from "../../tools/helpers/Types";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiPanel                  from "../../tools/ui/UiPanel";
 // import UserModel                    from "../../user/model/UserModel";
@@ -14,11 +14,11 @@
 // import TwnsLobbyTopPanel            from "./LobbyTopPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsLobbyBottomPanel {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.Lobby {
+    import NotifyType               = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class LobbyBottomPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForLobbyBottomPanel = void;
+    export class LobbyBottomPanel extends TwnsUiPanel.UiPanel<OpenDataForLobbyBottomPanel> {
         private readonly _groupBottom!  : eui.Group;
         private readonly _btnMyInfo!    : TwnsUiButton.UiButton;
         private readonly _btnChat!      : TwnsUiButton.UiButton;
@@ -54,7 +54,7 @@ namespace TwnsLobbyBottomPanel {
             TwnsPanelManager.close(TwnsPanelConfig.Dict.UserOnlineUsersPanel);
             TwnsPanelManager.close(TwnsPanelConfig.Dict.ChatPanel);
             TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, {
-                userId: Helpers.getExisted(UserModel.getSelfUserId()),
+                userId: Helpers.getExisted(Twns.User.UserModel.getSelfUserId()),
             });
         }
 
@@ -100,7 +100,7 @@ namespace TwnsLobbyBottomPanel {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateImgChatRed(): void {
-            this._btnChat.setRedVisible(ChatModel.checkHasUnreadMessage());
+            this._btnChat.setRedVisible(Twns.Chat.ChatModel.checkHasUnreadMessage());
         }
 
         protected async _showOpenAnimation(): Promise<void> {

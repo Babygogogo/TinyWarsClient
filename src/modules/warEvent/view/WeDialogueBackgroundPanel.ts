@@ -10,7 +10,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -26,7 +26,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
-    import NotifyType   = TwnsNotifyType.NotifyType;
+    import NotifyType   = Twns.Notify.NotifyType;
     import GameConfig   = Config.GameConfig;
 
     export type OpenDataForWeDialogueBackgroundPanel = {
@@ -171,7 +171,7 @@ namespace Twns.WarEvent {
             const panel                 = data.panel;
             data.action.backgroundId    = data.backgroundId;
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonConfirm01);
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             panel.close();
         }
 

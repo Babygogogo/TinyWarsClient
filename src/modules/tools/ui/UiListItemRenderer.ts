@@ -15,7 +15,7 @@ namespace TwnsUiListItemRenderer {
         private _isOpening                  = false;
 
         private _shortSfxCode               = ShortSfxCode.ButtonNeutral01;
-        private _notifyListenerArray        : Notify.Listener[] | null = null;
+        private _notifyListenerArray        : Twns.Notify.Listener[] | null = null;
         private _uiListenerArray            : UiListener[] | null = null;
 
         public data                         : Types.Undefinable<DataForRenderer>;
@@ -137,10 +137,10 @@ namespace TwnsUiListItemRenderer {
             return this._shortSfxCode;
         }
 
-        protected _setNotifyListenerArray(array: Notify.Listener[] | null): void {
+        protected _setNotifyListenerArray(array: Twns.Notify.Listener[] | null): void {
             this._notifyListenerArray = array;
         }
-        protected _getNotifyListenerArray(): Notify.Listener[] | null {
+        protected _getNotifyListenerArray(): Twns.Notify.Listener[] | null {
             return this._notifyListenerArray;
         }
         protected _setUiListenerArray(array: UiListener[] | null): void {
@@ -153,7 +153,7 @@ namespace TwnsUiListItemRenderer {
         private _registerListeners(): void {
             const notifyListenerArray = this._getNotifyListenerArray();
             if (notifyListenerArray) {
-                Notify.addEventListeners(notifyListenerArray, this);
+                Twns.Notify.addEventListeners(notifyListenerArray, this);
             }
 
             const uiListenerArray = this._getUiListenerArray();
@@ -167,7 +167,7 @@ namespace TwnsUiListItemRenderer {
         private _unregisterListeners(): void {
             const notifyListenerArray = this._getNotifyListenerArray();
             if (notifyListenerArray) {
-                Notify.removeEventListeners(notifyListenerArray, this);
+                Twns.Notify.removeEventListeners(notifyListenerArray, this);
             }
 
             const uiListenerArray = this._getUiListenerArray();

@@ -9,15 +9,15 @@
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import WarDestructionHelpers    from "../../tools/warHelpers/WarDestructionHelpers";
 // import MeUtility                from "./MeUtility";
 // import TwnsMeWar                from "./MeWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeDrawer {
+namespace Twns.MapEditor {
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import DrawerMode           = Types.MapEditorDrawerMode;
     import GridIndex            = Types.GridIndex;
     import SymmetryType         = Types.SymmetryType;
@@ -61,7 +61,7 @@ namespace TwnsMeDrawer {
         private _dataForDeleteTileFromLocation  : DataForDeleteTileFromLocation | null = null;
         private _symmetricalDrawType            = SymmetryType.None;
 
-        private _notifyListeners: Notify.Listener[] = [
+        private _notifyListeners: Twns.Notify.Listener[] = [
             { type: NotifyType.BwCursorTapped,     callback: this._onNotifyBwCursorTapped },
             { type: NotifyType.BwCursorDragged,    callback: this._onNotifyBwCursorDragged },
         ];
@@ -72,21 +72,21 @@ namespace TwnsMeDrawer {
 
         public startRunning(war: Twns.MapEditor.MeWar): void {
             this._setWar(war);
-            Notify.addEventListeners(this._notifyListeners, this);
+            Twns.Notify.addEventListeners(this._notifyListeners, this);
         }
         public stopRunning(): void {
             delete this._war;
 
-            Notify.removeEventListeners(this._notifyListeners, this);
+            Twns.Notify.removeEventListeners(this._notifyListeners, this);
         }
 
         private _onNotifyBwCursorTapped(e: egret.Event): void {
-            const data      = e.data as NotifyData.BwCursorTapped;
+            const data      = e.data as Twns.Notify.NotifyData.BwCursorTapped;
             const gridIndex = data.tappedOn;
             this._handleAction(gridIndex);
         }
         private _onNotifyBwCursorDragged(e: egret.Event): void {
-            const data = e.data as NotifyData.BwCursorDragged;
+            const data = e.data as Twns.Notify.NotifyData.BwCursorDragged;
             this._handleAction(data.draggedTo);
         }
 
@@ -99,7 +99,7 @@ namespace TwnsMeDrawer {
 
         private _setMode(mode: DrawerMode): void {
             this._mode = mode;
-            Notify.dispatch(NotifyType.MeDrawerModeChanged);
+            Twns.Notify.dispatch(NotifyType.MeDrawerModeChanged);
         }
         public setModeDeleteUnit(): void {
             this._setMode(DrawerMode.DeleteUnit);
@@ -229,7 +229,7 @@ namespace TwnsMeDrawer {
                     tile.startRunning(war);
                     tile.flushDataToView();
 
-                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+                    Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
                 }
             }
         }
@@ -263,7 +263,7 @@ namespace TwnsMeDrawer {
                     tile.startRunning(war);
                     tile.flushDataToView();
 
-                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+                    Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
                 }
             }
         }
@@ -292,7 +292,7 @@ namespace TwnsMeDrawer {
                     tile.startRunning(war);
                     tile.flushDataToView();
 
-                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+                    Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
                 }
             }
         }
@@ -321,7 +321,7 @@ namespace TwnsMeDrawer {
                     tile.startRunning(war);
                     tile.flushDataToView();
 
-                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+                    Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
                 }
             }
         }
@@ -349,7 +349,7 @@ namespace TwnsMeDrawer {
                 tile.startRunning(war);
                 tile.flushDataToView();
 
-                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+                Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
             }
         }
 
@@ -414,7 +414,7 @@ namespace TwnsMeDrawer {
             tile.startRunning(war);
             tile.flushDataToView();
 
-            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+            Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
             const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
@@ -435,7 +435,7 @@ namespace TwnsMeDrawer {
                 t2.startRunning(war);
                 t2.flushDataToView();
 
-                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as NotifyData.MeTileChanged);
+                Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Twns.Notify.NotifyData.MeTileChanged);
             }
         }
         private _handleDrawTileDecorator(gridIndex: GridIndex): void {
@@ -461,7 +461,7 @@ namespace TwnsMeDrawer {
             tile.startRunning(war);
             tile.flushDataToView();
 
-            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+            Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
             const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
@@ -482,7 +482,7 @@ namespace TwnsMeDrawer {
                 t2.startRunning(war);
                 t2.flushDataToView();
 
-                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as NotifyData.MeTileChanged);
+                Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Twns.Notify.NotifyData.MeTileChanged);
             }
         }
         private _handleDrawTileObject(gridIndex: GridIndex): void {
@@ -517,7 +517,7 @@ namespace TwnsMeDrawer {
             tile.startRunning(war);
             tile.flushDataToView();
 
-            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+            Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
             const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
@@ -542,7 +542,7 @@ namespace TwnsMeDrawer {
                 t2.startRunning(war);
                 t2.flushDataToView();
 
-                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as NotifyData.MeTileChanged);
+                Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Twns.Notify.NotifyData.MeTileChanged);
             }
         }
         private _handleDrawUnit(gridIndex: GridIndex): void {
@@ -571,7 +571,7 @@ namespace TwnsMeDrawer {
             unitMap.setUnitOnMap(unit);
             unitMap.setNextUnitId(unitId + 1);
 
-            Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as NotifyData.BwUnitChanged);
+            Twns.Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as Twns.Notify.NotifyData.BwUnitChanged);
         }
         private _handleDeleteTileDecorator(gridIndex: GridIndex): void {
             const tileMap   = this._getWar().getTileMap();
@@ -579,7 +579,7 @@ namespace TwnsMeDrawer {
             tile.deleteTileDecorator();
             tile.flushDataToView();
 
-            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+            Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
             const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
@@ -588,7 +588,7 @@ namespace TwnsMeDrawer {
                 t2.deleteTileDecorator();
                 t2.flushDataToView();
 
-                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as NotifyData.MeTileChanged);
+                Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Twns.Notify.NotifyData.MeTileChanged);
             }
         }
         private _handleDeleteTileObject(gridIndex: GridIndex): void {
@@ -597,7 +597,7 @@ namespace TwnsMeDrawer {
             tile.deleteTileObject();
             tile.flushDataToView();
 
-            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+            Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
             const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
@@ -606,7 +606,7 @@ namespace TwnsMeDrawer {
                 t2.deleteTileObject();
                 t2.flushDataToView();
 
-                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as NotifyData.MeTileChanged);
+                Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Twns.Notify.NotifyData.MeTileChanged);
             }
         }
         private _handleDeleteUnit(gridIndex: GridIndex): void {
@@ -618,7 +618,7 @@ namespace TwnsMeDrawer {
                     war.getTileMap().getView().updateCoZone();
                 }
 
-                Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as NotifyData.BwUnitChanged);
+                Twns.Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as Twns.Notify.NotifyData.BwUnitChanged);
             }
         }
         private _handleAddTileToLocation(gridIndex: GridIndex): void {

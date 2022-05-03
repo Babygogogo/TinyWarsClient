@@ -16,7 +16,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -33,13 +33,13 @@
 // import TwnsUserSetStageScalePanel   from "./UserSetStageScalePanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserSettingsPanel {
+namespace Twns.User {
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
 
-    export type OpenData = void;
-    export class UserSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserSettingsPanel = void;
+    export class UserSettingsPanel extends TwnsUiPanel.UiPanel<OpenDataForUserSettingsPanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
@@ -114,14 +114,14 @@ namespace TwnsUserSettingsPanel {
                     Lang.setLanguageType(languageType);
                     LocalStorage.setLanguageType(languageType);
 
-                    Notify.dispatch(NotifyType.LanguageChanged);
+                    Twns.Notify.dispatch(NotifyType.LanguageChanged);
                 },
                 callbackOnRight : () => {
                     const languageType = Types.LanguageType.English;
                     Lang.setLanguageType(languageType);
                     LocalStorage.setLanguageType(languageType);
 
-                    Notify.dispatch(NotifyType.LanguageChanged);
+                    Twns.Notify.dispatch(NotifyType.LanguageChanged);
                 },
                 checkerForLeftOn: () => {
                     return Lang.getCurrentLanguageType() === Types.LanguageType.Chinese;
@@ -132,17 +132,17 @@ namespace TwnsUserSettingsPanel {
                 leftTextType    : LangTextType.B0385,
                 rightTextType   : LangTextType.B0386,
                 callbackOnLeft  : () => {
-                    UserProxy.reqUserSetSettings({
+                    Twns.User.UserProxy.reqUserSetSettings({
                         unitAndTileTextureVersion: Types.UnitAndTileTextureVersion.V0,
                     });
                 },
                 callbackOnRight : () => {
-                    UserProxy.reqUserSetSettings({
+                    Twns.User.UserProxy.reqUserSetSettings({
                         unitAndTileTextureVersion: Types.UnitAndTileTextureVersion.V1,
                     });
                 },
                 checkerForLeftOn: () => {
-                    return UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0;
+                    return Twns.User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0;
                 },
             });
             this._uiRadioUnitAnimation.setData({
@@ -182,17 +182,17 @@ namespace TwnsUserSettingsPanel {
                 leftTextType    : LangTextType.B0561,
                 rightTextType   : LangTextType.B0562,
                 callbackOnLeft  : () => {
-                    UserProxy.reqUserSetSettings({
+                    Twns.User.UserProxy.reqUserSetSettings({
                         isShowGridBorder: true,
                     });
                 },
                 callbackOnRight : () => {
-                    UserProxy.reqUserSetSettings({
+                    Twns.User.UserProxy.reqUserSetSettings({
                         isShowGridBorder: false,
                     });
                 },
                 checkerForLeftOn: () => {
-                    return UserModel.getSelfSettingsIsShowGridBorder();
+                    return Twns.User.UserModel.getSelfSettingsIsShowGridBorder();
                 },
             });
             this._uiRadioAutoScrollMap.setData({
@@ -200,22 +200,22 @@ namespace TwnsUserSettingsPanel {
                 leftTextType    : LangTextType.B0561,
                 rightTextType   : LangTextType.B0562,
                 callbackOnLeft  : () => {
-                    UserProxy.reqUserSetSettings({
+                    Twns.User.UserProxy.reqUserSetSettings({
                         isAutoScrollMap: true,
                     });
                 },
                 callbackOnRight : () => {
-                    UserProxy.reqUserSetSettings({
+                    Twns.User.UserProxy.reqUserSetSettings({
                         isAutoScrollMap: false,
                     });
                 },
                 checkerForLeftOn: () => {
-                    return UserModel.getSelfSettingsIsAutoScrollMap();
+                    return Twns.User.UserModel.getSelfSettingsIsAutoScrollMap();
                 },
             });
 
-            const selfUserId = Helpers.getExisted(UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnOpened_00);
-            UserProxy.reqUserGetPublicInfo(selfUserId);
+            const selfUserId = Helpers.getExisted(Twns.User.UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnOpened_00);
+            Twns.User.UserProxy.reqUserGetPublicInfo(selfUserId);
 
             this._scroller.viewport.scrollV = 0;
             this._updateView();
@@ -243,12 +243,12 @@ namespace TwnsUserSettingsPanel {
             this._updateView();
         }
         private _onMsgUserSetNickname(): void {
-            const selfUserId = Helpers.getExisted(UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnMsgUserSetNickname_00);
-            UserProxy.reqUserGetPublicInfo(selfUserId);
+            const selfUserId = Helpers.getExisted(Twns.User.UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnMsgUserSetNickname_00);
+            Twns.User.UserProxy.reqUserGetPublicInfo(selfUserId);
         }
         private _onMsgUserSetDiscordId(): void {
-            const selfUserId = Helpers.getExisted(UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnMsgUserSetDiscordId_00);
-            UserProxy.reqUserGetPublicInfo(selfUserId);
+            const selfUserId = Helpers.getExisted(Twns.User.UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnMsgUserSetDiscordId_00);
+            Twns.User.UserProxy.reqUserGetPublicInfo(selfUserId);
         }
         private _onTouchedBtnDamageCalculator(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageCalculatorPanel, {
@@ -358,10 +358,10 @@ namespace TwnsUserSettingsPanel {
             group.addChild(this._btnUnitsInfo);
             group.addChild(this._btnComplaint);
             group.addChild(this._btnChangeGameVersion);
-            if (UserModel.getIsSelfAdmin()) {
+            if (Twns.User.UserModel.getIsSelfAdmin()) {
                 group.addChild(this._btnGameManagement);
             }
-            if ((UserModel.getIsSelfAdmin()) || (UserModel.getIsSelfMapCommittee())) {
+            if ((Twns.User.UserModel.getIsSelfAdmin()) || (Twns.User.UserModel.getIsSelfMapCommittee())) {
                 group.addChild(this._btnMapManagement);
             }
         }

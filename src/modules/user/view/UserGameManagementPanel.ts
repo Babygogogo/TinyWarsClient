@@ -16,7 +16,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -33,12 +33,12 @@
 // import TwnsUserSetStageScalePanel   from "./UserSetStageScalePanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserGameManagementPanel {
+namespace Twns.User {
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class UserGameManagementPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserGameManagementPanel = void;
+    export class UserGameManagementPanel extends TwnsUiPanel.UiPanel<OpenDataForUserGameManagementPanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
@@ -82,11 +82,11 @@ namespace TwnsUserGameManagementPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 title       : Lang.getText(LangTextType.B0879),
                 content     : Lang.getText(LangTextType.A0225),
-                callback    : () => SpmProxy.reqSpmDeleteAllScoreAndReplay(),
+                callback    : () => Twns.SinglePlayerMode.SpmProxy.reqSpmDeleteAllScoreAndReplay(),
             });
         }
         private _onTouchedBtnSetPrivilege(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetPrivilegePanel, { userId: Helpers.getExisted(UserModel.getSelfUserId()) });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetPrivilegePanel, { userId: Helpers.getExisted(Twns.User.UserModel.getSelfUserId()) });
         }
         private _onTouchedBtnMapManagement(): void {
             TwnsPanelManager.closeAllPanelsExcept([
@@ -137,12 +137,12 @@ namespace TwnsUserGameManagementPanel {
             const group = this._groupButtons;
             group.removeChildren();
 
-            if (UserModel.getIsSelfAdmin()) {
+            if (Twns.User.UserModel.getIsSelfAdmin()) {
                 group.addChild(this._btnSetPrivilege);
                 group.addChild(this._btnDeleteAllSpmRank);
                 group.addChild(this._btnManageBroadcast);
             }
-            if ((UserModel.getIsSelfAdmin()) || (UserModel.getIsSelfMapCommittee())) {
+            if ((Twns.User.UserModel.getIsSelfAdmin()) || (Twns.User.UserModel.getIsSelfMapCommittee())) {
                 group.addChild(this._btnMapManagement);
             }
         }

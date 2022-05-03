@@ -32,11 +32,11 @@ namespace Twns.BaseWar {
     import GameConfig               = Config.GameConfig;
 
     export abstract class BwWar {
-        private readonly _weatherManager        = new TwnsBwWeatherManager.BwWeatherManager();
+        private readonly _weatherManager        = new Twns.BaseWar.BwWeatherManager();
         private readonly _turnManager           = new BwTurnManager();
         private readonly _executedActionManager = new BaseWar.BwExecutedActionManager();
-        private readonly _randomNumberManager   = new TwnsBwRandomNumberManager.BwRandomNumberManager();
-        private readonly _drawVoteManager       = new TwnsBwDrawVoteManager.BwDrawVoteManager();
+        private readonly _randomNumberManager   = new Twns.BaseWar.BwRandomNumberManager();
+        private readonly _drawVoteManager       = new Twns.BaseWar.BwDrawVoteManager();
         private readonly _view                  = new BaseWar.BwWarView();
 
         private _gameConfig             : GameConfig | null = null;
@@ -344,10 +344,10 @@ namespace Twns.BaseWar {
         public getActionPlanner(): BwActionPlanner {
             return this.getField().getActionPlanner();
         }
-        public getGridVisualEffect(): TwnsBwGridVisualEffect.BwGridVisualEffect {
+        public getGridVisualEffect(): Twns.BaseWar.BwGridVisualEffect {
             return this.getField().getGridVisualEffect();
         }
-        public getCursor(): TwnsBwCursor.BwCursor {
+        public getCursor(): Twns.BaseWar.BwCursor {
             return this.getField().getCursor();
         }
 
@@ -358,13 +358,13 @@ namespace Twns.BaseWar {
             return this.getTurnManager().getPhaseCode();
         }
 
-        public getWeatherManager(): TwnsBwWeatherManager.BwWeatherManager {
+        public getWeatherManager(): Twns.BaseWar.BwWeatherManager {
             return this._weatherManager;
         }
-        public getDrawVoteManager(): TwnsBwDrawVoteManager.BwDrawVoteManager {
+        public getDrawVoteManager(): Twns.BaseWar.BwDrawVoteManager {
             return this._drawVoteManager;
         }
-        public getRandomNumberManager(): TwnsBwRandomNumberManager.BwRandomNumberManager {
+        public getRandomNumberManager(): Twns.BaseWar.BwRandomNumberManager {
             return this._randomNumberManager;
         }
         public getExecutedActionManager(): BaseWar.BwExecutedActionManager {

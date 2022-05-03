@@ -2,7 +2,7 @@
 // import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
 // import Types                    from "../../tools/helpers/Types";
 
-namespace TwnsMeActionPlanner {
+namespace Twns.MapEditor {
     import GridIndex        = Types.GridIndex;
     import State            = Types.ActionPlannerState;
 

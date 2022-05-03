@@ -7,9 +7,9 @@
 // import TwnsBwGridVisualEffect   from "../model/BwGridVisualEffect";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwGridVisualEffectView {
+namespace Twns.BaseWar {
     import GridIndex            = Types.GridIndex;
-    import BwGridVisualEffect   = TwnsBwGridVisualEffect.BwGridVisualEffect;
+    import BwGridVisualEffect   = Twns.BaseWar.BwGridVisualEffect;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = CommonConstants.GridSize;
     const BLOCK_OFFSET_X                                = Math.floor(_GRID_WIDTH * 0.3);

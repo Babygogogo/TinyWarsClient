@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -20,12 +20,12 @@
 // import TwnsChangeLogModifyPanel from "./ChangeLogModifyPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsChangeLogPanel {
+namespace Twns.ChangeLog {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class ChangeLogPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForChangeLogPanel = void;
+    export class ChangeLogPanel extends TwnsUiPanel.UiPanel<OpenDataForChangeLogPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
@@ -54,8 +54,8 @@ namespace TwnsChangeLogPanel {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
 
-            if (!ChangeLogModel.getAllMessageList()) {
-                ChangeLogProxy.reqChangeLogGetMessageList();
+            if (!Twns.ChangeLog.ChangeLogModel.getAllMessageList()) {
+                Twns.ChangeLog.ChangeLogProxy.reqChangeLogGetMessageList();
             }
         }
         protected _onClosing(): void {
@@ -70,11 +70,11 @@ namespace TwnsChangeLogPanel {
         }
         private _onMsgChangeLogAddMessage(): void {
             FloatText.show(Lang.getText(LangTextType.A0154));
-            ChangeLogProxy.reqChangeLogGetMessageList();
+            Twns.ChangeLog.ChangeLogProxy.reqChangeLogGetMessageList();
         }
         private _onMsgChangeLogModifyMessage(): void {
             FloatText.show(Lang.getText(LangTextType.A0154));
-            ChangeLogProxy.reqChangeLogGetMessageList();
+            Twns.ChangeLog.ChangeLogProxy.reqChangeLogGetMessageList();
         }
 
         private _onTouchedBtnAddMessage(): void {
@@ -94,14 +94,14 @@ namespace TwnsChangeLogPanel {
             this._btnAddMessage.label   = Lang.getText(LangTextType.B0454);
         }
         private _updateListMessageAndLabelNoMessage(): void {
-            const messageList               = ChangeLogModel.getAllMessageList() || [];
+            const messageList               = Twns.ChangeLog.ChangeLogModel.getAllMessageList() || [];
             this._labelNoMessage.visible    = !messageList.length;
             this._listMessage.bindData(messageList);
         }
         private async _updateBtnAddMessage(): Promise<void> {
             const btn   = this._btnAddMessage;
             btn.visible = false;
-            btn.visible = UserModel.checkCanSelfEditChangeLog();
+            btn.visible = Twns.User.UserModel.checkCanSelfEditChangeLog();
         }
 
         protected async _showOpenAnimation(): Promise<void> {
@@ -161,7 +161,7 @@ namespace TwnsChangeLogPanel {
             const btnModify     = this._btnModify;
             btnModify.label     = Lang.getText(LangTextType.B0317);
             btnModify.visible   = false;
-            btnModify.visible   = UserModel.checkCanSelfEditChangeLog();
+            btnModify.visible   = Twns.User.UserModel.checkCanSelfEditChangeLog();
         }
 
         private _onTouchedBtnModify(): void {

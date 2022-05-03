@@ -4,7 +4,7 @@
 // import MpwUtility           from "./MpwUtility";
 // import TwnsMpwWar           from "./MpwWar";
 
-namespace TwnsMpwFogMap {
+namespace Twns.MultiPlayerWar {
     export class MpwFogMap extends Twns.BaseWar.BwFogMap {
         public startRunning(war: Twns.MultiPlayerWar.MpwWar): void {
             this._setWar(war);
@@ -15,7 +15,7 @@ namespace TwnsMpwFogMap {
                     tile.setHasFog(false);
                 } else {
                     if (!tile.getHasFog()) {
-                        MpwUtility.resetTileDataAsHasFog(tile);
+                        Twns.MultiPlayerWar.MpwUtility.resetTileDataAsHasFog(tile);
                     }
                 }
             }

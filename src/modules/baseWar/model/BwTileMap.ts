@@ -216,7 +216,7 @@ namespace Twns.BaseWar {
         public setLocationVisibleFlags(flags: number): void {
             this._setLocationVisibleFlags(flags);
             this.getView().resetLocationLayer();
-            Notify.dispatch(TwnsNotifyType.NotifyType.BwTileMapLocationVisibleSet);
+            Twns.Notify.dispatch(Twns.Notify.NotifyType.BwTileMapLocationVisibleSet);
         }
         public getLocationVisibleFlags(): number {
             return this._locationVisibleFlags;
@@ -243,7 +243,7 @@ namespace Twns.BaseWar {
                 }
             }
             this.getView().resetLocationLayer();
-            Notify.dispatch(TwnsNotifyType.NotifyType.BwTileMapLocationVisibleSet);
+            Twns.Notify.dispatch(Twns.Notify.NotifyType.BwTileMapLocationVisibleSet);
         }
     }
 }

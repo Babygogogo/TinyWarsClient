@@ -9,7 +9,7 @@
 // import UserModel        from "../../user/model/UserModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwTileView {
+namespace Twns.BaseWar {
     import TileObjectType       = Types.TileObjectType;
     import TileBaseType         = Types.TileBaseType;
     import TileDecoratorType    = Types.TileDecoratorType;
@@ -68,14 +68,14 @@ namespace TwnsBwTileView {
             const hasFog    = data.hasFog;
             const tileData  = data.tileData;
             const themeType = data.themeType;
-            const version   = UserModel.getSelfSettingsTextureVersion();
+            const version   = Twns.User.UserModel.getSelfSettingsTextureVersion();
             const tickCount = Timer.getTileAnimationTickCount();
 
             {
                 const objectType    = Helpers.getExisted(tileData.objectType);
                 const imgObject     = this.getImgObject();
                 imgObject.visible   = true;
-                imgObject.source    = CommonModel.getCachedTileObjectImageSource({
+                imgObject.source    = Twns.Common.CommonModel.getCachedTileObjectImageSource({
                     version,
                     themeType,
                     skinId      : ((hasFog) && (objectType !== TileObjectType.Headquarters)) ? CommonConstants.UnitAndTileNeutralSkinId : skinId,
@@ -95,7 +95,7 @@ namespace TwnsBwTileView {
                     imgBase.visible = false;
                 } else {
                     imgBase.visible = true;
-                    imgBase.source  = CommonModel.getCachedTileBaseImageSource({
+                    imgBase.source  = Twns.Common.CommonModel.getCachedTileBaseImageSource({
                         version,
                         themeType,
                         skinId      : CommonConstants.UnitAndTileNeutralSkinId,
@@ -114,7 +114,7 @@ namespace TwnsBwTileView {
                     imgDecorator.visible = false;
                 } else {
                     imgDecorator.visible    = true;
-                    imgDecorator.source     = CommonModel.getCachedTileDecoratorImageSource({
+                    imgDecorator.source     = Twns.Common.CommonModel.getCachedTileDecoratorImageSource({
                         version,
                         themeType,
                         skinId          : CommonConstants.UnitAndTileNeutralSkinId,

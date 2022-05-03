@@ -1,7 +1,7 @@
 
 // import Lang             from "../lang/Lang";
 // import Notify           from "../notify/Notify";
-// import TwnsNotifyType   from "../notify/NotifyType";
+// import Twns.Notify   from "../notify/NotifyType";
 // import ProtoManager     from "../proto/ProtoManager";
 // import CommonConstants  from "./CommonConstants";
 // import Helpers          from "./Helpers";

@@ -13,7 +13,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -31,7 +31,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiPlayerWar {
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
 
     // eslint-disable-next-line no-shadow
     enum PanelSkinState {
@@ -128,10 +128,10 @@ namespace Twns.MultiPlayerWar {
 
             const userId = war.getPlayerInTurn().getUserId();
             if ((userId != null)                        &&
-                (userId !== UserModel.getSelfUserId())  &&
+                (userId !== Twns.User.UserModel.getSelfUserId())  &&
                 (Timer.getServerTimestamp() % 60 == 0)
             ) {
-                UserProxy.reqUserGetOnlineState(userId);
+                Twns.User.UserProxy.reqUserGetOnlineState(userId);
             }
         }
         private _onNotifyBwPlayerFundChanged(): void {
@@ -146,8 +146,8 @@ namespace Twns.MultiPlayerWar {
             SoundManager.playCoBgmWithWar(war, false);
 
             const userId = war.getPlayerInTurn().getUserId();
-            if ((userId != null) && (userId !== UserModel.getSelfUserId())) {
-                UserProxy.reqUserGetOnlineState(userId);
+            if ((userId != null) && (userId !== Twns.User.UserModel.getSelfUserId())) {
+                Twns.User.UserProxy.reqUserGetOnlineState(userId);
             }
         }
         private _onNotifyBwCoEnergyChanged(): void {
@@ -208,8 +208,8 @@ namespace Twns.MultiPlayerWar {
             if (userId != null) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
 
-                if (userId !== UserModel.getSelfUserId()) {
-                    UserProxy.reqUserGetOnlineState(userId);
+                if (userId !== Twns.User.UserModel.getSelfUserId()) {
+                    Twns.User.UserProxy.reqUserGetOnlineState(userId);
                 }
 
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -280,11 +280,11 @@ namespace Twns.MultiPlayerWar {
         private async _updateLabelPlayerState(): Promise<void> {
             const userId    = this._getOpenData().war.getPlayerInTurn().getUserId();
             const label     = this._labelPlayerState;
-            if ((userId == null) || (userId === UserModel.getSelfUserId())) {
+            if ((userId == null) || (userId === Twns.User.UserModel.getSelfUserId())) {
                 label.text      = Lang.getText(LangTextType.B0676);
                 label.textColor = Types.ColorValue.Green;
             } else {
-                const userPublicInfo = await UserModel.getUserPublicInfo(userId);
+                const userPublicInfo = await Twns.User.UserModel.getUserPublicInfo(userId);
                 if ((userPublicInfo == null) || (!userPublicInfo.isOnline)) {
                     label.text      = Lang.getText(LangTextType.B0677);
                     label.textColor = Types.ColorValue.Red;
@@ -389,7 +389,7 @@ namespace Twns.MultiPlayerWar {
         }
 
         private _updateBtnChat(): void {
-            this._btnChat.setRedVisible(ChatModel.checkHasUnreadMessage());
+            this._btnChat.setRedVisible(Twns.Chat.ChatModel.checkHasUnreadMessage());
         }
 
         private _setPanelSkinState(state: PanelSkinState): void {
@@ -461,15 +461,15 @@ namespace Twns.MultiPlayerWar {
             const war       = data.war;
             const userId    = war.getPlayer(data.playerIndex).getUserId();
             if ((userId != null)                        &&
-                (userId !== UserModel.getSelfUserId())  &&
+                (userId !== Twns.User.UserModel.getSelfUserId())  &&
                 (Timer.getServerTimestamp() % 60 == 0)
             ) {
-                UserProxy.reqUserGetOnlineState(userId);
+                Twns.User.UserProxy.reqUserGetOnlineState(userId);
             }
         }
 
         private _onNotifyBwPlayerFundChanged(e: egret.Event): void {
-            const eventData = e.data as NotifyData.BwPlayerFundChanged;
+            const eventData = e.data as Notify.NotifyData.BwPlayerFundChanged;
             const data      = this._getData();
             if (eventData === data.war.getPlayer(data.playerIndex)) {
                 this._updateLabelFundAndAddFund();
@@ -494,8 +494,8 @@ namespace Twns.MultiPlayerWar {
             if (userId != null) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
 
-                if (userId !== UserModel.getSelfUserId()) {
-                    UserProxy.reqUserGetOnlineState(userId);
+                if (userId !== Twns.User.UserModel.getSelfUserId()) {
+                    Twns.User.UserProxy.reqUserGetOnlineState(userId);
                 }
             }
         }
@@ -504,10 +504,10 @@ namespace Twns.MultiPlayerWar {
             const data      = this._getData();
             const userId    = data.war.getPlayer(data.playerIndex).getUserId();
             const img       = this._imgOnlineState;
-            if ((userId == null) || (userId === UserModel.getSelfUserId())) {
+            if ((userId == null) || (userId === Twns.User.UserModel.getSelfUserId())) {
                 img.source = `uncompressedColorGreen0000`;
             } else {
-                const userPublicInfo = await UserModel.getUserPublicInfo(userId);
+                const userPublicInfo = await Twns.User.UserModel.getUserPublicInfo(userId);
                 if ((userPublicInfo == null) || (!userPublicInfo.isOnline)) {
                     img.source = `uncompressedColorRed0000`;
                 } else {

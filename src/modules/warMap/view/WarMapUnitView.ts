@@ -74,8 +74,8 @@ namespace Twns.WarMap {
                 return;
             }
 
-            this._imgUnit.source = CommonModel.getCachedUnitImageSource({
-                version     : UserModel.getSelfSettingsTextureVersion(),
+            this._imgUnit.source = Twns.Common.CommonModel.getCachedUnitImageSource({
+                version     : Twns.User.UserModel.getSelfSettingsTextureVersion(),
                 skinId      : data.skinId || Twns.Config.ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data.playerIndex)),
                 unitType    : Helpers.getExisted(data.unitType),
                 isMoving    : false,
@@ -241,7 +241,7 @@ namespace Twns.WarMap {
     }
 
     function getImageSourcePrefix(isDark: boolean): string {
-        return CommonModel.getUnitAndTileTexturePrefix() + (isDark ? `c07` : `c03`);
+        return Twns.Common.CommonModel.getUnitAndTileTexturePrefix() + (isDark ? `c07` : `c03`);
     }
 }
 

@@ -13,7 +13,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
@@ -28,17 +28,17 @@
 // import TwnsWwMainMenuPanel                  from "./WwMainMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWwOngoingWarsPanel {
-    import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+namespace Twns.WatchWar {
+    import OpenDataForWarCommonMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import NotifyType                               = Twns.Notify.NotifyType;
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
 
-    export type OpenData = void;
-    export class WwOngoingWarsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForWwOngoingWarsPanel = void;
+    export class WwOngoingWarsPanel extends TwnsUiPanel.UiPanel<OpenDataForWwOngoingWarsPanel> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForWarCommonMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
@@ -80,7 +80,7 @@ namespace TwnsWwOngoingWarsPanel {
             this._updateGroupWarList();
             this._updateComponentsForTargetWarInfo();
 
-            WwProxy.reqMpwWatchGetOngoingWarIdArray();
+            Twns.WatchWar.WwProxy.reqMpwWatchGetOngoingWarIdArray();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -119,7 +119,7 @@ namespace TwnsWwOngoingWarsPanel {
 
         private _onNotifyMsgMpwWatchContinueWarFailed(): void {
             TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBlockPanel);
-            WwProxy.reqMpwWatchGetOngoingWarIdArray();
+            Twns.WatchWar.WwProxy.reqMpwWatchGetOngoingWarIdArray();
         }
 
         private _onTouchTapBtnBack(): void {
@@ -132,7 +132,7 @@ namespace TwnsWwOngoingWarsPanel {
         private _onTouchedBtnNextStep(): void {
             const data = this._listWar.getSelectedData();
             if (data) {
-                WwProxy.reqWatchContinueWar(Helpers.getExisted(data.warId, ClientErrorCode.WwOngoingWarsPanel_OnTouchedBtnNextStep_00));
+                Twns.WatchWar.WwProxy.reqWatchContinueWar(Helpers.getExisted(data.warId, ClientErrorCode.WwOngoingWarsPanel_OnTouchedBtnNextStep_00));
             }
         }
 
@@ -171,12 +171,12 @@ namespace TwnsWwOngoingWarsPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Twns.Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageClass   : Twns.Common.CommonWarPlayerInfoPage,
                     pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {

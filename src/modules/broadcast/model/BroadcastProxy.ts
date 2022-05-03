@@ -1,14 +1,14 @@
 
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import Notify               from "../../tools/notify/Notify";
 // import NetManager           from "../../tools/network/NetManager";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import BroadcastModel       from "./BroadcastModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace BroadcastProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.Broadcast.BroadcastProxy {
+    import NotifyType       = Twns.Notify.NotifyType;
     import ILanguageText    = CommonProto.Structure.ILanguageText;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
@@ -34,7 +34,7 @@ namespace BroadcastProxy {
     function _onMsgBroadcastAddMessage(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgBroadcastAddMessage.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgBroadcastAddMessage, data);
+            Twns.Notify.dispatch(NotifyType.MsgBroadcastAddMessage, data);
         }
     }
 
@@ -48,7 +48,7 @@ namespace BroadcastProxy {
     function _onMsgBroadcastDeleteMessage(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgBroadcastDeleteMessage.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgBroadcastDeleteMessage, data);
+            Twns.Notify.dispatch(NotifyType.MsgBroadcastDeleteMessage, data);
         }
     }
 
@@ -61,7 +61,7 @@ namespace BroadcastProxy {
     function _onMsgBroadcastDoBroadcast(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgBroadcastDoBroadcast.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgBroadcastDoBroadcast, data);
+            Twns.Notify.dispatch(NotifyType.MsgBroadcastDoBroadcast, data);
         }
     }
 
@@ -72,8 +72,8 @@ namespace BroadcastProxy {
     function _onMsgBroadcastGetAllMessageIdArray(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgBroadcastGetAllMessageIdArray.IS;
         if (!data.errorCode) {
-            BroadcastModel.setAllMessageIdArray(data.messageIdArray || []);
-            Notify.dispatch(NotifyType.MsgBroadcastGetAllMessageIdArray, data);
+            Twns.Broadcast.BroadcastModel.setAllMessageIdArray(data.messageIdArray || []);
+            Twns.Notify.dispatch(NotifyType.MsgBroadcastGetAllMessageIdArray, data);
         }
     }
 
@@ -85,8 +85,8 @@ namespace BroadcastProxy {
     function _onMsgBroadcastGetMessageData(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgBroadcastGetMessageData.IS;
         if (!data.errorCode) {
-            BroadcastModel.setMessageData(Helpers.getExisted(data.messageId), data.messageData ?? null);
-            Notify.dispatch(NotifyType.MsgBroadcastGetMessageData, data);
+            Twns.Broadcast.BroadcastModel.setMessageData(Helpers.getExisted(data.messageId), data.messageData ?? null);
+            Twns.Notify.dispatch(NotifyType.MsgBroadcastGetMessageData, data);
         }
     }
 }

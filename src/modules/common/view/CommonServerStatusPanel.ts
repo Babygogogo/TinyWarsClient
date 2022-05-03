@@ -5,7 +5,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
@@ -13,12 +13,12 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonServerStatusPanel {
+namespace Twns.Common {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class CommonServerStatusPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForCommonServerStatusPanel = void;
+    export class CommonServerStatusPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonServerStatusPanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _group!                    : eui.Group;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
@@ -46,7 +46,7 @@ namespace TwnsCommonServerStatusPanel {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            CommonProxy.reqCommonGetServerStatus();
+            Twns.Common.CommonProxy.reqCommonGetServerStatus();
         }
         protected _onClosing(): void {
             // nothing to do

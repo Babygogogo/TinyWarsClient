@@ -7,7 +7,7 @@
 // import Logger                               from "../../tools/helpers/Logger";
 // import Types                                from "../../tools/helpers/Types";
 // import Notify                               from "../../tools/notify/Notify";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
 // import UserModel                            from "../../user/model/UserModel";
@@ -18,12 +18,12 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiRankRoom.MrrModel {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import NotifyType                               = Twns.Notify.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
     import IMrrRoomInfo                             = CommonProto.MultiRankRoom.IMrrRoomInfo;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
 
     let _previewingRoomId           : number | null = null;
     let _maxConcurrentCountForStd   = 0;
@@ -151,7 +151,7 @@ namespace Twns.MultiRankRoom.MrrModel {
             return false;
         }
 
-        const selfUserId = UserModel.getSelfUserId();
+        const selfUserId = Twns.User.UserModel.getSelfUserId();
         const playerData = roomInfo.playerDataList?.find(v => v.userId === selfUserId);
         if (playerData == null) {
             return false;
@@ -175,7 +175,7 @@ namespace Twns.MultiRankRoom.MrrModel {
     export function setPreviewingRoomId(roomId: number | null): void {
         if (getPreviewingRoomId() != roomId) {
             _previewingRoomId = roomId;
-            Notify.dispatch(NotifyType.MrrJoinedPreviewingRoomIdChanged);
+            Twns.Notify.dispatch(NotifyType.MrrJoinedPreviewingRoomIdChanged);
         }
     }
 
@@ -187,7 +187,7 @@ namespace Twns.MultiRankRoom.MrrModel {
 
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
         const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
-        const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+        const playerInfoArray   : Twns.Common.PlayerInfo[] = [];
         for (const playerInfo of (roomInfo.playerDataList || [])) {
             const playerIndex = Helpers.getExisted(playerInfo.playerIndex);
             playerInfoArray.push({

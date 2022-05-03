@@ -4,7 +4,7 @@
 // import TwnsRwWar            from "./RwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsHrwFogMap {
+namespace Twns.HalfwayReplayWar {
     export class HrwFogMap extends Twns.BaseWar.BwFogMap {
         public startRunning(war: Twns.BaseWar.BwWar): void {
             this._setWar(war);

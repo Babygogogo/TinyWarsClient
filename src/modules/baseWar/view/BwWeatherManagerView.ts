@@ -1,6 +1,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwWeatherManagerView {
+namespace Twns.BaseWar {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import WeatherType      = Types.WeatherType;
 
@@ -12,7 +12,7 @@ namespace TwnsBwWeatherManagerView {
     const SANDSTORM_ANGLE   = 70;
 
     export class BwWeatherManagerView extends eui.Component {
-        private _weatherManager?        : TwnsBwWeatherManager.BwWeatherManager;
+        private _weatherManager?        : Twns.BaseWar.BwWeatherManager;
         private _containerForRain       = new eui.Component();
         private _imgArrayForRain        : TwnsUiImage.UiImage[] = [];
         private _containerForSnow       = new eui.Component();
@@ -54,7 +54,7 @@ namespace TwnsBwWeatherManagerView {
             }
         }
 
-        public init(manager: TwnsBwWeatherManager.BwWeatherManager): void {
+        public init(manager: Twns.BaseWar.BwWeatherManager): void {
             this._setWeatherManager(manager);
         }
 
@@ -67,10 +67,10 @@ namespace TwnsBwWeatherManagerView {
             this._stopView();
         }
 
-        private _getWeatherManager(): TwnsBwWeatherManager.BwWeatherManager {
+        private _getWeatherManager(): Twns.BaseWar.BwWeatherManager {
             return Helpers.getExisted(this._weatherManager, ClientErrorCode.BwWeatherManagerView_GetWeatherManager_00);
         }
-        private _setWeatherManager(manager: TwnsBwWeatherManager.BwWeatherManager): void {
+        private _setWeatherManager(manager: Twns.BaseWar.BwWeatherManager): void {
             this._weatherManager = manager;
         }
 

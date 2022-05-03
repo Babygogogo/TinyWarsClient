@@ -4,7 +4,7 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Types                from "../../tools/helpers/Types";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 // import UserModel            from "../../user/model/UserModel";
 // import TwnsBwUnitMap        from "../model/BwUnitMap";
@@ -12,7 +12,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import UnitCategory         = Types.UnitCategory;
     import ActionPlannerState   = Types.ActionPlannerState;
 
@@ -56,10 +56,10 @@ namespace Twns.BaseWar {
                 this.addUnit(unit.getView(), false);
             }
 
-            Notify.addEventListeners(this._notifyListeners, this);
+            Twns.Notify.addEventListeners(this._notifyListeners, this);
         }
         public stopRunningView(): void {
-            Notify.removeEventListeners(this._notifyListeners, this);
+            Twns.Notify.removeEventListeners(this._notifyListeners, this);
         }
 
         private _getUnitMap(): BaseWar.BwUnitMap {
@@ -247,7 +247,7 @@ namespace Twns.BaseWar {
         }
 
         private _updateOpacityForAllLayers(): void {
-            const opacity               = (UserModel.getSelfSettingsOpacitySettings()?.unitOpacity ?? 100) / 100;
+            const opacity               = (Twns.User.UserModel.getSelfSettingsOpacitySettings()?.unitOpacity ?? 100) / 100;
             this._layerForAir.alpha     = opacity;
             this._layerForGround.alpha  = opacity;
             this._layerForNaval.alpha   = opacity;

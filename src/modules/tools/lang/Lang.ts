@@ -596,7 +596,7 @@ namespace Lang {
         let playerIndex     = CommonConstants.WarFirstPlayerIndex;
         for (const playerInfo of data.playerInfoList || []) {
             const userId = playerInfo.userId;
-            playerArray.push(`P${playerIndex}: ${userId != null ? await UserModel.getUserNickname(userId) : `----`}`);
+            playerArray.push(`P${playerIndex}: ${userId != null ? await Twns.User.UserModel.getUserNickname(userId) : `----`}`);
             ++playerIndex;
         }
 

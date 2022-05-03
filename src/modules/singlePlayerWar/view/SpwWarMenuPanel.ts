@@ -12,7 +12,7 @@
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
 // import Notify                           from "../../tools/notify/Notify";
-// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import Twns.Notify                   from "../../tools/notify/NotifyType";
 // import ProtoTypes                       from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiImage                      from "../../tools/ui/UiImage";
@@ -28,7 +28,7 @@
 namespace Twns.SinglePlayerWar {
     import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
     import LangTextType                 = TwnsLangTextType.LangTextType;
-    import NotifyType                   = TwnsNotifyType.NotifyType;
+    import NotifyType                   = Twns.Notify.NotifyType;
 
     export type OpenDataForSpwWarMenuPanel = void;
     export class SpwWarMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForSpwWarMenuPanel> {
@@ -52,7 +52,7 @@ namespace Twns.SinglePlayerWar {
         private readonly _btnGotoWarList!       : TwnsUiButton.UiButton;
         private readonly _btnGotoLobby!         : TwnsUiButton.UiButton;
 
-        private _war?           : TwnsSpwWar.SpwWar;
+        private _war?           : Twns.SinglePlayerWar.SpwWar;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -84,7 +84,7 @@ namespace Twns.SinglePlayerWar {
             this._setIsCloseOnTouchedMask();
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            const war = Helpers.getExisted(SpwModel.getWar());
+            const war = Helpers.getExisted(Twns.SinglePlayerWar.SpwModel.getWar());
             this._setWar(war);
 
             this._updateView();
@@ -93,10 +93,10 @@ namespace Twns.SinglePlayerWar {
             delete this._war;
         }
 
-        private _setWar(war: TwnsSpwWar.SpwWar): void {
+        private _setWar(war: Twns.SinglePlayerWar.SpwWar): void {
             this._war = war;
         }
-        private _getWar(): TwnsSpwWar.SpwWar {
+        private _getWar(): Twns.SinglePlayerWar.SpwWar {
             return Helpers.getExisted(this._war);
         }
 
@@ -152,11 +152,11 @@ namespace Twns.SinglePlayerWar {
                 callback: () => {
                     const warType = war.getWarType();
                     if ((warType === Types.WarType.ScwFog) || (warType === Types.WarType.ScwStd)) {
-                        SpmProxy.reqSpmSaveScw(war);
+                        Twns.SinglePlayerMode.SpmProxy.reqSpmSaveScw(war);
                     } else if ((warType === Types.WarType.SfwFog) || (warType === Types.WarType.SfwStd)) {
-                        SpmProxy.reqSpmSaveSfw(war);
+                        Twns.SinglePlayerMode.SpmProxy.reqSpmSaveSfw(war);
                     } else if ((warType === Types.WarType.SrwFog) || (warType === Types.WarType.SrwStd)) {
-                        SpmProxy.reqSpmSaveSrw(war);
+                        Twns.SinglePlayerMode.SpmProxy.reqSpmSaveSrw(war);
                     } else {
                         throw Helpers.newError(`Invalid warType: ${warType}`, ClientErrorCode.SpwWarMenuPanel_OnTOuchedBtnSaveGame_00);
                     }
@@ -243,7 +243,7 @@ namespace Twns.SinglePlayerWar {
         }
 
         private _onTouchedBtnSetPath(): void {
-            const isEnabled = UserModel.getSelfSettingsIsSetPathMode();
+            const isEnabled = Twns.User.UserModel.getSelfSettingsIsSetPathMode();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getFormattedText(
                     LangTextType.F0033,
@@ -253,14 +253,14 @@ namespace Twns.SinglePlayerWar {
                 textForCancel   : Lang.getText(LangTextType.B0434),
                 callback: () => {
                     if (!isEnabled) {
-                        UserProxy.reqUserSetSettings({
+                        Twns.User.UserProxy.reqUserSetSettings({
                             isSetPathMode   : true,
                         });
                     }
                 },
                 callbackOnCancel: () => {
                     if (isEnabled) {
-                        UserProxy.reqUserSetSettings({
+                        Twns.User.UserProxy.reqUserSetSettings({
                             isSetPathMode   : false,
                         });
                     }
@@ -279,13 +279,13 @@ namespace Twns.SinglePlayerWar {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0140),
                 callback: () => {
-                    SpmProxy.reqSpmDeleteWarSaveSlot(saveSlotIndex);
+                    Twns.SinglePlayerMode.SpmProxy.reqSpmDeleteWarSaveSlot(saveSlotIndex);
                 },
             });
         }
 
         private _onTouchedBtnUnitOpacity(): void {
-            UserModel.reqTickSelfSettingsUnitOpacity();
+            Twns.User.UserModel.reqTickSelfSettingsUnitOpacity();
         }
 
         private _onTouchedBtnMapRating(): void {
@@ -294,12 +294,12 @@ namespace Twns.SinglePlayerWar {
             const maxValue  = CommonConstants.MapMaxRating;
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0363),
-                currentValue    : UserModel.getMapRating(mapId) || 0,
+                currentValue    : Twns.User.UserModel.getMapRating(mapId) || 0,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    UserProxy.reqUserSetMapRating(mapId, panel.getInputValue());
+                    Twns.User.UserProxy.reqUserSetMapRating(mapId, panel.getInputValue());
                 },
             });
         }
@@ -415,7 +415,7 @@ namespace Twns.SinglePlayerWar {
         }
 
         private _updateBtnUnitOpacity(): void {
-            this._btnUnitOpacity.label = `${Lang.getText(LangTextType.B0747)}: ${UserModel.getSelfSettingsOpacitySettings()?.unitOpacity ?? 100}%`;
+            this._btnUnitOpacity.label = `${Lang.getText(LangTextType.B0747)}: ${Twns.User.UserModel.getSelfSettingsOpacitySettings()?.unitOpacity ?? 100}%`;
         }
 
         private _updateBtnMapRating(): void {
@@ -425,7 +425,7 @@ namespace Twns.SinglePlayerWar {
                 btn.visible = false;
             } else {
                 btn.visible = true;
-                btn.label   = `${Lang.getText(LangTextType.B0804)}: ${UserModel.getMapRating(mapId) ?? `--`}`;
+                btn.label   = `${Lang.getText(LangTextType.B0804)}: ${Twns.User.UserModel.getMapRating(mapId) ?? `--`}`;
             }
         }
 

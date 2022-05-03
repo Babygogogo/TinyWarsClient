@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -17,15 +17,15 @@
 // import UserProxy                from "../../user/model/UserProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserPanel {
+namespace Twns.User {
     import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+    import NotifyType   = Twns.Notify.NotifyType;
     import WarType      = Types.WarType;
 
-    export type OpenData = {
+    export type OpenDataForUserPanel = {
         userId  : number;
     };
-    export class UserPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class UserPanel extends TwnsUiPanel.UiPanel<OpenDataForUserPanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _group!                    : eui.Group;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
@@ -102,7 +102,7 @@ namespace TwnsUserPanel {
             this._updateView();
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            UserProxy.reqUserGetPublicInfo(this._getOpenData().userId);
+            Twns.User.UserProxy.reqUserGetPublicInfo(this._getOpenData().userId);
         }
         protected _onClosing(): void {
             // nothing to do
@@ -116,20 +116,20 @@ namespace TwnsUserPanel {
         }
         private _onNotifyMsgUserSetNickname(): void {
             const userId = this._getOpenData().userId;
-            if (userId === UserModel.getSelfUserId()) {
-                UserProxy.reqUserGetPublicInfo(userId);
+            if (userId === Twns.User.UserModel.getSelfUserId()) {
+                Twns.User.UserProxy.reqUserGetPublicInfo(userId);
             }
         }
         private _onNotifyMsgUserSetDiscordId(): void {
             const userId = this._getOpenData().userId;
-            if (userId === UserModel.getSelfUserId()) {
-                UserProxy.reqUserGetPublicInfo(userId);
+            if (userId === Twns.User.UserModel.getSelfUserId()) {
+                Twns.User.UserProxy.reqUserGetPublicInfo(userId);
             }
         }
         private _onNotifyMsgUserSetAvatarId(): void {
             const userId = this._getOpenData().userId;
-            if (userId === UserModel.getSelfUserId()) {
-                UserProxy.reqUserGetPublicInfo(userId);
+            if (userId === Twns.User.UserModel.getSelfUserId()) {
+                Twns.User.UserProxy.reqUserGetPublicInfo(userId);
             }
         }
         private _onTouchedBtnChat(): void {
@@ -172,7 +172,7 @@ namespace TwnsUserPanel {
 
         private async _updateView(): Promise<void> {
             const userId    = this._getOpenData().userId;
-            const info      = await UserModel.getUserPublicInfo(userId);
+            const info      = await Twns.User.UserModel.getUserPublicInfo(userId);
             if (info) {
                 const registerTime          = info.registerTime;
                 const labelRegisterTime1    = this._labelRegisterTime1;
@@ -209,15 +209,15 @@ namespace TwnsUserPanel {
         }
 
         private _updateBtnChat(): void {
-            this._btnChat.visible = this._getOpenData().userId !== UserModel.getSelfUserId();
+            this._btnChat.visible = this._getOpenData().userId !== Twns.User.UserModel.getSelfUserId();
         }
 
         private _updateBtnSetAvatar(): void {
-            this._btnSetAvatar.visible = this._getOpenData().userId === UserModel.getSelfUserId();
+            this._btnSetAvatar.visible = this._getOpenData().userId === Twns.User.UserModel.getSelfUserId();
         }
 
         private async _updateImgAvatar(): Promise<void> {
-            const info              = await UserModel.getUserPublicInfo(this._getOpenData().userId);
+            const info              = await Twns.User.UserModel.getUserPublicInfo(this._getOpenData().userId);
             this._imgAvatar.source  = Twns.Config.ConfigManager.getUserAvatarImageSource(info?.avatarId ?? 1);
         }
 
@@ -255,11 +255,11 @@ namespace TwnsUserPanel {
         }
 
         private async _updateLabelTitle(): Promise<void> {
-            const nickname          = await UserModel.getUserNickname(this._getOpenData().userId);
+            const nickname          = await Twns.User.UserModel.getUserNickname(this._getOpenData().userId);
             this._labelTitle.text   = Lang.getFormattedText(LangTextType.F0009, nickname);
         }
         private async _updateComponentsForStdRank(): Promise<void> {
-            const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwStd, 2);
+            const data                      = await Twns.User.UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwStd, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
             const rankName                  = `(${(await Twns.Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? CommonConstants.ErrorTextForUndefined})`;
@@ -270,7 +270,7 @@ namespace TwnsUserPanel {
             this._labelStdRankRankSuffix.text   = Helpers.getSuffixForRank(rank) || ``;
         }
         private async _updateComponentsForFogRank(): Promise<void> {
-            const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwFog, 2);
+            const data                      = await Twns.User.UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwFog, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
             const rankName                  = `(${(await Twns.Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? CommonConstants.ErrorTextForUndefined})`;
@@ -282,8 +282,8 @@ namespace TwnsUserPanel {
         }
         private async _updateComponentsForSpmRank(): Promise<void> {
             const userId                        = this._getOpenData().userId;
-            const rankScore                     = (await UserModel.getUserPublicInfo(userId))?.spmOverallRankScore ?? 0;
-            const rankIndex                     = (await Twns.LeaderboardModel.getSpmOverallRankIndex(userId)) ?? 0;
+            const rankScore                     = (await Twns.User.UserModel.getUserPublicInfo(userId))?.spmOverallRankScore ?? 0;
+            const rankIndex                     = (await Twns.Leaderboard.LeaderboardModel.getSpmOverallRankIndex(userId)) ?? 0;
             this._labelSpmRankScore.text        = rankScore > 0 ? Helpers.formatString(`%.2f`, rankScore) : `--`;
 
             const isRankValid                   = (rankIndex > 0) && (rankScore > 0);
@@ -331,7 +331,7 @@ namespace TwnsUserPanel {
             this._sclHistoryFog.bindData(dataList);
         }
         private async _updateLabelOnlineTime(): Promise<void> {
-            const info                  = await UserModel.getUserPublicInfo(this._getOpenData().userId);
+            const info                  = await Twns.User.UserModel.getUserPublicInfo(this._getOpenData().userId);
             const onlineTime            = info ? info.onlineTime : null;
             this._labelOnlineTime.text  = onlineTime == null ? CommonConstants.ErrorTextForUndefined : Helpers.getTimeDurationText2(onlineTime);
         }
@@ -367,7 +367,7 @@ namespace TwnsUserPanel {
                 labelType.text  = `${playersCount}P`;
             }
 
-            const info              = await UserModel.getUserMpwStatisticsData(data.userId, warType, playersCount);
+            const info              = await Twns.User.UserModel.getUserMpwStatisticsData(data.userId, warType, playersCount);
             const winCount          = info ? info.wins || 0 : 0;
             const loseCount         = info ? info.loses || 0 : 0;
             const drawCount         = info ? info.draws || 0 : 0;

@@ -7,7 +7,7 @@
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
 // import Notify               from "../../tools/notify/Notify";
 // import NotifyData           from "../../tools/notify/NotifyData";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 // import UserModel            from "../../user/model/UserModel";
@@ -16,7 +16,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SingleCustomRoom.ScrCreateModel {
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import IDataForPlayerRule       = CommonProto.WarRule.IDataForPlayerRule;
     import IDataForPlayerInRoom     = CommonProto.Structure.IDataForPlayerInRoom;
     import GameConfig               = Config.GameConfig;
@@ -106,12 +106,12 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         getSettingsForCommon().instanceWarRule  = WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRule, mapRawData.warEventFullData);
 
         await resetPlayerInfoList();
-        Notify.dispatch(NotifyType.ScrCreateTemplateWarRuleIdChanged);
+        Twns.Notify.dispatch(NotifyType.ScrCreateTemplateWarRuleIdChanged);
     }
     export function setCustomWarRuleId(): void {
         const instanceWarRule               = getInstanceWarRule();
         instanceWarRule.templateWarRuleId   = null;
-        Notify.dispatch(NotifyType.ScrCreateTemplateWarRuleIdChanged);
+        Twns.Notify.dispatch(NotifyType.ScrCreateTemplateWarRuleIdChanged);
     }
     export function getTemplateWarRuleId(): number | null {
         return getInstanceWarRule().templateWarRuleId ?? null;
@@ -159,7 +159,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
                 newPlayerInfoList.push({
                     playerIndex,
                     isReady             : true,
-                    userId              : playerIndex === 1 ? UserModel.getSelfUserId() : null,
+                    userId              : playerIndex === 1 ? Twns.User.UserModel.getSelfUserId() : null,
                     unitAndTileSkinId   : playerIndex,
                     coId                : newCoId,
                 });
@@ -178,7 +178,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         const data = getData();
         if (data.slotIndex !== slotIndex) {
             data.slotIndex = slotIndex;
-            Notify.dispatch(NotifyType.ScrCreateWarSaveSlotChanged);
+            Twns.Notify.dispatch(NotifyType.ScrCreateWarSaveSlotChanged);
         }
     }
     export function getSaveSlotIndex(): number {
@@ -194,8 +194,8 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
 
     export function tickUserId(playerIndex: number): void {
         const playerInfo    = getPlayerInfo(playerIndex);
-        playerInfo.userId   = playerInfo.userId ? null : UserModel.getSelfUserId();
-        Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as NotifyData.ScrCreatePlayerInfoChanged);
+        playerInfo.userId   = playerInfo.userId ? null : Twns.User.UserModel.getSelfUserId();
+        Twns.Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Twns.Notify.NotifyData.ScrCreatePlayerInfoChanged);
     }
 
     export function tickUnitAndTileSkinId(playerIndex: number): void {
@@ -206,14 +206,14 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         const existingPlayerData    = playerInfoList.find(v => v.unitAndTileSkinId === newSkinId);
         if (existingPlayerData) {
             existingPlayerData.unitAndTileSkinId = oldSkinId;
-            Notify.dispatch(
+            Twns.Notify.dispatch(
                 NotifyType.ScrCreatePlayerInfoChanged,
-                { playerIndex: existingPlayerData.playerIndex } as NotifyData.ScrCreatePlayerInfoChanged
+                { playerIndex: existingPlayerData.playerIndex } as Twns.Notify.NotifyData.ScrCreatePlayerInfoChanged
             );
         }
 
         targetPlayerData.unitAndTileSkinId = newSkinId;
-        Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as NotifyData.ScrCreatePlayerInfoChanged);
+        Twns.Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Twns.Notify.NotifyData.ScrCreatePlayerInfoChanged);
     }
 
     export function getTeamIndex(playerIndex: number): number {
@@ -225,7 +225,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         const playerRule        = getPlayerRule(playerIndex);
         playerRule.teamIndex    = Helpers.getExisted(playerRule.teamIndex) % (WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(getInstanceWarRule())) + 1;
 
-        Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as NotifyData.ScrCreatePlayerInfoChanged);
+        Twns.Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Twns.Notify.NotifyData.ScrCreatePlayerInfoChanged);
     }
 
     export function getBannedCoIdArray(playerIndex: number): number[] | null {
@@ -246,7 +246,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
     }
     export function setCoId(playerIndex: number, coId: number): void {
         getPlayerInfo(playerIndex).coId = coId;
-        Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as NotifyData.ScrCreatePlayerInfoChanged);
+        Twns.Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Twns.Notify.NotifyData.ScrCreatePlayerInfoChanged);
     }
 
     export function getHasFog(): boolean {

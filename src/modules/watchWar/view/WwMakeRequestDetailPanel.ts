@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -17,15 +17,15 @@
 // import WwProxy                  from "../model/WwProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWwMakeRequestDetailPanel {
+namespace Twns.WatchWar {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import GameConfig       = Twns.Config.GameConfig;
 
-    export type OpenData = {
+    export type OpenDataForWwMakeRequestDetailPanel = {
         warId   : number;
     };
-    export class WwMakeRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WwMakeRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForWwMakeRequestDetailPanel> {
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelYes!         : TwnsUiLabel.UiLabel;
         private readonly _labelNo!          : TwnsUiLabel.UiLabel;
@@ -93,7 +93,7 @@ namespace TwnsWwMakeRequestDetailPanel {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0083, userIds.length),
                     callback: () => {
-                        WwProxy.reqWatchMakeRequest(warId, userIds);
+                        Twns.WatchWar.WwProxy.reqWatchMakeRequest(warId, userIds);
                         this.close();
                     }
                 });
@@ -129,7 +129,7 @@ namespace TwnsWwMakeRequestDetailPanel {
             }
 
             const gameConfig            = await Twns.Config.ConfigManager.getGameConfig(configVersion);
-            const selfUserId            = Helpers.getExisted(UserModel.getSelfUserId());
+            const selfUserId            = Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
             const ongoingDstUserIdArray = outgoingInfo.ongoingDstUserIdArray || [];
             const requestDstUserIdArray = outgoingInfo.requestDstUserIdArray || [];
             const playerInfoList        = (await Twns.MultiPlayerWar.MpwModel.getWarProgressInfo(warId))?.playerInfoList || [];
@@ -192,7 +192,7 @@ namespace TwnsWwMakeRequestDetailPanel {
                 this._labelState.visible    = true;
                 this._labelState.text       = `(${Lang.getText(LangTextType.B0056)})`;
             } else {
-                if (playerInfo.userId === UserModel.getSelfUserId()) {
+                if (playerInfo.userId === Twns.User.UserModel.getSelfUserId()) {
                     this._imgAccept.visible     = false;
                     this._imgDecline.visible    = false;
                     this._labelState.visible    = true;
@@ -224,7 +224,7 @@ namespace TwnsWwMakeRequestDetailPanel {
             if (userId == null) {
                 labelName.text = `${Lang.getText(LangTextType.B0607)} ${coName}`;
             } else {
-                labelName.text = `${await UserModel.getUserNickname(userId)} ${coName}`;
+                labelName.text = `${await Twns.User.UserModel.getUserNickname(userId)} ${coName}`;
             }
         }
 

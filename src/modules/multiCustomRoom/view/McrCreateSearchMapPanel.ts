@@ -3,7 +3,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -13,12 +13,12 @@
 // import TwnsMcrCreateMapListPanel    from "./McrCreateMapListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMcrCreateSearchMapPanel {
+namespace Twns.MultiCustomRoom {
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class McrCreateSearchMapPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMcrCreateSearchMapPanel = void;
+    export class McrCreateSearchMapPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrCreateSearchMapPanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
 
         private readonly _group!                    : eui.Group;

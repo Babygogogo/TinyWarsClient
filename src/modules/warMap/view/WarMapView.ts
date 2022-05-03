@@ -7,7 +7,7 @@
 // import Timer                from "../../tools/helpers/Timer";
 // import Types                from "../../tools/helpers/Types";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
@@ -16,7 +16,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarMap {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import MapSize          = Types.MapSize;
     import IMapRawData      = CommonProto.Map.IMapRawData;
     import WarSerialization = CommonProto.WarSerialization;
@@ -86,7 +86,7 @@ namespace Twns.WarMap {
         private readonly _gridBorderLayer       = new egret.DisplayObjectContainer();
         private readonly _objectLayer           = new TileObjectLayer();
 
-        private readonly _notifyListenerArray   : Notify.Listener[] = [
+        private readonly _notifyListenerArray   : Twns.Notify.Listener[] = [
             { type: NotifyType.TileAnimationTick,                   callback: this._onNotifyTileAnimationTick },
             { type: NotifyType.UserSettingsIsShowGridBorderChanged, callback: this._onNotifyIsShowGridBorderChanged },
         ];
@@ -118,13 +118,13 @@ namespace Twns.WarMap {
             this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
 
-            Notify.addEventListeners(this._notifyListenerArray, this);
+            Twns.Notify.addEventListeners(this._notifyListenerArray, this);
         }
         private _onRemovedFromStage(): void {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
 
-            Notify.removeEventListeners(this._notifyListenerArray, this);
+            Twns.Notify.removeEventListeners(this._notifyListenerArray, this);
         }
         private _onNotifyTileAnimationTick(): void {
             this._baseLayer.updateViewOnTick();
@@ -161,7 +161,7 @@ namespace Twns.WarMap {
             this._updateGridBorderLayerVisible();
         }
         private _updateGridBorderLayerVisible(): void {
-            this._gridBorderLayer.visible = UserModel.getSelfSettingsIsShowGridBorder();
+            this._gridBorderLayer.visible = Twns.User.UserModel.getSelfSettingsIsShowGridBorder();
         }
 
         private _initBorderLayer(): void {
@@ -341,8 +341,8 @@ namespace Twns.WarMap {
         protected _getImageSource(tileData: ISerialTile, tickCount: number): string {
             return tileData == null
                 ? ``
-                : CommonModel.getCachedTileBaseImageSource({
-                    version     : UserModel.getSelfSettingsTextureVersion(),
+                : Twns.Common.CommonModel.getCachedTileBaseImageSource({
+                    version     : Twns.User.UserModel.getSelfSettingsTextureVersion(),
                     themeType   : Types.TileThemeType.Clear,
                     baseType    : Helpers.getExisted(tileData.baseType),
                     shapeId     : tileData.baseShapeId || 0,
@@ -361,8 +361,8 @@ namespace Twns.WarMap {
         protected _getImageSource(tileData: ISerialTile, tickCount: number): string {
             return tileData == null
                 ? ``
-                : CommonModel.getCachedTileDecoratorImageSource({
-                    version         : UserModel.getSelfSettingsTextureVersion(),
+                : Twns.Common.CommonModel.getCachedTileDecoratorImageSource({
+                    version         : Twns.User.UserModel.getSelfSettingsTextureVersion(),
                     themeType       : Types.TileThemeType.Clear,
                     decoratorType   : tileData.decoratorType ?? null,
                     shapeId         : tileData.decoratorShapeId ?? null,
@@ -381,8 +381,8 @@ namespace Twns.WarMap {
         protected _getImageSource(tileData: Types.WarMapTileViewData, tickCount: number): string {
             return tileData == null
                 ? ``
-                : CommonModel.getCachedTileObjectImageSource({
-                    version     : UserModel.getSelfSettingsTextureVersion(),
+                : Twns.Common.CommonModel.getCachedTileObjectImageSource({
+                    version     : Twns.User.UserModel.getSelfSettingsTextureVersion(),
                     themeType   : Types.TileThemeType.Clear,
                     objectType  : tileData.objectType || Types.TileObjectType.Empty,
                     shapeId     : tileData.objectShapeId || 0,
@@ -414,7 +414,7 @@ namespace Twns.WarMap {
         private readonly _airLayer              = new egret.DisplayObjectContainer();
         private readonly _groundLayer           = new egret.DisplayObjectContainer();
         private readonly _seaLayer              = new egret.DisplayObjectContainer();
-        private readonly _notifyListenerArray   : Notify.Listener[] = [
+        private readonly _notifyListenerArray   : Twns.Notify.Listener[] = [
             { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
             { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
         ];
@@ -455,13 +455,13 @@ namespace Twns.WarMap {
             this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
 
-            Notify.addEventListeners(this._notifyListenerArray, this);
+            Twns.Notify.addEventListeners(this._notifyListenerArray, this);
         }
         private _onRemovedFromStage(): void {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
 
-            Notify.removeEventListeners(this._notifyListenerArray, this);
+            Twns.Notify.removeEventListeners(this._notifyListenerArray, this);
         }
         private _onNotifyUnitAnimationTick(): void {
             const tickCount = Timer.getUnitAnimationTickCount();

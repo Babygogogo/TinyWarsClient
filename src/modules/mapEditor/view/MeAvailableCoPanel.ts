@@ -7,7 +7,7 @@
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiComponent      from "../../tools/ui/UiComponent";
@@ -17,16 +17,16 @@
 // import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeAvailableCoPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.MapEditor {
+    import NotifyType       = Twns.Notify.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
-    export type OpenData = {
+    export type OpenDataForMeAvailableCoPanel = {
         playerRule      : CommonProto.WarRule.IDataForPlayerRule;
         templateWarRule : CommonProto.WarRule.ITemplateWarRule;
         isReviewing     : boolean;
     };
-    export class MeAvailableCoPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MeAvailableCoPanel extends TwnsUiPanel.UiPanel<OpenDataForMeAvailableCoPanel> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -96,7 +96,7 @@ namespace TwnsMeAvailableCoPanel {
             } else {
                 const openData = this._getOpenData();
                 Twns.WarHelpers.WarRuleHelpers.setBannedCoIdArray(openData.templateWarRule, Helpers.getExisted(openData.playerRule.playerIndex), bannedCoIdSet);
-                Notify.dispatch(NotifyType.MeBannedCoIdArrayChanged);
+                Twns.Notify.dispatch(NotifyType.MeBannedCoIdArrayChanged);
                 this.close();
             }
         }

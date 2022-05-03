@@ -7,7 +7,7 @@
 // import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwDrawVoteManager {
+namespace Twns.BaseWar {
     import ISerialPlayerManager = CommonProto.WarSerialization.ISerialPlayerManager;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import BwWar                = Twns.BaseWar.BwWar;

@@ -7,7 +7,7 @@
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
 // import Notify               from "../../tools/notify/Notify";
 // import NotifyData           from "../../tools/notify/NotifyData";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 // import UserModel            from "../../user/model/UserModel";
@@ -16,7 +16,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SingleRankRoom.SrrCreateModel {
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import IDataForPlayerRule       = CommonProto.WarRule.IDataForPlayerRule;
     import IDataForPlayerInRoom     = CommonProto.Structure.IDataForPlayerInRoom;
     import GameConfig               = Config.GameConfig;
@@ -103,7 +103,7 @@ namespace Twns.SingleRankRoom.SrrCreateModel {
         getSettingsForCommon().instanceWarRule = WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRule, mapRawData.warEventFullData);
         await resetPlayerInfoList();
 
-        Notify.dispatch(NotifyType.SrrCreateModelTemplateWarRuleIdChanged);
+        Twns.Notify.dispatch(NotifyType.SrrCreateModelTemplateWarRuleIdChanged);
     }
     function getTemplateWarRuleId(): number | null {
         return getInstanceWarRule().templateWarRuleId ?? null;
@@ -133,7 +133,7 @@ namespace Twns.SingleRankRoom.SrrCreateModel {
         const gameConfig            = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
         const playersCount          = Helpers.getExisted((await getMapRawData()).playersCountUnneutral);
         const playerRuleDataArray   = Helpers.getExisted(instanceWarRule.ruleForPlayers?.playerRuleDataArray);
-        const selfUserId            = UserModel.getSelfUserId();
+        const selfUserId            = Twns.User.UserModel.getSelfUserId();
         const newPlayerInfoList     : IDataForPlayerInRoom[] = [];
 
         for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
@@ -173,7 +173,7 @@ namespace Twns.SingleRankRoom.SrrCreateModel {
         const data = getData();
         if (data.slotIndex !== slotIndex) {
             data.slotIndex = slotIndex;
-            Notify.dispatch(NotifyType.SrrCreateWarSaveSlotChanged);
+            Twns.Notify.dispatch(NotifyType.SrrCreateWarSaveSlotChanged);
         }
     }
     export function getSaveSlotIndex(): number {
@@ -202,7 +202,7 @@ namespace Twns.SingleRankRoom.SrrCreateModel {
         // }
 
         targetPlayerData.unitAndTileSkinId = newSkinId;
-        Notify.dispatch(NotifyType.SrrCreatePlayerInfoChanged, { playerIndex } as NotifyData.SrrCreatePlayerInfoChanged);
+        Twns.Notify.dispatch(NotifyType.SrrCreatePlayerInfoChanged, { playerIndex } as Twns.Notify.NotifyData.SrrCreatePlayerInfoChanged);
     }
 
     export function getTeamIndex(playerIndex: number): number {
@@ -218,7 +218,7 @@ namespace Twns.SingleRankRoom.SrrCreateModel {
     }
     export function setCoId(playerIndex: number, coId: number): void {
         getPlayerInfo(playerIndex).coId = coId;
-        Notify.dispatch(NotifyType.SrrCreatePlayerInfoChanged, { playerIndex } as NotifyData.SrrCreatePlayerInfoChanged);
+        Twns.Notify.dispatch(NotifyType.SrrCreatePlayerInfoChanged, { playerIndex } as Twns.Notify.NotifyData.SrrCreatePlayerInfoChanged);
     }
 
     export function getHasFog(): boolean {

@@ -6,12 +6,12 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Notify                   from "../../tools/notify/Notify";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiZoomableComponent  from "../../tools/ui/UiZoomableComponent";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType   = TwnsNotifyType.NotifyType;
+    import NotifyType   = Twns.Notify.NotifyType;
     import GridIndex    = Types.GridIndex;
     import Point        = Types.Point;
 
@@ -46,7 +46,7 @@ namespace Twns.BaseWar {
 
         private _war? : BwWar;
 
-        private _notifyListeners: Notify.Listener[] = [
+        private _notifyListeners: Twns.Notify.Listener[] = [
             { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             { type: NotifyType.BwFieldZoomed,   callback: this._onNotifyBwFieldZoomed },
             { type: NotifyType.BwFieldDragged,  callback: this._onNotifyBwFieldDragged },
@@ -104,7 +104,7 @@ namespace Twns.BaseWar {
         }
 
         public startRunningView(): void {
-            Notify.addEventListeners(this._notifyListeners, this);
+            Twns.Notify.addEventListeners(this._notifyListeners, this);
             for (const listener of this._uiListeners) {
                 listener.ui.addEventListener(Helpers.getExisted(listener.eventType), listener.callback, this);
             }
@@ -114,7 +114,7 @@ namespace Twns.BaseWar {
             this.updatePersistentText();
         }
         public stopRunning(): void {
-            Notify.removeEventListeners(this._notifyListeners, this);
+            Twns.Notify.removeEventListeners(this._notifyListeners, this);
             for (const listener of this._uiListeners) {
                 listener.ui.removeEventListener(Helpers.getExisted(listener.eventType), listener.callback, this);
             }
@@ -239,11 +239,11 @@ namespace Twns.BaseWar {
         }
 
         private _onNotifyBwFieldZoomed(e: egret.Event): void {
-            const data = e.data as NotifyData.BwFieldZoomed;
+            const data = e.data as Twns.Notify.NotifyData.BwFieldZoomed;
             this._fieldContainer.setZoomByTouches(data.current, data.previous);
         }
         private _onNotifyBwFieldDragged(e: egret.Event): void {
-            const data = e.data as NotifyData.BwFieldDragged;
+            const data = e.data as Twns.Notify.NotifyData.BwFieldDragged;
             this._fieldContainer.setDragByTouches(data.current, data.previous);
         }
 

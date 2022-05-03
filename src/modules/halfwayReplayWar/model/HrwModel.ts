@@ -2,7 +2,7 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Logger               from "../../tools/helpers/Logger";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoManager         from "../../tools/proto/ProtoManager";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
@@ -10,7 +10,7 @@
 // import TwnsRwWar            from "./RwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace HrwModel {
+namespace Twns.HalfwayReplayWar.HrwModel {
     import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
     import WarAction                    = CommonProto.WarAction;
     import WarSerialization             = CommonProto.WarSerialization;

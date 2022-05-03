@@ -6,7 +6,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -15,7 +15,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -139,7 +139,7 @@ namespace Twns.WarEvent {
                 maxPlayerIndex          : openData.war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : playerIndexArray => {
                     action.conPlayerIndexArray = playerIndexArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -150,7 +150,7 @@ namespace Twns.WarEvent {
                 currentSkillTypeArray   : action.conCoUsingSkillTypeArray ?? [],
                 callbackOnConfirm       : skillTypeArray => {
                     action.conCoUsingSkillTypeArray = skillTypeArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -161,7 +161,7 @@ namespace Twns.WarEvent {
                 currentAliveStateArray  : action.conAliveStateArray ?? [],
                 callbackOnConfirm       : aliveStateArray => {
                     action.conAliveStateArray = aliveStateArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -174,7 +174,7 @@ namespace Twns.WarEvent {
             const value = !text ? null : parseInt(text);
             if ((value == null) || (!isNaN(value))) {
                 this._getAction().conFund = value;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             } else {
                 this._updateInputConFund();
             }
@@ -182,7 +182,7 @@ namespace Twns.WarEvent {
         private _onTouchedBtnConFundComparator(): void {
             const condition             = this._getAction();
             condition.conFundComparator = Helpers.getNextValueComparator(condition.conFundComparator);
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputConEnergyPercentage(): void {
             this._setInnerTouchMaskEnabled(true);
@@ -192,7 +192,7 @@ namespace Twns.WarEvent {
             const value = !text ? null : parseInt(text);
             if ((value == null) || (!isNaN(value))) {
                 this._getAction().conEnergyPercentage = value;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             } else {
                 this._updateInputConEnergyPercentage();
             }
@@ -200,7 +200,7 @@ namespace Twns.WarEvent {
         private _onTouchedBtnConEnergyPercentageComparator(): void {
             const condition                         = this._getAction();
             condition.conEnergyPercentageComparator = Helpers.getNextValueComparator(condition.conEnergyPercentageComparator);
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnActAliveState(): void {
@@ -215,7 +215,7 @@ namespace Twns.WarEvent {
             } else {
                 action.actAliveState = Types.PlayerAliveState.Alive;
             }
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnActAliveStateHelp(): void {
@@ -241,7 +241,7 @@ namespace Twns.WarEvent {
                     Math.max(-maxValue, rawValue)
                 );
             }
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onFocusInInputActFundMultiplierPct(): void {
@@ -260,7 +260,7 @@ namespace Twns.WarEvent {
                     Math.max(-maxValue, rawValue)
                 );
             }
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onFocusInInputActCoEnergyDeltaPct(): void {
@@ -279,7 +279,7 @@ namespace Twns.WarEvent {
                     Math.max(-maxValue, rawValue)
                 );
             }
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onFocusInInputActCoEnergyMultiplierPct(): void {
@@ -298,7 +298,7 @@ namespace Twns.WarEvent {
                     Math.max(-maxValue, rawValue)
                 );
             }
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         ////////////////////////////////////////////////////////////////////////////////

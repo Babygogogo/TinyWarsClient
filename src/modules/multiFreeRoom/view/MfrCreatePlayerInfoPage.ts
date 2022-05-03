@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -19,7 +19,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiFreeRoom {
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
 
     export class MfrCreatePlayerInfoPage extends TwnsUiTabPage.UiTabPage<void> {
         private readonly _groupInfo!    : eui.Group;
@@ -141,7 +141,7 @@ namespace Twns.MultiFreeRoom {
             this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
 
-            const userInfo              = MultiFreeRoom.MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await UserModel.getUserPublicInfo(Helpers.getExisted(UserModel.getSelfUserId())) : null;
+            const userInfo              = MultiFreeRoom.MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await Twns.User.UserModel.getUserPublicInfo(Helpers.getExisted(Twns.User.UserModel.getSelfUserId())) : null;
             const labelNickname         = this._labelNickname;
             if (userInfo) {
                 labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;

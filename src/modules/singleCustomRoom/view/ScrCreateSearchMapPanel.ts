@@ -2,7 +2,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
 // import TwnsUiPanel                  from "../../tools/ui/UiPanel";
@@ -10,12 +10,12 @@
 // import TwnsScrCreateMapListPanel    from "./ScrCreateMapListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsScrCreateSearchMapPanel {
+namespace Twns.SingleCustomRoom {
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class ScrCreateSearchMapPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForScrCreateSearchMapPanel = void;
+    export class ScrCreateSearchMapPanel extends TwnsUiPanel.UiPanel<OpenDataForScrCreateSearchMapPanel> {
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
         private readonly _btnReset!                 : TwnsUiButton.UiButton;
         private readonly _btnSearch!                : TwnsUiButton.UiButton;

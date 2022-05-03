@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -17,14 +17,14 @@
 // import TwnsUserPanel            from "../../user/view/UserPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpmRankPage {
+namespace Twns.SinglePlayerMode {
     import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+    import NotifyType   = Twns.Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForSpmRankPage = {
         mapId   : number | null;
     };
-    export class SpmRankPage extends TwnsUiTabPage.UiTabPage<OpenData> {
+    export class SpmRankPage extends TwnsUiTabPage.UiTabPage<OpenDataForSpmRankPage> {
         private readonly _listRule! : TwnsUiScrollList.UiScrollList<DataForRuleRenderer>;
 
         public constructor() {
@@ -124,7 +124,7 @@ namespace TwnsSpmRankPage {
             const ruleId        = data.ruleId;
             const mapId         = data.mapId;
             const configVersion = Helpers.getExisted(Twns.Config.ConfigManager.getLatestConfigVersion());
-            const selfInfo      = UserModel.getSelfInfo()?.userComplexInfo;
+            const selfInfo      = Twns.User.UserModel.getSelfInfo()?.userComplexInfo;
             const selfScore     = selfInfo?.userWarStatistics?.spwArray?.find(v => (v.mapId === mapId) && (v.configVersion === configVersion) && (v.ruleId === ruleId))?.highScore ?? Number.MIN_SAFE_INTEGER;
             const selfPrivilege = selfInfo?.userPrivilege;
             const hasPrivilege  = selfPrivilege?.isAdmin ?? selfPrivilege?.isMapCommittee ?? false;
@@ -163,7 +163,7 @@ namespace TwnsSpmRankPage {
             this._labelStdNoData.visible    = !length;
             this._listStd.bindData(dataArray);
 
-            const myScore       = UserModel.getSelfInfo()?.userComplexInfo?.userWarStatistics?.spwArray?.find(v => (v.mapId === mapId) && (v.configVersion === configVersion) && (v.ruleId === ruleId))?.highScore;
+            const myScore       = Twns.User.UserModel.getSelfInfo()?.userComplexInfo?.userWarStatistics?.spwArray?.find(v => (v.mapId === mapId) && (v.configVersion === configVersion) && (v.ruleId === ruleId))?.highScore;
             const labelMyScore  = this._labelMyScore;
             if (myScore == null) {
                 labelMyScore.text = `--`;
@@ -236,7 +236,7 @@ namespace TwnsSpmRankPage {
             this._imgBottomLine.visible = data.isLast;
             this._imgReplay.visible     = data.canReplay;
 
-            const userInfo = Helpers.getExisted(await UserModel.getUserPublicInfo(data.userId));
+            const userInfo = Helpers.getExisted(await Twns.User.UserModel.getUserPublicInfo(data.userId));
             labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
 
         }

@@ -4,13 +4,13 @@
 // import NetManager           from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import CommonModel          from "./CommonModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace CommonProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.Common.CommonProxy {
+    import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
@@ -34,7 +34,7 @@ namespace CommonProxy {
     function _onMsgCommonHeartbeat(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgCommonHeartbeat.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgCommonHeartbeat, data);
+            Twns.Notify.dispatch(NotifyType.MsgCommonHeartbeat, data);
         }
     }
 
@@ -47,7 +47,7 @@ namespace CommonProxy {
         const data = e.data as CommonProto.NetMessage.MsgCommonLatestConfigVersion.IS;
         Twns.Config.ConfigManager.setLatestConfigVersion(Helpers.getExisted(data.version));
 
-        Notify.dispatch(NotifyType.MsgCommonLatestConfigVersion, data);
+        Twns.Notify.dispatch(NotifyType.MsgCommonLatestConfigVersion, data);
     }
 
     export function reqCommonGetServerStatus(): void {
@@ -56,7 +56,7 @@ namespace CommonProxy {
     function _onMsgCommonGetServerStatus(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCommonGetServerStatus.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgCommonGetServerStatus, data);
+            Twns.Notify.dispatch(NotifyType.MsgCommonGetServerStatus, data);
         }
     }
 
@@ -66,8 +66,8 @@ namespace CommonProxy {
     function _onMsgCommonGetRankList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCommonGetRankList.IS;
         if (!data.errorCode) {
-            CommonModel.setMrwRankArray(data.mrwRankDataArray || []);
-            Notify.dispatch(NotifyType.MsgCommonGetRankList, data);
+            Twns.Common.CommonModel.setMrwRankArray(data.mrwRankDataArray || []);
+            Twns.Notify.dispatch(NotifyType.MsgCommonGetRankList, data);
         }
     }
 }

@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -17,12 +17,12 @@
 // import TwnsUserPanel            from "../../user/view/UserPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonRankListPanel {
+namespace Twns.Common {
     import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+    import NotifyType   = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class CommonRankListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForCommonRankListPanel = void;
+    export class CommonRankListPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonRankListPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -62,7 +62,7 @@ namespace TwnsCommonRankListPanel {
             this._listSpm.setItemRenderer(SpmUserRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            CommonProxy.reqGetRankList();
+            Twns.Common.CommonProxy.reqGetRankList();
 
             this._updateView();
             this._updateComponentsForLanguage();
@@ -111,7 +111,7 @@ namespace TwnsCommonRankListPanel {
             const playersCount  = 2;
             const warType       = Types.WarType.MrwStd;
             const dataList      : DataForMrwUserRenderer[] = [];
-            for (const data of CommonModel.getMrwRankList() || []) {
+            for (const data of Twns.Common.CommonModel.getMrwRankList() || []) {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     const userId = data.userId;
                     if (userId == null) {
@@ -135,7 +135,7 @@ namespace TwnsCommonRankListPanel {
             const playersCount  = 2;
             const warType       = Types.WarType.MrwFog;
             const dataList      : DataForMrwUserRenderer[] = [];
-            for (const data of CommonModel.getMrwRankList() || []) {
+            for (const data of Twns.Common.CommonModel.getMrwRankList() || []) {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     const userId = data.userId;
                     if (userId == null) {
@@ -157,7 +157,7 @@ namespace TwnsCommonRankListPanel {
 
         private async _updateComponentsForSpm(): Promise<void> {
             const dataArray: DataForSpmUserRenderer[] = [];
-            for (const data of await Twns.LeaderboardModel.getSpmOverallTopDataArray() ?? []) {
+            for (const data of await Twns.Leaderboard.LeaderboardModel.getSpmOverallTopDataArray() ?? []) {
                 const length    = dataArray.length;
                 const score     = Helpers.getExisted(data.score);
                 dataArray.push({
@@ -252,7 +252,7 @@ namespace TwnsCommonRankListPanel {
             this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
             this._imgBg.alpha       = rank % 2 == 1 ? 0.2 : 0.5;
 
-            const userInfo = await UserModel.getUserPublicInfo(data.userId);
+            const userInfo = await Twns.User.UserModel.getUserPublicInfo(data.userId);
             if (userInfo == null) {
                 throw Helpers.newError(`UserRenderer._updateView() empty userInfo.`);
             }
@@ -313,7 +313,7 @@ namespace TwnsCommonRankListPanel {
             this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
             this._imgBg.alpha       = data.index % 2 == 1 ? 0.2 : 0.5;
 
-            const userInfo          = await UserModel.getUserPublicInfo(data.userId);
+            const userInfo          = await Twns.User.UserModel.getUserPublicInfo(data.userId);
             labelNickname.text      = userInfo?.nickname || CommonConstants.ErrorTextForUndefined;
         }
     }

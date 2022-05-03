@@ -12,7 +12,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
@@ -29,13 +29,13 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WatchWar {
-    import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForWarCommonMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import NotifyType                               = Twns.Notify.NotifyType;
 
     export type OpenDataForWwDeleteWatcherWarsPanel = void;
     export class WwDeleteWatcherWarsPanel extends TwnsUiPanel.UiPanel<OpenDataForWwDeleteWatcherWarsPanel> {
@@ -79,7 +79,7 @@ namespace Twns.WatchWar {
             this._updateGroupWarList();
             this._updateComponentsForTargetWarInfo();
 
-            WwProxy.reqMpwWatchWatchedWarIdArray();
+            Twns.WatchWar.WwProxy.reqMpwWatchWatchedWarIdArray();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -114,7 +114,7 @@ namespace Twns.WatchWar {
 
         private _onNotifyMpwWatchDeleteWatcher(): void {
             FloatText.show(Lang.getText(LangTextType.A0062));
-            WwProxy.reqMpwWatchWatchedWarIdArray();
+            Twns.WatchWar.WwProxy.reqMpwWatchWatchedWarIdArray();
         }
 
         private _onTouchTapBtnBack(): void {
@@ -175,12 +175,12 @@ namespace Twns.WatchWar {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Twns.Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageClass   : Twns.Common.CommonWarPlayerInfoPage,
                     pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {

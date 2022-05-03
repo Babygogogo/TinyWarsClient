@@ -1,13 +1,13 @@
 
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import NetManager           from "../../tools/network/NetManager";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import ChangeLogModel       from "./ChangeLogModel";
 
-namespace ChangeLogProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.ChangeLog.ChangeLogProxy {
+    import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
     import ILanguageText    = CommonProto.Structure.ILanguageText;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
@@ -30,7 +30,7 @@ namespace ChangeLogProxy {
     function _onMsgChangeLogAddMessage(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgChangeLogAddMessage.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgChangeLogAddMessage, data);
+            Twns.Notify.dispatch(NotifyType.MsgChangeLogAddMessage, data);
         }
     }
 
@@ -45,7 +45,7 @@ namespace ChangeLogProxy {
     function _onMsgChangeLogModifyMessage(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgChangeLogModifyMessage.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgChangeLogModifyMessage, data);
+            Twns.Notify.dispatch(NotifyType.MsgChangeLogModifyMessage, data);
         }
     }
 
@@ -56,8 +56,8 @@ namespace ChangeLogProxy {
     function _onMsgChangeLogGetMessageList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChangeLogGetMessageList.IS;
         if (!data.errorCode) {
-            ChangeLogModel.setAllMessageList(data.messageList || []);
-            Notify.dispatch(NotifyType.MsgChangeLogGetMessageList, data);
+            Twns.ChangeLog.ChangeLogModel.setAllMessageList(data.messageList || []);
+            Twns.Notify.dispatch(NotifyType.MsgChangeLogGetMessageList, data);
         }
     }
 }

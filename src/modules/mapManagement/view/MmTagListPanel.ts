@@ -5,7 +5,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
@@ -19,13 +19,13 @@
 // import TwnsMmTagSearchPanel         from "./MmTagSearchPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmTagListPanel {
-    import FiltersForMapList    = TwnsMmAvailabilityListPanel.FiltersForMapList;
+namespace Twns.MapManagement {
+    import FiltersForMapList    = Twns.MapManagement.FiltersForMapList;
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
 
-    export type OpenData = FiltersForMapList | null;
-    export class MmTagListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMmTagListPanel = FiltersForMapList | null;
+    export class MmTagListPanel extends TwnsUiPanel.UiPanel<OpenDataForMmTagListPanel> {
         private readonly _listMap!              : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
         private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelMenuTitle!       : TwnsUiLabel.UiLabel;

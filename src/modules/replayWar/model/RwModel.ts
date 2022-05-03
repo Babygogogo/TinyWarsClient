@@ -2,7 +2,7 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Logger               from "../../tools/helpers/Logger";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoManager         from "../../tools/proto/ProtoManager";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
@@ -10,22 +10,22 @@
 // import TwnsRwWar            from "./RwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace RwModel {
+namespace Twns.ReplayWar.RwModel {
     import NetMessage           = CommonProto.NetMessage;
     import IReplayInfo          = CommonProto.Replay.IReplayInfo;
     import ISerialWar           = CommonProto.WarSerialization.ISerialWar;
     import MsgReplayGetDataIs   = NetMessage.MsgReplayGetData.IS;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import RwWar                = Twns.ReplayWar.RwWar;
 
     let _replayIdArray          : number[] | null = null;
     let _previewingReplayId     : number | null = null;
     let _war                    : RwWar | null = null;
     const _replayInfoAccessor   = Helpers.createCachedDataAccessor<number, IReplayInfo>({
-        reqData: (replayId: number) => RwProxy.reqReplayGetReplayInfo(replayId),
+        reqData: (replayId: number) => Twns.ReplayWar.RwProxy.reqReplayGetReplayInfo(replayId),
     });
     const _replaySelfRatingAccessor = Helpers.createCachedDataAccessor<number, number>({
-        reqData: (replayId: number) => RwProxy.reqReplayGetSelfRating(replayId),
+        reqData: (replayId: number) => Twns.ReplayWar.RwProxy.reqReplayGetSelfRating(replayId),
     });
 
     export function init(): void {
@@ -56,7 +56,7 @@ namespace RwModel {
     export function setPreviewingReplayId(replayId: number | null): void {
         if (getPreviewingReplayId() != replayId) {
             _previewingReplayId = replayId;
-            Notify.dispatch(NotifyType.RwPreviewingReplayIdChanged);
+            Twns.Notify.dispatch(NotifyType.RwPreviewingReplayIdChanged);
         }
     }
     export function getPreviewingReplayId(): number | null {
@@ -123,7 +123,7 @@ namespace RwModel {
     // Functions for replay data.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     const _replayDataGetter = Helpers.createCachedDataAccessor<number, ISerialWar>({
-        reqData : (replayId: number) => RwProxy.reqReplayGetData(replayId),
+        reqData : (replayId: number) => Twns.ReplayWar.RwProxy.reqReplayGetData(replayId),
     });
 
     export function getReplayData(replayId: number): Promise<ISerialWar | null> {

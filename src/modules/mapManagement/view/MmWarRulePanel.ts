@@ -5,7 +5,7 @@
 // import Types                            from "../../tools/helpers/Types";
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import Twns.Notify                   from "../../tools/notify/NotifyType";
 // import ProtoTypes                       from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiImage                      from "../../tools/ui/UiImage";
@@ -18,7 +18,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapManagement {
     import LangTextType                 = TwnsLangTextType.LangTextType;
-    import NotifyType                   = TwnsNotifyType.NotifyType;
+    import NotifyType                   = Twns.Notify.NotifyType;
     import ITemplateWarRule             = CommonProto.WarRule.ITemplateWarRule;
     import IDataForPlayerRule           = CommonProto.WarRule.IDataForPlayerRule;
 
@@ -170,7 +170,7 @@ namespace Twns.MapManagement {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content     : Lang.getText(LangTextType.A0282),
                     callback    : () => {
-                        WarMapProxy.reqMmAddWarRule(Helpers.getExisted(this._getOpenData().mapRawData.mapId), templateWarRule);
+                        Twns.WarMap.WarMapProxy.reqMmAddWarRule(Helpers.getExisted(this._getOpenData().mapRawData.mapId), templateWarRule);
                     },
                 });
             }
@@ -188,7 +188,7 @@ namespace Twns.MapManagement {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0292),
                     callback: () => {
-                        WarMapProxy.reqMmDeleteWarRule(Helpers.getExisted(mapRawData.mapId), ruleId);
+                        Twns.WarMap.WarMapProxy.reqMmDeleteWarRule(Helpers.getExisted(mapRawData.mapId), ruleId);
                     }
                 });
             }
@@ -927,21 +927,21 @@ namespace Twns.MapManagement {
             const data = this.data;
             if (data) {
                 WarHelpers.WarRuleHelpers.moveWarEventId(data.templateWarRule, data.warEventId, -1);
-                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
+                Twns.Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
         private _onTouchedBtnDown(): void {
             const data = this.data;
             if (data) {
                 WarHelpers.WarRuleHelpers.moveWarEventId(data.templateWarRule, data.warEventId, 1);
-                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
+                Twns.Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
         private _onTouchedBtnDelete(): void {
             const data = this.data;
             if (data) {
                 WarHelpers.WarRuleHelpers.deleteWarEventId(data.templateWarRule, data.warEventId);
-                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
+                Twns.Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
         private _onNotifyLanguageChanged(): void {

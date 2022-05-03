@@ -9,7 +9,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -25,7 +25,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SinglePlayerWar {
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     // eslint-disable-next-line no-shadow
@@ -35,7 +35,7 @@ namespace Twns.SinglePlayerWar {
     }
 
     export type OpenDataForSpwTopPanel = {
-        war     : TwnsSpwWar.SpwWar;
+        war     : Twns.SinglePlayerWar.SpwWar;
     };
     export class SpwTopPanel extends TwnsUiPanel.UiPanel<OpenDataForSpwTopPanel> {
         private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForListPlayer>;
@@ -203,11 +203,11 @@ namespace Twns.SinglePlayerWar {
                 callback: () => {
                     const warType = war.getWarType();
                     if ((warType === Types.WarType.ScwFog) || (warType === Types.WarType.ScwStd)) {
-                        SpmProxy.reqSpmSaveScw(war);
+                        Twns.SinglePlayerMode.SpmProxy.reqSpmSaveScw(war);
                     } else if ((warType === Types.WarType.SfwFog) || (warType === Types.WarType.SfwStd)) {
-                        SpmProxy.reqSpmSaveSfw(war);
+                        Twns.SinglePlayerMode.SpmProxy.reqSpmSaveSfw(war);
                     } else if ((warType === Types.WarType.SrwFog) || (warType === Types.WarType.SrwStd)) {
-                        SpmProxy.reqSpmSaveSrw(war);
+                        Twns.SinglePlayerMode.SpmProxy.reqSpmSaveSrw(war);
                     } else {
                         throw Helpers.newError(`Invalid warType: ${warType}`, ClientErrorCode.SpwWarMenuPanel_OnTOuchedBtnSaveGame_00);
                     }
@@ -342,7 +342,7 @@ namespace Twns.SinglePlayerWar {
         }
 
         private _updateBtnChat(): void {
-            this._btnChat.setRedVisible(ChatModel.checkHasUnreadMessage());
+            this._btnChat.setRedVisible(Twns.Chat.ChatModel.checkHasUnreadMessage());
         }
 
         private _setPanelSkinState(state: PanelSkinState): void {
@@ -379,7 +379,7 @@ namespace Twns.SinglePlayerWar {
     }
 
     type DataForListPlayer = {
-        war         : TwnsSpwWar.SpwWar
+        war         : Twns.SinglePlayerWar.SpwWar
         playerIndex : number;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForListPlayer> {
@@ -409,7 +409,7 @@ namespace Twns.SinglePlayerWar {
         }
 
         private _onNotifyBwPlayerFundChanged(e: egret.Event): void {
-            const eventData = e.data as NotifyData.BwPlayerFundChanged;
+            const eventData = e.data as Notify.NotifyData.BwPlayerFundChanged;
             const data      = this._getData();
             if (eventData === data.war.getPlayer(data.playerIndex)) {
                 this._updateLabelFundAndAddFund();
@@ -429,7 +429,7 @@ namespace Twns.SinglePlayerWar {
         }
 
         private _onNotifyBwCoIdChanged(e: egret.Event): void {
-            const eventData = e.data as NotifyData.BwCoIdChanged;
+            const eventData = e.data as Notify.NotifyData.BwCoIdChanged;
             const data      = this._getData();
             if (eventData === data.war.getPlayer(data.playerIndex)) {
                 this._updateImgCo();

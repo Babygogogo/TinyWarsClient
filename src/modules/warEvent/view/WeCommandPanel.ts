@@ -9,7 +9,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
 // import TwnsUiPanel                  from "../../tools/ui/UiPanel";
@@ -23,7 +23,7 @@
 namespace Twns.WarEvent {
     import MeWar                    = MapEditor.MeWar;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import ColorValue               = Types.ColorValue;
     import WarEventDescType         = Types.WarEventDescType;
@@ -130,7 +130,7 @@ namespace Twns.WarEvent {
                     tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                     callback        : (panel) => {
                         eventData.maxCallCountInPlayerTurn = panel.getInputValue();
-                        Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                        Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     },
                 });
             }
@@ -149,7 +149,7 @@ namespace Twns.WarEvent {
                     tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                     callback        : (panel) => {
                         eventData.maxCallCountTotal = panel.getInputValue();
-                        Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                        Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     },
                 });
             }
@@ -163,7 +163,7 @@ namespace Twns.WarEvent {
                     fullData,
                     eventId,
                 }) != null) {
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             };
 
@@ -188,7 +188,7 @@ namespace Twns.WarEvent {
                     FloatText.show(Lang.getFormattedText(LangTextType.F0084, `E${newEventId}`));
 
                     this.close();
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -203,7 +203,7 @@ namespace Twns.WarEvent {
                     FloatText.show(Lang.getFormattedText(LangTextType.F0084, `E${newEventId}`));
 
                     this.close();
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -226,7 +226,7 @@ namespace Twns.WarEvent {
                     }
 
                     this.close();
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -234,7 +234,7 @@ namespace Twns.WarEvent {
             const data = this._getOpenData();
             const node = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()?.conditionNodeArray?.find(v => v.nodeId === data.nodeId));
             node.isAnd = !node.isAnd;
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnReplaceNode(): void {               // DONE
             const data = this._getOpenData();
@@ -251,13 +251,13 @@ namespace Twns.WarEvent {
                 fullData        : Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()),
                 parentNodeId    : Helpers.getExisted(data.nodeId),
             }) != null) {
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onTouchedBtnAddSubCondition(): void {           // DONE
             const data = this._getOpenData();
             if (WarHelpers.WarEventHelpers.addDefaultCondition(Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()), Helpers.getExisted(data.nodeId)) != null) {
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onTouchedBtnShallowCloneNode(): void {
@@ -278,7 +278,7 @@ namespace Twns.WarEvent {
                     FloatText.show(Lang.getFormattedText(LangTextType.F0084, `N${newNodeId}`));
 
                     this.close();
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -300,7 +300,7 @@ namespace Twns.WarEvent {
                     FloatText.show(Lang.getFormattedText(LangTextType.F0084, `N${newNodeId}`));
 
                     this.close();
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -322,7 +322,7 @@ namespace Twns.WarEvent {
                     // WarEventHelper.checkAndDeleteUnusedNode(fullData, nodeId);
 
                     this.close();
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -358,7 +358,7 @@ namespace Twns.WarEvent {
                     FloatText.show(Lang.getFormattedText(LangTextType.F0084, `C${newConditionId}`));
 
                     this.close();
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -374,7 +374,7 @@ namespace Twns.WarEvent {
                     // WarEventHelper.checkAndDeleteUnusedCondition(fullData, conditionId);
 
                     this.close();
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -398,7 +398,7 @@ namespace Twns.WarEvent {
         private _onTouchedBtnAddAction(): void {                 // DONE
             const data = this._getOpenData();
             if (WarHelpers.WarEventHelpers.addDefaultAction(Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()), data.eventId) != null) {
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onTouchedBtnDeepCloneAction(): void {
@@ -414,7 +414,7 @@ namespace Twns.WarEvent {
                     FloatText.show(Lang.getFormattedText(LangTextType.F0084, `A${newActionId}`));
 
                     this.close();
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -430,7 +430,7 @@ namespace Twns.WarEvent {
                     // WarEventHelper.checkAndDeleteUnusedAction(fullData, actionId);
 
                     this.close();
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }

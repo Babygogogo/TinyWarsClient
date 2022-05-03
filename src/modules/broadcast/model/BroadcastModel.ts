@@ -5,12 +5,12 @@
 // import ProtoTypes   from "../../tools/proto/ProtoTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace BroadcastModel {
+namespace Twns.Broadcast.BroadcastModel {
     import IBroadcastMessage    = CommonProto.Broadcast.IBroadcastMessage;
 
     const _allMessageIdArray    : number[] = [];
     const _messageDataAccessor  = Helpers.createCachedDataAccessor<number, IBroadcastMessage>({
-        reqData : (messageId: number) => BroadcastProxy.reqBroadcastGetMessageData(messageId),
+        reqData : (messageId: number) => Twns.Broadcast.BroadcastProxy.reqBroadcastGetMessageData(messageId),
     });
 
     export function setAllMessageIdArray(messageIdArray: number[]): void {

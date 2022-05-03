@@ -3,13 +3,13 @@
 // import Helpers          from "../../tools/helpers/Helpers";
 // import Types            from "../../tools/helpers/Types";
 // import Notify           from "../../tools/notify/Notify";
-// import TwnsNotifyType   from "../../tools/notify/NotifyType";
+// import Twns.Notify   from "../../tools/notify/NotifyType";
 // import ProtoManager     from "../../tools/proto/ProtoManager";
 // import ProtoTypes       from "../../tools/proto/ProtoTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SinglePlayerMode.SpmModel {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NetMessage               = CommonProto.NetMessage;
     import SpmWarSaveSlotData       = Types.SpmWarSaveSlotData;
@@ -19,7 +19,7 @@ namespace Twns.SinglePlayerMode.SpmModel {
     import MsgSpmGetReplayDataIs    = NetMessage.MsgSpmGetReplayData.IS;
 
     export function init(): void {
-        Notify.addEventListeners([
+        Twns.Notify.addEventListeners([
             { type: NotifyType.MsgSpmValidateSrw,   callback: _onNotifyMsgSpmValidateSrw, },
         ], null);
     }
@@ -42,7 +42,7 @@ namespace Twns.SinglePlayerMode.SpmModel {
     // Functions for save slots.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     const _slotFullDataAccessor = Helpers.createCachedDataAccessor<number, SpmWarSaveSlotData>({
-        reqData : (slotIndex) => SpmProxy.reqSpmGetWarSaveSlotFullData(slotIndex),
+        reqData : (slotIndex) => Twns.SinglePlayerMode.SpmProxy.reqSpmGetWarSaveSlotFullData(slotIndex),
     });
     let _previewingSlotIndex    : number;
 
@@ -87,7 +87,7 @@ namespace Twns.SinglePlayerMode.SpmModel {
     export function setPreviewingSlotIndex(index: number): void {
         if (getPreviewingSlotIndex() !== index) {
             _previewingSlotIndex = index;
-            Notify.dispatch(NotifyType.SpmPreviewingWarSaveSlotChanged);
+            Twns.Notify.dispatch(NotifyType.SpmPreviewingWarSaveSlotChanged);
         }
     }
 
@@ -147,7 +147,7 @@ namespace Twns.SinglePlayerMode.SpmModel {
     // Functions for rank list.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     const _rankDataGetter = Helpers.createCachedDataAccessor<number, ISpmRankInfoForRule[]>({
-        reqData : (mapId: number) => SpmProxy.reqSpmGetRankList(mapId),
+        reqData : (mapId: number) => Twns.SinglePlayerMode.SpmProxy.reqSpmGetRankList(mapId),
     });
 
     export function getRankData(mapId: number): Promise<ISpmRankInfoForRule[] | null> {
@@ -162,7 +162,7 @@ namespace Twns.SinglePlayerMode.SpmModel {
     // Functions for replay data.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     const _replayDataAccessor = Helpers.createCachedDataAccessor<number, ISerialWar>({
-        reqData : (rankId: number) => SpmProxy.reqSpmGetReplayData(rankId),
+        reqData : (rankId: number) => Twns.SinglePlayerMode.SpmProxy.reqSpmGetReplayData(rankId),
     });
 
     export function getReplayData(rankId: number): Promise<ISerialWar | null> {

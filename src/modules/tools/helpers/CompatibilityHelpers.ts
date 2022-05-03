@@ -121,7 +121,7 @@ namespace CompatibilityHelpers {
         TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonErrorPanel, {
             content: text,
         });
-        ChatProxy.reqChatAddMessage(
+        Twns.Chat.ChatProxy.reqChatAddMessage(
             text.substr(0, CommonConstants.ChatErrorMaxLength),
             Types.ChatMessageToCategory.Private,
             CommonConstants.AdminUserId,

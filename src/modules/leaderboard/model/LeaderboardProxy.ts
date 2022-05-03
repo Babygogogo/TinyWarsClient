@@ -1,7 +1,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace Twns.LeaderboardProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.Leaderboard.LeaderboardProxy {
+    import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
@@ -19,8 +19,8 @@ namespace Twns.LeaderboardProxy {
     function _onMsgLbSpmOverallGetTopDataArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgLbSpmOverallGetTopDataArray.IS;
         if (!data.errorCode) {
-            LeaderboardModel.setSpmOverallTopDataArray(data.dataArray ?? null);
-            Notify.dispatch(NotifyType.MsgLbSpmOverallGetTopDataArray, data);
+            Leaderboard.LeaderboardModel.setSpmOverallTopDataArray(data.dataArray ?? null);
+            Twns.Notify.dispatch(NotifyType.MsgLbSpmOverallGetTopDataArray, data);
         }
     }
 
@@ -32,8 +32,8 @@ namespace Twns.LeaderboardProxy {
     function _onMsgLbSpmOverallGetRankIndex(e: egret.Event): void {
         const data = e.data as NetMessage.MsgLbSpmOverallGetRankIndex.IS;
         if (!data.errorCode) {
-            LeaderboardModel.setSpmOverallRankIndex(Helpers.getExisted(data.userId), data.rankIndex ?? null);
-            Notify.dispatch(NotifyType.MsgLbSpmOverallGetRankIndex, data);
+            Leaderboard.LeaderboardModel.setSpmOverallRankIndex(Helpers.getExisted(data.userId), data.rankIndex ?? null);
+            Twns.Notify.dispatch(NotifyType.MsgLbSpmOverallGetRankIndex, data);
         }
     }
 }

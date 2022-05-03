@@ -8,7 +8,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -20,12 +20,12 @@
 // import SpwModel                 from "../model/SpwModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpwLoadWarPanel {
+namespace Twns.SinglePlayerWar {
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class SpwLoadWarPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForSpwLoadWarPanel = void;
+    export class SpwLoadWarPanel extends TwnsUiPanel.UiPanel<OpenDataForSpwLoadWarPanel> {
         private readonly _group!            : eui.Group;
         private readonly _labelPanelTitle!  : TwnsUiLabel.UiLabel;
         private readonly _srlSaveSlot!      : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
@@ -78,7 +78,7 @@ namespace TwnsSpwLoadWarPanel {
             this._updateComponentsForLanguage();
 
             this._srlSaveSlot.bindData(await this._createDataForList());
-            this._listSaveSlot.selectedIndex = Helpers.getExisted(SpwModel.getWar()).getSaveSlotIndex();
+            this._listSaveSlot.selectedIndex = Helpers.getExisted(Twns.SinglePlayerWar.SpwModel.getWar()).getSaveSlotIndex();
         }
 
         private _updateComponentsForLanguage(): void {

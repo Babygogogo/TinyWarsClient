@@ -6,13 +6,13 @@
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import UserProxy            from "./UserProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace UserModel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.User.UserModel {
+    import NotifyType           = Twns.Notify.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NetMessage           = CommonProto.NetMessage;
     import IUserPublicInfo      = CommonProto.User.IUserPublicInfo;
@@ -27,14 +27,14 @@ namespace UserModel {
     let _selfAccount                : string;
     let _selfPassword               : string | null = null;
     const _userPublicInfoAccessor   = Helpers.createCachedDataAccessor<number, IUserPublicInfo>({
-        reqData                     : (userId: number) => UserProxy.reqUserGetPublicInfo(userId),
+        reqData                     : (userId: number) => Twns.User.UserProxy.reqUserGetPublicInfo(userId),
     });
     const _userBriefInfoAccessor    = Helpers.createCachedDataAccessor<number, IUserBriefInfo>({
-        reqData                     : (userId: number) => UserProxy.reqUserGetBriefInfo(userId),
+        reqData                     : (userId: number) => Twns.User.UserProxy.reqUserGetBriefInfo(userId),
     });
 
     export function init(): void {
-        Notify.addEventListeners([
+        Twns.Notify.addEventListeners([
             { type: NotifyType.NetworkDisconnected,    callback: _onNotifyNetworkDisconnected, },
             { type: NotifyType.MsgUserLogout,          callback: _onNotifyMsgUserLogout, },
         ], null);
@@ -196,18 +196,18 @@ namespace UserModel {
         }
 
         selfSettings.opacitySettings = opacitySettings;
-        Notify.dispatch(NotifyType.UserSettingsOpacitySettingsChanged);
+        Twns.Notify.dispatch(NotifyType.UserSettingsOpacitySettingsChanged);
     }
     export function reqTickSelfSettingsUnitOpacity(): void {
         const unitOpacity = getSelfSettingsOpacitySettings()?.unitOpacity;
         if ((unitOpacity === 100) || (unitOpacity == null)) {
-            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 75 } });
+            Twns.User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 75 } });
         } else if (unitOpacity === 75) {
-            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 50 } });
+            Twns.User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 50 } });
         } else if (unitOpacity === 50) {
-            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 0 } });
+            Twns.User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 0 } });
         } else {
-            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 100 } });
+            Twns.User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 100 } });
         }
     }
     function mergeSelfSettingsOpacitySettings(newOpacitySettings: CommonProto.User.IUserOpacitySettings): void {
@@ -226,7 +226,7 @@ namespace UserModel {
             currentOpacitySettings.unitOpacity          = newOpacitySettings.unitOpacity ?? currentOpacitySettings.unitOpacity;
         }
 
-        Notify.dispatch(NotifyType.UserSettingsOpacitySettingsChanged);
+        Twns.Notify.dispatch(NotifyType.UserSettingsOpacitySettingsChanged);
     }
 
     export function updateOnMsgUserLogin(data: NetMessage.MsgUserLogin.IS): void {
@@ -270,14 +270,14 @@ namespace UserModel {
         (newSettings.opacitySettings != null)           && (mergeSelfSettingsOpacitySettings(newSettings.opacitySettings));
 
         if (oldVersion !== getSelfSettingsTextureVersion()) {
-            CommonModel.updateOnUnitAndTileTextureVersionChanged();
-            Notify.dispatch(NotifyType.UnitAndTileTextureVersionChanged);
+            Twns.Common.CommonModel.updateOnUnitAndTileTextureVersionChanged();
+            Twns.Notify.dispatch(NotifyType.UnitAndTileTextureVersionChanged);
         }
         if (oldIsShowGridBorder !== getSelfSettingsIsShowGridBorder()) {
-            Notify.dispatch(NotifyType.UserSettingsIsShowGridBorderChanged);
+            Twns.Notify.dispatch(NotifyType.UserSettingsIsShowGridBorderChanged);
         }
         if (oldIsAutoScrollMap !== getSelfSettingsIsAutoScrollMap()) {
-            Notify.dispatch(NotifyType.UserSettingsIsAutoScrollMapChanged);
+            Twns.Notify.dispatch(NotifyType.UserSettingsIsAutoScrollMapChanged);
         }
     }
     export function updateOnMsgUserSetMapRating(data: NetMessage.MsgUserSetMapRating.IS): void {

@@ -5,7 +5,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
@@ -15,14 +15,14 @@
 // import UserProxy            from "../../user/model/UserProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserSetPrivilegePanel {
+namespace Twns.User {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForUserSetPrivilegePanel = {
         userId  : number;
     };
-    export class UserSetPrivilegePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class UserSetPrivilegePanel extends TwnsUiPanel.UiPanel<OpenDataForUserSetPrivilegePanel> {
         private readonly _btnGetInfo!               : TwnsUiButton.UiButton;
         private readonly _inputUserId!              : TwnsUiTextInput.UiTextInput;
         private readonly _labelUserName!            : TwnsUiLabel.UiLabel;
@@ -72,7 +72,7 @@ namespace TwnsUserSetPrivilegePanel {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             const userId = this._getOpenData().userId;
             this._inputUserId.text = `${userId}`;
-            UserProxy.reqUserGetPublicInfo(userId);
+            Twns.User.UserProxy.reqUserGetPublicInfo(userId);
         }
         protected _onClosing(): void {
             // nothing to do
@@ -100,13 +100,13 @@ namespace TwnsUserSetPrivilegePanel {
 
         private _onTouchedBtnGetInfo(): void {
             const userId = this._getUserId();
-            (userId) && (UserProxy.reqUserGetPublicInfo(userId));
+            (userId) && (Twns.User.UserProxy.reqUserGetPublicInfo(userId));
         }
 
         private _onTouchedBtnConfirm(): void {
             const userId = this._getUserId();
             if (userId) {
-                UserProxy.reqUserSetPrivilege(userId, {
+                Twns.User.UserProxy.reqUserSetPrivilege(userId, {
                     canChat             : !!this._imgCanChat.visible,
                     canLogin            : !!this._imgCanLogin.visible,
                     isAdmin             : !!this._imgIsAdmin.visible,

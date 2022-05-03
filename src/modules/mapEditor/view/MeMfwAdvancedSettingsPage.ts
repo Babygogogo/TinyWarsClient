@@ -7,7 +7,7 @@
 // import Helpers                  from "../../tools/helpers/Helpers";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -17,8 +17,8 @@
 // import MeMfwModel               from "../model/MeMfwModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeMfwAdvancedSettingsPage {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.MapEditor {
+    import NotifyType           = Twns.Notify.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
     export class MeMfwAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<void> {

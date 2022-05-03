@@ -17,8 +17,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.TestWar {
     import BwWarEventManager    = BaseWar.BwWarEventManager;
-    import TwPlayerManager      = TwnsTwPlayerManager.TwPlayerManager;
-    import TwField              = TwnsTwField.TwField;
+    import TwPlayerManager      = Twns.TestWar.TwPlayerManager;
+    import TwField              = Twns.TestWar.TwField;
     import WarSerialization     = CommonProto.WarSerialization;
     import ISerialWar           = WarSerialization.ISerialWar;
     import IMapRawData          = CommonProto.Map.IMapRawData;

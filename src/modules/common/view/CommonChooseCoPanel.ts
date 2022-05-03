@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiCoInfo             from "../../tools/ui/UiCoInfo";
@@ -16,18 +16,18 @@
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseCoPanel {
+namespace Twns.Common {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import GameConfig       = Twns.Config.GameConfig;
+    import NotifyType       = Twns.Notify.NotifyType;
+    import GameConfig       = Config.GameConfig;
 
-    export type OpenData = {
+    export type OpenDataForCommonChooseCoPanel = {
         gameConfig          : GameConfig;
         currentCoId         : number | null;
         availableCoIdArray  : number[];
         callbackOnConfirm   : (coId: number) => void;
     };
-    export class CommonChooseCoPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChooseCoPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseCoPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
 

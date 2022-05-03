@@ -5,7 +5,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
@@ -16,13 +16,13 @@
 // import UserProxy            from "../model/UserProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserRegisterPanel {
+namespace Twns.User {
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
-    export type OpenData = void;
-    export class UserRegisterPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserRegisterPanel = void;
+    export class UserRegisterPanel extends TwnsUiPanel.UiPanel<OpenDataForUserRegisterPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -67,9 +67,9 @@ namespace TwnsUserRegisterPanel {
             const password  = this._inputPassword.text;
             LocalStorage.setAccount(account);
             LocalStorage.setPassword(password);
-            UserModel.setSelfAccount(account);
-            UserModel.setSelfPassword(password);
-            UserProxy.reqLogin(account, password, false);
+            Twns.User.UserModel.setSelfAccount(account);
+            Twns.User.UserModel.setSelfPassword(password);
+            Twns.User.UserProxy.reqLogin(account, password, false);
         }
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
@@ -86,7 +86,7 @@ namespace TwnsUserRegisterPanel {
             } else if (!Helpers.checkIsNicknameValid(nickname)) {
                 FloatText.show(Lang.getText(LangTextType.A0002));
             } else {
-                UserProxy.reqUserRegister(account, password, nickname);
+                Twns.User.UserProxy.reqUserRegister(account, password, nickname);
             }
         }
 

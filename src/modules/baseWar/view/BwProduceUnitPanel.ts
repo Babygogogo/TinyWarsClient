@@ -10,7 +10,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -26,7 +26,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import UnitType             = Types.UnitType;
     import GridIndex            = Types.GridIndex;
@@ -60,13 +60,13 @@ namespace Twns.BaseWar {
             this._listUnit.setItemRenderer(UnitRenderer);
             this._btnCancel.setShortSfxCode(Types.ShortSfxCode.None);
 
-            Notify.dispatch(NotifyType.BwProduceUnitPanelOpened);
+            Twns.Notify.dispatch(NotifyType.BwProduceUnitPanelOpened);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
         }
         protected _onClosing(): void {
-            Notify.dispatch(NotifyType.BwProduceUnitPanelClosed);
+            Twns.Notify.dispatch(NotifyType.BwProduceUnitPanelClosed);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

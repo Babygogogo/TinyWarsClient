@@ -3,13 +3,13 @@
 // import NetManager           from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import MrrModel             from "./MrrModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiRankRoom.MrrProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
@@ -33,7 +33,7 @@ namespace Twns.MultiRankRoom.MrrProxy {
         if (!data.errorCode) {
             Twns.MultiRankRoom.MrrModel.setMaxConcurrentCount(false, Helpers.getExisted(data.maxCountForStd));
             Twns.MultiRankRoom.MrrModel.setMaxConcurrentCount(true, Helpers.getExisted(data.maxCountForFog));
-            Notify.dispatch(NotifyType.MsgMrrGetMaxConcurrentCount, data);
+            Twns.Notify.dispatch(NotifyType.MsgMrrGetMaxConcurrentCount, data);
         }
     }
 
@@ -45,7 +45,7 @@ namespace Twns.MultiRankRoom.MrrProxy {
     async function _onMsgMrrGetRoomPublicInfo(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
         await Twns.MultiRankRoom.MrrModel.updateOnMsgMrrGetRoomPublicInfo(data);
-        Notify.dispatch(NotifyType.MsgMrrGetRoomPublicInfo, data);
+        Twns.Notify.dispatch(NotifyType.MsgMrrGetRoomPublicInfo, data);
     }
 
     export function reqMrrGetJoinedRoomIdArray(): void {
@@ -55,7 +55,7 @@ namespace Twns.MultiRankRoom.MrrProxy {
     function _onMsgMrrGetJoinedRoomIdArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMrrGetJoinedRoomIdArray.IS;
         Twns.MultiRankRoom.MrrModel.setJoinedRoomIdArray(data.roomIdArray || []);
-        Notify.dispatch(NotifyType.MsgMrrGetJoinedRoomIdArray, data);
+        Twns.Notify.dispatch(NotifyType.MsgMrrGetJoinedRoomIdArray, data);
     }
 
     export function reqMrrSetBannedCoIdList(roomId: number, bannedCoIdList: number[]): void {
@@ -68,7 +68,7 @@ namespace Twns.MultiRankRoom.MrrProxy {
         const data = e.data as NetMessage.MsgMrrSetBannedCoIdList.IS;
         if (!data.errorCode) {
             await Twns.MultiRankRoom.MrrModel.updateOnMsgMrrSetBannedCoIdList(data);
-            Notify.dispatch(NotifyType.MsgMrrSetBannedCoIdList, data);
+            Twns.Notify.dispatch(NotifyType.MsgMrrSetBannedCoIdList, data);
         }
     }
 
@@ -83,7 +83,7 @@ namespace Twns.MultiRankRoom.MrrProxy {
         if (!data.errorCode) {
             Twns.MultiRankRoom.MrrModel.setMaxConcurrentCount(false, Helpers.getExisted(data.maxCountForStd));
             Twns.MultiRankRoom.MrrModel.setMaxConcurrentCount(true, Helpers.getExisted(data.maxCountForFog));
-            Notify.dispatch(NotifyType.MsgMrrSetMaxConcurrentCount, data);
+            Twns.Notify.dispatch(NotifyType.MsgMrrSetMaxConcurrentCount, data);
         }
     }
 
@@ -98,14 +98,14 @@ namespace Twns.MultiRankRoom.MrrProxy {
         const data = e.data as NetMessage.MsgMrrSetSelfSettings.IS;
         if (!data.errorCode) {
             await Twns.MultiRankRoom.MrrModel.updateOnMsgMrrSetSelfSettings(data);
-            Notify.dispatch(NotifyType.MsgMrrSetSelfSettings, data);
+            Twns.Notify.dispatch(NotifyType.MsgMrrSetSelfSettings, data);
         }
     }
 
     function _onMsgMrrDeleteRoomByServer(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMrrDeleteRoomByServer.IS;
         Twns.MultiRankRoom.MrrModel.updateOnMsgMrrDeleteRoomByServer(data);
-        Notify.dispatch(NotifyType.MsgMrrDeleteRoomByServer, data);
+        Twns.Notify.dispatch(NotifyType.MsgMrrDeleteRoomByServer, data);
     }
 }
 

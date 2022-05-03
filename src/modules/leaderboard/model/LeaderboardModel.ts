@@ -1,13 +1,13 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace Twns.LeaderboardModel {
+namespace Twns.Leaderboard.LeaderboardModel {
     import ISpmOverallSingleData    = CommonProto.Leaderboard.LeaderboardSpmOverall.ISingleData;
 
     const _spmOverallTopDataArrayAccessor = Helpers.createCachedDataAccessor<null, ISpmOverallSingleData[]>({
-        reqData: () => LeaderboardProxy.reqLbSpmOverallGetTopDataArray(),
+        reqData: () => Leaderboard.LeaderboardProxy.reqLbSpmOverallGetTopDataArray(),
     });
     const _spmOverallRankIndexAccessor = Helpers.createCachedDataAccessor<number, number>({
-        reqData: (userId: number) => LeaderboardProxy.reqLbSpmOverallGetRankIndex(userId),
+        reqData: (userId: number) => Leaderboard.LeaderboardProxy.reqLbSpmOverallGetRankIndex(userId),
     });
 
     export function getSpmOverallTopDataArray(): Promise<ISpmOverallSingleData[] | null> {

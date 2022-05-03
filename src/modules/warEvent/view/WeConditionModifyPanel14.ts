@@ -5,7 +5,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -18,7 +18,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
@@ -117,7 +117,7 @@ namespace Twns.WarEvent {
                 maxPlayerIndex          : this._getOpenData().war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : playerIndexArray => {
                     condition.playerIndexArray = playerIndexArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -127,7 +127,7 @@ namespace Twns.WarEvent {
                 currentAliveStateArray  : condition.aliveStateArray ?? [],
                 callbackOnConfirm       : aliveStateArray => {
                     condition.aliveStateArray = aliveStateArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -138,7 +138,7 @@ namespace Twns.WarEvent {
                 gameConfig                  : this._getOpenData().war.getGameConfig(),
                 callbackOnConfirm           : coCategoryIdArray => {
                     condition.coCategoryIdArray = coCategoryIdArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             });
         }
@@ -148,7 +148,7 @@ namespace Twns.WarEvent {
                 currentSkillTypeArray   : condition.coUsingSkillTypeArray ?? [],
                 callbackOnConfirm       : skillTypeArray => {
                     condition.coUsingSkillTypeArray = skillTypeArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -160,7 +160,7 @@ namespace Twns.WarEvent {
             const value = !text ? null : parseInt(text);
             if ((value == null) || (!isNaN(value))) {
                 this._getCondition().fund = value;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             } else {
                 this._updateInputFund();
             }
@@ -168,7 +168,7 @@ namespace Twns.WarEvent {
         private _onTouchedBtnFundComparator(): void {
             const condition             = this._getCondition();
             condition.fundComparator    = Helpers.getNextValueComparator(condition.fundComparator);
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputEnergyPercentage(): void {
             this._setInnerTouchMaskEnabled(true);
@@ -178,7 +178,7 @@ namespace Twns.WarEvent {
             const value = !text ? null : parseInt(text);
             if ((value == null) || (!isNaN(value))) {
                 this._getCondition().energyPercentage = value;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             } else {
                 this._updateInputEnergyPercentage();
             }
@@ -186,7 +186,7 @@ namespace Twns.WarEvent {
         private _onTouchedBtnEnergyPercentageComparator(): void {
             const condition                         = this._getCondition();
             condition.energyPercentageComparator    = Helpers.getNextValueComparator(condition.energyPercentageComparator);
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputPlayersCount(): void {
             this._setInnerTouchMaskEnabled(true);
@@ -196,7 +196,7 @@ namespace Twns.WarEvent {
             const value = !text ? null : parseInt(text);
             if ((value != null) && (!isNaN(value))) {
                 this._getCondition().playersCount = value;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             } else {
                 this._updateInputPlayersCount();
             }
@@ -204,7 +204,7 @@ namespace Twns.WarEvent {
         private _onTouchedBtnPlayersCountComparator(): void {
             const condition                     = this._getCondition();
             condition.playersCountComparator    = Helpers.getNextValueComparator(condition.playersCountComparator);
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _updateView(): void {

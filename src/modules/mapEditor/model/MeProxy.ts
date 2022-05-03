@@ -3,13 +3,13 @@
 // import NetManager           from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import MeModel              from "./MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace MeProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.MapEditor.MeProxy {
+    import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
@@ -29,8 +29,8 @@ namespace MeProxy {
     async function _onMsgMeGetMapDataList(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMeGetMapDataList.IS;
         if (!data.errorCode) {
-            await MeModel.resetDataList(data.dataList || []);
-            Notify.dispatch(NotifyType.MsgMeGetDataList, data);
+            await Twns.MapEditor.MeModel.resetDataList(data.dataList || []);
+            Twns.Notify.dispatch(NotifyType.MsgMeGetDataList, data);
         }
     }
 
@@ -44,8 +44,8 @@ namespace MeProxy {
     function _onMsgMeGetMapData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMeGetMapData.IS;
         if (!data.errorCode) {
-            MeModel.updateData(Helpers.getExisted(data.slotIndex), Helpers.getExisted(data.data));
-            Notify.dispatch(NotifyType.MsgMeGetData, data);
+            Twns.MapEditor.MeModel.updateData(Helpers.getExisted(data.slotIndex), Helpers.getExisted(data.data));
+            Twns.Notify.dispatch(NotifyType.MsgMeGetData, data);
         }
     }
 
@@ -61,7 +61,7 @@ namespace MeProxy {
     function _onMsgMeSubmitMap(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMeSubmitMap.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMeSubmitMap, data);
+            Twns.Notify.dispatch(NotifyType.MsgMeSubmitMap, data);
         }
     }
 }

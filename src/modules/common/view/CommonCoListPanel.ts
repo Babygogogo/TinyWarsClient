@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiCoInfo             from "../../tools/ui/UiCoInfo";
 // import TwnsUiComponent          from "../../tools/ui/UiComponent";
@@ -16,15 +16,15 @@
 // import TwnsCommonHelpPanel      from "./CommonHelpPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonCoListPanel {
+namespace Twns.Common {
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import GameConfig           = Twns.Config.GameConfig;
 
-    export type OpenData = {
+    export type OpenDataForCommonCoListPanel = {
         war     : Twns.BaseWar.BwWar;
     };
-    export class CommonCoListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonCoListPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonCoListPanel> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;

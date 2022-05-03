@@ -5,14 +5,14 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Types                from "../../tools/helpers/Types";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 // import WarMapModel          from "../../warMap/model/WarMapModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiCustomRoom.McrCreateModel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import BootTimerType    = Types.BootTimerType;
     import GameConfig       = Config.GameConfig;
 
@@ -110,14 +110,14 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
             setSelfCoId(WarHelpers.WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
         }
 
-        Notify.dispatch(NotifyType.McrCreateTemplateWarRuleIdChanged);
-        Notify.dispatch(NotifyType.McrCreateTeamIndexChanged);
+        Twns.Notify.dispatch(NotifyType.McrCreateTemplateWarRuleIdChanged);
+        Twns.Notify.dispatch(NotifyType.McrCreateTeamIndexChanged);
     }
     export function setCustomWarRuleId(): void {
         const instanceWarRule               = getInstanceWarRule();
         instanceWarRule.templateWarRuleId   = null;
 
-        Notify.dispatch(NotifyType.McrCreateTemplateWarRuleIdChanged);
+        Twns.Notify.dispatch(NotifyType.McrCreateTemplateWarRuleIdChanged);
     }
     export function getTemplateWarRuleId(): number | null {
         return getInstanceWarRule().templateWarRuleId ?? null;
@@ -170,7 +170,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
     export function setSelfPlayerIndex(playerIndex: number): void {
         if (playerIndex !== getSelfPlayerIndex()) {
             getData().selfPlayerIndex = playerIndex;
-            Notify.dispatch(NotifyType.McrCreateSelfPlayerIndexChanged);
+            Twns.Notify.dispatch(NotifyType.McrCreateSelfPlayerIndexChanged);
         }
     }
     // export async function tickSelfPlayerIndex(): Promise<void> {
@@ -183,7 +183,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
     export function setSelfCoId(coId: number): void {
         if (getSelfCoId() !== coId) {
             getData().selfCoId = coId;
-            Notify.dispatch(NotifyType.McrCreateSelfCoIdChanged);
+            Twns.Notify.dispatch(NotifyType.McrCreateSelfCoIdChanged);
         }
     }
     export function getSelfCoId(): number {
@@ -193,7 +193,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
     export function setSelfUnitAndTileSkinId(skinId: number): void {
         if (skinId !== getSelfUnitAndTileSkinId()) {
             getData().selfUnitAndTileSkinId = skinId;
-            Notify.dispatch(NotifyType.McrCreateSelfSkinIdChanged);
+            Twns.Notify.dispatch(NotifyType.McrCreateSelfSkinIdChanged);
         }
     }
     export function tickSelfUnitAndTileSkinId(): void {
@@ -251,7 +251,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
 
     export function tickTeamIndex(playerIndex: number): void {
         WarHelpers.WarRuleHelpers.tickTeamIndex(getInstanceWarRule(), playerIndex);
-        Notify.dispatch(NotifyType.McrCreateTeamIndexChanged);
+        Twns.Notify.dispatch(NotifyType.McrCreateTeamIndexChanged);
     }
     export function getTeamIndex(playerIndex: number): number {
         return WarHelpers.WarRuleHelpers.getTeamIndex(getInstanceWarRule(), playerIndex);

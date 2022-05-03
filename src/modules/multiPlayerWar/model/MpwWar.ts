@@ -23,13 +23,13 @@ namespace Twns.MultiPlayerWar {
 
     export abstract class MpwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new MultiPlayerWar.MpwPlayerManager();
-        private readonly _field                 = new TwnsMpwField.MpwField();
+        private readonly _field                 = new Twns.MultiPlayerWar.MpwField();
         private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
 
         private _visionTeamIndex    : number | null = null;
 
-        public getField(): TwnsMpwField.MpwField {
+        public getField(): Twns.MultiPlayerWar.MpwField {
             return this._field;
         }
         public getPlayerManager(): MultiPlayerWar.MpwPlayerManager {
@@ -63,7 +63,7 @@ namespace Twns.MultiPlayerWar {
                     tile.setHasFog(false);
                 } else {
                     if (!tile.getHasFog()) {
-                        MpwUtility.resetTileDataAsHasFog(tile);
+                        Twns.MultiPlayerWar.MpwUtility.resetTileDataAsHasFog(tile);
                     }
                 }
 

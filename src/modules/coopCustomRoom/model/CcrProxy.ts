@@ -3,12 +3,12 @@
 // import NetManager           from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.CoopCustomRoom.CcrProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
@@ -35,7 +35,7 @@ namespace Twns.CoopCustomRoom.CcrProxy {
     function _onMsgCcrCreateRoom(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCcrCreateRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgCcrCreateRoom, data);
+            Twns.Notify.dispatch(NotifyType.MsgCcrCreateRoom, data);
         }
     }
 
@@ -47,7 +47,7 @@ namespace Twns.CoopCustomRoom.CcrProxy {
     async function _onMsgCcrJoinRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgCcrJoinRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgCcrJoinRoom, data);
+            Twns.Notify.dispatch(NotifyType.MsgCcrJoinRoom, data);
         }
     }
 
@@ -61,7 +61,7 @@ namespace Twns.CoopCustomRoom.CcrProxy {
     function _onMsgCcrDeleteRoom(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCcrDeleteRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgCcrDeleteRoom, data);
+            Twns.Notify.dispatch(NotifyType.MsgCcrDeleteRoom, data);
         }
     }
 
@@ -75,7 +75,7 @@ namespace Twns.CoopCustomRoom.CcrProxy {
     async function _onMsgCcrExitRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgCcrExitRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgCcrExitRoom, data);
+            Twns.Notify.dispatch(NotifyType.MsgCcrExitRoom, data);
         }
     }
 
@@ -90,7 +90,7 @@ namespace Twns.CoopCustomRoom.CcrProxy {
     async function _onMsgCcrDeletePlayer(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgCcrDeletePlayer.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgCcrDeletePlayer, data);
+            Twns.Notify.dispatch(NotifyType.MsgCcrDeletePlayer, data);
         }
     }
 
@@ -105,7 +105,7 @@ namespace Twns.CoopCustomRoom.CcrProxy {
     async function _onMsgCcrSetReady(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgCcrSetReady.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgCcrSetReady, data);
+            Twns.Notify.dispatch(NotifyType.MsgCcrSetReady, data);
         }
     }
 
@@ -117,7 +117,7 @@ namespace Twns.CoopCustomRoom.CcrProxy {
     async function _onMsgCcrSetSelfSettings(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgCcrSetSelfSettings.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgCcrSetSelfSettings, data);
+            Twns.Notify.dispatch(NotifyType.MsgCcrSetSelfSettings, data);
         }
     }
 
@@ -132,7 +132,7 @@ namespace Twns.CoopCustomRoom.CcrProxy {
         const data = e.data as NetMessage.MsgCcrGetRoomStaticInfo.IS;
         if (!data.errorCode) {
             CcrModel.setRoomStaticInfo(Helpers.getExisted(data.roomId), data.roomStaticInfo ?? null);
-            Notify.dispatch(NotifyType.MsgCcrGetRoomStaticInfo, data);
+            Twns.Notify.dispatch(NotifyType.MsgCcrGetRoomStaticInfo, data);
         }
     }
 
@@ -147,7 +147,7 @@ namespace Twns.CoopCustomRoom.CcrProxy {
         const data = e.data as NetMessage.MsgCcrGetRoomPlayerInfo.IS;
         if (!data.errorCode) {
             CcrModel.setRoomPlayerInfo(Helpers.getExisted(data.roomId), data.roomPlayerInfo ?? null);
-            Notify.dispatch(NotifyType.MsgCcrGetRoomPlayerInfo, data);
+            Twns.Notify.dispatch(NotifyType.MsgCcrGetRoomPlayerInfo, data);
         }
     }
 
@@ -161,7 +161,7 @@ namespace Twns.CoopCustomRoom.CcrProxy {
     function _onMsgCcrStartWar(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCcrStartWar.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgCcrStartWar, data);
+            Twns.Notify.dispatch(NotifyType.MsgCcrStartWar, data);
         }
     }
 }

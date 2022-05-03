@@ -12,7 +12,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -25,7 +25,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
 
     export type OpenDataForMeModifyMapDescPanel = {
@@ -107,7 +107,7 @@ namespace Twns.MapEditor {
                             });
                         }
                     }
-                    Notify.dispatch(NotifyType.MeMapDescChanged);
+                    Twns.Notify.dispatch(NotifyType.MeMapDescChanged);
                 },
             });
         }
@@ -148,7 +148,7 @@ namespace Twns.MapEditor {
                             });
                         }
                     }
-                    Notify.dispatch(NotifyType.MeMapDescChanged);
+                    Twns.Notify.dispatch(NotifyType.MeMapDescChanged);
                 },
             });
         }

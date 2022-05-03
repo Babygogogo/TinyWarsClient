@@ -5,7 +5,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
@@ -15,12 +15,12 @@
 // import TwnsMeWarMenuPanel   from "./MeWarMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeResizePanel {
+namespace Twns.MapEditor {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class MeResizePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeResizePanel = void;
+    export class MeResizePanel extends TwnsUiPanel.UiPanel<OpenDataForMeResizePanel> {
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelCurrSizeTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelCurrWidth!       : TwnsUiLabel.UiLabel;
@@ -114,7 +114,7 @@ namespace TwnsMeResizePanel {
                 return;
             }
 
-            const war               = Helpers.getExisted(MeModel.getWar());
+            const war               = Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
             const { width, height } = war.getTileMap().getMapSize();
             const newWidth          = width + deltaLeft + deltaRight;
             const newHeight         = height + deltaTop + deltaBottom;
@@ -240,7 +240,7 @@ namespace TwnsMeResizePanel {
         }
 
         private _updateComponentsForData(): void {
-            const war                   = Helpers.getExisted(MeModel.getWar());
+            const war                   = Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
             const { width, height }     = war.getTileMap().getMapSize();
             this._labelCurrWidth.text   = "" + width;
             this._labelCurrHeight.text  = "" + height;

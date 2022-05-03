@@ -1,14 +1,14 @@
 
 // import TwnsNetMessageCodes          from "../../tools/network/NetMessageCodes";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import RwModel                      from "./RwModel";
 // import NetManager                   from "../../tools/network/NetManager";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace RwProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.ReplayWar.RwProxy {
+    import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
@@ -32,8 +32,8 @@ namespace RwProxy {
     function _onMsgReplayGetReplayIdArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgReplayGetReplayIdArray.IS;
         if (!data.errorCode) {
-            RwModel.setReplayIdArray(data.replayIdArray || []);
-            Notify.dispatch(NotifyType.MsgReplayGetReplayIdArray, data);
+            Twns.ReplayWar.RwModel.setReplayIdArray(data.replayIdArray || []);
+            Twns.Notify.dispatch(NotifyType.MsgReplayGetReplayIdArray, data);
         }
     }
 
@@ -47,8 +47,8 @@ namespace RwProxy {
     function _onMsgReplayGetData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgReplayGetData.IS;
         if (!data.errorCode) {
-            RwModel.updateOnMsgReplayGetData(data);
-            Notify.dispatch(NotifyType.MsgReplayGetData, data);
+            Twns.ReplayWar.RwModel.updateOnMsgReplayGetData(data);
+            Twns.Notify.dispatch(NotifyType.MsgReplayGetData, data);
         }
     }
 
@@ -62,8 +62,8 @@ namespace RwProxy {
     function _onMsgReplayGetReplayInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgReplayGetReplayInfo.IS;
         if (!data.errorCode) {
-            RwModel.setReplayInfo(Helpers.getExisted(data.replayId), data.replayInfo ?? null);
-            Notify.dispatch(NotifyType.MsgReplayGetBriefInfo, data);
+            Twns.ReplayWar.RwModel.setReplayInfo(Helpers.getExisted(data.replayId), data.replayInfo ?? null);
+            Twns.Notify.dispatch(NotifyType.MsgReplayGetBriefInfo, data);
         }
     }
 
@@ -77,8 +77,8 @@ namespace RwProxy {
     function _onMsgReplayGetSelfRating(e: egret.Event): void {
         const data = e.data as NetMessage.MsgReplayGetSelfRating.IS;
         if (!data.errorCode) {
-            RwModel.setReplaySelfRating(Helpers.getExisted(data.replayId), data.rating ?? null);
-            Notify.dispatch(NotifyType.MsgReplayGetSelfRating, data);
+            Twns.ReplayWar.RwModel.setReplaySelfRating(Helpers.getExisted(data.replayId), data.rating ?? null);
+            Twns.Notify.dispatch(NotifyType.MsgReplayGetSelfRating, data);
         }
     }
 
@@ -93,7 +93,7 @@ namespace RwProxy {
     function _onMsgReplaySetSelfRating(e: egret.Event): void {
         const data = e.data as NetMessage.MsgReplaySetSelfRating.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgReplaySetSelfRating, data);
+            Twns.Notify.dispatch(NotifyType.MsgReplaySetSelfRating, data);
         }
     }
 }

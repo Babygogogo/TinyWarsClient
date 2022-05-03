@@ -5,14 +5,14 @@
 // import TwnsMpwActionPlanner from "./MpwActionPlanner";
 // import TwnsMpwFogMap        from "./MpwFogMap";
 
-namespace TwnsMpwField {
+namespace Twns.MultiPlayerWar {
     export class MpwField extends Twns.BaseWar.BwField {
-        private readonly _fogMap        = new TwnsMpwFogMap.MpwFogMap();
+        private readonly _fogMap        = new Twns.MultiPlayerWar.MpwFogMap();
         private readonly _tileMap       = new Twns.BaseWar.BwTileMap();
         private readonly _unitMap       = new Twns.BaseWar.BwUnitMap();
-        private readonly _actionPlanner = new TwnsMpwActionPlanner.MpwActionPlanner();
+        private readonly _actionPlanner = new Twns.MultiPlayerWar.MpwActionPlanner();
 
-        public getFogMap(): TwnsMpwFogMap.MpwFogMap {
+        public getFogMap(): Twns.MultiPlayerWar.MpwFogMap {
             return this._fogMap;
         }
         public getTileMap(): Twns.BaseWar.BwTileMap {
@@ -21,7 +21,7 @@ namespace TwnsMpwField {
         public getUnitMap(): Twns.BaseWar.BwUnitMap {
             return this._unitMap;
         }
-        public getActionPlanner(): TwnsMpwActionPlanner.MpwActionPlanner {
+        public getActionPlanner(): Twns.MultiPlayerWar.MpwActionPlanner {
             return this._actionPlanner;
         }
     }

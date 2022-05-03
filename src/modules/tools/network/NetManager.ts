@@ -1,7 +1,7 @@
 
 // import Logger               from "../helpers/Logger";
 // import Notify               from "../notify/Notify";
-// import TwnsNotifyType       from "../notify/NotifyType";
+// import Twns.Notify       from "../notify/NotifyType";
 // import TwnsLangTextType     from "../lang/LangTextType";
 // import TwnsNetMessageCodes  from "./NetMessageCodes";
 // import FloatText            from "../helpers/FloatText";
@@ -12,7 +12,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace NetManager {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
@@ -176,10 +176,10 @@ namespace NetManager {
     function onWebSocketConnectionOpened(): void {
         FloatText.show(Lang.getText(LangTextType.A0007));
 
-        Notify.dispatch(NotifyType.NetworkConnected);
+        Twns.Notify.dispatch(NotifyType.NetworkConnected);
     }
     function onWebSocketConnectionClosed(): void {
-        Notify.dispatch(NotifyType.NetworkDisconnected);
+        Twns.Notify.dispatch(NotifyType.NetworkDisconnected);
         if (!checkCanAutoReconnect()) {
             // FloatText.show(Lang.getText(Lang.Type.A0013));
         } else {

@@ -1,19 +1,19 @@
 
 // import Types                        from "../../tools/helpers/Types";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsBwGridVisualEffectView   from "../view/BwGridVisualEffectView";
 // import TwnsBwWar                    from "./BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwGridVisualEffect {
+namespace Twns.BaseWar {
     import GridIndex                = Types.GridIndex;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
 
     export class BwGridVisualEffect {
-        private readonly _view = new TwnsBwGridVisualEffectView.BwGridVisualEffectView();
+        private readonly _view = new Twns.BaseWar.BwGridVisualEffectView();
 
-        private _notifyListeners: Notify.Listener[] = [
+        private _notifyListeners: Twns.Notify.Listener[] = [
             // { type: NotifyType.BwUnitBeAttacked,   callback: this._onNotifyBwUnitBeAttacked },
             // { type: NotifyType.BwUnitBeDestroyed,  callback: this._onNotifyBwUnitBeDestroyed },
             // { type: NotifyType.BwUnitBeRepaired,   callback: this._onNotifyBwUnitBeRepaired },
@@ -31,18 +31,18 @@ namespace TwnsBwGridVisualEffect {
         }
 
         public startRunning(war: Twns.BaseWar.BwWar): void {
-            Notify.addEventListeners(this._notifyListeners, this, false, 1);
+            Twns.Notify.addEventListeners(this._notifyListeners, this, false, 1);
         }
         public startRunningView(): void {
             this.getView().startRunningView();
         }
         public stopRunning(): void {
-            Notify.removeEventListeners(this._notifyListeners, this);
+            Twns.Notify.removeEventListeners(this._notifyListeners, this);
 
             this.getView().stopRunningView();
         }
 
-        public getView(): TwnsBwGridVisualEffectView.BwGridVisualEffectView {
+        public getView(): Twns.BaseWar.BwGridVisualEffectView {
             return this._view;
         }
 

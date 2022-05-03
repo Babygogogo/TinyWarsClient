@@ -7,14 +7,14 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonErrorPanel {
+namespace Twns.Common {
     import LangTextType         = TwnsLangTextType.LangTextType;
 
-    export type OpenData = {
+    export type OpenDataForCommonErrorPanel = {
         content     : string;
         callback?   : () => any;
     };
-    export class CommonErrorPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonErrorPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonErrorPanel> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelContent! : TwnsUiLabel.UiLabel;
         private readonly _btnClose!     : TwnsUiButton.UiButton;

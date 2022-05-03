@@ -6,7 +6,7 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Types                from "../../tools/helpers/Types";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 // import UserModel            from "../../user/model/UserModel";
@@ -14,7 +14,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import GridIndex        = Types.GridIndex;
     import PlayerAliveState = Types.PlayerAliveState;
     import CoSkillType      = Types.CoSkillType;
@@ -151,7 +151,7 @@ namespace Twns.BaseWar {
                 coUsingSkillType            : this.getCoUsingSkillType(),
                 coIsDestroyedInTurn         : this.getCoIsDestroyedInTurn(),
                 unitAndTileSkinId           : this.getUnitAndTileSkinId(),
-                userId                      : playerIndex > 0 ? UserModel.getSelfUserId() : null,
+                userId                      : playerIndex > 0 ? Twns.User.UserModel.getSelfUserId() : null,
                 coId                        : this.getCoId(),
                 coCurrentEnergy             : this.getCoCurrentEnergy(),
                 coPowerActivatedCount       : this.getCoPowerActivatedCount(),
@@ -174,7 +174,7 @@ namespace Twns.BaseWar {
         public setFund(fund: number): void {
             if (this._fund !== fund) {
                 this._fund = fund;
-                Notify.dispatch(NotifyType.BwPlayerFundChanged, this);
+                Twns.Notify.dispatch(NotifyType.BwPlayerFundChanged, this);
             }
         }
         public getFund(): number {
@@ -260,13 +260,13 @@ namespace Twns.BaseWar {
             const userId = this.getUserId();
             return (userId == null)
                 ?  `A.I.`
-                : await UserModel.getUserNickname(userId) || `??`;
+                : await Twns.User.UserModel.getUserNickname(userId) || `??`;
         }
 
         public setCoId(coId: number): void {
             if (this._coId !== coId) {
                 this._coId = coId;
-                Notify.dispatch(NotifyType.BwCoIdChanged, this);
+                Twns.Notify.dispatch(NotifyType.BwCoIdChanged, this);
             }
         }
         public getCoId(): number {
@@ -275,7 +275,7 @@ namespace Twns.BaseWar {
 
         public setCoCurrentEnergy(energy: number): void {
             this._coCurrentEnergy = energy;
-            Notify.dispatch(NotifyType.BwCoEnergyChanged);
+            Twns.Notify.dispatch(NotifyType.BwCoEnergyChanged);
         }
         public getCoCurrentEnergy(): number {
             return Helpers.getExisted(this._coCurrentEnergy);
@@ -363,7 +363,7 @@ namespace Twns.BaseWar {
         public setCoUsingSkillType(skillType: Types.CoSkillType): void {
             if (this._coUsingSkillType !== skillType) {
                 this._coUsingSkillType = skillType;
-                Notify.dispatch(NotifyType.BwCoUsingSkillTypeChanged);
+                Twns.Notify.dispatch(NotifyType.BwCoUsingSkillTypeChanged);
             }
         }
         public getCoCurrentSkills(): number[] {

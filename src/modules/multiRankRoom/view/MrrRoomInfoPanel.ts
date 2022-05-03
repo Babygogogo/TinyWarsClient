@@ -14,7 +14,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiImage                          from "../../tools/ui/UiImage";
@@ -36,11 +36,11 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiRankRoom {
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import NotifyType                               = Twns.Notify.NotifyType;
     import NetMessage                               = CommonProto.NetMessage;
 
     export type OpenDataForMrrRoomInfoPanel = {
@@ -114,12 +114,12 @@ namespace Twns.MultiRankRoom {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Twns.Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageClass   : Twns.Common.CommonWarPlayerInfoPage,
                     pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
@@ -158,7 +158,7 @@ namespace Twns.MultiRankRoom {
         private async _onTouchedBtnBanCo(): Promise<void> {
             const roomId            = this._getOpenData().roomId;
             const roomInfo          = await MultiRankRoom.MrrModel.getRoomInfo(roomId);
-            const userId            = UserModel.getSelfUserId();
+            const userId            = Twns.User.UserModel.getSelfUserId();
             const selfPlayerData    = roomInfo ? roomInfo.playerDataList?.find(v => v.userId === userId) : null;
             if (selfPlayerData) {
                 const gameConfig = await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion));
@@ -185,7 +185,7 @@ namespace Twns.MultiRankRoom {
         private async _onTouchedBtnChooseCo(): Promise<void> {
             const roomId            = this._getOpenData().roomId;
             const roomInfo          = await MultiRankRoom.MrrModel.getRoomInfo(roomId);
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = Twns.User.UserModel.getSelfUserId();
             const selfPlayerData    = roomInfo ? roomInfo.playerDataList?.find(v => v.userId === selfUserId) : null;
             if (selfPlayerData != null) {
                 if (selfPlayerData.isReady) {
@@ -323,7 +323,7 @@ namespace Twns.MultiRankRoom {
             } else {
                 group.visible = true;
 
-                const userId        = UserModel.getSelfUserId();
+                const userId        = Twns.User.UserModel.getSelfUserId();
                 const playerData    = Helpers.getExisted(roomInfo.playerDataList?.find(v => v.userId === userId));
                 const playerIndex   = playerData.playerIndex;
                 const banCoData     = roomInfo.settingsForMrw?.dataArrayForBanCo?.find(v => v.srcPlayerIndex === playerIndex);
@@ -397,7 +397,7 @@ namespace Twns.MultiRankRoom {
                 return;
             }
 
-            const userId        = UserModel.getSelfUserId();
+            const userId        = Twns.User.UserModel.getSelfUserId();
             const playerData    = Helpers.getExisted(roomInfo.playerDataList?.find(v => v.userId === userId));
             const playerIndex   = playerData.playerIndex;
             if (roomInfo.timeForStartSetSelfSettings == null) {
@@ -593,7 +593,7 @@ namespace Twns.MultiRankRoom {
         private async _updateState(): Promise<void> {
             const data              = this._getData();
             const roomInfo          = data ? await MultiRankRoom.MrrModel.getRoomInfo(data.roomId) : null;
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = Twns.User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             this.currentState       = ((selfPlayerData) && (data.playerIndex === selfPlayerData.playerIndex)) ? `down` : `up`;
@@ -620,7 +620,7 @@ namespace Twns.MultiRankRoom {
         public async onItemTapEvent(): Promise<void> {
             const data              = this._getData();
             const roomInfo          = data ? await MultiRankRoom.MrrModel.getRoomInfo(data.roomId) : null;
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = Twns.User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             if (selfPlayerData == null) {
@@ -678,7 +678,7 @@ namespace Twns.MultiRankRoom {
             const isReady           = data.isReady;
             const roomId            = data.roomId;
             const roomInfo          = await MultiRankRoom.MrrModel.getRoomInfo(roomId);
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = Twns.User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             if ((selfPlayerData) && (selfPlayerData.isReady !== isReady)) {
@@ -733,7 +733,7 @@ namespace Twns.MultiRankRoom {
             const data              = this._getData();
             const roomInfo          = await MultiRankRoom.MrrModel.getRoomInfo(data.roomId);
             const isReady           = data.isReady;
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = Twns.User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             const isSelected        = (!!selfPlayerData) && (isReady === selfPlayerData.isReady);

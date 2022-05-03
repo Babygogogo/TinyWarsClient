@@ -5,7 +5,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -17,7 +17,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
 
@@ -64,7 +64,7 @@ namespace Twns.WarEvent {
         private readonly _btnActIsHighlighted!              : TwnsUiButton.UiButton;
         private readonly _labelActIsHighlighted!            : TwnsUiLabel.UiLabel;
 
-        private readonly _tileView                      = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private readonly _tileView                      = new Twns.MapEditor.MeTileSimpleView();
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -139,7 +139,7 @@ namespace Twns.WarEvent {
                 currentLocationIdArray  : action.conLocationIdArray ?? [],
                 callbackOnConfirm       : locationIdArray => {
                     action.conLocationIdArray = locationIdArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -150,7 +150,7 @@ namespace Twns.WarEvent {
                 mapSize                 : this._getOpenData().war.getTileMap().getMapSize(),
                 callbackOnConfirm       : gridIndexArray => {
                     action.conGridIndexArray = gridIndexArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -164,19 +164,19 @@ namespace Twns.WarEvent {
             } else {
                 action.conIsHighlighted = true;
             }
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnDestroyUnit(): void {
             const action          = this._getAction();
             action.actDestroyUnit = !action.actDestroyUnit;
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnActIsModifyTileBase(): void {
             const action                = this._getAction();
             action.actIsModifyTileBase  = !action.actIsModifyTileBase;
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActTileBase(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTileBasePanel, {
@@ -184,7 +184,7 @@ namespace Twns.WarEvent {
                     const tileData          = Helpers.getExisted(this._getAction().actTileData);
                     tileData.baseType       = baseType;
                     tileData.baseShapeId    = baseShapeId;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -192,7 +192,7 @@ namespace Twns.WarEvent {
         private _onTouchedBtnActIsModifyTileDecorator(): void {
             const action                    = this._getAction();
             action.actIsModifyTileDecorator = !action.actIsModifyTileDecorator;
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActTileDecorator(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTileDecoratorPanel, {
@@ -200,7 +200,7 @@ namespace Twns.WarEvent {
                     const tileData              = Helpers.getExisted(this._getAction().actTileData);
                     tileData.decoratorType      = decoratorType;
                     tileData.decoratorShapeId   = decoratorShapeId;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -208,13 +208,13 @@ namespace Twns.WarEvent {
             const tileData              = Helpers.getExisted(this._getAction().actTileData);
             tileData.decoratorType      = null;
             tileData.decoratorShapeId   = null;
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnActIsModifyTileObject(): void {
             const action                    = this._getAction();
             action.actIsModifyTileObject    = !action.actIsModifyTileObject;
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActTileObject(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTileObjectPanel, {
@@ -223,7 +223,7 @@ namespace Twns.WarEvent {
                     tileData.objectType     = objectType;
                     tileData.objectShapeId  = objectShapeId;
                     tileData.playerIndex    = playerIndex;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -232,7 +232,7 @@ namespace Twns.WarEvent {
             tileData.objectType     = Types.TileObjectType.Empty;
             tileData.objectShapeId  = null;
             tileData.playerIndex    = CommonConstants.WarNeutralPlayerIndex;
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActIsHighlighted(): void {
             const tileData          = Helpers.getExisted(this._getAction().actTileData);
@@ -244,7 +244,7 @@ namespace Twns.WarEvent {
             } else {
                 tileData.isHighlighted = true;
             }
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _updateView(): void {

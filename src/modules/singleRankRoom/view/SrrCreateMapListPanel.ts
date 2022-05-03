@@ -7,7 +7,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -22,12 +22,12 @@
 // import TwnsScrCreateSettingsPanel   from "./ScrCreateSettingsPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSrrCreateMapListPanel {
+namespace Twns.SingleRankRoom {
     import LangTextType                     = TwnsLangTextType.LangTextType;
-    import NotifyType                       = TwnsNotifyType.NotifyType;
+    import NotifyType                       = Twns.Notify.NotifyType;
     import IDataForMapTag                   = CommonProto.Map.IDataForMapTag;
-    import OpenDataForCommonWarMapInfoPage  = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForSpmRankPage           = TwnsSpmRankPage.OpenData;
+    import OpenDataForCommonWarMapInfoPage  = Twns.Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForSpmRankPage           = Twns.SinglePlayerMode.OpenDataForSpmRankPage;
 
     type FiltersForMapList = {
         mapName?        : string | null;
@@ -36,8 +36,8 @@ namespace TwnsSrrCreateMapListPanel {
         minRating?      : number | null;
         mapTag?         : IDataForMapTag | null;
     };
-    export type OpenData = FiltersForMapList | null;
-    export class SrrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForSrrCreateMapListPanel = FiltersForMapList | null;
+    export class SrrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForSrrCreateMapListPanel> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForSpmRankPage>;
 
@@ -173,12 +173,12 @@ namespace TwnsSrrCreateMapListPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Twns.Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0436) },
-                    pageClass   : TwnsSpmRankPage.SpmRankPage,
+                    pageClass   : Twns.SinglePlayerMode.SpmRankPage,
                     pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
             ]);

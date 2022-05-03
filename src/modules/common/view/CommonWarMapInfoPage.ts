@@ -2,7 +2,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiMapInfo        from "../../tools/ui/UiMapInfo";
@@ -11,9 +11,9 @@
 // import WarMapModel          from "../../warMap/model/WarMapModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonWarMapInfoPage {
+namespace Twns.Common {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import GameConfig       = Twns.Config.GameConfig;
 
     export type OpenDataForCommonMapInfoPage = {

@@ -4,11 +4,11 @@
 // import Types                from "../../tools/helpers/Types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwWarPanel {
-    export type OpenData = {
+namespace Twns.BaseWar {
+    export type OpenDataForBwWarPanel = {
         war: Twns.BaseWar.BwWar;
     };
-    export class BwWarPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwWarPanel extends TwnsUiPanel.UiPanel<OpenDataForBwWarPanel> {
         private readonly _group!    : eui.Group;
 
         protected _onOpening(): void {

@@ -92,8 +92,8 @@ namespace Twns.BaseWar {
         }
         public tickUnitAnimationFrame(): void {
             const unit              = Helpers.getExisted(this.getUnit());
-            this._imgUnit.source    = CommonModel.getCachedUnitImageSource({
-                version     : UserModel.getSelfSettingsTextureVersion(),
+            this._imgUnit.source    = Twns.Common.CommonModel.getCachedUnitImageSource({
+                version     : Twns.User.UserModel.getSelfSettingsTextureVersion(),
                 isDark      : this._isDark,
                 isMoving    : this._animationType === UnitAnimationType.Move,
                 tickCount   : Timer.getUnitAnimationTickCount(),
@@ -440,7 +440,7 @@ namespace Twns.BaseWar {
         }
 
         protected _getImageSourcePrefix(isDark: boolean): string {
-            return CommonModel.getUnitAndTileTexturePrefix() + (isDark ? `c07` : `c03`);
+            return Twns.Common.CommonModel.getUnitAndTileTexturePrefix() + (isDark ? `c07` : `c03`);
         }
     }
 }

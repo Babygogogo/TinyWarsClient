@@ -5,16 +5,15 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import NotifyData           from "../../tools/notify/NotifyData";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import Types                from "../../tools/helpers/Types";
 // import TwnsBwCursor         from "../model/BwCursor";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwCursorView {
+namespace Twns.BaseWar {
     import GridIndex            = Types.GridIndex;
     import ActionPlannerState   = Types.ActionPlannerState;
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import BwCursor             = TwnsBwCursor.BwCursor;
+    import NotifyType           = Twns.Notify.NotifyType;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
     const _PULSE_IN_DURATION                    = 150;
@@ -91,7 +90,7 @@ namespace TwnsBwCursorView {
         }
 
         public startRunningView(): void {
-            Notify.addEventListener(NotifyType.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
+            Twns.Notify.addEventListener(NotifyType.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
             this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,             this._onTouchBegin,             this);
             this.addEventListener(egret.TouchEvent.TOUCH_CANCEL,            this._onTouchCancel,            this);
             this.addEventListener(egret.TouchEvent.TOUCH_END,               this._onTouchEnd,               this);
@@ -106,7 +105,7 @@ namespace TwnsBwCursorView {
             this._stopNormalAnimation();
             this._stopTargetAnimation();
 
-            Notify.removeEventListener(NotifyType.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
+            Twns.Notify.removeEventListener(NotifyType.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
             this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,              this._onTouchBegin,             this);
             this.removeEventListener(egret.TouchEvent.TOUCH_CANCEL,             this._onTouchCancel,            this);
             this.removeEventListener(egret.TouchEvent.TOUCH_END,                this._onTouchEnd,               this);
@@ -151,10 +150,10 @@ namespace TwnsBwCursorView {
                 const currGridIndex = this._getCursor().getGridIndex();
                 if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
                     this._isTouchMovedOrMultiple = true;
-                    Notify.dispatch(NotifyType.BwCursorDragged, {
+                    Twns.Notify.dispatch(NotifyType.BwCursorDragged, {
                         current     : currGridIndex,
                         draggedTo   : gridIndex,
-                    } as NotifyData.BwCursorDragged);
+                    } as Twns.Notify.NotifyData.BwCursorDragged);
                 }
             }
         }
@@ -197,27 +196,27 @@ namespace TwnsBwCursorView {
                 currGlobalTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
 
                 if (currGlobalTouchPoints.size > 1) {
-                    Notify.dispatch(NotifyType.BwFieldZoomed, {
+                    Twns.Notify.dispatch(NotifyType.BwFieldZoomed, {
                         current : currGlobalTouchPoints,
                         previous: this._prevGlobalTouchPoints,
-                    } as NotifyData.BwFieldZoomed);
+                    } as Twns.Notify.NotifyData.BwFieldZoomed);
                 } else {
                     if (this._touchIdForTouchingCursor != null) {
                         const gridIndex     = this._getGridIndexByLocalXY(e.localX, e.localY);
                         const currGridIndex = this._getCursor().getGridIndex();
                         if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
                             this._isTouchMovedOrMultiple = true;
-                            Notify.dispatch(NotifyType.BwCursorDragged, {
+                            Twns.Notify.dispatch(NotifyType.BwCursorDragged, {
                                 current     : currGridIndex,
                                 draggedTo   : gridIndex,
-                            } as NotifyData.BwCursorDragged);
+                            } as Twns.Notify.NotifyData.BwCursorDragged);
                         }
                     } else {
                         if (this._isTouchMovedOrMultiple) {
-                            Notify.dispatch(NotifyType.BwFieldDragged, {
+                            Twns.Notify.dispatch(NotifyType.BwFieldDragged, {
                                 current : currGlobalTouchPoints.values().next().value,
                                 previous: this._prevGlobalTouchPoints.values().next().value,
-                            } as NotifyData.BwFieldDragged);
+                            } as Twns.Notify.NotifyData.BwFieldDragged);
                         }
                     }
                 }
@@ -240,13 +239,13 @@ namespace TwnsBwCursorView {
                     this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
                     if (!this._isTouchMovedOrMultiple) {
                         const initialGlobalTouchPoint = Helpers.getExisted(this._initialGlobalTouchPoint);
-                        Notify.dispatch(NotifyType.BwCursorTapped, {
+                        Twns.Notify.dispatch(NotifyType.BwCursorTapped, {
                             current : this._getCursor().getGridIndex(),
                             tappedOn: this._getGridIndexByGlobalXY(initialGlobalTouchPoint.x, initialGlobalTouchPoint.y),
-                        } as NotifyData.BwCursorTapped);
+                        } as Twns.Notify.NotifyData.BwCursorTapped);
                     } else {
                         if (touchIdForTouchingCursor != null) {
-                            Notify.dispatch(NotifyType.BwCursorDragEnded);
+                            Twns.Notify.dispatch(NotifyType.BwCursorDragEnded);
                         }
                     }
                     delete this._initialGlobalTouchPoint;

@@ -13,7 +13,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
@@ -25,11 +25,11 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiFreeWar {
     import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import NotifyType                               = Twns.Notify.NotifyType;
     import MpwModel                                 = MultiPlayerWar.MpwModel;
 
     export type OpenDataForMfwMyWarListPanel = void;
@@ -116,12 +116,12 @@ namespace Twns.MultiFreeWar {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Twns.Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageClass   : Twns.Common.CommonWarPlayerInfoPage,
                     pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
@@ -359,7 +359,7 @@ namespace Twns.MultiFreeWar {
             const warId             = this._getData().warId;
             const warSettings       = await MpwModel.getWarSettings(warId);
             const warProgressInfo   = await MpwModel.getWarProgressInfo(warId);
-            const userId            = UserModel.getSelfUserId();
+            const userId            = Twns.User.UserModel.getSelfUserId();
             const label             = this._labelRestTimeToBoot;
             if ((warSettings == null)       ||
                 (warProgressInfo == null)   ||

@@ -1,6 +1,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsNotifyType {
+namespace Twns.Notify {
     // eslint-disable-next-line no-shadow
     export const enum NotifyType {
         NetworkConnected,
@@ -319,4 +319,4 @@ namespace TwnsNotifyType {
     }
 }
 
-// export default TwnsNotifyType;
+// export default Twns.Notify;

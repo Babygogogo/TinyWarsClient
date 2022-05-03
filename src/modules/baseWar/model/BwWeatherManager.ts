@@ -1,6 +1,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwWeatherManager {
+namespace Twns.BaseWar {
     import WeatherType              = Types.WeatherType;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -12,7 +12,7 @@ namespace TwnsBwWeatherManager {
         private _expireTurnIndex?       : number | null;
         private _war?                   : Twns.BaseWar.BwWar;
 
-        private readonly _view = new TwnsBwWeatherManagerView.BwWeatherManagerView();
+        private readonly _view = new Twns.BaseWar.BwWeatherManagerView();
 
         public init(data: Types.Undefinable<ISerialWeatherManager>): void {
             this.setForceWeatherType(data?.forceWeatherType ?? null);
@@ -56,7 +56,7 @@ namespace TwnsBwWeatherManager {
             return Helpers.getExisted(this._war, ClientErrorCode.BwWeatherManager_GetWar_00);
         }
 
-        public getView(): TwnsBwWeatherManagerView.BwWeatherManagerView {
+        public getView(): Twns.BaseWar.BwWeatherManagerView {
             return this._view;
         }
 
@@ -73,7 +73,7 @@ namespace TwnsBwWeatherManager {
         public setForceWeatherType(type: WeatherType | null): void {
             if (this._forceWeatherType !== type) {
                 this._forceWeatherType = type;
-                Notify.dispatch(TwnsNotifyType.NotifyType.BwForceWeatherTypeChanged);
+                Twns.Notify.dispatch(Twns.Notify.NotifyType.BwForceWeatherTypeChanged);
             }
         }
         public getForceWeatherType(): WeatherType | null {

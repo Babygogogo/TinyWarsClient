@@ -9,7 +9,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -24,10 +24,10 @@
 // import TwnsBwTileView           from "./BwTileView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwTileDetailPanel {
+namespace Twns.BaseWar {
     import BwTile           = Twns.BaseWar.BwTile;
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import UnitType         = Types.UnitType;
     import GameConfig       = Twns.Config.GameConfig;
 
@@ -83,10 +83,10 @@ namespace TwnsBwTileDetailPanel {
         LaserTurretDeltaPrimaryAmmoPercentage,
     }
 
-    export type OpenData = {
+    export type OpenDataForBwTileDetailPanel = {
         tile    : BwTile;
     };
-    export class BwTileDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwTileDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForBwTileDetailPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
@@ -97,7 +97,7 @@ namespace TwnsBwTileDetailPanel {
         private readonly _listMoveCost!     : TwnsUiScrollList.UiScrollList<DataForMoveRangeRenderer>;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
 
-        private readonly _tileView          = new TwnsBwTileView.BwTileView();
+        private readonly _tileView          = new Twns.BaseWar.BwTileView();
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([

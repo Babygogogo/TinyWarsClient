@@ -6,7 +6,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -14,13 +14,13 @@
 // import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBroadcastAddMessagePanel {
+namespace Twns.Broadcast {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import ILanguageText    = CommonProto.Structure.ILanguageText;
 
-    export type OpenData = void;
-    export class BroadcastAddMessagePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForBroadcastAddMessagePanel = void;
+    export class BroadcastAddMessagePanel extends TwnsUiPanel.UiPanel<OpenDataForBroadcastAddMessagePanel> {
         private readonly _group!                : eui.Group;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelChinese!         : TwnsUiLabel.UiLabel;
@@ -99,7 +99,7 @@ namespace TwnsBroadcastAddMessagePanel {
                 FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.BroadcastTextMaxLength));
             } else {
                 const startTime = this._startTime;
-                BroadcastProxy.reqBroadcastAddMessage(textList, startTime, startTime + this._duration);
+                Twns.Broadcast.BroadcastProxy.reqBroadcastAddMessage(textList, startTime, startTime + this._duration);
                 this.close();
             }
         }

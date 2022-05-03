@@ -10,7 +10,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -25,7 +25,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import ColorValue               = Types.ColorValue;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
@@ -86,7 +86,7 @@ namespace Twns.WarEvent {
                 FloatText.show(Lang.getText(LangTextType.A0189));
             } else {
                 unitArray.push(Twns.WarHelpers.WarEventHelpers.getDefaultAddUnitData());
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
@@ -95,7 +95,7 @@ namespace Twns.WarEvent {
                 content : Lang.getText(LangTextType.A0190),
                 callback: () => {
                     Helpers.getExisted(this._getOpenData().action.WeaAddUnit?.unitArray).length = 0;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             });
         }
@@ -248,19 +248,19 @@ namespace Twns.WarEvent {
                 content : Lang.getText(LangTextType.A0029),
                 callback: () => {
                     Helpers.deleteElementFromArray(Helpers.getExisted(data.action.WeaAddUnit?.unitArray), data.dataForAddUnit);
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
         private _onTouchedGroupCanBeBlockedByUnit(): void {
             const data = this._getData();
             data.dataForAddUnit.canBeBlockedByUnit = !data.dataForAddUnit.canBeBlockedByUnit;
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedGroupNeedMovableTile(): void {
             const data                          = this._getData();
             data.dataForAddUnit.needMovableTile = !data.dataForAddUnit.needMovableTile;
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnAiMode(): void {
             const unitData  = Helpers.getExisted(this._getData().dataForAddUnit.unitData);
@@ -272,19 +272,19 @@ namespace Twns.WarEvent {
             } else {
                 unitData.aiMode = Types.UnitAiMode.NoMove;
             }
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedGroupIsDiving(): void {
             const data          = this._getData();
             const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
             unitData.isDiving   = unitData.isDiving ? null : true;
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedGroupHasLoadedCo(): void {
             const data              = this._getData();
             const unitData          = Helpers.getExisted(data.dataForAddUnit.unitData);
             unitData.hasLoadedCo    = unitData.hasLoadedCo ? null : true;
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActionState(): void {
             const data      = this._getData();
@@ -294,7 +294,7 @@ namespace Twns.WarEvent {
             } else {
                 unitData.actionState = Types.UnitActionState.Acted;
             }
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnUnitType(): void {
             const data = this._getData();
@@ -309,7 +309,7 @@ namespace Twns.WarEvent {
             const newGridX  = Math.max(0, Math.min(parseInt(this._inputGridX.text) || 0, data.war.getTileMap().getMapSize().width - 1));
             if (newGridX !== gridIndex.x) {
                 gridIndex.x = newGridX;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputGridY(): void {
@@ -318,7 +318,7 @@ namespace Twns.WarEvent {
             const newGridY  = Math.max(0, Math.min(parseInt(this._inputGridY.text) || 0, data.war.getTileMap().getMapSize().height - 1));
             if (newGridY !== gridIndex.y) {
                 gridIndex.y = newGridY;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputPlayerIndex(): void {
@@ -330,7 +330,7 @@ namespace Twns.WarEvent {
             );
             if (newPlayerIndex !== unitData.playerIndex) {
                 unitData.playerIndex = newPlayerIndex;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputHp(): void {
@@ -341,7 +341,7 @@ namespace Twns.WarEvent {
             const newHp     = Math.max(0, Math.min(parseInt(this._inputHp.text) || 0, maxHp));
             if (newHp !== currentHp) {
                 unitData.currentHp = newHp === maxHp ? null : newHp;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputFuel(): void {
@@ -352,7 +352,7 @@ namespace Twns.WarEvent {
             const newFuel       = Math.max(0, Math.min(parseInt(this._inputFuel.text) || 0, maxFuel));
             if (newFuel !== currentFuel) {
                 unitData.currentFuel = newFuel === maxFuel ? null : newFuel;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputPromotion(): void {
@@ -363,7 +363,7 @@ namespace Twns.WarEvent {
             const newPromotion      = Math.max(0, Math.min(parseInt(this._inputPromotion.text) || 0, maxPromotion));
             if (newPromotion !== currentPromotion) {
                 unitData.currentPromotion = newPromotion === 0 ? null : newPromotion;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputPrimaryAmmo(): void {
@@ -374,7 +374,7 @@ namespace Twns.WarEvent {
             const newAmmo       = Math.max(0, Math.min(parseInt(this._inputPrimaryAmmo.text) || 0, maxAmmo));
             if (newAmmo !== currentAmmo) {
                 unitData.primaryWeaponCurrentAmmo = newAmmo === maxAmmo ? null : newAmmo;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputFlareAmmo(): void {
@@ -385,7 +385,7 @@ namespace Twns.WarEvent {
             const newAmmo       = Math.max(0, Math.min(parseInt(this._inputFlareAmmo.text) || 0, maxAmmo));
             if (newAmmo !== currentAmmo) {
                 unitData.flareCurrentAmmo = newAmmo === maxAmmo ? null : newAmmo;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputBuildMaterial(): void {
@@ -396,7 +396,7 @@ namespace Twns.WarEvent {
             const newMaterial       = Math.max(0, Math.min(parseInt(this._inputBuildMaterial.text) || 0, maxMaterial));
             if (newMaterial !== currentMaterial) {
                 unitData.currentBuildMaterial = newMaterial === maxMaterial ? null : newMaterial;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputProduceMaterial(): void {
@@ -407,7 +407,7 @@ namespace Twns.WarEvent {
             const newMaterial       = Math.max(0, Math.min(parseInt(this._inputProduceMaterial.text) || 0, maxMaterial));
             if (newMaterial !== currentMaterial) {
                 unitData.currentProduceMaterial = newMaterial === maxMaterial ? null : newMaterial;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 

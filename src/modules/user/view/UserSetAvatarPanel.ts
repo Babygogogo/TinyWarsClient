@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -19,7 +19,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.User {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
     export type OpenDataForUserSetAvatarPanel = void;
     export class UserSetAvatarPanel extends TwnsUiPanel.UiPanel<OpenDataForUserSetAvatarPanel> {
@@ -66,8 +66,8 @@ namespace Twns.User {
         }
         private _onTouchedBtnConfirm(): void {
             const avatarId = this._sclAvatar.getSelectedData()?.avatarId;
-            if ((avatarId != null) && (avatarId !== UserModel.getSelfAvatarId())) {
-                UserProxy.reqSetAvatarId(avatarId);
+            if ((avatarId != null) && (avatarId !== Twns.User.UserModel.getSelfAvatarId())) {
+                Twns.User.UserProxy.reqSetAvatarId(avatarId);
             }
             this.close();
         }
@@ -114,7 +114,7 @@ namespace Twns.User {
         }
 
         private _updateImgAvatar(): void {
-            this._imgAvatar.source = Twns.Config.ConfigManager.getUserAvatarImageSource(this._sclAvatar.getSelectedData()?.avatarId ?? UserModel.getSelfAvatarId() ?? 1);
+            this._imgAvatar.source = Twns.Config.ConfigManager.getUserAvatarImageSource(this._sclAvatar.getSelectedData()?.avatarId ?? Twns.User.UserModel.getSelfAvatarId() ?? 1);
         }
         private _updateSclAvatar(): void {
             const dataArray: DataForAvatarRenderer[] = [];
@@ -125,7 +125,7 @@ namespace Twns.User {
                 });
             }
 
-            const selfAvatarId  = UserModel.getSelfAvatarId() ?? 1;
+            const selfAvatarId  = Twns.User.UserModel.getSelfAvatarId() ?? 1;
             const list          = this._sclAvatar;
             list.bindData(dataArray);
             list.setSelectedIndex(dataArray.findIndex(v => v.avatarId === selfAvatarId));

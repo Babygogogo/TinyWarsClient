@@ -8,7 +8,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -20,14 +20,14 @@
 // import WarMapModel              from "../../warMap/model/WarMapModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpmCreateSfwSaveSlotsPanel {
+namespace Twns.SinglePlayerMode {
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import ISerialWar           = CommonProto.WarSerialization.ISerialWar;
 
-    export type OpenData = ISerialWar;
+    export type OpenDataForSpmCreateSfwSaveSlotsPanel = ISerialWar;
 
-    export class SpmCreateSfwSaveSlotsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class SpmCreateSfwSaveSlotsPanel extends TwnsUiPanel.UiPanel<OpenDataForSpmCreateSfwSaveSlotsPanel> {
         private readonly _group!            : eui.Group;
         private readonly _labelPanelTitle!  : TwnsUiLabel.UiLabel;
         private readonly _srlSaveSlot!      : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
@@ -140,7 +140,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
                     tips        : Lang.getText(LangTextType.A0144),
                     charRestrict: null,
                     callback    : (panel) => {
-                        SpmProxy.reqSpmCreateSfw({
+                        Twns.SinglePlayerMode.SpmProxy.reqSpmCreateSfw({
                             slotIndex       : data.slotIndex,
                             slotExtraData   : { slotComment: panel.getInputText() },
                             warData         : data.warData,

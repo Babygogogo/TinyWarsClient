@@ -15,7 +15,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiImage                          from "../../tools/ui/UiImage";
@@ -35,10 +35,10 @@
 namespace Twns.MultiCustomRoom {
     import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import NotifyType                               = Twns.Notify.NotifyType;
     import NetMessage                               = CommonProto.NetMessage;
 
     export type OpenDataForMcrRoomInfoPanel = {
@@ -103,12 +103,12 @@ namespace Twns.MultiCustomRoom {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Twns.Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForWarCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageClass   : Twns.Common.CommonWarPlayerInfoPage,
                     pageData    : await this._createDataForWarCommonPlayerInfoPage(),
                 },
                 {
@@ -155,7 +155,7 @@ namespace Twns.MultiCustomRoom {
                 return;
             }
 
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = Twns.User.UserModel.getSelfUserId();
             const selfPlayerData    = roomPlayerInfo.playerDataList?.find(v => v.userId === selfUserId);
             if (selfPlayerData != null) {
                 if (selfPlayerData.isReady) {
@@ -223,7 +223,7 @@ namespace Twns.MultiCustomRoom {
                 return;
             }
 
-            const selfUserId = Helpers.getExisted(UserModel.getSelfUserId());
+            const selfUserId = Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
             if (!data.roomPlayerInfo?.playerDataList?.some(v => v.userId === selfUserId)) {
                 this.close();
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMyRoomListPanel, void 0);
@@ -335,7 +335,7 @@ namespace Twns.MultiCustomRoom {
                 return;
             }
 
-            const userId            = UserModel.getSelfUserId();
+            const userId            = Twns.User.UserModel.getSelfUserId();
             const selfPlayerData    = roomPlayerInfo.playerDataList?.find(v => v.userId === userId);
             if (selfPlayerData) {
                 const gameConfig        = await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomStaticInfo.settingsForCommon?.configVersion));
@@ -351,7 +351,7 @@ namespace Twns.MultiCustomRoom {
             }
 
             const ownerInfo         = roomPlayerInfo.playerDataList?.find(v => v.playerIndex === roomPlayerInfo.ownerPlayerIndex);
-            const isSelfOwner       = (!!ownerInfo) && (ownerInfo.userId === UserModel.getSelfUserId());
+            const isSelfOwner       = (!!ownerInfo) && (ownerInfo.userId === Twns.User.UserModel.getSelfUserId());
             const btnStartGame      = this._btnStartGame;
             btnStartGame.setRedVisible(await MultiCustomRoom.McrModel.checkCanStartGame(roomId));
 
@@ -518,7 +518,7 @@ namespace Twns.MultiCustomRoom {
                 return;
             }
 
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = Twns.User.UserModel.getSelfUserId();
             const playerDataList    = Helpers.getExisted(roomPlayerInfo.playerDataList);
             const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
             if (selfPlayerData == null) {
@@ -576,7 +576,7 @@ namespace Twns.MultiCustomRoom {
         private async _updateState(): Promise<void> {
             const data              = this._getData();
             const roomInfo          = await MultiCustomRoom.McrModel.getRoomPlayerInfo(data.roomId);
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = Twns.User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             this.currentState       = ((selfPlayerData) && (data.playerIndex === selfPlayerData.playerIndex)) ? `down` : `up`;
@@ -608,7 +608,7 @@ namespace Twns.MultiCustomRoom {
                 return;
             }
 
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = Twns.User.UserModel.getSelfUserId();
             const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
             const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
             if (selfPlayerData == null) {
@@ -647,7 +647,7 @@ namespace Twns.MultiCustomRoom {
             if (data) {
                 const skinId            = data.skinId;
                 const roomInfo          = data ? await MultiCustomRoom.McrModel.getRoomPlayerInfo(data.roomId) : null;
-                const selfUserId        = UserModel.getSelfUserId();
+                const selfUserId        = Twns.User.UserModel.getSelfUserId();
                 const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
                 const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
                 this._imgColor.source   = WarHelpers.WarCommonHelpers.getImageSourceForSkinId(skinId, (!!selfPlayerData) && (selfPlayerData.unitAndTileSkinId === skinId));
@@ -681,7 +681,7 @@ namespace Twns.MultiCustomRoom {
             const isReady           = data.isReady;
             const roomId            = data.roomId;
             const roomInfo          = await MultiCustomRoom.McrModel.getRoomPlayerInfo(roomId);
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = Twns.User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             if ((selfPlayerData) && (selfPlayerData.isReady !== isReady)) {
@@ -713,7 +713,7 @@ namespace Twns.MultiCustomRoom {
             const data              = this._getData();
             const roomInfo          = await MultiCustomRoom.McrModel.getRoomPlayerInfo(data.roomId);
             const isReady           = data.isReady;
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = Twns.User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             const isSelected        = (!!selfPlayerData) && (isReady === selfPlayerData.isReady);

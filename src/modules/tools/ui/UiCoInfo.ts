@@ -5,7 +5,7 @@
 // import Types                    from "../helpers/Types";
 // import Lang                     from "../lang/Lang";
 // import TwnsLangTextType         from "../lang/LangTextType";
-// import TwnsNotifyType           from "../notify/NotifyType";
+// import Twns.Notify           from "../notify/NotifyType";
 // import TwnsUiComponent          from "./UiComponent";
 // import TwnsUiImage              from "./UiImage";
 // import TwnsUiLabel              from "./UiLabel";
@@ -16,7 +16,7 @@
 namespace TwnsUiCoInfo {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import CoSkillType      = Types.CoSkillType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
     type CoData = {

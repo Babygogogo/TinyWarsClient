@@ -7,7 +7,7 @@
 // import Timer                    from "../../tools/helpers/Timer";
 // import Types                    from "../../tools/helpers/Types";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
 // import WarDestructionHelpers    from "../../tools/warHelpers/WarDestructionHelpers";
@@ -17,7 +17,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType                   = TwnsNotifyType.NotifyType;
+    import NotifyType                   = Twns.Notify.NotifyType;
     import TurnPhaseCode                = Types.TurnPhaseCode;
     import TurnAndPlayerIndex           = Types.TurnAndPlayerIndex;
     import ISerialTurnManager           = CommonProto.WarSerialization.ISerialTurnManager;
@@ -889,7 +889,7 @@ namespace Twns.BaseWar {
         private _setTurnIndex(index: number): void {
             if (this._turnIndex !== index){
                 this._turnIndex = index;
-                Notify.dispatch(NotifyType.BwTurnIndexChanged);
+                Twns.Notify.dispatch(NotifyType.BwTurnIndexChanged);
             }
         }
 
@@ -899,7 +899,7 @@ namespace Twns.BaseWar {
         private _setPlayerIndexInTurn(index: number): void {
             if (this._playerIndexInTurn !== index) {
                 this._playerIndexInTurn = index;
-                Notify.dispatch(NotifyType.BwPlayerIndexInTurnChanged);
+                Twns.Notify.dispatch(NotifyType.BwPlayerIndexInTurnChanged);
             }
         }
         public getNextAlivePlayerIndex(playerIndex: number, includeNeutral = false): number {
@@ -919,7 +919,7 @@ namespace Twns.BaseWar {
         private _setPhaseCode(code: TurnPhaseCode): void {
             if (this._phaseCode !== code) {
                 this._phaseCode = code;
-                Notify.dispatch(NotifyType.BwTurnPhaseCodeChanged);
+                Twns.Notify.dispatch(NotifyType.BwTurnPhaseCodeChanged);
             }
         }
 

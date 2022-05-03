@@ -8,7 +8,7 @@
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -20,15 +20,15 @@
 // import TwnsMeTileSimpleView     from "./MeTileSimpleView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseTileBasePanel {
-    import DataForDrawTileBase  = TwnsMeDrawer.DataForDrawTileBase;
+namespace Twns.Common {
+    import DataForDrawTileBase  = Twns.MapEditor.DataForDrawTileBase;
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForCommonChooseTileBasePanel = {
         callback: (baseType: Types.TileBaseType, shapeId: number) => void;
     };
-    export class CommonChooseTileBasePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChooseTileBasePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseTileBasePanel> {
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
@@ -144,7 +144,7 @@ namespace TwnsCommonChooseTileBasePanel {
         private readonly _group!        : eui.Group;
         private readonly _conTileView!  : eui.Group;
 
-        private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private _tileView   = new Twns.MapEditor.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

@@ -3,7 +3,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -13,14 +13,14 @@
 // import TwnsMmWarRulePanel   from "./MmWarRulePanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmTagChangePanel {
+namespace Twns.MapManagement {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForMmTagChangePanel = {
         mapId   : number;
     };
-    export class MmTagChangePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MmTagChangePanel extends TwnsUiPanel.UiPanel<OpenDataForMmTagChangePanel> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnWarRule!   : TwnsUiButton.UiButton;
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
@@ -57,7 +57,7 @@ namespace TwnsMmTagChangePanel {
         }
 
         private _onTouchedBtnConfirm(): void {
-            WarMapProxy.reqMmSetMapTag(this._getOpenData().mapId, {
+            Twns.WarMap.WarMapProxy.reqMmSetMapTag(this._getOpenData().mapId, {
                 fog : this._imgFog.visible ? true : null,
             });
             this.close();

@@ -9,7 +9,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
@@ -28,10 +28,10 @@ namespace Twns.SingleCustomRoom {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import ScrCreateAdvancedSettingsPage            = SingleCustomRoom.ScrCreateAdvancedSettingsPage;
-    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
     import ScrCreatePlayerInfoPage                  = SingleCustomRoom.ScrCreatePlayerInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import NotifyType                               = Twns.Notify.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
@@ -80,7 +80,7 @@ namespace Twns.SingleCustomRoom {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Twns.Common.CommonWarMapInfoPage,
                     pageData    : this._createDataForCommonMapInfoPage(),
                 },
                 {
@@ -108,7 +108,7 @@ namespace Twns.SingleCustomRoom {
         private async _onTouchedBtnConfirm(): Promise<void> {
             const data      = SingleCustomRoom.ScrCreateModel.getData();
             const callback  = () => {
-                SpmProxy.reqSpmCreateScw(data);
+                Twns.SinglePlayerMode.SpmProxy.reqSpmCreateScw(data);
                 this._btnConfirm.enabled = false;
                 this._resetTimeoutForBtnConfirm();
             };

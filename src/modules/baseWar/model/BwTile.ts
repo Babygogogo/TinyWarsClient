@@ -50,7 +50,7 @@ namespace Twns.BaseWar {
         private _customCannonData?      : ITileCustomCannonData | null;
         private _customLaserTurretData? : ITileCustomLaserTurretData | null;
 
-        private readonly _view  = new TwnsBwTileView.BwTileView();
+        private readonly _view  = new Twns.BaseWar.BwTileView();
         private _hasFog         = false;
         private _war?           : BwWar;
 
@@ -336,7 +336,7 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
-        public getView(): TwnsBwTileView.BwTileView {
+        public getView(): Twns.BaseWar.BwTileView {
             return this._view;
         }
         public flushDataToView(): void {
@@ -505,7 +505,7 @@ namespace Twns.BaseWar {
             } else {
                 this._setLocationFlags(this.getLocationFlags() & ~(1 << (locationId - 1)));
             }
-            Notify.dispatch(TwnsNotifyType.NotifyType.BwTileLocationFlagSet, this as NotifyData.BwTileLocationFlagSet);
+            Twns.Notify.dispatch(Twns.Notify.NotifyType.BwTileLocationFlagSet, this as Twns.Notify.NotifyData.BwTileLocationFlagSet);
         }
         public setHasLocationFlagArray(locationIdArray: number[], hasFlag: boolean): void {
             for (const locationId of locationIdArray) {
@@ -515,7 +515,7 @@ namespace Twns.BaseWar {
                     this._setLocationFlags(this.getLocationFlags() & ~(1 << (locationId - 1)));
                 }
             }
-            Notify.dispatch(TwnsNotifyType.NotifyType.BwTileLocationFlagSet, this as NotifyData.BwTileLocationFlagSet);
+            Twns.Notify.dispatch(Twns.Notify.NotifyType.BwTileLocationFlagSet, this as Twns.Notify.NotifyData.BwTileLocationFlagSet);
         }
         public getHasLocationFlagArray(): number[] {
             const locationIdArray: number[] = [];
@@ -536,7 +536,7 @@ namespace Twns.BaseWar {
         public setIsHighlighted(isHighlighted: boolean): void {
             if (this._isHighlighted !== isHighlighted) {
                 this._isHighlighted = isHighlighted;
-                Notify.dispatch(TwnsNotifyType.NotifyType.BwTileIsHighlightedChanged, this as NotifyData.BwTileIsHighlightChanged);
+                Twns.Notify.dispatch(Twns.Notify.NotifyType.BwTileIsHighlightedChanged, this as Twns.Notify.NotifyData.BwTileIsHighlightChanged);
             }
         }
 

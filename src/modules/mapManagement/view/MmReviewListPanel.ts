@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -18,13 +18,13 @@
 // import TwnsMmMainMenuPanel      from "./MmMainMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmReviewListPanel {
+namespace Twns.MapManagement {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import IMapEditorData   = CommonProto.Map.IMapEditorData;
 
-    export type OpenData = void;
-    export class MmReviewListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMmReviewListPanel = void;
+    export class MmReviewListPanel extends TwnsUiPanel.UiPanel<OpenDataForMmReviewListPanel> {
         private readonly _zoomMap!          : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelNoData!      : TwnsUiLabel.UiLabel;
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
@@ -50,7 +50,7 @@ namespace TwnsMmReviewListPanel {
             this._labelLoading.visible  = true;
             this._labelNoData.visible   = false;
 
-            WarMapProxy.reqMmGetReviewingMaps();
+            Twns.WarMap.WarMapProxy.reqMmGetReviewingMaps();
         }
         protected _onClosing(): void {
             // nothing to do

@@ -9,7 +9,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
@@ -28,10 +28,10 @@ namespace Twns.SingleRankRoom {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForSpmRankPage                   = TwnsSpmRankPage.OpenData;
+    import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForSpmRankPage                   = Twns.SinglePlayerMode.OpenDataForSpmRankPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import NotifyType                               = Twns.Notify.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
@@ -80,7 +80,7 @@ namespace Twns.SingleRankRoom {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Twns.Common.CommonWarMapInfoPage,
                     pageData    : this._createDataForCommonMapInfoPage(),
                 },
                 {
@@ -90,7 +90,7 @@ namespace Twns.SingleRankRoom {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0436) },
-                    pageClass   : TwnsSpmRankPage.SpmRankPage,
+                    pageClass   : Twns.SinglePlayerMode.SpmRankPage,
                     pageData    : this._createDataForSpmRankPage(),
                 },
             ]);
@@ -113,7 +113,7 @@ namespace Twns.SingleRankRoom {
         private async _onTouchedBtnConfirm(): Promise<void> {
             const data      = SingleRankRoom.SrrCreateModel.getData();
             const callback  = () => {
-                SpmProxy.reqSpmCreateSrw(data);
+                Twns.SinglePlayerMode.SpmProxy.reqSpmCreateSrw(data);
                 this._btnConfirm.enabled = false;
                 this._resetTimeoutForBtnConfirm();
             };

@@ -3,7 +3,7 @@
 // import TwnsBwWar            from "../../baseWar/model/BwWar";
 // import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 
-namespace TwnsSpwFogMap {
+namespace Twns.SinglePlayerWar {
     import BwFogMap = Twns.BaseWar.BwFogMap;
 
     export class SpwFogMap extends BwFogMap {

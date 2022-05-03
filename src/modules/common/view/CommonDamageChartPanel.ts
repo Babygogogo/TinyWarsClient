@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -19,8 +19,8 @@
 // import TwnsWarMapUnitView       from "../../warMap/view/WarMapUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonDamageChartPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import NotifyType       = Twns.Notify.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import UnitType         = Types.UnitType;
     import TileType         = Types.TileType;
@@ -41,10 +41,10 @@ namespace TwnsCommonDamageChartPanel {
         IsDiver,
         LoadUnit,
     }
-    export type OpenData = {
+    export type OpenDataForCommonDamageChartPanel = {
         gameConfig   : GameConfig;
     };
-    export class CommonDamageChartPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonDamageChartPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonDamageChartPanel> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _groupList!            : eui.Group;
         private readonly _listUnit!             : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
@@ -720,8 +720,8 @@ namespace TwnsCommonDamageChartPanel {
                 const targetArmorType           = Helpers.getExisted(targetCfg.armorType);
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
-                this._tileView.source           = CommonModel.getCachedTileObjectImageSource({
-                    version     : UserModel.getSelfSettingsTextureVersion(),
+                this._tileView.source           = Twns.Common.CommonModel.getCachedTileObjectImageSource({
+                    version     : Twns.User.UserModel.getSelfSettingsTextureVersion(),
                     themeType   : Types.TileThemeType.Clear,
                     skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                     objectType  : Twns.Config.ConfigManager.getTileObjectTypeByTileType(targetTileType),

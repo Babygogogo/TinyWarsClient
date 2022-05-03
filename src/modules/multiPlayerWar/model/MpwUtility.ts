@@ -4,7 +4,7 @@
 // import Types            from "../../tools/helpers/Types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace MpwUtility {
+namespace Twns.MultiPlayerWar.MpwUtility {
     import BwTile = Twns.BaseWar.BwTile;
 
     export function resetTileDataAsHasFog(tile: BwTile): void {

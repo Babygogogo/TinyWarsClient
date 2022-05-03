@@ -5,7 +5,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -16,15 +16,15 @@
 // import MeModel                  from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeAddWarEventToRulePanel {
+namespace Twns.MapEditor {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForMeAddWarEventToRulePanel = {
         templateWarRule : CommonProto.WarRule.ITemplateWarRule;
         warEventArray   : CommonProto.WarEvent.IWarEvent[];
     };
-    export class MeAddWarEventToRulePanel extends TwnsUiPanel.UiPanel<OpenData>{
+    export class MeAddWarEventToRulePanel extends TwnsUiPanel.UiPanel<OpenDataForMeAddWarEventToRulePanel>{
         private readonly _listWarEvent!     : TwnsUiScrollList.UiScrollList<DataForWarEventRenderer>;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelNoWarEvent!  : TwnsUiLabel.UiLabel;
@@ -115,14 +115,14 @@ namespace TwnsMeAddWarEventToRulePanel {
             const data = this.data;
             if (data) {
                 Twns.WarHelpers.WarRuleHelpers.addWarEventId(data.templateWarRule, data.warEventId);
-                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
+                Twns.Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
         private _onTouchedBtnDelete(): void {
             const data = this.data;
             if (data) {
                 Twns.WarHelpers.WarRuleHelpers.deleteWarEventId(data.templateWarRule, data.warEventId);
-                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
+                Twns.Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
 

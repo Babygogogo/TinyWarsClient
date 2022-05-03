@@ -10,7 +10,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -22,7 +22,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiCustomRoom {
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import PlayerRuleType       = Types.PlayerRuleType;
 
     export class McrCreateAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
@@ -332,7 +332,7 @@ namespace Twns.MultiCustomRoom {
                 callbackOnConfirm   : (bannedCoIdSet) => {
                     const callback = () => {
                         MultiCustomRoom.McrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
-                        Notify.dispatch(NotifyType.McrCreateBannedCoIdArrayChanged);
+                        Twns.Notify.dispatch(NotifyType.McrCreateBannedCoIdArrayChanged);
                         TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBanCoPanel);
                     };
                     if ((selfCoId == null) || (!bannedCoIdSet.has(selfCoId))) {

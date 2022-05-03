@@ -5,7 +5,7 @@
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwRandomNumberManager {
+namespace Twns.BaseWar {
     import ISeedRandomState = CommonProto.Structure.ISeedRandomState;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 

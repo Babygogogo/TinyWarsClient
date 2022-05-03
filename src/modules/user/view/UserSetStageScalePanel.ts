@@ -7,21 +7,21 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserSetStageScalePanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.User {
+    import NotifyType       = Twns.Notify.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import StageMinScale    = CommonConstants.StageMinScale;
     import StageMaxScale    = CommonConstants.StageMaxScale;
 
-    export type OpenData = void;
-    export class UserSetStageScalePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserSetStageScalePanel = void;
+    export class UserSetStageScalePanel extends TwnsUiPanel.UiPanel<OpenDataForUserSetStageScalePanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;

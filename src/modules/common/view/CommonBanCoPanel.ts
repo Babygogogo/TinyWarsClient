@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiCoInfo             from "../../tools/ui/UiCoInfo";
 // import TwnsUiComponent          from "../../tools/ui/UiComponent";
@@ -16,12 +16,12 @@
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonBanCoPanel {
+namespace Twns.Common {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import GameConfig       = Twns.Config.GameConfig;
 
-    export type OpenData = {
+    export type OpenDataForCommonBanCoPanel = {
         playerIndex         : number;
         gameConfig          : GameConfig;
         bannedCoIdArray     : number[];
@@ -30,7 +30,7 @@ namespace TwnsCommonBanCoPanel {
         selfCoId            : number | null;
         callbackOnConfirm   : ((bannedCoIdSet: Set<number>) => void) | null;
     };
-    export class CommonBanCoPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonBanCoPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonBanCoPanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _group!                    : eui.Group;
         private readonly _labelAvailableCoTitle!    : TwnsUiLabel.UiLabel;

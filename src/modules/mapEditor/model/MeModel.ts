@@ -9,7 +9,7 @@
 // import TwnsMeWar            from "./MeWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace MeModel {
+namespace Twns.MapEditor.MeModel {
     import MeWar            = Twns.MapEditor.MeWar;
     import MapReviewStatus  = Types.MapReviewStatus;
     import IMapRawData      = CommonProto.Map.IMapRawData;
@@ -34,7 +34,7 @@ namespace MeModel {
             });
         }
 
-        const maxSlotsCount = UserModel.getIsSelfMapCommittee()
+        const maxSlotsCount = Twns.User.UserModel.getIsSelfMapCommittee()
             ? CommonConstants.MapEditorSlotMaxCountForCommittee
             : CommonConstants.MapEditorSlotMaxCountForNormal;
         for (let i = 0; i < maxSlotsCount; ++i) {

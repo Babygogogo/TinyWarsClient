@@ -14,7 +14,7 @@
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
 // import Notify                           from "../../tools/notify/Notify";
-// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import Twns.Notify                   from "../../tools/notify/NotifyType";
 // import ProtoTypes                       from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiLabel                      from "../../tools/ui/UiLabel";
@@ -31,7 +31,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.HalfwayReplayWar {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
@@ -92,7 +92,7 @@ namespace Twns.HalfwayReplayWar {
         }
 
         private _getWar(): HalfwayReplayWar.HrwWar {
-            return Helpers.getExisted(HrwModel.getWar());
+            return Helpers.getExisted(Twns.HalfwayReplayWar.HrwModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -331,7 +331,7 @@ namespace Twns.HalfwayReplayWar {
             return {
                 name    : Lang.getText(LangTextType.B0430),
                 callback: () => {
-                    const isEnabled = UserModel.getSelfSettingsIsSetPathMode();
+                    const isEnabled = Twns.User.UserModel.getSelfSettingsIsSetPathMode();
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                         content : Lang.getFormattedText(
                             LangTextType.F0033,
@@ -341,14 +341,14 @@ namespace Twns.HalfwayReplayWar {
                         textForCancel   : Lang.getText(LangTextType.B0434),
                         callback: () => {
                             if (!isEnabled) {
-                                UserProxy.reqUserSetSettings({
+                                Twns.User.UserProxy.reqUserSetSettings({
                                     isSetPathMode   : true,
                                 });
                             }
                         },
                         callbackOnCancel: () => {
                             if (isEnabled) {
-                                UserProxy.reqUserSetSettings({
+                                Twns.User.UserProxy.reqUserSetSettings({
                                     isSetPathMode   : false,
                                 });
                             }

@@ -4,7 +4,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -14,12 +14,12 @@
 // import UserProxy            from "../../user/model/UserProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserChangeNicknamePanel {
-    import NotifyType   = TwnsNotifyType.NotifyType;
+namespace Twns.User {
+    import NotifyType   = Twns.Notify.NotifyType;
     import LangTextType = TwnsLangTextType.LangTextType;
 
-    export type OpenData = void;
-    export class UserChangeNicknamePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserChangeNicknamePanel = void;
+    export class UserChangeNicknamePanel extends TwnsUiPanel.UiPanel<OpenDataForUserChangeNicknamePanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -45,7 +45,7 @@ namespace TwnsUserChangeNicknamePanel {
             this._setIsCloseOnTouchedMask();
 
             this._isRequesting          = false;
-            this._inputNickname.text    = UserModel.getSelfNickname() || ``;
+            this._inputNickname.text    = Twns.User.UserModel.getSelfNickname() || ``;
             this._updateComponentsForLanguage();
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
@@ -64,7 +64,7 @@ namespace TwnsUserChangeNicknamePanel {
                     FloatText.show(Lang.getText(LangTextType.A0002));
                 } else {
                     this._isRequesting = true;
-                    UserProxy.reqSetNickname(nickname);
+                    Twns.User.UserProxy.reqSetNickname(nickname);
                 }
             }
         }

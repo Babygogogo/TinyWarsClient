@@ -5,7 +5,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -18,7 +18,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
@@ -87,7 +87,7 @@ namespace Twns.WarEvent {
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnTileType(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
@@ -103,7 +103,7 @@ namespace Twns.WarEvent {
                 Helpers.getExisted(this._getCondition().WecTileTypeEqualTo).tileType = value;
                 this._updateLabelDescAndLabelError();
                 this._updateComponentsForTileType();
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputGridX(): void {
@@ -115,7 +115,7 @@ namespace Twns.WarEvent {
                 Helpers.getExisted(this._getCondition().WecTileTypeEqualTo?.gridIndex).x = Math.max(0, Math.min(mapSize.width - 1, value));
                 this._updateLabelDescAndLabelError();
                 this._updateInputGridX();
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputGridY(): void {
@@ -127,7 +127,7 @@ namespace Twns.WarEvent {
                 Helpers.getExisted(this._getCondition().WecTileTypeEqualTo?.gridIndex).y = Math.max(0, Math.min(mapSize.height - 1, value));
                 this._updateLabelDescAndLabelError();
                 this._updateInputGridY();
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 

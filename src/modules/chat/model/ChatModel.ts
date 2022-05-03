@@ -8,7 +8,7 @@
 // import TwnsChatPanel    from "../view/ChatPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace ChatModel {
+namespace Twns.Chat.ChatModel {
     import ChatCategory     = Types.ChatMessageToCategory;
     import IChatMessage     = CommonProto.Chat.IChatMessage;
 
@@ -40,7 +40,7 @@ namespace ChatModel {
             const msgToCategory = msg.toCategory;
             const msgToTarget   = Helpers.getExisted(msg.toTarget);
             const msgContent    = msg.content;
-            const isSentBySelf  = UserModel.getSelfUserId() === fromUserId;
+            const isSentBySelf  = Twns.User.UserModel.getSelfUserId() === fromUserId;
 
             if (msgToCategory === ChatCategory.PublicChannel) {
                 addMessage(ChatCategory.PublicChannel, msg, msgToTarget);
@@ -48,7 +48,7 @@ namespace ChatModel {
             } else if (msgToCategory === ChatCategory.WarAndTeam) {
                 addMessage(ChatCategory.WarAndTeam, msg, msgToTarget);
                 if ((!isSentBySelf) && (showFloatText) && (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.ChatPanel))) {
-                    UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else if (msgToCategory === ChatCategory.Private) {
@@ -57,32 +57,32 @@ namespace ChatModel {
                 } else {
                     addMessage(ChatCategory.Private, msg, fromUserId);
                     if ((showFloatText) && (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.ChatPanel))) {
-                        UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                        Twns.User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                     }
                 }
 
             } else if (msgToCategory === ChatCategory.McrRoom) {
                 addMessage(msgToCategory, msg, msgToTarget);
                 if ((!isSentBySelf) && (showFloatText) && (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.ChatPanel))) {
-                    UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else if (msgToCategory === ChatCategory.MfrRoom) {
                 addMessage(msgToCategory, msg, msgToTarget);
                 if ((!isSentBySelf) && (showFloatText) && (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.ChatPanel))) {
-                    UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else if (msgToCategory === ChatCategory.CcrRoom) {
                 addMessage(msgToCategory, msg, msgToTarget);
                 if ((!isSentBySelf) && (showFloatText) && (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.ChatPanel))) {
-                    UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else if (msgToCategory === ChatCategory.MapReview) {
                 addMessage(msgToCategory, msg, msgToTarget);
                 if ((!isSentBySelf) && (showFloatText) && (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.ChatPanel))) {
-                    UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else {

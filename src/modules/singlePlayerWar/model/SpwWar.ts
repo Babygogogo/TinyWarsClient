@@ -13,15 +13,15 @@
 // import TwnsSpwPlayerManager         from "./SpwPlayerManager";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpwWar {
+namespace Twns.SinglePlayerWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import WarAction                = CommonProto.WarAction;
     import ISpmWarSaveSlotExtraData = CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
     import BwCommonSettingManager   = Twns.BaseWar.BwCommonSettingManager;
 
     export abstract class SpwWar extends Twns.BaseWar.BwWar {
-        private readonly _playerManager         = new TwnsSpwPlayerManager.SpwPlayerManager();
-        private readonly _field                 = new TwnsSpwField.SpwField();
+        private readonly _playerManager         = new Twns.SinglePlayerWar.SpwPlayerManager();
+        private readonly _field                 = new Twns.SinglePlayerWar.SpwField();
         private readonly _commonSettingManager  = new BwCommonSettingManager();
         private readonly _warEventManager       = new Twns.BaseWar.BwWarEventManager();
 
@@ -153,10 +153,10 @@ namespace TwnsSpwWar {
             return null;
         }
 
-        public getPlayerManager(): TwnsSpwPlayerManager.SpwPlayerManager {
+        public getPlayerManager(): Twns.SinglePlayerWar.SpwPlayerManager {
             return this._playerManager;
         }
-        public getField(): TwnsSpwField.SpwField {
+        public getField(): Twns.SinglePlayerWar.SpwField {
             return this._field;
         }
         public getCommonSettingManager(): BwCommonSettingManager {
@@ -189,10 +189,10 @@ namespace TwnsSpwWar {
         }
 
         public getHumanPlayerIndexes(): number[] {
-            return (this.getPlayerManager() as TwnsSpwPlayerManager.SpwPlayerManager).getHumanPlayerIndexes();
+            return (this.getPlayerManager() as Twns.SinglePlayerWar.SpwPlayerManager).getHumanPlayerIndexes();
         }
         public getHumanPlayers(): Twns.BaseWar.BwPlayer[] {
-            return (this.getPlayerManager() as TwnsSpwPlayerManager.SpwPlayerManager).getHumanPlayers();
+            return (this.getPlayerManager() as Twns.SinglePlayerWar.SpwPlayerManager).getHumanPlayers();
         }
     }
 }

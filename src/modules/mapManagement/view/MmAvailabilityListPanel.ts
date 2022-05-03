@@ -5,7 +5,7 @@
 // import Types                            from "../../tools/helpers/Types";
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import Twns.Notify                   from "../../tools/notify/NotifyType";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
@@ -18,9 +18,9 @@
 // import TwnsMmMainMenuPanel              from "./MmMainMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmAvailabilityListPanel {
+namespace Twns.MapManagement {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
     export type FiltersForMapList = {
         mapName?        : string | null;
@@ -29,8 +29,8 @@ namespace TwnsMmAvailabilityListPanel {
         playedTimes?    : number | null;
         minRating?      : number | null;
     };
-    export type OpenData = FiltersForMapList | null;
-    export class MmAvailabilityListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMmAvailabilityListPanel = FiltersForMapList | null;
+    export class MmAvailabilityListPanel extends TwnsUiPanel.UiPanel<OpenDataForMmAvailabilityListPanel> {
         private readonly _listMap!              : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
         private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelMenuTitle!       : TwnsUiLabel.UiLabel;

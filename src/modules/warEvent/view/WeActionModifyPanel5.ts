@@ -6,7 +6,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -14,20 +14,20 @@
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel5 {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.WarEvent {
+    import NotifyType               = Twns.Notify.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import BwWar                    = Twns.BaseWar.BwWar;
     import WeatherType              = Types.WeatherType;
 
-    export type OpenData = {
+    export type OpenDataForWeActionModifyPanel5 = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel5 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel5 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel5> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnType!          : TwnsUiButton.UiButton;
         private readonly _btnBack!          : TwnsUiButton.UiButton;
@@ -83,7 +83,7 @@ namespace TwnsWeActionModifyPanel5 {
                 action.weatherType = WeatherType.Clear;
             }
 
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnType(): void {
@@ -100,7 +100,7 @@ namespace TwnsWeActionModifyPanel5 {
             const newTurns  = Math.min(parseInt(this._inputTurns.text)) || 0;
             if (newTurns !== data.weatherTurnsCount) {
                 data.weatherTurnsCount = newTurns;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 

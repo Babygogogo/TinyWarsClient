@@ -7,7 +7,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import NotifyData                   from "../../tools/notify/NotifyData";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -21,7 +21,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SingleRankRoom {
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
 
     export class SrrCreatePlayerInfoPage extends TwnsUiTabPage.UiTabPage<void> {
         private readonly _groupInfo!    : eui.Group;
@@ -57,7 +57,7 @@ namespace Twns.SingleRankRoom {
             // nothing to do
         }
         private async _updateComponentsForPlayerInfo(): Promise<void> {
-            const mapRawData    = await Twns.SingleRankRoom.SrrCreateModel.getMapRawData();
+            const mapRawData    = await SingleRankRoom.SrrCreateModel.getMapRawData();
             const listPlayer    = this._listPlayer;
             if (mapRawData) {
                 listPlayer.bindData(this._createDataForListPlayer(Helpers.getExisted(mapRawData.playersCountUnneutral)));
@@ -112,7 +112,7 @@ namespace Twns.SingleRankRoom {
         protected _onDataChanged(): void {
             this._updateComponentsForSettings();
 
-            this._btnChangeCo.visible = Twns.SingleRankRoom.SrrCreateModel.getPlayerRule(this._getData().playerIndex).fixedCoIdInSrw == null;
+            this._btnChangeCo.visible = SingleRankRoom.SrrCreateModel.getPlayerRule(this._getData().playerIndex).fixedCoIdInSrw == null;
         }
 
         private async _onTouchedGroupCo(): Promise<void> {
@@ -120,35 +120,35 @@ namespace Twns.SingleRankRoom {
             const coId          = playerData ? playerData.coId : null;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
-                    gameConfig      : Twns.SingleRankRoom.SrrCreateModel.getGameConfig(),
+                    gameConfig      : SingleRankRoom.SrrCreateModel.getGameConfig(),
                     coId,
                 });
             }
         }
 
         private async _onTouchedBtnChangeSkinId(): Promise<void> {
-            Twns.SingleRankRoom.SrrCreateModel.tickUnitAndTileSkinId(this._getData().playerIndex);
+            SingleRankRoom.SrrCreateModel.tickUnitAndTileSkinId(this._getData().playerIndex);
         }
 
         private async _onTouchedBtnChangeCo(): Promise<void> {
-            const roomInfo  = Twns.SingleRankRoom.SrrCreateModel.getData();
+            const roomInfo  = SingleRankRoom.SrrCreateModel.getData();
             if (!roomInfo) {
                 return;
             }
 
             const playerIndex   = this._getData().playerIndex;
-            const currentCoId   = Twns.SingleRankRoom.SrrCreateModel.getCoId(playerIndex);
+            const currentCoId   = SingleRankRoom.SrrCreateModel.getCoId(playerIndex);
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
-                gameConfig          : Twns.SingleRankRoom.SrrCreateModel.getGameConfig(),
+                gameConfig          : SingleRankRoom.SrrCreateModel.getGameConfig(),
                 currentCoId,
                 availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
-                    baseWarRule         : Twns.SingleRankRoom.SrrCreateModel.getInstanceWarRule(),
+                    baseWarRule         : SingleRankRoom.SrrCreateModel.getInstanceWarRule(),
                     playerIndex,
                     gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion)),
                 }),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
-                        Twns.SingleRankRoom.SrrCreateModel.setCoId(playerIndex, newCoId);
+                        SingleRankRoom.SrrCreateModel.setCoId(playerIndex, newCoId);
                     }
                 },
             });
@@ -159,7 +159,7 @@ namespace Twns.SingleRankRoom {
         }
 
         private _onNotifySrrCreatePlayerInfoChanged(e: egret.Event): void {
-            const eventData = e.data as NotifyData.SrrCreatePlayerInfoChanged;
+            const eventData = e.data as Notify.NotifyData.SrrCreatePlayerInfoChanged;
             if (eventData.playerIndex === this._getData().playerIndex) {
                 this._updateComponentsForSettings();
             }
@@ -171,7 +171,7 @@ namespace Twns.SingleRankRoom {
         }
 
         private async _updateComponentsForSettings(): Promise<void> {
-            const roomInfo  = Twns.SingleRankRoom.SrrCreateModel.getData();
+            const roomInfo  = SingleRankRoom.SrrCreateModel.getData();
             if (!roomInfo) {
                 return;
             }
@@ -196,7 +196,7 @@ namespace Twns.SingleRankRoom {
         }
 
         private _getPlayerData(): CommonProto.Structure.IDataForPlayerInRoom {
-            return Twns.SingleRankRoom.SrrCreateModel.getPlayerInfo(this._getData().playerIndex);
+            return SingleRankRoom.SrrCreateModel.getPlayerInfo(this._getData().playerIndex);
         }
     }
 }

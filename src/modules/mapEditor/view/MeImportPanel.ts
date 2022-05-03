@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -15,12 +15,12 @@
 // import MeModel                  from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeImportPanel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.MapEditor {
+    import NotifyType           = Twns.Notify.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
-    export type OpenData = void;
-    export class MeImportPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeImportPanel = void;
+    export class MeImportPanel extends TwnsUiPanel.UiPanel<OpenDataForMeImportPanel> {
         private readonly _group!        : eui.Group;
         private readonly _listMap!      : TwnsUiScrollList.UiScrollList<DataForMapRenderer>;
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
@@ -111,7 +111,7 @@ namespace TwnsMeImportPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0095) + `\n#${mapId} ${data.mapName}`,
                 callback: async () => {
-                    const war = Helpers.getExisted(MeModel.getWar());
+                    const war = Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
                     war.stopRunning();
                     await war.initWithMapEditorData(
                         {

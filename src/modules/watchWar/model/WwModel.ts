@@ -18,10 +18,10 @@ namespace Twns.WatchWar.WwModel {
     import IMpwWatchOutgoingInfo                    = CommonProto.MultiPlayerWar.IMpwWatchOutgoingInfo;
     import MsgMpwWatchGetIncomingInfoIs             = CommonProto.NetMessage.MsgMpwWatchGetIncomingInfo.IS;
     import MsgMpwWatchGetOutgoingInfoIs             = CommonProto.NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
-    import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForWarCommonMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
@@ -67,7 +67,7 @@ namespace Twns.WatchWar.WwModel {
     // Functions for incoming info.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     const _watchIncomingInfoAccessor = Helpers.createCachedDataAccessor<number, IMpwWatchIncomingInfo>({
-        reqData : (warId: number) => WwProxy.reqMpwWatchGetIncomingInfo(warId),
+        reqData : (warId: number) => Twns.WatchWar.WwProxy.reqMpwWatchGetIncomingInfo(warId),
     });
 
     export function getWatchIncomingInfo(warId: number): Promise<IMpwWatchIncomingInfo | null> {
@@ -82,7 +82,7 @@ namespace Twns.WatchWar.WwModel {
     // Functions for outgoing info.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     const _watchOutgoingInfoAccessor = Helpers.createCachedDataAccessor<number, IMpwWatchOutgoingInfo>({
-        reqData : (warId: number) => WwProxy.reqMpwWatchGetOutgoingInfo(warId),
+        reqData : (warId: number) => Twns.WatchWar.WwProxy.reqMpwWatchGetOutgoingInfo(warId),
     });
 
     export function getWatchOutgoingInfo(warId: number): Promise<IMpwWatchOutgoingInfo | null> {
@@ -141,7 +141,7 @@ namespace Twns.WatchWar.WwModel {
         const instanceWarRule       = Helpers.getExisted(settingsForCommon.instanceWarRule, ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_02);
         const playerDataList        = Helpers.getExisted(warProgressInfo.playerInfoList, ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_03);
         const playersCountUnneutral = WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(instanceWarRule);
-        const playerInfoArray       : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+        const playerInfoArray       : Twns.Common.PlayerInfo[] = [];
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
             const playerData    = Helpers.getExisted(playerDataList.find(v => v.playerIndex === playerIndex), ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_04);
             const userId        = playerData.userId;

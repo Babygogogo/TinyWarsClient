@@ -1,7 +1,8 @@
 
 // import ProtoTypes       from "../../tools/proto/ProtoTypes";
 
-namespace ChangeLogModel {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.ChangeLog.ChangeLogModel {
     import IChangeLogMessage    = CommonProto.ChangeLog.IChangeLogMessage;
 
     let _messageList: IChangeLogMessage[] | null = null;

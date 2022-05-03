@@ -3,13 +3,13 @@
 // import NetManager           from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import McrJoinModel         from "./McrJoinModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiCustomRoom.McrProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
@@ -36,9 +36,9 @@ namespace Twns.MultiCustomRoom.McrProxy {
     function _onMsgMcrCreateRoom(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrCreateRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrCreateRoom, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrCreateRoom, data);
         } else {
-            Notify.dispatch(NotifyType.MsgMcrCreateRoomFailed, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrCreateRoomFailed, data);
         }
     }
 
@@ -50,7 +50,7 @@ namespace Twns.MultiCustomRoom.McrProxy {
     async function _onMsgMcrJoinRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrJoinRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrJoinRoom, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrJoinRoom, data);
         }
     }
 
@@ -64,7 +64,7 @@ namespace Twns.MultiCustomRoom.McrProxy {
     function _onMsgMcrDeleteRoom(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrDeleteRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrDeleteRoom, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrDeleteRoom, data);
         }
     }
 
@@ -78,7 +78,7 @@ namespace Twns.MultiCustomRoom.McrProxy {
     async function _onMsgMcrExitRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrExitRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrExitRoom, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrExitRoom, data);
         }
     }
 
@@ -105,7 +105,7 @@ namespace Twns.MultiCustomRoom.McrProxy {
     async function _onMsgMcrDeletePlayer(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrDeletePlayer.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrDeletePlayer, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrDeletePlayer, data);
         }
     }
 
@@ -120,7 +120,7 @@ namespace Twns.MultiCustomRoom.McrProxy {
     async function _onMsgMcrSetReady(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrSetReady.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrSetReady, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrSetReady, data);
         }
     }
 
@@ -132,7 +132,7 @@ namespace Twns.MultiCustomRoom.McrProxy {
     async function _onMsgMcrSetSelfSettings(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrSetSelfSettings.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrSetSelfSettings, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrSetSelfSettings, data);
         }
     }
 
@@ -148,12 +148,12 @@ namespace Twns.MultiCustomRoom.McrProxy {
         const roomId    = data.roomId;
         if (!data.errorCode) {
             McrModel.setRoomStaticInfo(Helpers.getExisted(roomId), data.roomStaticInfo ?? null);
-            Notify.dispatch(NotifyType.MsgMcrGetRoomStaticInfo, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrGetRoomStaticInfo, data);
         } else {
             if (roomId != null) {
                 McrModel.setRoomStaticInfo(roomId, data.roomStaticInfo ?? null);
             }
-            Notify.dispatch(NotifyType.MsgMcrGetRoomStaticInfoFailed, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrGetRoomStaticInfoFailed, data);
         }
     }
 
@@ -169,12 +169,12 @@ namespace Twns.MultiCustomRoom.McrProxy {
         const roomId    = data.roomId;
         if (!data.errorCode) {
             McrModel.setRoomPlayerInfo(Helpers.getExisted(roomId), data.roomPlayerInfo ?? null);
-            Notify.dispatch(NotifyType.MsgMcrGetRoomPlayerInfo, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrGetRoomPlayerInfo, data);
         } else {
             if (roomId != null) {
                 McrModel.setRoomPlayerInfo(roomId, data.roomPlayerInfo ?? null);
             }
-            Notify.dispatch(NotifyType.MsgMcrGetRoomPlayerInfoFailed, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrGetRoomPlayerInfoFailed, data);
         }
     }
 
@@ -188,7 +188,7 @@ namespace Twns.MultiCustomRoom.McrProxy {
     function _onMsgMcrStartWar(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrStartWar.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrStartWar, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrStartWar, data);
         }
     }
 }

@@ -5,7 +5,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -15,19 +15,19 @@
 // import WarEventHelper           from "../model/WarEventHelper";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeNodeReplacePanel {
+namespace Twns.WarEvent {
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
 
-    export type OpenData = {
+    export type OpenDataForWeNodeReplacePanel = {
         eventId         : number;
         parentNodeId?   : number;
         nodeId          : number | null;
         fullData        : IWarEventFullData;
     };
-    export class WeNodeReplacePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeNodeReplacePanel extends TwnsUiPanel.UiPanel<OpenDataForWeNodeReplacePanel> {
         private readonly _listNode!     : TwnsUiScrollList.UiScrollList<DataForNodeRenderer>;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelNoNode!  : TwnsUiLabel.UiLabel;
@@ -144,7 +144,7 @@ namespace TwnsWeNodeReplacePanel {
                     conditionIdArray,
                     subNodeIdArray,
                 }) != null) {
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             } else {
                 if (Twns.WarHelpers.WarEventHelpers.getAllSubNodesAndConditionsForNode({ fullData, nodeId: candidateNodeId }).nodeIdSet.has(parentNodeId)) {
@@ -158,7 +158,7 @@ namespace TwnsWeNodeReplacePanel {
                     nodeIdForClone  : candidateNodeId,
                     nodeIdForDelete : data.srcNodeId,
                 }) != null) {
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             }
         }
@@ -177,7 +177,7 @@ namespace TwnsWeNodeReplacePanel {
                     eventId     : data.eventId,
                     newNodeId,
                 })) {
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             } else {
                 if (Twns.WarHelpers.WarEventHelpers.getAllSubNodesAndConditionsForNode({ fullData, nodeId: newNodeId }).nodeIdSet.has(parentNodeId)) {
@@ -191,7 +191,7 @@ namespace TwnsWeNodeReplacePanel {
                     oldNodeId   : data.srcNodeId,
                     newNodeId,
                 })) {
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             }
         }

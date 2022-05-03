@@ -4,19 +4,19 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 // import MeModel              from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeVisibilityPanel {
+namespace Twns.MapEditor {
     import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+    import NotifyType   = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class MeVisibilityPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeVisibilityPanel = void;
+    export class MeVisibilityPanel extends TwnsUiPanel.UiPanel<OpenDataForMeVisibilityPanel> {
         private readonly _groupUnit!            : eui.Group;
         private readonly _labelUnit!            : TwnsUiLabel.UiLabel;
         private readonly _imgUnit!              : TwnsUiImage.UiImage;
@@ -65,7 +65,7 @@ namespace TwnsMeVisibilityPanel {
         }
 
         private _getWar(): Twns.MapEditor.MeWar {
-            return Helpers.getExisted(MeModel.getWar());
+            return Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
         }
 
         private _onTouchedGroupTileBase(): void {

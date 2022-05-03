@@ -9,13 +9,13 @@
 // import NetManager               from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes      from "../../tools/network/NetMessageCodes";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiPlayerWar.MpwProxy {
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import NetMessage           = CommonProto.NetMessage;
     import NetMessageCodes      = TwnsNetMessageCodes.NetMessageCodes;
 
@@ -56,9 +56,9 @@ namespace Twns.MultiPlayerWar.MpwProxy {
     function _onMsgMpwCommonContinueWar(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwCommonContinueWar.IS;
         if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMpwCommonContinueWarFailed, data);
+            Twns.Notify.dispatch(NotifyType.MsgMpwCommonContinueWarFailed, data);
         } else {
-            Notify.dispatch(NotifyType.MsgMpwCommonContinueWar, data);
+            Twns.Notify.dispatch(NotifyType.MsgMpwCommonContinueWar, data);
         }
     }
 
@@ -75,7 +75,7 @@ namespace Twns.MultiPlayerWar.MpwProxy {
         const data = e.data as NetMessage.MsgMpwCommonSyncWar.IS;
         if (!data.errorCode) {
             MpwModel.updateOnPlayerSyncWar(data);
-            Notify.dispatch(NotifyType.MsgMpwCommonSyncWar);
+            Twns.Notify.dispatch(NotifyType.MsgMpwCommonSyncWar);
         }
     }
 
@@ -89,7 +89,7 @@ namespace Twns.MultiPlayerWar.MpwProxy {
     function _onMsgMpwCommonGetWarSettings(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwCommonGetWarSettings.IS;
         MpwModel.updateOnMsgMpwCommonGetWarSettings(data);
-        Notify.dispatch(NotifyType.MsgMpwCommonGetWarSettings, data);
+        Twns.Notify.dispatch(NotifyType.MsgMpwCommonGetWarSettings, data);
     }
 
     export function reqMpwCommonGetWarProgressInfo(warId: number): void {
@@ -102,7 +102,7 @@ namespace Twns.MultiPlayerWar.MpwProxy {
     function _onMsgMpwCommonGetWarProgressInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwCommonGetWarProgressInfo.IS;
         MpwModel.updateOnMsgMpwCommonGetWarProgressInfo(data);
-        Notify.dispatch(NotifyType.MsgMpwCommonGetWarProgressInfo, data);
+        Twns.Notify.dispatch(NotifyType.MsgMpwCommonGetWarProgressInfo, data);
     }
 
     export function reqMpwGetHalfwayReplayData(warId: number): void {
@@ -115,9 +115,9 @@ namespace Twns.MultiPlayerWar.MpwProxy {
     function _onMsgMpwGetHalfwayReplayData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwGetHalfwayReplayData.IS;
         if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMpwGetHalfwayReplayDataFailed, data);
+            Twns.Notify.dispatch(NotifyType.MsgMpwGetHalfwayReplayDataFailed, data);
         } else {
-            Notify.dispatch(NotifyType.MsgMpwGetHalfwayReplayData, data);
+            Twns.Notify.dispatch(NotifyType.MsgMpwGetHalfwayReplayData, data);
         }
     }
 
@@ -131,7 +131,7 @@ namespace Twns.MultiPlayerWar.MpwProxy {
     function _onMsgMpwCommonHandleBoot(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwCommonHandleBoot.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMpwCommonHandleBoot, data);
+            Twns.Notify.dispatch(NotifyType.MsgMpwCommonHandleBoot, data);
         }
     }
 
@@ -147,7 +147,7 @@ namespace Twns.MultiPlayerWar.MpwProxy {
         const data = e.data as NetMessage.MsgMpwExecuteWarAction.IS;
         if (!data.errorCode) {
             MpwModel.updateOnMsgMpwExecuteWarAction(Helpers.getExisted(data.actionContainer), Helpers.getExisted(data.warId));
-            Notify.dispatch(NotifyType.MsgMpwExecuteWarAction, data);
+            Twns.Notify.dispatch(NotifyType.MsgMpwExecuteWarAction, data);
         }
     }
 }

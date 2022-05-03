@@ -14,7 +14,7 @@
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
 // import Notify                           from "../../tools/notify/Notify";
-// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import Twns.Notify                   from "../../tools/notify/NotifyType";
 // import ProtoTypes                       from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiLabel                      from "../../tools/ui/UiLabel";
@@ -31,7 +31,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.ReplayWar {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
@@ -92,7 +92,7 @@ namespace Twns.ReplayWar {
         }
 
         private _getWar(): ReplayWar.RwWar {
-            return Helpers.getExisted(RwModel.getWar());
+            return Helpers.getExisted(Twns.ReplayWar.RwModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -251,7 +251,7 @@ namespace Twns.ReplayWar {
                         maxValue,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
-                            RwProxy.reqReplaySetSelfRating(this._getWar().getReplayId(), panel.getInputValue());
+                            Twns.ReplayWar.RwProxy.reqReplaySetSelfRating(this._getWar().getReplayId(), panel.getInputValue());
                         },
                     });
                 },
@@ -346,7 +346,7 @@ namespace Twns.ReplayWar {
             return {
                 name    : Lang.getText(LangTextType.B0430),
                 callback: () => {
-                    const isEnabled = UserModel.getSelfSettingsIsSetPathMode();
+                    const isEnabled = Twns.User.UserModel.getSelfSettingsIsSetPathMode();
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                         content : Lang.getFormattedText(
                             LangTextType.F0033,
@@ -356,14 +356,14 @@ namespace Twns.ReplayWar {
                         textForCancel   : Lang.getText(LangTextType.B0434),
                         callback: () => {
                             if (!isEnabled) {
-                                UserProxy.reqUserSetSettings({
+                                Twns.User.UserProxy.reqUserSetSettings({
                                     isSetPathMode   : true,
                                 });
                             }
                         },
                         callbackOnCancel: () => {
                             if (isEnabled) {
-                                UserProxy.reqUserSetSettings({
+                                Twns.User.UserProxy.reqUserSetSettings({
                                     isSetPathMode   : false,
                                 });
                             }

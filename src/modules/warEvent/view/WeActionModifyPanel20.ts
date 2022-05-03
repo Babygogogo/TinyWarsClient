@@ -6,7 +6,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -14,8 +14,8 @@
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel20 {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.WarEvent {
+    import NotifyType               = Twns.Notify.NotifyType;
     import PlayerAliveState         = Types.PlayerAliveState;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
@@ -23,12 +23,12 @@ namespace TwnsWeActionModifyPanel20 {
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import BwWar                    = Twns.BaseWar.BwWar;
 
-    export type OpenData = {
+    export type OpenDataForWeActionModifyPanel20 = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel20 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel20 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel20> {
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
         private readonly _btnType!                  : TwnsUiButton.UiButton;
         private readonly _btnBack!                  : TwnsUiButton.UiButton;
@@ -79,7 +79,7 @@ namespace TwnsWeActionModifyPanel20 {
             const action        =this._getAction();
             action.playerIndex  = ((action.playerIndex || 0) % openData.war.getPlayersCountUnneutral()) + 1;
 
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnSwitchPlayerState(): void {
@@ -93,7 +93,7 @@ namespace TwnsWeActionModifyPanel20 {
                 action.playerAliveState = PlayerAliveState.Alive;
             }
 
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnType(): void {

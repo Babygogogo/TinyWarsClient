@@ -12,7 +12,7 @@
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
 // import Notify                           from "../../tools/notify/Notify";
-// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import Twns.Notify                   from "../../tools/notify/NotifyType";
 // import ProtoTypes                       from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiImage                      from "../../tools/ui/UiImage";
@@ -25,7 +25,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiPlayerWar {
     import LangTextType                 = TwnsLangTextType.LangTextType;
-    import NotifyType                   = TwnsNotifyType.NotifyType;
+    import NotifyType                   = Twns.Notify.NotifyType;
 
     export type OpenDataForMpwSpectatePanel = void;
     export class MpwSpectatePanel extends TwnsUiPanel.UiPanel<OpenDataForMpwSpectatePanel> {
@@ -103,7 +103,7 @@ namespace Twns.MultiPlayerWar {
                 userIdSet.add(userId);
             }
 
-            const selfUserId = Helpers.getExisted(UserModel.getSelfUserId());
+            const selfUserId = Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
             for (const [, player] of war.getPlayerManager().getAllPlayersDict()) {
                 const userId = player.getUserId();
                 if ((userId != null) && (userId !== selfUserId) && (!userIdSet.has(userId))) {

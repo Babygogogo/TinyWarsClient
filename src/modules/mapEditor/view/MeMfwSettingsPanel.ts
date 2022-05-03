@@ -7,7 +7,7 @@
 // import Types                            from "../../tools/helpers/Types";
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import Twns.Notify                   from "../../tools/notify/NotifyType";
 // import ProtoTypes                       from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiLabel                      from "../../tools/ui/UiLabel";
@@ -21,9 +21,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import MeMfwAdvancedSettingsPage    = TwnsMeMfwAdvancedSettingsPage.MeMfwAdvancedSettingsPage;
+    import MeMfwAdvancedSettingsPage    = Twns.MapEditor.MeMfwAdvancedSettingsPage;
     import MeMfwBasicSettingsPage       = MapEditor.MeMfwBasicSettingsPage;
-    import NotifyType                   = TwnsNotifyType.NotifyType;
+    import NotifyType                   = Twns.Notify.NotifyType;
     import LangTextType                 = TwnsLangTextType.LangTextType;
 
     export type OpenDataForMeMfwSettingsPanel = void;

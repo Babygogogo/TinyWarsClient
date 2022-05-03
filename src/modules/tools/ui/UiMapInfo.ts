@@ -12,7 +12,7 @@
 // import Types                    from "../helpers/Types";
 // import Lang                     from "../lang/Lang";
 // import TwnsLangTextType         from "../lang/LangTextType";
-// import TwnsNotifyType           from "../notify/NotifyType";
+// import Twns.Notify           from "../notify/NotifyType";
 // import ProtoTypes               from "../proto/ProtoTypes";
 // import WarCommonHelpers         from "../warHelpers/WarCommonHelpers";
 // import TwnsUiComponent          from "./UiComponent";
@@ -23,7 +23,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiMapInfo {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import TileType         = Types.TileType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
@@ -108,12 +108,12 @@ namespace TwnsUiMapInfo {
                 const maxValue = CommonConstants.MapMaxRating;
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                     title           : Lang.getText(LangTextType.B0363),
-                    currentValue    : UserModel.getMapRating(mapId) || 0,
+                    currentValue    : Twns.User.UserModel.getMapRating(mapId) || 0,
                     minValue,
                     maxValue,
                     tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]\n${Lang.getText(LangTextType.A0238)}`,
                     callback        : panel => {
-                        UserProxy.reqUserSetMapRating(mapId, panel.getInputValue());
+                        Twns.User.UserProxy.reqUserSetMapRating(mapId, panel.getInputValue());
                     },
                 });
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -172,7 +172,7 @@ namespace TwnsUiMapInfo {
                 const mapId                 = mapInfo.mapId;
                 const mapRawData            = Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId));
                 const rating                = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
-                const myRating              = UserModel.getMapRating(mapId);
+                const myRating              = Twns.User.UserModel.getMapRating(mapId);
                 labelMapName.text           = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
                 labelMapId.text             = `${mapId}`;
                 labelPlayersCount.text      = `${mapRawData.playersCountUnneutral}`;
@@ -269,7 +269,7 @@ namespace TwnsUiMapInfo {
         private readonly _conTileView!  : eui.Group;
         private readonly _labelNum!     : TwnsUiLabel.UiLabel;
 
-        private _tileView       = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private _tileView       = new Twns.MapEditor.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

@@ -6,12 +6,12 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonBlockPanel {
-    export type OpenData = {
+namespace Twns.Common {
+    export type OpenDataForCommonBlockPanel = {
         title  : string;
         content: string;
     };
-    export class CommonBlockPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonBlockPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonBlockPanel> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;

@@ -13,7 +13,7 @@ namespace Twns.SingleCustomWar {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
-    export class ScwWar extends TwnsSpwWar.SpwWar {
+    export class ScwWar extends Twns.SinglePlayerWar.SpwWar {
         private _settingsForScw?    : ISettingsForScw;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {

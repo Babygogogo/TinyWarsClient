@@ -4,13 +4,13 @@
 // import StageManager             from "../helpers/StageManager";
 // import Types                    from "../helpers/Types";
 // import Notify                   from "../notify/Notify";
-// import TwnsNotifyType           from "../notify/NotifyType";
+// import Twns.Notify           from "../notify/NotifyType";
 // import TwnsUiListItemRenderer   from "./UiListItemRenderer";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiScrollList {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import UiListener           = Types.UiListener;
     import ShortSfxCode         = Types.ShortSfxCode;
 
@@ -18,7 +18,7 @@ namespace TwnsUiScrollList {
         private _isChildrenCreated          = false;
         private _isOpening                  = false;
 
-        private _notifyListenerArray        : Notify.Listener[] | null = null;
+        private _notifyListenerArray        : Twns.Notify.Listener[] | null = null;
         private _uiListenerArray            : UiListener[] | null = null;
         private _shortSfxCodeForTouchList   = ShortSfxCode.None;
 
@@ -144,10 +144,10 @@ namespace TwnsUiScrollList {
             return Helpers.getExisted(this._list);
         }
 
-        private _setNotifyListenerArray(array: Notify.Listener[] | null): void {
+        private _setNotifyListenerArray(array: Twns.Notify.Listener[] | null): void {
             this._notifyListenerArray = array;
         }
-        private _getNotifyListenerArray(): Notify.Listener[] | null {
+        private _getNotifyListenerArray(): Twns.Notify.Listener[] | null {
             return this._notifyListenerArray;
         }
         private _setUiListenerArray(array: UiListener[] | null): void {
@@ -160,7 +160,7 @@ namespace TwnsUiScrollList {
         private _registerListeners(): void {
             const notifyListenerArray = this._getNotifyListenerArray();
             if (notifyListenerArray) {
-                Notify.addEventListeners(notifyListenerArray, this);
+                Twns.Notify.addEventListeners(notifyListenerArray, this);
             }
 
             const uiListenerArray = this._getUiListenerArray();
@@ -174,7 +174,7 @@ namespace TwnsUiScrollList {
         private _unregisterListeners(): void {
             const notifyListenerArray = this._getNotifyListenerArray();
             if (notifyListenerArray) {
-                Notify.removeEventListeners(notifyListenerArray, this);
+                Twns.Notify.removeEventListeners(notifyListenerArray, this);
             }
 
             const uiListenerArray = this._getUiListenerArray();

@@ -13,7 +13,7 @@
 // import TwnsSpmMainMenuPanel         from "../../singlePlayerMode/view/SpmMainMenuPanel";
 // import Helpers                      from "../../tools/helpers/Helpers";
 // import Types                        from "../../tools/helpers/Types";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiPanel                  from "../../tools/ui/UiPanel";
 // import WwModel                      from "../../watchWar/model/WwModel";
@@ -24,7 +24,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiCustomRoom {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import Tween                    = egret.Tween;
 
     export type OpenDataForMcrMainMenuPanel = void;

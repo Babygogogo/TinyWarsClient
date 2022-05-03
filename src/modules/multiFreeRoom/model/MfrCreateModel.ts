@@ -3,13 +3,13 @@
 // import Helpers          from "../../tools/helpers/Helpers";
 // import Types            from "../../tools/helpers/Types";
 // import Notify           from "../../tools/notify/Notify";
-// import TwnsNotifyType   from "../../tools/notify/NotifyType";
+// import Twns.Notify   from "../../tools/notify/NotifyType";
 // import ProtoTypes       from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiFreeRoom.MfrCreateModel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import BootTimerType    = Types.BootTimerType;
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
 
@@ -98,7 +98,7 @@ namespace Twns.MultiFreeRoom.MfrCreateModel {
     export function setSelfPlayerIndex(playerIndex: number): void {
         if (playerIndex !== getSelfPlayerIndex()) {
             getData().selfPlayerIndex = playerIndex;
-            Notify.dispatch(NotifyType.MfrCreateSelfPlayerIndexChanged);
+            Twns.Notify.dispatch(NotifyType.MfrCreateSelfPlayerIndexChanged);
         }
     }
     export function getSelfPlayerIndex(): number {
@@ -112,7 +112,7 @@ namespace Twns.MultiFreeRoom.MfrCreateModel {
     export function setSelfCoId(coId: number): void {
         if (getSelfCoId() !== coId) {
             getData().selfCoId = coId;
-            Notify.dispatch(NotifyType.MfrCreateSelfCoIdChanged);
+            Twns.Notify.dispatch(NotifyType.MfrCreateSelfCoIdChanged);
         }
     }
     export function getSelfCoId(): number {

@@ -3,13 +3,13 @@
 // import TwnsUiImage          from "./UiImage";
 // import Helpers              from "../helpers/Helpers";
 // import Notify               from "../notify/Notify";
-// import TwnsNotifyType       from "../notify/NotifyType";
+// import Twns.Notify       from "../notify/NotifyType";
 // import StageManager         from "../helpers/StageManager";
 // import Types                from "../helpers/Types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiZoomableComponent {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import Point                = Types.Point;
     import TouchPoints          = Types.TouchPoints;
 
@@ -71,9 +71,9 @@ namespace TwnsUiZoomableComponent {
 
         public setMouseWheelListenerEnabled(enabled: boolean): void {
             if (enabled) {
-                Notify.addEventListener(NotifyType.MouseWheel, this._onNotifyMouseWheel, this);
+                Twns.Notify.addEventListener(NotifyType.MouseWheel, this._onNotifyMouseWheel, this);
             } else {
-                Notify.removeEventListener(NotifyType.MouseWheel, this._onNotifyMouseWheel, this);
+                Twns.Notify.removeEventListener(NotifyType.MouseWheel, this._onNotifyMouseWheel, this);
             }
         }
 
@@ -139,7 +139,7 @@ namespace TwnsUiZoomableComponent {
             const newX      = needRevise ? this.getRevisedContentX(x) : x;
             if (newX !== contents.x) {
                 contents.x = newX;
-                Notify.dispatch(NotifyType.ZoomableContentsMoved);
+                Twns.Notify.dispatch(NotifyType.ZoomableContentsMoved);
             }
         }
         private set _contentX(x: number) {
@@ -156,7 +156,7 @@ namespace TwnsUiZoomableComponent {
             const newY      = needRevise ? this.getRevisedContentY(y) : y;
             if (newY !== contents.y) {
                 contents.y = newY;
-                Notify.dispatch(NotifyType.ZoomableContentsMoved);
+                Twns.Notify.dispatch(NotifyType.ZoomableContentsMoved);
             }
         }
         private set _contentY(y: number) {

@@ -3,13 +3,13 @@
 // import NetManager           from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarMapModel          from "./WarMapModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace WarMapProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.WarMap.WarMapProxy {
+    import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
@@ -33,7 +33,7 @@ namespace WarMapProxy {
         const data = e.data as NetMessage.MsgMapGetEnabledMapIdArray.IS;
         if (!data.errorCode) {
             Twns.WarMap.WarMapModel.resetEnabledMapIdArray(data.mapIdArray || []);
-            Notify.dispatch(NotifyType.MsgMapGetEnabledMapIdArray, data);
+            Twns.Notify.dispatch(NotifyType.MsgMapGetEnabledMapIdArray, data);
         }
     }
 
@@ -47,7 +47,7 @@ namespace WarMapProxy {
     function _onMsgMapGetBriefData(e: egret.Event): void {
         const data  = e.data as NetMessage.MsgMapGetBriefData.IS;
         Twns.WarMap.WarMapModel.setBriefData(Helpers.getExisted(data.mapId), data.mapBriefData ?? null);
-        Notify.dispatch(NotifyType.MsgMapGetBriefData, data);
+        Twns.Notify.dispatch(NotifyType.MsgMapGetBriefData, data);
     }
 
     export function reqGetMapRawData(mapId: number): void {
@@ -60,7 +60,7 @@ namespace WarMapProxy {
     function _onMsgMapGetRawData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMapGetRawData.IS;
         Twns.WarMap.WarMapModel.setRawData(Helpers.getExisted(data.mapId), data.mapRawData ?? null);
-        Notify.dispatch(NotifyType.MsgMapGetRawData, data);
+        Twns.Notify.dispatch(NotifyType.MsgMapGetRawData, data);
     }
 
     export function reqMmSetWarRuleAvailability({ mapId, ruleId, availability }: {
@@ -80,7 +80,7 @@ namespace WarMapProxy {
         const data = e.data as NetMessage.MsgMmSetWarRuleAvailability.IS;
         if (!data.errorCode) {
             await Twns.WarMap.WarMapModel.updateOnSetWarRuleAvailability(data);
-            Notify.dispatch(NotifyType.MsgMmSetWarRuleAvailability, data);
+            Twns.Notify.dispatch(NotifyType.MsgMmSetWarRuleAvailability, data);
         }
     }
 
@@ -95,7 +95,7 @@ namespace WarMapProxy {
     function _onMsgMmSetMapEnabled(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMmSetMapEnabled.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMmSetMapEnabled, data);
+            Twns.Notify.dispatch(NotifyType.MsgMmSetMapEnabled, data);
         }
     }
 
@@ -108,7 +108,7 @@ namespace WarMapProxy {
         const data = e.data as NetMessage.MsgMmGetReviewingMaps.IS;
         if (!data.errorCode) {
             Twns.WarMap.WarMapModel.setMmReviewingMaps(data.maps || []);
-            Notify.dispatch(NotifyType.MsgMmGetReviewingMaps, data);
+            Twns.Notify.dispatch(NotifyType.MsgMmGetReviewingMaps, data);
         }
     }
 
@@ -132,7 +132,7 @@ namespace WarMapProxy {
     function _onMsgMmReviewMap(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMmReviewMap.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMmReviewMap, data);
+            Twns.Notify.dispatch(NotifyType.MsgMmReviewMap, data);
         }
     }
 
@@ -145,7 +145,7 @@ namespace WarMapProxy {
     function _onMsgMmSetMapTag(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMmSetMapTag.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMmSetMapTag, data);
+            Twns.Notify.dispatch(NotifyType.MsgMmSetMapTag, data);
         }
     }
 
@@ -159,7 +159,7 @@ namespace WarMapProxy {
         const data = e.data as NetMessage.MsgMmSetMapName.IS;
         if (!data.errorCode) {
             await Twns.WarMap.WarMapModel.updateOnSetMapName(data);
-            Notify.dispatch(NotifyType.MsgMmSetMapName, data);
+            Twns.Notify.dispatch(NotifyType.MsgMmSetMapName, data);
         }
     }
 
@@ -175,7 +175,7 @@ namespace WarMapProxy {
         const data = e.data as NetMessage.MsgMmAddWarRule.IS;
         if (!data.errorCode) {
             await Twns.WarMap.WarMapModel.updateOnAddWarRule(data);
-            Notify.dispatch(NotifyType.MsgMmAddWarRule, data);
+            Twns.Notify.dispatch(NotifyType.MsgMmAddWarRule, data);
         }
     }
 
@@ -191,7 +191,7 @@ namespace WarMapProxy {
         const data = e.data as NetMessage.MsgMmDeleteWarRule.IS;
         if (!data.errorCode) {
             await Twns.WarMap.WarMapModel.updateOnDeleteWarRule(data);
-            Notify.dispatch(NotifyType.MsgMmDeleteWarRule, data);
+            Twns.Notify.dispatch(NotifyType.MsgMmDeleteWarRule, data);
         }
     }
 }

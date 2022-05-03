@@ -4,7 +4,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
@@ -15,12 +15,12 @@
 // import TwnsMmTagListPanel           from "./MmTagListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmMainMenuPanel {
+namespace Twns.MapManagement {
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class MmMainMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMmMainMenuPanel = void;
+    export class MmMainMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForMmMainMenuPanel> {
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnBack!          : TwnsUiButton.UiButton;
         private readonly _listCommand!      : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;

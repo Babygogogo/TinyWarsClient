@@ -7,7 +7,7 @@
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -15,15 +15,15 @@
 // import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmMapRenamePanel {
+namespace Twns.MapManagement {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import ILanguageText    = CommonProto.Structure.ILanguageText;
 
-    export type OpenData = {
+    export type OpenDataForMmMapRenamePanel = {
         mapId   : number;
     };
-    export class MmMapRenamePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MmMapRenamePanel extends TwnsUiPanel.UiPanel<OpenDataForMmMapRenamePanel> {
         private readonly _inputChinese!     : TwnsUiTextInput.UiTextInput;
         private readonly _inputEnglish!     : TwnsUiTextInput.UiTextInput;
         private readonly _labelTip!         : TwnsUiLabel.UiLabel;
@@ -68,7 +68,7 @@ namespace TwnsMmMapRenamePanel {
             } else if (nameArray.some(v => Helpers.getExisted(v.text).length > CommonConstants.MapMaxNameLength)) {
                 FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.MapMaxNameLength));
             } else {
-                WarMapProxy.reqMmSetMapName(this._getOpenData().mapId, nameArray);
+                Twns.WarMap.WarMapProxy.reqMmSetMapName(this._getOpenData().mapId, nameArray);
                 this.close();
             }
         }

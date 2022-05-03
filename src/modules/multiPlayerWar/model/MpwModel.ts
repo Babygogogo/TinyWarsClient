@@ -18,7 +18,7 @@
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
 // import Notify                               from "../../tools/notify/Notify";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import WarActionExecutor                    from "../../tools/warHelpers/WarActionExecutor";
 // import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
@@ -34,7 +34,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
     import MfwWar                                   = MultiFreeWar.MfwWar;
     import MrwWar                                   = MultiRankWar.MrwWar;
     import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import NotifyType                               = Twns.Notify.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
     import IWarActionContainer                      = CommonProto.WarAction.IWarActionContainer;
     import IInstanceWarRule                         = CommonProto.WarRule.IInstanceWarRule;
@@ -50,9 +50,9 @@ namespace Twns.MultiPlayerWar.MpwModel {
     import MsgMpwCommonGetWarProgressInfoIs         = CommonProto.NetMessage.MsgMpwCommonGetWarProgressInfo.IS;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
 
-    const _NOTIFY_LISTENERS     : Notify.Listener[] = [
+    const _NOTIFY_LISTENERS     : Twns.Notify.Listener[] = [
         { type: NotifyType.MsgMpwWatchGetIncomingInfo,      callback: _onNotifyMsgMpwWatchGetIncomingInfo },
         { type: NotifyType.MsgMpwWatchGetOutgoingInfo,      callback: _onNotifyMsgMpwWatchGetOutgoingInfo },
     ];
@@ -61,7 +61,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
     const _cachedActions        : IWarActionContainer[] = [];
 
     export function init(): void {
-        Notify.addEventListeners(_NOTIFY_LISTENERS);
+        Twns.Notify.addEventListeners(_NOTIFY_LISTENERS);
     }
 
     export async function getMyMcwWarIdArray(): Promise<number[]> {
@@ -77,7 +77,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
         return getMyMpwWarIdArray(warSettings => warSettings?.settingsForCcw != null);
     }
     async function getMyMpwWarIdArray(predicate: (warSettings: IMpwWarSettings | null) => boolean): Promise<number[]> {
-        const userId = UserModel.getSelfUserId();
+        const userId = Twns.User.UserModel.getSelfUserId();
         if (userId == null) {
             return [];
         }
@@ -121,7 +121,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
         if (progressInfo == null) {
             return false;
         } else {
-            const selfUserId = UserModel.getSelfUserId();
+            const selfUserId = Twns.User.UserModel.getSelfUserId();
             return (progressInfo.playerInfoList || []).some(v => (v.playerIndex === progressInfo.playerIndexInTurn) && (v.userId === selfUserId));
         }
     }
@@ -702,7 +702,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
 
         const settingsForCommon = Helpers.getExisted(warSettings.settingsForCommon);
         const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
-        const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+        const playerInfoArray   : Twns.Common.PlayerInfo[] = [];
         for (const playerInfo of warProgressInfo.playerInfoList || []) {
             const playerIndex   = Helpers.getExisted(playerInfo.playerIndex);
             const userId        = playerInfo.userId ?? null;
@@ -791,7 +791,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
             return;
         }
 
-        const selfUserId            = Helpers.getExisted(UserModel.getSelfUserId());
+        const selfUserId            = Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
         const ongoingDstUserIdArray = info.ongoingDstUserIdArray ?? [];
         const requestDstUserIdArray = info.requestDstUserIdArray ?? [];
         for (const [, player] of war.getPlayerManager().getAllPlayersDict()) {
@@ -950,9 +950,9 @@ namespace Twns.MultiPlayerWar.MpwModel {
             return;
         }
 
-        const selfUserId = Helpers.getExisted(UserModel.getSelfUserId());
+        const selfUserId = Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
         war.getExecutedActionManager().addExecutedAction(container);
-        await WarActionExecutor.checkAndExecute(war, container, false);
+        await Twns.WarHelpers.WarActionExecutor.checkAndExecute(war, container, false);
 
         const selfPlayer        = war.getPlayerManager().getPlayerByUserId(selfUserId);
         const callbackForGoBack = () => {

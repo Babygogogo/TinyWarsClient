@@ -4,7 +4,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -13,13 +13,13 @@
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChangeVersionPanel {
+namespace Twns.Common {
     import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+    import NotifyType   = Twns.Notify.NotifyType;
     import GameVersion  = Types.GameVersion;
 
-    export type OpenData = void;
-    export class CommonChangeVersionPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForCommonChangeVersionPanel = void;
+    export class CommonChangeVersionPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChangeVersionPanel> {
         private readonly _group!        : eui.Group;
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;

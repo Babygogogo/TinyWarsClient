@@ -1,21 +1,21 @@
 
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Types                from "../../tools/helpers/Types";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiCoInfo         from "../../tools/ui/UiCoInfo";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonCoInfoPanel {
-    import NotifyType   = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import NotifyType   = Twns.Notify.NotifyType;
     import GameConfig   = Twns.Config.GameConfig;
 
-    export type OpenData = {
+    export type OpenDataForCommonCoInfoPanel = {
         gameConfig      : GameConfig;
         coId            : number;
     };
-    export class CommonCoInfoPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonCoInfoPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonCoInfoPanel> {
         private readonly _imgMask!  : TwnsUiImage.UiImage;
         private readonly _group!    : eui.Group;
         private readonly _uiCoInfo! : TwnsUiCoInfo.UiCoInfo;

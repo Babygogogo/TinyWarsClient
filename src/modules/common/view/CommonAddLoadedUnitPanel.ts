@@ -10,7 +10,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -24,18 +24,18 @@
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonAddLoadedUnitPanel {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import NotifyType               = Twns.Notify.NotifyType;
     import ColorValue               = Types.ColorValue;
     import FocusEvent               = egret.FocusEvent;
     import LangTextType             = TwnsLangTextType.LangTextType;
 
-    export type OpenData = {
+    export type OpenDataForCommonAddLoadedUnitPanel = {
         war         : Twns.BaseWar.BwWar;
         loaderUnit  : Twns.BaseWar.BwUnit;
         callback    : (unitData: CommonProto.WarSerialization.ISerialUnit) => void;
     };
-    export class CommonAddLoadedUnitPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonAddLoadedUnitPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonAddLoadedUnitPanel> {
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
         private readonly _btnBack!                  : TwnsUiButton.UiButton;
         private readonly _btnConfirm!               : TwnsUiButton.UiButton;

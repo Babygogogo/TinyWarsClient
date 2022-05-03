@@ -12,7 +12,7 @@
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
 // import Notify                           from "../../tools/notify/Notify";
-// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import Twns.Notify                   from "../../tools/notify/NotifyType";
 // import ProtoTypes                       from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiImage                      from "../../tools/ui/UiImage";
@@ -33,10 +33,10 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
     import BwWarEventManager        = BaseWar.BwWarEventManager;
-    import MeField                  = TwnsMeField.MeField;
+    import MeField                  = Twns.MapEditor.MeField;
     import MeWar                    = MapEditor.MeWar;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import ITemplateWarRule         = CommonProto.WarRule.ITemplateWarRule;
     import IDataForPlayerRule       = CommonProto.WarRule.IDataForPlayerRule;
 
@@ -145,7 +145,7 @@ namespace Twns.MapEditor {
         }
 
         private _getWar(): MeWar {
-            return Helpers.getExisted(MeModel.getWar());
+            return Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -996,7 +996,7 @@ namespace Twns.MapEditor {
         }
         private _createDataAiCoIdInCcw(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const coId          = playerRule.fixedCoIdInCcw;
-            const gameConfig    = Helpers.getExisted(MeModel.getWar()?.getGameConfig());
+            const gameConfig    = Helpers.getExisted(Twns.MapEditor.MeModel.getWar()?.getGameConfig());
             return {
                 titleText               : Lang.getText(LangTextType.B0644),
                 infoText                : coId == null ? `--` : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined,
@@ -1051,7 +1051,7 @@ namespace Twns.MapEditor {
         }
         private _createDataAiCoIdInSrw(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const coId          = playerRule.fixedCoIdInSrw;
-            const gameConfig    = Helpers.getExisted(MeModel.getWar()?.getGameConfig());
+            const gameConfig    = Helpers.getExisted(Twns.MapEditor.MeModel.getWar()?.getGameConfig());
             return {
                 titleText               : Lang.getText(LangTextType.B0815),
                 infoText                : coId == null ? `--` : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined,
@@ -1145,21 +1145,21 @@ namespace Twns.MapEditor {
             const data = this.data;
             if (data) {
                 WarHelpers.WarRuleHelpers.moveWarEventId(data.templateWarRule, data.warEventId, -1);
-                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
+                Twns.Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
         private _onTouchedBtnDown(): void {
             const data = this.data;
             if (data) {
                 WarHelpers.WarRuleHelpers.moveWarEventId(data.templateWarRule, data.warEventId, 1);
-                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
+                Twns.Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
         private _onTouchedBtnDelete(): void {
             const data = this.data;
             if (data) {
                 WarHelpers.WarRuleHelpers.deleteWarEventId(data.templateWarRule, data.warEventId);
-                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
+                Twns.Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
         private _onNotifyLanguageChanged(): void {

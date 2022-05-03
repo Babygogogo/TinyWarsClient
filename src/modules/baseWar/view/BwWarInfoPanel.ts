@@ -11,7 +11,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -28,7 +28,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import IDataForPlayerRule   = CommonProto.WarRule.IDataForPlayerRule;
 
@@ -373,10 +373,10 @@ namespace Twns.BaseWar {
                 content : isHuman ? Lang.getText(LangTextType.A0110) : Lang.getText(LangTextType.A0111),
                 callback: () => {
                     if (!isHuman) {
-                        player.setUserId(UserModel.getSelfUserId());
+                        player.setUserId(Twns.User.UserModel.getSelfUserId());
                     } else {
                         player.setUserId(null);
-                        SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war);
+                        Twns.SinglePlayerWar.SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war);
                     }
                     this._updateView();
                 },
@@ -669,7 +669,7 @@ namespace Twns.BaseWar {
             const labelValue        = this._labelValue;
             labelValue.text         = userId == null
                 ? Lang.getText(LangTextType.B0607)
-                : Helpers.getExisted(await UserModel.getUserNickname(userId), ClientErrorCode.BwWarInfoPanel_InfoRenderer_UpdateViewAsPlayer_00);
+                : Helpers.getExisted(await Twns.User.UserModel.getUserNickname(userId), ClientErrorCode.BwWarInfoPanel_InfoRenderer_UpdateViewAsPlayer_00);
             labelValue.textColor    = 0xFFFFFF;
 
             const canModify         = checkCanModifyPlayerInfo(war);

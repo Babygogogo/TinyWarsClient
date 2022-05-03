@@ -25,10 +25,10 @@ namespace Twns.MapEditor {
     import GameConfig               = Config.GameConfig;
 
     export class MeWar extends BaseWar.BwWar {
-        private readonly _playerManager         = new TwnsMePlayerManager.MePlayerManager();
-        private readonly _field                 = new TwnsMeField.MeField();
+        private readonly _playerManager         = new Twns.MapEditor.MePlayerManager();
+        private readonly _field                 = new Twns.MapEditor.MeField();
         private readonly _commonSettingManager  = new MapEditor.MeCommonSettingManager();
-        private readonly _drawer                = new TwnsMeDrawer.MeDrawer();
+        private readonly _drawer                = new Twns.MapEditor.MeDrawer();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
 
         private _mapModifiedTime?       : number;
@@ -122,10 +122,10 @@ namespace Twns.MapEditor {
             return [Types.BootTimerType.NoBoot];
         }
 
-        public getPlayerManager(): TwnsMePlayerManager.MePlayerManager {
+        public getPlayerManager(): Twns.MapEditor.MePlayerManager {
             return this._playerManager;
         }
-        public getField(): TwnsMeField.MeField {
+        public getField(): Twns.MapEditor.MeField {
             return this._field;
         }
         public getCommonSettingManager(): MapEditor.MeCommonSettingManager {
@@ -225,7 +225,7 @@ namespace Twns.MapEditor {
             return null;
         }
 
-        public getDrawer(): TwnsMeDrawer.MeDrawer {
+        public getDrawer(): Twns.MapEditor.MeDrawer {
             return this._drawer;
         }
 
@@ -339,7 +339,7 @@ namespace Twns.MapEditor {
         }
 
         public getPlayersCountUnneutral(): number {
-            return (this.getField() as TwnsMeField.MeField).getMaxPlayerIndex();
+            return (this.getField() as Twns.MapEditor.MeField).getMaxPlayerIndex();
         }
     }
 }

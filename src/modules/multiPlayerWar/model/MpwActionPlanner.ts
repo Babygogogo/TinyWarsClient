@@ -16,7 +16,7 @@
 // import TwnsMpwWar               from "./MpwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMpwActionPlanner {
+namespace Twns.MultiPlayerWar {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import UnitState            = Types.UnitActionState;
@@ -555,7 +555,7 @@ namespace TwnsMpwActionPlanner {
         protected _checkCanControlUnit(unit: Twns.BaseWar.BwUnit): boolean {
             const war           = this._getWar();
             const playerInTurn  = war.getPlayerInTurn();
-            return (playerInTurn.getUserId() === UserModel.getSelfUserId())
+            return (playerInTurn.getUserId() === Twns.User.UserModel.getSelfUserId())
                 && (playerInTurn.getPlayerIndex() === unit.getPlayerIndex());
         }
 

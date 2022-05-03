@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -19,9 +19,9 @@
 // import TwnsCommonConfirmPanel   from "./CommonConfirmPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonWarPlayerInfoPage {
+namespace Twns.Common {
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import GameConfig           = Twns.Config.GameConfig;
 
     export type PlayerInfo = {
@@ -83,7 +83,7 @@ namespace TwnsCommonWarPlayerInfoPage {
                 playerInfoArray,
                 enterTurnTime,
             } = openData;
-            const isRoomOwnedBySelf = playerInfoArray.find(v => v.playerIndex === roomOwnerPlayerIndex)?.userId === UserModel.getSelfUserId();
+            const isRoomOwnedBySelf = playerInfoArray.find(v => v.playerIndex === roomOwnerPlayerIndex)?.userId === Twns.User.UserModel.getSelfUserId();
             const dataArray         : DataForPlayerRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 const playerInfo = playerInfoArray.find(v => v.playerIndex === playerIndex);
@@ -186,7 +186,7 @@ namespace TwnsCommonWarPlayerInfoPage {
                 return;
             }
 
-            if (userId === UserModel.getSelfUserId()) {
+            if (userId === Twns.User.UserModel.getSelfUserId()) {
                 const callback = data.callbackOnExitRoom;
                 if (callback) {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
@@ -199,7 +199,7 @@ namespace TwnsCommonWarPlayerInfoPage {
                 const callback = data.callbackOnDeletePlayer;
                 if ((callback) && (data.isRoomOwnedBySelf)) {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
-                        content : Lang.getFormattedText(LangTextType.F0029, await UserModel.getUserNickname(userId)),
+                        content : Lang.getFormattedText(LangTextType.F0029, await Twns.User.UserModel.getUserNickname(userId)),
                         callback: () => {
                             callback(playerInfo.playerIndex);
                         },
@@ -254,7 +254,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             }
 
             const userId        = playerInfo.userId;
-            const userInfo      = userId == null ? null : await UserModel.getUserPublicInfo(userId);
+            const userInfo      = userId == null ? null : await Twns.User.UserModel.getUserPublicInfo(userId);
             const labelNickname = this._labelNickname;
             if (userInfo) {
                 labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
@@ -267,7 +267,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             if (userInfo) {
                 groupButton.addChild(this._btnInfo);
 
-                const selfUserId = UserModel.getSelfUserId();
+                const selfUserId = Twns.User.UserModel.getSelfUserId();
                 if (userId !== selfUserId) {
                     groupButton.addChild(this._btnChat);
                 }
@@ -297,7 +297,7 @@ namespace TwnsCommonWarPlayerInfoPage {
 
         private async _updateComponentsForRankInfo(): Promise<void> {
             const userId                = this._getData().playerInfo.userId;
-            const userInfo              = userId == null ? null : await UserModel.getUserPublicInfo(userId);
+            const userInfo              = userId == null ? null : await Twns.User.UserModel.getUserPublicInfo(userId);
             const rankScoreArray        = userInfo?.userMrwRankInfoArray;
             const stdRankInfo           = rankScoreArray?.find(v => v.warType === Types.WarType.MrwStd);
             const fogRankInfo           = rankScoreArray?.find(v => v.warType === Types.WarType.MrwFog);

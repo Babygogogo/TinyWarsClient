@@ -129,7 +129,7 @@ namespace Twns.MapEditor.MeMfwModel {
     }
 
     export function setIsControlledByPlayer(playerIndex: number, isByPlayer: boolean): void {
-        getPlayer(playerIndex).userId = isByPlayer ? UserModel.getSelfUserId() : null;
+        getPlayer(playerIndex).userId = isByPlayer ? Twns.User.UserModel.getSelfUserId() : null;
     }
     export function getIsControlledByHuman(playerIndex: number): boolean {
         return getPlayer(playerIndex).userId != null;

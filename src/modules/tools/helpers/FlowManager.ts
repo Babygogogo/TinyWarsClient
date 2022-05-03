@@ -57,7 +57,7 @@
 // import NetManager                   from "../network/NetManager";
 // import TwnsNetMessageCodes          from "../network/NetMessageCodes";
 // import Notify                       from "../notify/Notify";
-// import TwnsNotifyType               from "../notify/NotifyType";
+// import Twns.Notify               from "../notify/NotifyType";
 // import ProtoManager                 from "../proto/ProtoManager";
 // import ProtoTypes                   from "../proto/ProtoTypes";
 // import ResManager                   from "../res/ResManager";
@@ -75,7 +75,7 @@
 namespace FlowManager {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
     import WarType          = Types.WarType;
 
@@ -99,7 +99,7 @@ namespace FlowManager {
         await Twns.ResVersionController.init();
         CompatibilityHelpers.init();
         NetManager.addListeners(_NET_EVENTS);
-        Notify.addEventListeners(_NOTIFY_EVENTS);
+        Twns.Notify.addEventListeners(_NOTIFY_EVENTS);
         StageManager.init(stage);
         await Promise.all([ResManager.init(), ProtoManager.init()]);
         StageManager.setStageScale(LocalStorage.getStageScale());
@@ -111,30 +111,30 @@ namespace FlowManager {
         Twns.MultiPlayerWar.MpwProxy.init();
         Twns.MultiPlayerWar.MpwModel.init();
         Timer.init();
-        UserProxy.init();
-        UserModel.init();
-        WarMapProxy.init();
+        Twns.User.UserProxy.init();
+        Twns.User.UserModel.init();
+        Twns.WarMap.WarMapProxy.init();
         Twns.WarMap.WarMapModel.init();
         Twns.MultiCustomRoom.McrProxy.init();
         Twns.MultiRankRoom.MrrProxy.init();
         Twns.MultiFreeRoom.MfrProxy.init();
         Twns.CoopCustomRoom.CcrProxy.init();
-        WwProxy.init();
-        RwProxy.init();
-        RwModel.init();
-        HrwModel.init();
-        SpmProxy.init();
+        Twns.WatchWar.WwProxy.init();
+        Twns.ReplayWar.RwProxy.init();
+        Twns.ReplayWar.RwModel.init();
+        Twns.HalfwayReplayWar.HrwModel.init();
+        Twns.SinglePlayerMode.SpmProxy.init();
         Twns.SinglePlayerMode.SpmModel.init();
         Twns.SingleCustomRoom.ScrCreateModel.init();
-        SpwModel.init();
-        MeProxy.init();
-        MeModel.init();
-        ChatProxy.init();
-        CommonProxy.init();
-        CommonModel.init();
-        BroadcastProxy.init();
-        ChangeLogProxy.init();
-        Twns.LeaderboardProxy.init();
+        Twns.SinglePlayerWar.SpwModel.init();
+        Twns.MapEditor.MeProxy.init();
+        Twns.MapEditor.MeModel.init();
+        Twns.Chat.ChatProxy.init();
+        Twns.Common.CommonProxy.init();
+        Twns.Common.CommonModel.init();
+        Twns.Broadcast.BroadcastProxy.init();
+        Twns.ChangeLog.ChangeLogProxy.init();
+        Twns.Leaderboard.LeaderboardProxy.init();
         TwnsPanelConfig.init();
 
         _removeLoadingDom();
@@ -146,10 +146,10 @@ namespace FlowManager {
 
     export function gotoLogin(): void {
         Twns.MultiPlayerWar.MpwModel.unloadWar();
-        RwModel.unloadWar();
-        HrwModel.unloadWar();
-        SpwModel.unloadWar();
-        MeModel.unloadWar();
+        Twns.ReplayWar.RwModel.unloadWar();
+        Twns.HalfwayReplayWar.HrwModel.unloadWar();
+        Twns.SinglePlayerWar.SpwModel.unloadWar();
+        Twns.MapEditor.MeModel.unloadWar();
 
         TwnsPanelManager.closeAllPanelsExcept([
             TwnsPanelConfig.Dict.UserLoginBackgroundPanel,
@@ -166,10 +166,10 @@ namespace FlowManager {
         _hasOnceWentToLobby = true;
 
         Twns.MultiPlayerWar.MpwModel.unloadWar();
-        RwModel.unloadWar();
-        HrwModel.unloadWar();
-        SpwModel.unloadWar();
-        MeModel.unloadWar();
+        Twns.ReplayWar.RwModel.unloadWar();
+        Twns.HalfwayReplayWar.HrwModel.unloadWar();
+        Twns.SinglePlayerWar.SpwModel.unloadWar();
+        Twns.MapEditor.MeModel.unloadWar();
         TwnsPanelManager.closeAllPanelsExcept([
             TwnsPanelConfig.Dict.BroadcastPanel,
             TwnsPanelConfig.Dict.LobbyBackgroundPanel,
@@ -190,10 +190,10 @@ namespace FlowManager {
 
     export async function gotoMultiPlayerWar(data: CommonProto.WarSerialization.ISerialWar): Promise<void> {
         const war = await Twns.MultiPlayerWar.MpwModel.loadWar(data);
-        RwModel.unloadWar();
-        HrwModel.unloadWar();
-        SpwModel.unloadWar();
-        MeModel.unloadWar();
+        Twns.ReplayWar.RwModel.unloadWar();
+        Twns.HalfwayReplayWar.HrwModel.unloadWar();
+        Twns.SinglePlayerWar.SpwModel.unloadWar();
+        Twns.MapEditor.MeModel.unloadWar();
 
         TwnsPanelManager.closeAllPanelsExcept([
             TwnsPanelConfig.Dict.BwBackgroundPanel,
@@ -210,11 +210,11 @@ namespace FlowManager {
         SoundManager.playCoBgmWithWar(war, true);
     }
     export async function gotoReplayWar(warData: CommonProto.WarSerialization.ISerialWar, replayId: number): Promise<void> {
-        const war = await RwModel.loadWar(warData, replayId);
-        HrwModel.unloadWar();
+        const war = await Twns.ReplayWar.RwModel.loadWar(warData, replayId);
+        Twns.HalfwayReplayWar.HrwModel.unloadWar();
         Twns.MultiPlayerWar.MpwModel.unloadWar();
-        SpwModel.unloadWar();
-        MeModel.unloadWar();
+        Twns.SinglePlayerWar.SpwModel.unloadWar();
+        Twns.MapEditor.MeModel.unloadWar();
 
         TwnsPanelManager.closeAllPanelsExcept([
             TwnsPanelConfig.Dict.BwBackgroundPanel,
@@ -230,11 +230,11 @@ namespace FlowManager {
         SoundManager.playCoBgmWithWar(war, true);
     }
     export async function gotoHalfwayReplayWar(warData: CommonProto.WarSerialization.ISerialWar): Promise<void> {
-        const war = await HrwModel.loadWar(warData);
-        RwModel.unloadWar();
+        const war = await Twns.HalfwayReplayWar.HrwModel.loadWar(warData);
+        Twns.ReplayWar.RwModel.unloadWar();
         Twns.MultiPlayerWar.MpwModel.unloadWar();
-        SpwModel.unloadWar();
-        MeModel.unloadWar();
+        Twns.SinglePlayerWar.SpwModel.unloadWar();
+        Twns.MapEditor.MeModel.unloadWar();
 
         TwnsPanelManager.closeAllPanelsExcept([
             TwnsPanelConfig.Dict.BwBackgroundPanel,
@@ -254,11 +254,11 @@ namespace FlowManager {
         slotExtraData   : CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
         warData         : CommonProto.WarSerialization.ISerialWar;
     }): Promise<void> {
-        const war = await SpwModel.loadWar({ warData, slotIndex, slotExtraData });
+        const war = await Twns.SinglePlayerWar.SpwModel.loadWar({ warData, slotIndex, slotExtraData });
         Twns.MultiPlayerWar.MpwModel.unloadWar();
-        RwModel.unloadWar();
-        HrwModel.unloadWar();
-        MeModel.unloadWar();
+        Twns.ReplayWar.RwModel.unloadWar();
+        Twns.HalfwayReplayWar.HrwModel.unloadWar();
+        Twns.MapEditor.MeModel.unloadWar();
 
         TwnsPanelManager.closeAllPanelsExcept([
             TwnsPanelConfig.Dict.BwBackgroundPanel,
@@ -274,14 +274,14 @@ namespace FlowManager {
 
         SoundManager.playCoBgmWithWar(war, true);
 
-        await SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war);
+        await Twns.SinglePlayerWar.SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war);
     }
     export async function gotoMapEditorWar(mapRawData: Types.Undefinable<CommonProto.Map.IMapRawData>, slotIndex: number, isReview: boolean): Promise<void> {
-        const war = await MeModel.loadWar(mapRawData, slotIndex, isReview);
+        const war = await Twns.MapEditor.MeModel.loadWar(mapRawData, slotIndex, isReview);
         Twns.MultiPlayerWar.MpwModel.unloadWar();
-        SpwModel.unloadWar();
-        RwModel.unloadWar();
-        HrwModel.unloadWar();
+        Twns.SinglePlayerWar.SpwModel.unloadWar();
+        Twns.ReplayWar.RwModel.unloadWar();
+        Twns.HalfwayReplayWar.HrwModel.unloadWar();
 
         TwnsPanelManager.closeAllPanelsExcept([
             TwnsPanelConfig.Dict.BwBackgroundPanel,
@@ -325,10 +325,10 @@ namespace FlowManager {
 
     export function gotoMfrCreateSettingsPanel(warData: CommonProto.WarSerialization.ISerialWar): void {
         Twns.MultiPlayerWar.MpwModel.unloadWar();
-        RwModel.unloadWar();
-        HrwModel.unloadWar();
-        SpwModel.unloadWar();
-        MeModel.unloadWar();
+        Twns.ReplayWar.RwModel.unloadWar();
+        Twns.HalfwayReplayWar.HrwModel.unloadWar();
+        Twns.SinglePlayerWar.SpwModel.unloadWar();
+        Twns.MapEditor.MeModel.unloadWar();
         Twns.MultiFreeRoom.MfrCreateModel.resetDataByInitialWarData(warData);
         TwnsPanelManager.closeAllPanelsExcept([
             TwnsPanelConfig.Dict.BroadcastPanel,
@@ -347,14 +347,14 @@ namespace FlowManager {
     // Callbacks.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _onNotifyNetworkConnected(): void {
-        const account   = UserModel.getSelfAccount();
-        const password  = UserModel.getSelfPassword();
+        const account   = Twns.User.UserModel.getSelfAccount();
+        const password  = Twns.User.UserModel.getSelfPassword();
         if ((_hasOnceWentToLobby)           &&
-            (!UserModel.getIsLoggedIn())    &&
+            (!Twns.User.UserModel.getIsLoggedIn())    &&
             (account != null)               &&
             (password != null)
         ) {
-            UserProxy.reqLogin(account, password, true);
+            Twns.User.UserProxy.reqLogin(account, password, true);
         }
     }
 
@@ -382,7 +382,7 @@ namespace FlowManager {
 
     function _onMsgUserLogout(): void {
         _hasOnceWentToLobby = false;
-        UserModel.clearLoginInfo();
+        Twns.User.UserModel.clearLoginInfo();
         gotoLogin();
     }
 
@@ -403,7 +403,7 @@ namespace FlowManager {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _checkCanFirstGoToLobby(): boolean {
         return (!_hasOnceWentToLobby)
-            && (UserModel.getIsLoggedIn())
+            && (Twns.User.UserModel.getIsLoggedIn())
             && (ResManager.checkIsLoadedMainResource())
             && (Twns.Config.ConfigManager.getLatestConfigVersion() != null);
     }
@@ -418,10 +418,10 @@ namespace FlowManager {
 
     function _unloadAllWarsAndOpenCommonPanels(): void {
         Twns.MultiPlayerWar.MpwModel.unloadWar();
-        RwModel.unloadWar();
-        HrwModel.unloadWar();
-        SpwModel.unloadWar();
-        MeModel.unloadWar();
+        Twns.ReplayWar.RwModel.unloadWar();
+        Twns.HalfwayReplayWar.HrwModel.unloadWar();
+        Twns.SinglePlayerWar.SpwModel.unloadWar();
+        Twns.MapEditor.MeModel.unloadWar();
 
         TwnsPanelManager.closeAllPanelsExcept([
             TwnsPanelConfig.Dict.BroadcastPanel,

@@ -4,14 +4,14 @@
 // import Lang             from "../lang/Lang";
 // import TwnsLangTextType from "../lang/LangTextType";
 // import Notify           from "../notify/Notify";
-// import TwnsNotifyType   from "../notify/NotifyType";
+// import Twns.Notify   from "../notify/NotifyType";
 // import TwnsUiComponent  from "./UiComponent";
 // import TwnsUiImage      from "./UiImage";
 // import TwnsUiLabel      from "./UiLabel";
 
 namespace TwnsUiRadioButton {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
     type DataForUiRadioButton = {
         titleTextType           : LangTextType;
@@ -22,7 +22,7 @@ namespace TwnsUiRadioButton {
         callbackOnLeft          : () => void;
         callbackOnRight         : () => void;
         checkerForLeftOn        : () => boolean;
-        notifyListenerArray?    : Notify.Listener[];
+        notifyListenerArray?    : Twns.Notify.Listener[];
     };
 
     export class UiRadioButton extends TwnsUiComponent.UiComponent {
@@ -65,7 +65,7 @@ namespace TwnsUiRadioButton {
             const data = this._getData();
             if (data) {
                 const notifyListenerArray = data.notifyListenerArray;
-                (notifyListenerArray) && (Notify.removeEventListeners(notifyListenerArray));
+                (notifyListenerArray) && (Twns.Notify.removeEventListeners(notifyListenerArray));
             }
 
             this._data = null;

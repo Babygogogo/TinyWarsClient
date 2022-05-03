@@ -8,7 +8,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
@@ -22,7 +22,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
     import BwWar                = BaseWar.BwWar;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import BwUnit               = BaseWar.BwUnit;
 
     const _CELL_WIDTH           = 70;
@@ -97,7 +97,7 @@ namespace Twns.BaseWar {
             this._updateView();
         }
         private _onNotifyBwUnitChanged(e: egret.Event): void {
-            const data = e.data as NotifyData.BwUnitChanged;
+            const data = e.data as Notify.NotifyData.BwUnitChanged;
             if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData().war.getCursor().getGridIndex())) {
                 this._updateView();
             }

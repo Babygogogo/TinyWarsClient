@@ -5,7 +5,7 @@
 // import Timer                from "../../tools/helpers/Timer";
 // import Types                from "../../tools/helpers/Types";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsBwActionPlanner  from "../model/BwActionPlanner";
 // import TwnsBwUnit           from "../model/BwUnit";
@@ -13,7 +13,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType   = TwnsNotifyType.NotifyType;
+    import NotifyType   = Twns.Notify.NotifyType;
     import State        = Types.ActionPlannerState;
     import GridIndex    = Types.GridIndex;
     import Direction    = Types.Direction;
@@ -108,7 +108,7 @@ namespace Twns.BaseWar {
         private _conForUnits            = new egret.DisplayObjectContainer();
         private _focusUnitViews         = new Map<number, Twns.BaseWar.BwUnitView>();
 
-        private _notifyEvents: Notify.Listener[] = [
+        private _notifyEvents: Twns.Notify.Listener[] = [
             { type: NotifyType.GridAnimationTick,       callback: this._onNotifyGridAnimationTick },
             { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
             { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
@@ -141,12 +141,12 @@ namespace Twns.BaseWar {
         }
 
         public startRunningView(): void {
-            Notify.addEventListeners(this._notifyEvents, this);
+            Twns.Notify.addEventListeners(this._notifyEvents, this);
 
             this.updateView();
         }
         public stopRunningView(): void {
-            Notify.removeEventListeners(this._notifyEvents, this);
+            Twns.Notify.removeEventListeners(this._notifyEvents, this);
         }
 
         private _getActionPlanner(): Twns.BaseWar.BwActionPlanner {

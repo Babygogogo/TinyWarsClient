@@ -3,7 +3,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarMapProxy          from "./WarMapProxy";
 
@@ -17,10 +17,10 @@ namespace Twns.WarMap.WarMapModel {
     let _reviewingMaps          : IMapEditorData[];
     const _enabledMapIdArray    : number[] = [];
     const _rawDataAccessor      = Helpers.createCachedDataAccessor<number, IMapRawData>({
-        reqData                 : (mapId: number) => WarMapProxy.reqGetMapRawData(mapId),
+        reqData                 : (mapId: number) => Twns.WarMap.WarMapProxy.reqGetMapRawData(mapId),
     });
     const _briefDataGetter      = Helpers.createCachedDataAccessor<number, IMapBriefData>({
-        reqData                 : (mapId: number) => WarMapProxy.reqGetMapBriefData(mapId),
+        reqData                 : (mapId: number) => Twns.WarMap.WarMapProxy.reqGetMapBriefData(mapId),
     });
 
     export function init(): void {

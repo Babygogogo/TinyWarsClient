@@ -148,8 +148,8 @@ namespace Twns.MapEditor.MeHelpers {
         const mapWidth  = 20;
         const mapHeight = 15;
         return {
-            designerName            : UserModel.getSelfNickname(),
-            designerUserId          : UserModel.getSelfUserId(),
+            designerName            : Twns.User.UserModel.getSelfNickname(),
+            designerUserId          : Twns.User.UserModel.getSelfUserId(),
             mapNameArray            : [
                 { languageType: LanguageType.Chinese, text: `${Lang.getText(LangTextType.B0279, LanguageType.Chinese)} - ${slotIndex}`},
                 { languageType: LanguageType.English, text: `${Lang.getText(LangTextType.B0279, LanguageType.English)} - ${slotIndex}`},
@@ -247,7 +247,7 @@ namespace Twns.MapEditor.MeHelpers {
             hasVotedForDraw             : false,
             aliveState                  : Types.PlayerAliveState.Alive,
             playerIndex,
-            userId                      : playerIndex > 0 ? UserModel.getSelfUserId() : null,
+            userId                      : playerIndex > 0 ? Twns.User.UserModel.getSelfUserId() : null,
             coId                        : 0,
             coCurrentEnergy             : null,
             coUsingSkillType            : Types.CoSkillType.Passive,

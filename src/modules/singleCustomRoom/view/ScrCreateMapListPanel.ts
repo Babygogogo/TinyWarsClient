@@ -7,7 +7,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -22,9 +22,9 @@
 // import TwnsScrCreateSettingsPanel   from "./ScrCreateSettingsPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsScrCreateMapListPanel {
+namespace Twns.SingleCustomRoom {
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import IDataForMapTag           = CommonProto.Map.IDataForMapTag;
 
     type FiltersForMapList = {
@@ -34,8 +34,8 @@ namespace TwnsScrCreateMapListPanel {
         minRating?      : number | null;
         mapTag?         : IDataForMapTag | null;
     };
-    export type OpenData = FiltersForMapList | null;
-    export class ScrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForScrCreateMapListPanel = FiltersForMapList | null;
+    export class ScrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForScrCreateMapListPanel> {
         private readonly _groupMapView!         : eui.Group;
         private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelLoading!         : TwnsUiLabel.UiLabel;

@@ -12,7 +12,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -25,7 +25,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import ColorValue               = Types.ColorValue;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
@@ -89,7 +89,7 @@ namespace Twns.WarEvent {
                 FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
                 dialogueArray.push(WarHelpers.WarEventHelpers.getDefaultSimpleCoDialogueData(this._getOpenData().war.getGameConfig()));
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
@@ -98,7 +98,7 @@ namespace Twns.WarEvent {
                 content : Lang.getText(LangTextType.A0190),
                 callback: () => {
                     Helpers.getExisted(this._getAction().dataArray).length = 0;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             });
         }
@@ -237,7 +237,7 @@ namespace Twns.WarEvent {
                 FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
                 dialogueArray.splice(dialogueArray.indexOf(data.dataForDialogue), 0, WarHelpers.WarEventHelpers.getDefaultSimpleCoDialogueData(data.war.getGameConfig()));
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
@@ -247,7 +247,7 @@ namespace Twns.WarEvent {
             const index         = dialogueArray.indexOf(data.dataForDialogue);
             if (index > 0) {
                 [dialogueArray[index - 1], dialogueArray[index]] = [dialogueArray[index], dialogueArray[index - 1]];
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
@@ -258,7 +258,7 @@ namespace Twns.WarEvent {
                     content : Lang.getText(LangTextType.A0029),
                     callback: () => {
                         Helpers.deleteElementFromArray(Helpers.getExisted(data.action.WeaSimpleDialogue?.dataArray), data.dataForDialogue);
-                        Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                        Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     },
                 });
             }
@@ -270,7 +270,7 @@ namespace Twns.WarEvent {
                 data.side = data.side === Types.WarEventActionSimpleDialogueSide.Bottom
                     ? Types.WarEventActionSimpleDialogueSide.Top
                     : Types.WarEventActionSimpleDialogueSide.Bottom;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
@@ -287,7 +287,7 @@ namespace Twns.WarEvent {
                     callbackOnConfirm   : coId => {
                         if (coId !== currentCoId) {
                             dataForCoDialogue.coId = coId;
-                            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                         }
                     },
                 });
@@ -329,7 +329,7 @@ namespace Twns.WarEvent {
                             });
                         }
                     }
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -369,7 +369,7 @@ namespace Twns.WarEvent {
                             });
                         }
                     }
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -406,7 +406,7 @@ namespace Twns.WarEvent {
                             });
                         }
                     }
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -420,7 +420,7 @@ namespace Twns.WarEvent {
                     content     : Lang.getText(LangTextType.A0225),
                     callback    : () => {
                         textData.text = null;
-                        Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                        Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     }
                 });
             }
@@ -458,7 +458,7 @@ namespace Twns.WarEvent {
                             });
                         }
                     }
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -472,7 +472,7 @@ namespace Twns.WarEvent {
                     content     : Lang.getText(LangTextType.A0225),
                     callback    : () => {
                         textData.text = null;
-                        Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                        Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     }
                 });
             }

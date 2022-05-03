@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -14,15 +14,15 @@
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwSimpleDialoguePanel {
+namespace Twns.BaseWar {
     import LangTextType = TwnsLangTextType.LangTextType;
 
-    export type OpenData = {
+    export type OpenDataForBwSimpleDialoguePanel = {
         gameConfig      : Twns.Config.GameConfig;
         actionData      : CommonProto.WarEvent.IWeaSimpleDialogue;
         callbackOnClose : () => void;
     };
-    export class BwSimpleDialoguePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwSimpleDialoguePanel extends TwnsUiPanel.UiPanel<OpenDataForBwSimpleDialoguePanel> {
         private readonly _group!            : eui.Group;
         private readonly _btnSkip!          : TwnsUiButton.UiButton;
         private readonly _imgTouchMask!     : TwnsUiImage.UiImage;
@@ -47,11 +47,11 @@ namespace TwnsBwSimpleDialoguePanel {
                 { ui: this._imgTouchMask,   callback: this._onTouchedImgTouchMask },
             ]);
             this._setNotifyListenerArray([
-                { type: TwnsNotifyType.NotifyType.LanguageChanged,  callback: this._onNotifyLanguageChanged },
+                { type: Twns.Notify.NotifyType.LanguageChanged,  callback: this._onNotifyLanguageChanged },
             ]);
             this._imgTouchMask.touchEnabled = true;
         }
-        protected async _updateOnOpenDataChanged(oldOpenData: OpenData | null): Promise<void> {
+        protected async _updateOnOpenDataChanged(oldOpenData: OpenDataForBwSimpleDialoguePanel | null): Promise<void> {
             this._updateComponentsForLanguage();
 
             if (oldOpenData) {

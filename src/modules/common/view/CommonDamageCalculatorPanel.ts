@@ -9,9 +9,9 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonDamageCalculatorPanel {
+namespace Twns.Common {
     import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+    import NotifyType   = Twns.Notify.NotifyType;
     import GameConfig   = Twns.Config.GameConfig;
     import CoSkillType  = Types.CoSkillType;
     import UnitType     = Types.UnitType;
@@ -51,10 +51,10 @@ namespace TwnsCommonDamageCalculatorPanel {
     };
     let _savedData: CalculatorData | null = null;
 
-    export type OpenData = {
+    export type OpenDataForCommonDamageCalculatorPanel = {
         data    : CalculatorData | null;
     };
-    export class CommonDamageCalculatorPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonDamageCalculatorPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonDamageCalculatorPanel> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _group!                : eui.Group;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
@@ -138,8 +138,8 @@ namespace TwnsCommonDamageCalculatorPanel {
 
         private readonly _unitView1             = new Twns.WarMap.WarMapUnitView();
         private readonly _unitView2             = new Twns.WarMap.WarMapUnitView();
-        private readonly _tileView1             = new TwnsMeTileSimpleView.MeTileSimpleView();
-        private readonly _tileView2             = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private readonly _tileView1             = new Twns.MapEditor.MeTileSimpleView();
+        private readonly _tileView2             = new Twns.MapEditor.MeTileSimpleView();
 
         private _calculatorData?                : CalculatorData;
 
@@ -788,7 +788,7 @@ namespace TwnsCommonDamageCalculatorPanel {
             gameConfig,
         };
     }
-    function createTileViewData(tileType: TileType, playerIndex: number): TwnsMeTileSimpleView.TileViewData {
+    function createTileViewData(tileType: TileType, playerIndex: number): Twns.MapEditor.TileViewData {
         const objectType    = Twns.Config.ConfigManager.getTileObjectTypeByTileType(tileType);
         const baseType      = Twns.Config.ConfigManager.getTileBaseTypeByTileType(tileType);
         return {

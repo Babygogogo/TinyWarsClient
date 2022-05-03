@@ -12,7 +12,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -29,7 +29,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Chat {
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import ChatCategory         = Types.ChatMessageToCategory;
     import ChatChannel          = Types.ChatChannel;
     import NetMessage           = CommonProto.NetMessage;
@@ -106,11 +106,11 @@ namespace Twns.Chat {
 
                 const toCategory    = data.toCategory;
                 const toTarget      = data.toTarget;
-                if (ChatModel.checkHasUnreadMessageForTarget(toCategory, toTarget)) {
-                    ChatProxy.reqUpdateReadProgress(
+                if (Twns.Chat.ChatModel.checkHasUnreadMessageForTarget(toCategory, toTarget)) {
+                    Twns.Chat.ChatProxy.reqUpdateReadProgress(
                         toCategory,
                         toTarget,
-                        ChatModel.getLatestMessageTimestamp(toCategory, toTarget)
+                        Twns.Chat.ChatModel.getLatestMessageTimestamp(toCategory, toTarget)
                     );
                 }
             }
@@ -129,7 +129,7 @@ namespace Twns.Chat {
         private async _onNotifyMsgChatAddMessage(e: egret.Event): Promise<void> {
             const message       = Helpers.getExisted((e.data as NetMessage.MsgChatAddMessage.IS).message);
             const fromUserId    = message.fromUserId;
-            if (fromUserId === UserModel.getSelfUserId()) {
+            if (fromUserId === Twns.User.UserModel.getSelfUserId()) {
                 this._inputMessage.text = "";
             }
 
@@ -142,11 +142,11 @@ namespace Twns.Chat {
                 ) {
                     this._updateComponentsForMessage();
 
-                    if (ChatModel.checkHasUnreadMessageForTarget(pageToCategory, pageToTarget)) {
-                        ChatProxy.reqUpdateReadProgress(
+                    if (Twns.Chat.ChatModel.checkHasUnreadMessageForTarget(pageToCategory, pageToTarget)) {
+                        Twns.Chat.ChatProxy.reqUpdateReadProgress(
                             pageToCategory,
                             pageToTarget,
-                            ChatModel.getLatestMessageTimestamp(pageToCategory, pageToTarget)
+                            Twns.Chat.ChatModel.getLatestMessageTimestamp(pageToCategory, pageToTarget)
                         );
                     }
                 }
@@ -167,7 +167,7 @@ namespace Twns.Chat {
             if (list.getBoundDataArray()?.some(v => v.message.messageId === messageId)) {
                 const chatData  = this._dataForListChat[Helpers.getExisted(this.getSelectedIndex())];
                 const dataArray : DataForMessageRenderer[] = [];
-                for (const message of ChatModel.getMessagesForCategory(chatData.toCategory).get(chatData.toTarget) || []) {
+                for (const message of Twns.Chat.ChatModel.getMessagesForCategory(chatData.toCategory).get(chatData.toTarget) || []) {
                     dataArray.push({ message });
                 }
 
@@ -184,12 +184,12 @@ namespace Twns.Chat {
 
         private _onTouchedBtnRefresh(): void {
             const currTime  = Timer.getServerTimestamp();
-            const cdTime    = ChatModel.getTimestampForNextReqAllMessages() - currTime;
+            const cdTime    = Twns.Chat.ChatModel.getTimestampForNextReqAllMessages() - currTime;
             if (cdTime > 0) {
                 FloatText.show(Lang.getFormattedText(LangTextType.F0026, cdTime));
             } else {
-                ChatModel.setTimestampForNextReqAllMessages(currTime + 30);
-                ChatProxy.reqGetAllMessages();
+                Twns.Chat.ChatModel.setTimestampForNextReqAllMessages(currTime + 30);
+                Twns.Chat.ChatProxy.reqGetAllMessages();
             }
         }
 
@@ -202,7 +202,7 @@ namespace Twns.Chat {
                     const selectedIndex = this.getSelectedIndex();
                     const data          = selectedIndex != null ? this._dataForListChat[selectedIndex] : null;
                     if (data) {
-                        ChatProxy.reqChatAddMessage(content, data.toCategory, data.toTarget);
+                        Twns.Chat.ChatProxy.reqChatAddMessage(content, data.toCategory, data.toTarget);
                     }
                 }
             }
@@ -270,7 +270,7 @@ namespace Twns.Chat {
         private _updateComponentsForMessage(): void {
             const chatData  = this._dataForListChat[Helpers.getExisted(this.getSelectedIndex())];
             const dataArray : DataForMessageRenderer[] = [];
-            for (const message of ChatModel.getMessagesForCategory(chatData.toCategory).get(chatData.toTarget) || []) {
+            for (const message of Twns.Chat.ChatModel.getMessagesForCategory(chatData.toCategory).get(chatData.toTarget) || []) {
                 dataArray.push({ message });
             }
 
@@ -283,7 +283,7 @@ namespace Twns.Chat {
             const dataDict      = new Map<number, DataForChatPageRenderer>();
             const timestampList : { index: number, timestamp: number }[] = [];
             let indexForSort    = 0;
-            for (const [toChannelId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.PublicChannel)) {
+            for (const [toChannelId, msgList] of Twns.Chat.ChatModel.getMessagesForCategory(ChatCategory.PublicChannel)) {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
                     panel       : this,
@@ -293,7 +293,7 @@ namespace Twns.Chat {
                 timestampList.push(getLatestTimestamp(indexForSort, msgList));
                 ++indexForSort;
             }
-            for (const [toWarAndTeam, msgList] of ChatModel.getMessagesForCategory(ChatCategory.WarAndTeam)) {
+            for (const [toWarAndTeam, msgList] of Twns.Chat.ChatModel.getMessagesForCategory(ChatCategory.WarAndTeam)) {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
                     panel       : this,
@@ -303,7 +303,7 @@ namespace Twns.Chat {
                 timestampList.push(getLatestTimestamp(indexForSort, msgList));
                 ++indexForSort;
             }
-            for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.McrRoom)) {
+            for (const [toRoomId, msgList] of Twns.Chat.ChatModel.getMessagesForCategory(ChatCategory.McrRoom)) {
                 if (await MultiCustomRoom.McrModel.getRoomStaticInfo(toRoomId)) {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
@@ -315,7 +315,7 @@ namespace Twns.Chat {
                     ++indexForSort;
                 }
             }
-            for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.CcrRoom)) {
+            for (const [toRoomId, msgList] of Twns.Chat.ChatModel.getMessagesForCategory(ChatCategory.CcrRoom)) {
                 if (await CoopCustomRoom.CcrModel.getRoomStaticInfo(toRoomId)) {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
@@ -327,7 +327,7 @@ namespace Twns.Chat {
                     ++indexForSort;
                 }
             }
-            for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.MfrRoom)) {
+            for (const [toRoomId, msgList] of Twns.Chat.ChatModel.getMessagesForCategory(ChatCategory.MfrRoom)) {
                 if (await MultiFreeRoom.MfrModel.getRoomStaticInfo(toRoomId)) {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
@@ -339,7 +339,7 @@ namespace Twns.Chat {
                     ++indexForSort;
                 }
             }
-            for (const [toMapReviewTarget, msgList] of ChatModel.getMessagesForCategory(ChatCategory.MapReview)) {
+            for (const [toMapReviewTarget, msgList] of Twns.Chat.ChatModel.getMessagesForCategory(ChatCategory.MapReview)) {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
                     panel       : this,
@@ -349,7 +349,7 @@ namespace Twns.Chat {
                 timestampList.push(getLatestTimestamp(indexForSort, msgList));
                 ++indexForSort;
             }
-            for (const [toUserId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.Private)) {
+            for (const [toUserId, msgList] of Twns.Chat.ChatModel.getMessagesForCategory(ChatCategory.Private)) {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
                     panel       : this,
@@ -362,7 +362,7 @@ namespace Twns.Chat {
 
             const war = MultiPlayerWar.MpwModel.getWar();
             if (war) {
-                const player = war.getPlayerManager().getPlayerByUserId(Helpers.getExisted(UserModel.getSelfUserId()));
+                const player = war.getPlayerManager().getPlayerByUserId(Helpers.getExisted(Twns.User.UserModel.getSelfUserId()));
                 if ((player) && (player.getAliveState() === Types.PlayerAliveState.Alive)) {
                     const toWarAndTeam1 = Helpers.getExisted(war.getWarId()) * CommonConstants.ChatTeamDivider;
                     if (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.WarAndTeam, toTarget: toWarAndTeam1 })) {
@@ -648,7 +648,7 @@ namespace Twns.Chat {
             } else if (toCategory === ChatCategory.Private) {
                 labelType.text = Lang.getText(LangTextType.B0378);
                 labelName.text = ``;
-                UserModel.getUserNickname(toTarget).then(name => labelName.text = name ?? CommonConstants.ErrorTextForUndefined);
+                Twns.User.UserModel.getUserNickname(toTarget).then(name => labelName.text = name ?? CommonConstants.ErrorTextForUndefined);
 
             } else if (toCategory === ChatCategory.McrRoom) {
                 labelType.text = `${Lang.getText(LangTextType.B0443)} #${toTarget}`;
@@ -697,7 +697,7 @@ namespace Twns.Chat {
 
             } else if (toCategory === ChatCategory.MapReview) {
                 labelType.text = `${Lang.getText(LangTextType.B0892)}`;
-                labelName.text = (await UserModel.getUserBriefInfo(toTarget))?.nickname ?? CommonConstants.ErrorTextForUndefined;
+                labelName.text = (await Twns.User.UserModel.getUserBriefInfo(toTarget))?.nickname ?? CommonConstants.ErrorTextForUndefined;
 
             } else {
                 throw Helpers.newError(`Invalid data.`);
@@ -706,7 +706,7 @@ namespace Twns.Chat {
 
         private _updateImgRed(): void {
             const data              = this._getData();
-            this._imgRed.visible    = ChatModel.checkHasUnreadMessageForTarget(data.toCategory, data.toTarget);
+            this._imgRed.visible    = Twns.Chat.ChatModel.checkHasUnreadMessageForTarget(data.toCategory, data.toTarget);
         }
     }
 
@@ -723,10 +723,10 @@ namespace Twns.Chat {
             const message               = data.message;
             const fromUserId            = Helpers.getExisted(message.fromUserId);
             this._labelContent.text     = message.content ?? CommonConstants.ErrorTextForUndefined;
-            this._labelName.textColor   = fromUserId === UserModel.getSelfUserId() ? 0x00FF00 : 0xFFFFFF;
+            this._labelName.textColor   = fromUserId === Twns.User.UserModel.getSelfUserId() ? 0x00FF00 : 0xFFFFFF;
             this._labelName.text        = `    (${Helpers.getTimestampShortText(Helpers.getExisted(message.timestamp))})`;
 
-            const userInfo = Helpers.getExisted(await UserModel.getUserPublicInfo(fromUserId));
+            const userInfo = Helpers.getExisted(await Twns.User.UserModel.getUserPublicInfo(fromUserId));
             if ((this._getIsOpening()) && (data === this._getData())) {
                 this._imgAvatar.source  = Config.ConfigManager.getUserAvatarImageSource(userInfo.avatarId ?? 1);
                 this._labelName.text    = `${userInfo.nickname || `???`}    (${Helpers.getTimestampShortText(Helpers.getExisted(message.timestamp))})`;

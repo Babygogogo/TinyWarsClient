@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -16,15 +16,15 @@
 // import TwnsMeTileSimpleView     from "./MeTileSimpleView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeChooseTileDecoratorPanel {
-    import DataForDrawTileDecorator = TwnsMeDrawer.DataForDrawTileDecorator;
+namespace Twns.MapEditor {
+    import DataForDrawTileDecorator = Twns.MapEditor.DataForDrawTileDecorator;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
 
     const MAX_RECENT_COUNT = 10;
 
-    export type OpenData = void;
-    export class MeChooseTileDecoratorPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeChooseTileDecoratorPanel = void;
+    export class MeChooseTileDecoratorPanel extends TwnsUiPanel.UiPanel<OpenDataForMeChooseTileDecoratorPanel> {
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
         private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForTileDecoratorRenderer>;
         private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
@@ -90,7 +90,7 @@ namespace TwnsMeChooseTileDecoratorPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0233),
                 callback: () => {
-                    Helpers.getExisted(MeModel.getWar()).getDrawer().autoFillTileDecorators();
+                    Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().autoFillTileDecorators();
                     this.close();
                 },
             });
@@ -186,7 +186,7 @@ namespace TwnsMeChooseTileDecoratorPanel {
         private readonly _conTileView!  : eui.Group;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
-        private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private _tileView   = new Twns.MapEditor.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -230,7 +230,7 @@ namespace TwnsMeChooseTileDecoratorPanel {
             const dataForDrawTileDecorator  = data.dataForDrawTileDecorator;
             panel.updateOnChooseTileDecorator(dataForDrawTileDecorator);
             panel.close();
-            Helpers.getExisted(MeModel.getWar()).getDrawer().setModeDrawTileDecorator(dataForDrawTileDecorator);
+            Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawTileDecorator(dataForDrawTileDecorator);
         }
     }
 }

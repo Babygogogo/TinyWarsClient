@@ -10,7 +10,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import WarActionExecutor            from "../../tools/warHelpers/WarActionExecutor";
 // import WarVisibilityHelpers         from "../../tools/warHelpers/WarVisibilityHelpers";
@@ -21,7 +21,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.ReplayWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import WarAction                = CommonProto.WarAction;
     import IWarActionContainer      = WarAction.IWarActionContainer;
     import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
@@ -34,8 +34,8 @@ namespace Twns.ReplayWar {
     };
 
     export class RwWar extends BaseWar.BwWar {
-        private readonly _playerManager         = new TwnsRwPlayerManager.RwPlayerManager();
-        private readonly _field                 = new TwnsRwField.RwField();
+        private readonly _playerManager         = new Twns.ReplayWar.RwPlayerManager();
+        private readonly _field                 = new Twns.ReplayWar.RwField();
         private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
 
@@ -76,10 +76,10 @@ namespace Twns.ReplayWar {
         public getCanCheat(): boolean {
             return false;
         }
-        public getField(): TwnsRwField.RwField {
+        public getField(): Twns.ReplayWar.RwField {
             return this._field;
         }
-        public getPlayerManager(): TwnsRwPlayerManager.RwPlayerManager {
+        public getPlayerManager(): Twns.ReplayWar.RwPlayerManager {
             return this._playerManager;
         }
         public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
@@ -342,7 +342,7 @@ namespace Twns.ReplayWar {
         }
         public setNextActionId(nextActionId: number): void {
             this._nextActionId = nextActionId;
-            Notify.dispatch(NotifyType.RwNextActionIdChanged);
+            Twns.Notify.dispatch(NotifyType.RwNextActionIdChanged);
         }
 
         public getIsAutoReplay(): boolean {
@@ -351,7 +351,7 @@ namespace Twns.ReplayWar {
         public setIsAutoReplay(isAuto: boolean): void {
             if (this.getIsAutoReplay() !== isAuto) {
                 this._isAutoReplay = isAuto;
-                Notify.dispatch(NotifyType.ReplayAutoReplayChanged);
+                Twns.Notify.dispatch(NotifyType.ReplayAutoReplayChanged);
 
                 if ((isAuto) && (!this.getIsExecutingAction()) && (!this.checkIsInEnd())) {
                     this._executeNextAction(false);
@@ -506,7 +506,7 @@ namespace Twns.ReplayWar {
         }
         private async _doExecuteAction(action: IWarActionContainer, isFastExecute: boolean): Promise<void> {
             this.setNextActionId(this.getNextActionId() + 1);
-            await WarActionExecutor.checkAndExecute(this, action, isFastExecute);
+            await Twns.WarHelpers.WarActionExecutor.checkAndExecute(this, action, isFastExecute);
 
             const isInEnd = this.checkIsInEnd();
             if (isInEnd) {

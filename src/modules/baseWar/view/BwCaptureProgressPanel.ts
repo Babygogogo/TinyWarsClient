@@ -4,14 +4,14 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwCaptureProgressPanel {
-    export type OpenData = {
+namespace Twns.BaseWar {
+    export type OpenDataForBwCaptureProgressPanel = {
         maxValue        : number;
         currentValue    : number;
         newValue        : number;
         callbackOnFinish: () => void;
     };
-    export class BwCaptureProgressPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwCaptureProgressPanel extends TwnsUiPanel.UiPanel<OpenDataForBwCaptureProgressPanel> {
         private readonly _group!        : eui.Group;
         private readonly _pbarProgress! : eui.ProgressBar;
 
@@ -23,7 +23,7 @@ namespace TwnsBwCaptureProgressPanel {
                 this.close();
             });
         }
-        protected async _updateOnOpenDataChanged(oldOpenData: OpenData | null): Promise<void> {
+        protected async _updateOnOpenDataChanged(oldOpenData: OpenDataForBwCaptureProgressPanel | null): Promise<void> {
             if (oldOpenData) {
                 oldOpenData.callbackOnFinish();
             }

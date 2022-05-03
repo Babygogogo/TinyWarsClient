@@ -4,13 +4,13 @@
 // import Types                from "../../tools/helpers/Types";
 // import Notify               from "../../tools/notify/Notify";
 // import NotifyData           from "../../tools/notify/NotifyData";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsBwCursorView     from "../view/BwCursorView";
 // import TwnsBwWar            from "./BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwCursor {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.BaseWar {
+    import NotifyType       = Twns.Notify.NotifyType;
 
     export class BwCursor {
         private _gridX              = 0;
@@ -18,11 +18,11 @@ namespace TwnsBwCursor {
         private _previousGridIndex  : Types.GridIndex | null = null;
         private _mapSize?           : Types.MapSize;
         private _isMovableByTouches = true;
-        private readonly _view      = new TwnsBwCursorView.BwCursorView();
+        private readonly _view      = new Twns.BaseWar.BwCursorView();
 
         private _war?               : Twns.BaseWar.BwWar;
 
-        private _notifyListeners: Notify.Listener[] = [
+        private _notifyListeners: Twns.Notify.Listener[] = [
             { type: NotifyType.BwCursorTapped,              callback: this._onNotifyBwCursorTapped },
             { type: NotifyType.BwCursorDragged,             callback: this._onNotifyBwCursorDragged },
             { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwActionPlannerStateChanged },
@@ -41,13 +41,13 @@ namespace TwnsBwCursor {
         public startRunning(war: Twns.BaseWar.BwWar): void {
             this._war = war;
 
-            Notify.addEventListeners(this._notifyListeners, this, false, 10);
+            Twns.Notify.addEventListeners(this._notifyListeners, this, false, 10);
         }
         public startRunningView(): void {
             this.getView().startRunningView();
         }
         public stopRunning(): void {
-            Notify.removeEventListeners(this._notifyListeners, this);
+            Twns.Notify.removeEventListeners(this._notifyListeners, this);
 
             this.getView().stopRunningView();
         }
@@ -57,14 +57,14 @@ namespace TwnsBwCursor {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyBwCursorTapped(e: egret.Event): void {
             if (this.getIsMovableByTouches()) {
-                const data = e.data as NotifyData.BwCursorTapped;
+                const data = e.data as Twns.Notify.NotifyData.BwCursorTapped;
                 this.setGridIndex(data.tappedOn);
                 this.updateView();
             }
         }
         private _onNotifyBwCursorDragged(e: egret.Event): void {
             if (this.getIsMovableByTouches()) {
-                const data = e.data as NotifyData.BwCursorDragged;
+                const data = e.data as Twns.Notify.NotifyData.BwCursorDragged;
                 this.setGridIndex(data.draggedTo);
                 this.updateView();
                 SoundManager.playShortSfx(Types.ShortSfxCode.CursorMove01);
@@ -81,7 +81,7 @@ namespace TwnsBwCursor {
             return Helpers.getExisted(this._war);
         }
 
-        public getView(): TwnsBwCursorView.BwCursorView {
+        public getView(): Twns.BaseWar.BwCursorView {
             return this._view;
         }
         public updateView(): void {
@@ -113,7 +113,7 @@ namespace TwnsBwCursor {
 
             this._gridX = gridIndex.x;
             this._gridY = gridIndex.y;
-            Notify.dispatch(NotifyType.BwCursorGridIndexChanged, this);
+            Twns.Notify.dispatch(NotifyType.BwCursorGridIndexChanged, this);
         }
         public getGridIndex(): Types.GridIndex {
             return { x: this.getGridX(), y: this.getGridY() };

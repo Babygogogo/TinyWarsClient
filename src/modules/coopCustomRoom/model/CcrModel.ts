@@ -7,7 +7,7 @@
 // import Helpers                              from "../../tools/helpers/Helpers";
 // import Types                                from "../../tools/helpers/Types";
 // import Notify                               from "../../tools/notify/Notify";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
 // import UserModel                            from "../../user/model/UserModel";
@@ -21,7 +21,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
     import ICcrRoomPlayerInfo                       = CommonProto.CoopCustomRoom.ICcrRoomPlayerInfo;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
 
     export type DataForCreateRoom   = CommonProto.NetMessage.MsgCcrCreateRoom.IC;
     export type DataForJoinRoom     = CommonProto.NetMessage.MsgCcrJoinRoom.IC;
@@ -52,7 +52,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
 
     export async function getUnjoinedRoomIdSet(filter: CcrRoomFilter | null): Promise<Set<number>> {
         const unjoinedRoomIdArray   : number[] = [];
-        const selfUserId            = UserModel.getSelfUserId();
+        const selfUserId            = Twns.User.UserModel.getSelfUserId();
         if (selfUserId == null) {
             return new Set();
         }
@@ -74,7 +74,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
     }
     export async function getJoinedRoomIdSet(filter: CcrRoomFilter | null): Promise<Set<number>> {
         const joinedRoomIdArray : number[] = [];
-        const selfUserId        = UserModel.getSelfUserId();
+        const selfUserId        = Twns.User.UserModel.getSelfUserId();
         if (selfUserId == null) {
             return new Set();
         }
@@ -126,7 +126,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
             getRoomPlayerInfo(roomId),
         ]);
         if ((roomStaticInfo) && (roomPlayerInfo)) {
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = Twns.User.UserModel.getSelfUserId();
             const playerDataList    = roomPlayerInfo.playerDataList || [];
             const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
             if ((selfPlayerData) && (!selfPlayerData.isReady)) {
@@ -152,7 +152,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
             return false;
         }
 
-        const selfUserId        = UserModel.getSelfUserId();
+        const selfUserId        = Twns.User.UserModel.getSelfUserId();
         const playerDataList    = roomPlayerInfo.playerDataList || [];
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
         return (selfPlayerData != null)
@@ -179,7 +179,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
         const instanceWarRule       = Helpers.getExisted(settingsForCommon.instanceWarRule);
         const playersCountUnneutral = WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(instanceWarRule);
         const playerDataList        = roomPlayerInfo.playerDataList || [];
-        const playerInfoArray       : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+        const playerInfoArray       : Twns.Common.PlayerInfo[] = [];
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
             const playerData    = playerDataList.find(v => v.playerIndex === playerIndex);
             const userId        = playerData?.userId ?? null;
@@ -461,7 +461,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 let hasPlayer       = false;
                 for (const playerInfo of playerDataList) {
                     const userId    = playerInfo.userId;
-                    const nickname  = (userId == null ? null : await UserModel.getUserBriefInfo(userId))?.nickname;
+                    const nickname  = (userId == null ? null : await Twns.User.UserModel.getUserBriefInfo(userId))?.nickname;
                     if ((nickname != null) && (nickname.toLowerCase().includes(lowerCaseName))) {
                         hasPlayer = true;
                         break;

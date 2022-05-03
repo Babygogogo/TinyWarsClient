@@ -3,7 +3,7 @@
 // import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import UserModel            from "../../user/model/UserModel";
 // import TwnsBwTileMap        from "../model/BwTileMap";
@@ -12,7 +12,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType   = TwnsNotifyType.NotifyType;
+    import NotifyType   = Twns.Notify.NotifyType;
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
@@ -27,7 +27,7 @@ namespace Twns.BaseWar {
         private readonly _imgBorderD                = new TwnsUiImage.UiImage(`uncompressedBorder0002`);
         private readonly _imgBorderL                = new TwnsUiImage.UiImage(`uncompressedBorder0003`);
 
-        private readonly _tileViewArray             : TwnsBwTileView.BwTileView[] = [];
+        private readonly _tileViewArray             : Twns.BaseWar.BwTileView[] = [];
         private readonly _baseLayer                 = new egret.DisplayObjectContainer();
         private readonly _decoratorLayer            = new egret.DisplayObjectContainer();
         private readonly _gridBorderLayer           = new egret.DisplayObjectContainer();
@@ -164,7 +164,7 @@ namespace Twns.BaseWar {
         }
 
         public startRunningView(): void {
-            Notify.addEventListeners(this._notifyListeners, this);
+            Twns.Notify.addEventListeners(this._notifyListeners, this);
 
             this.resetLocationLayer();
             this._initCoZoneContainer();
@@ -172,7 +172,7 @@ namespace Twns.BaseWar {
             this.updateCoZone();
         }
         public stopRunningView(): void {
-            Notify.removeEventListeners(this._notifyListeners, this);
+            Twns.Notify.removeEventListeners(this._notifyListeners, this);
 
             this._stopCoZoneAnimation();
         }
@@ -418,7 +418,7 @@ namespace Twns.BaseWar {
 
         private _onNotifyBwTileLocationFlagSet(e: egret.Event): void {
             const tileMap   = Helpers.getExisted(this._tileMap);
-            const tile      = e.data as NotifyData.BwTileLocationFlagSet;
+            const tile      = e.data as Twns.Notify.NotifyData.BwTileLocationFlagSet;
             const img       = this._locationLayer.getChildAt(GridIndexHelpers.getGridId(tile.getGridIndex(), tileMap.getMapSize()));
             for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
                 if ((tileMap.getIsLocationVisible(locationId)) && (tile.getHasLocationFlag(locationId))) {
@@ -435,11 +435,11 @@ namespace Twns.BaseWar {
         }
 
         private _updateGridBorderLayerVisible(): void {
-            this._gridBorderLayer.visible = UserModel.getSelfSettingsIsShowGridBorder();
+            this._gridBorderLayer.visible = Twns.User.UserModel.getSelfSettingsIsShowGridBorder();
         }
 
         private _updateOpacityForTileLayers(): void {
-            const opacitySettings       = UserModel.getSelfSettingsOpacitySettings();
+            const opacitySettings       = Twns.User.UserModel.getSelfSettingsOpacitySettings();
             this._baseLayer.alpha       = (opacitySettings?.tileBaseOpacity ?? 100) / 100;
             this._objectLayer.alpha     = (opacitySettings?.tileObjectOpacity ?? 100) / 100;
             this._decoratorLayer.alpha  = (opacitySettings?.tileDecoratorOpacity ?? 100) / 100;

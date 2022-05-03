@@ -9,10 +9,10 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonConfirmPanel {
+namespace Twns.Common {
     import LangTextType = TwnsLangTextType.LangTextType;
 
-    export type OpenData = {
+    export type OpenDataForCommonConfirmPanel = {
         title?              : string;
         content             : string;
         callback            : () => any;
@@ -21,7 +21,7 @@ namespace TwnsCommonConfirmPanel {
         textForCancel?      : string;
         showButtonClose?    : boolean;
     };
-    export class CommonConfirmPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonConfirmPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonConfirmPanel> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
 
         private readonly _group!        : eui.Group;

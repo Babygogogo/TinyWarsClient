@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -18,12 +18,12 @@
 // import TwnsUserRegisterPanel    from "./UserRegisterPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserLoginPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.User {
+    import NotifyType       = Twns.Notify.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
-    export type OpenData = void;
-    export class UserLoginPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserLoginPanel = void;
+    export class UserLoginPanel extends TwnsUiPanel.UiPanel<OpenDataForUserLoginPanel> {
         private readonly _imgTitle!                 : TwnsUiImage.UiImage;
 
         private readonly _groupAccount!             : eui.Group;
@@ -97,9 +97,9 @@ namespace TwnsUserLoginPanel {
                 } else {
                     LocalStorage.setAccount(account);
                     LocalStorage.setPassword(password);
-                    UserModel.setSelfAccount(account);
-                    UserModel.setSelfPassword(password);
-                    UserProxy.reqLogin(account, password, false);
+                    Twns.User.UserModel.setSelfAccount(account);
+                    Twns.User.UserModel.setSelfPassword(password);
+                    Twns.User.UserProxy.reqLogin(account, password, false);
                 }
             }
         }

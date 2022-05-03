@@ -8,7 +8,7 @@
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -20,15 +20,15 @@
 // import TwnsMeTileSimpleView     from "./MeTileSimpleView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeChooseTileBasePanel {
-    import DataForDrawTileBase  = TwnsMeDrawer.DataForDrawTileBase;
+namespace Twns.MapEditor {
+    import DataForDrawTileBase  = Twns.MapEditor.DataForDrawTileBase;
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
 
     const MAX_RECENT_COUNT = 10;
 
-    export type OpenData = void;
-    export class MeChooseTileBasePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeChooseTileBasePanel = void;
+    export class MeChooseTileBasePanel extends TwnsUiPanel.UiPanel<OpenDataForMeChooseTileBasePanel> {
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
         private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForTileBaseRenderer>;
         private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
@@ -197,7 +197,7 @@ namespace TwnsMeChooseTileBasePanel {
         private readonly _group!        : eui.Group;
         private readonly _conTileView!  : eui.Group;
 
-        private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private _tileView   = new Twns.MapEditor.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -238,12 +238,12 @@ namespace TwnsMeChooseTileBasePanel {
             if (!panel.getNeedFill()) {
                 panel.updateOnChooseTileBase(dataForDrawTileBase);
                 panel.close();
-                Helpers.getExisted(MeModel.getWar()).getDrawer().setModeDrawTileBase(dataForDrawTileBase);
+                Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawTileBase(dataForDrawTileBase);
             } else {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0089),
                     callback: () => {
-                        const war           = Helpers.getExisted(MeModel.getWar());
+                        const war           = Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
                         const gameConfig    = war.getGameConfig();
                         for (const tile of war.getTileMap().getAllTiles()) {
                             tile.init({
@@ -262,7 +262,7 @@ namespace TwnsMeChooseTileBasePanel {
 
                         panel.updateOnChooseTileBase(dataForDrawTileBase);
                         panel.close();
-                        Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: war.getCursor().getGridIndex() } as NotifyData.MeTileChanged);
+                        Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: war.getCursor().getGridIndex() } as Twns.Notify.NotifyData.MeTileChanged);
                     },
                 });
             }

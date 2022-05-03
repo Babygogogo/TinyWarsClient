@@ -6,7 +6,7 @@
 // import UserModel        from "../../user/model/UserModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace CommonModel {
+namespace Twns.Common.CommonModel {
     import UnitType                 = Types.UnitType;
     import TileThemeType            = Types.TileThemeType;
     import TileBaseType             = Types.TileBaseType;
@@ -43,7 +43,7 @@ namespace CommonModel {
         return _unitAndTileTexturePrefix;
     }
     function updateUnitAndTileTexturePrefix(): void {
-        _unitAndTileTexturePrefix = `v${Helpers.getNumText(UserModel.getSelfSettingsTextureVersion())}_`;
+        _unitAndTileTexturePrefix = `v${Helpers.getNumText(Twns.User.UserModel.getSelfSettingsTextureVersion())}_`;
     }
 
     export function tickTileImageSources(): void {

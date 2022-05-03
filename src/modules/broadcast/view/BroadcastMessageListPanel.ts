@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -20,12 +20,12 @@
 // import TwnsChangeLogModifyPanel from "./ChangeLogModifyPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBroadcastMessageListPanel {
+namespace Twns.Broadcast {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class BroadcastMessageListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForBroadcastMessageListPanel = void;
+    export class BroadcastMessageListPanel extends TwnsUiPanel.UiPanel<OpenDataForBroadcastMessageListPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
@@ -52,7 +52,7 @@ namespace TwnsBroadcastMessageListPanel {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
 
-            BroadcastProxy.reqBroadcastGetAllMessageIdArray();
+            Twns.Broadcast.BroadcastProxy.reqBroadcastGetAllMessageIdArray();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -83,7 +83,7 @@ namespace TwnsBroadcastMessageListPanel {
         }
         private _updateListMessageAndLabelNoMessage(): void {
             const dataArray: DataForMessageRenderer[] = [];
-            for (const messageId of BroadcastModel.getAllMessageIdArray()) {
+            for (const messageId of Twns.Broadcast.BroadcastModel.getAllMessageIdArray()) {
                 dataArray.push({
                     messageId,
                 });
@@ -94,7 +94,7 @@ namespace TwnsBroadcastMessageListPanel {
         }
         private _updateBtnAddMessage(): void {
             const btn   = this._btnAddMessage;
-            btn.visible = UserModel.getIsSelfAdmin();
+            btn.visible = Twns.User.UserModel.getIsSelfAdmin();
         }
 
         protected async _showOpenAnimation(): Promise<void> {
@@ -150,7 +150,7 @@ namespace TwnsBroadcastMessageListPanel {
         protected async _onDataChanged(): Promise<void> {
             const data          = this._getData();
             const messageId     = data.messageId;
-            const messageData   = await BroadcastModel.getMessageData(messageId);
+            const messageData   = await Twns.Broadcast.BroadcastModel.getMessageData(messageId);
             if (messageData == null) {
                 return;
             }
@@ -169,7 +169,7 @@ namespace TwnsBroadcastMessageListPanel {
                 title   : Lang.getText(LangTextType.B0220),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
-                    BroadcastProxy.reqBroadcastDeleteMessage(this._getData().messageId);
+                    Twns.Broadcast.BroadcastProxy.reqBroadcastDeleteMessage(this._getData().messageId);
                 },
             });
         }

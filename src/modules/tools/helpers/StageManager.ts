@@ -1,6 +1,6 @@
 
 // import Notify           from "../notify/Notify";
-// import TwnsNotifyType   from "../notify/NotifyType";
+// import Twns.Notify   from "../notify/NotifyType";
 // import TwnsUiPanel      from "../ui/UiPanel";
 // import CommonConstants  from "./CommonConstants";
 // import Helpers          from "./Helpers";
@@ -9,7 +9,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace StageManager {
     import LayerType            = Types.LayerType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     // The game is in landscape mode, which means that its design max height equals its design width, 960.
@@ -109,14 +109,14 @@ namespace StageManager {
         _mouseY = e.stageY;
     }
     function _onMouseWheel(e: egret.Event): void {
-        Notify.dispatch(NotifyType.MouseWheel, e.data * ((egret.Capabilities.os === `Unknown` || navigator?.userAgent?.toLowerCase()?.includes(`firefox`)) ? 40 : 1));
+        Twns.Notify.dispatch(NotifyType.MouseWheel, e.data * ((egret.Capabilities.os === `Unknown` || navigator?.userAgent?.toLowerCase()?.includes(`firefox`)) ? 40 : 1));
     }
 
     function _onTouchBegin(e: egret.TouchEvent): void {
-        Notify.dispatch(NotifyType.GlobalTouchBegin, e);
+        Twns.Notify.dispatch(NotifyType.GlobalTouchBegin, e);
     }
     function _onTouchMove(e: egret.TouchEvent): void {
-        Notify.dispatch(NotifyType.GlobalTouchMove, e);
+        Twns.Notify.dispatch(NotifyType.GlobalTouchMove, e);
     }
 
     class UiLayer extends eui.UILayer {

@@ -3,7 +3,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
@@ -12,15 +12,15 @@
 // import TwnsMeWar            from "../model/MeWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeSymmetryPanel {
+namespace Twns.MapEditor {
     import MeWar        = Twns.MapEditor.MeWar;
     import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+    import NotifyType   = Twns.Notify.NotifyType;
     import SymmetryType = Types.SymmetryType;
     import GridIndex    = Types.GridIndex;
 
-    export type OpenData = void;
-    export class MeSymmetryPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeSymmetryPanel = void;
+    export class MeSymmetryPanel extends TwnsUiPanel.UiPanel<OpenDataForMeSymmetryPanel> {
         private readonly _groupLeftRight!               : eui.Group;
         private readonly _labelLeftRightTitle!          : TwnsUiLabel.UiLabel;
         private readonly _labelLeftRightRate!           : TwnsUiLabel.UiLabel;
@@ -126,7 +126,7 @@ namespace TwnsMeSymmetryPanel {
         }
 
         private _getWar(): MeWar {
-            return Helpers.getExisted(MeModel.getWar());
+            return Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
         }
 
         private _onTouchedGroupLeftRightBox(): void {

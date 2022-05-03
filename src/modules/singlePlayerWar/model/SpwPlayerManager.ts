@@ -4,7 +4,7 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpwPlayerManager {
+namespace Twns.SinglePlayerWar {
     import BwPlayerManager  = Twns.BaseWar.BwPlayerManager;
 
     export class SpwPlayerManager extends BwPlayerManager {

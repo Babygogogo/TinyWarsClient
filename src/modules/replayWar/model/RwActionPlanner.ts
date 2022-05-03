@@ -10,7 +10,7 @@
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsRwActionPlanner {
+namespace Twns.ReplayWar {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import UnitState            = Types.UnitActionState;

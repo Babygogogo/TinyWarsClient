@@ -4,7 +4,7 @@
 // import Types                    from "../../tools/helpers/Types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsTwActionPlanner {
+namespace Twns.TestWar {
     import GridIndex    = Types.GridIndex;
     import State        = Types.ActionPlannerState;
     export class TwActionPlanner extends Twns.BaseWar.BwActionPlanner {

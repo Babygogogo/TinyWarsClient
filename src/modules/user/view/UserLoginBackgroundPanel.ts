@@ -10,7 +10,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -21,12 +21,12 @@
 // import TwnsUserSetSoundPanel        from "./UserSetSoundPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserLoginBackgroundPanel {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.User {
+    import NotifyType               = Twns.Notify.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
 
-    export type OpenData = void;
-    export class UserLoginBackgroundPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserLoginBackgroundPanel = void;
+    export class UserLoginBackgroundPanel extends TwnsUiPanel.UiPanel<OpenDataForUserLoginBackgroundPanel> {
         private readonly _imgBackground!    : TwnsUiImage.UiImage;
 
         private readonly _groupRightButton! : eui.Group;
@@ -222,7 +222,7 @@ namespace TwnsUserLoginBackgroundPanel {
             if (Lang.getCurrentLanguageType() !== languageType) {
                 Lang.setLanguageType(languageType);
                 LocalStorage.setLanguageType(languageType);
-                Notify.dispatch(NotifyType.LanguageChanged);
+                Twns.Notify.dispatch(NotifyType.LanguageChanged);
             }
         }
 

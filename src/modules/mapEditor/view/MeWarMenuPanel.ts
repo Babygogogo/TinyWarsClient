@@ -14,7 +14,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -44,8 +44,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import DataForDrawUnit          = TwnsMeDrawer.DataForDrawUnit;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import DataForDrawUnit          = Twns.MapEditor.DataForDrawUnit;
+    import NotifyType               = Twns.Notify.NotifyType;
     import UnitType                 = Types.UnitType;
     import TileBaseType             = Types.TileBaseType;
     import TileObjectType           = Types.TileObjectType;
@@ -115,7 +115,7 @@ namespace Twns.MapEditor {
         }
 
         private _getWar(): MeWar {
-            return Helpers.getExisted(MeModel.getWar());
+            return Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -462,7 +462,7 @@ namespace Twns.MapEditor {
                 return {
                     name    : Lang.getText(LangTextType.B0709),
                     callback: () => {
-                        const currValue = UserModel.getSelfMapEditorAutoSaveTime();
+                        const currValue = Twns.User.UserModel.getSelfMapEditorAutoSaveTime();
                         const minValue  = CommonConstants.MapEditorAutoSaveMinTime;
                         const maxValue  = CommonConstants.MapEditorAutoSaveMaxTime;
                         TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
@@ -476,7 +476,7 @@ namespace Twns.MapEditor {
                                 const text  = panel.getInputText();
                                 if (!text) {
                                     if (currValue != null) {
-                                        UserProxy.reqSetMapEditorAutoSaveTime(null);
+                                        Twns.User.UserProxy.reqSetMapEditorAutoSaveTime(null);
                                     }
                                 } else {
                                     const value = Number(text);
@@ -484,7 +484,7 @@ namespace Twns.MapEditor {
                                         FloatText.show(Lang.getText(LangTextType.A0098));
                                     } else {
                                         if (currValue !== value) {
-                                            UserProxy.reqSetMapEditorAutoSaveTime(value);
+                                            Twns.User.UserProxy.reqSetMapEditorAutoSaveTime(value);
                                         }
                                     }
                                 }
@@ -701,7 +701,7 @@ namespace Twns.MapEditor {
         private readonly _labelNum!     : TwnsUiLabel.UiLabel;
         private readonly _conTileView!  : eui.Group;
 
-        private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private _tileView   = new Twns.MapEditor.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -771,7 +771,7 @@ namespace Twns.MapEditor {
             const dataForDrawUnit   = data.dataForDrawUnit;
             this._labelNum.text    = "" + data.count;
 
-            const war   = Helpers.getExisted(MeModel.getWar());
+            const war   = Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
             const unit  = new BaseWar.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
@@ -789,7 +789,7 @@ namespace Twns.MapEditor {
         public onItemTapEvent(): void {
             const data = this._getData();
             TwnsPanelManager.close(TwnsPanelConfig.Dict.MeChooseUnitPanel);
-            Helpers.getExisted(MeModel.getWar()).getDrawer().setModeDrawUnit(data.dataForDrawUnit);
+            Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawUnit(data.dataForDrawUnit);
         }
     }
 }

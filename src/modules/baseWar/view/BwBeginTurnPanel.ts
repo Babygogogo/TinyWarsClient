@@ -7,8 +7,8 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwBeginTurnPanel {
-    export type OpenData = {
+namespace Twns.BaseWar {
+    export type OpenDataForBwBeginTurnPanel = {
         gameConfig          : Twns.Config.GameConfig;
         playerIndex         : number;
         teamIndex           : number;
@@ -17,7 +17,7 @@ namespace TwnsBwBeginTurnPanel {
         unitAndTileSkinId   : number;
         callbackOnFinish    : () => void;
     };
-    export class BwBeginTurnPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwBeginTurnPanel extends TwnsUiPanel.UiPanel<OpenDataForBwBeginTurnPanel> {
         private readonly _group!            : eui.Group;
         private readonly _labelPlayerIndex! : TwnsUiLabel.UiLabel;
         private readonly _labelNickname!    : TwnsUiLabel.UiLabel;
@@ -35,7 +35,7 @@ namespace TwnsBwBeginTurnPanel {
                 this.close();
             });
         }
-        protected async _updateOnOpenDataChanged(oldOpenData: OpenData | null): Promise<void> {
+        protected async _updateOnOpenDataChanged(oldOpenData: OpenDataForBwBeginTurnPanel | null): Promise<void> {
             if (oldOpenData) {
                 oldOpenData.callbackOnFinish();
                 this._resetTimeoutForClose();

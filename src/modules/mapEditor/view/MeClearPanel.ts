@@ -5,7 +5,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
@@ -15,12 +15,12 @@
 // import TwnsMeWarMenuPanel   from "./MeWarMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeClearPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.MapEditor {
+    import NotifyType       = Twns.Notify.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
-    export type OpenData = void;
-    export class MeClearPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeClearPanel = void;
+    export class MeClearPanel extends TwnsUiPanel.UiPanel<OpenDataForMeClearPanel> {
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelCurrSizeTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelCurrWidth!       : TwnsUiLabel.UiLabel;
@@ -51,7 +51,7 @@ namespace TwnsMeClearPanel {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            const { width, height }     = Helpers.getExisted(MeModel.getWar()).getTileMap().getMapSize();
+            const { width, height }     = Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getTileMap().getMapSize();
             this._labelCurrHeight.text  = "" + height;
             this._labelCurrWidth.text   = "" + width;
             this._inputNewHeight.text   = "" + height;
@@ -74,7 +74,7 @@ namespace TwnsMeClearPanel {
             if ((!gridsCount) || (gridsCount <= 0)) {
                 FloatText.show(Lang.getText(LangTextType.A0087));
             } else {
-                const war = Helpers.getExisted(MeModel.getWar());
+                const war = Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
                 war.stopRunning();
                 await war.initWithMapEditorData(
                     {
@@ -96,7 +96,7 @@ namespace TwnsMeClearPanel {
             const input = this._inputNewWidth;
             let width = Number(input.text);
             if ((isNaN(width)) || (width <= 0)) {
-                width = Helpers.getExisted(MeModel.getWar()).getTileMap().getMapSize().width;
+                width = Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getTileMap().getMapSize().width;
             }
             this._newWidth  = width;
             input.text      = "" + width;
@@ -106,7 +106,7 @@ namespace TwnsMeClearPanel {
             const input = this._inputNewHeight;
             let width = Number(input.text);
             if ((isNaN(width)) || (width <= 0)) {
-                width = Helpers.getExisted(MeModel.getWar()).getTileMap().getMapSize().height;
+                width = Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getTileMap().getMapSize().height;
             }
             this._newHeight = width;
             input.text      = "" + width;

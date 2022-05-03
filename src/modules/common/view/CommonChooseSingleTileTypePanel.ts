@@ -5,7 +5,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -15,18 +15,18 @@
 // import WarEventHelper           from "../model/WarEventHelper";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseSingleTileTypePanel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import NotifyType           = Twns.Notify.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import TileType             = Types.TileType;
 
-    export type OpenData = {
+    export type OpenDataForCommonChooseSingleTileTypePanel = {
         currentTileType : TileType;
         tileTypeArray   : TileType[];
         playerIndex     : number;
         callback        : (tileType: TileType) => void;
     };
-    export class CommonChooseSingleTileTypePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChooseSingleTileTypePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseSingleTileTypePanel> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
@@ -121,7 +121,7 @@ namespace TwnsCommonChooseSingleTileTypePanel {
         private readonly _conTileView!  : eui.Group;
         private readonly _labelType!    : TwnsUiLabel.UiLabel;
 
-        private readonly _tileView      = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private readonly _tileView      = new Twns.MapEditor.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

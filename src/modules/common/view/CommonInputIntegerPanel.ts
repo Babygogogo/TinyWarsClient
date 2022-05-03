@@ -3,7 +3,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -11,11 +11,11 @@
 // import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonInputIntegerPanel {
+namespace Twns.Common {
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForCommonInputIntegerPanel = {
         title           : string;
         currentValue    : number;
         maxValue        : number;
@@ -23,7 +23,7 @@ namespace TwnsCommonInputIntegerPanel {
         tips            : string | null;
         callback        : (panel: CommonInputIntegerPanel) => any;
     };
-    export class CommonInputIntegerPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonInputIntegerPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonInputIntegerPanel> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;

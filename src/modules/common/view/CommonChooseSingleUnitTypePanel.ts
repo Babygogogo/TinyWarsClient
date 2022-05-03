@@ -5,7 +5,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -15,20 +15,20 @@
 // import WarEventHelper           from "../model/WarEventHelper";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseSingleUnitTypePanel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import NotifyType           = Twns.Notify.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import UnitType             = Types.UnitType;
     import GameConfig           = Twns.Config.GameConfig;
 
-    export type OpenData = {
+    export type OpenDataForCommonChooseSingleUnitTypePanel = {
         gameConfig      : GameConfig;
         currentUnitType : UnitType;
         unitTypeArray   : UnitType[];
         playerIndex     : number;
         callback        : (unitType: UnitType) => void;
     };
-    export class CommonChooseSingleUnitTypePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChooseSingleUnitTypePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseSingleUnitTypePanel> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;

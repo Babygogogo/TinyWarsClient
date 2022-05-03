@@ -7,7 +7,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import NotifyData                   from "../../tools/notify/NotifyData";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -21,7 +21,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SingleCustomRoom {
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import GameConfig               = Config.GameConfig;
 
     export class ScrCreatePlayerInfoPage extends TwnsUiTabPage.UiTabPage<void> {
@@ -164,7 +164,7 @@ namespace Twns.SingleCustomRoom {
         }
 
         private _onNotifyScrCreatePlayerInfoChanged(e: egret.Event): void {
-            const eventData = e.data as NotifyData.ScrCreatePlayerInfoChanged;
+            const eventData = e.data as Notify.NotifyData.ScrCreatePlayerInfoChanged;
             if (eventData.playerIndex === this._getData().playerIndex) {
                 this._updateComponentsForSettings();
             }

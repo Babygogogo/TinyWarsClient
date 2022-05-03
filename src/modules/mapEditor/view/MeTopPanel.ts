@@ -6,7 +6,7 @@
 // import Types                            from "../../tools/helpers/Types";
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import Twns.Notify                   from "../../tools/notify/NotifyType";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 // import TwnsUiPanel                      from "../../tools/ui/UiPanel";
@@ -24,9 +24,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import MeDrawer                 = TwnsMeDrawer.MeDrawer;
+    import MeDrawer                 = Twns.MapEditor.MeDrawer;
     import MeWar                    = MapEditor.MeWar;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import DrawerMode               = Types.MapEditorDrawerMode;
     import LangTextType             = TwnsLangTextType.LangTextType;
 
@@ -76,7 +76,7 @@ namespace Twns.MapEditor {
         private readonly _labelLocation!                : TwnsUiLabel.UiLabel;
 
         private _unitView   = new BaseWar.BwUnitView();
-        private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private _tileView   = new Twns.MapEditor.MeTileSimpleView();
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -140,7 +140,7 @@ namespace Twns.MapEditor {
         }
 
         private _getWar(): MeWar {
-            return Helpers.getExisted(MeModel.getWar());
+            return Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
         }
         private _getDrawer(): MeDrawer {
             return this._getWar().getDrawer();
@@ -153,18 +153,18 @@ namespace Twns.MapEditor {
             this._updateComponentsForLanguage();
         }
         private async _onNotifyTimeTick(): Promise<void> {
-            const autoSaveTime = UserModel.getSelfMapEditorAutoSaveTime();
+            const autoSaveTime = Twns.User.UserModel.getSelfMapEditorAutoSaveTime();
             if ((!autoSaveTime) || (Timer.getServerTimestamp() % autoSaveTime !== 0)) {
                 return;
             }
 
-            const war = MeModel.getWar();
+            const war = Twns.MapEditor.MeModel.getWar();
             if ((war == null) || (!war.getIsMapModified()) || (war.getIsReviewingMap())) {
                 return;
             }
 
             const slotIndex = war.getMapSlotIndex();
-            if (slotIndex === MeModel.getReviewingMapSlotIndex()) {
+            if (slotIndex === Twns.MapEditor.MeModel.getReviewingMapSlotIndex()) {
                 return;
             }
 
@@ -172,7 +172,7 @@ namespace Twns.MapEditor {
             if (await MapEditor.MeHelpers.getCriticalErrorCodeForMapRawData(mapRawData)) {
                 FloatText.show(Lang.getText(LangTextType.A0304));
             } else {
-                MeProxy.reqMeSubmitMap(slotIndex, mapRawData, false);
+                Twns.MapEditor.MeProxy.reqMeSubmitMap(slotIndex, mapRawData, false);
             }
         }
         private _onNotifyTileAnimationTick(): void {
@@ -279,7 +279,7 @@ namespace Twns.MapEditor {
                 content : Lang.getText(LangTextType.A0072),
                 callback: async () => {
                     const slotIndex = war.getMapSlotIndex();
-                    const data      = MeModel.getData(slotIndex);
+                    const data      = Twns.MapEditor.MeModel.getData(slotIndex);
                     war.stopRunning();
                     await war.initWithMapEditorData(
                         {
@@ -343,7 +343,7 @@ namespace Twns.MapEditor {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {
                 toMapReviewTarget: war.getIsReviewingMap()
                     ? war.getMapDesignerUserId()
-                    : Helpers.getExisted(UserModel.getSelfUserId())
+                    : Helpers.getExisted(Twns.User.UserModel.getSelfUserId())
             });
         }
         private _onTouchedBtnMenu(): void {

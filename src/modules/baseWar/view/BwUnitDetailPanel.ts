@@ -12,7 +12,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -27,7 +27,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import UnitType                 = Types.UnitType;
     import TileType                 = Types.TileType;
@@ -164,7 +164,7 @@ namespace Twns.BaseWar {
 
                     unit.getLoaderUnit()?.updateView();
                     war.getActionPlanner().setStateIdle();
-                    Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as NotifyData.BwUnitChanged);
+                    Twns.Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as Twns.Notify.NotifyData.BwUnitChanged);
 
                     this.close();
                 },
@@ -1028,7 +1028,7 @@ namespace Twns.BaseWar {
                     this._updateView();
                     war.getActionPlanner().setStateIdle();
 
-                    Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex: unit.getGridIndex() } as NotifyData.BwUnitChanged);
+                    Twns.Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex: unit.getGridIndex() } as Twns.Notify.NotifyData.BwUnitChanged);
                 },
             });
         }
@@ -1146,8 +1146,8 @@ namespace Twns.BaseWar {
                 const targetArmorType           = Helpers.getExisted(targetCfg.armorType);
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
-                this._tileView.source           = CommonModel.getCachedTileObjectImageSource({
-                    version     : UserModel.getSelfSettingsTextureVersion(),
+                this._tileView.source           = Twns.Common.CommonModel.getCachedTileObjectImageSource({
+                    version     : Twns.User.UserModel.getSelfSettingsTextureVersion(),
                     themeType   : Types.TileThemeType.Clear,
                     skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                     objectType  : Config.ConfigManager.getTileObjectTypeByTileType(targetTileType),

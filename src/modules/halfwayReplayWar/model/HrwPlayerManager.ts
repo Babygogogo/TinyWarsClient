@@ -2,7 +2,7 @@
 // import TwnsBwPlayerManager from "../../baseWar/model/BwPlayerManager";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsHrwPlayerManager {
+namespace Twns.HalfwayReplayWar {
     import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
     export class HrwPlayerManager extends Twns.BaseWar.BwPlayerManager {

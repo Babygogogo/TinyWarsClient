@@ -19,18 +19,18 @@
 // import TwnsSpwWar           from "./SpwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace SpwModel {
+namespace Twns.SinglePlayerWar.SpwModel {
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import SpwWar                   = TwnsSpwWar.SpwWar;
-    import ScwWar                   = Twns.SingleCustomWar.ScwWar;
-    import SfwWar                   = Twns.SingleFreeWar.SfwWar;
-    import SrwWar                   = Twns.SingleRankWar.SrwWar;
-    import SpwPlayerManager         = TwnsSpwPlayerManager.SpwPlayerManager;
+    import SpwWar                   = Twns.SinglePlayerWar.SpwWar;
+    import ScwWar                   = SingleCustomWar.ScwWar;
+    import SfwWar                   = SingleFreeWar.SfwWar;
+    import SrwWar                   = SingleRankWar.SrwWar;
+    import SpwPlayerManager         = Twns.SinglePlayerWar.SpwPlayerManager;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import WarSerialization         = CommonProto.WarSerialization;
     import IWarActionContainer      = CommonProto.WarAction.IWarActionContainer;
     import ISpmWarSaveSlotExtraData = CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
-    import BwWar                    = Twns.BaseWar.BwWar;
+    import BwWar                    = BaseWar.BwWar;
 
     let _war: SpwWar | null = null;
 
@@ -53,7 +53,7 @@ namespace SpwModel {
 
         const data  = Helpers.deepClone(warData);
         const war   = createWarByWarData(data);
-        war.init(data, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(data.settingsForCommon?.configVersion)));
+        war.init(data, await Config.ConfigManager.getGameConfig(Helpers.getExisted(data.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         war.setSaveSlotIndex(slotIndex);
         war.setSaveSlotExtraData(slotExtraData);
@@ -176,7 +176,7 @@ namespace SpwModel {
                                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                                     content : Lang.getText(LangTextType.A0277),
                                     callback: () => {
-                                        SpmProxy.reqSpmValidateSrw(war);
+                                        Twns.SinglePlayerMode.SpmProxy.reqSpmValidateSrw(war);
                                     },
                                 });
                             },
@@ -355,7 +355,7 @@ namespace SpwModel {
 
     async function reviseAndExecute(war: BwWar, action: IWarActionContainer): Promise<void> {
         const revisedAction = WarActionReviser.revise(war, action);
-        await WarActionExecutor.checkAndExecute(war, revisedAction, false);
+        await WarHelpers.WarActionExecutor.checkAndExecute(war, revisedAction, false);
 
         war.getExecutedActionManager().addExecutedAction(revisedAction);
     }

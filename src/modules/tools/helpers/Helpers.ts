@@ -481,8 +481,8 @@ namespace Helpers {
     // export function createCachedDataGetter<DataType, NetMessageType>({ dataDict, dataExpireTime = 999999, notifyTypeForSucceed, notifyTypeForFail, checkIsTargetMessage, reqData }: {
     //     dataDict                : Map<number, DataType | null>;
     //     dataExpireTime?         : number;
-    //     notifyTypeForSucceed    : TwnsNotifyType.NotifyType;
-    //     notifyTypeForFail       : TwnsNotifyType.NotifyType;
+    //     notifyTypeForSucceed    : Twns.Notify.NotifyType;
+    //     notifyTypeForFail       : Twns.Notify.NotifyType;
     //     checkIsTargetMessage    : (msg: NetMessageType, key: number) => boolean;
     //     reqData                 : (key: number) => void;
     // }): (key: number) => Promise<DataType | null> {
