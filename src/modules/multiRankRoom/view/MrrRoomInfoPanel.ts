@@ -192,7 +192,7 @@ namespace Twns.MultiRankRoom {
                     FloatText.show(Lang.getText(LangTextType.A0207));
                 } else {
                     const currentCoId = MultiRankRoom.MrrSelfSettingsModel.getCoId();
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                         gameConfig          : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
                         currentCoId,
                         availableCoIdArray  : Twns.Helpers.getExisted(MultiRankRoom.MrrSelfSettingsModel.getAvailableCoIdArray()),

@@ -280,7 +280,7 @@ namespace Twns.WarEvent {
             if (dataForCoDialogue) {
                 const gameConfig    = data.war.getGameConfig();
                 const currentCoId   = dataForCoDialogue.coId ?? null;
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                     gameConfig,
                     availableCoIdArray  : gameConfig.getCoIdArrayForDialogue(),
                     currentCoId,

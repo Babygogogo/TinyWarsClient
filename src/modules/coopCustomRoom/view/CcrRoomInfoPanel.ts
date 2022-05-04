@@ -163,7 +163,7 @@ namespace Twns.CoopCustomRoom {
                     const currentCoId       = selfPlayerData.coId ?? null;
                     const settingsForCommon = Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon);
                     const gameConfig        = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion));
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                         gameConfig,
                         currentCoId,
                         availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({

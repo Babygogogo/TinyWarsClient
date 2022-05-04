@@ -132,7 +132,7 @@ namespace Twns.MultiCustomRoom {
         private _onTouchedBtnChooseCo(): void {
             const currentCoId = MultiCustomRoom.McrCreateModel.getSelfCoId();
             const gameConfig    = MultiCustomRoom.McrCreateModel.getGameConfig();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                 gameConfig,
                 currentCoId,
                 availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({

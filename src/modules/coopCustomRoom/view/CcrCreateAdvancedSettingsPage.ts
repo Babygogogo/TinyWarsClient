@@ -657,7 +657,7 @@ namespace Twns.CoopCustomRoom {
                 if (playerIndex === CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex()) {
                     FloatText.show(Lang.getText(LangTextType.A0220));
                 } else {
-                    PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseCoPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                         gameConfig,
                         currentCoId         : coId,
                         availableCoIdArray  : gameConfig.getEnabledCoArray().map(v => v.coId),

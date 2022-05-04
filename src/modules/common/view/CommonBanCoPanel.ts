@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiCoInfo             from "../../tools/ui/UiCoInfo";
 // import TwnsUiComponent          from "../../tools/ui/UiComponent";
@@ -17,9 +17,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common {
-    import LangTextType     = Twns.Lang.LangTextType;
-    import NotifyType       = Twns.Notify.NotifyType;
-    import GameConfig       = Twns.Config.GameConfig;
+    import LangTextType     = Lang.LangTextType;
+    import NotifyType       = Notify.NotifyType;
+    import GameConfig       = Config.GameConfig;
 
     export type OpenDataForCommonBanCoPanel = {
         playerIndex         : number;
@@ -100,11 +100,11 @@ namespace Twns.Common {
             const openData = this._getOpenData();
             const callback = openData.callbackOnConfirm;
             if (callback == null) {
-                throw Twns.Helpers.newError(`CommonBanCoPanel._onTouchedBtnConfirm() empty callback.`);
+                throw Helpers.newError(`CommonBanCoPanel._onTouchedBtnConfirm() empty callback.`);
             } else {
                 const bannedCoIdSet = this._bannedCoIdSet;
                 if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0130),
                     });
@@ -113,7 +113,7 @@ namespace Twns.Common {
 
                 const maxBanCount = openData.maxBanCount;
                 if ((maxBanCount != null) && (bannedCoIdSet.size > maxBanCount)) {
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getFormattedText(LangTextType.F0031, maxBanCount),
                     });
@@ -162,7 +162,7 @@ namespace Twns.Common {
 
         private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
             const renderer  = e.currentTarget as RendererForCoName;
-            const coId      = Twns.Helpers.getExisted(renderer.getCoId());
+            const coId      = Helpers.getExisted(renderer.getCoId());
             this._setPreviewCoId(coId);
 
             const openData = this._getOpenData();
@@ -179,7 +179,7 @@ namespace Twns.Common {
             }
 
             if (coId === CommonConstants.CoEmptyId) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0130),
                 });
@@ -188,7 +188,7 @@ namespace Twns.Common {
 
             const maxBanCount = openData.maxBanCount;
             if ((maxBanCount != null) && (bannedCoIdSet.size >= maxBanCount)) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getFormattedText(LangTextType.F0031, maxBanCount),
                 });
@@ -203,7 +203,7 @@ namespace Twns.Common {
             if (openData.selfCoId !== coId) {
                 callback();
             } else {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0057),
                     callback,
                 });
@@ -311,7 +311,7 @@ namespace Twns.Common {
         private _updateGroupCoNames(): void {
             const bannedCoIdSet = this._bannedCoIdSet;
             for (const renderer of this._renderersForCoNames) {
-                renderer.setIsAvailable(!bannedCoIdSet.has(Twns.Helpers.getExisted(renderer.getCoId())));
+                renderer.setIsAvailable(!bannedCoIdSet.has(Helpers.getExisted(renderer.getCoId())));
             }
         }
 
@@ -332,33 +332,33 @@ namespace Twns.Common {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: -40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
 
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: -40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -460,7 +460,7 @@ namespace Twns.Common {
             const isAvailable           = !!this._isAvailable;
             this._imgSelected.visible   = isAvailable;
             this._imgUnselected.visible = !isAvailable;
-            this._labelName.text        = this._gameConfig?.getCoBasicCfg(Twns.Helpers.getExisted(this._coId))?.name || CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = this._gameConfig?.getCoBasicCfg(Helpers.getExisted(this._coId))?.name || CommonConstants.ErrorTextForUndefined;
         }
     }
 }

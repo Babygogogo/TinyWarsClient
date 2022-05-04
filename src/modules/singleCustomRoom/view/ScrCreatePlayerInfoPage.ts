@@ -143,7 +143,7 @@ namespace Twns.SingleCustomRoom {
             const data          = this._getData();
             const playerIndex   = data.playerIndex;
             const currentCoId   = Twns.SingleCustomRoom.ScrCreateModel.getCoId(playerIndex);
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                 gameConfig          : data.gameConfig,
                 currentCoId,
                 availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({

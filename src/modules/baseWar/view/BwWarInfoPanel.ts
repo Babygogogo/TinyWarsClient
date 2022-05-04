@@ -404,7 +404,7 @@ namespace Twns.BaseWar {
             const player                                = war.getPlayer(playerIndex);
             const gameConfig                            = war.getGameConfig();
             const currentCoId                           = player.getCoId();
-            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseCoPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                 gameConfig,
                 currentCoId,
                 availableCoIdArray  : gameConfig.getEnabledCoArray().map(v => v.coId),

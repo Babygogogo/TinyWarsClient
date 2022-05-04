@@ -1,7 +1,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.PanelHelpers {
-    import LayerType    = Twns.Types.LayerType;
+    import LayerType    = Types.LayerType;
 
     export type PanelConfig<T> = {
         cls             : new () => TwnsUiPanel.UiPanel<T>;
@@ -12,273 +12,274 @@ namespace Twns.PanelHelpers {
     };
 
     export let PanelDict: {
-        BwBackgroundPanel                   : PanelConfig<Twns.BaseWar.OpenDataForBwBackgroundPanel>;
-        BwBeginTurnPanel                    : PanelConfig<Twns.BaseWar.OpenDataForBwBeginTurnPanel>;
-        BwCaptureProgressPanel              : PanelConfig<Twns.BaseWar.OpenDataForBwCaptureProgressPanel>;
-        BwDamagePreviewPanel                : PanelConfig<Twns.BaseWar.OpenDataForBwDamagePreviewPanel>;
-        BwDialoguePanel                     : PanelConfig<Twns.BaseWar.OpenDataForBwDialoguePanel>;
-        BwProduceUnitPanel                  : PanelConfig<Twns.BaseWar.OpenDataForBwProduceUnitPanel>;
-        BwSimpleDialoguePanel               : PanelConfig<Twns.BaseWar.OpenDataForBwSimpleDialoguePanel>;
-        BwTileBriefPanel                    : PanelConfig<Twns.BaseWar.OpenDataForBwTileBriefPanel>;
-        BwTileDetailPanel                   : PanelConfig<Twns.BaseWar.OpenDataForBwTileDetailPanel>;
-        BwUnitActionsPanel                  : PanelConfig<Twns.BaseWar.OpenDataForBwUnitActionsPanel>;
-        BwUnitBriefPanel                    : PanelConfig<Twns.BaseWar.OpenDataForBwUnitBriefPanel>;
-        BwUnitDetailPanel                   : PanelConfig<Twns.BaseWar.OpenDataForBwUnitDetailPanel>;
-        BwUnitListPanel                     : PanelConfig<Twns.BaseWar.OpenDataForBwUnitListPanel>;
-        BwWarInfoPanel                      : PanelConfig<Twns.BaseWar.OpenDataForBwWarInfoPanel>;
-        BwWarPanel                          : PanelConfig<Twns.BaseWar.OpenDataForBwWarPanel>;
+        BwBackgroundPanel                   : PanelConfig<BaseWar.OpenDataForBwBackgroundPanel>;
+        BwBeginTurnPanel                    : PanelConfig<BaseWar.OpenDataForBwBeginTurnPanel>;
+        BwCaptureProgressPanel              : PanelConfig<BaseWar.OpenDataForBwCaptureProgressPanel>;
+        BwDamagePreviewPanel                : PanelConfig<BaseWar.OpenDataForBwDamagePreviewPanel>;
+        BwDialoguePanel                     : PanelConfig<BaseWar.OpenDataForBwDialoguePanel>;
+        BwProduceUnitPanel                  : PanelConfig<BaseWar.OpenDataForBwProduceUnitPanel>;
+        BwSimpleDialoguePanel               : PanelConfig<BaseWar.OpenDataForBwSimpleDialoguePanel>;
+        BwTileBriefPanel                    : PanelConfig<BaseWar.OpenDataForBwTileBriefPanel>;
+        BwTileDetailPanel                   : PanelConfig<BaseWar.OpenDataForBwTileDetailPanel>;
+        BwUnitActionsPanel                  : PanelConfig<BaseWar.OpenDataForBwUnitActionsPanel>;
+        BwUnitBriefPanel                    : PanelConfig<BaseWar.OpenDataForBwUnitBriefPanel>;
+        BwUnitDetailPanel                   : PanelConfig<BaseWar.OpenDataForBwUnitDetailPanel>;
+        BwUnitListPanel                     : PanelConfig<BaseWar.OpenDataForBwUnitListPanel>;
+        BwWarInfoPanel                      : PanelConfig<BaseWar.OpenDataForBwWarInfoPanel>;
+        BwWarPanel                          : PanelConfig<BaseWar.OpenDataForBwWarPanel>;
 
-        BroadcastAddMessagePanel            : PanelConfig<Twns.Broadcast.OpenDataForBroadcastAddMessagePanel>;
-        BroadcastMessageListPanel           : PanelConfig<Twns.Broadcast.OpenDataForBroadcastMessageListPanel>;
-        BroadcastPanel                      : PanelConfig<Twns.Broadcast.OpenDataForBroadcastPanel>;
+        BroadcastAddMessagePanel            : PanelConfig<Broadcast.OpenDataForBroadcastAddMessagePanel>;
+        BroadcastMessageListPanel           : PanelConfig<Broadcast.OpenDataForBroadcastMessageListPanel>;
+        BroadcastPanel                      : PanelConfig<Broadcast.OpenDataForBroadcastPanel>;
 
-        ChangeLogAddPanel                   : PanelConfig<Twns.ChangeLog.OpenDataForChangeLogAddPanel>;
-        ChangeLogModifyPanel                : PanelConfig<Twns.ChangeLog.OpenDataForChangeLogModifyPanel>;
-        ChangeLogPanel                      : PanelConfig<Twns.ChangeLog.OpenDataForChangeLogPanel>;
+        ChangeLogAddPanel                   : PanelConfig<ChangeLog.OpenDataForChangeLogAddPanel>;
+        ChangeLogModifyPanel                : PanelConfig<ChangeLog.OpenDataForChangeLogModifyPanel>;
+        ChangeLogPanel                      : PanelConfig<ChangeLog.OpenDataForChangeLogPanel>;
 
-        CcrCreateMapListPanel               : PanelConfig<Twns.CoopCustomRoom.OpenDataForCcrCreateMapListPanel>;
-        CcrCreateSearchMapPanel             : PanelConfig<Twns.CoopCustomRoom.OpenDataForCcrCreateSearchMapPanel>;
-        CcrCreateSettingsPanel              : PanelConfig<Twns.CoopCustomRoom.OpenDataForCcrCreateSettingsPanel>;
-        CcrJoinRoomListPanel                : PanelConfig<Twns.CoopCustomRoom.OpenDataForCcrJoinRoomListPanel>;
-        CcrMainMenuPanel                    : PanelConfig<Twns.CoopCustomRoom.OpenDataForCcrMainMenuPanel>;
-        CcrMyRoomListPanel                  : PanelConfig<Twns.CoopCustomRoom.OpenDataForCcrMyRoomListPanel>;
-        CcrRoomInfoPanel                    : PanelConfig<Twns.CoopCustomRoom.OpenDataForCcrRoomInfoPanel>;
-        CcrSearchRoomPanel                  : PanelConfig<Twns.CoopCustomRoom.OpenDataForCcrSearchRoomPanel>;
+        CcrCreateMapListPanel               : PanelConfig<CoopCustomRoom.OpenDataForCcrCreateMapListPanel>;
+        CcrCreateSearchMapPanel             : PanelConfig<CoopCustomRoom.OpenDataForCcrCreateSearchMapPanel>;
+        CcrCreateSettingsPanel              : PanelConfig<CoopCustomRoom.OpenDataForCcrCreateSettingsPanel>;
+        CcrJoinRoomListPanel                : PanelConfig<CoopCustomRoom.OpenDataForCcrJoinRoomListPanel>;
+        CcrMainMenuPanel                    : PanelConfig<CoopCustomRoom.OpenDataForCcrMainMenuPanel>;
+        CcrMyRoomListPanel                  : PanelConfig<CoopCustomRoom.OpenDataForCcrMyRoomListPanel>;
+        CcrRoomInfoPanel                    : PanelConfig<CoopCustomRoom.OpenDataForCcrRoomInfoPanel>;
+        CcrSearchRoomPanel                  : PanelConfig<CoopCustomRoom.OpenDataForCcrSearchRoomPanel>;
 
-        CcwMyWarListPanel                   : PanelConfig<Twns.CoopCustomWar.OpenDataForCcwMyWarListPanel>;
+        CcwMyWarListPanel                   : PanelConfig<CoopCustomWar.OpenDataForCcwMyWarListPanel>;
 
-        ChatCommandPanel                    : PanelConfig<Twns.Chat.OpenDataForChatCommandPanel>;
-        ChatPanel                           : PanelConfig<Twns.Chat.OpenDataForChatPanel>;
+        ChatCommandPanel                    : PanelConfig<Chat.OpenDataForChatCommandPanel>;
+        ChatPanel                           : PanelConfig<Chat.OpenDataForChatPanel>;
 
-        CommonAddLoadedUnitPanel            : PanelConfig<Twns.Common.OpenDataForCommonAddLoadedUnitPanel>;
-        CommonAlertPanel                    : PanelConfig<Twns.Common.OpenDataForCommonAlertPanel>;
-        CommonBanCoPanel                    : PanelConfig<Twns.Common.OpenDataForCommonBanCoPanel>;
-        CommonBlockPanel                    : PanelConfig<Twns.Common.OpenDataForCommonBlockPanel>;
-        CommonChangeVersionPanel            : PanelConfig<Twns.Common.OpenDataForCommonChangeVersionPanel>;
-        CommonChooseCoCategoryIdPanel       : PanelConfig<Twns.Common.OpenDataForCommonChooseCoCategoryIdPanel>;
-        CommonChooseCoPanel                 : PanelConfig<Twns.Common.OpenDataForCommonChooseCoPanel>;
-        CommonChooseCoSkillTypePanel        : PanelConfig<Twns.Common.OpenDataForCommonChooseCoSkillTypePanel>;
-        CommonChooseCustomCounterIdPanel    : PanelConfig<Twns.Common.OpenDataForCommonChooseCustomCounterIdPanel>;
-        CommonChooseGridIndexPanel          : PanelConfig<Twns.Common.OpenDataForCommonChooseGridIndexPanel>;
-        CommonChooseLocationPanel           : PanelConfig<Twns.Common.OpenDataForCommonChooseLocationPanel>;
-        CommonChoosePlayerAliveStatePanel   : PanelConfig<Twns.Common.OpenDataForCommonChoosePlayerAliveStatePanel>;
-        CommonChoosePlayerIndexPanel        : PanelConfig<Twns.Common.OpenDataForCommonChoosePlayerIndexPanel>;
-        CommonChooseSingleTileTypePanel     : PanelConfig<Twns.Common.OpenDataForCommonChooseSingleTileTypePanel>;
-        CommonChooseSingleUnitTypePanel     : PanelConfig<Twns.Common.OpenDataForCommonChooseSingleUnitTypePanel>;
-        CommonChooseTeamIndexPanel          : PanelConfig<Twns.Common.OpenDataForCommonChooseTeamIndexPanel>;
-        CommonChooseTileBasePanel           : PanelConfig<Twns.Common.OpenDataForCommonChooseTileBasePanel>;
-        CommonChooseTileDecoratorPanel      : PanelConfig<Twns.Common.OpenDataForCommonChooseTileDecoratorPanel>;
-        CommonChooseTileObjectPanel         : PanelConfig<Twns.Common.OpenDataForCommonChooseTileObjectPanel>;
-        CommonChooseTileTypePanel           : PanelConfig<Twns.Common.OpenDataForCommonChooseTileTypePanel>;
-        CommonChooseUnitActionStatePanel    : PanelConfig<Twns.Common.OpenDataForCommonChooseUnitActionStatePanel>;
-        CommonChooseUnitTypePanel           : PanelConfig<Twns.Common.OpenDataForCommonChooseUnitTypePanel>;
-        CommonChooseWarEventActionIdPanel   : PanelConfig<Twns.Common.OpenDataForCommonChooseWarEventActionIdPanel>;
-        CommonChooseWarEventIdPanel         : PanelConfig<Twns.Common.OpenDataForCommonChooseWarEventIdPanel>;
-        CommonChooseWeatherTypePanel        : PanelConfig<Twns.Common.OpenDataForCommonChooseWeatherTypePanel>;
-        CommonCoInfoPanel                   : PanelConfig<Twns.Common.OpenDataForCommonCoInfoPanel>;
-        CommonCoListPanel                   : PanelConfig<Twns.Common.OpenDataForCommonCoListPanel>;
-        CommonConfirmPanel                  : PanelConfig<Twns.Common.OpenDataForCommonConfirmPanel>;
-        CommonDamageCalculatorPanel         : PanelConfig<Twns.Common.OpenDataForCommonDamageCalculatorPanel>;
-        CommonDamageChartPanel              : PanelConfig<Twns.Common.OpenDataForCommonDamageChartPanel>;
-        CommonErrorPanel                    : PanelConfig<Twns.Common.OpenDataForCommonErrorPanel>;
-        CommonHelpPanel                     : PanelConfig<Twns.Common.OpenDataForCommonHelpPanel>;
-        CommonInputPanel                    : PanelConfig<Twns.Common.OpenDataForCommonInputPanel>;
-        CommonInputIntegerPanel             : PanelConfig<Twns.Common.OpenDataForCommonInputIntegerPanel>;
-        CommonJoinRoomPasswordPanel         : PanelConfig<Twns.Common.OpenDataForCommonJoinRoomPasswordPanel>;
-        CommonMapWarStatisticsPanel         : PanelConfig<Twns.Common.OpenDataForCommonMapWarStatisticsPanel>;
-        CommonModifyWarRuleNamePanel        : PanelConfig<Twns.Common.OpenDataForCommonModifyWarRuleNamePanel>;
-        CommonRankListPanel                 : PanelConfig<Twns.Common.OpenDataForCommonRankListPanel>;
-        CommonServerStatusPanel             : PanelConfig<Twns.Common.OpenDataForCommonServerStatusPanel>;
-        CommonWarEventListPanel             : PanelConfig<Twns.Common.OpenDataForCommonWarEventListPanel>;
+        CommonAddLoadedUnitPanel            : PanelConfig<Common.OpenDataForCommonAddLoadedUnitPanel>;
+        CommonAlertPanel                    : PanelConfig<Common.OpenDataForCommonAlertPanel>;
+        CommonBanCoPanel                    : PanelConfig<Common.OpenDataForCommonBanCoPanel>;
+        CommonBlockPanel                    : PanelConfig<Common.OpenDataForCommonBlockPanel>;
+        CommonChangeVersionPanel            : PanelConfig<Common.OpenDataForCommonChangeVersionPanel>;
+        CommonChooseCoCategoryIdPanel       : PanelConfig<Common.OpenDataForCommonChooseCoCategoryIdPanel>;
+        CommonChooseCoPanel                 : PanelConfig<Common.OpenDataForCommonChooseCoPanel>;
+        CommonChooseCoSkillTypePanel        : PanelConfig<Common.OpenDataForCommonChooseCoSkillTypePanel>;
+        CommonChooseCustomCounterIdPanel    : PanelConfig<Common.OpenDataForCommonChooseCustomCounterIdPanel>;
+        CommonChooseGridIndexPanel          : PanelConfig<Common.OpenDataForCommonChooseGridIndexPanel>;
+        CommonChooseLocationPanel           : PanelConfig<Common.OpenDataForCommonChooseLocationPanel>;
+        CommonChoosePlayerAliveStatePanel   : PanelConfig<Common.OpenDataForCommonChoosePlayerAliveStatePanel>;
+        CommonChoosePlayerIndexPanel        : PanelConfig<Common.OpenDataForCommonChoosePlayerIndexPanel>;
+        CommonChooseSingleCoPanel           : PanelConfig<Common.OpenDataForCommonChooseSingleCoPanel>;
+        CommonChooseSingleTileTypePanel     : PanelConfig<Common.OpenDataForCommonChooseSingleTileTypePanel>;
+        CommonChooseSingleUnitTypePanel     : PanelConfig<Common.OpenDataForCommonChooseSingleUnitTypePanel>;
+        CommonChooseTeamIndexPanel          : PanelConfig<Common.OpenDataForCommonChooseTeamIndexPanel>;
+        CommonChooseTileBasePanel           : PanelConfig<Common.OpenDataForCommonChooseTileBasePanel>;
+        CommonChooseTileDecoratorPanel      : PanelConfig<Common.OpenDataForCommonChooseTileDecoratorPanel>;
+        CommonChooseTileObjectPanel         : PanelConfig<Common.OpenDataForCommonChooseTileObjectPanel>;
+        CommonChooseTileTypePanel           : PanelConfig<Common.OpenDataForCommonChooseTileTypePanel>;
+        CommonChooseUnitActionStatePanel    : PanelConfig<Common.OpenDataForCommonChooseUnitActionStatePanel>;
+        CommonChooseUnitTypePanel           : PanelConfig<Common.OpenDataForCommonChooseUnitTypePanel>;
+        CommonChooseWarEventActionIdPanel   : PanelConfig<Common.OpenDataForCommonChooseWarEventActionIdPanel>;
+        CommonChooseWarEventIdPanel         : PanelConfig<Common.OpenDataForCommonChooseWarEventIdPanel>;
+        CommonChooseWeatherTypePanel        : PanelConfig<Common.OpenDataForCommonChooseWeatherTypePanel>;
+        CommonCoInfoPanel                   : PanelConfig<Common.OpenDataForCommonCoInfoPanel>;
+        CommonCoListPanel                   : PanelConfig<Common.OpenDataForCommonCoListPanel>;
+        CommonConfirmPanel                  : PanelConfig<Common.OpenDataForCommonConfirmPanel>;
+        CommonDamageCalculatorPanel         : PanelConfig<Common.OpenDataForCommonDamageCalculatorPanel>;
+        CommonDamageChartPanel              : PanelConfig<Common.OpenDataForCommonDamageChartPanel>;
+        CommonErrorPanel                    : PanelConfig<Common.OpenDataForCommonErrorPanel>;
+        CommonHelpPanel                     : PanelConfig<Common.OpenDataForCommonHelpPanel>;
+        CommonInputPanel                    : PanelConfig<Common.OpenDataForCommonInputPanel>;
+        CommonInputIntegerPanel             : PanelConfig<Common.OpenDataForCommonInputIntegerPanel>;
+        CommonJoinRoomPasswordPanel         : PanelConfig<Common.OpenDataForCommonJoinRoomPasswordPanel>;
+        CommonMapWarStatisticsPanel         : PanelConfig<Common.OpenDataForCommonMapWarStatisticsPanel>;
+        CommonModifyWarRuleNamePanel        : PanelConfig<Common.OpenDataForCommonModifyWarRuleNamePanel>;
+        CommonRankListPanel                 : PanelConfig<Common.OpenDataForCommonRankListPanel>;
+        CommonServerStatusPanel             : PanelConfig<Common.OpenDataForCommonServerStatusPanel>;
+        CommonWarEventListPanel             : PanelConfig<Common.OpenDataForCommonWarEventListPanel>;
 
-        HrwReplayProgressPanel              : PanelConfig<Twns.HalfwayReplayWar.OpenDataForHrwReplayProgressPanel>;
-        HrwTopPanel                         : PanelConfig<Twns.HalfwayReplayWar.OpenDataForHrwTopPanel>;
-        HrwWarMenuPanel                     : PanelConfig<Twns.HalfwayReplayWar.OpenDataForHrwWarMenuPanel>;
+        HrwReplayProgressPanel              : PanelConfig<HalfwayReplayWar.OpenDataForHrwReplayProgressPanel>;
+        HrwTopPanel                         : PanelConfig<HalfwayReplayWar.OpenDataForHrwTopPanel>;
+        HrwWarMenuPanel                     : PanelConfig<HalfwayReplayWar.OpenDataForHrwWarMenuPanel>;
 
-        LobbyBackgroundPanel                : PanelConfig<Twns.Lobby.OpenDataForLobbyBackgroundPanel>;
-        LobbyBottomPanel                    : PanelConfig<Twns.Lobby.OpenDataForLobbyBottomPanel>;
-        LobbyPanel                          : PanelConfig<Twns.Lobby.OpenDataForLobbyPanel>;
-        LobbyTopPanel                       : PanelConfig<Twns.Lobby.OpenDataForLobbyTopPanel>;
-        LobbyTopRightPanel                  : PanelConfig<Twns.Lobby.OpenDataForLobbyTopRightPanel>;
+        LobbyBackgroundPanel                : PanelConfig<Lobby.OpenDataForLobbyBackgroundPanel>;
+        LobbyBottomPanel                    : PanelConfig<Lobby.OpenDataForLobbyBottomPanel>;
+        LobbyPanel                          : PanelConfig<Lobby.OpenDataForLobbyPanel>;
+        LobbyTopPanel                       : PanelConfig<Lobby.OpenDataForLobbyTopPanel>;
+        LobbyTopRightPanel                  : PanelConfig<Lobby.OpenDataForLobbyTopRightPanel>;
 
-        McrCreateMapListPanel               : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrCreateMapListPanel>;
-        McrCreateSearchMapPanel             : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrCreateSearchMapPanel>;
-        McrCreateSettingsPanel              : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrCreateSettingsPanel>;
-        McrJoinRoomListPanel                : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrJoinRoomListPanel>;
-        McrMainMenuPanel                    : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrMainMenuPanel>;
-        McrMyRoomListPanel                  : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrMyRoomListPanel>;
-        McrRoomInfoPanel                    : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrRoomInfoPanel>;
-        McrSearchRoomPanel                  : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrSearchRoomPanel>;
+        McrCreateMapListPanel               : PanelConfig<MultiCustomRoom.OpenDataForMcrCreateMapListPanel>;
+        McrCreateSearchMapPanel             : PanelConfig<MultiCustomRoom.OpenDataForMcrCreateSearchMapPanel>;
+        McrCreateSettingsPanel              : PanelConfig<MultiCustomRoom.OpenDataForMcrCreateSettingsPanel>;
+        McrJoinRoomListPanel                : PanelConfig<MultiCustomRoom.OpenDataForMcrJoinRoomListPanel>;
+        McrMainMenuPanel                    : PanelConfig<MultiCustomRoom.OpenDataForMcrMainMenuPanel>;
+        McrMyRoomListPanel                  : PanelConfig<MultiCustomRoom.OpenDataForMcrMyRoomListPanel>;
+        McrRoomInfoPanel                    : PanelConfig<MultiCustomRoom.OpenDataForMcrRoomInfoPanel>;
+        McrSearchRoomPanel                  : PanelConfig<MultiCustomRoom.OpenDataForMcrSearchRoomPanel>;
 
-        McwMyWarListPanel                   : PanelConfig<Twns.MultiCustomWar.OpenDataForMcwMyWarListPanel>;
+        McwMyWarListPanel                   : PanelConfig<MultiCustomWar.OpenDataForMcwMyWarListPanel>;
 
-        MeAddWarEventToRulePanel            : PanelConfig<Twns.MapEditor.OpenDataForMeAddWarEventToRulePanel>;
-        MeAvailableCoPanel                  : PanelConfig<Twns.MapEditor.OpenDataForMeAvailableCoPanel>;
-        MeChooseTileBasePanel               : PanelConfig<Twns.MapEditor.OpenDataForMeChooseTileBasePanel>;
-        MeChooseTileDecoratorPanel          : PanelConfig<Twns.MapEditor.OpenDataForMeChooseTileDecoratorPanel>;
-        MeChooseTileObjectPanel             : PanelConfig<Twns.MapEditor.OpenDataForMeChooseTileObjectPanel>;
-        MeChooseUnitPanel                   : PanelConfig<Twns.MapEditor.OpenDataForMeChooseUnitPanel>;
-        MeClearPanel                        : PanelConfig<Twns.MapEditor.OpenDataForMeClearPanel>;
-        MeConfirmSaveMapPanel               : PanelConfig<Twns.MapEditor.OpenDataForMeConfirmSaveMapPanel>;
-        MeImportPanel                       : PanelConfig<Twns.MapEditor.OpenDataForMeImportPanel>;
-        MeMapListPanel                      : PanelConfig<Twns.MapEditor.OpenDataForMeMapListPanel>;
-        MeMapTagPanel                       : PanelConfig<Twns.MapEditor.OpenDataForMeMapTagPanel>;
-        MeMfwSettingsPanel                  : PanelConfig<Twns.MapEditor.OpenDataForMeMfwSettingsPanel>;
-        MeModifyMapDescPanel                : PanelConfig<Twns.MapEditor.OpenDataForMeModifyMapDescPanel>;
-        MeModifyMapNamePanel                : PanelConfig<Twns.MapEditor.OpenDataForMeModifyMapNamePanel>;
-        MeResizePanel                       : PanelConfig<Twns.MapEditor.OpenDataForMeResizePanel>;
-        MeSimSettingsPanel                  : PanelConfig<Twns.MapEditor.OpenDataForMeSimSettingsPanel>;
-        MeSymmetryPanel                     : PanelConfig<Twns.MapEditor.OpenDataForMeSymmetryPanel>;
-        MeTopPanel                          : PanelConfig<Twns.MapEditor.OpenDataForMeTopPanel>;
-        MeVisibilityPanel                   : PanelConfig<Twns.MapEditor.OpenDataForMeVisibilityPanel>;
-        MeWarMenuPanel                      : PanelConfig<Twns.MapEditor.OpenDataForMeWarMenuPanel>;
-        MeWarRulePanel                      : PanelConfig<Twns.MapEditor.OpenDataForMeWarRulePanel>;
-        MeChooseLocationPanel               : PanelConfig<Twns.MapEditor.OpenDataForMeChooseLocationPanel>;
+        MeAddWarEventToRulePanel            : PanelConfig<MapEditor.OpenDataForMeAddWarEventToRulePanel>;
+        MeAvailableCoPanel                  : PanelConfig<MapEditor.OpenDataForMeAvailableCoPanel>;
+        MeChooseTileBasePanel               : PanelConfig<MapEditor.OpenDataForMeChooseTileBasePanel>;
+        MeChooseTileDecoratorPanel          : PanelConfig<MapEditor.OpenDataForMeChooseTileDecoratorPanel>;
+        MeChooseTileObjectPanel             : PanelConfig<MapEditor.OpenDataForMeChooseTileObjectPanel>;
+        MeChooseUnitPanel                   : PanelConfig<MapEditor.OpenDataForMeChooseUnitPanel>;
+        MeClearPanel                        : PanelConfig<MapEditor.OpenDataForMeClearPanel>;
+        MeConfirmSaveMapPanel               : PanelConfig<MapEditor.OpenDataForMeConfirmSaveMapPanel>;
+        MeImportPanel                       : PanelConfig<MapEditor.OpenDataForMeImportPanel>;
+        MeMapListPanel                      : PanelConfig<MapEditor.OpenDataForMeMapListPanel>;
+        MeMapTagPanel                       : PanelConfig<MapEditor.OpenDataForMeMapTagPanel>;
+        MeMfwSettingsPanel                  : PanelConfig<MapEditor.OpenDataForMeMfwSettingsPanel>;
+        MeModifyMapDescPanel                : PanelConfig<MapEditor.OpenDataForMeModifyMapDescPanel>;
+        MeModifyMapNamePanel                : PanelConfig<MapEditor.OpenDataForMeModifyMapNamePanel>;
+        MeResizePanel                       : PanelConfig<MapEditor.OpenDataForMeResizePanel>;
+        MeSimSettingsPanel                  : PanelConfig<MapEditor.OpenDataForMeSimSettingsPanel>;
+        MeSymmetryPanel                     : PanelConfig<MapEditor.OpenDataForMeSymmetryPanel>;
+        MeTopPanel                          : PanelConfig<MapEditor.OpenDataForMeTopPanel>;
+        MeVisibilityPanel                   : PanelConfig<MapEditor.OpenDataForMeVisibilityPanel>;
+        MeWarMenuPanel                      : PanelConfig<MapEditor.OpenDataForMeWarMenuPanel>;
+        MeWarRulePanel                      : PanelConfig<MapEditor.OpenDataForMeWarRulePanel>;
+        MeChooseLocationPanel               : PanelConfig<MapEditor.OpenDataForMeChooseLocationPanel>;
 
-        MfrCreateSettingsPanel              : PanelConfig<Twns.MultiFreeRoom.OpenDataForMfrCreateSettingsPanel>;
-        MfrJoinRoomListPanel                : PanelConfig<Twns.MultiFreeRoom.OpenDataForMfrJoinRoomListPanel>;
-        MfrMainMenuPanel                    : PanelConfig<Twns.MultiFreeRoom.OpenDataForMfrMainMenuPanel>;
-        MfrMyRoomListPanel                  : PanelConfig<Twns.MultiFreeRoom.OpenDataForMfrMyRoomListPanel>;
-        MfrRoomInfoPanel                    : PanelConfig<Twns.MultiFreeRoom.OpenDataForMfrRoomInfoPanel>;
-        MfrSearchRoomPanel                  : PanelConfig<Twns.MultiFreeRoom.OpenDataForMfrSearchRoomPanel>;
+        MfrCreateSettingsPanel              : PanelConfig<MultiFreeRoom.OpenDataForMfrCreateSettingsPanel>;
+        MfrJoinRoomListPanel                : PanelConfig<MultiFreeRoom.OpenDataForMfrJoinRoomListPanel>;
+        MfrMainMenuPanel                    : PanelConfig<MultiFreeRoom.OpenDataForMfrMainMenuPanel>;
+        MfrMyRoomListPanel                  : PanelConfig<MultiFreeRoom.OpenDataForMfrMyRoomListPanel>;
+        MfrRoomInfoPanel                    : PanelConfig<MultiFreeRoom.OpenDataForMfrRoomInfoPanel>;
+        MfrSearchRoomPanel                  : PanelConfig<MultiFreeRoom.OpenDataForMfrSearchRoomPanel>;
 
-        MfwMyWarListPanel                   : PanelConfig<Twns.MultiFreeWar.OpenDataForMfwMyWarListPanel>;
+        MfwMyWarListPanel                   : PanelConfig<MultiFreeWar.OpenDataForMfwMyWarListPanel>;
 
-        MmAcceptMapPanel                    : PanelConfig<Twns.MapManagement.OpenDataForMmAcceptMapPanel>;
-        MmAvailabilityListPanel             : PanelConfig<Twns.MapManagement.OpenDataForMmAvailabilityListPanel>;
-        MmAvailabilitySearchPanel           : PanelConfig<Twns.MapManagement.OpenDataForMmAvailabilitySearchPanel>;
-        MmCommandPanel                      : PanelConfig<Twns.MapManagement.OpenDataForMmCommandPanel>;
-        MmMainMenuPanel                     : PanelConfig<Twns.MapManagement.OpenDataForMmMainMenuPanel>;
-        MmMapRenamePanel                    : PanelConfig<Twns.MapManagement.OpenDataForMmMapRenamePanel>;
-        MmRejectMapPanel                    : PanelConfig<Twns.MapManagement.OpenDataForMmRejectMapPanel>;
-        MmReviewListPanel                   : PanelConfig<Twns.MapManagement.OpenDataForMmReviewListPanel>;
-        MmSetWarRuleAvailabilityPanel       : PanelConfig<Twns.MapManagement.OpenDataForMmSetWarRuleAvailabilityPanel>;
-        MmTagChangePanel                    : PanelConfig<Twns.MapManagement.OpenDataForMmTagChangePanel>;
-        MmTagListPanel                      : PanelConfig<Twns.MapManagement.OpenDataForMmTagListPanel>;
-        MmTagSearchPanel                    : PanelConfig<Twns.MapManagement.OpenDataForMmTagSearchPanel>;
-        MmWarRuleAvailableCoPanel           : PanelConfig<Twns.MapManagement.OpenDataForMmWarRuleAvailableCoPanel>;
-        MmWarRulePanel                      : PanelConfig<Twns.MapManagement.OpenDataForMmWarRulePanel>;
+        MmAcceptMapPanel                    : PanelConfig<MapManagement.OpenDataForMmAcceptMapPanel>;
+        MmAvailabilityListPanel             : PanelConfig<MapManagement.OpenDataForMmAvailabilityListPanel>;
+        MmAvailabilitySearchPanel           : PanelConfig<MapManagement.OpenDataForMmAvailabilitySearchPanel>;
+        MmCommandPanel                      : PanelConfig<MapManagement.OpenDataForMmCommandPanel>;
+        MmMainMenuPanel                     : PanelConfig<MapManagement.OpenDataForMmMainMenuPanel>;
+        MmMapRenamePanel                    : PanelConfig<MapManagement.OpenDataForMmMapRenamePanel>;
+        MmRejectMapPanel                    : PanelConfig<MapManagement.OpenDataForMmRejectMapPanel>;
+        MmReviewListPanel                   : PanelConfig<MapManagement.OpenDataForMmReviewListPanel>;
+        MmSetWarRuleAvailabilityPanel       : PanelConfig<MapManagement.OpenDataForMmSetWarRuleAvailabilityPanel>;
+        MmTagChangePanel                    : PanelConfig<MapManagement.OpenDataForMmTagChangePanel>;
+        MmTagListPanel                      : PanelConfig<MapManagement.OpenDataForMmTagListPanel>;
+        MmTagSearchPanel                    : PanelConfig<MapManagement.OpenDataForMmTagSearchPanel>;
+        MmWarRuleAvailableCoPanel           : PanelConfig<MapManagement.OpenDataForMmWarRuleAvailableCoPanel>;
+        MmWarRulePanel                      : PanelConfig<MapManagement.OpenDataForMmWarRulePanel>;
 
-        MpwSpectatePanel                    : PanelConfig<Twns.MultiPlayerWar.OpenDataForMpwSpectatePanel>;
-        MpwSidePanel                        : PanelConfig<Twns.MultiPlayerWar.OpenDataForMpwSidePanel>;
-        MpwTopPanel                         : PanelConfig<Twns.MultiPlayerWar.OpenDataForMpwTopPanel>;
-        MpwWarMenuPanel                     : PanelConfig<Twns.MultiPlayerWar.OpenDataForMpwWarMenuPanel>;
+        MpwSpectatePanel                    : PanelConfig<MultiPlayerWar.OpenDataForMpwSpectatePanel>;
+        MpwSidePanel                        : PanelConfig<MultiPlayerWar.OpenDataForMpwSidePanel>;
+        MpwTopPanel                         : PanelConfig<MultiPlayerWar.OpenDataForMpwTopPanel>;
+        MpwWarMenuPanel                     : PanelConfig<MultiPlayerWar.OpenDataForMpwWarMenuPanel>;
 
-        MrrMainMenuPanel                    : PanelConfig<Twns.MultiRankRoom.OpenDataForMrrMainMenuPanel>;
-        MrrMyRoomListPanel                  : PanelConfig<Twns.MultiRankRoom.OpenDataForMrrMyRoomListPanel>;
-        MrrPreviewMapListPanel              : PanelConfig<Twns.MultiRankRoom.OpenDataForMrrPreviewMapListPanel>;
-        MrrRoomInfoPanel                    : PanelConfig<Twns.MultiRankRoom.OpenDataForMrrRoomInfoPanel>;
-        MrrSetMaxConcurrentCountPanel       : PanelConfig<Twns.MultiRankRoom.OpenDataForMrrSetMaxConcurrentCountPanel>;
+        MrrMainMenuPanel                    : PanelConfig<MultiRankRoom.OpenDataForMrrMainMenuPanel>;
+        MrrMyRoomListPanel                  : PanelConfig<MultiRankRoom.OpenDataForMrrMyRoomListPanel>;
+        MrrPreviewMapListPanel              : PanelConfig<MultiRankRoom.OpenDataForMrrPreviewMapListPanel>;
+        MrrRoomInfoPanel                    : PanelConfig<MultiRankRoom.OpenDataForMrrRoomInfoPanel>;
+        MrrSetMaxConcurrentCountPanel       : PanelConfig<MultiRankRoom.OpenDataForMrrSetMaxConcurrentCountPanel>;
 
-        MrwMyWarListPanel                   : PanelConfig<Twns.MultiRankWar.OpenDataForMrwMyWarListPanel>;
+        MrwMyWarListPanel                   : PanelConfig<MultiRankWar.OpenDataForMrwMyWarListPanel>;
 
-        RwReplayListPanel                   : PanelConfig<Twns.ReplayWar.OpenDataForRwReplayListPanel>;
-        RwReplayProgressPanel               : PanelConfig<Twns.ReplayWar.OpenDataForRwReplayProgressPanel>;
-        RwSearchReplayPanel                 : PanelConfig<Twns.ReplayWar.OpenDataForRwSearchReplayPanel>;
-        RwTopPanel                          : PanelConfig<Twns.ReplayWar.OpenDataForRwTopPanel>;
-        RwWarMenuPanel                      : PanelConfig<Twns.ReplayWar.OpenDataForRwWarMenuPanel>;
+        RwReplayListPanel                   : PanelConfig<ReplayWar.OpenDataForRwReplayListPanel>;
+        RwReplayProgressPanel               : PanelConfig<ReplayWar.OpenDataForRwReplayProgressPanel>;
+        RwSearchReplayPanel                 : PanelConfig<ReplayWar.OpenDataForRwSearchReplayPanel>;
+        RwTopPanel                          : PanelConfig<ReplayWar.OpenDataForRwTopPanel>;
+        RwWarMenuPanel                      : PanelConfig<ReplayWar.OpenDataForRwWarMenuPanel>;
 
-        ScrCreateMapListPanel               : PanelConfig<Twns.SingleCustomRoom.OpenDataForScrCreateMapListPanel>;
-        ScrCreateSearchMapPanel             : PanelConfig<Twns.SingleCustomRoom.OpenDataForScrCreateSearchMapPanel>;
-        ScrCreateSettingsPanel              : PanelConfig<Twns.SingleCustomRoom.OpenDataForScrCreateSettingsPanel>;
+        ScrCreateMapListPanel               : PanelConfig<SingleCustomRoom.OpenDataForScrCreateMapListPanel>;
+        ScrCreateSearchMapPanel             : PanelConfig<SingleCustomRoom.OpenDataForScrCreateSearchMapPanel>;
+        ScrCreateSettingsPanel              : PanelConfig<SingleCustomRoom.OpenDataForScrCreateSettingsPanel>;
 
-        SpmCreateSaveSlotsPanel             : PanelConfig<Twns.SinglePlayerMode.OpenDataForSpmCreateSaveSlotsPanel>;
-        SpmCreateSfwSaveSlotsPanel          : PanelConfig<Twns.SinglePlayerMode.OpenDataForSpmCreateSfwSaveSlotsPanel>;
-        SpmMainMenuPanel                    : PanelConfig<Twns.SinglePlayerMode.OpenDataForSpmMainMenuPanel>;
-        SpmWarListPanel                     : PanelConfig<Twns.SinglePlayerMode.OpenDataForSpmWarListPanel>;
+        SpmCreateSaveSlotsPanel             : PanelConfig<SinglePlayerMode.OpenDataForSpmCreateSaveSlotsPanel>;
+        SpmCreateSfwSaveSlotsPanel          : PanelConfig<SinglePlayerMode.OpenDataForSpmCreateSfwSaveSlotsPanel>;
+        SpmMainMenuPanel                    : PanelConfig<SinglePlayerMode.OpenDataForSpmMainMenuPanel>;
+        SpmWarListPanel                     : PanelConfig<SinglePlayerMode.OpenDataForSpmWarListPanel>;
 
-        SpwLoadWarPanel                     : PanelConfig<Twns.SinglePlayerWar.OpenDataForSpwLoadWarPanel>;
-        SpwSidePanel                        : PanelConfig<Twns.SinglePlayerWar.OpenDataForSpwSidePanel>;
-        SpwTopPanel                         : PanelConfig<Twns.SinglePlayerWar.OpenDataForSpwTopPanel>;
-        SpwWarMenuPanel                     : PanelConfig<Twns.SinglePlayerWar.OpenDataForSpwWarMenuPanel>;
+        SpwLoadWarPanel                     : PanelConfig<SinglePlayerWar.OpenDataForSpwLoadWarPanel>;
+        SpwSidePanel                        : PanelConfig<SinglePlayerWar.OpenDataForSpwSidePanel>;
+        SpwTopPanel                         : PanelConfig<SinglePlayerWar.OpenDataForSpwTopPanel>;
+        SpwWarMenuPanel                     : PanelConfig<SinglePlayerWar.OpenDataForSpwWarMenuPanel>;
 
-        SrrCreateMapListPanel               : PanelConfig<Twns.SingleRankRoom.OpenDataForSrrCreateMapListPanel>;
-        SrrCreateSettingsPanel              : PanelConfig<Twns.SingleRankRoom.OpenDataForSrrCreateSettingsPanel>;
+        SrrCreateMapListPanel               : PanelConfig<SingleRankRoom.OpenDataForSrrCreateMapListPanel>;
+        SrrCreateSettingsPanel              : PanelConfig<SingleRankRoom.OpenDataForSrrCreateSettingsPanel>;
 
-        UserChangeDiscordIdPanel            : PanelConfig<Twns.User.OpenDataForUserChangeDiscordIdPanel>;
-        UserChangeNicknamePanel             : PanelConfig<Twns.User.OpenDataForUserChangeNicknamePanel>;
-        UserGameManagementPanel             : PanelConfig<Twns.User.OpenDataForUserGameManagementPanel>;
-        UserLoginBackgroundPanel            : PanelConfig<Twns.User.OpenDataForUserLoginBackgroundPanel>;
-        UserLoginPanel                      : PanelConfig<Twns.User.OpenDataForUserLoginPanel>;
-        UserOnlineUsersPanel                : PanelConfig<Twns.User.OpenDataForUserOnlineUsersPanel>;
-        UserPanel                           : PanelConfig<Twns.User.OpenDataForUserPanel>;
-        UserRegisterPanel                   : PanelConfig<Twns.User.OpenDataForUserRegisterPanel>;
-        UserSetAvatarPanel                  : PanelConfig<Twns.User.OpenDataForUserSetAvatarPanel>;
-        UserSetOpacityPanel                 : PanelConfig<Twns.User.OpenDataForUserSetOpacityPanel>;
-        UserSetPasswordPanel                : PanelConfig<Twns.User.OpenDataForUserSetPasswordPanel>;
-        UserSetPrivilegePanel               : PanelConfig<Twns.User.OpenDataForUserSetPrivilegePanel>;
-        UserSetSoundPanel                   : PanelConfig<Twns.User.OpenDataForUserSetSoundPanel>;
-        UserSetStageScalePanel              : PanelConfig<Twns.User.OpenDataForUserSetStageScalePanel>;
-        UserSettingsPanel                   : PanelConfig<Twns.User.OpenDataForUserSettingsPanel>;
+        UserChangeDiscordIdPanel            : PanelConfig<User.OpenDataForUserChangeDiscordIdPanel>;
+        UserChangeNicknamePanel             : PanelConfig<User.OpenDataForUserChangeNicknamePanel>;
+        UserGameManagementPanel             : PanelConfig<User.OpenDataForUserGameManagementPanel>;
+        UserLoginBackgroundPanel            : PanelConfig<User.OpenDataForUserLoginBackgroundPanel>;
+        UserLoginPanel                      : PanelConfig<User.OpenDataForUserLoginPanel>;
+        UserOnlineUsersPanel                : PanelConfig<User.OpenDataForUserOnlineUsersPanel>;
+        UserPanel                           : PanelConfig<User.OpenDataForUserPanel>;
+        UserRegisterPanel                   : PanelConfig<User.OpenDataForUserRegisterPanel>;
+        UserSetAvatarPanel                  : PanelConfig<User.OpenDataForUserSetAvatarPanel>;
+        UserSetOpacityPanel                 : PanelConfig<User.OpenDataForUserSetOpacityPanel>;
+        UserSetPasswordPanel                : PanelConfig<User.OpenDataForUserSetPasswordPanel>;
+        UserSetPrivilegePanel               : PanelConfig<User.OpenDataForUserSetPrivilegePanel>;
+        UserSetSoundPanel                   : PanelConfig<User.OpenDataForUserSetSoundPanel>;
+        UserSetStageScalePanel              : PanelConfig<User.OpenDataForUserSetStageScalePanel>;
+        UserSettingsPanel                   : PanelConfig<User.OpenDataForUserSettingsPanel>;
 
-        WeActionAddUnitListPanel            : PanelConfig<Twns.WarEvent.OpenDataForWeActionAddUnitListPanel>;
-        WeActionModifyPanel1                : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel1>;
-        WeActionModifyPanel2                : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel2>;
-        WeActionModifyPanel3                : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel3>;
-        WeActionModifyPanel4                : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel4>;
-        WeActionModifyPanel5                : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel5>;
-        WeActionModifyPanel6                : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel6>;
-        WeActionModifyPanel7                : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel7>;
-        WeActionModifyPanel10               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel10>;
-        WeActionModifyPanel11               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel11>;
-        WeActionModifyPanel20               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel20>;
-        WeActionModifyPanel21               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel21>;
-        WeActionModifyPanel22               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel22>;
-        WeActionModifyPanel23               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel23>;
-        WeActionModifyPanel24               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel24>;
-        WeActionModifyPanel25               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel25>;
-        WeActionModifyPanel30               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel30>;
-        WeActionModifyPanel40               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel40>;
-        WeActionModifyPanel41               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel41>;
-        WeActionModifyPanel50               : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel50>;
-        WeActionReplacePanel                : PanelConfig<Twns.WarEvent.OpenDataForWeActionReplacePanel>;
-        WeActionTypeListPanel               : PanelConfig<Twns.WarEvent.OpenDataForWeActionTypeListPanel>;
-        WeCommandPanel                      : PanelConfig<Twns.WarEvent.OpenDataForWeCommandPanel>;
-        WeConditionModifyPanel1             : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel1>;
-        WeConditionModifyPanel2             : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel2>;
-        WeConditionModifyPanel3             : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel3>;
-        WeConditionModifyPanel4             : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel4>;
-        WeConditionModifyPanel5             : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel5>;
-        WeConditionModifyPanel6             : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel6>;
-        WeConditionModifyPanel10            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel10>;
-        WeConditionModifyPanel11            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel11>;
-        WeConditionModifyPanel12            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel12>;
-        WeConditionModifyPanel13            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel13>;
-        WeConditionModifyPanel14            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel14>;
-        WeConditionModifyPanel20            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel20>;
-        WeConditionModifyPanel21            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel21>;
-        WeConditionModifyPanel22            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel22>;
-        WeConditionModifyPanel23            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel23>;
-        WeConditionModifyPanel30            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel30>;
-        WeConditionModifyPanel31            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel31>;
-        WeConditionModifyPanel32            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel32>;
-        WeConditionModifyPanel40            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel40>;
-        WeConditionModifyPanel50            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel50>;
-        WeConditionModifyPanel60            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel60>;
-        WeConditionReplacePanel             : PanelConfig<Twns.WarEvent.OpenDataForWeConditionReplacePanel>;
-        WeConditionTypeListPanel            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionTypeListPanel>;
-        WeDialogueBackgroundPanel           : PanelConfig<Twns.WarEvent.OpenDataForWeDialogueBackgroundPanel>;
-        WeEventListPanel                    : PanelConfig<Twns.WarEvent.OpenDataForWeEventListPanel>;
-        WeEventRenamePanel                  : PanelConfig<Twns.WarEvent.OpenDataForWeEventRenamePanel>;
-        WeNodeReplacePanel                  : PanelConfig<Twns.WarEvent.OpenDataForWeNodeReplacePanel>;
+        WeActionAddUnitListPanel            : PanelConfig<WarEvent.OpenDataForWeActionAddUnitListPanel>;
+        WeActionModifyPanel1                : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel1>;
+        WeActionModifyPanel2                : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel2>;
+        WeActionModifyPanel3                : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel3>;
+        WeActionModifyPanel4                : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel4>;
+        WeActionModifyPanel5                : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel5>;
+        WeActionModifyPanel6                : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel6>;
+        WeActionModifyPanel7                : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel7>;
+        WeActionModifyPanel10               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel10>;
+        WeActionModifyPanel11               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel11>;
+        WeActionModifyPanel20               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel20>;
+        WeActionModifyPanel21               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel21>;
+        WeActionModifyPanel22               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel22>;
+        WeActionModifyPanel23               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel23>;
+        WeActionModifyPanel24               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel24>;
+        WeActionModifyPanel25               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel25>;
+        WeActionModifyPanel30               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel30>;
+        WeActionModifyPanel40               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel40>;
+        WeActionModifyPanel41               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel41>;
+        WeActionModifyPanel50               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel50>;
+        WeActionReplacePanel                : PanelConfig<WarEvent.OpenDataForWeActionReplacePanel>;
+        WeActionTypeListPanel               : PanelConfig<WarEvent.OpenDataForWeActionTypeListPanel>;
+        WeCommandPanel                      : PanelConfig<WarEvent.OpenDataForWeCommandPanel>;
+        WeConditionModifyPanel1             : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel1>;
+        WeConditionModifyPanel2             : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel2>;
+        WeConditionModifyPanel3             : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel3>;
+        WeConditionModifyPanel4             : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel4>;
+        WeConditionModifyPanel5             : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel5>;
+        WeConditionModifyPanel6             : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel6>;
+        WeConditionModifyPanel10            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel10>;
+        WeConditionModifyPanel11            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel11>;
+        WeConditionModifyPanel12            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel12>;
+        WeConditionModifyPanel13            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel13>;
+        WeConditionModifyPanel14            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel14>;
+        WeConditionModifyPanel20            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel20>;
+        WeConditionModifyPanel21            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel21>;
+        WeConditionModifyPanel22            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel22>;
+        WeConditionModifyPanel23            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel23>;
+        WeConditionModifyPanel30            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel30>;
+        WeConditionModifyPanel31            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel31>;
+        WeConditionModifyPanel32            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel32>;
+        WeConditionModifyPanel40            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel40>;
+        WeConditionModifyPanel50            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel50>;
+        WeConditionModifyPanel60            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel60>;
+        WeConditionReplacePanel             : PanelConfig<WarEvent.OpenDataForWeConditionReplacePanel>;
+        WeConditionTypeListPanel            : PanelConfig<WarEvent.OpenDataForWeConditionTypeListPanel>;
+        WeDialogueBackgroundPanel           : PanelConfig<WarEvent.OpenDataForWeDialogueBackgroundPanel>;
+        WeEventListPanel                    : PanelConfig<WarEvent.OpenDataForWeEventListPanel>;
+        WeEventRenamePanel                  : PanelConfig<WarEvent.OpenDataForWeEventRenamePanel>;
+        WeNodeReplacePanel                  : PanelConfig<WarEvent.OpenDataForWeNodeReplacePanel>;
 
-        WarMapBuildingListPanel             : PanelConfig<Twns.WarMap.OpenDataForWarMapBuildingListPanel>;
+        WarMapBuildingListPanel             : PanelConfig<WarMap.OpenDataForWarMapBuildingListPanel>;
 
-        WwDeleteWatcherDetailPanel          : PanelConfig<Twns.WatchWar.OpenDataForWwDeleteWatcherDetailPanel>;
-        WwDeleteWatcherWarsPanel            : PanelConfig<Twns.WatchWar.OpenDataForWwDeleteWatcherWarsPanel>;
-        WwHandleRequestDetailPanel          : PanelConfig<Twns.WatchWar.OpenDataForWwHandleRequestDetailPanel>;
-        WwHandleRequestWarsPanel            : PanelConfig<Twns.WatchWar.OpenDataForWwHandleRequestWarsPanel>;
-        WwMainMenuPanel                     : PanelConfig<Twns.WatchWar.OpenDataForWatchWarMainMenuPanel>;
-        WwMakeRequestDetailPanel            : PanelConfig<Twns.WatchWar.OpenDataForWwMakeRequestDetailPanel>;
-        WwMakeRequestWarsPanel              : PanelConfig<Twns.WatchWar.OpenDataForWwMakeRequestWarsPanel>;
-        WwOngoingWarsPanel                  : PanelConfig<Twns.WatchWar.OpenDataForWwOngoingWarsPanel>;
-        WwSearchWarPanel                    : PanelConfig<Twns.WatchWar.OpenDataForWwSearchWarPanel>;
+        WwDeleteWatcherDetailPanel          : PanelConfig<WatchWar.OpenDataForWwDeleteWatcherDetailPanel>;
+        WwDeleteWatcherWarsPanel            : PanelConfig<WatchWar.OpenDataForWwDeleteWatcherWarsPanel>;
+        WwHandleRequestDetailPanel          : PanelConfig<WatchWar.OpenDataForWwHandleRequestDetailPanel>;
+        WwHandleRequestWarsPanel            : PanelConfig<WatchWar.OpenDataForWwHandleRequestWarsPanel>;
+        WwMainMenuPanel                     : PanelConfig<WatchWar.OpenDataForWatchWarMainMenuPanel>;
+        WwMakeRequestDetailPanel            : PanelConfig<WatchWar.OpenDataForWwMakeRequestDetailPanel>;
+        WwMakeRequestWarsPanel              : PanelConfig<WatchWar.OpenDataForWwMakeRequestWarsPanel>;
+        WwOngoingWarsPanel                  : PanelConfig<WatchWar.OpenDataForWwOngoingWarsPanel>;
+        WwSearchWarPanel                    : PanelConfig<WatchWar.OpenDataForWwSearchWarPanel>;
     };
 
     export function initPanelDict(): void {
         PanelDict = {
             BwBackgroundPanel: {
-                cls         : Twns.BaseWar?.BwBackgroundPanel,
+                cls         : BaseWar?.BwBackgroundPanel,
                 skinName    : `resource/skins/baseWar/BwBackgroundPanel.exml`,
                 layer       : LayerType.Bottom,
                 isExclusive : true,
@@ -286,96 +287,96 @@ namespace Twns.PanelHelpers {
             },
 
             BwBeginTurnPanel: {
-                cls         : Twns.BaseWar?.BwBeginTurnPanel,
+                cls         : BaseWar?.BwBeginTurnPanel,
                 skinName    : `resource/skins/baseWar/BwBeginTurnPanel.exml`,
                 layer       : LayerType.Notify0,
                 needCache   : true,
             },
 
             BwCaptureProgressPanel: {
-                cls         : Twns.BaseWar?.BwCaptureProgressPanel,
+                cls         : BaseWar?.BwCaptureProgressPanel,
                 skinName    : `resource/skins/baseWar/BwCaptureProgressPanel.exml`,
                 layer       : LayerType.Notify0,
                 needCache   : true,
             },
 
             BwDamagePreviewPanel: {
-                cls         : Twns.BaseWar?.BwDamagePreviewPanel,
+                cls         : BaseWar?.BwDamagePreviewPanel,
                 skinName    : `resource/skins/baseWar/BwDamagePreviewPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             BwDialoguePanel: {
-                cls         : Twns.BaseWar?.BwDialoguePanel,
+                cls         : BaseWar?.BwDialoguePanel,
                 skinName    : `resource/skins/baseWar/BwDialoguePanel.exml`,
                 layer       : LayerType.Hud1,
             },
 
             BwProduceUnitPanel: {
-                cls         : Twns.BaseWar?.BwProduceUnitPanel,
+                cls         : BaseWar?.BwProduceUnitPanel,
                 skinName    : `resource/skins/baseWar/BwProduceUnitPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             BwSimpleDialoguePanel: {
-                cls         : Twns.BaseWar?.BwSimpleDialoguePanel,
+                cls         : BaseWar?.BwSimpleDialoguePanel,
                 skinName    : `resource/skins/baseWar/BwSimpleDialoguePanel.exml`,
                 layer       : LayerType.Hud1,
             },
 
             BwTileBriefPanel: {
-                cls         : Twns.BaseWar?.BwTileBriefPanel,
+                cls         : BaseWar?.BwTileBriefPanel,
                 skinName    : `resource/skins/baseWar/BwTileBriefPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             BwTileDetailPanel: {
-                cls         : Twns.BaseWar?.BwTileDetailPanel,
+                cls         : BaseWar?.BwTileDetailPanel,
                 skinName    : `resource/skins/baseWar/BwTileDetailPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             BwUnitActionsPanel: {
-                cls         : Twns.BaseWar?.BwUnitActionsPanel,
+                cls         : BaseWar?.BwUnitActionsPanel,
                 skinName    : `resource/skins/baseWar/BwUnitActionsPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             BwUnitBriefPanel: {
-                cls         : Twns.BaseWar?.BwUnitBriefPanel,
+                cls         : BaseWar?.BwUnitBriefPanel,
                 skinName    : `resource/skins/baseWar/BwUnitBriefPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             BwUnitDetailPanel: {
-                cls         : Twns.BaseWar?.BwUnitDetailPanel,
+                cls         : BaseWar?.BwUnitDetailPanel,
                 skinName    : `resource/skins/baseWar/BwUnitDetailPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             BwUnitListPanel: {
-                cls         : Twns.BaseWar?.BwUnitListPanel,
+                cls         : BaseWar?.BwUnitListPanel,
                 skinName    : `resource/skins/baseWar/BwUnitListPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             BwWarInfoPanel: {
-                cls         : Twns.BaseWar?.BwWarInfoPanel,
+                cls         : BaseWar?.BwWarInfoPanel,
                 skinName    : `resource/skins/baseWar/BwWarInfoPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             BwWarPanel: {
-                cls         : Twns.BaseWar?.BwWarPanel,
+                cls         : BaseWar?.BwWarPanel,
                 skinName    : `resource/skins/baseWar/BwWarPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -384,19 +385,19 @@ namespace Twns.PanelHelpers {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             BroadcastAddMessagePanel: {
-                cls         : Twns.Broadcast?.BroadcastAddMessagePanel,
+                cls         : Broadcast?.BroadcastAddMessagePanel,
                 skinName    : `resource/skins/broadcast/BroadcastAddMessagePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             BroadcastMessageListPanel: {
-                cls         : Twns.Broadcast?.BroadcastMessageListPanel,
+                cls         : Broadcast?.BroadcastMessageListPanel,
                 skinName    : `resource/skins/broadcast/BroadcastMessageListPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             BroadcastPanel: {
-                cls         : Twns.Broadcast?.BroadcastPanel,
+                cls         : Broadcast?.BroadcastPanel,
                 skinName    : `resource/skins/broadcast/BroadcastPanel.exml`,
                 layer       : LayerType.Notify0,
                 needCache   : true,
@@ -404,81 +405,81 @@ namespace Twns.PanelHelpers {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             ChangeLogAddPanel: {
-                cls         : Twns.ChangeLog?.ChangeLogAddPanel,
+                cls         : ChangeLog?.ChangeLogAddPanel,
                 skinName    : `resource/skins/changeLog/ChangeLogAddPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ChangeLogModifyPanel: {
-                cls         : Twns.ChangeLog?.ChangeLogModifyPanel,
+                cls         : ChangeLog?.ChangeLogModifyPanel,
                 skinName    : `resource/skins/changeLog/ChangeLogModifyPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ChangeLogPanel: {
-                cls         : Twns.ChangeLog?.ChangeLogPanel,
+                cls         : ChangeLog?.ChangeLogPanel,
                 skinName    : `resource/skins/changeLog/ChangeLogPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             CcrCreateMapListPanel: {
-                cls         : Twns.CoopCustomRoom?.CcrCreateMapListPanel,
+                cls         : CoopCustomRoom?.CcrCreateMapListPanel,
                 skinName    : `resource/skins/coopCustomRoom/CcrCreateMapListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             CcrCreateSearchMapPanel: {
-                cls         : Twns.CoopCustomRoom?.CcrCreateSearchMapPanel,
+                cls         : CoopCustomRoom?.CcrCreateSearchMapPanel,
                 skinName    : `resource/skins/coopCustomRoom/CcrCreateSearchMapPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CcrCreateSettingsPanel: {
-                cls         : Twns.CoopCustomRoom?.CcrCreateSettingsPanel,
+                cls         : CoopCustomRoom?.CcrCreateSettingsPanel,
                 skinName    : `resource/skins/coopCustomRoom/CcrCreateSettingsPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             CcrJoinRoomListPanel: {
-                cls         : Twns.CoopCustomRoom?.CcrJoinRoomListPanel,
+                cls         : CoopCustomRoom?.CcrJoinRoomListPanel,
                 skinName    : `resource/skins/coopCustomRoom/CcrJoinRoomListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             CcrMainMenuPanel: {
-                cls         : Twns.CoopCustomRoom?.CcrMainMenuPanel,
+                cls         : CoopCustomRoom?.CcrMainMenuPanel,
                 skinName    : `resource/skins/coopCustomRoom/CcrMainMenuPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             CcrMyRoomListPanel: {
-                cls         : Twns.CoopCustomRoom?.CcrMyRoomListPanel,
+                cls         : CoopCustomRoom?.CcrMyRoomListPanel,
                 skinName    : `resource/skins/coopCustomRoom/CcrMyRoomListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             CcrRoomInfoPanel: {
-                cls         : Twns.CoopCustomRoom?.CcrRoomInfoPanel,
+                cls         : CoopCustomRoom?.CcrRoomInfoPanel,
                 skinName    : `resource/skins/coopCustomRoom/CcrRoomInfoPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             CcrSearchRoomPanel: {
-                cls         : Twns.CoopCustomRoom?.CcrSearchRoomPanel,
+                cls         : CoopCustomRoom?.CcrSearchRoomPanel,
                 skinName    : `resource/skins/coopCustomRoom/CcrSearchRoomPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             CcwMyWarListPanel: {
-                cls         : Twns.CoopCustomWar?.CcwMyWarListPanel,
+                cls         : CoopCustomWar?.CcwMyWarListPanel,
                 skinName    : `resource/skins/coopCustomWar/CcwMyWarListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -486,13 +487,13 @@ namespace Twns.PanelHelpers {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             ChatCommandPanel: {
-                cls         : Twns.Chat?.ChatCommandPanel,
+                cls         : Chat?.ChatCommandPanel,
                 skinName    : `resource/skins/chat/ChatCommandPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : false,
             },
             ChatPanel: {
-                cls         : Twns.Chat?.ChatPanel,
+                cls         : Chat?.ChatPanel,
                 skinName    : `resource/skins/chat/ChatPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
@@ -500,283 +501,289 @@ namespace Twns.PanelHelpers {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             CommonAddLoadedUnitPanel: {
-                cls         : Twns.Common?.CommonAddLoadedUnitPanel,
+                cls         : Common?.CommonAddLoadedUnitPanel,
                 skinName    : `resource/skins/common/CommonAddLoadedUnitPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonAlertPanel: {
-                cls         : Twns.Common?.CommonAlertPanel,
+                cls         : Common?.CommonAlertPanel,
                 skinName    : `resource/skins/common/CommonAlertPanel.exml`,
                 layer       : LayerType.Notify0,
             },
 
             CommonBanCoPanel: {
-                cls         : Twns.Common?.CommonBanCoPanel,
+                cls         : Common?.CommonBanCoPanel,
                 skinName    : `resource/skins/common/CommonBanCoPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonBlockPanel: {
-                cls         : Twns.Common?.CommonBlockPanel,
+                cls         : Common?.CommonBlockPanel,
                 skinName    : `resource/skins/common/CommonBlockPanel.exml`,
                 layer       : LayerType.Notify0,
             },
 
             CommonChangeVersionPanel: {
-                cls         : Twns.Common?.CommonChangeVersionPanel,
+                cls         : Common?.CommonChangeVersionPanel,
                 skinName    : `resource/skins/common/CommonChangeVersionPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseCoCategoryIdPanel: {
-                cls         : Twns.Common?.CommonChooseCoCategoryIdPanel,
+                cls         : Common?.CommonChooseCoCategoryIdPanel,
                 skinName    : `resource/skins/common/CommonChooseCoCategoryIdPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseCoPanel: {
-                cls         : Twns.Common?.CommonChooseCoPanel,
+                cls         : Common?.CommonChooseCoPanel,
                 skinName    : `resource/skins/common/CommonChooseCoPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseCoSkillTypePanel: {
-                cls         : Twns.Common?.CommonChooseCoSkillTypePanel,
+                cls         : Common?.CommonChooseCoSkillTypePanel,
                 skinName    : `resource/skins/common/CommonChooseCoSkillTypePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseCustomCounterIdPanel: {
-                cls         : Twns.Common?.CommonChooseCustomCounterIdPanel,
+                cls         : Common?.CommonChooseCustomCounterIdPanel,
                 skinName    : `resource/skins/common/CommonChooseCustomCounterIdPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseGridIndexPanel: {
-                cls         : Twns.Common?.CommonChooseGridIndexPanel,
+                cls         : Common?.CommonChooseGridIndexPanel,
                 skinName    : `resource/skins/common/CommonChooseGridIndexPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseLocationPanel: {
-                cls         : Twns.Common?.CommonChooseLocationPanel,
+                cls         : Common?.CommonChooseLocationPanel,
                 skinName    : `resource/skins/common/CommonChooseLocationPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChoosePlayerAliveStatePanel: {
-                cls         : Twns.Common?.CommonChoosePlayerAliveStatePanel,
+                cls         : Common?.CommonChoosePlayerAliveStatePanel,
                 skinName    : `resource/skins/common/CommonChoosePlayerAliveStatePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChoosePlayerIndexPanel: {
-                cls         : Twns.Common?.CommonChoosePlayerIndexPanel,
+                cls         : Common?.CommonChoosePlayerIndexPanel,
                 skinName    : `resource/skins/common/CommonChoosePlayerIndexPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
+            CommonChooseSingleCoPanel: {
+                cls         : Common?.CommonChooseSingleCoPanel,
+                skinName    : `resource/skins/common/CommonChooseSingleCoPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
             CommonChooseSingleTileTypePanel: {
-                cls         : Twns.Common?.CommonChooseSingleTileTypePanel,
+                cls         : Common?.CommonChooseSingleTileTypePanel,
                 skinName    : `resource/skins/common/CommonChooseSingleTileTypePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseSingleUnitTypePanel: {
-                cls         : Twns.Common?.CommonChooseSingleUnitTypePanel,
+                cls         : Common?.CommonChooseSingleUnitTypePanel,
                 skinName    : `resource/skins/common/CommonChooseSingleUnitTypePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseTeamIndexPanel: {
-                cls         : Twns.Common?.CommonChooseTeamIndexPanel,
+                cls         : Common?.CommonChooseTeamIndexPanel,
                 skinName    : `resource/skins/common/CommonChooseTeamIndexPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseTileBasePanel: {
-                cls         : Twns.Common?.CommonChooseTileBasePanel,
+                cls         : Common?.CommonChooseTileBasePanel,
                 skinName    : `resource/skins/common/CommonChooseTileBasePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseTileDecoratorPanel: {
-                cls         : Twns.Common?.CommonChooseTileDecoratorPanel,
+                cls         : Common?.CommonChooseTileDecoratorPanel,
                 skinName    : `resource/skins/common/CommonChooseTileDecoratorPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseTileObjectPanel: {
-                cls         : Twns.Common?.CommonChooseTileObjectPanel,
+                cls         : Common?.CommonChooseTileObjectPanel,
                 skinName    : `resource/skins/common/CommonChooseTileObjectPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseTileTypePanel: {
-                cls         : Twns.Common?.CommonChooseTileTypePanel,
+                cls         : Common?.CommonChooseTileTypePanel,
                 skinName    : `resource/skins/common/CommonChooseTileTypePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseUnitActionStatePanel: {
-                cls         : Twns.Common?.CommonChooseUnitActionStatePanel,
+                cls         : Common?.CommonChooseUnitActionStatePanel,
                 skinName    : `resource/skins/common/CommonChooseUnitActionStatePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseUnitTypePanel: {
-                cls         : Twns.Common?.CommonChooseUnitTypePanel,
+                cls         : Common?.CommonChooseUnitTypePanel,
                 skinName    : `resource/skins/common/CommonChooseUnitTypePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseWarEventActionIdPanel: {
-                cls         : Twns.Common?.CommonChooseWarEventActionIdPanel,
+                cls         : Common?.CommonChooseWarEventActionIdPanel,
                 skinName    : `resource/skins/common/CommonChooseWarEventActionIdPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseWarEventIdPanel: {
-                cls         : Twns.Common?.CommonChooseWarEventIdPanel,
+                cls         : Common?.CommonChooseWarEventIdPanel,
                 skinName    : `resource/skins/common/CommonChooseWarEventIdPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonChooseWeatherTypePanel: {
-                cls         : Twns.Common?.CommonChooseWeatherTypePanel,
+                cls         : Common?.CommonChooseWeatherTypePanel,
                 skinName    : `resource/skins/common/CommonChooseWeatherTypePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonCoInfoPanel: {
-                cls         : Twns.Common?.CommonCoInfoPanel,
+                cls         : Common?.CommonCoInfoPanel,
                 skinName    : `resource/skins/common/CommonCoInfoPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonCoListPanel: {
-                cls         : Twns.Common?.CommonCoListPanel,
+                cls         : Common?.CommonCoListPanel,
                 skinName    : `resource/skins/common/CommonCoListPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonConfirmPanel: {
-                cls         : Twns.Common?.CommonConfirmPanel,
+                cls         : Common?.CommonConfirmPanel,
                 skinName    : `resource/skins/common/CommonConfirmPanel.exml`,
                 layer       : LayerType.Notify0,
             },
 
             CommonDamageCalculatorPanel: {
-                cls         : Twns.Common?.CommonDamageCalculatorPanel,
+                cls         : Common?.CommonDamageCalculatorPanel,
                 skinName    : `resource/skins/common/CommonDamageCalculatorPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             CommonDamageChartPanel: {
-                cls         : Twns.Common?.CommonDamageChartPanel,
+                cls         : Common?.CommonDamageChartPanel,
                 skinName    : `resource/skins/common/CommonDamageChartPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             CommonErrorPanel: {
-                cls         : Twns.Common?.CommonErrorPanel,
+                cls         : Common?.CommonErrorPanel,
                 skinName    : `resource/skins/common/CommonErrorPanel.exml`,
                 layer       : LayerType.Top,
             },
 
             CommonHelpPanel: {
-                cls         : Twns.Common?.CommonHelpPanel,
+                cls         : Common?.CommonHelpPanel,
                 skinName    : `resource/skins/common/CommonHelpPanel.exml`,
                 layer       : LayerType.Notify0,
             },
 
             CommonInputPanel: {
-                cls         : Twns.Common?.CommonInputPanel,
+                cls         : Common?.CommonInputPanel,
                 skinName    : `resource/skins/common/CommonInputPanel.exml`,
                 layer       : LayerType.Notify0,
             },
 
             CommonInputIntegerPanel: {
-                cls         : Twns.Common?.CommonInputIntegerPanel,
+                cls         : Common?.CommonInputIntegerPanel,
                 skinName    : `resource/skins/common/CommonInputIntegerPanel.exml`,
                 layer       : LayerType.Notify0,
             },
 
             CommonJoinRoomPasswordPanel: {
-                cls         : Twns.Common?.CommonJoinRoomPasswordPanel,
+                cls         : Common?.CommonJoinRoomPasswordPanel,
                 skinName    : `resource/skins/common/CommonJoinRoomPasswordPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonMapWarStatisticsPanel: {
-                cls         : Twns.Common?.CommonMapWarStatisticsPanel,
+                cls         : Common?.CommonMapWarStatisticsPanel,
                 skinName    : `resource/skins/common/CommonMapWarStatisticsPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonModifyWarRuleNamePanel: {
-                cls         : Twns.Common?.CommonModifyWarRuleNamePanel,
+                cls         : Common?.CommonModifyWarRuleNamePanel,
                 skinName    : `resource/skins/common/CommonModifyWarRuleNamePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonRankListPanel: {
-                cls         : Twns.Common?.CommonRankListPanel,
+                cls         : Common?.CommonRankListPanel,
                 skinName    : `resource/skins/common/CommonRankListPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonServerStatusPanel: {
-                cls         : Twns.Common?.CommonServerStatusPanel,
+                cls         : Common?.CommonServerStatusPanel,
                 skinName    : `resource/skins/common/CommonServerStatusPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             CommonWarEventListPanel: {
-                cls         : Twns.Common?.CommonWarEventListPanel,
+                cls         : Common?.CommonWarEventListPanel,
                 skinName    : `resource/skins/common/CommonWarEventListPanel.exml`,
                 layer       : LayerType.Hud1,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             HrwReplayProgressPanel: {
-                cls         : Twns.HalfwayReplayWar?.HrwReplayProgressPanel,
+                cls         : HalfwayReplayWar?.HrwReplayProgressPanel,
                 skinName    : `resource/skins/halfwayReplayWar/HrwReplayProgressPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             HrwTopPanel: {
-                cls         : Twns.HalfwayReplayWar?.HrwTopPanel,
+                cls         : HalfwayReplayWar?.HrwTopPanel,
                 skinName    : `resource/skins/halfwayReplayWar/HrwTopPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             HrwWarMenuPanel: {
-                cls         : Twns.HalfwayReplayWar?.HrwWarMenuPanel,
+                cls         : HalfwayReplayWar?.HrwWarMenuPanel,
                 skinName    : `resource/skins/halfwayReplayWar/HrwWarMenuPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             LobbyBackgroundPanel: {
-                cls         : Twns.Lobby?.LobbyBackgroundPanel,
+                cls         : Lobby?.LobbyBackgroundPanel,
                 skinName    : `resource/skins/lobby/LobbyBackgroundPanel.exml`,
                 layer       : LayerType.Bottom,
                 needCache   : true,
             },
 
             LobbyBottomPanel: {
-                cls         : Twns.Lobby?.LobbyBottomPanel,
+                cls         : Lobby?.LobbyBottomPanel,
                 skinName    : `resource/skins/lobby/LobbyBottomPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             LobbyPanel: {
-                cls         : Twns.Lobby?.LobbyPanel,
+                cls         : Lobby?.LobbyPanel,
                 skinName    : `resource/skins/lobby/LobbyPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -784,14 +791,14 @@ namespace Twns.PanelHelpers {
             },
 
             LobbyTopPanel: {
-                cls         : Twns.Lobby?.LobbyTopPanel,
+                cls         : Lobby?.LobbyTopPanel,
                 skinName    : `resource/skins/lobby/LobbyTopPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             LobbyTopRightPanel: {
-                cls         : Twns.Lobby?.LobbyTopRightPanel,
+                cls         : Lobby?.LobbyTopRightPanel,
                 skinName    : `resource/skins/lobby/LobbyTopRightPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
@@ -799,62 +806,62 @@ namespace Twns.PanelHelpers {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             McrCreateMapListPanel: {
-                cls         : Twns.MultiCustomRoom?.McrCreateMapListPanel,
+                cls         : MultiCustomRoom?.McrCreateMapListPanel,
                 skinName    : `resource/skins/multiCustomRoom/McrCreateMapListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             McrCreateSearchMapPanel: {
-                cls         : Twns.MultiCustomRoom?.McrCreateSearchMapPanel,
+                cls         : MultiCustomRoom?.McrCreateSearchMapPanel,
                 skinName    : `resource/skins/multiCustomRoom/McrCreateSearchMapPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             McrCreateSettingsPanel: {
-                cls         : Twns.MultiCustomRoom?.McrCreateSettingsPanel,
+                cls         : MultiCustomRoom?.McrCreateSettingsPanel,
                 skinName    : `resource/skins/multiCustomRoom/McrCreateSettingsPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             McrJoinRoomListPanel: {
-                cls         : Twns.MultiCustomRoom?.McrJoinRoomListPanel,
+                cls         : MultiCustomRoom?.McrJoinRoomListPanel,
                 skinName    : `resource/skins/multiCustomRoom/McrJoinRoomListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             McrMainMenuPanel: {
-                cls         : Twns.MultiCustomRoom?.McrMainMenuPanel,
+                cls         : MultiCustomRoom?.McrMainMenuPanel,
                 skinName    : `resource/skins/multiCustomRoom/McrMainMenuPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             McrMyRoomListPanel: {
-                cls         : Twns.MultiCustomRoom?.McrMyRoomListPanel,
+                cls         : MultiCustomRoom?.McrMyRoomListPanel,
                 skinName    : `resource/skins/multiCustomRoom/McrMyRoomListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             McrRoomInfoPanel: {
-                cls         : Twns.MultiCustomRoom?.McrRoomInfoPanel,
+                cls         : MultiCustomRoom?.McrRoomInfoPanel,
                 skinName    : `resource/skins/multiCustomRoom/McrRoomInfoPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             McrSearchRoomPanel: {
-                cls         : Twns.MultiCustomRoom?.McrSearchRoomPanel,
+                cls         : MultiCustomRoom?.McrSearchRoomPanel,
                 skinName    : `resource/skins/multiCustomRoom/McrSearchRoomPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             McwMyWarListPanel: {
-                cls         : Twns.MultiCustomWar?.McwMyWarListPanel,
+                cls         : MultiCustomWar?.McwMyWarListPanel,
                 skinName    : `resource/skins/multiCustomWar/McwMyWarListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -862,187 +869,187 @@ namespace Twns.PanelHelpers {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             MeAddWarEventToRulePanel: {
-                cls         : Twns.MapEditor?.MeAddWarEventToRulePanel,
+                cls         : MapEditor?.MeAddWarEventToRulePanel,
                 skinName    : `resource/skins/mapEditor/MeAddWarEventToRulePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeAvailableCoPanel: {
-                cls         : Twns.MapEditor?.MeAvailableCoPanel,
+                cls         : MapEditor?.MeAvailableCoPanel,
                 skinName    : `resource/skins/mapEditor/MeAvailableCoPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeChooseTileBasePanel: {
-                cls         : Twns.MapEditor?.MeChooseTileBasePanel,
+                cls         : MapEditor?.MeChooseTileBasePanel,
                 skinName    : `resource/skins/mapEditor/MeChooseTileBasePanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             MeChooseTileDecoratorPanel: {
-                cls         : Twns.MapEditor?.MeChooseTileDecoratorPanel,
+                cls         : MapEditor?.MeChooseTileDecoratorPanel,
                 skinName    : `resource/skins/mapEditor/MeChooseTileDecoratorPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             MeChooseTileObjectPanel: {
-                cls         : Twns.MapEditor?.MeChooseTileObjectPanel,
+                cls         : MapEditor?.MeChooseTileObjectPanel,
                 skinName    : `resource/skins/mapEditor/MeChooseTileObjectPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             MeChooseUnitPanel: {
-                cls         : Twns.MapEditor?.MeChooseUnitPanel,
+                cls         : MapEditor?.MeChooseUnitPanel,
                 skinName    : `resource/skins/mapEditor/MeChooseUnitPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             MeClearPanel: {
-                cls         : Twns.MapEditor?.MeClearPanel,
+                cls         : MapEditor?.MeClearPanel,
                 skinName    : `resource/skins/mapEditor/MeClearPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeConfirmSaveMapPanel: {
-                cls         : Twns.MapEditor?.MeConfirmSaveMapPanel,
+                cls         : MapEditor?.MeConfirmSaveMapPanel,
                 skinName    : `resource/skins/mapEditor/MeConfirmSaveMapPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeImportPanel: {
-                cls         : Twns.MapEditor?.MeImportPanel,
+                cls         : MapEditor?.MeImportPanel,
                 skinName    : `resource/skins/mapEditor/MeImportPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeMapListPanel: {
-                cls         : Twns.MapEditor?.MeMapListPanel,
+                cls         : MapEditor?.MeMapListPanel,
                 skinName    : `resource/skins/mapEditor/MeMapListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MeMapTagPanel: {
-                cls         : Twns.MapEditor?.MeMapTagPanel,
+                cls         : MapEditor?.MeMapTagPanel,
                 skinName    : `resource/skins/mapEditor/MeMapTagPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeMfwSettingsPanel: {
-                cls         : Twns.MapEditor?.MeMfwSettingsPanel,
+                cls         : MapEditor?.MeMfwSettingsPanel,
                 skinName    : `resource/skins/mapEditor/MeMfwSettingsPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeModifyMapDescPanel: {
-                cls         : Twns.MapEditor?.MeModifyMapDescPanel,
+                cls         : MapEditor?.MeModifyMapDescPanel,
                 skinName    : `resource/skins/mapEditor/MeModifyMapDescPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeModifyMapNamePanel: {
-                cls         : Twns.MapEditor?.MeModifyMapNamePanel,
+                cls         : MapEditor?.MeModifyMapNamePanel,
                 skinName    : `resource/skins/mapEditor/MeModifyMapNamePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeResizePanel: {
-                cls         : Twns.MapEditor?.MeResizePanel,
+                cls         : MapEditor?.MeResizePanel,
                 skinName    : `resource/skins/mapEditor/MeResizePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeSimSettingsPanel: {
-                cls         : Twns.MapEditor?.MeSimSettingsPanel,
+                cls         : MapEditor?.MeSimSettingsPanel,
                 skinName    : `resource/skins/mapEditor/MeSimSettingsPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeSymmetryPanel: {
-                cls         : Twns.MapEditor?.MeSymmetryPanel,
+                cls         : MapEditor?.MeSymmetryPanel,
                 skinName    : `resource/skins/mapEditor/MeSymmetryPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeTopPanel: {
-                cls         : Twns.MapEditor?.MeTopPanel,
+                cls         : MapEditor?.MeTopPanel,
                 skinName    : `resource/skins/mapEditor/MeTopPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeVisibilityPanel: {
-                cls         : Twns.MapEditor?.MeVisibilityPanel,
+                cls         : MapEditor?.MeVisibilityPanel,
                 skinName    : `resource/skins/mapEditor/MeVisibilityPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeWarMenuPanel: {
-                cls         : Twns.MapEditor?.MeWarMenuPanel,
+                cls         : MapEditor?.MeWarMenuPanel,
                 skinName    : `resource/skins/mapEditor/MeWarMenuPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeWarRulePanel: {
-                cls         : Twns.MapEditor?.MeWarRulePanel,
+                cls         : MapEditor?.MeWarRulePanel,
                 skinName    : `resource/skins/mapEditor/MeWarRulePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MeChooseLocationPanel: {
-                cls         : Twns.MapEditor?.MeChooseLocationPanel,
+                cls         : MapEditor?.MeChooseLocationPanel,
                 skinName    : `resource/skins/mapEditor/MeChooseLocationPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             MfrCreateSettingsPanel: {
-                cls         : Twns.MultiFreeRoom?.MfrCreateSettingsPanel,
+                cls         : MultiFreeRoom?.MfrCreateSettingsPanel,
                 skinName    : `resource/skins/multiFreeRoom/MfrCreateSettingsPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MfrJoinRoomListPanel: {
-                cls         : Twns.MultiFreeRoom?.MfrJoinRoomListPanel,
+                cls         : MultiFreeRoom?.MfrJoinRoomListPanel,
                 skinName    : `resource/skins/multiFreeRoom/MfrJoinRoomListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MfrMainMenuPanel: {
-                cls         : Twns.MultiFreeRoom?.MfrMainMenuPanel,
+                cls         : MultiFreeRoom?.MfrMainMenuPanel,
                 skinName    : `resource/skins/multiFreeRoom/MfrMainMenuPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MfrMyRoomListPanel: {
-                cls         : Twns.MultiFreeRoom?.MfrMyRoomListPanel,
+                cls         : MultiFreeRoom?.MfrMyRoomListPanel,
                 skinName    : `resource/skins/multiFreeRoom/MfrMyRoomListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MfrRoomInfoPanel: {
-                cls         : Twns.MultiFreeRoom?.MfrRoomInfoPanel,
+                cls         : MultiFreeRoom?.MfrRoomInfoPanel,
                 skinName    : `resource/skins/multiFreeRoom/MfrRoomInfoPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MfrSearchRoomPanel: {
-                cls         : Twns.MultiFreeRoom?.MfrSearchRoomPanel,
+                cls         : MultiFreeRoom?.MfrSearchRoomPanel,
                 skinName    : `resource/skins/multiFreeRoom/MfrSearchRoomPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             MfwMyWarListPanel: {
-                cls         : Twns.MultiFreeWar?.MfwMyWarListPanel,
+                cls         : MultiFreeWar?.MfwMyWarListPanel,
                 skinName    : `resource/skins/multiFreeWar/MfwMyWarListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -1050,156 +1057,156 @@ namespace Twns.PanelHelpers {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             MmAcceptMapPanel: {
-                cls         : Twns.MapManagement?.MmAcceptMapPanel,
+                cls         : MapManagement?.MmAcceptMapPanel,
                 skinName    : `resource/skins/mapManagement/MmAcceptMapPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MmAvailabilityListPanel: {
-                cls         : Twns.MapManagement?.MmAvailabilityListPanel,
+                cls         : MapManagement?.MmAvailabilityListPanel,
                 skinName    : `resource/skins/mapManagement/MmAvailabilityListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MmAvailabilitySearchPanel: {
-                cls         : Twns.MapManagement?.MmAvailabilitySearchPanel,
+                cls         : MapManagement?.MmAvailabilitySearchPanel,
                 skinName    : `resource/skins/mapManagement/MmAvailabilitySearchPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MmCommandPanel: {
-                cls         : Twns.MapManagement?.MmCommandPanel,
+                cls         : MapManagement?.MmCommandPanel,
                 skinName    : `resource/skins/mapManagement/MmCommandPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MmMainMenuPanel: {
-                cls         : Twns.MapManagement?.MmMainMenuPanel,
+                cls         : MapManagement?.MmMainMenuPanel,
                 skinName    : `resource/skins/mapManagement/MmMainMenuPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MmMapRenamePanel: {
-                cls         : Twns.MapManagement?.MmMapRenamePanel,
+                cls         : MapManagement?.MmMapRenamePanel,
                 skinName    : `resource/skins/mapManagement/MmMapRenamePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MmRejectMapPanel: {
-                cls         : Twns.MapManagement?.MmRejectMapPanel,
+                cls         : MapManagement?.MmRejectMapPanel,
                 skinName    : `resource/skins/mapManagement/MmRejectMapPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MmReviewListPanel: {
-                cls         : Twns.MapManagement?.MmReviewListPanel,
+                cls         : MapManagement?.MmReviewListPanel,
                 skinName    : `resource/skins/mapManagement/MmReviewListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MmSetWarRuleAvailabilityPanel: {
-                cls         : Twns.MapManagement?.MmSetWarRuleAvailabilityPanel,
+                cls         : MapManagement?.MmSetWarRuleAvailabilityPanel,
                 skinName    : `resource/skins/mapManagement/MmSetWarRuleAvailabilityPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MmTagChangePanel: {
-                cls         : Twns.MapManagement?.MmTagChangePanel,
+                cls         : MapManagement?.MmTagChangePanel,
                 skinName    : `resource/skins/mapManagement/MmTagChangePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MmTagListPanel: {
-                cls         : Twns.MapManagement?.MmTagListPanel,
+                cls         : MapManagement?.MmTagListPanel,
                 skinName    : `resource/skins/mapManagement/MmTagListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MmTagSearchPanel: {
-                cls         : Twns.MapManagement?.MmTagSearchPanel,
+                cls         : MapManagement?.MmTagSearchPanel,
                 skinName    : `resource/skins/mapManagement/MmTagSearchPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MmWarRuleAvailableCoPanel: {
-                cls         : Twns.MapManagement?.MmWarRuleAvailableCoPanel,
+                cls         : MapManagement?.MmWarRuleAvailableCoPanel,
                 skinName    : `resource/skins/mapManagement/MmWarRuleAvailableCoPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MmWarRulePanel: {
-                cls         : Twns.MapManagement?.MmWarRulePanel,
+                cls         : MapManagement?.MmWarRulePanel,
                 skinName    : `resource/skins/mapManagement/MmWarRulePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             MpwSpectatePanel: {
-                cls         : Twns.MultiPlayerWar?.MpwSpectatePanel,
+                cls         : MultiPlayerWar?.MpwSpectatePanel,
                 skinName    : `resource/skins/multiPlayerWar/MpwSpectatePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MpwSidePanel: {
-                cls         : Twns.MultiPlayerWar?.MpwSidePanel,
+                cls         : MultiPlayerWar?.MpwSidePanel,
                 skinName    : `resource/skins/multiPlayerWar/MpwSidePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MpwTopPanel: {
-                cls         : Twns.MultiPlayerWar?.MpwTopPanel,
+                cls         : MultiPlayerWar?.MpwTopPanel,
                 skinName    : `resource/skins/multiPlayerWar/MpwTopPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             MpwWarMenuPanel: {
-                cls         : Twns.MultiPlayerWar?.MpwWarMenuPanel,
+                cls         : MultiPlayerWar?.MpwWarMenuPanel,
                 skinName    : `resource/skins/multiPlayerWar/MpwWarMenuPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             MrrMainMenuPanel: {
-                cls         : Twns.MultiRankRoom?.MrrMainMenuPanel,
+                cls         : MultiRankRoom?.MrrMainMenuPanel,
                 skinName    : `resource/skins/multiRankRoom/MrrMainMenuPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MrrMyRoomListPanel: {
-                cls         : Twns.MultiRankRoom?.MrrMyRoomListPanel,
+                cls         : MultiRankRoom?.MrrMyRoomListPanel,
                 skinName    : `resource/skins/multiRankRoom/MrrMyRoomListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MrrPreviewMapListPanel: {
-                cls         : Twns.MultiRankRoom?.MrrPreviewMapListPanel,
+                cls         : MultiRankRoom?.MrrPreviewMapListPanel,
                 skinName    : `resource/skins/multiRankRoom/MrrPreviewMapListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MrrRoomInfoPanel: {
-                cls         : Twns.MultiRankRoom?.MrrRoomInfoPanel,
+                cls         : MultiRankRoom?.MrrRoomInfoPanel,
                 skinName    : `resource/skins/multiRankRoom/MrrRoomInfoPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MrrSetMaxConcurrentCountPanel: {
-                cls         : Twns.MultiRankRoom?.MrrSetMaxConcurrentCountPanel,
+                cls         : MultiRankRoom?.MrrSetMaxConcurrentCountPanel,
                 skinName    : `resource/skins/multiRankRoom/MrrSetMaxConcurrentCountPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             MrwMyWarListPanel: {
-                cls         : Twns.MultiRankWar?.MrwMyWarListPanel,
+                cls         : MultiRankWar?.MrwMyWarListPanel,
                 skinName    : `resource/skins/multiRankWar/MrwMyWarListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -1207,52 +1214,52 @@ namespace Twns.PanelHelpers {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             RwReplayListPanel: {
-                cls         : Twns.ReplayWar?.RwReplayListPanel,
+                cls         : ReplayWar?.RwReplayListPanel,
                 skinName    : `resource/skins/replayWar/RwReplayListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             RwReplayProgressPanel: {
-                cls         : Twns.ReplayWar?.RwReplayProgressPanel,
+                cls         : ReplayWar?.RwReplayProgressPanel,
                 skinName    : `resource/skins/replayWar/RwReplayProgressPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             RwSearchReplayPanel: {
-                cls         : Twns.ReplayWar?.RwSearchReplayPanel,
+                cls         : ReplayWar?.RwSearchReplayPanel,
                 skinName    : `resource/skins/replayWar/RwSearchReplayPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             RwTopPanel: {
-                cls         : Twns.ReplayWar?.RwTopPanel,
+                cls         : ReplayWar?.RwTopPanel,
                 skinName    : `resource/skins/replayWar/RwTopPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             RwWarMenuPanel: {
-                cls         : Twns.ReplayWar?.RwWarMenuPanel,
+                cls         : ReplayWar?.RwWarMenuPanel,
                 skinName    : `resource/skins/replayWar/RwWarMenuPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             ScrCreateMapListPanel: {
-                cls         : Twns.SingleCustomRoom?.ScrCreateMapListPanel,
+                cls         : SingleCustomRoom?.ScrCreateMapListPanel,
                 skinName    : `resource/skins/singleCustomRoom/ScrCreateMapListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             ScrCreateSearchMapPanel: {
-                cls         : Twns.SingleCustomRoom?.ScrCreateSearchMapPanel,
+                cls         : SingleCustomRoom?.ScrCreateSearchMapPanel,
                 skinName    : `resource/skins/singleCustomRoom/ScrCreateSearchMapPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ScrCreateSettingsPanel: {
-                cls         : Twns.SingleCustomRoom?.ScrCreateSettingsPanel,
+                cls         : SingleCustomRoom?.ScrCreateSettingsPanel,
                 skinName    : `resource/skins/singleCustomRoom/ScrCreateSettingsPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -1260,26 +1267,26 @@ namespace Twns.PanelHelpers {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             SpmCreateSaveSlotsPanel: {
-                cls         : Twns.SinglePlayerMode?.SpmCreateSaveSlotsPanel,
+                cls         : SinglePlayerMode?.SpmCreateSaveSlotsPanel,
                 skinName    : `resource/skins/singlePlayerMode/SpmCreateSaveSlotsPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             SpmCreateSfwSaveSlotsPanel: {
-                cls         : Twns.SinglePlayerMode?.SpmCreateSfwSaveSlotsPanel,
+                cls         : SinglePlayerMode?.SpmCreateSfwSaveSlotsPanel,
                 skinName    : `resource/skins/singlePlayerMode/SpmCreateSfwSaveSlotsPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             SpmMainMenuPanel: {
-                cls         : Twns.SinglePlayerMode?.SpmMainMenuPanel,
+                cls         : SinglePlayerMode?.SpmMainMenuPanel,
                 skinName    : `resource/skins/singlePlayerMode/SpmMainMenuPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             SpmWarListPanel: {
-                cls         : Twns.SinglePlayerMode?.SpmWarListPanel,
+                cls         : SinglePlayerMode?.SpmWarListPanel,
                 skinName    : `resource/skins/singlePlayerMode/SpmWarListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -1287,39 +1294,39 @@ namespace Twns.PanelHelpers {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             SpwLoadWarPanel: {
-                cls         : Twns.SinglePlayerWar?.SpwLoadWarPanel,
+                cls         : SinglePlayerWar?.SpwLoadWarPanel,
                 skinName    : `resource/skins/singlePlayerWar/SpwLoadWarPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             SpwSidePanel: {
-                cls         : Twns.SinglePlayerWar?.SpwSidePanel,
+                cls         : SinglePlayerWar?.SpwSidePanel,
                 skinName    : `resource/skins/singlePlayerWar/SpwSidePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             SpwTopPanel: {
-                cls         : Twns.SinglePlayerWar?.SpwTopPanel,
+                cls         : SinglePlayerWar?.SpwTopPanel,
                 skinName    : `resource/skins/singlePlayerWar/SpwTopPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             SpwWarMenuPanel: {
-                cls         : Twns.SinglePlayerWar?.SpwWarMenuPanel,
+                cls         : SinglePlayerWar?.SpwWarMenuPanel,
                 skinName    : `resource/skins/singlePlayerWar/SpwWarMenuPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             SrrCreateMapListPanel: {
-                cls         : Twns.SingleRankRoom?.SrrCreateMapListPanel,
+                cls         : SingleRankRoom?.SrrCreateMapListPanel,
                 skinName    : `resource/skins/singleRankRoom/SrrCreateMapListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             SrrCreateSettingsPanel: {
-                cls         : Twns.SingleRankRoom?.SrrCreateSettingsPanel,
+                cls         : SingleRankRoom?.SrrCreateSettingsPanel,
                 skinName    : `resource/skins/singleRankRoom/SrrCreateSettingsPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -1327,94 +1334,94 @@ namespace Twns.PanelHelpers {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             UserChangeDiscordIdPanel: {
-                cls         : Twns.User?.UserChangeDiscordIdPanel,
+                cls         : User?.UserChangeDiscordIdPanel,
                 skinName    : `resource/skins/user/UserChangeDiscordIdPanel.exml`,
                 layer       : LayerType.Hud1,
             },
 
             UserChangeNicknamePanel: {
-                cls         : Twns.User?.UserChangeNicknamePanel,
+                cls         : User?.UserChangeNicknamePanel,
                 skinName    : `resource/skins/user/UserChangeNicknamePanel.exml`,
                 layer       : LayerType.Hud1,
             },
 
             UserGameManagementPanel: {
-                cls         : Twns.User?.UserGameManagementPanel,
+                cls         : User?.UserGameManagementPanel,
                 skinName    : `resource/skins/user/UserGameManagementPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             UserLoginBackgroundPanel: {
-                cls         : Twns.User?.UserLoginBackgroundPanel,
+                cls         : User?.UserLoginBackgroundPanel,
                 skinName    : `resource/skins/user/UserLoginBackgroundPanel.exml`,
                 layer       : LayerType.Bottom,
                 isExclusive : true,
             },
 
             UserLoginPanel: {
-                cls         : Twns.User?.UserLoginPanel,
+                cls         : User?.UserLoginPanel,
                 skinName    : `resource/skins/user/UserLoginPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             UserOnlineUsersPanel: {
-                cls         : Twns.User?.UserOnlineUsersPanel,
+                cls         : User?.UserOnlineUsersPanel,
                 skinName    : `resource/skins/user/UserOnlineUsersPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             UserPanel: {
-                cls         : Twns.User?.UserPanel,
+                cls         : User?.UserPanel,
                 skinName    : `resource/skins/user/UserPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },
 
             UserRegisterPanel: {
-                cls         : Twns.User?.UserRegisterPanel,
+                cls         : User?.UserRegisterPanel,
                 skinName    : `resource/skins/user/UserRegisterPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             UserSetAvatarPanel: {
-                cls         : Twns.User?.UserSetAvatarPanel,
+                cls         : User?.UserSetAvatarPanel,
                 skinName    : `resource/skins/user/UserSetAvatarPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             UserSetPasswordPanel: {
-                cls         : Twns.User?.UserSetPasswordPanel,
+                cls         : User?.UserSetPasswordPanel,
                 skinName    : `resource/skins/user/UserSetPasswordPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             UserSetPrivilegePanel: {
-                cls         : Twns.User?.UserSetPrivilegePanel,
+                cls         : User?.UserSetPrivilegePanel,
                 skinName    : `resource/skins/user/UserSetPrivilegePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             UserSetSoundPanel: {
-                cls         : Twns.User?.UserSetSoundPanel,
+                cls         : User?.UserSetSoundPanel,
                 skinName    : `resource/skins/user/UserSetSoundPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             UserSetOpacityPanel: {
-                cls         : Twns.User?.UserSetOpacityPanel,
+                cls         : User?.UserSetOpacityPanel,
                 skinName    : `resource/skins/user/UserSetOpacityPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             UserSetStageScalePanel: {
-                cls         : Twns.User?.UserSetStageScalePanel,
+                cls         : User?.UserSetStageScalePanel,
                 skinName    : `resource/skins/user/UserSetStageScalePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             UserSettingsPanel: {
-                cls         : Twns.User?.UserSettingsPanel,
+                cls         : User?.UserSettingsPanel,
                 skinName    : `resource/skins/user/UserSettingsPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
@@ -1422,368 +1429,368 @@ namespace Twns.PanelHelpers {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             WeActionAddUnitListPanel: {
-                cls         : Twns.WarEvent?.WeActionAddUnitListPanel,
+                cls         : WarEvent?.WeActionAddUnitListPanel,
                 skinName    : `resource/skins/warEvent/WeActionAddUnitListPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel1: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel1,
+                cls         : WarEvent?.WeActionModifyPanel1,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel1.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel2: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel2,
+                cls         : WarEvent?.WeActionModifyPanel2,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel2.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel3: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel3,
+                cls         : WarEvent?.WeActionModifyPanel3,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel3.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel4: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel4,
+                cls         : WarEvent?.WeActionModifyPanel4,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel4.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel5: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel5,
+                cls         : WarEvent?.WeActionModifyPanel5,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel5.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel6: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel6,
+                cls         : WarEvent?.WeActionModifyPanel6,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel6.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel7: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel7,
+                cls         : WarEvent?.WeActionModifyPanel7,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel7.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel10: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel10,
+                cls         : WarEvent?.WeActionModifyPanel10,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel10.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel11: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel11,
+                cls         : WarEvent?.WeActionModifyPanel11,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel11.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel20: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel20,
+                cls         : WarEvent?.WeActionModifyPanel20,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel20.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel21: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel21,
+                cls         : WarEvent?.WeActionModifyPanel21,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel21.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel22: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel22,
+                cls         : WarEvent?.WeActionModifyPanel22,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel22.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel23: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel23,
+                cls         : WarEvent?.WeActionModifyPanel23,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel23.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel24: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel24,
+                cls         : WarEvent?.WeActionModifyPanel24,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel24.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel25: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel25,
+                cls         : WarEvent?.WeActionModifyPanel25,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel25.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel30: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel30,
+                cls         : WarEvent?.WeActionModifyPanel30,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel30.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel40: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel40,
+                cls         : WarEvent?.WeActionModifyPanel40,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel40.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel41: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel41,
+                cls         : WarEvent?.WeActionModifyPanel41,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel41.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel50: {
-                cls         : Twns.WarEvent?.WeActionModifyPanel50,
+                cls         : WarEvent?.WeActionModifyPanel50,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel50.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionReplacePanel: {
-                cls         : Twns.WarEvent?.WeActionReplacePanel,
+                cls         : WarEvent?.WeActionReplacePanel,
                 skinName    : `resource/skins/warEvent/WeActionReplacePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionTypeListPanel: {
-                cls         : Twns.WarEvent?.WeActionTypeListPanel,
+                cls         : WarEvent?.WeActionTypeListPanel,
                 skinName    : `resource/skins/warEvent/WeActionTypeListPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeCommandPanel: {
-                cls         : Twns.WarEvent?.WeCommandPanel,
+                cls         : WarEvent?.WeCommandPanel,
                 skinName    : `resource/skins/warEvent/WeCommandPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel1: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel1,
+                cls         : WarEvent?.WeConditionModifyPanel1,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel1.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel2: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel2,
+                cls         : WarEvent?.WeConditionModifyPanel2,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel2.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel3: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel3,
+                cls         : WarEvent?.WeConditionModifyPanel3,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel3.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel4: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel4,
+                cls         : WarEvent?.WeConditionModifyPanel4,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel4.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel5: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel5,
+                cls         : WarEvent?.WeConditionModifyPanel5,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel5.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel6: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel6,
+                cls         : WarEvent?.WeConditionModifyPanel6,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel6.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel10: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel10,
+                cls         : WarEvent?.WeConditionModifyPanel10,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel10.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel11: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel11,
+                cls         : WarEvent?.WeConditionModifyPanel11,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel11.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel12: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel12,
+                cls         : WarEvent?.WeConditionModifyPanel12,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel12.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel13: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel13,
+                cls         : WarEvent?.WeConditionModifyPanel13,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel13.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel14: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel14,
+                cls         : WarEvent?.WeConditionModifyPanel14,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel14.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel20: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel20,
+                cls         : WarEvent?.WeConditionModifyPanel20,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel20.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel21: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel21,
+                cls         : WarEvent?.WeConditionModifyPanel21,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel21.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel22: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel22,
+                cls         : WarEvent?.WeConditionModifyPanel22,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel22.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel23: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel23,
+                cls         : WarEvent?.WeConditionModifyPanel23,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel23.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel30: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel30,
+                cls         : WarEvent?.WeConditionModifyPanel30,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel30.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel31: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel31,
+                cls         : WarEvent?.WeConditionModifyPanel31,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel31.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel32: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel32,
+                cls         : WarEvent?.WeConditionModifyPanel32,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel32.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel40: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel40,
+                cls         : WarEvent?.WeConditionModifyPanel40,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel40.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel50: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel50,
+                cls         : WarEvent?.WeConditionModifyPanel50,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel50.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionModifyPanel60: {
-                cls         : Twns.WarEvent?.WeConditionModifyPanel60,
+                cls         : WarEvent?.WeConditionModifyPanel60,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel60.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionReplacePanel: {
-                cls         : Twns.WarEvent?.WeConditionReplacePanel,
+                cls         : WarEvent?.WeConditionReplacePanel,
                 skinName    : `resource/skins/warEvent/WeConditionReplacePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeConditionTypeListPanel: {
-                cls         : Twns.WarEvent?.WeConditionTypeListPanel,
+                cls         : WarEvent?.WeConditionTypeListPanel,
                 skinName    : `resource/skins/warEvent/WeConditionTypeListPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeDialogueBackgroundPanel: {
-                cls         : Twns.WarEvent?.WeDialogueBackgroundPanel,
+                cls         : WarEvent?.WeDialogueBackgroundPanel,
                 skinName    : `resource/skins/warEvent/WeDialogueBackgroundPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeEventListPanel: {
-                cls         : Twns.WarEvent?.WeEventListPanel,
+                cls         : WarEvent?.WeEventListPanel,
                 skinName    : `resource/skins/warEvent/WeEventListPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeEventRenamePanel: {
-                cls         : Twns.WarEvent?.WeEventRenamePanel,
+                cls         : WarEvent?.WeEventRenamePanel,
                 skinName    : `resource/skins/warEvent/WeEventRenamePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeNodeReplacePanel: {
-                cls         : Twns.WarEvent?.WeNodeReplacePanel,
+                cls         : WarEvent?.WeNodeReplacePanel,
                 skinName    : `resource/skins/warEvent/WeNodeReplacePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             WarMapBuildingListPanel: {
-                cls         : Twns.WarMap?.WarMapBuildingListPanel,
+                cls         : WarMap?.WarMapBuildingListPanel,
                 skinName    : `resource/skins/warMap/WarMapBuildingListPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             WwDeleteWatcherDetailPanel: {
-                cls         : Twns.WatchWar?.WwDeleteWatcherDetailPanel,
+                cls         : WatchWar?.WwDeleteWatcherDetailPanel,
                 skinName    : `resource/skins/watchWar/WwDeleteWatcherDetailPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WwDeleteWatcherWarsPanel: {
-                cls         : Twns.WatchWar?.WwDeleteWatcherWarsPanel,
+                cls         : WatchWar?.WwDeleteWatcherWarsPanel,
                 skinName    : `resource/skins/watchWar/WwDeleteWatcherWarsPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             WwHandleRequestDetailPanel: {
-                cls         : Twns.WatchWar?.WwHandleRequestDetailPanel,
+                cls         : WatchWar?.WwHandleRequestDetailPanel,
                 skinName    : `resource/skins/watchWar/WwHandleRequestDetailPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WwHandleRequestWarsPanel: {
-                cls         : Twns.WatchWar?.WwHandleRequestWarsPanel,
+                cls         : WatchWar?.WwHandleRequestWarsPanel,
                 skinName    : `resource/skins/watchWar/WwHandleRequestWarsPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             WwMainMenuPanel: {
-                cls         : Twns.WatchWar?.WwMainMenuPanel,
+                cls         : WatchWar?.WwMainMenuPanel,
                 skinName    : `resource/skins/watchWar/WwMainMenuPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             WwMakeRequestDetailPanel: {
-                cls         : Twns.WatchWar?.WwMakeRequestDetailPanel,
+                cls         : WatchWar?.WwMakeRequestDetailPanel,
                 skinName    : `resource/skins/watchWar/WwMakeRequestDetailPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WwMakeRequestWarsPanel: {
-                cls         : Twns.WatchWar?.WwMakeRequestWarsPanel,
+                cls         : WatchWar?.WwMakeRequestWarsPanel,
                 skinName    : `resource/skins/watchWar/WwMakeRequestWarsPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             WwOngoingWarsPanel: {
-                cls         : Twns.WatchWar?.WwOngoingWarsPanel,
+                cls         : WatchWar?.WwOngoingWarsPanel,
                 skinName    : `resource/skins/watchWar/WwOngoingWarsPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             WwSearchWarPanel: {
-                cls         : Twns.WatchWar?.WwSearchWarPanel,
+                cls         : WatchWar?.WwSearchWarPanel,
                 skinName    : `resource/skins/watchWar/WwSearchWarPanel.exml`,
                 layer       : LayerType.Hud0,
             },

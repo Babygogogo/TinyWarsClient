@@ -4930,6 +4930,10 @@ namespace Twns.Lang {
             `可使用CO主动技`,
             `Can Use CO Power`,
         ],
+        [LangTextType.B0898]: [
+            `选择CO`,
+            `Choose COs`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -5748,6 +5752,14 @@ namespace Twns.Lang {
         [LangTextType.F0132]: [
             `CO是 %s`,
             `the CO is %s`,
+        ],
+        [LangTextType.F0133]: [
+            `无法选中 "%s"。`,
+            `"%s" cannot be chosen.`,
+        ],
+        [LangTextType.F0134]: [
+            `必须选中 "%s"。`,
+            `"%s" must be chosen.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

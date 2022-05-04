@@ -30,6 +30,7 @@ namespace TwnsUiScrollList {
         private _cachedSelectedIndexArray   : number[] | null = null;
         private _cachedScrollVerPercentage  : number | null = null;
         private _cachedScrollHorPercentage  : number | null = null;
+        private _cachedListTouchEnabled     : boolean | null = null;
 
         private readonly _mousePoint    = new egret.Point();
 
@@ -124,6 +125,11 @@ namespace TwnsUiScrollList {
                 this.setSelectedIndexArray(this._cachedSelectedIndexArray);
                 this._cachedSelectedIndexArray = null;
             }
+
+            if (this._cachedListTouchEnabled != null) {
+                this.setListTouchEnabled(this._cachedListTouchEnabled);
+                this._cachedListTouchEnabled = null;
+            }
         }
         private _onClosed(): void {
             this.clear();
@@ -142,6 +148,14 @@ namespace TwnsUiScrollList {
 
         private _getList(): eui.List {
             return Twns.Helpers.getExisted(this._list);
+        }
+
+        public setListTouchEnabled(enabled: boolean): void {
+            if (!this.getIsOpening()) {
+                this._cachedListTouchEnabled = enabled;
+            } else {
+                this._getList().touchChildren = enabled;
+            }
         }
 
         private _setNotifyListenerArray(array: Twns.Notify.Listener[] | null): void {
@@ -300,6 +314,7 @@ namespace TwnsUiScrollList {
             this._cachedSelectedIndexArray  = null;
             this._cachedScrollHorPercentage = null;
             this._cachedScrollVerPercentage = null;
+            this._cachedListTouchEnabled    = null;
 
             this._getDataProvider()?.removeAll();
         }

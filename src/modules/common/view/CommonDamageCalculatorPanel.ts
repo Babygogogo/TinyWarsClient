@@ -232,7 +232,7 @@ namespace Twns.Common {
         }
         private _handleTouchedImgCo(playerData: PlayerData): void {
             const gameConfig = this._getCalculatorData().gameConfig;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                 gameConfig,
                 currentCoId         : playerData.coId,
                 availableCoIdArray  : gameConfig.getEnabledCoArray().map(v => v.coId),

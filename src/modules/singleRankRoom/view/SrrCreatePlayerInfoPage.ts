@@ -138,7 +138,7 @@ namespace Twns.SingleRankRoom {
 
             const playerIndex   = this._getData().playerIndex;
             const currentCoId   = SingleRankRoom.SrrCreateModel.getCoId(playerIndex);
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                 gameConfig          : SingleRankRoom.SrrCreateModel.getGameConfig(),
                 currentCoId,
                 availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({

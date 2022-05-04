@@ -88,6 +88,7 @@
 		"bin-debug/modules/common/view/CommonChooseLocationPanel.js",
 		"bin-debug/modules/common/view/CommonChoosePlayerAliveStatePanel.js",
 		"bin-debug/modules/common/view/CommonChoosePlayerIndexPanel.js",
+		"bin-debug/modules/common/view/CommonChooseSingleCoPanel.js",
 		"bin-debug/modules/common/view/CommonChooseSingleTileTypePanel.js",
 		"bin-debug/modules/common/view/CommonChooseSingleUnitTypePanel.js",
 		"bin-debug/modules/common/view/CommonChooseTeamIndexPanel.js",

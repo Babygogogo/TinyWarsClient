@@ -198,7 +198,7 @@ namespace Twns.CoopCustomRoom {
             const playerRule        = WarHelpers.WarRuleHelpers.getPlayerRule(instanceWarRule, playerIndex);
             const gameConfig        = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(CoopCustomRoom.CcrCreateModel.getData().settingsForCommon?.configVersion));
             if (playerIndex === CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex()) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                     gameConfig,
                     currentCoId         : CoopCustomRoom.CcrCreateModel.getSelfCoId(),
                     availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({ baseWarRule: instanceWarRule, playerIndex, gameConfig }),
@@ -218,7 +218,7 @@ namespace Twns.CoopCustomRoom {
                             coIdArray.push(cfg.coId);
                         }
 
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                             gameConfig,
                             currentCoId         : coId,
                             availableCoIdArray  : coIdArray,

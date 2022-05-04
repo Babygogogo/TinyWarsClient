@@ -411,7 +411,6 @@ namespace Twns.MapManagement {
                         index,
                         playerRule,
                         templateWarRule,
-                        isReviewing : false,
                         panel       : this,
                     });
                     ++index;
@@ -453,7 +452,6 @@ namespace Twns.MapManagement {
         index           : number;
         templateWarRule : ITemplateWarRule;
         playerRule      : IDataForPlayerRule;
-        isReviewing     : boolean;
         panel           : MmWarRulePanel;
     };
 
@@ -476,29 +474,28 @@ namespace Twns.MapManagement {
             const data              = this._getData();
             const templateWarRule   = data.templateWarRule;
             const playerRule        = data.playerRule;
-            const isReviewing       = data.isReviewing;
             return [
-                this._createDataPlayerIndex(templateWarRule, playerRule, isReviewing),
-                this._createDataTeamIndex(templateWarRule, playerRule, isReviewing),
-                await this._createDataBannedCoIdArray(templateWarRule, playerRule, isReviewing),
-                await this._createDataBannedUnitTypeArray(templateWarRule, playerRule, isReviewing),
-                this._createDataCanActivateCoSkill(templateWarRule, playerRule, isReviewing),
-                this._createDataInitialFund(templateWarRule, playerRule, isReviewing),
-                this._createDataIncomeMultiplier(templateWarRule, playerRule, isReviewing),
-                this._createDataEnergyAddPctOnLoadCo(templateWarRule, playerRule, isReviewing),
-                this._createDataEnergyGrowthMultiplier(templateWarRule, playerRule, isReviewing),
-                this._createDataMoveRangeModifier(templateWarRule, playerRule, isReviewing),
-                this._createDataAttackPowerModifier(templateWarRule, playerRule, isReviewing),
-                this._createDataVisionRangeModifier(templateWarRule, playerRule, isReviewing),
-                this._createDataLuckLowerLimit(templateWarRule, playerRule, isReviewing),
-                this._createDataLuckUpperLimit(templateWarRule, playerRule, isReviewing),
-                this._createDataIsControlledByAiInCcw(templateWarRule, playerRule, isReviewing),
-                await this._createDataAiCoIdInCcw(templateWarRule, playerRule, isReviewing),
-                this._createDataIsControlledByAiInSrw(templateWarRule, playerRule, isReviewing),
-                await this._createDataAiCoIdInSrw(templateWarRule, playerRule, isReviewing),
+                this._createDataPlayerIndex(templateWarRule, playerRule),
+                this._createDataTeamIndex(templateWarRule, playerRule),
+                await this._createDataBannedCoIdArray(templateWarRule, playerRule),
+                await this._createDataBannedUnitTypeArray(templateWarRule, playerRule),
+                this._createDataCanActivateCoSkill(templateWarRule, playerRule),
+                this._createDataInitialFund(templateWarRule, playerRule),
+                this._createDataIncomeMultiplier(templateWarRule, playerRule),
+                this._createDataEnergyAddPctOnLoadCo(templateWarRule, playerRule),
+                this._createDataEnergyGrowthMultiplier(templateWarRule, playerRule),
+                this._createDataMoveRangeModifier(templateWarRule, playerRule),
+                this._createDataAttackPowerModifier(templateWarRule, playerRule),
+                this._createDataVisionRangeModifier(templateWarRule, playerRule),
+                this._createDataLuckLowerLimit(templateWarRule, playerRule),
+                this._createDataLuckUpperLimit(templateWarRule, playerRule),
+                this._createDataIsControlledByAiInCcw(templateWarRule, playerRule),
+                await this._createDataAiCoIdInCcw(templateWarRule, playerRule),
+                this._createDataIsControlledByAiInSrw(templateWarRule, playerRule),
+                await this._createDataAiCoIdInSrw(templateWarRule, playerRule),
             ];
         }
-        private _createDataPlayerIndex(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataPlayerIndex(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0018),
                 infoText                : Lang.getPlayerForceName(Helpers.getExisted(playerRule.playerIndex)),
@@ -506,46 +503,36 @@ namespace Twns.MapManagement {
                 callbackOnTouchedTitle  : null,
             };
         }
-        private _createDataTeamIndex(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataTeamIndex(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0019),
                 infoText                : Lang.getPlayerTeamName(Helpers.getExisted(playerRule.teamIndex)) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : 0xFFFFFF,
-                callbackOnTouchedTitle  : isReviewing
-                    ? null
-                    : () => {
-                        WarHelpers.WarRuleHelpers.tickTeamIndex(templateWarRule, Helpers.getExisted(playerRule.playerIndex));
-                        this._updateView();
-                    },
-            };
-        }
-        private async _createDataBannedCoIdArray(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): Promise<DataForInfoRenderer> {
-            const bannedCoIdArray   = playerRule.bannedCoIdArray ?? [];
-            const gameConfig        = await Config.ConfigManager.getLatestGameConfig();
-            return {
-                titleText               : Lang.getText(LangTextType.B0403),
-                infoText                : `${bannedCoIdArray.length}`,
-                infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    PanelHelpers.open(PanelHelpers.PanelDict.CommonBanCoPanel, {
-                        gameConfig,
-                        playerIndex         : Helpers.getExisted(playerRule.playerIndex),
-                        bannedCoIdArray,
-                        fullCoIdArray       : gameConfig.getEnabledCoArray().map(v => v.coId),
-                        maxBanCount         : null,
-                        selfCoId            : null,
-                        callbackOnConfirm   : bannedCoIdSet => {
-                            if (!isReviewing) {
-                                playerRule.bannedCoIdArray = [...bannedCoIdSet];
-                                this._updateView();
-                            }
-                            PanelHelpers.close(PanelHelpers.PanelDict.CommonBanCoPanel);
-                        },
-                    });
+                    WarHelpers.WarRuleHelpers.tickTeamIndex(templateWarRule, Helpers.getExisted(playerRule.playerIndex));
+                    this._updateView();
                 },
             };
         }
-        private async _createDataBannedUnitTypeArray(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): Promise<DataForInfoRenderer> {
+        private async _createDataBannedCoIdArray(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): Promise<DataForInfoRenderer> {
+            const currentBannedCoIdArray    = playerRule.bannedCoIdArray ?? [];
+            const gameConfig                = await Config.ConfigManager.getLatestGameConfig();
+            return {
+                titleText               : Lang.getText(LangTextType.B0403),
+                infoText                : `${currentBannedCoIdArray.length}`,
+                infoColor               : 0xFFFFFF,
+                callbackOnTouchedTitle  : () => PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseCoPanel, {
+                    gameConfig,
+                    currentCoIdArray        : currentBannedCoIdArray,
+                    forceUnchosenCoIdArray  : [CommonConstants.CoEmptyId],
+                    callbackOnConfirm       : bannedCoIdArray => {
+                        WarHelpers.WarRuleHelpers.setBannedCoIdArray(templateWarRule, Helpers.getExisted(playerRule.playerIndex), new Set(bannedCoIdArray));
+                        this._updateView();
+                    },
+                }),
+            };
+        }
+        private async _createDataBannedUnitTypeArray(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): Promise<DataForInfoRenderer> {
             const currentBannedUnitTypeArray    = playerRule.bannedUnitTypeArray ?? [];
             const gameConfig                    = await Config.ConfigManager.getLatestGameConfig();
             return {
@@ -557,378 +544,348 @@ namespace Twns.MapManagement {
                         currentUnitTypeArray    : currentBannedUnitTypeArray,
                         gameConfig,
                         callbackOnConfirm       : bannedUnitTypeArray => {
-                            if (!isReviewing) {
-                                WarHelpers.WarRuleHelpers.setBannedUnitTypeArray(templateWarRule, Helpers.getExisted(playerRule.playerIndex), bannedUnitTypeArray);
-                                this._updateView();
-                            }
+                            WarHelpers.WarRuleHelpers.setBannedUnitTypeArray(templateWarRule, Helpers.getExisted(playerRule.playerIndex), bannedUnitTypeArray);
+                            this._updateView();
                         },
                     });
                 },
             };
         }
-        private _createDataCanActivateCoSkill(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataCanActivateCoSkill(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             const canActivate = playerRule.canActivateCoSkill !== false;
             return {
                 titleText               : Lang.getText(LangTextType.B0897),
                 infoText                : Lang.getText(canActivate ? LangTextType.B0012 : LangTextType.B0013),
                 infoColor               : canActivate ? 0xFFFFFF : 0xFF0000,
-                callbackOnTouchedTitle  : isReviewing
-                    ? null
-                    : () => {
-                        WarHelpers.WarRuleHelpers.setCanActivateCoSkill(templateWarRule, Helpers.getExisted(playerRule.playerIndex), !canActivate);
-                        this._updateView();
-                    },
+                callbackOnTouchedTitle  : () => {
+                    WarHelpers.WarRuleHelpers.setCanActivateCoSkill(templateWarRule, Helpers.getExisted(playerRule.playerIndex), !canActivate);
+                    this._updateView();
+                },
             };
         }
-        private _createDataInitialFund(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataInitialFund(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             const currValue = Helpers.getExisted(playerRule.initialFund);
             return {
                 titleText               : Lang.getText(LangTextType.B0178),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
-                callbackOnTouchedTitle  : isReviewing
-                    ? null
-                    : () => {
-                        const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
-                        const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
-                            title           : Lang.getText(LangTextType.B0178),
-                            currentValue    : currValue,
-                            minValue,
-                            maxValue,
-                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                WarHelpers.WarRuleHelpers.setInitialFund(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
-                                this._updateView();
-                            },
-                        });
-                    },
+                callbackOnTouchedTitle  : () => {
+                    const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
+                    const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        title           : Lang.getText(LangTextType.B0178),
+                        currentValue    : currValue,
+                        minValue,
+                        maxValue,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            WarHelpers.WarRuleHelpers.setInitialFund(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                            this._updateView();
+                        },
+                    });
+                },
             };
         }
-        private _createDataIncomeMultiplier(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataIncomeMultiplier(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             const currValue = Helpers.getExisted(playerRule.incomeMultiplier);
             return {
                 titleText               : Lang.getText(LangTextType.B0179),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
-                callbackOnTouchedTitle  : isReviewing
-                    ? null
-                    : () => {
-                        const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
-                        const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
-                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
-                            title           : Lang.getText(LangTextType.B0179),
-                            currentValue    : currValue,
-                            minValue,
-                            maxValue,
-                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                WarHelpers.WarRuleHelpers.setIncomeMultiplier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
-                                this._updateView();
-                            },
-                        });
-                    },
+                callbackOnTouchedTitle  : () => {
+                    const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
+                    const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        title           : Lang.getText(LangTextType.B0179),
+                        currentValue    : currValue,
+                        minValue,
+                        maxValue,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            WarHelpers.WarRuleHelpers.setIncomeMultiplier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                            this._updateView();
+                        },
+                    });
+                },
             };
         }
-        private _createDataEnergyAddPctOnLoadCo(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataEnergyAddPctOnLoadCo(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             const currValue = Helpers.getExisted(playerRule.energyAddPctOnLoadCo);
             return {
                 titleText               : Lang.getText(LangTextType.B0180),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
-                callbackOnTouchedTitle  : isReviewing
-                    ? null
-                    : () => {
-                        const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
-                        const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
-                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
-                            title           : Lang.getText(LangTextType.B0180),
-                            currentValue    : currValue,
-                            minValue,
-                            maxValue,
-                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                WarHelpers.WarRuleHelpers.setEnergyAddPctOnLoadCo(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
-                                this._updateView();
-                            },
-                        });
-                    },
+                callbackOnTouchedTitle  : () => {
+                    const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
+                    const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        title           : Lang.getText(LangTextType.B0180),
+                        currentValue    : currValue,
+                        minValue,
+                        maxValue,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            WarHelpers.WarRuleHelpers.setEnergyAddPctOnLoadCo(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                            this._updateView();
+                        },
+                    });
+                },
             };
         }
-        private _createDataEnergyGrowthMultiplier(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataEnergyGrowthMultiplier(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             const currValue = Helpers.getExisted(playerRule.energyGrowthMultiplier);
             return {
                 titleText               : Lang.getText(LangTextType.B0181),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
-                callbackOnTouchedTitle  : isReviewing
-                    ? null
-                    : () => {
-                        const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
-                        const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
-                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
-                            title           : Lang.getText(LangTextType.B0181),
-                            currentValue    : currValue,
-                            minValue,
-                            maxValue,
-                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                WarHelpers.WarRuleHelpers.setEnergyGrowthMultiplier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
-                                this._updateView();
-                            },
-                        });
-                    },
+                callbackOnTouchedTitle  : () => {
+                    const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
+                    const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        title           : Lang.getText(LangTextType.B0181),
+                        currentValue    : currValue,
+                        minValue,
+                        maxValue,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            WarHelpers.WarRuleHelpers.setEnergyGrowthMultiplier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                            this._updateView();
+                        },
+                    });
+                },
             };
         }
-        private _createDataMoveRangeModifier(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataMoveRangeModifier(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             const currValue = Helpers.getExisted(playerRule.moveRangeModifier);
             return {
                 titleText               : Lang.getText(LangTextType.B0182),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
-                callbackOnTouchedTitle  : isReviewing
-                    ? null
-                    : () => {
-                        const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
-                        const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
-                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
-                            title           : Lang.getText(LangTextType.B0182),
-                            currentValue    : currValue,
-                            minValue,
-                            maxValue,
-                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                WarHelpers.WarRuleHelpers.setMoveRangeModifier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
-                                this._updateView();
-                            },
-                        });
-                    },
+                callbackOnTouchedTitle  : () => {
+                    const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
+                    const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        title           : Lang.getText(LangTextType.B0182),
+                        currentValue    : currValue,
+                        minValue,
+                        maxValue,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            WarHelpers.WarRuleHelpers.setMoveRangeModifier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                            this._updateView();
+                        },
+                    });
+                },
             };
         }
-        private _createDataAttackPowerModifier(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataAttackPowerModifier(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             const currValue = Helpers.getExisted(playerRule.attackPowerModifier);
             return {
                 titleText               : Lang.getText(LangTextType.B0183),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
-                callbackOnTouchedTitle  : isReviewing
-                    ? null
-                    : () => {
-                        const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
-                        const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
-                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
-                            title           : Lang.getText(LangTextType.B0183),
-                            currentValue    : currValue,
-                            minValue,
-                            maxValue,
-                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                WarHelpers.WarRuleHelpers.setAttackPowerModifier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
-                                this._updateView();
-                            },
-                        });
-                    },
+                callbackOnTouchedTitle  : () => {
+                    const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
+                    const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        title           : Lang.getText(LangTextType.B0183),
+                        currentValue    : currValue,
+                        minValue,
+                        maxValue,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            WarHelpers.WarRuleHelpers.setAttackPowerModifier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                            this._updateView();
+                        },
+                    });
+                },
             };
         }
-        private _createDataVisionRangeModifier(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataVisionRangeModifier(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             const currValue = Helpers.getExisted(playerRule.visionRangeModifier);
             return {
                 titleText               : Lang.getText(LangTextType.B0184),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
-                callbackOnTouchedTitle  : isReviewing
-                    ? null
-                    : () => {
-                        const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
-                        const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
-                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
-                            title           : Lang.getText(LangTextType.B0184),
-                            currentValue    : currValue,
-                            minValue,
-                            maxValue,
-                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                WarHelpers.WarRuleHelpers.setVisionRangeModifier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
-                                this._updateView();
-                            },
-                        });
-                    },
+                callbackOnTouchedTitle  : () => {
+                    const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
+                    const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        title           : Lang.getText(LangTextType.B0184),
+                        currentValue    : currValue,
+                        minValue,
+                        maxValue,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            WarHelpers.WarRuleHelpers.setVisionRangeModifier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                            this._updateView();
+                        },
+                    });
+                },
             };
         }
-        private _createDataLuckLowerLimit(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataLuckLowerLimit(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             const currValue     = Helpers.getExisted(playerRule.luckLowerLimit);
             const playerIndex   = Helpers.getExisted(playerRule.playerIndex);
             return {
                 titleText               : Lang.getText(LangTextType.B0189),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
-                callbackOnTouchedTitle  : isReviewing
-                    ? null
-                    : () => {
-                        const minValue      = CommonConstants.WarRuleLuckMinLimit;
-                        const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
-                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
-                            title           : Lang.getText(LangTextType.B0189),
-                            currentValue    : currValue,
-                            minValue,
-                            maxValue,
-                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const value         = panel.getInputValue();
-                                const upperLimit    = WarHelpers.WarRuleHelpers.getLuckUpperLimit(templateWarRule, playerIndex);
-                                if (value <= upperLimit) {
-                                    WarHelpers.WarRuleHelpers.setLuckLowerLimit(templateWarRule, playerIndex, value);
-                                } else {
-                                    WarHelpers.WarRuleHelpers.setLuckUpperLimit(templateWarRule, playerIndex, value);
-                                    WarHelpers.WarRuleHelpers.setLuckLowerLimit(templateWarRule, playerIndex, upperLimit);
-                                }
-                                this._updateView();
-                            },
-                        });
-                    },
+                callbackOnTouchedTitle  : () => {
+                    const minValue      = CommonConstants.WarRuleLuckMinLimit;
+                    const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        title           : Lang.getText(LangTextType.B0189),
+                        currentValue    : currValue,
+                        minValue,
+                        maxValue,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            const value         = panel.getInputValue();
+                            const upperLimit    = WarHelpers.WarRuleHelpers.getLuckUpperLimit(templateWarRule, playerIndex);
+                            if (value <= upperLimit) {
+                                WarHelpers.WarRuleHelpers.setLuckLowerLimit(templateWarRule, playerIndex, value);
+                            } else {
+                                WarHelpers.WarRuleHelpers.setLuckUpperLimit(templateWarRule, playerIndex, value);
+                                WarHelpers.WarRuleHelpers.setLuckLowerLimit(templateWarRule, playerIndex, upperLimit);
+                            }
+                            this._updateView();
+                        },
+                    });
+                },
             };
         }
-        private _createDataLuckUpperLimit(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataLuckUpperLimit(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             const currValue     = Helpers.getExisted(playerRule.luckUpperLimit);
             const playerIndex   = Helpers.getExisted(playerRule.playerIndex);
             return {
                 titleText               : Lang.getText(LangTextType.B0190),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
-                callbackOnTouchedTitle  : isReviewing
-                    ? null
-                    : () => {
-                        const minValue      = CommonConstants.WarRuleLuckMinLimit;
-                        const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
-                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
-                            title           : Lang.getText(LangTextType.B0190),
-                            currentValue    : currValue,
-                            minValue,
-                            maxValue,
-                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const value         = panel.getInputValue();
-                                const lowerLimit    = WarHelpers.WarRuleHelpers.getLuckLowerLimit(templateWarRule, playerIndex);
-                                if (value >= lowerLimit) {
-                                    WarHelpers.WarRuleHelpers.setLuckUpperLimit(templateWarRule, playerIndex, value);
-                                } else {
-                                    WarHelpers.WarRuleHelpers.setLuckLowerLimit(templateWarRule, playerIndex, value);
-                                    WarHelpers.WarRuleHelpers.setLuckUpperLimit(templateWarRule, playerIndex, lowerLimit);
-                                }
-                                this._updateView();
-                            },
-                        });
-                    },
+                callbackOnTouchedTitle  : () => {
+                    const minValue      = CommonConstants.WarRuleLuckMinLimit;
+                    const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        title           : Lang.getText(LangTextType.B0190),
+                        currentValue    : currValue,
+                        minValue,
+                        maxValue,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            const value         = panel.getInputValue();
+                            const lowerLimit    = WarHelpers.WarRuleHelpers.getLuckLowerLimit(templateWarRule, playerIndex);
+                            if (value >= lowerLimit) {
+                                WarHelpers.WarRuleHelpers.setLuckUpperLimit(templateWarRule, playerIndex, value);
+                            } else {
+                                WarHelpers.WarRuleHelpers.setLuckLowerLimit(templateWarRule, playerIndex, value);
+                                WarHelpers.WarRuleHelpers.setLuckUpperLimit(templateWarRule, playerIndex, lowerLimit);
+                            }
+                            this._updateView();
+                        },
+                    });
+                },
             };
         }
-        private _createDataIsControlledByAiInCcw(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataIsControlledByAiInCcw(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             const isControlledByAi = playerRule.fixedCoIdInCcw != null;
             return {
                 titleText               : Lang.getText(LangTextType.B0645),
                 infoText                : Lang.getText(isControlledByAi ? LangTextType.B0012 : LangTextType.B0013),
                 infoColor               : isControlledByAi ? 0x00FF00 : 0xFFFFFF,
-                callbackOnTouchedTitle  : isReviewing
-                    ? null
-                    : () => {
-                        if (!templateWarRule.ruleAvailability?.canCcw) {
-                            FloatText.show(Lang.getText(LangTextType.A0221));
-                            return;
-                        }
+                callbackOnTouchedTitle  : () => {
+                    if (!templateWarRule.ruleAvailability?.canCcw) {
+                        FloatText.show(Lang.getText(LangTextType.A0221));
+                        return;
+                    }
 
-                        const playerIndex = Helpers.getExisted(playerRule.playerIndex);
-                        if (isControlledByAi) {
-                            WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, playerIndex, null);
-                        } else {
-                            WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, playerIndex, CommonConstants.CoEmptyId);
-                        }
-                        this._updateView();
-                    },
+                    const playerIndex = Helpers.getExisted(playerRule.playerIndex);
+                    if (isControlledByAi) {
+                        WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, playerIndex, null);
+                    } else {
+                        WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, playerIndex, CommonConstants.CoEmptyId);
+                    }
+                    this._updateView();
+                },
             };
         }
-        private async _createDataAiCoIdInCcw(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): Promise<DataForInfoRenderer> {
+        private async _createDataAiCoIdInCcw(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): Promise<DataForInfoRenderer> {
             const coId          = playerRule.fixedCoIdInCcw;
             const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
             return {
                 titleText               : Lang.getText(LangTextType.B0644),
                 infoText                : coId == null ? `--` : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : coId == null ? 0xFFFFFF : 0x00FF00,
-                callbackOnTouchedTitle  : isReviewing
-                    ? null
-                    : () => {
-                        if (!templateWarRule.ruleAvailability?.canCcw) {
-                            FloatText.show(Lang.getText(LangTextType.A0221));
-                            return;
-                        }
+                callbackOnTouchedTitle  : () => {
+                    if (!templateWarRule.ruleAvailability?.canCcw) {
+                        FloatText.show(Lang.getText(LangTextType.A0221));
+                        return;
+                    }
 
-                        const coIdArray: number[] = [];
-                        for (const cfg of gameConfig.getEnabledCoArray()) {
-                            coIdArray.push(cfg.coId);
-                        }
-                        PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseCoPanel, {
-                            gameConfig,
-                            currentCoId         : playerRule.fixedCoIdInCcw ?? null,
-                            availableCoIdArray  : coIdArray,
-                            callbackOnConfirm   : (newCoId: number) => {
-                                WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, Helpers.getExisted(playerRule.playerIndex), newCoId);
-                                this._updateView();
-                            },
-                        });
-                    },
+                    const coIdArray: number[] = [];
+                    for (const cfg of gameConfig.getEnabledCoArray()) {
+                        coIdArray.push(cfg.coId);
+                    }
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
+                        gameConfig,
+                        currentCoId         : playerRule.fixedCoIdInCcw ?? null,
+                        availableCoIdArray  : coIdArray,
+                        callbackOnConfirm   : (newCoId: number) => {
+                            WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, Helpers.getExisted(playerRule.playerIndex), newCoId);
+                            this._updateView();
+                        },
+                    });
+                },
             };
         }
-        private _createDataIsControlledByAiInSrw(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataIsControlledByAiInSrw(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             const isControlledByAi = playerRule.fixedCoIdInSrw != null;
             return {
                 titleText               : Lang.getText(LangTextType.B0816),
                 infoText                : Lang.getText(isControlledByAi ? LangTextType.B0012 : LangTextType.B0013),
                 infoColor               : isControlledByAi ? 0x00FF00 : 0xFFFFFF,
-                callbackOnTouchedTitle  : isReviewing
-                    ? null
-                    : () => {
-                        if (!templateWarRule.ruleAvailability?.canSrw) {
-                            FloatText.show(Lang.getText(LangTextType.A0276));
-                            return;
-                        }
+                callbackOnTouchedTitle  : () => {
+                    if (!templateWarRule.ruleAvailability?.canSrw) {
+                        FloatText.show(Lang.getText(LangTextType.A0276));
+                        return;
+                    }
 
-                        const playerIndex = Helpers.getExisted(playerRule.playerIndex);
-                        if (isControlledByAi) {
-                            WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, playerIndex, null);
-                        } else {
-                            WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, playerIndex, CommonConstants.CoEmptyId);
-                        }
-                        this._updateView();
-                    },
+                    const playerIndex = Helpers.getExisted(playerRule.playerIndex);
+                    if (isControlledByAi) {
+                        WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, playerIndex, null);
+                    } else {
+                        WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, playerIndex, CommonConstants.CoEmptyId);
+                    }
+                    this._updateView();
+                },
             };
         }
-        private async _createDataAiCoIdInSrw(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): Promise<DataForInfoRenderer> {
+        private async _createDataAiCoIdInSrw(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): Promise<DataForInfoRenderer> {
             const coId          = playerRule.fixedCoIdInSrw;
             const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
             return {
                 titleText               : Lang.getText(LangTextType.B0815),
                 infoText                : coId == null ? `--` : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : coId == null ? 0xFFFFFF : 0x00FF00,
-                callbackOnTouchedTitle  : isReviewing
-                    ? null
-                    : () => {
-                        if (!templateWarRule.ruleAvailability?.canSrw) {
-                            FloatText.show(Lang.getText(LangTextType.A0276));
-                            return;
-                        }
+                callbackOnTouchedTitle  : () => {
+                    if (!templateWarRule.ruleAvailability?.canSrw) {
+                        FloatText.show(Lang.getText(LangTextType.A0276));
+                        return;
+                    }
 
-                        const coIdArray: number[] = [];
-                        for (const cfg of gameConfig.getEnabledCoArray()) {
-                            coIdArray.push(cfg.coId);
-                        }
-                        PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseCoPanel, {
-                            gameConfig,
-                            currentCoId         : playerRule.fixedCoIdInSrw ?? null,
-                            availableCoIdArray  : coIdArray,
-                            callbackOnConfirm   : (newCoId: number) => {
-                                WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, Helpers.getExisted(playerRule.playerIndex), newCoId);
-                                this._updateView();
-                            },
-                        });
-                    },
+                    const coIdArray: number[] = [];
+                    for (const cfg of gameConfig.getEnabledCoArray()) {
+                        coIdArray.push(cfg.coId);
+                    }
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
+                        gameConfig,
+                        currentCoId         : playerRule.fixedCoIdInSrw ?? null,
+                        availableCoIdArray  : coIdArray,
+                        callbackOnConfirm   : (newCoId: number) => {
+                            WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, Helpers.getExisted(playerRule.playerIndex), newCoId);
+                            this._updateView();
+                        },
+                    });
+                },
             };
         }
     }

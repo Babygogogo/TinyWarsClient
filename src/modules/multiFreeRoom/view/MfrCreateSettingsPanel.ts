@@ -138,7 +138,7 @@ namespace Twns.MultiFreeRoom {
         private async _onTouchedBtnChooseCo(): Promise<void> {
             const currentCoId = MultiFreeRoom.MfrCreateModel.getSelfCoId();
             const gameConfig    = await Config.ConfigManager.getGameConfig(MultiFreeRoom.MfrCreateModel.getConfigVersion());
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                 gameConfig,
                 currentCoId,
                 availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
