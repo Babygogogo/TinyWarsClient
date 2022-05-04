@@ -4,7 +4,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -14,8 +14,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiRankRoom {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import MaxCount         = CommonConstants.RankMaxConcurrentCount;
     import MinCount         = CommonConstants.RankMinConcurrentCount;
 
@@ -146,7 +146,7 @@ namespace Twns.MultiRankRoom {
             this.close();
         }
         private _onTouchedBtnConfirm(): void {
-            MultiRankRoom.MrrProxy.reqMrrSetMaxConcurrentCount(Helpers.getExisted(this._selectedCountForStd), Helpers.getExisted(this._selectedCountForFog));
+            MultiRankRoom.MrrProxy.reqMrrSetMaxConcurrentCount(Twns.Helpers.getExisted(this._selectedCountForStd), Twns.Helpers.getExisted(this._selectedCountForFog));
 
             this.close();
         }
@@ -171,14 +171,14 @@ namespace Twns.MultiRankRoom {
         }
 
         private _updateGroupStd(): void {
-            const count                 = Helpers.getExisted(this._selectedCountForStd);
+            const count                 = Twns.Helpers.getExisted(this._selectedCountForStd);
             const pos                   = this._groupStd.width * (count - MinCount) / (MaxCount - MinCount);
             this._imgStdPoint.x         = pos;
             this._imgStdBar.width       = pos;
             this._labelStdCount.text    = `${count}`;
         }
         private _updateGroupFog(): void {
-            const count                 = Helpers.getExisted(this._selectedCountForFog);
+            const count                 = Twns.Helpers.getExisted(this._selectedCountForFog);
             const pos                   = this._groupFog.width * (count - MinCount) / (MaxCount - MinCount);
             this._imgFogPoint.x         = pos;
             this._imgFogBar.width       = pos;
@@ -186,32 +186,32 @@ namespace Twns.MultiRankRoom {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { verticalCenter: 40, alpha: 0 },
                 endProps    : { verticalCenter: 0, alpha: 1 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { verticalCenter: 0, alpha: 1 },
                 endProps    : { verticalCenter: 40, alpha: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

@@ -8,10 +8,10 @@
 // import UserModel        from "../../user/model/UserModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeTileSimpleView {
-    import TileBaseType             = Types.TileBaseType;
-    import TileDecoratorType        = Types.TileDecoratorType;
-    import TileObjectType           = Types.TileObjectType;
+namespace Twns.MapEditor {
+    import TileBaseType             = Twns.Types.TileBaseType;
+    import TileDecoratorType        = Twns.Types.TileDecoratorType;
+    import TileObjectType           = Twns.Types.TileObjectType;
 
     const { height: GRID_HEIGHT }   = CommonConstants.GridSize;
     export type TileViewData = {
@@ -92,8 +92,8 @@ namespace TwnsMeTileSimpleView {
         }
 
         protected _updateImages(): void {
-            const version   = UserModel.getSelfSettingsTextureVersion();
-            const tickCount = Timer.getTileAnimationTickCount();
+            const version   = Twns.User.UserModel.getSelfSettingsTextureVersion();
+            const tickCount = Twns.Timer.getTileAnimationTickCount();
 
             {
                 const objectType    = this._objectType;
@@ -102,10 +102,10 @@ namespace TwnsMeTileSimpleView {
                     imgObject.visible = false;
                 } else {
                     imgObject.visible = true;
-                    imgObject.source  = CommonModel.getCachedTileObjectImageSource({
+                    imgObject.source  = Twns.Common.CommonModel.getCachedTileObjectImageSource({
                         version,
-                        themeType   : Types.TileThemeType.Clear,
-                        skinId      : Helpers.getExisted(this._playerIndex),
+                        themeType   : Twns.Types.TileThemeType.Clear,
+                        skinId      : Twns.Helpers.getExisted(this._playerIndex),
                         objectType,
                         isDark      : false,
                         shapeId     : this._objectShapeId ?? 0,
@@ -121,13 +121,13 @@ namespace TwnsMeTileSimpleView {
                     imgBase.visible = false;
                 } else {
                     imgBase.visible = true;
-                    imgBase.source  = CommonModel.getCachedTileBaseImageSource({
+                    imgBase.source  = Twns.Common.CommonModel.getCachedTileBaseImageSource({
                         version,
-                        themeType   : Types.TileThemeType.Clear,
+                        themeType   : Twns.Types.TileThemeType.Clear,
                         skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                         baseType,
                         isDark      : false,
-                        shapeId     : Helpers.getExisted(this._baseShapeId),
+                        shapeId     : Twns.Helpers.getExisted(this._baseShapeId),
                         tickCount,
                     });
                 }
@@ -140,13 +140,13 @@ namespace TwnsMeTileSimpleView {
                     imgDecorator.visible = false;
                 } else {
                     imgDecorator.visible = true;
-                    imgDecorator.source  = CommonModel.getCachedTileDecoratorImageSource({
+                    imgDecorator.source  = Twns.Common.CommonModel.getCachedTileDecoratorImageSource({
                         version,
-                        themeType   : Types.TileThemeType.Clear,
+                        themeType   : Twns.Types.TileThemeType.Clear,
                         skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                         decoratorType,
                         isDark      : false,
-                        shapeId     : Helpers.getExisted(this._decoratorShapeId),
+                        shapeId     : Twns.Helpers.getExisted(this._decoratorShapeId),
                         tickCount,
                     });
                 }

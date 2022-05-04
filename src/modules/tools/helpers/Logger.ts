@@ -2,7 +2,7 @@
 // import Types     from "./Types";
 
 namespace Logger {
-    import LogLevel         = Types.LogLevel;
+    import LogLevel         = Twns.Types.LogLevel;
 
     const CONSOLE           = window.console;
     const LOG_LEVEL         = window.CLIENT_VERSION === "DEVELOP" ? LogLevel.All : LogLevel.Off;

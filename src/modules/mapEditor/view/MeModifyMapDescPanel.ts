@@ -12,7 +12,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -25,8 +25,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import NotifyType               = Twns.Notify.NotifyType;
+    import LangTextType             = Twns.Lang.LangTextType;
 
     export type OpenDataForMeModifyMapDescPanel = {
         war     : MeWar;
@@ -78,10 +78,10 @@ namespace Twns.MapEditor {
             }
 
             const textArray         = war.getMapDescArray();
-            const textData          = textArray.find(v => v.languageType === Types.LanguageType.Chinese);
+            const textData          = textArray.find(v => v.languageType === Twns.Types.LanguageType.Chinese);
             const currentText       = textData?.text;
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0455),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
@@ -96,18 +96,18 @@ namespace Twns.MapEditor {
                     }
 
                     if (!text.length) {
-                        Helpers.deleteElementFromArray(textArray, textData);
+                        Twns.Helpers.deleteElementFromArray(textArray, textData);
                     } else {
                         if (textData) {
                             textData.text = text;
                         } else {
                             textArray.push({
-                                languageType    : Types.LanguageType.Chinese,
+                                languageType    : Twns.Types.LanguageType.Chinese,
                                 text,
                             });
                         }
                     }
-                    Notify.dispatch(NotifyType.MeMapDescChanged);
+                    Twns.Notify.dispatch(NotifyType.MeMapDescChanged);
                 },
             });
         }
@@ -119,10 +119,10 @@ namespace Twns.MapEditor {
             }
 
             const textArray         = war.getMapDescArray();
-            const textData          = textArray.find(v => v.languageType === Types.LanguageType.English);
+            const textData          = textArray.find(v => v.languageType === Twns.Types.LanguageType.English);
             const currentText       = textData?.text;
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0456),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
@@ -137,18 +137,18 @@ namespace Twns.MapEditor {
                     }
 
                     if (!text.length) {
-                        Helpers.deleteElementFromArray(textArray, textData);
+                        Twns.Helpers.deleteElementFromArray(textArray, textData);
                     } else {
                         if (textData) {
                             textData.text = text;
                         } else {
                             textArray.push({
-                                languageType    : Types.LanguageType.English,
+                                languageType    : Twns.Types.LanguageType.English,
                                 text,
                             });
                         }
                     }
-                    Notify.dispatch(NotifyType.MeMapDescChanged);
+                    Twns.Notify.dispatch(NotifyType.MeMapDescChanged);
                 },
             });
         }
@@ -174,12 +174,12 @@ namespace Twns.MapEditor {
             this._labelChinese.text = Lang.getLanguageText({
                 textArray,
                 useAlternate: false,
-                languageType: Types.LanguageType.Chinese,
+                languageType: Twns.Types.LanguageType.Chinese,
             }) || "";
             this._labelEnglish.text = Lang.getLanguageText({
                 textArray,
                 useAlternate: false,
-                languageType: Types.LanguageType.English,
+                languageType: Twns.Types.LanguageType.English,
             }) || "";
         }
     }

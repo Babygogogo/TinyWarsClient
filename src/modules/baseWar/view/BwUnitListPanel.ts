@@ -10,7 +10,7 @@
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -22,10 +22,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import BwWar            = BaseWar.BwWar;
-    import BwCursor         = TwnsBwCursor.BwCursor;
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
     export type OpenDataForBwUnitListPanel = {
         war : BwWar;
@@ -136,9 +134,9 @@ namespace Twns.BaseWar {
         const unitB     = b.unit;
         const stateA    = unitA.getActionState();
         const stateB    = unitB.getActionState();
-        if ((stateA === Types.UnitActionState.Idle) && (stateB !== Types.UnitActionState.Idle)) {
+        if ((stateA === Twns.Types.UnitActionState.Idle) && (stateB !== Twns.Types.UnitActionState.Idle)) {
             return -1;
-        } else if ((stateA !== Types.UnitActionState.Idle) && (stateB === Types.UnitActionState.Idle)) {
+        } else if ((stateA !== Twns.Types.UnitActionState.Idle) && (stateB === Twns.Types.UnitActionState.Idle)) {
             return 1;
         } else {
             return unitA.getUnitType() - unitB.getUnitType();
@@ -173,10 +171,10 @@ namespace Twns.BaseWar {
                 { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
                 { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
 
-            this._imgHp.source      = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;
-            this._imgFuel.source    = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FUEL;
+            this._imgHp.source      = Twns.Common.CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;
+            this._imgFuel.source    = Twns.Common.CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FUEL;
             this._conUnitView.addChild(this._unitView);
         }
 
@@ -206,17 +204,17 @@ namespace Twns.BaseWar {
 
             const gridIndex = data.unit.getGridIndex();
             if (GridIndexHelpers.checkIsEqual(gridIndex, cursor.getGridIndex())) {
-                Notify.dispatch(NotifyType.BwCursorTapped, {
+                Twns.Notify.dispatch(NotifyType.BwCursorTapped, {
                     current : gridIndex,
                     tappedOn: gridIndex,
-                } as NotifyData.BwCursorTapped);
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwUnitListPanel);
+                } as Twns.Notify.NotifyData.BwCursorTapped);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.BwUnitListPanel);
             } else {
                 cursor.setGridIndex(gridIndex);
                 cursor.updateView();
                 war.getView().tweenGridToCentralArea(gridIndex);
                 war.getGridVisualEffect().showEffectAiming(gridIndex, 800);
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
             }
         }
 
@@ -233,22 +231,22 @@ namespace Twns.BaseWar {
 
             if (unit.getCurrentBuildMaterial() != null) {
                 this._imgState.visible      = true;
-                this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_MATERIAL;
+                this._imgState.source       = Twns.Common.CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_MATERIAL;
                 this._labelState.visible    = true;
                 this._labelState.text       = `${unit.getCurrentBuildMaterial()}`;
             } else if (unit.getCurrentProduceMaterial() != null) {
                 this._imgState.visible      = true;
-                this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_MATERIAL;
+                this._imgState.source       = Twns.Common.CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_MATERIAL;
                 this._labelState.visible    = true;
                 this._labelState.text       = `${unit.getCurrentProduceMaterial()}`;
             } else if (unit.getFlareCurrentAmmo() != null) {
                 this._imgState.visible      = true;
-                this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FLARE;
+                this._imgState.source       = Twns.Common.CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FLARE;
                 this._labelState.visible    = true;
                 this._labelState.text       = `${unit.getFlareCurrentAmmo()}`;
             } else if (unit.getPrimaryWeaponCurrentAmmo() != null) {
                 this._imgState.visible      = true;
-                this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_AMMO;
+                this._imgState.source       = Twns.Common.CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_AMMO;
                 this._labelState.visible    = true;
                 this._labelState.text       = `${unit.getPrimaryWeaponCurrentAmmo()}`;
             } else {

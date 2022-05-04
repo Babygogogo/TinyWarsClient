@@ -3,18 +3,18 @@
 // import NetManager           from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarMapModel          from "./WarMapModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace WarMapProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.WarMap.WarMapProxy {
+    import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import NetMessageCodes  = Twns.Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Twns.Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgMapGetEnabledMapIdArray,      callback: _onMsgMapGetEnabledMapIdArray },
             { msgCode: NetMessageCodes.MsgMapGetBriefData,              callback: _onMsgMapGetBriefData },
             { msgCode: NetMessageCodes.MsgMapGetRawData,                callback: _onMsgMapGetRawData },
@@ -32,13 +32,13 @@ namespace WarMapProxy {
     function _onMsgMapGetEnabledMapIdArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMapGetEnabledMapIdArray.IS;
         if (!data.errorCode) {
-            WarMapModel.resetEnabledMapIdArray(data.mapIdArray || []);
-            Notify.dispatch(NotifyType.MsgMapGetEnabledMapIdArray, data);
+            Twns.WarMap.WarMapModel.resetEnabledMapIdArray(data.mapIdArray || []);
+            Twns.Notify.dispatch(NotifyType.MsgMapGetEnabledMapIdArray, data);
         }
     }
 
     export function reqGetMapBriefData(mapId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMapGetBriefData: { c: {
                 mapId,
             }, },
@@ -46,12 +46,12 @@ namespace WarMapProxy {
     }
     function _onMsgMapGetBriefData(e: egret.Event): void {
         const data  = e.data as NetMessage.MsgMapGetBriefData.IS;
-        WarMapModel.setBriefData(Helpers.getExisted(data.mapId), data.mapBriefData ?? null);
-        Notify.dispatch(NotifyType.MsgMapGetBriefData, data);
+        Twns.WarMap.WarMapModel.setBriefData(Twns.Helpers.getExisted(data.mapId), data.mapBriefData ?? null);
+        Twns.Notify.dispatch(NotifyType.MsgMapGetBriefData, data);
     }
 
     export function reqGetMapRawData(mapId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMapGetRawData: { c: {
                 mapId,
             }, },
@@ -59,8 +59,8 @@ namespace WarMapProxy {
     }
     function _onMsgMapGetRawData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMapGetRawData.IS;
-        WarMapModel.setRawData(Helpers.getExisted(data.mapId), data.mapRawData ?? null);
-        Notify.dispatch(NotifyType.MsgMapGetRawData, data);
+        Twns.WarMap.WarMapModel.setRawData(Twns.Helpers.getExisted(data.mapId), data.mapRawData ?? null);
+        Twns.Notify.dispatch(NotifyType.MsgMapGetRawData, data);
     }
 
     export function reqMmSetWarRuleAvailability({ mapId, ruleId, availability }: {
@@ -68,7 +68,7 @@ namespace WarMapProxy {
         ruleId      : number;
         availability: CommonProto.WarRule.IRuleAvailability;
     }): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMmSetWarRuleAvailability: { c: {
                 mapId,
                 ruleId,
@@ -79,13 +79,13 @@ namespace WarMapProxy {
     async function _onMsgMmSetWarRuleAvailability(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMmSetWarRuleAvailability.IS;
         if (!data.errorCode) {
-            await WarMapModel.updateOnSetWarRuleAvailability(data);
-            Notify.dispatch(NotifyType.MsgMmSetWarRuleAvailability, data);
+            await Twns.WarMap.WarMapModel.updateOnSetWarRuleAvailability(data);
+            Twns.Notify.dispatch(NotifyType.MsgMmSetWarRuleAvailability, data);
         }
     }
 
     export function reqMmSetMapEnabled(mapId: number, isEnabled: boolean): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMmSetMapEnabled: { c: {
                 mapId,
                 isEnabled,
@@ -95,20 +95,20 @@ namespace WarMapProxy {
     function _onMsgMmSetMapEnabled(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMmSetMapEnabled.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMmSetMapEnabled, data);
+            Twns.Notify.dispatch(NotifyType.MsgMmSetMapEnabled, data);
         }
     }
 
     export function reqMmGetReviewingMaps(): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMmGetReviewingMaps: { c: {} },
         });
     }
     function _onMsgMmGetReviewingMaps(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMmGetReviewingMaps.IS;
         if (!data.errorCode) {
-            WarMapModel.setMmReviewingMaps(data.maps || []);
-            Notify.dispatch(NotifyType.MsgMmGetReviewingMaps, data);
+            Twns.WarMap.WarMapModel.setMmReviewingMaps(data.maps || []);
+            Twns.Notify.dispatch(NotifyType.MsgMmGetReviewingMaps, data);
         }
     }
 
@@ -119,7 +119,7 @@ namespace WarMapProxy {
         isAccept        : boolean;
         reviewComment   : string | null;
     }): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMmReviewMap: { c: {
                 designerUserId,
                 slotIndex,
@@ -132,12 +132,12 @@ namespace WarMapProxy {
     function _onMsgMmReviewMap(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMmReviewMap.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMmReviewMap, data);
+            Twns.Notify.dispatch(NotifyType.MsgMmReviewMap, data);
         }
     }
 
     export function reqMmSetMapTag(mapId: number, mapTag: CommonProto.Map.IDataForMapTag | null): void {
-        NetManager.send({ MsgMmSetMapTag: { c: {
+        Twns.Net.NetManager.send({ MsgMmSetMapTag: { c: {
             mapId,
             mapTag,
         } } });
@@ -145,12 +145,12 @@ namespace WarMapProxy {
     function _onMsgMmSetMapTag(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMmSetMapTag.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMmSetMapTag, data);
+            Twns.Notify.dispatch(NotifyType.MsgMmSetMapTag, data);
         }
     }
 
     export function reqMmSetMapName(mapId: number, mapNameArray: CommonProto.Structure.ILanguageText[]): void {
-        NetManager.send({ MsgMmSetMapName: { c: {
+        Twns.Net.NetManager.send({ MsgMmSetMapName: { c: {
             mapId,
             mapNameArray,
         } } });
@@ -158,29 +158,29 @@ namespace WarMapProxy {
     async function _onMsgMmSetMapName(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMmSetMapName.IS;
         if (!data.errorCode) {
-            await WarMapModel.updateOnSetMapName(data);
-            Notify.dispatch(NotifyType.MsgMmSetMapName, data);
+            await Twns.WarMap.WarMapModel.updateOnSetMapName(data);
+            Twns.Notify.dispatch(NotifyType.MsgMmSetMapName, data);
         }
     }
 
-    export function reqMmAddWarRule(mapId: number, warRule: CommonProto.WarRule.IWarRule): void {
-        NetManager.send({
+    export function reqMmAddWarRule(mapId: number, templateWarRule: CommonProto.WarRule.ITemplateWarRule): void {
+        Twns.Net.NetManager.send({
             MsgMmAddWarRule: { c: {
                 mapId,
-                warRule,
+                templateWarRule,
             } },
         });
     }
     async function _onMsgMmAddWarRule(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMmAddWarRule.IS;
         if (!data.errorCode) {
-            await WarMapModel.updateOnAddWarRule(data);
-            Notify.dispatch(NotifyType.MsgMmAddWarRule, data);
+            await Twns.WarMap.WarMapModel.updateOnAddWarRule(data);
+            Twns.Notify.dispatch(NotifyType.MsgMmAddWarRule, data);
         }
     }
 
     export function reqMmDeleteWarRule(mapId: number, ruleId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMmDeleteWarRule: { c: {
                 mapId,
                 ruleId,
@@ -190,8 +190,8 @@ namespace WarMapProxy {
     async function _onMsgMmDeleteWarRule(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMmDeleteWarRule.IS;
         if (!data.errorCode) {
-            await WarMapModel.updateOnDeleteWarRule(data);
-            Notify.dispatch(NotifyType.MsgMmDeleteWarRule, data);
+            await Twns.WarMap.WarMapModel.updateOnDeleteWarRule(data);
+            Twns.Notify.dispatch(NotifyType.MsgMmDeleteWarRule, data);
         }
     }
 }

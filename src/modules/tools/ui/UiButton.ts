@@ -6,7 +6,7 @@
 // import SoundManager     from "../helpers/SoundManager";
 
 namespace TwnsUiButton {
-    import ShortSfxCode = Types.ShortSfxCode;
+    import ShortSfxCode = Twns.Types.ShortSfxCode;
 
     export class UiButton extends eui.Button {
         private readonly _imgExtra!     : eui.Image;
@@ -73,14 +73,14 @@ namespace TwnsUiButton {
             this.setImgExtraVisible(false);
         }
         private _onTouchBegin(): void {
-            Helpers.changeColor(this, Types.ColorType.White, 50);
+            Twns.Helpers.changeColor(this, Twns.Types.ColorType.White, 50);
         }
         private _onTouchEnd(): void {
-            SoundManager.playShortSfx(this.getShortSfxCode());
-            Helpers.changeColor(this, Types.ColorType.Origin);
+            Twns.SoundManager.playShortSfx(this.getShortSfxCode());
+            Twns.Helpers.changeColor(this, Twns.Types.ColorType.Origin);
         }
         private _onTouchReleaseOutside(): void {
-            Helpers.changeColor(this, Types.ColorType.Origin);
+            Twns.Helpers.changeColor(this, Twns.Types.ColorType.Origin);
         }
     }
 }

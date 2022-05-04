@@ -3,7 +3,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -13,14 +13,14 @@
 // import TwnsMmWarRulePanel   from "./MmWarRulePanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmTagChangePanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.MapManagement {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForMmTagChangePanel = {
         mapId   : number;
     };
-    export class MmTagChangePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MmTagChangePanel extends TwnsUiPanel.UiPanel<OpenDataForMmTagChangePanel> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnWarRule!   : TwnsUiButton.UiButton;
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
@@ -45,7 +45,7 @@ namespace TwnsMmTagChangePanel {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            const briefData         = Helpers.getExisted(await WarMapModel.getBriefData(this._getOpenData().mapId));
+            const briefData         = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getBriefData(this._getOpenData().mapId));
             this._imgFog.visible    = !!(briefData.mapTag || {}).fog;
         }
         protected _onClosing(): void {
@@ -57,15 +57,15 @@ namespace TwnsMmTagChangePanel {
         }
 
         private _onTouchedBtnConfirm(): void {
-            WarMapProxy.reqMmSetMapTag(this._getOpenData().mapId, {
+            Twns.WarMap.WarMapProxy.reqMmSetMapTag(this._getOpenData().mapId, {
                 fog : this._imgFog.visible ? true : null,
             });
             this.close();
         }
 
         private async _onTouchedBtnWarRule(): Promise<void> {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmWarRulePanel, {
-                mapRawData      : Helpers.getExisted(await WarMapModel.getRawData(this._getOpenData().mapId)),
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmWarRulePanel, {
+                mapRawData      : Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(this._getOpenData().mapId)),
             });
             this.close();
         }

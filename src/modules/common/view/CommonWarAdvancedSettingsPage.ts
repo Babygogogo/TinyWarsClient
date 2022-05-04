@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -15,17 +15,16 @@
 // import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonWarAdvancedSettingsPage {
-    import GameConfig           = Twns.Config.GameConfig;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import GameConfig           = Config.GameConfig;
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
     import PlayerRuleType       = Types.PlayerRuleType;
     import WarType              = Types.WarType;
-    import IWarRule             = CommonProto.WarRule.IWarRule;
     import IDataForPlayerRule   = CommonProto.WarRule.IDataForPlayerRule;
 
     export type OpenDataForCommonWarAdvancedSettingsPage = {
-        warRule         : IWarRule;
+        instanceWarRule : CommonProto.WarRule.IInstanceWarRule;
         warType         : WarType;
         gameConfig      : GameConfig;
     } | null;
@@ -81,7 +80,7 @@ namespace TwnsCommonWarAdvancedSettingsPage {
             }
 
             const gameConfig        = openData.gameConfig;
-            const playerRuleArray   = Helpers.getExisted(openData.warRule?.ruleForPlayers?.playerRuleDataArray);
+            const playerRuleArray   = Helpers.getExisted(openData.instanceWarRule?.ruleForPlayers?.playerRuleDataArray);
             const dataArray         : DataForPlayerRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playerRuleArray.length; ++playerIndex) {
                 dataArray.push({
@@ -121,7 +120,7 @@ namespace TwnsCommonWarAdvancedSettingsPage {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
             if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
                     title   : `CO`,
                     content : Lang.getText(LangTextType.R0004),
                 });
@@ -212,6 +211,10 @@ namespace TwnsCommonWarAdvancedSettingsPage {
                 this._updateViewAsTeamIndex();
             } else if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
                 this._updateViewAsBannedCoIdArray();
+            } else if (playerRuleType === PlayerRuleType.BannedUnitTypeArray) {
+                this._updateViewAsBannedUnitTypeArray();
+            } else if (playerRuleType === PlayerRuleType.CanActivateCoSkill) {
+                this._updateViewAsCanActivateCoSkill();
             } else if (playerRuleType === PlayerRuleType.InitialFund) {
                 this._updateViewAsInitialFund();
             } else if (playerRuleType === PlayerRuleType.IncomeMultiplier) {
@@ -249,6 +252,18 @@ namespace TwnsCommonWarAdvancedSettingsPage {
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
+        }
+        private _updateViewAsBannedUnitTypeArray(): void {
+            const currValue         = this._getData().playerRule.bannedUnitTypeArray?.length ?? 0;
+            const labelValue        = this._labelValue;
+            labelValue.text         = `${currValue}`;
+            labelValue.textColor    = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
+        }
+        private _updateViewAsCanActivateCoSkill(): void {
+            const currValue         = this._getData().playerRule.canActivateCoSkill !== false;
+            const labelValue        = this._labelValue;
+            labelValue.text         = Lang.getText(currValue ? LangTextType.B0012 : LangTextType.B0013);
+            labelValue.textColor    = currValue ? 0xFFFFFF : 0xFF0000;
         }
         private _updateViewAsInitialFund(): void {
             const currValue         = Helpers.getExisted(this._getData().playerRule.initialFund);
@@ -333,10 +348,12 @@ namespace TwnsCommonWarAdvancedSettingsPage {
         const typeArray: PlayerRuleType[] = [
             PlayerRuleType.TeamIndex,
             PlayerRuleType.BannedCoIdArray,
+            PlayerRuleType.BannedUnitTypeArray,
             PlayerRuleType.InitialFund,
             PlayerRuleType.IncomeMultiplier,
             PlayerRuleType.EnergyAddPctOnLoadCo,
             PlayerRuleType.EnergyGrowthMultiplier,
+            PlayerRuleType.CanActivateCoSkill,
             PlayerRuleType.MoveRangeModifier,
             PlayerRuleType.AttackPowerModifier,
             PlayerRuleType.VisionRangeModifier,

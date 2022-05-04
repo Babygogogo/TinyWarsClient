@@ -5,7 +5,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
@@ -15,12 +15,12 @@
 // import TwnsMeWarMenuPanel   from "./MeWarMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeResizePanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.MapEditor {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class MeResizePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeResizePanel = void;
+    export class MeResizePanel extends TwnsUiPanel.UiPanel<OpenDataForMeResizePanel> {
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelCurrSizeTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelCurrWidth!       : TwnsUiLabel.UiLabel;
@@ -110,11 +110,11 @@ namespace TwnsMeResizePanel {
             const deltaBottom   = this._deltaBottom;
             if ((deltaLeft === 0) && (deltaRight === 0) && (deltaTop === 0) && (deltaBottom === 0)) {
                 this.close();
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.MeWarMenuPanel);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.MeWarMenuPanel);
                 return;
             }
 
-            const war               = Helpers.getExisted(MeModel.getWar());
+            const war               = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
             const { width, height } = war.getTileMap().getMapSize();
             const newWidth          = width + deltaLeft + deltaRight;
             const newHeight         = height + deltaTop + deltaBottom;
@@ -137,14 +137,14 @@ namespace TwnsMeResizePanel {
                 .startRunningView();
 
             this.close();
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.MeWarMenuPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.MeWarMenuPanel);
         }
 
         private _onTouchedBtnDeltaTop(): void {
             const minValue      = -CommonConstants.MapMaxGridsCount;
             const maxValue      = CommonConstants.MapMaxGridsCount;
             const currentValue  = this._deltaTop;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0857),
                 currentValue,
                 minValue,
@@ -163,7 +163,7 @@ namespace TwnsMeResizePanel {
             const minValue      = -CommonConstants.MapMaxGridsCount;
             const maxValue      = CommonConstants.MapMaxGridsCount;
             const currentValue  = this._deltaBottom;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0858),
                 currentValue,
                 minValue,
@@ -182,7 +182,7 @@ namespace TwnsMeResizePanel {
             const minValue      = -CommonConstants.MapMaxGridsCount;
             const maxValue      = CommonConstants.MapMaxGridsCount;
             const currentValue  = this._deltaLeft;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0859),
                 currentValue,
                 minValue,
@@ -201,7 +201,7 @@ namespace TwnsMeResizePanel {
             const minValue      = -CommonConstants.MapMaxGridsCount;
             const maxValue      = CommonConstants.MapMaxGridsCount;
             const currentValue  = this._deltaRight;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0860),
                 currentValue,
                 minValue,
@@ -240,7 +240,7 @@ namespace TwnsMeResizePanel {
         }
 
         private _updateComponentsForData(): void {
-            const war                   = Helpers.getExisted(MeModel.getWar());
+            const war                   = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
             const { width, height }     = war.getTileMap().getMapSize();
             this._labelCurrWidth.text   = "" + width;
             this._labelCurrHeight.text  = "" + height;

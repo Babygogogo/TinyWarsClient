@@ -5,10 +5,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace GridIndexHelpers {
-    import GridIndex            = Types.GridIndex;
-    import MapSize              = Types.MapSize;
-    import Direction            = Types.Direction;
-    import Point                = Types.Point;
+    import GridIndex            = Twns.Types.GridIndex;
+    import MapSize              = Twns.Types.MapSize;
+    import Direction            = Twns.Types.Direction;
+    import Point                = Twns.Types.Point;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
     const _ADJACENT_OFFSETS = [
@@ -18,7 +18,7 @@ namespace GridIndexHelpers {
         { offset: { x:  0, y:  1 }, direction: Direction.Down,  clockwiseOffset: { x:  1, y: -1 }, },
     ];
 
-    export function convertGridIndex(raw: Types.Undefinable<CommonProto.Structure.IGridIndex>): GridIndex | null {
+    export function convertGridIndex(raw: Twns.Types.Undefinable<CommonProto.Structure.IGridIndex>): GridIndex | null {
         return ((!raw) || (raw.x == null) || (raw.y == null))
             ? null
             : raw as GridIndex;
@@ -106,7 +106,7 @@ namespace GridIndexHelpers {
         return grids;
     }
     export function getAdjacentGrid(g: GridIndex, direction: Direction): GridIndex {
-        return add(g, Helpers.getExisted(_ADJACENT_OFFSETS.find(v => v.direction === direction)?.offset));
+        return add(g, Twns.Helpers.getExisted(_ADJACENT_OFFSETS.find(v => v.direction === direction)?.offset));
     }
 
     /**

@@ -3,7 +3,7 @@
 // import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 // import TwnsRwWar            from "./RwWar";
 
-namespace TwnsRwFogMap {
+namespace Twns.ReplayWar {
     export class RwFogMap extends Twns.BaseWar.BwFogMap {
         public startRunning(war: Twns.ReplayWar.RwWar): void {
             this._setWar(war);

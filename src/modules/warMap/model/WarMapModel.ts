@@ -3,25 +3,24 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarMapProxy          from "./WarMapProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace WarMapModel {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import WarType              = Types.WarType;
+namespace Twns.WarMap.WarMapModel {
+    import ClientErrorCode      = Twns.ClientErrorCode;
     import IMapRawData          = CommonProto.Map.IMapRawData;
     import IMapBriefData        = CommonProto.Map.IMapBriefData;
     import IMapEditorData       = CommonProto.Map.IMapEditorData;
 
     let _reviewingMaps          : IMapEditorData[];
     const _enabledMapIdArray    : number[] = [];
-    const _rawDataAccessor      = Helpers.createCachedDataAccessor<number, IMapRawData>({
-        reqData                 : (mapId: number) => WarMapProxy.reqGetMapRawData(mapId),
+    const _rawDataAccessor      = Twns.Helpers.createCachedDataAccessor<number, IMapRawData>({
+        reqData                 : (mapId: number) => Twns.WarMap.WarMapProxy.reqGetMapRawData(mapId),
     });
-    const _briefDataGetter      = Helpers.createCachedDataAccessor<number, IMapBriefData>({
-        reqData                 : (mapId: number) => WarMapProxy.reqGetMapBriefData(mapId),
+    const _briefDataGetter      = Twns.Helpers.createCachedDataAccessor<number, IMapBriefData>({
+        reqData                 : (mapId: number) => Twns.WarMap.WarMapProxy.reqGetMapBriefData(mapId),
     });
 
     export function init(): void {
@@ -44,8 +43,8 @@ namespace WarMapModel {
     }
 
     export async function updateOnSetMapName(data: CommonProto.NetMessage.MsgMmSetMapName.IS): Promise<void> {
-        const mapId         = Helpers.getExisted(data.mapId, ClientErrorCode.WarMapModel_UpdateOnSetMapName_00);
-        const mapNameArray  = Helpers.getExisted(data.mapNameArray, ClientErrorCode.WarMapModel_UpdateOnSetMapName_01);
+        const mapId         = Twns.Helpers.getExisted(data.mapId, ClientErrorCode.WarMapModel_UpdateOnSetMapName_00);
+        const mapNameArray  = Twns.Helpers.getExisted(data.mapNameArray, ClientErrorCode.WarMapModel_UpdateOnSetMapName_01);
         const mapBriefData  = await getBriefData(mapId);
         (mapBriefData) && (mapBriefData.mapNameArray = mapNameArray);
 
@@ -53,20 +52,20 @@ namespace WarMapModel {
         (mapRawData) && (mapRawData.mapNameArray = mapNameArray);
     }
     export async function updateOnAddWarRule(data: CommonProto.NetMessage.MsgMmAddWarRule.IS): Promise<void> {
-        const mapId     = Helpers.getExisted(data.mapId);
-        const warRule   = Helpers.getExisted(data.warRule);
-        Helpers.getExisted((await getRawData(mapId))?.warRuleArray).push(warRule);
+        const mapId             = Twns.Helpers.getExisted(data.mapId);
+        const templateWarRule   = Twns.Helpers.getExisted(data.templateWarRule);
+        Twns.Helpers.getExisted((await getRawData(mapId))?.templateWarRuleArray).push(templateWarRule);
     }
     export async function updateOnDeleteWarRule(data: CommonProto.NetMessage.MsgMmDeleteWarRule.IS): Promise<void> {
-        const mapId         = Helpers.getExisted(data.mapId);
-        const ruleId        = Helpers.getExisted(data.ruleId);
-        const warRuleArray  = Helpers.getExisted((await getRawData(mapId))?.warRuleArray);
-        const index         = warRuleArray.findIndex(v => v.ruleId === ruleId);
-        (index >= 0) && (warRuleArray.splice(index, 1));
+        const mapId                 = Twns.Helpers.getExisted(data.mapId);
+        const ruleId                = Twns.Helpers.getExisted(data.ruleId);
+        const templateWarRuleArray  = Twns.Helpers.getExisted((await getRawData(mapId))?.templateWarRuleArray);
+        const index                 = templateWarRuleArray.findIndex(v => v.ruleId === ruleId);
+        (index >= 0) && (templateWarRuleArray.splice(index, 1));
     }
     export async function updateOnSetWarRuleAvailability(data: CommonProto.NetMessage.MsgMmSetWarRuleAvailability.IS): Promise<void> {
-        const warRule               = Helpers.getExisted((await getRawData(Helpers.getExisted(data.mapId)))?.warRuleArray?.find(v => v.ruleId === data.ruleId));
-        warRule.ruleAvailability    = data.availability;
+        const templateWarRule               = Twns.Helpers.getExisted((await getRawData(Twns.Helpers.getExisted(data.mapId)))?.templateWarRuleArray?.find(v => v.ruleId === data.ruleId));
+        templateWarRule.ruleAvailability    = data.availability;
     }
 
     export async function getMapNameInCurrentLanguage(mapId: number): Promise<string | null> {
@@ -81,7 +80,7 @@ namespace WarMapModel {
         return (await getRawData(mapId))?.designerName ?? null;
     }
     export async function getTotalPlayedTimes(mapId: number): Promise<number> {
-        const mapBriefData  = Helpers.getExisted(await getBriefData(mapId));
+        const mapBriefData  = Twns.Helpers.getExisted(await getBriefData(mapId));
         let totalTimes      = 0;
         for (const statisticsForRule of mapBriefData.mapExtraData?.mapWarStatistics?.statisticsForRuleArray ?? []) {
             for (const info of statisticsForRule.statisticsForTurnArray ?? []) {
@@ -96,7 +95,7 @@ namespace WarMapModel {
         const mapExtraData = mapBriefData ? mapBriefData.mapExtraData : null;
         const totalRaters  = mapExtraData ? mapExtraData.totalRaters : null;
         return totalRaters
-            ? (Helpers.getExisted(mapExtraData?.totalRating) / totalRaters)
+            ? (Twns.Helpers.getExisted(mapExtraData?.totalRating) / totalRaters)
             : null;
     }
     export async function getTotalRatersCount(mapId: number): Promise<number | null> {
@@ -106,7 +105,7 @@ namespace WarMapModel {
 
     export function updateRawDataDict(dataList: IMapRawData[]): void {
         for (const data of dataList || []) {
-            setRawData(Helpers.getExisted(data.mapId), data);
+            setRawData(Twns.Helpers.getExisted(data.mapId), data);
         }
     }
     export function getRawData(mapId: number): Promise<IMapRawData | null> {
@@ -136,7 +135,7 @@ namespace WarMapModel {
         return _reviewingMaps;
     }
 
-    export function getMapSize(mapRawData: IMapRawData): Types.MapSize | null {
+    export function getMapSize(mapRawData: IMapRawData): Twns.Types.MapSize | null {
         const { mapWidth, mapHeight } = mapRawData;
         return (mapWidth == null) || (mapHeight == null)
              ? null

@@ -7,29 +7,24 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiFreeWar {
-    import MpwWar           = Twns.MultiPlayerWar.MpwWar;
+    import MpwWar           = MultiPlayerWar.MpwWar;
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForMfw  = CommonProto.WarSettings.ISettingsForMfw;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
     export class MfwWar extends MpwWar {
         private _settingsForMfw?    : ISettingsForMfw;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(data, gameConfig);
-            this._setSettingsForMfw(Helpers.getExisted(data.settingsForMfw, ClientErrorCode.MfwWar_Init_00));
+            this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
+            this._setSettingsForMfw(Twns.Helpers.getExisted(data.settingsForMfw, ClientErrorCode.MfwWar_Init_00));
 
             this._initView();
         }
 
         public getCanCheat(): boolean {
             return false;
-        }
-        public getWarType(): Types.WarType {
-            return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.MfwFog
-                : Types.WarType.MfwStd;
         }
         public getIsNeedExecutedAction(): boolean {
             return false;
@@ -45,7 +40,7 @@ namespace Twns.MultiFreeWar {
             this._settingsForMfw = settings;
         }
         public getSettingsForMfw(): ISettingsForMfw {
-            return Helpers.getExisted(this._settingsForMfw);
+            return Twns.Helpers.getExisted(this._settingsForMfw);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,7 +57,7 @@ namespace Twns.MultiFreeWar {
         }
 
         public getSettingsBootTimerParams(): number[] {
-            return Helpers.getExisted(this.getSettingsForMfw().bootTimerParams);
+            return Twns.Helpers.getExisted(this.getSettingsForMfw().bootTimerParams);
         }
     }
 }

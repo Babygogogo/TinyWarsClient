@@ -47,7 +47,7 @@ namespace TwnsUiZoomableMap {
             zoom.setContentHeight(mapView.height);
             zoom.setContentScale(0, true);
         }
-        public showMapByWarData(data: CommonProto.WarSerialization.ISerialWar, players: Types.Undefinable<CommonProto.WarSerialization.ISerialPlayer[]>, config: Twns.Config.GameConfig): void {
+        public showMapByWarData(data: CommonProto.WarSerialization.ISerialWar, players: Twns.Types.Undefinable<CommonProto.WarSerialization.ISerialPlayer[]>, config: Twns.Config.GameConfig): void {
             const mapView = this._mapView;
             mapView.showMapByWarData(data, config, players);
 

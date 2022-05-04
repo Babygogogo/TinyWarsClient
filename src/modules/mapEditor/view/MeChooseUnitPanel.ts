@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -17,15 +17,15 @@
 // import MeModel                  from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeChooseUnitPanel {
-    import DataForDrawUnit  = TwnsMeDrawer.DataForDrawUnit;
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.MapEditor {
+    import DataForDrawUnit  = Twns.MapEditor.DataForDrawUnit;
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
     const MAX_RECENT_COUNT = 10;
 
-    export type OpenData = void;
-    export class MeChooseUnitPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeChooseUnitPanel = void;
+    export class MeChooseUnitPanel extends TwnsUiPanel.UiPanel<OpenDataForMeChooseUnitPanel> {
         private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
         private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
@@ -95,13 +95,13 @@ namespace TwnsMeChooseUnitPanel {
 
         private async _createDataForListUnit(): Promise<DataForCategoryRenderer[]> {
             const mapping = new Map<number, DataForDrawUnit[]>();
-            for (const unitType of (await Twns.Config.ConfigManager.getLatestGameConfig()).getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
+            for (const unitType of (await Twns.Config.ConfigManager.getLatestGameConfig()).getUnitTypesByCategory(Twns.Types.UnitCategory.All) ?? []) {
                 for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                     if (!mapping.has(playerIndex)) {
                         mapping.set(playerIndex, []);
                     }
 
-                    Helpers.getExisted(mapping.get(playerIndex)).push({
+                    Twns.Helpers.getExisted(mapping.get(playerIndex)).push({
                         playerIndex,
                         unitType,
                     });
@@ -191,7 +191,7 @@ namespace TwnsMeChooseUnitPanel {
             const data              = this._getData();
             const dataForDrawUnit   = data.dataForDrawUnit;
             const unitType          = dataForDrawUnit.unitType;
-            const war               = Helpers.getExisted(MeModel.getWar());
+            const war               = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
             this._labelName.text    = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
 
             const unitView  = this._unitView;
@@ -213,7 +213,7 @@ namespace TwnsMeChooseUnitPanel {
             const dataForDrawUnit   = data.dataForDrawUnit;
             panel.updateOnChooseUnit(dataForDrawUnit);
             panel.close();
-            Helpers.getExisted(MeModel.getWar()).getDrawer().setModeDrawUnit(dataForDrawUnit);
+            Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawUnit(dataForDrawUnit);
         }
     }
 }

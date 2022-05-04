@@ -7,7 +7,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import NotifyData                   from "../../tools/notify/NotifyData";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -19,10 +19,10 @@
 // import ScrCreateModel               from "../model/ScrCreateModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsScrCreatePlayerInfoPage {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import GameConfig               = Twns.Config.GameConfig;
+namespace Twns.SingleCustomRoom {
+    import LangTextType             = Twns.Lang.LangTextType;
+    import NotifyType               = Twns.Notify.NotifyType;
+    import GameConfig               = Config.GameConfig;
 
     export class ScrCreatePlayerInfoPage extends TwnsUiTabPage.UiTabPage<void> {
         private readonly _groupInfo!    : eui.Group;
@@ -58,10 +58,10 @@ namespace TwnsScrCreatePlayerInfoPage {
             // nothing to do
         }
         private async _updateComponentsForPlayerInfo(): Promise<void> {
-            const mapRawData    = await ScrCreateModel.getMapRawData();
+            const mapRawData    = await Twns.SingleCustomRoom.ScrCreateModel.getMapRawData();
             const listPlayer    = this._listPlayer;
             if (mapRawData) {
-                listPlayer.bindData(this._createDataForListPlayer(Helpers.getExisted(mapRawData.playersCountUnneutral)));
+                listPlayer.bindData(this._createDataForListPlayer(Twns.Helpers.getExisted(mapRawData.playersCountUnneutral)));
             } else {
                 listPlayer.clear();
             }
@@ -69,7 +69,7 @@ namespace TwnsScrCreatePlayerInfoPage {
 
         private _createDataForListPlayer(playersCountUnneutral: number): DataForPlayerRenderer[] {
             const dataList      : DataForPlayerRenderer[] = [];
-            const gameConfig    = ScrCreateModel.getGameConfig();
+            const gameConfig    = Twns.SingleCustomRoom.ScrCreateModel.getGameConfig();
             for (let playerIndex = 1; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataList.push({
                     gameConfig,
@@ -119,41 +119,41 @@ namespace TwnsScrCreatePlayerInfoPage {
             const playerData    = this._getPlayerData();
             const coId          = playerData ? playerData.coId : null;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
-                    gameConfig  : ScrCreateModel.getGameConfig(),
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoInfoPanel, {
+                    gameConfig  : Twns.SingleCustomRoom.ScrCreateModel.getGameConfig(),
                     coId,
                 });
             }
         }
 
         private async _onTouchedBtnChangeController(): Promise<void> {
-            ScrCreateModel.tickUserId(this._getData().playerIndex);
+            Twns.SingleCustomRoom.ScrCreateModel.tickUserId(this._getData().playerIndex);
         }
 
         private async _onTouchedBtnChangeSkinId(): Promise<void> {
-            ScrCreateModel.tickUnitAndTileSkinId(this._getData().playerIndex);
+            Twns.SingleCustomRoom.ScrCreateModel.tickUnitAndTileSkinId(this._getData().playerIndex);
         }
 
         private async _onTouchedBtnChangeCo(): Promise<void> {
-            const roomInfo  = ScrCreateModel.getData();
+            const roomInfo  = Twns.SingleCustomRoom.ScrCreateModel.getData();
             if (!roomInfo) {
                 return;
             }
 
             const data          = this._getData();
             const playerIndex   = data.playerIndex;
-            const currentCoId   = ScrCreateModel.getCoId(playerIndex);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+            const currentCoId   = Twns.SingleCustomRoom.ScrCreateModel.getCoId(playerIndex);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                 gameConfig          : data.gameConfig,
                 currentCoId,
-                availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
-                    warRule         : ScrCreateModel.getWarRule(),
+                availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                    baseWarRule         : Twns.SingleCustomRoom.ScrCreateModel.getInstanceWarRule(),
                     playerIndex,
-                    gameConfig      : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion)),
+                    gameConfig      : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomInfo.settingsForCommon?.configVersion)),
                 }),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
-                        ScrCreateModel.setCoId(playerIndex, newCoId);
+                        Twns.SingleCustomRoom.ScrCreateModel.setCoId(playerIndex, newCoId);
                     }
                 },
             });
@@ -164,7 +164,7 @@ namespace TwnsScrCreatePlayerInfoPage {
         }
 
         private _onNotifyScrCreatePlayerInfoChanged(e: egret.Event): void {
-            const eventData = e.data as NotifyData.ScrCreatePlayerInfoChanged;
+            const eventData = e.data as Notify.NotifyData.ScrCreatePlayerInfoChanged;
             if (eventData.playerIndex === this._getData().playerIndex) {
                 this._updateComponentsForSettings();
             }
@@ -181,24 +181,24 @@ namespace TwnsScrCreatePlayerInfoPage {
         }
 
         private async _updateComponentsForSettings(): Promise<void> {
-            const roomInfo  = ScrCreateModel.getData();
+            const roomInfo  = Twns.SingleCustomRoom.ScrCreateModel.getData();
             if (!roomInfo) {
                 return;
             }
 
             const playerIndex           = this._getData().playerIndex;
-            const settingsForCommon     = Helpers.getExisted(roomInfo.settingsForCommon);
+            const settingsForCommon     = Twns.Helpers.getExisted(roomInfo.settingsForCommon);
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(Helpers.getExisted(settingsForCommon.warRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(Twns.Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
 
             const playerData            = this._getPlayerData();
-            this._imgSkin.source        = Twns.WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(Helpers.getExisted(playerData.unitAndTileSkinId));
+            this._imgSkin.source        = WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(Twns.Helpers.getExisted(playerData.unitAndTileSkinId));
             this._labelPlayerType.text  = playerData.userId == null
                 ? Lang.getText(LangTextType.B0607)
                 : Lang.getText(LangTextType.B0031);
 
-            const coId                  = Helpers.getExisted(playerData.coId);
-            const gameConfig            = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+            const coId                  = Twns.Helpers.getExisted(playerData.coId);
+            const gameConfig            = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion));
             const coCfg                 = gameConfig.getCoBasicCfg(coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
@@ -206,7 +206,7 @@ namespace TwnsScrCreatePlayerInfoPage {
         }
 
         private _getPlayerData(): CommonProto.Structure.IDataForPlayerInRoom {
-            return ScrCreateModel.getPlayerInfo(this._getData().playerIndex);
+            return Twns.SingleCustomRoom.ScrCreateModel.getPlayerInfo(this._getData().playerIndex);
         }
     }
 }

@@ -4,7 +4,7 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Types                from "../../tools/helpers/Types";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 // import UserModel            from "../../user/model/UserModel";
 // import TwnsBwUnitMap        from "../model/BwUnitMap";
@@ -12,9 +12,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import UnitCategory         = Types.UnitCategory;
-    import ActionPlannerState   = Types.ActionPlannerState;
+    import NotifyType           = Twns.Notify.NotifyType;
+    import UnitCategory         = Twns.Types.UnitCategory;
+    import ActionPlannerState   = Twns.Types.ActionPlannerState;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
 
@@ -56,14 +56,14 @@ namespace Twns.BaseWar {
                 this.addUnit(unit.getView(), false);
             }
 
-            Notify.addEventListeners(this._notifyListeners, this);
+            Twns.Notify.addEventListeners(this._notifyListeners, this);
         }
         public stopRunningView(): void {
-            Notify.removeEventListeners(this._notifyListeners, this);
+            Twns.Notify.removeEventListeners(this._notifyListeners, this);
         }
 
         private _getUnitMap(): BaseWar.BwUnitMap {
-            return Helpers.getExisted(this._unitMap);
+            return Twns.Helpers.getExisted(this._unitMap);
         }
         private _setUnitMap(unitMap: BaseWar.BwUnitMap): void {
             this._unitMap = unitMap;
@@ -73,7 +73,7 @@ namespace Twns.BaseWar {
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public addUnit(view: Twns.BaseWar.BwUnitView, needResetZOrder: boolean): void {
-            const model = Helpers.getExisted(view.getUnit());
+            const model = Twns.Helpers.getExisted(view.getUnit());
 
             view.x = _GRID_WIDTH * model.getGridX();
             view.y = _GRID_HEIGHT * model.getGridY();
@@ -88,7 +88,7 @@ namespace Twns.BaseWar {
             (view.parent) && (view.parent.removeChild(view));
         }
 
-        public resetZOrder(unitType: Types.UnitType): void {
+        public resetZOrder(unitType: Twns.Types.UnitType): void {
             this._resetZOrderForLayer(this._getLayerByUnitType(unitType));
         }
 
@@ -119,37 +119,37 @@ namespace Twns.BaseWar {
 
             } else if (state === ActionPlannerState.MakingMovePath) {
                 this._resetVisibleForAllUnitsOnMap();
-                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
+                Twns.Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingAction) {
                 this._resetVisibleForAllUnitsOnMap();
-                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
+                Twns.Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingAttackTarget) {
                 this._resetVisibleForAllUnitsOnMap();
-                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
+                Twns.Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingDropDestination) {
                 this._resetVisibleForAllUnitsOnMap();
-                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
+                Twns.Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingFlareDestination) {
                 this._resetVisibleForAllUnitsOnMap();
-                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
+                Twns.Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingSiloDestination) {
                 this._resetVisibleForAllUnitsOnMap();
-                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
+                Twns.Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
@@ -164,11 +164,11 @@ namespace Twns.BaseWar {
 
             } else if (state === ActionPlannerState.PreviewingUnitMovableArea) {
                 this._resetVisibleForAllUnitsOnMap();
-                Helpers.getExisted(actionPlanner.getUnitForPreviewingMovableArea()).setViewVisible(false);
+                Twns.Helpers.getExisted(actionPlanner.getUnitForPreviewingMovableArea()).setViewVisible(false);
 
             } else if (state === ActionPlannerState.PreviewingUnitVisibleArea) {
                 this._resetVisibleForAllUnitsOnMap();
-                Helpers.getExisted(actionPlanner.getUnitForPreviewingVisibleArea()).setViewVisible(false);
+                Twns.Helpers.getExisted(actionPlanner.getUnitForPreviewingVisibleArea()).setViewVisible(false);
 
             } else if (state === ActionPlannerState.PreviewingTileAttackableArea) {
                 this._resetVisibleForAllUnitsOnMap();
@@ -197,7 +197,7 @@ namespace Twns.BaseWar {
             for (let i = 0; i < viewsCount; ++i) {
                 views[i] = layer.getChildAt(i) as any;
             }
-            views.sort((v1, v2) => Helpers.getExisted(v1.getUnit()).getGridY() - Helpers.getExisted(v2.getUnit()).getGridY());
+            views.sort((v1, v2) => Twns.Helpers.getExisted(v1.getUnit()).getGridY() - Twns.Helpers.getExisted(v2.getUnit()).getGridY());
             for (let i = 0; i < viewsCount; ++i) {
                 layer.setChildIndex(views[i], i);
             }
@@ -224,7 +224,7 @@ namespace Twns.BaseWar {
             }
         }
 
-        private _getLayerByUnitType(unitType: Types.UnitType): egret.DisplayObjectContainer {
+        private _getLayerByUnitType(unitType: Twns.Types.UnitType): egret.DisplayObjectContainer {
             const gameConfig = this._getUnitMap().getWar().getGameConfig();
             if (gameConfig.checkIsUnitTypeInCategory(unitType, UnitCategory.Air)) {
                 return this._layerForAir;
@@ -233,7 +233,7 @@ namespace Twns.BaseWar {
             } else if (gameConfig.checkIsUnitTypeInCategory(unitType, UnitCategory.Naval)) {
                 return this._layerForNaval;
             } else {
-                throw Helpers.newError(`Invalid unitType: ${unitType}`);
+                throw Twns.Helpers.newError(`Invalid unitType: ${unitType}`);
             }
         }
 
@@ -247,7 +247,7 @@ namespace Twns.BaseWar {
         }
 
         private _updateOpacityForAllLayers(): void {
-            const opacity               = (UserModel.getSelfSettingsOpacitySettings()?.unitOpacity ?? 100) / 100;
+            const opacity               = (Twns.User.UserModel.getSelfSettingsOpacitySettings()?.unitOpacity ?? 100) / 100;
             this._layerForAir.alpha     = opacity;
             this._layerForGround.alpha  = opacity;
             this._layerForNaval.alpha   = opacity;

@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -18,13 +18,13 @@
 // import TwnsMmMainMenuPanel      from "./MmMainMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmReviewListPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.MapManagement {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import IMapEditorData   = CommonProto.Map.IMapEditorData;
 
-    export type OpenData = void;
-    export class MmReviewListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMmReviewListPanel = void;
+    export class MmReviewListPanel extends TwnsUiPanel.UiPanel<OpenDataForMmReviewListPanel> {
         private readonly _zoomMap!          : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelNoData!      : TwnsUiLabel.UiLabel;
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
@@ -50,7 +50,7 @@ namespace TwnsMmReviewListPanel {
             this._labelLoading.visible  = true;
             this._labelNoData.visible   = false;
 
-            WarMapProxy.reqMmGetReviewingMaps();
+            Twns.WarMap.WarMapProxy.reqMmGetReviewingMaps();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -80,7 +80,7 @@ namespace TwnsMmReviewListPanel {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onMsgMmGetReviewingMaps(): void {
-            const newData               = this._createDataForListMap(WarMapModel.getMmReviewingMaps());
+            const newData               = this._createDataForListMap(Twns.WarMap.WarMapModel.getMmReviewingMaps());
             this._dataForListMap        = newData;
             this._labelLoading.visible  = false;
 
@@ -100,7 +100,7 @@ namespace TwnsMmReviewListPanel {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmMainMenuPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -160,9 +160,9 @@ namespace TwnsMmReviewListPanel {
         protected _onDataChanged(): void {
             const data                  = this._getData();
             const mapEditorData         = data.mapEditorData;
-            const mapRawData            = Helpers.getExisted(mapEditorData.mapRawData);
-            const status                = Helpers.getExisted(mapEditorData.reviewStatus);
-            this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            const mapRawData            = Twns.Helpers.getExisted(mapEditorData.mapRawData);
+            const status                = Twns.Helpers.getExisted(mapEditorData.reviewStatus);
+            this.currentState           = data.index === data.panel.getSelectedIndex() ? Twns.Types.UiState.Down : Twns.Types.UiState.Up;
             this._labelStatus.text      = Lang.getMapReviewStatusText(status) ?? CommonConstants.ErrorTextForUndefined;
             this._labelStatus.textColor = getReviewStatusTextColor(status);
             this._labelName.text        = Lang.getLanguageText({ textArray: mapRawData.mapNameArray }) || `(${Lang.getText(LangTextType.B0277)})`;
@@ -175,16 +175,16 @@ namespace TwnsMmReviewListPanel {
 
         private _onTouchTapBtnNext(): void {
             const data = this._getData().mapEditorData;
-            FlowManager.gotoMapEditorWar(Helpers.getExisted(data.mapRawData), Helpers.getExisted(data.slotIndex), true);
+            Twns.FlowManager.gotoMapEditorWar(Twns.Helpers.getExisted(data.mapRawData), Twns.Helpers.getExisted(data.slotIndex), true);
         }
     }
 
-    function getReviewStatusTextColor(status: Types.MapReviewStatus): number {
+    function getReviewStatusTextColor(status: Twns.Types.MapReviewStatus): number {
         switch (status) {
-            case Types.MapReviewStatus.None     : return 0xffffff;
-            case Types.MapReviewStatus.Reviewing: return 0xffff00;
-            case Types.MapReviewStatus.Rejected : return 0xff0000;
-            case Types.MapReviewStatus.Accepted : return 0x00ff00;
+            case Twns.Types.MapReviewStatus.None     : return 0xffffff;
+            case Twns.Types.MapReviewStatus.Reviewing: return 0xffff00;
+            case Twns.Types.MapReviewStatus.Rejected : return 0xff0000;
+            case Twns.Types.MapReviewStatus.Accepted : return 0x00ff00;
             default                             : return 0xffffff;
         }
     }

@@ -4,7 +4,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -14,19 +14,19 @@
 // import WarEventHelper           from "../model/WarEventHelper";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeConditionTypeListPanel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.WarEvent {
+    import NotifyType           = Twns.Notify.NotifyType;
     import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
     import IWarEventCondition   = CommonProto.WarEvent.IWarEventCondition;
-    import ConditionType        = Types.WarEventConditionType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
+    import ConditionType        = Twns.Types.WarEventConditionType;
+    import LangTextType         = Twns.Lang.LangTextType;
 
-    export type OpenData = {
+    export type OpenDataForWeConditionTypeListPanel = {
         war         : Twns.BaseWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
-    export class WeConditionTypeListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeConditionTypeListPanel extends TwnsUiPanel.UiPanel<OpenDataForWeConditionTypeListPanel> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
         private readonly _listType!     : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;
@@ -116,9 +116,9 @@ namespace TwnsWeConditionTypeListPanel {
             if (conditionType !== Twns.WarHelpers.WarEventHelpers.getConditionType(condition)) {
                 Twns.WarHelpers.WarEventHelpers.resetCondition(condition, conditionType);
                 Twns.WarHelpers.WarEventHelpers.openConditionModifyPanel({ fullData: data.fullData, condition, war: data.war });
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionTypeListPanel);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionTypeListPanel);
 
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onNotifyLanguageChanged(): void {        // DONE

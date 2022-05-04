@@ -4,7 +4,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode              = Twns.ClientErrorCode;
     import IWarActionContainer          = CommonProto.WarAction.IWarActionContainer;
     import ISerialExecutedActionManager = CommonProto.WarSerialization.ISerialExecutedActionManager;
 
@@ -15,7 +15,7 @@ namespace Twns.BaseWar {
 
         public init({ isNeedExecutedActions, data }: {
             isNeedExecutedActions: boolean;
-            data                : Types.Undefinable<ISerialExecutedActionManager>;
+            data                : Twns.Types.Undefinable<ISerialExecutedActionManager>;
         }): void {
             this._setIsNeedExecutedActions(isNeedExecutedActions);
 
@@ -41,7 +41,7 @@ namespace Twns.BaseWar {
             this._isNeedExecutedActions = isNeedReplay;
         }
         private _getIsNeedExecutedActions(): boolean {
-            return Helpers.getExisted(this._isNeedExecutedActions);
+            return Twns.Helpers.getExisted(this._isNeedExecutedActions);
         }
 
         private _setExecutedActionsCount(count: number): void {
@@ -55,7 +55,7 @@ namespace Twns.BaseWar {
             this._executedActionArray = actions;
         }
         public getAllExecutedActionArray(): IWarActionContainer[] {
-            return Helpers.getExisted(this._executedActionArray);
+            return Twns.Helpers.getExisted(this._executedActionArray);
         }
 
         public getExecutedAction(actionId: number): IWarActionContainer {
@@ -64,13 +64,13 @@ namespace Twns.BaseWar {
         public addExecutedAction(rawAction: IWarActionContainer): void {
             const executedActionsCount = this.getExecutedActionsCount();
             if (rawAction.actionId !== executedActionsCount) {
-                throw Helpers.newError(`Invalid actionId: ${rawAction.actionId}`, ClientErrorCode.BwExecutedActionManager_AddExecutedAction_00);
+                throw Twns.Helpers.newError(`Invalid actionId: ${rawAction.actionId}`, ClientErrorCode.BwExecutedActionManager_AddExecutedAction_00);
             }
 
             this._setExecutedActionsCount(executedActionsCount + 1);
 
             if (this._getIsNeedExecutedActions()) {
-                this.getAllExecutedActionArray().push(Helpers.deepClone(rawAction));
+                this.getAllExecutedActionArray().push(Twns.Helpers.deepClone(rawAction));
             }
         }
     }

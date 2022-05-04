@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
@@ -16,8 +16,8 @@
 // import TwnsBwTileView           from "./BwTileView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwTileBriefPanel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.BaseWar {
+    import NotifyType           = Twns.Notify.NotifyType;
 
     const _IMAGE_SOURCE_HP      = `c04_t10_s00_f00`;
     const _IMAGE_SOURCE_CAPTURE = `c04_t10_s04_f00`;
@@ -27,13 +27,13 @@ namespace TwnsBwTileBriefPanel {
     // const _IMAGE_SOURCE_BUILD   = `c04_t10_s05_f00`;
     // const _CELL_WIDTH           = 80;
 
-    export type OpenData = {
+    export type OpenDataForBwTileBriefPanel = {
         war : Twns.BaseWar.BwWar;
     };
-    export class BwTileBriefPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwTileBriefPanel extends TwnsUiPanel.UiPanel<OpenDataForBwTileBriefPanel> {
         private readonly _group!            : eui.Group;
         private readonly _conTileView!      : eui.Group;
-        private readonly _tileView          = new TwnsBwTileView.BwTileView();
+        private readonly _tileView          = new Twns.BaseWar.BwTileView();
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
         private readonly _labelGridIndex!   : TwnsUiLabel.UiLabel;
         private readonly _labelState!       : TwnsUiLabel.UiLabel;
@@ -79,7 +79,7 @@ namespace TwnsBwTileBriefPanel {
         //     this._adjustPositionOnTouch(e.data);
         // }
         private _onNotifyBwCursorGridIndexChanged(e: egret.Event): void {
-            const data  = e.data as NotifyData.BwCursorGridIndexChanged;
+            const data  = e.data as Notify.NotifyData.BwCursorGridIndexChanged;
             const war   = this._getOpenData().war;
             if ((war.getIsRunning()) && (data === war.getCursor())) {
                 this._updateView();
@@ -87,14 +87,14 @@ namespace TwnsBwTileBriefPanel {
         }
         private _onNotifyBwActionPlannerStateChanged(): void {
             const planner = this._getOpenData().war.getActionPlanner();
-            if ((planner.getPreviousState() === Types.ActionPlannerState.ExecutingAction) &&
-                (planner.getState() !== Types.ActionPlannerState.ExecutingAction)
+            if ((planner.getPreviousState() === Twns.Types.ActionPlannerState.ExecutingAction) &&
+                (planner.getState() !== Twns.Types.ActionPlannerState.ExecutingAction)
             ) {
                 this._updateView();
             }
         }
         private _onNotifyMeTileChanged(e: egret.Event): void {
-            const data  = e.data as NotifyData.MeTileChanged;
+            const data  = e.data as Notify.NotifyData.MeTileChanged;
             const war   = this._getOpenData().war;
             if ((war.getIsRunning()) && (GridIndexHelpers.checkIsEqual(data.gridIndex, war.getCursor().getGridIndex()))) {
                 this._updateView();
@@ -110,8 +110,8 @@ namespace TwnsBwTileBriefPanel {
         private _onTouchedThis(): void {
             const war   = this._getOpenData().war;
             const tile  = war.getTileMap().getTile(war.getCursor().getGridIndex());
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileDetailPanel, { tile });
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwTileDetailPanel, { tile });
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -187,24 +187,24 @@ namespace TwnsBwTileBriefPanel {
         // }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, bottom: -40 },
                 endProps    : { alpha: 1, bottom: 0 },
                 tweenTime   : 50,
             });
 
-            await Helpers.wait(50);
+            await Twns.Helpers.wait(50);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, bottom: 0 },
                 endProps    : { alpha: 0, bottom: -40 },
                 tweenTime   : 50,
             });
 
-            await Helpers.wait(50);
+            await Twns.Helpers.wait(50);
         }
     }
 }

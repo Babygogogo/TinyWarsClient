@@ -5,10 +5,10 @@
 // import TwnsSpwActionPlanner from "./SpwActionPlanner";
 // import TwnsSpwFogMap        from "./SpwFogMap";
 
-namespace TwnsSpwField {
+namespace Twns.SinglePlayerWar {
     import BwField          = Twns.BaseWar.BwField;
-    import SpwFogMap        = TwnsSpwFogMap.SpwFogMap;
-    import SpwActionPlanner = TwnsSpwActionPlanner.SpwActionPlanner;
+    import SpwFogMap        = Twns.SinglePlayerWar.SpwFogMap;
+    import SpwActionPlanner = Twns.SinglePlayerWar.SpwActionPlanner;
     import BwUnitMap        = Twns.BaseWar.BwUnitMap;
 
     export class SpwField extends BwField {

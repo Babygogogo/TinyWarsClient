@@ -7,19 +7,19 @@
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
 // import Notify               from "../../tools/notify/Notify";
 // import NotifyData           from "../../tools/notify/NotifyData";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 // import UserModel            from "../../user/model/UserModel";
 // import WarMapModel          from "../../warMap/model/WarMapModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace SrrCreateModel {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.SingleRankRoom.SrrCreateModel {
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
     import IDataForPlayerRule       = CommonProto.WarRule.IDataForPlayerRule;
     import IDataForPlayerInRoom     = CommonProto.Structure.IDataForPlayerInRoom;
-    import GameConfig               = Twns.Config.GameConfig;
+    import GameConfig               = Config.GameConfig;
 
     export type DataForCreateWar    = CommonProto.NetMessage.MsgSpmCreateSrw.IC;
 
@@ -37,8 +37,9 @@ namespace SrrCreateModel {
         },
         settingsForCommon   : {
             configVersion   : null,
-            presetWarRuleId : null,
-            warRule         : null,
+            instanceWarRule : {
+                templateWarRuleId   : null,
+            },
         },
         mapId               : 0,
 
@@ -54,14 +55,14 @@ namespace SrrCreateModel {
     }
 
     export async function getMapBriefData(): Promise<CommonProto.Map.IMapBriefData> {
-        return Helpers.getExisted(await WarMapModel.getBriefData(getMapId()));
+        return Helpers.getExisted(await WarMap.WarMapModel.getBriefData(getMapId()));
     }
     export async function getMapRawData(): Promise<CommonProto.Map.IMapRawData> {
-        return Helpers.getExisted(await WarMapModel.getRawData(getMapId()));
+        return Helpers.getExisted(await WarMap.WarMapModel.getRawData(getMapId()));
     }
 
     export function getPlayerRule(playerIndex: number): IDataForPlayerRule {
-        return WarRuleHelpers.getPlayerRule(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getPlayerRule(getInstanceWarRule(), playerIndex);
     }
     export function getPlayerInfo(playerIndex: number): IDataForPlayerInRoom {
         return Helpers.getExisted(getData().playerInfoList?.find(v => v.playerIndex === playerIndex));
@@ -69,12 +70,12 @@ namespace SrrCreateModel {
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
         setMapId(mapId);
-        setConfigVersion(Helpers.getExisted(Twns.Config.ConfigManager.getLatestConfigVersion()));
-        setGameConfig(await Twns.Config.ConfigManager.getLatestGameConfig());
-        setSaveSlotIndex(await SpmModel.getAvailableIndex());
+        setConfigVersion(Helpers.getExisted(Config.ConfigManager.getLatestConfigVersion()));
+        setGameConfig(await Config.ConfigManager.getLatestGameConfig());
+        setSaveSlotIndex(await SinglePlayerMode.SpmModel.getAvailableIndex());
         setSlotComment(null);
         setPlayerInfoList([]);
-        await resetDataByWarRuleId(Helpers.getExisted((await getMapRawData()).warRuleArray?.find(v => v.ruleAvailability?.canSrw)?.ruleId));
+        await resetDataByTemplateWarRuleId(Helpers.getExisted((await getMapRawData()).templateWarRuleArray?.find(v => v.ruleAvailability?.canSrw)?.ruleId));
     }
     export function getData(): DataForCreateWar {
         return _dataForCreateWar;
@@ -82,8 +83,8 @@ namespace SrrCreateModel {
     export function getSettingsForCommon(): CommonProto.WarSettings.ISettingsForCommon {
         return Helpers.getExisted(getData().settingsForCommon);
     }
-    export function getWarRule(): CommonProto.WarRule.IWarRule {
-        return Helpers.getExisted(getSettingsForCommon().warRule);
+    export function getInstanceWarRule(): CommonProto.WarRule.IInstanceWarRule {
+        return Helpers.getExisted(getSettingsForCommon().instanceWarRule);
     }
 
     function setConfigVersion(version: string): void {
@@ -96,41 +97,31 @@ namespace SrrCreateModel {
         return Helpers.getExisted(_gameConfig);
     }
 
-    export async function resetDataByWarRuleId(ruleId: number): Promise<void> {
-        await resetDataByPresetWarRuleId(ruleId);
-    }
-    async function resetDataByPresetWarRuleId(ruleId: number): Promise<void> {
-        getSettingsForCommon().warRule = Helpers.deepClone(Helpers.getExisted((await getMapRawData()).warRuleArray?.find(v => v.ruleId === ruleId)));
-        setPresetWarRuleId(ruleId);
+    export async function resetDataByTemplateWarRuleId(templateWarRuleId: number): Promise<void> {
+        const mapRawData        = await getMapRawData();
+        const templateWarRule   = Helpers.getExisted(mapRawData.templateWarRuleArray?.find(v => v.ruleId === templateWarRuleId));
+        getSettingsForCommon().instanceWarRule = WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRule, mapRawData.warEventFullData);
         await resetPlayerInfoList();
+
+        Notify.dispatch(NotifyType.SrrCreateModelTemplateWarRuleIdChanged);
     }
-    function setPresetWarRuleId(ruleId: number): void {
-        getWarRule().ruleId                     = ruleId;
-        getSettingsForCommon().presetWarRuleId  = ruleId;
-        Notify.dispatch(NotifyType.SrrCreatePresetWarRuleIdChanged);
+    function getTemplateWarRuleId(): number | null {
+        return getInstanceWarRule().templateWarRuleId ?? null;
     }
-    export function getPresetWarRuleId(): number | null {
-        return getSettingsForCommon().presetWarRuleId ?? null;
-    }
-    export async function tickPresetWarRuleId(): Promise<void> {
-        const currWarRuleId = getPresetWarRuleId();
-        const warRuleArray  = Helpers.getExisted((await getMapRawData()).warRuleArray);
-        if (currWarRuleId == null) {
-            await resetDataByWarRuleId(Helpers.getExisted(warRuleArray.find(v => v.ruleAvailability?.canSrw)?.ruleId));
+    export async function tickTemplateWarRuleId(): Promise<void> {
+        const templateWarRuleArray  = Helpers.getExisted((await getMapRawData()).templateWarRuleArray);
+        const currTemplateWarRuleId = getTemplateWarRuleId();
+        if (currTemplateWarRuleId == null) {
+            await resetDataByTemplateWarRuleId(Helpers.getExisted(templateWarRuleArray.find(v => v.ruleAvailability?.canSrw)?.ruleId));
         } else {
-            const warRuleIdList: number[] = [];
-            for (let ruleId = currWarRuleId + 1; ruleId < warRuleArray.length; ++ruleId) {
-                warRuleIdList.push(ruleId);
-            }
-            for (let ruleId = 0; ruleId < currWarRuleId; ++ruleId) {
-                warRuleIdList.push(ruleId);
-            }
-            for (const ruleId of warRuleIdList) {
-                if (warRuleArray.find(v => v.ruleId === ruleId)?.ruleAvailability?.canSrw) {
-                    await resetDataByWarRuleId(ruleId);
-                    return;
+            const newTemplateWarRuleId = Helpers.getNonNullElements(templateWarRuleArray.filter(v => v.ruleAvailability?.canSrw).map(v => v.ruleId)).sort((v1, v2) => {
+                if (v1 > currTemplateWarRuleId) {
+                    return (v2 <= currTemplateWarRuleId) ? -1 : v1 - v2;
+                } else {
+                    return (v2 > currTemplateWarRuleId) ? 1 : v1 - v2;
                 }
-            }
+            })[0];
+            await resetDataByTemplateWarRuleId(newTemplateWarRuleId);
         }
     }
 
@@ -138,18 +129,18 @@ namespace SrrCreateModel {
         const data                  = getData();
         const oldPlayerInfoList     = getPlayerInfoList();
         const settingsForCommon     = Helpers.getExisted(data.settingsForCommon);
-        const warRule               = Helpers.getExisted(settingsForCommon.warRule);
-        const gameConfig            = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+        const instanceWarRule       = Helpers.getExisted(settingsForCommon.instanceWarRule);
+        const gameConfig            = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
         const playersCount          = Helpers.getExisted((await getMapRawData()).playersCountUnneutral);
-        const playerRuleDataArray   = Helpers.getExisted(warRule.ruleForPlayers?.playerRuleDataArray);
-        const selfUserId            = UserModel.getSelfUserId();
+        const playerRuleDataArray   = Helpers.getExisted(instanceWarRule.ruleForPlayers?.playerRuleDataArray);
+        const selfUserId            = User.UserModel.getSelfUserId();
         const newPlayerInfoList     : IDataForPlayerInRoom[] = [];
 
         for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
             const coIdForAi             = playerRuleDataArray.find(v => v.playerIndex === playerIndex)?.fixedCoIdInSrw;
             const oldInfo               = oldPlayerInfoList.find(v => v.playerIndex === playerIndex);
-            const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule, playerIndex, gameConfig });
-            const newCoId               = WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray);
+            const availableCoIdArray    = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({ baseWarRule: instanceWarRule, playerIndex, gameConfig });
+            const newCoId               = WarHelpers.WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray);
             if (oldInfo) {
                 const coId = Helpers.getExisted(oldInfo.coId);
                 newPlayerInfoList.push({
@@ -211,15 +202,11 @@ namespace SrrCreateModel {
         // }
 
         targetPlayerData.unitAndTileSkinId = newSkinId;
-        Notify.dispatch(NotifyType.SrrCreatePlayerInfoChanged, { playerIndex } as NotifyData.SrrCreatePlayerInfoChanged);
+        Notify.dispatch(NotifyType.SrrCreatePlayerInfoChanged, { playerIndex } as Notify.NotifyData.SrrCreatePlayerInfoChanged);
     }
 
     export function getTeamIndex(playerIndex: number): number {
         return Helpers.getExisted(getPlayerRule(playerIndex).teamIndex);
-    }
-
-    export function getBannedCoIdArray(playerIndex: number): number[] | null {
-        return WarRuleHelpers.getBannedCoIdArray(getWarRule(), playerIndex);
     }
 
     export function getCoId(playerIndex: number): number {
@@ -227,11 +214,11 @@ namespace SrrCreateModel {
     }
     export function setCoId(playerIndex: number, coId: number): void {
         getPlayerInfo(playerIndex).coId = coId;
-        Notify.dispatch(NotifyType.SrrCreatePlayerInfoChanged, { playerIndex } as NotifyData.SrrCreatePlayerInfoChanged);
+        Notify.dispatch(NotifyType.SrrCreatePlayerInfoChanged, { playerIndex } as Notify.NotifyData.SrrCreatePlayerInfoChanged);
     }
 
     export function getHasFog(): boolean {
-        return Helpers.getExisted(getWarRule().ruleForGlobalParams?.hasFogByDefault);
+        return Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault);
     }
 
     export function getInitialFund(playerIndex: number): number {
@@ -272,7 +259,7 @@ namespace SrrCreateModel {
 
     export function getInvalidParamTips(): string | null{
         const teamSet = new Set<number>();
-        for (const playerRule of Helpers.getExisted(getWarRule().ruleForPlayers?.playerRuleDataArray)) {
+        for (const playerRule of Helpers.getExisted(getInstanceWarRule().ruleForPlayers?.playerRuleDataArray)) {
             teamSet.add(Helpers.getExisted(playerRule.teamIndex));
         }
         if (teamSet.size <= 1) {

@@ -3,7 +3,7 @@
 // import TwnsClientErrorCode  from "./ClientErrorCode";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace Types {
+namespace Twns.Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Config types.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -196,7 +196,7 @@ namespace Types {
         skinId?             : number;
         hasLoadedUnit?      : boolean;
         coUsingSkillType?   : CoSkillType;
-        gameConfig              : Twns.Config.GameConfig;
+        gameConfig          : Config.GameConfig;
     }
 
     export interface WarMapTileViewData extends CommonProto.WarSerialization.ISerialTile {
@@ -217,6 +217,8 @@ namespace Types {
         extraData   : CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
         warData     : CommonProto.WarSerialization.ISerialWar;
     };
+
+    export type BaseWarRule = CommonProto.WarRule.IInstanceWarRule | CommonProto.WarRule.ITemplateWarRule;
 
     export type ReplayCheckpointInfo = {
         checkpointId: number;
@@ -256,7 +258,7 @@ namespace Types {
 
     export interface CustomError extends Error {
         isShown?    : boolean;
-        errorCode?  : TwnsClientErrorCode.ClientErrorCode;
+        errorCode?  : ClientErrorCode;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -731,6 +733,8 @@ namespace Types {
     export enum PlayerRuleType {
         TeamIndex,
         BannedCoIdArray,
+        BannedUnitTypeArray,
+        CanActivateCoSkill,
         InitialFund,
         IncomeMultiplier,
         EnergyAddPctOnLoadCo,

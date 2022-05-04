@@ -5,7 +5,7 @@
 // import Types                    from "../helpers/Types";
 // import Lang                     from "../lang/Lang";
 // import TwnsLangTextType         from "../lang/LangTextType";
-// import TwnsNotifyType           from "../notify/NotifyType";
+// import Twns.Notify           from "../notify/NotifyType";
 // import TwnsUiComponent          from "./UiComponent";
 // import TwnsUiImage              from "./UiImage";
 // import TwnsUiLabel              from "./UiLabel";
@@ -14,10 +14,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiCoInfo {
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import CoSkillType      = Types.CoSkillType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import ClientErrorCode  = Twns.ClientErrorCode;
+    import CoSkillType      = Twns.Types.CoSkillType;
+    import NotifyType       = Twns.Notify.NotifyType;
+    import LangTextType     = Twns.Lang.LangTextType;
 
     type CoData = {
         gameConfig      : Twns.Config.GameConfig;
@@ -73,7 +73,7 @@ namespace TwnsUiCoInfo {
             this._updateComponentsForCoInfo();
         }
         public getCoData(): CoData {
-            return Helpers.getExisted(this._coData);
+            return Twns.Helpers.getExisted(this._coData);
         }
 
         public setSelectedSkillType(skillType: CoSkillType): void {
@@ -108,12 +108,12 @@ namespace TwnsUiCoInfo {
                 return;
             }
 
-            this._labelArtDesignerTitle.text            = `${Lang.getText(LangTextType.B0839)}:`;
-            this._labelDataDesignerTitle.text           = `${Lang.getText(LangTextType.B0840)}:`;
-            this._labelBoardCostPercentageTitle.text    = `${Lang.getText(LangTextType.B0164)}:`;
-            this._labelZoneRadiusTitle.text             = `${Lang.getText(LangTextType.B0165)}:`;
-            this._labelEnergyBarTitle.text              = `${Lang.getText(LangTextType.B0166)}:`;
-            this._labelEnergyCostTitle.text             = `${Lang.getText(LangTextType.B0167)}:`;
+            this._labelArtDesignerTitle.text            = `${Twns.Lang.getText(LangTextType.B0839)}:`;
+            this._labelDataDesignerTitle.text           = `${Twns.Lang.getText(LangTextType.B0840)}:`;
+            this._labelBoardCostPercentageTitle.text    = `${Twns.Lang.getText(LangTextType.B0164)}:`;
+            this._labelZoneRadiusTitle.text             = `${Twns.Lang.getText(LangTextType.B0165)}:`;
+            this._labelEnergyBarTitle.text              = `${Twns.Lang.getText(LangTextType.B0166)}:`;
+            this._labelEnergyCostTitle.text             = `${Twns.Lang.getText(LangTextType.B0167)}:`;
         }
 
         private _updateComponentsForCoInfo(): void {
@@ -137,18 +137,18 @@ namespace TwnsUiCoInfo {
             const coType        = gameConfig.getCoType(coId);
             const groupZoneInfo = this._groupZoneInfo;
             (groupZoneInfo.parent) && (groupZoneInfo.parent.removeChild(groupZoneInfo));
-            if (coType === Types.CoType.Zoned) {
+            if (coType === Twns.Types.CoType.Zoned) {
                 this._groupInfo.addChildAt(groupZoneInfo, 0);
 
                 this._labelBoardCostPercentage.text = `${cfg?.boardCostPercentage}%`;
                 this._labelZoneRadius.text          = `${cfg?.zoneRadius}`;
                 this._labelEnergyBar.text           = (cfg?.zoneExpansionEnergyList || []).join(` / `) || `--`;
 
-            } else if (coType === Types.CoType.Global) {
+            } else if (coType === Twns.Types.CoType.Global) {
                 // nothing to do
 
             } else {
-                throw Helpers.newError(`Invalid coType: ${coType}`, ClientErrorCode.UiCoInfo_UpdateComponentsForCoInfo_00);
+                throw Twns.Helpers.newError(`Invalid coType: ${coType}`, ClientErrorCode.UiCoInfo_UpdateComponentsForCoInfo_00);
             }
 
             this._updateComponentsForSkill();
@@ -174,8 +174,8 @@ namespace TwnsUiCoInfo {
             const gameConfig                = coData.gameConfig;
             const skillIdArray              = gameConfig.getCoSkillArray(coId, skillType) || [];
             const hasSkill                  = !!skillIdArray.length;
-            this._labelSkillType.text       = `${Lang.getCoSkillTypeName(skillType)}:`;
-            this._labelSkillName.text       = hasSkill ? `` : Lang.getText(LangTextType.B0001);
+            this._labelSkillType.text       = `${Twns.Lang.getCoSkillTypeName(skillType)}:`;
+            this._labelSkillName.text       = hasSkill ? `` : Twns.Lang.getText(LangTextType.B0001);
 
             const groupEnergyCost = this._groupEnergyCost;
             if (!hasSkill) {
@@ -195,7 +195,7 @@ namespace TwnsUiCoInfo {
             }
 
             const dataArrayForListSkillDesc : DataForSkillDescRenderer[] = [];
-            const rawDesc                   = (gameConfig.getCoSkillDescArray(coId, skillType) || [])[Lang.getCurrentLanguageType()];
+            const rawDesc                   = (gameConfig.getCoSkillDescArray(coId, skillType) || [])[Twns.Lang.getCurrentLanguageType()];
             if (!rawDesc) {
                 dataArrayForListSkillDesc.push({ desc: CommonConstants.ErrorTextForUndefined });
             } else {
@@ -219,8 +219,8 @@ namespace TwnsUiCoInfo {
         protected _onDataChanged(): void {
             const data              = this._getData();
             const skillType         = data.coSkillType;
-            this.currentState       = data.component.getSelectedSkillType() === skillType ? Types.UiState.Down : Types.UiState.Up;
-            this._labelType.text    = Lang.getCoSkillTypeName(skillType) ?? CommonConstants.ErrorTextForUndefined;
+            this.currentState       = data.component.getSelectedSkillType() === skillType ? Twns.Types.UiState.Down : Twns.Types.UiState.Up;
+            this._labelType.text    = Twns.Lang.getCoSkillTypeName(skillType) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         public onItemTapEvent(): void {

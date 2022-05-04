@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -15,8 +15,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarMap {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import GameConfig       = Config.GameConfig;
 
     export type OpenDataForWarMapBuildingListPanel = {
@@ -58,15 +58,15 @@ namespace Twns.WarMap {
             const gameConfig    = openData.gameConfig;
             const dict          = new Map<number, Map<number, number>>();
             for (const tileData of openData.tileDataArray || []) {
-                const template = gameConfig.getTileTemplateCfgByType(Twns.Config.ConfigManager.getTileType(Types.TileBaseType.Plain, Helpers.getExisted(tileData.objectType)));
+                const template = gameConfig.getTileTemplateCfgByType(Twns.Config.ConfigManager.getTileType(Twns.Types.TileBaseType.Plain, Twns.Helpers.getExisted(tileData.objectType)));
                 if ((template) && (template.maxCapturePoint != null)) {
                     const tileType = template.type;
                     if (!dict.has(tileType)) {
                         dict.set(tileType, new Map<number, number>());
                     }
 
-                    const playerIndex   = Helpers.getExisted(tileData.playerIndex);
-                    const subDict       = Helpers.getExisted(dict.get(tileType));
+                    const playerIndex   = Twns.Helpers.getExisted(tileData.playerIndex);
+                    const subDict       = Twns.Helpers.getExisted(dict.get(tileType));
                     subDict.set(playerIndex, (subDict.get(playerIndex) || 0) + 1);
                 }
             }
@@ -85,7 +85,7 @@ namespace Twns.WarMap {
 
     type DataForTileRenderer = {
         maxPlayerIndex  : number;
-        tileType        : Types.TileType;
+        tileType        : Twns.Types.TileType;
         dict            : Map<number, number>;
     };
     class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileRenderer> {
@@ -99,7 +99,7 @@ namespace Twns.WarMap {
         private readonly _labelNum5!        : TwnsUiLabel.UiLabel;
         private readonly _labelTotalNum!    : TwnsUiLabel.UiLabel;
 
-        private _tileView       = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private _tileView       = new Twns.MapEditor.MeTileSimpleView();
         private _labelNumList   : TwnsUiLabel.UiLabel[] = [];
 
         protected _onOpened(): void {
@@ -151,7 +151,7 @@ namespace Twns.WarMap {
                 tileDecoratorShapeId: null,
                 tileObjectType      : tileObjectType,
                 tileObjectShapeId   : 0,
-                playerIndex         : tileObjectType === Types.TileObjectType.Headquarters
+                playerIndex         : tileObjectType === Twns.Types.TileObjectType.Headquarters
                     ? CommonConstants.WarFirstPlayerIndex
                     : CommonConstants.WarNeutralPlayerIndex,
             });

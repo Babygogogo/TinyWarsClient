@@ -7,22 +7,22 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsRwReplayProgressPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+namespace Twns.ReplayWar {
+    import NotifyType       = Twns.Notify.NotifyType;
+    import ClientErrorCode  = Twns.ClientErrorCode;
+    import LangTextType     = Twns.Lang.LangTextType;
 
-    export type OpenData = {
+    export type OpenDataForRwReplayProgressPanel = {
         war: Twns.ReplayWar.RwWar;
     };
-    export class RwReplayProgressPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class RwReplayProgressPanel extends TwnsUiPanel.UiPanel<OpenDataForRwReplayProgressPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -38,7 +38,7 @@ namespace TwnsRwReplayProgressPanel {
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
         private readonly _btnConfirm!       : TwnsUiButton.UiButton;
 
-        private _allCheckpointInfoArray?    : Types.ReplayCheckpointInfo[];
+        private _allCheckpointInfoArray?    : Twns.Types.ReplayCheckpointInfo[];
         private _selectedCheckpointId?      : number;
 
         protected _onOpening(): void {
@@ -117,16 +117,16 @@ namespace TwnsRwReplayProgressPanel {
             this._updateLabelTarget();
         }
         private async _onTouchedBtnConfirm(): Promise<void> {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonBlockPanel, {
                 title   : Lang.getText(LangTextType.B0088),
                 content : Lang.getText(LangTextType.A0040),
             });
             await this._getOpenData().war.loadCheckpoint(this._getSelectedCheckpointId());
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBlockPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonBlockPanel);
             this.close();
         }
         private _onTouchedPanelMask(): void {
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonCancel01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonCancel01);
 
             this.close();
         }
@@ -155,12 +155,12 @@ namespace TwnsRwReplayProgressPanel {
             this._imgProgressBar.width  = pos;
         }
         private _updateLabelTarget(): void {
-            const checkpointInfo        = Helpers.getExisted(this._allCheckpointInfoArray, ClientErrorCode.RwReplayProgressPanel_UpdateGroupProgress_00)[this._getSelectedCheckpointId()];
+            const checkpointInfo        = Twns.Helpers.getExisted(this._allCheckpointInfoArray, ClientErrorCode.RwReplayProgressPanel_UpdateGroupProgress_00)[this._getSelectedCheckpointId()];
             this._labelTarget.text      = `${Lang.getText(LangTextType.B0191)}${checkpointInfo.turnIndex}  P${checkpointInfo.playerIndex}  ${Lang.getText(LangTextType.B0616)}${checkpointInfo.nextActionId}`;
         }
 
         private _getSelectedCheckpointId(): number {
-            return Helpers.getExisted(this._selectedCheckpointId, ClientErrorCode.RwReplayProgressPanel_GetSelectedCheckpointId_00);
+            return Twns.Helpers.getExisted(this._selectedCheckpointId, ClientErrorCode.RwReplayProgressPanel_GetSelectedCheckpointId_00);
         }
         private _setSelectedCheckpointId(checkpointId: number): void {
             this._selectedCheckpointId = checkpointId;
@@ -169,36 +169,36 @@ namespace TwnsRwReplayProgressPanel {
             return 0;
         }
         private _getMaxCheckpointId(): number {
-            return Helpers.getExisted(this._allCheckpointInfoArray?.length, ClientErrorCode.RwReplayProgressPanel_GetMaxCheckpointId_00) - 1;
+            return Twns.Helpers.getExisted(this._allCheckpointInfoArray?.length, ClientErrorCode.RwReplayProgressPanel_GetMaxCheckpointId_00) - 1;
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

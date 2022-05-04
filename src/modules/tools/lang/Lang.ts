@@ -13,7 +13,7 @@
 // import TwnsLangTextType     from "./LangTextType";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace Lang {
+namespace Twns.Lang {
     import LanguageType             = Types.LanguageType;
     import WarEventConditionType    = Types.WarEventConditionType;
     import WarEventActionType       = Types.WarEventActionType;
@@ -21,11 +21,6 @@ namespace Lang {
     import GameVersion              = Types.GameVersion;
     import WeatherType              = Types.WeatherType;
     import BgmCode                  = Types.BgmCode;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import ServerErrorCode          = TwnsServerErrorCode.ServerErrorCode;
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import LangCommonText           = TwnsLangCommonText.LangCommonText;
-    import LangErrorText            = TwnsLangErrorText.LangErrorText;
 
     let _languageType = LanguageType.Chinese;
     export function init(): void {
@@ -418,15 +413,6 @@ namespace Lang {
         }
     }
 
-    export function getWarRuleNameInLanguage(warRule: CommonProto.WarRule.IWarRule): string | null {
-        if (warRule.ruleId == null) {
-            return getText(LangTextType.B0321);
-        } else {
-            const ruleNameArray = warRule.ruleNameArray;
-            return ruleNameArray ? getLanguageText({ textArray: ruleNameArray }) : null;
-        }
-    }
-
     export function getWarEventConditionTypeName(type: WarEventConditionType): string | null {
         switch (type) {
             case WarEventConditionType.WecTurnIndexEqualTo                  : return getText(LangTextType.B0504);
@@ -483,6 +469,8 @@ namespace Lang {
         switch (type) {
             case PlayerRuleType.TeamIndex               : return getText(LangTextType.B0019);
             case PlayerRuleType.BannedCoIdArray         : return getText(LangTextType.B0403);
+            case PlayerRuleType.BannedUnitTypeArray     : return getText(LangTextType.B0895);
+            case PlayerRuleType.CanActivateCoSkill      : return getText(LangTextType.B0897);
             case PlayerRuleType.InitialFund             : return getText(LangTextType.B0178);
             case PlayerRuleType.IncomeMultiplier        : return getText(LangTextType.B0179);
             case PlayerRuleType.EnergyAddPctOnLoadCo    : return getText(LangTextType.B0180);
@@ -492,8 +480,8 @@ namespace Lang {
             case PlayerRuleType.VisionRangeModifier     : return getText(LangTextType.B0184);
             case PlayerRuleType.LuckLowerLimit          : return getText(LangTextType.B0189);
             case PlayerRuleType.LuckUpperLimit          : return getText(LangTextType.B0190);
-            case PlayerRuleType.AiCoIdInCcw             : return getText(LangTextType.B0641);
-            case PlayerRuleType.AiControlInCcw          : return getText(LangTextType.B0642);
+            case PlayerRuleType.AiCoIdInCcw             : return getText(LangTextType.B0642);
+            case PlayerRuleType.AiControlInCcw          : return getText(LangTextType.B0641);
             default                                     : return null;
         }
     }
@@ -605,13 +593,13 @@ namespace Lang {
         let playerIndex     = CommonConstants.WarFirstPlayerIndex;
         for (const playerInfo of data.playerInfoList || []) {
             const userId = playerInfo.userId;
-            playerArray.push(`P${playerIndex}: ${userId != null ? await UserModel.getUserNickname(userId) : `----`}`);
+            playerArray.push(`P${playerIndex}: ${userId != null ? await User.UserModel.getUserNickname(userId) : `----`}`);
             ++playerIndex;
         }
 
         const mapId = data.mapId;
         return [
-            getFormattedText(LangTextType.F0027, mapId != null ? await WarMapModel.getMapNameInCurrentLanguage(mapId) : getText(LangTextType.B0557)),
+            getFormattedText(LangTextType.F0027, mapId != null ? await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) : getText(LangTextType.B0557)),
             ...playerArray,
             getText(LangTextType.A0125)
         ].join("\n");

@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiCoInfo             from "../../tools/ui/UiCoInfo";
 // import TwnsUiComponent          from "../../tools/ui/UiComponent";
@@ -16,12 +16,12 @@
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonBanCoPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import GameConfig       = Twns.Config.GameConfig;
+namespace Twns.Common {
+    import LangTextType     = Lang.LangTextType;
+    import NotifyType       = Notify.NotifyType;
+    import GameConfig       = Config.GameConfig;
 
-    export type OpenData = {
+    export type OpenDataForCommonBanCoPanel = {
         playerIndex         : number;
         gameConfig          : GameConfig;
         bannedCoIdArray     : number[];
@@ -30,7 +30,7 @@ namespace TwnsCommonBanCoPanel {
         selfCoId            : number | null;
         callbackOnConfirm   : ((bannedCoIdSet: Set<number>) => void) | null;
     };
-    export class CommonBanCoPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonBanCoPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonBanCoPanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _group!                    : eui.Group;
         private readonly _labelAvailableCoTitle!    : TwnsUiLabel.UiLabel;
@@ -104,7 +104,7 @@ namespace TwnsCommonBanCoPanel {
             } else {
                 const bannedCoIdSet = this._bannedCoIdSet;
                 if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0130),
                     });
@@ -113,7 +113,7 @@ namespace TwnsCommonBanCoPanel {
 
                 const maxBanCount = openData.maxBanCount;
                 if ((maxBanCount != null) && (bannedCoIdSet.size > maxBanCount)) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getFormattedText(LangTextType.F0031, maxBanCount),
                     });
@@ -179,7 +179,7 @@ namespace TwnsCommonBanCoPanel {
             }
 
             if (coId === CommonConstants.CoEmptyId) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0130),
                 });
@@ -188,7 +188,7 @@ namespace TwnsCommonBanCoPanel {
 
             const maxBanCount = openData.maxBanCount;
             if ((maxBanCount != null) && (bannedCoIdSet.size >= maxBanCount)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getFormattedText(LangTextType.F0031, maxBanCount),
                 });
@@ -203,7 +203,7 @@ namespace TwnsCommonBanCoPanel {
             if (openData.selfCoId !== coId) {
                 callback();
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0057),
                     callback,
                 });

@@ -9,27 +9,22 @@
 namespace Twns.CoopCustomWar {
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForCcw  = CommonProto.WarSettings.ISettingsForCcw;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import MpwWar           = Twns.MultiPlayerWar.MpwWar;
+    import ClientErrorCode  = Twns.ClientErrorCode;
+    import MpwWar           = MultiPlayerWar.MpwWar;
     import GameConfig       = Config.GameConfig;
 
     export class CcwWar extends MpwWar {
         private _settingsForCcw?: ISettingsForCcw;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(data, gameConfig);
-            this._setSettingsForCcw(Helpers.getExisted(data.settingsForCcw, ClientErrorCode.CcwWar_Init_00));
+            this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
+            this._setSettingsForCcw(Twns.Helpers.getExisted(data.settingsForCcw, ClientErrorCode.CcwWar_Init_00));
 
             this._initView();
         }
 
         public getCanCheat(): boolean {
             return false;
-        }
-        public getWarType(): Types.WarType {
-            return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.CcwFog
-                : Types.WarType.CcwStd;
         }
         public getIsNeedExecutedAction(): boolean {
             return false;
@@ -38,14 +33,14 @@ namespace Twns.CoopCustomWar {
             return false;
         }
         public getMapId(): number {
-            return Helpers.getExisted(this.getSettingsForCcw().mapId);
+            return Twns.Helpers.getExisted(this.getSettingsForCcw().mapId);
         }
 
         private _setSettingsForCcw(settings: ISettingsForCcw): void {
             this._settingsForCcw = settings;
         }
         public getSettingsForCcw(): ISettingsForCcw {
-            return Helpers.getExisted(this._settingsForCcw);
+            return Twns.Helpers.getExisted(this._settingsForCcw);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,7 +61,7 @@ namespace Twns.CoopCustomWar {
 
         public getSettingsBootTimerParams(): number[] {
             const settingsForCcw = this.getSettingsForCcw();
-            return Helpers.getExisted(settingsForCcw.bootTimerParams);
+            return Twns.Helpers.getExisted(settingsForCcw.bootTimerParams);
         }
     }
 }

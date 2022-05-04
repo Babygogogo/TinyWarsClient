@@ -9,7 +9,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
@@ -25,14 +25,14 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SingleCustomRoom {
-    import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode                          = Twns.ClientErrorCode;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import ScrCreateAdvancedSettingsPage            = TwnsScrCreateAdvancedSettingsPage.ScrCreateAdvancedSettingsPage;
-    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import ScrCreatePlayerInfoPage                  = TwnsScrCreatePlayerInfoPage.ScrCreatePlayerInfoPage;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
-    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
+    import ScrCreateAdvancedSettingsPage            = SingleCustomRoom.ScrCreateAdvancedSettingsPage;
+    import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
+    import ScrCreatePlayerInfoPage                  = SingleCustomRoom.ScrCreatePlayerInfoPage;
+    import LangTextType                             = Twns.Lang.LangTextType;
+    import NotifyType                               = Twns.Notify.NotifyType;
+    import WarBasicSettingsType                     = Twns.Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -80,7 +80,7 @@ namespace Twns.SingleCustomRoom {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Twns.Common.CommonWarMapInfoPage,
                     pageData    : this._createDataForCommonMapInfoPage(),
                 },
                 {
@@ -103,20 +103,20 @@ namespace Twns.SingleCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ScrCreateMapListPanel, null);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ScrCreateMapListPanel, null);
         }
         private async _onTouchedBtnConfirm(): Promise<void> {
-            const data      = ScrCreateModel.getData();
+            const data      = SingleCustomRoom.ScrCreateModel.getData();
             const callback  = () => {
-                SpmProxy.reqSpmCreateScw(data);
+                Twns.SinglePlayerMode.SpmProxy.reqSpmCreateScw(data);
                 this._btnConfirm.enabled = false;
                 this._resetTimeoutForBtnConfirm();
             };
 
-            if (await SpmModel.checkIsEmpty(Helpers.getExisted(data.slotIndex))) {
+            if (await SinglePlayerMode.SpmModel.checkIsEmpty(Twns.Helpers.getExisted(data.slotIndex))) {
                 callback();
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0070),
                     callback,
                 });
@@ -128,10 +128,10 @@ namespace Twns.SingleCustomRoom {
         }
         private _onNotifyMsgSpmCreateScw(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgSpmCreateScw.IS;
-            FlowManager.gotoSinglePlayerWar({
-                warData         : Helpers.getExisted(data.warData),
-                slotExtraData   : Helpers.getExisted(data.extraData),
-                slotIndex       : Helpers.getExisted(data.slotIndex),
+            Twns.FlowManager.gotoSinglePlayerWar({
+                warData         : Twns.Helpers.getExisted(data.warData),
+                slotExtraData   : Twns.Helpers.getExisted(data.extraData),
+                slotIndex       : Twns.Helpers.getExisted(data.slotIndex),
             });
         }
         private _onNotifyScrCreateWarSaveSlotChanged(): void {
@@ -172,25 +172,25 @@ namespace Twns.SingleCustomRoom {
         }
 
         private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
-            const mapId = ScrCreateModel.getMapId();
+            const mapId = SingleCustomRoom.ScrCreateModel.getMapId();
             return mapId == null
                 ? null
                 : {
-                    gameConfig  : ScrCreateModel.getGameConfig(),
+                    gameConfig  : SingleCustomRoom.ScrCreateModel.getGameConfig(),
                     mapInfo     : { mapId },
                 };
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            const warRule           = ScrCreateModel.getWarRule();
-            const gameConfig        = ScrCreateModel.getGameConfig();
-            const warEventFullData  = (await ScrCreateModel.getMapRawData()).warEventFullData ?? null;
+            const instanceWarRule   = SingleCustomRoom.ScrCreateModel.getInstanceWarRule();
+            const gameConfig        = SingleCustomRoom.ScrCreateModel.getGameConfig();
+            const warEventFullData  = (await SingleCustomRoom.ScrCreateModel.getMapRawData()).warEventFullData ?? null;
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
                     {
                         settingsType    : WarBasicSettingsType.MapId,
-                        currentValue    : ScrCreateModel.getMapId(),
-                        warRule,
+                        currentValue    : SingleCustomRoom.ScrCreateModel.getMapId(),
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
@@ -198,72 +198,72 @@ namespace Twns.SingleCustomRoom {
                     {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: async () => {
-                            await ScrCreateModel.tickPresetWarRuleId();
+                            await SingleCustomRoom.ScrCreateModel.tickTemplateWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.HasFog,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: () => {
-                            ScrCreateModel.setHasFog(!ScrCreateModel.getHasFog());
-                            ScrCreateModel.setCustomWarRuleId();
+                            SingleCustomRoom.ScrCreateModel.setHasFog(!SingleCustomRoom.ScrCreateModel.getHasFog());
+                            SingleCustomRoom.ScrCreateModel.setCustomWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.Weather,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: () => {
-                            ScrCreateModel.tickDefaultWeatherType();
-                            ScrCreateModel.setCustomWarRuleId();
+                            SingleCustomRoom.ScrCreateModel.tickDefaultWeatherType();
+                            SingleCustomRoom.ScrCreateModel.setCustomWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarEvent,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.SpmSaveSlotIndex,
-                        currentValue    : ScrCreateModel.getSaveSlotIndex(),
-                        warRule,
+                        currentValue    : SingleCustomRoom.ScrCreateModel.getSaveSlotIndex(),
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: () => {
-                            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSaveSlotsPanel, {
-                                currentSlotIndex    : ScrCreateModel.getSaveSlotIndex(),
+                            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmCreateSaveSlotsPanel, {
+                                currentSlotIndex    : SingleCustomRoom.ScrCreateModel.getSaveSlotIndex(),
                                 callback            : slotIndex => {
-                                    ScrCreateModel.setSaveSlotIndex(slotIndex);
+                                    SingleCustomRoom.ScrCreateModel.setSaveSlotIndex(slotIndex);
                                 },
                             });
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.SpmSaveSlotComment,
-                        currentValue    : ScrCreateModel.getSlotComment(),
-                        warRule,
+                        currentValue    : SingleCustomRoom.ScrCreateModel.getSlotComment(),
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
-                                throw Helpers.newError(`Invalid newValue: ${newValue}`, ClientErrorCode.ScrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_00);
+                                throw Twns.Helpers.newError(`Invalid newValue: ${newValue}`, ClientErrorCode.ScrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_00);
                             }
-                            ScrCreateModel.setSlotComment(newValue);
+                            SingleCustomRoom.ScrCreateModel.setSlotComment(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
@@ -277,52 +277,52 @@ namespace Twns.SingleCustomRoom {
         // Opening/closing animations.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnConfirm,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnConfirm,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 

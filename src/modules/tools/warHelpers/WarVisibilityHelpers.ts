@@ -9,14 +9,14 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarVisibilityHelpers {
-    import GridIndex        = Types.GridIndex;
-    import Visibility       = Types.Visibility;
+    import GridIndex        = Twns.Types.GridIndex;
+    import Visibility       = Twns.Types.Visibility;
 
     export function checkIsUnitOnMapVisibleToTeam(
         { war, gridIndex, unitType, isDiving, unitPlayerIndex, observerTeamIndex }: {
             war                 : Twns.BaseWar.BwWar;
             gridIndex           : GridIndex;
-            unitType            : Types.UnitType;
+            unitType            : Twns.Types.UnitType;
             isDiving            : boolean;
             unitPlayerIndex     : number;
             observerTeamIndex   : number;
@@ -35,7 +35,7 @@ namespace WarVisibilityHelpers {
         { war, gridIndex, unitType, isDiving, unitPlayerIndex, observerTeamIndexes }: {
             war                 : Twns.BaseWar.BwWar;
             gridIndex           : GridIndex;
-            unitType            : Types.UnitType;
+            unitType            : Twns.Types.UnitType;
             isDiving            : boolean;
             unitPlayerIndex     : number;
             observerTeamIndexes : Set<number>;
@@ -378,7 +378,7 @@ namespace WarVisibilityHelpers {
     function _createVisibilityMapFromPath(war: Twns.BaseWar.BwWar, path: GridIndex[], unit: Twns.BaseWar.BwUnit): Visibility[][] {
         const tileMap       = war.getTileMap();
         const mapSize       = tileMap.getMapSize();
-        const visibilityMap = Helpers.createEmptyMap(mapSize.width, mapSize.height, Visibility.OutsideVision);
+        const visibilityMap = Twns.Helpers.createEmptyMap(mapSize.width, mapSize.height, Visibility.OutsideVision);
         const playerIndex   = unit.getPlayerIndex();
         const isTrueVision  = path.length ? unit.checkIsTrueVision(path[0]) : false;
         for (const node of path) {

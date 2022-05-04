@@ -5,12 +5,12 @@
 // import ProtoTypes   from "../../tools/proto/ProtoTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace BroadcastModel {
+namespace Twns.Broadcast.BroadcastModel {
     import IBroadcastMessage    = CommonProto.Broadcast.IBroadcastMessage;
 
     const _allMessageIdArray    : number[] = [];
-    const _messageDataAccessor  = Helpers.createCachedDataAccessor<number, IBroadcastMessage>({
-        reqData : (messageId: number) => BroadcastProxy.reqBroadcastGetMessageData(messageId),
+    const _messageDataAccessor  = Twns.Helpers.createCachedDataAccessor<number, IBroadcastMessage>({
+        reqData : (messageId: number) => Twns.Broadcast.BroadcastProxy.reqBroadcastGetMessageData(messageId),
     });
 
     export function setAllMessageIdArray(messageIdArray: number[]): void {
@@ -29,14 +29,14 @@ namespace BroadcastModel {
     }
 
     export async function getOngoingMessageIdArray(): Promise<number[]> {
-        const currTime      = Timer.getServerTimestamp();
+        const currTime      = Twns.Timer.getServerTimestamp();
         const promiseArray  : Promise<number | null>[] = [];
         for (const messageId of getAllMessageIdArray()) {
             promiseArray.push((async () => {
                 const messageData = await getMessageData(messageId);
                 if ((messageData)                                           &&
-                    (Helpers.getExisted(messageData.startTime) <= currTime) &&
-                    (Helpers.getExisted(messageData.endTime) >= currTime)
+                    (Twns.Helpers.getExisted(messageData.startTime) <= currTime) &&
+                    (Twns.Helpers.getExisted(messageData.endTime) >= currTime)
                 ) {
                     return messageId;
                 } else {
@@ -44,7 +44,7 @@ namespace BroadcastModel {
                 }
             })());
         }
-        return Helpers.getNonNullElements(await Promise.all(promiseArray));
+        return Twns.Helpers.getNonNullElements(await Promise.all(promiseArray));
     }
 }
 

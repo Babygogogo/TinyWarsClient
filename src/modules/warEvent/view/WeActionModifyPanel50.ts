@@ -12,7 +12,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -25,10 +25,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
     import BwWar                    = BaseWar.BwWar;
 
     export type OpenDataForWeActionModifyPanel50 = {
@@ -81,11 +81,11 @@ namespace Twns.WarEvent {
         }
 
         private _onTouchedBtnChinese(): void {
-            const textArray         = Helpers.getExisted(this._getAction().textArray);
-            const textData          = textArray.find(v => v.languageType === Types.LanguageType.Chinese);
+            const textArray         = Twns.Helpers.getExisted(this._getAction().textArray);
+            const textData          = textArray.find(v => v.languageType === Twns.Types.LanguageType.Chinese);
             const currentText       = textData?.text;
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0455),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
@@ -100,28 +100,28 @@ namespace Twns.WarEvent {
                     }
 
                     if (!text.length) {
-                        Helpers.deleteElementFromArray(textArray, textData);
+                        Twns.Helpers.deleteElementFromArray(textArray, textData);
                     } else {
                         if (textData) {
                             textData.text = text;
                         } else {
                             textArray.push({
-                                languageType    : Types.LanguageType.Chinese,
+                                languageType    : Twns.Types.LanguageType.Chinese,
                                 text,
                             });
                         }
                     }
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
 
         private _onTouchedBtnEnglish(): void {
-            const textArray         = Helpers.getExisted(this._getAction().textArray);
-            const textData          = textArray.find(v => v.languageType === Types.LanguageType.English);
+            const textArray         = Twns.Helpers.getExisted(this._getAction().textArray);
+            const textData          = textArray.find(v => v.languageType === Twns.Types.LanguageType.English);
             const currentText       = textData?.text;
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0456),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
@@ -136,25 +136,25 @@ namespace Twns.WarEvent {
                     }
 
                     if (!text.length) {
-                        Helpers.deleteElementFromArray(textArray, textData);
+                        Twns.Helpers.deleteElementFromArray(textArray, textData);
                     } else {
                         if (textData) {
                             textData.text = text;
                         } else {
                             textArray.push({
-                                languageType    : Types.LanguageType.English,
+                                languageType    : Twns.Types.LanguageType.English,
                                 text,
                             });
                         }
                     }
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -187,7 +187,7 @@ namespace Twns.WarEvent {
             const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForAction(openData.fullData, action, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
             this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
 
@@ -196,17 +196,17 @@ namespace Twns.WarEvent {
             this._labelChinese.text = Lang.getLanguageText({
                 textArray,
                 useAlternate: false,
-                languageType: Types.LanguageType.Chinese,
+                languageType: Twns.Types.LanguageType.Chinese,
             }) || "";
             this._labelEnglish.text = Lang.getLanguageText({
                 textArray,
                 useAlternate: false,
-                languageType: Types.LanguageType.English,
+                languageType: Twns.Types.LanguageType.English,
             }) || "";
         }
 
         private _getAction(): CommonProto.WarEvent.IWeaPersistentShowText {
-            return Helpers.getExisted(this._getOpenData().action.WeaPersistentShowText);
+            return Twns.Helpers.getExisted(this._getOpenData().action.WeaPersistentShowText);
         }
     }
 }

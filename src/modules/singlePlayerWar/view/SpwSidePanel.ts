@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 // import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
@@ -16,11 +16,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SinglePlayerWar {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import LangTextType         = Twns.Lang.LangTextType;
+    import NotifyType           = Twns.Notify.NotifyType;
 
     export type OpenDataForSpwSidePanel = {
-        war : TwnsSpwWar.SpwWar;
+        war : Twns.SinglePlayerWar.SpwWar;
     };
     export class SpwSidePanel extends TwnsUiPanel.UiPanel<OpenDataForSpwSidePanel> {
         private readonly _groupLeft!    : eui.Group;
@@ -54,10 +54,10 @@ namespace Twns.SinglePlayerWar {
                 { ui: this._btnInfo,            callback: this._onTouchedBtnInfo },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
             ]);
-            this._btnCop.setShortSfxCode(Types.ShortSfxCode.None);
-            this._btnScop.setShortSfxCode(Types.ShortSfxCode.None);
-            this._btnNextUnit.setShortSfxCode(Types.ShortSfxCode.None);
-            this._btnNextTile.setShortSfxCode(Types.ShortSfxCode.None);
+            this._btnCop.setShortSfxCode(Twns.Types.ShortSfxCode.None);
+            this._btnScop.setShortSfxCode(Twns.Types.ShortSfxCode.None);
+            this._btnNextUnit.setShortSfxCode(Twns.Types.ShortSfxCode.None);
+            this._btnNextTile.setShortSfxCode(Twns.Types.ShortSfxCode.None);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -78,7 +78,7 @@ namespace Twns.SinglePlayerWar {
         private _onNotifyBwPlayerIndexInTurnChanged(): void {
             const war = this._getOpenData().war;
             this._updateDynamicButtons();
-            SoundManager.playCoBgmWithWar(war, false);
+            Twns.SoundManager.playCoBgmWithWar(war, false);
         }
         private _onNotifyBwCoEnergyChanged(): void {
             this._updateBtnCop();
@@ -87,7 +87,7 @@ namespace Twns.SinglePlayerWar {
         private _onNotifyBwCoUsingSkillChanged(): void {
             this._updateBtnCop();
             this._updateBtnScop();
-            SoundManager.playCoBgmWithWar(this._getOpenData().war, false);
+            Twns.SoundManager.playCoBgmWithWar(this._getOpenData().war, false);
         }
         private _onNotifyBwActionPlannerStateChanged(): void {
             this._updateDynamicButtons();
@@ -95,49 +95,49 @@ namespace Twns.SinglePlayerWar {
 
         private _onTouchedBtnCop(): void {
             const war       = this._getOpenData().war;
-            const skillType = Types.CoSkillType.Power;
+            const skillType = Twns.Types.CoSkillType.Power;
             if (!war.getPlayerInTurn().checkCanUseCoSkill(skillType)) {
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonForbidden01);
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0142),
                     content : Lang.getText(LangTextType.A0054),
                     callback: () => war.getActionPlanner().setStateRequestingPlayerUseCoSkill(skillType),
                 });
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
             }
         }
         private _onTouchedBtnScop(): void {
             const war       = this._getOpenData().war;
-            const skillType = Types.CoSkillType.SuperPower;
+            const skillType = Twns.Types.CoSkillType.SuperPower;
             if (!war.getPlayerInTurn().checkCanUseCoSkill(skillType)) {
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonForbidden01);
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0144),
                     content : Lang.getText(LangTextType.A0058),
                     callback: () => war.getActionPlanner().setStateRequestingPlayerUseCoSkill(skillType),
                 });
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
             }
         }
         private _onTouchedBtnNextUnit(): void {
             const war           = this._getOpenData().war;
             const field         = war.getField();
             const actionPlanner = field.getActionPlanner();
-            if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
+            if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Twns.Types.ActionPlannerState.ExecutingAction)) {
                 actionPlanner.setStateIdle();
 
                 const gridIndex = WarHelpers.WarCommonHelpers.getIdleUnitGridIndex(war);
                 if (!gridIndex) {
-                    SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
+                    Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonForbidden01);
                 } else {
                     const cursor = field.getCursor();
                     cursor.setGridIndex(gridIndex);
                     cursor.updateView();
                     war.getView().tweenGridToCentralArea(gridIndex);
                     war.getGridVisualEffect().showEffectAiming(gridIndex, 800);
-                    SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                    Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
                 }
             }
         }
@@ -145,19 +145,19 @@ namespace Twns.SinglePlayerWar {
             const war           = this._getOpenData().war;
             const field         = war.getField();
             const actionPlanner = field.getActionPlanner();
-            if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
+            if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Twns.Types.ActionPlannerState.ExecutingAction)) {
                 actionPlanner.setStateIdle();
 
                 const gridIndex = WarHelpers.WarCommonHelpers.getIdleBuildingGridIndex(war);
                 if (!gridIndex) {
-                    SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
+                    Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonForbidden01);
                 } else {
                     const cursor = field.getCursor();
                     cursor.setGridIndex(gridIndex);
                     cursor.updateView();
                     war.getView().tweenGridToCentralArea(gridIndex);
                     war.getGridVisualEffect().showEffectAiming(gridIndex, 800);
-                    SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                    Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
                 }
             }
         }
@@ -166,7 +166,7 @@ namespace Twns.SinglePlayerWar {
             if ((war.getDrawVoteManager().getRemainingVotes()) && (!war.getPlayerInTurn().getHasVotedForDraw())) {
                 FloatText.show(Lang.getText(LangTextType.A0034));
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0036),
                     content : WarHelpers.WarCommonHelpers.getHintForEndTurn(war),
                     callback: () => this._getOpenData().war.getActionPlanner().setStateRequestingPlayerEndTurn(),
@@ -182,14 +182,14 @@ namespace Twns.SinglePlayerWar {
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarInfoPanel, { war });
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwWarInfoPanel, { war });
         }
         private _onTouchedBtnMenu(): void {
             const actionPlanner = this._getOpenData().war.getActionPlanner();
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpwWarMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpwWarMenuPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -223,16 +223,16 @@ namespace Twns.SinglePlayerWar {
             const war       = this._getOpenData().war;
             const player    = war.getPlayerInTurn();
             const btn       = this._btnCop;
-            if ((war.getActionPlanner().getState() !== Types.ActionPlannerState.Idle)   ||
-                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)      ||
+            if ((war.getActionPlanner().getState() !== Twns.Types.ActionPlannerState.Idle)   ||
+                (war.getTurnManager().getPhaseCode() !== Twns.Types.TurnPhaseCode.Main)      ||
                 (!war.checkIsHumanInTurn())                                             ||
-                (player.getCoType() !== Types.CoType.Global)                            ||
+                (player.getCoType() !== Twns.Types.CoType.Global)                            ||
                 (player.getCoPowerEnergy() == null)
             ) {
                 (btn.parent) && (btn.parent.removeChild(btn));
             } else {
                 (!btn.parent) && (this._groupLeft.addChildAt(btn, 0));
-                btn.icon = player.checkCanUseCoSkill(Types.CoSkillType.Power) ? `commonIcon0009` : `commonIcon0010`;
+                btn.icon = player.checkCanUseCoSkill(Twns.Types.CoSkillType.Power) ? `commonIcon0009` : `commonIcon0010`;
             }
         }
 
@@ -240,25 +240,25 @@ namespace Twns.SinglePlayerWar {
             const war       = this._getOpenData().war;
             const player    = war.getPlayerInTurn();
             const btn       = this._btnScop;
-            if ((war.getActionPlanner().getState() !== Types.ActionPlannerState.Idle)   ||
-                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)      ||
+            if ((war.getActionPlanner().getState() !== Twns.Types.ActionPlannerState.Idle)   ||
+                (war.getTurnManager().getPhaseCode() !== Twns.Types.TurnPhaseCode.Main)      ||
                 (!war.checkIsHumanInTurn())                                             ||
-                (player.getCoType() !== Types.CoType.Global)                            ||
+                (player.getCoType() !== Twns.Types.CoType.Global)                            ||
                 (player.getCoSuperPowerEnergy() == null)
             ) {
                 (btn.parent) && (btn.parent.removeChild(btn));
             } else {
                 (!btn.parent) && (this._groupLeft.addChild(btn));
-                btn.icon = player.checkCanUseCoSkill(Types.CoSkillType.SuperPower) ? `commonIcon0011` : `commonIcon0012`;
+                btn.icon = player.checkCanUseCoSkill(Twns.Types.CoSkillType.SuperPower) ? `commonIcon0011` : `commonIcon0012`;
             }
         }
 
         private _updateBtnEndTurn(): void {
             const war                   = this._getOpenData().war;
             const turnManager           = war.getTurnManager();
-            this._btnEndTurn.visible    = (war.getActionPlanner().getState() === Types.ActionPlannerState.Idle)
+            this._btnEndTurn.visible    = (war.getActionPlanner().getState() === Twns.Types.ActionPlannerState.Idle)
                 && (war.checkIsHumanInTurn())
-                && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
+                && (turnManager.getPhaseCode() === Twns.Types.TurnPhaseCode.Main);
         }
 
         private _updateBtnNextUnit(): void {
@@ -266,9 +266,9 @@ namespace Twns.SinglePlayerWar {
             const actionPlanner = war.getActionPlanner();
             const turnManager   = war.getTurnManager();
             const btn           = this._btnNextUnit;
-            if ((actionPlanner.getState() !== Types.ActionPlannerState.Idle)    ||
+            if ((actionPlanner.getState() !== Twns.Types.ActionPlannerState.Idle)    ||
                 (!war.checkIsHumanInTurn())                                     ||
-                (turnManager.getPhaseCode() !== Types.TurnPhaseCode.Main)
+                (turnManager.getPhaseCode() !== Twns.Types.TurnPhaseCode.Main)
             ) {
                 btn.visible = false;
             } else {
@@ -282,9 +282,9 @@ namespace Twns.SinglePlayerWar {
             const actionPlanner = war.getActionPlanner();
             const turnManager   = war.getTurnManager();
             const btn           = this._btnNextTile;
-            if ((actionPlanner.getState() !== Types.ActionPlannerState.Idle)    ||
+            if ((actionPlanner.getState() !== Twns.Types.ActionPlannerState.Idle)    ||
                 (!war.checkIsHumanInTurn())                                     ||
-                (turnManager.getPhaseCode() !== Types.TurnPhaseCode.Main)
+                (turnManager.getPhaseCode() !== Twns.Types.TurnPhaseCode.Main)
             ) {
                 btn.visible = false;
             } else {
@@ -298,11 +298,11 @@ namespace Twns.SinglePlayerWar {
             const turnManager       = war.getTurnManager();
             const actionPlanner     = war.getActionPlanner();
             const state             = actionPlanner.getState();
-            this._btnCancel.visible = (state !== Types.ActionPlannerState.Idle)
-                && (state !== Types.ActionPlannerState.ExecutingAction)
+            this._btnCancel.visible = (state !== Twns.Types.ActionPlannerState.Idle)
+                && (state !== Twns.Types.ActionPlannerState.ExecutingAction)
                 && (!actionPlanner.checkIsStateRequesting())
                 && (war.checkIsHumanInTurn())
-                && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
+                && (turnManager.getPhaseCode() === Twns.Types.TurnPhaseCode.Main);
         }
     }
 }

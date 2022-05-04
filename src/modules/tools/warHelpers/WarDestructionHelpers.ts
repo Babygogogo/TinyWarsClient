@@ -7,14 +7,14 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarDestructionHelpers {
-    import GridIndex        = Types.GridIndex;
-    import TileObjectType   = Types.TileObjectType;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import GridIndex        = Twns.Types.GridIndex;
+    import TileObjectType   = Twns.Types.TileObjectType;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import BwWar            = Twns.BaseWar.BwWar;
 
     export function destroyUnitOnMap(war: BwWar, gridIndex: GridIndex, showExplosionEffect: boolean): void {
         const unitMap       = war.getUnitMap();
-        const unit          = Helpers.getExisted(unitMap.getUnitOnMap(gridIndex), ClientErrorCode.DestructionHelpers_DestroyUnitOnMap_00);
+        const unit          = Twns.Helpers.getExisted(unitMap.getUnitOnMap(gridIndex), ClientErrorCode.DestructionHelpers_DestroyUnitOnMap_00);
         const allCoUnits    = unitMap.getAllCoUnits(unit.getPlayerIndex());
         unitMap.removeUnitOnMap(gridIndex, true);
         war.getTileMap().getTile(gridIndex).updateOnUnitLeave();
@@ -36,7 +36,7 @@ namespace WarDestructionHelpers {
                 player.setCoCurrentEnergy(Math.floor(currentEnergy * restCoUnitsCount / totalCoUnitsCount));
             } else {
                 player.setCoCurrentEnergy(0);
-                player.setCoUsingSkillType(Types.CoSkillType.Passive);
+                player.setCoUsingSkillType(Twns.Types.CoSkillType.Passive);
             }
         }
 
@@ -46,7 +46,7 @@ namespace WarDestructionHelpers {
 
             const warView = war.getView();
             (warView) && (warView.showVibration());
-            SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.Explode);
         }
     }
 
@@ -69,7 +69,7 @@ namespace WarDestructionHelpers {
         if ((showExplosionEffect) && (hasRemovedUnit)) {
             const warView = war.getView();
             (warView) && (warView.showVibration());
-            SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.Explode);
         }
 
         for (const tile of tileMap.getAllTiles()) {
@@ -93,10 +93,10 @@ namespace WarDestructionHelpers {
         war.getFogMap().resetAllMapsForPlayer(playerIndex);
 
         const player = war.getPlayer(playerIndex);
-        player.setAliveState(Types.PlayerAliveState.Dead);
+        player.setAliveState(Twns.Types.PlayerAliveState.Dead);
         player.setCoIsDestroyedInTurn(true);
         player.setCoCurrentEnergy(0);
-        player.setCoUsingSkillType(Types.CoSkillType.Passive);
+        player.setCoUsingSkillType(Twns.Types.CoSkillType.Passive);
 
         war.getDrawVoteManager().setRemainingVotes(null);
     }
@@ -105,7 +105,7 @@ namespace WarDestructionHelpers {
         war.getTileMap().getTile(gridIndex).updateOnUnitLeave();
 
         const unitMap   = war.getUnitMap();
-        const unit      = Helpers.getExisted(unitMap.getUnitOnMap(gridIndex));
+        const unit      = Twns.Helpers.getExisted(unitMap.getUnitOnMap(gridIndex));
 
         unitMap.removeUnitOnMap(gridIndex, true);
         for (const u of unitMap.getUnitsLoadedByLoader(unit, true)) {

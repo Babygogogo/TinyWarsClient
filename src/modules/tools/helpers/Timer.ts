@@ -5,16 +5,16 @@
 // import TwnsLangTextType from "../lang/LangTextType";
 // import NetManager       from "../network/NetManager";
 // import Notify           from "../notify/Notify";
-// import TwnsNotifyType   from "../notify/NotifyType";
+// import Notify   from "../notify/NotifyType";
 // import ProtoTypes       from "../proto/ProtoTypes";
 // import FloatText        from "./FloatText";
 // import Helpers          from "./Helpers";
 // import LocalStorage     from "./LocalStorage";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace Timer {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+namespace Twns.Timer {
+    import NotifyType       = Notify.NotifyType;
+    import LangTextType     = Twns.Lang.LangTextType;
 
     const TILE_ANIMATION_INTERVAL_MS        = 200;
     const UNIT_ANIMATION_INTERVAL_MS        = 120;
@@ -73,7 +73,7 @@ namespace Timer {
 
         _intervalIdForTileAnimation = egret.setInterval(() => {
             ++_tileAnimationTickCount;
-            CommonModel.tickTileImageSources();
+            Common.CommonModel.tickTileImageSources();
             Notify.dispatch(NotifyType.TileAnimationTick);
         }, null, TILE_ANIMATION_INTERVAL_MS);
     }
@@ -95,7 +95,7 @@ namespace Timer {
 
         _intervalIdForUnitAnimation = egret.setInterval(() => {
             ++_unitAnimationTickCount;
-            CommonModel.tickUnitImageSources();
+            Common.CommonModel.tickUnitImageSources();
             Notify.dispatch(NotifyType.UnitAnimationTick);
         }, null, UNIT_ANIMATION_INTERVAL_MS);
     }
@@ -147,14 +147,14 @@ namespace Timer {
 
     function heartbeat(): void {
         if (!_isHeartbeatAnswered) {
-            if (!NetManager.checkCanAutoReconnect()) {
+            if (!Net.NetManager.checkCanAutoReconnect()) {
                 FloatText.show(Lang.getText(LangTextType.A0013));
             } else {
                 FloatText.show(Lang.getText(LangTextType.A0008));
-                NetManager.init();
+                Net.NetManager.init();
             }
         }
-        CommonProxy.reqCommonHeartbeat(_heartbeatCounter);
+        Common.CommonProxy.reqCommonHeartbeat(_heartbeatCounter);
     }
 }
 

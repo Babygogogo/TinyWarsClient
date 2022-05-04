@@ -4,7 +4,7 @@
 // import Types            from "../../tools/helpers/Types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace MpwUtility {
+namespace Twns.MultiPlayerWar.MpwUtility {
     import BwTile = Twns.BaseWar.BwTile;
 
     export function resetTileDataAsHasFog(tile: BwTile): void {
@@ -15,7 +15,7 @@ namespace MpwUtility {
             baseType        : tile.getBaseType(),
             decoratorType   : tile.getDecoratorType(),
             objectType      : tile.getObjectType(),
-            playerIndex     : tile.getType() === Types.TileType.Headquarters ? tile.getPlayerIndex() : CommonConstants.WarNeutralPlayerIndex,
+            playerIndex     : tile.getType() === Twns.Types.TileType.Headquarters ? tile.getPlayerIndex() : CommonConstants.WarNeutralPlayerIndex,
             baseShapeId     : tile.getBaseShapeId(),
             decoratorShapeId: tile.getDecoratorShapeId(),
             objectShapeId   : tile.getObjectShapeId(),

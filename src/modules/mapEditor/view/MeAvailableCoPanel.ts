@@ -7,7 +7,7 @@
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiComponent      from "../../tools/ui/UiComponent";
@@ -17,18 +17,17 @@
 // import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeAvailableCoPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import WarRule          = CommonProto.WarRule;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+namespace Twns.MapEditor {
+    import NotifyType       = Twns.Notify.NotifyType;
+    import LangTextType     = Twns.Lang.LangTextType;
 
-    export type OpenData = {
-        playerRule      : WarRule.IDataForPlayerRule;
-        warRule         : WarRule.IWarRule;
+    export type OpenDataForMeAvailableCoPanel = {
+        playerRule      : CommonProto.WarRule.IDataForPlayerRule;
+        templateWarRule : CommonProto.WarRule.ITemplateWarRule;
         isReviewing     : boolean;
     };
-    export class MeAvailableCoPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
+    export class MeAvailableCoPanel extends TwnsUiPanel.UiPanel<OpenDataForMeAvailableCoPanel> {
+        protected readonly _LAYER_TYPE   = Twns.Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeAvailableCoPanel;
@@ -90,14 +89,14 @@ namespace TwnsMeAvailableCoPanel {
         private _onTouchedBtnConfirm(): void {
             const bannedCoIdSet = this._bannedCoIdSet;
             if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0130),
                 });
             } else {
                 const openData = this._getOpenData();
-                WarRuleHelpers.setBannedCoIdArray(openData.warRule, Helpers.getExisted(openData.playerRule.playerIndex), bannedCoIdSet);
-                Notify.dispatch(NotifyType.MeBannedCoIdArrayChanged);
+                Twns.WarHelpers.WarRuleHelpers.setBannedCoIdArray(openData.templateWarRule, Twns.Helpers.getExisted(openData.playerRule.playerIndex), bannedCoIdSet);
+                Twns.Notify.dispatch(NotifyType.MeBannedCoIdArrayChanged);
                 this.close();
             }
         }
@@ -109,7 +108,7 @@ namespace TwnsMeAvailableCoPanel {
                 const gameConfig    = await Twns.Config.ConfigManager.getLatestGameConfig();
                 const coIdList      = renderer.getIsCustomSwitch()
                     ? gameConfig.getEnabledCustomCoIdList()
-                    : gameConfig.getEnabledCoIdListInTier(Helpers.getExisted(renderer.getCoTier()));
+                    : gameConfig.getEnabledCoIdListInTier(Twns.Helpers.getExisted(renderer.getCoTier()));
 
                 if (renderer.getState() === CoTierState.Unavailable) {
                     for (const coId of coIdList) {
@@ -131,7 +130,7 @@ namespace TwnsMeAvailableCoPanel {
         private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
             if (!this._getOpenData().isReviewing) {
                 const renderer      = e.currentTarget as RendererForCoName;
-                const coId          = Helpers.getExisted(renderer.getCoId());
+                const coId          = Twns.Helpers.getExisted(renderer.getCoId());
                 const bannedCoIdSet = this._bannedCoIdSet;
 
                 if (!renderer.getIsSelected()) {
@@ -187,7 +186,7 @@ namespace TwnsMeAvailableCoPanel {
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
                     ? gameConfig.getEnabledCustomCoIdList()
-                    : gameConfig.getEnabledCoIdListInTier(Helpers.getExisted(renderer.getCoTier()));
+                    : gameConfig.getEnabledCoIdListInTier(Twns.Helpers.getExisted(renderer.getCoTier()));
 
                 if (includedCoIdList.every(coId => bannedCoIdSet.has(coId))) {
                     renderer.setState(CoTierState.Unavailable);
@@ -221,7 +220,7 @@ namespace TwnsMeAvailableCoPanel {
         private _updateGroupCoNames(): void {
             const bannedCoIdSet = this._bannedCoIdSet;
             for (const renderer of this._renderersForCoNames) {
-                renderer.setIsSelected(!bannedCoIdSet.has(Helpers.getExisted(renderer.getCoId())));
+                renderer.setIsSelected(!bannedCoIdSet.has(Twns.Helpers.getExisted(renderer.getCoId())));
             }
         }
     }
@@ -272,7 +271,7 @@ namespace TwnsMeAvailableCoPanel {
             } else {
                 this._labelName.textColor = 0xFF0000;
             }
-            Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Types.ColorType.Origin : Types.ColorType.Gray);
+            Twns.Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Twns.Types.ColorType.Origin : Twns.Types.ColorType.Gray);
         }
         public getState(): CoTierState | null {
             return this._state;
@@ -305,7 +304,7 @@ namespace TwnsMeAvailableCoPanel {
         public setIsSelected(isSelected: boolean): void {
             this._isSelected            = isSelected;
             this._labelName.textColor   = isSelected ? 0x00ff00 : 0xff0000;
-            Helpers.changeColor(this._imgSelected, isSelected ? Types.ColorType.Origin : Types.ColorType.Gray);
+            Twns.Helpers.changeColor(this._imgSelected, isSelected ? Twns.Types.ColorType.Origin : Twns.Types.ColorType.Gray);
         }
         public getIsSelected(): boolean | null {
             return this._isSelected;

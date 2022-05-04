@@ -3,7 +3,7 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiTabPage        from "../../tools/ui/UiTabPage";
@@ -11,9 +11,9 @@
 // import RwModel              from "../model/RwModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsRwReplayWarInfoPage {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.ReplayWar {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
     export type OpenDataForRwReplayWarInfoPage = {
         replayId: number;
@@ -106,18 +106,18 @@ namespace TwnsRwReplayWarInfoPage {
 
         private async _updateLabelWarType(): Promise<void> {
             const replayBriefInfo   = await this._getReplayInfo();
-            this._labelWarType.text = replayBriefInfo ? Lang.getWarTypeName(Helpers.getExisted(replayBriefInfo.warType)) ?? CommonConstants.ErrorTextForUndefined : `??`;
+            this._labelWarType.text = replayBriefInfo ? Lang.getWarTypeName(Twns.Helpers.getExisted(replayBriefInfo.warType)) ?? CommonConstants.ErrorTextForUndefined : `??`;
         }
 
         private async _updateLabelGlobalRating(): Promise<void> {
             const replayBriefInfo           = await this._getReplayInfo();
             const raters                    = replayBriefInfo ? replayBriefInfo.totalRaters : null;
-            this._labelGlobalRating.text    = raters ? (Helpers.getExisted(replayBriefInfo?.totalRating) / raters).toFixed(2) : Lang.getText(LangTextType.B0001);
+            this._labelGlobalRating.text    = raters ? (Twns.Helpers.getExisted(replayBriefInfo?.totalRating) / raters).toFixed(2) : Lang.getText(LangTextType.B0001);
         }
 
         private async _updateLabelMyRating(): Promise<void> {
             const replayId              = this._getOpenData()?.replayId;
-            const rating                = replayId == null ? null : await RwModel.getReplaySelfRating(replayId);
+            const rating                = replayId == null ? null : await Twns.ReplayWar.RwModel.getReplaySelfRating(replayId);
             this._labelMyRating.text    = rating == null ? Lang.getText(LangTextType.B0001) : `${rating}`;
         }
 
@@ -125,7 +125,7 @@ namespace TwnsRwReplayWarInfoPage {
             const mapId             = (await this._getReplayInfo())?.mapId;
             this._labelMapName.text = mapId == null
                 ? `----`
-                : (await WarMapModel.getMapNameInCurrentLanguage(mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                : (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId)) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private async _updateLabelTurnIndex(): Promise<void> {
@@ -138,7 +138,7 @@ namespace TwnsRwReplayWarInfoPage {
         private async _updateLabelEndTime(): Promise<void> {
             const replayBriefInfo   = await this._getReplayInfo();
             this._labelEndTime.text = replayBriefInfo
-                ? Helpers.getTimestampShortText(Helpers.getExisted(replayBriefInfo.warEndTime))
+                ? Twns.Helpers.getTimestampShortText(Twns.Helpers.getExisted(replayBriefInfo.warEndTime))
                 : `??`;
         }
 
@@ -146,7 +146,7 @@ namespace TwnsRwReplayWarInfoPage {
             const replayId = this._getOpenData()?.replayId;
             return replayId == null
                 ? null
-                : await RwModel.getReplayInfo(replayId);
+                : await Twns.ReplayWar.RwModel.getReplayInfo(replayId);
         }
     }
 }

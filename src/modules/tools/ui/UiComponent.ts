@@ -3,14 +3,14 @@
 // import Notify               from "../notify/Notify";
 
 namespace TwnsUiComponent {
-    import UiListener   = Types.UiListener;
+    import UiListener   = Twns.Types.UiListener;
 
     export class UiComponent extends eui.Component {
         private _isChildrenCreated  = false;
         private _isSkinLoaded       = false;
         private _isOpening          = false;
 
-        private _notifyListenerArray    : Notify.Listener[] | null = null;
+        private _notifyListenerArray    : Twns.Notify.Listener[] | null = null;
         private _uiListenerArray        : UiListener[] | null = null;
 
         protected constructor() {
@@ -91,10 +91,10 @@ namespace TwnsUiComponent {
             this._isOpening = opening;
         }
 
-        protected _setNotifyListenerArray(array: Notify.Listener[] | null): void {
+        protected _setNotifyListenerArray(array: Twns.Notify.Listener[] | null): void {
             this._notifyListenerArray = array;
         }
-        protected _getNotifyListenerArray(): Notify.Listener[] | null {
+        protected _getNotifyListenerArray(): Twns.Notify.Listener[] | null {
             return this._notifyListenerArray;
         }
         protected _setUiListenerArray(array: UiListener[] | null): void {
@@ -107,7 +107,7 @@ namespace TwnsUiComponent {
         protected _registerListeners(): void {
             const notifyListenerArray = this._getNotifyListenerArray();
             if (notifyListenerArray) {
-                Notify.addEventListeners(notifyListenerArray, this);
+                Twns.Notify.addEventListeners(notifyListenerArray, this);
             }
 
             const uiListenerArray = this._getUiListenerArray();
@@ -121,7 +121,7 @@ namespace TwnsUiComponent {
         protected _unregisterListeners(): void {
             const notifyListenerArray = this._getNotifyListenerArray();
             if (notifyListenerArray) {
-                Notify.removeEventListeners(notifyListenerArray, this);
+                Twns.Notify.removeEventListeners(notifyListenerArray, this);
             }
 
             const uiListenerArray = this._getUiListenerArray();

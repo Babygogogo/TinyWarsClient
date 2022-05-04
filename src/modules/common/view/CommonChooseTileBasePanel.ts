@@ -8,7 +8,7 @@
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -20,15 +20,15 @@
 // import TwnsMeTileSimpleView     from "./MeTileSimpleView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseTileBasePanel {
-    import DataForDrawTileBase  = TwnsMeDrawer.DataForDrawTileBase;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import DataForDrawTileBase  = Twns.MapEditor.DataForDrawTileBase;
+    import LangTextType         = Twns.Lang.LangTextType;
+    import NotifyType           = Twns.Notify.NotifyType;
 
-    export type OpenData = {
-        callback: (baseType: Types.TileBaseType, shapeId: number) => void;
+    export type OpenDataForCommonChooseTileBasePanel = {
+        callback: (baseType: Twns.Types.TileBaseType, shapeId: number) => void;
     };
-    export class CommonChooseTileBasePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChooseTileBasePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseTileBasePanel> {
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
@@ -74,9 +74,9 @@ namespace TwnsCommonChooseTileBasePanel {
                     typeMap.set(baseType, []);
                 }
 
-                const list = Helpers.getExisted(typeMap.get(baseType));
+                const list = Twns.Helpers.getExisted(typeMap.get(baseType));
                 for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
-                    if ((baseType === Types.TileBaseType.Sea) && (shapeId !== 0)) {
+                    if ((baseType === Twns.Types.TileBaseType.Sea) && (shapeId !== 0)) {
                         continue;
                     }
 
@@ -107,7 +107,7 @@ namespace TwnsCommonChooseTileBasePanel {
 
     type DataForCategoryRenderer = {
         dataListForDrawTileBase : DataForDrawTileBase[];
-        callback                : (baseType: Types.TileBaseType, shapeId: number) => void;
+        callback                : (baseType: Twns.Types.TileBaseType, shapeId: number) => void;
     };
     class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
         private readonly _labelCategory!    : TwnsUiLabel.UiLabel;
@@ -116,13 +116,13 @@ namespace TwnsCommonChooseTileBasePanel {
         protected _onOpened(): void {
             this._listTileBase.setItemRenderer(TileBaseRenderer);
             this._listTileBase.setScrollPolicyH(eui.ScrollPolicy.OFF);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
         }
 
         protected _onDataChanged(): void {
             const data                      = this._getData();
             const dataListForDrawTileBase   = data.dataListForDrawTileBase;
-            this._labelCategory.text        = Lang.getTileName(Twns.Config.ConfigManager.getTileType(dataListForDrawTileBase[0].baseType, Types.TileObjectType.Empty)) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelCategory.text        = Lang.getTileName(Twns.Config.ConfigManager.getTileType(dataListForDrawTileBase[0].baseType, Twns.Types.TileObjectType.Empty)) ?? CommonConstants.ErrorTextForUndefined;
 
             const dataListForTileBase   : DataForTileBaseRenderer[] = [];
             const callback              = data.callback;
@@ -138,13 +138,13 @@ namespace TwnsCommonChooseTileBasePanel {
 
     type DataForTileBaseRenderer = {
         dataForDrawTileBase : DataForDrawTileBase;
-        callback            : (baseType: Types.TileBaseType, shapeId: number) => void;
+        callback            : (baseType: Twns.Types.TileBaseType, shapeId: number) => void;
     };
     class TileBaseRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileBaseRenderer> {
         private readonly _group!        : eui.Group;
         private readonly _conTileView!  : eui.Group;
 
-        private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private _tileView   = new Twns.MapEditor.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -182,7 +182,7 @@ namespace TwnsCommonChooseTileBasePanel {
             const data                  = this._getData();
             const dataForDrawTileBase   = data.dataForDrawTileBase;
             data.callback(dataForDrawTileBase.baseType, dataForDrawTileBase.shapeId);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonChooseTileBasePanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonChooseTileBasePanel);
         }
     }
 }

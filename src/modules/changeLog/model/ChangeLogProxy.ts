@@ -1,19 +1,20 @@
 
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import NetManager           from "../../tools/network/NetManager";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import ChangeLogModel       from "./ChangeLogModel";
 
-namespace ChangeLogProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.ChangeLog.ChangeLogProxy {
+    import NotifyType       = Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
     import ILanguageText    = CommonProto.Structure.ILanguageText;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import NetMessageCodes  = Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgChangeLogAddMessage,         callback: _onMsgChangeLogAddMessage },
             { msgCode: NetMessageCodes.MsgChangeLogModifyMessage,      callback: _onMsgChangeLogModifyMessage },
             { msgCode: NetMessageCodes.MsgChangeLogGetMessageList,     callback: _onMsgChangeLogGetMessageList, },
@@ -21,7 +22,7 @@ namespace ChangeLogProxy {
     }
 
     export function reqChangeLogAddMessage(textList: ILanguageText[]): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgChangeLogAddMessage: { c: {
                 textList,
             } },
@@ -35,7 +36,7 @@ namespace ChangeLogProxy {
     }
 
     export function reqChangeLogModifyMessage(messageId: number, textList: ILanguageText[]): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgChangeLogModifyMessage: { c: {
                 messageId,
                 textList,
@@ -50,13 +51,13 @@ namespace ChangeLogProxy {
     }
 
     export function reqChangeLogGetMessageList(): void {
-        NetManager.send({ MsgChangeLogGetMessageList: { c: {
+        Net.NetManager.send({ MsgChangeLogGetMessageList: { c: {
         } }, });
     }
     function _onMsgChangeLogGetMessageList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChangeLogGetMessageList.IS;
         if (!data.errorCode) {
-            ChangeLogModel.setAllMessageList(data.messageList || []);
+            ChangeLog.ChangeLogModel.setAllMessageList(data.messageList || []);
             Notify.dispatch(NotifyType.MsgChangeLogGetMessageList, data);
         }
     }

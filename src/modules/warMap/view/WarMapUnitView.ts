@@ -22,10 +22,10 @@ namespace Twns.WarMap {
         private readonly _imgState                  = new TwnsUiImage.UiImage();
         private readonly _framesForStateAnimation   : string[] = [];
 
-        private _unitData                           : Types.WarMapUnitViewData | null = null;
+        private _unitData                           : Twns.Types.WarMapUnitViewData | null = null;
         private _isDark                             = false;
 
-        public constructor(data?: Types.WarMapUnitViewData, tickCount?: number) {
+        public constructor(data?: Twns.Types.WarMapUnitViewData, tickCount?: number) {
             super();
 
             const imgUnit       = this._imgUnit;
@@ -48,23 +48,23 @@ namespace Twns.WarMap {
             (data) && (this.update(data, tickCount));
         }
 
-        public update(data: Types.WarMapUnitViewData, tickCount?: number): void {
+        public update(data: Twns.Types.WarMapUnitViewData, tickCount?: number): void {
             this._setUnitData(data);
 
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex));
-            this._isDark    = data.actionState === Types.UnitActionState.Acted;
+            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex));
+            this._isDark    = data.actionState === Twns.Types.UnitActionState.Acted;
             this.x          = gridIndex.x * GRID_WIDTH - GRID_WIDTH / 4;
             this.y          = gridIndex.y * GRID_HEIGHT - GRID_HEIGHT / 2;
-            this.updateOnAnimationTick(tickCount || Timer.getUnitAnimationTickCount());
+            this.updateOnAnimationTick(tickCount || Twns.Timer.getUnitAnimationTickCount());
 
             this._updateImageHp();
             this._resetStateAnimationFrames();
         }
 
-        public getUnitData(): Types.WarMapUnitViewData | null {
+        public getUnitData(): Twns.Types.WarMapUnitViewData | null {
             return this._unitData;
         }
-        private _setUnitData(data: Types.WarMapUnitViewData): void {
+        private _setUnitData(data: Twns.Types.WarMapUnitViewData): void {
             this._unitData = data;
         }
 
@@ -74,10 +74,10 @@ namespace Twns.WarMap {
                 return;
             }
 
-            this._imgUnit.source = CommonModel.getCachedUnitImageSource({
-                version     : UserModel.getSelfSettingsTextureVersion(),
-                skinId      : data.skinId || Twns.Config.ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data.playerIndex)),
-                unitType    : Helpers.getExisted(data.unitType),
+            this._imgUnit.source = Twns.Common.CommonModel.getCachedUnitImageSource({
+                version     : Twns.User.UserModel.getSelfSettingsTextureVersion(),
+                skinId      : data.skinId || Twns.Config.ConfigManager.getUnitAndTileDefaultSkinId(Twns.Helpers.getExisted(data.playerIndex)),
+                unitType    : Twns.Helpers.getExisted(data.unitType),
                 isMoving    : false,
                 isDark      : this._isDark,
                 tickCount,
@@ -105,7 +105,7 @@ namespace Twns.WarMap {
                 imgHp.visible = false;
             } else {
                 imgHp.visible   = true;
-                imgHp.source    = `${getImageSourcePrefix(this._isDark)}_t99_s01_f${Helpers.getNumText(normalizedHp)}`;
+                imgHp.source    = `${getImageSourcePrefix(this._isDark)}_t99_s01_f${Twns.Helpers.getNumText(normalizedHp)}`;
             }
         }
         private _resetStateAnimationFrames(): void {
@@ -128,7 +128,7 @@ namespace Twns.WarMap {
             const framesCount       = frames.length;
             this._imgState.source   = framesCount <= 0
                 ? ``
-                : frames[Timer.getUnitAnimationTickCount() % framesCount];
+                : frames[Twns.Timer.getUnitAnimationTickCount() % framesCount];
         }
 
         private _addFrameForCoSkill(): void {
@@ -138,10 +138,10 @@ namespace Twns.WarMap {
             }
 
             const skillType     = unitData.coUsingSkillType;
-            const strForSkinId  = Helpers.getNumText(this._getSkinId());
-            if (skillType === Types.CoSkillType.Power) {
+            const strForSkinId  = Twns.Helpers.getNumText(this._getSkinId());
+            if (skillType === Twns.Types.CoSkillType.Power) {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s08_f${strForSkinId}`);
-            } else if (skillType === Types.CoSkillType.SuperPower) {
+            } else if (skillType === Twns.Types.CoSkillType.SuperPower) {
                 this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s07_f${strForSkinId}`);
             }
         }
@@ -156,7 +156,7 @@ namespace Twns.WarMap {
             } else {
                 const promotion = unitData.currentPromotion;
                 if ((promotion != null) && (promotion > 0)) {
-                    this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s05_f${Helpers.getNumText(promotion)}`);
+                    this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s05_f${Twns.Helpers.getNumText(promotion)}`);
                 }
             }
         }
@@ -191,25 +191,25 @@ namespace Twns.WarMap {
         private _addFrameForDive(): void {
             const unitData = this.getUnitData();
             if ((unitData) && (unitData.isDiving)) {
-                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s03_f${Helpers.getNumText(this._getSkinId())}`);
+                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s03_f${Twns.Helpers.getNumText(this._getSkinId())}`);
             }
         }
         private _addFrameForCapture(): void {
             const unitData = this.getUnitData();
             if ((unitData) && (unitData.isCapturingTile)) {
-                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s04_f${Helpers.getNumText(this._getSkinId())}`);
+                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s04_f${Twns.Helpers.getNumText(this._getSkinId())}`);
             }
         }
         private _addFrameForBuild(): void {
             const unitData = this.getUnitData();
             if ((unitData) && (unitData.isBuildingTile)) {
-                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s04_f${Helpers.getNumText(this._getSkinId())}`);
+                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s04_f${Twns.Helpers.getNumText(this._getSkinId())}`);
             }
         }
         private _addFrameForLoader(): void {
             const unitData = this.getUnitData();
             if ((unitData) && (unitData.hasLoadedUnit)) {
-                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s06_f${Helpers.getNumText(this._getSkinId())}`);
+                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s06_f${Twns.Helpers.getNumText(this._getSkinId())}`);
             }
         }
         private _addFrameForMaterial(): void {
@@ -230,18 +230,18 @@ namespace Twns.WarMap {
             }
         }
 
-        private _getUnitTemplateCfg(): Types.UnitTemplateCfg {
-            const data = Helpers.getExisted(this.getUnitData());
-            return Helpers.getExisted(data.gameConfig.getUnitTemplateCfg(Helpers.getExisted(data.unitType)));
+        private _getUnitTemplateCfg(): Twns.Types.UnitTemplateCfg {
+            const data = Twns.Helpers.getExisted(this.getUnitData());
+            return Twns.Helpers.getExisted(data.gameConfig.getUnitTemplateCfg(Twns.Helpers.getExisted(data.unitType)));
         }
         private _getSkinId(): number {
             const data = this.getUnitData();
-            return data?.skinId ?? Twns.Config.ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data?.playerIndex));
+            return data?.skinId ?? Twns.Config.ConfigManager.getUnitAndTileDefaultSkinId(Twns.Helpers.getExisted(data?.playerIndex));
         }
     }
 
     function getImageSourcePrefix(isDark: boolean): string {
-        return CommonModel.getUnitAndTileTexturePrefix() + (isDark ? `c07` : `c03`);
+        return Twns.Common.CommonModel.getUnitAndTileTexturePrefix() + (isDark ? `c07` : `c03`);
     }
 }
 

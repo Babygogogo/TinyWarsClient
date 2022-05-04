@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -18,14 +18,14 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import UnitActionType   = Types.UnitActionType;
+    import NotifyType       = Twns.Notify.NotifyType;
+    import LangTextType     = Twns.Lang.LangTextType;
+    import UnitActionType   = Twns.Types.UnitActionType;
     import BwWar            = BaseWar.BwWar;
 
     export type OpenDataForBwUnitActionsPanel = {
         war         : BwWar;
-        destination : Types.GridIndex;
+        destination : Twns.Types.GridIndex;
         actionList  : Twns.BaseWar.DataForUnitAction[];
     };
     export class BwUnitActionsPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitActionsPanel> {
@@ -64,7 +64,7 @@ namespace Twns.BaseWar {
         private _updateView(): void {
             const openData = this._getOpenData();
             if (openData == null) {
-                throw Helpers.newError(`BwUnitActionsPanel._updateView() empty openData.`);
+                throw Twns.Helpers.newError(`BwUnitActionsPanel._updateView() empty openData.`);
             }
 
             const war       = openData.war;
@@ -107,7 +107,7 @@ namespace Twns.BaseWar {
         private _updatePosition(): void {
             const openData = this._getOpenData();
             if (openData == null) {
-                throw Helpers.newError(`BwUnitActionsPanel._updatePosition() empty openData.`);
+                throw Twns.Helpers.newError(`BwUnitActionsPanel._updatePosition() empty openData.`);
             }
 
             const container = openData.war.getView().getFieldContainer();
@@ -126,24 +126,24 @@ namespace Twns.BaseWar {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { scaleX: 0, scaleY: 0 },
                 endProps    : { scaleX: 1, scaleY: 1 },
                 tweenTime   : 100,
             });
 
-            await Helpers.wait(100);
+            await Twns.Helpers.wait(100);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { scaleX: 1, scaleY: 1 },
                 endProps    : { scaleX: 0, scaleY: 0 },
                 tweenTime   : 100,
             });
 
-            await Helpers.wait(100);
+            await Twns.Helpers.wait(100);
         }
     }
 
@@ -168,7 +168,7 @@ namespace Twns.BaseWar {
                 { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
                 { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
-            this._setShortSfxCode(Types.ShortSfxCode.CursorConfirm01);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.CursorConfirm01);
 
             this._conUnitView.addChild(this._unitView);
         }
@@ -185,7 +185,7 @@ namespace Twns.BaseWar {
                 labelCost.text      = "";
                 unitView.visible    = false;
             } else {
-                if (data.actionType !== Types.UnitActionType.ProduceUnit) {
+                if (data.actionType !== Twns.Types.UnitActionType.ProduceUnit) {
                     labelCost.text = ``;
                 } else {
                     const cost      = data.costForProduceUnit;

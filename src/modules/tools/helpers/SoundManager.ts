@@ -9,14 +9,14 @@
 // import Types                from "./Types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace SoundManager {
+namespace Twns.SoundManager {
     import SoundType            = Types.SoundType;
     import BgmCode              = Types.BgmCode;
     import ShortSfxCode         = Types.ShortSfxCode;
     import LongSfxCode          = Types.LongSfxCode;
     import UnitType             = Types.UnitType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import LangTextType         = Twns.Lang.LangTextType;
+    import ClientErrorCode      = Twns.ClientErrorCode;
 
     export const DEFAULT_MUTE   = false;
     export const DEFAULT_VOLUME = 1;
@@ -215,7 +215,7 @@ namespace SoundManager {
         // playRandomCoBgm();
         playBgm(BgmCode.Co0000);
     }
-    export function playCoBgmWithWar(war: Twns.BaseWar.BwWar, force: boolean): void {
+    export function playCoBgmWithWar(war: BaseWar.BwWar, force: boolean): void {
         const player = war.getPlayerInTurn();
         if ((player.checkIsNeutral()) && (!force)) {
             return;

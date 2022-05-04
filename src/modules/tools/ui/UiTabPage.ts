@@ -5,7 +5,7 @@
 // import TwnsUiComponent      from "./UiComponent";
 
 namespace TwnsUiTabPage {
-    import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode = Twns.ClientErrorCode;
 
     export abstract class UiTabPage<OpenData> extends TwnsUiComponent.UiComponent {
         private _openData?  : OpenData;
@@ -31,7 +31,7 @@ namespace TwnsUiTabPage {
             this._openData = data;
         }
         protected _getOpenData(): OpenData {
-            return Helpers.getDefined(this._openData, ClientErrorCode.UiTabPage_GetOpenData_00);
+            return Twns.Helpers.getDefined(this._openData, ClientErrorCode.UiTabPage_GetOpenData_00);
         }
         private _clearOpenData(): void {
             delete this._openData;

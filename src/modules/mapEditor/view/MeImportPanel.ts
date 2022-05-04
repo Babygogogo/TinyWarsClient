@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -15,12 +15,12 @@
 // import MeModel                  from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeImportPanel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
+namespace Twns.MapEditor {
+    import NotifyType           = Twns.Notify.NotifyType;
+    import LangTextType         = Twns.Lang.LangTextType;
 
-    export type OpenData = void;
-    export class MeImportPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeImportPanel = void;
+    export class MeImportPanel extends TwnsUiPanel.UiPanel<OpenDataForMeImportPanel> {
         private readonly _group!        : eui.Group;
         private readonly _listMap!      : TwnsUiScrollList.UiScrollList<DataForMapRenderer>;
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
@@ -64,9 +64,9 @@ namespace TwnsMeImportPanel {
         private async _createDataForListMap(): Promise<DataForMapRenderer[]> {
             const dataArray     : DataForMapRenderer[] = [];
             const promiseArray  : Promise<void>[] = [];
-            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+            for (const mapId of Twns.WarMap.WarMapModel.getEnabledMapIdArray()) {
                 promiseArray.push((async () => {
-                    const mapBriefData = await WarMapModel.getBriefData(mapId);
+                    const mapBriefData = await Twns.WarMap.WarMapModel.getBriefData(mapId);
                     if (mapBriefData == null) {
                         return;
                     }
@@ -74,7 +74,7 @@ namespace TwnsMeImportPanel {
                     if (mapBriefData.mapExtraData?.isEnabled) {
                         dataArray.push({
                             mapId,
-                            mapName     : await WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined,
+                            mapName     : await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined,
                             panel       : this,
                         });
                     }
@@ -108,14 +108,14 @@ namespace TwnsMeImportPanel {
         public onItemTapEvent(): void {
             const data  = this._getData();
             const mapId = data.mapId;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0095) + `\n#${mapId} ${data.mapName}`,
                 callback: async () => {
-                    const war = Helpers.getExisted(MeModel.getWar());
+                    const war = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
                     war.stopRunning();
                     await war.initWithMapEditorData(
                         {
-                            mapRawData  : await WarMapModel.getRawData(mapId),
+                            mapRawData  : await Twns.WarMap.WarMapModel.getRawData(mapId),
                             slotIndex   : war.getMapSlotIndex(),
                         },
                         await Twns.Config.ConfigManager.getLatestGameConfig()

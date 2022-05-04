@@ -5,7 +5,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -15,19 +15,19 @@
 // import WarEventHelper           from "../model/WarEventHelper";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionTypeListPanel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.WarEvent {
+    import NotifyType           = Twns.Notify.NotifyType;
     import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
     import IWarEventAction      = CommonProto.WarEvent.IWarEventAction;
-    import ActionType           = Types.WarEventActionType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
+    import ActionType           = Twns.Types.WarEventActionType;
+    import LangTextType         = Twns.Lang.LangTextType;
 
-    export type OpenData = {
+    export type OpenDataForWeActionTypeListPanel = {
         war         : Twns.BaseWar.BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionTypeListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionTypeListPanel extends TwnsUiPanel.UiPanel<OpenDataForWeActionTypeListPanel> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
         private readonly _listType!     : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;
@@ -123,9 +123,9 @@ namespace TwnsWeActionTypeListPanel {
             if (actionType !== Twns.WarHelpers.WarEventHelpers.getActionType(action)) {
                 Twns.WarHelpers.WarEventHelpers.resetAction(action, actionType);
                 Twns.WarHelpers.WarEventHelpers.openActionModifyPanel(data.war, data.fullData, action);
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionTypeListPanel);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel);
 
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onNotifyLanguageChanged(): void {        // DONE

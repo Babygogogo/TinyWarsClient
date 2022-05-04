@@ -5,7 +5,7 @@
 // import TwnsMeMapListPanel           from "../../mapEditor/view/MeMapListPanel";
 // import Helpers                      from "../../tools/helpers/Helpers";
 // import Types                        from "../../tools/helpers/Types";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiPanel                  from "../../tools/ui/UiPanel";
 // import UserModel                    from "../../user/model/UserModel";
@@ -14,11 +14,11 @@
 // import TwnsLobbyTopPanel            from "./LobbyTopPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsLobbyBottomPanel {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.Lobby {
+    import NotifyType               = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class LobbyBottomPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForLobbyBottomPanel = void;
+    export class LobbyBottomPanel extends TwnsUiPanel.UiPanel<OpenDataForLobbyBottomPanel> {
         private readonly _groupBottom!  : eui.Group;
         private readonly _btnMyInfo!    : TwnsUiButton.UiButton;
         private readonly _btnChat!      : TwnsUiButton.UiButton;
@@ -51,31 +51,31 @@ namespace TwnsLobbyBottomPanel {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnMyInfo(): void {
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.UserOnlineUsersPanel);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.ChatPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, {
-                userId: Helpers.getExisted(UserModel.getSelfUserId()),
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.UserOnlineUsersPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.ChatPanel);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, {
+                userId: Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId()),
             });
         }
 
         private _onTouchedBtnChat(): void {
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.UserOnlineUsersPanel);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.UserPanel);
-            if (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.ChatPanel)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: null });
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.UserOnlineUsersPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.UserPanel);
+            if (!Twns.PanelHelpers.getRunningPanel(Twns.PanelHelpers.PanelDict.ChatPanel)) {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChatPanel, { toUserId: null });
             } else {
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.ChatPanel);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.ChatPanel);
             }
         }
 
         private _onTouchedBtnMapEditor(): void {
             this.close();
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeMapListPanel, void 0);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyTopPanel);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeMapListPanel, void 0);
         }
 
         private async _onTouchedBtnGameData(): Promise<void> {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageChartPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonDamageChartPanel, {
                 gameConfig: await Twns.Config.ConfigManager.getLatestGameConfig(),
             });
         }
@@ -100,49 +100,49 @@ namespace TwnsLobbyBottomPanel {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateImgChatRed(): void {
-            this._btnChat.setRedVisible(ChatModel.checkHasUnreadMessage());
+            this._btnChat.setRedVisible(Twns.Chat.ChatModel.checkHasUnreadMessage());
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupBottom,
                 beginProps  : { alpha: 0, bottom: -40 },
                 endProps    : { alpha: 1, bottom: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnMyInfo,
                 beginProps  : { alpha: 0, top: 40 },
                 endProps    : { alpha: 1, top: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnChat,
                 beginProps  : { alpha: 0, top: 40 },
                 waitTime    : 66,
                 endProps    : { alpha: 1, top: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnMapEditor,
                 beginProps  : { alpha: 0, top: 40 },
                 waitTime    : 132,
                 endProps    : { alpha: 1, top: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnGameData,
                 beginProps  : { alpha: 0, top: 40 },
                 waitTime    : 200,
                 endProps    : { alpha: 1, top: 0 },
             });
 
-            await Helpers.wait(200 + CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(200 + CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupBottom,
                 beginProps  : { alpha: 1, bottom: 0 },
                 endProps    : { alpha: 0, bottom: -40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

@@ -10,15 +10,15 @@
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsHrwActionPlanner {
-    import LangTextType         = TwnsLangTextType.LangTextType;
+namespace Twns.HalfwayReplayWar {
+    import LangTextType         = Lang.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import UnitState            = Types.UnitActionState;
     import GridIndex            = Types.GridIndex;
     import State                = Types.ActionPlannerState;
     import UnitActionType       = Types.UnitActionType;
 
-    export class HrwActionPlanner extends Twns.BaseWar.BwActionPlanner {
+    export class HrwActionPlanner extends BaseWar.BwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,14 +27,14 @@ namespace TwnsHrwActionPlanner {
 
             const currState = this.getState();
             if (currState === State.ChoosingAction) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitActionsPanel, this._getDataForUnitActionsPanel());
+                PanelHelpers.open(PanelHelpers.PanelDict.BwUnitActionsPanel, this._getDataForUnitActionsPanel());
             } else {
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwUnitActionsPanel);
+                PanelHelpers.close(PanelHelpers.PanelDict.BwUnitActionsPanel);
             }
             if ((currState === State.MakingMovePath) || (currState === State.ChoosingAttackTarget)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDamagePreviewPanel, { war: this._getWar() });
+                PanelHelpers.open(PanelHelpers.PanelDict.BwDamagePreviewPanel, { war: this._getWar() });
             } else {
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwDamagePreviewPanel);
+                PanelHelpers.close(PanelHelpers.PanelDict.BwDamagePreviewPanel);
             }
         }
 
@@ -315,7 +315,7 @@ namespace TwnsHrwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getActionUnitBeLoaded(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = Helpers.getExisted(this.getFocusUnit());
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -329,7 +329,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitJoin(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitJoin(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = Helpers.getExisted(this.getFocusUnit());
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -343,7 +343,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitUseCoSuperPower(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -354,7 +354,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitUseCoPower(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -365,7 +365,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitLoadCo(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitLoadCo(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -376,7 +376,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitCapture(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitCapture(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -387,7 +387,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitDive(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitDive(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -398,7 +398,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitSurface(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitSurface(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -409,7 +409,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitBuildTile(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitBuildTile(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -420,7 +420,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitSupply(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitSupply(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -440,13 +440,17 @@ namespace TwnsHrwActionPlanner {
                 return [];
             }
         }
-        protected _getActionUnitProduceUnit(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
                 const focusUnit         = Helpers.getExisted(this.getFocusUnit());
                 const produceUnitType   = focusUnit.getProduceUnitType();
-                if ((this.getFocusUnitLoaded()) || (this.getMovePath().length !== 1) || (produceUnitType == null)) {
+                if ((this.getFocusUnitLoaded())                                                                                                                     ||
+                    (this.getMovePath().length !== 1)                                                                                                               ||
+                    (produceUnitType == null)                                                                                                                       ||
+                    ((focusUnit.getWar().getCommonSettingManager().getSettingsBannedUnitTypeArray(focusUnit.getPlayerIndex()) ?? []).indexOf(produceUnitType) >= 0)
+                ) {
                     return [];
                 } else {
                     const costForProduceUnit = focusUnit.getProduceUnitCost();
@@ -484,7 +488,7 @@ namespace TwnsHrwActionPlanner {
                 }
             }
         }
-        protected _getActionUnitWait(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitWait(): BaseWar.DataForUnitAction[] {
             const existingUnit = this._getUnitMap().getUnitOnMap(this.getMovePathDestination());
             if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
                 return [];

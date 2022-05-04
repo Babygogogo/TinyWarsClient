@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -18,12 +18,12 @@
 // import TwnsUserRegisterPanel    from "./UserRegisterPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserLoginPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+namespace Twns.User {
+    import NotifyType       = Twns.Notify.NotifyType;
+    import LangTextType     = Twns.Lang.LangTextType;
 
-    export type OpenData = void;
-    export class UserLoginPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserLoginPanel = void;
+    export class UserLoginPanel extends TwnsUiPanel.UiPanel<OpenDataForUserLoginPanel> {
         private readonly _imgTitle!                 : TwnsUiImage.UiImage;
 
         private readonly _groupAccount!             : eui.Group;
@@ -62,7 +62,7 @@ namespace TwnsUserLoginPanel {
             this._inputPassword.text                = isRememberPassword ? LocalStorage.getPassword() : ``;
             this._btnLogin.enabled                  = true;
             this._imgRememberPasswordCheck.visible  = isRememberPassword;
-            this._btnLogin.setShortSfxCode(Types.ShortSfxCode.ButtonConfirm01);
+            this._btnLogin.setShortSfxCode(Twns.Types.ShortSfxCode.ButtonConfirm01);
             this._updateComponentsForLanguage();
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
@@ -81,7 +81,7 @@ namespace TwnsUserLoginPanel {
         }
 
         private _onTouchedSelf(): void {
-            SoundManager.init();
+            Twns.SoundManager.init();
         }
 
         private _onTouchedBtnLogin(): void {
@@ -89,17 +89,17 @@ namespace TwnsUserLoginPanel {
 
             const account  = this._inputAccount.text;
             const password = this._inputPassword.text;
-            if (!Helpers.checkIsAccountValid(account)) {
+            if (!Twns.Helpers.checkIsAccountValid(account)) {
                 FloatText.show(Lang.getText(LangTextType.A0001));
             } else {
-                if (!Helpers.checkIsPasswordValid(password)) {
+                if (!Twns.Helpers.checkIsPasswordValid(password)) {
                     FloatText.show(Lang.getText(LangTextType.A0003));
                 } else {
                     LocalStorage.setAccount(account);
                     LocalStorage.setPassword(password);
-                    UserModel.setSelfAccount(account);
-                    UserModel.setSelfPassword(password);
-                    UserProxy.reqLogin(account, password, false);
+                    Twns.User.UserModel.setSelfAccount(account);
+                    Twns.User.UserModel.setSelfPassword(password);
+                    Twns.User.UserProxy.reqLogin(account, password, false);
                 }
             }
         }
@@ -107,7 +107,7 @@ namespace TwnsUserLoginPanel {
         private _onTouchedBtnRegister(): void {
             NoSleepManager.enable();
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserRegisterPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserRegisterPanel, void 0);
         }
 
         private _onTouchedBtnForgetPassword(): void {
@@ -117,7 +117,7 @@ namespace TwnsUserLoginPanel {
         private _onTouchedGroupRememberPassword(): void {
             const isRemember = LocalStorage.getIsRememberPassword();
             LocalStorage.setIsRememberPassword(!isRemember);
-            SoundManager.playShortSfx(isRemember ? Types.ShortSfxCode.ButtonCancel01 : Types.ShortSfxCode.ButtonConfirm01);
+            Twns.SoundManager.playShortSfx(isRemember ? Twns.Types.ShortSfxCode.ButtonCancel01 : Twns.Types.ShortSfxCode.ButtonConfirm01);
             this._imgRememberPasswordCheck.visible = !isRemember;
         }
 
@@ -131,67 +131,67 @@ namespace TwnsUserLoginPanel {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgTitle,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
                 tweenTime   : 1000,
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupAccount,
                 beginProps  : { alpha: 0, y: 40 },
                 endProps    : { alpha: 1, y: 0 },
                 waitTime    : 800,
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupPassword,
                 beginProps  : { alpha: 0, y: 40 },
                 endProps    : { alpha: 1, y: 0 },
                 waitTime    : 900,
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupPasswordCommand,
                 beginProps  : { alpha: 0, y: 40 },
                 endProps    : { alpha: 1, y: 0 },
                 waitTime    : 1000,
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupButton,
                 beginProps  : { alpha: 0, y: 40 },
                 endProps    : { alpha: 1, y: 0 },
                 waitTime    : 1100,
             });
 
-            await Helpers.wait(1100 + CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(1100 + CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgTitle,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupAccount,
                 beginProps  : { alpha: 1, y: 0 },
                 endProps    : { alpha: 0, y: 40 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupPassword,
                 beginProps  : { alpha: 1, y: 0 },
                 endProps    : { alpha: 0, y: 40 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupPasswordCommand,
                 beginProps  : { alpha: 1, y: 0 },
                 endProps    : { alpha: 0, y: 40 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupButton,
                 beginProps  : { alpha: 1, y: 0 },
                 endProps    : { alpha: 0, y: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

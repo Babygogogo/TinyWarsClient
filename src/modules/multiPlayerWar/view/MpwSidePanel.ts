@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 // import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
@@ -16,8 +16,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiPlayerWar {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
 
     export type OpenDataForMpwSidePanel = {
         war : MultiPlayerWar.MpwWar;
@@ -99,7 +99,7 @@ namespace Twns.MultiPlayerWar {
             if (!war.getPlayerInTurn().checkCanUseCoSkill(skillType)) {
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0142),
                     content : Lang.getText(LangTextType.A0054),
                     callback: () => war.getActionPlanner().setStateRequestingPlayerUseCoSkill(skillType),
@@ -113,7 +113,7 @@ namespace Twns.MultiPlayerWar {
             if (!war.getPlayerInTurn().checkCanUseCoSkill(skillType)) {
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0144),
                     content : Lang.getText(LangTextType.A0058),
                     callback: () => war.getActionPlanner().setStateRequestingPlayerUseCoSkill(skillType),
@@ -166,7 +166,7 @@ namespace Twns.MultiPlayerWar {
             if ((war.getDrawVoteManager().getRemainingVotes()) && (!war.getPlayerInTurn().getHasVotedForDraw())) {
                 FloatText.show(Lang.getText(LangTextType.A0034));
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0036),
                     content : WarHelpers.WarCommonHelpers.getHintForEndTurn(war),
                     callback: () => this._getOpenData().war.getActionPlanner().setStateRequestingPlayerEndTurn(),
@@ -182,14 +182,14 @@ namespace Twns.MultiPlayerWar {
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarInfoPanel, { war });
+            PanelHelpers.open(PanelHelpers.PanelDict.BwWarInfoPanel, { war });
         }
         private _onTouchedBtnMenu(): void {
             const actionPlanner = this._getOpenData().war.getActionPlanner();
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MpwWarMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MpwWarMenuPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

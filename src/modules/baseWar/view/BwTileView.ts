@@ -9,10 +9,10 @@
 // import UserModel        from "../../user/model/UserModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwTileView {
-    import TileObjectType       = Types.TileObjectType;
-    import TileBaseType         = Types.TileBaseType;
-    import TileDecoratorType    = Types.TileDecoratorType;
+namespace Twns.BaseWar {
+    import TileObjectType       = Twns.Types.TileObjectType;
+    import TileBaseType         = Twns.Types.TileBaseType;
+    import TileDecoratorType    = Twns.Types.TileDecoratorType;
     import ISerialTile          = CommonProto.WarSerialization.ISerialTile;
 
     const {
@@ -22,7 +22,7 @@ namespace TwnsBwTileView {
 
     export type DataForTileView = {
         tileData    : ISerialTile;
-        themeType   : Types.TileThemeType;
+        themeType   : Twns.Types.TileThemeType;
         hasFog      : boolean;
         skinId      : number;
     };
@@ -63,19 +63,19 @@ namespace TwnsBwTileView {
         }
 
         public updateView(): void {
-            const data      = Helpers.getExisted(this.getData());
+            const data      = Twns.Helpers.getExisted(this.getData());
             const skinId    = data.skinId;
             const hasFog    = data.hasFog;
             const tileData  = data.tileData;
             const themeType = data.themeType;
-            const version   = UserModel.getSelfSettingsTextureVersion();
-            const tickCount = Timer.getTileAnimationTickCount();
+            const version   = Twns.User.UserModel.getSelfSettingsTextureVersion();
+            const tickCount = Twns.Timer.getTileAnimationTickCount();
 
             {
-                const objectType    = Helpers.getExisted(tileData.objectType);
+                const objectType    = Twns.Helpers.getExisted(tileData.objectType);
                 const imgObject     = this.getImgObject();
                 imgObject.visible   = true;
-                imgObject.source    = CommonModel.getCachedTileObjectImageSource({
+                imgObject.source    = Twns.Common.CommonModel.getCachedTileObjectImageSource({
                     version,
                     themeType,
                     skinId      : ((hasFog) && (objectType !== TileObjectType.Headquarters)) ? CommonConstants.UnitAndTileNeutralSkinId : skinId,
@@ -90,12 +90,12 @@ namespace TwnsBwTileView {
                 const baseType  = tileData.baseType;
                 const imgBase   = this.getImgBase();
                 if (baseType == null) {
-                    throw Helpers.newError(`BwTileView.updateView() empty baseType.`);
+                    throw Twns.Helpers.newError(`BwTileView.updateView() empty baseType.`);
                 } else if (baseType === TileBaseType.Empty) {
                     imgBase.visible = false;
                 } else {
                     imgBase.visible = true;
-                    imgBase.source  = CommonModel.getCachedTileBaseImageSource({
+                    imgBase.source  = Twns.Common.CommonModel.getCachedTileBaseImageSource({
                         version,
                         themeType,
                         skinId      : CommonConstants.UnitAndTileNeutralSkinId,
@@ -114,7 +114,7 @@ namespace TwnsBwTileView {
                     imgDecorator.visible = false;
                 } else {
                     imgDecorator.visible    = true;
-                    imgDecorator.source     = CommonModel.getCachedTileDecoratorImageSource({
+                    imgDecorator.source     = Twns.Common.CommonModel.getCachedTileDecoratorImageSource({
                         version,
                         themeType,
                         skinId          : CommonConstants.UnitAndTileNeutralSkinId,

@@ -3,7 +3,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -12,13 +12,13 @@
 // import TwnsMeWar            from "../model/MeWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeMapTagPanel {
+namespace Twns.MapEditor {
     import MeWar        = Twns.MapEditor.MeWar;
-    import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+    import LangTextType = Twns.Lang.LangTextType;
+    import NotifyType   = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class MeMapTagPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeMapTagPanel = void;
+    export class MeMapTagPanel extends TwnsUiPanel.UiPanel<OpenDataForMeMapTagPanel> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
         private readonly _btnConfirm!   : TwnsUiButton.UiButton;
@@ -49,7 +49,7 @@ namespace TwnsMeMapTagPanel {
         }
 
         private _getWar(): MeWar {
-            return Helpers.getExisted(MeModel.getWar());
+            return Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
         }
 
         private _onNotifyLanguageChanged(): void {

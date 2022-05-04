@@ -6,7 +6,7 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Types                from "../../tools/helpers/Types";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 // import UserModel            from "../../user/model/UserModel";
@@ -14,14 +14,13 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Notify.NotifyType;
     import GridIndex        = Types.GridIndex;
     import PlayerAliveState = Types.PlayerAliveState;
     import CoSkillType      = Types.CoSkillType;
     import CoType           = Types.CoType;
     import GameConfig       = Config.GameConfig;
     import ISerialPlayer    = CommonProto.WarSerialization.ISerialPlayer;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwPlayer {
         private _playerIndex?               : number;
@@ -72,7 +71,6 @@ namespace Twns.BaseWar {
             }
 
             const coId              = Helpers.getExisted(data.coId, ClientErrorCode.BwPlayer_Init_07);
-            const coConfig          = gameConfig.getCoBasicCfg(coId);
             const coUsingSkillType  = data.coUsingSkillType as CoSkillType;
             if ((coUsingSkillType !== CoSkillType.Passive)  &&
                 (coUsingSkillType !== CoSkillType.Power)    &&
@@ -151,7 +149,7 @@ namespace Twns.BaseWar {
                 coUsingSkillType            : this.getCoUsingSkillType(),
                 coIsDestroyedInTurn         : this.getCoIsDestroyedInTurn(),
                 unitAndTileSkinId           : this.getUnitAndTileSkinId(),
-                userId                      : playerIndex > 0 ? UserModel.getSelfUserId() : null,
+                userId                      : playerIndex > 0 ? User.UserModel.getSelfUserId() : null,
                 coId                        : this.getCoId(),
                 coCurrentEnergy             : this.getCoCurrentEnergy(),
                 coPowerActivatedCount       : this.getCoPowerActivatedCount(),
@@ -260,7 +258,7 @@ namespace Twns.BaseWar {
             const userId = this.getUserId();
             return (userId == null)
                 ?  `A.I.`
-                : await UserModel.getUserNickname(userId) || `??`;
+                : await User.UserModel.getUserNickname(userId) || `??`;
         }
 
         public setCoId(coId: number): void {
@@ -404,6 +402,10 @@ namespace Twns.BaseWar {
             if ((this.checkCoIsUsingActiveSkill())  ||
                 (!this.getCoSkills(skillType))
             ) {
+                return false;
+            }
+
+            if (!this._getWar().getCommonSettingManager().getSettingsCanActivateCoSkill(this.getPlayerIndex())) {
                 return false;
             }
 

@@ -6,7 +6,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -14,19 +14,19 @@
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel10 {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.WarEvent {
+    import NotifyType               = Twns.Notify.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
     import BwWar                    = Twns.BaseWar.BwWar;
 
-    export type OpenData = {
+    export type OpenDataForWeActionModifyPanel10 = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel10 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel10 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel10> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnType!          : TwnsUiButton.UiButton;
         private readonly _btnBack!          : TwnsUiButton.UiButton;
@@ -72,19 +72,19 @@ namespace TwnsWeActionModifyPanel10 {
         private _onTouchedBtnHasFog(): void {
             const action        = this.getAction();
             const forceFogCode  = action.forceFogCode;
-            if (forceFogCode === Types.ForceFogCode.Fog) {
-                action.forceFogCode = Types.ForceFogCode.Clear;
-            } else if (forceFogCode === Types.ForceFogCode.Clear) {
-                action.forceFogCode = Types.ForceFogCode.None;
+            if (forceFogCode === Twns.Types.ForceFogCode.Fog) {
+                action.forceFogCode = Twns.Types.ForceFogCode.Clear;
+            } else if (forceFogCode === Twns.Types.ForceFogCode.Clear) {
+                action.forceFogCode = Twns.Types.ForceFogCode.None;
             } else {
-                action.forceFogCode = Types.ForceFogCode.Fog;
+                action.forceFogCode = Twns.Types.ForceFogCode.Fog;
             }
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -96,7 +96,7 @@ namespace TwnsWeActionModifyPanel10 {
             const newTurns  = Math.min(parseInt(this._inputTurns.text)) || 0;
             if (newTurns !== action.turnsCount) {
                 action.turnsCount = newTurns;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
@@ -122,7 +122,7 @@ namespace TwnsWeActionModifyPanel10 {
         }
 
         private _updateLabelHasFog(): void {
-            this._labelHasFog.text = Lang.getForceFogCodeName(Helpers.getExisted(this.getAction().forceFogCode)) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelHasFog.text = Lang.getForceFogCodeName(Twns.Helpers.getExisted(this.getAction().forceFogCode)) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateInputTurns(): void {
@@ -130,7 +130,7 @@ namespace TwnsWeActionModifyPanel10 {
         }
 
         private getAction(): CommonProto.WarEvent.IWeaSetForceFogCode {
-            return Helpers.getExisted(this._getOpenData().action.WeaSetForceFogCode);
+            return Twns.Helpers.getExisted(this._getOpenData().action.WeaSetForceFogCode);
         }
     }
 }

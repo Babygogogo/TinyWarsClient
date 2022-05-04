@@ -19,18 +19,17 @@
 // import TwnsSpwWar           from "./SpwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace SpwModel {
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import SpwWar                   = TwnsSpwWar.SpwWar;
-    import ScwWar                   = Twns.SingleCustomWar.ScwWar;
-    import SfwWar                   = Twns.SingleFreeWar.SfwWar;
-    import SrwWar                   = Twns.SingleRankWar.SrwWar;
-    import SpwPlayerManager         = TwnsSpwPlayerManager.SpwPlayerManager;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+namespace Twns.SinglePlayerWar.SpwModel {
+    import SpwWar                   = SinglePlayerWar.SpwWar;
+    import ScwWar                   = SingleCustomWar.ScwWar;
+    import SfwWar                   = SingleFreeWar.SfwWar;
+    import SrwWar                   = SingleRankWar.SrwWar;
+    import SpwPlayerManager         = SinglePlayerWar.SpwPlayerManager;
+    import LangTextType             = Lang.LangTextType;
     import WarSerialization         = CommonProto.WarSerialization;
     import IWarActionContainer      = CommonProto.WarAction.IWarActionContainer;
     import ISpmWarSaveSlotExtraData = CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
-    import BwWar                    = Twns.BaseWar.BwWar;
+    import BwWar                    = BaseWar.BwWar;
 
     let _war: SpwWar | null = null;
 
@@ -53,7 +52,7 @@ namespace SpwModel {
 
         const data  = Helpers.deepClone(warData);
         const war   = createWarByWarData(data);
-        war.init(data, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(data.settingsForCommon?.configVersion)));
+        war.init(data, await Config.ConfigManager.getGameConfig(Helpers.getExisted(data.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         war.setSaveSlotIndex(slotIndex);
         war.setSaveSlotExtraData(slotExtraData);
@@ -111,7 +110,7 @@ namespace SpwModel {
             return;
         }
 
-        const robotAction = await WarRobot.getNextAction(war);
+        const robotAction = await WarHelpers.WarRobot.getNextAction(war);
         if (!war.getIsRunning()) {
             _warsWithRobotRunning.delete(war);
             return;
@@ -145,7 +144,7 @@ namespace SpwModel {
 
         const callback = () => FlowManager.gotoLobby();
         if (war.getDrawVoteManager().checkIsDraw()) {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                 title   : Lang.getText(LangTextType.B0088),
                 content : Lang.getText(LangTextType.A0030),
                 callback,
@@ -153,36 +152,36 @@ namespace SpwModel {
         } else {
             const humanPlayerArray = (war.getPlayerManager() as SpwPlayerManager).getHumanPlayers();
             if (humanPlayerArray.length <= 0) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0035),
                     callback,
                 });
             } else {
                 if (humanPlayerArray.every(v => v.getAliveState() === Types.PlayerAliveState.Dead)) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0023),
                         callback,
                     });
                 } else {
                     if (war instanceof SrwWar) {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                             title   : Lang.getText(LangTextType.B0088),
                             content : Lang.getFormattedText(LangTextType.F0127, war.calculateTotalScore()),
                             callback: () => {
                                 callback();
 
-                                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                                     content : Lang.getText(LangTextType.A0277),
                                     callback: () => {
-                                        SpmProxy.reqSpmValidateSrw(war);
+                                        SinglePlayerMode.SpmProxy.reqSpmValidateSrw(war);
                                     },
                                 });
                             },
                         });
                     } else {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                             title   : Lang.getText(LangTextType.B0088),
                             content : Lang.getText(LangTextType.A0022),
                             callback,
@@ -354,8 +353,8 @@ namespace SpwModel {
     }
 
     async function reviseAndExecute(war: BwWar, action: IWarActionContainer): Promise<void> {
-        const revisedAction = WarActionReviser.revise(war, action);
-        await WarActionExecutor.checkAndExecute(war, revisedAction, false);
+        const revisedAction = WarHelpers.WarActionReviser.revise(war, action);
+        await WarHelpers.WarActionExecutor.checkAndExecute(war, revisedAction, false);
 
         war.getExecutedActionManager().addExecutedAction(revisedAction);
     }

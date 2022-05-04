@@ -16,7 +16,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -33,15 +33,15 @@
 // import TwnsUserSetStageScalePanel   from "./UserSetStageScalePanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsChatCommandPanel {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.Chat {
+    import LangTextType             = Twns.Lang.LangTextType;
+    import NotifyType               = Twns.Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForChatCommandPanel = {
         userId      : number | null;
         messageId   : number;
     };
-    export class ChatCommandPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class ChatCommandPanel extends TwnsUiPanel.UiPanel<OpenDataForChatCommandPanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
@@ -80,54 +80,54 @@ namespace TwnsChatCommandPanel {
             this._updateComponentsForLanguage();
         }
         private _onTouchedBtnUserInfo(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, {
                 userId  : this._getOpenData().userId,
             });
             this.close();
         }
         private _onTouchedBtnPrivateChat(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChatPanel, {
                 toUserId    : this._getOpenData().userId,
             });
             this.close();
         }
         private _onTouchedBtnDeleteMessage(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0286),
                 callback: () => {
-                    ChatProxy.reqChatDeleteMessage(this._getOpenData().messageId);
+                    Twns.Chat.ChatProxy.reqChatDeleteMessage(this._getOpenData().messageId);
                     this.close();
                 },
             });
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {
@@ -143,11 +143,11 @@ namespace TwnsChatCommandPanel {
             if ((userId != null) && (userId > 1000000)) {
                 group.addChild(this._btnUserInfo);
 
-                if (userId !== UserModel.getSelfUserId()) {
+                if (userId !== Twns.User.UserModel.getSelfUserId()) {
                     group.addChild(this._btnPrivateChat);
                 }
             }
-            if ((UserModel.getIsSelfAdmin()) || (UserModel.getIsSelfChatManager())) {
+            if ((Twns.User.UserModel.getIsSelfAdmin()) || (Twns.User.UserModel.getIsSelfChatManager())) {
                 group.addChild(this._btnDeleteMessage);
             }
         }

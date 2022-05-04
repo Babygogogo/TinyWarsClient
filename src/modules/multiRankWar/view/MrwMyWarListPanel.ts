@@ -14,7 +14,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
@@ -26,12 +26,12 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiRankWar {
-    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import LangTextType                             = Twns.Lang.LangTextType;
+    import NotifyType                               = Twns.Notify.NotifyType;
     import MpwModel                                 = MultiPlayerWar.MpwModel;
 
     export type OpenDataForMrwMyWarListPanel = void;
@@ -77,7 +77,7 @@ namespace Twns.MultiRankWar {
 
         public setAndReviseSelectedWarId(newWarId: number, needScroll: boolean): void {
             const listWar   = this._listWar;
-            const index     = Helpers.getExisted(listWar.getRandomIndex(v => v.warId === newWarId));
+            const index     = Twns.Helpers.getExisted(listWar.getRandomIndex(v => v.warId === newWarId));
             listWar.setSelectedIndex(index);
             this._updateComponentsForPreviewingWarInfo();
 
@@ -95,15 +95,15 @@ namespace Twns.MultiRankWar {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMainMenuPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MrrMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
         }
 
         private _onTouchedBtnNextStep(): void {
             const warId = this._listWar.getSelectedData()?.warId;
             if (warId != null) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonBlockPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0040),
                 });
@@ -118,12 +118,12 @@ namespace Twns.MultiRankWar {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Twns.Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageClass   : Twns.Common.CommonWarPlayerInfoPage,
                     pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
@@ -133,7 +133,7 @@ namespace Twns.MultiRankWar {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageClass   : Twns.Common.CommonWarAdvancedSettingsPage,
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
@@ -224,7 +224,7 @@ namespace Twns.MultiRankWar {
             return mapId == null
                 ? null
                 : {
-                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(warSettings?.settingsForCommon?.configVersion)),
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(warSettings?.settingsForCommon?.configVersion)),
                     mapInfo     : { mapId },
                 };
         }
@@ -242,62 +242,62 @@ namespace Twns.MultiRankWar {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupWarList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupWarList,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -340,7 +340,7 @@ namespace Twns.MultiRankWar {
             if (warSettings == null) {
                 labelName.text  = ``;
             } else {
-                labelName.text  = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(warSettings.settingsForMrw?.mapId)) || CommonConstants.ErrorTextForUndefined;
+                labelName.text  = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(warSettings.settingsForMrw?.mapId)) || CommonConstants.ErrorTextForUndefined;
             }
         }
 
@@ -361,7 +361,7 @@ namespace Twns.MultiRankWar {
             const warId             = this._getData().warId;
             const warSettings       = await MpwModel.getWarSettings(warId);
             const warProgressInfo   = await MpwModel.getWarProgressInfo(warId);
-            const userId            = UserModel.getSelfUserId();
+            const userId            = Twns.User.UserModel.getSelfUserId();
             const label             = this._labelRestTimeToBoot;
             if ((warSettings == null)       ||
                 (warProgressInfo == null)   ||
@@ -372,7 +372,7 @@ namespace Twns.MultiRankWar {
                 return;
             }
 
-            const playerIndexInTurn = Helpers.getExisted(warProgressInfo.playerIndexInTurn);
+            const playerIndexInTurn = Twns.Helpers.getExisted(warProgressInfo.playerIndexInTurn);
             const playerInfo        = warProgressInfo.playerInfoList?.find(v => v.playerIndex === playerIndexInTurn);
             if (playerInfo?.userId !== userId) {
                 label.text = ``;
@@ -383,11 +383,11 @@ namespace Twns.MultiRankWar {
             const restTimeToBoot    = playerInfo.restTimeToBoot;
             const restTime          = (restTimeToBoot == null) || (enterTurnTime == null)
                 ? null
-                : Math.max(0, restTimeToBoot + enterTurnTime - Timer.getServerTimestamp());
+                : Math.max(0, restTimeToBoot + enterTurnTime - Twns.Timer.getServerTimestamp());
             if (restTime == null) {
                 label.text      = ``;
             } else {
-                label.text      = Helpers.getTimeDurationText2(restTime);
+                label.text      = Twns.Helpers.getTimeDurationText2(restTime);
                 label.textColor = restTime >= 30 * 60
                     ? 0xFFFFFF
                     : (restTime >= 5 * 60 ? 0xFFFF00 : 0xFF4400);

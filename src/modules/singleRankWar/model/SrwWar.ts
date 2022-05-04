@@ -9,18 +9,18 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SingleRankWar {
-    import SpwWar           = TwnsSpwWar.SpwWar;
+    import SpwWar           = Twns.SinglePlayerWar.SpwWar;
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForSrw  = CommonProto.WarSettings.ISettingsForSrw;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
     export class SrwWar extends SpwWar {
         private _settingsForSrw?    : ISettingsForSrw;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(data, gameConfig);
-            this._setSettingsForSrw(Helpers.getExisted(data.settingsForSrw, ClientErrorCode.SrwWar_Init_00));
+            this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
+            this._setSettingsForSrw(Twns.Helpers.getExisted(data.settingsForSrw, ClientErrorCode.SrwWar_Init_00));
 
             this._initView();
         }
@@ -33,7 +33,7 @@ namespace Twns.SingleRankWar {
 
                 warId                       : this.getWarId(),
                 isEnded                     : this.getIsEnded(),
-                seedRandomInitialState      : Helpers.getExisted(randomNumberManager.getSeedRandomInitialState()),
+                seedRandomInitialState      : Twns.Helpers.getExisted(randomNumberManager.getSeedRandomInitialState()),
                 seedRandomCurrentState      : randomNumberManager.getSeedRandomCurrentState(),
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                 weatherManager              : this.getWeatherManager().serialize(),
@@ -45,7 +45,7 @@ namespace Twns.SingleRankWar {
             };
         }
         public serializeForValidation(): ISerialWar {
-            const settingsForSrw        = Helpers.deepClone(this._getSettingsForSrw());
+            const settingsForSrw        = Twns.Helpers.deepClone(this._getSettingsForSrw());
             settingsForSrw.totalScore   = this.calculateTotalScore();
             return {
                 settingsForCommon           : this.getCommonSettingManager().getSettingsForCommon(),
@@ -53,7 +53,7 @@ namespace Twns.SingleRankWar {
 
                 warId                       : null,
                 isEnded                     : null,
-                seedRandomInitialState      : Helpers.getExisted(this.getRandomNumberManager().getSeedRandomInitialState()),
+                seedRandomInitialState      : Twns.Helpers.getExisted(this.getRandomNumberManager().getSeedRandomInitialState()),
                 seedRandomCurrentState      : null,
                 remainingVotesForDraw       : null,
                 weatherManager              : null,
@@ -75,14 +75,8 @@ namespace Twns.SingleRankWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getWarType(): Types.WarType {
-            return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.SrwFog
-                : Types.WarType.SrwStd;
-        }
-
         public getMapId(): number {
-            return Helpers.getExisted(this._getSettingsForSrw().mapId);
+            return Twns.Helpers.getExisted(this._getSettingsForSrw().mapId);
         }
 
         public getCanCheat(): boolean {
@@ -90,14 +84,14 @@ namespace Twns.SingleRankWar {
         }
 
         public getSettingsBootTimerParams(): number[] {
-            return [Types.BootTimerType.NoBoot];
+            return [Twns.Types.BootTimerType.NoBoot];
         }
 
         private _setSettingsForSrw(settings: ISettingsForSrw): void {
             this._settingsForSrw = settings;
         }
         private _getSettingsForSrw(): ISettingsForSrw {
-            return Helpers.getExisted(this._settingsForSrw);
+            return Twns.Helpers.getExisted(this._settingsForSrw);
         }
 
         public calculateTotalScore(): number {

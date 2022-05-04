@@ -7,7 +7,7 @@
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -15,15 +15,15 @@
 // import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmMapRenamePanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.MapManagement {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import ILanguageText    = CommonProto.Structure.ILanguageText;
 
-    export type OpenData = {
+    export type OpenDataForMmMapRenamePanel = {
         mapId   : number;
     };
-    export class MmMapRenamePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MmMapRenamePanel extends TwnsUiPanel.UiPanel<OpenDataForMmMapRenamePanel> {
         private readonly _inputChinese!     : TwnsUiTextInput.UiTextInput;
         private readonly _inputEnglish!     : TwnsUiTextInput.UiTextInput;
         private readonly _labelTip!         : TwnsUiLabel.UiLabel;
@@ -60,15 +60,15 @@ namespace TwnsMmMapRenamePanel {
 
         private _onTouchedBtnModify(): void {
             const nameArray: ILanguageText[] = [
-                { languageType: Types.LanguageType.Chinese, text: (this._inputChinese.text || ``).trim() },
-                { languageType: Types.LanguageType.English, text: (this._inputEnglish.text || ``).trim() },
+                { languageType: Twns.Types.LanguageType.Chinese, text: (this._inputChinese.text || ``).trim() },
+                { languageType: Twns.Types.LanguageType.English, text: (this._inputEnglish.text || ``).trim() },
             ];
-            if (nameArray.some(v => Helpers.getExisted(v.text).length <= 0)) {
+            if (nameArray.some(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
                 FloatText.show(Lang.getText(LangTextType.A0155));
-            } else if (nameArray.some(v => Helpers.getExisted(v.text).length > CommonConstants.MapMaxNameLength)) {
+            } else if (nameArray.some(v => Twns.Helpers.getExisted(v.text).length > CommonConstants.MapMaxNameLength)) {
                 FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.MapMaxNameLength));
             } else {
-                WarMapProxy.reqMmSetMapName(this._getOpenData().mapId, nameArray);
+                Twns.WarMap.WarMapProxy.reqMmSetMapName(this._getOpenData().mapId, nameArray);
                 this.close();
             }
         }
@@ -77,9 +77,9 @@ namespace TwnsMmMapRenamePanel {
             this._updateComponentsForLanguage();
 
             const openData          = this._getOpenData();
-            const nameArray         = (await WarMapModel.getRawData(openData.mapId))?.mapNameArray;
-            this._inputChinese.text = Lang.getLanguageText({ textArray: nameArray, languageType: Types.LanguageType.Chinese, useAlternate: false }) ?? ``;
-            this._inputEnglish.text = Lang.getLanguageText({ textArray: nameArray, languageType: Types.LanguageType.English, useAlternate: false }) ?? ``;
+            const nameArray         = (await Twns.WarMap.WarMapModel.getRawData(openData.mapId))?.mapNameArray;
+            this._inputChinese.text = Lang.getLanguageText({ textArray: nameArray, languageType: Twns.Types.LanguageType.Chinese, useAlternate: false }) ?? ``;
+            this._inputEnglish.text = Lang.getLanguageText({ textArray: nameArray, languageType: Twns.Types.LanguageType.English, useAlternate: false }) ?? ``;
         }
 
         private _updateComponentsForLanguage(): void {

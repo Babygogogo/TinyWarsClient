@@ -5,7 +5,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -16,8 +16,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import LangTextType         = Twns.Lang.LangTextType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
 
     export type OpenDataForWeActionReplacePanel = {
@@ -80,7 +80,7 @@ namespace Twns.WarEvent {
                     war,
                     eventId,
                     srcActionId,
-                    candidateActionId: Helpers.getExisted(action.WeaCommonData?.actionId),
+                    candidateActionId: Twns.Helpers.getExisted(action.WeaCommonData?.actionId),
                     fullData,
                 });
             }
@@ -130,8 +130,8 @@ namespace Twns.WarEvent {
                 actionIdForDelete   : data.srcActionId,
                 actionIdForClone    : data.candidateActionId,
             }) != null) {
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionReplacePanel);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionReplacePanel);
             }
         }
         private _onTouchedBtnSelect(): void {        // DONE
@@ -142,8 +142,8 @@ namespace Twns.WarEvent {
                 oldActionId : data.srcActionId,
                 newActionId : data.candidateActionId,
             })) {
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionReplacePanel);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionReplacePanel);
             }
         }
         private _onNotifyLanguageChanged(): void {        // DONE

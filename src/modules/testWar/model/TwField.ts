@@ -5,10 +5,10 @@
 // import TwnsTwActionPlanner  from "./TwActionPlanner";
 // import TwnsTwFogMap         from "./TwFogMap";
 
-namespace TwnsTwField {
+namespace Twns.TestWar {
     import BwField          = Twns.BaseWar.BwField;
-    import TwFogMap         = TwnsTwFogMap.TwFogMap;
-    import TwActionPlanner  = TwnsTwActionPlanner.TwActionPlanner;
+    import TwFogMap         = Twns.TestWar.TwFogMap;
+    import TwActionPlanner  = Twns.TestWar.TwActionPlanner;
     import BwUnitMap        = Twns.BaseWar.BwUnitMap;
 
     export class TwField extends BwField {

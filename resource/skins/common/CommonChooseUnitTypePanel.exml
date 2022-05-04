@@ -2,6 +2,8 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
     <e:Group width="640" height="380" horizontalCenter="0" verticalCenter="0">
         <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" right="0" top="0" bottom="0" left="0" />
@@ -9,11 +11,11 @@
             <TwnsUiLabel:UiLabel id="_labelTitle" text="Add Tiles To Locations" horizontalCenter="0" size="20"
                                  bold="true" top="0" />
             <e:Group y="28" horizontalCenter="0">
-                <TwnsUiButton:UiButton id="_btnSelectAllUnitTypes" label="ShowAllLocations" x="0" y="0"
+                <TwnsUiButton:UiButton id="_btnSelectAll" label="ShowAllLocations" x="0" y="0"
                                        skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
                 <TwnsUiButton:UiButton label="ShowAllLocations" x="10" y="10"
-                                       skinName="Skins.Component.Button.ButtonSelfAdaption001"
-                                       id="_btnUnselectAllUnitTypes" width="140" />
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" id="_btnUnselectAll"
+                                       width="140" />
                 <e:layout>
                     <e:HorizontalLayout gap="20" />
                 </e:layout>
@@ -49,6 +51,8 @@
                     <e:HorizontalLayout gap="20" />
                 </e:layout>
             </e:Group>
+            <TwnsUiButton:UiButton label="ShowAllLocations" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                   id="_btnClose" width="140" horizontalCenter="0" bottom="0" />
         </e:Group>
     </e:Group>
 </e:Skin>

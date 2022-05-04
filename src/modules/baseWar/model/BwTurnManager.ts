@@ -7,7 +7,7 @@
 // import Timer                    from "../../tools/helpers/Timer";
 // import Types                    from "../../tools/helpers/Types";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
 // import WarDestructionHelpers    from "../../tools/warHelpers/WarDestructionHelpers";
@@ -17,14 +17,14 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType                   = TwnsNotifyType.NotifyType;
-    import TurnPhaseCode                = Types.TurnPhaseCode;
-    import TurnAndPlayerIndex           = Types.TurnAndPlayerIndex;
+    import NotifyType                   = Twns.Notify.NotifyType;
+    import TurnPhaseCode                = Twns.Types.TurnPhaseCode;
+    import TurnAndPlayerIndex           = Twns.Types.TurnAndPlayerIndex;
     import ISerialTurnManager           = CommonProto.WarSerialization.ISerialTurnManager;
     import WarAction                    = CommonProto.WarAction;
     import IWarActionSystemBeginTurn    = WarAction.IWarActionSystemBeginTurn;
     import IWarActionPlayerEndTurn      = WarAction.IWarActionPlayerEndTurn;
-    import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode              = Twns.ClientErrorCode;
 
     export class BwTurnManager {
         private _turnIndex?          : number;
@@ -35,9 +35,9 @@ namespace Twns.BaseWar {
         private _war?                   : BwWar;
         private _hasUnitOnBeginningTurn = false;
 
-        public init(data: Types.Undefinable<ISerialTurnManager>, playersCountUnneutral: number): void {
+        public init(data: Twns.Types.Undefinable<ISerialTurnManager>, playersCountUnneutral: number): void {
             if (data == null) {
-                throw Helpers.newError(`Empty data.`, ClientErrorCode.BwTurnManager_Init_00);
+                throw Twns.Helpers.newError(`Empty data.`, ClientErrorCode.BwTurnManager_Init_00);
             }
 
             const playerIndex = data.playerIndex;
@@ -45,20 +45,20 @@ namespace Twns.BaseWar {
                 (playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
                 (playerIndex > playersCountUnneutral)
             ) {
-                throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTurnManager_Init_01);
+                throw Twns.Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTurnManager_Init_01);
             }
 
             const turnPhaseCode = data.turnPhaseCode as TurnPhaseCode;
             if ((turnPhaseCode !== TurnPhaseCode.Main)          &&
                 (turnPhaseCode !== TurnPhaseCode.WaitBeginTurn)
             ) {
-                throw Helpers.newError(`Invalid turnPhaseCode: ${turnPhaseCode}`, ClientErrorCode.BwTurnManager_Init_02);
+                throw Twns.Helpers.newError(`Invalid turnPhaseCode: ${turnPhaseCode}`, ClientErrorCode.BwTurnManager_Init_02);
             }
 
-            this._setTurnIndex(Helpers.getExisted(data.turnIndex, ClientErrorCode.BwTurnManager_Init_03));
+            this._setTurnIndex(Twns.Helpers.getExisted(data.turnIndex, ClientErrorCode.BwTurnManager_Init_03));
             this._setPlayerIndexInTurn(playerIndex);
             this._setPhaseCode(turnPhaseCode);
-            this._setEnterTurnTime(Helpers.getExisted(data.enterTurnTime, ClientErrorCode.BwTurnManager_Init_04));
+            this._setEnterTurnTime(Twns.Helpers.getExisted(data.enterTurnTime, ClientErrorCode.BwTurnManager_Init_04));
         }
         public fastInit(data: ISerialTurnManager, playersCountUnneutral: number): void {
             this.init(data, playersCountUnneutral);
@@ -87,7 +87,7 @@ namespace Twns.BaseWar {
             this._war = war;
         }
         public getWar(): BwWar {
-            return Helpers.getExisted(this._war);
+            return Twns.Helpers.getExisted(this._war);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,7 +107,7 @@ namespace Twns.BaseWar {
         private async _endPhaseWaitBeginTurnWithExtraData(action: IWarActionSystemBeginTurn, isFastExecute: boolean): Promise<void> {
             const phaseCode = this.getPhaseCode();
             if (phaseCode !== TurnPhaseCode.WaitBeginTurn) {
-                throw Helpers.newError(`Invalid phaseCode: ${phaseCode}`, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_00);
+                throw Twns.Helpers.newError(`Invalid phaseCode: ${phaseCode}`, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_00);
             }
 
             this._runPhaseGetFundWithExtraData(action, isFastExecute);
@@ -122,17 +122,17 @@ namespace Twns.BaseWar {
 
             this._setPhaseCode(TurnPhaseCode.Main);
 
-            const extraData = Helpers.getExisted(action.extraData, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_01);
+            const extraData = Twns.Helpers.getExisted(action.extraData, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_01);
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war             : this.getWar(),
-                commonExtraData : Helpers.getExisted(extraData.commonExtraData, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_02),
+                commonExtraData : Twns.Helpers.getExisted(extraData.commonExtraData, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_02),
                 isFastExecute,
             });
         }
         private async _endPhaseWaitBeginTurnWithoutExtraData(isFastExecute: boolean): Promise<void> {
             const phaseCode = this.getPhaseCode();
             if (phaseCode !== TurnPhaseCode.WaitBeginTurn) {
-                throw Helpers.newError(`Invalid phaseCode: ${phaseCode}`, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithoutExtraData_00);
+                throw Twns.Helpers.newError(`Invalid phaseCode: ${phaseCode}`, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithoutExtraData_00);
             }
 
             this._runPhaseGetFundWithoutExtraData(isFastExecute);
@@ -151,7 +151,7 @@ namespace Twns.BaseWar {
         private _endPhaseMainWithExtraData(action: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
             const phaseCode = this.getPhaseCode();
             if (phaseCode !== TurnPhaseCode.Main) {
-                throw Helpers.newError(`Invalid phaseCode: ${phaseCode}`, ClientErrorCode.BwTurnManager_EndPhaseMainWithExtraData_00);
+                throw Twns.Helpers.newError(`Invalid phaseCode: ${phaseCode}`, ClientErrorCode.BwTurnManager_EndPhaseMainWithExtraData_00);
             }
 
             this._runPhaseResetUnitStateWithExtraData(action, isFastExecute);
@@ -165,17 +165,17 @@ namespace Twns.BaseWar {
 
             this._setPhaseCode(TurnPhaseCode.WaitBeginTurn);
 
-            const extraData = Helpers.getExisted(action.extraData, ClientErrorCode.BwTurnManager_EndPhaseMainWithExtraData_01);
+            const extraData = Twns.Helpers.getExisted(action.extraData, ClientErrorCode.BwTurnManager_EndPhaseMainWithExtraData_01);
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war             : this.getWar(),
-                commonExtraData : Helpers.getExisted(extraData.commonExtraData, ClientErrorCode.BwTurnManager_EndPhaseMainWithExtraData_02),
+                commonExtraData : Twns.Helpers.getExisted(extraData.commonExtraData, ClientErrorCode.BwTurnManager_EndPhaseMainWithExtraData_02),
                 isFastExecute,
             });
         }
         private _endPhaseMainWithoutExtraData(isFastExecute: boolean): void {
             const phaseCode = this.getPhaseCode();
             if (phaseCode !== TurnPhaseCode.Main) {
-                throw Helpers.newError(`Invalid phaseCode: ${phaseCode}`, ClientErrorCode.BwTurnManager_EndPhaseMainWithoutExtraData_00);
+                throw Twns.Helpers.newError(`Invalid phaseCode: ${phaseCode}`, ClientErrorCode.BwTurnManager_EndPhaseMainWithoutExtraData_00);
             }
 
             this._runPhaseResetUnitStateWithoutExtraData(isFastExecute);
@@ -318,7 +318,7 @@ namespace Twns.BaseWar {
             }
 
             for (const unit of allUnitsLoaded.sort(sorterForRepairUnits)) {
-                const loader        = Helpers.getExisted(unit.getLoaderUnit(), ClientErrorCode.BwTurnManager_RunPhaseRepairUnitByUnitWithoutExtraData_00);
+                const loader        = Twns.Helpers.getExisted(unit.getLoaderUnit(), ClientErrorCode.BwTurnManager_RunPhaseRepairUnitByUnitWithoutExtraData_00);
                 const gridIndex     = loader.getGridIndex();
                 const repairData    = loader.getRepairHpAndCostForLoadedUnit(unit);
                 if (repairData) {
@@ -412,7 +412,7 @@ namespace Twns.BaseWar {
                 const visibleUnits              = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
                 const unitMap                   = war.getUnitMap();
                 const gridVisionEffect          = war.getGridVisualEffect();
-                const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+                const getCoGridIndexArrayOnMap  = Twns.Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
                 for (const skillId of player.getCoCurrentSkills() || []) {
                     const skillCfg = gameConfig.getCoSkillCfg(skillId);
                     if (skillCfg?.selfHpRecovery) {
@@ -518,7 +518,7 @@ namespace Twns.BaseWar {
                             ) {
                                 const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
                                 if (maxAmmo) {
-                                    const currentAmmo               = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwTurnManager_RunPhaseRecoverUnitByCoWithoutExtraData_00);
+                                    const currentAmmo               = Twns.Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwTurnManager_RunPhaseRecoverUnitByCoWithoutExtraData_00);
                                     const deltaPrimaryWeaponAmmo    = Math.min(Math.floor(maxAmmo * recoverCfg[2] / 100), maxAmmo - currentAmmo);
                                     unit.updateByRepairData({
                                         gridIndex               : unitGridIndex,
@@ -550,14 +550,14 @@ namespace Twns.BaseWar {
             const mapSize           = tileMap.getMapSize();
             const allTileArray      = tileMap.getAllTiles().filter(v => v.getPlayerIndex() === playerIndex);
             {
-                const crystalArray = allTileArray.filter(v => (v.getType() === Types.TileType.Crystal))
+                const crystalArray = allTileArray.filter(v => (v.getType() === Twns.Types.TileType.Crystal))
                     .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
                 for (const tile of crystalArray) {
                     await handleMapWeaponTileCrystalWithExtraData(data, war, tile, isFastExecute);
                 }
             }
             {
-                const customCrystalArray = allTileArray.filter(v => v.getType() === Types.TileType.CustomCrystal)
+                const customCrystalArray = allTileArray.filter(v => v.getType() === Twns.Types.TileType.CustomCrystal)
                     .sort((v1, v2) => {
                         const priority1 = v1.getCustomCrystalData()?.priority ?? 0;
                         const priority2 = v2.getCustomCrystalData()?.priority ?? 0;
@@ -579,7 +579,7 @@ namespace Twns.BaseWar {
                 }
             }
             {
-                const customCannonArray = allTileArray.filter(v => v.getType() === Types.TileType.CustomCannon)
+                const customCannonArray = allTileArray.filter(v => v.getType() === Twns.Types.TileType.CustomCannon)
                     .sort((v1, v2) => {
                         const priority1 = v1.getCustomCannonData()?.priority ?? 0;
                         const priority2 = v2.getCustomCannonData()?.priority ?? 0;
@@ -594,14 +594,14 @@ namespace Twns.BaseWar {
                 }
             }
             {
-                const laserTurretArray = allTileArray.filter(v => v.getType() === Types.TileType.LaserTurret)
+                const laserTurretArray = allTileArray.filter(v => v.getType() === Twns.Types.TileType.LaserTurret)
                     .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
                 for (const tile of laserTurretArray) {
                     await handleMapWeaponTileLaserTurretWithExtraData(data, war, tile, isFastExecute);
                 }
             }
             {
-                const customLaserTurretArray = allTileArray.filter(v => v.getType() === Types.TileType.CustomLaserTurret)
+                const customLaserTurretArray = allTileArray.filter(v => v.getType() === Twns.Types.TileType.CustomLaserTurret)
                     .sort((v1, v2) => {
                         const priority1 = v1.getCustomLaserTurretData()?.priority ?? 0;
                         const priority2 = v2.getCustomLaserTurretData()?.priority ?? 0;
@@ -625,14 +625,14 @@ namespace Twns.BaseWar {
             const allTileArray      = tileMap.getAllTiles().filter(v => v.getPlayerIndex() === playerIndex);
 
             {
-                const crystalArray = allTileArray.filter(v => v.getType() === Types.TileType.Crystal)
+                const crystalArray = allTileArray.filter(v => v.getType() === Twns.Types.TileType.Crystal)
                     .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
                 for (const tile of crystalArray) {
                     await handleMapWeaponTileCrystalWithoutExtraData(war, tile, isFastExecute);
                 }
             }
             {
-                const customCrystalArray = allTileArray.filter(v => v.getType() === Types.TileType.CustomCrystal)
+                const customCrystalArray = allTileArray.filter(v => v.getType() === Twns.Types.TileType.CustomCrystal)
                     .sort((v1, v2) => {
                         const priority1 = v1.getCustomCrystalData()?.priority ?? 0;
                         const priority2 = v2.getCustomCrystalData()?.priority ?? 0;
@@ -654,7 +654,7 @@ namespace Twns.BaseWar {
                 }
             }
             {
-                const customCannonArray = allTileArray.filter(v => v.getType() === Types.TileType.CustomCannon)
+                const customCannonArray = allTileArray.filter(v => v.getType() === Twns.Types.TileType.CustomCannon)
                     .sort((v1, v2) => {
                         const priority1 = v1.getCustomCannonData()?.priority ?? 0;
                         const priority2 = v2.getCustomCannonData()?.priority ?? 0;
@@ -669,14 +669,14 @@ namespace Twns.BaseWar {
                 }
             }
             {
-                const laserTurretArray = allTileArray.filter(v => v.getType() === Types.TileType.LaserTurret)
+                const laserTurretArray = allTileArray.filter(v => v.getType() === Twns.Types.TileType.LaserTurret)
                     .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
                 for (const tile of laserTurretArray) {
                     await handleMapWeaponTileLaserTurretWithoutExtraData(war, tile, isFastExecute);
                 }
             }
             {
-                const customLaserTurretArray = allTileArray.filter(v => v.getType() === Types.TileType.CustomLaserTurret)
+                const customLaserTurretArray = allTileArray.filter(v => v.getType() === Twns.Types.TileType.CustomLaserTurret)
                     .sort((v1, v2) => {
                         const priority1 = v1.getCustomLaserTurretData()?.priority ?? 0;
                         const priority2 = v2.getCustomLaserTurretData()?.priority ?? 0;
@@ -724,7 +724,7 @@ namespace Twns.BaseWar {
             if ((this._getHasUnitOnBeginningTurn())                     &&
                 (!hasUnit)
             ) {
-                player.setAliveState(Types.PlayerAliveState.Dying);
+                player.setAliveState(Twns.Types.PlayerAliveState.Dying);
             }
 
             if (hasUnit) {
@@ -744,7 +744,7 @@ namespace Twns.BaseWar {
             const war           = this.getWar();
             for (const unit of war.getUnitMap().getAllUnits()) {
                 if (unit.getPlayerIndex() === playerIndex) {
-                    unit.setActionState(Types.UnitActionState.Idle);
+                    unit.setActionState(Twns.Types.UnitActionState.Idle);
                     unit.updateView();
                 }
             }
@@ -766,27 +766,27 @@ namespace Twns.BaseWar {
             const info = this._getNextTurnAndPlayerIndex();
             this._setTurnIndex(info.turnIndex);
             this._setPlayerIndexInTurn(info.playerIndex);
-            this._setEnterTurnTime(Timer.getServerTimestamp());
+            this._setEnterTurnTime(Twns.Timer.getServerTimestamp());
             this.getWar().getWarEventManager().updateWarEventCalledCountOnPlayerTurnSwitched();
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private _runPhaseTickTurnAndPlayerIndexWithoutExtraData(isFastExecute: boolean): void {
             const playerIndex       = this.getPlayerIndexInTurn();
             const war               = this.getWar();
-            const currTime          = Timer.getServerTimestamp();
+            const currTime          = Twns.Timer.getServerTimestamp();
             const player            = war.getPlayer(playerIndex);
             const bootTimerParams   = war.getSettingsBootTimerParams();
-            const timerType         : Types.BootTimerType = bootTimerParams[0];
-            if (timerType === Types.BootTimerType.NoBoot) {
+            const timerType         : Twns.Types.BootTimerType = bootTimerParams[0];
+            if (timerType === Twns.Types.BootTimerType.NoBoot) {
                 player.setRestTimeToBoot(0);
 
-            } else if (timerType === Types.BootTimerType.Regular) {
-                player.setRestTimeToBoot(Helpers.getExisted(bootTimerParams[1], ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_00));
+            } else if (timerType === Twns.Types.BootTimerType.Regular) {
+                player.setRestTimeToBoot(Twns.Helpers.getExisted(bootTimerParams[1], ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_00));
 
-            } else if (timerType === Types.BootTimerType.Incremental) {
+            } else if (timerType === Twns.Types.BootTimerType.Incremental) {
                 const oldRestTimeToBoot = player.getRestTimeToBoot();
                 const enterTurnTime     = this.getEnterTurnTime();
-                const incrementalTime   = Helpers.getExisted(bootTimerParams[2], ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_01);
+                const incrementalTime   = Twns.Helpers.getExisted(bootTimerParams[2], ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_01);
                 const restTimeToBoot    = Math.max(
                     0,
                     Math.min(
@@ -797,13 +797,13 @@ namespace Twns.BaseWar {
                 player.setRestTimeToBoot(restTimeToBoot);
 
             } else {
-                throw Helpers.newError(`Invalid timerType: ${timerType}`, ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_02);
+                throw Twns.Helpers.newError(`Invalid timerType: ${timerType}`, ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_02);
             }
 
             const info = this._getNextTurnAndPlayerIndex();
             this._setTurnIndex(info.turnIndex);
             this._setPlayerIndexInTurn(info.playerIndex);
-            this._setEnterTurnTime(Timer.getServerTimestamp());
+            this._setEnterTurnTime(Twns.Timer.getServerTimestamp());
             war.getWarEventManager().updateWarEventCalledCountOnPlayerTurnSwitched();
         }
 
@@ -818,7 +818,7 @@ namespace Twns.BaseWar {
             player.setCoIsDestroyedInTurn(false);
 
             if (player.checkCoIsUsingActiveSkill()) {
-                player.setCoUsingSkillType(Types.CoSkillType.Passive);
+                player.setCoUsingSkillType(Twns.Types.CoSkillType.Passive);
                 war.getTileMap().getView().updateCoZone();
             }
         }
@@ -884,22 +884,22 @@ namespace Twns.BaseWar {
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getTurnIndex(): number {
-            return Helpers.getExisted(this._turnIndex);
+            return Twns.Helpers.getExisted(this._turnIndex);
         }
         private _setTurnIndex(index: number): void {
             if (this._turnIndex !== index){
                 this._turnIndex = index;
-                Notify.dispatch(NotifyType.BwTurnIndexChanged);
+                Twns.Notify.dispatch(NotifyType.BwTurnIndexChanged);
             }
         }
 
         public getPlayerIndexInTurn(): number {
-            return Helpers.getExisted(this._playerIndexInTurn);
+            return Twns.Helpers.getExisted(this._playerIndexInTurn);
         }
         private _setPlayerIndexInTurn(index: number): void {
             if (this._playerIndexInTurn !== index) {
                 this._playerIndexInTurn = index;
-                Notify.dispatch(NotifyType.BwPlayerIndexInTurnChanged);
+                Twns.Notify.dispatch(NotifyType.BwPlayerIndexInTurnChanged);
             }
         }
         public getNextAlivePlayerIndex(playerIndex: number, includeNeutral = false): number {
@@ -914,17 +914,17 @@ namespace Twns.BaseWar {
         }
 
         public getPhaseCode(): TurnPhaseCode {
-            return Helpers.getExisted(this._phaseCode);
+            return Twns.Helpers.getExisted(this._phaseCode);
         }
         private _setPhaseCode(code: TurnPhaseCode): void {
             if (this._phaseCode !== code) {
                 this._phaseCode = code;
-                Notify.dispatch(NotifyType.BwTurnPhaseCodeChanged);
+                Twns.Notify.dispatch(NotifyType.BwTurnPhaseCodeChanged);
             }
         }
 
         public getEnterTurnTime(): number {
-            return Helpers.getExisted(this._enterTurnTime);
+            return Twns.Helpers.getExisted(this._enterTurnTime);
         }
         private _setEnterTurnTime(time: number): void {
             this._enterTurnTime = time;
@@ -933,7 +933,7 @@ namespace Twns.BaseWar {
         private _getNextTurnAndPlayerIndex(
             currTurnIndex   = this.getTurnIndex(),
             currPlayerIndex = this.getPlayerIndexInTurn(),
-        ): Types.TurnAndPlayerIndex {
+        ): Twns.Types.TurnAndPlayerIndex {
             if (currPlayerIndex < this.getWar().getPlayerManager().getTotalPlayersCount(false)) {
                 return {
                     turnIndex   : currTurnIndex,
@@ -963,7 +963,7 @@ namespace Twns.BaseWar {
                 }
 
                 const player = playerManager.getPlayer(nextPlayerIndex);
-                if (player.getAliveState() !== Types.PlayerAliveState.Dead) {
+                if (player.getAliveState() !== Twns.Types.PlayerAliveState.Dead) {
                     return {
                         turnIndex   : nextTurnIndex,
                         playerIndex : nextPlayerIndex
@@ -985,12 +985,12 @@ namespace Twns.BaseWar {
     function sorterForRepairUnits(unit1: BwUnit, unit2: BwUnit): number {
         const cost1 = unit1.getProductionFinalCost();
         if (cost1 == null) {
-            throw Helpers.newError(`Empty cost1.`, ClientErrorCode.BwTurnManager_SorterForRepairUnits_00);
+            throw Twns.Helpers.newError(`Empty cost1.`, ClientErrorCode.BwTurnManager_SorterForRepairUnits_00);
         }
 
         const cost2 = unit2.getProductionFinalCost();
         if (cost2 == null) {
-            throw Helpers.newError(`Empty cost2.`, ClientErrorCode.BwTurnManager_SorterForRepairUnits_01);
+            throw Twns.Helpers.newError(`Empty cost2.`, ClientErrorCode.BwTurnManager_SorterForRepairUnits_01);
         }
 
         if (cost1 !== cost2) {
@@ -998,12 +998,12 @@ namespace Twns.BaseWar {
         } else {
             const unitId1 = unit1.getUnitId();
             if (unitId1 == null) {
-                throw Helpers.newError(`Empty unitId1.`, ClientErrorCode.BwTurnManager_SorterForRepairUnits_02);
+                throw Twns.Helpers.newError(`Empty unitId1.`, ClientErrorCode.BwTurnManager_SorterForRepairUnits_02);
             }
 
             const unitId2 = unit2.getUnitId();
             if (unitId2 == null) {
-                throw Helpers.newError(`Empty unitId2.`, ClientErrorCode.BwTurnManager_SorterForRepairUnits_03);
+                throw Twns.Helpers.newError(`Empty unitId2.`, ClientErrorCode.BwTurnManager_SorterForRepairUnits_03);
             }
 
             return unitId1 - unitId2;
@@ -1017,7 +1017,7 @@ namespace Twns.BaseWar {
         if (!isFastExecute) {
             war.getView().moveGridToCenter(tileGridIndex);
             gridVisualEffect.showEffectCharge(tileGridIndex);
-            await Helpers.wait(400);
+            await Twns.Helpers.wait(400);
         }
 
         if (!isFastExecute) {
@@ -1035,9 +1035,9 @@ namespace Twns.BaseWar {
                     }
                 }
             }
-            await Helpers.wait(200);
+            await Twns.Helpers.wait(200);
 
-            await Helpers.wait(400);
+            await Twns.Helpers.wait(400);
         }
     }
     async function handleMapWeaponTileCrystalWithoutExtraData(war: BwWar, tile: BwTile, isFastExecute: boolean): Promise<void> {
@@ -1046,14 +1046,14 @@ namespace Twns.BaseWar {
         if (!isFastExecute) {
             war.getView().moveGridToCenter(tileGridIndex);
             gridVisualEffect.showEffectCharge(tileGridIndex);
-            await Helpers.wait(400);
+            await Twns.Helpers.wait(400);
         }
 
         const unitMap           = war.getUnitMap();
         const gameConfig        = war.getGameConfig();
         const playerIndexInTurn = tile.getPlayerIndex();
         const teamIndexInTurn   = tile.getTeamIndex();
-        const data              = Helpers.getExisted(tile.getCustomCrystalData(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_00);
+        const data              = Twns.Helpers.getExisted(tile.getCustomCrystalData(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_00);
         const affectedUnits     = new Set<BwUnit>();
         const { canAffectAlly, canAffectEnemy, canAffectSelf } = data;
 
@@ -1091,7 +1091,7 @@ namespace Twns.BaseWar {
         {
             const { deltaHp, deltaFuelPercentage, deltaPrimaryAmmoPercentage } = data;
             if (deltaHp || deltaFuelPercentage || deltaPrimaryAmmoPercentage) {
-                for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: tile.getGridIndex(), minDistance: 0, maxDistance: Helpers.getExisted(data.radius, ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_01), mapSize: unitMap.getMapSize() })) {
+                for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: tile.getGridIndex(), minDistance: 0, maxDistance: Twns.Helpers.getExisted(data.radius, ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_01), mapSize: unitMap.getMapSize() })) {
                     const unit = unitMap.getUnitOnMap(gridIndex);
                     if (unit == null) {
                         continue;
@@ -1120,7 +1120,7 @@ namespace Twns.BaseWar {
                         if (deltaPrimaryAmmoPercentage) {
                             const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
                             if (maxAmmo != null) {
-                                const currentAmmo = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_02);
+                                const currentAmmo = Twns.Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_02);
                                 if (deltaPrimaryAmmoPercentage < 0) {
                                     unit.setPrimaryWeaponCurrentAmmo(Math.max(
                                         0,
@@ -1180,12 +1180,12 @@ namespace Twns.BaseWar {
                     }
                 }
             }
-            await Helpers.wait(200);
+            await Twns.Helpers.wait(200);
 
             for (const unit of affectedUnits) {
                 unit.updateView();
             }
-            await Helpers.wait(400);
+            await Twns.Helpers.wait(400);
         }
     }
 
@@ -1195,7 +1195,7 @@ namespace Twns.BaseWar {
         if (!isFastExecute) {
             war.getView().moveGridToCenter(tileGridIndex);
             gridVisualEffect.showEffectCharge(tileGridIndex);
-            await Helpers.wait(400);
+            await Twns.Helpers.wait(400);
         }
     }
     async function handleMapWeaponTileCannonWithoutExtraData(war: BwWar, tile: BwTile, isFastExecute: boolean): Promise<void> {
@@ -1204,12 +1204,12 @@ namespace Twns.BaseWar {
         if (!isFastExecute) {
             war.getView().moveGridToCenter(tileGridIndex);
             gridVisualEffect.showEffectCharge(tileGridIndex);
-            await Helpers.wait(400);
+            await Twns.Helpers.wait(400);
         }
 
         const gameConfig         = war.getGameConfig();
-        const data                  = Helpers.getExisted(tile.getCustomCannonData(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCannon_00);
-        const getCandidateUnitArray = Helpers.createLazyFunc(() => generateCandidateUnitArrayForCannon(war, tile));
+        const data                  = Twns.Helpers.getExisted(tile.getCustomCannonData(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCannon_00);
+        const getCandidateUnitArray = Twns.Helpers.createLazyFunc(() => generateCandidateUnitArrayForCannon(war, tile));
         const maxTargetCount        = data.maxTargetCount ?? 0;
         const affectedUnits         = new Set<BwUnit>();
         for (let i = 0; i < maxTargetCount; ++i) {
@@ -1239,7 +1239,7 @@ namespace Twns.BaseWar {
                     if (deltaPrimaryAmmoPercentage) {
                         const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
                         if (maxAmmo != null) {
-                            const currentAmmo = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCannon_01);
+                            const currentAmmo = Twns.Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCannon_01);
                             if (deltaPrimaryAmmoPercentage < 0) {
                                 unit.setPrimaryWeaponCurrentAmmo(Math.max(
                                     0,
@@ -1288,17 +1288,17 @@ namespace Twns.BaseWar {
                 for (const unit of affectedUnits) {
                     gridVisualEffect.showEffectDamage(unit.getGridIndex());
                 }
-                await Helpers.wait(200);
+                await Twns.Helpers.wait(200);
 
                 for (const unit of affectedUnits) {
                     unit.updateView();
                 }
-                await Helpers.wait(400);
+                await Twns.Helpers.wait(400);
             }
         }
     }
     function generateCandidateUnitArrayForCannon(war: BwWar, tile: BwTile): BwUnit[] {
-        const data              = Helpers.getExisted(tile.getCustomCannonData(), ClientErrorCode.BwTurnManager_GenerateCandidateUnitArrayForCannon_00);
+        const data              = Twns.Helpers.getExisted(tile.getCustomCannonData(), ClientErrorCode.BwTurnManager_GenerateCandidateUnitArrayForCannon_00);
         const playerIndexInTurn = tile.getPlayerIndex();
         const teamIndexInTurn   = tile.getTeamIndex();
         const tileX             = tile.getGridX();
@@ -1352,7 +1352,7 @@ namespace Twns.BaseWar {
         if (!isFastExecute) {
             war.getView().moveGridToCenter(tileGridIndex);
             gridVisualEffect.showEffectCharge(tileGridIndex);
-            await Helpers.wait(400);
+            await Twns.Helpers.wait(400);
         }
 
         if (!isFastExecute) {
@@ -1370,9 +1370,9 @@ namespace Twns.BaseWar {
                     }
                 }
             }
-            await Helpers.wait(200);
+            await Twns.Helpers.wait(200);
 
-            await Helpers.wait(400);
+            await Twns.Helpers.wait(400);
         }
     }
     async function handleMapWeaponTileLaserTurretWithoutExtraData(war: BwWar, tile: BwTile, isFastExecute: boolean): Promise<void> {
@@ -1381,11 +1381,11 @@ namespace Twns.BaseWar {
         if (!isFastExecute) {
             war.getView().moveGridToCenter(tileGridIndex);
             gridVisualEffect.showEffectCharge(tileGridIndex);
-            await Helpers.wait(400);
+            await Twns.Helpers.wait(400);
         }
 
         const gameConfig         = war.getGameConfig();
-        const data                  = Helpers.getExisted(tile.getCustomLaserTurretData(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileLaserTurret_00);
+        const data                  = Twns.Helpers.getExisted(tile.getCustomLaserTurretData(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileLaserTurret_00);
         const candidateUnitArray    = generateCandidateUnitArrayForLaserTurret(war, tile);
         const affectedUnits         = new Set<BwUnit>();
         {
@@ -1410,7 +1410,7 @@ namespace Twns.BaseWar {
                     if (deltaPrimaryAmmoPercentage) {
                         const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
                         if (maxAmmo != null) {
-                            const currentAmmo = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_01);
+                            const currentAmmo = Twns.Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_01);
                             if (deltaPrimaryAmmoPercentage < 0) {
                                 unit.setPrimaryWeaponCurrentAmmo(Math.max(
                                     0,
@@ -1469,16 +1469,16 @@ namespace Twns.BaseWar {
                     }
                 }
             }
-            await Helpers.wait(200);
+            await Twns.Helpers.wait(200);
 
             for (const unit of affectedUnits) {
                 unit.updateView();
             }
-            await Helpers.wait(400);
+            await Twns.Helpers.wait(400);
         }
     }
     function generateCandidateUnitArrayForLaserTurret(war: BwWar, tile: BwTile): BwUnit[] {
-        const data              = Helpers.getExisted(tile.getCustomLaserTurretData(), ClientErrorCode.BwTurnManager_GenerateCandidateUnitArrayForLaserTurret_00);
+        const data              = Twns.Helpers.getExisted(tile.getCustomLaserTurretData(), ClientErrorCode.BwTurnManager_GenerateCandidateUnitArrayForLaserTurret_00);
         const playerIndexInTurn = tile.getPlayerIndex();
         const teamIndexInTurn   = tile.getTeamIndex();
         const tileGridX         = tile.getGridX();
@@ -1492,7 +1492,7 @@ namespace Twns.BaseWar {
 
         const { canAffectAlly, canAffectEnemy, canAffectSelf }  = data;
         const candidateUnitArray                                : BwUnit[] = [];
-        const checkAndAddUnit                                   = (gridIndex: Types.GridIndex) => {
+        const checkAndAddUnit                                   = (gridIndex: Twns.Types.GridIndex) => {
             const unit = unitMap.getUnitOnMap(gridIndex);
             if (unit == null) {
                 return;
@@ -1508,28 +1508,28 @@ namespace Twns.BaseWar {
         };
 
         for (let deltaX = 0; deltaX < rangeForRight; ++deltaX) {
-            const gridIndex: Types.GridIndex = { x: tileGridX + deltaX + 1, y: tileGridY };
+            const gridIndex: Twns.Types.GridIndex = { x: tileGridX + deltaX + 1, y: tileGridY };
             if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
                 break;
             }
             checkAndAddUnit(gridIndex);
         }
         for (let deltaX = 0; deltaX < rangeForLeft; ++deltaX) {
-            const gridIndex: Types.GridIndex = { x: tileGridX - deltaX - 1, y: tileGridY };
+            const gridIndex: Twns.Types.GridIndex = { x: tileGridX - deltaX - 1, y: tileGridY };
             if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
                 break;
             }
             checkAndAddUnit(gridIndex);
         }
         for (let deltaY = 0; deltaY < rangeForDown; ++deltaY) {
-            const gridIndex: Types.GridIndex = { x: tileGridX, y: tileGridY + deltaY + 1 };
+            const gridIndex: Twns.Types.GridIndex = { x: tileGridX, y: tileGridY + deltaY + 1 };
             if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
                 break;
             }
             checkAndAddUnit(gridIndex);
         }
         for (let deltaY = 0; deltaY < rangeForUp; ++deltaY) {
-            const gridIndex: Types.GridIndex = { x: tileGridX, y: tileGridY - deltaY - 1 };
+            const gridIndex: Twns.Types.GridIndex = { x: tileGridX, y: tileGridY - deltaY - 1 };
             if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
                 break;
             }

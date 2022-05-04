@@ -8,7 +8,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -20,12 +20,12 @@
 // import SpwModel                 from "../model/SpwModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpwLoadWarPanel {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.SinglePlayerWar {
+    import LangTextType         = Twns.Lang.LangTextType;
+    import NotifyType           = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class SpwLoadWarPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForSpwLoadWarPanel = void;
+    export class SpwLoadWarPanel extends TwnsUiPanel.UiPanel<OpenDataForSpwLoadWarPanel> {
         private readonly _group!            : eui.Group;
         private readonly _labelPanelTitle!  : TwnsUiLabel.UiLabel;
         private readonly _srlSaveSlot!      : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
@@ -61,7 +61,7 @@ namespace TwnsSpwLoadWarPanel {
         }
 
         private _onTouchedBtnHelp(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0325),
                 content : Lang.getText(LangTextType.R0006),
             });
@@ -78,7 +78,7 @@ namespace TwnsSpwLoadWarPanel {
             this._updateComponentsForLanguage();
 
             this._srlSaveSlot.bindData(await this._createDataForList());
-            this._listSaveSlot.selectedIndex = Helpers.getExisted(SpwModel.getWar()).getSaveSlotIndex();
+            this._listSaveSlot.selectedIndex = Twns.Helpers.getExisted(Twns.SinglePlayerWar.SpwModel.getWar()).getSaveSlotIndex();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -92,7 +92,7 @@ namespace TwnsSpwLoadWarPanel {
             for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
-                    slotInfo    : await SpmModel.getSlotFullData(slotIndex),
+                    slotInfo    : await Twns.SinglePlayerMode.SpmModel.getSlotFullData(slotIndex),
                 });
             }
 
@@ -102,7 +102,7 @@ namespace TwnsSpwLoadWarPanel {
 
     type DataForSlotRenderer = {
         slotIndex   : number;
-        slotInfo    : Types.SpmWarSaveSlotData | null;
+        slotInfo    : Twns.Types.SpmWarSaveSlotData | null;
     };
     class SlotRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSlotRenderer> {
         private readonly _group!            : eui.Group;
@@ -129,10 +129,10 @@ namespace TwnsSpwLoadWarPanel {
             const data      = this._getData();
             const slotInfo  = data.slotInfo;
             if (slotInfo) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0072),
                     callback: () => {
-                        FlowManager.gotoSinglePlayerWar({
+                        Twns.FlowManager.gotoSinglePlayerWar({
                             slotIndex       : slotInfo.slotIndex,
                             warData         : slotInfo.warData,
                             slotExtraData   : slotInfo.extraData,
@@ -166,7 +166,7 @@ namespace TwnsSpwLoadWarPanel {
                     const mapId         = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
+                        : (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
                 }
             }
         }

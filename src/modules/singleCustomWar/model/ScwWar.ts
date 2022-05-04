@@ -10,15 +10,15 @@
 namespace Twns.SingleCustomWar {
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForScw  = CommonProto.WarSettings.ISettingsForScw;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
-    export class ScwWar extends TwnsSpwWar.SpwWar {
+    export class ScwWar extends Twns.SinglePlayerWar.SpwWar {
         private _settingsForScw?    : ISettingsForScw;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(data, gameConfig);
-            this._setSettingsForScw(Helpers.getExisted(data.settingsForScw, ClientErrorCode.ScwWar_Init_00));
+            this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
+            this._setSettingsForScw(Twns.Helpers.getExisted(data.settingsForScw, ClientErrorCode.ScwWar_Init_00));
 
             this._initView();
         }
@@ -52,14 +52,8 @@ namespace Twns.SingleCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getWarType(): Types.WarType {
-            return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.ScwFog
-                : Types.WarType.ScwStd;
-        }
-
         public getMapId(): number {
-            return Helpers.getExisted(this._getSettingsForScw().mapId);
+            return Twns.Helpers.getExisted(this._getSettingsForScw().mapId);
         }
 
         public getCanCheat(): boolean {
@@ -67,14 +61,14 @@ namespace Twns.SingleCustomWar {
         }
 
         public getSettingsBootTimerParams(): number[] {
-            return [Types.BootTimerType.NoBoot];
+            return [Twns.Types.BootTimerType.NoBoot];
         }
 
         private _setSettingsForScw(settings: ISettingsForScw): void {
             this._settingsForScw = settings;
         }
         private _getSettingsForScw(): ISettingsForScw {
-            return Helpers.getExisted(this._settingsForScw);
+            return Twns.Helpers.getExisted(this._settingsForScw);
         }
     }
 }

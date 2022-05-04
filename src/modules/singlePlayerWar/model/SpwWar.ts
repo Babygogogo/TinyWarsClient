@@ -13,15 +13,15 @@
 // import TwnsSpwPlayerManager         from "./SpwPlayerManager";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpwWar {
-    import LangTextType             = TwnsLangTextType.LangTextType;
+namespace Twns.SinglePlayerWar {
+    import LangTextType             = Twns.Lang.LangTextType;
     import WarAction                = CommonProto.WarAction;
     import ISpmWarSaveSlotExtraData = CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
     import BwCommonSettingManager   = Twns.BaseWar.BwCommonSettingManager;
 
     export abstract class SpwWar extends Twns.BaseWar.BwWar {
-        private readonly _playerManager         = new TwnsSpwPlayerManager.SpwPlayerManager();
-        private readonly _field                 = new TwnsSpwField.SpwField();
+        private readonly _playerManager         = new Twns.SinglePlayerWar.SpwPlayerManager();
+        private readonly _field                 = new Twns.SinglePlayerWar.SpwField();
         private readonly _commonSettingManager  = new BwCommonSettingManager();
         private readonly _warEventManager       = new Twns.BaseWar.BwWarEventManager();
 
@@ -92,7 +92,7 @@ namespace TwnsSpwWar {
             return `${Lang.getText(LangTextType.B0451)}`;
         }
         public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | null> {
-            const playerIndex = Helpers.getExisted(action.targetPlayerIndex);
+            const playerIndex = Twns.Helpers.getExisted(action.targetPlayerIndex);
             return `p${playerIndex} ${await this.getPlayer(playerIndex).getNickname()} ${Lang.getText(LangTextType.B0450)}`;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | null> {
@@ -153,10 +153,10 @@ namespace TwnsSpwWar {
             return null;
         }
 
-        public getPlayerManager(): TwnsSpwPlayerManager.SpwPlayerManager {
+        public getPlayerManager(): Twns.SinglePlayerWar.SpwPlayerManager {
             return this._playerManager;
         }
-        public getField(): TwnsSpwField.SpwField {
+        public getField(): Twns.SinglePlayerWar.SpwField {
             return this._field;
         }
         public getCommonSettingManager(): BwCommonSettingManager {
@@ -178,21 +178,21 @@ namespace TwnsSpwWar {
             this._saveSlotIndex = slotIndex;
         }
         public getSaveSlotIndex(): number {
-            return Helpers.getExisted(this._saveSlotIndex);
+            return Twns.Helpers.getExisted(this._saveSlotIndex);
         }
 
         public setSaveSlotExtraData(extraData: ISpmWarSaveSlotExtraData): void {
             this._saveSlotExtraData = extraData;
         }
         public getSaveSlotExtraData(): ISpmWarSaveSlotExtraData {
-            return Helpers.getExisted(this._saveSlotExtraData);
+            return Twns.Helpers.getExisted(this._saveSlotExtraData);
         }
 
         public getHumanPlayerIndexes(): number[] {
-            return (this.getPlayerManager() as TwnsSpwPlayerManager.SpwPlayerManager).getHumanPlayerIndexes();
+            return (this.getPlayerManager() as Twns.SinglePlayerWar.SpwPlayerManager).getHumanPlayerIndexes();
         }
         public getHumanPlayers(): Twns.BaseWar.BwPlayer[] {
-            return (this.getPlayerManager() as TwnsSpwPlayerManager.SpwPlayerManager).getHumanPlayers();
+            return (this.getPlayerManager() as Twns.SinglePlayerWar.SpwPlayerManager).getHumanPlayers();
         }
     }
 }

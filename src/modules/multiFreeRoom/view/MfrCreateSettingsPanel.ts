@@ -11,7 +11,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiImage                          from "../../tools/ui/UiImage";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
@@ -29,12 +29,12 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiFreeRoom {
-    import MfrCreateAdvancedSettingsPage            = TwnsMfrCreateAdvancedSettingsPage.MfrCreateAdvancedSettingsPage;
+    import MfrCreateAdvancedSettingsPage            = Twns.MultiFreeRoom.MfrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
-    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
+    import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
+    import LangTextType                             = Twns.Lang.LangTextType;
+    import NotifyType                               = Twns.Notify.NotifyType;
+    import WarBasicSettingsType                     = Twns.Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -103,7 +103,7 @@ namespace Twns.MultiFreeRoom {
                 // },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Twns.Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForCommonMapInfoPage(),
                 },
             ]);
@@ -125,30 +125,30 @@ namespace Twns.MultiFreeRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMainMenuPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MfrMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
         }
         private _onTouchedBtnConfirm(): void {
-            MultiFreeRoom.MfrProxy.reqCreateRoom(MfrCreateModel.getData());
+            MultiFreeRoom.MfrProxy.reqCreateRoom(MultiFreeRoom.MfrCreateModel.getData());
 
             this._btnConfirm.enabled = false;
             this._resetTimeoutForBtnConfirm();
         }
         private async _onTouchedBtnChooseCo(): Promise<void> {
-            const currentCoId = MfrCreateModel.getSelfCoId();
-            const gameConfig    = await Config.ConfigManager.getGameConfig(MfrCreateModel.getConfigVersion());
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+            const currentCoId = MultiFreeRoom.MfrCreateModel.getSelfCoId();
+            const gameConfig    = await Config.ConfigManager.getGameConfig(MultiFreeRoom.MfrCreateModel.getConfigVersion());
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                 gameConfig,
                 currentCoId,
-                availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
-                    warRule         : MfrCreateModel.getWarRule(),
-                    playerIndex     : MfrCreateModel.getSelfPlayerIndex(),
+                availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                    baseWarRule         : MultiFreeRoom.MfrCreateModel.getInstanceWarRule(),
+                    playerIndex     : MultiFreeRoom.MfrCreateModel.getSelfPlayerIndex(),
                     gameConfig,
                 }),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
-                        MfrCreateModel.setSelfCoId(newCoId);
+                        MultiFreeRoom.MfrCreateModel.setSelfCoId(newCoId);
                     }
                 },
             });
@@ -162,7 +162,7 @@ namespace Twns.MultiFreeRoom {
         }
         private _onNotifyMsgMfrCreateRoom(): void {
             FloatText.show(Lang.getText(LangTextType.A0015));
-            FlowManager.gotoLobby();
+            Twns.FlowManager.gotoLobby();
         }
 
         private _resetTimeoutForBtnConfirm(): void {
@@ -196,12 +196,12 @@ namespace Twns.MultiFreeRoom {
         }
 
         private async _updateBtnChooseCo(): Promise<void> {
-            const cfg               = (await Config.ConfigManager.getGameConfig(MfrCreateModel.getConfigVersion())).getCoBasicCfg(MfrCreateModel.getSelfCoId());
+            const cfg               = (await Config.ConfigManager.getGameConfig(MultiFreeRoom.MfrCreateModel.getConfigVersion())).getCoBasicCfg(MultiFreeRoom.MfrCreateModel.getSelfCoId());
             this._btnChooseCo.label = cfg?.name ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private async _initSclPlayerIndex(): Promise<void> {
-            const playersCountUnneutral = Helpers.getExisted(MfrCreateModel.getInitialWarData().playerManager?.players).length - 1;
+            const playersCountUnneutral = Twns.Helpers.getExisted(MultiFreeRoom.MfrCreateModel.getInitialWarData().playerManager?.players).length - 1;
             const dataArray             : DataForPlayerIndexRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
@@ -222,11 +222,11 @@ namespace Twns.MultiFreeRoom {
         }
 
         private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const warData = MfrCreateModel.getInitialWarData();
+            const warData = MultiFreeRoom.MfrCreateModel.getInitialWarData();
             return warData == null
                 ? null
                 : {
-                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)),
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(warData.settingsForCommon?.configVersion)),
                     warInfo     : { warData, players: null }
                 };
         }
@@ -238,59 +238,59 @@ namespace Twns.MultiFreeRoom {
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            const warRule           = MfrCreateModel.getWarRule();
-            const bootTimerParams   = MfrCreateModel.getBootTimerParams();
-            const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(MfrCreateModel.getConfigVersion()));
-            const timerType         = bootTimerParams[0] as Types.BootTimerType;
-            const warEventFullData  = MfrCreateModel.getInitialWarData().warEventManager?.warEventFullData ?? null;
+            const instanceWarRule   = MultiFreeRoom.MfrCreateModel.getInstanceWarRule();
+            const bootTimerParams   = MultiFreeRoom.MfrCreateModel.getBootTimerParams();
+            const gameConfig        = Twns.Helpers.getExisted(await Config.ConfigManager.getGameConfig(MultiFreeRoom.MfrCreateModel.getConfigVersion()));
+            const timerType         = bootTimerParams[0] as Twns.Types.BootTimerType;
+            const warEventFullData  = instanceWarRule.warEventFullData ?? null;
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
                     {
                         settingsType    : WarBasicSettingsType.WarName,
-                        currentValue    : MfrCreateModel.getWarName(),
-                        warRule,
+                        currentValue    : MultiFreeRoom.MfrCreateModel.getWarName(),
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
-                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
+                                throw Twns.Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            MfrCreateModel.setWarName(newValue);
+                            MultiFreeRoom.MfrCreateModel.setWarName(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarPassword,
-                        currentValue    : MfrCreateModel.getWarPassword(),
-                        warRule,
+                        currentValue    : MultiFreeRoom.MfrCreateModel.getWarPassword(),
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
-                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
+                                throw Twns.Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            MfrCreateModel.setWarPassword(newValue);
+                            MultiFreeRoom.MfrCreateModel.setWarPassword(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarComment,
-                        currentValue    : MfrCreateModel.getWarComment(),
-                        warRule,
+                        currentValue    : MultiFreeRoom.MfrCreateModel.getWarComment(),
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
-                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
+                                throw Twns.Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            MfrCreateModel.setWarComment(newValue);
+                            MultiFreeRoom.MfrCreateModel.setWarComment(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
@@ -298,7 +298,7 @@ namespace Twns.MultiFreeRoom {
                     {
                         settingsType    : WarBasicSettingsType.HasFog,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
@@ -306,7 +306,7 @@ namespace Twns.MultiFreeRoom {
                     {
                         settingsType    : WarBasicSettingsType.Weather,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
@@ -314,83 +314,83 @@ namespace Twns.MultiFreeRoom {
                     {
                         settingsType    : WarBasicSettingsType.WarEvent,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.TurnsLimit,
-                        currentValue    : MfrCreateModel.getTurnsLimit(),
-                        warRule,
+                        currentValue    : MultiFreeRoom.MfrCreateModel.getTurnsLimit(),
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue !== "number") {
-                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
+                                throw Twns.Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            MfrCreateModel.setTurnsLimit(newValue);
+                            MultiFreeRoom.MfrCreateModel.setTurnsLimit(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.TimerType,
                         currentValue    : timerType,
-                        warRule,
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: async () => {
-                            MfrCreateModel.tickBootTimerType();
+                            MultiFreeRoom.MfrCreateModel.tickBootTimerType();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                 ],
             };
-            if (timerType === Types.BootTimerType.Regular) {
+            if (timerType === Twns.Types.BootTimerType.Regular) {
                 openData.dataArrayForListSettings.push({
                     settingsType    : WarBasicSettingsType.TimerRegularParam,
                     currentValue    : bootTimerParams[1],
-                    warRule,
+                    instanceWarRule: instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: () => {
-                        MfrCreateModel.tickTimerRegularTime();
+                        MultiFreeRoom.MfrCreateModel.tickTimerRegularTime();
                         this._updateCommonWarBasicSettingsPage();
                     },
                 });
-            } else if (timerType === Types.BootTimerType.Incremental) {
+            } else if (timerType === Twns.Types.BootTimerType.Incremental) {
                 openData.dataArrayForListSettings.push(
                     {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                         currentValue    : bootTimerParams[1],
-                        warRule,
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: number | string | null) => {
                             if (typeof newValue !== "number") {
-                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
+                                throw Twns.Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            MfrCreateModel.setTimerIncrementalInitialTime(newValue);
+                            MultiFreeRoom.MfrCreateModel.setTimerIncrementalInitialTime(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                         currentValue    : bootTimerParams[2],
-                        warRule,
+                        instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: number | string | null) => {
                             if (typeof newValue !== "number") {
-                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
+                                throw Twns.Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            MfrCreateModel.setTimerIncrementalIncrementalValue(newValue);
+                            MultiFreeRoom.MfrCreateModel.setTimerIncrementalIncrementalValue(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                 );
             } else {
-                throw Helpers.newError(`MfrCreateSettingsPanel._createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+                throw Twns.Helpers.newError(`MfrCreateSettingsPanel._createDataForCommonWarBasicSettingsPage() invalid timerType.`);
             }
 
             return openData;
@@ -400,62 +400,62 @@ namespace Twns.MultiFreeRoom {
         // Opening/closing animations.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupSettings,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnConfirm,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupSettings,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnConfirm,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -492,24 +492,24 @@ namespace Twns.MultiFreeRoom {
         public async onItemTapEvent(): Promise<void> {
             const data = this.data;
             if (data) {
-                const creator       = MfrCreateModel;
+                const creator       = MultiFreeRoom.MfrCreateModel;
                 const playerIndex   = data.playerIndex;
                 const playerData    = creator.getInitialWarData().playerManager?.players?.find(v => v.playerIndex === playerIndex);
                 if ((playerData == null)                                    ||
-                    (playerData.aliveState === Types.PlayerAliveState.Dead) ||
+                    (playerData.aliveState === Twns.Types.PlayerAliveState.Dead) ||
                     (playerData.userId == null)
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0204));
                 } else {
                     creator.setSelfPlayerIndex(playerIndex);
 
-                    const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
-                        warRule         : creator.getWarRule(),
+                    const availableCoIdArray = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                        baseWarRule         : creator.getInstanceWarRule(),
                         playerIndex,
-                        gameConfig      : await Config.ConfigManager.getGameConfig(MfrCreateModel.getConfigVersion()),
+                        gameConfig      : await Config.ConfigManager.getGameConfig(MultiFreeRoom.MfrCreateModel.getConfigVersion()),
                     });
                     if (availableCoIdArray.indexOf(creator.getSelfCoId()) < 0) {
-                        creator.setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
+                        creator.setSelfCoId(WarHelpers.WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
                     }
                 }
             }
@@ -528,12 +528,12 @@ namespace Twns.MultiFreeRoom {
             const data = this.data;
             if (data) {
                 const playerIndex       = data.playerIndex;
-                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(MfrCreateModel.getWarRule(), playerIndex))})`;
+                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(MultiFreeRoom.MfrCreateModel.getInstanceWarRule(), playerIndex))})`;
             }
         }
         private _updateState(): void {
             const data          = this.data;
-            this.currentState   = ((data) && (data.playerIndex === MfrCreateModel.getSelfPlayerIndex())) ? `down` : `up`;
+            this.currentState   = ((data) && (data.playerIndex === MultiFreeRoom.MfrCreateModel.getSelfPlayerIndex())) ? `down` : `up`;
         }
     }
 
@@ -561,7 +561,7 @@ namespace Twns.MultiFreeRoom {
             const data = this.data;
             if (data) {
                 const skinId            = data.skinId;
-                this._imgColor.source   = WarHelpers.WarCommonHelpers.getImageSourceForSkinId(skinId, MfrCreateModel.getSelfPlayerData().unitAndTileSkinId === skinId);
+                this._imgColor.source   = WarHelpers.WarCommonHelpers.getImageSourceForSkinId(skinId, MultiFreeRoom.MfrCreateModel.getSelfPlayerData().unitAndTileSkinId === skinId);
             }
         }
     }

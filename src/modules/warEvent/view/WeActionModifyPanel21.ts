@@ -6,7 +6,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -14,19 +14,19 @@
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel21 {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.WarEvent {
+    import NotifyType               = Twns.Notify.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
     import BwWar                    = Twns.BaseWar.BwWar;
 
-    export type OpenData = {
+    export type OpenDataForWeActionModifyPanel21 = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel21 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel21 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel21> {
         private readonly _labelTitle!                   : TwnsUiLabel.UiLabel;
         private readonly _btnType!                      : TwnsUiButton.UiButton;
         private readonly _btnBack!                      : TwnsUiButton.UiButton;
@@ -80,12 +80,12 @@ namespace TwnsWeActionModifyPanel21 {
             const action        = this._getAction();
             action.playerIndex  = ((action.playerIndex || 0) % openData.war.getPlayersCountUnneutral()) + 1;
 
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -105,7 +105,7 @@ namespace TwnsWeActionModifyPanel21 {
                     Math.max(-maxValue, rawValue)
                 );
             }
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onFocusOutInputMultiplierPercentage(): void {
@@ -121,7 +121,7 @@ namespace TwnsWeActionModifyPanel21 {
                     Math.max(-maxValue, rawValue)
                 );
             }
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -168,7 +168,7 @@ namespace TwnsWeActionModifyPanel21 {
         }
 
         private _getAction(): CommonProto.WarEvent.IWeaDeprecatedSetPlayerFund {
-            return Helpers.getExisted(this._getOpenData().action.WeaDeprecatedSetPlayerFund);
+            return Twns.Helpers.getExisted(this._getOpenData().action.WeaDeprecatedSetPlayerFund);
         }
     }
 }

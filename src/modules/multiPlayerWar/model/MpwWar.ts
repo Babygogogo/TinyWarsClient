@@ -18,18 +18,18 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiPlayerWar {
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
     import WarAction                = CommonProto.WarAction;
 
     export abstract class MpwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new MultiPlayerWar.MpwPlayerManager();
-        private readonly _field                 = new TwnsMpwField.MpwField();
+        private readonly _field                 = new Twns.MultiPlayerWar.MpwField();
         private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
 
         private _visionTeamIndex    : number | null = null;
 
-        public getField(): TwnsMpwField.MpwField {
+        public getField(): Twns.MultiPlayerWar.MpwField {
             return this._field;
         }
         public getPlayerManager(): MultiPlayerWar.MpwPlayerManager {
@@ -63,7 +63,7 @@ namespace Twns.MultiPlayerWar {
                     tile.setHasFog(false);
                 } else {
                     if (!tile.getHasFog()) {
-                        MpwUtility.resetTileDataAsHasFog(tile);
+                        Twns.MultiPlayerWar.MpwUtility.resetTileDataAsHasFog(tile);
                     }
                 }
 
@@ -135,7 +135,7 @@ namespace Twns.MultiPlayerWar {
             return `${Lang.getText(LangTextType.B0451)}`;
         }
         public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | null> {
-            const playerIndex = Helpers.getExisted(action.extraData?.targetPlayerIndex);
+            const playerIndex = Twns.Helpers.getExisted(action.extraData?.targetPlayerIndex);
             return `p${playerIndex} ${await this.getPlayer(playerIndex).getNickname()} ${Lang.getText(LangTextType.B0450)}`;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | null> {
@@ -205,7 +205,7 @@ namespace Twns.MultiPlayerWar {
             } else {
                 const restTime = this.getPlayer(playerIndex).getRestTimeToBoot();
                 if (playerIndex === this.getPlayerIndexInTurn()) {
-                    return (this.getEnterTurnTime() + restTime - Timer.getServerTimestamp()) || null;
+                    return (this.getEnterTurnTime() + restTime - Twns.Timer.getServerTimestamp()) || null;
                 } else {
                     return restTime;
                 }
@@ -234,7 +234,7 @@ namespace Twns.MultiPlayerWar {
         }
         public tickVisionTeamIndex(): number | null {
             const teamIndexArray = [...this.getPlayerManager().getWatcherTeamIndexesForSelf()].sort((v1, v2) => v1 - v2);
-            Helpers.deleteElementFromArray(teamIndexArray, CommonConstants.WarNeutralTeamIndex);
+            Twns.Helpers.deleteElementFromArray(teamIndexArray, CommonConstants.WarNeutralTeamIndex);
 
             const currentVisionTeamIndex    = this.getVisionTeamIndex();
             const newVisionTeamIndex        = currentVisionTeamIndex == null

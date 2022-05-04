@@ -1,7 +1,7 @@
 
 // import Lang             from "../lang/Lang";
 // import Notify           from "../notify/Notify";
-// import TwnsNotifyType   from "../notify/NotifyType";
+// import Twns.Notify   from "../notify/NotifyType";
 // import ProtoManager     from "../proto/ProtoManager";
 // import CommonConstants  from "./CommonConstants";
 // import Helpers          from "./Helpers";
@@ -9,27 +9,27 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Config.ConfigManager {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import TileBaseType         = Types.TileBaseType;
-    import TileDecoratorType    = Types.TileDecoratorType;
-    import TileObjectType       = Types.TileObjectType;
-    import TileType             = Types.TileType;
-    import UnitType             = Types.UnitType;
+    import ClientErrorCode      = Twns.ClientErrorCode;
+    import TileBaseType         = Twns.Types.TileBaseType;
+    import TileDecoratorType    = Twns.Types.TileDecoratorType;
+    import TileObjectType       = Twns.Types.TileObjectType;
+    import TileType             = Twns.Types.TileType;
+    import UnitType             = Twns.Types.UnitType;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Initializers.
     ////////////////////////////////////////////////////////////////////////////////
     let _latestConfigVersion    : string | null = null;
-    const _gameConfigAccessor   = Helpers.createCachedDataAccessor<string, GameConfig>({
+    const _gameConfigAccessor   = Twns.Helpers.createCachedDataAccessor<string, GameConfig>({
         reqData : async (version: string) => {
-            let rawConfig   : Types.FullConfig | null = null;
+            let rawConfig   : Twns.Types.FullConfig | null = null;
             const configBin = await RES.getResByUrl(
                 `resource/config/FullConfig${version}.bin`,
                 void 0,
                 null,
                 RES.ResourceItem.TYPE_BIN
             );
-            rawConfig = configBin ? ProtoManager.decodeAsFullConfig(configBin) as Types.FullConfig : null;
+            rawConfig = configBin ? ProtoManager.decodeAsFullConfig(configBin) as Twns.Types.FullConfig : null;
 
             if (rawConfig == null) {
                 _gameConfigAccessor.setData(version, null);
@@ -53,15 +53,15 @@ namespace Twns.Config.ConfigManager {
         _latestConfigVersion = version;
     }
     export async function getGameConfig(version: string): Promise<GameConfig> {
-        return Helpers.getExisted(await _gameConfigAccessor.getData(version));
+        return Twns.Helpers.getExisted(await _gameConfigAccessor.getData(version));
     }
     export async function getLatestGameConfig(): Promise<GameConfig> {
-        return await getGameConfig(Helpers.getExisted(getLatestConfigVersion()));
+        return await getGameConfig(Twns.Helpers.getExisted(getLatestConfigVersion()));
     }
 
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
-        const mapping = Helpers.getExisted(CommonConstants.TileTypeMapping.get(baseType), ClientErrorCode.ConfigManager_GetTileType_00);
-        return Helpers.getExisted(mapping.get(objectType), ClientErrorCode.ConfigManager_GetTileType_01);
+        const mapping = Twns.Helpers.getExisted(CommonConstants.TileTypeMapping.get(baseType), ClientErrorCode.ConfigManager_GetTileType_00);
+        return Twns.Helpers.getExisted(mapping.get(objectType), ClientErrorCode.ConfigManager_GetTileType_01);
     }
 
     export function checkIsValidPlayerIndexForTile(playerIndex: number, baseType: TileBaseType, objectType: TileObjectType): boolean {
@@ -145,9 +145,9 @@ namespace Twns.Config.ConfigManager {
         }
     }
 
-    export function checkIsValidTurnPhaseCode(turnPhaseCode: Types.TurnPhaseCode): boolean {
-        return (turnPhaseCode === Types.TurnPhaseCode.Main)
-            || (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn);
+    export function checkIsValidTurnPhaseCode(turnPhaseCode: Twns.Types.TurnPhaseCode): boolean {
+        return (turnPhaseCode === Twns.Types.TurnPhaseCode.Main)
+            || (turnPhaseCode === Twns.Types.TurnPhaseCode.WaitBeginTurn);
     }
     export function checkIsValidCustomCrystalData(data: CommonProto.WarSerialization.ITileCustomCrystalData): boolean {
         return (data.radius != null)
@@ -184,7 +184,7 @@ namespace Twns.Config.ConfigManager {
         return ((new Set(teamIndexArray)).size === teamIndexArray.length)
             && (teamIndexArray.every(v => checkIsValidTeamIndex(v, playersCountUnneutral)));
     }
-    export function checkIsValidGridIndexSubset(gridIndexArray: CommonProto.Structure.IGridIndex[], mapSize: Types.MapSize): boolean {
+    export function checkIsValidGridIndexSubset(gridIndexArray: CommonProto.Structure.IGridIndex[], mapSize: Twns.Types.MapSize): boolean {
         const gridIdSet = new Set<number>();
         for (const g of gridIndexArray) {
             const gridIndex = GridIndexHelpers.convertGridIndex(g);
@@ -240,61 +240,61 @@ namespace Twns.Config.ConfigManager {
 
         return true;
     }
-    export function checkIsValidUnitAiMode(mode: Types.UnitAiMode): boolean {
-        return (mode === Types.UnitAiMode.NoMove)
-            || (mode === Types.UnitAiMode.Normal)
-            || (mode === Types.UnitAiMode.WaitUntilCanAttack);
+    export function checkIsValidUnitAiMode(mode: Twns.Types.UnitAiMode): boolean {
+        return (mode === Twns.Types.UnitAiMode.NoMove)
+            || (mode === Twns.Types.UnitAiMode.Normal)
+            || (mode === Twns.Types.UnitAiMode.WaitUntilCanAttack);
     }
-    export function checkIsValidValueComparator(comparator: Types.ValueComparator): boolean {
-        return (comparator === Types.ValueComparator.EqualTo)
-            || (comparator === Types.ValueComparator.NotEqualTo)
-            || (comparator === Types.ValueComparator.GreaterThan)
-            || (comparator === Types.ValueComparator.NotGreaterThan)
-            || (comparator === Types.ValueComparator.LessThan)
-            || (comparator === Types.ValueComparator.NotLessThan);
+    export function checkIsValidValueComparator(comparator: Twns.Types.ValueComparator): boolean {
+        return (comparator === Twns.Types.ValueComparator.EqualTo)
+            || (comparator === Twns.Types.ValueComparator.NotEqualTo)
+            || (comparator === Twns.Types.ValueComparator.GreaterThan)
+            || (comparator === Twns.Types.ValueComparator.NotGreaterThan)
+            || (comparator === Twns.Types.ValueComparator.LessThan)
+            || (comparator === Twns.Types.ValueComparator.NotLessThan);
     }
-    export function checkIsValidPlayerAliveState(aliveState: Types.PlayerAliveState): boolean {
-        return (aliveState === Types.PlayerAliveState.Alive)
-            || (aliveState === Types.PlayerAliveState.Dead)
-            || (aliveState === Types.PlayerAliveState.Dying);
+    export function checkIsValidPlayerAliveState(aliveState: Twns.Types.PlayerAliveState): boolean {
+        return (aliveState === Twns.Types.PlayerAliveState.Alive)
+            || (aliveState === Twns.Types.PlayerAliveState.Dead)
+            || (aliveState === Twns.Types.PlayerAliveState.Dying);
     }
-    export function checkIsValidPlayerAliveStateSubset(aliveStateArray: Types.PlayerAliveState[]): boolean {
+    export function checkIsValidPlayerAliveStateSubset(aliveStateArray: Twns.Types.PlayerAliveState[]): boolean {
         return ((new Set(aliveStateArray)).size === aliveStateArray.length)
             && (aliveStateArray.every(v => checkIsValidPlayerAliveState(v)));
     }
-    export function checkIsValidCoSkillType(skillType: Types.CoSkillType): boolean {
-        return (skillType === Types.CoSkillType.Passive)
-            || (skillType === Types.CoSkillType.Power)
-            || (skillType === Types.CoSkillType.SuperPower);
+    export function checkIsValidCoSkillType(skillType: Twns.Types.CoSkillType): boolean {
+        return (skillType === Twns.Types.CoSkillType.Passive)
+            || (skillType === Twns.Types.CoSkillType.Power)
+            || (skillType === Twns.Types.CoSkillType.SuperPower);
     }
-    export function checkIsValidCoSkillTypeSubset(skillTypeArray: Types.CoSkillType[]): boolean {
+    export function checkIsValidCoSkillTypeSubset(skillTypeArray: Twns.Types.CoSkillType[]): boolean {
         return ((new Set(skillTypeArray)).size === skillTypeArray.length)
             && (skillTypeArray.every(v => checkIsValidCoSkillType(v)));
     }
-    export function checkIsValidForceFogCode(forceFogCode: Types.ForceFogCode): boolean {
-        return (forceFogCode === Types.ForceFogCode.None)
-            || (forceFogCode === Types.ForceFogCode.Fog)
-            || (forceFogCode === Types.ForceFogCode.Clear);
+    export function checkIsValidForceFogCode(forceFogCode: Twns.Types.ForceFogCode): boolean {
+        return (forceFogCode === Twns.Types.ForceFogCode.None)
+            || (forceFogCode === Twns.Types.ForceFogCode.Fog)
+            || (forceFogCode === Twns.Types.ForceFogCode.Clear);
     }
-    export function checkIsValidUnitActionState(actionState: Types.UnitActionState): boolean {
-        return (actionState === Types.UnitActionState.Acted)
-            || (actionState === Types.UnitActionState.Idle);
+    export function checkIsValidUnitActionState(actionState: Twns.Types.UnitActionState): boolean {
+        return (actionState === Twns.Types.UnitActionState.Acted)
+            || (actionState === Twns.Types.UnitActionState.Idle);
     }
-    export function checkIsValidUnitActionStateSubset(actionStateArray: Types.UnitActionState[]): boolean {
+    export function checkIsValidUnitActionStateSubset(actionStateArray: Twns.Types.UnitActionState[]): boolean {
         return ((new Set(actionStateArray)).size === actionStateArray.length)
             && (actionStateArray.every(v => checkIsValidUnitActionState(v)));
     }
 
     export function getTileBaseTypeByTileType(type: TileType): TileBaseType {
-        return Helpers.getExisted(CommonConstants.TileTypeToTileBaseType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
+        return Twns.Helpers.getExisted(CommonConstants.TileTypeToTileBaseType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
     }
     export function getTileObjectTypeByTileType(type: TileType): TileObjectType {
-        return Helpers.getExisted(CommonConstants.TileTypeToTileObjectType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
+        return Twns.Helpers.getExisted(CommonConstants.TileTypeToTileObjectType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
     }
 
     export function getTileBaseImageSource({version, themeType, skinId, baseType, isDark, shapeId, tickCount}: {
-        version     : Types.UnitAndTileTextureVersion;
-        themeType   : Types.TileThemeType;
+        version     : Twns.Types.UnitAndTileTextureVersion;
+        themeType   : Twns.Types.TileThemeType;
         skinId      : number;
         baseType    : TileBaseType;
         isDark      : boolean;
@@ -305,22 +305,22 @@ namespace Twns.Config.ConfigManager {
             return ``;
         }
 
-        const cfgForFrame       = Helpers.getExisted(CommonConstants.TileBaseFrameConfigs.get(version)?.get(baseType), ClientErrorCode.ConfigManager_GetTileBaseImageSource_00);
+        const cfgForFrame       = Twns.Helpers.getExisted(CommonConstants.TileBaseFrameConfigs.get(version)?.get(baseType), ClientErrorCode.ConfigManager_GetTileBaseImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
-        const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
-        const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
-        const textForVersion    = `ver${Helpers.getNumText(version)}`;
-        const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
-        const textForType       = `type${Helpers.getNumText(baseType)}`;
+        const textForTheme      = `theme${Twns.Helpers.getNumText(themeType)}`;
+        const textForShapeId    = `shape${Twns.Helpers.getNumText(shapeId || 0)}`;
+        const textForVersion    = `ver${Twns.Helpers.getNumText(version)}`;
+        const textForSkin       = `skin${Twns.Helpers.getNumText(skinId)}`;
+        const textForType       = `type${Twns.Helpers.getNumText(baseType)}`;
         const textForFrame      = ticksPerFrame < Number.MAX_VALUE
-            ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
+            ? `frame${Twns.Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
             : `frame00`;
         return `tileBase_${textForVersion}_${textForTheme}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
     }
     export function getTileDecoratorImageSource({version, themeType, skinId, decoratorType, isDark, shapeId, tickCount}: {
-        version         : Types.UnitAndTileTextureVersion;
-        themeType       : Types.TileThemeType;
+        version         : Twns.Types.UnitAndTileTextureVersion;
+        themeType       : Twns.Types.TileThemeType;
         skinId          : number;
         decoratorType   : TileDecoratorType | null;
         isDark          : boolean;
@@ -331,38 +331,38 @@ namespace Twns.Config.ConfigManager {
             return ``;
         }
 
-        const cfgForFrame       = Helpers.getExisted(CommonConstants.TileDecoratorFrameConfigs.get(version)?.get(decoratorType), ClientErrorCode.ConfigManager_GetTileDecoratorImageSource_00);
+        const cfgForFrame       = Twns.Helpers.getExisted(CommonConstants.TileDecoratorFrameConfigs.get(version)?.get(decoratorType), ClientErrorCode.ConfigManager_GetTileDecoratorImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
-        const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
-        const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
-        const textForVersion    = `ver${Helpers.getNumText(version)}`;
-        const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
-        const textForType       = `type${Helpers.getNumText(decoratorType)}`;
+        const textForTheme      = `theme${Twns.Helpers.getNumText(themeType)}`;
+        const textForShapeId    = `shape${Twns.Helpers.getNumText(shapeId || 0)}`;
+        const textForVersion    = `ver${Twns.Helpers.getNumText(version)}`;
+        const textForSkin       = `skin${Twns.Helpers.getNumText(skinId)}`;
+        const textForType       = `type${Twns.Helpers.getNumText(decoratorType)}`;
         const textForFrame      = ticksPerFrame < Number.MAX_VALUE
-            ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
+            ? `frame${Twns.Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
             : `frame00`;
         return `tileDecorator_${textForVersion}_${textForTheme}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
     }
     export function getTileObjectImageSource({version, themeType, skinId, objectType, isDark, shapeId, tickCount}: {
-        version     : Types.UnitAndTileTextureVersion;
-        themeType   : Types.TileThemeType;
+        version     : Twns.Types.UnitAndTileTextureVersion;
+        themeType   : Twns.Types.TileThemeType;
         skinId      : number;
         objectType  : TileObjectType;
         isDark      : boolean;
         shapeId     : number;
         tickCount   : number;
     }): string {
-        const cfgForFrame       = Helpers.getExisted(CommonConstants.TileObjectFrameConfigs.get(version)?.get(objectType), ClientErrorCode.ConfigManager_GetTileObjectImageSource_00);
+        const cfgForFrame       = Twns.Helpers.getExisted(CommonConstants.TileObjectFrameConfigs.get(version)?.get(objectType), ClientErrorCode.ConfigManager_GetTileObjectImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
-        const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
-        const textForShapeId    = `shape${Helpers.getNumText(shapeId)}`;
-        const textForVersion    = `ver${Helpers.getNumText(version)}`;
-        const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
-        const textForType       = `type${Helpers.getNumText(objectType)}`;
+        const textForTheme      = `theme${Twns.Helpers.getNumText(themeType)}`;
+        const textForShapeId    = `shape${Twns.Helpers.getNumText(shapeId)}`;
+        const textForVersion    = `ver${Twns.Helpers.getNumText(version)}`;
+        const textForSkin       = `skin${Twns.Helpers.getNumText(skinId)}`;
+        const textForType       = `type${Twns.Helpers.getNumText(objectType)}`;
         const textForFrame      = ticksPerFrame < Number.MAX_VALUE
-            ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
+            ? `frame${Twns.Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
             : `frame00`;
         return `tileObject_${textForVersion}_${textForTheme}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
     }
@@ -372,59 +372,59 @@ namespace Twns.Config.ConfigManager {
     }
 
     export function getUnitImageSource({ version, skinId, unitType, isDark, isMoving, tickCount }: {
-        version     : Types.UnitAndTileTextureVersion;
+        version     : Twns.Types.UnitAndTileTextureVersion;
         skinId      : number;
         unitType    : UnitType;
         isDark      : boolean;
         isMoving    : boolean;
         tickCount   : number;
     }): string {
-        const cfgForUnit        = Helpers.getExisted(CommonConstants.UnitImageConfigs.get(version)?.get(unitType), ClientErrorCode.ConfigManager_GetUnitImageSource_00);
+        const cfgForUnit        = Twns.Helpers.getExisted(CommonConstants.UnitImageConfigs.get(version)?.get(unitType), ClientErrorCode.ConfigManager_GetUnitImageSource_00);
         const cfgForFrame       = isMoving ? cfgForUnit.moving : cfgForUnit.idle;
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
         const textForMoving     = isMoving ? `act01` : `act00`;
-        const textForVersion    = `ver${Helpers.getNumText(version)}`;
-        const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
-        const textForType       = `type${Helpers.getNumText(unitType)}`;
-        const textForFrame      = `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`;
+        const textForVersion    = `ver${Twns.Helpers.getNumText(version)}`;
+        const textForSkin       = `skin${Twns.Helpers.getNumText(skinId)}`;
+        const textForType       = `type${Twns.Helpers.getNumText(unitType)}`;
+        const textForFrame      = `frame${Twns.Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`;
         return `unit_${textForVersion}_${textForType}_${textForDark}_${textForMoving}_${textForSkin}_${textForFrame}`;
     }
 
-    export function getWeatherImageSource(weatherType: Types.WeatherType): string {
+    export function getWeatherImageSource(weatherType: Twns.Types.WeatherType): string {
         switch (weatherType) {
-            case Types.WeatherType.Clear        : return `commonIcon0026`;
-            case Types.WeatherType.Rainy        : return `commonIcon0027`;
-            case Types.WeatherType.Sandstorm    : return `commonIcon0028`;
-            case Types.WeatherType.Snowy        : return `commonIcon0022`;
-            default                             : throw Helpers.newError(`ConfigManager.getWeatherImageSource() invalid weatherType: ${weatherType}`);
+            case Twns.Types.WeatherType.Clear        : return `commonIcon0026`;
+            case Twns.Types.WeatherType.Rainy        : return `commonIcon0027`;
+            case Twns.Types.WeatherType.Sandstorm    : return `commonIcon0028`;
+            case Twns.Types.WeatherType.Snowy        : return `commonIcon0022`;
+            default                             : throw Twns.Helpers.newError(`ConfigManager.getWeatherImageSource() invalid weatherType: ${weatherType}`);
         }
     }
 
     export function getDialogueBackgroundImage(backgroundId: number): string {
-        return `resource/assets/texture/background/dialogueBackground${Helpers.getNumText(backgroundId, 4)}.jpg`;
+        return `resource/assets/texture/background/dialogueBackground${Twns.Helpers.getNumText(backgroundId, 4)}.jpg`;
     }
 
     export function getUserAvatarImageSource(avatarId: number): string {
-        return `userAvatar${Helpers.getNumText(avatarId, 4)}`;
+        return `userAvatar${Twns.Helpers.getNumText(avatarId, 4)}`;
     }
 
-    export function checkIsUnitDivingByDefaultWithTemplateCfg(templateCfg: Types.UnitTemplateCfg): boolean {
+    export function checkIsUnitDivingByDefaultWithTemplateCfg(templateCfg: Twns.Types.UnitTemplateCfg): boolean {
         const diveCfgs = templateCfg.diveCfgs;
         return (diveCfgs != null) && (!!diveCfgs[1]);
     }
 
-    export function checkIsValidTileObjectShapeId(tileObjectType: TileObjectType, shapeId: Types.Undefinable<number>): boolean {
+    export function checkIsValidTileObjectShapeId(tileObjectType: TileObjectType, shapeId: Twns.Types.Undefinable<number>): boolean {
         const cfg = CommonConstants.TileObjectShapeConfigs.get(tileObjectType);
         return (!!cfg)
             && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
     }
-    export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: Types.Undefinable<number>): boolean {
+    export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: Twns.Types.Undefinable<number>): boolean {
         const cfg = CommonConstants.TileBaseShapeConfigs.get(tileBaseType);
         return (!!cfg)
             && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
     }
-    export function checkIsValidTileDecoratorShapeId(type: Types.Undefinable<TileDecoratorType>, shapeId: Types.Undefinable<number>): boolean {
+    export function checkIsValidTileDecoratorShapeId(type: Twns.Types.Undefinable<TileDecoratorType>, shapeId: Twns.Types.Undefinable<number>): boolean {
         if (type == null) {
             return shapeId == null;
         }
@@ -434,20 +434,20 @@ namespace Twns.Config.ConfigManager {
             && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
     }
 
-    export function getSymmetricalTileBaseShapeId(baseType: TileBaseType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
+    export function getSymmetricalTileBaseShapeId(baseType: TileBaseType, shapeId: number, symmetryType: Twns.Types.SymmetryType): number | null {
         const cfg           = CommonConstants.TileBaseSymmetry.get(baseType);
         const shapeIdList   = cfg ? cfg.get(shapeId || 0) : null;
         return shapeIdList ? shapeIdList[symmetryType] : null;
     }
-    export function getSymmetricalTileDecoratorShapeId(decoratorType: TileDecoratorType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
+    export function getSymmetricalTileDecoratorShapeId(decoratorType: TileDecoratorType, shapeId: number, symmetryType: Twns.Types.SymmetryType): number | null {
         const cfg           = CommonConstants.TileDecoratorSymmetry.get(decoratorType);
         const shapeIdList   = cfg ? cfg.get(shapeId) : null;
         return shapeIdList ? shapeIdList[symmetryType] : null;
     }
-    export function getSymmetricalTileObjectType(objectType: TileObjectType, symmetryType: Types.SymmetryType): TileObjectType {
-        return Helpers.getExisted(CommonConstants.TileObjectTypeSymmetry.get(objectType))[symmetryType];
+    export function getSymmetricalTileObjectType(objectType: TileObjectType, symmetryType: Twns.Types.SymmetryType): TileObjectType {
+        return Twns.Helpers.getExisted(CommonConstants.TileObjectTypeSymmetry.get(objectType))[symmetryType];
     }
-    export function getSymmetricalTileObjectShapeId(objectType: TileObjectType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
+    export function getSymmetricalTileObjectShapeId(objectType: TileObjectType, shapeId: number, symmetryType: Twns.Types.SymmetryType): number | null {
         const cfg           = CommonConstants.TileObjectShapeSymmetry.get(objectType);
         const shapeIdList   = cfg ? cfg.get(shapeId || 0) : null;
         return shapeIdList ? shapeIdList[symmetryType] : null;
@@ -456,15 +456,15 @@ namespace Twns.Config.ConfigManager {
         baseType    : TileBaseType;
         shapeId1    : number;
         shapeId2    : number;
-        symmetryType: Types.SymmetryType;
+        symmetryType: Twns.Types.SymmetryType;
     }): boolean {
         return getSymmetricalTileBaseShapeId(params.baseType, params.shapeId1, params.symmetryType) === (params.shapeId2 || 0);
     }
     export function checkIsTileDecoratorSymmetrical({ decoratorType, shapeId1, shapeId2, symmetryType }: {
         decoratorType   : TileDecoratorType | null;
-        shapeId1        : Types.Undefinable<number>;
-        shapeId2        : Types.Undefinable<number>;
-        symmetryType    : Types.SymmetryType;
+        shapeId1        : Twns.Types.Undefinable<number>;
+        shapeId2        : Twns.Types.Undefinable<number>;
+        symmetryType    : Twns.Types.SymmetryType;
     }): boolean {
         if (decoratorType == null) {
             return (shapeId1 == null) && (shapeId2 == null);
@@ -482,7 +482,7 @@ namespace Twns.Config.ConfigManager {
         objectType  : TileObjectType;
         shapeId1    : number;
         shapeId2    : number;
-        symmetryType: Types.SymmetryType;
+        symmetryType: Twns.Types.SymmetryType;
     }): boolean {
         return getSymmetricalTileObjectShapeId(params.objectType, params.shapeId1, params.symmetryType) === (params.shapeId2 || 0);
     }

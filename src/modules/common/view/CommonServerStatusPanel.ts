@@ -5,7 +5,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
@@ -13,12 +13,12 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonServerStatusPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class CommonServerStatusPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForCommonServerStatusPanel = void;
+    export class CommonServerStatusPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonServerStatusPanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _group!                    : eui.Group;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
@@ -46,7 +46,7 @@ namespace TwnsCommonServerStatusPanel {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            CommonProxy.reqCommonGetServerStatus();
+            Twns.Common.CommonProxy.reqCommonGetServerStatus();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -58,7 +58,7 @@ namespace TwnsCommonServerStatusPanel {
             this._labelAccounts.text        = "" + data.totalAccounts;
 
             const totalOnlineTime           = data.totalOnlineTime;
-            this._labelOnlineTime.text      = totalOnlineTime == null ? CommonConstants.ErrorTextForUndefined : Helpers.getTimeDurationText(totalOnlineTime);
+            this._labelOnlineTime.text      = totalOnlineTime == null ? CommonConstants.ErrorTextForUndefined : Twns.Helpers.getTimeDurationText(totalOnlineTime);
 
             const activeAccounts            = data.activeAccounts;
             this._labelActiveAccounts.text  = activeAccounts == null ? CommonConstants.ErrorTextForUndefined : activeAccounts.join(" / ");
@@ -76,32 +76,32 @@ namespace TwnsCommonServerStatusPanel {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

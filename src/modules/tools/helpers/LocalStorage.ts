@@ -52,15 +52,15 @@ namespace LocalStorage {
         return data ? JSON.parse(data) : null;
     }
 
-    export function setLanguageType(language: Types.LanguageType): void {
+    export function setLanguageType(language: Twns.Types.LanguageType): void {
         storage.setItem(KEY_LANGUAGE, "" + language);
     }
-    export function getLanguageType(): Types.LanguageType {
+    export function getLanguageType(): Twns.Types.LanguageType {
         const t = parseInt(storage.getItem(KEY_LANGUAGE));
-        if ((t === Types.LanguageType.English) || (t === Types.LanguageType.Chinese)) {
+        if ((t === Twns.Types.LanguageType.English) || (t === Twns.Types.LanguageType.Chinese)) {
             return t;
         } else {
-            return Types.LanguageType.English;
+            return Twns.Types.LanguageType.English;
         }
     }
 

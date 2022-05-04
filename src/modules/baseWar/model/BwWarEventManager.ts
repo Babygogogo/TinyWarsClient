@@ -21,67 +21,63 @@ namespace Twns.BaseWar {
     import WarEvent                         = CommonProto.WarEvent;
     import IWarActionSystemCallWarEvent     = CommonProto.WarAction.IWarActionSystemCallWarEvent;
     import ICustomCounter                   = CommonProto.WarSerialization.ICustomCounter;
-    import ClientErrorCode                  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode                  = Twns.ClientErrorCode;
     import WarEventHelpers                  = WarHelpers.WarEventHelpers;
 
     export class BwWarEventManager {
         private _war?                           : BwWar;
-        private _warEventFullData?              : IWarEventFullData | null;
         private _calledCountList?               : IDataForWarEventCalledCount[] | null;
         private _customCounterArray?            : ICustomCounter[] | null;
         private _ongoingPersistentActionIdSet?  : Set<number>;
 
-        public init(data: Types.Undefinable<ISerialWarEventManager>): void {
+        public init(data: Twns.Types.Undefinable<ISerialWarEventManager>, warEventFullData: Twns.Types.Undefinable<CommonProto.Map.IWarEventFullData>): void {
             if (!data) {
-                this._setWarEventFullData(null);
                 this._setCalledCountList(null);
                 this._setCustomCounterArray(null);
                 this._setOngoingPersistentActionIdSet(new Set());
             } else {
+                // TODO: validate the data.
                 const customCounterArray = data.customCounterArray ?? null;
                 if ((customCounterArray) && (!Config.ConfigManager.checkIsValidCustomCounterArray(customCounterArray))) {
-                    throw Helpers.newError(`BwWarEventManager.init() invalid customCounterArray.`, ClientErrorCode.BwWarEventManager_Init_00);
+                    throw Twns.Helpers.newError(`BwWarEventManager.init() invalid customCounterArray.`, ClientErrorCode.BwWarEventManager_Init_00);
                 }
 
-                // TODO: validate the data.
-                const warEventFullData                  = Helpers.deepClone(data.warEventFullData) ?? null;
                 const ongoingPersistentActionIdArray    = data.ongoingPersistentActionIdArray ?? [];
                 const ongoingPersistentActionIdSet      = new Set(ongoingPersistentActionIdArray);
                 if (ongoingPersistentActionIdArray.length !== ongoingPersistentActionIdSet.size) {
-                    throw Helpers.newError(`BwWarEventMAnager.init() invalid ongoingPersistentActionIdArray.`, ClientErrorCode.BwWarEventManager_Init_01);
+                    throw Twns.Helpers.newError(`BwWarEventMAnager.init() invalid ongoingPersistentActionIdArray.`, ClientErrorCode.BwWarEventManager_Init_01);
                 }
                 for (const actionId of ongoingPersistentActionIdSet) {
                     const action = warEventFullData?.actionArray?.find(v => v.WeaCommonData?.actionId === actionId);
                     if ((action == null) || (!WarEventHelpers.checkIsPersistentAction(action))) {
-                        throw Helpers.newError(`BwWarEventMAnager.init() invalid ongoingPersistentActionIdArray.`, ClientErrorCode.BwWarEventManager_Init_02);
+                        throw Twns.Helpers.newError(`BwWarEventMAnager.init() invalid ongoingPersistentActionIdArray.`, ClientErrorCode.BwWarEventManager_Init_02);
                     }
                 }
 
-                this._setWarEventFullData(warEventFullData);
-                this._setCalledCountList(Helpers.deepClone(data.calledCountList) ?? null);
-                this._setCustomCounterArray(Helpers.deepClone(customCounterArray));
+                this._setCalledCountList(Twns.Helpers.deepClone(data.calledCountList) ?? null);
+                this._setCustomCounterArray(Twns.Helpers.deepClone(customCounterArray));
                 this._setOngoingPersistentActionIdSet(ongoingPersistentActionIdSet);
             }
         }
         public fastInit(data: ISerialWarEventManager): void {
-            this.init(data);
+            this._setCalledCountList(Twns.Helpers.deepClone(data.calledCountList) ?? null);
+            this._setCustomCounterArray(Twns.Helpers.deepClone(data.customCounterArray ?? null));
+            this._setOngoingPersistentActionIdSet(new Set(data.ongoingPersistentActionIdArray));
         }
 
         public serialize(): ISerialWarEventManager {
             return {
-                warEventFullData                : this.getWarEventFullData(),
                 calledCountList                 : this._getCalledCountList(),
                 customCounterArray              : this._getCustomCounterArray(),
                 ongoingPersistentActionIdArray  : [...this.getOngoingPersistentActionIdSet()],
             };
         }
         public serializeForCreateSfw(): ISerialWarEventManager {
-            return Helpers.deepClone({
-                warEventFullData                : this.getWarEventFullData(),
-                calledCountList                 : this._getCalledCountList(),
-                customCounterArray              : this._getCustomCounterArray(),
+            return {
+                calledCountList                 : Twns.Helpers.deepClone(this._getCalledCountList()),
+                customCounterArray              : Twns.Helpers.deepClone(this._getCustomCounterArray()),
                 ongoingPersistentActionIdArray  : [...this.getOngoingPersistentActionIdSet()],
-            });
+            };
         }
         public serializeForCreateMfr(): ISerialWarEventManager {
             return this.serializeForCreateSfw();
@@ -95,14 +91,11 @@ namespace Twns.BaseWar {
             this._war = war;
         }
         private _getWar(): BwWar {
-            return Helpers.getExisted(this._war);
+            return Twns.Helpers.getExisted(this._war);
         }
 
-        protected _setWarEventFullData(data: IWarEventFullData | null): void {
-            this._warEventFullData = data;
-        }
         public getWarEventFullData(): IWarEventFullData | null {
-            return Helpers.getDefined(this._warEventFullData, ClientErrorCode.BwWarEventManager_GetWarEventFullData_00);
+            return this._getWar().getCommonSettingManager().getInstanceWarRule().warEventFullData ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +105,7 @@ namespace Twns.BaseWar {
             this._calledCountList = list;
         }
         private _getCalledCountList(): IDataForWarEventCalledCount[] | null {
-            return Helpers.getDefined(this._calledCountList, ClientErrorCode.BwWarEventManager_GetCalledCountList_00);
+            return Twns.Helpers.getDefined(this._calledCountList, ClientErrorCode.BwWarEventManager_GetCalledCountList_00);
         }
 
         public updateWarEventCalledCountOnCall(eventId: number): void {                     // DONE
@@ -127,10 +120,10 @@ namespace Twns.BaseWar {
                 const data = calledCountList.find(v => v.eventId === eventId);
                 if (data) {
                     if (data.calledCountInPlayerTurn == null) {
-                        throw Helpers.newError(`Empty data.calledCountInPlayerTurn.`);
+                        throw Twns.Helpers.newError(`Empty data.calledCountInPlayerTurn.`);
                     }
                     if (data.calledCountTotal == null) {
-                        throw Helpers.newError(`Empty data.calledCountTotal`);
+                        throw Twns.Helpers.newError(`Empty data.calledCountTotal`);
                     }
                     ++data.calledCountInPlayerTurn;
                     ++data.calledCountTotal;
@@ -169,16 +162,16 @@ namespace Twns.BaseWar {
             this._customCounterArray = counterArray;
         }
         private _getCustomCounterArray(): ICustomCounter[] | null {
-            return Helpers.getDefined(this._customCounterArray, ClientErrorCode.BwWarEventManager_GetCustomCounterArray_00);
+            return Twns.Helpers.getDefined(this._customCounterArray, ClientErrorCode.BwWarEventManager_GetCustomCounterArray_00);
         }
 
         private _setCustomCounter(counterId: number, counterValue: number): void {
             if (!Config.ConfigManager.checkIsValidCustomCounterId(counterId)) {
-                throw Helpers.newError(`BwWarEventManager._setCustomCounter() invalid counterId: ${counterId}`, ClientErrorCode.BwWarEventManager_SetCustomCounter_00);
+                throw Twns.Helpers.newError(`BwWarEventManager._setCustomCounter() invalid counterId: ${counterId}`, ClientErrorCode.BwWarEventManager_SetCustomCounter_00);
             }
 
             if (!Config.ConfigManager.checkIsValidCustomCounterValue(counterValue)) {
-                throw Helpers.newError(`BwWarEventManager._setCustomCounter() invalid counterValue: ${counterValue}`, ClientErrorCode.BwWarEventManager_SetCustomCounter_01);
+                throw Twns.Helpers.newError(`BwWarEventManager._setCustomCounter() invalid counterValue: ${counterValue}`, ClientErrorCode.BwWarEventManager_SetCustomCounter_01);
             }
 
             const array = this._getCustomCounterArray();
@@ -201,7 +194,7 @@ namespace Twns.BaseWar {
         }
         private _getCustomCounter(counterId: number): number {
             if (!Config.ConfigManager.checkIsValidCustomCounterId(counterId)) {
-                throw Helpers.newError(`BwWarEventManager._getCustomCounter() invalid counterId: ${counterId}`, ClientErrorCode.BwWarEventManager_GetCustomCounter_00);
+                throw Twns.Helpers.newError(`BwWarEventManager._getCustomCounter() invalid counterId: ${counterId}`, ClientErrorCode.BwWarEventManager_GetCustomCounter_00);
             }
 
             return this._getCustomCounterArray()?.find(v => v.customCounterId === counterId)?.customCounterValue ?? 0;
@@ -214,7 +207,7 @@ namespace Twns.BaseWar {
             this._ongoingPersistentActionIdSet = actionIdArray;
         }
         public getOngoingPersistentActionIdSet(): Set<number> {
-            return Helpers.getExisted(this._ongoingPersistentActionIdSet, ClientErrorCode.BwWarEventManager_GetOngoingPersistentActionIdSet_00);
+            return Twns.Helpers.getExisted(this._ongoingPersistentActionIdSet, ClientErrorCode.BwWarEventManager_GetOngoingPersistentActionIdSet_00);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -223,17 +216,17 @@ namespace Twns.BaseWar {
         public async callWarEvent(action: IWarActionSystemCallWarEvent, isFastExecute: boolean): Promise<void> {
             this._getWar().getIsExecuteActionsWithExtraData()
                 ? await this._callWarEventWithExtraData(action, isFastExecute)
-                : await this._callWarEventWithoutExtraData(Helpers.getExisted(action.warEventId, ClientErrorCode.BwWarEventManager_CallWarEvent_00), isFastExecute);
+                : await this._callWarEventWithoutExtraData(Twns.Helpers.getExisted(action.warEventId, ClientErrorCode.BwWarEventManager_CallWarEvent_00), isFastExecute);
         }
         private async _callWarEventWithExtraData(action: IWarActionSystemCallWarEvent, isFastExecute: boolean): Promise<void> {
-            for (const actionId of this.getWarEvent(Helpers.getExisted(action.extraData?.warEventId, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_00)).actionIdArray || []) {
+            for (const actionId of this.getWarEvent(Twns.Helpers.getExisted(action.extraData?.warEventId, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_00)).actionIdArray || []) {
                 await this._callWarActionWithExtraData(actionId, isFastExecute);
             }
 
-            const extraData = Helpers.getExisted(action.extraData, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_01);
+            const extraData = Twns.Helpers.getExisted(action.extraData, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_01);
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war             : this._getWar(),
-                commonExtraData : Helpers.getExisted(extraData.commonExtraData, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_02),
+                commonExtraData : Twns.Helpers.getExisted(extraData.commonExtraData, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_02),
                 isFastExecute,
             });
         }
@@ -265,7 +258,7 @@ namespace Twns.BaseWar {
             else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithExtraData(action.WeaSetTileState, isFastExecute); }
             else if (action.WeaPersistentShowText)              { await this._callActionPersistentShowTextWithExtraData(action.WeaPersistentShowText, isFastExecute, warEventActionId); }
             else {
-                throw Helpers.newError(`Invalid action.`);
+                throw Twns.Helpers.newError(`Invalid action.`);
             }
 
             // todo: add more actions.
@@ -292,7 +285,7 @@ namespace Twns.BaseWar {
             else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithoutExtraData(action.WeaSetTileState, isFastExecute); }
             else if (action.WeaPersistentShowText)              { await this._callActionPersistentShowTextWithoutExtraData(action.WeaPersistentShowText, isFastExecute, warEventActionId); }
             else {
-                throw Helpers.newError(`Invalid action.`);
+                throw Twns.Helpers.newError(`Invalid action.`);
             }
 
             // todo: add more actions.
@@ -305,7 +298,7 @@ namespace Twns.BaseWar {
         private async _callActionAddUnitWithoutExtraData(action: WarEvent.IWeaAddUnit, isFastExecute: boolean): Promise<void> {
             const unitArray = action.unitArray;
             if ((unitArray == null) || (!unitArray.length)) {
-                throw Helpers.newError(`Empty unitArray.`);
+                throw Twns.Helpers.newError(`Empty unitArray.`);
             }
 
             const war           = this._getWar();
@@ -315,32 +308,32 @@ namespace Twns.BaseWar {
             const gameConfig    = war.getGameConfig();
             const mapSize       = unitMap.getMapSize();
             for (const data of unitArray) {
-                const unitData = Helpers.getExisted(data.unitData);
+                const unitData = Twns.Helpers.getExisted(data.unitData);
                 if (unitData.loaderUnitId != null) {
-                    throw Helpers.newError(`unitData.loaderUnitId != null: ${unitData.loaderUnitId}`);
+                    throw Twns.Helpers.newError(`unitData.loaderUnitId != null: ${unitData.loaderUnitId}`);
                 }
 
-                const canBeBlockedByUnit    = Helpers.getExisted(data.canBeBlockedByUnit);
-                const needMovableTile       = Helpers.getExisted(data.needMovableTile);
+                const canBeBlockedByUnit    = Twns.Helpers.getExisted(data.canBeBlockedByUnit);
+                const needMovableTile       = Twns.Helpers.getExisted(data.needMovableTile);
                 const unitId                = unitMap.getNextUnitId();
-                const unitType              = Helpers.getExisted(unitData.unitType);
-                const moveType              = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.moveType);
-                const rawGridIndex          = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
+                const unitType              = Twns.Helpers.getExisted(unitData.unitType);
+                const moveType              = Twns.Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.moveType);
+                const rawGridIndex          = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
                 if (WarHelpers.WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
                     gameConfig,
                     playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
                 })) {
-                    throw Helpers.newError(`Invalid unitData: ${JSON.stringify(unitData)}`);
+                    throw Twns.Helpers.newError(`Invalid unitData: ${JSON.stringify(unitData)}`);
                 }
 
-                const playerIndex = Helpers.getExisted(unitData.playerIndex);
+                const playerIndex = Twns.Helpers.getExisted(unitData.playerIndex);
                 const player = playerManager.getPlayer(playerIndex);
                 if (player == null) {
                     continue;
                 }
-                if (player.getAliveState() === Types.PlayerAliveState.Dead) {
+                if (player.getAliveState() === Twns.Types.PlayerAliveState.Dead) {
                     continue;
                 }
 
@@ -356,7 +349,7 @@ namespace Twns.BaseWar {
                     continue;
                 }
 
-                const revisedUnitData       = Helpers.deepClone(unitData);
+                const revisedUnitData       = Twns.Helpers.deepClone(unitData);
                 revisedUnitData.gridIndex   = gridIndex;
                 revisedUnitData.unitId      = unitId;
 
@@ -376,7 +369,7 @@ namespace Twns.BaseWar {
             }
 
             return new Promise<void>(resolve => {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwDialoguePanel, {
                     gameConfig   : this._getWar().getGameConfig(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
@@ -389,7 +382,7 @@ namespace Twns.BaseWar {
             }
 
             return new Promise<void>(resolve => {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwDialoguePanel, {
                     gameConfig   : this._getWar().getGameConfig(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
@@ -399,7 +392,7 @@ namespace Twns.BaseWar {
 
         private async _callActionSetViewpointWithExtraData(action: WarEvent.IWeaSetViewpoint, isFast: boolean): Promise<void> {
             const war       = this._getWar();
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(action.gridIndex), ClientErrorCode.BwWarEventManager_CallActionSetViewpointWithExtraData_00);
+            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(action.gridIndex), ClientErrorCode.BwWarEventManager_CallActionSetViewpointWithExtraData_00);
             const cursor    = war.getCursor();
             cursor.setGridIndex(gridIndex);
             cursor.updateView();
@@ -414,7 +407,7 @@ namespace Twns.BaseWar {
         }
         private async _callActionSetViewpointWithoutExtraData(action: WarEvent.IWeaSetViewpoint, isFast: boolean): Promise<void> {
             const war       = this._getWar();
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(action.gridIndex), ClientErrorCode.BwWarEventManager_CallActionSetViewpointWithoutExtraData_00);
+            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(action.gridIndex), ClientErrorCode.BwWarEventManager_CallActionSetViewpointWithoutExtraData_00);
             const cursor    = war.getCursor();
             cursor.setGridIndex(gridIndex);
             cursor.updateView();
@@ -431,9 +424,9 @@ namespace Twns.BaseWar {
         private async _callActionSetWeatherWithExtraData(action: WarEvent.IWeaSetWeather, isFast: boolean): Promise<void> {
             const war               = this._getWar();
             const weatherManager    = war.getWeatherManager();
-            weatherManager.setForceWeatherType(Helpers.getExisted(action.weatherType, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithExtraData_00));
+            weatherManager.setForceWeatherType(Twns.Helpers.getExisted(action.weatherType, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithExtraData_00));
 
-            const turnsCount = Helpers.getExisted(action.weatherTurnsCount, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithExtraData_01);
+            const turnsCount = Twns.Helpers.getExisted(action.weatherTurnsCount, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithExtraData_01);
             if (turnsCount == 0) {
                 weatherManager.setExpirePlayerIndex(null);
                 weatherManager.setExpireTurnIndex(null);
@@ -449,9 +442,9 @@ namespace Twns.BaseWar {
         private async _callActionSetWeatherWithoutExtraData(action: WarEvent.IWeaSetWeather, isFast: boolean): Promise<void> {
             const war               = this._getWar();
             const weatherManager    = war.getWeatherManager();
-            weatherManager.setForceWeatherType(Helpers.getExisted(action.weatherType, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithoutExtraData_00));
+            weatherManager.setForceWeatherType(Twns.Helpers.getExisted(action.weatherType, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithoutExtraData_00));
 
-            const weatherTurnsCount = Helpers.getExisted(action.weatherTurnsCount, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithoutExtraData_01);
+            const weatherTurnsCount = Twns.Helpers.getExisted(action.weatherTurnsCount, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithoutExtraData_01);
             if (weatherTurnsCount == 0) {
                 weatherManager.setExpirePlayerIndex(null);
                 weatherManager.setExpireTurnIndex(null);
@@ -471,7 +464,7 @@ namespace Twns.BaseWar {
             }
 
             return new Promise<void>(resolve => {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwSimpleDialoguePanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwSimpleDialoguePanel, {
                     gameConfig   : this._getWar().getGameConfig(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
@@ -484,7 +477,7 @@ namespace Twns.BaseWar {
             }
 
             return new Promise<void>(resolve => {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwSimpleDialoguePanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwSimpleDialoguePanel, {
                     gameConfig   : this._getWar().getGameConfig(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
@@ -498,9 +491,9 @@ namespace Twns.BaseWar {
             }
 
             if (action.useCoBgm) {
-                SoundManager.playCoBgmWithWar(this._getWar(), false);
+                Twns.SoundManager.playCoBgmWithWar(this._getWar(), false);
             } else {
-                SoundManager.playBgm(Helpers.getExisted(action.bgmCode));
+                Twns.SoundManager.playBgm(Twns.Helpers.getExisted(action.bgmCode));
             }
         }
         private async _callActionPlayBgmWithoutExtraData(action: WarEvent.IWeaPlayBgm, isFast: boolean): Promise<void> {
@@ -509,9 +502,9 @@ namespace Twns.BaseWar {
             }
 
             if (action.useCoBgm) {
-                SoundManager.playCoBgmWithWar(this._getWar(), false);
+                Twns.SoundManager.playCoBgmWithWar(this._getWar(), false);
             } else {
-                SoundManager.playBgm(Helpers.getExisted(action.bgmCode));
+                Twns.SoundManager.playBgm(Twns.Helpers.getExisted(action.bgmCode));
             }
         }
 
@@ -519,9 +512,9 @@ namespace Twns.BaseWar {
         private async _callActionSetForceFogCodeWithExtraData(action: WarEvent.IWeaSetForceFogCode, isFast: boolean): Promise<void> {
             const war       = this._getWar();
             const fogMap    = war.getFogMap();
-            fogMap.setForceFogCode(Helpers.getExisted(action.forceFogCode, ClientErrorCode.BwWarEventManager_CallActionSetHasFogWithExtraData_00));
+            fogMap.setForceFogCode(Twns.Helpers.getExisted(action.forceFogCode, ClientErrorCode.BwWarEventManager_CallActionSetHasFogWithExtraData_00));
 
-            const turnsCount = Helpers.getExisted(action.turnsCount, ClientErrorCode.BwWarEventManager_CallActionSetHasFogWithExtraData_01);
+            const turnsCount = Twns.Helpers.getExisted(action.turnsCount, ClientErrorCode.BwWarEventManager_CallActionSetHasFogWithExtraData_01);
             if (turnsCount == 0) {
                 fogMap.setForceExpirePlayerIndex(null);
                 fogMap.setForceExpireTurnIndex(null);
@@ -534,9 +527,9 @@ namespace Twns.BaseWar {
         private async _callActionSetForceFogCodeWithoutExtraData(action: WarEvent.IWeaSetForceFogCode, isFast: boolean): Promise<void> {
             const war       = this._getWar();
             const fogMap    = war.getFogMap();
-            fogMap.setForceFogCode(Helpers.getExisted(action.forceFogCode, ClientErrorCode.BwWarEventManager_CallActionSetHasFogWithoutExtraData_00));
+            fogMap.setForceFogCode(Twns.Helpers.getExisted(action.forceFogCode, ClientErrorCode.BwWarEventManager_CallActionSetHasFogWithoutExtraData_00));
 
-            const turnsCount = Helpers.getExisted(action.turnsCount, ClientErrorCode.BwWarEventManager_CallActionSetHasFogWithoutExtraData_01);
+            const turnsCount = Twns.Helpers.getExisted(action.turnsCount, ClientErrorCode.BwWarEventManager_CallActionSetHasFogWithoutExtraData_01);
             if (turnsCount == 0) {
                 fogMap.setForceExpirePlayerIndex(null);
                 fogMap.setForceExpireTurnIndex(null);
@@ -596,12 +589,12 @@ namespace Twns.BaseWar {
             const war = this._getWar();
             const playerIndex = action.playerIndex;
             if ((playerIndex == null) || (playerIndex === CommonConstants.WarNeutralPlayerIndex)) {
-                throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`);
+                throw Twns.Helpers.newError(`Invalid playerIndex: ${playerIndex}`);
             }
 
-            const playerAliveState = Helpers.getExisted(action.playerAliveState);
+            const playerAliveState = Twns.Helpers.getExisted(action.playerAliveState);
             if (!Config.ConfigManager.checkIsValidPlayerAliveState(playerAliveState)) {
-                throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`);
+                throw Twns.Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`);
             }
 
             const player = war.getPlayer(playerIndex);
@@ -616,7 +609,7 @@ namespace Twns.BaseWar {
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private async _callActionDeprecatedSetPlayerFundWithoutExtraData(action: WarEvent.IWeaDeprecatedSetPlayerFund, isFastExecute: boolean): Promise<void> {
-            const player                = this._getWar().getPlayer(Helpers.getExisted(action.playerIndex));
+            const player                = this._getWar().getPlayer(Twns.Helpers.getExisted(action.playerIndex));
             const multiplierPercentage  = action.multiplierPercentage ?? 100;
             const deltaValue            = action.deltaValue ?? 0;
             const maxValue              = CommonConstants.WarPlayerMaxFund;
@@ -632,7 +625,7 @@ namespace Twns.BaseWar {
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private async _callActionDeprecatedSetPlayerCoEnergyWithoutExtraData(action: WarEvent.IWeaDeprecatedSetPlayerCoEnergy, isFastExecute: boolean): Promise<void> {
-            const player                = this._getWar().getPlayer(Helpers.getExisted(action.playerIndex));
+            const player                = this._getWar().getPlayer(Twns.Helpers.getExisted(action.playerIndex));
             const multiplierPercentage  = action.multiplierPercentage ?? 100;
             const deltaPercentage       = action.deltaPercentage ?? 0;
             const maxEnergy             = player.getCoMaxEnergy();
@@ -665,9 +658,9 @@ namespace Twns.BaseWar {
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private async _callActionSetPlayerAliveStateWithoutExtraData(action: WarEvent.IWeaSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
-            const playerAliveState = Helpers.getExisted(action.playerAliveState);
+            const playerAliveState = Twns.Helpers.getExisted(action.playerAliveState);
             if (!Config.ConfigManager.checkIsValidPlayerAliveState(playerAliveState)) {
-                throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`);
+                throw Twns.Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`);
             }
 
             const playerIndexArray = action.playerIndexArray;
@@ -690,9 +683,9 @@ namespace Twns.BaseWar {
             const conAliveStateArray            = action.conAliveStateArray;
             const conCoUsingSkillTypeArray      = action.conCoUsingSkillTypeArray;
             const conFund                       = action.conFund;
-            const conFundComparator             = action.conFundComparator ?? Types.ValueComparator.EqualTo;
+            const conFundComparator             = action.conFundComparator ?? Twns.Types.ValueComparator.EqualTo;
             const conEnergyPercentage           = action.conEnergyPercentage;
-            const conEnergyPercentageComparator = action.conEnergyPercentageComparator ?? Types.ValueComparator.EqualTo;
+            const conEnergyPercentageComparator = action.conEnergyPercentageComparator ?? Twns.Types.ValueComparator.EqualTo;
             const actFundMultiplierPercentage   = action.actFundMultiplierPercentage ?? 100;
             const actFundDeltaValue             = action.actFundDeltaValue ?? 0;
             const actCoEnergyMultiplierPct      = action.actCoEnergyMultiplierPct ?? 100;
@@ -710,7 +703,7 @@ namespace Twns.BaseWar {
 
                 const fund = player.getFund();
                 if ((conFund != null)                       &&
-                    (!Helpers.checkIsMeetValueComparator({
+                    (!Twns.Helpers.checkIsMeetValueComparator({
                         comparator  : conFundComparator,
                         targetValue : conFund,
                         actualValue : fund,
@@ -723,7 +716,7 @@ namespace Twns.BaseWar {
                 const coCurrentEnergy   = player.getCoCurrentEnergy();
                 if (conEnergyPercentage != null) {
                     if ((coMaxEnergy == 0)                      ||
-                        (!Helpers.checkIsMeetValueComparator({
+                        (!Twns.Helpers.checkIsMeetValueComparator({
                             comparator  : conEnergyPercentageComparator,
                             targetValue : conEnergyPercentage,
                             actualValue : coCurrentEnergy * 100 / coMaxEnergy,
@@ -738,7 +731,7 @@ namespace Twns.BaseWar {
                     Math.max(-maxFund, Math.floor(fund * actFundMultiplierPercentage / 100 + actFundDeltaValue)))
                 );
 
-                player.setCoCurrentEnergy(Helpers.getValueInRange({
+                player.setCoCurrentEnergy(Twns.Helpers.getValueInRange({
                     maxValue    : coMaxEnergy,
                     minValue    : 0,
                     rawValue    : Math.floor(coCurrentEnergy * actCoEnergyMultiplierPct / 100 + coMaxEnergy * actCoEnergyDeltaPct / 100),
@@ -782,18 +775,18 @@ namespace Twns.BaseWar {
             const playerIndexArray              = action.conPlayerIndexArray ?? [];
             const teamIndexArray                = action.conTeamIndexArray ?? [];
             const locationIdArray               = action.conLocationIdArray ?? [];
-            const gridIndexArray                = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_00)) ?? [];
+            const gridIndexArray                = action.conGridIndexArray?.map(v => Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_00)) ?? [];
             const unitTypeArray                 = action.conUnitTypeArray ?? [];
             const actionStateArray              = action.conActionStateArray ?? [];
             const hasLoadedCo                   = action.conHasLoadedCo;
             const conHp                         = action.conHp;
-            const conHpComparator               = action.conHpComparator ?? Types.ValueComparator.EqualTo;
+            const conHpComparator               = action.conHpComparator ?? Twns.Types.ValueComparator.EqualTo;
             const conFuelPct                    = action.conFuelPct;
-            const conFuelPctComparator          = action.conFuelPctComparator ?? Types.ValueComparator.EqualTo;
+            const conFuelPctComparator          = action.conFuelPctComparator ?? Twns.Types.ValueComparator.EqualTo;
             const conPriAmmoPct                 = action.conPriAmmoPct;
-            const conPriAmmoPctComparator       = action.conPriAmmoPctComparator ?? Types.ValueComparator.EqualTo;
+            const conPriAmmoPctComparator       = action.conPriAmmoPctComparator ?? Twns.Types.ValueComparator.EqualTo;
             const conPromotion                  = action.conPromotion;
-            const conPromotionComparator        = action.conPromotionComparator ?? Types.ValueComparator.EqualTo;
+            const conPromotionComparator        = action.conPromotionComparator ?? Twns.Types.ValueComparator.EqualTo;
             const destroyUnit                   = action.actDestroyUnit;
             const actActionState                = action.actActionState;
             const actHasLoadedCo                = action.actHasLoadedCo;
@@ -817,7 +810,7 @@ namespace Twns.BaseWar {
             const minPriAmmo                    = 0;
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
-                    const gridIndex : Types.GridIndex = { x, y };
+                    const gridIndex : Twns.Types.GridIndex = { x, y };
                     const unit      = unitMap.getUnitOnMap(gridIndex);
                     const tile      = tileMap.getTile(gridIndex);
                     if ((unit == null)                                                                                          ||
@@ -833,7 +826,7 @@ namespace Twns.BaseWar {
                     }
 
                     if ((conHp != null)                         &&
-                        (!Helpers.checkIsMeetValueComparator({
+                        (!Twns.Helpers.checkIsMeetValueComparator({
                             comparator  : conHpComparator,
                             targetValue : conHp,
                             actualValue : unit.getCurrentHp(),
@@ -843,7 +836,7 @@ namespace Twns.BaseWar {
                     }
 
                     if ((conPromotion != null)                  &&
-                        (!Helpers.checkIsMeetValueComparator({
+                        (!Twns.Helpers.checkIsMeetValueComparator({
                             comparator  : conPromotionComparator,
                             targetValue : conPromotion,
                             actualValue : unit.getCurrentPromotion(),
@@ -853,7 +846,7 @@ namespace Twns.BaseWar {
                     }
 
                     if ((conFuelPct != null)                    &&
-                        (!Helpers.checkIsMeetValueComparator({
+                        (!Twns.Helpers.checkIsMeetValueComparator({
                             comparator  : conFuelPctComparator,
                             targetValue : conFuelPct * 100,
                             actualValue : unit.getCurrentFuel() * 100 / unit.getMaxFuel(),
@@ -865,10 +858,10 @@ namespace Twns.BaseWar {
                     if (conPriAmmoPct != null) {
                         const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
                         if ((maxAmmo == null)                       ||
-                            (!Helpers.checkIsMeetValueComparator({
+                            (!Twns.Helpers.checkIsMeetValueComparator({
                                 comparator  : conPriAmmoPctComparator,
                                 targetValue : conPriAmmoPct * 100,
-                                actualValue : Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_01) * 100 / maxAmmo,
+                                actualValue : Twns.Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_01) * 100 / maxAmmo,
                             }))
                         ) {
                             continue;
@@ -879,19 +872,19 @@ namespace Twns.BaseWar {
                         WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
 
                     } else {
-                        unit.setCurrentHp(Helpers.getValueInRange({
+                        unit.setCurrentHp(Twns.Helpers.getValueInRange({
                             maxValue    : unit.getMaxHp(),
                             minValue    : minHp,
                             rawValue    : Math.floor(unit.getCurrentHp() * hpMultiplierPercentage / 100 + hpDeltaValue),
                         }));
 
-                        unit.setCurrentFuel(Helpers.getValueInRange({
+                        unit.setCurrentFuel(Twns.Helpers.getValueInRange({
                             maxValue    : unit.getMaxFuel(),
                             minValue    : minFuel,
                             rawValue    : Math.floor(unit.getCurrentFuel() * fuelMultiplierPercentage / 100 + fuelDeltaValue),
                         }));
 
-                        unit.setCurrentPromotion(Helpers.getValueInRange({
+                        unit.setCurrentPromotion(Twns.Helpers.getValueInRange({
                             maxValue    : unit.getMaxPromotion(),
                             minValue    : minPromotion,
                             rawValue    : Math.floor(unit.getCurrentPromotion() * promotionMultiplierPercentage / 100 + promotionDeltaValue),
@@ -900,8 +893,8 @@ namespace Twns.BaseWar {
                         {
                             const currentAmmo = unit.getPrimaryWeaponCurrentAmmo();
                             if (currentAmmo != null) {
-                                unit.setPrimaryWeaponCurrentAmmo(Helpers.getValueInRange({
-                                    maxValue    : Helpers.getExisted(unit.getPrimaryWeaponMaxAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_02),
+                                unit.setPrimaryWeaponCurrentAmmo(Twns.Helpers.getValueInRange({
+                                    maxValue    : Twns.Helpers.getExisted(unit.getPrimaryWeaponMaxAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_02),
                                     minValue    : minPriAmmo,
                                     rawValue    : Math.floor(currentAmmo * priAmmoMultiplierPercentage / 100 + priAmmoDeltaValue),
                                 }));
@@ -931,16 +924,16 @@ namespace Twns.BaseWar {
         private async _callActionSetTileTypeWithoutExtraData(action: WarEvent.IWeaSetTileType, isFastExecute: boolean): Promise<void> {
             const war                       = this._getWar();
             const gameConfig                = war.getGameConfig();
-            const actTileData               = Helpers.getExisted(action.actTileData, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_00);
-            const rawActBaseType            = Helpers.getExisted(actTileData.baseType, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_01);
-            const rawActObjectType          = Helpers.getExisted(actTileData.objectType, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_02);
+            const actTileData               = Twns.Helpers.getExisted(action.actTileData, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_00);
+            const rawActBaseType            = Twns.Helpers.getExisted(actTileData.baseType, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_01);
+            const rawActObjectType          = Twns.Helpers.getExisted(actTileData.objectType, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_02);
             const actDestroyUnit            = action.actDestroyUnit;
             const actIsModifyTileBase       = (action.actIsModifyTileBase) || (action.actIsModifyTileBase == null);
             const actIsModifyTileDecorator  = (action.actIsModifyTileDecorator) || (action.actIsModifyTileDecorator == null);
             const actIsModifyTileObject     = (action.actIsModifyTileObject) || (action.actIsModifyTileObject == null);
             const conIsHighlighted          = action.conIsHighlighted;
             const conLocationIdArray        = action.conLocationIdArray ?? [];
-            const conGridIndexArray         = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_03)) ?? [];
+            const conGridIndexArray         = action.conGridIndexArray?.map(v => Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_03)) ?? [];
             const unitMap                   = war.getUnitMap();
             const tileMap                   = war.getTileMap();
             const mapSize                   = tileMap.getMapSize();
@@ -948,7 +941,7 @@ namespace Twns.BaseWar {
             const mapHeight                 = mapSize.height;
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
-                    const gridIndex : Types.GridIndex = { x, y };
+                    const gridIndex : Twns.Types.GridIndex = { x, y };
                     const tile      = tileMap.getTile(gridIndex);
                     if (((conIsHighlighted != null) && (tile.getIsHighlighted() !== conIsHighlighted))                              ||
                         ((conGridIndexArray.length) && (!conGridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
@@ -1001,7 +994,7 @@ namespace Twns.BaseWar {
             const mapHeight                             = mapSize.height;
             const conIsHighlighted                      = action.conIsHighlighted;
             const conLocationIdArray                    = action.conLocationIdArray ?? [];
-            const conGridIndexArray                     = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_00)) ?? [];
+            const conGridIndexArray                     = action.conGridIndexArray?.map(v => Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_00)) ?? [];
             const actHpMultiplierPercentage             = action.actHpMultiplierPercentage;
             const actHpDeltaValue                       = action.actHpDeltaValue;
             const actBuildPointMultiplierPercentage     = action.actBuildPointMultiplierPercentage;
@@ -1013,7 +1006,7 @@ namespace Twns.BaseWar {
             const actIsHighlighted                      = action.actIsHighlighted;
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
-                    const gridIndex : Types.GridIndex = { x, y };
+                    const gridIndex : Twns.Types.GridIndex = { x, y };
                     const tile      = tileMap.getTile(gridIndex);
                     if (((conIsHighlighted != null) && (tile.getIsHighlighted() !== conIsHighlighted))                              ||
                         ((conGridIndexArray.length) && (!conGridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
@@ -1027,9 +1020,9 @@ namespace Twns.BaseWar {
                         if ((currentHp != null)                                                 &&
                             ((actHpMultiplierPercentage != null) || (actHpDeltaValue != null))
                         ) {
-                            tile.setCurrentHp(Helpers.getValueInRange({
+                            tile.setCurrentHp(Twns.Helpers.getValueInRange({
                                 minValue    : 0,
-                                maxValue    : Helpers.getExisted(tile.getMaxHp(), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_01),
+                                maxValue    : Twns.Helpers.getExisted(tile.getMaxHp(), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_01),
                                 rawValue    : Math.floor(currentHp * (actHpMultiplierPercentage ?? 100) / 100 + (actHpDeltaValue ?? 0)),
                             }));
                         }
@@ -1040,9 +1033,9 @@ namespace Twns.BaseWar {
                         if ((currentBuildPoint != null)                                                         &&
                             ((actBuildPointDeltaValue != null) || (actBuildPointMultiplierPercentage != null))
                         ) {
-                            tile.setCurrentBuildPoint(Helpers.getValueInRange({
+                            tile.setCurrentBuildPoint(Twns.Helpers.getValueInRange({
                                 minValue    : 0,
-                                maxValue    : Helpers.getExisted(tile.getMaxBuildPoint(), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_02),
+                                maxValue    : Twns.Helpers.getExisted(tile.getMaxBuildPoint(), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_02),
                                 rawValue    : Math.floor(currentBuildPoint * (actBuildPointMultiplierPercentage ?? 100) / 100 + (actBuildPointDeltaValue ?? 0)),
                             }));
                         }
@@ -1053,9 +1046,9 @@ namespace Twns.BaseWar {
                         if ((currentCapturePoint != null)                                                           &&
                             ((actCapturePointDeltaValue != null) || (actCapturePointMultiplierPercentage != null))
                         ) {
-                            tile.setCurrentCapturePoint(Helpers.getValueInRange({
+                            tile.setCurrentCapturePoint(Twns.Helpers.getValueInRange({
                                 minValue    : 0,
-                                maxValue    : Helpers.getExisted(tile.getMaxCapturePoint(), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_03),
+                                maxValue    : Twns.Helpers.getExisted(tile.getMaxCapturePoint(), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_03),
                                 rawValue    : Math.floor(currentCapturePoint * (actCapturePointMultiplierPercentage ?? 100) / 100 + (actCapturePointDeltaValue ?? 0)),
                             }));
                         }
@@ -1094,7 +1087,8 @@ namespace Twns.BaseWar {
         }
 
         public getCallableWarEventId(): number | null {                                // DONE
-            for (const warEventId of this._getWar().getCommonSettingManager().getWarRule().warEventIdArray || []) {
+            for (const warEvent of this._getWar().getCommonSettingManager().getInstanceWarRule().warEventFullData?.eventArray || []) {
+                const warEventId = Twns.Helpers.getExisted(warEvent.eventId);
                 if (this._checkCanCallWarEvent(warEventId)) {
                     return warEventId;
                 }
@@ -1105,22 +1099,22 @@ namespace Twns.BaseWar {
 
         private _checkCanCallWarEvent(warEventId: number): boolean {            // DONE
             const warEvent = this.getWarEvent(warEventId);
-            if ((this.getWarEventCalledCountInPlayerTurn(warEventId) >= Helpers.getExisted(warEvent.maxCallCountInPlayerTurn)) ||
-                (this.getWarEventCalledCountTotal(warEventId) >= Helpers.getExisted(warEvent.maxCallCountTotal))
+            if ((this.getWarEventCalledCountInPlayerTurn(warEventId) >= Twns.Helpers.getExisted(warEvent.maxCallCountInPlayerTurn)) ||
+                (this.getWarEventCalledCountTotal(warEventId) >= Twns.Helpers.getExisted(warEvent.maxCallCountTotal))
             ) {
                 return false;
             }
 
-            return this._checkIsMeetConditionNode(Helpers.getExisted(warEvent.conditionNodeId));
+            return this._checkIsMeetConditionNode(Twns.Helpers.getExisted(warEvent.conditionNodeId));
         }
 
         private _checkIsMeetConditionNode(nodeId: number): boolean {            // DONE
             const node              = this._getConditionNode(nodeId);
-            const isAnd             = Helpers.getExisted(node.isAnd);
+            const isAnd             = Twns.Helpers.getExisted(node.isAnd);
             const conditionIdArray  = node.conditionIdArray;
             const subNodeIdArray    = node.subNodeIdArray;
             if ((!conditionIdArray?.length) && (!subNodeIdArray?.length)) {
-                throw Helpers.newError(`Empty conditionIdArray and subNodeIdArray.`);
+                throw Twns.Helpers.newError(`Empty conditionIdArray and subNodeIdArray.`);
             }
 
             if (conditionIdArray) {
@@ -1174,29 +1168,29 @@ namespace Twns.BaseWar {
             else if (condition.WecUnitPresence)                     { return this._checkIsMeetConUnitPresence(condition.WecUnitPresence); }
             else if (condition.WecCustomCounter)                    { return this._checkIsMeetConCustomCounter(condition.WecCustomCounter); }
 
-            throw Helpers.newError(`Invalid condition!`);
+            throw Twns.Helpers.newError(`Invalid condition!`);
         }
 
         private _checkIsMeetConEventCalledCountTotalEqualTo(condition: WarEvent.IWecEventCalledCountTotalEqualTo): boolean {
-            const eventIdEqualTo    = Helpers.getExisted(condition.eventIdEqualTo);
-            const countEqualTo      = Helpers.getExisted(condition.countEqualTo);
-            const isNot             = Helpers.getExisted(condition.isNot);
+            const eventIdEqualTo    = Twns.Helpers.getExisted(condition.eventIdEqualTo);
+            const countEqualTo      = Twns.Helpers.getExisted(condition.countEqualTo);
+            const isNot             = Twns.Helpers.getExisted(condition.isNot);
             return (this.getWarEventCalledCountTotal(eventIdEqualTo) === countEqualTo)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
         private _checkIsMeetConEventCalledCountTotalGreaterThan(condition: WarEvent.IWecEventCalledCountTotalGreaterThan): boolean {
-            const eventIdEqualTo    = Helpers.getExisted(condition.eventIdEqualTo);
-            const countGreaterThan  = Helpers.getExisted(condition.countGreaterThan);
-            const isNot             = Helpers.getExisted(condition.isNot);
+            const eventIdEqualTo    = Twns.Helpers.getExisted(condition.eventIdEqualTo);
+            const countGreaterThan  = Twns.Helpers.getExisted(condition.countGreaterThan);
+            const isNot             = Twns.Helpers.getExisted(condition.isNot);
             return (this.getWarEventCalledCountTotal(eventIdEqualTo) > countGreaterThan)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
         private _checkIsMeetConEventCalledCountTotalLessThan(condition: WarEvent.IWecEventCalledCountTotalLessThan): boolean {
-            const eventIdEqualTo    = Helpers.getExisted(condition.eventIdEqualTo);
-            const countLessThan     = Helpers.getExisted(condition.countLessThan);
-            const isNot             = Helpers.getExisted(condition.isNot);
+            const eventIdEqualTo    = Twns.Helpers.getExisted(condition.eventIdEqualTo);
+            const countLessThan     = Twns.Helpers.getExisted(condition.countLessThan);
+            const isNot             = Twns.Helpers.getExisted(condition.isNot);
             return (this.getWarEventCalledCountTotal(eventIdEqualTo) < countLessThan)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
@@ -1205,17 +1199,18 @@ namespace Twns.BaseWar {
             const eventIdArray          = condition.eventIdArray ?? [];
             const timesInTurn           = condition.timesInTurn;
             const timesTotal            = condition.timesTotal;
-            const timesInTurnComparator = Helpers.getExisted(condition.timesInTurnComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_00);
-            const timesTotalComparator  = Helpers.getExisted(condition.timesTotalComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_01);
+            const timesInTurnComparator = Twns.Helpers.getExisted(condition.timesInTurnComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_00);
+            const timesTotalComparator  = Twns.Helpers.getExisted(condition.timesTotalComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_01);
 
             let eventsCount = 0;
-            for (const eventId of this._getWar().getCommonSettingManager().getWarRule().warEventIdArray ?? []) {
+            for (const warEvent of this._getWar().getCommonSettingManager().getInstanceWarRule().warEventFullData?.eventArray ?? []) {
+                const eventId = Twns.Helpers.getExisted(warEvent.eventId, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_02);
                 if ((eventIdArray.length) && (eventIdArray.indexOf(eventId) < 0)) {
                     continue;
                 }
 
                 if ((timesInTurn != null)                   &&
-                    (!Helpers.checkIsMeetValueComparator({
+                    (!Twns.Helpers.checkIsMeetValueComparator({
                         comparator  : timesInTurnComparator,
                         targetValue : timesInTurn,
                         actualValue : this.getWarEventCalledCountInPlayerTurn(eventId),
@@ -1225,7 +1220,7 @@ namespace Twns.BaseWar {
                 }
 
                 if ((timesTotal != null)                    &&
-                    (!Helpers.checkIsMeetValueComparator({
+                    (!Twns.Helpers.checkIsMeetValueComparator({
                         comparator  : timesTotalComparator,
                         targetValue : timesTotal,
                         actualValue : this.getWarEventCalledCountTotal(eventId),
@@ -1237,17 +1232,17 @@ namespace Twns.BaseWar {
                 ++eventsCount;
             }
 
-            return Helpers.checkIsMeetValueComparator({
-                comparator  : Helpers.getExisted(condition.eventsCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_02),
-                targetValue : Helpers.getExisted(condition.eventsCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_03),
+            return Twns.Helpers.checkIsMeetValueComparator({
+                comparator  : Twns.Helpers.getExisted(condition.eventsCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_03),
+                targetValue : Twns.Helpers.getExisted(condition.eventsCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_04),
                 actualValue : eventsCount,
             });
         }
 
         private _checkIsMeetConPlayerAliveStateEqualTo(condition: WarEvent.IWecPlayerAliveStateEqualTo): boolean {
-            const playerIndexEqualTo    = Helpers.getExisted(condition.playerIndexEqualTo);
-            const aliveStateEqualTo     = Helpers.getExisted(condition.aliveStateEqualTo);
-            const isNot                 = Helpers.getExisted(condition.isNot);
+            const playerIndexEqualTo    = Twns.Helpers.getExisted(condition.playerIndexEqualTo);
+            const aliveStateEqualTo     = Twns.Helpers.getExisted(condition.aliveStateEqualTo);
+            const isNot                 = Twns.Helpers.getExisted(condition.isNot);
             const player                = this._getWar().getPlayer(playerIndexEqualTo);
             return (player.getAliveState() === aliveStateEqualTo)
                 ? (isNot ? false : true)
@@ -1259,9 +1254,9 @@ namespace Twns.BaseWar {
             const coUsingSkillTypeArray         = condition.coUsingSkillTypeArray ?? [];
             const coCategoryIdArray             = condition.coCategoryIdArray ?? [];
             const targetFund                    = condition.fund;
-            const fundComparator                = Helpers.getExisted(condition.fundComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_00);
+            const fundComparator                = Twns.Helpers.getExisted(condition.fundComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_00);
             const targetEnergyPercentage        = condition.energyPercentage;
-            const energyPercentageComparator    = Helpers.getExisted(condition.energyPercentageComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_01);
+            const energyPercentageComparator    = Twns.Helpers.getExisted(condition.energyPercentageComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_01);
             const war                           = this._getWar();
             const gameConfig                    = war.getGameConfig();
             let playersCount                    = 0;
@@ -1273,7 +1268,7 @@ namespace Twns.BaseWar {
                     continue;
                 }
 
-                if ((targetFund != null) && (!Helpers.checkIsMeetValueComparator({
+                if ((targetFund != null) && (!Twns.Helpers.checkIsMeetValueComparator({
                     comparator  : fundComparator,
                     targetValue : targetFund,
                     actualValue : player.getFund(),
@@ -1290,7 +1285,7 @@ namespace Twns.BaseWar {
 
                 if (targetEnergyPercentage != null) {
                     const maxEnergy = player.getCoMaxEnergy();
-                    if ((maxEnergy <= 0) || (!Helpers.checkIsMeetValueComparator({
+                    if ((maxEnergy <= 0) || (!Twns.Helpers.checkIsMeetValueComparator({
                         comparator  : energyPercentageComparator,
                         targetValue : targetEnergyPercentage,
                         actualValue : player.getCoCurrentEnergy() * 100 / maxEnergy,
@@ -1302,32 +1297,32 @@ namespace Twns.BaseWar {
                 ++playersCount;
             }
 
-            return Helpers.checkIsMeetValueComparator({
-                comparator  : Helpers.getExisted(condition.playersCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_02),
+            return Twns.Helpers.checkIsMeetValueComparator({
+                comparator  : Twns.Helpers.getExisted(condition.playersCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_02),
                 actualValue : playersCount,
-                targetValue : Helpers.getExisted(condition.playersCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_03),
+                targetValue : Twns.Helpers.getExisted(condition.playersCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_03),
             });
         }
 
         private _checkIsMeetConPlayerIndexInTurnEqualTo(condition: WarEvent.IWecPlayerIndexInTurnEqualTo): boolean {
-            const valueEqualTo  = Helpers.getExisted(condition.valueEqualTo);
-            const isNot         = Helpers.getExisted(condition.isNot);
+            const valueEqualTo  = Twns.Helpers.getExisted(condition.valueEqualTo);
+            const isNot         = Twns.Helpers.getExisted(condition.isNot);
             const playerIndex   = this._getWar().getPlayerIndexInTurn();
             return (playerIndex === valueEqualTo)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
         private _checkIsMeetConPlayerIndexInTurnGreaterThan(condition: WarEvent.IWecPlayerIndexInTurnGreaterThan): boolean {
-            const valueGreaterThan  = Helpers.getExisted(condition.valueGreaterThan);
-            const isNot             = Helpers.getExisted(condition.isNot);
+            const valueGreaterThan  = Twns.Helpers.getExisted(condition.valueGreaterThan);
+            const isNot             = Twns.Helpers.getExisted(condition.isNot);
             const playerIndex       = this._getWar().getPlayerIndexInTurn();
             return (playerIndex > valueGreaterThan)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
         private _checkIsMeetConPlayerIndexInTurnLessThan(condition: WarEvent.IWecPlayerIndexInTurnLessThan): boolean {
-            const valueLessThan = Helpers.getExisted(condition.valueLessThan);
-            const isNot         = Helpers.getExisted(condition.isNot);
+            const valueLessThan = Twns.Helpers.getExisted(condition.valueLessThan);
+            const isNot         = Twns.Helpers.getExisted(condition.isNot);
             const playerIndex   = this._getWar().getPlayerIndexInTurn();
             return (playerIndex < valueLessThan)
                 ? (isNot ? false : true)
@@ -1335,33 +1330,33 @@ namespace Twns.BaseWar {
         }
 
         private _checkIsMeetConTurnIndexEqualTo(condition: WarEvent.IWecTurnIndexEqualTo): boolean {
-            const valueEqualTo  = Helpers.getExisted(condition.valueEqualTo);
-            const isNot         = Helpers.getExisted(condition.isNot);
+            const valueEqualTo  = Twns.Helpers.getExisted(condition.valueEqualTo);
+            const isNot         = Twns.Helpers.getExisted(condition.isNot);
             const turnIndex     = this._getWar().getTurnManager().getTurnIndex();
             return (turnIndex === valueEqualTo)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
         private _checkIsMeetConTurnIndexGreaterThan(condition: WarEvent.IWecTurnIndexGreaterThan): boolean {
-            const valueGreaterThan  = Helpers.getExisted(condition.valueGreaterThan);
-            const isNot             = Helpers.getExisted(condition.isNot);
+            const valueGreaterThan  = Twns.Helpers.getExisted(condition.valueGreaterThan);
+            const isNot             = Twns.Helpers.getExisted(condition.isNot);
             const turnIndex         = this._getWar().getTurnManager().getTurnIndex();
             return (turnIndex > valueGreaterThan)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
         private _checkIsMeetConTurnIndexLessThan(condition: WarEvent.IWecTurnIndexLessThan): boolean {
-            const valueLessThan     = Helpers.getExisted(condition.valueLessThan);
-            const isNot             = Helpers.getExisted(condition.isNot);
+            const valueLessThan     = Twns.Helpers.getExisted(condition.valueLessThan);
+            const isNot             = Twns.Helpers.getExisted(condition.isNot);
             const turnIndex         = this._getWar().getTurnManager().getTurnIndex();
             return (turnIndex < valueLessThan)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
         private _checkIsMeetConTurnIndexRemainderEqualTo(condition: WarEvent.IWecTurnIndexRemainderEqualTo): boolean {
-            const divider           = Helpers.getExisted(condition.divider);
-            const remainderEqualTo  = Helpers.getExisted(condition.remainderEqualTo);
-            const isNot             = Helpers.getExisted(condition.isNot);
+            const divider           = Twns.Helpers.getExisted(condition.divider);
+            const remainderEqualTo  = Twns.Helpers.getExisted(condition.remainderEqualTo);
+            const isNot             = Twns.Helpers.getExisted(condition.isNot);
             const turnIndex         = this._getWar().getTurnManager().getTurnIndex();
             return (turnIndex % divider === remainderEqualTo)
                 ? (isNot ? false : true)
@@ -1374,7 +1369,7 @@ namespace Twns.BaseWar {
                 const targetTurnIndex       = condition.turnIndex;
                 const turnIndexComparator   = condition.turnIndexComparator;
                 if ((targetTurnIndex != null) && (turnIndexComparator != null)) {
-                    if (!Helpers.checkIsMeetValueComparator({
+                    if (!Twns.Helpers.checkIsMeetValueComparator({
                         comparator  : turnIndexComparator,
                         actualValue : turnIndex,
                         targetValue : targetTurnIndex,
@@ -1388,7 +1383,7 @@ namespace Twns.BaseWar {
                 const targetRemainder       = condition.turnIndexRemainder;
                 const remainderComparator   = condition.turnIndexRemainderComparator;
                 if ((turnIndexDivider != null) && (targetRemainder != null) && (remainderComparator != null)) {
-                    if (!Helpers.checkIsMeetValueComparator({
+                    if (!Twns.Helpers.checkIsMeetValueComparator({
                         comparator  : remainderComparator,
                         actualValue : turnIndex % turnIndexDivider,
                         targetValue : targetRemainder,
@@ -1414,8 +1409,8 @@ namespace Twns.BaseWar {
         }
 
         private _checkIsMeetConTurnPhaseEqualTo(condition: WarEvent.IWecTurnPhaseEqualTo): boolean {
-            const valueEqualTo  = Helpers.getExisted(condition.valueEqualTo);
-            const isNot         = Helpers.getExisted(condition.isNot);
+            const valueEqualTo  = Twns.Helpers.getExisted(condition.valueEqualTo);
+            const isNot         = Twns.Helpers.getExisted(condition.isNot);
             const phaseCode     = this._getWar().getTurnManager().getPhaseCode();
             return (phaseCode === valueEqualTo)
                 ? (isNot ? false : true)
@@ -1438,16 +1433,16 @@ namespace Twns.BaseWar {
         }
 
         private _checkIsMeetConTilePlayerIndexEqualTo(condition: WarEvent.IWecTilePlayerIndexEqualTo): boolean {
-            const tile  = this._getWar().getTileMap().getTile(Helpers.getExisted(GridIndexHelpers.convertGridIndex(condition.gridIndex), ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePlayerIndexEqualTo_00));
+            const tile  = this._getWar().getTileMap().getTile(Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(condition.gridIndex), ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePlayerIndexEqualTo_00));
             const isNot = condition.isNot;
-            return (tile.getPlayerIndex() === Helpers.getExisted(condition.playerIndex, ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePlayerIndexEqualTo_01))
+            return (tile.getPlayerIndex() === Twns.Helpers.getExisted(condition.playerIndex, ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePlayerIndexEqualTo_01))
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
         private _checkIsMeetConTileTypeEqualTo(condition: WarEvent.IWecTileTypeEqualTo): boolean {
-            const tile  = this._getWar().getTileMap().getTile(Helpers.getExisted(GridIndexHelpers.convertGridIndex(condition.gridIndex), ClientErrorCode.BwWarEventManager_CheckIsMeetConTileTypeEqualTo_00));
+            const tile  = this._getWar().getTileMap().getTile(Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(condition.gridIndex), ClientErrorCode.BwWarEventManager_CheckIsMeetConTileTypeEqualTo_00));
             const isNot = condition.isNot;
-            return (tile.getType() === Helpers.getExisted(condition.tileType, ClientErrorCode.BwWarEventManager_CheckIsMeetConTileTypeEqualTo_01))
+            return (tile.getType() === Twns.Helpers.getExisted(condition.tileType, ClientErrorCode.BwWarEventManager_CheckIsMeetConTileTypeEqualTo_01))
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
@@ -1455,7 +1450,7 @@ namespace Twns.BaseWar {
             const playerIndexArray      = condition.playerIndexArray ?? [];
             const teamIndexArray        = condition.teamIndexArray ?? [];
             const locationIdArray       = condition.locationIdArray ?? [];
-            const gridIndexArray        = condition.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePresence_00)) ?? [];
+            const gridIndexArray        = condition.gridIndexArray?.map(v => Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePresence_00)) ?? [];
             const tileTypeArray         = condition.tileTypeArray ?? [];
             const war                   = this._getWar();
             const tileMap               = war.getTileMap();
@@ -1465,7 +1460,7 @@ namespace Twns.BaseWar {
             let tilesCount              = 0;
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
-                    const gridIndex : Types.GridIndex = { x, y };
+                    const gridIndex : Twns.Types.GridIndex = { x, y };
                     const tile      = tileMap.getTile(gridIndex);
                     if (((tileTypeArray.length) && (tileTypeArray.indexOf(tile.getType()) < 0))                                 ||
                         ((playerIndexArray.length) && (playerIndexArray.indexOf(tile.getPlayerIndex()) < 0))                    ||
@@ -1480,28 +1475,28 @@ namespace Twns.BaseWar {
                 }
             }
 
-            return Helpers.checkIsMeetValueComparator({
-                comparator  : Helpers.getExisted(condition.tilesCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePresence_01),
+            return Twns.Helpers.checkIsMeetValueComparator({
+                comparator  : Twns.Helpers.getExisted(condition.tilesCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePresence_01),
                 actualValue : tilesCount,
-                targetValue : Helpers.getExisted(condition.tilesCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePresence_02)
+                targetValue : Twns.Helpers.getExisted(condition.tilesCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePresence_02)
             });
         }
         private _checkIsMeetConUnitPresence(condition: WarEvent.IWecUnitPresence): boolean {
             const playerIndexArray      = condition.playerIndexArray ?? [];
             const teamIndexArray        = condition.teamIndexArray ?? [];
             const locationIdArray       = condition.locationIdArray ?? [];
-            const gridIndexArray        = condition.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_00)) ?? [];
+            const gridIndexArray        = condition.gridIndexArray?.map(v => Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_00)) ?? [];
             const unitTypeArray         = condition.unitTypeArray ?? [];
             const actionStateArray      = condition.actionStateArray ?? [];
             const hasLoadedCo           = condition.hasLoadedCo;
             const hp                    = condition.hp;
-            const hpComparator          = condition.hpComparator ?? Types.ValueComparator.EqualTo;
+            const hpComparator          = condition.hpComparator ?? Twns.Types.ValueComparator.EqualTo;
             const fuelPct               = condition.fuelPct;
-            const fuelPctComparator     = condition.fuelPctComparator ?? Types.ValueComparator.EqualTo;
+            const fuelPctComparator     = condition.fuelPctComparator ?? Twns.Types.ValueComparator.EqualTo;
             const priAmmoPct            = condition.priAmmoPct;
-            const priAmmoPctComparator  = condition.priAmmoPctComparator ?? Types.ValueComparator.EqualTo;
+            const priAmmoPctComparator  = condition.priAmmoPctComparator ?? Twns.Types.ValueComparator.EqualTo;
             const promotion             = condition.promotion;
-            const promotionComparator   = condition.promotionComparator ?? Types.ValueComparator.EqualTo;
+            const promotionComparator   = condition.promotionComparator ?? Twns.Types.ValueComparator.EqualTo;
             const war                   = this._getWar();
             const unitMap               = war.getUnitMap();
             const tileMap               = war.getTileMap();
@@ -1522,7 +1517,7 @@ namespace Twns.BaseWar {
                 }
 
                 if ((hp != null)                            &&
-                    (!Helpers.checkIsMeetValueComparator({
+                    (!Twns.Helpers.checkIsMeetValueComparator({
                         comparator  : hpComparator,
                         targetValue : hp,
                         actualValue : unit.getCurrentHp(),
@@ -1532,7 +1527,7 @@ namespace Twns.BaseWar {
                 }
 
                 if ((promotion != null)                     &&
-                    (!Helpers.checkIsMeetValueComparator({
+                    (!Twns.Helpers.checkIsMeetValueComparator({
                         comparator  : promotionComparator,
                         targetValue : promotion,
                         actualValue : unit.getCurrentPromotion(),
@@ -1542,7 +1537,7 @@ namespace Twns.BaseWar {
                 }
 
                 if ((fuelPct != null)                       &&
-                    (!Helpers.checkIsMeetValueComparator({
+                    (!Twns.Helpers.checkIsMeetValueComparator({
                         comparator  : fuelPctComparator,
                         targetValue : fuelPct * 100,
                         actualValue : unit.getCurrentFuel() * 100 / unit.getMaxFuel(),
@@ -1554,10 +1549,10 @@ namespace Twns.BaseWar {
                 if (priAmmoPct != null) {
                     const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
                     if ((maxAmmo == null)   ||
-                        (!Helpers.checkIsMeetValueComparator({
+                        (!Twns.Helpers.checkIsMeetValueComparator({
                             comparator  : priAmmoPctComparator,
                             targetValue : priAmmoPct * 100,
-                            actualValue : Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_01) * 100 / maxAmmo
+                            actualValue : Twns.Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_01) * 100 / maxAmmo
                         }))
                     ) {
                         continue;
@@ -1567,20 +1562,20 @@ namespace Twns.BaseWar {
                 ++unitsCount;
             }
 
-            return Helpers.checkIsMeetValueComparator({
-                comparator  : Helpers.getExisted(condition.unitsCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_02),
+            return Twns.Helpers.checkIsMeetValueComparator({
+                comparator  : Twns.Helpers.getExisted(condition.unitsCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_02),
                 actualValue : unitsCount,
-                targetValue : Helpers.getExisted(condition.unitsCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_03),
+                targetValue : Twns.Helpers.getExisted(condition.unitsCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_03),
             });
         }
 
         private _checkIsMeetConCustomCounter(condition: WarEvent.IWecCustomCounter): boolean {
             const counterIdArray        = condition.counterIdArray ?? [];
             const targetValue           = condition.value;
-            const valueComparator       = Helpers.getExisted(condition.valueComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConCustomCounter_00);
+            const valueComparator       = Twns.Helpers.getExisted(condition.valueComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConCustomCounter_00);
             const valueDivider          = condition.valueDivider;
             const valueRemainder        = condition.valueRemainder;
-            const remainderComparator   = Helpers.getExisted(condition.valueRemainderComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConCustomCounter_01);
+            const remainderComparator   = Twns.Helpers.getExisted(condition.valueRemainderComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConCustomCounter_01);
             let counter                 = 0;
             for (let counterId = CommonConstants.WarCustomCounterMinId; counterId <= CommonConstants.WarCustomCounterMaxId; ++counterId) {
                 if ((counterIdArray.length) && (counterIdArray.indexOf(counterId) < 0)) {
@@ -1589,7 +1584,7 @@ namespace Twns.BaseWar {
 
                 const value = this._getCustomCounter(counterId);
                 if ((targetValue != null)                   &&
-                    (!Helpers.checkIsMeetValueComparator({
+                    (!Twns.Helpers.checkIsMeetValueComparator({
                         comparator  : valueComparator,
                         targetValue,
                         actualValue : value,
@@ -1600,7 +1595,7 @@ namespace Twns.BaseWar {
 
                 if ((valueDivider != null)                  &&
                     (valueRemainder != null)                &&
-                    (!Helpers.checkIsMeetValueComparator({
+                    (!Twns.Helpers.checkIsMeetValueComparator({
                         comparator  : remainderComparator,
                         targetValue : valueRemainder,
                         actualValue : value % valueDivider,
@@ -1612,35 +1607,35 @@ namespace Twns.BaseWar {
                 ++counter;
             }
 
-            return Helpers.checkIsMeetValueComparator({
-                comparator  : Helpers.getExisted(condition.counterCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConCustomCounter_02),
-                targetValue : Helpers.getExisted(condition.counterCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConCustomCounter_03),
+            return Twns.Helpers.checkIsMeetValueComparator({
+                comparator  : Twns.Helpers.getExisted(condition.counterCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConCustomCounter_02),
+                targetValue : Twns.Helpers.getExisted(condition.counterCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConCustomCounter_03),
                 actualValue : counter,
             });
         }
 
         public getWarEvent(warEventId: number): WarEvent.IWarEvent {                    // DONE
-            return Helpers.getExisted(this.getWarEventFullData()?.eventArray?.find(v => v.eventId === warEventId));
+            return Twns.Helpers.getExisted(this.getWarEventFullData()?.eventArray?.find(v => v.eventId === warEventId));
         }
         private _getConditionNode(nodeId: number): WarEvent.IWarEventConditionNode {    // DONE
-            return Helpers.getExisted(this.getWarEventFullData()?.conditionNodeArray?.find(v => v.nodeId === nodeId));
+            return Twns.Helpers.getExisted(this.getWarEventFullData()?.conditionNodeArray?.find(v => v.nodeId === nodeId));
         }
         private _getCondition(conditionId: number): WarEvent.IWarEventCondition {       // DONE
-            return Helpers.getExisted(this.getWarEventFullData()?.conditionArray?.find(v => v.WecCommonData?.conditionId === conditionId));
+            return Twns.Helpers.getExisted(this.getWarEventFullData()?.conditionArray?.find(v => v.WecCommonData?.conditionId === conditionId));
         }
         public getWarEventAction(actionId: number): WarEvent.IWarEventAction {          // DONE
-            return Helpers.getExisted(this.getWarEventFullData()?.actionArray?.find(v => v.WeaCommonData?.actionId === actionId));
+            return Twns.Helpers.getExisted(this.getWarEventFullData()?.actionArray?.find(v => v.WeaCommonData?.actionId === actionId));
         }
     }
 
     function getGridIndexForAddUnit({ origin, unitMap, tileMap, moveType, needMovableTile, canBeBlockedByUnit }: {
-        origin              : Types.GridIndex;
+        origin              : Twns.Types.GridIndex;
         unitMap             : BwUnitMap;
         tileMap             : BwTileMap;
-        moveType            : Types.MoveType;
+        moveType            : Twns.Types.MoveType;
         needMovableTile     : boolean;
         canBeBlockedByUnit  : boolean;
-    }): Types.GridIndex | null {
+    }): Twns.Types.GridIndex | null {
         const mapSize = tileMap.getMapSize();
         if ((canBeBlockedByUnit) && (unitMap.getUnitOnMap(origin))) {
             return null;

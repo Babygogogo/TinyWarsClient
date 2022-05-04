@@ -6,7 +6,7 @@
 // // import Types                    from "../../tools/helpers/Types";
 // // import Lang                     from "../../tools/lang/Lang";
 // // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// // import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// // import Twns.Notify           from "../../tools/notify/NotifyType";
 // // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
 // // import TwnsUiPanel              from "../../tools/ui/UiPanel";
@@ -18,7 +18,7 @@
 // namespace TwnsBwBuildingListPanel {
 //     import BwPlayerManager  = TwnsBwPlayerManager.BwPlayerManager;
 //     import LangTextType     = TwnsLangTextType.LangTextType;
-//     import NotifyType       = TwnsNotifyType.NotifyType;
+//     import NotifyType       = Twns.Notify.NotifyType;
 //     import BwWar            = TwnsBwWar.BwWar;
 
 //     type OpenDataForBwBuildingListPanel = {

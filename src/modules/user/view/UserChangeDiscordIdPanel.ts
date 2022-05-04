@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -16,12 +16,12 @@
 // import UserProxy                from "../../user/model/UserProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserChangeDiscordIdPanel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
+namespace Twns.User {
+    import NotifyType           = Twns.Notify.NotifyType;
+    import LangTextType         = Twns.Lang.LangTextType;
 
-    export type OpenData = void;
-    export class UserChangeDiscordIdPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserChangeDiscordIdPanel = void;
+    export class UserChangeDiscordIdPanel extends TwnsUiPanel.UiPanel<OpenDataForUserChangeDiscordIdPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -49,7 +49,7 @@ namespace TwnsUserChangeDiscordIdPanel {
             this._setIsCloseOnTouchedMask();
 
             this._isRequesting          = false;
-            this._inputDiscordId.text   = UserModel.getSelfDiscordId() ?? ``;
+            this._inputDiscordId.text   = Twns.User.UserModel.getSelfDiscordId() ?? ``;
 
             const labelUrl          = this._labelUrl;
             labelUrl.touchEnabled   = true;
@@ -72,18 +72,18 @@ namespace TwnsUserChangeDiscordIdPanel {
                 FloatText.show(Lang.getText(LangTextType.A0046));
             } else {
                 const discordId = this._inputDiscordId.text;
-                if (!Helpers.checkIsDiscordIdValid(discordId)) {
+                if (!Twns.Helpers.checkIsDiscordIdValid(discordId)) {
                     FloatText.show(Lang.getText(LangTextType.A0048));
                 } else {
                     this._isRequesting = true;
-                    UserProxy.reqSetDiscordId(discordId);
+                    Twns.User.UserProxy.reqSetDiscordId(discordId);
                 }
             }
         }
 
         private _onTouchedLabelUrl(): void {
             if ((window) && (window.open)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, `Discord`),
                     callback: () => {
                         window.open(CommonConstants.DiscordUrl);
@@ -116,32 +116,32 @@ namespace TwnsUserChangeDiscordIdPanel {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

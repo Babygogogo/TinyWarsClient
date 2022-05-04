@@ -4,16 +4,16 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 // import MeModel              from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseCoCategoryIdPanel {
-    import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import LangTextType = Twns.Lang.LangTextType;
+    import NotifyType   = Twns.Notify.NotifyType;
 
     export type OpenDataForCommonChooseCoCategoryIdPanel = {
         currentCoCategoryIdArray    : number[];
@@ -94,7 +94,7 @@ namespace TwnsCommonChooseCoCategoryIdPanel {
             const counterIdArray    = this._getOpenData().currentCoCategoryIdArray;
             const list              = this._listLocation;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => counterIdArray.indexOf(v.coCategoryId) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => counterIdArray.indexOf(v.coCategoryId) >= 0 ? i : null)));
         }
     }
 

@@ -6,13 +6,13 @@
 // import Types                from "./Types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace Helpers {
+namespace Twns.Helpers {
     import ColorType            = Types.ColorType;
     import ILanguageText        = CommonProto.Structure.ILanguageText;
     import IMessageContainer    = CommonProto.NetMessage.IMessageContainer;
     import IWarActionContainer  = CommonProto.WarAction.IWarActionContainer;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import LangTextType         = Twns.Lang.LangTextType;
+    import ClientErrorCode      = Twns.ClientErrorCode;
 
     const COLOR_MATRIX_FILTERS = {
         [ColorType.Gray]: new egret.ColorMatrixFilter([
@@ -481,8 +481,8 @@ namespace Helpers {
     // export function createCachedDataGetter<DataType, NetMessageType>({ dataDict, dataExpireTime = 999999, notifyTypeForSucceed, notifyTypeForFail, checkIsTargetMessage, reqData }: {
     //     dataDict                : Map<number, DataType | null>;
     //     dataExpireTime?         : number;
-    //     notifyTypeForSucceed    : TwnsNotifyType.NotifyType;
-    //     notifyTypeForFail       : TwnsNotifyType.NotifyType;
+    //     notifyTypeForSucceed    : Notify.NotifyType;
+    //     notifyTypeForFail       : Notify.NotifyType;
     //     checkIsTargetMessage    : (msg: NetMessageType, key: number) => boolean;
     //     reqData                 : (key: number) => void;
     // }): (key: number) => Promise<DataType | null> {
@@ -567,7 +567,7 @@ namespace Helpers {
 
         return {
             getData: (key: KeyType): Promise<DataType | null> => {
-                const serverTimestamp = Timer.getServerTimestamp();
+                const serverTimestamp = Twns.Timer.getServerTimestamp();
                 if ((dataDict.has(key))                                                     &&
                     (serverTimestamp - (dataTimestampDict.get(key) ?? 0) <= dataExpireTime)
                 ) {
@@ -613,7 +613,7 @@ namespace Helpers {
             },
 
             setData : (key: KeyType, data: DataType | null): void => {
-                dataTimestampDict.set(key, Timer.getServerTimestamp());
+                dataTimestampDict.set(key, Twns.Timer.getServerTimestamp());
                 dataDict.set(key, data);
 
                 for (const cb of requestDict.get(key) ?? []) {

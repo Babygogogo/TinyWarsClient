@@ -8,7 +8,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiTab {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode      = Twns.ClientErrorCode;
     export class UiTab<DataForTabItemRenderer, DataForPage> extends TwnsUiComponent.UiComponent {
         private readonly _bar!          : eui.TabBar;  // 页签栏
         private readonly _page!         : eui.Group;   // 页面内容，仅用于占位
@@ -44,7 +44,7 @@ namespace TwnsUiTab {
                         tabDataArray[index].pageData = pageData;
                     }
                 }
-                this.bindData(tabDataArray, Helpers.getExisted(this._cachedSelectedIndex));
+                this.bindData(tabDataArray, Twns.Helpers.getExisted(this._cachedSelectedIndex));
 
                 this._cachedTabDataArray    = null;
                 this._cachedSelectedIndex   = null;
@@ -68,7 +68,7 @@ namespace TwnsUiTab {
 
             const item = this._bar.getElementAt(index);
             if (item instanceof TwnsUiListItemRenderer.UiListItemRenderer) {
-                SoundManager.playShortSfx(item.getShortSfxCode());
+                Twns.SoundManager.playShortSfx(item.getShortSfxCode());
                 item.onItemTapEvent(event);
             }
         }
@@ -78,10 +78,10 @@ namespace TwnsUiTab {
 
         private _setSelectedIndex(index: number): void {
             if (!this.getIsOpening()) {
-                throw Helpers.newError(`UiTab._setSelectedIndex() not opening.`, ClientErrorCode.UiTab_SetSelectedIndex_00);
+                throw Twns.Helpers.newError(`UiTab._setSelectedIndex() not opening.`, ClientErrorCode.UiTab_SetSelectedIndex_00);
             }
 
-            const data = Helpers.getExisted(this._getTabDataArray()[index]);
+            const data = Twns.Helpers.getExisted(this._getTabDataArray()[index]);
             this._removeAllCachedPagesFromParent();
             this._bar.selectedIndex = index;
             this._selectedIndex     = index;
@@ -96,7 +96,7 @@ namespace TwnsUiTab {
         }
 
         public getPageInstance(index: number): TwnsUiTabPage.UiTabPage<DataForPage> {
-            const tabData = Helpers.getExisted(this._getTabDataArray()[index]);
+            const tabData = Twns.Helpers.getExisted(this._getTabDataArray()[index]);
             if (!tabData.pageInstance) {
                 tabData.pageInstance = new tabData.pageClass();
             }
@@ -113,7 +113,7 @@ namespace TwnsUiTab {
 
         public bindData(dataArray: DataForUiTab<DataForTabItemRenderer, DataForPage>[], selectedIndex = 0): void {
             if (!dataArray.length) {
-                throw Helpers.newError(`UiTab.bindData() empty data.`, ClientErrorCode.UiTab_BindData_00);
+                throw Twns.Helpers.newError(`UiTab.bindData() empty data.`, ClientErrorCode.UiTab_BindData_00);
             }
 
             if (!this.getIsOpening()) {
@@ -143,7 +143,7 @@ namespace TwnsUiTab {
                 return;
             }
 
-            const tabData       = Helpers.getExisted(this._getTabDataArray()[index]);
+            const tabData       = Twns.Helpers.getExisted(this._getTabDataArray()[index]);
             tabData.pageData    = pageData;
             if ((index === this.getSelectedIndex()) && (refreshPage)) {
                 this._setSelectedIndex(index);

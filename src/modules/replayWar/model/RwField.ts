@@ -5,10 +5,10 @@
 // import TwnsRwActionPlanner  from "./RwActionPlanner";
 // import TwnsRwFogMap         from "./RwFogMap";
 
-namespace TwnsRwField {
+namespace Twns.ReplayWar {
     import BwField          = Twns.BaseWar.BwField;
-    import RwActionPlanner  = TwnsRwActionPlanner.RwActionPlanner;
-    import RwFogMap         = TwnsRwFogMap.RwFogMap;
+    import RwActionPlanner  = Twns.ReplayWar.RwActionPlanner;
+    import RwFogMap         = Twns.ReplayWar.RwFogMap;
     import BwUnitMap        = Twns.BaseWar.BwUnitMap;
 
     export class RwField extends BwField {

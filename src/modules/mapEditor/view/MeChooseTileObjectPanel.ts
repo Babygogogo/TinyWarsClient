@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -16,15 +16,15 @@
 // import TwnsMeTileSimpleView     from "./MeTileSimpleView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeChooseTileObjectPanel {
-    import DataForDrawTileObject    = TwnsMeDrawer.DataForDrawTileObject;
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.MapEditor {
+    import DataForDrawTileObject    = Twns.MapEditor.DataForDrawTileObject;
+    import LangTextType             = Twns.Lang.LangTextType;
+    import NotifyType               = Twns.Notify.NotifyType;
 
     const MAX_RECENT_COUNT = 10;
 
-    export type OpenData = void;
-    export class MeChooseTileObjectPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeChooseTileObjectPanel = void;
+    export class MeChooseTileObjectPanel extends TwnsUiPanel.UiPanel<OpenDataForMeChooseTileObjectPanel> {
         private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
         private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForTileObjectRenderer>;
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
@@ -90,10 +90,10 @@ namespace TwnsMeChooseTileObjectPanel {
         }
 
         private _onTouchedBtnAdjustRoad(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content: Lang.getText(LangTextType.A0259),
                 callback: () => {
-                    const drawer = Helpers.getExisted(MeModel.getWar()).getDrawer();
+                    const drawer = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer();
                     drawer.autoAdjustRoads();
                     drawer.autoAdjustBridges();
                     this.close();
@@ -101,10 +101,10 @@ namespace TwnsMeChooseTileObjectPanel {
             });
         }
         private _onTouchedBtnAdjustPlasma(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content: Lang.getText(LangTextType.A0260),
                 callback: () => {
-                    const drawer = Helpers.getExisted(MeModel.getWar()).getDrawer();
+                    const drawer = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer();
                     drawer.autoAdjustPlasmas();
                     drawer.autoAdjustPipes();
                     this.close();
@@ -130,8 +130,8 @@ namespace TwnsMeChooseTileObjectPanel {
                         mapping.set(playerIndex, []);
                     }
 
-                    const dataListForDrawTileObject = Helpers.getExisted(mapping.get(playerIndex));
-                    const shapesCount               = UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0 ? cfg.shapesCountForV0 : cfg.shapesCount;
+                    const dataListForDrawTileObject = Twns.Helpers.getExisted(mapping.get(playerIndex));
+                    const shapesCount               = Twns.User.UserModel.getSelfSettingsTextureVersion() === Twns.Types.UnitAndTileTextureVersion.V0 ? cfg.shapesCountForV0 : cfg.shapesCount;
                     for (let shapeId = 0; shapeId < shapesCount; ++shapeId) {
                         dataListForDrawTileObject.push({
                             objectType,
@@ -204,7 +204,7 @@ namespace TwnsMeChooseTileObjectPanel {
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _conTileView!  : eui.Group;
 
-        private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private _tileView   = new Twns.MapEditor.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -227,7 +227,7 @@ namespace TwnsMeChooseTileObjectPanel {
             const data                  = this._getData();
             const dataForDrawTileObject = data.dataForDrawTileObject;
             const tileObjectType        = dataForDrawTileObject.objectType;
-            this._labelName.text        = Lang.getTileName(Twns.Config.ConfigManager.getTileType(Types.TileBaseType.Plain, tileObjectType)) || CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = Lang.getTileName(Twns.Config.ConfigManager.getTileType(Twns.Types.TileBaseType.Plain, tileObjectType)) || CommonConstants.ErrorTextForUndefined;
             this._tileView.init({
                 tileObjectType,
                 tileObjectShapeId   : dataForDrawTileObject.shapeId,
@@ -246,7 +246,7 @@ namespace TwnsMeChooseTileObjectPanel {
             const dataForDrawTileObject = data.dataForDrawTileObject;
             panel.updateOnChooseTileObject(dataForDrawTileObject);
             panel.close();
-            Helpers.getExisted(MeModel.getWar()).getDrawer().setModeDrawTileObject(dataForDrawTileObject);
+            Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawTileObject(dataForDrawTileObject);
         }
     }
 }

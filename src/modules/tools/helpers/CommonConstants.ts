@@ -3,11 +3,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace CommonConstants {
-    import TileBaseType         = Types.TileBaseType;
-    import TileDecoratorType    = Types.TileDecoratorType;
-    import TileObjectType       = Types.TileObjectType;
-    import TileType             = Types.TileType;
-    import UnitType             = Types.UnitType;
+    import TileBaseType         = Twns.Types.TileBaseType;
+    import TileDecoratorType    = Twns.Types.TileDecoratorType;
+    import TileObjectType       = Twns.Types.TileObjectType;
+    import TileType             = Twns.Types.TileType;
+    import UnitType             = Twns.Types.UnitType;
 
     type FrameCfg = {
         framesCount     : number;
@@ -33,7 +33,7 @@ namespace CommonConstants {
 
     export const ErrorTextForLang                       = `LangErr`;
     export const ErrorTextForUndefined                  = `UndefErr`;
-    export const GameVersion                            = Types.GameVersion.Legacy;
+    export const GameVersion                            = Twns.Types.GameVersion.Legacy;
     export const AdminUserId                            = 1000001;
     export const NameListMaxLength                      = 5;
 
@@ -58,7 +58,7 @@ namespace CommonConstants {
     export const WarEventMaxConditionsPerMap                            = 100;
     export const WarEventMaxActionsPerMap                               = 100;
     export const WarEventMaxActionsPerEvent                             = 10;
-    export const WarEventMaxCallCountTotal                              = 100;
+    export const WarEventMaxCallCountTotal                              = 1000;
     export const WarEventMaxCallCountInPlayerTurn                       = 10;
     export const WarEventActionAddUnitMaxCount                          = 50;
     export const WarEventActionDialogueTextMaxLength                    = 300;
@@ -120,7 +120,7 @@ namespace CommonConstants {
     export const WarBootTimerRegularMaxLimit            = 3600 * 24 * 7;
     export const WarBootTimerRegularDefaultValue        = 3600 * 24 * 3;
     export const WarBootTimerIncrementalMaxLimit        = 3600 * 24;
-    export const WarBootTimerDefaultParams              = [Types.BootTimerType.Regular, WarBootTimerRegularDefaultValue];
+    export const WarBootTimerDefaultParams              = [Twns.Types.BootTimerType.Regular, WarBootTimerRegularDefaultValue];
     export const WarMaxTurnsLimit                       = 80;
     export const WarMinTurnsLimit                       = 20;
 
@@ -141,6 +141,7 @@ namespace CommonConstants {
     export const WarRuleInitialFundMinLimit                 = 0;
     export const WarRuleInitialFundMaxLimit                 = 1000000;
     export const WarRuleInitialFundDefault                  = 0;
+    export const WarRuleBannedUnitTypeCountDefault          = 0;
     export const WarRuleLuckMinLimit                        = -100;
     export const WarRuleLuckMaxLimit                        = 100;
     export const WarRuleLuckDefaultLowerLimit               = 0;
@@ -153,7 +154,7 @@ namespace CommonConstants {
     export const WarRuleVisionRangeModifierDefault          = 0;
     export const WarRuleMaxCount                            = 5;
 
-    export const GridSize: Types.Size = {
+    export const GridSize: Twns.Types.Size = {
         width   : 24,
         height  : 24,
     };
@@ -407,7 +408,7 @@ namespace CommonConstants {
 
     export const TileBaseFrameConfigs = new Map([
         [
-            Types.UnitAndTileTextureVersion.V0,
+            Twns.Types.UnitAndTileTextureVersion.V0,
             new Map<TileBaseType, FrameCfg >([
                 [ TileBaseType.Beach,   { framesCount: 6,   ticksPerFrame: 1                }],
                 [ TileBaseType.Plain,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
@@ -416,7 +417,7 @@ namespace CommonConstants {
             ]),
         ],
         [
-            Types.UnitAndTileTextureVersion.V1,
+            Twns.Types.UnitAndTileTextureVersion.V1,
             new Map<TileBaseType, FrameCfg >([
                 [ TileBaseType.Beach,   { framesCount: 6,   ticksPerFrame: 1                }],
                 [ TileBaseType.Plain,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
@@ -433,13 +434,13 @@ namespace CommonConstants {
     ]);
     export const TileDecoratorFrameConfigs = new Map([
         [
-            Types.UnitAndTileTextureVersion.V0,
+            Twns.Types.UnitAndTileTextureVersion.V0,
             new Map<TileDecoratorType, FrameCfg>([
                 [ TileDecoratorType.Shore, { framesCount: 6, ticksPerFrame: 1 } ],
             ]),
         ],
         [
-            Types.UnitAndTileTextureVersion.V1,
+            Twns.Types.UnitAndTileTextureVersion.V1,
             new Map<TileDecoratorType, FrameCfg>([
                 [ TileDecoratorType.Shore, { framesCount: 6, ticksPerFrame: 1 } ],
             ]),
@@ -450,7 +451,7 @@ namespace CommonConstants {
     ]);
     export const TileObjectFrameConfigs = new Map([
         [
-            Types.UnitAndTileTextureVersion.V0,
+            Twns.Types.UnitAndTileTextureVersion.V0,
             new Map<TileObjectType, FrameCfg>([
                 [ TileObjectType.Empty,             { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
                 [ TileObjectType.Airport,           { framesCount: 2,   ticksPerFrame: 3                } ],
@@ -490,7 +491,7 @@ namespace CommonConstants {
             ]),
         ],
         [
-            Types.UnitAndTileTextureVersion.V1,
+            Twns.Types.UnitAndTileTextureVersion.V1,
             new Map<TileObjectType, FrameCfg >([
                 [ TileObjectType.Empty,             { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
                 [ TileObjectType.Airport,           { framesCount: 2,   ticksPerFrame: 3                } ],
@@ -1073,7 +1074,7 @@ namespace CommonConstants {
 
     export const UnitImageConfigs = new Map([
         [
-            Types.UnitAndTileTextureVersion.V0,
+            Twns.Types.UnitAndTileTextureVersion.V0,
             new Map<UnitType, { idle: FrameCfg, moving: FrameCfg }>([
                 [ UnitType.Infantry,        { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
                 [ UnitType.Mech,            { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
@@ -1104,7 +1105,7 @@ namespace CommonConstants {
             ]),
         ],
         [
-            Types.UnitAndTileTextureVersion.V1,
+            Twns.Types.UnitAndTileTextureVersion.V1,
             new Map<UnitType, { idle: FrameCfg, moving: FrameCfg }>([
                 // [ UnitType.Infantry,        { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
                 // [ UnitType.Mech,            { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],

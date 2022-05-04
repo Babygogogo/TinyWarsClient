@@ -4,7 +4,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -13,15 +13,15 @@
 // import WarMapProxy          from "../../warMap/model/WarMapProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmAcceptMapPanel {
+namespace Twns.MapManagement {
     import MeWar        = Twns.MapEditor.MeWar;
-    import NotifyType   = TwnsNotifyType.NotifyType;
-    import LangTextType = TwnsLangTextType.LangTextType;
+    import NotifyType   = Twns.Notify.NotifyType;
+    import LangTextType = Twns.Lang.LangTextType;
 
-    export type OpenData = {
+    export type OpenDataForMmAcceptMapPanel = {
         war: MeWar;
     };
-    export class MmAcceptMapPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MmAcceptMapPanel extends TwnsUiPanel.UiPanel<OpenDataForMmAcceptMapPanel> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelTips!    : TwnsUiLabel.UiLabel;
         private readonly _inputReason!  : TwnsUiTextInput.UiTextInput;
@@ -57,7 +57,7 @@ namespace TwnsMmAcceptMapPanel {
         private _onTouchedBtnConfirm(): void {
             const war       = this._getOpenData().war;
             const callback  = () => {
-                WarMapProxy.reqMmReviewMap({
+                Twns.WarMap.WarMapProxy.reqMmReviewMap({
                     designerUserId  : war.getMapDesignerUserId(),
                     slotIndex       : war.getMapSlotIndex(),
                     modifiedTime    : war.getMapModifiedTime(),
@@ -66,10 +66,10 @@ namespace TwnsMmAcceptMapPanel {
                 });
                 this.close();
             };
-            if (!war.getWarRuleArray().some(v => v.ruleAvailability?.canMrw)) {
+            if (!war.getTemplateWarRuleArray().some(v => v.ruleAvailability?.canMrw)) {
                 callback();
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0296),
                     callback,
                 });

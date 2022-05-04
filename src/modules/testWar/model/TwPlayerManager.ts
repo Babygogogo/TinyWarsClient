@@ -1,7 +1,7 @@
 
 // import TwnsBwPlayerManager from "../../baseWar/model/BwPlayerManager";
 
-namespace TwnsTwPlayerManager {
+namespace Twns.TestWar {
     import BwPlayerManager = Twns.BaseWar.BwPlayerManager;
 
     export class TwPlayerManager extends BwPlayerManager {

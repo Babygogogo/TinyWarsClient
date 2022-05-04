@@ -2,7 +2,7 @@
 // import CommonConstants          from "../../tools/helpers/CommonConstants";
 // import Helpers                  from "../../tools/helpers/Helpers";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
 // import McrModel                 from "./McrModel";
@@ -21,11 +21,11 @@ namespace Twns.MultiCustomRoom.McrJoinModel {
         if ((playerIndex == null) || (unitAndTileSkinId == null)) {
             return null;
         } else {
-            const settingsForCommon = Helpers.getExisted(roomStaticInfo.settingsForCommon);
+            const settingsForCommon = Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon);
             return {
                 roomId          : roomStaticInfo.roomId,
                 isReady         : false,
-                coId            : WarRuleHelpers.getRandomCoIdWithSettingsForCommon(Helpers.getExisted(settingsForCommon.warRule), playerIndex, await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion))),
+                coId            : WarHelpers.WarRuleHelpers.getRandomCoIdWithSettingsForCommon(Twns.Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex, await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion))),
                 playerIndex,
                 unitAndTileSkinId,
             };
@@ -33,8 +33,8 @@ namespace Twns.MultiCustomRoom.McrJoinModel {
     }
 
     function generateAvailablePlayerIndexList(roomStaticInfo: IMcrRoomStaticInfo, roomPlayerInfo: IMcrRoomPlayerInfo): number[] {
-        const playersCount      = WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForCommon?.warRule));
-        const playerInfoList    = Helpers.getExisted(roomPlayerInfo.playerDataList);
+        const playersCount      = WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon?.instanceWarRule));
+        const playerInfoList    = Twns.Helpers.getExisted(roomPlayerInfo.playerDataList);
         const indexes           : number[] = [];
         for (let i = 1; i <= playersCount; ++i) {
             if (playerInfoList.every(v => v.playerIndex !== i)) {
@@ -45,7 +45,7 @@ namespace Twns.MultiCustomRoom.McrJoinModel {
     }
 
     function generateAvailableSkinIdList(roomPlayerInfo: IMcrRoomPlayerInfo): number[] {
-        const playerDataList    = Helpers.getExisted(roomPlayerInfo.playerDataList);
+        const playerDataList    = Twns.Helpers.getExisted(roomPlayerInfo.playerDataList);
         const idList            : number[] = [];
         for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
             if (playerDataList.every(v => v.unitAndTileSkinId !== skinId)) {

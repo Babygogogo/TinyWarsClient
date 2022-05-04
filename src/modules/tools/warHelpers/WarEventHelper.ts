@@ -27,19 +27,18 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarHelpers.WarEventHelpers {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import LanguageType             = Types.LanguageType;
-    import ConditionType            = Types.WarEventConditionType;
-    import ActionType               = Types.WarEventActionType;
-    import PlayerAliveState         = Types.PlayerAliveState;
+    import LangTextType             = Twns.Lang.LangTextType;
+    import LanguageType             = Twns.Types.LanguageType;
+    import ConditionType            = Twns.Types.WarEventConditionType;
+    import ActionType               = Twns.Types.WarEventActionType;
+    import PlayerAliveState         = Twns.Types.PlayerAliveState;
     import WarEvent                 = CommonProto.WarEvent;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
-    import IMapRawData              = CommonProto.Map.IMapRawData;
     import IWarEvent                = WarEvent.IWarEvent;
     import IWarEventAction          = WarEvent.IWarEventAction;
     import IWarEventCondition       = WarEvent.IWarEventCondition;
     import IWarEventConditionNode   = WarEvent.IWarEventConditionNode;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode          = Twns.ClientErrorCode;
     import BwWar                    = BaseWar.BwWar;
     import GameConfig               = Config.GameConfig;
 
@@ -116,7 +115,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         return fullData.actionArray?.find(v => v.WeaCommonData?.actionId === actionId) ?? null;
     }
 
-    export function getAllWarEventIdArray(fullData: Types.Undefinable<IWarEventFullData>): number[] {
+    export function getAllWarEventIdArray(fullData: Twns.Types.Undefinable<IWarEventFullData>): number[] {
         const idArray: number[] = [];
         for (const event of fullData ? fullData.eventArray || [] : []) {
             const eventId = event.eventId;
@@ -127,7 +126,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         return idArray;
     }
 
-    export function trimAndCloneWarEventFullData(fullData: Types.Undefinable<IWarEventFullData>, eventIdArray: Types.Undefinable<number[]>): IWarEventFullData {
+    export function trimAndCloneWarEventFullData(fullData: Twns.Types.Undefinable<IWarEventFullData>, eventIdArray: Twns.Types.Undefinable<number[]>): IWarEventFullData {
         const dstEventArray     : IWarEvent[] = [];
         const dstNodeArray      : IWarEventConditionNode[] = [];
         const dstConditionArray : IWarEventCondition[] = [];
@@ -191,7 +190,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             }
         }
 
-        return Helpers.deepClone(trimmedData);
+        return Twns.Helpers.deepClone(trimmedData);
     }
 
     export function checkIsPersistentAction(action: IWarEventAction): boolean {
@@ -205,126 +204,19 @@ namespace Twns.WarHelpers.WarEventHelpers {
     type WarEventActionDict         = Map<number, IWarEventAction>;
     type WarEventConditionDict      = Map<number, IWarEventCondition>;
     type WarEventConditionNodeDict  = Map<number, IWarEventConditionNode>;
-    export function checkIsWarEventFullDataValid(mapRawData: IMapRawData, gameConfig: GameConfig): boolean {   // DONE
-        const warEventFullData = mapRawData.warEventFullData;
-        if (warEventFullData == null) {
-            return true;
-        }
-
-        const warRuleList = mapRawData.warRuleArray;
-        if (warRuleList == null) {
-            return false;
-        }
-
-        const actionDict = new Map<number, IWarEventAction>();
-        for (const action of warEventFullData.actionArray || []) {
-            const commonData = action.WeaCommonData;
-            if (commonData == null) {
-                return false;
-            }
-
-            const actionId = commonData.actionId;
-            if ((actionId == null) || (actionDict.has(actionId))) {
-                return false;
-            }
-            actionDict.set(actionId, action);
-        }
-        if (actionDict.size > CommonConstants.WarEventMaxActionsPerMap) {
-            return false;
-        }
-
-        const conditionDict = new Map<number, IWarEventCondition>();
-        for (const condition of warEventFullData.conditionArray || []) {
-            const commonData = condition.WecCommonData;
-            if (commonData == null) {
-                return false;
-            }
-
-            const conditionId = commonData.conditionId;
-            if ((conditionId == null) || (conditionDict.has(conditionId))) {
-                return false;
-            }
-            conditionDict.set(conditionId, condition);
-        }
-        if (conditionDict.size > CommonConstants.WarEventMaxConditionsPerMap) {
-            return false;
-        }
-
-        const nodeDict = new Map<number, IWarEventConditionNode>();
-        for (const node of warEventFullData.conditionNodeArray || []) {
-            const nodeId = node.nodeId;
-            if ((nodeId == null) || (nodeDict.has(nodeId))) {
-                return false;
-            }
-            nodeDict.set(nodeId, node);
-        }
-        if (nodeDict.size > CommonConstants.WarEventMaxConditionNodesPerMap) {
-            return false;
-        }
-
-        const eventDict = new Map<number, IWarEvent>();
-        for (const event of warEventFullData.eventArray || []) {
-            const eventId = event.eventId;
-            if ((eventId == null) || (eventDict.has(eventId))) {
-                return false;
-            }
-            eventDict.set(eventId, event);
-        }
-        if (eventDict.size > CommonConstants.WarEventMaxEventsPerMap) {
-            return false;
-        }
-
-        if (!checkIsEveryWarEventActionInUse(actionDict, eventDict)) {
-            return false;
-        }
-        if (!checkIsEveryWarEventConditionInUse(conditionDict, nodeDict)) {
-            return false;
-        }
-        if (!checkIsEveryWarEventConditionNodeInUse(nodeDict, eventDict)) {
-            return false;
-        }
-        if (!checkIsEveryWarEventInUse(eventDict, warRuleList)) {
-            return false;
-        }
-
-        for (const [, action] of actionDict) {
-            if (!checkIsValidWarEventAction({ action, actionDict, mapRawData, gameConfig })) {
-                return false;
-            }
-        }
-        for (const [, condition] of conditionDict) {
-            if (!checkIsValidWarEventCondition({ condition, mapRawData, gameConfig })) {
-                return false;
-            }
-        }
-        for (const [, conditionNode] of nodeDict) {
-            if (!checkIsValidWarEventConditionNode({ conditionNode, conditionDict, nodeDict })) {
-                return false;
-            }
-        }
-        for (const [, warEvent] of eventDict) {
-            if (!checkIsValidWarEvent({ warEvent, nodeDict, actionDict })) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-    export function getErrorCodeForWarEventFullData(mapRawData: IMapRawData, gameConfig: GameConfig): ClientErrorCode {   // DONE
-        const warEventFullData = mapRawData.warEventFullData;
+    export function getErrorCodeForWarEventFullData({ warEventFullData, gameConfig, mapSize, playersCountUnneutral }: {
+        warEventFullData        : Twns.Types.Undefinable<IWarEventFullData>;
+        gameConfig              : GameConfig;
+        mapSize                 : Twns.Types.MapSize;
+        playersCountUnneutral   : number;
+    }): ClientErrorCode {   // DONE
         if (warEventFullData == null) {
             return ClientErrorCode.NoError;
         }
 
-        const warRuleArray = mapRawData.warRuleArray;
-        if (warRuleArray == null) {
-            return ClientErrorCode.WarEventFullDataValidation00;
-        }
-
         const actionDict = new Map<number, IWarEventAction>();
         for (const action of warEventFullData.actionArray || []) {
-            const commonData    = action.WeaCommonData;
-            const actionId      = commonData?.actionId;
+            const actionId = action.WeaCommonData?.actionId;
             if ((actionId == null) || (actionDict.has(actionId))) {
                 return ClientErrorCode.WarEventFullDataValidation01;
             }
@@ -336,8 +228,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const conditionDict = new Map<number, IWarEventCondition>();
         for (const condition of warEventFullData.conditionArray || []) {
-            const commonData    = condition.WecCommonData;
-            const conditionId   = commonData?.conditionId;
+            const conditionId = condition.WecCommonData?.conditionId;
             if ((conditionId == null) || (conditionDict.has(conditionId))) {
                 return ClientErrorCode.WarEventFullDataValidation03;
             }
@@ -380,17 +271,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
         if (!checkIsEveryWarEventConditionNodeInUse(nodeDict, eventDict)) {
             return ClientErrorCode.WarEventFullDataValidation11;
         }
-        if (!checkIsEveryWarEventInUse(eventDict, warRuleArray)) {
-            return ClientErrorCode.WarEventFullDataValidation12;
-        }
 
         for (const [, action] of actionDict) {
-            if (!checkIsValidWarEventAction({ action, actionDict, mapRawData, gameConfig })) {
+            if (!checkIsValidWarEventAction({ action, actionDict, mapSize, gameConfig, playersCountUnneutral })) {
                 return ClientErrorCode.WarEventFullDataValidation13;
             }
         }
         for (const [, condition] of conditionDict) {
-            if (!checkIsValidWarEventCondition({ condition, mapRawData, gameConfig })) {
+            if (!checkIsValidWarEventCondition({ condition, mapSize, gameConfig, playersCountUnneutral })) {
                 return ClientErrorCode.WarEventFullDataValidation14;
             }
         }
@@ -465,47 +353,19 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsEveryWarEventInUse(eventDict: WarEventDict, warRuleArray: CommonProto.WarRule.IWarRule[]): boolean {  // DONE
-        for (const [eventId] of eventDict) {
-            let isInUse = false;
-            for (const warRule of warRuleArray) {
-                if ((warRule.warEventIdArray || []).indexOf(eventId) >= 0) {
-                    isInUse = true;
-                    break;
-                }
-            }
 
-            if (!isInUse) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    function checkIsValidWarEventAction({ action, actionDict, mapRawData, gameConfig }: {    // DONE
-        action      : IWarEventAction;
-        actionDict  : WarEventActionDict;
-        mapRawData  : IMapRawData;
-        gameConfig  : GameConfig;
+    function checkIsValidWarEventAction({ action, actionDict, mapSize, gameConfig, playersCountUnneutral }: {    // DONE
+        action                  : IWarEventAction;
+        actionDict              : WarEventActionDict;
+        mapSize                 : Twns.Types.MapSize;
+        gameConfig              : GameConfig;
+        playersCountUnneutral   : number;
     }): boolean {
         if (Object.keys(action).length !== 2) {
             return false;
         }
 
         if (action.WeaCommonData?.actionId == null) {
-            return false;
-        }
-
-        const mapHeight = mapRawData.mapHeight;
-        const mapWidth  = mapRawData.mapWidth;
-        if ((!mapHeight) || (!mapWidth)) {
-            return false;
-        }
-        const mapSize: Types.MapSize = { width: mapWidth, height: mapHeight };
-
-        const playersCountUnneutral = mapRawData.playersCountUnneutral;
-        if (playersCountUnneutral == null) {
             return false;
         }
 
@@ -531,9 +391,9 @@ namespace Twns.WarHelpers.WarEventHelpers {
             || (checkIsValidWeaPersistentShowText(action.WeaPersistentShowText));
         }
     function checkIsValidWeaAddUnit({ action, gameConfig, mapSize, playersCountUnneutral }: {
-        action                  : Types.Undefinable<CommonProto.WarEvent.IWeaAddUnit>;
+        action                  : Twns.Types.Undefinable<CommonProto.WarEvent.IWeaAddUnit>;
         gameConfig              : GameConfig;
-        mapSize                 : Types.MapSize;
+        mapSize                 : Twns.Types.MapSize;
         playersCountUnneutral   : number;
     }): boolean {
         if (action == null) {
@@ -574,7 +434,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWeaDialogue(action: Types.Undefinable<CommonProto.WarEvent.IWeaDialogue>, gameConfig: GameConfig): boolean {
+    function checkIsValidWeaDialogue(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaDialogue>, gameConfig: GameConfig): boolean {
         if (action == null) {
             return false;
         }
@@ -626,13 +486,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         const side = data.side;
-        if ((side !== Types.WarEventActionDialogueSide.Left) &&
-            (side !== Types.WarEventActionDialogueSide.Right)
+        if ((side !== Twns.Types.WarEventActionDialogueSide.Left) &&
+            (side !== Twns.Types.WarEventActionDialogueSide.Right)
         ) {
             return false;
         }
 
-        if (!Helpers.checkIsValidLanguageTextArray({
+        if (!Twns.Helpers.checkIsValidLanguageTextArray({
             list            : data.textArray,
             minTextLength   : 1,
             maxTextLength   : CommonConstants.WarEventActionDialogueTextMaxLength,
@@ -643,7 +503,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const nameArray = data.nameArray;
         if ((nameArray)                             &&
-            (!Helpers.checkIsValidLanguageTextArray({
+            (!Twns.Helpers.checkIsValidLanguageTextArray({
                 list            : nameArray,
                 minTextLength   : 1,
                 maxTextLength   : CommonConstants.WarEventActionDialogueNameMaxLength,
@@ -656,7 +516,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         return true;
     }
     function checkIsValidDataForAside(data: CommonProto.WarEvent.WeaDialogue.IDataForAside): boolean {
-        if (!Helpers.checkIsValidLanguageTextArray({
+        if (!Twns.Helpers.checkIsValidLanguageTextArray({
             list            : data.textArray,
             minTextLength   : 1,
             maxTextLength   : CommonConstants.WarEventActionDialogueTextMaxLength,
@@ -667,7 +527,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWeaSetViewpoint(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetViewpoint>, mapSize: Types.MapSize): boolean {
+    function checkIsValidWeaSetViewpoint(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaSetViewpoint>, mapSize: Twns.Types.MapSize): boolean {
         if (action == null) {
             return false;
         }
@@ -676,7 +536,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         return (gridIndex != null)
             && (GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize));
     }
-    function checkIsValidWeaSetWeather(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetWeather>, gameConfig: GameConfig): boolean {
+    function checkIsValidWeaSetWeather(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaSetWeather>, gameConfig: GameConfig): boolean {
         if (action == null) {
             return false;
         }
@@ -686,7 +546,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             && (gameConfig.checkIsValidWeatherType(weatherType))
             && (action.weatherTurnsCount != null);
     }
-    function checkIsValidWeaSimpleDialogue(action: Types.Undefinable<CommonProto.WarEvent.IWeaSimpleDialogue>, gameConfig: GameConfig): boolean {
+    function checkIsValidWeaSimpleDialogue(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaSimpleDialogue>, gameConfig: GameConfig): boolean {
         if (action == null) {
             return false;
         }
@@ -716,7 +576,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWeaPlayBgm(action: Types.Undefinable<CommonProto.WarEvent.IWeaPlayBgm>): boolean {
+    function checkIsValidWeaPlayBgm(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaPlayBgm>): boolean {
         if (action == null) {
             return false;
         }
@@ -726,9 +586,9 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         const bgmCode = action.bgmCode;
-        return (bgmCode != null) && (bgmCode <= Types.BgmCode.Co9999);
+        return (bgmCode != null) && (bgmCode <= Twns.Types.BgmCode.Co9999);
     }
-    function checkIsValidWeaSetForceFogCode(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetForceFogCode>): boolean {
+    function checkIsValidWeaSetForceFogCode(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaSetForceFogCode>): boolean {
         if (action == null) {
             return false;
         }
@@ -738,7 +598,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             && (Config.ConfigManager.checkIsValidForceFogCode(forceFogCode))
             && (action.turnsCount != null);
     }
-    function checkIsValidWeaSetCustomCounter(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetCustomCounter>): boolean {
+    function checkIsValidWeaSetCustomCounter(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaSetCustomCounter>): boolean {
         if (action == null) {
             return false;
         }
@@ -772,7 +632,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWeaDeprecatedSetPlayerAliveState(action: Types.Undefinable<CommonProto.WarEvent.IWeaDeprecatedSetPlayerAliveState>, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaDeprecatedSetPlayerAliveState(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaDeprecatedSetPlayerAliveState>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -785,20 +645,20 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return false;
         }
 
-        const playerAliveState: Types.Undefinable<Types.PlayerAliveState> = action.playerAliveState;
+        const playerAliveState: Twns.Types.Undefinable<Twns.Types.PlayerAliveState> = action.playerAliveState;
         if (playerAliveState == null) {
             return false;
         }
-        if ((playerAliveState !== Types.PlayerAliveState.Alive) &&
-            (playerAliveState !== Types.PlayerAliveState.Dying) &&
-            (playerAliveState !== Types.PlayerAliveState.Dead)
+        if ((playerAliveState !== Twns.Types.PlayerAliveState.Alive) &&
+            (playerAliveState !== Twns.Types.PlayerAliveState.Dying) &&
+            (playerAliveState !== Twns.Types.PlayerAliveState.Dead)
         ) {
             return false;
         }
 
         return true;
     }
-    function checkIsValidWeaDeprecatedSetPlayerFund(action: Types.Undefinable<CommonProto.WarEvent.IWeaDeprecatedSetPlayerFund>, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaDeprecatedSetPlayerFund(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaDeprecatedSetPlayerFund>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -824,7 +684,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWeaDeprecatedSetPlayerCoEnergy(action: Types.Undefinable<CommonProto.WarEvent.IWeaDeprecatedSetPlayerCoEnergy>, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaDeprecatedSetPlayerCoEnergy(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaDeprecatedSetPlayerCoEnergy>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -850,7 +710,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWeaStopPersistentAction(action: Types.Undefinable<CommonProto.WarEvent.IWeaStopPersistentAction>, actionDict: WarEventActionDict): boolean {
+    function checkIsValidWeaStopPersistentAction(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaStopPersistentAction>, actionDict: WarEventActionDict): boolean {
         if (action == null) {
             return false;
         }
@@ -868,7 +728,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWeaSetPlayerAliveState(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetPlayerAliveState>, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaSetPlayerAliveState(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaSetPlayerAliveState>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -878,20 +738,20 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return false;
         }
 
-        const playerAliveState: Types.Undefinable<Types.PlayerAliveState> = action.playerAliveState;
+        const playerAliveState: Twns.Types.Undefinable<Twns.Types.PlayerAliveState> = action.playerAliveState;
         if (playerAliveState == null) {
             return false;
         }
-        if ((playerAliveState !== Types.PlayerAliveState.Alive) &&
-            (playerAliveState !== Types.PlayerAliveState.Dying) &&
-            (playerAliveState !== Types.PlayerAliveState.Dead)
+        if ((playerAliveState !== Twns.Types.PlayerAliveState.Alive) &&
+            (playerAliveState !== Twns.Types.PlayerAliveState.Dying) &&
+            (playerAliveState !== Twns.Types.PlayerAliveState.Dead)
         ) {
             return false;
         }
 
         return true;
     }
-    function checkIsValidWeaSetPlayerState(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetPlayerState>, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaSetPlayerState(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaSetPlayerState>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -950,7 +810,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWeaSetPlayerCoEnergy(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetPlayerCoEnergy>, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaSetPlayerCoEnergy(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaSetPlayerCoEnergy>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -966,7 +826,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWeaSetUnitState(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetUnitState>, mapSize: Types.MapSize, playersCountUnneutral: number, gameConfig: GameConfig): boolean {
+    function checkIsValidWeaSetUnitState(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaSetUnitState>, mapSize: Twns.Types.MapSize, playersCountUnneutral: number, gameConfig: GameConfig): boolean {
         if (action == null) {
             return false;
         }
@@ -1066,7 +926,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWeaSetTileType(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetTileType>, mapSize: Types.MapSize, playersCountUnneutral: number, gameConfig: GameConfig): boolean {
+    function checkIsValidWeaSetTileType(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaSetTileType>, mapSize: Twns.Types.MapSize, playersCountUnneutral: number, gameConfig: GameConfig): boolean {
         if (action == null) {
             return false;
         }
@@ -1091,7 +951,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 return false;
             }
 
-            const tempData      = Helpers.deepClone(tileData);
+            const tempData      = Twns.Helpers.deepClone(tileData);
             tempData.gridIndex  = { x: 0, y: 0 };
             if ((new BaseWar.BwTile()).getErrorCodeForTileData(tempData, playersCountUnneutral, gameConfig)) {
                 return false;
@@ -1100,7 +960,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWeaSetTileState(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetTileState>, mapSize: Types.MapSize): boolean {
+    function checkIsValidWeaSetTileState(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaSetTileState>, mapSize: Twns.Types.MapSize): boolean {
         if (action == null) {
             return false;
         }
@@ -1148,12 +1008,12 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWeaPersistentShowText(action: Types.Undefinable<CommonProto.WarEvent.IWeaPersistentShowText>): boolean {
+    function checkIsValidWeaPersistentShowText(action: Twns.Types.Undefinable<CommonProto.WarEvent.IWeaPersistentShowText>): boolean {
         if (action == null) {
             return false;
         }
 
-        if (!Helpers.checkIsValidLanguageTextArray({
+        if (!Twns.Helpers.checkIsValidLanguageTextArray({
             list            : action.textArray,
             minTextCount    : 1,
             minTextLength   : 1,
@@ -1165,10 +1025,11 @@ namespace Twns.WarHelpers.WarEventHelpers {
         return true;
     }
 
-    function checkIsValidWarEventCondition({ condition, mapRawData, gameConfig }: {  // DONE
-        condition   : IWarEventCondition;
-        mapRawData  : CommonProto.Map.IMapRawData;
-        gameConfig  : GameConfig;
+    function checkIsValidWarEventCondition({ condition, mapSize, gameConfig, playersCountUnneutral }: {  // DONE
+        condition               : IWarEventCondition;
+        mapSize                 : Twns.Types.MapSize;
+        gameConfig              : GameConfig;
+        playersCountUnneutral   : number;
     }): boolean {
         if (Object.keys(condition).length !== 2) {
             return false;
@@ -1178,21 +1039,11 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return false;
         }
 
-        const playersCountUnneutral = mapRawData.playersCountUnneutral;
-        if (playersCountUnneutral == null) {
-            return false;
-        }
-
-        const mapSize = WarMapModel.getMapSize(mapRawData);
-        if (mapSize == null) {
-            return false;
-        }
-
         // TODO add more checkers when the condition types grow.
         return (checkIsValidWecEventCalledCountTotalEqualTo(condition.WecEventCalledCountTotalEqualTo))
             || (checkIsValidWecEventCalledCountTotalGreaterThan(condition.WecEventCalledCountTotalGreaterThan))
             || (checkIsValidWecEventCalledCountTotalLessThan(condition.WecEventCalledCountTotalLessThan))
-            || (checkIsValidWecEventCalledCount(condition.WecEventCalledCount, mapRawData.warEventFullData))
+            || (checkIsValidWecEventCalledCount(condition.WecEventCalledCount))
             || (checkIsValidWecPlayerAliveStateEqualTo(condition.WecPlayerAliveStateEqualTo, playersCountUnneutral))
             || (checkIsValidWecPlayerPresence(condition.WecPlayerPresence, playersCountUnneutral, gameConfig))
             || (checkIsValidWecTurnIndexEqualTo(condition.WecTurnIndexEqualTo))
@@ -1211,22 +1062,22 @@ namespace Twns.WarHelpers.WarEventHelpers {
             || (checkIsValidWecUnitPresence(condition.WecUnitPresence, mapSize, playersCountUnneutral, gameConfig))
             || (checkIsValidWecCustomCounter(condition.WecCustomCounter));
     }
-    function checkIsValidWecEventCalledCountTotalEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecEventCalledCountTotalEqualTo>): boolean {
+    function checkIsValidWecEventCalledCountTotalEqualTo(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecEventCalledCountTotalEqualTo>): boolean {
         return (condition != null)
             && (condition.countEqualTo != null)
             && (condition.eventIdEqualTo != null);
     }
-    function checkIsValidWecEventCalledCountTotalGreaterThan(condition: Types.Undefinable<CommonProto.WarEvent.IWecEventCalledCountTotalGreaterThan>): boolean {
+    function checkIsValidWecEventCalledCountTotalGreaterThan(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecEventCalledCountTotalGreaterThan>): boolean {
         return (condition != null)
             && (condition.countGreaterThan != null)
             && (condition.eventIdEqualTo != null);
     }
-    function checkIsValidWecEventCalledCountTotalLessThan(condition: Types.Undefinable<CommonProto.WarEvent.IWecEventCalledCountTotalLessThan>): boolean {
+    function checkIsValidWecEventCalledCountTotalLessThan(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecEventCalledCountTotalLessThan>): boolean {
         return (condition != null)
             && (condition.countLessThan != null)
             && (condition.eventIdEqualTo != null);
     }
-    function checkIsValidWecEventCalledCount(condition: Types.Undefinable<CommonProto.WarEvent.IWecEventCalledCount>, fullData: Types.Undefinable<IWarEventFullData>): boolean {
+    function checkIsValidWecEventCalledCount(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecEventCalledCount>): boolean {
         if (condition == null) {
             return false;
         }
@@ -1234,16 +1085,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
         {
             const eventIdArray = condition.eventIdArray;
             if (eventIdArray) {
-                const eventArray    = fullData?.eventArray ?? [];
-                const eventIdSet    = new Set<number>();
-                for (const eventId of eventIdArray) {
-                    if ((eventIdSet.has(eventId))                       ||
-                        (eventArray.every(v => v.eventId !== eventId))
-                    ) {
-                        return false;
-                    }
-
-                    eventIdSet.add(eventId);
+                if (new Set(eventIdArray).size !== eventIdArray.length) {
+                    return false;
                 }
             }
         }
@@ -1275,15 +1118,15 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWecPlayerAliveStateEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecPlayerAliveStateEqualTo>, playersCountUnneutral: number): boolean {
+    function checkIsValidWecPlayerAliveStateEqualTo(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecPlayerAliveStateEqualTo>, playersCountUnneutral: number): boolean {
         if (condition == null) {
             return false;
         }
 
         const { playerIndexEqualTo, aliveStateEqualTo } = condition;
-        if ((aliveStateEqualTo !== Types.PlayerAliveState.Alive)    &&
-            (aliveStateEqualTo !== Types.PlayerAliveState.Dead)     &&
-            (aliveStateEqualTo !== Types.PlayerAliveState.Dying)
+        if ((aliveStateEqualTo !== Twns.Types.PlayerAliveState.Alive)    &&
+            (aliveStateEqualTo !== Twns.Types.PlayerAliveState.Dead)     &&
+            (aliveStateEqualTo !== Twns.Types.PlayerAliveState.Dying)
         ) {
             return false;
         }
@@ -1296,7 +1139,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWecPlayerPresence(condition: Types.Undefinable<CommonProto.WarEvent.IWecPlayerPresence>, playersCountUnneutral: number, gameConfig: GameConfig): boolean {
+    function checkIsValidWecPlayerPresence(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecPlayerPresence>, playersCountUnneutral: number, gameConfig: GameConfig): boolean {
         if (condition == null) {
             return false;
         }
@@ -1384,19 +1227,19 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWecTurnIndexEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecTurnIndexEqualTo>): boolean {
+    function checkIsValidWecTurnIndexEqualTo(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecTurnIndexEqualTo>): boolean {
         return (condition != null)
             && (condition.valueEqualTo != null);
     }
-    function checkIsValidWecTurnIndexGreaterThan(condition: Types.Undefinable<CommonProto.WarEvent.IWecTurnIndexGreaterThan>): boolean {
+    function checkIsValidWecTurnIndexGreaterThan(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecTurnIndexGreaterThan>): boolean {
         return (condition != null)
             && (condition.valueGreaterThan != null);
     }
-    function checkIsValidWecTurnIndexLessThan(condition: Types.Undefinable<CommonProto.WarEvent.IWecTurnIndexLessThan>): boolean {
+    function checkIsValidWecTurnIndexLessThan(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecTurnIndexLessThan>): boolean {
         return (condition != null)
             && (condition.valueLessThan != null);
     }
-    function checkIsValidWecTurnIndexRemainderEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecTurnIndexRemainderEqualTo>): boolean {
+    function checkIsValidWecTurnIndexRemainderEqualTo(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecTurnIndexRemainderEqualTo>): boolean {
         if (condition == null) {
             return false;
         }
@@ -1407,7 +1250,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             && (remainderEqualTo != null)
             && (remainderEqualTo < divider);
     }
-    function checkIsValidWecTurnAndPlayer(condition: Types.Undefinable<CommonProto.WarEvent.IWecTurnAndPlayer>, playersCountUnneutral: number): boolean {
+    function checkIsValidWecTurnAndPlayer(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecTurnAndPlayer>, playersCountUnneutral: number): boolean {
         if (condition == null) {
             return false;
         }
@@ -1465,7 +1308,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWecPlayerIndexInTurnEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecPlayerIndexInTurnEqualTo>, playersCountUnneutral: number): boolean {
+    function checkIsValidWecPlayerIndexInTurnEqualTo(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecPlayerIndexInTurnEqualTo>, playersCountUnneutral: number): boolean {
         if (condition == null) {
             return false;
         }
@@ -1475,7 +1318,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             && (valueEqualTo >= CommonConstants.WarNeutralPlayerIndex)
             && (valueEqualTo <= playersCountUnneutral);
     }
-    function checkIsValidWecPlayerIndexInTurnGreaterThan(condition: Types.Undefinable<CommonProto.WarEvent.IWecPlayerIndexInTurnGreaterThan>, playersCountUnneutral: number): boolean {
+    function checkIsValidWecPlayerIndexInTurnGreaterThan(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecPlayerIndexInTurnGreaterThan>, playersCountUnneutral: number): boolean {
         if (condition == null) {
             return false;
         }
@@ -1485,7 +1328,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             && (valueEqualTo >= CommonConstants.WarNeutralPlayerIndex)
             && (valueEqualTo <= playersCountUnneutral);
     }
-    function checkIsValidWecPlayerIndexInTurnLessThan(condition: Types.Undefinable<CommonProto.WarEvent.IWecPlayerIndexInTurnLessThan>, playersCountUnneutral: number): boolean {
+    function checkIsValidWecPlayerIndexInTurnLessThan(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecPlayerIndexInTurnLessThan>, playersCountUnneutral: number): boolean {
         if (condition == null) {
             return false;
         }
@@ -1495,16 +1338,16 @@ namespace Twns.WarHelpers.WarEventHelpers {
             && (valueEqualTo >= CommonConstants.WarNeutralPlayerIndex)
             && (valueEqualTo <= playersCountUnneutral);
     }
-    function checkIsValidWecTurnPhaseEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecTurnPhaseEqualTo>): boolean {
+    function checkIsValidWecTurnPhaseEqualTo(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecTurnPhaseEqualTo>): boolean {
         if (condition == null) {
             return false;
         }
 
         const value = condition.valueEqualTo;
-        return (value === Types.TurnPhaseCode.Main)
-            || (value === Types.TurnPhaseCode.WaitBeginTurn);
+        return (value === Twns.Types.TurnPhaseCode.Main)
+            || (value === Twns.Types.TurnPhaseCode.WaitBeginTurn);
     }
-    function checkIsValidWecWeatherAndFog(condition: Types.Undefinable<CommonProto.WarEvent.IWecWeatherAndFog>, gameConfig: GameConfig): boolean {
+    function checkIsValidWecWeatherAndFog(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecWeatherAndFog>, gameConfig: GameConfig): boolean {
         if (condition == null) {
             return false;
         }
@@ -1515,7 +1358,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWecTilePlayerIndexEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecTilePlayerIndexEqualTo>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
+    function checkIsValidWecTilePlayerIndexEqualTo(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecTilePlayerIndexEqualTo>, mapSize: Twns.Types.MapSize, playersCountUnneutral: number): boolean {
         if (condition == null) {
             return false;
         }
@@ -1527,7 +1370,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             && (gridIndex != null)
             && (GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize));
     }
-    function checkIsValidWecTileTypeEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecTileTypeEqualTo>, mapSize: Types.MapSize, gameConfig: GameConfig): boolean {
+    function checkIsValidWecTileTypeEqualTo(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecTileTypeEqualTo>, mapSize: Twns.Types.MapSize, gameConfig: GameConfig): boolean {
         if (condition == null) {
             return false;
         }
@@ -1539,7 +1382,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             && (gridIndex != null)
             && (GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize));
     }
-    function checkIsValidWecTilePresence(condition: Types.Undefinable<CommonProto.WarEvent.IWecTilePresence>, mapSize: Types.MapSize, playersCountUnneutral: number, gameConfig: GameConfig): boolean {
+    function checkIsValidWecTilePresence(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecTilePresence>, mapSize: Twns.Types.MapSize, playersCountUnneutral: number, gameConfig: GameConfig): boolean {
         if (condition == null) {
             return false;
         }
@@ -1626,7 +1469,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWecUnitPresence(condition: Types.Undefinable<CommonProto.WarEvent.IWecUnitPresence>, mapSize: Types.MapSize, playersCountUnneutral: number, gameConfig: GameConfig): boolean {
+    function checkIsValidWecUnitPresence(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecUnitPresence>, mapSize: Twns.Types.MapSize, playersCountUnneutral: number, gameConfig: GameConfig): boolean {
         if (condition == null) {
             return false;
         }
@@ -1714,7 +1557,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWecCustomCounter(condition: Types.Undefinable<CommonProto.WarEvent.IWecCustomCounter>): boolean {
+    function checkIsValidWecCustomCounter(condition: Twns.Types.Undefinable<CommonProto.WarEvent.IWecCustomCounter>): boolean {
         if (condition == null) {
             return false;
         }
@@ -1837,7 +1680,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
     }): boolean {
         const eventNameArray = warEvent.eventNameArray;
         if ((eventNameArray == null)                                     ||
-            (!Helpers.checkIsValidLanguageTextArray({
+            (!Twns.Helpers.checkIsValidLanguageTextArray({
                 list            : eventNameArray,
                 maxTextLength   : CommonConstants.WarEventNameMaxLength,
                 minTextLength   : 1,
@@ -1906,22 +1749,22 @@ namespace Twns.WarHelpers.WarEventHelpers {
             || (getDescForWecUnitPresence(con.WecUnitPresence))
             || (getDescForWecCustomCounter(con.WecCustomCounter));
     }
-    function getDescForWecEventCalledCountTotalEqualTo(data: Types.Undefinable<WarEvent.IWecEventCalledCountTotalEqualTo>): string | null {
+    function getDescForWecEventCalledCountTotalEqualTo(data: Twns.Types.Undefinable<WarEvent.IWecEventCalledCountTotalEqualTo>): string | null {
         return (data)
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0035 : LangTextType.F0036, data.eventIdEqualTo, data.countEqualTo)
             : null;
     }
-    function getDescForWecEventCalledCountTotalGreaterThan(data: Types.Undefinable<WarEvent.IWecEventCalledCountTotalGreaterThan>): string | null {
+    function getDescForWecEventCalledCountTotalGreaterThan(data: Twns.Types.Undefinable<WarEvent.IWecEventCalledCountTotalGreaterThan>): string | null {
         return (data)
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0037 : LangTextType.F0038, data.eventIdEqualTo, data.countGreaterThan)
             : null;
     }
-    function getDescForWecEventCalledCountTotalLessThan(data: Types.Undefinable<WarEvent.IWecEventCalledCountTotalLessThan>): string | null {
+    function getDescForWecEventCalledCountTotalLessThan(data: Twns.Types.Undefinable<WarEvent.IWecEventCalledCountTotalLessThan>): string | null {
         return (data)
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0039 : LangTextType.F0040, data.eventIdEqualTo, data.countLessThan)
             : null;
     }
-    function getDescForWecEventCalledCount(data: Types.Undefinable<WarEvent.IWecEventCalledCount>): string | null {
+    function getDescForWecEventCalledCount(data: Twns.Types.Undefinable<WarEvent.IWecEventCalledCount>): string | null {
         if (data == null) {
             return null;
         }
@@ -1933,15 +1776,15 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const timesInTurn           = data.timesInTurn;
         const textForTimesInTurn    = timesInTurn != null
-            ? Lang.getFormattedText(LangTextType.F0104, Lang.getValueComparatorName(Helpers.getExisted(data.timesInTurnComparator)), timesInTurn)
+            ? Lang.getFormattedText(LangTextType.F0104, Lang.getValueComparatorName(Twns.Helpers.getExisted(data.timesInTurnComparator)), timesInTurn)
             : null;
 
         const timesTotal            = data.timesTotal;
         const textForTimesTotal     = timesTotal != null
-            ? Lang.getFormattedText(LangTextType.F0105, Lang.getValueComparatorName(Helpers.getExisted(data.timesTotalComparator)), timesTotal)
+            ? Lang.getFormattedText(LangTextType.F0105, Lang.getValueComparatorName(Twns.Helpers.getExisted(data.timesTotalComparator)), timesTotal)
             : null;
 
-        const textArrayForSubConditions = Helpers.getNonNullElements([
+        const textArrayForSubConditions = Twns.Helpers.getNonNullElements([
             textForTimesInTurn,
             textForTimesTotal,
         ]);
@@ -1949,16 +1792,16 @@ namespace Twns.WarHelpers.WarEventHelpers {
             LangTextType.F0103,
             textForEventIdArray,
             textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
-            Lang.getValueComparatorName(Helpers.getExisted(data.eventsCountComparator)),
+            Lang.getValueComparatorName(Twns.Helpers.getExisted(data.eventsCountComparator)),
             data.eventsCount ?? CommonConstants.ErrorTextForUndefined,
         );
     }
-    function getDescForWecPlayerAliveStateEqualTo(data: Types.Undefinable<WarEvent.IWecPlayerAliveStateEqualTo>): string | null {
+    function getDescForWecPlayerAliveStateEqualTo(data: Twns.Types.Undefinable<WarEvent.IWecPlayerAliveStateEqualTo>): string | null {
         return (data)
-            ? Lang.getFormattedText(!data.isNot ? LangTextType.F0041 : LangTextType.F0042, data.playerIndexEqualTo, Lang.getPlayerAliveStateName(Helpers.getExisted(data.aliveStateEqualTo)))
+            ? Lang.getFormattedText(!data.isNot ? LangTextType.F0041 : LangTextType.F0042, data.playerIndexEqualTo, Lang.getPlayerAliveStateName(Twns.Helpers.getExisted(data.aliveStateEqualTo)))
             : null;
     }
-    function getDescForWecPlayerPresence(data: Types.Undefinable<WarEvent.IWecPlayerPresence>, gameConfig: GameConfig): string | null {
+    function getDescForWecPlayerPresence(data: Twns.Types.Undefinable<WarEvent.IWecPlayerPresence>, gameConfig: GameConfig): string | null {
         if (data == null) {
             return null;
         }
@@ -1975,12 +1818,12 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const fund          = data.fund;
         const textForFund   = fund != null
-            ? Lang.getFormattedText(LangTextType.F0100, Lang.getValueComparatorName(Helpers.getExisted(data.fundComparator)), fund)
+            ? Lang.getFormattedText(LangTextType.F0100, Lang.getValueComparatorName(Twns.Helpers.getExisted(data.fundComparator)), fund)
             : null;
 
         const energyPercentage          = data.energyPercentage;
         const textForEnergyPercentage   = energyPercentage != null
-            ? Lang.getFormattedText(LangTextType.F0101, Lang.getValueComparatorName(Helpers.getExisted(data.energyPercentageComparator)), energyPercentage)
+            ? Lang.getFormattedText(LangTextType.F0101, Lang.getValueComparatorName(Twns.Helpers.getExisted(data.energyPercentageComparator)), energyPercentage)
             : null;
 
         const coUsingSkillTypeArray         = data.coUsingSkillTypeArray;
@@ -1993,7 +1836,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? Lang.getFormattedText(LangTextType.F0132, coCategoryIdArray.map(v => gameConfig.getCoCategoryCfg(v)?.name).join(`/`))
             : null;
 
-        const textArrayForSubCondition = Helpers.getNonNullElements([
+        const textArrayForSubCondition = Twns.Helpers.getNonNullElements([
             textForAliveStateArray,
             textForFund,
             textForEnergyPercentage,
@@ -2004,46 +1847,46 @@ namespace Twns.WarHelpers.WarEventHelpers {
             LangTextType.F0098,
             textForPlayerIndexArray,
             textArrayForSubCondition.length ? textArrayForSubCondition.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
-            Lang.getValueComparatorName(Helpers.getExisted(data.playersCountComparator)),
+            Lang.getValueComparatorName(Twns.Helpers.getExisted(data.playersCountComparator)),
             data.playersCount ?? CommonConstants.ErrorTextForUndefined
         );
     }
-    function getDescForWecPlayerIndexInTurnEqualTo(data: Types.Undefinable<WarEvent.IWecPlayerIndexInTurnEqualTo>): string | null {
+    function getDescForWecPlayerIndexInTurnEqualTo(data: Twns.Types.Undefinable<WarEvent.IWecPlayerIndexInTurnEqualTo>): string | null {
         return (data)
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0043 : LangTextType.F0044, data.valueEqualTo)
             : null;
     }
-    function getDescForWecPlayerIndexInTurnGreaterThan(data: Types.Undefinable<WarEvent.IWecPlayerIndexInTurnGreaterThan>): string | null {
+    function getDescForWecPlayerIndexInTurnGreaterThan(data: Twns.Types.Undefinable<WarEvent.IWecPlayerIndexInTurnGreaterThan>): string | null {
         return (data)
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0045 : LangTextType.F0046, data.valueGreaterThan)
             : null;
     }
-    function getDescForWecPlayerIndexInTurnLessThan(data: Types.Undefinable<WarEvent.IWecPlayerIndexInTurnLessThan>): string | null {
+    function getDescForWecPlayerIndexInTurnLessThan(data: Twns.Types.Undefinable<WarEvent.IWecPlayerIndexInTurnLessThan>): string | null {
         return (data)
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0047 : LangTextType.F0048, data.valueLessThan)
             : null;
     }
-    function getDescForWecTurnIndexEqualTo(data: Types.Undefinable<WarEvent.IWecTurnIndexEqualTo>): string | null {
+    function getDescForWecTurnIndexEqualTo(data: Twns.Types.Undefinable<WarEvent.IWecTurnIndexEqualTo>): string | null {
         return (data)
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0049 : LangTextType.F0050, data.valueEqualTo)
             : null;
     }
-    function getDescForWecTurnIndexGreaterThan(data: Types.Undefinable<WarEvent.IWecTurnIndexGreaterThan>): string | null {
+    function getDescForWecTurnIndexGreaterThan(data: Twns.Types.Undefinable<WarEvent.IWecTurnIndexGreaterThan>): string | null {
         return (data)
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0051 : LangTextType.F0052, data.valueGreaterThan)
             : null;
     }
-    function getDescForWecTurnIndexLessThan(data: Types.Undefinable<WarEvent.IWecTurnIndexLessThan>): string | null {
+    function getDescForWecTurnIndexLessThan(data: Twns.Types.Undefinable<WarEvent.IWecTurnIndexLessThan>): string | null {
         return (data)
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0053 : LangTextType.F0054, data.valueLessThan)
             : null;
     }
-    function getDescForWecTurnIndexRemainderEqualTo(data: Types.Undefinable<WarEvent.IWecTurnIndexRemainderEqualTo>): string | null {
+    function getDescForWecTurnIndexRemainderEqualTo(data: Twns.Types.Undefinable<WarEvent.IWecTurnIndexRemainderEqualTo>): string | null {
         return (data)
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0055 : LangTextType.F0056, data.divider, data.remainderEqualTo)
             : null;
     }
-    function getDescForWecTurnAndPlayer(data: Types.Undefinable<WarEvent.IWecTurnAndPlayer>): string | null {
+    function getDescForWecTurnAndPlayer(data: Twns.Types.Undefinable<WarEvent.IWecTurnAndPlayer>): string | null {
         if (data == null) {
             return null;
         }
@@ -2105,12 +1948,12 @@ namespace Twns.WarHelpers.WarEventHelpers {
             }
         }
     }
-    function getDescForWecTurnPhaseEqualTo(data: Types.Undefinable<WarEvent.IWecTurnPhaseEqualTo>): string | null {
+    function getDescForWecTurnPhaseEqualTo(data: Twns.Types.Undefinable<WarEvent.IWecTurnPhaseEqualTo>): string | null {
         return (data)
-            ? Lang.getFormattedText(!data.isNot ? LangTextType.F0057 : LangTextType.F0058, Lang.getTurnPhaseName(Helpers.getExisted(data.valueEqualTo)))
+            ? Lang.getFormattedText(!data.isNot ? LangTextType.F0057 : LangTextType.F0058, Lang.getTurnPhaseName(Twns.Helpers.getExisted(data.valueEqualTo)))
             : null;
     }
-    function getDescForWecWeatherAndFog(data: Types.Undefinable<WarEvent.IWecWeatherAndFog>): string | null {
+    function getDescForWecWeatherAndFog(data: Twns.Types.Undefinable<WarEvent.IWecWeatherAndFog>): string | null {
         if (data == null) {
             return null;
         }
@@ -2125,7 +1968,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? Lang.getFormattedText(LangTextType.F0107, Lang.getText(hasFogCurrently ? LangTextType.B0431 : LangTextType.B0432))
             : null;
 
-        const textArrayForSubCondition = Helpers.getNonNullElements([
+        const textArrayForSubCondition = Twns.Helpers.getNonNullElements([
             textForHasFogCurrently
         ]);
         return Lang.getFormattedText(
@@ -2134,12 +1977,12 @@ namespace Twns.WarHelpers.WarEventHelpers {
             textArrayForSubCondition.length ? textArrayForSubCondition.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
         );
     }
-    function getDescForWecTilePlayerIndexEqualTo(data: Types.Undefinable<WarEvent.IWecTilePlayerIndexEqualTo>): string | null {
+    function getDescForWecTilePlayerIndexEqualTo(data: Twns.Types.Undefinable<WarEvent.IWecTilePlayerIndexEqualTo>): string | null {
         if (data == null) {
             return null;
         }
 
-        const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex), ClientErrorCode.WarEventHelper_GetDescForWecTilePlayerIndexEqualTo_00);
+        const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex), ClientErrorCode.WarEventHelper_GetDescForWecTilePlayerIndexEqualTo_00);
         return Lang.getFormattedText(
             data.isNot ? LangTextType.F0079 : LangTextType.F0078,
             gridIndex.x,
@@ -2147,20 +1990,20 @@ namespace Twns.WarHelpers.WarEventHelpers {
             data.playerIndex
         );
     }
-    function getDescForWecTileTypeEqualTo(data: Types.Undefinable<WarEvent.IWecTileTypeEqualTo>): string | null {
+    function getDescForWecTileTypeEqualTo(data: Twns.Types.Undefinable<WarEvent.IWecTileTypeEqualTo>): string | null {
         if (data == null) {
             return null;
         }
 
-        const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex), ClientErrorCode.WarEventHelper_GetDescForWecTileTypeEqualTo_00);
+        const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex), ClientErrorCode.WarEventHelper_GetDescForWecTileTypeEqualTo_00);
         return Lang.getFormattedText(
             data.isNot ? LangTextType.F0081 : LangTextType.F0080,
             gridIndex.x,
             gridIndex.y,
-            Lang.getTileName(Helpers.getExisted(data.tileType, ClientErrorCode.WarEventHelper_GetDescForWecTileTypeEqualTo_01))
+            Lang.getTileName(Twns.Helpers.getExisted(data.tileType, ClientErrorCode.WarEventHelper_GetDescForWecTileTypeEqualTo_01))
         );
     }
-    function getDescForWecTilePresence(data: Types.Undefinable<WarEvent.IWecTilePresence>): string | null {
+    function getDescForWecTilePresence(data: Twns.Types.Undefinable<WarEvent.IWecTilePresence>): string | null {
         if (data == null) {
             return null;
         }
@@ -2194,7 +2037,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             tilesCount ?? CommonConstants.ErrorTextForUndefined
         );
     }
-    function getDescForWecUnitPresence(data: Types.Undefinable<WarEvent.IWecUnitPresence>): string | null {
+    function getDescForWecUnitPresence(data: Twns.Types.Undefinable<WarEvent.IWecUnitPresence>): string | null {
         if (data == null) {
             return null;
         }
@@ -2260,7 +2103,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const unitsCount                = data.unitsCount;
         const comparator                = data.unitsCountComparator;
-        const textArrayForSubConditions = Helpers.getNonNullElements([
+        const textArrayForSubConditions = Twns.Helpers.getNonNullElements([
             textForTeamIndex,
             textForPlayerIndex,
             textForLocation,
@@ -2280,7 +2123,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             unitsCount ?? CommonConstants.ErrorTextForUndefined
         );
     }
-    function getDescForWecCustomCounter(data: Types.Undefinable<WarEvent.IWecCustomCounter>): string | null {
+    function getDescForWecCustomCounter(data: Twns.Types.Undefinable<WarEvent.IWecCustomCounter>): string | null {
         if (data == null) {
             return null;
         }
@@ -2292,16 +2135,16 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const targetValue           = data.value;
         const textForTargetValue    = targetValue != null
-            ? Lang.getFormattedText(LangTextType.F0112, Lang.getValueComparatorName(Helpers.getExisted(data.valueComparator)), targetValue)
+            ? Lang.getFormattedText(LangTextType.F0112, Lang.getValueComparatorName(Twns.Helpers.getExisted(data.valueComparator)), targetValue)
             : null;
 
         const valueDivider      = data.valueDivider;
         const valueRemainder    = data.valueRemainder;
         const textForRemainder  = (valueDivider ?? valueRemainder != null)
-            ? Lang.getFormattedText(LangTextType.F0113, valueDivider ?? CommonConstants.ErrorTextForUndefined, Lang.getValueComparatorName(Helpers.getExisted(data.valueRemainderComparator)), valueRemainder ?? CommonConstants.ErrorTextForUndefined)
+            ? Lang.getFormattedText(LangTextType.F0113, valueDivider ?? CommonConstants.ErrorTextForUndefined, Lang.getValueComparatorName(Twns.Helpers.getExisted(data.valueRemainderComparator)), valueRemainder ?? CommonConstants.ErrorTextForUndefined)
             : null;
 
-        const textArrayForSubConditions = Helpers.getNonNullElements([
+        const textArrayForSubConditions = Twns.Helpers.getNonNullElements([
             textForTargetValue,
             textForRemainder,
         ]);
@@ -2309,7 +2152,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             LangTextType.F0111,
             textForCounterIdArray,
             textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
-            Lang.getValueComparatorName(Helpers.getExisted(data.counterCountComparator)),
+            Lang.getValueComparatorName(Twns.Helpers.getExisted(data.counterCountComparator)),
             data.counterCount ?? CommonConstants.ErrorTextForUndefined,
         );
     }
@@ -2336,13 +2179,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
             || (getDescForWeaSetTileState(action.WeaSetTileState))
             || (getDescForWeaPersistentShowText(action.WeaPersistentShowText));
     }
-    function getDescForWeaAddUnit(data: Types.Undefinable<WarEvent.IWeaAddUnit>): string | null {
+    function getDescForWeaAddUnit(data: Twns.Types.Undefinable<WarEvent.IWeaAddUnit>): string | null {
         if (!data) {
             return null;
         } else {
-            const unitCountDict = new Map<Types.UnitType, number>();
+            const unitCountDict = new Map<Twns.Types.UnitType, number>();
             for (const unitData of data.unitArray || []) {
-                const unitType = Helpers.getExisted(unitData.unitData?.unitType);
+                const unitType = Twns.Helpers.getExisted(unitData.unitData?.unitType);
                 unitCountDict.set(unitType, (unitCountDict.get(unitType) || 0) + 1);
             }
 
@@ -2353,7 +2196,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return Lang.getFormattedText(LangTextType.F0059, unitNameArray.join(", "));
         }
     }
-    function getDescForWeaDialogue(data: Types.Undefinable<WarEvent.IWeaDialogue>, gameConfig: GameConfig): string | null {
+    function getDescForWeaDialogue(data: Twns.Types.Undefinable<WarEvent.IWeaDialogue>, gameConfig: GameConfig): string | null {
         if (data == null) {
             return null;
         } else {
@@ -2372,7 +2215,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return Lang.getFormattedText(LangTextType.F0070, coNameArray.join(`, `));
         }
     }
-    function getDescForWeaSetViewpoint(data: Types.Undefinable<WarEvent.IWeaSetViewpoint>): string | null {
+    function getDescForWeaSetViewpoint(data: Twns.Types.Undefinable<WarEvent.IWeaSetViewpoint>): string | null {
         if (data == null) {
             return null;
         }
@@ -2380,18 +2223,18 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const gridIndex = data.gridIndex;
         return Lang.getFormattedText(LangTextType.F0075, gridIndex?.x, gridIndex?.y);
     }
-    function getDescForWeaSetWeather(data: Types.Undefinable<WarEvent.IWeaSetWeather>): string | null {
+    function getDescForWeaSetWeather(data: Twns.Types.Undefinable<WarEvent.IWeaSetWeather>): string | null {
         if (data == null) {
             return null;
         }
 
-        const weatherTurnsCount = Helpers.getExisted(data.weatherTurnsCount, ClientErrorCode.WarEventHelper_GetDescForWeaSetWeather_00);
-        const weatherName       = Lang.getWeatherName(Helpers.getExisted(data.weatherType, ClientErrorCode.WarEventHelper_GetDescForWeaSetWeather_01));
+        const weatherTurnsCount = Twns.Helpers.getExisted(data.weatherTurnsCount, ClientErrorCode.WarEventHelper_GetDescForWeaSetWeather_00);
+        const weatherName       = Lang.getWeatherName(Twns.Helpers.getExisted(data.weatherType, ClientErrorCode.WarEventHelper_GetDescForWeaSetWeather_01));
         return (weatherTurnsCount == 0)
             ? Lang.getFormattedText(LangTextType.F0077, weatherName)
             : Lang.getFormattedText(LangTextType.F0076, weatherName, weatherTurnsCount);
     }
-    function getDescForWeaSimpleDialogue(data: Types.Undefinable<WarEvent.IWeaSimpleDialogue>, gameConfig: GameConfig): string | null {
+    function getDescForWeaSimpleDialogue(data: Twns.Types.Undefinable<WarEvent.IWeaSimpleDialogue>, gameConfig: GameConfig): string | null {
         if (data == null) {
             return null;
         } else {
@@ -2410,7 +2253,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return Lang.getFormattedText(LangTextType.F0085, coNameArray.join(`, `));
         }
     }
-    function getDescForWeaPlayBgm(data: Types.Undefinable<WarEvent.IWeaPlayBgm>): string | null {
+    function getDescForWeaPlayBgm(data: Twns.Types.Undefinable<WarEvent.IWeaPlayBgm>): string | null {
         if (data == null) {
             return null;
         }
@@ -2422,18 +2265,18 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return `${Lang.getText(LangTextType.B0750)}: ${bgmCode == null ? CommonConstants.ErrorTextForUndefined : Lang.getBgmName(bgmCode)}`;
         }
     }
-    function getDescForWeaSetForceFogCode(data: Types.Undefinable<WarEvent.IWeaSetForceFogCode>): string | null {
+    function getDescForWeaSetForceFogCode(data: Twns.Types.Undefinable<WarEvent.IWeaSetForceFogCode>): string | null {
         if (data == null) {
             return null;
         }
 
-        const turnsCount            = Helpers.getExisted(data.turnsCount, ClientErrorCode.WarEventHelper_GetDescForWeaSetHasFog_00);
-        const textForForceFogCode   = Lang.getForceFogCodeName(Helpers.getExisted(data.forceFogCode, ClientErrorCode.WarEventHelper_GetDescForWeaSetHasFog_01)) ?? CommonConstants.ErrorTextForUndefined;
+        const turnsCount            = Twns.Helpers.getExisted(data.turnsCount, ClientErrorCode.WarEventHelper_GetDescForWeaSetHasFog_00);
+        const textForForceFogCode   = Lang.getForceFogCodeName(Twns.Helpers.getExisted(data.forceFogCode, ClientErrorCode.WarEventHelper_GetDescForWeaSetHasFog_01)) ?? CommonConstants.ErrorTextForUndefined;
         return (turnsCount == 0)
             ? Lang.getFormattedText(LangTextType.F0109, textForForceFogCode)
             : Lang.getFormattedText(LangTextType.F0108, textForForceFogCode, turnsCount);
     }
-    function getDescForWeaSetCustomCounter(data: Types.Undefinable<WarEvent.IWeaSetCustomCounter>): string | null {
+    function getDescForWeaSetCustomCounter(data: Twns.Types.Undefinable<WarEvent.IWeaSetCustomCounter>): string | null {
         if (data == null) {
             return null;
         }
@@ -2446,35 +2289,35 @@ namespace Twns.WarHelpers.WarEventHelpers {
             data.deltaValue ?? 0
         );
     }
-    function getDescForWeaDeprecatedSetPlayerAliveState(data: Types.Undefinable<WarEvent.IWeaDeprecatedSetPlayerAliveState>): string | null {
+    function getDescForWeaDeprecatedSetPlayerAliveState(data: Twns.Types.Undefinable<WarEvent.IWeaDeprecatedSetPlayerAliveState>): string | null {
         if (!data) {
             return null;
         } else {
-            return Lang.getFormattedText(LangTextType.F0066, data.playerIndex, Lang.getPlayerAliveStateName(Helpers.getExisted(data.playerAliveState)));
+            return Lang.getFormattedText(LangTextType.F0066, data.playerIndex, Lang.getPlayerAliveStateName(Twns.Helpers.getExisted(data.playerAliveState)));
         }
     }
-    function getDescForWeaDeprecatedSetPlayerFund(data: Types.Undefinable<WarEvent.IWeaDeprecatedSetPlayerFund>): string | null {
+    function getDescForWeaDeprecatedSetPlayerFund(data: Twns.Types.Undefinable<WarEvent.IWeaDeprecatedSetPlayerFund>): string | null {
         if (data == null) {
             return null;
         }
 
         return Lang.getFormattedText(LangTextType.F0087, data.playerIndex, data.multiplierPercentage ?? 100, data.deltaValue ?? 0);
     }
-    function getDescForWeaDeprecatedSetPlayerCoEnergy(data: Types.Undefinable<WarEvent.IWeaDeprecatedSetPlayerCoEnergy>): string | null {
+    function getDescForWeaDeprecatedSetPlayerCoEnergy(data: Twns.Types.Undefinable<WarEvent.IWeaDeprecatedSetPlayerCoEnergy>): string | null {
         if (data == null) {
             return null;
         }
 
         return Lang.getFormattedText(LangTextType.F0086, data.playerIndex, data.multiplierPercentage ?? 100, data.deltaPercentage ?? 0);
     }
-    function getDescForWeaStopPersistentAction(data: Types.Undefinable<WarEvent.IWeaStopPersistentAction>): string | null {
+    function getDescForWeaStopPersistentAction(data: Twns.Types.Undefinable<WarEvent.IWeaStopPersistentAction>): string | null {
         if (data == null) {
             return null;
         }
 
         return Lang.getFormattedText(LangTextType.F0130, data.actionIdArray?.map(v => `A${v}`).join(`/`) || `--`);
     }
-    function getDescForWeaSetPlayerAliveState(data: Types.Undefinable<WarEvent.IWeaSetPlayerAliveState>): string | null {
+    function getDescForWeaSetPlayerAliveState(data: Twns.Types.Undefinable<WarEvent.IWeaSetPlayerAliveState>): string | null {
         if (!data) {
             return null;
         }
@@ -2483,10 +2326,10 @@ namespace Twns.WarHelpers.WarEventHelpers {
         return Lang.getFormattedText(
             LangTextType.F0066,
             playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`/`) : Lang.getText(LangTextType.B0766),
-            Lang.getPlayerAliveStateName(Helpers.getExisted(data.playerAliveState))
+            Lang.getPlayerAliveStateName(Twns.Helpers.getExisted(data.playerAliveState))
         );
     }
-    function getDescForWeaSetPlayerState(data: Types.Undefinable<WarEvent.IWeaSetPlayerState>): string | null {
+    function getDescForWeaSetPlayerState(data: Twns.Types.Undefinable<WarEvent.IWeaSetPlayerState>): string | null {
         if (data == null) {
             return null;
         }
@@ -2526,7 +2369,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             )
             : null;
 
-        const textArrayForSubConditions = Helpers.getNonNullElements([
+        const textArrayForSubConditions = Twns.Helpers.getNonNullElements([
             textForConAliveStateArray,
             textForConCoUsingSkillTypeArray,
             textForConFund,
@@ -2550,7 +2393,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0809), actCoEnergyMultiplierPct, `${actCoEnergyDeltaPct}%`)
             : null;
 
-        const textArrayForModifiers = Helpers.getNonNullElements([
+        const textArrayForModifiers = Twns.Helpers.getNonNullElements([
             textForActAliveState,
             textForActFund,
             textForActCoEnergy,
@@ -2562,7 +2405,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
         )} ${textArrayForModifiers.join(` `)}`;
     }
-    function getDescForWeaSetPlayerCoEnergy(data: Types.Undefinable<WarEvent.IWeaSetPlayerCoEnergy>): string | null {
+    function getDescForWeaSetPlayerCoEnergy(data: Twns.Types.Undefinable<WarEvent.IWeaSetPlayerCoEnergy>): string | null {
         if (data == null) {
             return null;
         }
@@ -2575,7 +2418,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             data.actCoEnergyDeltaPct ?? 0
         );
     }
-    function getDescForWeaSetUnitState(data: Types.Undefinable<WarEvent.IWeaSetUnitState>): string | null {
+    function getDescForWeaSetUnitState(data: Twns.Types.Undefinable<WarEvent.IWeaSetUnitState>): string | null {
         if (data == null) {
             return null;
         }
@@ -2639,7 +2482,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? Lang.getFormattedText(LangTextType.F0123, conPromotionComparator != null ? Lang.getValueComparatorName(conPromotionComparator) : CommonConstants.ErrorTextForUndefined, conPromotion)
             : null;
 
-        const textArrayForSubConditions = Helpers.getNonNullElements([
+        const textArrayForSubConditions = Twns.Helpers.getNonNullElements([
             textForTeamIndex,
             textForPlayerIndex,
             textForLocation,
@@ -2693,7 +2536,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0370), promotionMultiplierPercentage, promotionDeltaValue)
             : null;
 
-        const textArrayForModifiers = Helpers.getNonNullElements([
+        const textArrayForModifiers = Twns.Helpers.getNonNullElements([
             textForActActionState,
             textForActHasLoadedCo,
             textForHp,
@@ -2707,7 +2550,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
         )} ${textArrayForModifiers.join(` `)}`;
     }
-    function getDescForWeaSetTileType(data: Types.Undefinable<WarEvent.IWeaSetTileType>): string | null {
+    function getDescForWeaSetTileType(data: Twns.Types.Undefinable<WarEvent.IWeaSetTileType>): string | null {
         if (data == null) {
             return null;
         }
@@ -2727,7 +2570,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? null
             : Lang.getText(conIsHighlighted ? LangTextType.B0848 : LangTextType.B0849);
 
-        const textArrayForSubConditions = Helpers.getNonNullElements([
+        const textArrayForSubConditions = Twns.Helpers.getNonNullElements([
             textForConLocation,
             textForConIsHighlighted,
         ]);
@@ -2755,7 +2598,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? null
             : Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0847), Lang.getText(actIsHighlighted ? LangTextType.B0012 : LangTextType.B0013));
 
-        const textArrayForModifiers = Helpers.getNonNullElements([
+        const textArrayForModifiers = Twns.Helpers.getNonNullElements([
             textForActTileData,
             textForActDestroyUnit,
             textForActIsHighlighted,
@@ -2766,7 +2609,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
         )} ${textArrayForModifiers.join(` `)}`;
     }
-    function getDescForWeaSetTileState(data: Types.Undefinable<WarEvent.IWeaSetTileState>): string | null {
+    function getDescForWeaSetTileState(data: Twns.Types.Undefinable<WarEvent.IWeaSetTileState>): string | null {
         if (data == null) {
             return null;
         }
@@ -2786,7 +2629,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? null
             : Lang.getText(conIsHighlighted ? LangTextType.B0848 : LangTextType.B0849);
 
-        const textArrayForSubConditions = Helpers.getNonNullElements([
+        const textArrayForSubConditions = Twns.Helpers.getNonNullElements([
             textForConLocation,
             textForConIsHighlighted,
         ]);
@@ -2824,7 +2667,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? null
             : Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0847), Lang.getText(actIsHighlighted ? LangTextType.B0012 : LangTextType.B0013));
 
-        const textArrayForModifiers = Helpers.getNonNullElements([
+        const textArrayForModifiers = Twns.Helpers.getNonNullElements([
             textForActHp,
             textForActCapturePoint,
             textForActBuildPoint,
@@ -2838,7 +2681,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
         )} ${textArrayForModifiers.join(` `)}`;
     }
-    function getDescForWeaPersistentShowText(data: Types.Undefinable<WarEvent.IWeaPersistentShowText>): string | null {
+    function getDescForWeaPersistentShowText(data: Twns.Types.Undefinable<WarEvent.IWeaPersistentShowText>): string | null {
         if (data == null) {
             return null;
         }
@@ -2904,7 +2747,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return Lang.getText(LangTextType.A0161);
         }
 
-        const nodeId            = Helpers.getExisted(node.nodeId);
+        const nodeId            = Twns.Helpers.getExisted(node.nodeId);
         const duplicatedNodeId  = getDuplicatedSubNodeId(fullData, nodeId);
         if (duplicatedNodeId != null) {
             return Lang.getFormattedText(LangTextType.F0061, `N${duplicatedNodeId}`);
@@ -3173,8 +3016,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return Lang.getText(LangTextType.A0165);
         }
 
-        if ((turnPhase !== Types.TurnPhaseCode.WaitBeginTurn)   &&
-            (turnPhase !== Types.TurnPhaseCode.Main)
+        if ((turnPhase !== Twns.Types.TurnPhaseCode.WaitBeginTurn)   &&
+            (turnPhase !== Twns.Types.TurnPhaseCode.Main)
         ) {
             return Lang.getText(LangTextType.A0165);
         }
@@ -3420,7 +3263,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const mapSize               = war.getTileMap().getMapSize();
         const playersCountUnneutral = war.getPlayersCountUnneutral();
         const validator             = (v: CommonProto.WarEvent.WeaAddUnit.IDataForAddUnit) => {
-            const unitData = Helpers.getExisted(v.unitData);
+            const unitData = Twns.Helpers.getExisted(v.unitData);
             return (v.canBeBlockedByUnit != null)
                 && (v.needMovableTile != null)
                 && (unitData.loaderUnitId == null)
@@ -3494,14 +3337,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 if ((coId == null)                                                                                          ||
                     (coId === CommonConstants.CoEmptyId)                                                                    ||
                     (gameConfig.getCoNameAndTierText(coId) == null)                                                         ||
-                    ((side !== Types.WarEventActionDialogueSide.Left) && (side !== Types.WarEventActionDialogueSide.Right)) ||
-                    (!Helpers.checkIsValidLanguageTextArray({
+                    ((side !== Twns.Types.WarEventActionDialogueSide.Left) && (side !== Twns.Types.WarEventActionDialogueSide.Right)) ||
+                    (!Twns.Helpers.checkIsValidLanguageTextArray({
                         list            : textArray,
                         minTextCount    : 1,
                         minTextLength   : 1,
                         maxTextLength   : CommonConstants.WarEventActionDialogueTextMaxLength,
                     }))                                                                                                     ||
-                    ((nameArray) && (!Helpers.checkIsValidLanguageTextArray({
+                    ((nameArray) && (!Twns.Helpers.checkIsValidLanguageTextArray({
                         list            : nameArray,
                         minTextCount    : 1,
                         minTextLength   : 1,
@@ -3518,7 +3361,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         {
             const dataForAside = dialogueData.dataForAside;
             if (dataForAside) {
-                if (!Helpers.checkIsValidLanguageTextArray({
+                if (!Twns.Helpers.checkIsValidLanguageTextArray({
                     list            : dataForAside.textArray,
                     minTextCount    : 1,
                     minTextLength   : 1,
@@ -3555,7 +3398,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         const bgmCode = data.bgmCode;
-        return ((bgmCode == null) || (!SoundManager.checkIsValidBgmCode(bgmCode)))
+        return ((bgmCode == null) || (!Twns.SoundManager.checkIsValidBgmCode(bgmCode)))
             ? Lang.getText(LangTextType.A0263)
             : null;
     }
@@ -3601,7 +3444,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return `${Lang.getText(LangTextType.A0212)} (${CommonConstants.WarFirstPlayerIndex} ~ ${playersCountUnneutral})`;
         }
 
-        const playerAliveState: Types.Undefinable<PlayerAliveState> = data.playerAliveState;
+        const playerAliveState: Twns.Types.Undefinable<PlayerAliveState> = data.playerAliveState;
         if (playerAliveState == null) {
             return Lang.getText(LangTextType.A0213);
         }
@@ -3684,7 +3527,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return `${Lang.getText(LangTextType.A0212)}`;
         }
 
-        const playerAliveState: Types.Undefinable<PlayerAliveState> = data.playerAliveState;
+        const playerAliveState: Twns.Types.Undefinable<PlayerAliveState> = data.playerAliveState;
         if (playerAliveState == null) {
             return Lang.getText(LangTextType.A0213);
         }
@@ -3882,7 +3725,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         {
-            const tileData      = Helpers.deepClone(actTileData);
+            const tileData      = Twns.Helpers.deepClone(actTileData);
             tileData.gridIndex  = { x: 0, y: 0 };
 
             const errorCode = (new BaseWar.BwTile()).getErrorCodeForTileData(tileData, playersCountUnneutral, war.getGameConfig());
@@ -3940,7 +3783,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         return null;
     }
     function getErrorTipForWeaPersistentShowText(data: WarEvent.IWeaPersistentShowText): string | null {
-        if (!Helpers.checkIsValidLanguageTextArray({
+        if (!Twns.Helpers.checkIsValidLanguageTextArray({
             list            : data.textArray,
             minTextCount    : 1,
             minTextLength   : 1,
@@ -3963,14 +3806,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 if ((coId == null)                                                                                          ||
                     (coId === CommonConstants.CoEmptyId)                                                                    ||
                     (gameConfig.getCoNameAndTierText(coId) == null)                                                         ||
-                    ((side !== Types.WarEventActionDialogueSide.Left) && (side !== Types.WarEventActionDialogueSide.Right)) ||
-                    (!Helpers.checkIsValidLanguageTextArray({
+                    ((side !== Twns.Types.WarEventActionDialogueSide.Left) && (side !== Twns.Types.WarEventActionDialogueSide.Right)) ||
+                    (!Twns.Helpers.checkIsValidLanguageTextArray({
                         list            : textArray,
                         minTextCount    : 1,
                         minTextLength   : 1,
                         maxTextLength   : CommonConstants.WarEventActionDialogueTextMaxLength,
                     }))                                                                                                     ||
-                    ((nameArray) && (!Helpers.checkIsValidLanguageTextArray({
+                    ((nameArray) && (!Twns.Helpers.checkIsValidLanguageTextArray({
                         list            : nameArray,
                         minTextCount    : 1,
                         minTextLength   : 1,
@@ -4160,17 +4003,17 @@ namespace Twns.WarHelpers.WarEventHelpers {
     } {
         let deletedNodesCount = 0;
         for (const node of (fullData.conditionNodeArray || []).concat()) {
-            deletedNodesCount += checkAndDeleteUnusedNode(fullData, Helpers.getExisted(node.nodeId), true);
+            deletedNodesCount += checkAndDeleteUnusedNode(fullData, Twns.Helpers.getExisted(node.nodeId), true);
         }
 
         let deletedConditionsCount = 0;
         for (const condition of (fullData.conditionArray || []).concat()) {
-            deletedConditionsCount += checkAndDeleteUnusedCondition(fullData, Helpers.getExisted(condition.WecCommonData?.conditionId));
+            deletedConditionsCount += checkAndDeleteUnusedCondition(fullData, Twns.Helpers.getExisted(condition.WecCommonData?.conditionId));
         }
 
         let deletedActionsCount = 0;
         for (const action of (fullData.actionArray || []).concat()) {
-            deletedActionsCount += checkAndDeleteUnusedAction(fullData, Helpers.getExisted(action.WeaCommonData?.actionId));
+            deletedActionsCount += checkAndDeleteUnusedAction(fullData, Twns.Helpers.getExisted(action.WeaCommonData?.actionId));
         }
 
         return {
@@ -4197,7 +4040,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return deleteCount;
         }
 
-        Helpers.deleteElementFromArray(nodeArray, node);
+        Twns.Helpers.deleteElementFromArray(nodeArray, node);
         ++deleteCount;
 
         if (isRecursive) {
@@ -4223,7 +4066,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return 0;
         }
 
-        return Helpers.deleteElementFromArray(conditionArray, condition);
+        return Twns.Helpers.deleteElementFromArray(conditionArray, condition);
     }
     function checkAndDeleteUnusedAction(fullData: IWarEventFullData, actionId: number): number {
         const actionArray = fullData.actionArray;
@@ -4240,7 +4083,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return 0;
         }
 
-        return Helpers.deleteElementFromArray(actionArray, action);
+        return Twns.Helpers.deleteElementFromArray(actionArray, action);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4304,17 +4147,17 @@ namespace Twns.WarHelpers.WarEventHelpers {
         } else if (conditionType === ConditionType.WecTurnAndPlayer) {
             condition.WecTurnAndPlayer = {
                 turnIndex                       : null,
-                turnIndexComparator             : Types.ValueComparator.EqualTo,
+                turnIndexComparator             : Twns.Types.ValueComparator.EqualTo,
                 turnIndexDivider                : null,
                 turnIndexRemainder              : null,
-                turnIndexRemainderComparator    : Types.ValueComparator.EqualTo,
+                turnIndexRemainderComparator    : Twns.Types.ValueComparator.EqualTo,
                 turnPhase                       : null,
                 playerIndexArray                : null,
             };
         } else if (conditionType === ConditionType.WecTurnPhaseEqualTo) {
             condition.WecTurnPhaseEqualTo = {
                 isNot           : false,
-                valueEqualTo    : Types.TurnPhaseCode.WaitBeginTurn,
+                valueEqualTo    : Twns.Types.TurnPhaseCode.WaitBeginTurn,
             };
         } else if (conditionType === ConditionType.WecWeatherAndFog) {
             condition.WecWeatherAndFog = {
@@ -4358,11 +4201,11 @@ namespace Twns.WarHelpers.WarEventHelpers {
             condition.WecEventCalledCount = {
                 eventIdArray            : null,
                 eventsCount             : 0,
-                eventsCountComparator   : Types.ValueComparator.EqualTo,
+                eventsCountComparator   : Twns.Types.ValueComparator.EqualTo,
                 timesInTurn             : null,
-                timesInTurnComparator   : Types.ValueComparator.EqualTo,
+                timesInTurnComparator   : Twns.Types.ValueComparator.EqualTo,
                 timesTotal              : null,
-                timesTotalComparator    : Types.ValueComparator.EqualTo,
+                timesTotalComparator    : Twns.Types.ValueComparator.EqualTo,
             };
         } else if (conditionType === ConditionType.WecPlayerAliveStateEqualTo) {
             condition.WecPlayerAliveStateEqualTo = {
@@ -4373,13 +4216,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
         } else if (conditionType === ConditionType.WecPlayerPresence) {
             condition.WecPlayerPresence = {
                 playersCount                : 0,
-                playersCountComparator      : Types.ValueComparator.EqualTo,
+                playersCountComparator      : Twns.Types.ValueComparator.EqualTo,
                 playerIndexArray            : null,
                 aliveStateArray             : null,
                 fund                        : null,
-                fundComparator              : Types.ValueComparator.EqualTo,
+                fundComparator              : Twns.Types.ValueComparator.EqualTo,
                 energyPercentage            : null,
-                energyPercentageComparator  : Types.ValueComparator.EqualTo,
+                energyPercentageComparator  : Twns.Types.ValueComparator.EqualTo,
                 coUsingSkillTypeArray       : null,
                 coCategoryIdArray           : null,
             };
@@ -4393,7 +4236,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             condition.WecTileTypeEqualTo = {
                 isNot       : false,
                 gridIndex   : { x: 0, y: 0 },
-                tileType    : Types.TileType.Plain,
+                tileType    : Twns.Types.TileType.Plain,
             };
         } else if (conditionType === ConditionType.WecTilePresence) {
             condition.WecTilePresence = {
@@ -4403,7 +4246,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 gridIndexArray      : null,
                 tileTypeArray       : null,
                 tilesCount          : 0,
-                tilesCountComparator: Types.ValueComparator.EqualTo,
+                tilesCountComparator: Twns.Types.ValueComparator.EqualTo,
             };
         } else if (conditionType === ConditionType.WecUnitPresence) {
             condition.WecUnitPresence = {
@@ -4415,30 +4258,30 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 actionStateArray        : null,
                 hasLoadedCo             : null,
                 hp                      : null,
-                hpComparator            : Types.ValueComparator.EqualTo,
+                hpComparator            : Twns.Types.ValueComparator.EqualTo,
                 fuelPct                 : null,
-                fuelPctComparator       : Types.ValueComparator.EqualTo,
+                fuelPctComparator       : Twns.Types.ValueComparator.EqualTo,
                 priAmmoPct              : null,
-                priAmmoPctComparator    : Types.ValueComparator.EqualTo,
+                priAmmoPctComparator    : Twns.Types.ValueComparator.EqualTo,
                 promotion               : null,
-                promotionComparator     : Types.ValueComparator.EqualTo,
+                promotionComparator     : Twns.Types.ValueComparator.EqualTo,
                 unitsCount              : 0,
-                unitsCountComparator    : Types.ValueComparator.EqualTo,
+                unitsCountComparator    : Twns.Types.ValueComparator.EqualTo,
             };
         } else if (conditionType === ConditionType.WecCustomCounter) {
             condition.WecCustomCounter = {
                 counterIdArray              : null,
                 counterCount                : 1,
-                counterCountComparator      : Types.ValueComparator.EqualTo,
+                counterCountComparator      : Twns.Types.ValueComparator.EqualTo,
                 value                       : null,
-                valueComparator             : Types.ValueComparator.EqualTo,
+                valueComparator             : Twns.Types.ValueComparator.EqualTo,
                 valueDivider                : null,
                 valueRemainder              : null,
-                valueRemainderComparator    : Types.ValueComparator.EqualTo,
+                valueRemainderComparator    : Twns.Types.ValueComparator.EqualTo,
             };
         } else {
             // todo: handle more condition types.
-            throw Helpers.newError(`Invalid conditionType: ${conditionType}.`, ClientErrorCode.WarEventHelper_ResetCondition_00);
+            throw Twns.Helpers.newError(`Invalid conditionType: ${conditionType}.`, ClientErrorCode.WarEventHelper_ResetCondition_00);
         }
     }
 
@@ -4448,57 +4291,57 @@ namespace Twns.WarHelpers.WarEventHelpers {
         war         : BwWar;
     }): void {
         // todo: handle more condition types.
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel1);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel2);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel3);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel4);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel5);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel6);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel10);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel11);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel12);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel13);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel14);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel20);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel21);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel22);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel23);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel30);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel31);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel32);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel40);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel50);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel60);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel1);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel2);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel3);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel4);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel5);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel6);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel10);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel11);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel12);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel13);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel14);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel20);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel21);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel22);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel23);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel30);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel31);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel32);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel40);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel50);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel60);
 
-        if      (condition.WecTurnIndexEqualTo)                 { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel1, { fullData, condition, war }); }
-        else if (condition.WecTurnIndexGreaterThan)             { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel2, { fullData, condition, war }); }
-        else if (condition.WecTurnIndexLessThan)                { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel3, { fullData, condition, war }); }
-        else if (condition.WecTurnIndexRemainderEqualTo)        { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel4, { fullData, condition, war }); }
-        else if (condition.WecTurnPhaseEqualTo)                 { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel5, { fullData, condition, war }); }
-        else if (condition.WecTurnAndPlayer)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel6, { fullData, condition, war }); }
+        if      (condition.WecTurnIndexEqualTo)                 { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel1, { fullData, condition, war }); }
+        else if (condition.WecTurnIndexGreaterThan)             { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel2, { fullData, condition, war }); }
+        else if (condition.WecTurnIndexLessThan)                { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel3, { fullData, condition, war }); }
+        else if (condition.WecTurnIndexRemainderEqualTo)        { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel4, { fullData, condition, war }); }
+        else if (condition.WecTurnPhaseEqualTo)                 { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel5, { fullData, condition, war }); }
+        else if (condition.WecTurnAndPlayer)                    { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel6, { fullData, condition, war }); }
 
-        else if (condition.WecPlayerIndexInTurnEqualTo)         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel10, { fullData, condition, war }); }
-        else if (condition.WecPlayerIndexInTurnGreaterThan)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel11, { fullData, condition, war }); }
-        else if (condition.WecPlayerIndexInTurnLessThan)        { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel12, { fullData, condition, war }); }
-        else if (condition.WecPlayerAliveStateEqualTo)          { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel13, { fullData, condition, war }); }
-        else if (condition.WecPlayerPresence)                   { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel14, { fullData, condition, war }); }
+        else if (condition.WecPlayerIndexInTurnEqualTo)         { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel10, { fullData, condition, war }); }
+        else if (condition.WecPlayerIndexInTurnGreaterThan)     { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel11, { fullData, condition, war }); }
+        else if (condition.WecPlayerIndexInTurnLessThan)        { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel12, { fullData, condition, war }); }
+        else if (condition.WecPlayerAliveStateEqualTo)          { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel13, { fullData, condition, war }); }
+        else if (condition.WecPlayerPresence)                   { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel14, { fullData, condition, war }); }
 
-        else if (condition.WecEventCalledCountTotalEqualTo)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel20, { fullData, condition, war }); }
-        else if (condition.WecEventCalledCountTotalGreaterThan) { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel21, { fullData, condition, war }); }
-        else if (condition.WecEventCalledCountTotalLessThan)    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel22, { fullData, condition, war }); }
-        else if (condition.WecEventCalledCount)                 { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel23, { fullData, condition, war }); }
+        else if (condition.WecEventCalledCountTotalEqualTo)     { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel20, { fullData, condition, war }); }
+        else if (condition.WecEventCalledCountTotalGreaterThan) { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel21, { fullData, condition, war }); }
+        else if (condition.WecEventCalledCountTotalLessThan)    { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel22, { fullData, condition, war }); }
+        else if (condition.WecEventCalledCount)                 { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel23, { fullData, condition, war }); }
 
-        else if (condition.WecTilePlayerIndexEqualTo)           { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel30, { fullData, condition, war }); }
-        else if (condition.WecTileTypeEqualTo)                  { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel31, { fullData, condition, war }); }
-        else if (condition.WecTilePresence)                     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel32, { fullData, condition, war }); }
+        else if (condition.WecTilePlayerIndexEqualTo)           { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel30, { fullData, condition, war }); }
+        else if (condition.WecTileTypeEqualTo)                  { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel31, { fullData, condition, war }); }
+        else if (condition.WecTilePresence)                     { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel32, { fullData, condition, war }); }
 
-        else if (condition.WecUnitPresence)                     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel40, { fullData, condition, war }); }
+        else if (condition.WecUnitPresence)                     { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel40, { fullData, condition, war }); }
 
-        else if (condition.WecWeatherAndFog)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel50, { fullData, condition, war }); }
+        else if (condition.WecWeatherAndFog)                    { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel50, { fullData, condition, war }); }
 
-        else if (condition.WecCustomCounter)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel60, { fullData, condition, war }); }
+        else if (condition.WecCustomCounter)                    { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionModifyPanel60, { fullData, condition, war }); }
 
-        else                                                    { throw Helpers.newError(`Invalid condition.`, ClientErrorCode.WarEventHelper_OpenConditionModifyPanel_00); }
+        else                                                    { throw Twns.Helpers.newError(`Invalid condition.`, ClientErrorCode.WarEventHelper_OpenConditionModifyPanel_00); }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4554,7 +4397,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             };
         } else if (actionType === ActionType.SetWeather) {
             action.WeaSetWeather = {
-                weatherType         : Types.WeatherType.Clear,
+                weatherType         : Twns.Types.WeatherType.Clear,
                 weatherTurnsCount   : 0,
             };
         } else if (actionType === ActionType.SimpleDialogue) {
@@ -4564,11 +4407,11 @@ namespace Twns.WarHelpers.WarEventHelpers {
         } else if (actionType === ActionType.PlayBgm) {
             action.WeaPlayBgm = {
                 useCoBgm        : false,
-                bgmCode         : Types.BgmCode.None,
+                bgmCode         : Twns.Types.BgmCode.None,
             };
         } else if (actionType === ActionType.SetForceFogCode) {
             action.WeaSetForceFogCode = {
-                forceFogCode    : Types.ForceFogCode.Fog,
+                forceFogCode    : Twns.Types.ForceFogCode.Fog,
                 turnsCount      : 0,
             };
         } else if (actionType === ActionType.SetCustomCounter) {
@@ -4609,9 +4452,9 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 conAliveStateArray              : null,
                 conCoUsingSkillTypeArray        : null,
                 conEnergyPercentage             : null,
-                conEnergyPercentageComparator   : Types.ValueComparator.EqualTo,
+                conEnergyPercentageComparator   : Twns.Types.ValueComparator.EqualTo,
                 conFund                         : null,
-                conFundComparator               : Types.ValueComparator.EqualTo,
+                conFundComparator               : Twns.Types.ValueComparator.EqualTo,
                 actFundDeltaValue               : 0,
                 actFundMultiplierPercentage     : 100,
                 actCoEnergyDeltaPct             : 0,
@@ -4634,13 +4477,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 conActionStateArray                 : null,
                 conHasLoadedCo                      : null,
                 conHp                               : null,
-                conHpComparator                     : Types.ValueComparator.EqualTo,
+                conHpComparator                     : Twns.Types.ValueComparator.EqualTo,
                 conFuelPct                          : null,
-                conFuelPctComparator                : Types.ValueComparator.EqualTo,
+                conFuelPctComparator                : Twns.Types.ValueComparator.EqualTo,
                 conPriAmmoPct                       : null,
-                conPriAmmoPctComparator             : Types.ValueComparator.EqualTo,
+                conPriAmmoPctComparator             : Twns.Types.ValueComparator.EqualTo,
                 conPromotion                        : null,
-                conPromotionComparator              : Types.ValueComparator.EqualTo,
+                conPromotionComparator              : Twns.Types.ValueComparator.EqualTo,
                 actDestroyUnit                      : null,
                 actActionState                      : null,
                 actHasLoadedCo                      : null,
@@ -4658,8 +4501,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 actTileData     : {
                     gridIndex   : null,
                     playerIndex : CommonConstants.WarNeutralPlayerIndex,
-                    objectType  : Types.TileObjectType.Empty,
-                    baseType    : Types.TileBaseType.Plain,
+                    objectType  : Twns.Types.TileObjectType.Empty,
+                    baseType    : Twns.Types.TileBaseType.Plain,
                 },
                 actIsModifyTileBase         : true,
                 actIsModifyTileDecorator    : true,
@@ -4680,59 +4523,62 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 textArray: [],
             };
         } else {
-            throw Helpers.newError(`Invalid actionType: ${actionType}.`, ClientErrorCode.WarEventHelper_ResetAction_00);
+            throw Twns.Helpers.newError(`Invalid actionType: ${actionType}.`, ClientErrorCode.WarEventHelper_ResetAction_00);
         }
     }
 
     export function openActionModifyPanel(war: BwWar, fullData: IWarEventFullData, action: IWarEventAction): void {
         // todo: handle more action types.
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel1);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel2);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel3);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel4);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel5);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel6);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel7);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel10);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel1);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel2);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel3);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel4);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel5);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel6);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel7);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel10);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel11);
 
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel20);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel21);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel22);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel23);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel24);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel25);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel20);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel21);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel22);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel23);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel24);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel25);
 
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel30);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel30);
 
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel40);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel41);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel40);
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel41);
 
-        if      (action.WeaAddUnit)                         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel1,  { war, fullData, action }); }
-        else if (action.WeaSetCustomCounter)                { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel2,  { war, fullData, action }); }
-        else if (action.WeaDialogue)                        { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel3,  { war, fullData, action }); }
-        else if (action.WeaSetViewpoint)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel4,  { war, fullData, action }); }
-        else if (action.WeaSetWeather)                      { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel5,  { war, fullData, action }); }
-        else if (action.WeaSimpleDialogue)                  { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel6,  { war, fullData, action }); }
-        else if (action.WeaPlayBgm)                         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel7,  { war, fullData, action }); }
-        else if (action.WeaSetForceFogCode)                 { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel10, { war, fullData, action }); }
-        else if (action.WeaStopPersistentAction)            { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel11, { war, fullData, action }); }
+        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionModifyPanel50);
 
-        else if (action.WeaDeprecatedSetPlayerAliveState)   { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel20, { war, fullData, action }); }
-        else if (action.WeaDeprecatedSetPlayerFund)         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel21, { war, fullData, action }); }
-        else if (action.WeaDeprecatedSetPlayerCoEnergy)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel22, { war, fullData, action }); }
-        else if (action.WeaSetPlayerAliveState)             { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel23, { war, fullData, action }); }
-        else if (action.WeaSetPlayerState)                  { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel24, { war, fullData, action }); }
-        else if (action.WeaSetPlayerCoEnergy)               { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel25, { war, fullData, action }); }
+        if      (action.WeaAddUnit)                         { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel1,  { war, fullData, action }); }
+        else if (action.WeaSetCustomCounter)                { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel2,  { war, fullData, action }); }
+        else if (action.WeaDialogue)                        { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel3,  { war, fullData, action }); }
+        else if (action.WeaSetViewpoint)                    { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel4,  { war, fullData, action }); }
+        else if (action.WeaSetWeather)                      { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel5,  { war, fullData, action }); }
+        else if (action.WeaSimpleDialogue)                  { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel6,  { war, fullData, action }); }
+        else if (action.WeaPlayBgm)                         { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel7,  { war, fullData, action }); }
+        else if (action.WeaSetForceFogCode)                 { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel10, { war, fullData, action }); }
+        else if (action.WeaStopPersistentAction)            { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel11, { war, fullData, action }); }
 
-        else if (action.WeaSetUnitState)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel30, { war, fullData, action }); }
+        else if (action.WeaDeprecatedSetPlayerAliveState)   { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel20, { war, fullData, action }); }
+        else if (action.WeaDeprecatedSetPlayerFund)         { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel21, { war, fullData, action }); }
+        else if (action.WeaDeprecatedSetPlayerCoEnergy)     { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel22, { war, fullData, action }); }
+        else if (action.WeaSetPlayerAliveState)             { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel23, { war, fullData, action }); }
+        else if (action.WeaSetPlayerState)                  { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel24, { war, fullData, action }); }
+        else if (action.WeaSetPlayerCoEnergy)               { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel25, { war, fullData, action }); }
 
-        else if (action.WeaSetTileType)                     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel40, { war, fullData, action }); }
-        else if (action.WeaSetTileState)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel41, { war, fullData, action }); }
+        else if (action.WeaSetUnitState)                    { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel30, { war, fullData, action }); }
 
-        else if (action.WeaPersistentShowText)              { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel50, { war, fullData, action }); }
+        else if (action.WeaSetTileType)                     { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel40, { war, fullData, action }); }
+        else if (action.WeaSetTileState)                    { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel41, { war, fullData, action }); }
+
+        else if (action.WeaPersistentShowText)              { Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionModifyPanel50, { war, fullData, action }); }
 
         else {
-            throw Helpers.newError(`Invalid action.`, ClientErrorCode.WarEventHelper_OpenActionModifyPanel_00);
+            throw Twns.Helpers.newError(`Invalid action.`, ClientErrorCode.WarEventHelper_OpenActionModifyPanel_00);
         }
     }
 
@@ -4757,14 +4603,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
                     maxCallCountTotal       : 1,
                     actionIdArray           : [],
                 });
-                eventArray.sort((v1, v2) => Helpers.getExisted(v1.eventId) - Helpers.getExisted(v2.eventId));
+                eventArray.sort((v1, v2) => Twns.Helpers.getExisted(v1.eventId) - Twns.Helpers.getExisted(v2.eventId));
                 return eventId;
             }
         }
     }
     export function cloneEvent(fullData: IWarEventFullData, srcEventId: number, isShallowClone: boolean): number {
-        const eventArray    = Helpers.getExisted(fullData.eventArray);
-        const srcEvent      = Helpers.getExisted(eventArray.find(v => v.eventId === srcEventId));
+        const eventArray    = Twns.Helpers.getExisted(fullData.eventArray);
+        const srcEvent      = Twns.Helpers.getExisted(eventArray.find(v => v.eventId === srcEventId));
         for (let eventId = 1; ; ++eventId) {
             if (eventArray.some(v => v.eventId === eventId)) {
                 continue;
@@ -4774,16 +4620,16 @@ namespace Twns.WarHelpers.WarEventHelpers {
             if (isShallowClone) {
                 eventArray.push({
                     eventId,
-                    eventNameArray          : Helpers.deepClone(srcEvent.eventNameArray),
+                    eventNameArray          : Twns.Helpers.deepClone(srcEvent.eventNameArray),
                     maxCallCountInPlayerTurn: srcEvent.maxCallCountInPlayerTurn,
                     maxCallCountTotal       : srcEvent.maxCallCountTotal,
-                    actionIdArray           : Helpers.deepClone(srcEvent.actionIdArray),
+                    actionIdArray           : Twns.Helpers.deepClone(srcEvent.actionIdArray),
                     conditionNodeId         : srcConditionNodeId,
                 });
             } else {
                 eventArray.push({
                     eventId,
-                    eventNameArray          : Helpers.deepClone(srcEvent.eventNameArray),
+                    eventNameArray          : Twns.Helpers.deepClone(srcEvent.eventNameArray),
                     maxCallCountInPlayerTurn: srcEvent.maxCallCountInPlayerTurn,
                     maxCallCountTotal       : srcEvent.maxCallCountTotal,
                     actionIdArray           : (srcEvent.actionIdArray ?? []).map(v => cloneAction(fullData, v)),
@@ -4791,7 +4637,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 });
             }
 
-            eventArray.sort((v1, v2) => Helpers.getExisted(v1.eventId) - Helpers.getExisted(v2.eventId));
+            eventArray.sort((v1, v2) => Twns.Helpers.getExisted(v1.eventId) - Twns.Helpers.getExisted(v2.eventId));
             return eventId;
         }
     }
@@ -4817,7 +4663,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                     conditionIdArray,
                     subNodeIdArray,
                 });
-                nodeArray.sort((v1, v2) => Helpers.getExisted(v1.nodeId) - Helpers.getExisted(v2.nodeId));
+                nodeArray.sort((v1, v2) => Twns.Helpers.getExisted(v1.nodeId) - Twns.Helpers.getExisted(v2.nodeId));
 
                 if (parentNode.subNodeIdArray == null) {
                     parentNode.subNodeIdArray = [nodeId];
@@ -4831,14 +4677,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
     }
     export function cloneNode(fullData: IWarEventFullData, srcNodeId: number, isShallowClone: boolean): number {
-        const nodeArray = Helpers.getExisted(fullData.conditionNodeArray);
-        const srcNode   = Helpers.getExisted(nodeArray.find(v => v.nodeId === srcNodeId));
+        const nodeArray = Twns.Helpers.getExisted(fullData.conditionNodeArray);
+        const srcNode   = Twns.Helpers.getExisted(nodeArray.find(v => v.nodeId === srcNodeId));
         for (let nodeId = 1; ; ++nodeId) {
             if (nodeArray.some(v => v.nodeId === nodeId)) {
                 continue;
             }
 
-            const newNode   = Helpers.deepClone(srcNode);
+            const newNode   = Twns.Helpers.deepClone(srcNode);
             newNode.nodeId  = nodeId;
             nodeArray.push(newNode);
             if (!isShallowClone) {
@@ -4853,7 +4699,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 }
             }
 
-            nodeArray.sort((v1, v2) => Helpers.getExisted(v1.nodeId) - Helpers.getExisted(v2.nodeId));
+            nodeArray.sort((v1, v2) => Twns.Helpers.getExisted(v1.nodeId) - Twns.Helpers.getExisted(v2.nodeId));
             return nodeId;
         }
     }
@@ -4877,18 +4723,18 @@ namespace Twns.WarHelpers.WarEventHelpers {
         if (srcNode == null) {
             return null;
         }
-        const newNode = Helpers.deepClone(srcNode);
+        const newNode = Twns.Helpers.deepClone(srcNode);
 
         for (let nodeId = 1; ; ++nodeId) {
             if (!nodeArray.some(v => v.nodeId === nodeId)) {
                 newNode.nodeId = nodeId;
                 nodeArray.push(newNode);
-                nodeArray.sort((v1, v2) => Helpers.getExisted(v1.nodeId) - Helpers.getExisted(v2.nodeId));
+                nodeArray.sort((v1, v2) => Twns.Helpers.getExisted(v1.nodeId) - Twns.Helpers.getExisted(v2.nodeId));
 
                 if (parentNode.subNodeIdArray == null) {
                     parentNode.subNodeIdArray = [nodeId];
                 } else {
-                    Helpers.deleteElementFromArray(parentNode.subNodeIdArray, nodeIdForDelete);
+                    Twns.Helpers.deleteElementFromArray(parentNode.subNodeIdArray, nodeIdForDelete);
                     parentNode.subNodeIdArray.push(nodeId);
                     parentNode.subNodeIdArray.sort((v1, v2) => v1 - v2);
                 }
@@ -4922,7 +4768,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                     conditionIdArray,
                     subNodeIdArray,
                 });
-                nodeArray.sort((v1, v2) => Helpers.getExisted(v1.nodeId) - Helpers.getExisted(v2.nodeId));
+                nodeArray.sort((v1, v2) => Twns.Helpers.getExisted(v1.nodeId) - Twns.Helpers.getExisted(v2.nodeId));
 
                 // const oldNodeId         = event.conditionNodeId;
                 event.conditionNodeId   = nodeId;
@@ -4986,7 +4832,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return false;
         }
 
-        Helpers.deleteElementFromArray(nodeIdArray, oldNodeId);
+        Twns.Helpers.deleteElementFromArray(nodeIdArray, oldNodeId);
         nodeIdArray.push(newNodeId);
         nodeIdArray.sort((v1, v2) => v1 - v2);
         // checkAndDeleteUnusedNode(fullData, oldNodeId);
@@ -4995,7 +4841,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
     }
 
     export function addDefaultCondition(fullData: IWarEventFullData, nodeId: number): number { // DONE
-        const node = Helpers.getExisted(getNode(fullData, nodeId), ClientErrorCode.WarEventHelper_AddDefaultCondition_00);
+        const node = Twns.Helpers.getExisted(getNode(fullData, nodeId), ClientErrorCode.WarEventHelper_AddDefaultCondition_00);
         if (node.conditionIdArray == null) {
             node.conditionIdArray = [];
         }
@@ -5013,15 +4859,15 @@ namespace Twns.WarHelpers.WarEventHelpers {
                     },
                     WecTurnAndPlayer : {
                         turnIndex                       : null,
-                        turnIndexComparator             : Types.ValueComparator.EqualTo,
+                        turnIndexComparator             : Twns.Types.ValueComparator.EqualTo,
                         turnIndexDivider                : null,
                         turnIndexRemainder              : null,
-                        turnIndexRemainderComparator    : Types.ValueComparator.EqualTo,
+                        turnIndexRemainderComparator    : Twns.Types.ValueComparator.EqualTo,
                         turnPhase                       : null,
                         playerIndexArray                : null,
                     },
                 });
-                conditionArray.sort((v1, v2) => Helpers.getExisted(v1.WecCommonData?.conditionId) - Helpers.getExisted(v2.WecCommonData?.conditionId));
+                conditionArray.sort((v1, v2) => Twns.Helpers.getExisted(v1.WecCommonData?.conditionId) - Twns.Helpers.getExisted(v2.WecCommonData?.conditionId));
 
                 conditionIdArray.push(conditionId);
                 conditionIdArray.sort((v1, v2) => v1 - v2);
@@ -5031,8 +4877,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
     }
     export function cloneCondition(fullData: IWarEventFullData, srcConditionId: number): number {
-        const conditionArray    = Helpers.getExisted(fullData.conditionArray);
-        const newCondition      = Helpers.deepClone(Helpers.getExisted(conditionArray.find(v => v.WecCommonData?.conditionId === srcConditionId)));
+        const conditionArray    = Twns.Helpers.getExisted(fullData.conditionArray);
+        const newCondition      = Twns.Helpers.deepClone(Twns.Helpers.getExisted(conditionArray.find(v => v.WecCommonData?.conditionId === srcConditionId)));
         conditionArray.push(newCondition);
 
         for (let conditionId = 1; ; ++conditionId) {
@@ -5040,8 +4886,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 continue;
             }
 
-            Helpers.getExisted(newCondition.WecCommonData).conditionId = conditionId;
-            conditionArray.sort((v1, v2) => Helpers.getExisted(v1.WecCommonData?.conditionId) - Helpers.getExisted(v2.WecCommonData?.conditionId));
+            Twns.Helpers.getExisted(newCondition.WecCommonData).conditionId = conditionId;
+            conditionArray.sort((v1, v2) => Twns.Helpers.getExisted(v1.WecCommonData?.conditionId) - Twns.Helpers.getExisted(v2.WecCommonData?.conditionId));
             return conditionId;
         }
     }
@@ -5065,7 +4911,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         if (srcCondition == null) {
             return null;
         }
-        const newCondition = Helpers.deepClone(srcCondition);
+        const newCondition = Twns.Helpers.deepClone(srcCondition);
 
         if (parentNode.conditionIdArray == null) {
             parentNode.conditionIdArray = [];
@@ -5074,11 +4920,11 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const conditionIdArray = parentNode.conditionIdArray;
         for (let conditionId = 1; ; ++conditionId) {
             if (!conditionArray.some(v => v.WecCommonData?.conditionId === conditionId)) {
-                Helpers.getExisted(newCondition.WecCommonData).conditionId = conditionId;
+                Twns.Helpers.getExisted(newCondition.WecCommonData).conditionId = conditionId;
                 conditionArray.push(newCondition);
-                conditionArray.sort((v1, v2) => Helpers.getExisted(v1.WecCommonData?.conditionId) - Helpers.getExisted(v2.WecCommonData?.conditionId));
+                conditionArray.sort((v1, v2) => Twns.Helpers.getExisted(v1.WecCommonData?.conditionId) - Twns.Helpers.getExisted(v2.WecCommonData?.conditionId));
 
-                Helpers.deleteElementFromArray(conditionIdArray, conditionIdForDelete);
+                Twns.Helpers.deleteElementFromArray(conditionIdArray, conditionIdForDelete);
                 conditionIdArray.push(conditionId);
                 conditionIdArray.sort((v1, v2) => v1 - v2);
 
@@ -5106,7 +4952,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         const conditionIdArray = parentNode.conditionIdArray;
-        Helpers.deleteElementFromArray(conditionIdArray, oldConditionId);
+        Twns.Helpers.deleteElementFromArray(conditionIdArray, oldConditionId);
         if (conditionIdArray.indexOf(newConditionId) < 0) {
             conditionIdArray.push(newConditionId);
             conditionIdArray.sort((v1, v2) => v1 - v2);
@@ -5140,7 +4986,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                         unitArray: [],
                     },
                 });
-                actionArray.sort((v1, v2) => Helpers.getExisted(v1.WeaCommonData?.actionId) - Helpers.getExisted(v2.WeaCommonData?.actionId));
+                actionArray.sort((v1, v2) => Twns.Helpers.getExisted(v1.WeaCommonData?.actionId) - Twns.Helpers.getExisted(v2.WeaCommonData?.actionId));
 
                 eventActionIdArray.push(actionId);
 
@@ -5155,7 +5001,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             unitData            : {
                 gridIndex       : { x: 0, y: 0 },
                 playerIndex     : CommonConstants.WarFirstPlayerIndex,
-                unitType        : Types.UnitType.Infantry,
+                unitType        : Twns.Types.UnitType.Infantry,
             },
         };
     }
@@ -5163,7 +5009,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         return {
             dataForCoDialogue: {
                 coId        : gameConfig.getCoIdArrayForDialogue()[0],
-                side        : Types.WarEventActionDialogueSide.Left,
+                side        : Twns.Types.WarEventActionDialogueSide.Left,
                 textArray   : [
                     { languageType: Lang.getCurrentLanguageType(), text: `...` },
                 ],
@@ -5183,7 +5029,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         return {
             dataForCoDialogue: {
                 coId        : gameConfig.getCoIdArrayForDialogue()[0],
-                side        : Types.WarEventActionSimpleDialogueSide.Bottom,
+                side        : Twns.Types.WarEventActionSimpleDialogueSide.Bottom,
                 textArray   : [
                     { languageType: Lang.getCurrentLanguageType(), text: `...` },
                 ],
@@ -5192,8 +5038,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
     }
 
     export function cloneAction(fullData: IWarEventFullData, srcActionId: number): number {
-        const actionArray   = Helpers.getExisted(fullData.actionArray);
-        const newAction     = Helpers.deepClone(Helpers.getExisted(actionArray.find(v => v.WeaCommonData?.actionId === srcActionId)));
+        const actionArray   = Twns.Helpers.getExisted(fullData.actionArray);
+        const newAction     = Twns.Helpers.deepClone(Twns.Helpers.getExisted(actionArray.find(v => v.WeaCommonData?.actionId === srcActionId)));
         actionArray.push(newAction);
 
         for (let actionId = 1; ; ++actionId) {
@@ -5201,8 +5047,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 continue;
             }
 
-            Helpers.getExisted(newAction.WeaCommonData).actionId = actionId;
-            actionArray.sort((v1, v2) => Helpers.getExisted(v1.WeaCommonData?.actionId) - Helpers.getExisted(v2.WeaCommonData?.actionId));
+            Twns.Helpers.getExisted(newAction.WeaCommonData).actionId = actionId;
+            actionArray.sort((v1, v2) => Twns.Helpers.getExisted(v1.WeaCommonData?.actionId) - Twns.Helpers.getExisted(v2.WeaCommonData?.actionId));
             return actionId;
         }
     }
@@ -5232,14 +5078,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         const actionIdArray = eventData.actionIdArray;
-        const newAction     = Helpers.deepClone(srcAction);
+        const newAction     = Twns.Helpers.deepClone(srcAction);
         for (let actionId = 1; ; ++actionId) {
             if (!actionArray.some(v => v.WeaCommonData?.actionId === actionId)) {
-                Helpers.getExisted(newAction.WeaCommonData).actionId = actionId;
+                Twns.Helpers.getExisted(newAction.WeaCommonData).actionId = actionId;
                 actionArray.push(newAction);
-                actionArray.sort((v1, v2) => Helpers.getExisted(v1.WeaCommonData?.actionId) - Helpers.getExisted(v2.WeaCommonData?.actionId));
+                actionArray.sort((v1, v2) => Twns.Helpers.getExisted(v1.WeaCommonData?.actionId) - Twns.Helpers.getExisted(v2.WeaCommonData?.actionId));
 
-                Helpers.deleteElementFromArray(actionIdArray, actionIdForDelete);
+                Twns.Helpers.deleteElementFromArray(actionIdArray, actionIdForDelete);
                 actionIdArray.push(actionId);
                 actionIdArray.sort((v1, v2) => v1 - v2);
 
@@ -5257,7 +5103,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return false;
         }
 
-        const actionIdArray = Helpers.getExisted(getEvent(fullData, eventId)?.actionIdArray);
+        const actionIdArray = Twns.Helpers.getExisted(getEvent(fullData, eventId)?.actionIdArray);
         actionIdArray[actionIdArray.indexOf(oldActionId)] = newActionId;
 
         return true;

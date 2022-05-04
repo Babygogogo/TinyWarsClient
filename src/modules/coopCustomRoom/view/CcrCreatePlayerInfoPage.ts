@@ -8,7 +8,7 @@
 // import Helpers                  from "../../tools/helpers/Helpers";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -19,9 +19,9 @@
 // import CcrCreateModel           from "../model/CcrCreateModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCcrCreatePlayerInfoPage {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.CoopCustomRoom {
+    import LangTextType         = Twns.Lang.LangTextType;
+    import NotifyType           = Twns.Notify.NotifyType;
 
     export class CcrCreatePlayerInfoPage extends TwnsUiTabPage.UiTabPage<void> {
         private readonly _groupInfo!    : eui.Group;
@@ -49,7 +49,7 @@ namespace TwnsCcrCreatePlayerInfoPage {
         }
 
         private async _updateComponentsForPlayerInfo(): Promise<void> {
-            this._listPlayer.bindData(this._createDataForListPlayer(Helpers.getExisted((await CcrCreateModel.getMapRawData()).playersCountUnneutral)));
+            this._listPlayer.bindData(this._createDataForListPlayer(Twns.Helpers.getExisted((await CoopCustomRoom.CcrCreateModel.getMapRawData()).playersCountUnneutral)));
         }
 
         private _createDataForListPlayer(playersCountUnneutral: number): DataForPlayerRenderer[] {
@@ -100,14 +100,14 @@ namespace TwnsCcrCreatePlayerInfoPage {
 
         private async _onTouchedGroupCo(): Promise<void> {
             const playerIndex       = this._getData().playerIndex;
-            const settingsForCommon = CcrCreateModel.getSettingsForCommon();
-            const coId              = (CcrCreateModel.getSelfPlayerIndex() === playerIndex)
-                ? (CcrCreateModel.getSelfCoId())
-                : (WarRuleHelpers.getPlayerRule(Helpers.getExisted(settingsForCommon.warRule), playerIndex).fixedCoIdInCcw);
+            const settingsForCommon = CoopCustomRoom.CcrCreateModel.getSettingsForCommon();
+            const coId              = (CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex() === playerIndex)
+                ? (CoopCustomRoom.CcrCreateModel.getSelfCoId())
+                : (WarHelpers.WarRuleHelpers.getPlayerRule(Twns.Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex).fixedCoIdInCcw);
 
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
-                    gameConfig   : CcrCreateModel.getGameConfig(),
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoInfoPanel, {
+                    gameConfig   : CoopCustomRoom.CcrCreateModel.getGameConfig(),
                     coId,
                 });
             }
@@ -115,11 +115,11 @@ namespace TwnsCcrCreatePlayerInfoPage {
 
         private async _onTouchedBtnChangeController(): Promise<void> {
             const data                  = this._getData();
-            const playerRuleArray       = Helpers.getExisted(CcrCreateModel.getWarRule().ruleForPlayers?.playerRuleDataArray);
+            const playerRuleArray       = Twns.Helpers.getExisted(CoopCustomRoom.CcrCreateModel.getInstanceWarRule().ruleForPlayers?.playerRuleDataArray);
             const humanPlayerIndexSet   = new Set<number>();
             const aiPlayerIndexSet      = new Set<number>();
             for (const playerRule of playerRuleArray) {
-                const playerIndex = Helpers.getExisted(playerRule.playerIndex);
+                const playerIndex = Twns.Helpers.getExisted(playerRule.playerIndex);
                 if (playerRule.fixedCoIdInCcw == null) {
                     humanPlayerIndexSet.add(playerIndex);
                 } else {
@@ -128,30 +128,30 @@ namespace TwnsCcrCreatePlayerInfoPage {
             }
 
             const playerIndex   = data.playerIndex;
-            const playerRule    = Helpers.getExisted(playerRuleArray.find(v => v.playerIndex === playerIndex));
-            if (playerIndex === CcrCreateModel.getSelfPlayerIndex()) {
+            const playerRule    = Twns.Helpers.getExisted(playerRuleArray.find(v => v.playerIndex === playerIndex));
+            if (playerIndex === CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex()) {
                 if (humanPlayerIndexSet.size < 2) {
                     FloatText.show(Lang.getText(LangTextType.A0222));
                 } else {
                     const callback = () => {
                         for (const p of humanPlayerIndexSet) {
                             if (p !== playerIndex) {
-                                CcrCreateModel.setSelfPlayerIndex(p);
+                                CoopCustomRoom.CcrCreateModel.setSelfPlayerIndex(p);
                                 break;
                             }
                         }
                         playerRule.fixedCoIdInCcw = CommonConstants.CoEmptyId;
-                        CcrCreateModel.setAiSkinId(playerIndex, playerIndex);
+                        CoopCustomRoom.CcrCreateModel.setAiSkinId(playerIndex, playerIndex);
                         data.page.updateView();
                     };
 
-                    if (CcrCreateModel.getPresetWarRuleId() == null) {
+                    if (CoopCustomRoom.CcrCreateModel.getTemplateWarRuleId() == null) {
                         callback();
                     } else {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0129),
                             callback: () => {
-                                CcrCreateModel.setCustomWarRuleId();
+                                CoopCustomRoom.CcrCreateModel.setCustomWarRuleId();
                                 callback();
                             },
                         });
@@ -160,22 +160,22 @@ namespace TwnsCcrCreatePlayerInfoPage {
 
             } else {
                 if (playerRule.fixedCoIdInCcw == null) {
-                    CcrCreateModel.setSelfPlayerIndex(playerIndex);
+                    CoopCustomRoom.CcrCreateModel.setSelfPlayerIndex(playerIndex);
                     data.page.updateView();
                 } else {
                     const callback = () => {
                         playerRule.fixedCoIdInCcw = null;
-                        CcrCreateModel.deleteAiSkinId(playerIndex);
+                        CoopCustomRoom.CcrCreateModel.deleteAiSkinId(playerIndex);
                         data.page.updateView();
                     };
 
-                    if (CcrCreateModel.getPresetWarRuleId() == null) {
+                    if (CoopCustomRoom.CcrCreateModel.getTemplateWarRuleId() == null) {
                         callback();
                     } else {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0129),
                             callback: () => {
-                                CcrCreateModel.setCustomWarRuleId();
+                                CoopCustomRoom.CcrCreateModel.setCustomWarRuleId();
                                 callback();
                             },
                         });
@@ -188,23 +188,23 @@ namespace TwnsCcrCreatePlayerInfoPage {
         }
 
         private async _onTouchedBtnChangeSkinId(): Promise<void> {
-            CcrCreateModel.tickUnitAndTileSkinId(this._getData().playerIndex);
+            CoopCustomRoom.CcrCreateModel.tickUnitAndTileSkinId(this._getData().playerIndex);
             this._updateComponentsForSettings();
         }
 
         private async _onTouchedBtnChangeCo(): Promise<void> {
-            const playerIndex   = this._getData().playerIndex;
-            const warRule       = CcrCreateModel.getWarRule();
-            const playerRule    = WarRuleHelpers.getPlayerRule(warRule, playerIndex);
-            const gameConfig    = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(CcrCreateModel.getData().settingsForCommon?.configVersion));
-            if (playerIndex === CcrCreateModel.getSelfPlayerIndex()) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+            const playerIndex       = this._getData().playerIndex;
+            const instanceWarRule   = CoopCustomRoom.CcrCreateModel.getInstanceWarRule();
+            const playerRule        = WarHelpers.WarRuleHelpers.getPlayerRule(instanceWarRule, playerIndex);
+            const gameConfig        = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(CoopCustomRoom.CcrCreateModel.getData().settingsForCommon?.configVersion));
+            if (playerIndex === CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex()) {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                     gameConfig,
-                    currentCoId         : CcrCreateModel.getSelfCoId(),
-                    availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule, playerIndex, gameConfig }),
+                    currentCoId         : CoopCustomRoom.CcrCreateModel.getSelfCoId(),
+                    availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({ baseWarRule: instanceWarRule, playerIndex, gameConfig }),
                     callbackOnConfirm   : (coId) => {
-                        if (coId !== CcrCreateModel.getSelfCoId()) {
-                            CcrCreateModel.setSelfCoId(coId);
+                        if (coId !== CoopCustomRoom.CcrCreateModel.getSelfCoId()) {
+                            CoopCustomRoom.CcrCreateModel.setSelfCoId(coId);
                             this._updateComponentsForSettings();
                         }
                     },
@@ -218,26 +218,26 @@ namespace TwnsCcrCreatePlayerInfoPage {
                             coIdArray.push(cfg.coId);
                         }
 
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                             gameConfig,
                             currentCoId         : coId,
                             availableCoIdArray  : coIdArray,
                             callbackOnConfirm   : (newCoId) => {
                                 if (newCoId !== coId) {
-                                    CcrCreateModel.setAiCoId(playerIndex, newCoId);
+                                    CoopCustomRoom.CcrCreateModel.setAiCoId(playerIndex, newCoId);
                                     this._updateComponentsForSettings();
                                 }
                             },
                         });
                     };
 
-                    if (warRule.ruleId == null) {
+                    if (instanceWarRule.templateWarRuleId == null) {
                         callback();
                     } else {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0129),
                             callback: () => {
-                                CcrCreateModel.setCustomWarRuleId();
+                                CoopCustomRoom.CcrCreateModel.setCustomWarRuleId();
                                 callback();
                             },
                         });
@@ -261,7 +261,7 @@ namespace TwnsCcrCreatePlayerInfoPage {
         }
 
         private async _updateComponentsForSettings(): Promise<void> {
-            const roomInfo  = CcrCreateModel.getData();
+            const roomInfo  = CoopCustomRoom.CcrCreateModel.getData();
             if (!roomInfo) {
                 return;
             }
@@ -269,16 +269,16 @@ namespace TwnsCcrCreatePlayerInfoPage {
             const playerIndex           = this._getData().playerIndex;
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
 
-            const settingsForCommon     = Helpers.getExisted(roomInfo.settingsForCommon);
-            const playerRule            = WarRuleHelpers.getPlayerRule(Helpers.getExisted(settingsForCommon.warRule), playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(Helpers.getExisted(playerRule.teamIndex)) || CommonConstants.ErrorTextForUndefined;
+            const settingsForCommon     = Twns.Helpers.getExisted(roomInfo.settingsForCommon);
+            const playerRule            = WarHelpers.WarRuleHelpers.getPlayerRule(Twns.Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex);
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(Twns.Helpers.getExisted(playerRule.teamIndex)) || CommonConstants.ErrorTextForUndefined;
 
-            const isSelfPlayer      = CcrCreateModel.getSelfPlayerIndex() === playerIndex;
+            const isSelfPlayer      = CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex() === playerIndex;
             const isHumanPlayer     = playerRule.fixedCoIdInCcw == null;
-            this._imgSkin.source    = Twns.WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(
+            this._imgSkin.source    = WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(
                 isSelfPlayer
-                    ? CcrCreateModel.getSelfUnitAndTileSkinId()
-                    : (isHumanPlayer ? null : CcrCreateModel.getAiSkinId(playerIndex))
+                    ? CoopCustomRoom.CcrCreateModel.getSelfUnitAndTileSkinId()
+                    : (isHumanPlayer ? null : CoopCustomRoom.CcrCreateModel.getAiSkinId(playerIndex))
             );
 
             this._labelPlayerType.text  = isSelfPlayer
@@ -287,8 +287,8 @@ namespace TwnsCcrCreatePlayerInfoPage {
                     ? Lang.getText(LangTextType.B0648)
                     : Lang.getText(LangTextType.B0607));
 
-            const coId                      = isSelfPlayer ? CcrCreateModel.getSelfCoId() : (playerRule.fixedCoIdInCcw ?? null);
-            const gameConfig                = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+            const coId                      = isSelfPlayer ? CoopCustomRoom.CcrCreateModel.getSelfCoId() : (playerRule.fixedCoIdInCcw ?? null);
+            const gameConfig                = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion));
             const coCfg                     = coId == null ? null : gameConfig.getCoBasicCfg(coId);
             this._labelCo.text              = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source          = coId == null ? `` : gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;

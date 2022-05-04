@@ -12,7 +12,7 @@
 // import Types                    from "../helpers/Types";
 // import Lang                     from "../lang/Lang";
 // import TwnsLangTextType         from "../lang/LangTextType";
-// import TwnsNotifyType           from "../notify/NotifyType";
+// import Twns.Notify           from "../notify/NotifyType";
 // import ProtoTypes               from "../proto/ProtoTypes";
 // import WarCommonHelpers         from "../warHelpers/WarCommonHelpers";
 // import TwnsUiComponent          from "./UiComponent";
@@ -23,9 +23,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiMapInfo {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import TileType         = Types.TileType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
+    import TileType         = Twns.Types.TileType;
+    import LangTextType     = Twns.Lang.LangTextType;
 
     type DataForUiMapInfo = {
         mapInfo?    : {
@@ -106,34 +106,34 @@ namespace TwnsUiMapInfo {
             if (mapId != null) {
                 const minValue = CommonConstants.MapMinRating;
                 const maxValue = CommonConstants.MapMaxRating;
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
-                    title           : Lang.getText(LangTextType.B0363),
-                    currentValue    : UserModel.getMapRating(mapId) || 0,
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                    title           : Twns.Lang.getText(LangTextType.B0363),
+                    currentValue    : Twns.User.UserModel.getMapRating(mapId) || 0,
                     minValue,
                     maxValue,
-                    tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]\n${Lang.getText(LangTextType.A0238)}`,
+                    tips            : `${Twns.Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]\n${Twns.Lang.getText(LangTextType.A0238)}`,
                     callback        : panel => {
-                        UserProxy.reqUserSetMapRating(mapId, panel.getInputValue());
+                        Twns.User.UserProxy.reqUserSetMapRating(mapId, panel.getInputValue());
                     },
                 });
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
             }
         }
         private _onTouchedGroupWarStatistics(): void {
             const mapId = this._data?.mapInfo?.mapId;
             if (mapId != null) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonMapWarStatisticsPanel, { mapId });
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonMapWarStatisticsPanel, { mapId });
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
             }
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelPlayersCountTitle.text   = Lang.getText(LangTextType.B0229);
-            this._labelPlayedTimesTitle.text    = Lang.getText(LangTextType.B0565);
-            this._labelMapSizeTitle.text        = Lang.getText(LangTextType.B0300);
-            this._labelRatingTitle.text         = Lang.getText(LangTextType.B0364);
-            this._labelMapIdTitle.text          = Lang.getText(LangTextType.B0821);
-            this._labelMyRatingTitle.text       = Lang.getText(LangTextType.B0363);
+            this._labelPlayersCountTitle.text   = Twns.Lang.getText(LangTextType.B0229);
+            this._labelPlayedTimesTitle.text    = Twns.Lang.getText(LangTextType.B0565);
+            this._labelMapSizeTitle.text        = Twns.Lang.getText(LangTextType.B0300);
+            this._labelRatingTitle.text         = Twns.Lang.getText(LangTextType.B0364);
+            this._labelMapIdTitle.text          = Twns.Lang.getText(LangTextType.B0821);
+            this._labelMyRatingTitle.text       = Twns.Lang.getText(LangTextType.B0363);
             this._updateLabelDesigner();
         }
 
@@ -170,38 +170,38 @@ namespace TwnsUiMapInfo {
             const mapInfo = data.mapInfo;
             if (mapInfo) {
                 const mapId                 = mapInfo.mapId;
-                const mapRawData            = Helpers.getExisted(await WarMapModel.getRawData(mapId));
-                const rating                = await WarMapModel.getAverageRating(mapId);
-                const myRating              = UserModel.getMapRating(mapId);
-                labelMapName.text           = await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
+                const mapRawData            = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId));
+                const rating                = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
+                const myRating              = Twns.User.UserModel.getMapRating(mapId);
+                labelMapName.text           = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
                 labelMapId.text             = `${mapId}`;
                 labelPlayersCount.text      = `${mapRawData.playersCountUnneutral}`;
-                labelRating.text            = rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001);
-                labelRaters.text            = `(${await WarMapModel.getTotalRatersCount(mapId)})`;
-                labelMyRating.text          = myRating != null ? `${myRating}` : Lang.getText(LangTextType.B0001);
-                labelPlayedTimes.text       = `${await WarMapModel.getTotalPlayedTimes(mapId)}`;
+                labelRating.text            = rating != null ? rating.toFixed(2) : Twns.Lang.getText(LangTextType.B0001);
+                labelRaters.text            = `(${await Twns.WarMap.WarMapModel.getTotalRatersCount(mapId)})`;
+                labelMyRating.text          = myRating != null ? `${myRating}` : Twns.Lang.getText(LangTextType.B0001);
+                labelPlayedTimes.text       = `${await Twns.WarMap.WarMapModel.getTotalPlayedTimes(mapId)}`;
                 labelMapSize.text           = `${mapRawData.mapWidth} x ${mapRawData.mapHeight}`;
                 imgSetMyRating.visible      = true;
                 imgWarStatistics.visible    = true;
-                this._listTile.bindData(generateDataForListTile(Helpers.getExisted(mapRawData.tileDataArray)));
+                this._listTile.bindData(generateDataForListTile(Twns.Helpers.getExisted(mapRawData.tileDataArray)));
 
                 return;
             }
 
             const warData = data.warData;
             if (warData) {
-                const tileMapData           = Helpers.getExisted(warData.field?.tileMap);
+                const tileMapData           = Twns.Helpers.getExisted(warData.field?.tileMap);
                 const mapSize               = Twns.WarHelpers.WarCommonHelpers.getMapSize(tileMapData);
                 labelMapName.text           = `--`;
                 labelMapId.text             = `--`;
-                labelPlayersCount.text      = `${Helpers.getExisted(warData.playerManager?.players).length - 1}`;
+                labelPlayersCount.text      = `${Twns.Helpers.getExisted(warData.playerManager?.players).length - 1}`;
                 labelRating.text            = `--`;
                 labelRaters.text            = `(--)`;
                 labelPlayedTimes.text       = `--`;
                 labelMapSize.text           = `${mapSize.width} x ${mapSize.height}`;
                 imgSetMyRating.visible      = false;
                 imgWarStatistics.visible    = false;
-                this._listTile.bindData(generateDataForListTile(Helpers.getExisted(tileMapData.tiles)));
+                this._listTile.bindData(generateDataForListTile(Twns.Helpers.getExisted(tileMapData.tiles)));
 
                 return;
             }
@@ -210,7 +210,7 @@ namespace TwnsUiMapInfo {
         private async _updateLabelDesigner(): Promise<void> {
             const data              = this._data;
             const labelDesigner     = this._labelDesigner;
-            const prefix            = `${Lang.getText(LangTextType.B0163)}: `;
+            const prefix            = `${Twns.Lang.getText(LangTextType.B0163)}: `;
             if (data == null) {
                 labelDesigner.text  = `${prefix}--`;
                 return;
@@ -218,7 +218,7 @@ namespace TwnsUiMapInfo {
 
             const mapInfo = data.mapInfo;
             if (mapInfo) {
-                const mapRawData    = Helpers.getExisted(await WarMapModel.getRawData(mapInfo.mapId));
+                const mapRawData    = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapInfo.mapId));
                 labelDesigner.text  = `${prefix}${mapRawData.designerName || CommonConstants.ErrorTextForUndefined}`;
                 return;
             }
@@ -234,7 +234,7 @@ namespace TwnsUiMapInfo {
     function generateDataForListTile(tileDataArray: CommonProto.WarSerialization.ISerialTile[]): DataForTileRenderer[] {
         const tileCountDict = new Map<TileType, number>();
         for (const tile of tileDataArray || []) {
-            const tileType = Twns.Config.ConfigManager.getTileType(Helpers.getExisted(tile.baseType), Helpers.getExisted(tile.objectType));
+            const tileType = Twns.Config.ConfigManager.getTileType(Twns.Helpers.getExisted(tile.baseType), Twns.Helpers.getExisted(tile.objectType));
             if (tileType != null) {
                 tileCountDict.set(tileType, (tileCountDict.get(tileType) || 0) + 1);
             }
@@ -261,7 +261,7 @@ namespace TwnsUiMapInfo {
         TileType.Radar,
     ];
     type DataForTileRenderer = {
-        tileType        : Types.TileType;
+        tileType        : Twns.Types.TileType;
         num             : number;
     };
     class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileRenderer> {
@@ -269,13 +269,13 @@ namespace TwnsUiMapInfo {
         private readonly _conTileView!  : eui.Group;
         private readonly _labelNum!     : TwnsUiLabel.UiLabel;
 
-        private _tileView       = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private _tileView       = new Twns.MapEditor.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
 
             const tileView      = this._tileView;
             const conTileView   = this._conTileView;
@@ -301,7 +301,7 @@ namespace TwnsUiMapInfo {
                 tileDecoratorShapeId: null,
                 tileObjectType      : tileObjectType,
                 tileObjectShapeId   : 0,
-                playerIndex         : tileObjectType === Types.TileObjectType.Headquarters
+                playerIndex         : tileObjectType === Twns.Types.TileObjectType.Headquarters
                     ? CommonConstants.WarFirstPlayerIndex
                     : CommonConstants.WarNeutralPlayerIndex,
             });

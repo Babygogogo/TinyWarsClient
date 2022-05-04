@@ -9,23 +9,27 @@
 // import CommonConstants      from "../helpers/CommonConstants";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace WarRuleHelpers {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+namespace Twns.WarHelpers.WarRuleHelpers {
+    import LangTextType         = Lang.LangTextType;
     import LanguageType         = Types.LanguageType;
     import BootTimerType        = Types.BootTimerType;
+    import BaseWarRule          = Types.BaseWarRule;
     import WarRule              = CommonProto.WarRule;
     import IRuleForGlobalParams = WarRule.IRuleForGlobalParams;
     import IRuleForPlayers      = WarRule.IRuleForPlayers;
     import IDataForPlayerRule   = WarRule.IDataForPlayerRule;
-    import IWarRule             = WarRule.IWarRule;
-    import GameConfig           = Twns.Config.GameConfig;
+    import ITemplateWarRule     = WarRule.ITemplateWarRule;
+    import IInstanceWarRule     = WarRule.IInstanceWarRule;
+    import IRuleAvailability    = WarRule.IRuleAvailability;
+    import GameConfig           = Config.GameConfig;
 
-    const DEFAULT_PLAYER_RULE: CommonProto.WarRule.IDataForPlayerRule = {
+    const DEFAULT_PLAYER_RULE: WarRule.IDataForPlayerRule = {
         playerIndex             : CommonConstants.WarNeutralPlayerIndex,
         teamIndex               : 0,
         attackPowerModifier     : 0,
         bannedCoIdArray         : [],
+        bannedUnitTypeArray     : [],
+        canActivateCoSkill      : true,
         energyGrowthMultiplier  : 100,
         energyAddPctOnLoadCo    : 0,
         initialFund             : 0,
@@ -36,131 +40,139 @@ namespace WarRuleHelpers {
         visionRangeModifier     : 0,
     };
 
-    export function getHasFogByDefault(warRule: IWarRule): boolean {
-        return Helpers.getExisted(warRule.ruleForGlobalParams?.hasFogByDefault);
+    export function getHasFogByDefault(baseWarRule: BaseWarRule): boolean {
+        return Helpers.getExisted(baseWarRule.ruleForGlobalParams?.hasFogByDefault);
     }
-    export function setHasFogByDefault(warRule: IWarRule, hasFog: boolean): void {
-        Helpers.getExisted(warRule.ruleForGlobalParams).hasFogByDefault = hasFog;
+    export function setHasFogByDefault(baseWarRule: BaseWarRule, hasFog: boolean): void {
+        Helpers.getExisted(baseWarRule.ruleForGlobalParams).hasFogByDefault = hasFog;
     }
 
-    export function getDefaultWeatherType(warRule: IWarRule): Types.WeatherType {
-        return warRule.ruleForGlobalParams?.defaultWeatherType ?? Types.WeatherType.Clear;
+    export function getDefaultWeatherType(baseWarRule: BaseWarRule): Types.WeatherType {
+        return baseWarRule.ruleForGlobalParams?.defaultWeatherType ?? Types.WeatherType.Clear;
     }
-    export function setDefaultWeatherType(warRule: IWarRule, weatherType: Types.WeatherType): void {
-        Helpers.getExisted(warRule.ruleForGlobalParams, ClientErrorCode.WarRuleHelpers_SetDefaultWeatherType_00).defaultWeatherType = weatherType;
+    export function setDefaultWeatherType(baseWarRule: BaseWarRule, weatherType: Types.WeatherType): void {
+        Helpers.getExisted(baseWarRule.ruleForGlobalParams, ClientErrorCode.WarRuleHelpers_SetDefaultWeatherType_00).defaultWeatherType = weatherType;
     }
-    export function tickDefaultWeatherType(warRule: IWarRule, gameConfig: GameConfig): void {
+    export function tickDefaultWeatherType(baseWarRule: BaseWarRule, gameConfig: GameConfig): void {
         const typeArray     = gameConfig.getAvailableWeatherTypes();
-        const weatherType   = getDefaultWeatherType(warRule);
-        setDefaultWeatherType(warRule, typeArray[(typeArray.indexOf(weatherType) + 1) % typeArray.length]);
+        const weatherType   = getDefaultWeatherType(baseWarRule);
+        setDefaultWeatherType(baseWarRule, typeArray[(typeArray.indexOf(weatherType) + 1) % typeArray.length]);
     }
 
-    export function getIncomeMultiplier(warRule: IWarRule, playerIndex: number): number {
-        const playerRule = getPlayerRule(warRule, playerIndex);
+    export function getIncomeMultiplier(baseWarRule: BaseWarRule, playerIndex: number): number {
+        const playerRule = getPlayerRule(baseWarRule, playerIndex);
         return Helpers.getExisted(playerRule.incomeMultiplier);
     }
-    export function setIncomeMultiplier(warRule: IWarRule, playerIndex: number, value: number): void {
-        const playerRule = getPlayerRule(warRule, playerIndex);
+    export function setIncomeMultiplier(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
+        const playerRule = getPlayerRule(baseWarRule, playerIndex);
         playerRule.incomeMultiplier = value;
     }
 
-    export function getEnergyGrowthMultiplier(warRule: IWarRule, playerIndex: number): number {
-        const playerRule = getPlayerRule(warRule, playerIndex);
+    export function getEnergyGrowthMultiplier(baseWarRule: BaseWarRule, playerIndex: number): number {
+        const playerRule = getPlayerRule(baseWarRule, playerIndex);
         return Helpers.getExisted(playerRule.energyGrowthMultiplier);
     }
-    export function setEnergyGrowthMultiplier(warRule: IWarRule, playerIndex: number, value: number): void {
-        const playerRule = getPlayerRule(warRule, playerIndex);
+    export function setEnergyGrowthMultiplier(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
+        const playerRule = getPlayerRule(baseWarRule, playerIndex);
         playerRule.energyGrowthMultiplier = value;
     }
 
-    export function getAttackPowerModifier(warRule: IWarRule, playerIndex: number): number {
-        const playerRule = getPlayerRule(warRule, playerIndex);
+    export function getAttackPowerModifier(baseWarRule: BaseWarRule, playerIndex: number): number {
+        const playerRule = getPlayerRule(baseWarRule, playerIndex);
         return Helpers.getExisted(playerRule.attackPowerModifier);
     }
-    export function setAttackPowerModifier(warRule: IWarRule, playerIndex: number, value: number): void {
-        const playerRule = getPlayerRule(warRule, playerIndex);
+    export function setAttackPowerModifier(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
+        const playerRule = getPlayerRule(baseWarRule, playerIndex);
         playerRule.attackPowerModifier = value;
     }
 
-    export function getMoveRangeModifier(warRule: IWarRule, playerIndex: number): number {
-        const playerRule = getPlayerRule(warRule, playerIndex);
+    export function getMoveRangeModifier(baseWarRule: BaseWarRule, playerIndex: number): number {
+        const playerRule = getPlayerRule(baseWarRule, playerIndex);
         return Helpers.getExisted(playerRule.moveRangeModifier);
     }
-    export function setMoveRangeModifier(warRule: IWarRule, playerIndex: number, value: number): void {
-        const playerRule = getPlayerRule(warRule, playerIndex);
+    export function setMoveRangeModifier(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
+        const playerRule = getPlayerRule(baseWarRule, playerIndex);
         playerRule.moveRangeModifier = value;
     }
 
-    export function getVisionRangeModifier(warRule: IWarRule, playerIndex: number): number {
-        const playerRule = getPlayerRule(warRule, playerIndex);
+    export function getVisionRangeModifier(baseWarRule: BaseWarRule, playerIndex: number): number {
+        const playerRule = getPlayerRule(baseWarRule, playerIndex);
         return Helpers.getExisted(playerRule.visionRangeModifier);
     }
-    export function setVisionRangeModifier(warRule: IWarRule, playerIndex: number, value: number): void {
-        const playerRule = getPlayerRule(warRule, playerIndex);
+    export function setVisionRangeModifier(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
+        const playerRule = getPlayerRule(baseWarRule, playerIndex);
         playerRule.visionRangeModifier = value;
     }
 
-    export function getInitialFund(warRule: IWarRule, playerIndex: number): number {
-        return Helpers.getExisted(getPlayerRule(warRule, playerIndex).initialFund);
+    export function getInitialFund(baseWarRule: BaseWarRule, playerIndex: number): number {
+        return Helpers.getExisted(getPlayerRule(baseWarRule, playerIndex).initialFund);
     }
-    export function setInitialFund(warRule: IWarRule, playerIndex: number, value: number): void {
-        getPlayerRule(warRule, playerIndex).initialFund = value;
-    }
-
-    export function getEnergyAddPctOnLoadCo(warRule: IWarRule, playerIndex: number): number {
-        return Helpers.getExisted(getPlayerRule(warRule, playerIndex).energyAddPctOnLoadCo);
-    }
-    export function setEnergyAddPctOnLoadCo(warRule: IWarRule, playerIndex: number, value: number): void {
-        getPlayerRule(warRule, playerIndex).energyAddPctOnLoadCo = value;
+    export function setInitialFund(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
+        getPlayerRule(baseWarRule, playerIndex).initialFund = value;
     }
 
-    export function getLuckLowerLimit(warRule: IWarRule, playerIndex: number): number {
-        return Helpers.getExisted(getPlayerRule(warRule, playerIndex).luckLowerLimit);
+    export function getEnergyAddPctOnLoadCo(baseWarRule: BaseWarRule, playerIndex: number): number {
+        return Helpers.getExisted(getPlayerRule(baseWarRule, playerIndex).energyAddPctOnLoadCo);
     }
-    export function setLuckLowerLimit(warRule: IWarRule, playerIndex: number, value: number): void {
-        getPlayerRule(warRule, playerIndex).luckLowerLimit = value;
-    }
-
-    export function getLuckUpperLimit(warRule: IWarRule, playerIndex: number): number {
-        return Helpers.getExisted(getPlayerRule(warRule, playerIndex).luckUpperLimit);
-    }
-    export function setLuckUpperLimit(warRule: IWarRule, playerIndex: number, value: number): void {
-        getPlayerRule(warRule, playerIndex).luckUpperLimit = value;
+    export function setEnergyAddPctOnLoadCo(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
+        getPlayerRule(baseWarRule, playerIndex).energyAddPctOnLoadCo = value;
     }
 
-    export function getBannedCoIdArray(warRule: IWarRule, playerIndex: number): number[] | null {
-        return getPlayerRule(warRule, playerIndex).bannedCoIdArray ?? null;
+    export function getLuckLowerLimit(baseWarRule: BaseWarRule, playerIndex: number): number {
+        return Helpers.getExisted(getPlayerRule(baseWarRule, playerIndex).luckLowerLimit);
     }
-    export function getAvailableCoIdArrayForPlayer({ warRule, playerIndex, gameConfig }: {
-        warRule         : IWarRule;
+    export function setLuckLowerLimit(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
+        getPlayerRule(baseWarRule, playerIndex).luckLowerLimit = value;
+    }
+
+    export function getLuckUpperLimit(baseWarRule: BaseWarRule, playerIndex: number): number {
+        return Helpers.getExisted(getPlayerRule(baseWarRule, playerIndex).luckUpperLimit);
+    }
+    export function setLuckUpperLimit(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
+        getPlayerRule(baseWarRule, playerIndex).luckUpperLimit = value;
+    }
+
+    export function getCanActivateCoSkill(baseWarRule: BaseWarRule, playerIndex: number): boolean {
+        return getPlayerRule(baseWarRule, playerIndex).canActivateCoSkill !== false;
+    }
+    export function setCanActivateCoSkill(baseWarRule: BaseWarRule, playerIndex: number, value: boolean): void {
+        getPlayerRule(baseWarRule, playerIndex).canActivateCoSkill = value;
+    }
+
+    export function getBannedUnitTypeArray(baseWarRule: BaseWarRule, playerIndex: number): Types.UnitType[] | null {
+        return getPlayerRule(baseWarRule, playerIndex).bannedUnitTypeArray ?? null;
+    }
+    export function setBannedUnitTypeArray(baseWarRule: BaseWarRule, playerIndex: number, unitTypeArray: Types.UnitType[]): void {
+        const playerRule        = getPlayerRule(baseWarRule, playerIndex);
+        const bannedUnitTypeSet = new Set(unitTypeArray);
+        if (playerRule.bannedUnitTypeArray == null) {
+            playerRule.bannedUnitTypeArray = [...bannedUnitTypeSet];
+        } else {
+            const bannedUnitTypeArray   = playerRule.bannedUnitTypeArray;
+            bannedUnitTypeArray.length  = 0;
+            for (const coId of bannedUnitTypeSet) {
+                bannedUnitTypeArray.push(coId);
+            }
+        }
+    }
+
+    export function getBannedCoIdArray(baseWarRule: BaseWarRule, playerIndex: number): number[] | null {
+        return getPlayerRule(baseWarRule, playerIndex).bannedCoIdArray ?? null;
+    }
+    export function getAvailableCoIdArrayForPlayer({ baseWarRule, playerIndex, gameConfig }: {
+        baseWarRule     : BaseWarRule;
         playerIndex     : number;
         gameConfig      : GameConfig;
     }): number[] {
-        return getAvailableCoIdArray(gameConfig, new Set<number>(getPlayerRule(warRule, playerIndex).bannedCoIdArray));
+        return getAvailableCoIdArray(gameConfig, new Set<number>(getPlayerRule(baseWarRule, playerIndex).bannedCoIdArray));
     }
     export function getAvailableCoIdArray(gameConfig: GameConfig, bannedCoIdSet: Set<number>): number[] {
         return gameConfig.getEnabledCoArray()
             .map(v => v.coId)
             .filter(v => !bannedCoIdSet.has(v));
     }
-    export function addBannedCoId(warRule: IWarRule, playerIndex: number, coId: number): void {
-        const playerRule = getPlayerRule(warRule, playerIndex);
-        if (playerRule.bannedCoIdArray == null) {
-            playerRule.bannedCoIdArray = [coId];
-        } else {
-            const bannedCoIdArray = playerRule.bannedCoIdArray;
-            if (bannedCoIdArray.indexOf(coId) < 0) {
-                bannedCoIdArray.push(coId);
-            }
-        }
-    }
-    export function deleteBannedCoId(warRule: IWarRule, playerIndex: number, coId: number): void {
-        const playerRule        = getPlayerRule(warRule, playerIndex);
-        const bannedCoIdArray   = Helpers.getExisted(playerRule.bannedCoIdArray);
-        Helpers.deleteElementFromArray(bannedCoIdArray, coId);
-    }
-    export function setBannedCoIdArray(warRule: IWarRule, playerIndex: number, coIdSet: Set<number>): void {
-        const playerRule = getPlayerRule(warRule, playerIndex);
+    export function setBannedCoIdArray(baseWarRule: BaseWarRule, playerIndex: number, coIdSet: Set<number>): void {
+        const playerRule = getPlayerRule(baseWarRule, playerIndex);
         if (playerRule.bannedCoIdArray == null) {
             playerRule.bannedCoIdArray = [...coIdSet];
         } else {
@@ -172,38 +184,38 @@ namespace WarRuleHelpers {
         }
     }
 
-    export function setFixedCoIdInCcw(warRule: IWarRule, playerIndex: number, coId: number | null): void {
-        const playerRule = getPlayerRule(warRule, playerIndex);
+    export function setFixedCoIdInCcw(baseWarRule: BaseWarRule, playerIndex: number, coId: number | null): void {
+        const playerRule = getPlayerRule(baseWarRule, playerIndex);
         playerRule.fixedCoIdInCcw = coId;
     }
-    export function getFixedCoIdInCcw(warRule: IWarRule, playerIndex: number): number | null {
-        return getPlayerRule(warRule, playerIndex).fixedCoIdInCcw ?? null;
+    export function getFixedCoIdInCcw(baseWarRule: BaseWarRule, playerIndex: number): number | null {
+        return getPlayerRule(baseWarRule, playerIndex).fixedCoIdInCcw ?? null;
     }
 
-    export function setFixedCoIdInSrw(warRule: IWarRule, playerIndex: number, coId: number | null): void {
-        getPlayerRule(warRule, playerIndex).fixedCoIdInSrw = coId;
+    export function setFixedCoIdInSrw(baseWarRule: BaseWarRule, playerIndex: number, coId: number | null): void {
+        getPlayerRule(baseWarRule, playerIndex).fixedCoIdInSrw = coId;
     }
-    export function getFixedCoIdInSrw(warRule: IWarRule, playerIndex: number): number | null {
-        return getPlayerRule(warRule, playerIndex).fixedCoIdInSrw ?? null;
+    export function getFixedCoIdInSrw(baseWarRule: BaseWarRule, playerIndex: number): number | null {
+        return getPlayerRule(baseWarRule, playerIndex).fixedCoIdInSrw ?? null;
     }
 
-    export function getTeamIndex(warRule: IWarRule, playerIndex: number): number {
+    export function getTeamIndex(baseWarRule: BaseWarRule, playerIndex: number): number {
         if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
             return CommonConstants.WarNeutralTeamIndex;
         }
 
-        const playerRule = getPlayerRule(warRule, playerIndex);
+        const playerRule = getPlayerRule(baseWarRule, playerIndex);
         return Helpers.getExisted(playerRule.teamIndex);
     }
-    export function setTeamIndex(warRule: IWarRule, playerIndex: number, teamIndex: number): void {
-        const playerRule = getPlayerRule(warRule, playerIndex);
+    export function setTeamIndex(baseWarRule: BaseWarRule, playerIndex: number, teamIndex: number): void {
+        const playerRule = getPlayerRule(baseWarRule, playerIndex);
         playerRule.teamIndex = teamIndex;
     }
-    export function tickTeamIndex(warRule: IWarRule, playerIndex: number): void {
+    export function tickTeamIndex(baseWarRule: BaseWarRule, playerIndex: number): void {
         setTeamIndex(
-            warRule,
+            baseWarRule,
             playerIndex,
-            getTeamIndex(warRule, playerIndex) % getPlayersCountUnneutral(warRule) + 1
+            getTeamIndex(baseWarRule, playerIndex) % getPlayersCountUnneutral(baseWarRule) + 1
         );
     }
 
@@ -211,20 +223,20 @@ namespace WarRuleHelpers {
         return Helpers.getExisted(ruleForPlayers.playerRuleDataArray?.find(v => v.playerIndex === playerIndex)?.teamIndex);
     }
 
-    export function getPlayerRule(warRule: IWarRule, playerIndex: number): IDataForPlayerRule {
+    export function getPlayerRule(baseWarRule: BaseWarRule, playerIndex: number): IDataForPlayerRule {
         if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
             return DEFAULT_PLAYER_RULE;
         }
 
-        return Helpers.getExisted(warRule.ruleForPlayers?.playerRuleDataArray?.find(v => v.playerIndex === playerIndex));
+        return Helpers.getExisted(baseWarRule.ruleForPlayers?.playerRuleDataArray?.find(v => v.playerIndex === playerIndex));
     }
 
-    export function getPlayersCountUnneutral(warRule: IWarRule): number {
-        return Helpers.getExisted(warRule.ruleForPlayers?.playerRuleDataArray).length;
+    export function getPlayersCountUnneutral(baseWarRule: BaseWarRule): number {
+        return Helpers.getExisted(baseWarRule.ruleForPlayers?.playerRuleDataArray).length;
     }
 
-    export function moveWarEventId(warRule: IWarRule, warEventId: number, deltaIndex: number): void {
-        const warEventIdArray   = Helpers.getExisted(warRule.warEventIdArray);
+    export function moveWarEventId(templateWarRule: ITemplateWarRule, warEventId: number, deltaIndex: number): void {
+        const warEventIdArray   = Helpers.getExisted(templateWarRule.warEventIdArray);
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
             throw Helpers.newError(`Invalid currIndex: ${currIndex}`, ClientErrorCode.WarRuleHelpers_MoveWarEventId_00);
@@ -236,8 +248,8 @@ namespace WarRuleHelpers {
             warEventIdArray.splice(newIndex, 0, warEventId);
         }
     }
-    export function deleteWarEventId(warRule: IWarRule, warEventId: number): void {
-        const warEventIdArray   = Helpers.getExisted(warRule.warEventIdArray);
+    export function deleteWarEventId(templateWarRule: ITemplateWarRule, warEventId: number): void {
+        const warEventIdArray   = Helpers.getExisted(templateWarRule.warEventIdArray);
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
             throw Helpers.newError(`Invalid currIndex: ${currIndex}`, ClientErrorCode.WarRuleHelpers_DeleteWarEventId_00);
@@ -245,12 +257,12 @@ namespace WarRuleHelpers {
 
         warEventIdArray.splice(currIndex, 1);
     }
-    export function addWarEventId(warRule: IWarRule, warEventId: number): void {
-        if (warRule.warEventIdArray == null) {
-            warRule.warEventIdArray = [];
+    export function addWarEventId(templateWarRule: ITemplateWarRule, warEventId: number): void {
+        if (templateWarRule.warEventIdArray == null) {
+            templateWarRule.warEventIdArray = [];
         }
 
-        const warEventIdArray = warRule.warEventIdArray;
+        const warEventIdArray = templateWarRule.warEventIdArray;
         if (warEventIdArray.indexOf(warEventId) >= 0) {
             throw Helpers.newError(`The warEventId exists: ${warEventId}.`, ClientErrorCode.WarRuleHelpers_AddWarEventId_00);
         }
@@ -258,9 +270,9 @@ namespace WarRuleHelpers {
         warEventIdArray.push(warEventId);
     }
 
-    export function getRandomCoIdWithSettingsForCommon(warRule: IWarRule, playerIndex: number, gameConfig: GameConfig): number {
+    export function getRandomCoIdWithSettingsForCommon(baseWarRule: BaseWarRule, playerIndex: number, gameConfig: GameConfig): number {
         return getRandomCoIdWithCoIdList(getAvailableCoIdArrayForPlayer({
-            warRule,
+            baseWarRule: baseWarRule,
             playerIndex,
             gameConfig,
         }));
@@ -277,7 +289,7 @@ namespace WarRuleHelpers {
         }
     }
 
-    export function createDefaultWarRule(ruleId: number | null, playersCount: number): IWarRule {
+    export function createDefaultTemplateWarRule(ruleId: number, playersCount: number): ITemplateWarRule {
         return {
             ruleId,
             ruleNameArray   : [
@@ -297,6 +309,29 @@ namespace WarRuleHelpers {
             },
             ruleForPlayers: {
                 playerRuleDataArray: createDefaultPlayerRuleList(playersCount),
+            },
+            warEventIdArray : null,
+        };
+    }
+    export function createDefaultInstanceWarRule(playersCount: number): IInstanceWarRule {
+        return {
+            templateWarRuleId   : null,
+            ruleNameArray       : [
+                { languageType: LanguageType.Chinese, text: Lang.getText(LangTextType.B0001, LanguageType.Chinese) },
+                { languageType: LanguageType.English, text: Lang.getText(LangTextType.B0001, LanguageType.English) },
+            ],
+            ruleForGlobalParams : {
+                hasFogByDefault     : false,
+                defaultWeatherType  : Types.WeatherType.Clear,
+            },
+            ruleForPlayers: {
+                playerRuleDataArray: createDefaultPlayerRuleList(playersCount),
+            },
+            warEventFullData    : {
+                eventArray          : [],
+                actionArray         : [],
+                conditionArray      : [],
+                conditionNodeArray  : [],
             },
         };
     }
@@ -321,182 +356,37 @@ namespace WarRuleHelpers {
             luckLowerLimit          : CommonConstants.WarRuleLuckDefaultLowerLimit,
             luckUpperLimit          : CommonConstants.WarRuleLuckDefaultUpperLimit,
             bannedCoIdArray         : [],
+            bannedUnitTypeArray     : [],
+            canActivateCoSkill      : true,
         };
     }
-    export function reviseWarRule(warRule: IWarRule, playersCount: number): void {
-        const ruleForPlayers = Helpers.getExisted(warRule.ruleForPlayers);
-        if (!ruleForPlayers.playerRuleDataArray) {
-            ruleForPlayers.playerRuleDataArray = [];
-        }
-
-        const playerRuleDataArray = ruleForPlayers.playerRuleDataArray;
-        for (let index = 0; index < playerRuleDataArray.length; ++index) {
-            const playerRule = playerRuleDataArray[index];
-            if (Helpers.getExisted(playerRule.playerIndex) > playersCount) {
-                playerRuleDataArray.splice(index, 1);
-                --index;
-                continue;
-            }
-        }
-
-        for (const playerRule of playerRuleDataArray) {
-            playerRule.teamIndex = Math.min(Helpers.getExisted(playerRule.teamIndex), playersCount);
-        }
-
-        for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
-            if (playerRuleDataArray.find(v => v.playerIndex === playerIndex) == null) {
-                playerRuleDataArray.push(createDefaultPlayerRule(playerIndex));
-            }
-        }
-    }
-
-    // export function checkIsValidWarRule(rule: IWarRule, warEventData: IWarEventFullData): boolean {
-    //     const ruleNameArray = rule.ruleNameArray;
-    //     if ((!ruleNameArray)                             ||
-    //         (!Helpers.checkIsValidLanguageTextArray({
-    //             list            : ruleNameArray,
-    //             minTextLength   : 1,
-    //             maxTextLength   : CommonConstants.WarRuleNameMaxLength,
-    //             minTextCount    : 1,
-    //         }))
-    //     ) {
-    //         return false;
-    //     }
-
-    //     const ruleForPlayers = rule.ruleForPlayers;
-    //     if ((!ruleForPlayers) || (!checkIsValidRuleForPlayers(ruleForPlayers))) {
-    //         return false;
-    //     }
-
-    //     const availability = rule.ruleAvailability;
-    //     if ((!availability) || (!checkIsValidWarRuleAvailability(availability))) {
-    //         return false;
-    //     }
-
-    //     const ruleForGlobalParams = rule.ruleForGlobalParams;
-    //     if ((!ruleForGlobalParams) || (!checkIsValidRuleForGlobalParams(ruleForGlobalParams))) {
-    //         return false;
-    //     }
-
-    //     const warEventArray = warEventData ? warEventData.eventArray || [] : [];
-    //     for (const warEventId of rule.warEventIdArray || []) {
-    //         if (!warEventArray.some(v => v.eventId === warEventId)) {
-    //             return false;
-    //         }
-    //     }
-
-    //     return true;
-    // }
-    // export function checkIsValidRuleForPlayers(ruleForPlayers: WarRule.IRuleForPlayers): boolean {
-    //     const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
-    //     const ruleArray = ruleForPlayers.playerRuleDataArray;
-    //     if (!ruleArray) {
-    //         return false;
-    //     }
-
-    //     const playersCount = ruleArray.length;
-    //     if (playersCount < 2) {
-    //         return false;
-    //     }
-
-    //     const playerIndexSet    = new Set<number>();
-    //     const teamIndexSet      = new Set<number>();
-    //     for (const data of ruleArray) {
-    //         const playerIndex   = data.playerIndex;
-    //         const teamIndex     = data.teamIndex;
-    //         if ((playerIndex    ==  null)                                       ||
-    //             (playerIndex    <   1)                                          ||
-    //             (playerIndex    >   playersCount)                               ||
-    //             (playerIndexSet.has(playerIndex))                               ||
-    //             (teamIndex      ==  null)                                       ||
-    //             (teamIndex      <   1)                                          ||
-    //             (teamIndex      >   playersCount)
-    //         ) {
-    //             return false;
-    //         }
-
-    //         const {
-    //             initialFund,        bannedCoIdArray,        incomeMultiplier,       energyAddPctOnLoadCo,   energyGrowthMultiplier,
-    //             moveRangeModifier,  attackPowerModifier,    visionRangeModifier,    luckUpperLimit,         luckLowerLimit,
-    //         } = data;
-    //         if ((initialFund                == null)                                                    ||
-    //             (initialFund                > CommonConstants.WarRuleInitialFundMaxLimit)               ||
-    //             (initialFund                < CommonConstants.WarRuleInitialFundMinLimit)               ||
-    //             (incomeMultiplier           == null)                                                    ||
-    //             (incomeMultiplier           > CommonConstants.WarRuleIncomeMultiplierMaxLimit)          ||
-    //             (incomeMultiplier           < CommonConstants.WarRuleIncomeMultiplierMinLimit)          ||
-    //             (energyAddPctOnLoadCo       == null)                                                    ||
-    //             (energyAddPctOnLoadCo       > CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)      ||
-    //             (energyAddPctOnLoadCo       < CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)      ||
-    //             (energyGrowthMultiplier     == null)                                                    ||
-    //             (energyGrowthMultiplier     > CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit)    ||
-    //             (energyGrowthMultiplier     < CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)    ||
-    //             (moveRangeModifier          == null)                                                    ||
-    //             (moveRangeModifier          > CommonConstants.WarRuleMoveRangeModifierMaxLimit)         ||
-    //             (moveRangeModifier          < CommonConstants.WarRuleMoveRangeModifierMinLimit)         ||
-    //             (attackPowerModifier        == null)                                                    ||
-    //             (attackPowerModifier        > CommonConstants.WarRuleOffenseBonusMaxLimit)              ||
-    //             (attackPowerModifier        < CommonConstants.WarRuleOffenseBonusMinLimit)              ||
-    //             (visionRangeModifier        == null)                                                    ||
-    //             (visionRangeModifier        > CommonConstants.WarRuleVisionRangeModifierMaxLimit)       ||
-    //             (visionRangeModifier        < CommonConstants.WarRuleVisionRangeModifierMinLimit)       ||
-    //             (luckLowerLimit             == null)                                                    ||
-    //             (luckLowerLimit             > CommonConstants.WarRuleLuckMaxLimit)                      ||
-    //             (luckLowerLimit             < CommonConstants.WarRuleLuckMinLimit)                      ||
-    //             (luckUpperLimit             == null)                                                    ||
-    //             (luckUpperLimit             > CommonConstants.WarRuleLuckMaxLimit)                      ||
-    //             (luckUpperLimit             < CommonConstants.WarRuleLuckMinLimit)                      ||
-    //             (luckUpperLimit             < luckLowerLimit)                                           ||
-    //             ((bannedCoIdArray || []).indexOf(CommonConstants.CoEmptyId) >= 0)                       ||
-    //             (bannedCoIdArray?.some(coId => ConfigManager.getCoBasicCfg(configVersion, coId) == null))
-    //         ) {
-    //             return false;
-    //         }
-
-    //         playerIndexSet.add(playerIndex);
-    //         teamIndexSet.add(teamIndex);
-    //     }
-
-    //     return (playerIndexSet.size === playersCount)
-    //         && (teamIndexSet.size > 1);
-    // }
-    // function checkIsValidRuleForGlobalParams(rule: WarRule.IRuleForGlobalParams): boolean {
-    //     const {
-    //         hasFogByDefault,
-    //     } = rule;
-    //     if (hasFogByDefault == null) {
-    //         return false;
-    //     }
-
-    //     return true;
-    // }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Validators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function getErrorCodeForWarRule({ rule, allWarEventIdArray, gameConfig, playersCountUnneutral }: {
-        rule                    : IWarRule;
+    export function getErrorCodeForTemplateWarRule({ templateWarRule, allWarEventIdArray, gameConfig, playersCountUnneutral }: {
+        templateWarRule         : ITemplateWarRule;
         allWarEventIdArray      : number[];
         gameConfig              : GameConfig;
         playersCountUnneutral   : number;
     }): ClientErrorCode {
         if (!Helpers.checkIsValidLanguageTextArray({
-            list            : rule.ruleNameArray,
+            list            : templateWarRule.ruleNameArray,
             minTextLength   : 1,
             maxTextLength   : CommonConstants.WarRuleNameMaxLength,
             minTextCount    : 1,
         })) {
-            return ClientErrorCode.WarRuleValidation00;
+            return ClientErrorCode.WarRuleHelpers_GetErrorCodeForTemplateWarRule_00;
         }
 
-        const ruleForPlayers = rule.ruleForPlayers;
+        const ruleForPlayers = templateWarRule.ruleForPlayers;
         if (ruleForPlayers == null) {
-            return ClientErrorCode.WarRuleValidation01;
+            return ClientErrorCode.WarRuleHelpers_GetErrorCodeForTemplateWarRule_01;
         }
 
-        const ruleAvailability = rule.ruleAvailability;
+        const ruleAvailability = templateWarRule.ruleAvailability;
         if ((!ruleAvailability) || (!checkIsValidWarRuleAvailability(ruleAvailability))) {
-            return ClientErrorCode.WarRuleValidation02;
+            return ClientErrorCode.WarRuleHelpers_GetErrorCodeForTemplateWarRule_02;
         }
 
         const errorCodeForRuleForPlayers = getErrorCodeForRuleForPlayers({ ruleForPlayers, gameConfig, playersCountUnneutral, ruleAvailability });
@@ -504,32 +394,82 @@ namespace WarRuleHelpers {
             return errorCodeForRuleForPlayers;
         }
 
-        const ruleForGlobalParams = rule.ruleForGlobalParams;
+        const ruleForGlobalParams = templateWarRule.ruleForGlobalParams;
         if (ruleForGlobalParams == null) {
-            return ClientErrorCode.WarRuleValidation03;
+            return ClientErrorCode.WarRuleHelpers_GetErrorCodeForTemplateWarRule_03;
         }
 
-        const errorCodeForGlobalParams = getErrorCodeForRuleForGlobalParams(ruleForGlobalParams);
+        const errorCodeForGlobalParams = getErrorCodeForRuleForGlobalParams(ruleForGlobalParams, gameConfig);
         if (errorCodeForGlobalParams) {
             return errorCodeForGlobalParams;
         }
 
-        for (const warEventId of rule.warEventIdArray || []) {
+        for (const warEventId of templateWarRule.warEventIdArray || []) {
             if (allWarEventIdArray.indexOf(warEventId) < 0) {
-                return ClientErrorCode.WarRuleValidation04;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForTemplateWarRule_04;
             }
         }
 
         return ClientErrorCode.NoError;
     }
-    export function getErrorCodeForWarRuleArray({ ruleList, playersCountUnneutral, allWarEventIdArray, gameConfig }: {
-        ruleList                : Types.Undefinable<IWarRule[]>;
+    export function getErrorCodeForInstanceWarRule({ instanceWarRule, gameConfig, playersCountUnneutral, warType, mapSize }: {
+        instanceWarRule         : IInstanceWarRule;
+        gameConfig              : GameConfig;
+        playersCountUnneutral   : number;
+        warType                 : Types.WarType;
+        mapSize                 : Types.MapSize;
+    }): ClientErrorCode {
+        if (!Helpers.checkIsValidLanguageTextArray({
+            list            : instanceWarRule.ruleNameArray,
+            minTextLength   : 1,
+            maxTextLength   : CommonConstants.WarRuleNameMaxLength,
+            minTextCount    : 1,
+        })) {
+            return ClientErrorCode.WarRuleHelpers_GetErrorCodeForInstanceWarRule_00;
+        }
+
+        const ruleForPlayers = instanceWarRule.ruleForPlayers;
+        if (ruleForPlayers == null) {
+            return ClientErrorCode.WarRuleHelpers_GetErrorCodeForInstanceWarRule_01;
+        }
+
+        const ruleAvailability: IRuleAvailability = {
+            canCcw  : (warType === Types.WarType.CcwFog) || (warType === Types.WarType.CcwStd),
+            canMcw  : (warType === Types.WarType.McwFog) || (warType === Types.WarType.McwStd),
+            canMrw  : (warType === Types.WarType.MrwFog) || (warType === Types.WarType.MrwStd),
+            canScw  : (warType === Types.WarType.ScwFog) || (warType === Types.WarType.ScwStd),
+            canSrw  : (warType === Types.WarType.SrwFog) || (warType === Types.WarType.SrwStd),
+        };
+        const errorCodeForRuleForPlayers = getErrorCodeForRuleForPlayers({ ruleForPlayers, gameConfig, playersCountUnneutral, ruleAvailability });
+        if (errorCodeForRuleForPlayers) {
+            return errorCodeForRuleForPlayers;
+        }
+
+        const ruleForGlobalParams = instanceWarRule.ruleForGlobalParams;
+        if (ruleForGlobalParams == null) {
+            return ClientErrorCode.WarRuleHelpers_GetErrorCodeForInstanceWarRule_02;
+        }
+
+        const errorCodeForGlobalParams = getErrorCodeForRuleForGlobalParams(ruleForGlobalParams, gameConfig);
+        if (errorCodeForGlobalParams) {
+            return errorCodeForGlobalParams;
+        }
+
+        const errorCodeForWarEvent = WarEventHelpers.getErrorCodeForWarEventFullData({ warEventFullData: instanceWarRule.warEventFullData, mapSize, gameConfig, playersCountUnneutral });
+        if (errorCodeForWarEvent) {
+            return errorCodeForWarEvent;
+        }
+
+        return ClientErrorCode.NoError;
+    }
+    export function getErrorCodeForTemplateWarRuleArray({ templateWarRuleArray, playersCountUnneutral, allWarEventIdArray, gameConfig }: {
+        templateWarRuleArray    : Types.Undefinable<ITemplateWarRule[]>;
         playersCountUnneutral   : number;
         allWarEventIdArray      : number[];
         gameConfig              : GameConfig;
     }): ClientErrorCode {
-        const rulesCount = ruleList ? ruleList.length : 0;
-        if ((!ruleList)                                     ||
+        const rulesCount = templateWarRuleArray ? templateWarRuleArray.length : 0;
+        if ((!templateWarRuleArray)                                     ||
             (rulesCount <= 0)                               ||
             (rulesCount > CommonConstants.WarRuleMaxCount)
         ) {
@@ -537,20 +477,20 @@ namespace WarRuleHelpers {
         }
 
         const ruleIdSet         = new Set<number>();
-        const trimmedRuleArray  : IWarRule[] = [];
-        for (const rule of ruleList) {
-            const ruleId = rule.ruleId;
+        const trimmedRuleArray  : ITemplateWarRule[] = [];
+        for (const templateWarRule of templateWarRuleArray) {
+            const ruleId = templateWarRule.ruleId;
             if ((ruleId == null) || (ruleId < 0) || (ruleId >= rulesCount) || (ruleIdSet.has(ruleId))) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForWarRuleArray_01;
             }
             ruleIdSet.add(ruleId);
 
-            const warRuleErrorCode = getErrorCodeForWarRule({ rule, allWarEventIdArray, gameConfig, playersCountUnneutral });
+            const warRuleErrorCode = getErrorCodeForTemplateWarRule({ templateWarRule: templateWarRule, allWarEventIdArray, gameConfig, playersCountUnneutral });
             if (warRuleErrorCode) {
                 return warRuleErrorCode;
             }
 
-            const trimmedRule           = Helpers.deepClone(rule);
+            const trimmedRule           = Helpers.deepClone(templateWarRule);
             trimmedRule.ruleId          = null;
             trimmedRule.ruleNameArray   = null;
             if (trimmedRuleArray.some(v => Helpers.checkIsSameValue(v, trimmedRule))) {
@@ -566,7 +506,7 @@ namespace WarRuleHelpers {
         ruleForPlayers          : IRuleForPlayers;
         gameConfig              : GameConfig;
         playersCountUnneutral   : number;
-        ruleAvailability        : WarRule.IRuleAvailability;
+        ruleAvailability        : IRuleAvailability;
     }): ClientErrorCode {
         const ruleArray = ruleForPlayers.playerRuleDataArray;
         if ((ruleArray == null) || (ruleArray.length !== playersCountUnneutral)) {
@@ -682,6 +622,14 @@ namespace WarRuleHelpers {
             if (bannedCoIdArray.some(coId => !gameConfig.checkHasCo(coId))) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_13;
             }
+            if (bannedCoIdArray.length !== new Set(bannedCoIdArray).size) {
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_14;
+            }
+
+            const bannedUnitTypeArray = data.bannedUnitTypeArray ?? [];
+            if (!gameConfig.checkIsValidUnitTypeSubset(bannedUnitTypeArray)) {
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_15;
+            }
 
             {
                 const fixedCoIdInSrw = data.fixedCoIdInSrw;
@@ -691,7 +639,7 @@ namespace WarRuleHelpers {
                     }
                 } else {
                     if (gameConfig.getCoBasicCfg(fixedCoIdInSrw) == null) {
-                        return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_15;
+                        return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_16;
                     }
                     teamIndexSetForAiInSrw.add(teamIndex);
                 }
@@ -740,7 +688,7 @@ namespace WarRuleHelpers {
         return ClientErrorCode.NoError;
     }
 
-    function checkIsValidWarRuleAvailability(availability: WarRule.IRuleAvailability): boolean {
+    function checkIsValidWarRuleAvailability(availability: IRuleAvailability): boolean {
         // const {
         //     canMcw,     canScw,     canMrw,     canSrw,     canCcw
         // } = availability;
@@ -752,21 +700,34 @@ namespace WarRuleHelpers {
         return availability != null;
     }
 
-    function getErrorCodeForRuleForGlobalParams(rule: IRuleForGlobalParams): ClientErrorCode {
+    export function getTemplateWarRule(templateWarRuleId: Types.Undefinable<number>, templateWarRuleArray: Types.Undefinable<ITemplateWarRule[]>): ITemplateWarRule | null {
+        return templateWarRuleId == null
+            ? null
+            : (templateWarRuleArray?.find(v => v.ruleId === templateWarRuleId) ?? null);
+    }
+    export function createInstanceWarRule(templateWarRule: ITemplateWarRule, warEventFullData: Types.Undefinable<CommonProto.Map.IWarEventFullData>): IInstanceWarRule {
+        return {
+            templateWarRuleId       : templateWarRule.ruleId,
+            ruleNameArray           : Helpers.deepClone(templateWarRule.ruleNameArray),
+
+            ruleForGlobalParams     : Helpers.deepClone(templateWarRule.ruleForGlobalParams),
+            ruleForPlayers          : Helpers.deepClone(templateWarRule.ruleForPlayers),
+            warEventFullData        : WarEventHelpers.trimAndCloneWarEventFullData(warEventFullData, templateWarRule.warEventIdArray),
+        };
+    }
+
+    function getErrorCodeForRuleForGlobalParams(ruleForGlobalParams: IRuleForGlobalParams, gameConfig: GameConfig): ClientErrorCode {
         {
-            const hasFogByDefault = rule.hasFogByDefault;
+            const hasFogByDefault = ruleForGlobalParams.hasFogByDefault;
             if (hasFogByDefault == null) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_00;
             }
         }
 
         {
-            const defaultWeatherType = rule.defaultWeatherType;
+            const defaultWeatherType = ruleForGlobalParams.defaultWeatherType;
             if ((defaultWeatherType != null)                            &&
-                (defaultWeatherType !== Types.WeatherType.Clear)        &&
-                (defaultWeatherType !== Types.WeatherType.Rainy)        &&
-                (defaultWeatherType !== Types.WeatherType.Sandstorm)    &&
-                (defaultWeatherType !== Types.WeatherType.Snowy)
+                (!gameConfig.checkIsValidWeatherType(defaultWeatherType))
             ) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_01;
             }

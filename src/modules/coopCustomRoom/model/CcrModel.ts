@@ -7,7 +7,7 @@
 // import Helpers                              from "../../tools/helpers/Helpers";
 // import Types                                from "../../tools/helpers/Types";
 // import Notify                               from "../../tools/notify/Notify";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
 // import UserModel                            from "../../user/model/UserModel";
@@ -15,21 +15,21 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.CoopCustomRoom.CcrModel {
-    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
-    import CcrRoomFilter                            = Types.CcrRoomFilter;
+    import WarBasicSettingsType                     = Twns.Types.WarBasicSettingsType;
+    import CcrRoomFilter                            = Twns.Types.CcrRoomFilter;
     import ICcrRoomStaticInfo                       = CommonProto.CoopCustomRoom.ICcrRoomStaticInfo;
     import ICcrRoomPlayerInfo                       = CommonProto.CoopCustomRoom.ICcrRoomPlayerInfo;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
 
     export type DataForCreateRoom   = CommonProto.NetMessage.MsgCcrCreateRoom.IC;
     export type DataForJoinRoom     = CommonProto.NetMessage.MsgCcrJoinRoom.IC;
 
-    const _roomStaticInfoAccessor = Helpers.createCachedDataAccessor<number, ICcrRoomStaticInfo>({
+    const _roomStaticInfoAccessor = Twns.Helpers.createCachedDataAccessor<number, ICcrRoomStaticInfo>({
         reqData : (roomId: number) => CcrProxy.reqCcrGetRoomStaticInfo(roomId),
     });
-    const _roomPlayerInfoAccessor = Helpers.createCachedDataAccessor<number, ICcrRoomPlayerInfo>({
+    const _roomPlayerInfoAccessor = Twns.Helpers.createCachedDataAccessor<number, ICcrRoomPlayerInfo>({
         reqData : (roomId: number) => CcrProxy.reqCcrGetRoomPlayerInfo(roomId),
     });
 
@@ -52,19 +52,19 @@ namespace Twns.CoopCustomRoom.CcrModel {
 
     export async function getUnjoinedRoomIdSet(filter: CcrRoomFilter | null): Promise<Set<number>> {
         const unjoinedRoomIdArray   : number[] = [];
-        const selfUserId            = UserModel.getSelfUserId();
+        const selfUserId            = Twns.User.UserModel.getSelfUserId();
         if (selfUserId == null) {
             return new Set();
         }
 
         const allRoomIdArray        = _roomPlayerInfoAccessor.getRequestedKeyArray();
-        const roomPlayerInfoArray   = Helpers.getNonNullElements(await Promise.all(allRoomIdArray.map(v => getRoomPlayerInfo(v))));
+        const roomPlayerInfoArray   = Twns.Helpers.getNonNullElements(await Promise.all(allRoomIdArray.map(v => getRoomPlayerInfo(v))));
         for (const roomPlayerInfo of roomPlayerInfoArray) {
             const playerDataList = roomPlayerInfo.playerDataList ?? [];
-            if ((playerDataList.length < Helpers.getExisted(roomPlayerInfo.playersCountUnneutral))  &&
+            if ((playerDataList.length < Twns.Helpers.getExisted(roomPlayerInfo.playersCountUnneutral))  &&
                 (playerDataList.every(v => v.userId !== selfUserId))
             ) {
-                unjoinedRoomIdArray.push(Helpers.getExisted(roomPlayerInfo.roomId));
+                unjoinedRoomIdArray.push(Twns.Helpers.getExisted(roomPlayerInfo.roomId));
             }
         }
 
@@ -74,16 +74,16 @@ namespace Twns.CoopCustomRoom.CcrModel {
     }
     export async function getJoinedRoomIdSet(filter: CcrRoomFilter | null): Promise<Set<number>> {
         const joinedRoomIdArray : number[] = [];
-        const selfUserId        = UserModel.getSelfUserId();
+        const selfUserId        = Twns.User.UserModel.getSelfUserId();
         if (selfUserId == null) {
             return new Set();
         }
 
         const allRoomIdArray        = _roomPlayerInfoAccessor.getRequestedKeyArray();
-        const roomPlayerInfoArray   = Helpers.getNonNullElements(await Promise.all(allRoomIdArray.map(v => getRoomPlayerInfo(v))));
+        const roomPlayerInfoArray   = Twns.Helpers.getNonNullElements(await Promise.all(allRoomIdArray.map(v => getRoomPlayerInfo(v))));
         for (const roomPlayerInfo of roomPlayerInfoArray) {
             if (roomPlayerInfo.playerDataList?.some(v => v.userId === selfUserId)) {
-                joinedRoomIdArray.push(Helpers.getExisted(roomPlayerInfo.roomId));
+                joinedRoomIdArray.push(Twns.Helpers.getExisted(roomPlayerInfo.roomId));
             }
         }
 
@@ -126,16 +126,16 @@ namespace Twns.CoopCustomRoom.CcrModel {
             getRoomPlayerInfo(roomId),
         ]);
         if ((roomStaticInfo) && (roomPlayerInfo)) {
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = Twns.User.UserModel.getSelfUserId();
             const playerDataList    = roomPlayerInfo.playerDataList || [];
             const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
             if ((selfPlayerData) && (!selfPlayerData.isReady)) {
                 return true;
             }
 
-            if ((playerDataList.length === WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForCommon?.warRule)))  &&
-                (playerDataList.every(v => v.isReady))                                                                                              &&
-                (selfPlayerData)                                                                                                                    &&
+            if ((playerDataList.length === WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon?.instanceWarRule)))  &&
+                (playerDataList.every(v => v.isReady))                                                                                                                      &&
+                (selfPlayerData)                                                                                                                                            &&
                 (roomPlayerInfo.ownerPlayerIndex === selfPlayerData.playerIndex)
             ) {
                 return true;
@@ -152,12 +152,12 @@ namespace Twns.CoopCustomRoom.CcrModel {
             return false;
         }
 
-        const selfUserId        = UserModel.getSelfUserId();
+        const selfUserId        = Twns.User.UserModel.getSelfUserId();
         const playerDataList    = roomPlayerInfo.playerDataList || [];
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
         return (selfPlayerData != null)
             && (selfPlayerData.playerIndex === roomPlayerInfo.ownerPlayerIndex)
-            && (playerDataList.length == WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForCommon?.warRule)))
+            && (playerDataList.length == WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon?.instanceWarRule)))
             && (playerDataList.every(v => v.isReady));
     }
 
@@ -175,11 +175,11 @@ namespace Twns.CoopCustomRoom.CcrModel {
             return null;
         }
 
-        const settingsForCommon     = Helpers.getExisted(roomStaticInfo.settingsForCommon);
-        const warRule               = Helpers.getExisted(settingsForCommon.warRule);
-        const playersCountUnneutral = WarRuleHelpers.getPlayersCountUnneutral(warRule);
+        const settingsForCommon     = Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon);
+        const instanceWarRule       = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule);
+        const playersCountUnneutral = WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(instanceWarRule);
         const playerDataList        = roomPlayerInfo.playerDataList || [];
-        const playerInfoArray       : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+        const playerInfoArray       : Twns.Common.PlayerInfo[] = [];
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
             const playerData    = playerDataList.find(v => v.playerIndex === playerIndex);
             const userId        = playerData?.userId ?? null;
@@ -187,7 +187,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
 
             playerInfoArray.push({
                 playerIndex,
-                teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
+                teamIndex           : WarHelpers.WarRuleHelpers.getTeamIndex(instanceWarRule, playerIndex),
                 isAi                : (userId == null) && (!!isReady),
                 userId,
                 coId                : playerData?.coId ?? null,
@@ -200,9 +200,9 @@ namespace Twns.CoopCustomRoom.CcrModel {
         }
 
         return {
-            gameConfig              : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+            gameConfig              : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)),
             playersCountUnneutral,
-            roomOwnerPlayerIndex    : Helpers.getExisted(roomPlayerInfo.ownerPlayerIndex),
+            roomOwnerPlayerIndex    : Twns.Helpers.getExisted(roomPlayerInfo.ownerPlayerIndex),
             callbackOnExitRoom      : () => CoopCustomRoom.CcrProxy.reqCcrExitRoom(roomId),
             callbackOnDeletePlayer  : (playerIndex) => CoopCustomRoom.CcrProxy.reqCcrDeletePlayer(roomId, playerIndex),
             playerInfoArray,
@@ -220,21 +220,21 @@ namespace Twns.CoopCustomRoom.CcrModel {
             return { dataArrayForListSettings: [] };
         }
 
-        const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
-        const settingsForCcw    = Helpers.getExisted(roomInfo.settingsForCcw);
-        const bootTimerParams   = Helpers.getExisted(settingsForCcw.bootTimerParams);
-        const mapId             = Helpers.getExisted(settingsForCcw.mapId);
-        const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
-        const warEventFullData  = (await WarMapModel.getRawData(mapId))?.warEventFullData ?? null;
+        const settingsForCommon = Twns.Helpers.getExisted(roomInfo.settingsForCommon);
+        const instanceWarRule   = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule);
+        const settingsForCcw    = Twns.Helpers.getExisted(roomInfo.settingsForCcw);
+        const bootTimerParams   = Twns.Helpers.getExisted(settingsForCcw.bootTimerParams);
+        const mapId             = Twns.Helpers.getExisted(settingsForCcw.mapId);
+        const gameConfig        = Twns.Helpers.getExisted(await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)));
+        const warEventFullData  = (await WarMap.WarMapModel.getRawData(mapId))?.warEventFullData ?? null;
         const warPassword       = settingsForCcw.warPassword;
-        const timerType         = bootTimerParams[0] as Types.BootTimerType;
+        const timerType         = bootTimerParams[0] as Twns.Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.MapId,
                     currentValue    : mapId,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -242,7 +242,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.WarName,
                     currentValue    : settingsForCcw.warName ?? null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -250,7 +250,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.WarPassword,
                     currentValue    : warPassword == null ? null : (showPassword ? warPassword : `****`),
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -258,7 +258,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.WarComment,
                     currentValue    : settingsForCcw.warComment ?? null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -266,7 +266,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -274,7 +274,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -282,7 +282,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -290,7 +290,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.WarEvent,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -298,7 +298,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
                     currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -306,28 +306,28 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
                 },
             ],
         };
-        if (timerType === Types.BootTimerType.Regular) {
+        if (timerType === Twns.Types.BootTimerType.Regular) {
             openData.dataArrayForListSettings.push({
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
-                warRule,
+                instanceWarRule,
                 gameConfig,
                 warEventFullData,
                 callbackOnModify: null,
             });
-        } else if (timerType === Types.BootTimerType.Incremental) {
+        } else if (timerType === Twns.Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                     currentValue    : bootTimerParams[1],
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
@@ -335,14 +335,14 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                     currentValue    : bootTimerParams[2],
-                    warRule,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,
                 },
             );
         } else {
-            throw Helpers.newError(`CcrModel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+            throw Twns.Helpers.newError(`CcrModel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
         }
 
         return openData;
@@ -358,12 +358,12 @@ namespace Twns.CoopCustomRoom.CcrModel {
             return null;
         }
 
-        const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
+        const settingsForCommon = Twns.Helpers.getExisted(roomInfo.settingsForCommon);
+        const instanceWarRule   = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule);
         return {
-            gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
-            warRule,
-            warType     : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.CcwFog : Types.WarType.CcwStd,
+            gameConfig  : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)),
+            instanceWarRule,
+            warType     : instanceWarRule.ruleForGlobalParams?.hasFogByDefault ? Twns.Types.WarType.CcwFog : Twns.Types.WarType.CcwStd,
         };
     }
 
@@ -388,10 +388,10 @@ namespace Twns.CoopCustomRoom.CcrModel {
             }
         }
 
-        const warRule = roomStaticInfo?.settingsForCommon?.warRule;
+        const instanceWarRule = roomStaticInfo?.settingsForCommon?.instanceWarRule;
         {
             const filterHasFog = filter.hasFog;
-            if ((filterHasFog != null) && ((!!warRule?.ruleForGlobalParams?.hasFogByDefault) !== filterHasFog)) {
+            if ((filterHasFog != null) && ((!!instanceWarRule?.ruleForGlobalParams?.hasFogByDefault) !== filterHasFog)) {
                 return false;
             }
         }
@@ -443,7 +443,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                     return false;
                 }
 
-                const mapRawData    = await WarMapModel.getRawData(mapId);
+                const mapRawData    = await WarMap.WarMapModel.getRawData(mapId);
                 const lowerCaseName = filterMapName.toLowerCase();
                 if (!(mapRawData?.mapNameArray || []).some(v => {
                     const name = v.text;
@@ -461,7 +461,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 let hasPlayer       = false;
                 for (const playerInfo of playerDataList) {
                     const userId    = playerInfo.userId;
-                    const nickname  = (userId == null ? null : await UserModel.getUserBriefInfo(userId))?.nickname;
+                    const nickname  = (userId == null ? null : await Twns.User.UserModel.getUserBriefInfo(userId))?.nickname;
                     if ((nickname != null) && (nickname.toLowerCase().includes(lowerCaseName))) {
                         hasPlayer = true;
                         break;

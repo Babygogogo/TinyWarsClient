@@ -6,7 +6,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -14,21 +14,21 @@
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel23 {
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import PlayerAliveState         = Types.PlayerAliveState;
+namespace Twns.WarEvent {
+    import NotifyType               = Twns.Notify.NotifyType;
+    import PlayerAliveState         = Twns.Types.PlayerAliveState;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import LangTextType             = Twns.Lang.LangTextType;
+    import ClientErrorCode          = Twns.ClientErrorCode;
     import BwWar                    = Twns.BaseWar.BwWar;
 
-    export type OpenData = {
+    export type OpenDataForWeActionModifyPanel23 = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel23 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel23 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel23> {
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
         private readonly _btnType!                  : TwnsUiButton.UiButton;
         private readonly _btnBack!                  : TwnsUiButton.UiButton;
@@ -75,12 +75,12 @@ namespace TwnsWeActionModifyPanel23 {
         private _onTouchedBtnSwitchPlayerIndex(): void {
             const openData  = this._getOpenData();
             const action    = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerIndexPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChoosePlayerIndexPanel, {
                 currentPlayerIndexArray : action.playerIndexArray ?? [],
                 maxPlayerIndex          : openData.war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : playerIndexArray => {
                     action.playerIndexArray = playerIndexArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -96,12 +96,12 @@ namespace TwnsWeActionModifyPanel23 {
                 action.playerAliveState = PlayerAliveState.Alive;
             }
 
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -136,15 +136,15 @@ namespace TwnsWeActionModifyPanel23 {
         }
 
         private _updateLabelPlayerState(): void {
-            this._labelPlayerState.text = Lang.getPlayerAliveStateName(Helpers.getExisted(this._getAction().playerAliveState)) || CommonConstants.ErrorTextForUndefined;
+            this._labelPlayerState.text = Lang.getPlayerAliveStateName(Twns.Helpers.getExisted(this._getAction().playerAliveState)) || CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelTips(): void {
-            this._labelTips.text = getTipsForPlayerAliveState(Helpers.getExisted(this._getAction().playerAliveState)) || CommonConstants.ErrorTextForUndefined;
+            this._labelTips.text = getTipsForPlayerAliveState(Twns.Helpers.getExisted(this._getAction().playerAliveState)) || CommonConstants.ErrorTextForUndefined;
         }
 
         private _getAction(): CommonProto.WarEvent.IWeaSetPlayerAliveState {
-            return Helpers.getExisted(this._getOpenData().action.WeaSetPlayerAliveState);
+            return Twns.Helpers.getExisted(this._getOpenData().action.WeaSetPlayerAliveState);
         }
     }
 
@@ -153,7 +153,7 @@ namespace TwnsWeActionModifyPanel23 {
             case PlayerAliveState.Alive : return Lang.getText(LangTextType.A0214);
             case PlayerAliveState.Dying : return Lang.getText(LangTextType.A0215);
             case PlayerAliveState.Dead  : return Lang.getText(LangTextType.A0216);
-            default                     : throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`, ClientErrorCode.WeActionModifyPanel2_GetTipsForPlayerAliveState_00);
+            default                     : throw Twns.Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`, ClientErrorCode.WeActionModifyPanel2_GetTipsForPlayerAliveState_00);
         }
     }
 }

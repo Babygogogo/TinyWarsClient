@@ -7,7 +7,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -22,9 +22,9 @@
 // import TwnsScrCreateSettingsPanel   from "./ScrCreateSettingsPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsScrCreateMapListPanel {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.SingleCustomRoom {
+    import LangTextType             = Twns.Lang.LangTextType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import IDataForMapTag           = CommonProto.Map.IDataForMapTag;
 
     type FiltersForMapList = {
@@ -34,8 +34,8 @@ namespace TwnsScrCreateMapListPanel {
         minRating?      : number | null;
         mapTag?         : IDataForMapTag | null;
     };
-    export type OpenData = FiltersForMapList | null;
-    export class ScrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForScrCreateMapListPanel = FiltersForMapList | null;
+    export class ScrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForScrCreateMapListPanel> {
         private readonly _groupMapView!         : eui.Group;
         private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
@@ -121,22 +121,22 @@ namespace TwnsScrCreateMapListPanel {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchTapBtnSearch(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ScrCreateSearchMapPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ScrCreateSearchMapPanel, void 0);
         }
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmMainMenuPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
         }
 
         private async _onTouchedBtnNextStep(): Promise<void> {
             const selectedMapId = this.getSelectedMapId();
             if (selectedMapId != null) {
                 this.close();
-                await ScrCreateModel.resetDataByMapId(selectedMapId);
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.ScrCreateSettingsPanel, void 0);
+                await Twns.SingleCustomRoom.ScrCreateModel.resetDataByMapId(selectedMapId);
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ScrCreateSettingsPanel, void 0);
             }
         }
 
@@ -168,17 +168,17 @@ namespace TwnsScrCreateMapListPanel {
             (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
 
             const promiseArray: Promise<void>[] = [];
-            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+            for (const mapId of Twns.WarMap.WarMapModel.getEnabledMapIdArray()) {
                 promiseArray.push((async () => {
-                    const mapBriefData = await WarMapModel.getBriefData(mapId);
+                    const mapBriefData = await Twns.WarMap.WarMapModel.getBriefData(mapId);
                     if (mapBriefData == null) {
                         return;
                     }
 
-                    const mapExtraData  = Helpers.getExisted(mapBriefData.mapExtraData);
+                    const mapExtraData  = Twns.Helpers.getExisted(mapBriefData.mapExtraData);
                     const mapTag        = mapBriefData.mapTag || {};
-                    const realMapName   = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                    const rating        = await WarMapModel.getAverageRating(mapId);
+                    const realMapName   = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
+                    const rating        = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
                     if ((!mapBriefData.ruleAvailability?.canScw)                                                ||
                         (!mapExtraData.isEnabled)                                                               ||
                         ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                         ||
@@ -204,7 +204,7 @@ namespace TwnsScrCreateMapListPanel {
 
         private async _showMap(mapId: number): Promise<void> {
             this._zoomMap.showMapByMapData(
-                Helpers.getExisted(await WarMapModel.getRawData(mapId)),
+                Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId)),
                 await Twns.Config.ConfigManager.getLatestGameConfig()
             );
             this._uiMapInfo.setData({
@@ -215,92 +215,92 @@ namespace TwnsScrCreateMapListPanel {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupMapView,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnSearch,
                 beginProps  : { alpha: 0, y: 40 },
                 endProps    : { alpha: 1, y: 80 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnMapInfo,
                 beginProps  : { alpha: 0, y: 40 },
                 endProps    : { alpha: 1, y: 80 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupMapList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._uiMapInfo,
                 beginProps  : { alpha: 0, right: -40 },
                 endProps    : { alpha: 1, right: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupMapView,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnSearch,
                 beginProps  : { alpha: 1, y: 80 },
                 endProps    : { alpha: 0, y: 40 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnMapInfo,
                 beginProps  : { alpha: 1, y: 80 },
                 endProps    : { alpha: 0, y: 40 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupMapList,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._uiMapInfo,
                 beginProps  : { alpha: 1, right: 0 },
                 endProps    : { alpha: 0, right: -40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -318,12 +318,12 @@ namespace TwnsScrCreateMapListPanel {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
             ]);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
         }
 
         protected _onDataChanged(): void {
             const data          = this._getData();
-            WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v || CommonConstants.ErrorTextForUndefined);
+            Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v || CommonConstants.ErrorTextForUndefined);
         }
 
         private _onTouchTapBtnChoose(): void {

@@ -1,5 +1,5 @@
 
-namespace TwnsNetMessageCodes {
+namespace Twns.Net {
 // eslint-disable-next-line no-shadow
 export enum NetMessageCodes {
 MsgCommonHeartbeat = 1,

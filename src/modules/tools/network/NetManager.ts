@@ -1,7 +1,7 @@
 
 // import Logger               from "../helpers/Logger";
 // import Notify               from "../notify/Notify";
-// import TwnsNotifyType       from "../notify/NotifyType";
+// import Notify       from "../notify/NotifyType";
 // import TwnsLangTextType     from "../lang/LangTextType";
 // import TwnsNetMessageCodes  from "./NetMessageCodes";
 // import FloatText            from "../helpers/FloatText";
@@ -11,11 +11,9 @@
 // import Helpers              from "../helpers/Helpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace NetManager {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+namespace Twns.Net.NetManager {
+    import NotifyType       = Notify.NotifyType;
+    import LangTextType     = Lang.LangTextType;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Constants.

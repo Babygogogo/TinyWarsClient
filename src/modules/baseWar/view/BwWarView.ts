@@ -6,14 +6,14 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Notify                   from "../../tools/notify/Notify";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiZoomableComponent  from "../../tools/ui/UiZoomableComponent";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType   = TwnsNotifyType.NotifyType;
-    import GridIndex    = Types.GridIndex;
-    import Point        = Types.Point;
+    import NotifyType   = Twns.Notify.NotifyType;
+    import GridIndex    = Twns.Types.GridIndex;
+    import Point        = Twns.Types.Point;
 
     const CENTRAL_PADDING = 120;
 
@@ -46,12 +46,12 @@ namespace Twns.BaseWar {
 
         private _war? : BwWar;
 
-        private _notifyListeners: Notify.Listener[] = [
+        private _notifyListeners: Twns.Notify.Listener[] = [
             { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             { type: NotifyType.BwFieldZoomed,   callback: this._onNotifyBwFieldZoomed },
             { type: NotifyType.BwFieldDragged,  callback: this._onNotifyBwFieldDragged },
         ];
-        private _uiListeners: Types.UiListener[] = [
+        private _uiListeners: Twns.Types.UiListener[] = [
             { ui: this,     callback: this._onEnterFrame,   eventType: egret.Event.ENTER_FRAME },
         ];
 
@@ -104,9 +104,9 @@ namespace Twns.BaseWar {
         }
 
         public startRunningView(): void {
-            Notify.addEventListeners(this._notifyListeners, this);
+            Twns.Notify.addEventListeners(this._notifyListeners, this);
             for (const listener of this._uiListeners) {
-                listener.ui.addEventListener(Helpers.getExisted(listener.eventType), listener.callback, this);
+                listener.ui.addEventListener(Twns.Helpers.getExisted(listener.eventType), listener.callback, this);
             }
 
             this._fieldContainer.setMouseWheelListenerEnabled(true);
@@ -114,9 +114,9 @@ namespace Twns.BaseWar {
             this.updatePersistentText();
         }
         public stopRunning(): void {
-            Notify.removeEventListeners(this._notifyListeners, this);
+            Twns.Notify.removeEventListeners(this._notifyListeners, this);
             for (const listener of this._uiListeners) {
-                listener.ui.removeEventListener(Helpers.getExisted(listener.eventType), listener.callback, this);
+                listener.ui.removeEventListener(Twns.Helpers.getExisted(listener.eventType), listener.callback, this);
             }
 
             this._fieldContainer.setMouseWheelListenerEnabled(false);
@@ -143,12 +143,12 @@ namespace Twns.BaseWar {
             const currX             = currPoint.x;
             const currY             = currPoint.y;
             // const padding           = this._padding;
-            const newX              = Helpers.getValueInRange({
+            const newX              = Twns.Helpers.getValueInRange({
                 minValue    : CENTRAL_PADDING + currX - topLeftPoint.x,
                 maxValue    : stageWidth - CENTRAL_PADDING + currX - bottomRightPoint.x,
                 rawValue    : currX,
             });
-            const newY              = Helpers.getValueInRange({
+            const newY              = Twns.Helpers.getValueInRange({
                 minValue    : CENTRAL_PADDING + currY - topLeftPoint.y,
                 maxValue    : stageHeight - CENTRAL_PADDING + currY - bottomRightPoint.y,
                 rawValue    : currY,
@@ -239,11 +239,11 @@ namespace Twns.BaseWar {
         }
 
         private _onNotifyBwFieldZoomed(e: egret.Event): void {
-            const data = e.data as NotifyData.BwFieldZoomed;
+            const data = e.data as Twns.Notify.NotifyData.BwFieldZoomed;
             this._fieldContainer.setZoomByTouches(data.current, data.previous);
         }
         private _onNotifyBwFieldDragged(e: egret.Event): void {
-            const data = e.data as NotifyData.BwFieldDragged;
+            const data = e.data as Twns.Notify.NotifyData.BwFieldDragged;
             this._fieldContainer.setDragByTouches(data.current, data.previous);
         }
 
@@ -261,11 +261,11 @@ namespace Twns.BaseWar {
 
     function getPadding(war: BaseWar.BwWar): Padding {
         if (war instanceof ReplayWar.RwWar) {
-            return Helpers.getExisted(PADDINGS.get(PaddingType.Replay));
+            return Twns.Helpers.getExisted(PADDINGS.get(PaddingType.Replay));
         } else if (war instanceof MapEditor.MeWar) {
-            return Helpers.getExisted(PADDINGS.get(PaddingType.MapEditor));
+            return Twns.Helpers.getExisted(PADDINGS.get(PaddingType.MapEditor));
         } else {
-            return Helpers.getExisted(PADDINGS.get(PaddingType.Default));
+            return Twns.Helpers.getExisted(PADDINGS.get(PaddingType.Default));
         }
     }
 }

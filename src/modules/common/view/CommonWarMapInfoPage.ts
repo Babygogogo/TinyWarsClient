@@ -2,7 +2,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiMapInfo        from "../../tools/ui/UiMapInfo";
@@ -11,9 +11,9 @@
 // import WarMapModel          from "../../warMap/model/WarMapModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonWarMapInfoPage {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import GameConfig       = Twns.Config.GameConfig;
 
     export type OpenDataForCommonMapInfoPage = {
@@ -23,7 +23,7 @@ namespace TwnsCommonWarMapInfoPage {
         };
         warInfo?    : {
             warData     : CommonProto.WarSerialization.ISerialWar;
-            players     : Types.Undefinable<CommonProto.WarSerialization.ISerialPlayer[]>;
+            players     : Twns.Types.Undefinable<CommonProto.WarSerialization.ISerialPlayer[]>;
         };
     } | null;
     export class CommonWarMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForCommonMapInfoPage> {
@@ -78,7 +78,7 @@ namespace TwnsCommonWarMapInfoPage {
                         },
                     });
 
-                    const mapRawData = await WarMapModel.getRawData(mapId);
+                    const mapRawData = await Twns.WarMap.WarMapModel.getRawData(mapId);
                     if (mapRawData) {
                         zoomMap.showMapByMapData(mapRawData, openData.gameConfig);
                     } else {

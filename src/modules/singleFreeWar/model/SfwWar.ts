@@ -8,18 +8,18 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SingleFreeWar {
-    import SpwWar           = TwnsSpwWar.SpwWar;
+    import SpwWar           = Twns.SinglePlayerWar.SpwWar;
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForSfw  = CommonProto.WarSettings.ISettingsForSfw;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
     export class SfwWar extends SpwWar {
         private _settingsForSfw?    : ISettingsForSfw;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
-            this._baseInit(data, gameConfig);
-            this._setSettingsForSfw(Helpers.getExisted(data.settingsForSfw, ClientErrorCode.SfwWar_Init_00));
+            this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
+            this._setSettingsForSfw(Twns.Helpers.getExisted(data.settingsForSfw, ClientErrorCode.SfwWar_Init_00));
 
             this._initView();
         }
@@ -53,12 +53,6 @@ namespace Twns.SingleFreeWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getWarType(): Types.WarType {
-            return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.SfwFog
-                : Types.WarType.SfwStd;
-        }
-
         public getMapId(): number | null {
             return null;
         }
@@ -68,14 +62,14 @@ namespace Twns.SingleFreeWar {
         }
 
         public getSettingsBootTimerParams(): number[] {
-            return [Types.BootTimerType.NoBoot];
+            return [Twns.Types.BootTimerType.NoBoot];
         }
 
         private _setSettingsForSfw(settings: ISettingsForSfw): void {
             this._settingsForSfw = settings;
         }
         private _getSettingsForSfw(): ISettingsForSfw {
-            return Helpers.getExisted(this._settingsForSfw);
+            return Twns.Helpers.getExisted(this._settingsForSfw);
         }
     }
 }

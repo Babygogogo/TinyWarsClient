@@ -6,7 +6,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -14,19 +14,19 @@
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel4 {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.WarEvent {
+    import NotifyType               = Twns.Notify.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
     import BwWar                    = Twns.BaseWar.BwWar;
 
-    export type OpenData = {
+    export type OpenDataForWeActionModifyPanel4 = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel4 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel4 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel4> {
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _btnType!              : TwnsUiButton.UiButton;
         private readonly _btnBack!              : TwnsUiButton.UiButton;
@@ -74,15 +74,15 @@ namespace TwnsWeActionModifyPanel4 {
         }
 
         private _onTouchedGroupNeedFocus(): void {
-            const action            = Helpers.getExisted(this._getOpenData().action.WeaSetViewpoint);
+            const action            = Twns.Helpers.getExisted(this._getOpenData().action.WeaSetViewpoint);
             action.needFocusEffect  = !action.needFocusEffect;
 
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -91,20 +91,20 @@ namespace TwnsWeActionModifyPanel4 {
 
         private _onFocusOutInputGridX(): void {
             const data      = this._getOpenData();
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.action.WeaSetViewpoint?.gridIndex));
+            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.action.WeaSetViewpoint?.gridIndex));
             const newGridX  = Math.max(0, Math.min(parseInt(this._inputGridX.text) || 0, data.war.getTileMap().getMapSize().width - 1));
             if (newGridX !== gridIndex.x) {
                 gridIndex.x = newGridX;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputGridY(): void {
             const data      = this._getOpenData();
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.action.WeaSetViewpoint?.gridIndex));
+            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.action.WeaSetViewpoint?.gridIndex));
             const newGridY  = Math.max(0, Math.min(parseInt(this._inputGridY.text) || 0, data.war.getTileMap().getMapSize().height - 1));
             if (newGridY !== gridIndex.y) {
                 gridIndex.y = newGridY;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
@@ -136,7 +136,7 @@ namespace TwnsWeActionModifyPanel4 {
         private _updateComponentsForGridIndex(): void {
             const inputX    = this._inputGridX;
             const inputY    = this._inputGridY;
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(this._getOpenData().action.WeaSetViewpoint?.gridIndex));
+            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(this._getOpenData().action.WeaSetViewpoint?.gridIndex));
             inputX.text     = `${gridIndex.x}`;
             inputY.text     = `${gridIndex.y}`;
         }

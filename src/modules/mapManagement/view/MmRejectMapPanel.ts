@@ -11,14 +11,14 @@
 // import WarMapProxy          from "../../warMap/model/WarMapProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmRejectMapPanel {
+namespace Twns.MapManagement {
     import MeWar        = Twns.MapEditor.MeWar;
-    import LangTextType = TwnsLangTextType.LangTextType;
+    import LangTextType = Twns.Lang.LangTextType;
 
-    export type OpenData = {
+    export type OpenDataForMmRejectMapPanel = {
         war: MeWar;
     };
-    export class MmRejectMapPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MmRejectMapPanel extends TwnsUiPanel.UiPanel<OpenDataForMmRejectMapPanel> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelTips!    : TwnsUiLabel.UiLabel;
         private readonly _inputReason!  : TwnsUiTextInput.UiTextInput;
@@ -51,7 +51,7 @@ namespace TwnsMmRejectMapPanel {
 
         private _onTouchedBtnConfirm(): void {
             const war = this._getOpenData().war;
-            WarMapProxy.reqMmReviewMap({
+            Twns.WarMap.WarMapProxy.reqMmReviewMap({
                 designerUserId  : war.getMapDesignerUserId(),
                 slotIndex       : war.getMapSlotIndex(),
                 modifiedTime    : war.getMapModifiedTime(),

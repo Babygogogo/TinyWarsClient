@@ -8,7 +8,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Notify                   from "../../tools/notify/Notify";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
 // import WarVisibilityHelpers     from "../../tools/warHelpers/WarVisibilityHelpers";
 // import UserModel                from "../../user/model/UserModel";
@@ -23,7 +23,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Notify.NotifyType;
     import UnitState        = Types.UnitActionState;
     import GridIndex        = Types.GridIndex;
     import State            = Types.ActionPlannerState;
@@ -35,7 +35,6 @@ namespace Twns.BaseWar {
     import BwUnit           = BaseWar.BwUnit;
     import BwUnitMap        = BaseWar.BwUnitMap;
     import BwWar            = BaseWar.BwWar;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     type ChosenUnitForDrop = {
         unit        : BwUnit;
@@ -51,7 +50,7 @@ namespace Twns.BaseWar {
     };
 
     export abstract class BwActionPlanner {
-        private readonly _view              = new Twns.BaseWar.BwActionPlannerView();
+        private readonly _view              = new BaseWar.BwActionPlannerView();
 
         private _war?                       : BwWar;
         private _mapSize?                   : Types.MapSize;
@@ -119,7 +118,7 @@ namespace Twns.BaseWar {
         protected _getTurnManager(): BaseWar.BwTurnManager {
             return this._getWar().getTurnManager();
         }
-        public getCursor(): TwnsBwCursor.BwCursor {
+        public getCursor(): BwCursor {
             return this._getWar().getCursor();
         }
 
@@ -129,7 +128,7 @@ namespace Twns.BaseWar {
         private _onNotifyBwCursorTapped(): void {
             const gridIndex = this.getCursor().getGridIndex();
             const nextState = this._getNextStateOnTap(gridIndex);
-            if (UserModel.getSelfSettingsIsAutoScrollMap()) {
+            if (User.UserModel.getSelfSettingsIsAutoScrollMap()) {
                 this._getWar().getView().tweenGridToCentralArea(gridIndex);
             }
 
@@ -226,8 +225,8 @@ namespace Twns.BaseWar {
         private _onNotifyBwCursorDragged(e: egret.Event): void {
             const gridIndex = this.getCursor().getGridIndex();
             const nextState = this._getNextStateOnDrag(gridIndex);
-            if (UserModel.getSelfSettingsIsAutoScrollMap()) {
-                this._getWar().getView().tweenGridToCentralArea((e.data as NotifyData.BwCursorDragged).draggedTo);
+            if (User.UserModel.getSelfSettingsIsAutoScrollMap()) {
+                this._getWar().getView().tweenGridToCentralArea((e.data as Notify.NotifyData.BwCursorDragged).draggedTo);
             }
 
             if ((nextState === this.getState())                                                                 &&
@@ -1146,7 +1145,7 @@ namespace Twns.BaseWar {
             this._updateView();
 
             SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwProduceUnitPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.BwProduceUnitPanel, {
                 gridIndex,
                 war         : this._getWar(),
             });
@@ -1260,7 +1259,7 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getView(): Twns.BaseWar.BwActionPlannerView {
+        public getView(): BaseWar.BwActionPlannerView {
             return this._view;
         }
         protected abstract _updateView(): void;
@@ -1640,7 +1639,7 @@ namespace Twns.BaseWar {
             const existingUnit = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
             if (WarHelpers.WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                 if (!existingUnit) {
-                    if (!UserModel.getSelfSettingsIsSetPathMode()) {
+                    if (!User.UserModel.getSelfSettingsIsSetPathMode()) {
                         return State.ChoosingAction;
                     } else {
                         const previousGridIndex = this.getCursor().getPreviousGridIndex();
@@ -1728,7 +1727,7 @@ namespace Twns.BaseWar {
                 const selfPlayerIndex   = this._getWar().getPlayerIndexInTurn();
                 if (WarHelpers.WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                     if (!existingUnit) {
-                        if (!UserModel.getSelfSettingsIsSetPathMode()) {
+                        if (!User.UserModel.getSelfSettingsIsSetPathMode()) {
                             return State.ChoosingAction;
                         } else {
                             const previousGridIndex = this.getCursor().getPreviousGridIndex();
@@ -1845,7 +1844,7 @@ namespace Twns.BaseWar {
             if (WarHelpers.WarCommonHelpers.checkAreaHasGrid(Helpers.getExisted(this.getMovableArea()), gridIndex)) {
                 const existingUnit = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
                 if (!existingUnit) {
-                    if (!UserModel.getSelfSettingsIsSetPathMode()) {
+                    if (!User.UserModel.getSelfSettingsIsSetPathMode()) {
                         return State.ChoosingAction;
                     } else {
                         return State.MakingMovePath;

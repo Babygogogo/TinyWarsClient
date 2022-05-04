@@ -5,7 +5,7 @@
 // import Types                            from "../../tools/helpers/Types";
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import Twns.Notify                   from "../../tools/notify/NotifyType";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
@@ -18,9 +18,9 @@
 // import TwnsMmMainMenuPanel              from "./MmMainMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmAvailabilityListPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.MapManagement {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
     export type FiltersForMapList = {
         mapName?        : string | null;
@@ -29,8 +29,8 @@ namespace TwnsMmAvailabilityListPanel {
         playedTimes?    : number | null;
         minRating?      : number | null;
     };
-    export type OpenData = FiltersForMapList | null;
-    export class MmAvailabilityListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMmAvailabilityListPanel = FiltersForMapList | null;
+    export class MmAvailabilityListPanel extends TwnsUiPanel.UiPanel<OpenDataForMmAvailabilityListPanel> {
         private readonly _listMap!              : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
         private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelMenuTitle!       : TwnsUiLabel.UiLabel;
@@ -118,12 +118,12 @@ namespace TwnsMmAvailabilityListPanel {
         }
 
         private _onTouchTapBtnSearch(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAvailabilitySearchPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmAvailabilitySearchPanel, void 0);
         }
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmMainMenuPanel, void 0);
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -148,16 +148,16 @@ namespace TwnsMmAvailabilityListPanel {
             (mapDesigner)       && (mapDesigner = mapDesigner.toLowerCase());
 
             const promiseArray: Promise<void>[] = [];
-            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+            for (const mapId of Twns.WarMap.WarMapModel.getEnabledMapIdArray()) {
                 promiseArray.push((async () => {
-                    const mapBriefData = await WarMapModel.getBriefData(mapId);
+                    const mapBriefData = await Twns.WarMap.WarMapModel.getBriefData(mapId);
                     if (mapBriefData == null) {
                         return;
                     }
 
-                    const mapName           = Helpers.getExisted(Lang.getLanguageText({ textArray: mapBriefData.mapNameArray }));
-                    const averageRating     = await WarMapModel.getAverageRating(mapId);
-                    const actualPlayedTimes = await WarMapModel.getTotalPlayedTimes(mapId);
+                    const mapName           = Twns.Helpers.getExisted(Lang.getLanguageText({ textArray: mapBriefData.mapNameArray }));
+                    const averageRating     = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
+                    const actualPlayedTimes = await Twns.WarMap.WarMapModel.getTotalPlayedTimes(mapId);
                     if ((!mapBriefData.mapExtraData?.isEnabled)                                                                 ||
                         ((mapNameForFilter) && (!mapName.toLowerCase().includes(mapNameForFilter)))                             ||
                         ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))                    ||
@@ -181,13 +181,13 @@ namespace TwnsMmAvailabilityListPanel {
         }
 
         private async _showMap(mapId: number): Promise<void> {
-            const mapRawData                = Helpers.getExisted(await WarMapModel.getRawData(mapId));
-            const rating                    = await WarMapModel.getAverageRating(mapId);
-            this._labelMapName.text         = Lang.getFormattedText(LangTextType.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
+            const mapRawData                = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId));
+            const rating                    = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
+            this._labelMapName.text         = Lang.getFormattedText(LangTextType.F0000, await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text        = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
             this._labelPlayersCount.text    = Lang.getFormattedText(LangTextType.F0002, mapRawData.playersCountUnneutral);
             this._labelRating.text          = Lang.getFormattedText(LangTextType.F0003, rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001));
-            this._labelPlayedTimes.text     = Lang.getFormattedText(LangTextType.F0004, await WarMapModel.getTotalPlayedTimes(mapId));
+            this._labelPlayedTimes.text     = Lang.getFormattedText(LangTextType.F0004, await Twns.WarMap.WarMapModel.getTotalPlayedTimes(mapId));
             this._groupInfo.visible         = true;
             this._groupInfo.alpha           = 1;
             egret.Tween.removeTweens(this._groupInfo);
@@ -228,7 +228,7 @@ namespace TwnsMmAvailabilityListPanel {
         }
 
         private _onTouchTapBtnNext(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmCommandPanel, { mapId: this._getData().mapId });
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmCommandPanel, { mapId: this._getData().mapId });
         }
 
         private _onNotifyMsgMmSetMapName(e: egret.Event): void {
@@ -242,10 +242,10 @@ namespace TwnsMmAvailabilityListPanel {
             const data          = this._getData();
             const mapId         = data.mapId;
             const labelName     = this._labelName;
-            this.currentState   = mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
+            this.currentState   = mapId === data.panel.getSelectedMapId() ? Twns.Types.UiState.Down : Twns.Types.UiState.Up;
             this._labelId.text  = `ID: ${mapId}`;
             labelName.text      = ``;
-            WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v ?? CommonConstants.ErrorTextForUndefined);
+            Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v ?? CommonConstants.ErrorTextForUndefined);
         }
     }
 }

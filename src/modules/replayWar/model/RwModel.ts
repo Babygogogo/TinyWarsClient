@@ -2,7 +2,7 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Logger               from "../../tools/helpers/Logger";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoManager         from "../../tools/proto/ProtoManager";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
@@ -10,22 +10,22 @@
 // import TwnsRwWar            from "./RwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace RwModel {
+namespace Twns.ReplayWar.RwModel {
     import NetMessage           = CommonProto.NetMessage;
     import IReplayInfo          = CommonProto.Replay.IReplayInfo;
     import ISerialWar           = CommonProto.WarSerialization.ISerialWar;
     import MsgReplayGetDataIs   = NetMessage.MsgReplayGetData.IS;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import RwWar                = Twns.ReplayWar.RwWar;
 
     let _replayIdArray          : number[] | null = null;
     let _previewingReplayId     : number | null = null;
     let _war                    : RwWar | null = null;
-    const _replayInfoAccessor   = Helpers.createCachedDataAccessor<number, IReplayInfo>({
-        reqData: (replayId: number) => RwProxy.reqReplayGetReplayInfo(replayId),
+    const _replayInfoAccessor   = Twns.Helpers.createCachedDataAccessor<number, IReplayInfo>({
+        reqData: (replayId: number) => Twns.ReplayWar.RwProxy.reqReplayGetReplayInfo(replayId),
     });
-    const _replaySelfRatingAccessor = Helpers.createCachedDataAccessor<number, number>({
-        reqData: (replayId: number) => RwProxy.reqReplayGetSelfRating(replayId),
+    const _replaySelfRatingAccessor = Twns.Helpers.createCachedDataAccessor<number, number>({
+        reqData: (replayId: number) => Twns.ReplayWar.RwProxy.reqReplayGetSelfRating(replayId),
     });
 
     export function init(): void {
@@ -56,7 +56,7 @@ namespace RwModel {
     export function setPreviewingReplayId(replayId: number | null): void {
         if (getPreviewingReplayId() != replayId) {
             _previewingReplayId = replayId;
-            Notify.dispatch(NotifyType.RwPreviewingReplayIdChanged);
+            Twns.Notify.dispatch(NotifyType.RwPreviewingReplayIdChanged);
         }
     }
     export function getPreviewingReplayId(): number | null {
@@ -74,10 +74,10 @@ namespace RwModel {
 
         const mapId = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
         if (mapId != null) {
-            const mapRawData                = Helpers.getExisted(await WarMapModel.getRawData(mapId));
+            const mapRawData                = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId));
             const unitDataArray             = mapRawData.unitDataArray || [];
-            const field                     = Helpers.getExisted(warData.field);
-            warData.seedRandomCurrentState  = Helpers.deepClone(warData.seedRandomInitialState);
+            const field                     = Twns.Helpers.getExisted(warData.field);
+            warData.seedRandomCurrentState  = Twns.Helpers.deepClone(warData.seedRandomInitialState);
             field.tileMap                   = { tiles: mapRawData.tileDataArray };
             field.unitMap                   = {
                 units       : unitDataArray,
@@ -87,21 +87,21 @@ namespace RwModel {
         {
             const settingsForMfw = warData.settingsForMfw;
             if (settingsForMfw) {
-                const initialWarData            = Helpers.getExisted(settingsForMfw.initialWarData);
+                const initialWarData            = Twns.Helpers.getExisted(settingsForMfw.initialWarData);
                 const seedRandomInitialState    = initialWarData.seedRandomInitialState;
-                warData.remainingVotesForDraw   = Helpers.deepClone(initialWarData.remainingVotesForDraw);
-                warData.weatherManager          = Helpers.deepClone(initialWarData.weatherManager);
-                warData.warEventManager         = Helpers.deepClone(initialWarData.warEventManager);
-                warData.playerManager           = Helpers.deepClone(initialWarData.playerManager);
-                warData.turnManager             = Helpers.deepClone(initialWarData.turnManager);
-                warData.field                   = Helpers.deepClone(initialWarData.field);
-                warData.seedRandomInitialState  = Helpers.deepClone(seedRandomInitialState);
-                warData.seedRandomCurrentState  = Helpers.deepClone(seedRandomInitialState);
+                warData.remainingVotesForDraw   = Twns.Helpers.deepClone(initialWarData.remainingVotesForDraw);
+                warData.weatherManager          = Twns.Helpers.deepClone(initialWarData.weatherManager);
+                warData.warEventManager         = Twns.Helpers.deepClone(initialWarData.warEventManager);
+                warData.playerManager           = Twns.Helpers.deepClone(initialWarData.playerManager);
+                warData.turnManager             = Twns.Helpers.deepClone(initialWarData.turnManager);
+                warData.field                   = Twns.Helpers.deepClone(initialWarData.field);
+                warData.seedRandomInitialState  = Twns.Helpers.deepClone(seedRandomInitialState);
+                warData.seedRandomCurrentState  = Twns.Helpers.deepClone(seedRandomInitialState);
             }
         }
 
         const war = new RwWar();
-        war.init(warData, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
+        war.init(warData, await Twns.Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(warData.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         war.setReplayId(replayId);
         _war = war;
@@ -122,8 +122,8 @@ namespace RwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for replay data.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _replayDataGetter = Helpers.createCachedDataAccessor<number, ISerialWar>({
-        reqData : (replayId: number) => RwProxy.reqReplayGetData(replayId),
+    const _replayDataGetter = Twns.Helpers.createCachedDataAccessor<number, ISerialWar>({
+        reqData : (replayId: number) => Twns.ReplayWar.RwProxy.reqReplayGetData(replayId),
     });
 
     export function getReplayData(replayId: number): Promise<ISerialWar | null> {
@@ -132,7 +132,7 @@ namespace RwModel {
 
     export function updateOnMsgReplayGetData(data: MsgReplayGetDataIs): void {
         const encodedWar = data.encodedWar;
-        _replayDataGetter.setData(Helpers.getExisted(data.replayId), encodedWar ? ProtoManager.decodeAsSerialWar(encodedWar) : null);
+        _replayDataGetter.setData(Twns.Helpers.getExisted(data.replayId), encodedWar ? ProtoManager.decodeAsSerialWar(encodedWar) : null);
     }
 }
 

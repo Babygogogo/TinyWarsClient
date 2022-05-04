@@ -4,7 +4,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiComponent      from "../../tools/ui/UiComponent";
@@ -13,16 +13,15 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmWarRuleAvailableCoPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import WarRule          = CommonProto.WarRule;
+namespace Twns.MapManagement {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = {
-        playerRule      : WarRule.IDataForPlayerRule;
-        warRule         : WarRule.IWarRule;
+    export type OpenDataForMmWarRuleAvailableCoPanel = {
+        playerRule      : CommonProto.WarRule.IDataForPlayerRule;
+        templateWarRule : CommonProto.WarRule.ITemplateWarRule;
     };
-    export class MmWarRuleAvailableCoPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MmWarRuleAvailableCoPanel extends TwnsUiPanel.UiPanel<OpenDataForMmWarRuleAvailableCoPanel> {
         private readonly _labelAvailableCoTitle!    : TwnsUiLabel.UiLabel;
         private readonly _groupCoTiers!             : eui.Group;
         private readonly _groupCoNames!             : eui.Group;
@@ -82,7 +81,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
         }
 
         private async _initGroupCoTiers(): Promise<void> {
-            const gameConfig = await Twns.Config.ConfigManager.getLatestGameConfig();
+            const gameConfig = await Config.ConfigManager.getLatestGameConfig();
             for (const tier of gameConfig.getCoTiers()) {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
@@ -107,7 +106,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
 
         private async _updateGroupCoTiers(): Promise<void> {
             const bannedCoIdSet = this._bannedCoIdSet;
-            const gameConfig    = await Twns.Config.ConfigManager.getLatestGameConfig();
+            const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
                     ? gameConfig.getEnabledCustomCoIdList()
@@ -124,7 +123,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
         }
 
         private async _initGroupCoNames(): Promise<void> {
-            const gameConfig = await Twns.Config.ConfigManager.getLatestGameConfig();
+            const gameConfig = await Config.ConfigManager.getLatestGameConfig();
             for (const cfg of gameConfig.getEnabledCoArray()) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
@@ -176,7 +175,7 @@ namespace TwnsMmWarRuleAvailableCoPanel {
             this._labelName.text    = `Tier ${tier}`;
         }
         public getCoTier(): number {
-            return Helpers.getExisted(this._tier);
+            return Twns.Helpers.getExisted(this._tier);
         }
 
         public setIsCustomSwitch(isCustomSwitch: boolean): void {
@@ -196,10 +195,10 @@ namespace TwnsMmWarRuleAvailableCoPanel {
             } else {
                 this._labelName.textColor = 0xFF0000;
             }
-            Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Types.ColorType.Origin : Types.ColorType.Gray);
+            Twns.Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Twns.Types.ColorType.Origin : Twns.Types.ColorType.Gray);
         }
         public getState(): CoTierState {
-            return Helpers.getExisted(this._state);
+            return Twns.Helpers.getExisted(this._state);
         }
     }
 
@@ -219,19 +218,19 @@ namespace TwnsMmWarRuleAvailableCoPanel {
         public async setCoId(coId: number): Promise<void> {
             this._coId = coId;
 
-            this._labelName.text = `${(await Twns.Config.ConfigManager.getLatestGameConfig()).getCoBasicCfg(coId)?.name}`;
+            this._labelName.text = `${(await Config.ConfigManager.getLatestGameConfig()).getCoBasicCfg(coId)?.name}`;
         }
         public getCoId(): number {
-            return Helpers.getExisted(this._coId);
+            return Twns.Helpers.getExisted(this._coId);
         }
 
         public setIsSelected(isSelected: boolean): void {
             this._isSelected            = isSelected;
             this._labelName.textColor   = isSelected ? 0x00ff00 : 0xff0000;
-            Helpers.changeColor(this._imgSelected, isSelected ? Types.ColorType.Origin : Types.ColorType.Gray);
+            Twns.Helpers.changeColor(this._imgSelected, isSelected ? Twns.Types.ColorType.Origin : Twns.Types.ColorType.Gray);
         }
         public getIsSelected(): boolean {
-            return Helpers.getExisted(this._isSelected);
+            return Twns.Helpers.getExisted(this._isSelected);
         }
     }
 }

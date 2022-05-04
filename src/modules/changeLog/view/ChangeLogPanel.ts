@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -20,12 +20,12 @@
 // import TwnsChangeLogModifyPanel from "./ChangeLogModifyPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsChangeLogPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.ChangeLog {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class ChangeLogPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForChangeLogPanel = void;
+    export class ChangeLogPanel extends TwnsUiPanel.UiPanel<OpenDataForChangeLogPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
@@ -54,8 +54,8 @@ namespace TwnsChangeLogPanel {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
 
-            if (!ChangeLogModel.getAllMessageList()) {
-                ChangeLogProxy.reqChangeLogGetMessageList();
+            if (!Twns.ChangeLog.ChangeLogModel.getAllMessageList()) {
+                Twns.ChangeLog.ChangeLogProxy.reqChangeLogGetMessageList();
             }
         }
         protected _onClosing(): void {
@@ -70,15 +70,15 @@ namespace TwnsChangeLogPanel {
         }
         private _onMsgChangeLogAddMessage(): void {
             FloatText.show(Lang.getText(LangTextType.A0154));
-            ChangeLogProxy.reqChangeLogGetMessageList();
+            Twns.ChangeLog.ChangeLogProxy.reqChangeLogGetMessageList();
         }
         private _onMsgChangeLogModifyMessage(): void {
             FloatText.show(Lang.getText(LangTextType.A0154));
-            ChangeLogProxy.reqChangeLogGetMessageList();
+            Twns.ChangeLog.ChangeLogProxy.reqChangeLogGetMessageList();
         }
 
         private _onTouchedBtnAddMessage(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChangeLogAddPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChangeLogAddPanel, void 0);
         }
 
         private _updateView(): void {
@@ -94,43 +94,43 @@ namespace TwnsChangeLogPanel {
             this._btnAddMessage.label   = Lang.getText(LangTextType.B0454);
         }
         private _updateListMessageAndLabelNoMessage(): void {
-            const messageList               = ChangeLogModel.getAllMessageList() || [];
+            const messageList               = Twns.ChangeLog.ChangeLogModel.getAllMessageList() || [];
             this._labelNoMessage.visible    = !messageList.length;
             this._listMessage.bindData(messageList);
         }
         private async _updateBtnAddMessage(): Promise<void> {
             const btn   = this._btnAddMessage;
             btn.visible = false;
-            btn.visible = UserModel.checkCanSelfEditChangeLog();
+            btn.visible = Twns.User.UserModel.checkCanSelfEditChangeLog();
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -144,14 +144,14 @@ namespace TwnsChangeLogPanel {
             this._setUiListenerArray([
                 { ui: this._btnModify,  callback: this._onTouchedBtnModify },
             ]);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
         }
 
         protected async _onDataChanged(): Promise<void> {
             const data              = this._getData();
             const messageId         = data.messageId;
             const createTimestamp   = data.createTimestamp;
-            this._labelIndex.text   = `#${messageId == null ? CommonConstants.ErrorTextForUndefined : Helpers.getNumText(messageId, 3)} (${createTimestamp == null ? CommonConstants.ErrorTextForUndefined : Helpers.getTimestampShortText(createTimestamp)})`;
+            this._labelIndex.text   = `#${messageId == null ? CommonConstants.ErrorTextForUndefined : Twns.Helpers.getNumText(messageId, 3)} (${createTimestamp == null ? CommonConstants.ErrorTextForUndefined : Twns.Helpers.getTimestampShortText(createTimestamp)})`;
 
             const textArray         = data.textList;
             this._labelContent.text = textArray == null
@@ -161,12 +161,12 @@ namespace TwnsChangeLogPanel {
             const btnModify     = this._btnModify;
             btnModify.label     = Lang.getText(LangTextType.B0317);
             btnModify.visible   = false;
-            btnModify.visible   = UserModel.checkCanSelfEditChangeLog();
+            btnModify.visible   = Twns.User.UserModel.checkCanSelfEditChangeLog();
         }
 
         private _onTouchedBtnModify(): void {
             const messageId = this._getData().messageId;
-            (messageId != null) && (TwnsPanelManager.open(TwnsPanelConfig.Dict.ChangeLogModifyPanel, { messageId }));
+            (messageId != null) && (Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChangeLogModifyPanel, { messageId }));
         }
     }
 }

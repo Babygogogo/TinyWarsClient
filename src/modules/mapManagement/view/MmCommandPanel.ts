@@ -4,7 +4,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -14,14 +14,14 @@
 // import TwnsMmWarRulePanel       from "./MmWarRulePanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmCommandPanel {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.MapManagement {
+    import LangTextType         = Twns.Lang.LangTextType;
+    import NotifyType           = Twns.Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForMmCommandPanel = {
         mapId   : number;
     };
-    export class MmCommandPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MmCommandPanel extends TwnsUiPanel.UiPanel<OpenDataForMmCommandPanel> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnDelete!    : TwnsUiButton.UiButton;
         private readonly _btnWarRule!   : TwnsUiButton.UiButton;
@@ -55,29 +55,29 @@ namespace TwnsMmCommandPanel {
         }
 
         private _onTouchedBtnDelete(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0080),
                 callback: () => {
-                    WarMapProxy.reqMmSetMapEnabled(this._getOpenData().mapId, false);
+                    Twns.WarMap.WarMapProxy.reqMmSetMapEnabled(this._getOpenData().mapId, false);
                     this.close();
                 },
             });
         }
 
         private async _onTouchedBtnWarRule(): Promise<void> {
-            const mapRawData = await WarMapModel.getRawData(this._getOpenData().mapId);
+            const mapRawData = await Twns.WarMap.WarMapModel.getRawData(this._getOpenData().mapId);
             if (mapRawData == null) {
-                throw Helpers.newError(`MmCommandPanel._onTouchedBtnWarRule() empty mapRawData.`);
+                throw Twns.Helpers.newError(`MmCommandPanel._onTouchedBtnWarRule() empty mapRawData.`);
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmWarRulePanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmWarRulePanel, {
                 mapRawData,
             });
             this.close();
         }
 
         private _onTouchedBtnRename(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmMapRenamePanel, { mapId: this._getOpenData().mapId });
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmMapRenamePanel, { mapId: this._getOpenData().mapId });
         }
 
         private _onTouchedBtnCancel(): void {
@@ -86,7 +86,7 @@ namespace TwnsMmCommandPanel {
 
         private async _updateComponentsForLanguage(): Promise<void> {
             const mapId             = this._getOpenData().mapId;
-            this._labelTitle.text   = `#${mapId} ${await WarMapModel.getMapNameInCurrentLanguage(mapId)}`;
+            this._labelTitle.text   = `#${mapId} ${await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId)}`;
             this._btnDelete.label   = Lang.getText(LangTextType.B0270);
             this._btnWarRule.label  = Lang.getText(LangTextType.B0314);
             this._btnRename.label   = Lang.getText(LangTextType.B0708);

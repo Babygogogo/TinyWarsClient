@@ -4,25 +4,25 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 // import MeModel              from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseTileTypePanel {
-    import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
-    import TileType     = Types.TileType;
+namespace Twns.Common {
+    import LangTextType = Twns.Lang.LangTextType;
+    import NotifyType   = Twns.Notify.NotifyType;
+    import TileType     = Twns.Types.TileType;
     import GameConfig   = Twns.Config.GameConfig;
 
-    export type OpenData = {
+    export type OpenDataForCommonChooseTileTypePanel = {
         gameConfig              : GameConfig;
         currentTileTypeArray    : TileType[];
         callbackOnConfirm       : (tileTypeArray: TileType[]) => void;
     };
-    export class CommonChooseTileTypePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChooseTileTypePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseTileTypePanel> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnSelectAll!     : TwnsUiButton.UiButton;
         private readonly _btnUnselectAll!   : TwnsUiButton.UiButton;
@@ -85,14 +85,14 @@ namespace TwnsCommonChooseTileTypePanel {
 
         private _updateListTileType(): void {
             const dataArray : DataForTileTypeRenderer[] = [];
-            for (const tileType of this._getOpenData().gameConfig.getTileTypesByCategory(Types.TileCategory.All) ?? []) {
+            for (const tileType of this._getOpenData().gameConfig.getTileTypesByCategory(Twns.Types.TileCategory.All) ?? []) {
                 dataArray.push({ tileType });
             }
 
             const tileTypeArray = this._getOpenData().currentTileTypeArray;
             const list          = this._listTileType;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => tileTypeArray.indexOf(v.tileType) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => tileTypeArray.indexOf(v.tileType) >= 0 ? i : null)));
         }
     }
 

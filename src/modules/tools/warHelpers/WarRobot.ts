@@ -14,8 +14,7 @@
 // import TwnsBwWar            from "../../baseWar/model/BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace WarRobot {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+namespace Twns.WarHelpers.WarRobot {
     import IWarActionContainer  = CommonProto.WarAction.IWarActionContainer;
     import WeaponType           = Types.WeaponType;
     import GridIndex            = Types.GridIndex;
@@ -26,9 +25,9 @@ namespace WarRobot {
     import UnitActionState      = Types.UnitActionState;
     import UnitAiMode           = Types.UnitAiMode;
     import CoSkillType          = Types.CoSkillType;
-    import BwUnit               = Twns.BaseWar.BwUnit;
-    import BwTile               = Twns.BaseWar.BwTile;
-    import BwWar                = Twns.BaseWar.BwWar;
+    import BwUnit               = BaseWar.BwUnit;
+    import BwTile               = BaseWar.BwTile;
+    import BwWar                = BaseWar.BwWar;
 
     type AttackInfo = {
         baseDamage      : number | null | undefined;
@@ -590,7 +589,7 @@ namespace WarRobot {
         const { war, mapSize }  = commonParams;
         const unitMap           = war.getUnitMap();
         const tileMap           = war.getTileMap();
-        return Twns.WarHelpers.WarCommonHelpers.createMovableArea({
+        return WarHelpers.WarCommonHelpers.createMovableArea({
             origin          : unitGridIndex,
             maxMoveCost     : Math.min(moveRange, currentFuel),
             mapSize,
@@ -655,7 +654,7 @@ namespace WarRobot {
         const attackerCurrentFuel           = attacker.getCurrentFuel();
         const { war, mapSize }              = commonParams;
         const unitMap                       = war.getUnitMap();
-        const attackerNormalizedCurrentHp   = Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(attackerCurrentHp);
+        const attackerNormalizedCurrentHp   = WarHelpers.WarCommonHelpers.getNormalizedHp(attackerCurrentHp);
         const baseDamageWithAmmo            = attacker.getCfgBaseDamage(targetArmorType, attacker.checkHasPrimaryWeapon() ? WeaponType.Primary : WeaponType.Secondary);
         const baseDamageForCurrentAmmo      = attacker.getBaseDamage(targetArmorType);
         const loaderUnitId                  = attacker.getLoaderUnitId();
@@ -666,7 +665,7 @@ namespace WarRobot {
             if (repairInfo) {
                 return {
                     baseDamage  : baseDamageWithAmmo,
-                    normalizedHp: Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(attackerCurrentHp + repairInfo.hp),
+                    normalizedHp: WarHelpers.WarCommonHelpers.getNormalizedHp(attackerCurrentHp + repairInfo.hp),
                     fuel        : attackerMaxFuel,
                     luckValue,
                 };
@@ -714,7 +713,7 @@ namespace WarRobot {
                 if (repairInfo) {
                     return {
                         baseDamage  : baseDamageWithAmmo,
-                        normalizedHp: Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(attackerCurrentHp + repairInfo.hp),
+                        normalizedHp: WarHelpers.WarCommonHelpers.getNormalizedHp(attackerCurrentHp + repairInfo.hp),
                         fuel        : attackerMaxFuel,
                         luckValue,
                     };
@@ -777,7 +776,7 @@ namespace WarRobot {
             }
 
             await Helpers.checkAndCallLater();
-            const movableArea = Twns.WarHelpers.WarCommonHelpers.createMovableArea({
+            const movableArea = WarHelpers.WarCommonHelpers.createMovableArea({
                 origin          : beginningGridIndex,
                 maxMoveCost     : Math.min(attackerFinalMoveRange, fuel),
                 mapSize,
@@ -796,7 +795,7 @@ namespace WarRobot {
             });
 
             await Helpers.checkAndCallLater();
-            const attackableArea = Twns.WarHelpers.WarCommonHelpers.createAttackableAreaForUnit({
+            const attackableArea = WarHelpers.WarCommonHelpers.createAttackableAreaForUnit({
                 movableArea,
                 mapSize,
                 minAttackRange,
@@ -999,7 +998,7 @@ namespace WarRobot {
         const attackerTeamIndex = attackerUnit.getTeamIndex();
 
         await Helpers.checkAndCallLater();
-        const movableArea = Twns.WarHelpers.WarCommonHelpers.createMovableArea({
+        const movableArea = WarHelpers.WarCommonHelpers.createMovableArea({
             origin          : gridIndex,
             maxMoveCost     : attackerUnit.getFinalMoveRange(),
             mapSize,
@@ -1018,7 +1017,7 @@ namespace WarRobot {
         });
 
         await Helpers.checkAndCallLater();
-        const attackableArea = Twns.WarHelpers.WarCommonHelpers.createAttackableAreaForUnit({
+        const attackableArea = WarHelpers.WarCommonHelpers.createAttackableAreaForUnit({
             movableArea,
             mapSize,
             minAttackRange  : attackerUnit.getMinAttackRange(),
@@ -1376,7 +1375,7 @@ namespace WarRobot {
         await Helpers.checkAndCallLater();
 
         const moveType      = unit.getMoveType();
-        const movableArea   = Twns.WarHelpers.WarCommonHelpers.createMovableArea({
+        const movableArea   = WarHelpers.WarCommonHelpers.createMovableArea({
             origin          : gridIndex,
             maxMoveCost     : Number.MAX_SAFE_INTEGER,
             mapSize,
@@ -1742,7 +1741,7 @@ namespace WarRobot {
         const mapSize                       = tileMap.getMapSize();
         const unitValueRatio                = commonParams.unitValueRatio;
         const getProducingUnitMovableArea   = Helpers.createLazyFunc(() => {
-            return Twns.WarHelpers.WarCommonHelpers.createMovableArea({
+            return WarHelpers.WarCommonHelpers.createMovableArea({
                 origin          : producingGridIndex,
                 maxMoveCost     : Number.MAX_SAFE_INTEGER,
                 mapSize,
@@ -1798,7 +1797,7 @@ namespace WarRobot {
                 if (baseDamage != null) {
                     const turnsCount = await getMinTurnsCountForAttack(unit, producingGridIndex);
                     if (turnsCount != null) {
-                        const damage    = Math.min(baseDamage * Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(unitCurrentHp) / unit.getNormalizedMaxHp(), producingUnitCurrentHp);
+                        const damage    = Math.min(baseDamage * WarHelpers.WarCommonHelpers.getNormalizedHp(unitCurrentHp) / unit.getNormalizedMaxHp(), producingUnitCurrentHp);
                         score           += -damage * productionCost / 1000 / Math.max(1, unitValueRatio) / turnsCount;
                     }
                 }
@@ -2358,7 +2357,7 @@ namespace WarRobot {
                         }
                     }
 
-                    const pathNodes         = Twns.WarHelpers.WarCommonHelpers.createShortestMovePath(reachableArea, gridIndex);
+                    const pathNodes         = WarHelpers.WarCommonHelpers.createShortestMovePath(reachableArea, gridIndex);
                     const scoreAndAction    = await getBestScoreAndActionForUnitAndPath(commonParams, candidateUnit, gridIndex, pathNodes);
                     if (scoreAndAction == null) {
                         return null;
@@ -2396,13 +2395,19 @@ namespace WarRobot {
         await Helpers.checkAndCallLater();
 
         const war           = commonParams.war;
-        const unitCategory  = war.getTileMap().getTile(gridIndex).getProduceUnitCategoryForPlayer(commonParams.playerIndexInTurn);
+        const playerIndex   = commonParams.playerIndexInTurn;
+        const unitCategory  = war.getTileMap().getTile(gridIndex).getProduceUnitCategoryForPlayer(playerIndex);
         if (unitCategory == null) {
             return null;
         }
 
-        let bestScoreAndUnitType: { score: number, unitType: UnitType } | null = null;
+        const bannedUnitTypeArray   = war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerIndex) ?? [];
+        let bestScoreAndUnitType    : { score: number, unitType: UnitType } | null = null;
         for (const unitType of war.getGameConfig().getUnitTypesByCategory(unitCategory) ?? []) {
+            if (bannedUnitTypeArray.indexOf(unitType) >= 0) {
+                continue;
+            }
+
             const score = await getScoreForActionPlayerProduceUnit({
                 commonParams,
                 producingGridIndex          : gridIndex,
@@ -2480,7 +2485,7 @@ namespace WarRobot {
 
             if (!movableAreaDict.has(attackerUnit)) {
                 await Helpers.checkAndCallLater();
-                movableAreaDict.set(attackerUnit, Twns.WarHelpers.WarCommonHelpers.createMovableArea({
+                movableAreaDict.set(attackerUnit, WarHelpers.WarCommonHelpers.createMovableArea({
                     origin          : attackerUnit.getGridIndex(),
                     maxMoveCost     : Number.MAX_SAFE_INTEGER,
                     mapSize,

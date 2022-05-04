@@ -5,7 +5,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -17,8 +17,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+    import LangTextType             = Twns.Lang.LangTextType;
+    import NotifyType               = Twns.Notify.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
@@ -101,7 +101,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionTypeListPanel, {
                 fullData    : openData.fullData,
                 condition   : openData.condition,
                 war         : openData.war,
@@ -112,43 +112,43 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnPlayerIndex(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerIndexPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChoosePlayerIndexPanel, {
                 currentPlayerIndexArray : condition.playerIndexArray ?? [],
                 maxPlayerIndex          : this._getOpenData().war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : playerIndexArray => {
                     condition.playerIndexArray = playerIndexArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
         private _onTouchedBtnAliveState(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerAliveStatePanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChoosePlayerAliveStatePanel, {
                 currentAliveStateArray  : condition.aliveStateArray ?? [],
                 callbackOnConfirm       : aliveStateArray => {
                     condition.aliveStateArray = aliveStateArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
         private _onTouchedBtnCoCategory(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoCategoryIdPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoCategoryIdPanel, {
                 currentCoCategoryIdArray    : condition.coCategoryIdArray ?? [],
                 gameConfig                  : this._getOpenData().war.getGameConfig(),
                 callbackOnConfirm           : coCategoryIdArray => {
                     condition.coCategoryIdArray = coCategoryIdArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             });
         }
         private _onTouchedBtnUsingSkillType(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoSkillTypePanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoSkillTypePanel, {
                 currentSkillTypeArray   : condition.coUsingSkillTypeArray ?? [],
                 callbackOnConfirm       : skillTypeArray => {
                     condition.coUsingSkillTypeArray = skillTypeArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -160,15 +160,15 @@ namespace Twns.WarEvent {
             const value = !text ? null : parseInt(text);
             if ((value == null) || (!isNaN(value))) {
                 this._getCondition().fund = value;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             } else {
                 this._updateInputFund();
             }
         }
         private _onTouchedBtnFundComparator(): void {
             const condition             = this._getCondition();
-            condition.fundComparator    = Helpers.getNextValueComparator(condition.fundComparator);
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            condition.fundComparator    = Twns.Helpers.getNextValueComparator(condition.fundComparator);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputEnergyPercentage(): void {
             this._setInnerTouchMaskEnabled(true);
@@ -178,15 +178,15 @@ namespace Twns.WarEvent {
             const value = !text ? null : parseInt(text);
             if ((value == null) || (!isNaN(value))) {
                 this._getCondition().energyPercentage = value;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             } else {
                 this._updateInputEnergyPercentage();
             }
         }
         private _onTouchedBtnEnergyPercentageComparator(): void {
             const condition                         = this._getCondition();
-            condition.energyPercentageComparator    = Helpers.getNextValueComparator(condition.energyPercentageComparator);
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            condition.energyPercentageComparator    = Twns.Helpers.getNextValueComparator(condition.energyPercentageComparator);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputPlayersCount(): void {
             this._setInnerTouchMaskEnabled(true);
@@ -196,15 +196,15 @@ namespace Twns.WarEvent {
             const value = !text ? null : parseInt(text);
             if ((value != null) && (!isNaN(value))) {
                 this._getCondition().playersCount = value;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             } else {
                 this._updateInputPlayersCount();
             }
         }
         private _onTouchedBtnPlayersCountComparator(): void {
             const condition                     = this._getCondition();
-            condition.playersCountComparator    = Helpers.getNextValueComparator(condition.playersCountComparator);
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            condition.playersCountComparator    = Twns.Helpers.getNextValueComparator(condition.playersCountComparator);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _updateView(): void {
@@ -248,7 +248,7 @@ namespace Twns.WarEvent {
             const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
             this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelPlayerIndex(): void {
@@ -273,7 +273,7 @@ namespace Twns.WarEvent {
             this._inputFund.text    = fund == null ? `` : `${fund}`;
         }
         private _updateLabelFundComparator(): void {
-            const comparator                = Helpers.getExisted(this._getCondition().fundComparator);
+            const comparator                = Twns.Helpers.getExisted(this._getCondition().fundComparator);
             this._labelFundComparator.text  = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputEnergyPercentage(): void {
@@ -281,7 +281,7 @@ namespace Twns.WarEvent {
             this._inputEnergyPercentage.text    = energyPercentage == null ? `` : `${energyPercentage}`;
         }
         private _updateLabelEnergyPercentageComparator(): void {
-            const comparator                            = Helpers.getExisted(this._getCondition().energyPercentageComparator);
+            const comparator                            = Twns.Helpers.getExisted(this._getCondition().energyPercentageComparator);
             this._labelEnergyPercentageComparator.text  = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputPlayersCount(): void {
@@ -289,12 +289,12 @@ namespace Twns.WarEvent {
             this._inputPlayersCount.text    = playersCount == null ? `` : `${playersCount}`;
         }
         private _updatePlayersCountComparator(): void {
-            const comparator                        = Helpers.getExisted(this._getCondition().playersCountComparator);
+            const comparator                        = Twns.Helpers.getExisted(this._getCondition().playersCountComparator);
             this._labelPlayersCountComparator.text  = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _getCondition(): CommonProto.WarEvent.IWecPlayerPresence {
-            return Helpers.getExisted(this._getOpenData().condition.WecPlayerPresence);
+            return Twns.Helpers.getExisted(this._getOpenData().condition.WecPlayerPresence);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {
             this._imgInnerTouchMask.visible = isEnabled;

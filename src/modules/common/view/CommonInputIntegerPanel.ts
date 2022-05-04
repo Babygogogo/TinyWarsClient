@@ -3,7 +3,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -11,11 +11,11 @@
 // import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonInputIntegerPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForCommonInputIntegerPanel = {
         title           : string;
         currentValue    : number;
         maxValue        : number;
@@ -23,7 +23,7 @@ namespace TwnsCommonInputIntegerPanel {
         tips            : string | null;
         callback        : (panel: CommonInputIntegerPanel) => any;
     };
-    export class CommonInputIntegerPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonInputIntegerPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonInputIntegerPanel> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
@@ -112,7 +112,7 @@ namespace TwnsCommonInputIntegerPanel {
             if (!input.text) {
                 input.text = `${openData.currentValue}`;
             } else {
-                input.text = `${Helpers.getValueInRange({
+                input.text = `${Twns.Helpers.getValueInRange({
                     minValue    : openData.minValue,
                     maxValue    : openData.maxValue,
                     rawValue    : parseFloat(input.text) || 0,
@@ -125,32 +125,32 @@ namespace TwnsCommonInputIntegerPanel {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: -40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: -40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -161,7 +161,7 @@ namespace TwnsCommonInputIntegerPanel {
         private _updateOnTouchedButtonsForChangeValue(deltaValue: number): void {
             const input     = this._input;
             const openData  = this._getOpenData();
-            input.text      = `${Helpers.getValueInRange({
+            input.text      = `${Twns.Helpers.getValueInRange({
                 minValue    : openData.minValue,
                 maxValue    : openData.maxValue,
                 rawValue    : (parseFloat(input.text) || 0) + deltaValue,

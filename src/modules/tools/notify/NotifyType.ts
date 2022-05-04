@@ -1,6 +1,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsNotifyType {
+namespace Twns.Notify {
     // eslint-disable-next-line no-shadow
     export const enum NotifyType {
         NetworkConnected,
@@ -32,7 +32,7 @@ namespace TwnsNotifyType {
         McrCreateSelfCoIdChanged,
         McrCreateSelfSkinIdChanged,
         McrCreateSelfPlayerIndexChanged,
-        McrCreatePresetWarRuleIdChanged,
+        McrCreateTemplateWarRuleIdChanged,
 
         MfrCreateSelfCoIdChanged,
         MfrCreateTeamIndexChanged,
@@ -45,7 +45,7 @@ namespace TwnsNotifyType {
         CcrCreateSelfCoIdChanged,
         CcrCreateSelfSkinIdChanged,
         CcrCreateSelfPlayerIndexChanged,
-        CcrCreatePresetWarRuleIdChanged,
+        CcrCreateTemplateWarRuleIdChanged,
 
         MrrMyRoomAdded,
         MrrMyRoomDeleted,
@@ -53,12 +53,12 @@ namespace TwnsNotifyType {
         MrrSelfSettingsCoIdChanged,
         MrrSelfSettingsSkinIdChanged,
 
-        ScrCreatePresetWarRuleIdChanged,
+        ScrCreateTemplateWarRuleIdChanged,
         ScrCreateBannedCoIdArrayChanged,
         ScrCreateWarSaveSlotChanged,
         ScrCreatePlayerInfoChanged,
 
-        SrrCreatePresetWarRuleIdChanged,
+        SrrCreateModelTemplateWarRuleIdChanged,
         SrrCreateBannedCoIdArrayChanged,
         SrrCreateWarSaveSlotChanged,
         SrrCreatePlayerInfoChanged,
@@ -319,4 +319,4 @@ namespace TwnsNotifyType {
     }
 }
 
-// export default TwnsNotifyType;
+// export default Twns.Notify;

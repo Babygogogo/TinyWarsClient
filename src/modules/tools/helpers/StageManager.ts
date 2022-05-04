@@ -1,6 +1,6 @@
 
 // import Notify           from "../notify/Notify";
-// import TwnsNotifyType   from "../notify/NotifyType";
+// import Twns.Notify   from "../notify/NotifyType";
 // import TwnsUiPanel      from "../ui/UiPanel";
 // import CommonConstants  from "./CommonConstants";
 // import Helpers          from "./Helpers";
@@ -8,9 +8,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace StageManager {
-    import LayerType            = Types.LayerType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import LayerType            = Twns.Types.LayerType;
+    import NotifyType           = Twns.Notify.NotifyType;
+    import ClientErrorCode      = Twns.ClientErrorCode;
 
     // The game is in landscape mode, which means that its design max height equals its design width, 960.
     const DESIGN_WIDTH         = 960;
@@ -79,7 +79,7 @@ namespace StageManager {
     }
 
     export function getLayer(layer: LayerType): UiLayer {
-        return Helpers.getExisted(_LAYERS.get(layer));
+        return Twns.Helpers.getExisted(_LAYERS.get(layer));
     }
 
     export function setStageScale(scale: number): void {
@@ -96,7 +96,7 @@ namespace StageManager {
 
     function _addLayer(layerType: LayerType): void {
         if (_LAYERS.has(layerType)) {
-            throw Helpers.newError(`StageManager._addLayer() duplicated layer: ${layerType}.`, ClientErrorCode.StageManager_AddLayer_00);
+            throw Twns.Helpers.newError(`StageManager._addLayer() duplicated layer: ${layerType}.`, ClientErrorCode.StageManager_AddLayer_00);
         }
 
         const layer = new UiLayer();
@@ -109,14 +109,14 @@ namespace StageManager {
         _mouseY = e.stageY;
     }
     function _onMouseWheel(e: egret.Event): void {
-        Notify.dispatch(NotifyType.MouseWheel, e.data * ((egret.Capabilities.os === `Unknown` || navigator?.userAgent?.toLowerCase()?.includes(`firefox`)) ? 40 : 1));
+        Twns.Notify.dispatch(NotifyType.MouseWheel, e.data * ((egret.Capabilities.os === `Unknown` || navigator?.userAgent?.toLowerCase()?.includes(`firefox`)) ? 40 : 1));
     }
 
     function _onTouchBegin(e: egret.TouchEvent): void {
-        Notify.dispatch(NotifyType.GlobalTouchBegin, e);
+        Twns.Notify.dispatch(NotifyType.GlobalTouchBegin, e);
     }
     function _onTouchMove(e: egret.TouchEvent): void {
-        Notify.dispatch(NotifyType.GlobalTouchMove, e);
+        Twns.Notify.dispatch(NotifyType.GlobalTouchMove, e);
     }
 
     class UiLayer extends eui.UILayer {

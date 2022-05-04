@@ -4,7 +4,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
@@ -15,12 +15,12 @@
 // import TwnsMmTagListPanel           from "./MmTagListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmMainMenuPanel {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.MapManagement {
+    import LangTextType             = Twns.Lang.LangTextType;
+    import NotifyType               = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class MmMainMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMmMainMenuPanel = void;
+    export class MmMainMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForMmMainMenuPanel> {
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnBack!          : TwnsUiButton.UiButton;
         private readonly _listCommand!      : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
@@ -49,7 +49,7 @@ namespace TwnsMmMainMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            FlowManager.gotoLobby();
+            Twns.FlowManager.gotoLobby();
         }
         private _onMsgUserLogout(): void {
             this.close();
@@ -76,21 +76,21 @@ namespace TwnsMmMainMenuPanel {
                     name    : Lang.getText(LangTextType.B0295),
                     callback: (): void => {
                         this.close();
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MmReviewListPanel, void 0);
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmReviewListPanel, void 0);
                     },
                 },
                 {
                     name    : Lang.getText(LangTextType.B0193),
                     callback: (): void => {
                         this.close();
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAvailabilityListPanel, {});
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmAvailabilityListPanel, {});
                     },
                 },
                 {
                     name    : Lang.getText(LangTextType.B0444),
                     callback: (): void => {
                         this.close();
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MmTagListPanel, null);
+                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmTagListPanel, null);
                     },
                 },
             ];

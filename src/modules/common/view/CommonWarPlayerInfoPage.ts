@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -19,9 +19,9 @@
 // import TwnsCommonConfirmPanel   from "./CommonConfirmPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonWarPlayerInfoPage {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import LangTextType         = Twns.Lang.LangTextType;
+    import NotifyType           = Twns.Notify.NotifyType;
     import GameConfig           = Twns.Config.GameConfig;
 
     export type PlayerInfo = {
@@ -83,12 +83,12 @@ namespace TwnsCommonWarPlayerInfoPage {
                 playerInfoArray,
                 enterTurnTime,
             } = openData;
-            const isRoomOwnedBySelf = playerInfoArray.find(v => v.playerIndex === roomOwnerPlayerIndex)?.userId === UserModel.getSelfUserId();
+            const isRoomOwnedBySelf = playerInfoArray.find(v => v.playerIndex === roomOwnerPlayerIndex)?.userId === Twns.User.UserModel.getSelfUserId();
             const dataArray         : DataForPlayerRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 const playerInfo = playerInfoArray.find(v => v.playerIndex === playerIndex);
                 if (playerInfo == null) {
-                    throw Helpers.newError(`CommonWarPlayerInfoPage._updateListPlayer() empty playerInfo.`);
+                    throw Twns.Helpers.newError(`CommonWarPlayerInfoPage._updateListPlayer() empty playerInfo.`);
                 }
 
                 dataArray.push({
@@ -157,7 +157,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             const data  = this._getData();
             const coId  = data.playerInfo.coId;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoInfoPanel, {
                     gameConfig  : data.gameConfig,
                     coId,
                 });
@@ -167,14 +167,14 @@ namespace TwnsCommonWarPlayerInfoPage {
         private _onTouchedBtnChat(): void {
             const userId = this._getData().playerInfo.userId;
             if (userId != null) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: userId });
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChatPanel, { toUserId: userId });
             }
         }
 
         private _onTouchedBtnInfo(): void {
             const userId = this._getData().playerInfo.userId;
             if (userId != null) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, { userId });
             }
         }
 
@@ -186,10 +186,10 @@ namespace TwnsCommonWarPlayerInfoPage {
                 return;
             }
 
-            if (userId === UserModel.getSelfUserId()) {
+            if (userId === Twns.User.UserModel.getSelfUserId()) {
                 const callback = data.callbackOnExitRoom;
                 if (callback) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                         content : Lang.getText(LangTextType.A0126),
                         callback,
                     });
@@ -198,8 +198,8 @@ namespace TwnsCommonWarPlayerInfoPage {
             } else {
                 const callback = data.callbackOnDeletePlayer;
                 if ((callback) && (data.isRoomOwnedBySelf)) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
-                        content : Lang.getFormattedText(LangTextType.F0029, await UserModel.getUserNickname(userId)),
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                        content : Lang.getFormattedText(LangTextType.F0029, await Twns.User.UserModel.getUserNickname(userId)),
                         callback: () => {
                             callback(playerInfo.playerIndex);
                         },
@@ -254,7 +254,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             }
 
             const userId        = playerInfo.userId;
-            const userInfo      = userId == null ? null : await UserModel.getUserPublicInfo(userId);
+            const userInfo      = userId == null ? null : await Twns.User.UserModel.getUserPublicInfo(userId);
             const labelNickname = this._labelNickname;
             if (userInfo) {
                 labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
@@ -267,7 +267,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             if (userInfo) {
                 groupButton.addChild(this._btnInfo);
 
-                const selfUserId = UserModel.getSelfUserId();
+                const selfUserId = Twns.User.UserModel.getSelfUserId();
                 if (userId !== selfUserId) {
                     groupButton.addChild(this._btnChat);
                 }
@@ -297,19 +297,19 @@ namespace TwnsCommonWarPlayerInfoPage {
 
         private async _updateComponentsForRankInfo(): Promise<void> {
             const userId                = this._getData().playerInfo.userId;
-            const userInfo              = userId == null ? null : await UserModel.getUserPublicInfo(userId);
+            const userInfo              = userId == null ? null : await Twns.User.UserModel.getUserPublicInfo(userId);
             const rankScoreArray        = userInfo?.userMrwRankInfoArray;
-            const stdRankInfo           = rankScoreArray?.find(v => v.warType === Types.WarType.MrwStd);
-            const fogRankInfo           = rankScoreArray?.find(v => v.warType === Types.WarType.MrwFog);
+            const stdRankInfo           = rankScoreArray?.find(v => v.warType === Twns.Types.WarType.MrwStd);
+            const fogRankInfo           = rankScoreArray?.find(v => v.warType === Twns.Types.WarType.MrwFog);
             const stdScore              = stdRankInfo?.currentScore;
             const fogScore              = fogRankInfo?.currentScore;
             const stdRank               = stdRankInfo?.currentRank;
             const fogRank               = fogRankInfo?.currentRank;
             this._labelRankStd.text     = stdRankInfo
-                ? `${stdScore == null ? CommonConstants.RankInitialScore : stdScore} (${stdRank == null ? `--` : `${stdRank}${Helpers.getSuffixForRank(stdRank)}`})`
+                ? `${stdScore == null ? CommonConstants.RankInitialScore : stdScore} (${stdRank == null ? `--` : `${stdRank}${Twns.Helpers.getSuffixForRank(stdRank)}`})`
                 : `??`;
             this._labelRankFog.text     = fogRankInfo
-                ? `${fogScore == null ? CommonConstants.RankInitialScore : fogScore} (${fogRank == null ? `--` : `${fogRank}${Helpers.getSuffixForRank(fogRank)}`})`
+                ? `${fogScore == null ? CommonConstants.RankInitialScore : fogScore} (${fogRank == null ? `--` : `${fogRank}${Twns.Helpers.getSuffixForRank(fogRank)}`})`
                 : `??`;
         }
 
@@ -321,7 +321,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             const restTime          = (restTimeToBoot == null) || (enterTurnTime == null)
                 ? null
                 : (playerInfo.isInTurn
-                    ? Math.max(0, restTimeToBoot + enterTurnTime - Timer.getServerTimestamp())
+                    ? Math.max(0, restTimeToBoot + enterTurnTime - Twns.Timer.getServerTimestamp())
                     : restTimeToBoot
                 );
             const label             = this._labelRestTimeToBoot;
@@ -329,7 +329,7 @@ namespace TwnsCommonWarPlayerInfoPage {
                 label.text      = `--`;
                 label.textColor = 0xFFFFFF;
             } else {
-                label.text      = Helpers.getTimeDurationText2(restTime);
+                label.text      = Twns.Helpers.getTimeDurationText2(restTime);
                 label.textColor = restTime >= 30 * 60
                     ? 0xFFFFFF
                     : (restTime >= 5 * 60 ? 0xFFFF00 : 0xFF4400);

@@ -3,18 +3,18 @@
 // import NetManager           from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import McrJoinModel         from "./McrJoinModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiCustomRoom.McrProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+    import NotifyType       = Twns.Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+    import NetMessageCodes  = Twns.Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Twns.Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgMcrCreateRoom,                callback: _onMsgMcrCreateRoom },
             { msgCode: NetMessageCodes.MsgMcrJoinRoom,                  callback: _onMsgMcrJoinRoom },
             { msgCode: NetMessageCodes.MsgMcrDeleteRoom,                callback: _onMsgMcrDeleteRoom },
@@ -29,33 +29,33 @@ namespace Twns.MultiCustomRoom.McrProxy {
     }
 
     export function reqCreateRoom(param: NetMessage.MsgMcrCreateRoom.IC): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMcrCreateRoom: { c: param },
         });
     }
     function _onMsgMcrCreateRoom(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrCreateRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrCreateRoom, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrCreateRoom, data);
         } else {
-            Notify.dispatch(NotifyType.MsgMcrCreateRoomFailed, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrCreateRoomFailed, data);
         }
     }
 
     export function reqMcrJoinRoom(data: NetMessage.MsgMcrJoinRoom.IC): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMcrJoinRoom: { c: data },
         });
     }
     async function _onMsgMcrJoinRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrJoinRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrJoinRoom, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrJoinRoom, data);
         }
     }
 
     export function reqMcrDeleteRoom(roomId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMcrDeleteRoom: { c: {
                 roomId,
             } },
@@ -64,12 +64,12 @@ namespace Twns.MultiCustomRoom.McrProxy {
     function _onMsgMcrDeleteRoom(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrDeleteRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrDeleteRoom, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrDeleteRoom, data);
         }
     }
 
     export function reqMcrExitRoom(roomId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMcrExitRoom: { c: {
                 roomId,
             }, },
@@ -78,7 +78,7 @@ namespace Twns.MultiCustomRoom.McrProxy {
     async function _onMsgMcrExitRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrExitRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrExitRoom, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrExitRoom, data);
         }
     }
 
@@ -95,7 +95,7 @@ namespace Twns.MultiCustomRoom.McrProxy {
     // }
 
     export function reqMcrDeletePlayer(roomId: number, playerIndex: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMcrDeletePlayer: { c: {
                 roomId,
                 playerIndex,
@@ -105,12 +105,12 @@ namespace Twns.MultiCustomRoom.McrProxy {
     async function _onMsgMcrDeletePlayer(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrDeletePlayer.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrDeletePlayer, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrDeletePlayer, data);
         }
     }
 
     export function reqMcrSetReady(roomId: number, isReady: boolean): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMcrSetReady: { c: {
                 roomId,
                 isReady,
@@ -120,24 +120,24 @@ namespace Twns.MultiCustomRoom.McrProxy {
     async function _onMsgMcrSetReady(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrSetReady.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrSetReady, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrSetReady, data);
         }
     }
 
     export function reqMcrSetSelfSettings(data: NetMessage.MsgMcrSetSelfSettings.IC): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMcrSetSelfSettings: { c: data },
         });
     }
     async function _onMsgMcrSetSelfSettings(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrSetSelfSettings.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrSetSelfSettings, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrSetSelfSettings, data);
         }
     }
 
     export function reqMcrGetRoomStaticInfo(roomId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMcrGetRoomStaticInfo: { c: {
                 roomId,
             }, },
@@ -147,18 +147,18 @@ namespace Twns.MultiCustomRoom.McrProxy {
         const data      = e.data as NetMessage.MsgMcrGetRoomStaticInfo.IS;
         const roomId    = data.roomId;
         if (!data.errorCode) {
-            McrModel.setRoomStaticInfo(Helpers.getExisted(roomId), data.roomStaticInfo ?? null);
-            Notify.dispatch(NotifyType.MsgMcrGetRoomStaticInfo, data);
+            McrModel.setRoomStaticInfo(Twns.Helpers.getExisted(roomId), data.roomStaticInfo ?? null);
+            Twns.Notify.dispatch(NotifyType.MsgMcrGetRoomStaticInfo, data);
         } else {
             if (roomId != null) {
                 McrModel.setRoomStaticInfo(roomId, data.roomStaticInfo ?? null);
             }
-            Notify.dispatch(NotifyType.MsgMcrGetRoomStaticInfoFailed, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrGetRoomStaticInfoFailed, data);
         }
     }
 
     export function reqMcrGetRoomPlayerInfo(roomId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMcrGetRoomPlayerInfo: { c: {
                 roomId,
             }, },
@@ -168,18 +168,18 @@ namespace Twns.MultiCustomRoom.McrProxy {
         const data      = e.data as NetMessage.MsgMcrGetRoomPlayerInfo.IS;
         const roomId    = data.roomId;
         if (!data.errorCode) {
-            McrModel.setRoomPlayerInfo(Helpers.getExisted(roomId), data.roomPlayerInfo ?? null);
-            Notify.dispatch(NotifyType.MsgMcrGetRoomPlayerInfo, data);
+            McrModel.setRoomPlayerInfo(Twns.Helpers.getExisted(roomId), data.roomPlayerInfo ?? null);
+            Twns.Notify.dispatch(NotifyType.MsgMcrGetRoomPlayerInfo, data);
         } else {
             if (roomId != null) {
                 McrModel.setRoomPlayerInfo(roomId, data.roomPlayerInfo ?? null);
             }
-            Notify.dispatch(NotifyType.MsgMcrGetRoomPlayerInfoFailed, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrGetRoomPlayerInfoFailed, data);
         }
     }
 
     export function reqMcrStartWar(roomId: number): void {
-        NetManager.send({
+        Twns.Net.NetManager.send({
             MsgMcrStartWar: { c: {
                 roomId,
             }, },
@@ -188,7 +188,7 @@ namespace Twns.MultiCustomRoom.McrProxy {
     function _onMsgMcrStartWar(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrStartWar.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrStartWar, data);
+            Twns.Notify.dispatch(NotifyType.MsgMcrStartWar, data);
         }
     }
 }

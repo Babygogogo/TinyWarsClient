@@ -12,7 +12,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
@@ -29,13 +29,13 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WatchWar {
-    import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForWarCommonMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
-    import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import LangTextType                             = Twns.Lang.LangTextType;
+    import ClientErrorCode                          = Twns.ClientErrorCode;
+    import NotifyType                               = Twns.Notify.NotifyType;
 
     export type OpenDataForWwDeleteWatcherWarsPanel = void;
     export class WwDeleteWatcherWarsPanel extends TwnsUiPanel.UiPanel<OpenDataForWwDeleteWatcherWarsPanel> {
@@ -79,7 +79,7 @@ namespace Twns.WatchWar {
             this._updateGroupWarList();
             this._updateComponentsForTargetWarInfo();
 
-            WwProxy.reqMpwWatchWatchedWarIdArray();
+            Twns.WatchWar.WwProxy.reqMpwWatchWatchedWarIdArray();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -87,7 +87,7 @@ namespace Twns.WatchWar {
 
         public async setAndReviseSelectedWarId(warId: number, needScroll: boolean): Promise<void> {
             const listMap   = this._listWar;
-            const index     = Helpers.getExisted(listMap.getRandomIndex(v => v.warId === warId));
+            const index     = Twns.Helpers.getExisted(listMap.getRandomIndex(v => v.warId === warId));
             listMap.setSelectedIndex(index);
             this._updateComponentsForTargetWarInfo();
 
@@ -114,14 +114,14 @@ namespace Twns.WatchWar {
 
         private _onNotifyMpwWatchDeleteWatcher(): void {
             FloatText.show(Lang.getText(LangTextType.A0062));
-            WwProxy.reqMpwWatchWatchedWarIdArray();
+            Twns.WatchWar.WwProxy.reqMpwWatchWatchedWarIdArray();
         }
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WwMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WwMainMenuPanel, void 0);
         }
 
         private async _onTouchedBtnNextStep(): Promise<void> {
@@ -134,7 +134,7 @@ namespace Twns.WatchWar {
             if (await WatchWar.WwModel.getWatchIncomingInfo(warId) == null) {
                 FloatText.show(Lang.getText(LangTextType.A0297));
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.WwDeleteWatcherDetailPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WwDeleteWatcherDetailPanel, {
                     warId,
                 });
             }
@@ -175,12 +175,12 @@ namespace Twns.WatchWar {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Twns.Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageClass   : Twns.Common.CommonWarPlayerInfoPage,
                     pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
@@ -190,7 +190,7 @@ namespace Twns.WatchWar {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageClass   : Twns.Common.CommonWarAdvancedSettingsPage,
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
@@ -247,62 +247,62 @@ namespace Twns.WatchWar {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupWarList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupWarList,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -331,7 +331,7 @@ namespace Twns.WatchWar {
 
         public onItemTapEvent(): void {
             const data = this._getData();
-            data.panel.setAndReviseSelectedWarId(Helpers.getExisted(data.warId, ClientErrorCode.WwMakeRequestWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
+            data.panel.setAndReviseSelectedWarId(Twns.Helpers.getExisted(data.warId, ClientErrorCode.WwMakeRequestWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
         }
 
         private _updateView(): void {
@@ -347,7 +347,7 @@ namespace Twns.WatchWar {
             const labelName = this._labelName;
             labelName.text  = ``;
 
-            const warSettings = await MultiPlayerWar.MpwModel.getWarSettings(Helpers.getExisted(this._getData().warId));
+            const warSettings = await MultiPlayerWar.MpwModel.getWarSettings(Twns.Helpers.getExisted(this._getData().warId));
             if (warSettings != null) {
                 const { settingsForMfw, settingsForCcw, settingsForMcw, settingsForMrw } = warSettings;
                 if (settingsForMfw) {
@@ -359,7 +359,7 @@ namespace Twns.WatchWar {
                         labelName.text = warName;
                     } else {
                         const mapId     = settingsForMcw.mapId;
-                        labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                        labelName.text  = (mapId == null ? null : await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
                     }
 
                 } else if (settingsForCcw) {
@@ -368,12 +368,12 @@ namespace Twns.WatchWar {
                         labelName.text = warName;
                     } else {
                         const mapId     = settingsForCcw.mapId;
-                        labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                        labelName.text  = (mapId == null ? null : await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
                     }
 
                 } else if (settingsForMrw) {
                     const mapId     = settingsForMrw.mapId;
-                    labelName.text  = (mapId == null ? null : await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+                    labelName.text  = (mapId == null ? null : await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
                 }
             }
         }

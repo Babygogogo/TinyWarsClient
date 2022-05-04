@@ -9,8 +9,8 @@
 // import Types                from "./Types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace CompatibilityHelpers {
-    import LangTextType     = TwnsLangTextType.LangTextType;
+namespace Twns.CompatibilityHelpers {
+    import LangTextType     = Twns.Lang.LangTextType;
 
     export function init(): void {
         initListenerForWindowOnError();
@@ -118,10 +118,10 @@ namespace CompatibilityHelpers {
     }
 
     function showErrorText(text: string): void {
-        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonErrorPanel, {
+        PanelHelpers.open(PanelHelpers.PanelDict.CommonErrorPanel, {
             content: text,
         });
-        ChatProxy.reqChatAddMessage(
+        Chat.ChatProxy.reqChatAddMessage(
             text.substr(0, CommonConstants.ChatErrorMaxLength),
             Types.ChatMessageToCategory.Private,
             CommonConstants.AdminUserId,

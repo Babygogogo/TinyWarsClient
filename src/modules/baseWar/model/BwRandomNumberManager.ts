@@ -5,9 +5,9 @@
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwRandomNumberManager {
+namespace Twns.BaseWar {
     import ISeedRandomState = CommonProto.Structure.ISeedRandomState;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
 
     export class BwRandomNumberManager {
         private _isNeedSeedRandom?          : boolean;
@@ -16,20 +16,20 @@ namespace TwnsBwRandomNumberManager {
 
         public init({ isNeedSeedRandom, initialState, currentState }: {
             isNeedSeedRandom: boolean;
-            initialState    : Types.Undefinable<ISeedRandomState>;
-            currentState    : Types.Undefinable<ISeedRandomState>;
+            initialState    : Twns.Types.Undefinable<ISeedRandomState>;
+            currentState    : Twns.Types.Undefinable<ISeedRandomState>;
         }): void {
             this._setIsNeedSeedRandom(isNeedSeedRandom);
 
             if (isNeedSeedRandom) {
                 // TODO: check if the states are valid.
                 if (initialState == null) {
-                    throw Helpers.newError(`Empty initialState.`);
+                    throw Twns.Helpers.newError(`Empty initialState.`);
                 }
                 this._setSeedRandomInitialState(initialState);
 
                 if (currentState == null) {
-                    throw Helpers.newError(`Empty currentState.`);
+                    throw Twns.Helpers.newError(`Empty currentState.`);
                 }
                 this._setRandomNumberGenerator(new Math.seedrandom("", { state: currentState }));
             }
@@ -39,14 +39,14 @@ namespace TwnsBwRandomNumberManager {
             this._isNeedSeedRandom = isNeedReplay;
         }
         public getIsNeedSeedRandom(): boolean {
-            return Helpers.getExisted(this._isNeedSeedRandom);
+            return Twns.Helpers.getExisted(this._isNeedSeedRandom);
         }
 
         private _setRandomNumberGenerator(generator: seedrandom.prng): void {
             this._randomNumberGenerator = generator;
         }
         private _getRandomNumberGenerator(): seedrandom.prng | null {
-            return Helpers.getDefined(this._randomNumberGenerator, ClientErrorCode.BwRandomNumberManager_GetRandomNumberGenerator_00);
+            return Twns.Helpers.getDefined(this._randomNumberGenerator, ClientErrorCode.BwRandomNumberManager_GetRandomNumberGenerator_00);
         }
 
         public getRandomNumber(): number {
@@ -54,18 +54,18 @@ namespace TwnsBwRandomNumberManager {
                 return Math.random();
             }
 
-            return Helpers.getExisted(this._getRandomNumberGenerator())();
+            return Twns.Helpers.getExisted(this._getRandomNumberGenerator())();
         }
 
         public getSeedRandomCurrentState(): CommonProto.Structure.ISeedRandomState {
-            return Helpers.getExisted(this._getRandomNumberGenerator()).state();
+            return Twns.Helpers.getExisted(this._getRandomNumberGenerator()).state();
         }
 
         private _setSeedRandomInitialState(state: CommonProto.Structure.ISeedRandomState): void {
             this._seedRandomInitialState = state;
         }
         public getSeedRandomInitialState(): CommonProto.Structure.ISeedRandomState | null {
-            return Helpers.getDefined(this._seedRandomInitialState, ClientErrorCode.BwRandomNumberManager_GetSeedRandomInitialState_00);
+            return Twns.Helpers.getDefined(this._seedRandomInitialState, ClientErrorCode.BwRandomNumberManager_GetSeedRandomInitialState_00);
         }
     }
 }

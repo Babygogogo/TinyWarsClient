@@ -4,7 +4,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -16,8 +16,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import LangTextType         = Twns.Lang.LangTextType;
+    import NotifyType           = Twns.Notify.NotifyType;
 
     export type OpenDataForMeConfirmSaveMapPanel = void;
     export class MeConfirmSaveMapPanel extends TwnsUiPanel.UiPanel<OpenDataForMeConfirmSaveMapPanel> {
@@ -54,7 +54,7 @@ namespace Twns.MapEditor {
             const groupNeedReview       = this._groupNeedReview;
             const labelReviewDescTitle  = this._labelReviewDescTitle;
             const labelReviewDesc       = this._labelReviewDesc;
-            const mapRawData            = Helpers.getExisted(MeModel.getWar()).serializeForMap();
+            const mapRawData            = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).serializeForMap();
             const criticalErrorCode     = await MapEditor.MeHelpers.getCriticalErrorCodeForMapRawData(mapRawData);
             if (criticalErrorCode) {
                 btnConfirm.visible              = false;
@@ -64,7 +64,7 @@ namespace Twns.MapEditor {
                 return;
             }
 
-            if (mapRawData.warRuleArray?.some(v => !checkIsValidAvailability(v.ruleAvailability))) {
+            if (mapRawData.templateWarRuleArray?.some(v => !checkIsValidAvailability(v.ruleAvailability))) {
                 this._mapRawData                = mapRawData;
                 btnConfirm.visible              = true;
                 groupNeedReview.visible         = false;
@@ -90,28 +90,28 @@ namespace Twns.MapEditor {
 
         private _onTouchedBtnConfirm(): void {
             const needReview            = this._needReview;
-            const slotIndex             = Helpers.getExisted(MeModel.getWar()).getMapSlotIndex();
-            const mapRawData            = Helpers.getExisted(this._mapRawData);
-            const reviewingSlotIndex    = MeModel.getReviewingMapSlotIndex();
+            const slotIndex             = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getMapSlotIndex();
+            const mapRawData            = Twns.Helpers.getExisted(this._mapRawData);
+            const reviewingSlotIndex    = Twns.MapEditor.MeModel.getReviewingMapSlotIndex();
             if (reviewingSlotIndex === slotIndex) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0245),
                     callback: () => {
-                        MeProxy.reqMeSubmitMap(slotIndex, mapRawData, needReview);
+                        Twns.MapEditor.MeProxy.reqMeSubmitMap(slotIndex, mapRawData, needReview);
                         this.close();
                     },
                 });
             } else {
                 if ((needReview) && (reviewingSlotIndex != null)) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                         content : Lang.getText(LangTextType.A0084),
                         callback: () => {
-                            MeProxy.reqMeSubmitMap(slotIndex, mapRawData, needReview);
+                            Twns.MapEditor.MeProxy.reqMeSubmitMap(slotIndex, mapRawData, needReview);
                             this.close();
                         },
                     });
                 } else {
-                    MeProxy.reqMeSubmitMap(slotIndex, mapRawData, needReview);
+                    Twns.MapEditor.MeProxy.reqMeSubmitMap(slotIndex, mapRawData, needReview);
                     this.close();
                 }
             }
@@ -140,7 +140,7 @@ namespace Twns.MapEditor {
         }
     }
 
-    function checkIsValidAvailability(ruleAvailability: Types.Undefinable<CommonProto.WarRule.IRuleAvailability>): boolean {
+    function checkIsValidAvailability(ruleAvailability: Twns.Types.Undefinable<CommonProto.WarRule.IRuleAvailability>): boolean {
         if (ruleAvailability == null) {
             return false;
         }
