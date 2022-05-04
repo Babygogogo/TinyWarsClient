@@ -5,7 +5,7 @@
 // import Types                            from "../../tools/helpers/Types";
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-// import Twns.Notify                   from "../../tools/notify/NotifyType";
+// import Notify                   from "../../tools/notify/NotifyType";
 // import ProtoTypes                       from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiImage                      from "../../tools/ui/UiImage";
@@ -17,8 +17,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapManagement {
-    import LangTextType                 = Twns.Lang.LangTextType;
-    import NotifyType                   = Twns.Notify.NotifyType;
+    import LangTextType                 = Lang.LangTextType;
+    import NotifyType                   = Notify.NotifyType;
     import ITemplateWarRule             = CommonProto.WarRule.ITemplateWarRule;
     import IDataForPlayerRule           = CommonProto.WarRule.IDataForPlayerRule;
 
@@ -115,7 +115,7 @@ namespace Twns.MapManagement {
             } else {
                 const oldIndex      = this.getSelectedIndex();
                 this._selectedIndex = newIndex;
-                this._selectedRule  = Twns.Helpers.deepClone(dataList[newIndex].templateWarRule);
+                this._selectedRule  = Helpers.deepClone(dataList[newIndex].templateWarRule);
                 if ((oldIndex != null) && (dataList[oldIndex])) {
                     this._listWarRule.updateSingleData(oldIndex, dataList[oldIndex]);
                 }
@@ -157,8 +157,8 @@ namespace Twns.MapManagement {
         private _onTouchedBtnSetAvailability(): void {
             const ruleId = this._selectedRule?.ruleId;
             if (ruleId != null) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmSetWarRuleAvailabilityPanel, {
-                    mapId   : Twns.Helpers.getExisted(this._getOpenData().mapRawData.mapId),
+                PanelHelpers.open(PanelHelpers.PanelDict.MmSetWarRuleAvailabilityPanel, {
+                    mapId   : Helpers.getExisted(this._getOpenData().mapRawData.mapId),
                     ruleId,
                 });
             }
@@ -167,10 +167,10 @@ namespace Twns.MapManagement {
         private _onTouchedBtnSubmitRule(): void {
             const templateWarRule = this._selectedRule;
             if (templateWarRule) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content     : Lang.getText(LangTextType.A0282),
                     callback    : () => {
-                        Twns.WarMap.WarMapProxy.reqMmAddWarRule(Twns.Helpers.getExisted(this._getOpenData().mapRawData.mapId), templateWarRule);
+                        WarMap.WarMapProxy.reqMmAddWarRule(Helpers.getExisted(this._getOpenData().mapRawData.mapId), templateWarRule);
                     },
                 });
             }
@@ -185,17 +185,17 @@ namespace Twns.MapManagement {
                     return;
                 }
 
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0292),
                     callback: () => {
-                        Twns.WarMap.WarMapProxy.reqMmDeleteWarRule(Twns.Helpers.getExisted(mapRawData.mapId), ruleId);
+                        WarMap.WarMapProxy.reqMmDeleteWarRule(Helpers.getExisted(mapRawData.mapId), ruleId);
                     }
                 });
             }
         }
 
         private _onTouchedBtnHelpHasFog(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
                 title  : Lang.getText(LangTextType.B0020),
                 content: Lang.getText(LangTextType.R0002),
             });
@@ -220,7 +220,7 @@ namespace Twns.MapManagement {
         private _onTouchedBtnModifyRuleName(): void {
             const templateWarRule = this._selectedRule;
             if (templateWarRule) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonModifyWarRuleNamePanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonModifyWarRuleNamePanel, {
                     templateWarRule,
                     callback        : () => {
                         this._updateLabelRuleName(templateWarRule);
@@ -232,7 +232,7 @@ namespace Twns.MapManagement {
         private _onTouchedBtnAvailabilityMcw(): void {
             const templateWarRule = this._selectedRule;
             if (templateWarRule) {
-                const ruleAvailability  = Twns.Helpers.getExisted(templateWarRule.ruleAvailability);
+                const ruleAvailability  = Helpers.getExisted(templateWarRule.ruleAvailability);
                 ruleAvailability.canMcw = !ruleAvailability.canMcw;
                 this._updateImgAvailabilityMcw(templateWarRule);
             }
@@ -241,7 +241,7 @@ namespace Twns.MapManagement {
         private _onTouchedBtnAvailabilityScw(): void {
             const templateWarRule = this._selectedRule;
             if (templateWarRule) {
-                const ruleAvailability  = Twns.Helpers.getExisted(templateWarRule.ruleAvailability);
+                const ruleAvailability  = Helpers.getExisted(templateWarRule.ruleAvailability);
                 ruleAvailability.canScw = !ruleAvailability.canScw;
                 this._updateImgAvailabilityScw(templateWarRule);
             }
@@ -250,7 +250,7 @@ namespace Twns.MapManagement {
         private _onTouchedBtnAvailabilityMrw(): void {
             const templateWarRule = this._selectedRule;
             if (templateWarRule) {
-                const ruleAvailability  = Twns.Helpers.getExisted(templateWarRule.ruleAvailability);
+                const ruleAvailability  = Helpers.getExisted(templateWarRule.ruleAvailability);
                 ruleAvailability.canMrw = !ruleAvailability.canMrw;
                 this._updateImgAvailabilityMrw(templateWarRule);
             }
@@ -259,7 +259,7 @@ namespace Twns.MapManagement {
         private _onTouchedBtnAvailabilityCcw(): void {
             const templateWarRule = this._selectedRule;
             if (templateWarRule) {
-                const ruleAvailability  = Twns.Helpers.getExisted(templateWarRule.ruleAvailability);
+                const ruleAvailability  = Helpers.getExisted(templateWarRule.ruleAvailability);
                 const canCcw            = !ruleAvailability.canCcw;
                 ruleAvailability.canCcw = canCcw;
                 this._updateImgAvailabilityCcw(templateWarRule);
@@ -276,7 +276,7 @@ namespace Twns.MapManagement {
         private _onTouchedBtnAvailabilitySrw(): void {
             const templateWarRule = this._selectedRule;
             if (templateWarRule) {
-                const ruleAvailability  = Twns.Helpers.getExisted(templateWarRule.ruleAvailability);
+                const ruleAvailability  = Helpers.getExisted(templateWarRule.ruleAvailability);
                 ruleAvailability.canSrw = !ruleAvailability.canSrw;
                 this._updateImgAvailabilitySrw(templateWarRule);
             }
@@ -285,7 +285,7 @@ namespace Twns.MapManagement {
         private _onTouchedBtnAddWarEvent(): void {
             const templateWarRule = this._selectedRule;
             if (templateWarRule) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeAddWarEventToRulePanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.MeAddWarEventToRulePanel, {
                     templateWarRule,
                     warEventArray   : this._getOpenData().mapRawData.warEventFullData?.eventArray ?? [],
                 });
@@ -354,7 +354,7 @@ namespace Twns.MapManagement {
             this._labelRuleName.text = Lang.concatLanguageTextList(templateWarRule?.ruleNameArray) || Lang.getText(LangTextType.B0001);
         }
         private _updateLabelWeather(templateWarRule: ITemplateWarRule | null): void {
-            this._labelWeather.text = Lang.getWeatherName(templateWarRule ? WarHelpers.WarRuleHelpers.getDefaultWeatherType(templateWarRule) : Twns.Types.WeatherType.Clear);
+            this._labelWeather.text = Lang.getWeatherName(templateWarRule ? WarHelpers.WarRuleHelpers.getDefaultWeatherType(templateWarRule) : Types.WeatherType.Clear);
         }
         private _updateImgHasFog(templateWarRule: ITemplateWarRule | null): void {
             this._imgHasFog.visible = templateWarRule ? !!templateWarRule.ruleForGlobalParams?.hasFogByDefault : false;
@@ -439,7 +439,7 @@ namespace Twns.MapManagement {
         protected _onDataChanged(): void {
             const data              = this._getData();
             const index             = data.index;
-            this.currentState       = index === data.panel.getSelectedIndex() ? Twns.Types.UiState.Down : Twns.Types.UiState.Up;
+            this.currentState       = index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelName.text    = `${Lang.getText(LangTextType.B0318)} ${index}`;
         }
 
@@ -481,6 +481,8 @@ namespace Twns.MapManagement {
                 this._createDataPlayerIndex(templateWarRule, playerRule, isReviewing),
                 this._createDataTeamIndex(templateWarRule, playerRule, isReviewing),
                 await this._createDataBannedCoIdArray(templateWarRule, playerRule, isReviewing),
+                await this._createDataBannedUnitTypeArray(templateWarRule, playerRule, isReviewing),
+                this._createDataCanActivateCoSkill(templateWarRule, playerRule, isReviewing),
                 this._createDataInitialFund(templateWarRule, playerRule, isReviewing),
                 this._createDataIncomeMultiplier(templateWarRule, playerRule, isReviewing),
                 this._createDataEnergyAddPctOnLoadCo(templateWarRule, playerRule, isReviewing),
@@ -499,7 +501,7 @@ namespace Twns.MapManagement {
         private _createDataPlayerIndex(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0018),
-                infoText                : Lang.getPlayerForceName(Twns.Helpers.getExisted(playerRule.playerIndex)),
+                infoText                : Lang.getPlayerForceName(Helpers.getExisted(playerRule.playerIndex)),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : null,
             };
@@ -507,12 +509,12 @@ namespace Twns.MapManagement {
         private _createDataTeamIndex(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0019),
-                infoText                : Lang.getPlayerTeamName(Twns.Helpers.getExisted(playerRule.teamIndex)) ?? CommonConstants.ErrorTextForUndefined,
+                infoText                : Lang.getPlayerTeamName(Helpers.getExisted(playerRule.teamIndex)) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : isReviewing
                     ? null
                     : () => {
-                        WarHelpers.WarRuleHelpers.tickTeamIndex(templateWarRule, Twns.Helpers.getExisted(playerRule.playerIndex));
+                        WarHelpers.WarRuleHelpers.tickTeamIndex(templateWarRule, Helpers.getExisted(playerRule.playerIndex));
                         this._updateView();
                     },
             };
@@ -525,9 +527,9 @@ namespace Twns.MapManagement {
                 infoText                : `${bannedCoIdArray.length}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonBanCoPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonBanCoPanel, {
                         gameConfig,
-                        playerIndex         : Twns.Helpers.getExisted(playerRule.playerIndex),
+                        playerIndex         : Helpers.getExisted(playerRule.playerIndex),
                         bannedCoIdArray,
                         fullCoIdArray       : gameConfig.getEnabledCoArray().map(v => v.coId),
                         maxBanCount         : null,
@@ -537,14 +539,49 @@ namespace Twns.MapManagement {
                                 playerRule.bannedCoIdArray = [...bannedCoIdSet];
                                 this._updateView();
                             }
-                            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonBanCoPanel);
+                            PanelHelpers.close(PanelHelpers.PanelDict.CommonBanCoPanel);
                         },
                     });
                 },
             };
         }
+        private async _createDataBannedUnitTypeArray(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): Promise<DataForInfoRenderer> {
+            const currentBannedUnitTypeArray    = playerRule.bannedUnitTypeArray ?? [];
+            const gameConfig                    = await Config.ConfigManager.getLatestGameConfig();
+            return {
+                titleText               : Lang.getText(LangTextType.B0895),
+                infoText                : `${currentBannedUnitTypeArray.length}`,
+                infoColor               : 0xFFFFFF,
+                callbackOnTouchedTitle  : () => {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseUnitTypePanel, {
+                        currentUnitTypeArray    : currentBannedUnitTypeArray,
+                        gameConfig,
+                        callbackOnConfirm       : bannedUnitTypeArray => {
+                            if (!isReviewing) {
+                                WarHelpers.WarRuleHelpers.setBannedUnitTypeArray(templateWarRule, Helpers.getExisted(playerRule.playerIndex), bannedUnitTypeArray);
+                                this._updateView();
+                            }
+                        },
+                    });
+                },
+            };
+        }
+        private _createDataCanActivateCoSkill(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            const canActivate = playerRule.canActivateCoSkill !== false;
+            return {
+                titleText               : Lang.getText(LangTextType.B0897),
+                infoText                : Lang.getText(canActivate ? LangTextType.B0012 : LangTextType.B0013),
+                infoColor               : canActivate ? 0xFFFFFF : 0xFF0000,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        WarHelpers.WarRuleHelpers.setCanActivateCoSkill(templateWarRule, Helpers.getExisted(playerRule.playerIndex), !canActivate);
+                        this._updateView();
+                    },
+            };
+        }
         private _createDataInitialFund(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = Twns.Helpers.getExisted(playerRule.initialFund);
+            const currValue = Helpers.getExisted(playerRule.initialFund);
             return {
                 titleText               : Lang.getText(LangTextType.B0178),
                 infoText                : `${currValue}`,
@@ -554,14 +591,14 @@ namespace Twns.MapManagement {
                     : () => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                         const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0178),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                WarHelpers.WarRuleHelpers.setInitialFund(templateWarRule, Twns.Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                                WarHelpers.WarRuleHelpers.setInitialFund(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
                                 this._updateView();
                             },
                         });
@@ -569,7 +606,7 @@ namespace Twns.MapManagement {
             };
         }
         private _createDataIncomeMultiplier(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = Twns.Helpers.getExisted(playerRule.incomeMultiplier);
+            const currValue = Helpers.getExisted(playerRule.incomeMultiplier);
             return {
                 titleText               : Lang.getText(LangTextType.B0179),
                 infoText                : `${currValue}%`,
@@ -579,14 +616,14 @@ namespace Twns.MapManagement {
                     : () => {
                         const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
                         const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0179),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                WarHelpers.WarRuleHelpers.setIncomeMultiplier(templateWarRule, Twns.Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                                WarHelpers.WarRuleHelpers.setIncomeMultiplier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
                                 this._updateView();
                             },
                         });
@@ -594,7 +631,7 @@ namespace Twns.MapManagement {
             };
         }
         private _createDataEnergyAddPctOnLoadCo(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = Twns.Helpers.getExisted(playerRule.energyAddPctOnLoadCo);
+            const currValue = Helpers.getExisted(playerRule.energyAddPctOnLoadCo);
             return {
                 titleText               : Lang.getText(LangTextType.B0180),
                 infoText                : `${currValue}%`,
@@ -604,14 +641,14 @@ namespace Twns.MapManagement {
                     : () => {
                         const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
                         const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0180),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                WarHelpers.WarRuleHelpers.setEnergyAddPctOnLoadCo(templateWarRule, Twns.Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                                WarHelpers.WarRuleHelpers.setEnergyAddPctOnLoadCo(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
                                 this._updateView();
                             },
                         });
@@ -619,7 +656,7 @@ namespace Twns.MapManagement {
             };
         }
         private _createDataEnergyGrowthMultiplier(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = Twns.Helpers.getExisted(playerRule.energyGrowthMultiplier);
+            const currValue = Helpers.getExisted(playerRule.energyGrowthMultiplier);
             return {
                 titleText               : Lang.getText(LangTextType.B0181),
                 infoText                : `${currValue}%`,
@@ -629,14 +666,14 @@ namespace Twns.MapManagement {
                     : () => {
                         const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
                         const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0181),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                WarHelpers.WarRuleHelpers.setEnergyGrowthMultiplier(templateWarRule, Twns.Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                                WarHelpers.WarRuleHelpers.setEnergyGrowthMultiplier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
                                 this._updateView();
                             },
                         });
@@ -644,7 +681,7 @@ namespace Twns.MapManagement {
             };
         }
         private _createDataMoveRangeModifier(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = Twns.Helpers.getExisted(playerRule.moveRangeModifier);
+            const currValue = Helpers.getExisted(playerRule.moveRangeModifier);
             return {
                 titleText               : Lang.getText(LangTextType.B0182),
                 infoText                : `${currValue}`,
@@ -654,14 +691,14 @@ namespace Twns.MapManagement {
                     : () => {
                         const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
                         const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0182),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                WarHelpers.WarRuleHelpers.setMoveRangeModifier(templateWarRule, Twns.Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                                WarHelpers.WarRuleHelpers.setMoveRangeModifier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
                                 this._updateView();
                             },
                         });
@@ -669,7 +706,7 @@ namespace Twns.MapManagement {
             };
         }
         private _createDataAttackPowerModifier(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = Twns.Helpers.getExisted(playerRule.attackPowerModifier);
+            const currValue = Helpers.getExisted(playerRule.attackPowerModifier);
             return {
                 titleText               : Lang.getText(LangTextType.B0183),
                 infoText                : `${currValue}%`,
@@ -679,14 +716,14 @@ namespace Twns.MapManagement {
                     : () => {
                         const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
                         const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0183),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                WarHelpers.WarRuleHelpers.setAttackPowerModifier(templateWarRule, Twns.Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                                WarHelpers.WarRuleHelpers.setAttackPowerModifier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
                                 this._updateView();
                             },
                         });
@@ -694,7 +731,7 @@ namespace Twns.MapManagement {
             };
         }
         private _createDataVisionRangeModifier(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = Twns.Helpers.getExisted(playerRule.visionRangeModifier);
+            const currValue = Helpers.getExisted(playerRule.visionRangeModifier);
             return {
                 titleText               : Lang.getText(LangTextType.B0184),
                 infoText                : `${currValue}`,
@@ -704,14 +741,14 @@ namespace Twns.MapManagement {
                     : () => {
                         const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
                         const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0184),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                WarHelpers.WarRuleHelpers.setVisionRangeModifier(templateWarRule, Twns.Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                                WarHelpers.WarRuleHelpers.setVisionRangeModifier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
                                 this._updateView();
                             },
                         });
@@ -719,8 +756,8 @@ namespace Twns.MapManagement {
             };
         }
         private _createDataLuckLowerLimit(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue     = Twns.Helpers.getExisted(playerRule.luckLowerLimit);
-            const playerIndex   = Twns.Helpers.getExisted(playerRule.playerIndex);
+            const currValue     = Helpers.getExisted(playerRule.luckLowerLimit);
+            const playerIndex   = Helpers.getExisted(playerRule.playerIndex);
             return {
                 titleText               : Lang.getText(LangTextType.B0189),
                 infoText                : `${currValue}%`,
@@ -730,7 +767,7 @@ namespace Twns.MapManagement {
                     : () => {
                         const minValue      = CommonConstants.WarRuleLuckMinLimit;
                         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0189),
                             currentValue    : currValue,
                             minValue,
@@ -752,8 +789,8 @@ namespace Twns.MapManagement {
             };
         }
         private _createDataLuckUpperLimit(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue     = Twns.Helpers.getExisted(playerRule.luckUpperLimit);
-            const playerIndex   = Twns.Helpers.getExisted(playerRule.playerIndex);
+            const currValue     = Helpers.getExisted(playerRule.luckUpperLimit);
+            const playerIndex   = Helpers.getExisted(playerRule.playerIndex);
             return {
                 titleText               : Lang.getText(LangTextType.B0190),
                 infoText                : `${currValue}%`,
@@ -763,7 +800,7 @@ namespace Twns.MapManagement {
                     : () => {
                         const minValue      = CommonConstants.WarRuleLuckMinLimit;
                         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0190),
                             currentValue    : currValue,
                             minValue,
@@ -798,7 +835,7 @@ namespace Twns.MapManagement {
                             return;
                         }
 
-                        const playerIndex = Twns.Helpers.getExisted(playerRule.playerIndex);
+                        const playerIndex = Helpers.getExisted(playerRule.playerIndex);
                         if (isControlledByAi) {
                             WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, playerIndex, null);
                         } else {
@@ -827,12 +864,12 @@ namespace Twns.MapManagement {
                         for (const cfg of gameConfig.getEnabledCoArray()) {
                             coIdArray.push(cfg.coId);
                         }
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseCoPanel, {
                             gameConfig,
                             currentCoId         : playerRule.fixedCoIdInCcw ?? null,
                             availableCoIdArray  : coIdArray,
                             callbackOnConfirm   : (newCoId: number) => {
-                                WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, Twns.Helpers.getExisted(playerRule.playerIndex), newCoId);
+                                WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, Helpers.getExisted(playerRule.playerIndex), newCoId);
                                 this._updateView();
                             },
                         });
@@ -853,7 +890,7 @@ namespace Twns.MapManagement {
                             return;
                         }
 
-                        const playerIndex = Twns.Helpers.getExisted(playerRule.playerIndex);
+                        const playerIndex = Helpers.getExisted(playerRule.playerIndex);
                         if (isControlledByAi) {
                             WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, playerIndex, null);
                         } else {
@@ -882,12 +919,12 @@ namespace Twns.MapManagement {
                         for (const cfg of gameConfig.getEnabledCoArray()) {
                             coIdArray.push(cfg.coId);
                         }
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseCoPanel, {
                             gameConfig,
                             currentCoId         : playerRule.fixedCoIdInSrw ?? null,
                             availableCoIdArray  : coIdArray,
                             callbackOnConfirm   : (newCoId: number) => {
-                                WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, Twns.Helpers.getExisted(playerRule.playerIndex), newCoId);
+                                WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, Helpers.getExisted(playerRule.playerIndex), newCoId);
                                 this._updateView();
                             },
                         });
@@ -898,7 +935,7 @@ namespace Twns.MapManagement {
 
     type DataForWarEventRenderer = {
         panel               : MmWarRulePanel;
-        warEventFullData    : Twns.Types.Undefinable<CommonProto.Map.IWarEventFullData>;
+        warEventFullData    : Types.Undefinable<CommonProto.Map.IWarEventFullData>;
         warEventId          : number;
         templateWarRule     : ITemplateWarRule;
     };
@@ -927,21 +964,21 @@ namespace Twns.MapManagement {
             const data = this.data;
             if (data) {
                 WarHelpers.WarRuleHelpers.moveWarEventId(data.templateWarRule, data.warEventId, -1);
-                Twns.Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
+                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
         private _onTouchedBtnDown(): void {
             const data = this.data;
             if (data) {
                 WarHelpers.WarRuleHelpers.moveWarEventId(data.templateWarRule, data.warEventId, 1);
-                Twns.Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
+                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
         private _onTouchedBtnDelete(): void {
             const data = this.data;
             if (data) {
                 WarHelpers.WarRuleHelpers.deleteWarEventId(data.templateWarRule, data.warEventId);
-                Twns.Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
+                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
             }
         }
         private _onNotifyLanguageChanged(): void {

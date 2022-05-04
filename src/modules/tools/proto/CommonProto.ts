@@ -10426,6 +10426,9 @@ declare namespace CommonProto {
 
             /** DataForPlayerRule bannedUnitTypeArray */
             bannedUnitTypeArray?: (number[]|null);
+
+            /** DataForPlayerRule canActivateCoSkill */
+            canActivateCoSkill?: (boolean|null);
         }
 
         /** Represents a DataForPlayerRule. */
@@ -10481,6 +10484,9 @@ declare namespace CommonProto {
 
             /** DataForPlayerRule bannedUnitTypeArray. */
             public bannedUnitTypeArray: number[];
+
+            /** DataForPlayerRule canActivateCoSkill. */
+            public canActivateCoSkill: boolean;
 
             /**
              * Creates a new DataForPlayerRule instance using the specified properties.

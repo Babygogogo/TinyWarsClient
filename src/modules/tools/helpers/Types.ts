@@ -734,6 +734,7 @@ namespace Twns.Types {
         TeamIndex,
         BannedCoIdArray,
         BannedUnitTypeArray,
+        CanActivateCoSkill,
         InitialFund,
         IncomeMultiplier,
         EnergyAddPctOnLoadCo,

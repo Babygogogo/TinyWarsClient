@@ -76,6 +76,7 @@ namespace Twns.MultiFreeRoom {
                 { playerRuleType: PlayerRuleType.IncomeMultiplier },
                 { playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
                 { playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
+                { playerRuleType: PlayerRuleType.CanActivateCoSkill },
                 { playerRuleType: PlayerRuleType.MoveRangeModifier },
                 { playerRuleType: PlayerRuleType.AttackPowerModifier },
                 { playerRuleType: PlayerRuleType.VisionRangeModifier },
@@ -172,6 +173,7 @@ namespace Twns.MultiFreeRoom {
                 { playerIndex, playerRuleType: PlayerRuleType.IncomeMultiplier },
                 { playerIndex, playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
                 { playerIndex, playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
+                { playerIndex, playerRuleType: PlayerRuleType.CanActivateCoSkill },
                 { playerIndex, playerRuleType: PlayerRuleType.MoveRangeModifier },
                 { playerIndex, playerRuleType: PlayerRuleType.AttackPowerModifier },
                 { playerIndex, playerRuleType: PlayerRuleType.VisionRangeModifier },
@@ -209,6 +211,7 @@ namespace Twns.MultiFreeRoom {
                     case PlayerRuleType.IncomeMultiplier        : this._updateComponentsForValueAsIncomeMultiplier(playerIndex);        return;
                     case PlayerRuleType.EnergyAddPctOnLoadCo    : this._updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex);    return;
                     case PlayerRuleType.EnergyGrowthMultiplier  : this._updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex);  return;
+                    case PlayerRuleType.CanActivateCoSkill      : this._updateComponentsForValueAsCanActivateCoSkill(playerIndex);      return;
                     case PlayerRuleType.MoveRangeModifier       : this._updateComponentsForValueAsMoveRangeModifier(playerIndex);       return;
                     case PlayerRuleType.AttackPowerModifier     : this._updateComponentsForValueAsAttackPowerModifier(playerIndex);     return;
                     case PlayerRuleType.VisionRangeModifier     : this._updateComponentsForValueAsVisionRangeModifier(playerIndex);     return;
@@ -266,6 +269,13 @@ namespace Twns.MultiFreeRoom {
             const labelValue        = this._labelValue;
             labelValue.text         = currValue == null ? `` : `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
+        }
+        private _updateComponentsForValueAsCanActivateCoSkill(playerIndex: number): void {
+            const warData               = MultiFreeRoom.MfrCreateModel.getInitialWarData();
+            const canActivateCoSkill    = WarHelpers.WarRuleHelpers.getEnergyGrowthMultiplier(Helpers.getExisted(warData.settingsForCommon?.instanceWarRule), playerIndex);
+            const labelValue            = this._labelValue;
+            labelValue.text             = Lang.getText(canActivateCoSkill ? LangTextType.B0012 : LangTextType.B0013);
+            labelValue.textColor        = canActivateCoSkill ? 0xFFFFFF : 0xFF0000;
         }
         private async _updateComponentsForValueAsMoveRangeModifier(playerIndex: number): Promise<void> {
             const warData           = MultiFreeRoom.MfrCreateModel.getInitialWarData();

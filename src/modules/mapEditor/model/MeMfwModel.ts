@@ -30,26 +30,26 @@ namespace Twns.MapEditor.MeMfwModel {
 
     export async function resetData(mapRawData: IMapRawData, warData: ISerialWar): Promise<void> {
         setMapRawData(mapRawData);
-        setWarData(Twns.Helpers.deepClone(warData));
+        setWarData(Helpers.deepClone(warData));
     }
 
     export function checkIsValidWarData(): boolean {
         const teamIndexSet = new Set<number>();
-        for (const player of Twns.Helpers.getExisted(getInstanceWarRule().ruleForPlayers?.playerRuleDataArray)) {
-            teamIndexSet.add(Twns.Helpers.getExisted(player.teamIndex));
+        for (const player of Helpers.getExisted(getInstanceWarRule().ruleForPlayers?.playerRuleDataArray)) {
+            teamIndexSet.add(Helpers.getExisted(player.teamIndex));
         }
         return teamIndexSet.size > 1;
     }
 
     export function getInstanceWarRule(): CommonProto.WarRule.IInstanceWarRule {
-        return Twns.Helpers.getExisted(getWarData().settingsForCommon?.instanceWarRule);
+        return Helpers.getExisted(getWarData().settingsForCommon?.instanceWarRule);
     }
 
     export function reviseInstanceWarRuleForAi(): void {
         setCustomWarRuleId();
 
-        const playerRuleArray = Twns.Helpers.getExisted(getInstanceWarRule().ruleForPlayers?.playerRuleDataArray);
-        for (const player of Twns.Helpers.getExisted(getWarData().playerManager?.players)) {
+        const playerRuleArray = Helpers.getExisted(getInstanceWarRule().ruleForPlayers?.playerRuleDataArray);
+        for (const player of Helpers.getExisted(getWarData().playerManager?.players)) {
             const playerRule = playerRuleArray.find(v => v.playerIndex === player.playerIndex);
             if (playerRule == null) {
                 continue;
@@ -61,18 +61,18 @@ namespace Twns.MapEditor.MeMfwModel {
     }
 
     async function resetDataByTemplateWarRuleId(templateWarRuleId: number | null): Promise<void> {
-        const settingsForCommon     = Twns.Helpers.getExisted(getWarData().settingsForCommon);
+        const settingsForCommon     = Helpers.getExisted(getWarData().settingsForCommon);
         const mapRawData            = getMapRawData();
-        const playersCountUnneutral = Twns.Helpers.getExisted(mapRawData.playersCountUnneutral);
+        const playersCountUnneutral = Helpers.getExisted(mapRawData.playersCountUnneutral);
 
         if (templateWarRuleId == null) {
             settingsForCommon.instanceWarRule = WarHelpers.WarRuleHelpers.createDefaultInstanceWarRule(playersCountUnneutral);
         } else {
-            const templateWarRule               = Twns.Helpers.getExisted(mapRawData.templateWarRuleArray?.find(v => v.ruleId === templateWarRuleId));
+            const templateWarRule               = Helpers.getExisted(mapRawData.templateWarRuleArray?.find(v => v.ruleId === templateWarRuleId));
             settingsForCommon.instanceWarRule   = WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRule, mapRawData.warEventFullData);
         }
 
-        const gameConfig = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion));
+        const gameConfig = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
             setCoId(playerIndex, WarHelpers.WarRuleHelpers.getRandomCoIdWithSettingsForCommon(settingsForCommon.instanceWarRule, playerIndex, gameConfig));
         }
@@ -86,11 +86,11 @@ namespace Twns.MapEditor.MeMfwModel {
     }
     export async function tickTemplateWarRuleId(): Promise<void> {
         const currTemplateWarRuleId = getTemplateWarRuleId();
-        const templateWarRuleArray  = Twns.Helpers.getExisted(getMapRawData().templateWarRuleArray);
+        const templateWarRuleArray  = Helpers.getExisted(getMapRawData().templateWarRuleArray);
         if (currTemplateWarRuleId == null) {
-            await resetDataByTemplateWarRuleId(Twns.Helpers.getExisted(templateWarRuleArray[0].ruleId));
+            await resetDataByTemplateWarRuleId(Helpers.getExisted(templateWarRuleArray[0].ruleId));
         } else {
-            const newTemplateWarRuleId = Twns.Helpers.getNonNullElements(templateWarRuleArray.map(v => v.ruleId)).sort((v1, v2) => {
+            const newTemplateWarRuleId = Helpers.getNonNullElements(templateWarRuleArray.map(v => v.ruleId)).sort((v1, v2) => {
                 if (v1 > currTemplateWarRuleId) {
                     return (v2 <= currTemplateWarRuleId) ? -1 : v1 - v2;
                 } else {
@@ -102,14 +102,14 @@ namespace Twns.MapEditor.MeMfwModel {
     }
 
     function getPlayer(playerIndex: number): CommonProto.WarSerialization.ISerialPlayer {
-        return Twns.Helpers.getExisted(getWarData().playerManager?.players?.find(v => v.playerIndex === playerIndex));
+        return Helpers.getExisted(getWarData().playerManager?.players?.find(v => v.playerIndex === playerIndex));
     }
 
     export function setCoId(playerIndex: number, coId: number): void {
         getPlayer(playerIndex).coId = coId;
     }
     export function getCoId(playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayer(playerIndex).coId);
+        return Helpers.getExisted(getPlayer(playerIndex).coId);
     }
 
     function setUnitAndTileSkinId(playerIndex: number, skinId: number): void {
@@ -125,21 +125,21 @@ namespace Twns.MapEditor.MeMfwModel {
         setUnitAndTileSkinId(playerIndex, newSkinId);
     }
     export function getUnitAndTileSkinId(playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayer(playerIndex).unitAndTileSkinId);
+        return Helpers.getExisted(getPlayer(playerIndex).unitAndTileSkinId);
     }
 
     export function setIsControlledByPlayer(playerIndex: number, isByPlayer: boolean): void {
-        getPlayer(playerIndex).userId = isByPlayer ? Twns.User.UserModel.getSelfUserId() : null;
+        getPlayer(playerIndex).userId = isByPlayer ? User.UserModel.getSelfUserId() : null;
     }
     export function getIsControlledByHuman(playerIndex: number): boolean {
         return getPlayer(playerIndex).userId != null;
     }
 
     export function setHasFog(hasFog: boolean): void {
-        Twns.Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
+        Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
     }
     export function getHasFog(): boolean {
-        return Twns.Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault);
+        return Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault);
     }
 
     export function tickTeamIndex(playerIndex: number): void {
@@ -175,16 +175,6 @@ namespace Twns.MapEditor.MeMfwModel {
     }
     export function getEnergyGrowthMultiplier(playerIndex: number): number {
         return WarHelpers.WarRuleHelpers.getEnergyGrowthMultiplier(getInstanceWarRule(), playerIndex);
-    }
-
-    export function getBannedCoIdArray(playerIndex: number): number[] | null {
-        return WarHelpers.WarRuleHelpers.getBannedCoIdArray(getInstanceWarRule(), playerIndex);
-    }
-    export function addBannedCoId(playerIndex: number, coId: number): void {
-        WarHelpers.WarRuleHelpers.addBannedCoId(getInstanceWarRule(), playerIndex, coId);
-    }
-    export function deleteBannedCoId(playerIndex: number, coId: number): void {
-        WarHelpers.WarRuleHelpers.deleteBannedCoId(getInstanceWarRule(), playerIndex, coId);
     }
 
     export function setLuckLowerLimit(playerIndex: number, limit: number): void {

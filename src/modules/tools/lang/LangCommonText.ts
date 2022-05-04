@@ -4926,6 +4926,10 @@ namespace Twns.Lang {
             `无可用部队`,
             `No available units`,
         ],
+        [LangTextType.B0897]: [
+            `可使用CO主动技`,
+            `Can Use CO Power`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [

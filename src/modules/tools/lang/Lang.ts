@@ -470,6 +470,7 @@ namespace Twns.Lang {
             case PlayerRuleType.TeamIndex               : return getText(LangTextType.B0019);
             case PlayerRuleType.BannedCoIdArray         : return getText(LangTextType.B0403);
             case PlayerRuleType.BannedUnitTypeArray     : return getText(LangTextType.B0895);
+            case PlayerRuleType.CanActivateCoSkill      : return getText(LangTextType.B0897);
             case PlayerRuleType.InitialFund             : return getText(LangTextType.B0178);
             case PlayerRuleType.IncomeMultiplier        : return getText(LangTextType.B0179);
             case PlayerRuleType.EnergyAddPctOnLoadCo    : return getText(LangTextType.B0180);

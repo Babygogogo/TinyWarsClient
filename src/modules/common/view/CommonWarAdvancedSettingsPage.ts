@@ -213,6 +213,8 @@ namespace Twns.Common {
                 this._updateViewAsBannedCoIdArray();
             } else if (playerRuleType === PlayerRuleType.BannedUnitTypeArray) {
                 this._updateViewAsBannedUnitTypeArray();
+            } else if (playerRuleType === PlayerRuleType.CanActivateCoSkill) {
+                this._updateViewAsCanActivateCoSkill();
             } else if (playerRuleType === PlayerRuleType.InitialFund) {
                 this._updateViewAsInitialFund();
             } else if (playerRuleType === PlayerRuleType.IncomeMultiplier) {
@@ -256,6 +258,12 @@ namespace Twns.Common {
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
+        }
+        private _updateViewAsCanActivateCoSkill(): void {
+            const currValue         = this._getData().playerRule.canActivateCoSkill !== false;
+            const labelValue        = this._labelValue;
+            labelValue.text         = Lang.getText(currValue ? LangTextType.B0012 : LangTextType.B0013);
+            labelValue.textColor    = currValue ? 0xFFFFFF : 0xFF0000;
         }
         private _updateViewAsInitialFund(): void {
             const currValue         = Helpers.getExisted(this._getData().playerRule.initialFund);
@@ -345,6 +353,7 @@ namespace Twns.Common {
             PlayerRuleType.IncomeMultiplier,
             PlayerRuleType.EnergyAddPctOnLoadCo,
             PlayerRuleType.EnergyGrowthMultiplier,
+            PlayerRuleType.CanActivateCoSkill,
             PlayerRuleType.MoveRangeModifier,
             PlayerRuleType.AttackPowerModifier,
             PlayerRuleType.VisionRangeModifier,

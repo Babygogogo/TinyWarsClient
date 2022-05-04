@@ -113,6 +113,7 @@ namespace Twns.CoopCustomRoom {
                 { playerRuleType: PlayerRuleType.IncomeMultiplier },
                 { playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
                 { playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
+                { playerRuleType: PlayerRuleType.CanActivateCoSkill },
                 { playerRuleType: PlayerRuleType.MoveRangeModifier },
                 { playerRuleType: PlayerRuleType.AttackPowerModifier },
                 { playerRuleType: PlayerRuleType.VisionRangeModifier },
@@ -202,6 +203,7 @@ namespace Twns.CoopCustomRoom {
                 { playerIndex, playerRuleType: PlayerRuleType.IncomeMultiplier },
                 { playerIndex, playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
                 { playerIndex, playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
+                { playerIndex, playerRuleType: PlayerRuleType.CanActivateCoSkill },
                 { playerIndex, playerRuleType: PlayerRuleType.MoveRangeModifier },
                 { playerIndex, playerRuleType: PlayerRuleType.AttackPowerModifier },
                 { playerIndex, playerRuleType: PlayerRuleType.VisionRangeModifier },
@@ -302,6 +304,7 @@ namespace Twns.CoopCustomRoom {
                     case PlayerRuleType.IncomeMultiplier        : this._updateComponentsForValueAsIncomeMultiplier(playerIndex);        return;
                     case PlayerRuleType.EnergyAddPctOnLoadCo    : this._updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex);    return;
                     case PlayerRuleType.EnergyGrowthMultiplier  : this._updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex);  return;
+                    case PlayerRuleType.CanActivateCoSkill      : this._updateComponentsForValueAsCanActivateCoSkill(playerIndex);      return;
                     case PlayerRuleType.MoveRangeModifier       : this._updateComponentsForValueAsMoveRangeModifier(playerIndex);       return;
                     case PlayerRuleType.AttackPowerModifier     : this._updateComponentsForValueAsAttackPowerModifier(playerIndex);     return;
                     case PlayerRuleType.VisionRangeModifier     : this._updateComponentsForValueAsVisionRangeModifier(playerIndex);     return;
@@ -478,6 +481,21 @@ namespace Twns.CoopCustomRoom {
                 } else {
                     CoopCustomRoom.CcrCreateModel.setEnergyGrowthMultiplier(playerIndex, value);
                 }
+            };
+        }
+        private _updateComponentsForValueAsCanActivateCoSkill(playerIndex: number): void {
+            this._inputValue.visible            = false;
+            this._callbackForFocusOutInputValue = null;
+
+            const instanceWarRule               = CoopCustomRoom.CcrCreateModel.getInstanceWarRule();
+            const canActivateCoSkill            = WarHelpers.WarRuleHelpers.getCanActivateCoSkill(instanceWarRule, playerIndex);
+            const labelValue                    = this._labelValue;
+            labelValue.visible                  = true;
+            labelValue.text                     = Lang.getText(canActivateCoSkill ? LangTextType.B0012 : LangTextType.B0013);
+            labelValue.textColor                = canActivateCoSkill ? 0xFFFFFF : 0xFF0000;
+            this._callbackForTouchLabelValue    = () => {
+                WarHelpers.WarRuleHelpers.setCanActivateCoSkill(instanceWarRule, playerIndex, !canActivateCoSkill);
+                this._updateComponentsForValue();
             };
         }
         private _updateComponentsForValueAsMoveRangeModifier(playerIndex: number): void {

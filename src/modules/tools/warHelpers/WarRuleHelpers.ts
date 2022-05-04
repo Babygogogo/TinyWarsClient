@@ -29,6 +29,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         attackPowerModifier     : 0,
         bannedCoIdArray         : [],
         bannedUnitTypeArray     : [],
+        canActivateCoSkill      : true,
         energyGrowthMultiplier  : 100,
         energyAddPctOnLoadCo    : 0,
         initialFund             : 0,
@@ -131,6 +132,13 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         getPlayerRule(baseWarRule, playerIndex).luckUpperLimit = value;
     }
 
+    export function getCanActivateCoSkill(baseWarRule: BaseWarRule, playerIndex: number): boolean {
+        return getPlayerRule(baseWarRule, playerIndex).canActivateCoSkill !== false;
+    }
+    export function setCanActivateCoSkill(baseWarRule: BaseWarRule, playerIndex: number, value: boolean): void {
+        getPlayerRule(baseWarRule, playerIndex).canActivateCoSkill = value;
+    }
+
     export function getBannedUnitTypeArray(baseWarRule: BaseWarRule, playerIndex: number): Types.UnitType[] | null {
         return getPlayerRule(baseWarRule, playerIndex).bannedUnitTypeArray ?? null;
     }
@@ -162,22 +170,6 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         return gameConfig.getEnabledCoArray()
             .map(v => v.coId)
             .filter(v => !bannedCoIdSet.has(v));
-    }
-    export function addBannedCoId(baseWarRule: BaseWarRule, playerIndex: number, coId: number): void {
-        const playerRule = getPlayerRule(baseWarRule, playerIndex);
-        if (playerRule.bannedCoIdArray == null) {
-            playerRule.bannedCoIdArray = [coId];
-        } else {
-            const bannedCoIdArray = playerRule.bannedCoIdArray;
-            if (bannedCoIdArray.indexOf(coId) < 0) {
-                bannedCoIdArray.push(coId);
-            }
-        }
-    }
-    export function deleteBannedCoId(baseWarRule: BaseWarRule, playerIndex: number, coId: number): void {
-        const playerRule        = getPlayerRule(baseWarRule, playerIndex);
-        const bannedCoIdArray   = Helpers.getExisted(playerRule.bannedCoIdArray);
-        Helpers.deleteElementFromArray(bannedCoIdArray, coId);
     }
     export function setBannedCoIdArray(baseWarRule: BaseWarRule, playerIndex: number, coIdSet: Set<number>): void {
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
@@ -365,6 +357,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             luckUpperLimit          : CommonConstants.WarRuleLuckDefaultUpperLimit,
             bannedCoIdArray         : [],
             bannedUnitTypeArray     : [],
+            canActivateCoSkill      : true,
         };
     }
 

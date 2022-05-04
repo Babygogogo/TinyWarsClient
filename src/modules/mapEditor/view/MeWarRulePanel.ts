@@ -684,6 +684,7 @@ namespace Twns.MapEditor {
                 this._createDataTeamIndex(templateWarRule, playerRule, isReviewing),
                 this._createDataBannedCoIdArray(templateWarRule, playerRule, isReviewing),
                 this._createDataBannedUnitTypeArray(templateWarRule, playerRule, isReviewing, gameConfig),
+                this._createDataCanActivateCoSkill(templateWarRule, playerRule, isReviewing),
                 this._createDataInitialFund(templateWarRule, playerRule, isReviewing),
                 this._createDataIncomeMultiplier(templateWarRule, playerRule, isReviewing),
                 this._createDataEnergyAddPctOnLoadCo(templateWarRule, playerRule, isReviewing),
@@ -753,6 +754,20 @@ namespace Twns.MapEditor {
                                 this._updateView();
                             },
                         });
+                    },
+            };
+        }
+        private _createDataCanActivateCoSkill(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            const canActivate = playerRule.canActivateCoSkill !== false;
+            return {
+                titleText               : Lang.getText(LangTextType.B0897),
+                infoText                : Lang.getText(canActivate ? LangTextType.B0012 : LangTextType.B0013),
+                infoColor               : canActivate ? 0xFFFFFF : 0xFF0000,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        WarHelpers.WarRuleHelpers.setCanActivateCoSkill(templateWarRule, Helpers.getExisted(playerRule.playerIndex), !canActivate);
+                        this._updateView();
                     },
             };
         }

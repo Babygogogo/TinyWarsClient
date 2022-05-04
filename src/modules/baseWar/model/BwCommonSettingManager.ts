@@ -108,6 +108,9 @@ namespace Twns.BaseWar {
         public getSettingsBannedUnitTypeArray(playerIndex: number): Types.UnitType[] | null {
             return WarHelpers.WarRuleHelpers.getBannedUnitTypeArray(this.getInstanceWarRule(), playerIndex);
         }
+        public getSettingsCanActivateCoSkill(playerIndex: number): boolean {
+            return WarHelpers.WarRuleHelpers.getCanActivateCoSkill(this.getInstanceWarRule(), playerIndex);
+        }
         public getTeamIndex(playerIndex: number): number {
             return WarHelpers.WarRuleHelpers.getTeamIndex(Helpers.getExisted(this.getSettingsForCommon().instanceWarRule), playerIndex);
         }

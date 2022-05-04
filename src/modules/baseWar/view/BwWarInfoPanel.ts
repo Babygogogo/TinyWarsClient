@@ -43,6 +43,7 @@ namespace Twns.BaseWar {
         TimeLimit,
         BannedUnitTypeArray,
         InitialFund,
+        CanActivateCoSkill,
         IncomeMultiplier,
         EnergyAddPctOnLoadCo,
         EnergyGrowthMultiplier,
@@ -348,6 +349,8 @@ namespace Twns.BaseWar {
                 this._modifyAsEnergyAddPctOnLoadCo();
             } else if (infoType === InfoType.EnergyGrowthMultiplier) {
                 this._modifyAsEnergyGrowthMultiplier();
+            } else if (infoType === InfoType.CanActivateCoSkill) {
+                this._modifyAsCanActivateCoSkill();
             } else if (infoType === InfoType.MoveRangeModifier) {
                 this._modifyAsMoveRangeModifier();
             } else if (infoType === InfoType.AttackPowerModifier) {
@@ -532,6 +535,12 @@ namespace Twns.BaseWar {
                 },
             });
         }
+        private _modifyAsCanActivateCoSkill(): void {
+            const { war, playerIndex }  = this._getData();
+            const currValue             = war.getCommonSettingManager().getSettingsCanActivateCoSkill(playerIndex);
+            WarHelpers.WarRuleHelpers.setCanActivateCoSkill(war.getInstanceWarRule(), playerIndex, !currValue);
+            this._updateView();
+        }
         private _modifyAsMoveRangeModifier(): void {
             const { playerIndex, war }  = this._getData();
             const currValue             = war.getCommonSettingManager().getSettingsMoveRangeModifier(playerIndex);
@@ -664,6 +673,8 @@ namespace Twns.BaseWar {
                 this._updateViewAsEnergyAddPctOnLoadCo();
             } else if (infoType === InfoType.EnergyGrowthMultiplier) {
                 this._updateViewAsEnergyGrowthMultiplier();
+            } else if (infoType === InfoType.CanActivateCoSkill) {
+                this._updateViewAsCanActivateCoSkill();
             } else if (infoType === InfoType.MoveRangeModifier) {
                 this._updateViewAsMoveRangeModifier();
             } else if (infoType === InfoType.AttackPowerModifier) {
@@ -875,6 +886,18 @@ namespace Twns.BaseWar {
             this._btnModify.visible = canModify;
             this._imgModify.visible = canModify;
         }
+        private _updateViewAsCanActivateCoSkill(): void {
+            const data              = this._getData();
+            const war               = data.war;
+            const currValue         = WarHelpers.WarRuleHelpers.getCanActivateCoSkill(war.getInstanceWarRule(), data.playerIndex);
+            const labelValue        = this._labelValue;
+            labelValue.text         = Lang.getText(currValue ? LangTextType.B0012 : LangTextType.B0013);
+            labelValue.textColor    = currValue ? 0xFFFFFF : 0xFF0000;
+
+            const canModify         = checkCanModifyPlayerInfo(war);
+            this._btnModify.visible = canModify;
+            this._imgModify.visible = canModify;
+        }
         private _updateViewAsMoveRangeModifier(): void {
             const data              = this._getData();
             const war               = data.war;
@@ -962,6 +985,7 @@ namespace Twns.BaseWar {
             InfoType.IncomeMultiplier,
             InfoType.EnergyAddPctOnLoadCo,
             InfoType.EnergyGrowthMultiplier,
+            InfoType.CanActivateCoSkill,
             InfoType.MoveRangeModifier,
             InfoType.AttackPowerModifier,
             InfoType.VisionRangeModifier,
@@ -984,6 +1008,7 @@ namespace Twns.BaseWar {
             case InfoType.IncomeMultiplier          : return Lang.getText(LangTextType.B0179);
             case InfoType.EnergyAddPctOnLoadCo      : return Lang.getText(LangTextType.B0180);
             case InfoType.EnergyGrowthMultiplier    : return Lang.getText(LangTextType.B0181);
+            case InfoType.CanActivateCoSkill        : return Lang.getText(LangTextType.B0897);
             case InfoType.MoveRangeModifier         : return Lang.getText(LangTextType.B0182);
             case InfoType.AttackPowerModifier       : return Lang.getText(LangTextType.B0183);
             case InfoType.VisionRangeModifier       : return Lang.getText(LangTextType.B0184);
