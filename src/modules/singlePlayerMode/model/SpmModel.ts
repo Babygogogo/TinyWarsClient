@@ -10,7 +10,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SinglePlayerMode.SpmModel {
     import NotifyType               = Twns.Notify.NotifyType;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
     import NetMessage               = CommonProto.NetMessage;
     import SpmWarSaveSlotData       = Twns.Types.SpmWarSaveSlotData;
     import ISerialWar               = CommonProto.WarSerialization.ISerialWar;

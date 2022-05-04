@@ -1,6 +1,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsClientErrorCode {
+namespace Twns {
     // eslint-disable-next-line no-shadow
     export const enum ClientErrorCode {
         NoError             = 0,

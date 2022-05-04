@@ -3,8 +3,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Lang {
-    import LangTextType = TwnsLangTextType.LangTextType;
-
     export const LangCommonText: { [type: number]: string [] } = {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Long strings.
@@ -4919,6 +4917,14 @@ namespace Twns.Lang {
         [LangTextType.B0894]: [
             `无描述`,
             `No Description`,
+        ],
+        [LangTextType.B0895]: [
+            `禁用部队`,
+            `Banned Units`,
+        ],
+        [LangTextType.B0896]: [
+            `无可用部队`,
+            `No available units`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

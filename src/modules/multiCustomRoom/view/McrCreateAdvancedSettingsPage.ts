@@ -10,7 +10,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -21,9 +21,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiCustomRoom {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = Twns.Notify.NotifyType;
-    import PlayerRuleType       = Twns.Types.PlayerRuleType;
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
+    import PlayerRuleType       = Types.PlayerRuleType;
 
     export class McrCreateAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
         private readonly _scroller!     : eui.Scroller;
@@ -80,7 +80,7 @@ namespace Twns.MultiCustomRoom {
             MultiCustomRoom.McrCreateModel.resetDataByTemplateWarRuleId(this._initialWarRuleId);
         }
         private _onTouchedBtnCustomize(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     MultiCustomRoom.McrCreateModel.setCustomWarRuleId();
@@ -107,6 +107,7 @@ namespace Twns.MultiCustomRoom {
             this._listSetting.bindData([
                 { playerRuleType: PlayerRuleType.TeamIndex },
                 { playerRuleType: PlayerRuleType.BannedCoIdArray },
+                { playerRuleType: PlayerRuleType.BannedUnitTypeArray },
                 { playerRuleType: PlayerRuleType.InitialFund },
                 { playerRuleType: PlayerRuleType.IncomeMultiplier },
                 { playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
@@ -120,7 +121,7 @@ namespace Twns.MultiCustomRoom {
         }
 
         private async _updateListPlayer(): Promise<void> {
-            const playersCount  = Twns.Helpers.getExisted((await MultiCustomRoom.McrCreateModel.getMapRawData()).playersCountUnneutral);
+            const playersCount  = Helpers.getExisted((await MultiCustomRoom.McrCreateModel.getMapRawData()).playersCountUnneutral);
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -158,7 +159,7 @@ namespace Twns.MultiCustomRoom {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
             if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
                     title   : `CO`,
                     content : Lang.getText(LangTextType.R0004),
                 });
@@ -195,6 +196,7 @@ namespace Twns.MultiCustomRoom {
             return [
                 { playerIndex, playerRuleType: PlayerRuleType.TeamIndex },
                 { playerIndex, playerRuleType: PlayerRuleType.BannedCoIdArray },
+                { playerIndex, playerRuleType: PlayerRuleType.BannedUnitTypeArray },
                 { playerIndex, playerRuleType: PlayerRuleType.InitialFund },
                 { playerIndex, playerRuleType: PlayerRuleType.IncomeMultiplier },
                 { playerIndex, playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
@@ -249,7 +251,7 @@ namespace Twns.MultiCustomRoom {
         }
 
         private _onTouchedBtnCustom(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     MultiCustomRoom.McrCreateModel.setCustomWarRuleId();
@@ -288,6 +290,7 @@ namespace Twns.MultiCustomRoom {
                 switch (data.playerRuleType) {
                     case PlayerRuleType.TeamIndex               : this._updateComponentsForValueAsTeamIndex(playerIndex);               return;
                     case PlayerRuleType.BannedCoIdArray         : this._updateComponentsForValueAsBannedCoIdArray(playerIndex);         return;
+                    case PlayerRuleType.BannedUnitTypeArray     : this._updateComponentsForValueAsBannedUnitTypeArray(playerIndex);     return;
                     case PlayerRuleType.InitialFund             : this._updateComponentsForValueAsInitialFund(playerIndex);             return;
                     case PlayerRuleType.IncomeMultiplier        : this._updateComponentsForValueAsIncomeMultiplier(playerIndex);        return;
                     case PlayerRuleType.EnergyAddPctOnLoadCo    : this._updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex);    return;
@@ -322,7 +325,7 @@ namespace Twns.MultiCustomRoom {
             labelValue.visible                  = true;
             labelValue.text                     = `${currValue}`;
             labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
-            this._callbackForTouchLabelValue    = () => Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonBanCoPanel, {
+            this._callbackForTouchLabelValue    = () => PanelHelpers.open(PanelHelpers.PanelDict.CommonBanCoPanel, {
                 playerIndex,
                 gameConfig,
                 fullCoIdArray       : gameConfig.getEnabledCoArray().map(v => v.coId),
@@ -332,13 +335,13 @@ namespace Twns.MultiCustomRoom {
                 callbackOnConfirm   : (bannedCoIdSet) => {
                     const callback = () => {
                         MultiCustomRoom.McrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
-                        Twns.Notify.dispatch(NotifyType.McrCreateBannedCoIdArrayChanged);
-                        Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonBanCoPanel);
+                        Notify.dispatch(NotifyType.McrCreateBannedCoIdArrayChanged);
+                        PanelHelpers.close(PanelHelpers.PanelDict.CommonBanCoPanel);
                     };
                     if ((selfCoId == null) || (!bannedCoIdSet.has(selfCoId))) {
                         callback();
                     } else {
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0057),
                             callback: () => {
                                 MultiCustomRoom.McrCreateModel.setSelfCoId(CommonConstants.CoEmptyId);
@@ -348,6 +351,27 @@ namespace Twns.MultiCustomRoom {
                     }
                 },
             });
+        }
+        private _updateComponentsForValueAsBannedUnitTypeArray(playerIndex: number): void {
+            this._inputValue.visible            = false;
+            this._callbackForFocusOutInputValue = null;
+
+            const currentBannedUnitTypeArray    = MultiCustomRoom.McrCreateModel.getBannedUnitTypeArray(playerIndex) ?? [];
+            const labelValue                    = this._labelValue;
+            const currValue                     = currentBannedUnitTypeArray.length;
+            labelValue.visible                  = true;
+            labelValue.text                     = `${currValue}`;
+            labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
+            this._callbackForTouchLabelValue    = () => {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseUnitTypePanel, {
+                    currentUnitTypeArray    : currentBannedUnitTypeArray,
+                    gameConfig              : MultiCustomRoom.McrCreateModel.getGameConfig(),
+                    callbackOnConfirm       : bannedUnitTypeArray => {
+                        MultiCustomRoom.McrCreateModel.setBannedUnitTypeArray(playerIndex, bannedUnitTypeArray);
+                        this._updateComponentsForValue();
+                    },
+                });
+            };
         }
         private _updateComponentsForValueAsInitialFund(playerIndex: number): void {
             this._labelValue.visible            = false;

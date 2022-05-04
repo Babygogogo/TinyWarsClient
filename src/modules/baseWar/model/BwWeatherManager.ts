@@ -2,8 +2,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
     import WeatherType              = Twns.Types.WeatherType;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import ClientErrorCode          = Twns.ClientErrorCode;
+    import LangTextType             = Twns.Lang.LangTextType;
     import ISerialWeatherManager    = CommonProto.WarSerialization.ISerialWeatherManager;
 
     export class BwWeatherManager {

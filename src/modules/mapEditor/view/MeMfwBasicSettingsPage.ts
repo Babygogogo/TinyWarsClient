@@ -16,7 +16,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
     import NotifyType               = Twns.Notify.NotifyType;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
 
     export class MeMfwBasicSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
         private readonly _btnMapNameTitle!      : TwnsUiButton.UiButton;

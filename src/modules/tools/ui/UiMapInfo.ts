@@ -25,7 +25,7 @@
 namespace TwnsUiMapInfo {
     import NotifyType       = Twns.Notify.NotifyType;
     import TileType         = Twns.Types.TileType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import LangTextType     = Twns.Lang.LangTextType;
 
     type DataForUiMapInfo = {
         mapInfo?    : {

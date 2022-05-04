@@ -49,7 +49,7 @@ namespace Twns.MapEditor {
     import UnitType                 = Twns.Types.UnitType;
     import TileBaseType             = Twns.Types.TileBaseType;
     import TileObjectType           = Twns.Types.TileObjectType;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
 
     // eslint-disable-next-line no-shadow
     enum TwnsMeWarMenuType {

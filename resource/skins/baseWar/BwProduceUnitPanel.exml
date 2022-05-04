@@ -45,6 +45,7 @@
                 </e:layout>
             </e:List>
         </TwnsUiScrollList:UiScrollList>
+        <TwnsUiLabel:UiLabel id="_labelNoUnit" text="Label" horizontalCenter="0" verticalCenter="-20" />
         <e:Group bottom="20" right="20">
             <TwnsUiButton:UiButton id="_btnDetail" label="详细信息" width="120"
                                    skinName="Skins.Component.Button.ButtonBlue002" height="30" x="360" y="0" />

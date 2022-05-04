@@ -8,9 +8,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import ISettingsForCommon   = CommonProto.WarSettings.ISettingsForCommon;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import GameConfig           = Config.GameConfig;
+    import ISettingsForCommon = CommonProto.WarSettings.ISettingsForCommon;
 
     export class BwCommonSettingManager {
         private _war?               : BwWar;
@@ -18,32 +16,32 @@ namespace Twns.BaseWar {
 
         public init({ settings, warType, playersCountUnneutral, gameConfig, mapSize }: {
             settings                : ISettingsForCommon;
-            warType                 : Twns.Types.WarType;
+            warType                 : Types.WarType;
             playersCountUnneutral   : number;
-            gameConfig              : GameConfig;
-            mapSize                 : Twns.Types.MapSize;
+            gameConfig              : Config.GameConfig;
+            mapSize                 : Types.MapSize;
         }): void {
             const configVersion = settings.configVersion;
             if (configVersion !== gameConfig.getVersion()) {
-                throw Twns.Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.BwCommonSettingManager_Init_00);
+                throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.BwCommonSettingManager_Init_00);
             }
 
             const errorCodeForWarRule = WarHelpers.WarRuleHelpers.getErrorCodeForInstanceWarRule({
-                instanceWarRule     : Twns.Helpers.getExisted(settings.instanceWarRule, ClientErrorCode.BwCommonSettingManager_Init_01),
+                instanceWarRule     : Helpers.getExisted(settings.instanceWarRule, ClientErrorCode.BwCommonSettingManager_Init_01),
                 gameConfig,
                 playersCountUnneutral,
                 warType,
                 mapSize,
             });
             if (errorCodeForWarRule) {
-                throw Twns.Helpers.newError(`Invalid warRule.`, errorCodeForWarRule);
+                throw Helpers.newError(`Invalid warRule.`, errorCodeForWarRule);
             }
 
             this._setSettingsForCommon(settings);
         }
 
         public serializeForCreateSfw(): ISettingsForCommon {
-            return Twns.Helpers.deepClone(this.getSettingsForCommon());
+            return Helpers.deepClone(this.getSettingsForCommon());
         }
         public serializeForCreateMfr(): ISettingsForCommon {
             return this.serializeForCreateSfw();
@@ -57,26 +55,26 @@ namespace Twns.BaseWar {
             this._war = war;
         }
         protected _getWar(): BwWar {
-            return Twns.Helpers.getExisted(this._war);
+            return Helpers.getExisted(this._war);
         }
 
         protected _setSettingsForCommon(settings: ISettingsForCommon): void {
             this._settingsForCommon = settings;
         }
         public getSettingsForCommon(): ISettingsForCommon {
-            return Twns.Helpers.getExisted(this._settingsForCommon, ClientErrorCode.BwCommonSettingManager_GetSettingsForCommon_00);
+            return Helpers.getExisted(this._settingsForCommon, ClientErrorCode.BwCommonSettingManager_GetSettingsForCommon_00);
         }
         public getTurnsLimit(): number {
             return this.getSettingsForCommon().turnsLimit ?? CommonConstants.WarMaxTurnsLimit;
         }
         public getInstanceWarRule(): CommonProto.WarRule.IInstanceWarRule {
-            return Twns.Helpers.getExisted(this.getSettingsForCommon().instanceWarRule);
+            return Helpers.getExisted(this.getSettingsForCommon().instanceWarRule);
         }
 
         public getSettingsHasFogByDefault(): boolean {
             return WarHelpers.WarRuleHelpers.getHasFogByDefault(this.getInstanceWarRule());
         }
-        public getSettingsDefaultWeatherType(): Twns.Types.WeatherType {
+        public getSettingsDefaultWeatherType(): Types.WeatherType {
             return WarHelpers.WarRuleHelpers.getDefaultWeatherType(this.getInstanceWarRule());
         }
 
@@ -107,8 +105,11 @@ namespace Twns.BaseWar {
         public getSettingsLuckUpperLimit(playerIndex: number): number {
             return WarHelpers.WarRuleHelpers.getLuckUpperLimit(this.getInstanceWarRule(), playerIndex);
         }
+        public getSettingsBannedUnitTypeArray(playerIndex: number): Types.UnitType[] | null {
+            return WarHelpers.WarRuleHelpers.getBannedUnitTypeArray(this.getInstanceWarRule(), playerIndex);
+        }
         public getTeamIndex(playerIndex: number): number {
-            return WarHelpers.WarRuleHelpers.getTeamIndex(Twns.Helpers.getExisted(this.getSettingsForCommon().instanceWarRule), playerIndex);
+            return WarHelpers.WarRuleHelpers.getTeamIndex(Helpers.getExisted(this.getSettingsForCommon().instanceWarRule), playerIndex);
         }
     }
 }

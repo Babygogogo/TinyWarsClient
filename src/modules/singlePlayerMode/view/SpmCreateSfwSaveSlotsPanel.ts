@@ -21,7 +21,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SinglePlayerMode {
-    import LangTextType         = TwnsLangTextType.LangTextType;
+    import LangTextType         = Twns.Lang.LangTextType;
     import NotifyType           = Twns.Notify.NotifyType;
     import ISerialWar           = CommonProto.WarSerialization.ISerialWar;
 

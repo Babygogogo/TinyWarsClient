@@ -26,7 +26,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
     import BwTile           = Twns.BaseWar.BwTile;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import LangTextType     = Twns.Lang.LangTextType;
     import NotifyType       = Twns.Notify.NotifyType;
     import UnitType         = Twns.Types.UnitType;
     import GameConfig       = Twns.Config.GameConfig;

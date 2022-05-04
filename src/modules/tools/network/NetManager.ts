@@ -13,8 +13,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Net.NetManager {
     import NotifyType       = Notify.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import LangTextType     = Lang.LangTextType;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Constants.

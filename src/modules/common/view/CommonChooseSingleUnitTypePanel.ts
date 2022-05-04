@@ -5,7 +5,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -16,10 +16,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common {
-    import NotifyType           = Twns.Notify.NotifyType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import UnitType             = Twns.Types.UnitType;
-    import GameConfig           = Twns.Config.GameConfig;
+    import NotifyType           = Notify.NotifyType;
+    import LangTextType         = Lang.LangTextType;
+    import UnitType             = Types.UnitType;
+    import GameConfig           = Config.GameConfig;
 
     export type OpenDataForCommonChooseSingleUnitTypePanel = {
         gameConfig      : GameConfig;
@@ -86,32 +86,32 @@ namespace Twns.Common {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -126,7 +126,7 @@ namespace Twns.Common {
         private readonly _conUnitView!  : eui.Group;
         private readonly _labelType!    : TwnsUiLabel.UiLabel;
 
-        private readonly _unitView      = new Twns.WarMap.WarMapUnitView();
+        private readonly _unitView      = new WarMap.WarMapUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -150,7 +150,7 @@ namespace Twns.Common {
             if (newUnitType !== data.currentUnitType) {
                 data.callback(newUnitType);
 
-                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonChooseSingleUnitTypePanel);
+                PanelHelpers.close(PanelHelpers.PanelDict.CommonChooseSingleUnitTypePanel);
             }
         }
 
@@ -158,7 +158,7 @@ namespace Twns.Common {
             this._updateComponentsForLanguage();
         }
         private _onNotifyUnitAnimationTick(): void {
-            this._unitView.updateOnAnimationTick(Twns.Timer.getUnitAnimationTickCount());
+            this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
         }
 
         private _updateComponentsForLanguage(): void {

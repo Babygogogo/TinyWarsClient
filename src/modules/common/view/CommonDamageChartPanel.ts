@@ -21,7 +21,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common {
     import NotifyType       = Twns.Notify.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import LangTextType     = Twns.Lang.LangTextType;
     import UnitType         = Twns.Types.UnitType;
     import TileType         = Twns.Types.TileType;
     import GameConfig       = Twns.Config.GameConfig;

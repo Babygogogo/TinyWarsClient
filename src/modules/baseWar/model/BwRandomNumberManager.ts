@@ -7,7 +7,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
     import ISeedRandomState = CommonProto.Structure.ISeedRandomState;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
 
     export class BwRandomNumberManager {
         private _isNeedSeedRandom?          : boolean;

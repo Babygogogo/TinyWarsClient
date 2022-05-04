@@ -18,7 +18,7 @@
 namespace Twns.WarEvent {
     import NotifyType       = Twns.Notify.NotifyType;
     import IDataForAddUnit  = CommonProto.WarEvent.WeaAddUnit.IDataForAddUnit;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import LangTextType     = Twns.Lang.LangTextType;
 
     export type OpenDataForWeActionAddUnitListPanel = {
         gameConfig      : Config.GameConfig;

@@ -4,7 +4,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
@@ -12,10 +12,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common {
-    import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = Twns.Notify.NotifyType;
-    import UnitType     = Twns.Types.UnitType;
-    import GameConfig   = Twns.Config.GameConfig;
+    import LangTextType = Lang.LangTextType;
+    import NotifyType   = Notify.NotifyType;
+    import UnitType     = Types.UnitType;
+    import GameConfig   = Config.GameConfig;
 
     export type OpenDataForCommonChooseUnitTypePanel = {
         gameConfig              : GameConfig;
@@ -85,14 +85,14 @@ namespace Twns.Common {
 
         private _updateListUnitType(): void {
             const dataArray : DataForUnitTypeRenderer[] = [];
-            for (const unitType of this._getOpenData().gameConfig.getUnitTypesByCategory(Twns.Types.UnitCategory.All) ?? []) {
+            for (const unitType of this._getOpenData().gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
                 dataArray.push({ unitType });
             }
 
             const unitTypeArray = this._getOpenData().currentUnitTypeArray;
             const list          = this._listUnitType;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => unitTypeArray.indexOf(v.unitType) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => unitTypeArray.indexOf(v.unitType) >= 0 ? i : null)));
         }
     }
 

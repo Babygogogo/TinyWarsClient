@@ -58,7 +58,7 @@ namespace CommonConstants {
     export const WarEventMaxConditionsPerMap                            = 100;
     export const WarEventMaxActionsPerMap                               = 100;
     export const WarEventMaxActionsPerEvent                             = 10;
-    export const WarEventMaxCallCountTotal                              = 100;
+    export const WarEventMaxCallCountTotal                              = 1000;
     export const WarEventMaxCallCountInPlayerTurn                       = 10;
     export const WarEventActionAddUnitMaxCount                          = 50;
     export const WarEventActionDialogueTextMaxLength                    = 300;
@@ -141,6 +141,7 @@ namespace CommonConstants {
     export const WarRuleInitialFundMinLimit                 = 0;
     export const WarRuleInitialFundMaxLimit                 = 1000000;
     export const WarRuleInitialFundDefault                  = 0;
+    export const WarRuleBannedUnitTypeCountDefault          = 0;
     export const WarRuleLuckMinLimit                        = -100;
     export const WarRuleLuckMaxLimit                        = 100;
     export const WarRuleLuckDefaultLowerLimit               = 0;

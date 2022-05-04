@@ -33,7 +33,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
     import McwWar                                   = MultiCustomWar.McwWar;
     import MfwWar                                   = MultiFreeWar.MfwWar;
     import MrwWar                                   = MultiRankWar.MrwWar;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import LangTextType                             = Twns.Lang.LangTextType;
     import NotifyType                               = Twns.Notify.NotifyType;
     import WarBasicSettingsType                     = Twns.Types.WarBasicSettingsType;
     import IWarActionContainer                      = CommonProto.WarAction.IWarActionContainer;

@@ -9,7 +9,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarMap.WarMapModel {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode      = Twns.ClientErrorCode;
     import IMapRawData          = CommonProto.Map.IMapRawData;
     import IMapBriefData        = CommonProto.Map.IMapBriefData;
     import IMapEditorData       = CommonProto.Map.IMapEditorData;

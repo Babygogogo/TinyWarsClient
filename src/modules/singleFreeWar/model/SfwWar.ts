@@ -11,7 +11,7 @@ namespace Twns.SingleFreeWar {
     import SpwWar           = Twns.SinglePlayerWar.SpwWar;
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForSfw  = CommonProto.WarSettings.ISettingsForSfw;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
     export class SfwWar extends SpwWar {

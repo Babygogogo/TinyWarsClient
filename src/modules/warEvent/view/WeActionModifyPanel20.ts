@@ -19,8 +19,8 @@ namespace Twns.WarEvent {
     import PlayerAliveState         = Twns.Types.PlayerAliveState;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import LangTextType             = Twns.Lang.LangTextType;
+    import ClientErrorCode          = Twns.ClientErrorCode;
     import BwWar                    = Twns.BaseWar.BwWar;
 
     export type OpenDataForWeActionModifyPanel20 = {

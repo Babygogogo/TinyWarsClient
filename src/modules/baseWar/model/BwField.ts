@@ -15,7 +15,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode      = Twns.ClientErrorCode;
     import ISerialField         = CommonProto.WarSerialization.ISerialField;
     import BwGridVisualEffect   = Twns.BaseWar.BwGridVisualEffect;
     import GameConfig           = Config.GameConfig;

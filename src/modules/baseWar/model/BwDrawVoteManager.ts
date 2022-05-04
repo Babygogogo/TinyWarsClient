@@ -9,7 +9,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
     import ISerialPlayerManager = CommonProto.WarSerialization.ISerialPlayerManager;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode      = Twns.ClientErrorCode;
     import BwWar                = Twns.BaseWar.BwWar;
 
     export class BwDrawVoteManager {

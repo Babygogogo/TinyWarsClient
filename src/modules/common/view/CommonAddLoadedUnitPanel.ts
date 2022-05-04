@@ -28,7 +28,7 @@ namespace Twns.Common {
     import NotifyType               = Twns.Notify.NotifyType;
     import ColorValue               = Twns.Types.ColorValue;
     import FocusEvent               = egret.FocusEvent;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
 
     export type OpenDataForCommonAddLoadedUnitPanel = {
         war         : Twns.BaseWar.BwWar;

@@ -258,7 +258,7 @@ namespace Twns.Types {
 
     export interface CustomError extends Error {
         isShown?    : boolean;
-        errorCode?  : TwnsClientErrorCode.ClientErrorCode;
+        errorCode?  : ClientErrorCode;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -733,6 +733,7 @@ namespace Twns.Types {
     export enum PlayerRuleType {
         TeamIndex,
         BannedCoIdArray,
+        BannedUnitTypeArray,
         InitialFund,
         IncomeMultiplier,
         EnergyAddPctOnLoadCo,

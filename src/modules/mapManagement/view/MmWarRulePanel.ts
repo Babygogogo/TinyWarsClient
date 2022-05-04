@@ -17,7 +17,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapManagement {
-    import LangTextType                 = TwnsLangTextType.LangTextType;
+    import LangTextType                 = Twns.Lang.LangTextType;
     import NotifyType                   = Twns.Notify.NotifyType;
     import ITemplateWarRule             = CommonProto.WarRule.ITemplateWarRule;
     import IDataForPlayerRule           = CommonProto.WarRule.IDataForPlayerRule;

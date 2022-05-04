@@ -17,19 +17,19 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiPlayerWar {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import TurnPhaseCode        = Twns.Types.TurnPhaseCode;
-    import UnitState            = Twns.Types.UnitActionState;
-    import GridIndex            = Twns.Types.GridIndex;
-    import State                = Twns.Types.ActionPlannerState;
-    import UnitActionType       = Twns.Types.UnitActionType;
-    import UnitType             = Twns.Types.UnitType;
+    import LangTextType         = Lang.LangTextType;
+    import TurnPhaseCode        = Types.TurnPhaseCode;
+    import UnitState            = Types.UnitActionState;
+    import GridIndex            = Types.GridIndex;
+    import State                = Types.ActionPlannerState;
+    import UnitActionType       = Types.UnitActionType;
+    import UnitType             = Types.UnitType;
 
-    export class MpwActionPlanner extends Twns.BaseWar.BwActionPlanner {
+    export class MpwActionPlanner extends BaseWar.BwActionPlanner {
         private _getPlayerIndexLoggedIn(): number | null {
             const war = this._getWar();
-            if (!(war instanceof Twns.MultiPlayerWar.MpwWar)) {
-                throw Twns.Helpers.newError(`Invalid war.`);
+            if (!(war instanceof MultiPlayerWar.MpwWar)) {
+                throw Helpers.newError(`Invalid war.`);
             }
             return war.getPlayerIndexLoggedIn();
         }
@@ -40,10 +40,10 @@ namespace Twns.MultiPlayerWar {
         public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: UnitType, unitHp: number): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerProduceUnit() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerProduceUnit() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerProduceUnit  : {
                     gridIndex,
@@ -59,10 +59,10 @@ namespace Twns.MultiPlayerWar {
         public setStateRequestingPlayerVoteForDraw(isAgree: boolean): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerVoteForDraw() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerVoteForDraw() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerVoteForDraw  : {
                     isAgree,
@@ -76,10 +76,10 @@ namespace Twns.MultiPlayerWar {
         private _setStateRequestingUnitProduceUnit(): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitProduceUnit() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitProduceUnit() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitProduceUnit: {
                     path: {
@@ -96,10 +96,10 @@ namespace Twns.MultiPlayerWar {
         private _setStateRequestingUnitBeLoaded(): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitBeLoaded   : {
                     path: {
@@ -116,10 +116,10 @@ namespace Twns.MultiPlayerWar {
         private _setStateRequestingUnitJoin(): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitJoinUnit   : {
                     path: {
@@ -136,17 +136,17 @@ namespace Twns.MultiPlayerWar {
         private _setStateRequestingUnitUseCoSuperPower(): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitUseCoSuperPower() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitUseCoSuperPower() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitUseCoSkill : {
                     path: {
                         nodes: this.getMovePath(),
                     },
                     launchUnitId    : this._getUnitIdForFocusUnitLoaded(),
-                    skillType       : Twns.Types.CoSkillType.SuperPower,
+                    skillType       : Types.CoSkillType.SuperPower,
                 },
             });
 
@@ -157,17 +157,17 @@ namespace Twns.MultiPlayerWar {
         private _setStateRequestingUnitUseCoPower(): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitUseCoPower() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitUseCoPower() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitUseCoSkill : {
                     path: {
                         nodes: this.getMovePath(),
                     },
                     launchUnitId    : this._getUnitIdForFocusUnitLoaded(),
-                    skillType       : Twns.Types.CoSkillType.Power,
+                    skillType       : Types.CoSkillType.Power,
                 },
             });
 
@@ -178,10 +178,10 @@ namespace Twns.MultiPlayerWar {
         private _setStateRequestingUnitLoadCo(): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitLoadCo() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitLoadCo() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitLoadCo : {
                     path: {
@@ -198,10 +198,10 @@ namespace Twns.MultiPlayerWar {
         private _setStateRequestingUnitWait(): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitWait() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitWait() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitWait   : {
                     path: {
@@ -218,10 +218,10 @@ namespace Twns.MultiPlayerWar {
         protected _setStateRequestingUnitAttackUnit(targetGridIndex: GridIndex): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitAttackUnit() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitAttackUnit() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitAttackUnit : {
                     path: {
@@ -234,16 +234,16 @@ namespace Twns.MultiPlayerWar {
 
             this._setState(State.RequestingUnitAttackUnit);
             this._updateView();
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.CursorConfirm01);
+            SoundManager.playShortSfx(Types.ShortSfxCode.CursorConfirm01);
         }
 
         protected _setStateRequestingUnitAttackTile(targetGridIndex: GridIndex): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitAttackTile() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitAttackTile() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitAttackTile : {
                     path: {
@@ -256,16 +256,16 @@ namespace Twns.MultiPlayerWar {
 
             this._setState(State.RequestingUnitAttackTile);
             this._updateView();
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.CursorConfirm01);
+            SoundManager.playShortSfx(Types.ShortSfxCode.CursorConfirm01);
         }
 
         private _setStateRequestingUnitBuildTile(): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitBuildTile() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitBuildTile() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitBuildTile  : {
                     path: {
@@ -282,10 +282,10 @@ namespace Twns.MultiPlayerWar {
         private _setStateRequestingUnitCaptureTile(): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitCaptureTile() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitCaptureTile() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitCaptureTile: {
                     path: {
@@ -302,10 +302,10 @@ namespace Twns.MultiPlayerWar {
         private _setStateRequestingUnitDive(): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDive() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDive() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitDive   : {
                     path: {
@@ -322,10 +322,10 @@ namespace Twns.MultiPlayerWar {
         private _setStateRequestingUnitSurface(): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitSurface() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitSurface() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitSurface    : {
                     path: {
@@ -342,7 +342,7 @@ namespace Twns.MultiPlayerWar {
         protected _setStateRequestingUnitDropOnTap(gridIndex: GridIndex): void {
             const unit = this.getChoosingUnitForDrop();
             if (unit == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDropOnTap() empty unit.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDropOnTap() empty unit.`);
             }
 
             this._pushBackChosenUnitForDrop({
@@ -350,17 +350,17 @@ namespace Twns.MultiPlayerWar {
                 destination : gridIndex,
             });
 
-            const destinations: Twns.Types.DropDestination[] = [];
+            const destinations: Types.DropDestination[] = [];
             for (const data of this.getChosenUnitsForDrop()) {
                 destinations.push({ unitId: data.unit.getUnitId(), gridIndex: data.destination });
             }
 
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDropOnTap() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDropOnTap() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitDropUnit   : {
                     path: {
@@ -375,17 +375,17 @@ namespace Twns.MultiPlayerWar {
             this._updateView();
         }
         private _setStateRequestingUnitDropOnChooseAction(): void {
-            const destinations = [] as Twns.Types.DropDestination[];
+            const destinations = [] as Types.DropDestination[];
             for (const data of this.getChosenUnitsForDrop()) {
                 destinations.push({ unitId: data.unit.getUnitId(), gridIndex: data.destination });
             }
 
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDropOnChooseAction() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDropOnChooseAction() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitDropUnit   : {
                     path: {
@@ -403,10 +403,10 @@ namespace Twns.MultiPlayerWar {
         protected _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitLaunchFlare() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitLaunchFlare() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitLaunchFlare: {
                     path: {
@@ -424,10 +424,10 @@ namespace Twns.MultiPlayerWar {
         protected _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitLaunchSilo() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitLaunchSilo() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitLaunchSilo : {
                     path: {
@@ -445,10 +445,10 @@ namespace Twns.MultiPlayerWar {
         private _setStateRequestingUnitSupply(): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner._setStateRequestingUnitSupply() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitSupply() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitSupplyUnit : {
                     path: {
@@ -465,10 +465,10 @@ namespace Twns.MultiPlayerWar {
         public setStateRequestingPlayerEndTurn(): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerEndTurn() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerEndTurn() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerEndTurn  : {
                 },
@@ -481,10 +481,10 @@ namespace Twns.MultiPlayerWar {
         public setStateRequestingPlayerSurrender(): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerSurrender() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerSurrender() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerSurrender: {
                 },
@@ -497,15 +497,15 @@ namespace Twns.MultiPlayerWar {
         public setStateRequestingPlayerDeleteUnit(): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerDeleteUnit() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerDeleteUnit() empty war.`);
             }
 
             const gridIndex = war.getCursor().getGridIndex();
             if (gridIndex == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerDeleteUnit() empty gridIndex.`);
+                throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerDeleteUnit() empty gridIndex.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerDeleteUnit   : {
                     gridIndex,
@@ -516,13 +516,13 @@ namespace Twns.MultiPlayerWar {
             this._updateView();
         }
 
-        public setStateRequestingPlayerUseCoSkill(skillType: Twns.Types.CoSkillType): void {
+        public setStateRequestingPlayerUseCoSkill(skillType: Types.CoSkillType): void {
             const war = this._getWar();
             if (war == null) {
-                throw Twns.Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerUseCoSkill() empty war.`);
+                throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerUseCoSkill() empty war.`);
             }
 
-            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerUseCoSkill   : {
                     skillType,
@@ -541,21 +541,21 @@ namespace Twns.MultiPlayerWar {
 
             const currState = this.getState();
             if (currState === State.ChoosingAction) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwUnitActionsPanel, this._getDataForUnitActionsPanel());
+                PanelHelpers.open(PanelHelpers.PanelDict.BwUnitActionsPanel, this._getDataForUnitActionsPanel());
             } else {
-                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.BwUnitActionsPanel);
+                PanelHelpers.close(PanelHelpers.PanelDict.BwUnitActionsPanel);
             }
             if ((currState === State.MakingMovePath) || (currState === State.ChoosingAttackTarget)) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwDamagePreviewPanel, { war: this._getWar() });
+                PanelHelpers.open(PanelHelpers.PanelDict.BwDamagePreviewPanel, { war: this._getWar() });
             } else {
-                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.BwDamagePreviewPanel);
+                PanelHelpers.close(PanelHelpers.PanelDict.BwDamagePreviewPanel);
             }
         }
 
-        protected _checkCanControlUnit(unit: Twns.BaseWar.BwUnit): boolean {
+        protected _checkCanControlUnit(unit: BaseWar.BwUnit): boolean {
             const war           = this._getWar();
             const playerInTurn  = war.getPlayerInTurn();
-            return (playerInTurn.getUserId() === Twns.User.UserModel.getSelfUserId())
+            return (playerInTurn.getUserId() === User.UserModel.getSelfUserId())
                 && (playerInTurn.getPlayerIndex() === unit.getPlayerIndex());
         }
 
@@ -597,7 +597,7 @@ namespace Twns.MultiPlayerWar {
                 const cursor                    = this.getCursor();
                 const cursorPreviousGridIndex   = cursor ? cursor.getPreviousGridIndex() : null;
                 if (cursorPreviousGridIndex == null) {
-                    throw Twns.Helpers.newError(`MpwActionPlanner._getNextStateOnTapWhenChoosingAttackTarget() empty cursorPreviousGridIndex.`);
+                    throw Helpers.newError(`MpwActionPlanner._getNextStateOnTapWhenChoosingAttackTarget() empty cursorPreviousGridIndex.`);
                 }
 
                 if (GridIndexHelpers.checkIsEqual(cursorPreviousGridIndex, gridIndex)) {
@@ -624,7 +624,7 @@ namespace Twns.MultiPlayerWar {
 
                 const focusUnit = this.getFocusUnit();
                 if (focusUnit == null) {
-                    throw Twns.Helpers.newError(`MpwActionPlanner._getNextStateOnTapWhenChoosingDropDestination() empty focusUnit.`);
+                    throw Helpers.newError(`MpwActionPlanner._getNextStateOnTapWhenChoosingDropDestination() empty focusUnit.`);
                 }
 
                 const restLoadedUnits = focusUnit.getLoadedUnits().filter(unit => chosenUnits.every(u => u !== unit));
@@ -638,7 +638,7 @@ namespace Twns.MultiPlayerWar {
             }
         }
         protected _getNextStateOnTapWhenChoosingFlareDestination(gridIndex: GridIndex): State {
-            if (GridIndexHelpers.getDistance(this.getMovePathDestination(), gridIndex) > Twns.Helpers.getExisted(this.getFocusUnit()?.getFlareMaxRange())) {
+            if (GridIndexHelpers.getDistance(this.getMovePathDestination(), gridIndex) > Helpers.getExisted(this.getFocusUnit()?.getFlareMaxRange())) {
                 return State.ChoosingAction;
             } else {
                 const previousGridIndex = this.getCursor().getPreviousGridIndex();
@@ -818,9 +818,9 @@ namespace Twns.MultiPlayerWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getActionUnitBeLoaded(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
-            const focusUnit     = Twns.Helpers.getExisted(this.getFocusUnit());
+            const focusUnit     = Helpers.getExisted(this.getFocusUnit());
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
                 return [];
             } else {
@@ -830,9 +830,9 @@ namespace Twns.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitJoin(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitJoin(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
-            const focusUnit     = Twns.Helpers.getExisted(this.getFocusUnit());
+            const focusUnit     = Helpers.getExisted(this.getFocusUnit());
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
                 return [];
             } else {
@@ -842,16 +842,16 @@ namespace Twns.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitUseCoSuperPower(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return !Twns.Helpers.getExisted(this.getFocusUnit()).checkCanUseCoSkill(Twns.Types.CoSkillType.SuperPower)
+                return !Helpers.getExisted(this.getFocusUnit()).checkCanUseCoSkill(Types.CoSkillType.SuperPower)
                     ? []
                     : [{
                         actionType  : UnitActionType.UseCoSuperPower,
                         callback    : () => {
-                            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0058),
                                 callback: () => this._setStateRequestingUnitUseCoSuperPower(),
                             });
@@ -859,16 +859,16 @@ namespace Twns.MultiPlayerWar {
                     }];
             }
         }
-        protected _getActionUnitUseCoPower(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return !Twns.Helpers.getExisted(this.getFocusUnit()).checkCanUseCoSkill(Twns.Types.CoSkillType.Power)
+                return !Helpers.getExisted(this.getFocusUnit()).checkCanUseCoSkill(Types.CoSkillType.Power)
                     ? []
                     : [{
                         actionType  : UnitActionType.UseCoPower,
                         callback    : () => {
-                            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0054),
                                 callback: () => this._setStateRequestingUnitUseCoPower(),
                             });
@@ -876,56 +876,56 @@ namespace Twns.MultiPlayerWar {
                     }];
             }
         }
-        protected _getActionUnitLoadCo(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitLoadCo(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return Twns.Helpers.getExisted(this.getFocusUnit()).checkCanLoadCoAfterMovePath(this.getMovePath())
+                return Helpers.getExisted(this.getFocusUnit()).checkCanLoadCoAfterMovePath(this.getMovePath())
                     ? [{ actionType: UnitActionType.LoadCo, callback: () => this._setStateRequestingUnitLoadCo() }]
                     : [];
             }
         }
-        protected _getActionUnitCapture(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitCapture(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (Twns.Helpers.getExisted(this.getFocusUnit()).checkCanCaptureTile(this._getTileMap().getTile(this.getMovePathDestination())))
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanCaptureTile(this._getTileMap().getTile(this.getMovePathDestination())))
                     ? [{ actionType: UnitActionType.Capture, callback: () => this._setStateRequestingUnitCaptureTile() }]
                     : [];
             }
         }
-        protected _getActionUnitDive(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitDive(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (Twns.Helpers.getExisted(this.getFocusUnit()).checkCanDive())
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanDive())
                     ? [{ actionType: UnitActionType.Dive, callback: () => this._setStateRequestingUnitDive() }]
                     : [];
             }
         }
-        protected _getActionUnitSurface(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitSurface(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (Twns.Helpers.getExisted(this.getFocusUnit()).checkCanSurface())
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanSurface())
                     ? [{ actionType: UnitActionType.Surface, callback: () => this._setStateRequestingUnitSurface() }]
                     : [];
             }
         }
-        protected _getActionUnitBuildTile(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitBuildTile(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (Twns.Helpers.getExisted(this.getFocusUnit()).checkCanBuildOnTile(this._getTileMap().getTile(this.getMovePathDestination())))
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanBuildOnTile(this._getTileMap().getTile(this.getMovePathDestination())))
                     ? [{ actionType: UnitActionType.BuildTile, callback: () => this._setStateRequestingUnitBuildTile() }]
                     : [];
             }
         }
-        protected _getActionUnitSupply(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitSupply(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                const focusUnit     = Twns.Helpers.getExisted(this.getFocusUnit());
+                const focusUnit     = Helpers.getExisted(this.getFocusUnit());
                 const playerIndex   = focusUnit.getPlayerIndex();
                 const unitMap       = this._getUnitMap();
                 if (focusUnit.checkIsAdjacentUnitSupplier()) {
@@ -939,31 +939,35 @@ namespace Twns.MultiPlayerWar {
                 return [];
             }
         }
-        protected _getActionUnitProduceUnit(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                const focusUnit         = Twns.Helpers.getExisted(this.getFocusUnit());
+                const focusUnit         = Helpers.getExisted(this.getFocusUnit());
                 const produceUnitType   = focusUnit.getProduceUnitType();
-                if ((this.getFocusUnitLoaded()) || (this.getMovePath().length !== 1) || (produceUnitType == null)) {
+                if ((this.getFocusUnitLoaded())                                                                                                                     ||
+                    (this.getMovePath().length !== 1)                                                                                                               ||
+                    (produceUnitType == null)                                                                                                                       ||
+                    ((focusUnit.getWar().getCommonSettingManager().getSettingsBannedUnitTypeArray(focusUnit.getPlayerIndex()) ?? []).indexOf(produceUnitType) >= 0)
+                ) {
                     return [];
                 } else {
                     const costForProduceUnit = focusUnit.getProduceUnitCost();
-                    if (Twns.Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) < 1) {
+                    if (Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) < 1) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
                             callback            : () => FloatText.show(Lang.getText(LangTextType.B0051)),
                             costForProduceUnit,
                             produceUnitType,
                         }];
-                    } else if (focusUnit.getLoadedUnitsCount() >= Twns.Helpers.getExisted(focusUnit.getMaxLoadUnitsCount())) {
+                    } else if (focusUnit.getLoadedUnitsCount() >= Helpers.getExisted(focusUnit.getMaxLoadUnitsCount())) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
                             callback            : () => FloatText.show(Lang.getText(LangTextType.B0052)),
                             costForProduceUnit,
                             produceUnitType,
                         }];
-                    } else if (Twns.Helpers.getExisted((this._getWar() as Twns.MultiPlayerWar.MpwWar).getPlayerLoggedIn()?.getFund()) < costForProduceUnit) {
+                    } else if (Helpers.getExisted((this._getWar() as MultiPlayerWar.MpwWar).getPlayerLoggedIn()?.getFund()) < costForProduceUnit) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
                             callback            : () => FloatText.show(Lang.getText(LangTextType.B0053)),
@@ -981,7 +985,7 @@ namespace Twns.MultiPlayerWar {
                 }
             }
         }
-        protected _getActionUnitWait(hasOtherAction: boolean): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitAction[] {
             const existingUnit = this._getUnitMap().getUnitOnMap(this.getMovePathDestination());
             if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
                 return [];
@@ -991,7 +995,7 @@ namespace Twns.MultiPlayerWar {
                         actionType  : UnitActionType.Wait,
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitDropOnChooseAction()
-                            : () => Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                            : () => PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0055),
                                 callback: () => this._setStateRequestingUnitDropOnChooseAction(),
                             }),
@@ -1001,7 +1005,7 @@ namespace Twns.MultiPlayerWar {
                         actionType  : UnitActionType.Wait,
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitWait()
-                            : () => Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                            : () => PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0055),
                                 callback: () => this._setStateRequestingUnitWait(),
                             }),

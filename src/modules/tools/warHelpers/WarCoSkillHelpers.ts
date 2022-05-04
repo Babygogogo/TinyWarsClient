@@ -13,7 +13,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarCoSkillHelpers {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode      = Twns.ClientErrorCode;
     import BwPlayer             = Twns.BaseWar.BwPlayer;
     import GridIndex            = Twns.Types.GridIndex;
     import Structure            = CommonProto.Structure;

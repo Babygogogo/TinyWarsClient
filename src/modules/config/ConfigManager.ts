@@ -9,7 +9,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Config.ConfigManager {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode      = Twns.ClientErrorCode;
     import TileBaseType         = Twns.Types.TileBaseType;
     import TileDecoratorType    = Twns.Types.TileDecoratorType;
     import TileObjectType       = Twns.Types.TileObjectType;

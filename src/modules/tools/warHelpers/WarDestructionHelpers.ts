@@ -9,7 +9,7 @@
 namespace WarDestructionHelpers {
     import GridIndex        = Twns.Types.GridIndex;
     import TileObjectType   = Twns.Types.TileObjectType;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import BwWar            = Twns.BaseWar.BwWar;
 
     export function destroyUnitOnMap(war: BwWar, gridIndex: GridIndex, showExplosionEffect: boolean): void {

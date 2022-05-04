@@ -21,7 +21,7 @@ namespace Twns.BaseWar {
     import WarEvent                         = CommonProto.WarEvent;
     import IWarActionSystemCallWarEvent     = CommonProto.WarAction.IWarActionSystemCallWarEvent;
     import ICustomCounter                   = CommonProto.WarSerialization.ICustomCounter;
-    import ClientErrorCode                  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode                  = Twns.ClientErrorCode;
     import WarEventHelpers                  = WarHelpers.WarEventHelpers;
 
     export class BwWarEventManager {

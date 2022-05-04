@@ -34,7 +34,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Chat {
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
     import NotifyType               = Twns.Notify.NotifyType;
 
     export type OpenDataForChatCommandPanel = {

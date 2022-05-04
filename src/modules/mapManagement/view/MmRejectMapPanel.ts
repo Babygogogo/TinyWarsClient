@@ -13,7 +13,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapManagement {
     import MeWar        = Twns.MapEditor.MeWar;
-    import LangTextType = TwnsLangTextType.LangTextType;
+    import LangTextType = Twns.Lang.LangTextType;
 
     export type OpenDataForMmRejectMapPanel = {
         war: MeWar;

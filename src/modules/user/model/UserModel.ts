@@ -13,14 +13,14 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.User.UserModel {
     import NotifyType           = Twns.Notify.NotifyType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
+    import LangTextType         = Twns.Lang.LangTextType;
     import NetMessage           = CommonProto.NetMessage;
     import IUserPublicInfo      = CommonProto.User.IUserPublicInfo;
     import IUserBriefInfo       = CommonProto.User.IUserBriefInfo;
     import IUserSettings        = CommonProto.User.IUserSettings;
     import IUserSelfInfo        = CommonProto.User.IUserSelfInfo;
     import IUserPrivilege       = CommonProto.User.IUserPrivilege;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode      = Twns.ClientErrorCode;
 
     let _isLoggedIn                 = false;
     let _selfInfo                   : IUserSelfInfo | null = null;

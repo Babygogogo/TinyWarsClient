@@ -10,11 +10,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarHelpers.WarRuleHelpers {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import LanguageType         = Twns.Types.LanguageType;
-    import BootTimerType        = Twns.Types.BootTimerType;
-    import BaseWarRule          = Twns.Types.BaseWarRule;
+    import LangTextType         = Lang.LangTextType;
+    import LanguageType         = Types.LanguageType;
+    import BootTimerType        = Types.BootTimerType;
+    import BaseWarRule          = Types.BaseWarRule;
     import WarRule              = CommonProto.WarRule;
     import IRuleForGlobalParams = WarRule.IRuleForGlobalParams;
     import IRuleForPlayers      = WarRule.IRuleForPlayers;
@@ -29,6 +28,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         teamIndex               : 0,
         attackPowerModifier     : 0,
         bannedCoIdArray         : [],
+        bannedUnitTypeArray     : [],
         energyGrowthMultiplier  : 100,
         energyAddPctOnLoadCo    : 0,
         initialFund             : 0,
@@ -40,17 +40,17 @@ namespace Twns.WarHelpers.WarRuleHelpers {
     };
 
     export function getHasFogByDefault(baseWarRule: BaseWarRule): boolean {
-        return Twns.Helpers.getExisted(baseWarRule.ruleForGlobalParams?.hasFogByDefault);
+        return Helpers.getExisted(baseWarRule.ruleForGlobalParams?.hasFogByDefault);
     }
     export function setHasFogByDefault(baseWarRule: BaseWarRule, hasFog: boolean): void {
-        Twns.Helpers.getExisted(baseWarRule.ruleForGlobalParams).hasFogByDefault = hasFog;
+        Helpers.getExisted(baseWarRule.ruleForGlobalParams).hasFogByDefault = hasFog;
     }
 
-    export function getDefaultWeatherType(baseWarRule: BaseWarRule): Twns.Types.WeatherType {
-        return baseWarRule.ruleForGlobalParams?.defaultWeatherType ?? Twns.Types.WeatherType.Clear;
+    export function getDefaultWeatherType(baseWarRule: BaseWarRule): Types.WeatherType {
+        return baseWarRule.ruleForGlobalParams?.defaultWeatherType ?? Types.WeatherType.Clear;
     }
-    export function setDefaultWeatherType(baseWarRule: BaseWarRule, weatherType: Twns.Types.WeatherType): void {
-        Twns.Helpers.getExisted(baseWarRule.ruleForGlobalParams, ClientErrorCode.WarRuleHelpers_SetDefaultWeatherType_00).defaultWeatherType = weatherType;
+    export function setDefaultWeatherType(baseWarRule: BaseWarRule, weatherType: Types.WeatherType): void {
+        Helpers.getExisted(baseWarRule.ruleForGlobalParams, ClientErrorCode.WarRuleHelpers_SetDefaultWeatherType_00).defaultWeatherType = weatherType;
     }
     export function tickDefaultWeatherType(baseWarRule: BaseWarRule, gameConfig: GameConfig): void {
         const typeArray     = gameConfig.getAvailableWeatherTypes();
@@ -60,7 +60,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
 
     export function getIncomeMultiplier(baseWarRule: BaseWarRule, playerIndex: number): number {
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
-        return Twns.Helpers.getExisted(playerRule.incomeMultiplier);
+        return Helpers.getExisted(playerRule.incomeMultiplier);
     }
     export function setIncomeMultiplier(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
@@ -69,7 +69,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
 
     export function getEnergyGrowthMultiplier(baseWarRule: BaseWarRule, playerIndex: number): number {
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
-        return Twns.Helpers.getExisted(playerRule.energyGrowthMultiplier);
+        return Helpers.getExisted(playerRule.energyGrowthMultiplier);
     }
     export function setEnergyGrowthMultiplier(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
@@ -78,7 +78,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
 
     export function getAttackPowerModifier(baseWarRule: BaseWarRule, playerIndex: number): number {
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
-        return Twns.Helpers.getExisted(playerRule.attackPowerModifier);
+        return Helpers.getExisted(playerRule.attackPowerModifier);
     }
     export function setAttackPowerModifier(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
@@ -87,7 +87,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
 
     export function getMoveRangeModifier(baseWarRule: BaseWarRule, playerIndex: number): number {
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
-        return Twns.Helpers.getExisted(playerRule.moveRangeModifier);
+        return Helpers.getExisted(playerRule.moveRangeModifier);
     }
     export function setMoveRangeModifier(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
@@ -96,7 +96,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
 
     export function getVisionRangeModifier(baseWarRule: BaseWarRule, playerIndex: number): number {
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
-        return Twns.Helpers.getExisted(playerRule.visionRangeModifier);
+        return Helpers.getExisted(playerRule.visionRangeModifier);
     }
     export function setVisionRangeModifier(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
@@ -104,31 +104,48 @@ namespace Twns.WarHelpers.WarRuleHelpers {
     }
 
     export function getInitialFund(baseWarRule: BaseWarRule, playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayerRule(baseWarRule, playerIndex).initialFund);
+        return Helpers.getExisted(getPlayerRule(baseWarRule, playerIndex).initialFund);
     }
     export function setInitialFund(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
         getPlayerRule(baseWarRule, playerIndex).initialFund = value;
     }
 
     export function getEnergyAddPctOnLoadCo(baseWarRule: BaseWarRule, playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayerRule(baseWarRule, playerIndex).energyAddPctOnLoadCo);
+        return Helpers.getExisted(getPlayerRule(baseWarRule, playerIndex).energyAddPctOnLoadCo);
     }
     export function setEnergyAddPctOnLoadCo(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
         getPlayerRule(baseWarRule, playerIndex).energyAddPctOnLoadCo = value;
     }
 
     export function getLuckLowerLimit(baseWarRule: BaseWarRule, playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayerRule(baseWarRule, playerIndex).luckLowerLimit);
+        return Helpers.getExisted(getPlayerRule(baseWarRule, playerIndex).luckLowerLimit);
     }
     export function setLuckLowerLimit(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
         getPlayerRule(baseWarRule, playerIndex).luckLowerLimit = value;
     }
 
     export function getLuckUpperLimit(baseWarRule: BaseWarRule, playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayerRule(baseWarRule, playerIndex).luckUpperLimit);
+        return Helpers.getExisted(getPlayerRule(baseWarRule, playerIndex).luckUpperLimit);
     }
     export function setLuckUpperLimit(baseWarRule: BaseWarRule, playerIndex: number, value: number): void {
         getPlayerRule(baseWarRule, playerIndex).luckUpperLimit = value;
+    }
+
+    export function getBannedUnitTypeArray(baseWarRule: BaseWarRule, playerIndex: number): Types.UnitType[] | null {
+        return getPlayerRule(baseWarRule, playerIndex).bannedUnitTypeArray ?? null;
+    }
+    export function setBannedUnitTypeArray(baseWarRule: BaseWarRule, playerIndex: number, unitTypeArray: Types.UnitType[]): void {
+        const playerRule        = getPlayerRule(baseWarRule, playerIndex);
+        const bannedUnitTypeSet = new Set(unitTypeArray);
+        if (playerRule.bannedUnitTypeArray == null) {
+            playerRule.bannedUnitTypeArray = [...bannedUnitTypeSet];
+        } else {
+            const bannedUnitTypeArray   = playerRule.bannedUnitTypeArray;
+            bannedUnitTypeArray.length  = 0;
+            for (const coId of bannedUnitTypeSet) {
+                bannedUnitTypeArray.push(coId);
+            }
+        }
     }
 
     export function getBannedCoIdArray(baseWarRule: BaseWarRule, playerIndex: number): number[] | null {
@@ -159,8 +176,8 @@ namespace Twns.WarHelpers.WarRuleHelpers {
     }
     export function deleteBannedCoId(baseWarRule: BaseWarRule, playerIndex: number, coId: number): void {
         const playerRule        = getPlayerRule(baseWarRule, playerIndex);
-        const bannedCoIdArray   = Twns.Helpers.getExisted(playerRule.bannedCoIdArray);
-        Twns.Helpers.deleteElementFromArray(bannedCoIdArray, coId);
+        const bannedCoIdArray   = Helpers.getExisted(playerRule.bannedCoIdArray);
+        Helpers.deleteElementFromArray(bannedCoIdArray, coId);
     }
     export function setBannedCoIdArray(baseWarRule: BaseWarRule, playerIndex: number, coIdSet: Set<number>): void {
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
@@ -196,7 +213,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         }
 
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
-        return Twns.Helpers.getExisted(playerRule.teamIndex);
+        return Helpers.getExisted(playerRule.teamIndex);
     }
     export function setTeamIndex(baseWarRule: BaseWarRule, playerIndex: number, teamIndex: number): void {
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
@@ -211,7 +228,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
     }
 
     export function getTeamIndexByRuleForPlayers(ruleForPlayers: IRuleForPlayers, playerIndex: number): number {
-        return Twns.Helpers.getExisted(ruleForPlayers.playerRuleDataArray?.find(v => v.playerIndex === playerIndex)?.teamIndex);
+        return Helpers.getExisted(ruleForPlayers.playerRuleDataArray?.find(v => v.playerIndex === playerIndex)?.teamIndex);
     }
 
     export function getPlayerRule(baseWarRule: BaseWarRule, playerIndex: number): IDataForPlayerRule {
@@ -219,18 +236,18 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             return DEFAULT_PLAYER_RULE;
         }
 
-        return Twns.Helpers.getExisted(baseWarRule.ruleForPlayers?.playerRuleDataArray?.find(v => v.playerIndex === playerIndex));
+        return Helpers.getExisted(baseWarRule.ruleForPlayers?.playerRuleDataArray?.find(v => v.playerIndex === playerIndex));
     }
 
     export function getPlayersCountUnneutral(baseWarRule: BaseWarRule): number {
-        return Twns.Helpers.getExisted(baseWarRule.ruleForPlayers?.playerRuleDataArray).length;
+        return Helpers.getExisted(baseWarRule.ruleForPlayers?.playerRuleDataArray).length;
     }
 
     export function moveWarEventId(templateWarRule: ITemplateWarRule, warEventId: number, deltaIndex: number): void {
-        const warEventIdArray   = Twns.Helpers.getExisted(templateWarRule.warEventIdArray);
+        const warEventIdArray   = Helpers.getExisted(templateWarRule.warEventIdArray);
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
-            throw Twns.Helpers.newError(`Invalid currIndex: ${currIndex}`, ClientErrorCode.WarRuleHelpers_MoveWarEventId_00);
+            throw Helpers.newError(`Invalid currIndex: ${currIndex}`, ClientErrorCode.WarRuleHelpers_MoveWarEventId_00);
         }
 
         const newIndex = Math.max(0, Math.min(warEventIdArray.length - 1, currIndex + deltaIndex));
@@ -240,10 +257,10 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         }
     }
     export function deleteWarEventId(templateWarRule: ITemplateWarRule, warEventId: number): void {
-        const warEventIdArray   = Twns.Helpers.getExisted(templateWarRule.warEventIdArray);
+        const warEventIdArray   = Helpers.getExisted(templateWarRule.warEventIdArray);
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
-            throw Twns.Helpers.newError(`Invalid currIndex: ${currIndex}`, ClientErrorCode.WarRuleHelpers_DeleteWarEventId_00);
+            throw Helpers.newError(`Invalid currIndex: ${currIndex}`, ClientErrorCode.WarRuleHelpers_DeleteWarEventId_00);
         }
 
         warEventIdArray.splice(currIndex, 1);
@@ -255,7 +272,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
 
         const warEventIdArray = templateWarRule.warEventIdArray;
         if (warEventIdArray.indexOf(warEventId) >= 0) {
-            throw Twns.Helpers.newError(`The warEventId exists: ${warEventId}.`, ClientErrorCode.WarRuleHelpers_AddWarEventId_00);
+            throw Helpers.newError(`The warEventId exists: ${warEventId}.`, ClientErrorCode.WarRuleHelpers_AddWarEventId_00);
         }
 
         warEventIdArray.push(warEventId);
@@ -270,12 +287,12 @@ namespace Twns.WarHelpers.WarRuleHelpers {
     }
     export function getRandomCoIdWithCoIdList(coIdList: number[]): number {
         if ((coIdList == null) || (coIdList.length <= 0)) {
-            throw Twns.Helpers.newError(`Empty coIdList.`, ClientErrorCode.WarRuleHelpers_GetRandomCoIdWithCoIdList_00);
+            throw Helpers.newError(`Empty coIdList.`, ClientErrorCode.WarRuleHelpers_GetRandomCoIdWithCoIdList_00);
         } else {
             if (coIdList.length <= 1) {
                 return coIdList[0];
             } else {
-                return Twns.Helpers.pickRandomElement(coIdList.filter(v => v !== CommonConstants.CoEmptyId));
+                return Helpers.pickRandomElement(coIdList.filter(v => v !== CommonConstants.CoEmptyId));
             }
         }
     }
@@ -296,7 +313,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             },
             ruleForGlobalParams : {
                 hasFogByDefault     : false,
-                defaultWeatherType  : Twns.Types.WeatherType.Clear,
+                defaultWeatherType  : Types.WeatherType.Clear,
             },
             ruleForPlayers: {
                 playerRuleDataArray: createDefaultPlayerRuleList(playersCount),
@@ -313,7 +330,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             ],
             ruleForGlobalParams : {
                 hasFogByDefault     : false,
-                defaultWeatherType  : Twns.Types.WeatherType.Clear,
+                defaultWeatherType  : Types.WeatherType.Clear,
             },
             ruleForPlayers: {
                 playerRuleDataArray: createDefaultPlayerRuleList(playersCount),
@@ -347,6 +364,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             luckLowerLimit          : CommonConstants.WarRuleLuckDefaultLowerLimit,
             luckUpperLimit          : CommonConstants.WarRuleLuckDefaultUpperLimit,
             bannedCoIdArray         : [],
+            bannedUnitTypeArray     : [],
         };
     }
 
@@ -359,7 +377,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         gameConfig              : GameConfig;
         playersCountUnneutral   : number;
     }): ClientErrorCode {
-        if (!Twns.Helpers.checkIsValidLanguageTextArray({
+        if (!Helpers.checkIsValidLanguageTextArray({
             list            : templateWarRule.ruleNameArray,
             minTextLength   : 1,
             maxTextLength   : CommonConstants.WarRuleNameMaxLength,
@@ -405,10 +423,10 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         instanceWarRule         : IInstanceWarRule;
         gameConfig              : GameConfig;
         playersCountUnneutral   : number;
-        warType                 : Twns.Types.WarType;
-        mapSize                 : Twns.Types.MapSize;
+        warType                 : Types.WarType;
+        mapSize                 : Types.MapSize;
     }): ClientErrorCode {
-        if (!Twns.Helpers.checkIsValidLanguageTextArray({
+        if (!Helpers.checkIsValidLanguageTextArray({
             list            : instanceWarRule.ruleNameArray,
             minTextLength   : 1,
             maxTextLength   : CommonConstants.WarRuleNameMaxLength,
@@ -423,11 +441,11 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         }
 
         const ruleAvailability: IRuleAvailability = {
-            canCcw  : (warType === Twns.Types.WarType.CcwFog) || (warType === Twns.Types.WarType.CcwStd),
-            canMcw  : (warType === Twns.Types.WarType.McwFog) || (warType === Twns.Types.WarType.McwStd),
-            canMrw  : (warType === Twns.Types.WarType.MrwFog) || (warType === Twns.Types.WarType.MrwStd),
-            canScw  : (warType === Twns.Types.WarType.ScwFog) || (warType === Twns.Types.WarType.ScwStd),
-            canSrw  : (warType === Twns.Types.WarType.SrwFog) || (warType === Twns.Types.WarType.SrwStd),
+            canCcw  : (warType === Types.WarType.CcwFog) || (warType === Types.WarType.CcwStd),
+            canMcw  : (warType === Types.WarType.McwFog) || (warType === Types.WarType.McwStd),
+            canMrw  : (warType === Types.WarType.MrwFog) || (warType === Types.WarType.MrwStd),
+            canScw  : (warType === Types.WarType.ScwFog) || (warType === Types.WarType.ScwStd),
+            canSrw  : (warType === Types.WarType.SrwFog) || (warType === Types.WarType.SrwStd),
         };
         const errorCodeForRuleForPlayers = getErrorCodeForRuleForPlayers({ ruleForPlayers, gameConfig, playersCountUnneutral, ruleAvailability });
         if (errorCodeForRuleForPlayers) {
@@ -452,7 +470,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         return ClientErrorCode.NoError;
     }
     export function getErrorCodeForTemplateWarRuleArray({ templateWarRuleArray, playersCountUnneutral, allWarEventIdArray, gameConfig }: {
-        templateWarRuleArray    : Twns.Types.Undefinable<ITemplateWarRule[]>;
+        templateWarRuleArray    : Types.Undefinable<ITemplateWarRule[]>;
         playersCountUnneutral   : number;
         allWarEventIdArray      : number[];
         gameConfig              : GameConfig;
@@ -479,10 +497,10 @@ namespace Twns.WarHelpers.WarRuleHelpers {
                 return warRuleErrorCode;
             }
 
-            const trimmedRule           = Twns.Helpers.deepClone(templateWarRule);
+            const trimmedRule           = Helpers.deepClone(templateWarRule);
             trimmedRule.ruleId          = null;
             trimmedRule.ruleNameArray   = null;
-            if (trimmedRuleArray.some(v => Twns.Helpers.checkIsSameValue(v, trimmedRule))) {
+            if (trimmedRuleArray.some(v => Helpers.checkIsSameValue(v, trimmedRule))) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForWarRuleArray_02;
             }
             trimmedRuleArray.push(trimmedRule);
@@ -611,6 +629,14 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             if (bannedCoIdArray.some(coId => !gameConfig.checkHasCo(coId))) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_13;
             }
+            if (bannedCoIdArray.length !== new Set(bannedCoIdArray).size) {
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_14;
+            }
+
+            const bannedUnitTypeArray = data.bannedUnitTypeArray ?? [];
+            if (!gameConfig.checkIsValidUnitTypeSubset(bannedUnitTypeArray)) {
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_15;
+            }
 
             {
                 const fixedCoIdInSrw = data.fixedCoIdInSrw;
@@ -620,7 +646,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
                     }
                 } else {
                     if (gameConfig.getCoBasicCfg(fixedCoIdInSrw) == null) {
-                        return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_15;
+                        return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_16;
                     }
                     teamIndexSetForAiInSrw.add(teamIndex);
                 }
@@ -681,18 +707,18 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         return availability != null;
     }
 
-    export function getTemplateWarRule(templateWarRuleId: Twns.Types.Undefinable<number>, templateWarRuleArray: Twns.Types.Undefinable<ITemplateWarRule[]>): ITemplateWarRule | null {
+    export function getTemplateWarRule(templateWarRuleId: Types.Undefinable<number>, templateWarRuleArray: Types.Undefinable<ITemplateWarRule[]>): ITemplateWarRule | null {
         return templateWarRuleId == null
             ? null
             : (templateWarRuleArray?.find(v => v.ruleId === templateWarRuleId) ?? null);
     }
-    export function createInstanceWarRule(templateWarRule: ITemplateWarRule, warEventFullData: Twns.Types.Undefinable<CommonProto.Map.IWarEventFullData>): IInstanceWarRule {
+    export function createInstanceWarRule(templateWarRule: ITemplateWarRule, warEventFullData: Types.Undefinable<CommonProto.Map.IWarEventFullData>): IInstanceWarRule {
         return {
             templateWarRuleId       : templateWarRule.ruleId,
-            ruleNameArray           : Twns.Helpers.deepClone(templateWarRule.ruleNameArray),
+            ruleNameArray           : Helpers.deepClone(templateWarRule.ruleNameArray),
 
-            ruleForGlobalParams     : Twns.Helpers.deepClone(templateWarRule.ruleForGlobalParams),
-            ruleForPlayers          : Twns.Helpers.deepClone(templateWarRule.ruleForPlayers),
+            ruleForGlobalParams     : Helpers.deepClone(templateWarRule.ruleForGlobalParams),
+            ruleForPlayers          : Helpers.deepClone(templateWarRule.ruleForPlayers),
             warEventFullData        : WarEventHelpers.trimAndCloneWarEventFullData(warEventFullData, templateWarRule.warEventIdArray),
         };
     }

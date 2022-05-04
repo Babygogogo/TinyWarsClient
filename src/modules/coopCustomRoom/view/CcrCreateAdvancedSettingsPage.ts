@@ -11,7 +11,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -22,9 +22,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.CoopCustomRoom {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = Twns.Notify.NotifyType;
-    import PlayerRuleType       = Twns.Types.PlayerRuleType;
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
+    import PlayerRuleType       = Types.PlayerRuleType;
 
     export class CcrCreateAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
         private readonly _scroller!     : eui.Scroller;
@@ -78,10 +78,10 @@ namespace Twns.CoopCustomRoom {
             this._updateBtnCustomize();
         }
         private _onTouchedBtnReset(): void {
-            CoopCustomRoom.CcrCreateModel.resetDataByTemplateWarRuleId(Twns.Helpers.getExisted(this._initialWarRuleId));
+            CoopCustomRoom.CcrCreateModel.resetDataByTemplateWarRuleId(Helpers.getExisted(this._initialWarRuleId));
         }
         private _onTouchedBtnCustomize(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     CoopCustomRoom.CcrCreateModel.setCustomWarRuleId();
@@ -108,6 +108,7 @@ namespace Twns.CoopCustomRoom {
             this._listSetting.bindData([
                 { playerRuleType: PlayerRuleType.TeamIndex },
                 { playerRuleType: PlayerRuleType.BannedCoIdArray },
+                { playerRuleType: PlayerRuleType.BannedUnitTypeArray },
                 { playerRuleType: PlayerRuleType.InitialFund },
                 { playerRuleType: PlayerRuleType.IncomeMultiplier },
                 { playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
@@ -123,7 +124,7 @@ namespace Twns.CoopCustomRoom {
         }
 
         private async _updateListPlayer(): Promise<void> {
-            const playersCount  = Twns.Helpers.getExisted((await CoopCustomRoom.CcrCreateModel.getMapRawData()).playersCountUnneutral);
+            const playersCount  = Helpers.getExisted((await CoopCustomRoom.CcrCreateModel.getMapRawData()).playersCountUnneutral);
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -159,7 +160,7 @@ namespace Twns.CoopCustomRoom {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
             if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
                     title   : `CO`,
                     content : Lang.getText(LangTextType.R0004),
                 });
@@ -196,6 +197,7 @@ namespace Twns.CoopCustomRoom {
             return [
                 { playerIndex, playerRuleType: PlayerRuleType.TeamIndex },
                 { playerIndex, playerRuleType: PlayerRuleType.BannedCoIdArray },
+                { playerIndex, playerRuleType: PlayerRuleType.BannedUnitTypeArray },
                 { playerIndex, playerRuleType: PlayerRuleType.InitialFund },
                 { playerIndex, playerRuleType: PlayerRuleType.IncomeMultiplier },
                 { playerIndex, playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
@@ -253,7 +255,7 @@ namespace Twns.CoopCustomRoom {
         }
 
         private _onTouchedBtnCustom(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     CoopCustomRoom.CcrCreateModel.setCustomWarRuleId();
@@ -295,6 +297,7 @@ namespace Twns.CoopCustomRoom {
                 switch (data.playerRuleType) {
                     case PlayerRuleType.TeamIndex               : this._updateComponentsForValueAsTeamIndex(playerIndex);               return;
                     case PlayerRuleType.BannedCoIdArray         : this._updateComponentsForValueAsBannedCoIdArray(playerIndex);         return;
+                    case PlayerRuleType.BannedUnitTypeArray     : this._updateComponentsForValueAsBannedUnitTypeArray(playerIndex);     return;
                     case PlayerRuleType.InitialFund             : this._updateComponentsForValueAsInitialFund(playerIndex);             return;
                     case PlayerRuleType.IncomeMultiplier        : this._updateComponentsForValueAsIncomeMultiplier(playerIndex);        return;
                     case PlayerRuleType.EnergyAddPctOnLoadCo    : this._updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex);    return;
@@ -332,7 +335,7 @@ namespace Twns.CoopCustomRoom {
             this._callbackForTouchLabelValue    = () => {
                 const gameConfig    = CoopCustomRoom.CcrCreateModel.getGameConfig();
                 const selfCoId      = playerIndex === CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex() ? CoopCustomRoom.CcrCreateModel.getSelfCoId() : null;
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonBanCoPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonBanCoPanel, {
                     playerIndex,
                     gameConfig,
                     maxBanCount         : null,
@@ -342,13 +345,13 @@ namespace Twns.CoopCustomRoom {
                     callbackOnConfirm   : (bannedCoIdSet) => {
                         const callback = () => {
                             CoopCustomRoom.CcrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
-                            Twns.Notify.dispatch(NotifyType.CcrCreateBannedCoIdArrayChanged);
-                            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonBanCoPanel);
+                            Notify.dispatch(NotifyType.CcrCreateBannedCoIdArrayChanged);
+                            PanelHelpers.close(PanelHelpers.PanelDict.CommonBanCoPanel);
                         };
                         if ((selfCoId == null) || (!bannedCoIdSet.has(selfCoId))) {
                             callback();
                         } else {
-                            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0057),
                                 callback: () => {
                                     CoopCustomRoom.CcrCreateModel.setSelfCoId(CommonConstants.CoEmptyId);
@@ -356,6 +359,27 @@ namespace Twns.CoopCustomRoom {
                                 },
                             });
                         }
+                    },
+                });
+            };
+        }
+        private _updateComponentsForValueAsBannedUnitTypeArray(playerIndex: number): void {
+            this._inputValue.visible            = false;
+            this._callbackForFocusOutInputValue = null;
+
+            const currentBannedUnitTypeArray    = CoopCustomRoom.CcrCreateModel.getBannedUnitTypeArray(playerIndex) ?? [];
+            const labelValue                    = this._labelValue;
+            const currValue                     = currentBannedUnitTypeArray.length;
+            labelValue.visible                  = true;
+            labelValue.text                     = `${currValue}`;
+            labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
+            this._callbackForTouchLabelValue    = () => {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseUnitTypePanel, {
+                    currentUnitTypeArray    : currentBannedUnitTypeArray,
+                    gameConfig              : CoopCustomRoom.CcrCreateModel.getGameConfig(),
+                    callbackOnConfirm       : bannedUnitTypeArray => {
+                        CoopCustomRoom.CcrCreateModel.setBannedUnitTypeArray(playerIndex, bannedUnitTypeArray);
+                        this._updateComponentsForValue();
                     },
                 });
             };
@@ -607,7 +631,7 @@ namespace Twns.CoopCustomRoom {
 
             const labelValue    = this._labelValue;
             const coId          = CoopCustomRoom.CcrCreateModel.getAiCoId(playerIndex);
-            const gameConfig    = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(CoopCustomRoom.CcrCreateModel.getData().settingsForCommon?.configVersion));
+            const gameConfig    = await Config.ConfigManager.getGameConfig(Helpers.getExisted(CoopCustomRoom.CcrCreateModel.getData().settingsForCommon?.configVersion));
             labelValue.visible  = true;
             labelValue.text     = coId == null ? `--` : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined;
 
@@ -615,7 +639,7 @@ namespace Twns.CoopCustomRoom {
                 if (playerIndex === CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex()) {
                     FloatText.show(Lang.getText(LangTextType.A0220));
                 } else {
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCoPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseCoPanel, {
                         gameConfig,
                         currentCoId         : coId,
                         availableCoIdArray  : gameConfig.getEnabledCoArray().map(v => v.coId),

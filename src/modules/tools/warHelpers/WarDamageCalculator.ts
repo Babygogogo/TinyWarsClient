@@ -14,7 +14,7 @@
 namespace WarDamageCalculator {
     import GridIndex            = Twns.Types.GridIndex;
     import IBattleDamageInfo    = CommonProto.Structure.IBattleDamageInfo;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode      = Twns.ClientErrorCode;
     import BwUnit               = Twns.BaseWar.BwUnit;
     import BwUnitMap            = Twns.BaseWar.BwUnitMap;
     import BwWar                = Twns.BaseWar.BwWar;

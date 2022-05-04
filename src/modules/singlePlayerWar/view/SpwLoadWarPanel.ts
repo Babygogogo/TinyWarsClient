@@ -21,7 +21,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SinglePlayerWar {
-    import LangTextType         = TwnsLangTextType.LangTextType;
+    import LangTextType         = Twns.Lang.LangTextType;
     import NotifyType           = Twns.Notify.NotifyType;
 
     export type OpenDataForSpwLoadWarPanel = void;

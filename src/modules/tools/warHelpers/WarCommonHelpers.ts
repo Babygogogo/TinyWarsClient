@@ -25,12 +25,12 @@ namespace Twns.WarHelpers.WarCommonHelpers {
     import TileType         = Twns.Types.TileType;
     import WarType          = Twns.Types.WarType;
     import Visibility       = Twns.Types.Visibility;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import LangTextType     = Twns.Lang.LangTextType;
     import CoSkillAreaType  = Twns.Types.CoSkillAreaType;
     import ISerialUnit      = WarSerialization.ISerialUnit;
     import ISerialWar       = WarSerialization.ISerialWar;
     import WarSerialization = CommonProto.WarSerialization;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
     type AvailableMovableGrid = {

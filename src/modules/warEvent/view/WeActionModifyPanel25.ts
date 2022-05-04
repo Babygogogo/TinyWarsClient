@@ -18,7 +18,7 @@ namespace Twns.WarEvent {
     import NotifyType               = Twns.Notify.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
     import BwWar                    = Twns.BaseWar.BwWar;
 
     export type OpenDataForWeActionModifyPanel25 = {

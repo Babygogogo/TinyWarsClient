@@ -32,7 +32,7 @@ namespace Twns.MultiFreeRoom {
     import MfrCreateAdvancedSettingsPage            = Twns.MultiFreeRoom.MfrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import LangTextType                             = Twns.Lang.LangTextType;
     import NotifyType                               = Twns.Notify.NotifyType;
     import WarBasicSettingsType                     = Twns.Types.WarBasicSettingsType;
 

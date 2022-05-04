@@ -21,7 +21,7 @@
 namespace Twns.MapEditor {
     import NotifyType       = Twns.Notify.NotifyType;
     import IMapEditorData   = CommonProto.Map.IMapEditorData;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import LangTextType     = Twns.Lang.LangTextType;
 
     export type OpenDataForMeMapListPanel = void;
     export class MeMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForMeMapListPanel> {

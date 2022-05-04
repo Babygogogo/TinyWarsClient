@@ -26,7 +26,7 @@
 namespace Twns.MultiFreeRoom {
     import NotifyType           = Twns.Notify.NotifyType;
     import Tween                = egret.Tween;
-    import LangTextType         = TwnsLangTextType.LangTextType;
+    import LangTextType         = Twns.Lang.LangTextType;
 
     export type OpenDataForMfrMainMenuPanel = void;
     export class MfrMainMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForMfrMainMenuPanel> {

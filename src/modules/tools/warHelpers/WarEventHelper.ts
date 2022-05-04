@@ -27,7 +27,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarHelpers.WarEventHelpers {
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
     import LanguageType             = Twns.Types.LanguageType;
     import ConditionType            = Twns.Types.WarEventConditionType;
     import ActionType               = Twns.Types.WarEventActionType;
@@ -38,7 +38,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
     import IWarEventAction          = WarEvent.IWarEventAction;
     import IWarEventCondition       = WarEvent.IWarEventCondition;
     import IWarEventConditionNode   = WarEvent.IWarEventConditionNode;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode          = Twns.ClientErrorCode;
     import BwWar                    = BaseWar.BwWar;
     import GameConfig               = Config.GameConfig;
 

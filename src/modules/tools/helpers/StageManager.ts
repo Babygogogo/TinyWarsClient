@@ -10,7 +10,7 @@
 namespace StageManager {
     import LayerType            = Twns.Types.LayerType;
     import NotifyType           = Twns.Notify.NotifyType;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode      = Twns.ClientErrorCode;
 
     // The game is in landscape mode, which means that its design max height equals its design width, 960.
     const DESIGN_WIDTH         = 960;

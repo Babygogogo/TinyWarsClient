@@ -16,7 +16,7 @@
 namespace Twns.MapManagement {
     import MeWar        = Twns.MapEditor.MeWar;
     import NotifyType   = Twns.Notify.NotifyType;
-    import LangTextType = TwnsLangTextType.LangTextType;
+    import LangTextType = Twns.Lang.LangTextType;
 
     export type OpenDataForMmAcceptMapPanel = {
         war: MeWar;

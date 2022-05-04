@@ -10,7 +10,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.CompatibilityHelpers {
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import LangTextType     = Twns.Lang.LangTextType;
 
     export function init(): void {
         initListenerForWindowOnError();

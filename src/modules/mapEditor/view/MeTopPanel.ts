@@ -28,7 +28,7 @@ namespace Twns.MapEditor {
     import MeWar                    = MapEditor.MeWar;
     import NotifyType               = Twns.Notify.NotifyType;
     import DrawerMode               = Twns.Types.MapEditorDrawerMode;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
 
     export type OpenDataForMeTopPanel = void;
     export class MeTopPanel extends TwnsUiPanel.UiPanel<OpenDataForMeTopPanel> {

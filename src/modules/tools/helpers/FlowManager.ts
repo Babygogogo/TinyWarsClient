@@ -73,8 +73,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.FlowManager {
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import ClientErrorCode  = Twns.ClientErrorCode;
+    import LangTextType     = Twns.Lang.LangTextType;
     import NotifyType       = Notify.NotifyType;
     import NetMessageCodes  = Twns.Net.NetMessageCodes;
     import WarType          = Types.WarType;

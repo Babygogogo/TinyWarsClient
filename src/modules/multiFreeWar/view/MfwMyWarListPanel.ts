@@ -28,7 +28,7 @@ namespace Twns.MultiFreeWar {
     import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import LangTextType                             = Twns.Lang.LangTextType;
     import NotifyType                               = Twns.Notify.NotifyType;
     import MpwModel                                 = MultiPlayerWar.MpwModel;
 

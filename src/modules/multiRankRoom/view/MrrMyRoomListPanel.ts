@@ -32,7 +32,7 @@ namespace Twns.MultiRankRoom {
     import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import LangTextType                             = Twns.Lang.LangTextType;
     import NotifyType                               = Twns.Notify.NotifyType;
 
     export type OpenDataForMrrMyRoomListPanel = void;

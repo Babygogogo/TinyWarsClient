@@ -12,7 +12,7 @@ namespace Twns.MapEditor {
     import ISettingsForCommon   = CommonProto.WarSettings.ISettingsForCommon;
     import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
     import GameConfig           = Config.GameConfig;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode      = Twns.ClientErrorCode;
 
     export class MeCommonSettingManager extends BaseWar.BwCommonSettingManager {
         // 在地图编辑器里，玩家数量固定为最大值（为了方便处理某些编辑逻辑），因此warRule实际上是不正确的，因此要重写init函数，去除父类中对warRule的合法性检查，否则地图会无法加载

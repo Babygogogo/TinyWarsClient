@@ -30,7 +30,7 @@ namespace Twns.WarEvent {
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
     import FocusEvent               = egret.FocusEvent;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
 
     export type OpenDataForWeActionModifyPanel1 = {
         war         : Twns.MapEditor.MeWar;

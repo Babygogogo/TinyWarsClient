@@ -16,8 +16,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.ReplayWar {
     import NotifyType       = Twns.Notify.NotifyType;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import ClientErrorCode  = Twns.ClientErrorCode;
+    import LangTextType     = Twns.Lang.LangTextType;
 
     export type OpenDataForRwReplayProgressPanel = {
         war: Twns.ReplayWar.RwWar;

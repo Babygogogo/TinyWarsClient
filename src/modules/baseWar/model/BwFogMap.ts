@@ -18,7 +18,7 @@ namespace Twns.BaseWar {
     import WarSerialization         = CommonProto.WarSerialization;
     import ISerialFogMap            = WarSerialization.ISerialFogMap;
     import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode          = Twns.ClientErrorCode;
     import BwWar                    = BaseWar.BwWar;
 
     export abstract class BwFogMap {

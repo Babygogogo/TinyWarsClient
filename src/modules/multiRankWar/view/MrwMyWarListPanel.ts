@@ -30,7 +30,7 @@ namespace Twns.MultiRankWar {
     import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import LangTextType                             = Twns.Lang.LangTextType;
     import NotifyType                               = Twns.Notify.NotifyType;
     import MpwModel                                 = MultiPlayerWar.MpwModel;
 

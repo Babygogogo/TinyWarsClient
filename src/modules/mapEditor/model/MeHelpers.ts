@@ -24,21 +24,20 @@
 namespace Twns.MapEditor.MeHelpers {
     import BwTile               = BaseWar.BwTile;
     import MeWar                = MapEditor.MeWar;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import GridIndex            = Twns.Types.GridIndex;
-    import TileType             = Twns.Types.TileType;
-    import TileObjectType       = Twns.Types.TileObjectType;
-    import TileBaseType         = Twns.Types.TileBaseType;
-    import SymmetryType         = Twns.Types.SymmetryType;
-    import LanguageType         = Twns.Types.LanguageType;
-    import TileDecoratorType    = Twns.Types.TileDecoratorType;
+    import LangTextType         = Lang.LangTextType;
+    import GridIndex            = Types.GridIndex;
+    import TileType             = Types.TileType;
+    import TileObjectType       = Types.TileObjectType;
+    import TileBaseType         = Types.TileBaseType;
+    import SymmetryType         = Types.SymmetryType;
+    import LanguageType         = Types.LanguageType;
+    import TileDecoratorType    = Types.TileDecoratorType;
     import IMapRawData          = CommonProto.Map.IMapRawData;
     import WarSerialization     = CommonProto.WarSerialization;
     import ITemplateWarRule     = CommonProto.WarRule.ITemplateWarRule;
     import ISerialTile          = WarSerialization.ISerialTile;
     import ISerialUnit          = WarSerialization.ISerialUnit;
     import ISerialPlayer        = WarSerialization.ISerialPlayer;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import BwUnitMap            = BaseWar.BwUnitMap;
 
     export type AsymmetricalCounters = {
@@ -148,8 +147,8 @@ namespace Twns.MapEditor.MeHelpers {
         const mapWidth  = 20;
         const mapHeight = 15;
         return {
-            designerName            : Twns.User.UserModel.getSelfNickname(),
-            designerUserId          : Twns.User.UserModel.getSelfUserId(),
+            designerName            : User.UserModel.getSelfNickname(),
+            designerUserId          : User.UserModel.getSelfUserId(),
             mapNameArray            : [
                 { languageType: LanguageType.Chinese, text: `${Lang.getText(LangTextType.B0279, LanguageType.Chinese)} - ${slotIndex}`},
                 { languageType: LanguageType.English, text: `${Lang.getText(LangTextType.B0279, LanguageType.English)} - ${slotIndex}`},
@@ -157,7 +156,7 @@ namespace Twns.MapEditor.MeHelpers {
             mapWidth,
             mapHeight,
             playersCountUnneutral   : 2,
-            modifiedTime            : Twns.Timer.getServerTimestamp(),
+            modifiedTime            : Timer.getServerTimestamp(),
             tileDataArray           : createDefaultTileDataArray(mapWidth, mapHeight, TileBaseType.Plain),
             unitDataArray           : [],
             warEventFullData        : {
@@ -189,7 +188,7 @@ namespace Twns.MapEditor.MeHelpers {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function createISerialWar(data: CommonProto.Map.IMapEditorData): WarSerialization.ISerialWar {
-        const mapRawData                    = Twns.Helpers.deepClone(Twns.Helpers.getExisted(data.mapRawData));
+        const mapRawData                    = Helpers.deepClone(Helpers.getExisted(data.mapRawData));
         const templateWarRuleArray          = mapRawData.templateWarRuleArray;
         const unitDataArray                 = mapRawData.unitDataArray || [];
         const templateWarRule               = createRevisedTemplateWarRuleForMeWar(templateWarRuleArray ? templateWarRuleArray[0] : null);
@@ -214,13 +213,13 @@ namespace Twns.MapEditor.MeHelpers {
             playerManager           : createISerialPlayerManager(),
             turnManager             : {
                 turnIndex       : CommonConstants.WarFirstTurnIndex,
-                turnPhaseCode   : Twns.Types.TurnPhaseCode.WaitBeginTurn,
+                turnPhaseCode   : Types.TurnPhaseCode.WaitBeginTurn,
                 playerIndex     : CommonConstants.WarNeutralPlayerIndex,
                 enterTurnTime   : 0,
             },
             field                   : {
                 fogMap  : {
-                    forceFogCode            : Twns.Types.ForceFogCode.None,
+                    forceFogCode            : Types.ForceFogCode.None,
                     forceExpirePlayerIndex  : null,
                     forceExpireTurnIndex    : null,
                     mapsFromPath            : null,
@@ -245,12 +244,12 @@ namespace Twns.MapEditor.MeHelpers {
         return {
             fund                        : 0,
             hasVotedForDraw             : false,
-            aliveState                  : Twns.Types.PlayerAliveState.Alive,
+            aliveState                  : Types.PlayerAliveState.Alive,
             playerIndex,
-            userId                      : playerIndex > 0 ? Twns.User.UserModel.getSelfUserId() : null,
+            userId                      : playerIndex > 0 ? User.UserModel.getSelfUserId() : null,
             coId                        : 0,
             coCurrentEnergy             : null,
-            coUsingSkillType            : Twns.Types.CoSkillType.Passive,
+            coUsingSkillType            : Types.CoSkillType.Passive,
             coPowerActivatedCount       : null,
             coIsDestroyedInTurn         : false,
             watchRequestSrcUserIdArray  : [],
@@ -260,7 +259,7 @@ namespace Twns.MapEditor.MeHelpers {
         };
     }
 
-    export function createRevisedTemplateWarRuleArrayForMeWar(srcTemplateWarRuleArray: Twns.Types.Undefinable<ITemplateWarRule[]>): ITemplateWarRule[] {
+    export function createRevisedTemplateWarRuleArrayForMeWar(srcTemplateWarRuleArray: Types.Undefinable<ITemplateWarRule[]>): ITemplateWarRule[] {
         if (!srcTemplateWarRuleArray?.length) {
             return [createRevisedTemplateWarRuleForMeWar(null)];
         } else {
@@ -271,16 +270,16 @@ namespace Twns.MapEditor.MeHelpers {
             return revisedTemplateWarRuleArray;
         }
     }
-    function createRevisedTemplateWarRuleForMeWar(templateWarRule: Twns.Types.Undefinable<ITemplateWarRule>): ITemplateWarRule {
+    function createRevisedTemplateWarRuleForMeWar(templateWarRule: Types.Undefinable<ITemplateWarRule>): ITemplateWarRule {
         if (templateWarRule == null) {
             return WarHelpers.WarRuleHelpers.createDefaultTemplateWarRule(0, CommonConstants.WarMaxPlayerIndex);
         } else {
-            const revisedTemplateWarRule            = Twns.Helpers.deepClone(templateWarRule);
+            const revisedTemplateWarRule            = Helpers.deepClone(templateWarRule);
             revisedTemplateWarRule.ruleForPlayers   = createRevisedRuleForPlayersForMeWar(revisedTemplateWarRule.ruleForPlayers);
             return revisedTemplateWarRule;
         }
     }
-    function createRevisedRuleForPlayersForMeWar(ruleForPlayers: Twns.Types.Undefinable<CommonProto.WarRule.IRuleForPlayers>): CommonProto.WarRule.IRuleForPlayers {
+    function createRevisedRuleForPlayersForMeWar(ruleForPlayers: Types.Undefinable<CommonProto.WarRule.IRuleForPlayers>): CommonProto.WarRule.IRuleForPlayers {
         const playerRuleArray = ruleForPlayers?.playerRuleDataArray;
         if (playerRuleArray == null) {
             return {
@@ -289,7 +288,7 @@ namespace Twns.MapEditor.MeHelpers {
         } else {
             const revisedPlayerRuleArray: CommonProto.WarRule.IDataForPlayerRule[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
-                revisedPlayerRuleArray.push(Twns.Helpers.deepClone(playerRuleArray.find(v => v.playerIndex === playerIndex)) ?? WarHelpers.WarRuleHelpers.createDefaultPlayerRule(playerIndex));
+                revisedPlayerRuleArray.push(Helpers.deepClone(playerRuleArray.find(v => v.playerIndex === playerIndex)) ?? WarHelpers.WarRuleHelpers.createDefaultPlayerRule(playerIndex));
             }
             return {
                 playerRuleDataArray : revisedPlayerRuleArray,
@@ -308,7 +307,7 @@ namespace Twns.MapEditor.MeHelpers {
             mapHeight               : newHeight,
             playersCountUnneutral   : mapRawData.playersCountUnneutral,
             warEventFullData        : mapRawData.warEventFullData,
-            modifiedTime            : Twns.Timer.getServerTimestamp(),
+            modifiedTime            : Timer.getServerTimestamp(),
             tileDataArray           : createDefaultTileDataArray(newWidth, newHeight, TileBaseType.Plain),
             unitDataArray           : null,
             templateWarRuleArray    : mapRawData.templateWarRuleArray,
@@ -324,7 +323,7 @@ namespace Twns.MapEditor.MeHelpers {
             mapHeight               : newHeight,
             playersCountUnneutral   : mapRawData.playersCountUnneutral,
             warEventFullData        : mapRawData.warEventFullData,
-            modifiedTime            : Twns.Timer.getServerTimestamp(),
+            modifiedTime            : Timer.getServerTimestamp(),
             tileDataArray           : getNewTileDataListForResize(mapRawData, newWidth, newHeight),
             unitDataArray           : getNewUnitDataListForResize(mapRawData, newWidth, newHeight),
             templateWarRuleArray    : mapRawData.templateWarRuleArray,
@@ -333,14 +332,14 @@ namespace Twns.MapEditor.MeHelpers {
     function getNewTileDataListForResize(mapRawData: IMapRawData, newWidth: number, newHeight: number): ISerialTile[] {
         const tileList: ISerialTile[] = [];
         for (const tileData of mapRawData.tileDataArray || []) {
-            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
             if ((gridIndex.x < newWidth) && (gridIndex.y < newHeight)) {
                 tileList.push(tileData);
             }
         }
 
-        const oldWidth  = Twns.Helpers.getExisted(mapRawData.mapWidth);
-        const oldHeight = Twns.Helpers.getExisted(mapRawData.mapHeight);
+        const oldWidth  = Helpers.getExisted(mapRawData.mapWidth);
+        const oldHeight = Helpers.getExisted(mapRawData.mapHeight);
         for (let x = 0; x < newWidth; ++x) {
             for (let y = 0; y < newHeight; ++y) {
                 if ((x >= oldWidth) || (y >= oldHeight)) {
@@ -354,7 +353,7 @@ namespace Twns.MapEditor.MeHelpers {
     function getNewUnitDataListForResize(mapRawData: IMapRawData, newWidth: number, newHeight: number): ISerialUnit[] {
         const unitDataArray: ISerialUnit[] = [];
         for (const unitData of mapRawData.unitDataArray || []) {
-            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
             if ((gridIndex.x < newWidth) && (gridIndex.y < newHeight)) {
                 unitDataArray.push(unitData);
             }
@@ -363,7 +362,7 @@ namespace Twns.MapEditor.MeHelpers {
         const allUnitsDict  = new Map<number, { unit: ISerialUnit, newUnitId: number }>();
         let nextUnitId      = 0;
         for (const unit of unitDataArray) {
-            allUnitsDict.set(Twns.Helpers.getExisted(unit.unitId), { unit, newUnitId: nextUnitId } );
+            allUnitsDict.set(Helpers.getExisted(unit.unitId), { unit, newUnitId: nextUnitId } );
             ++nextUnitId;
         }
         for (const [, value] of allUnitsDict) {
@@ -372,7 +371,7 @@ namespace Twns.MapEditor.MeHelpers {
 
             const loaderUnitId = unit.loaderUnitId;
             if (loaderUnitId != null) {
-                unit.loaderUnitId = Twns.Helpers.getExisted(allUnitsDict.get(loaderUnitId)).newUnitId;
+                unit.loaderUnitId = Helpers.getExisted(allUnitsDict.get(loaderUnitId)).newUnitId;
             }
         }
 
@@ -389,7 +388,7 @@ namespace Twns.MapEditor.MeHelpers {
             mapWidth                : mapRawData.mapWidth,
             mapHeight               : mapRawData.mapHeight,
             playersCountUnneutral   : mapRawData.playersCountUnneutral,
-            modifiedTime            : Twns.Timer.getServerTimestamp(),
+            modifiedTime            : Timer.getServerTimestamp(),
             tileDataArray           : getNewTileDataListForOffset(mapRawData, offsetX, offsetY),
             unitDataArray           : getNewUnitDataListForOffset(mapRawData, offsetX, offsetY),
             templateWarRuleArray    : mapRawData.templateWarRuleArray,
@@ -397,15 +396,15 @@ namespace Twns.MapEditor.MeHelpers {
         };
     }
     function getNewTileDataListForOffset(mapRawData: IMapRawData, offsetX: number, offsetY: number): ISerialTile[] {
-        const width         = Twns.Helpers.getExisted(mapRawData.mapWidth);
-        const height        = Twns.Helpers.getExisted(mapRawData.mapHeight);
+        const width         = Helpers.getExisted(mapRawData.mapWidth);
+        const height        = Helpers.getExisted(mapRawData.mapHeight);
         const tileDataList  : ISerialTile[] = [];
-        for (const tileData of Twns.Helpers.getExisted(mapRawData.tileDataArray)) {
-            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
+        for (const tileData of Helpers.getExisted(mapRawData.tileDataArray)) {
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
             const newX      = gridIndex.x + offsetX;
             const newY      = gridIndex.y + offsetY;
             if ((newX >= 0) && (newX < width) && (newY >= 0) && (newY < height)) {
-                const newData       = Twns.Helpers.deepClone(tileData);
+                const newData       = Helpers.deepClone(tileData);
                 newData.gridIndex   = { x: newX, y: newY };
                 tileDataList.push(newData);
             }
@@ -426,15 +425,15 @@ namespace Twns.MapEditor.MeHelpers {
         return tileDataList;
     }
     function getNewUnitDataListForOffset(mapRawData: IMapRawData, offsetX: number, offsetY: number): ISerialUnit[] {
-        const width         = Twns.Helpers.getExisted(mapRawData.mapWidth);
-        const height        = Twns.Helpers.getExisted(mapRawData.mapHeight);
+        const width         = Helpers.getExisted(mapRawData.mapWidth);
+        const height        = Helpers.getExisted(mapRawData.mapHeight);
         const unitDataArray : ISerialUnit[] = [];
         for (const unitData of mapRawData.unitDataArray || []) {
-            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
             const newX      = gridIndex.x + offsetX;
             const newY      = gridIndex.y + offsetY;
             if ((newX >= 0) && (newX < width) && (newY >= 0) && (newY < height)) {
-                const newData       = Twns.Helpers.deepClone(unitData);
+                const newData       = Helpers.deepClone(unitData);
                 newData.gridIndex   = { x: newX, y: newY };
                 unitDataArray.push(newData);
             }
@@ -443,7 +442,7 @@ namespace Twns.MapEditor.MeHelpers {
         const allUnitsDict  = new Map<number, { unit: ISerialUnit, newUnitId: number }>();
         let nextUnitId      = 0;
         for (const unit of unitDataArray) {
-            allUnitsDict.set(Twns.Helpers.getExisted(unit.unitId), { unit, newUnitId: nextUnitId } );
+            allUnitsDict.set(Helpers.getExisted(unit.unitId), { unit, newUnitId: nextUnitId } );
             ++nextUnitId;
         }
         for (const [, value] of allUnitsDict) {
@@ -452,7 +451,7 @@ namespace Twns.MapEditor.MeHelpers {
 
             const loaderUnitId = unit.loaderUnitId;
             if (loaderUnitId != null) {
-                unit.loaderUnitId = Twns.Helpers.getExisted(allUnitsDict.get(loaderUnitId)).newUnitId;
+                unit.loaderUnitId = Helpers.getExisted(allUnitsDict.get(loaderUnitId)).newUnitId;
             }
         }
 
@@ -473,7 +472,7 @@ namespace Twns.MapEditor.MeHelpers {
 
             const loaderUnitId = unit.getLoaderUnitId();
             if (loaderUnitId != null) {
-                unit.setLoaderUnitId(Twns.Helpers.getExisted(allUnits.get(loaderUnitId), ClientErrorCode.MeUtility_ReviseAllUnitIds_00).newUnitId);
+                unit.setLoaderUnitId(Helpers.getExisted(allUnits.get(loaderUnitId), ClientErrorCode.MeUtility_ReviseAllUnitIds_00).newUnitId);
             }
         }
         unitMap.setNextUnitId(nextUnitId);
@@ -495,20 +494,20 @@ namespace Twns.MapEditor.MeHelpers {
             for (let y = 0; y < height; ++y) {
                 const gridIndex = { x, y };
                 const tile      = tileMap.getTile(gridIndex);
-                if (checkIsSymmetrical(tile, tileMap.getTile(Twns.Helpers.getExisted(getSymmetricalGridIndex(gridIndex, SymmetryType.LeftToRight, mapSize))), SymmetryType.LeftToRight)) {
+                if (checkIsSymmetrical(tile, tileMap.getTile(Helpers.getExisted(getSymmetricalGridIndex(gridIndex, SymmetryType.LeftToRight, mapSize))), SymmetryType.LeftToRight)) {
                     ++countLeftRight;
                 }
-                if (checkIsSymmetrical(tile, tileMap.getTile(Twns.Helpers.getExisted(getSymmetricalGridIndex(gridIndex, SymmetryType.UpToDown, mapSize))), SymmetryType.UpToDown)) {
+                if (checkIsSymmetrical(tile, tileMap.getTile(Helpers.getExisted(getSymmetricalGridIndex(gridIndex, SymmetryType.UpToDown, mapSize))), SymmetryType.UpToDown)) {
                     ++countUpDown;
                 }
-                if (checkIsSymmetrical(tile, tileMap.getTile(Twns.Helpers.getExisted(getSymmetricalGridIndex(gridIndex, SymmetryType.Rotation, mapSize))), SymmetryType.Rotation)) {
+                if (checkIsSymmetrical(tile, tileMap.getTile(Helpers.getExisted(getSymmetricalGridIndex(gridIndex, SymmetryType.Rotation, mapSize))), SymmetryType.Rotation)) {
                     ++countRotational;
                 }
                 if (isSquare) {
-                    if (checkIsSymmetrical(tile, tileMap.getTile(Twns.Helpers.getExisted(getSymmetricalGridIndex(gridIndex, SymmetryType.UpLeftToDownRight, mapSize))), SymmetryType.UpLeftToDownRight)) {
+                    if (checkIsSymmetrical(tile, tileMap.getTile(Helpers.getExisted(getSymmetricalGridIndex(gridIndex, SymmetryType.UpLeftToDownRight, mapSize))), SymmetryType.UpLeftToDownRight)) {
                         ++countUpLeftDownRight;
                     }
-                    if (checkIsSymmetrical(tile, tileMap.getTile(Twns.Helpers.getExisted(getSymmetricalGridIndex(gridIndex, SymmetryType.UpRightToDownLeft, mapSize))), SymmetryType.UpRightToDownLeft)) {
+                    if (checkIsSymmetrical(tile, tileMap.getTile(Helpers.getExisted(getSymmetricalGridIndex(gridIndex, SymmetryType.UpRightToDownLeft, mapSize))), SymmetryType.UpRightToDownLeft)) {
                         ++countUpRightDownLeft;
                     }
                 }
@@ -524,7 +523,7 @@ namespace Twns.MapEditor.MeHelpers {
             UpRightToDownLeft   : isSquare ? totalGrids - countUpRightDownLeft : null,
         };
     }
-    export function getSymmetricalGridIndex(gridIndex: GridIndex, symmetryType: SymmetryType, mapSize: Twns.Types.MapSize): GridIndex | null {
+    export function getSymmetricalGridIndex(gridIndex: GridIndex, symmetryType: SymmetryType, mapSize: Types.MapSize): GridIndex | null {
         const { width, height } = mapSize;
         if (symmetryType === SymmetryType.LeftToRight) {
             return {
@@ -620,7 +619,7 @@ namespace Twns.MapEditor.MeHelpers {
 
         const baseType1 = tileMap.getTile(gridIndex1).getBaseType();
         if ((baseType1 === TileBaseType.River) || (baseType1 === TileBaseType.Sea)) {
-            if (tile2.getMoveCostByMoveType(Twns.Types.MoveType.Tank) != null) {
+            if (tile2.getMoveCostByMoveType(Types.MoveType.Tank) != null) {
                 return true;
             }
         }
@@ -635,7 +634,7 @@ namespace Twns.MapEditor.MeHelpers {
         const isAdjacent2           = checkIsPlasma(tileMap, { x, y: y + 1 }) ? 1 : 0;
         const isAdjacent1           = checkIsPlasma(tileMap, { x, y: y - 1 }) ? 1 : 0;
         const isAdjacentToMeteor    = GridIndexHelpers.getAdjacentGrids(gridIndex, tileMap.getMapSize()).some(v => tileMap.getTile(v).getType() === TileType.Meteor);
-        return Twns.Helpers.getExisted(TilePlasmaAutoShapeIdMap.get(isAdjacentToMeteor))[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
+        return Helpers.getExisted(TilePlasmaAutoShapeIdMap.get(isAdjacentToMeteor))[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
     function checkIsPlasma(tileMap: BaseWar.BwTileMap, gridIndex: GridIndex): boolean {
         if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
@@ -647,13 +646,13 @@ namespace Twns.MapEditor.MeHelpers {
     }
 
     export function getAutoPipeShapeId(tileMap: BaseWar.BwTileMap, gridIndex: GridIndex): number {
-        const isAdjacent4   = checkCanLinkToPipe(tileMap, gridIndex, Twns.Types.Direction.Left) ? 1 : 0;
-        const isAdjacent3   = checkCanLinkToPipe(tileMap, gridIndex, Twns.Types.Direction.Right) ? 1 : 0;
-        const isAdjacent2   = checkCanLinkToPipe(tileMap, gridIndex, Twns.Types.Direction.Down) ? 1 : 0;
-        const isAdjacent1   = checkCanLinkToPipe(tileMap, gridIndex, Twns.Types.Direction.Up) ? 1 : 0;
+        const isAdjacent4   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Left) ? 1 : 0;
+        const isAdjacent3   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Right) ? 1 : 0;
+        const isAdjacent2   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Down) ? 1 : 0;
+        const isAdjacent1   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Up) ? 1 : 0;
         return TilePipeAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
-    function checkCanLinkToPipe(tileMap: BaseWar.BwTileMap, origin: GridIndex, direction: Twns.Types.Direction): boolean {
+    function checkCanLinkToPipe(tileMap: BaseWar.BwTileMap, origin: GridIndex, direction: Types.Direction): boolean {
         const gridIndex = GridIndexHelpers.getAdjacentGrid(origin, direction);
         if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
             return true;
@@ -662,14 +661,14 @@ namespace Twns.MapEditor.MeHelpers {
         const tile          = tileMap.getTile(gridIndex);
         const objectType    = tile.getObjectType();
         const objectShapeId = tile.getObjectShapeId();
-        if (objectType === Twns.Types.TileObjectType.Empty) {
-            return ((objectShapeId === 1) && ((direction === Twns.Types.Direction.Left) || (direction === Twns.Types.Direction.Right)))
-                || ((objectShapeId === 2) && ((direction === Twns.Types.Direction.Up) || (direction === Twns.Types.Direction.Down)));
-        } else if (objectType === Twns.Types.TileObjectType.Pipe) {
+        if (objectType === Types.TileObjectType.Empty) {
+            return ((objectShapeId === 1) && ((direction === Types.Direction.Left) || (direction === Types.Direction.Right)))
+                || ((objectShapeId === 2) && ((direction === Types.Direction.Up) || (direction === Types.Direction.Down)));
+        } else if (objectType === Types.TileObjectType.Pipe) {
             return true;
-        } else if (objectType === Twns.Types.TileObjectType.PipeJoint) {
-            return ((objectShapeId === 0) && ((direction === Twns.Types.Direction.Left) || (direction === Twns.Types.Direction.Right)))
-                || ((objectShapeId === 1) && ((direction === Twns.Types.Direction.Up) || (direction === Twns.Types.Direction.Down)));
+        } else if (objectType === Types.TileObjectType.PipeJoint) {
+            return ((objectShapeId === 0) && ((direction === Types.Direction.Left) || (direction === Types.Direction.Right)))
+                || ((objectShapeId === 1) && ((direction === Types.Direction.Up) || (direction === Types.Direction.Down)));
         } else {
             return false;
         }
@@ -852,7 +851,7 @@ namespace Twns.MapEditor.MeHelpers {
         const warEventFullData  = mapRawData.warEventFullData;
         const warRuleError      = WarHelpers.WarRuleHelpers.getErrorCodeForTemplateWarRuleArray({
             templateWarRuleArray,
-            playersCountUnneutral   : Twns.Helpers.getExisted(mapRawData.playersCountUnneutral),
+            playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),
             allWarEventIdArray      : WarHelpers.WarEventHelpers.getAllWarEventIdArray(warEventFullData),
             gameConfig,
         });
@@ -876,7 +875,7 @@ namespace Twns.MapEditor.MeHelpers {
 
         return await new TestWar.TwWar().getErrorCodeForInitByMapRawData(mapRawData, gameConfig);
     }
-    function getErrorCodeForMapDesigner(mapDesigner: Twns.Types.Undefinable<string>): ClientErrorCode {
+    function getErrorCodeForMapDesigner(mapDesigner: Types.Undefinable<string>): ClientErrorCode {
         if ((mapDesigner == null)                                       ||
             (mapDesigner.length <= 0)                                   ||
             (mapDesigner.length > CommonConstants.MapMaxDesignerLength)
@@ -886,8 +885,8 @@ namespace Twns.MapEditor.MeHelpers {
             return ClientErrorCode.NoError;
         }
     }
-    function getErrorCodeForMapNameArray(mapNameList: Twns.Types.Undefinable<CommonProto.Structure.ILanguageText[]>): ClientErrorCode {
-        if (!Twns.Helpers.checkIsValidLanguageTextArray({
+    function getErrorCodeForMapNameArray(mapNameList: Types.Undefinable<CommonProto.Structure.ILanguageText[]>): ClientErrorCode {
+        if (!Helpers.checkIsValidLanguageTextArray({
             list            : mapNameList,
             maxTextLength   : CommonConstants.MapMaxNameLength,
             minTextLength   : 1,
@@ -898,14 +897,14 @@ namespace Twns.MapEditor.MeHelpers {
 
         return ClientErrorCode.NoError;
     }
-    function getErrorCodeForMapExtraText(mapExtraText: Twns.Types.Undefinable<CommonProto.Map.IMapExtraText>): ClientErrorCode {
+    function getErrorCodeForMapExtraText(mapExtraText: Types.Undefinable<CommonProto.Map.IMapExtraText>): ClientErrorCode {
         if (mapExtraText == null) {
             return ClientErrorCode.NoError;
         }
 
         const mapDescription = mapExtraText.mapDescription;
         if ((mapDescription?.length)                &&
-            (!Twns.Helpers.checkIsValidLanguageTextArray({
+            (!Helpers.checkIsValidLanguageTextArray({
                 list            : mapDescription,
                 minTextCount    : 1,
                 minTextLength   : 1,
@@ -917,7 +916,7 @@ namespace Twns.MapEditor.MeHelpers {
 
         return ClientErrorCode.NoError;
     }
-    function getErrorCodeForUnitArray(unitArray: Twns.Types.Undefinable<CommonProto.WarSerialization.ISerialUnit[]>): ClientErrorCode {
+    function getErrorCodeForUnitArray(unitArray: Types.Undefinable<CommonProto.WarSerialization.ISerialUnit[]>): ClientErrorCode {
         if (!WarHelpers.WarCommonHelpers.checkIsUnitIdCompact(unitArray)) {
             return ClientErrorCode.MeHelpers_GetErrorCodeForUnitArray_00;
         }
@@ -969,7 +968,7 @@ namespace Twns.MapEditor.MeHelpers {
 
         return ClientErrorCode.NoError;
     }
-    function checkIsEveryWarEventInUse(warEventFullData: Twns.Types.Undefinable<CommonProto.Map.IWarEventFullData>, templateWarRuleArray: ITemplateWarRule[]): boolean {  // DONE
+    function checkIsEveryWarEventInUse(warEventFullData: Types.Undefinable<CommonProto.Map.IWarEventFullData>, templateWarRuleArray: ITemplateWarRule[]): boolean {  // DONE
         const eventArray = warEventFullData?.eventArray;
         return (!eventArray?.length)
             || (eventArray.every(warEvent => {
@@ -995,7 +994,7 @@ namespace Twns.MapEditor.MeHelpers {
             war.startRunning()
                 .startRunningView();
         } catch (e) {
-            return (e as Twns.Types.CustomError).errorCode ?? ClientErrorCode.MeUtility_GetSevereErrorCodeForMapRawData_01;
+            return (e as Types.CustomError).errorCode ?? ClientErrorCode.MeUtility_GetSevereErrorCodeForMapRawData_01;
         }
 
         return ClientErrorCode.NoError;

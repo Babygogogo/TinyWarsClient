@@ -16,7 +16,7 @@ namespace Twns.BaseWar {
     import WarSerialization = CommonProto.WarSerialization;
     import ISerialUnitMap   = WarSerialization.ISerialUnitMap;
     import ISerialUnit      = WarSerialization.ISerialUnit;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
     export class BwUnitMap {

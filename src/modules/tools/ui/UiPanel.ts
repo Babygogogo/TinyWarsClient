@@ -22,7 +22,7 @@ namespace TwnsUiPanel {
     export const EVENT_PANEL_SKIN_LOADED            = `EventPanelSkinLoaded`;
     export const EVENT_PANEL_CHILDREN_CREATED       = `EventPanelChildrenCreated`;
 
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import UiListener       = Twns.Types.UiListener;
     import PanelConfig      = Twns.PanelHelpers.PanelConfig;
 

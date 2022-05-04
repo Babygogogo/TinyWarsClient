@@ -14,7 +14,7 @@
 // import Helpers                      from "../helpers/Helpers";
 // import Types                        from "../helpers/Types";
 // import Notify                       from "../notify/Notify";
-// import Twns.Notify               from "../notify/NotifyType";
+// import Notify               from "../notify/NotifyType";
 // import ProtoTypes                   from "../proto/ProtoTypes";
 // import WarCommonHelpers             from "./WarCommonHelpers";
 // import WarCoSkillHelpers            from "./WarCoSkillHelpers";
@@ -24,10 +24,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarHelpers.WarActionExecutor {
-    import GridIndex                            = Twns.Types.GridIndex;
-    import UnitActionState                      = Twns.Types.UnitActionState;
-    import MovePath                             = Twns.Types.MovePath;
-    import TileType                             = Twns.Types.TileType;
+    import GridIndex                            = Types.GridIndex;
+    import UnitActionState                      = Types.UnitActionState;
+    import MovePath                             = Types.MovePath;
+    import TileType                             = Types.TileType;
     import WarAction                            = CommonProto.WarAction;
     import IWarActionContainer                  = WarAction.IWarActionContainer;
     import IWarActionPlayerDeleteUnit           = WarAction.IWarActionPlayerDeleteUnit;
@@ -59,12 +59,11 @@ namespace Twns.WarHelpers.WarActionExecutor {
     import IWarActionUnitSurface                = WarAction.IWarActionUnitSurface;
     import IWarActionUnitUseCoSkill             = WarAction.IWarActionUnitUseCoSkill;
     import IWarActionUnitWait                   = WarAction.IWarActionUnitWait;
-    import ClientErrorCode                      = TwnsClientErrorCode.ClientErrorCode;
     import BwPlayer                             = BaseWar.BwPlayer;
     import BwUnit                               = BaseWar.BwUnit;
     import BwTile                               = BaseWar.BwTile;
     import BwWar                                = BaseWar.BwWar;
-    import NotifyType                           = Twns.Notify.NotifyType;
+    import NotifyType                           = Notify.NotifyType;
 
     type ResultForHandleDestructionForTile = {
         damagedTileSet?     : Set<BwTile>;
@@ -73,13 +72,13 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     export async function checkAndExecute(war: BwWar, action: IWarActionContainer, isFast: boolean): Promise<void> {
         if (!war.getIsRunning()) {
-            throw Twns.Helpers.newError(`!war.getIsRunning().`, ClientErrorCode.BwWarActionExecutor_CheckAndExecute_00);
+            throw Helpers.newError(`!war.getIsRunning().`, ClientErrorCode.BwWarActionExecutor_CheckAndExecute_00);
         }
         if (war.getIsExecutingAction()) {
-            throw Twns.Helpers.newError(`war.getIsExecutingAction().`, ClientErrorCode.BwWarActionExecutor_CheckAndExecute_01);
+            throw Helpers.newError(`war.getIsExecutingAction().`, ClientErrorCode.BwWarActionExecutor_CheckAndExecute_01);
         }
         if (war.getIsEnded()) {
-            throw Twns.Helpers.newError(`war.getIsEnded().`, ClientErrorCode.BwWarActionExecutor_CheckAndExecute_02);
+            throw Helpers.newError(`war.getIsEnded().`, ClientErrorCode.BwWarActionExecutor_CheckAndExecute_02);
         }
 
         const actionPlanner = war.getActionPlanner();
@@ -125,7 +124,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         else                                                { await exeUnknownAction(); }
 
         if (!isFast) {
-            Twns.Notify.dispatch(NotifyType.WarActionNormalExecuted);
+            Notify.dispatch(NotifyType.WarActionNormalExecuted);
         }
     }
 
@@ -141,7 +140,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExePlayerDeleteUnit_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExePlayerDeleteUnit_00),
                 isFastExecute   : true,
             });
         } else {
@@ -160,7 +159,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExePlayerDeleteUnit_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExePlayerDeleteUnit_00);
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
                 movingUnitAndPath       : commonExtraData.movingUnitAndPath,
@@ -229,7 +228,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (extraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(extraData.commonExtraData, ClientErrorCode.WarActionExecutor_HandlePlayerProduceUnit_00),
+                commonExtraData : Helpers.getExisted(extraData.commonExtraData, ClientErrorCode.WarActionExecutor_HandlePlayerProduceUnit_00),
                 isFastExecute   : true,
             });
 
@@ -237,13 +236,13 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const unitMap       = war.getUnitMap();
             const unitId        = unitMap.getNextUnitId();
             const gridIndex     = action.gridIndex as GridIndex;
-            const unitType      = Twns.Helpers.getExisted(action.unitType);
-            const unitHp        = Twns.Helpers.getExisted(action.unitHp);
+            const unitType      = Helpers.getExisted(action.unitType);
+            const unitHp        = Helpers.getExisted(action.unitHp);
             const gameConfig    = war.getGameConfig();
             const playerInTurn  = war.getPlayerInTurn();
             const playerIndex   = playerInTurn.getPlayerIndex();
             const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
-            const cfgCost       = Twns.Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost);
+            const cfgCost       = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost);
             const cost          = Math.floor(
                 cfgCost
                 * (skillCfg ? skillCfg[5] : 100)
@@ -269,11 +268,11 @@ namespace Twns.WarHelpers.WarActionExecutor {
             playerInTurn.setFund(playerInTurn.getFund() - cost);
         }
     }
-    function getPromotionForPlayerProduceUnit(war: BwWar, gridIndex: GridIndex, unitType: Twns.Types.UnitType): number {
+    function getPromotionForPlayerProduceUnit(war: BwWar, gridIndex: GridIndex, unitType: Types.UnitType): number {
         const player                    = war.getPlayerInTurn();
         const coZoneRadius              = player.getCoZoneRadius();
         const gameConfig                = war.getGameConfig();
-        const getCoGridIndexArrayOnMap  = Twns.Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+        const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
         let promotion                   = 0;
         for (const skillId of war.getPlayerInTurn().getCoCurrentSkills()) {
             const cfg = gameConfig.getCoSkillCfg(skillId)?.selfPromotionBonusByProduce;
@@ -305,11 +304,11 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExePlayerSurrender_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExePlayerSurrender_00),
                 isFastExecute   : true,
             });
         } else {
-            war.getPlayerInTurn().setAliveState(Twns.Types.PlayerAliveState.Dying);
+            war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
         }
     }
     async function normalExePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender): Promise<void> {
@@ -318,7 +317,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExePlayerSurrender_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExePlayerSurrender_00);
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
                 movingUnitAndPath       : commonExtraData.movingUnitAndPath,
@@ -333,7 +332,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             });
 
         } else {
-            war.getPlayerInTurn().setAliveState(Twns.Types.PlayerAliveState.Dying);
+            war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
         }
     }
 
@@ -349,7 +348,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExePlayerVoteForDraw_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExePlayerVoteForDraw_00),
                 isFastExecute   : true,
             });
         } else {
@@ -371,7 +370,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExePlayerVoteForDraw_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExePlayerVoteForDraw_00);
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
                 movingUnitAndPath       : commonExtraData.movingUnitAndPath,
@@ -410,15 +409,15 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const playerInTurn      = war.getPlayerInTurn();
         const actionExtraData   = action.extraData;
         if (actionExtraData) {
-            const skillType         = Twns.Helpers.getExisted(actionExtraData.skillType, ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_00);
+            const skillType         = Helpers.getExisted(actionExtraData.skillType, ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_00);
             const skillIdArray      = playerInTurn.getCoSkills(skillType);
-            const skillDataArray    = Twns.Helpers.getExisted(actionExtraData.skillDataArray, ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_01);
+            const skillDataArray    = Helpers.getExisted(actionExtraData.skillDataArray, ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_01);
             for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
                 WarCoSkillHelpers.exeInstantSkill({
                     war,
                     player          : playerInTurn,
                     skillId         : skillIdArray[skillIndex],
-                    skillData       : Twns.Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_02),
+                    skillData       : Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_02),
                     hasExtraData    : true,
                     isFastExecute   : true,
                 });
@@ -426,12 +425,12 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_03),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_03),
                 isFastExecute   : true,
             });
 
         } else {
-            const skillType     = Twns.Helpers.getExisted(action.skillType, ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_04);
+            const skillType     = Helpers.getExisted(action.skillType, ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_04);
             const skillIdArray  = playerInTurn.getCoSkills(skillType);
             playerInTurn.updateOnUseCoSkill(skillType);
 
@@ -464,15 +463,15 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const actionExtraData   = action.extraData;
         const playerIndex       = playerInTurn.getPlayerIndex();
         if (actionExtraData) {
-            const skillType         = Twns.Helpers.getExisted(actionExtraData.skillType, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_00);
-            const skillDataArray    = Twns.Helpers.getExisted(actionExtraData.skillDataArray, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_01);
+            const skillType         = Helpers.getExisted(actionExtraData.skillType, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_00);
+            const skillDataArray    = Helpers.getExisted(actionExtraData.skillDataArray, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_01);
             const skillIdArray      = playerInTurn.getCoSkills(skillType);
             for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
                 WarCoSkillHelpers.exeInstantSkill({
                     war,
                     player          : playerInTurn,
                     skillId         : skillIdArray[skillIndex],
-                    skillData       : Twns.Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_02),
+                    skillData       : Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_02),
                     hasExtraData    : true,
                     isFastExecute   : false,
                 });
@@ -480,7 +479,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_03),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_03),
                 isFastExecute   : false,
             });
 
@@ -492,7 +491,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             }
 
         } else {
-            const skillType = Twns.Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_04);
+            const skillType = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_04);
             playerInTurn.updateOnUseCoSkill(skillType);
 
             const skillIdArray = playerInTurn.getCoSkills(skillType);
@@ -545,11 +544,11 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const playerInTurn  = war.getPlayerInTurn();
         const playerIndex   = playerInTurn.getPlayerIndex();
         if ((playerIndex !== CommonConstants.WarNeutralPlayerIndex)         &&
-            (playerInTurn.getAliveState() !== Twns.Types.PlayerAliveState.Dead)
+            (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
         ) {
             const nickname = await playerInTurn.getNickname();
             await new Promise<void>(resolve => {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwBeginTurnPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.BwBeginTurnPanel, {
                     gameConfig          : war.getGameConfig(),
                     playerIndex,
                     teamIndex           : playerInTurn.getTeamIndex(),
@@ -575,10 +574,10 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const warEventManager   = war.getWarEventManager();
         const actionExtraData   = action.extraData;
         if (actionExtraData) {
-            warEventManager.updateWarEventCalledCountOnCall(Twns.Helpers.getExisted(actionExtraData.warEventId, ClientErrorCode.WarActionExecutor_FastExeSystemCallWarEvent_00));
+            warEventManager.updateWarEventCalledCountOnCall(Helpers.getExisted(actionExtraData.warEventId, ClientErrorCode.WarActionExecutor_FastExeSystemCallWarEvent_00));
             await warEventManager.callWarEvent(action, true);
         } else {
-            warEventManager.updateWarEventCalledCountOnCall(Twns.Helpers.getExisted(action.warEventId, ClientErrorCode.WarActionExecutor_FastExeSystemCallWarEvent_02));
+            warEventManager.updateWarEventCalledCountOnCall(Helpers.getExisted(action.warEventId, ClientErrorCode.WarActionExecutor_FastExeSystemCallWarEvent_02));
             await warEventManager.callWarEvent(action, true);
         }
         war.updateTilesAndUnitsOnVisibilityChanged(true);
@@ -590,10 +589,10 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const warEventManager   = war.getWarEventManager();
         const actionExtraData   = action.extraData;
         if (actionExtraData) {
-            warEventManager.updateWarEventCalledCountOnCall(Twns.Helpers.getExisted(actionExtraData.warEventId, ClientErrorCode.WarActionExecutor_NormalExeSystemCallWarEvent_00));
+            warEventManager.updateWarEventCalledCountOnCall(Helpers.getExisted(actionExtraData.warEventId, ClientErrorCode.WarActionExecutor_NormalExeSystemCallWarEvent_00));
             await warEventManager.callWarEvent(action, false);
         } else {
-            warEventManager.updateWarEventCalledCountOnCall(Twns.Helpers.getExisted(action.warEventId, ClientErrorCode.WarActionExecutor_NormalExeSystemCallWarEvent_01));
+            warEventManager.updateWarEventCalledCountOnCall(Helpers.getExisted(action.warEventId, ClientErrorCode.WarActionExecutor_NormalExeSystemCallWarEvent_01));
             await warEventManager.callWarEvent(action, false);
         }
 
@@ -612,12 +611,12 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeSystemDestroyPlayerForce_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeSystemDestroyPlayerForce_00),
                 isFastExecute   : true,
             });
             war.getDrawVoteManager().setRemainingVotes(null);
         } else {
-            WarDestructionHelpers.destroyPlayerForce(war, Twns.Helpers.getExisted(action.targetPlayerIndex), false);
+            WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), false);
         }
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
@@ -627,7 +626,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeSystemDestroyPlayerForce_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeSystemDestroyPlayerForce_00);
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
                 movingUnitAndPath       : commonExtraData.movingUnitAndPath,
@@ -643,7 +642,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             war.getDrawVoteManager().setRemainingVotes(null);
 
         } else {
-            WarDestructionHelpers.destroyPlayerForce(war, Twns.Helpers.getExisted(action.targetPlayerIndex), true);
+            WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), true);
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged(false);
@@ -694,11 +693,11 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeSystemHandleBootPlayer_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeSystemHandleBootPlayer_00),
                 isFastExecute   : true,
             });
         } else {
-            war.getPlayerInTurn().setAliveState(Twns.Types.PlayerAliveState.Dying);
+            war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
         }
     }
     async function normalExeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer): Promise<void> {
@@ -707,7 +706,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeSystemHandleBootPlayer_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeSystemHandleBootPlayer_00);
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
                 movingUnitAndPath       : commonExtraData.movingUnitAndPath,
@@ -722,7 +721,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             });
 
         } else {
-            war.getPlayerInTurn().setAliveState(Twns.Types.PlayerAliveState.Dying);
+            war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
         }
     }
 
@@ -737,7 +736,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeSystemVoteForDraw_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeSystemVoteForDraw_00),
                 isFastExecute   : true,
             });
         } else {
@@ -755,7 +754,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
     async function normalExeSystemVoteForDraw(war: BwWar, action: IWarActionSystemVoteForDraw): Promise<void> {
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeSystemVoteForDraw_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeSystemVoteForDraw_00);
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
                 movingUnitAndPath       : commonExtraData.movingUnitAndPath,
@@ -794,7 +793,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_00),
                 isFastExecute   : true,
             });
 
@@ -803,7 +802,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const launchUnitId  = action.launchUnitId;
             const pathNodes     = path.nodes;
             const unitMap       = war.getUnitMap();
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -829,16 +828,16 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 const damagedTileSet    = new Set<BwTile>();
 
                 for (const battleDamageInfo of battleDamageInfoArray) {
-                    const unitId1   = Twns.Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_01);
-                    const unit1     = Twns.Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_02);
+                    const unitId1   = Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_01);
+                    const unit1     = Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_02);
                     const player1   = unit1.getPlayer();
-                    const damage    = Twns.Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_03);
+                    const damage    = Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_03);
                     affectedPlayerSet.add(player1);
                     affectedUnitSet.add(unit1);
 
                     const unitId2 = battleDamageInfo.targetUnitId;
                     if (unitId2 != null) {
-                        const unit2                 = Twns.Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_04);
+                        const unit2                 = Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_04);
                         const unitGridIndex1        = unit1.getGridIndex();
                         const unitGridIndex2        = unit2.getGridIndex();
                         const playerIndex1          = unit1.getPlayerIndex();
@@ -891,30 +890,30 @@ namespace Twns.WarHelpers.WarActionExecutor {
                     const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
                         const tile2         = tileMap.getTile(gridIndex2);
-                        const tileOldHp2    = Twns.Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_05);
+                        const tileOldHp2    = Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_05);
                         handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
                         handleHpForTile(tile2, Math.max(0, tileOldHp2 - damage));
 
                         const result = handleDestructionForTile(war, tile2);
-                        for (const tile of Twns.Helpers.getExisted(result.damagedTileSet)) {
+                        for (const tile of Helpers.getExisted(result.damagedTileSet)) {
                             damagedTileSet.add(tile);
                         }
-                        for (const tile of Twns.Helpers.getExisted(result.destroyedTileSet)) {
+                        for (const tile of Helpers.getExisted(result.destroyedTileSet)) {
                             destroyedTileSet.add(tile);
                         }
 
                         continue;
                     }
 
-                    throw Twns.Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_06);
+                    throw Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_06);
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
                     if ((!affectedPlayer.checkIsNeutral())                              &&
                         (!unitMap.checkHasUnit(affectedPlayer.getPlayerIndex()))        &&
-                        (affectedPlayer.getAliveState() !== Twns.Types.PlayerAliveState.Dead)
+                        (affectedPlayer.getAliveState() !== Types.PlayerAliveState.Dead)
                     ) {
-                        affectedPlayer.setAliveState(Twns.Types.PlayerAliveState.Dying);
+                        affectedPlayer.setAliveState(Types.PlayerAliveState.Dying);
                     }
                 }
             }
@@ -927,7 +926,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_00);
             const targetGridIndex = GridIndexHelpers.convertGridIndex(actionExtraData.targetGridIndex);
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
@@ -947,7 +946,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const launchUnitId      = action.launchUnitId;
             const pathNodes         = path.nodes;
             const unitMap           = war.getUnitMap();
-            const focusUnit         = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             const targetGridIndex   = GridIndexHelpers.convertGridIndex(action.targetGridIndex);
 
             if (path.isBlocked) {
@@ -965,7 +964,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
             } else {
                 if (targetGridIndex == null) {
-                    throw Twns.Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_01);
+                    throw Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_01);
                 }
                 const battleDamageInfoArray = WarDamageCalculator.getFinalBattleDamage({
                     war,
@@ -994,17 +993,17 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 const damagedTileSet    = new Set<BwTile>();
 
                 for (const battleDamageInfo of battleDamageInfoArray) {
-                    const unitId1   = Twns.Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_02);
-                    const unit1     = Twns.Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_03);
+                    const unitId1   = Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_02);
+                    const unit1     = Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_03);
                     const player1   = unit1.getPlayer();
-                    const damage    = Twns.Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_04);
+                    const damage    = Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_04);
                     affectedPlayerSet.add(player1);
                     affectedUnitSet.add(unit1);
 
                     const unitId2 = battleDamageInfo.targetUnitId;
                     if (unitId2 != null) {
                         const unitGridIndex1        = unit1.getGridIndex();
-                        const unit2                 = Twns.Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_05);
+                        const unit2                 = Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_05);
                         const unitGridIndex2        = unit2.getGridIndex();
                         const playerIndex1          = unit1.getPlayerIndex();
                         const playerIndex2          = unit2.getPlayerIndex();
@@ -1056,30 +1055,30 @@ namespace Twns.WarHelpers.WarActionExecutor {
                     const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
                         const tile2         = tileMap.getTile(gridIndex2);
-                        const tileOldHp2    = Twns.Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_06);
+                        const tileOldHp2    = Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_06);
                         handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
                         handleHpForTile(tile2, Math.max(0, tileOldHp2 - damage));
 
                         const result = handleDestructionForTile(war, tile2);
-                        for (const tile of Twns.Helpers.getExisted(result.damagedTileSet)) {
+                        for (const tile of Helpers.getExisted(result.damagedTileSet)) {
                             damagedTileSet.add(tile);
                         }
-                        for (const tile of Twns.Helpers.getExisted(result.destroyedTileSet)) {
+                        for (const tile of Helpers.getExisted(result.destroyedTileSet)) {
                             destroyedTileSet.add(tile);
                         }
 
                         continue;
                     }
 
-                    throw Twns.Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_07);
+                    throw Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_07);
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
                     const affectedPlayerIndex = affectedPlayer.getPlayerIndex();
                     if ((!unitMap.checkHasUnit(affectedPlayerIndex))                    &&
-                        (affectedPlayer.getAliveState() !== Twns.Types.PlayerAliveState.Dead)
+                        (affectedPlayer.getAliveState() !== Types.PlayerAliveState.Dead)
                     ) {
-                        affectedPlayer.setAliveState(Twns.Types.PlayerAliveState.Dying);
+                        affectedPlayer.setAliveState(Types.PlayerAliveState.Dying);
                     }
                 }
 
@@ -1112,7 +1111,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 }
                 if ((isVisibleUnitDestroyed) || (destroyedTileSet.size)) {
                     war.getView().showVibration();
-                    Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.Explode);
+                    SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
                 }
             }
         }
@@ -1132,7 +1131,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_00),
                 isFastExecute   : true,
             });
 
@@ -1141,7 +1140,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const launchUnitId  = action.launchUnitId;
             const pathNodes     = path.nodes;
             const unitMap       = war.getUnitMap();
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -1167,16 +1166,16 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 const damagedTileSet    = new Set<BwTile>();
 
                 for (const battleDamageInfo of battleDamageInfoArray) {
-                    const unitId1   = Twns.Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_01);
-                    const unit1     = Twns.Helpers.getExisted(unitMap.getUnitById(unitId1),ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_02);
+                    const unitId1   = Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_01);
+                    const unit1     = Helpers.getExisted(unitMap.getUnitById(unitId1),ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_02);
                     const player1   = unit1.getPlayer();
-                    const damage    = Twns.Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_03);
+                    const damage    = Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_03);
                     affectedPlayerSet.add(player1);
                     affectedUnitSet.add(unit1);
 
                     const unitId2 = battleDamageInfo.targetUnitId;
                     if (unitId2 != null) {
-                        const unit2                 = Twns.Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_04);
+                        const unit2                 = Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_04);
                         const unitGridIndex1        = unit1.getGridIndex();
                         const unitGridIndex2        = unit2.getGridIndex();
                         const playerIndex1          = unit1.getPlayerIndex();
@@ -1229,30 +1228,30 @@ namespace Twns.WarHelpers.WarActionExecutor {
                     const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
                         const tile2         = tileMap.getTile(gridIndex2);
-                        const tileOldHp2    = Twns.Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_05);
+                        const tileOldHp2    = Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_05);
                         handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
                         handleHpForTile(tile2, Math.max(0, tileOldHp2 - damage));
 
                         const result = handleDestructionForTile(war, tile2);
-                        for (const tile of Twns.Helpers.getExisted(result.damagedTileSet)) {
+                        for (const tile of Helpers.getExisted(result.damagedTileSet)) {
                             damagedTileSet.add(tile);
                         }
-                        for (const tile of Twns.Helpers.getExisted(result.destroyedTileSet)) {
+                        for (const tile of Helpers.getExisted(result.destroyedTileSet)) {
                             destroyedTileSet.add(tile);
                         }
 
                         continue;
                     }
 
-                    throw Twns.Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_06);
+                    throw Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_06);
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
                     if ((!affectedPlayer.checkIsNeutral())                              &&
                         (!unitMap.checkHasUnit(affectedPlayer.getPlayerIndex()))        &&
-                        (affectedPlayer.getAliveState() !== Twns.Types.PlayerAliveState.Dead)
+                        (affectedPlayer.getAliveState() !== Types.PlayerAliveState.Dead)
                     ) {
-                        affectedPlayer.setAliveState(Twns.Types.PlayerAliveState.Dying);
+                        affectedPlayer.setAliveState(Types.PlayerAliveState.Dying);
                     }
                 }
             }
@@ -1267,7 +1266,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const gridVisualEffect  = war.getGridVisualEffect();
         const actionExtraData   = action.extraData;
         if (actionExtraData) {
-            const commonExtraData   = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_00);
+            const commonExtraData   = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_00);
             const targetGridIndex   = GridIndexHelpers.convertGridIndex(actionExtraData.targetGridIndex);
             const movingUnitAndPath = commonExtraData.movingUnitAndPath;
             const movingUnitData    = movingUnitAndPath?.unit;
@@ -1292,10 +1291,10 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 ((destroyedUnitIdArray?? []).indexOf(movingUnitId) >= 0)    &&
                 (lastNode?.isVisible)
             ) {
-                gridVisualEffect.showEffectExplosion(Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_01));
+                gridVisualEffect.showEffectExplosion(Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_01));
                 if (!isWarViewVibrated) {
                     warView.showVibration();
-                    Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.Explode);
+                    SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
                 }
             }
 
@@ -1304,7 +1303,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const launchUnitId  = action.launchUnitId;
             const pathNodes     = path.nodes;
             const unitMap       = war.getUnitMap();
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -1321,7 +1320,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             } else {
                 const targetGridIndex = GridIndexHelpers.convertGridIndex(action.targetGridIndex);
                 if (targetGridIndex == null) {
-                    throw Twns.Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_02);
+                    throw Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_02);
                 }
 
                 const battleDamageInfoArray = WarDamageCalculator.getFinalBattleDamage({
@@ -1339,7 +1338,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                     pathNodes,
                     isDiving    : focusUnit.getIsDiving(),
                     isBlocked   : false,
-                    aiming      : allVisibleUnits.has(Twns.Helpers.getExisted(unitMap.getUnitOnMap(targetGridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_03)) ? targetGridIndex : null,
+                    aiming      : allVisibleUnits.has(Helpers.getExisted(unitMap.getUnitOnMap(targetGridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_03)) ? targetGridIndex : null,
                 });
 
                 const tileMap           = war.getTileMap();
@@ -1350,16 +1349,16 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 const damagedTileSet    = new Set<BwTile>();
 
                 for (const battleDamageInfo of battleDamageInfoArray) {
-                    const unitId1   = Twns.Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_04);
-                    const unit1     = Twns.Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_05);
+                    const unitId1   = Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_04);
+                    const unit1     = Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_05);
                     const player1   = unit1.getPlayer();
-                    const damage    = Twns.Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_06);
+                    const damage    = Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_06);
                     affectedPlayerSet.add(player1);
                     affectedUnitSet.add(unit1);
 
                     const unitId2 = battleDamageInfo.targetUnitId;
                     if (unitId2 != null) {
-                        const unit2                 = Twns.Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_07);
+                        const unit2                 = Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_07);
                         const unitGridIndex1        = unit1.getGridIndex();
                         const unitGridIndex2        = unit2.getGridIndex();
                         const playerIndex1          = unit1.getPlayerIndex();
@@ -1412,30 +1411,30 @@ namespace Twns.WarHelpers.WarActionExecutor {
                     const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
                         const tile2         = tileMap.getTile(gridIndex2);
-                        const tileOldHp2    = Twns.Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_08);
+                        const tileOldHp2    = Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_08);
                         handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
                         handleHpForTile(tile2, Math.max(0, tileOldHp2 - damage));
 
                         const result = handleDestructionForTile(war, tile2);
-                        for (const tile of Twns.Helpers.getExisted(result.damagedTileSet)) {
+                        for (const tile of Helpers.getExisted(result.damagedTileSet)) {
                             damagedTileSet.add(tile);
                         }
-                        for (const tile of Twns.Helpers.getExisted(result.destroyedTileSet)) {
+                        for (const tile of Helpers.getExisted(result.destroyedTileSet)) {
                             destroyedTileSet.add(tile);
                         }
 
                         continue;
                     }
 
-                    throw Twns.Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_09);
+                    throw Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_09);
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
                     const affectedPlayerIndex = affectedPlayer.getPlayerIndex();
                     if ((!unitMap.checkHasUnit(affectedPlayerIndex))                    &&
-                        (affectedPlayer.getAliveState() !== Twns.Types.PlayerAliveState.Dead)
+                        (affectedPlayer.getAliveState() !== Types.PlayerAliveState.Dead)
                     ) {
-                        affectedPlayer.setAliveState(Twns.Types.PlayerAliveState.Dying);
+                        affectedPlayer.setAliveState(Types.PlayerAliveState.Dying);
                     }
                 }
 
@@ -1467,7 +1466,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 }
                 if ((isVisibleUnitDestroyed) || (destroyedTileSet.size)) {
                     war.getView().showVibration();
-                    Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.Explode);
+                    SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
                 }
             }
         }
@@ -1487,7 +1486,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitBeLoaded_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitBeLoaded_00),
                 isFastExecute   : true,
             });
         } else {
@@ -1495,13 +1494,13 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const launchUnitId  = action.launchUnitId;
             const pathNodes     = path.nodes;
             const unitMap       = war.getUnitMap();
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             focusUnit.setActionState(UnitActionState.Acted);
             if (path.isBlocked) {
                 unitMap.setUnitOnMap(focusUnit);
             } else {
-                const loaderUnit = Twns.Helpers.getExisted(unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]));
+                const loaderUnit = Helpers.getExisted(unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]));
                 unitMap.setUnitLoaded(focusUnit);
                 focusUnit.setLoaderUnitId(loaderUnit.getUnitId());
             }
@@ -1515,7 +1514,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const unitMap           = war.getUnitMap();
         const actionExtraData   = action.extraData;
         if (actionExtraData) {
-            const commonExtraData       = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitBeLoaded_00);
+            const commonExtraData       = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitBeLoaded_00);
             const movingUnitAndPath     = commonExtraData.movingUnitAndPath;
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
@@ -1534,7 +1533,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 const movingPath    = movingUnitAndPath?.path;
                 const lastNode      = movingPath ? movingPath[movingPath.length - 1] : null;
                 if ((lastNode) && (lastNode.isVisible) && (!lastNode.isBlocked)) {
-                    const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitBeLoaded_01);
+                    const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitBeLoaded_01);
                     unitMap.getUnitOnMap(gridIndex)?.updateView();
                 }
             }
@@ -1543,7 +1542,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const revisedPath   = action.path as MovePath;
             const pathNodes     = revisedPath.nodes;
             const launchUnitId  = action.launchUnitId;
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
             focusUnit.setActionState(UnitActionState.Acted);
 
@@ -1559,7 +1558,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 focusUnit.updateView();
 
             } else {
-                const loaderUnit = Twns.Helpers.getExisted(unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]));
+                const loaderUnit = Helpers.getExisted(unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]));
                 unitMap.setUnitLoaded(focusUnit);
                 focusUnit.setLoaderUnitId(loaderUnit.getUnitId());
 
@@ -1590,7 +1589,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_FastExeUnitBuildTile_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_FastExeUnitBuildTile_00),
                 isFastExecute   : true,
             });
         } else {
@@ -1598,7 +1597,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const launchUnitId  = action.launchUnitId;
             const pathNodes     = path.nodes;
             const unitMap       = war.getUnitMap();
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -1606,7 +1605,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             if (!path.isBlocked) {
                 const endingGridIndex   = pathNodes[pathNodes.length - 1];
                 const tile              = war.getTileMap().getTile(endingGridIndex);
-                const buildPoint        = Twns.Helpers.getExisted(tile.getCurrentBuildPoint()) - Twns.Helpers.getExisted(focusUnit.getBuildAmount());
+                const buildPoint        = Helpers.getExisted(tile.getCurrentBuildPoint()) - Helpers.getExisted(focusUnit.getBuildAmount());
                 // if (tile.getIsFogEnabled()) {
                 //     tile.setFogDisabled();
                 // }
@@ -1614,12 +1613,12 @@ namespace Twns.WarHelpers.WarActionExecutor {
                     focusUnit.setIsBuildingTile(true);
                     tile.setCurrentBuildPoint(buildPoint);
                 } else {
-                    const targetTileCfg = Twns.Helpers.getExisted(focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType()), ClientErrorCode.BwWarActionExecutor_FastExeUnitBuildTile_01);
+                    const targetTileCfg = Helpers.getExisted(focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType()), ClientErrorCode.BwWarActionExecutor_FastExeUnitBuildTile_01);
                     focusUnit.setIsBuildingTile(false);
-                    focusUnit.setCurrentBuildMaterial(Twns.Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) - 1);
+                    focusUnit.setCurrentBuildMaterial(Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) - 1);
                     tile.resetByTypeAndPlayerIndex({
-                        baseType        : Twns.Helpers.getExisted(targetTileCfg.dstBaseType),
-                        objectType      : Twns.Helpers.getExisted(targetTileCfg.dstObjectType),
+                        baseType        : Helpers.getExisted(targetTileCfg.dstBaseType),
+                        objectType      : Helpers.getExisted(targetTileCfg.dstObjectType),
                         playerIndex     : focusUnit.getPlayerIndex(),
                     });
                 }
@@ -1634,7 +1633,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const unitMap           = war.getUnitMap();
         const actionExtraData   = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_NormalExeUnitBuildTile_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_NormalExeUnitBuildTile_00);
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
                 movingUnitAndPath       : commonExtraData.movingUnitAndPath,
@@ -1652,7 +1651,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const path          = action.path as MovePath;
             const launchUnitId  = action.launchUnitId;
             const pathNodes     = path.nodes;
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -1660,7 +1659,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             if (!path.isBlocked) {
                 const endingGridIndex   = pathNodes[pathNodes.length - 1];
                 const tile              = war.getTileMap().getTile(endingGridIndex);
-                const buildPoint        = Twns.Helpers.getExisted(tile.getCurrentBuildPoint()) - Twns.Helpers.getExisted(focusUnit.getBuildAmount());
+                const buildPoint        = Helpers.getExisted(tile.getCurrentBuildPoint()) - Helpers.getExisted(focusUnit.getBuildAmount());
                 // if (tile.getIsFogEnabled()) {
                 //     tile.setFogDisabled();
                 // }
@@ -1668,12 +1667,12 @@ namespace Twns.WarHelpers.WarActionExecutor {
                     focusUnit.setIsBuildingTile(true);
                     tile.setCurrentBuildPoint(buildPoint);
                 } else {
-                    const targetTileCfg = Twns.Helpers.getExisted(focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType()), ClientErrorCode.BwWarActionExecutor_NormalExeUnitBuildTile_01);
+                    const targetTileCfg = Helpers.getExisted(focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType()), ClientErrorCode.BwWarActionExecutor_NormalExeUnitBuildTile_01);
                     focusUnit.setIsBuildingTile(false);
-                    focusUnit.setCurrentBuildMaterial(Twns.Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) - 1);
+                    focusUnit.setCurrentBuildMaterial(Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) - 1);
                     tile.resetByTypeAndPlayerIndex({
-                        baseType        : Twns.Helpers.getExisted(targetTileCfg.dstBaseType),
-                        objectType      : Twns.Helpers.getExisted(targetTileCfg.dstObjectType),
+                        baseType        : Helpers.getExisted(targetTileCfg.dstBaseType),
+                        objectType      : Helpers.getExisted(targetTileCfg.dstObjectType),
                         playerIndex     : focusUnit.getPlayerIndex(),
                     });
                 }
@@ -1703,7 +1702,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitCaptureTile_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitCaptureTile_00),
                 isFastExecute   : true,
             });
         } else {
@@ -1711,7 +1710,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const launchUnitId  = action.launchUnitId;
             const pathNodes     = path.nodes;
             const unitMap       = war.getUnitMap();
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -1721,9 +1720,9 @@ namespace Twns.WarHelpers.WarActionExecutor {
             } else {
                 const destination       = pathNodes[pathNodes.length - 1];
                 const tile              = war.getTileMap().getTile(destination);
-                const restCapturePoint  = Twns.Helpers.getExisted(tile.getCurrentCapturePoint()) - Twns.Helpers.getExisted(focusUnit.getCaptureAmount(destination));
+                const restCapturePoint  = Helpers.getExisted(tile.getCurrentCapturePoint()) - Helpers.getExisted(focusUnit.getCaptureAmount(destination));
                 if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
-                    tile.getPlayer().setAliveState(Twns.Types.PlayerAliveState.Dying);
+                    tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
                 }
 
                 if (restCapturePoint > 0) {
@@ -1735,7 +1734,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                     tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
                     tile.resetByTypeAndPlayerIndex({
                         baseType        : tile.getBaseType(),
-                        objectType      : tileObjectType === Twns.Types.TileObjectType.Headquarters ? Twns.Types.TileObjectType.City : tileObjectType,
+                        objectType      : tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType,
                         playerIndex     : focusUnit.getPlayerIndex(),
                     });
                 }
@@ -1751,9 +1750,9 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const unitMap           = war.getUnitMap();
         const tileMap           = war.getTileMap();
         const playerInTurn      = war.getPlayerInTurn();
-        const isSelfInTurn      = playerInTurn.getUserId() === Twns.User.UserModel.getSelfUserId();
+        const isSelfInTurn      = playerInTurn.getUserId() === User.UserModel.getSelfUserId();
         if (actionExtraData) {
-            const commonExtraData       = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_00);
+            const commonExtraData       = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_00);
             const movingUnitAndPath     = commonExtraData.movingUnitAndPath;
             const movingPath            = movingUnitAndPath?.path;
             const tileArrayAfterAction  = commonExtraData.tileArrayAfterAction;
@@ -1767,17 +1766,17 @@ namespace Twns.WarHelpers.WarActionExecutor {
             {
                 const lastNode = movingPath ? movingPath[movingPath.length - 1] : null;
                 if ((isSelfInTurn) && (lastNode) && (!lastNode.isBlocked)) {
-                    const gridIndex             = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_01);
+                    const gridIndex             = Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_01);
                     const tile                  = tileMap.getTile(gridIndex);
-                    const maxCapturePoint       = Twns.Helpers.getExisted(tile.getMaxCapturePoint(), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_02);
-                    const tileDataAfterAction   = Twns.Helpers.getExisted(tileArrayAfterAction?.find(v => {
-                        return GridIndexHelpers.checkIsEqual(gridIndex, Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(v.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_03));
+                    const maxCapturePoint       = Helpers.getExisted(tile.getMaxCapturePoint(), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_02);
+                    const tileDataAfterAction   = Helpers.getExisted(tileArrayAfterAction?.find(v => {
+                        return GridIndexHelpers.checkIsEqual(gridIndex, Helpers.getExisted(GridIndexHelpers.convertGridIndex(v.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_03));
                     }), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_04);
                     await new Promise<void>(resolve => {
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwCaptureProgressPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.BwCaptureProgressPanel, {
                             maxValue            : maxCapturePoint,
                             newValue            : maxCapturePoint - (tileDataAfterAction.currentCapturePoint ?? 0),
-                            currentValue        : maxCapturePoint - Twns.Helpers.getExisted(tile.getCurrentCapturePoint(), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_05),
+                            currentValue        : maxCapturePoint - Helpers.getExisted(tile.getCurrentCapturePoint(), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_05),
                             callbackOnFinish    : () => resolve(),
                         });
                     });
@@ -1796,7 +1795,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const path          = action.path as MovePath;
             const launchUnitId  = action.launchUnitId;
             const pathNodes     = path.nodes;
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -1813,11 +1812,11 @@ namespace Twns.WarHelpers.WarActionExecutor {
             } else {
                 const destination           = pathNodes[pathNodes.length - 1];
                 const tile                  = war.getTileMap().getTile(destination);
-                const maxCapturePoint       = Twns.Helpers.getExisted(tile.getMaxCapturePoint());
-                const currentCapturePoint   = Twns.Helpers.getExisted(tile.getCurrentCapturePoint());
-                const restCapturePoint      = currentCapturePoint - Twns.Helpers.getExisted(focusUnit.getCaptureAmount(destination));
+                const maxCapturePoint       = Helpers.getExisted(tile.getMaxCapturePoint());
+                const currentCapturePoint   = Helpers.getExisted(tile.getCurrentCapturePoint());
+                const restCapturePoint      = currentCapturePoint - Helpers.getExisted(focusUnit.getCaptureAmount(destination));
                 if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
-                    tile.getPlayer().setAliveState(Twns.Types.PlayerAliveState.Dying);
+                    tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
                 }
 
                 if (restCapturePoint > 0) {
@@ -1829,7 +1828,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                     tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
                     tile.resetByTypeAndPlayerIndex({
                         baseType    : tile.getBaseType(),
-                        objectType  : tileObjectType === Twns.Types.TileObjectType.Headquarters ? Twns.Types.TileObjectType.City : tileObjectType,
+                        objectType  : tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType,
                         playerIndex : focusUnit.getPlayerIndex(),
                     });
                 }
@@ -1842,7 +1841,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 });
                 if (isSelfInTurn) {
                     await new Promise<void>(resolve => {
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwCaptureProgressPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.BwCaptureProgressPanel, {
                             maxValue            : maxCapturePoint,
                             newValue            : maxCapturePoint - restCapturePoint,
                             currentValue        : maxCapturePoint - currentCapturePoint,
@@ -1870,7 +1869,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitDive_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitDive_00),
                 isFastExecute   : true,
             });
         } else {
@@ -1878,7 +1877,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const launchUnitId  = action.launchUnitId;
             const pathNodes     = path.nodes;
             const unitMap       = war.getUnitMap();
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             const isSuccessful  = !path.isBlocked;
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
@@ -1894,7 +1893,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const gridVisualEffect  = war.getGridVisualEffect();
         const actionExtraData   = action.extraData;
         if (actionExtraData) {
-            const commonExtraData   = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitDive_00);
+            const commonExtraData   = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitDive_00);
             const movingUnitAndPath = commonExtraData.movingUnitAndPath;
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
@@ -1906,7 +1905,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const movingPath    = movingUnitAndPath?.path;
             const lastNode      = movingPath ? movingPath[movingPath?.length - 1] : null;
             if ((lastNode?.isVisible) && (!lastNode.isBlocked)) {
-                gridVisualEffect.showEffectDive(Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitDive_01));
+                gridVisualEffect.showEffectDive(Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitDive_01));
             }
 
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
@@ -1920,7 +1919,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const launchUnitId  = action.launchUnitId;
             const pathNodes     = path.nodes;
             const unitMap       = war.getUnitMap();
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             const isSuccessful  = !path.isBlocked;
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
@@ -1965,7 +1964,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitDropUnit_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitDropUnit_00),
                 isFastExecute   : true,
             });
         } else {
@@ -1974,15 +1973,15 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const pathNodes         = path.nodes;
             const unitMap           = war.getUnitMap();
             const endingGridIndex   = pathNodes[pathNodes.length - 1];
-            const focusUnit         = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
             const shouldUpdateFogMap    = war.getPlayerManager().getWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
             const unitsForDrop          : BwUnit[] = [];
-            for (const { unitId, gridIndex } of (action.dropDestinations || []) as Twns.Types.DropDestination[]) {
-                const unitForDrop = Twns.Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
+            for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
+                const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
                 unitMap.setUnitUnloaded(unitId, gridIndex);
                 for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
                     unit.setGridIndex(gridIndex);
@@ -2008,7 +2007,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const gridVisualEffect  = war.getGridVisualEffect();
         const unitMap           = war.getUnitMap();
         if (actionExtraData) {
-            const commonExtraData   = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitDropUnit_00);
+            const commonExtraData   = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitDropUnit_00);
             const movingUnitAndPath = commonExtraData.movingUnitAndPath;
             const movingUnitView    = await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
@@ -2023,7 +2022,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             if (lastNode) {
                 if (lastNode.isVisible) {
                     if (actionExtraData.isDropBlocked) {
-                        gridVisualEffect.showEffectBlock(Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitDropUnit_01));
+                        gridVisualEffect.showEffectBlock(Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitDropUnit_01));
                     }
                 } else {
                     (movingUnitView) && (unitMapView.removeUnit(movingUnitView));
@@ -2049,7 +2048,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const launchUnitId      = action.launchUnitId;
             const pathNodes         = path.nodes;
             const endingGridIndex   = pathNodes[pathNodes.length - 1];
-            const focusUnit         = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -2057,8 +2056,8 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const shouldUpdateFogMap    = war.getPlayerManager().getWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
             const fogMap                = war.getFogMap();
             const unitsForDrop          : BwUnit[] = [];
-            for (const { unitId, gridIndex } of (action.dropDestinations || []) as Twns.Types.DropDestination[]) {
-                const unitForDrop = Twns.Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
+            for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
+                const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
                 unitMap.setUnitUnloaded(unitId, gridIndex);
                 for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
                     unit.setGridIndex(gridIndex);
@@ -2115,7 +2114,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitJoinUnit_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitJoinUnit_00),
                 isFastExecute   : true,
             });
         } else {
@@ -2124,7 +2123,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const pathNodes         = path.nodes;
             const endingGridIndex   = pathNodes[pathNodes.length - 1];
             const unitMap           = war.getUnitMap();
-            const focusUnit         = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
 
             if (path.isBlocked) {
                 WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
@@ -2132,7 +2131,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 focusUnit.setActionState(UnitActionState.Acted);
 
             } else {
-                const targetUnit    = Twns.Helpers.getExisted(unitMap.getUnitOnMap(endingGridIndex));
+                const targetUnit    = Helpers.getExisted(unitMap.getUnitOnMap(endingGridIndex));
                 const player        = war.getPlayer(focusUnit.getPlayerIndex());
                 unitMap.removeUnitOnMap(endingGridIndex, true);
                 WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
@@ -2143,8 +2142,8 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
                 if (focusUnit.checkHasPrimaryWeapon()) {
                     focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
-                        Twns.Helpers.getExisted(focusUnit.getPrimaryWeaponMaxAmmo()),
-                        Twns.Helpers.getExisted(focusUnit.getPrimaryWeaponCurrentAmmo()) + Twns.Helpers.getExisted(targetUnit.getPrimaryWeaponCurrentAmmo()),
+                        Helpers.getExisted(focusUnit.getPrimaryWeaponMaxAmmo()),
+                        Helpers.getExisted(focusUnit.getPrimaryWeaponCurrentAmmo()) + Helpers.getExisted(targetUnit.getPrimaryWeaponCurrentAmmo()),
                     ));
                 }
 
@@ -2178,7 +2177,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 if (maxBuildMaterial != null) {
                     focusUnit.setCurrentBuildMaterial(Math.min(
                         maxBuildMaterial,
-                        Twns.Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) + Twns.Helpers.getExisted(targetUnit.getCurrentBuildMaterial()),
+                        Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) + Helpers.getExisted(targetUnit.getCurrentBuildMaterial()),
                     ));
                 }
 
@@ -2186,7 +2185,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 if (maxProduceMaterial != null) {
                     focusUnit.setCurrentProduceMaterial(Math.min(
                         maxProduceMaterial,
-                        Twns.Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) + Twns.Helpers.getExisted(targetUnit.getCurrentProduceMaterial()),
+                        Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) + Helpers.getExisted(targetUnit.getCurrentProduceMaterial()),
                     ));
                 }
 
@@ -2202,7 +2201,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                     if (maxAmmo != null) {
                         focusUnit.setFlareCurrentAmmo(Math.min(
                             maxAmmo,
-                            Twns.Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) + Twns.Helpers.getExisted(targetUnit.getFlareCurrentAmmo()),
+                            Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) + Helpers.getExisted(targetUnit.getFlareCurrentAmmo()),
                         ));
                     }
                 }
@@ -2217,7 +2216,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const unitMap           = war.getUnitMap();
         const actionExtraData   = action.extraData;
         if (actionExtraData) {
-            const commonExtraData   = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitJoinUnit_00);
+            const commonExtraData   = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitJoinUnit_00);
             const movingUnitAndPath = commonExtraData.movingUnitAndPath;
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
@@ -2229,7 +2228,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const movingPath    = movingUnitAndPath?.path;
             const lastNode      = movingPath ? movingPath[movingPath?.length - 1] : null;
             if ((lastNode?.isVisible) && (!lastNode.isBlocked)) {
-                const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitJoinUnit_01);
+                const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitJoinUnit_01);
                 if (unitMap.getUnitOnMap(gridIndex)) {
                     unitMap.removeUnitOnMap(gridIndex, true);
                 }
@@ -2246,7 +2245,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const launchUnitId      = action.launchUnitId;
             const pathNodes         = path.nodes;
             const endingGridIndex   = pathNodes[pathNodes.length - 1];
-            const focusUnit         = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
 
             if (path.isBlocked) {
                 WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
@@ -2262,7 +2261,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 focusUnit.updateView();
 
             } else {
-                const targetUnit    = Twns.Helpers.getExisted(unitMap.getUnitOnMap(endingGridIndex));
+                const targetUnit    = Helpers.getExisted(unitMap.getUnitOnMap(endingGridIndex));
                 const player        = war.getPlayer(focusUnit.getPlayerIndex());
                 unitMap.removeUnitOnMap(endingGridIndex, false);
                 WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
@@ -2273,8 +2272,8 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
                 if (focusUnit.checkHasPrimaryWeapon()) {
                     focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
-                        Twns.Helpers.getExisted(focusUnit.getPrimaryWeaponMaxAmmo()),
-                        Twns.Helpers.getExisted(focusUnit.getPrimaryWeaponCurrentAmmo()) + Twns.Helpers.getExisted(targetUnit.getPrimaryWeaponCurrentAmmo())
+                        Helpers.getExisted(focusUnit.getPrimaryWeaponMaxAmmo()),
+                        Helpers.getExisted(focusUnit.getPrimaryWeaponCurrentAmmo()) + Helpers.getExisted(targetUnit.getPrimaryWeaponCurrentAmmo())
                     ));
                 }
 
@@ -2308,7 +2307,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 if (maxBuildMaterial != null) {
                     focusUnit.setCurrentBuildMaterial(Math.min(
                         maxBuildMaterial,
-                        Twns.Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) + Twns.Helpers.getExisted(targetUnit.getCurrentBuildMaterial())
+                        Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) + Helpers.getExisted(targetUnit.getCurrentBuildMaterial())
                     ));
                 }
 
@@ -2316,7 +2315,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 if (maxProduceMaterial != null) {
                     focusUnit.setCurrentProduceMaterial(Math.min(
                         maxProduceMaterial,
-                        Twns.Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) + Twns.Helpers.getExisted(targetUnit.getCurrentProduceMaterial())
+                        Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) + Helpers.getExisted(targetUnit.getCurrentProduceMaterial())
                     ));
                 }
 
@@ -2332,7 +2331,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                     if (maxAmmo != null) {
                         focusUnit.setFlareCurrentAmmo(Math.min(
                             maxAmmo,
-                            Twns.Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) + Twns.Helpers.getExisted(targetUnit.getFlareCurrentAmmo())
+                            Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) + Helpers.getExisted(targetUnit.getFlareCurrentAmmo())
                         ));
                     }
                 }
@@ -2364,7 +2363,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitLaunchFlare_01),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitLaunchFlare_01),
                 isFastExecute   : true,
             });
         } else {
@@ -2372,20 +2371,20 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const pathNodes     = path.nodes;
             const unitMap       = war.getUnitMap();
             const launchUnitId  = action.launchUnitId;
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
             const isFlareSucceeded  = !path.isBlocked;
-            const flareRadius       = Twns.Helpers.getExisted(focusUnit.getFlareRadius());
+            const flareRadius       = Helpers.getExisted(focusUnit.getFlareRadius());
             const targetGridIndex   = GridIndexHelpers.convertGridIndex(action.targetGridIndex);
             if (isFlareSucceeded) {
                 if (targetGridIndex == null) {
-                    throw Twns.Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.WarActionExecutor_FastExeUnitLaunchFlare_02);
+                    throw Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.WarActionExecutor_FastExeUnitLaunchFlare_02);
                 }
 
-                focusUnit.setFlareCurrentAmmo(Twns.Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) - 1);
+                focusUnit.setFlareCurrentAmmo(Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) - 1);
                 fogMap.updateMapFromPathsByFlare(focusUnit.getPlayerIndex(), targetGridIndex, flareRadius);
             }
         }
@@ -2401,7 +2400,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const playerIndexInTurn = war.getPlayerIndexInTurn();
         const actionExtraData   = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_00);
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
                 movingUnitAndPath       : commonExtraData.movingUnitAndPath,
@@ -2411,7 +2410,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
             const targetGridIndex   = GridIndexHelpers.convertGridIndex(actionExtraData.targetGridIndex);
             if (targetGridIndex) {
-                const flareRadius = Twns.Helpers.getExisted(actionExtraData.flareRadius, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_01);
+                const flareRadius = Helpers.getExisted(actionExtraData.flareRadius, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_01);
                 for (const grid of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: flareRadius, mapSize })) {
                     gridVisualEffect.showEffectFlare(grid);
                 }
@@ -2428,20 +2427,20 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const pathNodes     = path.nodes;
             const unitMap       = war.getUnitMap();
             const launchUnitId  = action.launchUnitId;
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
             const isFlareSucceeded  = !path.isBlocked;
-            const flareRadius       = Twns.Helpers.getExisted(focusUnit.getFlareRadius());
+            const flareRadius       = Helpers.getExisted(focusUnit.getFlareRadius());
             const targetGridIndex   = GridIndexHelpers.convertGridIndex(action.targetGridIndex);
             if (isFlareSucceeded) {
                 if (targetGridIndex == null) {
-                    throw Twns.Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_02);
+                    throw Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_02);
                 }
 
-                focusUnit.setFlareCurrentAmmo(Twns.Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) - 1);
+                focusUnit.setFlareCurrentAmmo(Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) - 1);
                 fogMap.updateMapFromPathsByFlare(playerIndexInTurn, targetGridIndex, flareRadius);
             }
 
@@ -2453,7 +2452,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             });
             if ((isFlareSucceeded) && (war.getPlayerManager().getWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex()))) {
                 if (targetGridIndex == null) {
-                    throw Twns.Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_03);
+                    throw Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_03);
                 }
 
                 for (const grid of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: flareRadius, mapSize })) {
@@ -2479,7 +2478,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitLaunchFlare_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitLaunchFlare_00),
                 isFastExecute   : true,
             });
         } else {
@@ -2487,7 +2486,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const pathNodes     = path.nodes;
             const launchUnitId  = action.launchUnitId;
             const unitMap       = war.getUnitMap();
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -2499,7 +2498,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
                 tile.resetByTypeAndPlayerIndex({
                     baseType        : tile.getBaseType(),
-                    objectType      : Twns.Types.TileObjectType.EmptySilo,
+                    objectType      : Types.TileObjectType.EmptySilo,
                     playerIndex     : CommonConstants.WarNeutralPlayerIndex,
                 });
 
@@ -2525,7 +2524,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const mapSize           = unitMap.getMapSize();
         const actionExtraData   = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchSilo_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchSilo_00);
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
                 movingUnitAndPath       : commonExtraData.movingUnitAndPath,
@@ -2550,7 +2549,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const path          = action.path as MovePath;
             const pathNodes     = path.nodes;
             const launchUnitId  = action.launchUnitId;
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -2568,12 +2567,12 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 const tile = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
                 tile.resetByTypeAndPlayerIndex({
                     baseType    : tile.getBaseType(),
-                    objectType  : Twns.Types.TileObjectType.EmptySilo,
+                    objectType  : Types.TileObjectType.EmptySilo,
                     playerIndex : CommonConstants.WarNeutralPlayerIndex,
                 });
 
                 const targetGridIndex   = GridIndexHelpers.convertGridIndex(action.targetGridIndex);
-                const targetGrids       = GridIndexHelpers.getGridsWithinDistance({ origin: Twns.Helpers.getExisted(targetGridIndex, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchSilo_01), minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize });
+                const targetGrids       = GridIndexHelpers.getGridsWithinDistance({ origin: Helpers.getExisted(targetGridIndex, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchSilo_01), minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize });
                 const targetUnits       : BwUnit[] = [];
                 for (const grid of targetGrids) {
                     const unit = unitMap.getUnitOnMap(grid);
@@ -2616,7 +2615,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_FastExeUnitLoadCo_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_FastExeUnitLoadCo_00),
                 isFastExecute   : true,
             });
         } else {
@@ -2624,7 +2623,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const launchUnitId  = action.launchUnitId;
             const pathNodes     = path.nodes;
             const unitMap       = war.getUnitMap();
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], action.launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], action.launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
 
@@ -2653,7 +2652,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_NormalExeUnitLoadCo_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_NormalExeUnitLoadCo_00);
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
                 movingUnitAndPath       : commonExtraData.movingUnitAndPath,
@@ -2672,7 +2671,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const launchUnitId  = action.launchUnitId;
             const pathNodes     = path.nodes;
             const unitMap       = war.getUnitMap();
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], action.launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], action.launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
 
@@ -2717,7 +2716,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitProduceUnit_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitProduceUnit_00),
                 isFastExecute   : true,
             });
         } else {
@@ -2725,7 +2724,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const pathNodes     = path.nodes;
             const unitMap       = war.getUnitMap();
             const launchUnitId  = action.launchUnitId;
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -2736,7 +2735,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 const gridIndex         = focusUnit.getGridIndex();
                 const producedUnitId    = unitMap.getNextUnitId();
                 const producedUnit      = new BwUnit();
-                const unitType          = Twns.Helpers.getExisted(focusUnit.getProduceUnitType(), ClientErrorCode.WarActionExecutor_FastExeUnitProduceUnit_01);
+                const unitType          = Helpers.getExisted(focusUnit.getProduceUnitType(), ClientErrorCode.WarActionExecutor_FastExeUnitProduceUnit_01);
                 producedUnit.init({
                     gridIndex,
                     playerIndex     : focusUnit.getPlayerIndex(),
@@ -2752,7 +2751,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 player.setFund(player.getFund() - focusUnit.getProduceUnitCost());
                 unitMap.setNextUnitId(producedUnitId + 1);
                 unitMap.setUnitLoaded(producedUnit);
-                focusUnit.setCurrentProduceMaterial(Twns.Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
+                focusUnit.setCurrentProduceMaterial(Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
             }
         }
         war.updateTilesAndUnitsOnVisibilityChanged(true);
@@ -2763,7 +2762,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitProduceUnit_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitProduceUnit_00);
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
                 movingUnitAndPath       : commonExtraData.movingUnitAndPath,
@@ -2782,7 +2781,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const pathNodes     = path.nodes;
             const unitMap       = war.getUnitMap();
             const launchUnitId  = action.launchUnitId;
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
 
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
@@ -2801,7 +2800,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 const gridIndex         = focusUnit.getGridIndex();
                 const producedUnitId    = unitMap.getNextUnitId();
                 const producedUnit      = new BwUnit();
-                const unitType          = Twns.Helpers.getExisted(focusUnit.getProduceUnitType(), ClientErrorCode.WarActionExecutor_NormalExeUnitProduceUnit_01);
+                const unitType          = Helpers.getExisted(focusUnit.getProduceUnitType(), ClientErrorCode.WarActionExecutor_NormalExeUnitProduceUnit_01);
                 producedUnit.init({
                     gridIndex,
                     playerIndex     : focusUnit.getPlayerIndex(),
@@ -2817,7 +2816,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 player.setFund(player.getFund() - focusUnit.getProduceUnitCost());
                 unitMap.setNextUnitId(producedUnitId + 1);
                 unitMap.setUnitLoaded(producedUnit);
-                focusUnit.setCurrentProduceMaterial(Twns.Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
+                focusUnit.setCurrentProduceMaterial(Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
 
                 await focusUnit.moveViewAlongPath({
                     pathNodes,
@@ -2832,13 +2831,13 @@ namespace Twns.WarHelpers.WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
-    function getPromotionForUnitProduceUnit(war: BwWar, producerUnit: BwUnit, targetUnitType: Twns.Types.UnitType): number {
+    function getPromotionForUnitProduceUnit(war: BwWar, producerUnit: BwUnit, targetUnitType: Types.UnitType): number {
         const player                    = producerUnit.getPlayer();
         const coZoneRadius              = player.getCoZoneRadius();
         const gridIndex                 = producerUnit.getGridIndex();
         const gameConfig                = war.getGameConfig();
         const hasLoadedCo               = producerUnit.getHasLoadedCo();
-        const getCoGridIndexArrayOnMap  = Twns.Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+        const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
         let promotion                   = 0;
         for (const skillId of war.getPlayerInTurn().getCoCurrentSkills()) {
             const cfg = gameConfig.getCoSkillCfg(skillId)?.selfPromotionBonusByProduce;
@@ -2870,7 +2869,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitSupplyUnit_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitSupplyUnit_00),
                 isFastExecute   : true,
             });
         } else {
@@ -2878,7 +2877,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const launchUnitId  = action.launchUnitId;
             const pathNodes     = revisedPath.nodes;
             const unitMap       = war.getUnitMap();
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -2896,8 +2895,8 @@ namespace Twns.WarHelpers.WarActionExecutor {
                         const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
                         unit.updateByRepairData({
                             deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
-                            deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - Twns.Helpers.getExisted(unit.getFlareCurrentAmmo()) : null,
-                            deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - Twns.Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo()) : null,
+                            deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - Helpers.getExisted(unit.getFlareCurrentAmmo()) : null,
+                            deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo()) : null,
                         });
                         suppliedUnits.push(unit);
                     }
@@ -2912,7 +2911,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitSupplyUnit_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitSupplyUnit_00);
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
                 movingUnitAndPath       : commonExtraData.movingUnitAndPath,
@@ -2931,7 +2930,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const launchUnitId  = action.launchUnitId;
             const pathNodes     = revisedPath.nodes;
             const unitMap       = war.getUnitMap();
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -2956,8 +2955,8 @@ namespace Twns.WarHelpers.WarActionExecutor {
                         const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
                         unit.updateByRepairData({
                             deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
-                            deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - Twns.Helpers.getExisted(unit.getFlareCurrentAmmo()) : null,
-                            deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - Twns.Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo()) : null,
+                            deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - Helpers.getExisted(unit.getFlareCurrentAmmo()) : null,
+                            deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo()) : null,
                         });
                         suppliedUnits.push(unit);
                     }
@@ -2994,7 +2993,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitSurface_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitSurface_00),
                 isFastExecute   : true,
             });
         } else {
@@ -3002,7 +3001,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const revisedPath   = action.path as MovePath;
             const pathNodes     = revisedPath.nodes;
             const launchUnitId  = action.launchUnitId;
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             const isSuccessful  = !revisedPath.isBlocked;
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
@@ -3018,7 +3017,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const gridVisualEffect  = war.getGridVisualEffect();
         const actionExtraData   = action.extraData;
         if (actionExtraData) {
-            const commonExtraData   = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitSurface_00);
+            const commonExtraData   = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitSurface_00);
             const movingUnitAndPath = commonExtraData.movingUnitAndPath;
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
@@ -3030,7 +3029,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const movingPath    = movingUnitAndPath?.path;
             const lastNode      = movingPath ? movingPath[movingPath?.length - 1] : null;
             if ((lastNode?.isVisible) && (!lastNode.isBlocked)) {
-                gridVisualEffect.showEffectSurface(Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitSurface_01));
+                gridVisualEffect.showEffectSurface(Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitSurface_01));
             }
 
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
@@ -3044,7 +3043,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const revisedPath   = action.path as MovePath;
             const pathNodes     = revisedPath.nodes;
             const launchUnitId  = action.launchUnitId;
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             const isSuccessful  = !revisedPath.isBlocked;
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
@@ -3087,16 +3086,16 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const playerInTurn      = war.getPlayerInTurn();
         const actionExtraData   = action.extraData;
         if (actionExtraData) {
-            const skillType: Twns.Types.Undefinable<Twns.Types.CoSkillType> = actionExtraData.skillType;
+            const skillType: Types.Undefinable<Types.CoSkillType> = actionExtraData.skillType;
             if (skillType != null) {
                 const skillIdArray      = playerInTurn.getCoSkills(skillType);
-                const skillDataArray    = Twns.Helpers.getExisted(actionExtraData.skillDataArray, ClientErrorCode.WarActionExecutor_FastExeUnitUseCoSkill_00);
+                const skillDataArray    = Helpers.getExisted(actionExtraData.skillDataArray, ClientErrorCode.WarActionExecutor_FastExeUnitUseCoSkill_00);
                 for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
                     WarCoSkillHelpers.exeInstantSkill({
                         war,
                         player          : playerInTurn,
                         skillId         : skillIdArray[skillIndex],
-                        skillData       : Twns.Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.WarActionExecutor_FastExeUnitUseCoSkill_01),
+                        skillData       : Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.WarActionExecutor_FastExeUnitUseCoSkill_01),
                         hasExtraData    : true,
                         isFastExecute   : true,
                     });
@@ -3105,7 +3104,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitUseCoSkill_02),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitUseCoSkill_02),
                 isFastExecute   : true,
             });
 
@@ -3114,13 +3113,13 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const revisedPath       = action.path as MovePath;
             const pathNodes         = revisedPath.nodes;
             const launchUnitId      = action.launchUnitId;
-            const focusUnit         = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId), ClientErrorCode.WarActionExecutor_FastExeUnitUseCoSkill_03);
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId), ClientErrorCode.WarActionExecutor_FastExeUnitUseCoSkill_03);
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
             if (!revisedPath.isBlocked) {
-                playerInTurn.updateOnUseCoSkill(Twns.Helpers.getExisted(action.skillType, ClientErrorCode.WarActionExecutor_FastExeUnitUseCoSkill_04));
+                playerInTurn.updateOnUseCoSkill(Helpers.getExisted(action.skillType, ClientErrorCode.WarActionExecutor_FastExeUnitUseCoSkill_04));
 
                 const skillIdArray = playerInTurn.getCoCurrentSkills();
                 for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
@@ -3154,7 +3153,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const playerIndex       = playerInTurn.getPlayerIndex();
         const actionExtraData   = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitUseCoSkill_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitUseCoSkill_00);
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
                 movingUnitAndPath       : commonExtraData.movingUnitAndPath,
@@ -3162,16 +3161,16 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 deleteViewAfterMoving   : true,
             });
 
-            const skillType: Twns.Types.Undefinable<Twns.Types.CoSkillType> = actionExtraData.skillType;
+            const skillType: Types.Undefinable<Types.CoSkillType> = actionExtraData.skillType;
             if (skillType != null) {
                 const skillIdArray      = playerInTurn.getCoSkills(skillType);
-                const skillDataArray    = Twns.Helpers.getExisted(actionExtraData.skillDataArray, ClientErrorCode.WarActionExecutor_NormalExeUnitUseCoSkill_01);
+                const skillDataArray    = Helpers.getExisted(actionExtraData.skillDataArray, ClientErrorCode.WarActionExecutor_NormalExeUnitUseCoSkill_01);
                 for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
                     WarCoSkillHelpers.exeInstantSkill({
                         war,
                         player          : playerInTurn,
                         skillId         : skillIdArray[skillIndex],
-                        skillData       : Twns.Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitUseCoSkill_02),
+                        skillData       : Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitUseCoSkill_02),
                         hasExtraData    : true,
                         isFastExecute   : false,
                     });
@@ -3197,7 +3196,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const revisedPath       = action.path as MovePath;
             const pathNodes         = revisedPath.nodes;
             const launchUnitId      = action.launchUnitId;
-            const focusUnit         = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId), ClientErrorCode.WarActionExecutor_NormalExeUnitUseCoSkill_03);
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId), ClientErrorCode.WarActionExecutor_NormalExeUnitUseCoSkill_03);
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -3211,7 +3210,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             focusUnit.updateView();
 
             if (!revisedPath.isBlocked) {
-                playerInTurn.updateOnUseCoSkill(Twns.Helpers.getExisted(action.skillType, ClientErrorCode.WarActionExecutor_NormalExeUnitUseCoSkill_04));
+                playerInTurn.updateOnUseCoSkill(Helpers.getExisted(action.skillType, ClientErrorCode.WarActionExecutor_NormalExeUnitUseCoSkill_04));
 
                 const skillIdArray = playerInTurn.getCoCurrentSkills();
                 for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
@@ -3257,7 +3256,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         if (actionExtraData) {
             WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
-                commonExtraData : Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitWait_00),
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitWait_00),
                 isFastExecute   : true,
             });
         } else {
@@ -3265,7 +3264,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const path          = action.path as MovePath;
             const launchUnitId  = action.launchUnitId;
             const pathNodes     = path.nodes;
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption, });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -3278,7 +3277,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            const commonExtraData = Twns.Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitWait_00);
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitWait_00);
             await WarHelpers.WarCommonHelpers.moveExtraUnit({
                 war,
                 movingUnitAndPath       : commonExtraData.movingUnitAndPath,
@@ -3297,7 +3296,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
             const revisedPath   = action.path as MovePath;
             const pathNodes     = revisedPath.nodes;
             const launchUnitId  = action.launchUnitId;
-            const focusUnit     = Twns.Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId), ClientErrorCode.WarActionExecutor_NormalExeUnitWait_01);
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId), ClientErrorCode.WarActionExecutor_NormalExeUnitWait_01);
             WarHelpers.WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -3316,16 +3315,16 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnknownAction(): Promise<void> {
-        throw Twns.Helpers.newError(`Unknown action.`, ClientErrorCode.BwWarActionExecutor_ExeUnknownAction_00);
+        throw Helpers.newError(`Unknown action.`, ClientErrorCode.BwWarActionExecutor_ExeUnknownAction_00);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function handlePrimaryWeaponAmmoForUnitAttackTile(attackerUnit: BwUnit, targetTile: BwTile): void {
-        const targetArmorType = Twns.Helpers.getExisted(targetTile.getArmorType(), ClientErrorCode.BwWarActionExecutor_HandlePrimaryWeaponForUnitAttackTile_00);
+        const targetArmorType = Helpers.getExisted(targetTile.getArmorType(), ClientErrorCode.BwWarActionExecutor_HandlePrimaryWeaponForUnitAttackTile_00);
         const attackerAmmo = attackerUnit.getPrimaryWeaponCurrentAmmo();
         if ((attackerAmmo != null)                                                              &&
             (attackerAmmo > 0)                                                                  &&
-            (attackerUnit.getCfgBaseDamage(targetArmorType, Twns.Types.WeaponType.Primary) != null)
+            (attackerUnit.getCfgBaseDamage(targetArmorType, Types.WeaponType.Primary) != null)
         ) {
             attackerUnit.setPrimaryWeaponCurrentAmmo(attackerAmmo - 1);
         }
@@ -3334,7 +3333,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         tile.setCurrentHp(newHp);
     }
     function handleDestructionForTile(war: BwWar, tile: BwTile): ResultForHandleDestructionForTile {
-        const hp        = Twns.Helpers.getExisted(tile.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_HandleDestructionForTile_00);
+        const hp        = Helpers.getExisted(tile.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_HandleDestructionForTile_00);
         const gridIndex = tile.getGridIndex();
         if (hp > 0) {
             return {
@@ -3365,7 +3364,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const attackerAmmo      = attackerUnit.getPrimaryWeaponCurrentAmmo();
         if ((attackerAmmo != null)                                                              &&
             (attackerAmmo > 0)                                                                  &&
-            (attackerUnit.getCfgBaseDamage(targetArmorType, Twns.Types.WeaponType.Primary) != null)
+            (attackerUnit.getCfgBaseDamage(targetArmorType, Types.WeaponType.Primary) != null)
         ) {
             attackerUnit.setPrimaryWeaponCurrentAmmo(attackerAmmo - 1);
         }
@@ -3427,7 +3426,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
             const cfg = gameConfig.getCoSkillCfg(skillId)?.selfGetFundByAttackUnit;
             if ((cfg)                                                                       &&
-                ((isAttackerInAttackerCoZone) || (cfg[0] === Twns.Types.CoSkillAreaType.Halo))   &&
+                ((isAttackerInAttackerCoZone) || (cfg[0] === Types.CoSkillAreaType.Halo))   &&
                 (gameConfig.checkIsUnitTypeInCategory(attackerUnitType, cfg[1]))            &&
                 (gameConfig.checkIsUnitTypeInCategory(targetUnitType, cfg[2]))
             ) {
@@ -3454,18 +3453,18 @@ namespace Twns.WarHelpers.WarActionExecutor {
         const gameConfig            = war.getGameConfig();
         if (attackerPlayer.checkCanGetEnergyWithBattle()) {
             const coEnergyType1 = attackerPlayer.getCoEnergyType();
-            if (coEnergyType1 === Twns.Types.CoEnergyType.Trilogy) {
+            if (coEnergyType1 === Types.CoEnergyType.Trilogy) {
                 const multiplier1       = commonSettingManager.getSettingsEnergyGrowthMultiplier(attackerPlayer.getPlayerIndex());
-                const energyParameters1 = Twns.Helpers.getExisted(attackerPlayer.getGlobalCoEnergyParameters());
+                const energyParameters1 = Helpers.getExisted(attackerPlayer.getGlobalCoEnergyParameters());
                 attackerPlayer.setCoCurrentEnergy(Math.min(
                     attackerPlayer.getCoMaxEnergy(),
                     attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostNormalizedHp * targetCfgProductionCost * multiplier1 * energyParameters1[2] / 100 / 10 / 100),
                 ));
 
-            } else if (coEnergyType1 === Twns.Types.CoEnergyType.Dor) {
+            } else if (coEnergyType1 === Types.CoEnergyType.Dor) {
                 const coType1 = attackerPlayer.getCoType();
-                if (((coType1 === Twns.Types.CoType.Zoned) && (isAttackerInAttackerCoZone)) ||
-                    (coType1 === Twns.Types.CoType.Global)
+                if (((coType1 === Types.CoType.Zoned) && (isAttackerInAttackerCoZone)) ||
+                    (coType1 === Types.CoType.Global)
                 ) {
                     const playerIndex1  = attackerPlayer.getPlayerIndex();
                     const multiplier1   = commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex1);
@@ -3477,24 +3476,24 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 }
 
             } else {
-                throw Twns.Helpers.newError(`Invalid coEnergyType1: ${coEnergyType1}`, ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_00);
+                throw Helpers.newError(`Invalid coEnergyType1: ${coEnergyType1}`, ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_00);
             }
         }
 
         if (targetPlayer.checkCanGetEnergyWithBattle()) {
             const coEnergyType2 = targetPlayer.getCoEnergyType();
-            if (coEnergyType2 === Twns.Types.CoEnergyType.Trilogy) {
+            if (coEnergyType2 === Types.CoEnergyType.Trilogy) {
                 const multiplier2       = commonSettingManager.getSettingsEnergyGrowthMultiplier(targetPlayer.getPlayerIndex());
-                const energyParameters2 = Twns.Helpers.getExisted(targetPlayer.getGlobalCoEnergyParameters());
+                const energyParameters2 = Helpers.getExisted(targetPlayer.getGlobalCoEnergyParameters());
                 targetPlayer.setCoCurrentEnergy(Math.min(
                     targetPlayer.getCoMaxEnergy(),
                     targetPlayer.getCoCurrentEnergy() + Math.floor(targetLostNormalizedHp * targetCfgProductionCost * multiplier2 * energyParameters2[3] / 100 / 10 / 100),
                 ));
 
-            } else if (coEnergyType2 === Twns.Types.CoEnergyType.Dor) {
+            } else if (coEnergyType2 === Types.CoEnergyType.Dor) {
                 const coType2 = targetPlayer.getCoType();
-                if (((coType2 === Twns.Types.CoType.Zoned) && (isTargetInTargetCoZone)) ||
-                    (coType2 === Twns.Types.CoType.Global)
+                if (((coType2 === Types.CoType.Zoned) && (isTargetInTargetCoZone)) ||
+                    (coType2 === Types.CoType.Global)
                 ) {
                     const playerIndex2  = targetPlayer.getPlayerIndex();
                     const multiplier2   = commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex2);
@@ -3506,7 +3505,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 }
 
             } else {
-                throw Twns.Helpers.newError(`Invalid coEnergyType2: ${coEnergyType2}`, ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_01);
+                throw Helpers.newError(`Invalid coEnergyType2: ${coEnergyType2}`, ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_01);
             }
         }
     }

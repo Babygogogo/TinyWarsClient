@@ -18,7 +18,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiFreeRoom {
-    import LangTextType         = TwnsLangTextType.LangTextType;
+    import LangTextType         = Twns.Lang.LangTextType;
     import NotifyType           = Twns.Notify.NotifyType;
 
     export class MfrCreatePlayerInfoPage extends TwnsUiTabPage.UiTabPage<void> {

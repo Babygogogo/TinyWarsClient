@@ -1,19 +1,20 @@
 
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import NetManager           from "../../tools/network/NetManager";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import ChangeLogModel       from "./ChangeLogModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.ChangeLog.ChangeLogProxy {
-    import NotifyType       = Twns.Notify.NotifyType;
+    import NotifyType       = Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
     import ILanguageText    = CommonProto.Structure.ILanguageText;
-    import NetMessageCodes  = Twns.Net.NetMessageCodes;
+    import NetMessageCodes  = Net.NetMessageCodes;
 
     export function init(): void {
-        Twns.Net.NetManager.addListeners([
+        Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgChangeLogAddMessage,         callback: _onMsgChangeLogAddMessage },
             { msgCode: NetMessageCodes.MsgChangeLogModifyMessage,      callback: _onMsgChangeLogModifyMessage },
             { msgCode: NetMessageCodes.MsgChangeLogGetMessageList,     callback: _onMsgChangeLogGetMessageList, },
@@ -21,7 +22,7 @@ namespace Twns.ChangeLog.ChangeLogProxy {
     }
 
     export function reqChangeLogAddMessage(textList: ILanguageText[]): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgChangeLogAddMessage: { c: {
                 textList,
             } },
@@ -30,12 +31,12 @@ namespace Twns.ChangeLog.ChangeLogProxy {
     function _onMsgChangeLogAddMessage(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgChangeLogAddMessage.IS;
         if (!data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgChangeLogAddMessage, data);
+            Notify.dispatch(NotifyType.MsgChangeLogAddMessage, data);
         }
     }
 
     export function reqChangeLogModifyMessage(messageId: number, textList: ILanguageText[]): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgChangeLogModifyMessage: { c: {
                 messageId,
                 textList,
@@ -45,19 +46,19 @@ namespace Twns.ChangeLog.ChangeLogProxy {
     function _onMsgChangeLogModifyMessage(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgChangeLogModifyMessage.IS;
         if (!data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgChangeLogModifyMessage, data);
+            Notify.dispatch(NotifyType.MsgChangeLogModifyMessage, data);
         }
     }
 
     export function reqChangeLogGetMessageList(): void {
-        Twns.Net.NetManager.send({ MsgChangeLogGetMessageList: { c: {
+        Net.NetManager.send({ MsgChangeLogGetMessageList: { c: {
         } }, });
     }
     function _onMsgChangeLogGetMessageList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChangeLogGetMessageList.IS;
         if (!data.errorCode) {
-            Twns.ChangeLog.ChangeLogModel.setAllMessageList(data.messageList || []);
-            Twns.Notify.dispatch(NotifyType.MsgChangeLogGetMessageList, data);
+            ChangeLog.ChangeLogModel.setAllMessageList(data.messageList || []);
+            Notify.dispatch(NotifyType.MsgChangeLogGetMessageList, data);
         }
     }
 }

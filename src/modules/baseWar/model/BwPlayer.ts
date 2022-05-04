@@ -21,7 +21,7 @@ namespace Twns.BaseWar {
     import CoType           = Twns.Types.CoType;
     import GameConfig       = Config.GameConfig;
     import ISerialPlayer    = CommonProto.WarSerialization.ISerialPlayer;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
 
     export class BwPlayer {
         private _playerIndex?               : number;

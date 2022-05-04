@@ -19,7 +19,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
     import MeWar                = MapEditor.MeWar;
-    import LangTextType         = TwnsLangTextType.LangTextType;
+    import LangTextType         = Twns.Lang.LangTextType;
     import NotifyType           = Twns.Notify.NotifyType;
     import ColorValue           = Twns.Types.ColorValue;
     import WarEventDescType     = Twns.Types.WarEventDescType;

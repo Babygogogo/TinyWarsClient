@@ -10423,6 +10423,9 @@ declare namespace CommonProto {
 
             /** DataForPlayerRule fixedCoIdInCcw */
             fixedCoIdInCcw?: (number|null);
+
+            /** DataForPlayerRule bannedUnitTypeArray */
+            bannedUnitTypeArray?: (number[]|null);
         }
 
         /** Represents a DataForPlayerRule. */
@@ -10475,6 +10478,9 @@ declare namespace CommonProto {
 
             /** DataForPlayerRule fixedCoIdInCcw. */
             public fixedCoIdInCcw: number;
+
+            /** DataForPlayerRule bannedUnitTypeArray. */
+            public bannedUnitTypeArray: number[];
 
             /**
              * Creates a new DataForPlayerRule instance using the specified properties.

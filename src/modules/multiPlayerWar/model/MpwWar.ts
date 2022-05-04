@@ -18,7 +18,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiPlayerWar {
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
     import WarAction                = CommonProto.WarAction;
 
     export abstract class MpwWar extends BaseWar.BwWar {

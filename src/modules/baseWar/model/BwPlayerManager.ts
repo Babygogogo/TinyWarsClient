@@ -13,7 +13,7 @@ namespace Twns.BaseWar {
     import ISerialPlayerManager     = WarSerialization.ISerialPlayerManager;
     import ISerialPlayer            = WarSerialization.ISerialPlayer;
     import PlayerAliveState         = Twns.Types.PlayerAliveState;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode          = Twns.ClientErrorCode;
     import BwWar                    = BaseWar.BwWar;
     import GameConfig               = Config.GameConfig;
 

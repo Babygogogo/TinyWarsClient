@@ -6,7 +6,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace ProtoManager {
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode          = Twns.ClientErrorCode;
     import IMessageContainer        = CommonProto.NetMessage.IMessageContainer;
     import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
     import IMapRawData              = CommonProto.Map.IMapRawData;

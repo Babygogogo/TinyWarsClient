@@ -32,8 +32,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.HalfwayReplayWar {
     import NotifyType           = Twns.Notify.NotifyType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import LangTextType         = Twns.Lang.LangTextType;
+    import ClientErrorCode      = Twns.ClientErrorCode;
 
     // eslint-disable-next-line no-shadow
     enum MenuType {

@@ -44,7 +44,7 @@ namespace Twns.BaseWar {
             const openData              = this._getOpenData();
             this._labelPlayerIndex.text = `${Lang.getPlayerForceName(openData.playerIndex)} (${Lang.getPlayerTeamName(openData.teamIndex)})`;
             this._labelNickname.text    = openData.nickname;
-            this._labelTurnStart.text   = Lang.getText(TwnsLangTextType.LangTextType.B0679);
+            this._labelTurnStart.text   = Lang.getText(Twns.Lang.LangTextType.B0679);
             this._imgSkin.source        = Twns.WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(openData.unitAndTileSkinId);
             this._imgCo.source          = openData.gameConfig.getCoHeadImageSource(openData.coId) ?? CommonConstants.ErrorTextForUndefined;
         }

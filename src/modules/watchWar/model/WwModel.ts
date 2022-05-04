@@ -22,7 +22,7 @@ namespace Twns.WatchWar.WwModel {
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
-    import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode                          = Twns.ClientErrorCode;
     import WarBasicSettingsType                     = Twns.Types.WarBasicSettingsType;
 
     let _requestableWarIdArray  : number[] | null = null;

@@ -28,7 +28,7 @@
 namespace Twns.BaseWar {
     import WarAction                = CommonProto.WarAction;
     import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode          = Twns.ClientErrorCode;
     import GameConfig               = Config.GameConfig;
 
     export abstract class BwWar {

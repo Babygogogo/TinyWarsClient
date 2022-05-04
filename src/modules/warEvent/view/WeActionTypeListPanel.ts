@@ -20,7 +20,7 @@ namespace Twns.WarEvent {
     import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
     import IWarEventAction      = CommonProto.WarEvent.IWarEventAction;
     import ActionType           = Twns.Types.WarEventActionType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
+    import LangTextType         = Twns.Lang.LangTextType;
 
     export type OpenDataForWeActionTypeListPanel = {
         war         : Twns.BaseWar.BwWar;

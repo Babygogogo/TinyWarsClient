@@ -26,7 +26,7 @@ namespace Twns.BaseWar {
     import GridIndex            = Twns.Types.GridIndex;
     import UnitTemplateCfg      = Twns.Types.UnitTemplateCfg;
     import ISerialUnit          = CommonProto.WarSerialization.ISerialUnit;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode      = Twns.ClientErrorCode;
     import GameConfig           = Config.GameConfig;
 
     export class BwUnit {

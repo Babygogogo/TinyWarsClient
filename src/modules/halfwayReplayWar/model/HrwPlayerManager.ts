@@ -3,7 +3,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.HalfwayReplayWar {
-    import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode = Twns.ClientErrorCode;
 
     export class HrwPlayerManager extends Twns.BaseWar.BwPlayerManager {
         private _watcherTeamIndexes?    : Set<number>;

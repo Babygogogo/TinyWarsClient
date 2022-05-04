@@ -8,7 +8,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiTab {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode      = Twns.ClientErrorCode;
     export class UiTab<DataForTabItemRenderer, DataForPage> extends TwnsUiComponent.UiComponent {
         private readonly _bar!          : eui.TabBar;  // 页签栏
         private readonly _page!         : eui.Group;   // 页面内容，仅用于占位

@@ -17,7 +17,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiRankRoom.MrrModel {
-    import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode                          = Twns.ClientErrorCode;
     import NotifyType                               = Twns.Notify.NotifyType;
     import WarBasicSettingsType                     = Twns.Types.WarBasicSettingsType;
     import IMrrRoomInfo                             = CommonProto.MultiRankRoom.IMrrRoomInfo;

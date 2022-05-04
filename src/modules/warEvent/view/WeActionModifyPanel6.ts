@@ -29,7 +29,7 @@ namespace Twns.WarEvent {
     import ColorValue               = Twns.Types.ColorValue;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
     import BwWar                    = BaseWar.BwWar;
 
     export type OpenDataForWeActionModifyPanel6 = {

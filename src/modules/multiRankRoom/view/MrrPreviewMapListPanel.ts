@@ -28,10 +28,10 @@ namespace Twns.MultiRankRoom {
     import OpenDataForCommonWarAdvancedSettingsPage     = Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage        = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage              = Twns.Common.OpenDataForCommonMapInfoPage;
-    import LangTextType                                 = TwnsLangTextType.LangTextType;
+    import LangTextType                                 = Twns.Lang.LangTextType;
     import NotifyType                                   = Twns.Notify.NotifyType;
     import WarBasicSettingsType                         = Twns.Types.WarBasicSettingsType;
-    import ClientErrorCode                              = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode                              = Twns.ClientErrorCode;
 
     export type OpenDataForMrrPreviewMapListPanel = {
         hasFog: boolean;

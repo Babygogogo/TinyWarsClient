@@ -30,7 +30,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiPlayerWar {
-    import LangTextType         = TwnsLangTextType.LangTextType;
+    import LangTextType         = Twns.Lang.LangTextType;
     import NotifyType           = Twns.Notify.NotifyType;
 
     // eslint-disable-next-line no-shadow

@@ -9,7 +9,7 @@
 namespace Twns.CoopCustomWar {
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForCcw  = CommonProto.WarSettings.ISettingsForCcw;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import MpwWar           = MultiPlayerWar.MpwWar;
     import GameConfig       = Config.GameConfig;
 

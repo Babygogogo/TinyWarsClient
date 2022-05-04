@@ -15,7 +15,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SingleRankRoom.SrrCreateModel {
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
     import NotifyType               = Twns.Notify.NotifyType;
     import IDataForPlayerRule       = CommonProto.WarRule.IDataForPlayerRule;
     import IDataForPlayerInRoom     = CommonProto.Structure.IDataForPlayerInRoom;

@@ -20,12 +20,12 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.ReplayWar {
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
     import NotifyType               = Twns.Notify.NotifyType;
     import WarAction                = CommonProto.WarAction;
     import IWarActionContainer      = WarAction.IWarActionContainer;
     import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode          = Twns.ClientErrorCode;
     import GameConfig               = Config.GameConfig;
 
     type CheckpointData = {

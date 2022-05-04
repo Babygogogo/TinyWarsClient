@@ -24,7 +24,7 @@ namespace Twns.BaseWar {
     import ITileCustomCannonData        = CommonProto.WarSerialization.ITileCustomCannonData;
     import ITileCustomLaserTurretData   = CommonProto.WarSerialization.ITileCustomLaserTurretData;
     import ISerialTile                  = CommonProto.WarSerialization.ISerialTile;
-    import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode              = Twns.ClientErrorCode;
     import GameConfig                   = Config.GameConfig;
 
     export class BwTile {

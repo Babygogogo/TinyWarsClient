@@ -14,10 +14,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiCoInfo {
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import CoSkillType      = Twns.Types.CoSkillType;
     import NotifyType       = Twns.Notify.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import LangTextType     = Twns.Lang.LangTextType;
 
     type CoData = {
         gameConfig      : Twns.Config.GameConfig;

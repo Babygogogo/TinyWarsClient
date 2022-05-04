@@ -33,8 +33,8 @@ namespace Twns.WatchWar {
     import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
-    import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
+    import LangTextType                             = Twns.Lang.LangTextType;
+    import ClientErrorCode                          = Twns.ClientErrorCode;
     import NotifyType                               = Twns.Notify.NotifyType;
 
     export type OpenDataForWwDeleteWatcherWarsPanel = void;

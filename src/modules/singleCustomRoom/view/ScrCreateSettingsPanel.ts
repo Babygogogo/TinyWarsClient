@@ -25,12 +25,12 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SingleCustomRoom {
-    import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode                          = Twns.ClientErrorCode;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import ScrCreateAdvancedSettingsPage            = SingleCustomRoom.ScrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
     import ScrCreatePlayerInfoPage                  = SingleCustomRoom.ScrCreatePlayerInfoPage;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import LangTextType                             = Twns.Lang.LangTextType;
     import NotifyType                               = Twns.Notify.NotifyType;
     import WarBasicSettingsType                     = Twns.Types.WarBasicSettingsType;
 

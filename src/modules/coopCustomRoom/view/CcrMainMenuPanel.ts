@@ -26,7 +26,7 @@
 namespace Twns.CoopCustomRoom {
     import NotifyType               = Twns.Notify.NotifyType;
     import Tween                    = egret.Tween;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
 
     export type OpenDataForCcrMainMenuPanel = void;
     export class CcrMainMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForCcrMainMenuPanel> {

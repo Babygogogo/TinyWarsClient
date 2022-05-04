@@ -31,7 +31,7 @@ namespace Twns.ReplayWar {
     import OpenDataForCommonWarMapInfoPage      = Twns.Common.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage   = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
     import RwReplayWarInfoPage                  = Twns.ReplayWar.RwReplayWarInfoPage;
-    import LangTextType                         = TwnsLangTextType.LangTextType;
+    import LangTextType                         = Twns.Lang.LangTextType;
     import NotifyType                           = Twns.Notify.NotifyType;
 
     export type OpenDataForRwReplayListPanel = void;

@@ -16,7 +16,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import LangTextType         = TwnsLangTextType.LangTextType;
+    import LangTextType         = Twns.Lang.LangTextType;
     import NotifyType           = Twns.Notify.NotifyType;
     import DrawerMode           = Twns.Types.MapEditorDrawerMode;
     import GridIndex            = Twns.Types.GridIndex;

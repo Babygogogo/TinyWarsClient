@@ -18,7 +18,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
     import DataForDrawTileDecorator = Twns.MapEditor.DataForDrawTileDecorator;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
     import NotifyType               = Twns.Notify.NotifyType;
 
     const MAX_RECENT_COUNT = 10;

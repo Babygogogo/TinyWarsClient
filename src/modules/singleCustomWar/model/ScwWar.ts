@@ -10,7 +10,7 @@
 namespace Twns.SingleCustomWar {
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForScw  = CommonProto.WarSettings.ISettingsForScw;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
     export class ScwWar extends Twns.SinglePlayerWar.SpwWar {

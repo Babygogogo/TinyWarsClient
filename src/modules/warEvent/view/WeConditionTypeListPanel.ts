@@ -19,7 +19,7 @@ namespace Twns.WarEvent {
     import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
     import IWarEventCondition   = CommonProto.WarEvent.IWarEventCondition;
     import ConditionType        = Twns.Types.WarEventConditionType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
+    import LangTextType         = Twns.Lang.LangTextType;
 
     export type OpenDataForWeConditionTypeListPanel = {
         war         : Twns.BaseWar.BwWar;

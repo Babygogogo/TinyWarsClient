@@ -1,5 +1,5 @@
 
-namespace TwnsServerErrorCode {
+namespace Twns {
 // eslint-disable-next-line no-shadow
 export const enum ServerErrorCode {
     NoError = 0,
@@ -7178,6 +7178,17 @@ export const enum ServerErrorCode {
     WarRuleHelpers_GetLuckUpperLimit_0007,
     WarRuleHelpers_GetLuckUpperLimit_0008,
     WarRuleHelpers_GetLuckUpperLimit_0009,
+
+    WarRuleHelpers_GetBannedUnitTypeArray_0000,
+    WarRuleHelpers_GetBannedUnitTypeArray_0001,
+    WarRuleHelpers_GetBannedUnitTypeArray_0002,
+    WarRuleHelpers_GetBannedUnitTypeArray_0003,
+    WarRuleHelpers_GetBannedUnitTypeArray_0004,
+    WarRuleHelpers_GetBannedUnitTypeArray_0005,
+    WarRuleHelpers_GetBannedUnitTypeArray_0006,
+    WarRuleHelpers_GetBannedUnitTypeArray_0007,
+    WarRuleHelpers_GetBannedUnitTypeArray_0008,
+    WarRuleHelpers_GetBannedUnitTypeArray_0009,
 
     WarRuleHelpers_GetTeamIndex_0000,
     WarRuleHelpers_GetTeamIndex_0001,

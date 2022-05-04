@@ -20,7 +20,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.User {
     import NotifyType       = Twns.Notify.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import LangTextType     = Twns.Lang.LangTextType;
 
     export type OpenDataForUserLoginPanel = void;
     export class UserLoginPanel extends TwnsUiPanel.UiPanel<OpenDataForUserLoginPanel> {

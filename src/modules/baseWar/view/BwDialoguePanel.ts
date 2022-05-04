@@ -15,7 +15,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import LangTextType = TwnsLangTextType.LangTextType;
+    import LangTextType = Twns.Lang.LangTextType;
 
     export type OpenDataForBwDialoguePanel = {
         gameConfig      : Twns.Config.GameConfig;

@@ -24,7 +24,7 @@ namespace Twns.MapEditor {
     import MeMfwAdvancedSettingsPage    = Twns.MapEditor.MeMfwAdvancedSettingsPage;
     import MeMfwBasicSettingsPage       = MapEditor.MeMfwBasicSettingsPage;
     import NotifyType                   = Twns.Notify.NotifyType;
-    import LangTextType                 = TwnsLangTextType.LangTextType;
+    import LangTextType                 = Twns.Lang.LangTextType;
 
     export type OpenDataForMeMfwSettingsPanel = void;
     export class MeMfwSettingsPanel extends TwnsUiPanel.UiPanel<OpenDataForMeMfwSettingsPanel> {

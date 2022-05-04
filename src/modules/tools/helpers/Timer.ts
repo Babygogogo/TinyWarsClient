@@ -14,7 +14,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Timer {
     import NotifyType       = Notify.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import LangTextType     = Twns.Lang.LangTextType;
 
     const TILE_ANIMATION_INTERVAL_MS        = 200;
     const UNIT_ANIMATION_INTERVAL_MS        = 120;

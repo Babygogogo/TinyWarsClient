@@ -33,8 +33,8 @@ namespace Twns.WatchWar {
     import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
-    import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import ClientErrorCode                          = Twns.ClientErrorCode;
+    import LangTextType                             = Twns.Lang.LangTextType;
     import NotifyType                               = Twns.Notify.NotifyType;
 
     type WarFilter = {

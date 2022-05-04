@@ -4,9 +4,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Lang {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import ServerErrorCode      = TwnsServerErrorCode.ServerErrorCode;
-
     export const LangErrorText: { [errorCode: number]: string[] } = {
         [ServerErrorCode.NoError]: [
             "",

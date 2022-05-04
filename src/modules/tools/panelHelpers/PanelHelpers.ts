@@ -1,7 +1,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.PanelHelpers {
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
 
     const _IS_CACHE_ENABLED = true;
     const _runningPanelDict = new Map<PanelConfig<any>, TwnsUiPanel.UiPanel<any>>();

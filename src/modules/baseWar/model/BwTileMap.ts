@@ -16,7 +16,7 @@ namespace Twns.BaseWar {
     import WarSerialization = CommonProto.WarSerialization;
     import ISerialTileMap   = WarSerialization.ISerialTileMap;
     import ISerialTile      = WarSerialization.ISerialTile;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
     export class BwTileMap {

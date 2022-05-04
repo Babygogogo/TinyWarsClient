@@ -22,7 +22,7 @@ namespace Twns.TestWar {
     import WarSerialization     = CommonProto.WarSerialization;
     import ISerialWar           = WarSerialization.ISerialWar;
     import IMapRawData          = CommonProto.Map.IMapRawData;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode      = Twns.ClientErrorCode;
     import BwWar                = BaseWar.BwWar;
     import GameConfig           = Config.GameConfig;
 

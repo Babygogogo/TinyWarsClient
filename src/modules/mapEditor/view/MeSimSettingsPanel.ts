@@ -23,7 +23,7 @@
 namespace Twns.MapEditor {
     import MeSimAdvancedSettingsPage    = Twns.MapEditor.MeSimAdvancedSettingsPage;
     import MeSimBasicSettingsPage       = MapEditor.MeSimBasicSettingsPage;
-    import LangTextType                 = TwnsLangTextType.LangTextType;
+    import LangTextType                 = Twns.Lang.LangTextType;
     import NotifyType                   = Twns.Notify.NotifyType;
 
     export type OpenDataForMeSimSettingsPanel = void;

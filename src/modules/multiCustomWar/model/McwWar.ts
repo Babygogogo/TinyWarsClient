@@ -10,7 +10,7 @@ namespace Twns.MultiCustomWar {
     import MpwWar           = MultiPlayerWar.MpwWar;
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForMcw  = CommonProto.WarSettings.ISettingsForMcw;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
     export class McwWar extends MpwWar {

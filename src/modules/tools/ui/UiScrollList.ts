@@ -9,7 +9,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiScrollList {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode      = Twns.ClientErrorCode;
     import NotifyType           = Twns.Notify.NotifyType;
     import UiListener           = Twns.Types.UiListener;
     import ShortSfxCode         = Twns.Types.ShortSfxCode;

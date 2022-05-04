@@ -12,7 +12,7 @@ namespace Twns.SingleRankWar {
     import SpwWar           = Twns.SinglePlayerWar.SpwWar;
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForSrw  = CommonProto.WarSettings.ISettingsForSrw;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
     export class SrwWar extends SpwWar {

@@ -11,8 +11,8 @@ namespace Twns.Helpers {
     import ILanguageText        = CommonProto.Structure.ILanguageText;
     import IMessageContainer    = CommonProto.NetMessage.IMessageContainer;
     import IWarActionContainer  = CommonProto.WarAction.IWarActionContainer;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import LangTextType         = Twns.Lang.LangTextType;
+    import ClientErrorCode      = Twns.ClientErrorCode;
 
     const COLOR_MATRIX_FILTERS = {
         [ColorType.Gray]: new egret.ColorMatrixFilter([

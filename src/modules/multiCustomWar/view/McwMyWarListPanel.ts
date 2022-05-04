@@ -30,7 +30,7 @@ namespace Twns.MultiCustomWar {
     import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
     import NotifyType                               = Twns.Notify.NotifyType;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
+    import LangTextType                             = Twns.Lang.LangTextType;
     import MpwModel                                 = MultiPlayerWar.MpwModel;
 
     export type OpenDataForMcwMyWarListPanel = void;

@@ -11,7 +11,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiRadioButton {
-    import LangTextType     = TwnsLangTextType.LangTextType;
+    import LangTextType     = Twns.Lang.LangTextType;
     import NotifyType       = Twns.Notify.NotifyType;
 
     type DataForUiRadioButton = {

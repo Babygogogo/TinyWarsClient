@@ -15,7 +15,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Twns.Lang.LangTextType;
     import NotifyType               = Twns.Notify.NotifyType;
 
     export class MeSimBasicSettingsPage extends TwnsUiTabPage.UiTabPage<void> {

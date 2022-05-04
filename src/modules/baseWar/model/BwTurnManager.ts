@@ -24,7 +24,7 @@ namespace Twns.BaseWar {
     import WarAction                    = CommonProto.WarAction;
     import IWarActionSystemBeginTurn    = WarAction.IWarActionSystemBeginTurn;
     import IWarActionPlayerEndTurn      = WarAction.IWarActionPlayerEndTurn;
-    import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode              = Twns.ClientErrorCode;
 
     export class BwTurnManager {
         private _turnIndex?          : number;

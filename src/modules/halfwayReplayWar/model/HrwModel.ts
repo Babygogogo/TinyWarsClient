@@ -11,7 +11,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.HalfwayReplayWar.HrwModel {
-    import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode              = Twns.ClientErrorCode;
     import WarAction                    = CommonProto.WarAction;
     import WarSerialization             = CommonProto.WarSerialization;
     import IWarActionContainer          = WarAction.IWarActionContainer;

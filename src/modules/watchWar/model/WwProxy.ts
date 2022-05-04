@@ -2,18 +2,18 @@
 // import NetManager               from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes      from "../../tools/network/NetMessageCodes";
 // import Notify                   from "../../tools/notify/Notify";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import WwModel                  from "./WwModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WatchWar.WwProxy {
-    import NotifyType           = Twns.Notify.NotifyType;
+    import NotifyType           = Notify.NotifyType;
     import NetMessage           = CommonProto.NetMessage;
-    import NetMessageCodes      = Twns.Net.NetMessageCodes;
+    import NetMessageCodes      = Net.NetMessageCodes;
 
     export function init(): void {
-        Twns.Net.NetManager.addListeners([
+        Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgMpwWatchGetRequestableWarIdArray,     callback: _onMsgMpwWatchGetRequestableWarIdArray },
             { msgCode: NetMessageCodes.MsgMpwWatchGetOngoingWarIdArray,         callback: _onMsgMpwWatchGetOngoingWarIdArray },
             { msgCode: NetMessageCodes.MsgMpwWatchGetRequestedWarIdArray,       callback: _onMsgMpwWatchGetRequestedWarIdArray },
@@ -34,7 +34,7 @@ namespace Twns.WatchWar.WwProxy {
         userNickname?           : string | null;
         playersCountUnneutral?  : number | null;
     }): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgMpwWatchGetRequestableWarIdArray: { c: {
                 warId,
                 coName,
@@ -47,13 +47,13 @@ namespace Twns.WatchWar.WwProxy {
     function _onMsgMpwWatchGetRequestableWarIdArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetRequestableWarIdArray.IS;
         if (!data.errorCode) {
-            Twns.WatchWar.WwModel.setRequestableWarIdArray(data.warIdArray || []);
-            Twns.Notify.dispatch(NotifyType.MsgMpwWatchGetUnwatchedWarInfos, data);
+            WatchWar.WwModel.setRequestableWarIdArray(data.warIdArray || []);
+            Notify.dispatch(NotifyType.MsgMpwWatchGetUnwatchedWarInfos, data);
         }
     }
 
     export function reqMpwWatchGetOngoingWarIdArray(): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgMpwWatchGetOngoingWarIdArray: { c: {
             } },
         });
@@ -61,13 +61,13 @@ namespace Twns.WatchWar.WwProxy {
     function _onMsgMpwWatchGetOngoingWarIdArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetOngoingWarIdArray.IS;
         if (!data.errorCode) {
-            Twns.WatchWar.WwModel.setOngoingWarIdArray(data.warIdArray || []);
-            Twns.Notify.dispatch(NotifyType.MsgMpwWatchGetOngoingWarInfos, data);
+            WatchWar.WwModel.setOngoingWarIdArray(data.warIdArray || []);
+            Notify.dispatch(NotifyType.MsgMpwWatchGetOngoingWarInfos, data);
         }
     }
 
     export function reqMpwWatchRequestedWarIdArray(): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgMpwWatchGetRequestedWarIdArray: { c: {
             }, }
         });
@@ -75,13 +75,13 @@ namespace Twns.WatchWar.WwProxy {
     function _onMsgMpwWatchGetRequestedWarIdArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetRequestedWarIdArray.IS;
         if (!data.errorCode) {
-            Twns.WatchWar.WwModel.setRequestedWarIdArray(data.warIdArray || []);
-            Twns.Notify.dispatch(NotifyType.MsgMpwWatchGetRequestedWarIdArray, data);
+            WatchWar.WwModel.setRequestedWarIdArray(data.warIdArray || []);
+            Notify.dispatch(NotifyType.MsgMpwWatchGetRequestedWarIdArray, data);
         }
     }
 
     export function reqMpwWatchWatchedWarIdArray(): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgMpwWatchGetWatchedWarIdArray: { c: {
             }, }
         });
@@ -89,13 +89,13 @@ namespace Twns.WatchWar.WwProxy {
     function _onMsgMpwWatchGetWatchedWarIdArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetWatchedWarIdArray.IS;
         if (!data.errorCode) {
-            Twns.WatchWar.WwModel.setWatchedWarIdArray(data.warIdArray || []);
-            Twns.Notify.dispatch(NotifyType.MsgMpwWatchGetWatchedWarInfos, data);
+            WatchWar.WwModel.setWatchedWarIdArray(data.warIdArray || []);
+            Notify.dispatch(NotifyType.MsgMpwWatchGetWatchedWarInfos, data);
         }
     }
 
     export function reqWatchMakeRequest(warId: number, dstUserIds: number[]): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgMpwWatchMakeRequest: { c: {
                 warId,
                 dstUserIds,
@@ -105,12 +105,12 @@ namespace Twns.WatchWar.WwProxy {
     function _onMsgMpwWatchMakeRequest(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchMakeRequest.IS;
         if (!data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgMpwWatchMakeRequest, data);
+            Notify.dispatch(NotifyType.MsgMpwWatchMakeRequest, data);
         }
     }
 
     export function reqWatchHandleRequest(warId: number, acceptSrcUserIds: number[], declineSrcUserIds: number[]): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgMpwWatchHandleRequest: { c: {
                 warId,
                 acceptSrcUserIds,
@@ -121,12 +121,12 @@ namespace Twns.WatchWar.WwProxy {
     function _onMsgMpwWatchHandleRequest(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchHandleRequest.IS;
         if (!data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgMpwWatchHandleRequest, data);
+            Notify.dispatch(NotifyType.MsgMpwWatchHandleRequest, data);
         }
     }
 
     export function reqWatchDeleteWatcher(warId: number, watcherUserIds: number[]): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgMpwWatchDeleteWatcher: { c: {
                 warId,
                 watcherUserIds,
@@ -136,12 +136,12 @@ namespace Twns.WatchWar.WwProxy {
     function _onMsgMpwWatchDeleteWatcher(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchDeleteWatcher.IS;
         if (!data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgMpwWatchDeleteWatcher, data);
+            Notify.dispatch(NotifyType.MsgMpwWatchDeleteWatcher, data);
         }
     }
 
     export function reqWatchContinueWar(warId: number): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgMpwWatchContinueWar: { c: {
                 warId,
             }, }
@@ -150,14 +150,14 @@ namespace Twns.WatchWar.WwProxy {
     function _onMsgMpwWatchContinueWar(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchContinueWar.IS;
         if (data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgMpwWatchContinueWarFailed, data);
+            Notify.dispatch(NotifyType.MsgMpwWatchContinueWarFailed, data);
         } else {
-            Twns.Notify.dispatch(NotifyType.MsgMpwWatchContinueWar, data);
+            Notify.dispatch(NotifyType.MsgMpwWatchContinueWar, data);
         }
     }
 
     export function reqMpwWatchGetIncomingInfo(warId: number): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgMpwWatchGetIncomingInfo: { c: {
                 warId,
             } },
@@ -165,12 +165,12 @@ namespace Twns.WatchWar.WwProxy {
     }
     function _onMsgMpwWatchGetIncomingInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetIncomingInfo.IS;
-        Twns.WatchWar.WwModel.updateOnMsgMpwWatchGetIncomingInfo(data);
-        Twns.Notify.dispatch(NotifyType.MsgMpwWatchGetIncomingInfo, data);
+        WatchWar.WwModel.updateOnMsgMpwWatchGetIncomingInfo(data);
+        Notify.dispatch(NotifyType.MsgMpwWatchGetIncomingInfo, data);
     }
 
     export function reqMpwWatchGetOutgoingInfo(warId: number): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgMpwWatchGetOutgoingInfo: { c: {
                 warId,
             } },
@@ -178,8 +178,8 @@ namespace Twns.WatchWar.WwProxy {
     }
     function _onMsgMpwWatchGetOutgoingInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
-        Twns.WatchWar.WwModel.updateOnMsgMpwWatchGetOutgoingInfo(data);
-        Twns.Notify.dispatch(NotifyType.MsgMpwWatchGetOutgoingInfo, data);
+        WatchWar.WwModel.updateOnMsgMpwWatchGetOutgoingInfo(data);
+        Notify.dispatch(NotifyType.MsgMpwWatchGetOutgoingInfo, data);
     }
 }
 

@@ -10,7 +10,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -26,10 +26,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType           = Twns.Notify.NotifyType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import UnitType             = Twns.Types.UnitType;
-    import GridIndex            = Twns.Types.GridIndex;
+    import NotifyType           = Notify.NotifyType;
+    import LangTextType         = Lang.LangTextType;
+    import UnitType             = Types.UnitType;
+    import GridIndex            = Types.GridIndex;
     import BwWar                = BaseWar.BwWar;
 
     export type OpenDataForBwProduceUnitPanel = {
@@ -40,6 +40,7 @@ namespace Twns.BaseWar {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _listUnit!     : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+        private readonly _labelNoUnit!  : TwnsUiLabel.UiLabel;
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
         private readonly _btnDetail!    : TwnsUiButton.UiButton;
 
@@ -58,15 +59,15 @@ namespace Twns.BaseWar {
             });
 
             this._listUnit.setItemRenderer(UnitRenderer);
-            this._btnCancel.setShortSfxCode(Twns.Types.ShortSfxCode.None);
+            this._btnCancel.setShortSfxCode(Types.ShortSfxCode.None);
 
-            Twns.Notify.dispatch(NotifyType.BwProduceUnitPanelOpened);
+            Notify.dispatch(NotifyType.BwProduceUnitPanelOpened);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
         }
         protected _onClosing(): void {
-            Twns.Notify.dispatch(NotifyType.BwProduceUnitPanelClosed);
+            Notify.dispatch(NotifyType.BwProduceUnitPanelClosed);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +87,7 @@ namespace Twns.BaseWar {
         private _onTouchedBtnDetail(): void {
             const data = this._listUnit.getSelectedData();
             if (data) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwUnitDetailPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.BwUnitDetailPanel, {
                     unit        : data.unit,
                     canDelete   : false,
                 });
@@ -99,30 +100,38 @@ namespace Twns.BaseWar {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            this._listUnit.bindData(this._createDataForList());
+            const dataArray             = this._createDataForList();
+            this._labelNoUnit.visible   = !dataArray.length;
+            this._listUnit.bindData(dataArray);
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnCancel.label = Lang.getText(LangTextType.B0154);
-            this._btnDetail.label = Lang.getText(LangTextType.B0267);
+            this._labelNoUnit.text  = Lang.getText(LangTextType.B0896);
+            this._btnCancel.label   = Lang.getText(LangTextType.B0154);
+            this._btnDetail.label   = Lang.getText(LangTextType.B0267);
         }
 
         private _createDataForList(): DataForUnitRenderer[] {
-            const dataList          : DataForUnitRenderer[] = [];
-            const openData          = this._getOpenData();
-            const war               = openData.war;
-            const gridIndex         = openData.gridIndex;
-            const tile              = war.getTileMap().getTile(gridIndex);
-            const player            = tile.getPlayer();
-            const currentFund       = player.getFund();
-            const playerIndex       = player.getPlayerIndex();
-            const gameConfig     = war.getGameConfig();
-            const actionPlanner     = war.getActionPlanner();
-            const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex) ?? null;
-            const unitCategory      = Twns.Helpers.getExisted(skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory());
-            const minNormalizedHp   = skillCfg ? WarHelpers.WarCommonHelpers.getNormalizedHp(skillCfg[3]) : WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
+            const dataList              : DataForUnitRenderer[] = [];
+            const openData              = this._getOpenData();
+            const war                   = openData.war;
+            const gridIndex             = openData.gridIndex;
+            const gameConfig            = war.getGameConfig();
+            const tile                  = war.getTileMap().getTile(gridIndex);
+            const player                = tile.getPlayer();
+            const currentFund           = player.getFund();
+            const playerIndex           = player.getPlayerIndex();
+            const actionPlanner         = war.getActionPlanner();
+            const bannedUnitTypeArray   = war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerIndex) ?? [];
+            const skillCfg              = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex) ?? null;
+            const unitCategory          = Helpers.getExisted(skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory());
+            const minNormalizedHp       = skillCfg ? WarHelpers.WarCommonHelpers.getNormalizedHp(skillCfg[3]) : WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
             for (const unitType of gameConfig.getUnitTypesByCategory(unitCategory) ?? []) {
+                if (bannedUnitTypeArray.indexOf(unitType) >= 0) {
+                    continue;
+                }
+
                 const unit = new BaseWar.BwUnit();
                 unit.init({
                     gridIndex,
@@ -133,7 +142,7 @@ namespace Twns.BaseWar {
                 unit.startRunning(war);
 
                 const costModifier  = player.getUnitCostModifier(gridIndex, false, unitType);
-                const cfgCost       = Twns.Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost);
+                const cfgCost       = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost);
                 dataList.push({
                     unitType,
                     currentFund,
@@ -153,33 +162,33 @@ namespace Twns.BaseWar {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
 
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -194,7 +203,7 @@ namespace Twns.BaseWar {
         cfgCost                 : number;
         costModifier            : number;
         currentFund             : number;
-        actionPlanner           : Twns.BaseWar.BwActionPlanner;
+        actionPlanner           : BaseWar.BwActionPlanner;
         gridIndex               : GridIndex;
         unitProductionSkillCfg  : number[] | null;
     };
@@ -223,7 +232,7 @@ namespace Twns.BaseWar {
             ]);
 
             this._imgBg.touchEnabled = true;
-            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
             this._conUnitView.addChild(this._unitView);
         }
 
@@ -248,32 +257,32 @@ namespace Twns.BaseWar {
         }
 
         private _onTouchedImgBg(): void {
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onTouchedGroupProduce(): void {
             const data = this._getData();
             if (data.currentFund < data.minCost) {
                 FloatText.show(Lang.getText(LangTextType.B0053));
-                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonForbidden01);
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 return;
             }
 
-            if (!Twns.PanelHelpers.getRunningPanel(Twns.PanelHelpers.PanelDict.BwProduceUnitPanel)) {
-                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonForbidden01);
+            if (!PanelHelpers.getRunningPanel(PanelHelpers.PanelDict.BwProduceUnitPanel)) {
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 return;
             }
 
             const actionPlanner = data.actionPlanner;
             if (actionPlanner.checkIsStateRequesting()) {
-                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonForbidden01);
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 return;
             }
 
             const skillCfg  = data.unitProductionSkillCfg;
             const unitType  = data.unitType;
             const gridIndex = data.gridIndex;
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonConfirm01);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonConfirm01);
             if (!skillCfg) {
                 actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, CommonConstants.UnitMaxHp);
             } else {
@@ -288,7 +297,7 @@ namespace Twns.BaseWar {
                         rawMaxHp,
                         Math.floor(data.currentFund * CommonConstants.UnitMaxHp / (data.cfgCost * data.costModifier * skillCfg[5] / 100) / normalizer) * normalizer
                     );
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                         title           : `${Lang.getUnitName(unitType)} HP`,
                         currentValue    : maxHp,
                         maxValue        : maxHp,

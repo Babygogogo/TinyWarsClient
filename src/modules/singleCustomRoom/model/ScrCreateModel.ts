@@ -7,7 +7,7 @@
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
 // import Notify               from "../../tools/notify/Notify";
 // import NotifyData           from "../../tools/notify/NotifyData";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 // import UserModel            from "../../user/model/UserModel";
@@ -15,8 +15,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SingleCustomRoom.ScrCreateModel {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = Twns.Notify.NotifyType;
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
     import IDataForPlayerRule       = CommonProto.WarRule.IDataForPlayerRule;
     import IDataForPlayerInRoom     = CommonProto.Structure.IDataForPlayerInRoom;
     import GameConfig               = Config.GameConfig;
@@ -50,44 +50,44 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
     let _gameConfig     : GameConfig | null = null;
 
     export function getMapId(): number {
-        return Twns.Helpers.getExisted(getData().settingsForScw?.mapId);
+        return Helpers.getExisted(getData().settingsForScw?.mapId);
     }
     function setMapId(mapId: number): void {
-        Twns.Helpers.getExisted(getData().settingsForScw).mapId = mapId;
+        Helpers.getExisted(getData().settingsForScw).mapId = mapId;
     }
 
     export async function getMapBriefData(): Promise<CommonProto.Map.IMapBriefData> {
-        return Twns.Helpers.getExisted(await WarMap.WarMapModel.getBriefData(getMapId()));
+        return Helpers.getExisted(await WarMap.WarMapModel.getBriefData(getMapId()));
     }
     export async function getMapRawData(): Promise<CommonProto.Map.IMapRawData> {
-        return Twns.Helpers.getExisted(await WarMap.WarMapModel.getRawData(getMapId()));
+        return Helpers.getExisted(await WarMap.WarMapModel.getRawData(getMapId()));
     }
 
     export function getPlayerRule(playerIndex: number): IDataForPlayerRule {
         return WarHelpers.WarRuleHelpers.getPlayerRule(getInstanceWarRule(), playerIndex);
     }
     export function getPlayerInfo(playerIndex: number): IDataForPlayerInRoom {
-        return Twns.Helpers.getExisted(getData().playerInfoList?.find(v => v.playerIndex === playerIndex));
+        return Helpers.getExisted(getData().playerInfoList?.find(v => v.playerIndex === playerIndex));
     }
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
-        const configVersion = Twns.Helpers.getExisted(Config.ConfigManager.getLatestConfigVersion());
+        const configVersion = Helpers.getExisted(Config.ConfigManager.getLatestConfigVersion());
         setMapId(mapId);
         setConfigVersion(configVersion);
         setGameConfig(await Config.ConfigManager.getGameConfig(configVersion));
         setSaveSlotIndex(await SinglePlayerMode.SpmModel.getAvailableIndex());
         setSlotComment(null);
         setPlayerInfoList([]);
-        await resetDataByTemplateWarRuleId(Twns.Helpers.getExisted((await getMapRawData()).templateWarRuleArray?.find(v => v.ruleAvailability?.canScw)?.ruleId));
+        await resetDataByTemplateWarRuleId(Helpers.getExisted((await getMapRawData()).templateWarRuleArray?.find(v => v.ruleAvailability?.canScw)?.ruleId));
     }
     export function getData(): DataForCreateWar {
         return _dataForCreateWar;
     }
     export function getSettingsForCommon(): CommonProto.WarSettings.ISettingsForCommon {
-        return Twns.Helpers.getExisted(getData().settingsForCommon);
+        return Helpers.getExisted(getData().settingsForCommon);
     }
     export function getInstanceWarRule(): CommonProto.WarRule.IInstanceWarRule {
-        return Twns.Helpers.getExisted(getSettingsForCommon().instanceWarRule);
+        return Helpers.getExisted(getSettingsForCommon().instanceWarRule);
     }
 
     function setConfigVersion(version: string): void {
@@ -97,32 +97,32 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         _gameConfig = config;
     }
     export function getGameConfig(): GameConfig {
-        return Twns.Helpers.getExisted(_gameConfig);
+        return Helpers.getExisted(_gameConfig);
     }
 
     export async function resetDataByTemplateWarRuleId(templateWarRuleId: number): Promise<void> {
         const mapRawData                        = await getMapRawData();
-        const templateWarRule                   = Twns.Helpers.getExisted(mapRawData.templateWarRuleArray?.find(v => v.ruleId === templateWarRuleId));
+        const templateWarRule                   = Helpers.getExisted(mapRawData.templateWarRuleArray?.find(v => v.ruleId === templateWarRuleId));
         getSettingsForCommon().instanceWarRule  = WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRule, mapRawData.warEventFullData);
 
         await resetPlayerInfoList();
-        Twns.Notify.dispatch(NotifyType.ScrCreateTemplateWarRuleIdChanged);
+        Notify.dispatch(NotifyType.ScrCreateTemplateWarRuleIdChanged);
     }
     export function setCustomWarRuleId(): void {
         const instanceWarRule               = getInstanceWarRule();
         instanceWarRule.templateWarRuleId   = null;
-        Twns.Notify.dispatch(NotifyType.ScrCreateTemplateWarRuleIdChanged);
+        Notify.dispatch(NotifyType.ScrCreateTemplateWarRuleIdChanged);
     }
     export function getTemplateWarRuleId(): number | null {
         return getInstanceWarRule().templateWarRuleId ?? null;
     }
     export async function tickTemplateWarRuleId(): Promise<void> {
         const currTemplateWarRuleId = getTemplateWarRuleId();
-        const templateWarRuleArray  = Twns.Helpers.getExisted((await getMapRawData()).templateWarRuleArray);
+        const templateWarRuleArray  = Helpers.getExisted((await getMapRawData()).templateWarRuleArray);
         if (currTemplateWarRuleId == null) {
-            await resetDataByTemplateWarRuleId(Twns.Helpers.getExisted(templateWarRuleArray.find(v => v.ruleAvailability?.canScw)?.ruleId));
+            await resetDataByTemplateWarRuleId(Helpers.getExisted(templateWarRuleArray.find(v => v.ruleAvailability?.canScw)?.ruleId));
         } else {
-            const newTemplateWarRuleId = Twns.Helpers.getNonNullElements(templateWarRuleArray.filter(v => v.ruleAvailability?.canScw).map(v => v.ruleId)).sort((v1, v2) => {
+            const newTemplateWarRuleId = Helpers.getNonNullElements(templateWarRuleArray.filter(v => v.ruleAvailability?.canScw).map(v => v.ruleId)).sort((v1, v2) => {
                 if (v1 > currTemplateWarRuleId) {
                     return (v2 <= currTemplateWarRuleId) ? -1 : v1 - v2;
                 } else {
@@ -136,10 +136,10 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
     async function resetPlayerInfoList(): Promise<void> {
         const data              = getData();
         const oldPlayerInfoList = getPlayerInfoList();
-        const settingsForCommon = Twns.Helpers.getExisted(data.settingsForCommon);
-        const instanceWarRule   = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule);
+        const settingsForCommon = Helpers.getExisted(data.settingsForCommon);
+        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
         const gameConfig        = getGameConfig();
-        const playersCount      = Twns.Helpers.getExisted((await getMapRawData()).playersCountUnneutral);
+        const playersCount      = Helpers.getExisted((await getMapRawData()).playersCountUnneutral);
         const newPlayerInfoList : IDataForPlayerInRoom[] = [];
 
         for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
@@ -147,7 +147,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
             const availableCoIdArray    = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({ baseWarRule: instanceWarRule, playerIndex, gameConfig });
             const newCoId               = WarHelpers.WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray);
             if (oldInfo) {
-                const coId = Twns.Helpers.getExisted(oldInfo.coId);
+                const coId = Helpers.getExisted(oldInfo.coId);
                 newPlayerInfoList.push({
                     playerIndex,
                     isReady             : true,
@@ -159,7 +159,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
                 newPlayerInfoList.push({
                     playerIndex,
                     isReady             : true,
-                    userId              : playerIndex === 1 ? Twns.User.UserModel.getSelfUserId() : null,
+                    userId              : playerIndex === 1 ? User.UserModel.getSelfUserId() : null,
                     unitAndTileSkinId   : playerIndex,
                     coId                : newCoId,
                 });
@@ -168,7 +168,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         setPlayerInfoList(newPlayerInfoList);
     }
     export function getPlayerInfoList(): IDataForPlayerInRoom[] {
-        return Twns.Helpers.getExisted(getData().playerInfoList);
+        return Helpers.getExisted(getData().playerInfoList);
     }
     function setPlayerInfoList(list: IDataForPlayerInRoom[]): void {
         getData().playerInfoList = list;
@@ -178,15 +178,15 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         const data = getData();
         if (data.slotIndex !== slotIndex) {
             data.slotIndex = slotIndex;
-            Twns.Notify.dispatch(NotifyType.ScrCreateWarSaveSlotChanged);
+            Notify.dispatch(NotifyType.ScrCreateWarSaveSlotChanged);
         }
     }
     export function getSaveSlotIndex(): number {
-        return Twns.Helpers.getExisted(getData().slotIndex);
+        return Helpers.getExisted(getData().slotIndex);
     }
 
     export function setSlotComment(comment: string | null): void {
-        Twns.Helpers.getExisted(getData().slotExtraData).slotComment = comment;
+        Helpers.getExisted(getData().slotExtraData).slotComment = comment;
     }
     export function getSlotComment(): string | null {
         return getData().slotExtraData?.slotComment ?? null;
@@ -194,68 +194,69 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
 
     export function tickUserId(playerIndex: number): void {
         const playerInfo    = getPlayerInfo(playerIndex);
-        playerInfo.userId   = playerInfo.userId ? null : Twns.User.UserModel.getSelfUserId();
-        Twns.Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Twns.Notify.NotifyData.ScrCreatePlayerInfoChanged);
+        playerInfo.userId   = playerInfo.userId ? null : User.UserModel.getSelfUserId();
+        Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Notify.NotifyData.ScrCreatePlayerInfoChanged);
     }
 
     export function tickUnitAndTileSkinId(playerIndex: number): void {
         const playerInfoList        = getPlayerInfoList();
-        const targetPlayerData      = Twns.Helpers.getExisted(playerInfoList.find(v => v.playerIndex === playerIndex));
-        const oldSkinId             = Twns.Helpers.getExisted(targetPlayerData.unitAndTileSkinId);
+        const targetPlayerData      = Helpers.getExisted(playerInfoList.find(v => v.playerIndex === playerIndex));
+        const oldSkinId             = Helpers.getExisted(targetPlayerData.unitAndTileSkinId);
         const newSkinId             = oldSkinId % CommonConstants.UnitAndTileMaxSkinId + 1;
         const existingPlayerData    = playerInfoList.find(v => v.unitAndTileSkinId === newSkinId);
         if (existingPlayerData) {
             existingPlayerData.unitAndTileSkinId = oldSkinId;
-            Twns.Notify.dispatch(
+            Notify.dispatch(
                 NotifyType.ScrCreatePlayerInfoChanged,
-                { playerIndex: existingPlayerData.playerIndex } as Twns.Notify.NotifyData.ScrCreatePlayerInfoChanged
+                { playerIndex: existingPlayerData.playerIndex } as Notify.NotifyData.ScrCreatePlayerInfoChanged
             );
         }
 
         targetPlayerData.unitAndTileSkinId = newSkinId;
-        Twns.Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Twns.Notify.NotifyData.ScrCreatePlayerInfoChanged);
+        Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Notify.NotifyData.ScrCreatePlayerInfoChanged);
     }
 
     export function getTeamIndex(playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayerRule(playerIndex).teamIndex);
+        return Helpers.getExisted(getPlayerRule(playerIndex).teamIndex);
     }
     export function tickTeamIndex(playerIndex: number): void {
         setCustomWarRuleId();
 
         const playerRule        = getPlayerRule(playerIndex);
-        playerRule.teamIndex    = Twns.Helpers.getExisted(playerRule.teamIndex) % (WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(getInstanceWarRule())) + 1;
+        playerRule.teamIndex    = Helpers.getExisted(playerRule.teamIndex) % (WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(getInstanceWarRule())) + 1;
 
-        Twns.Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Twns.Notify.NotifyData.ScrCreatePlayerInfoChanged);
+        Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Notify.NotifyData.ScrCreatePlayerInfoChanged);
     }
 
     export function getBannedCoIdArray(playerIndex: number): number[] | null {
         return WarHelpers.WarRuleHelpers.getBannedCoIdArray(getInstanceWarRule(), playerIndex);
     }
-    export function addBannedCoId(playerIndex: number, coId: number): void {
-        WarHelpers.WarRuleHelpers.addBannedCoId(getInstanceWarRule(), playerIndex, coId);
-    }
-    export function deleteBannedCoId(playerIndex: number, coId: number): void {
-        WarHelpers.WarRuleHelpers.deleteBannedCoId(getInstanceWarRule(), playerIndex, coId);
-    }
     export function setBannedCoIdArray(playerIndex: number, coIdSet: Set<number>): void {
         WarHelpers.WarRuleHelpers.setBannedCoIdArray(getInstanceWarRule(), playerIndex, coIdSet);
     }
 
+    export function getBannedUnitTypeArray(playerIndex: number): number[] | null {
+        return WarHelpers.WarRuleHelpers.getBannedUnitTypeArray(getInstanceWarRule(), playerIndex);
+    }
+    export function setBannedUnitTypeArray(playerIndex: number, unitTypeArray: number[]): void {
+        WarHelpers.WarRuleHelpers.setBannedUnitTypeArray(getInstanceWarRule(), playerIndex, unitTypeArray);
+    }
+
     export function getCoId(playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayerInfo(playerIndex).coId);
+        return Helpers.getExisted(getPlayerInfo(playerIndex).coId);
     }
     export function setCoId(playerIndex: number, coId: number): void {
         getPlayerInfo(playerIndex).coId = coId;
-        Twns.Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Twns.Notify.NotifyData.ScrCreatePlayerInfoChanged);
+        Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Notify.NotifyData.ScrCreatePlayerInfoChanged);
     }
 
     export function getHasFog(): boolean {
-        return Twns.Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault);
+        return Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault);
     }
     export function setHasFog(hasFog: boolean): void {
         setCustomWarRuleId();
 
-        Twns.Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
+        Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
     }
     export function setPrevHasFog(): void {
         setHasFog(!getHasFog());
@@ -274,7 +275,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         getPlayerRule(playerIndex).initialFund = initialFund;
     }
     export function getInitialFund(playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayerRule(playerIndex).initialFund);
+        return Helpers.getExisted(getPlayerRule(playerIndex).initialFund);
     }
 
     export function setIncomeMultiplier(playerIndex: number, multiplier: number): void {
@@ -283,7 +284,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         getPlayerRule(playerIndex).incomeMultiplier = multiplier;
     }
     export function getIncomeMultiplier(playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayerRule(playerIndex).incomeMultiplier);
+        return Helpers.getExisted(getPlayerRule(playerIndex).incomeMultiplier);
     }
 
     export function setEnergyAddPctOnLoadCo(playerIndex: number, percentage: number): void {
@@ -292,7 +293,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         getPlayerRule(playerIndex).energyAddPctOnLoadCo = percentage;
     }
     export function getEnergyAddPctOnLoadCo(playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayerRule(playerIndex).energyAddPctOnLoadCo);
+        return Helpers.getExisted(getPlayerRule(playerIndex).energyAddPctOnLoadCo);
     }
 
     export function setEnergyGrowthMultiplier(playerIndex: number, multiplier: number): void {
@@ -301,7 +302,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         getPlayerRule(playerIndex).energyGrowthMultiplier = multiplier;
     }
     export function getEnergyGrowthMultiplier(playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayerRule(playerIndex).energyGrowthMultiplier);
+        return Helpers.getExisted(getPlayerRule(playerIndex).energyGrowthMultiplier);
     }
 
     export function setMoveRangeModifier(playerIndex: number, modifier: number): void {
@@ -310,7 +311,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         getPlayerRule(playerIndex).moveRangeModifier = modifier;
     }
     export function getMoveRangeModifier(playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayerRule(playerIndex).moveRangeModifier);
+        return Helpers.getExisted(getPlayerRule(playerIndex).moveRangeModifier);
     }
 
     export function setAttackPowerModifier(playerIndex: number, modifier: number): void {
@@ -319,7 +320,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         getPlayerRule(playerIndex).attackPowerModifier = modifier;
     }
     export function getAttackPowerModifier(playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayerRule(playerIndex).attackPowerModifier);
+        return Helpers.getExisted(getPlayerRule(playerIndex).attackPowerModifier);
     }
 
     export function setVisionRangeModifier(playerIndex: number, modifier: number): void {
@@ -328,7 +329,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         getPlayerRule(playerIndex).visionRangeModifier = modifier;
     }
     export function getVisionRangeModifier(playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayerRule(playerIndex).visionRangeModifier);
+        return Helpers.getExisted(getPlayerRule(playerIndex).visionRangeModifier);
     }
 
     export function setLuckLowerLimit(playerIndex: number, limit: number): void {
@@ -337,7 +338,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         getPlayerRule(playerIndex).luckLowerLimit = limit;
     }
     export function getLuckLowerLimit(playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayerRule(playerIndex).luckLowerLimit);
+        return Helpers.getExisted(getPlayerRule(playerIndex).luckLowerLimit);
     }
 
     export function setLuckUpperLimit(playerIndex: number, limit: number): void {
@@ -346,13 +347,13 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         getPlayerRule(playerIndex).luckUpperLimit = limit;
     }
     export function getLuckUpperLimit(playerIndex: number): number {
-        return Twns.Helpers.getExisted(getPlayerRule(playerIndex).luckUpperLimit);
+        return Helpers.getExisted(getPlayerRule(playerIndex).luckUpperLimit);
     }
 
     export function getInvalidParamTips(): string | null{
         const teamSet = new Set<number>();
-        for (const playerRule of Twns.Helpers.getExisted(getInstanceWarRule().ruleForPlayers?.playerRuleDataArray)) {
-            teamSet.add(Twns.Helpers.getExisted(playerRule.teamIndex));
+        for (const playerRule of Helpers.getExisted(getInstanceWarRule().ruleForPlayers?.playerRuleDataArray)) {
+            teamSet.add(Helpers.getExisted(playerRule.teamIndex));
         }
         if (teamSet.size <= 1) {
             return Lang.getText(LangTextType.A0069);
