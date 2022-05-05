@@ -125,7 +125,7 @@ namespace Twns.MultiPlayerWar {
         }
         public async getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | null> {
             const playerIndex = this.getPlayerIndexInTurn();
-            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+            if (playerIndex === Twns.CommonConstants.WarNeutralPlayerIndex) {
                 return Lang.getFormattedText(LangTextType.F0022, Lang.getText(LangTextType.B0111), playerIndex);
             } else {
                 return Lang.getFormattedText(LangTextType.F0022, await this.getPlayerInTurn().getNickname(), playerIndex);
@@ -200,7 +200,7 @@ namespace Twns.MultiPlayerWar {
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getBootRestTime(playerIndex: number): number | null {
-            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+            if (playerIndex === Twns.CommonConstants.WarNeutralPlayerIndex) {
                 return null;
             } else {
                 const restTime = this.getPlayer(playerIndex).getRestTimeToBoot();
@@ -234,7 +234,7 @@ namespace Twns.MultiPlayerWar {
         }
         public tickVisionTeamIndex(): number | null {
             const teamIndexArray = [...this.getPlayerManager().getWatcherTeamIndexesForSelf()].sort((v1, v2) => v1 - v2);
-            Twns.Helpers.deleteElementFromArray(teamIndexArray, CommonConstants.WarNeutralTeamIndex);
+            Twns.Helpers.deleteElementFromArray(teamIndexArray, Twns.CommonConstants.WarNeutralTeamIndex);
 
             const currentVisionTeamIndex    = this.getVisionTeamIndex();
             const newVisionTeamIndex        = currentVisionTeamIndex == null

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
+        xmlns:TwnsUiRadioButton="TwnsUiRadioButton.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group id="_group" width="336" height="150" horizontalCenter="0" verticalCenter="0">
+        <e:Group left="0" right="0" top="0" bottom="0">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                 scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
+            <e:Group y="0" left="0" right="0">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                                     source="uncompressedColorGrey0001" y="0" left="0" right="0" />
+                <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+                <TwnsUiButton:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001"
+                                       verticalCenter="0" right="30" />
+            </e:Group>
+        </e:Group>
+        <e:Scroller id="_scroller" left="0" right="0" top="50" bottom="10">
+            <e:Group x="20" y="0">
+                <e:Group id="_groupButtons" y="220" horizontalCenter="0">
+                    <TwnsUiButton:UiButton id="_btnUnit" label="积分排名" y="300" x="196"
+                                           skinName="Skins.Component.Button.ButtonBlack001" width="120" height="34" />
+                    <TwnsUiButton:UiButton id="_btnTile" label="更改昵称" y="290" x="186"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnCo" label="更改密码" y="290" x="186"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
+                    <e:layout>
+                        <e:TileLayout orientation="rows" requestedColumnCount="2" horizontalGap="50" verticalGap="14" />
+                    </e:layout>
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout horizontalAlign="center" gap="20" paddingTop="2" />
+                </e:layout>
+            </e:Group>
+        </e:Scroller>
+    </e:Group>
+</e:Skin>

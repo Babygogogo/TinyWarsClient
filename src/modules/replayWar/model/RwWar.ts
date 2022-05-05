@@ -319,7 +319,7 @@ namespace Twns.ReplayWar {
         }
         public tickVisionTeamIndex(): number | null {
             const teamIndexArray = [...new Set(this.getPlayerManager().getAllPlayers().map(v => v.getTeamIndex()))].sort((v1, v2) => v1 - v2);
-            Twns.Helpers.deleteElementFromArray(teamIndexArray, CommonConstants.WarNeutralTeamIndex);
+            Twns.Helpers.deleteElementFromArray(teamIndexArray, Twns.CommonConstants.WarNeutralTeamIndex);
 
             const currentVisionTeamIndex    = this.getVisionTeamIndex();
             const newVisionTeamIndex        = currentVisionTeamIndex == null

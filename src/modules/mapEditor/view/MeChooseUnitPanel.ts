@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -18,9 +18,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import DataForDrawUnit  = Twns.MapEditor.DataForDrawUnit;
-    import LangTextType     = Twns.Lang.LangTextType;
-    import NotifyType       = Twns.Notify.NotifyType;
+    import DataForDrawUnit  = MapEditor.DataForDrawUnit;
+    import LangTextType     = Lang.LangTextType;
+    import NotifyType       = Notify.NotifyType;
 
     const MAX_RECENT_COUNT = 10;
 
@@ -28,7 +28,8 @@ namespace Twns.MapEditor {
     export class MeChooseUnitPanel extends TwnsUiPanel.UiPanel<OpenDataForMeChooseUnitPanel> {
         private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
         private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
-        private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
+        private readonly _listPlayerIndex!  : TwnsUiScrollList.UiScrollList<DataForPlayerIndexRenderer>;
+        private readonly _listUnit!         : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
         private _dataListForRecent   : DataForUnitRenderer[] = [];
@@ -43,17 +44,30 @@ namespace Twns.MapEditor {
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
 
+            this._listPlayerIndex.setItemRenderer(PlayerIndexRenderer);
             this._listRecent.setItemRenderer(UnitRenderer);
-            this._listCategory.setItemRenderer(CategoryRenderer);
+            this._listUnit.setItemRenderer(UnitRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this._updateListCategory();
+            this._resetListPlayerIndex(Twns.CommonConstants.WarFirstPlayerIndex);
+            this._updateListUnit();
             this._updateListRecent();
         }
         protected _onClosing(): void {
             // nothing to do
+        }
+
+        public setAndReviseSelectedPlayerIndex(newPlayerIndex: number, needScroll: boolean): void {
+            const listPlayerIndex   = this._listPlayerIndex;
+            const index             = Helpers.getExisted(listPlayerIndex.getRandomIndex(v => v.playerIndex === newPlayerIndex));
+            listPlayerIndex.setSelectedIndex(index);
+            this._updateListUnit();
+
+            if (needScroll) {
+                listPlayerIndex.scrollVerticalToIndex(index);
+            }
         }
 
         public updateOnChooseUnit(data: DataForDrawUnit): void {
@@ -93,36 +107,40 @@ namespace Twns.MapEditor {
             this._labelRecentTitle.text = `${Lang.getText(LangTextType.B0372)}:`;
         }
 
-        private async _createDataForListUnit(): Promise<DataForCategoryRenderer[]> {
-            const mapping = new Map<number, DataForDrawUnit[]>();
-            for (const unitType of (await Twns.Config.ConfigManager.getLatestGameConfig()).getUnitTypesByCategory(Twns.Types.UnitCategory.All) ?? []) {
-                for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
-                    if (!mapping.has(playerIndex)) {
-                        mapping.set(playerIndex, []);
-                    }
-
-                    Twns.Helpers.getExisted(mapping.get(playerIndex)).push({
-                        playerIndex,
-                        unitType,
-                    });
-                }
-            }
-
-            const dataList: DataForCategoryRenderer[] = [];
-            for (const [, dataListForDrawUnit] of mapping) {
-                dataList.push({
-                    dataListForDrawUnit,
-                    panel               : this,
+        private _resetListPlayerIndex(selectedPlayerIndex: number | null): void {
+            const dataArray: DataForPlayerIndexRenderer[] = [];
+            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= Twns.CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+                dataArray.push({
+                    playerIndex,
+                    panel       : this,
                 });
             }
 
-            return dataList;
+            const list = this._listPlayerIndex;
+            list.bindData(dataArray);
+            list.setSelectedIndex(list.getFirstIndex(v => v.playerIndex === selectedPlayerIndex) ?? (dataArray.length ? 0 : -1));
         }
 
-        private async _updateListCategory(): Promise<void> {
-            const dataList = await this._createDataForListUnit();
-            this._listCategory.bindData(dataList);
-            this._listCategory.scrollVerticalTo(0);
+        private async _updateListUnit(): Promise<void> {
+            const playerIndex = this._listPlayerIndex.getSelectedData()?.playerIndex;
+            const listUnit    = this._listUnit;
+            if (playerIndex == null) {
+                listUnit.clear();
+                return;
+            }
+
+            const dataArray: DataForUnitRenderer[] = [];
+            for (const unitType of (await Config.ConfigManager.getLatestGameConfig()).getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
+                dataArray.push({
+                    panel           : this,
+                    dataForDrawUnit : {
+                        playerIndex,
+                        unitType,
+                    },
+                });
+            }
+
+            listUnit.bindData(dataArray);
         }
 
         private _updateListRecent(): void {
@@ -131,30 +149,20 @@ namespace Twns.MapEditor {
         }
     }
 
-    type DataForCategoryRenderer = {
-        dataListForDrawUnit : DataForDrawUnit[];
-        panel               : MeChooseUnitPanel;
+    type DataForPlayerIndexRenderer = {
+        playerIndex : number;
+        panel       : MeChooseUnitPanel;
     };
-    class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
-        private readonly _listUnit! : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
-
-        protected _onOpened(): void {
-            this._listUnit.setItemRenderer(UnitRenderer);
-            this._listUnit.setScrollPolicyH(eui.ScrollPolicy.OFF);
-        }
+    class PlayerIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerIndexRenderer> {
+        private readonly _labelPlayerIndex! : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            const data              = this._getData();
-            const unitViewIdList    = data.dataListForDrawUnit;
-            const dataListForUnit   : DataForUnitRenderer[] = [];
-            const panel             = data.panel;
-            for (const unitViewId of unitViewIdList) {
-                dataListForUnit.push({
-                    panel,
-                    dataForDrawUnit: unitViewId,
-                });
-            }
-            this._listUnit.bindData(dataListForUnit);
+            this._labelPlayerIndex.text = `P${this._getData().playerIndex}`;
+        }
+
+        public onItemTapEvent(): void {
+            const data = this._getData();
+            data.panel.setAndReviseSelectedPlayerIndex(data.playerIndex, false);
         }
     }
 
@@ -167,7 +175,7 @@ namespace Twns.MapEditor {
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _conUnitView!  : eui.Group;
 
-        private _unitView   = new Twns.BaseWar.BwUnitView();
+        private _unitView   = new BaseWar.BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -191,11 +199,11 @@ namespace Twns.MapEditor {
             const data              = this._getData();
             const dataForDrawUnit   = data.dataForDrawUnit;
             const unitType          = dataForDrawUnit.unitType;
-            const war               = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
-            this._labelName.text    = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
+            const war               = Helpers.getExisted(MapEditor.MeModel.getWar());
+            this._labelName.text    = Lang.getUnitName(unitType) ?? Twns.CommonConstants.ErrorTextForUndefined;
 
             const unitView  = this._unitView;
-            const unit      = new Twns.BaseWar.BwUnit();
+            const unit      = new BaseWar.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
@@ -213,7 +221,7 @@ namespace Twns.MapEditor {
             const dataForDrawUnit   = data.dataForDrawUnit;
             panel.updateOnChooseUnit(dataForDrawUnit);
             panel.close();
-            Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawUnit(dataForDrawUnit);
+            Helpers.getExisted(MapEditor.MeModel.getWar()).getDrawer().setModeDrawUnit(dataForDrawUnit);
         }
     }
 }

@@ -210,7 +210,7 @@ namespace Twns.WarEvent {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
-            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputTurnIndex(): void {
             const turnIndex             = this._getCondition().turnIndex;
@@ -218,7 +218,7 @@ namespace Twns.WarEvent {
         }
         private _updateLabelTurnIndexComparator(): void {
             const comparator                    = Twns.Helpers.getExisted(this._getCondition().turnIndexComparator);
-            this._labelTurnIndexComparator.text = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelTurnIndexComparator.text = Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputTurnDivider(): void {
             const turnDivider           = this._getCondition().turnIndexDivider;
@@ -230,11 +230,11 @@ namespace Twns.WarEvent {
         }
         private _updateLabelTurnRemainderComparator(): void {
             const comparator                        = Twns.Helpers.getExisted(this._getCondition().turnIndexRemainderComparator);
-            this._labelTurnRemainderComparator.text = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelTurnRemainderComparator.text = Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelTurnPhase(): void {
             const turnPhase             = this._getCondition().turnPhase;
-            this._labelTurnPhase.text   = turnPhase == null ? Lang.getText(LangTextType.B0776) : (Lang.getTurnPhaseName(turnPhase) ?? CommonConstants.ErrorTextForUndefined);
+            this._labelTurnPhase.text   = turnPhase == null ? Lang.getText(LangTextType.B0776) : (Lang.getTurnPhaseName(turnPhase) ?? Twns.CommonConstants.ErrorTextForUndefined);
         }
         private _updateLabelPlayerIndex(): void {
             const playerIndexArray      = this._getCondition().playerIndexArray;

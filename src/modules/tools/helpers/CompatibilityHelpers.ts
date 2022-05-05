@@ -122,9 +122,9 @@ namespace Twns.CompatibilityHelpers {
             content: text,
         });
         Chat.ChatProxy.reqChatAddMessage(
-            text.substr(0, CommonConstants.ChatErrorMaxLength),
+            text.substr(0, Twns.CommonConstants.ChatErrorMaxLength),
             Types.ChatMessageToCategory.Private,
-            CommonConstants.AdminUserId,
+            Twns.CommonConstants.AdminUserId,
         );
     }
 

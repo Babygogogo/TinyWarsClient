@@ -272,7 +272,7 @@ namespace Twns.CoopCustomRoom {
             const roomId                = this._getOpenData().roomId;
             const playersCountUnneutral = Twns.Helpers.getExisted((await WarMap.WarMapModel.getRawData(Twns.Helpers.getExisted((await CcrModel.getRoomStaticInfo(roomId))?.settingsForCcw?.mapId)))?.playersCountUnneutral);
             const dataArray             : DataForPlayerIndexRenderer[] = [];
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
                     roomId,
                     playerIndex,
@@ -284,7 +284,7 @@ namespace Twns.CoopCustomRoom {
         private _initSclSkinId(): void {
             const roomId    = this._getOpenData().roomId;
             const dataArray : DataForSkinIdRenderer[] = [];
-            for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
+            for (let skinId = Twns.CommonConstants.UnitAndTileMinSkinId; skinId <= Twns.CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
                 dataArray.push({
                     roomId,
                     skinId,
@@ -335,7 +335,7 @@ namespace Twns.CoopCustomRoom {
             const selfPlayerData    = roomPlayerInfo.playerDataList?.find(v => v.userId === userId);
             if (selfPlayerData) {
                 const gameConfig        = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon?.configVersion));
-                this._btnChooseCo.label = gameConfig.getCoBasicCfg(Twns.Helpers.getExisted(selfPlayerData.coId))?.name ?? CommonConstants.ErrorTextForUndefined;
+                this._btnChooseCo.label = gameConfig.getCoBasicCfg(Twns.Helpers.getExisted(selfPlayerData.coId))?.name ?? Twns.CommonConstants.ErrorTextForUndefined;
             }
         }
 
@@ -431,7 +431,7 @@ namespace Twns.CoopCustomRoom {
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -460,7 +460,7 @@ namespace Twns.CoopCustomRoom {
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -565,7 +565,7 @@ namespace Twns.CoopCustomRoom {
 
             const playerIndex       = data.playerIndex;
             const teamIndex         = WarHelpers.WarRuleHelpers.getTeamIndex(Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon?.instanceWarRule), playerIndex);
-            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(teamIndex) || CommonConstants.ErrorTextForUndefined})`;
+            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(teamIndex) || Twns.CommonConstants.ErrorTextForUndefined})`;
         }
         private async _updateState(): Promise<void> {
             const data              = this._getData();

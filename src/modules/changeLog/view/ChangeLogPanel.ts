@@ -116,7 +116,7 @@ namespace Twns.ChangeLog {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -130,7 +130,7 @@ namespace Twns.ChangeLog {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -151,12 +151,12 @@ namespace Twns.ChangeLog {
             const data              = this._getData();
             const messageId         = data.messageId;
             const createTimestamp   = data.createTimestamp;
-            this._labelIndex.text   = `#${messageId == null ? CommonConstants.ErrorTextForUndefined : Twns.Helpers.getNumText(messageId, 3)} (${createTimestamp == null ? CommonConstants.ErrorTextForUndefined : Twns.Helpers.getTimestampShortText(createTimestamp)})`;
+            this._labelIndex.text   = `#${messageId == null ? Twns.CommonConstants.ErrorTextForUndefined : Twns.Helpers.getNumText(messageId, 3)} (${createTimestamp == null ? Twns.CommonConstants.ErrorTextForUndefined : Twns.Helpers.getTimestampShortText(createTimestamp)})`;
 
             const textArray         = data.textList;
             this._labelContent.text = textArray == null
-                ? CommonConstants.ErrorTextForUndefined
-                : (Lang.getLanguageText({ textArray }) || CommonConstants.ErrorTextForUndefined);
+                ? Twns.CommonConstants.ErrorTextForUndefined
+                : (Lang.getLanguageText({ textArray }) || Twns.CommonConstants.ErrorTextForUndefined);
 
             const btnModify     = this._btnModify;
             btnModify.label     = Lang.getText(LangTextType.B0317);

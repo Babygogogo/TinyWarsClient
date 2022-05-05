@@ -142,7 +142,7 @@ namespace Twns.WatchWar.WwModel {
         const playerDataList        = Twns.Helpers.getExisted(warProgressInfo.playerInfoList, ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_03);
         const playersCountUnneutral = WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(instanceWarRule);
         const playerInfoArray       : Twns.Common.PlayerInfo[] = [];
-        for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+        for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
             const playerData    = Twns.Helpers.getExisted(playerDataList.find(v => v.playerIndex === playerIndex), ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_04);
             const userId        = playerData.userId;
             playerInfoArray.push({
@@ -184,7 +184,7 @@ namespace Twns.WatchWar.WwModel {
         const instanceWarRule   = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_02);
         const gameConfig        = Twns.Helpers.getExisted(await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)));
         const { settingsForMcw, settingsForCcw, settingsForMfw, settingsForMrw } = warSettings;
-        const bootTimerParams   = settingsForMcw?.bootTimerParams ?? settingsForMfw?.bootTimerParams ?? settingsForCcw?.bootTimerParams ?? CommonConstants.WarBootTimerDefaultParams;
+        const bootTimerParams   = settingsForMcw?.bootTimerParams ?? settingsForMfw?.bootTimerParams ?? settingsForCcw?.bootTimerParams ?? Twns.CommonConstants.WarBootTimerDefaultParams;
         const timerType         = bootTimerParams[0] as Twns.Types.BootTimerType;
         const mapId             = settingsForMcw?.mapId ?? settingsForMrw?.mapId ?? settingsForCcw?.mapId ?? null;
         const warEventFullData  = instanceWarRule.warEventFullData ?? null;
@@ -248,7 +248,7 @@ namespace Twns.WatchWar.WwModel {
                 },
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? Twns.CommonConstants.WarMaxTurnsLimit,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,

@@ -277,7 +277,7 @@ namespace Twns.MultiFreeRoom {
             const roomId                = this._getOpenData().roomId;
             const playersCountUnneutral = Twns.Helpers.getExisted((await MfrModel.getRoomStaticInfo(roomId))?.settingsForMfw?.initialWarData?.playerManager?.players).length - 1;
             const dataArray             : DataForPlayerIndexRenderer[] = [];
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
                     roomId,
                     playerIndex,
@@ -289,7 +289,7 @@ namespace Twns.MultiFreeRoom {
         private _initSclSkinId(): void {
             const roomId    = this._getOpenData().roomId;
             const dataArray : DataForSkinIdRenderer[] = [];
-            for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
+            for (let skinId = Twns.CommonConstants.UnitAndTileMinSkinId; skinId <= Twns.CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
                 dataArray.push({
                     roomId,
                     skinId,
@@ -340,7 +340,7 @@ namespace Twns.MultiFreeRoom {
             const selfPlayerData    = roomPlayerInfo.playerDataList?.find(v => v.userId === userId);
             if (selfPlayerData) {
                 const gameConfig        = (await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon?.configVersion)));
-                this._btnChooseCo.label = gameConfig.getCoBasicCfg(Twns.Helpers.getExisted(selfPlayerData.coId))?.name ?? CommonConstants.ErrorTextForUndefined;
+                this._btnChooseCo.label = gameConfig.getCoBasicCfg(Twns.Helpers.getExisted(selfPlayerData.coId))?.name ?? Twns.CommonConstants.ErrorTextForUndefined;
             }
         }
 
@@ -436,7 +436,7 @@ namespace Twns.MultiFreeRoom {
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -465,7 +465,7 @@ namespace Twns.MultiFreeRoom {
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 

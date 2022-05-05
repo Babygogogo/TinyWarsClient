@@ -235,7 +235,7 @@ namespace Twns.WarEvent {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.actFundDeltaValue = null;
             } else {
-                const maxValue              = CommonConstants.WarEventActionSetPlayerFundMaxDeltaValue;
+                const maxValue              = Twns.CommonConstants.WarEventActionSetPlayerFundMaxDeltaValue;
                 action.actFundDeltaValue    = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
@@ -254,7 +254,7 @@ namespace Twns.WarEvent {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.actFundMultiplierPercentage = null;
             } else {
-                const maxValue                      = CommonConstants.WarEventActionSetPlayerFundMaxMultiplierPercentage;
+                const maxValue                      = Twns.CommonConstants.WarEventActionSetPlayerFundMaxMultiplierPercentage;
                 action.actFundMultiplierPercentage  = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
@@ -273,7 +273,7 @@ namespace Twns.WarEvent {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.actCoEnergyDeltaPct = null;
             } else {
-                const maxValue              = CommonConstants.WarEventActionSetPlayerCoEnergyMaxDeltaPercentage;
+                const maxValue              = Twns.CommonConstants.WarEventActionSetPlayerCoEnergyMaxDeltaPercentage;
                 action.actCoEnergyDeltaPct  = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
@@ -292,7 +292,7 @@ namespace Twns.WarEvent {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.actCoEnergyMultiplierPct = null;
             } else {
-                const maxValue                  = CommonConstants.WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage;
+                const maxValue                  = Twns.CommonConstants.WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage;
                 action.actCoEnergyMultiplierPct = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
@@ -353,7 +353,7 @@ namespace Twns.WarEvent {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
-            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelPlayerIndex(): void {
@@ -378,7 +378,7 @@ namespace Twns.WarEvent {
 
         private _updateLabelConFundComparator(): void {
             const comparator                    = this._getAction().conFundComparator;
-            this._labelConFundComparator.text   = comparator == null ? CommonConstants.ErrorTextForUndefined : (Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined);
+            this._labelConFundComparator.text   = comparator == null ? Twns.CommonConstants.ErrorTextForUndefined : (Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined);
         }
 
         private _updateInputConEnergyPercentage(): void {
@@ -388,12 +388,12 @@ namespace Twns.WarEvent {
 
         private _updateLabelConEnergyPercentageComparator(): void {
             const comparator                                = this._getAction().conEnergyPercentageComparator;
-            this._labelConEnergyPercentageComparator.text   = comparator == null ? CommonConstants.ErrorTextForUndefined : (Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined);
+            this._labelConEnergyPercentageComparator.text   = comparator == null ? Twns.CommonConstants.ErrorTextForUndefined : (Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined);
         }
 
         private _updateLabelActAliveState(): void {
             const aliveState                = this._getAction().actAliveState;
-            this._labelActAliveState.text   = aliveState == null ? `--` : (Lang.getPlayerAliveStateName(aliveState) ?? CommonConstants.ErrorTextForUndefined);
+            this._labelActAliveState.text   = aliveState == null ? `--` : (Lang.getPlayerAliveStateName(aliveState) ?? Twns.CommonConstants.ErrorTextForUndefined);
         }
 
         private _updateInputActFundDeltaValue(): void {

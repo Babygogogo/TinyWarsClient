@@ -243,7 +243,7 @@ namespace Twns.MultiCustomRoom {
                 endProps    : { alpha: 1, right: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -282,7 +282,7 @@ namespace Twns.MultiCustomRoom {
                 endProps    : { alpha: 0, right: -40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -305,7 +305,7 @@ namespace Twns.MultiCustomRoom {
         protected async _onDataChanged(): Promise<void> {
             const label = this._labelName;
             label.text  = ``;
-            label.text  = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId) ?? CommonConstants.ErrorTextForUndefined;
+            label.text  = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _onTouchTapBtnChoose(): void {

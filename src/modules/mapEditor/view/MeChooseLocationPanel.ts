@@ -110,7 +110,7 @@ namespace Twns.MapEditor {
         private _updateListLocation(): void {
             const dataArray : DataForLocationRenderer[] = [];
             const war       = this._getWar();
-            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+            for (let locationId = Twns.CommonConstants.MapMinLocationId; locationId <= Twns.CommonConstants.MapMaxLocationId; ++locationId) {
                 dataArray.push({ war, locationId });
             }
 

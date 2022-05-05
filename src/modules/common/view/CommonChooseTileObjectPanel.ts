@@ -65,7 +65,7 @@ namespace Twns.Common {
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
             const mapping = new Map<number, DataForDrawTileObject[]>();
-            for (const [objectType, cfg] of CommonConstants.TileObjectShapeConfigs) {
+            for (const [objectType, cfg] of Twns.CommonConstants.TileObjectShapeConfigs) {
                 for (let playerIndex = cfg.minPlayerIndex; playerIndex <= cfg.maxPlayerIndex; ++playerIndex) {
                     if (!mapping.has(playerIndex)) {
                         mapping.set(playerIndex, []);
@@ -164,7 +164,7 @@ namespace Twns.Common {
             const data                  = this._getData();
             const dataForDrawTileObject = data.dataForDrawTileObject;
             const tileObjectType        = dataForDrawTileObject.objectType;
-            this._labelName.text        = Lang.getTileName(Twns.Config.ConfigManager.getTileType(Twns.Types.TileBaseType.Plain, tileObjectType)) || CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = Lang.getTileName(Twns.Config.ConfigManager.getTileType(Twns.Types.TileBaseType.Plain, tileObjectType)) || Twns.CommonConstants.ErrorTextForUndefined;
             this._tileView.init({
                 tileObjectType,
                 tileObjectShapeId   : dataForDrawTileObject.shapeId,

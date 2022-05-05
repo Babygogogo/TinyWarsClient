@@ -41,7 +41,7 @@ namespace Twns.MapManagement {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this._inputReason.maxChars  = CommonConstants.MapReviewCommentMaxLength;
+            this._inputReason.maxChars  = Twns.CommonConstants.MapReviewCommentMaxLength;
         }
         protected _onClosing(): void {
             // nothing to do

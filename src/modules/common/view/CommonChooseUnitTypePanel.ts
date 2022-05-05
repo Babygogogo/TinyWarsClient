@@ -123,7 +123,7 @@ namespace Twns.Common {
         private readonly _labelUnitName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelUnitName.text = Lang.getUnitName(this._getData().unitType) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelUnitName.text = Lang.getUnitName(this._getData().unitType) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
     }
 }

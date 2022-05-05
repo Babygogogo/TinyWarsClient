@@ -82,7 +82,7 @@ namespace Twns.Common {
 
         private _updateListLocation(): void {
             const dataArray : DataForLocationRenderer[] = [];
-            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+            for (let locationId = Twns.CommonConstants.MapMinLocationId; locationId <= Twns.CommonConstants.MapMaxLocationId; ++locationId) {
                 dataArray.push({ locationId });
             }
 

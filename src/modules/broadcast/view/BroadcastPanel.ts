@@ -71,7 +71,7 @@ namespace Twns.Broadcast {
             const textList: string[] = [];
             for (const messageId of messageIdArray) {
                 ongoingSet.add(messageId);
-                textList.push(Lang.getLanguageText({ textArray: (await Twns.Broadcast.BroadcastModel.getMessageData(messageId))?.textList }) ?? CommonConstants.ErrorTextForUndefined);
+                textList.push(Lang.getLanguageText({ textArray: (await Twns.Broadcast.BroadcastModel.getMessageData(messageId))?.textList }) ?? Twns.CommonConstants.ErrorTextForUndefined);
             }
 
             const group = this._groupLamp;

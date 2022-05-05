@@ -115,7 +115,7 @@ namespace Twns.WarEvent {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.deltaValue = null;
             } else {
-                const maxValue      = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
+                const maxValue      = Twns.CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
                 action.deltaValue   = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
@@ -134,7 +134,7 @@ namespace Twns.WarEvent {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.multiplierPercentage = null;
             } else {
-                const maxValue              = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
+                const maxValue              = Twns.CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
                 action.multiplierPercentage = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
@@ -175,7 +175,7 @@ namespace Twns.WarEvent {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
-            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelCounterId(): void {

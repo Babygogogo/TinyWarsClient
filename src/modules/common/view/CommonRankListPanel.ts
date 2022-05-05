@@ -186,7 +186,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -200,7 +200,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -256,7 +256,7 @@ namespace Twns.Common {
             if (userInfo == null) {
                 throw Twns.Helpers.newError(`UserRenderer._updateView() empty userInfo.`);
             }
-            labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
+            labelNickname.text = userInfo.nickname || Twns.CommonConstants.ErrorTextForUndefined;
 
             const rankInfo = (userInfo.userMrwRankInfoArray || []).find(v => {
                 return (v.playersCountUnneutral === data.playersCount) && (v.warType === data.warType);
@@ -314,7 +314,7 @@ namespace Twns.Common {
             this._imgBg.alpha       = data.index % 2 == 1 ? 0.2 : 0.5;
 
             const userInfo          = await Twns.User.UserModel.getUserPublicInfo(data.userId);
-            labelNickname.text      = userInfo?.nickname || CommonConstants.ErrorTextForUndefined;
+            labelNickname.text      = userInfo?.nickname || Twns.CommonConstants.ErrorTextForUndefined;
         }
     }
 }

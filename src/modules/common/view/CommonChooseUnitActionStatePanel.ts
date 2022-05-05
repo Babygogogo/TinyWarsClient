@@ -107,7 +107,7 @@ namespace Twns.Common {
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = Lang.getUnitActionStateText(this._getData().unitActionState) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName.text = Lang.getUnitActionStateText(this._getData().unitActionState) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
     }
 }

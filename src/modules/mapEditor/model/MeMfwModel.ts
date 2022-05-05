@@ -73,7 +73,7 @@ namespace Twns.MapEditor.MeMfwModel {
         }
 
         const gameConfig = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
-        for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+        for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
             setCoId(playerIndex, WarHelpers.WarRuleHelpers.getRandomCoIdWithSettingsForCommon(settingsForCommon.instanceWarRule, playerIndex, gameConfig));
         }
     }
@@ -117,7 +117,7 @@ namespace Twns.MapEditor.MeMfwModel {
     }
     export function tickUnitAndTileSkinId(playerIndex: number): void {
         const currSkinId        = getUnitAndTileSkinId(playerIndex);
-        const newSkinId         = currSkinId % CommonConstants.UnitAndTileMaxSkinId + 1;
+        const newSkinId         = currSkinId % Twns.CommonConstants.UnitAndTileMaxSkinId + 1;
         // const existingPlayer    = getWarData().playerManager?.players?.find(v => v.unitAndTileSkinId === newSkinId);
         // if (existingPlayer) {
         //     setUnitAndTileSkinId(Helpers.getExisted(existingPlayer.playerIndex), currSkinId);

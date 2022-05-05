@@ -120,7 +120,7 @@ namespace Twns.WarEvent {
             const data = this._getOpenData();
             if (data) {
                 const minValue  = 1;
-                const maxValue  = CommonConstants.WarEventMaxCallCountInPlayerTurn;
+                const maxValue  = Twns.CommonConstants.WarEventMaxCallCountInPlayerTurn;
                 const eventData = Twns.Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()?.eventArray?.find(v => v.eventId === data.eventId));
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                     title           : Lang.getText(LangTextType.B0476),
@@ -139,7 +139,7 @@ namespace Twns.WarEvent {
             const data = this._getOpenData();
             if (data) {
                 const minValue  = 1;
-                const maxValue  = CommonConstants.WarEventMaxCallCountTotal;
+                const maxValue  = Twns.CommonConstants.WarEventMaxCallCountTotal;
                 const eventData = Twns.Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()?.eventArray?.find(v => v.eventId === data.eventId));
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                     title           : Lang.getText(LangTextType.B0477),

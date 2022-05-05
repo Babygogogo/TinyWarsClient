@@ -78,7 +78,7 @@
                                            skinName="Skins.Component.Button.ButtonBlack001" />
                     <TwnsUiButton:UiButton id="_btnComplaint" label="意见反馈" y="340" x="236"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
-                    <TwnsUiButton:UiButton id="_btnUnitsInfo" label="部队属性表" y="360" x="256"
+                    <TwnsUiButton:UiButton id="_btnGameChart" label="部队属性表" y="360" x="256"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
                     <TwnsUiButton:UiButton id="_btnChangeLog" label="更新日志" y="360" x="256"
                                            skinName="Skins.Component.Button.ButtonBlack001" />

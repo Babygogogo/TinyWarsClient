@@ -25,7 +25,7 @@ namespace Twns.WarMap {
     import ISerialPlayer    = WarSerialization.ISerialPlayer;
     import GameConfig       = Config.GameConfig;
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Twns.CommonConstants.GridSize;
 
     export class WarMapView extends egret.DisplayObjectContainer {
         private readonly _tileMapView   = new TileMapView();
@@ -347,7 +347,7 @@ namespace Twns.WarMap {
                     baseType    : Twns.Helpers.getExisted(tileData.baseType),
                     shapeId     : tileData.baseShapeId || 0,
                     isDark      : false,
-                    skinId      : CommonConstants.UnitAndTileNeutralSkinId,
+                    skinId      : Twns.CommonConstants.UnitAndTileNeutralSkinId,
                     tickCount,
                 });
         }
@@ -367,7 +367,7 @@ namespace Twns.WarMap {
                     decoratorType   : tileData.decoratorType ?? null,
                     shapeId         : tileData.decoratorShapeId ?? null,
                     isDark          : false,
-                    skinId          : CommonConstants.UnitAndTileNeutralSkinId,
+                    skinId          : Twns.CommonConstants.UnitAndTileNeutralSkinId,
                     tickCount,
                 });
         }

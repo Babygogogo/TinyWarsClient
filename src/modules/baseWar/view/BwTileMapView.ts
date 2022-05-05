@@ -14,7 +14,7 @@
 namespace Twns.BaseWar {
     import NotifyType   = Twns.Notify.NotifyType;
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Twns.CommonConstants.GridSize;
 
     export class BwTileMapView extends egret.DisplayObjectContainer {
         private readonly _borderLayer               = new egret.DisplayObjectContainer();
@@ -201,7 +201,7 @@ namespace Twns.BaseWar {
         public resetLocationLayer(): void {
             const locationIdArray   : number[] = [];
             const tileMap           = Twns.Helpers.getExisted(this._tileMap);
-            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+            for (let locationId = Twns.CommonConstants.MapMinLocationId; locationId <= Twns.CommonConstants.MapMaxLocationId; ++locationId) {
                 if (tileMap.getIsLocationVisible(locationId)) {
                     locationIdArray.push(locationId);
                 }
@@ -271,7 +271,7 @@ namespace Twns.BaseWar {
                     matrix.length = mapWidth;
                 }
 
-                for (let playerIndex = playersCount + 1; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+                for (let playerIndex = playersCount + 1; playerIndex <= Twns.CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                     for (const column of imageDict.get(playerIndex) || []) {
                         for (const img of column || []) {
                             (img) && (img.parent) && (img.parent.removeChild(img));
@@ -420,7 +420,7 @@ namespace Twns.BaseWar {
             const tileMap   = Twns.Helpers.getExisted(this._tileMap);
             const tile      = e.data as Twns.Notify.NotifyData.BwTileLocationFlagSet;
             const img       = this._locationLayer.getChildAt(GridIndexHelpers.getGridId(tile.getGridIndex(), tileMap.getMapSize()));
-            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+            for (let locationId = Twns.CommonConstants.MapMinLocationId; locationId <= Twns.CommonConstants.MapMaxLocationId; ++locationId) {
                 if ((tileMap.getIsLocationVisible(locationId)) && (tile.getHasLocationFlag(locationId))) {
                     img.visible = true;
                     return;

@@ -163,7 +163,7 @@ namespace Twns.MapEditor {
             const mapRawData            = mapData.mapRawData;
             const status                = Twns.Helpers.getExisted(mapData.reviewStatus);
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Twns.Types.UiState.Down : Twns.Types.UiState.Up;
-            this._labelStatus.text      = Lang.getMapReviewStatusText(status) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelStatus.text      = Lang.getMapReviewStatusText(status) ?? Twns.CommonConstants.ErrorTextForUndefined;
             this._labelStatus.textColor = getReviewStatusTextColor(status);
             this._labelName.text        = Lang.getLanguageText({ textArray: mapRawData ? mapRawData.mapNameArray : [] }) || `(${Lang.getText(LangTextType.B0277)})`;
         }

@@ -2744,7 +2744,7 @@ namespace Twns.Lang {
         ],
         [LangTextType.B0351]: [
             `移动基础消耗表`,
-            `Base Move Cost Chart`,
+            `Base Move Cost`,
         ],
         [LangTextType.B0352]: [
             `防御加成`,
@@ -4933,6 +4933,14 @@ namespace Twns.Lang {
         [LangTextType.B0898]: [
             `选择CO`,
             `Choose COs`,
+        ],
+        [LangTextType.B0899]: [
+            `地形`,
+            `Terrains`,
+        ],
+        [LangTextType.B0900]: [
+            `游戏数据`,
+            `Game Chart`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

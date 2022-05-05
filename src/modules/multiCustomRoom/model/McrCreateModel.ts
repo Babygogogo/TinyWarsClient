@@ -28,16 +28,16 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
 
     const _dataForCreateRoom: DataForCreateRoom = {
         settingsForCommon       : {
-            turnsLimit          : CommonConstants.WarMaxTurnsLimit,
+            turnsLimit          : Twns.CommonConstants.WarMaxTurnsLimit,
             instanceWarRule     : {
                 templateWarRuleId   : null,
             },
         },
         settingsForMcw          : {},
 
-        selfCoId                : CommonConstants.CoEmptyId,
-        selfPlayerIndex         : CommonConstants.WarFirstPlayerIndex,
-        selfUnitAndTileSkinId   : CommonConstants.UnitAndTileMinSkinId,
+        selfCoId                : Twns.CommonConstants.CoEmptyId,
+        selfPlayerIndex         : Twns.CommonConstants.WarFirstPlayerIndex,
+        selfUnitAndTileSkinId   : Twns.CommonConstants.UnitAndTileMinSkinId,
     };
     let _gameConfig: GameConfig | null = null;
 
@@ -52,9 +52,9 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
         setWarName("");
         setWarPassword("");
         setWarComment("");
-        setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
-        setTurnsLimit(CommonConstants.WarMaxTurnsLimit);
-        setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
+        setBootTimerParams([BootTimerType.Regular, Twns.CommonConstants.WarBootTimerRegularDefaultValue]);
+        setTurnsLimit(Twns.CommonConstants.WarMaxTurnsLimit);
+        setSelfPlayerIndex(Twns.CommonConstants.WarFirstPlayerIndex);
         await resetDataByTemplateWarRuleId(Helpers.getExisted((await getMapRawData()).templateWarRuleArray?.find(v => v.ruleAvailability?.canMcw)?.ruleId));
     }
     export function getData(): DataForCreateRoom {
@@ -197,7 +197,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
         }
     }
     export function tickSelfUnitAndTileSkinId(): void {
-        setSelfUnitAndTileSkinId(getSelfUnitAndTileSkinId() % CommonConstants.UnitAndTileMaxSkinId + 1);
+        setSelfUnitAndTileSkinId(getSelfUnitAndTileSkinId() % Twns.CommonConstants.UnitAndTileMaxSkinId + 1);
     }
     export function getSelfUnitAndTileSkinId(): number {
         return Helpers.getExisted(getData().selfUnitAndTileSkinId);
@@ -225,7 +225,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
         if ((params) && (params[0] === BootTimerType.Regular)) {
             setBootTimerParams([BootTimerType.Incremental, 60 * 15, 10]);
         } else {
-            setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
+            setBootTimerParams([BootTimerType.Regular, Twns.CommonConstants.WarBootTimerRegularDefaultValue]);
         }
     }
     export function tickTimerRegularTime(): void {

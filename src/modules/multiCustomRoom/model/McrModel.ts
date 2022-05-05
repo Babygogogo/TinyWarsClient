@@ -182,7 +182,7 @@ namespace Twns.MultiCustomRoom.McrModel {
         const playersCountUnneutral = Twns.Helpers.getExisted(WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(instanceWarRule));
         const playerDataList        = roomPlayerInfo.playerDataList || [];
         const playerInfoArray       : Twns.Common.PlayerInfo[] = [];
-        for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+        for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
             const playerData = playerDataList.find(v => v.playerIndex === playerIndex);
             playerInfoArray.push({
                 playerIndex,
@@ -302,7 +302,7 @@ namespace Twns.MultiCustomRoom.McrModel {
                 },
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? Twns.CommonConstants.WarMaxTurnsLimit,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,

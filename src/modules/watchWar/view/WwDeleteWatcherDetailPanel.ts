@@ -153,7 +153,7 @@ namespace Twns.WatchWar {
             this._labelIsWatchingOthers.text    = data.isWatchingOthers ? Lang.getText(LangTextType.B0012) : "";
             this._imgDelete.visible             = data.isDelete;
             this._imgKeep.visible               = !data.isDelete;
-            Twns.User.UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name ?? CommonConstants.ErrorTextForUndefined);
+            Twns.User.UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name ?? Twns.CommonConstants.ErrorTextForUndefined);
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {

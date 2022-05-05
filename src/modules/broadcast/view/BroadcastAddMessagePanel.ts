@@ -65,8 +65,8 @@ namespace Twns.Broadcast {
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
 
-            this._inputChinese.maxChars = CommonConstants.BroadcastTextMaxLength;
-            this._inputEnglish.maxChars = CommonConstants.BroadcastTextMaxLength;
+            this._inputChinese.maxChars = Twns.CommonConstants.BroadcastTextMaxLength;
+            this._inputEnglish.maxChars = Twns.CommonConstants.BroadcastTextMaxLength;
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._startTime = Twns.Timer.getServerTimestamp();
@@ -95,8 +95,8 @@ namespace Twns.Broadcast {
             }
             if (textList.every(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
                 FloatText.show(Lang.getText(LangTextType.A0155));
-            } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > CommonConstants.BroadcastTextMaxLength)) {
-                FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.BroadcastTextMaxLength));
+            } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > Twns.CommonConstants.BroadcastTextMaxLength)) {
+                FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.BroadcastTextMaxLength));
             } else {
                 const startTime = this._startTime;
                 Twns.Broadcast.BroadcastProxy.reqBroadcastAddMessage(textList, startTime, startTime + this._duration);

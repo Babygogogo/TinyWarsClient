@@ -181,8 +181,8 @@ namespace Twns.BaseWar {
                 const { side, nameArray }   = dataForCoDialogue;
                 const coId                  = Twns.Helpers.getExisted(dataForCoDialogue.coId);
                 const gameConfig            = openData.gameConfig;
-                const coImageSource         = gameConfig.getCoBustImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
-                const coName                = Lang.getLanguageText({ textArray: nameArray }) ?? gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined;
+                const coImageSource         = gameConfig.getCoBustImageSource(coId) ?? Twns.CommonConstants.ErrorTextForUndefined;
+                const coName                = Lang.getLanguageText({ textArray: nameArray }) ?? gameConfig.getCoNameAndTierText(coId) ?? Twns.CommonConstants.ErrorTextForUndefined;
 
                 if (side === Twns.Types.WarEventActionDialogueSide.Left) {
                     groupName1.visible  = true;
@@ -227,7 +227,7 @@ namespace Twns.BaseWar {
                 endProps    : { alpha: 1 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -236,7 +236,7 @@ namespace Twns.BaseWar {
                 endProps    : { alpha: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 }

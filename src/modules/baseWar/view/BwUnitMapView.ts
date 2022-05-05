@@ -16,7 +16,7 @@ namespace Twns.BaseWar {
     import UnitCategory         = Twns.Types.UnitCategory;
     import ActionPlannerState   = Twns.Types.ActionPlannerState;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Twns.CommonConstants.GridSize;
 
     export class BwUnitMapView extends egret.DisplayObjectContainer {
         private readonly _layerForNaval     = new egret.DisplayObjectContainer();

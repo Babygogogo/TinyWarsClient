@@ -16,7 +16,7 @@ namespace Twns.BaseWar {
     import UnitAnimationType    = Twns.Types.UnitAnimationType;
     import GridIndex            = Twns.Types.GridIndex;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = CommonConstants.GridSize;
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = Twns.CommonConstants.GridSize;
     const _IMG_UNIT_STAND_ANCHOR_OFFSET_X               = _GRID_WIDTH * 3 / 4;
     const _IMG_UNIT_STAND_ANCHOR_OFFSET_Y               = _GRID_HEIGHT / 2;
     const _IMG_UNIT_STAND_X                             = _GRID_WIDTH * 2 / 4;

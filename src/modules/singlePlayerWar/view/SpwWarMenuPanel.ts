@@ -290,8 +290,8 @@ namespace Twns.SinglePlayerWar {
 
         private _onTouchedBtnMapRating(): void {
             const mapId     = Twns.Helpers.getExisted(this._getWar().getMapId());
-            const minValue  = CommonConstants.MapMinRating;
-            const maxValue  = CommonConstants.MapMaxRating;
+            const minValue  = Twns.CommonConstants.MapMinRating;
+            const maxValue  = Twns.CommonConstants.MapMaxRating;
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0363),
                 currentValue    : Twns.User.UserModel.getMapRating(mapId) || 0,
@@ -444,7 +444,7 @@ namespace Twns.SinglePlayerWar {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -458,7 +458,7 @@ namespace Twns.SinglePlayerWar {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
 
         private _checkCanDoAction(): boolean {

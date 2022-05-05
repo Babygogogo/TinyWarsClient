@@ -15,7 +15,7 @@ namespace Twns.BaseWar {
     import ActionPlannerState   = Twns.Types.ActionPlannerState;
     import NotifyType           = Twns.Notify.NotifyType;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Twns.CommonConstants.GridSize;
     const _PULSE_IN_DURATION                    = 150;
     const _PULSE_OUT_DURATION                   = 150;
     const _PULSE_INTERVAL_DURATION              = 300;

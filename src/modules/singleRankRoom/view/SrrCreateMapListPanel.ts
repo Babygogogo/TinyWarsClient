@@ -307,7 +307,7 @@ namespace Twns.SingleRankRoom {
                 endProps    : { alpha: 1, left: 20 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -346,7 +346,7 @@ namespace Twns.SingleRankRoom {
                 endProps    : { alpha: 0, left: -20 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -361,7 +361,7 @@ namespace Twns.SingleRankRoom {
 
         protected _onDataChanged(): void {
             const data          = this._getData();
-            Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v || CommonConstants.ErrorTextForUndefined);
+            Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v || Twns.CommonConstants.ErrorTextForUndefined);
         }
 
         public onItemTapEvent(): void {

@@ -57,7 +57,7 @@ namespace Twns.MapEditor.MeSimModel {
         }
 
         const gameConfig = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
-        for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
+        for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
             setCoId(playerIndex, WarHelpers.WarRuleHelpers.getRandomCoIdWithSettingsForCommon(settingsForCommon.instanceWarRule, playerIndex, gameConfig));
         }
     }
@@ -101,7 +101,7 @@ namespace Twns.MapEditor.MeSimModel {
     }
     export function tickUnitAndTileSkinId(playerIndex: number): void {
         const currSkinId        = getUnitAndTileSkinId(playerIndex);
-        const newSkinId         = currSkinId % CommonConstants.UnitAndTileMaxSkinId + 1;
+        const newSkinId         = currSkinId % Twns.CommonConstants.UnitAndTileMaxSkinId + 1;
         // const existingPlayer    = getWarData().playerManager?.players?.find(v => v.unitAndTileSkinId === newSkinId);
         // if (existingPlayer) {
         //     setUnitAndTileSkinId(Helpers.getExisted(existingPlayer.playerIndex), currSkinId);

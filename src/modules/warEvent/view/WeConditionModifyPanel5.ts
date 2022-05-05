@@ -117,13 +117,13 @@ namespace Twns.WarEvent {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
-            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateImgIsNot(): void {
             this._imgIsNot.visible = !!this._getCondition().WecTurnPhaseEqualTo?.isNot;
         }
         private _updateLabelTurnPhase(): void {
-            this._labelTurnPhase.text = Lang.getTurnPhaseName(Twns.Helpers.getExisted(this._getCondition().WecTurnPhaseEqualTo?.valueEqualTo)) || CommonConstants.ErrorTextForUndefined;
+            this._labelTurnPhase.text = Lang.getTurnPhaseName(Twns.Helpers.getExisted(this._getCondition().WecTurnPhaseEqualTo?.valueEqualTo)) || Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _getCondition(): IWarEventCondition {

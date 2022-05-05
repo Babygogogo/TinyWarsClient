@@ -64,7 +64,7 @@ namespace Twns.Common {
 
         private async _onTouchedBtnConfirm(): Promise<void> {
             const selectedVersion = this._getSelectedGameVersion();
-            if ((selectedVersion == null) || (selectedVersion === CommonConstants.GameVersion)) {
+            if ((selectedVersion == null) || (selectedVersion === Twns.CommonConstants.GameVersion)) {
                 this.close();
                 return;
             }
@@ -96,7 +96,7 @@ namespace Twns.Common {
             const dataArray     = this._createDataForListVersion();
             const listVersion   = this._listVersion;
             listVersion.bindData(dataArray);
-            listVersion.setSelectedIndex(dataArray.findIndex(v => v.gameVersion === CommonConstants.GameVersion));
+            listVersion.setSelectedIndex(dataArray.findIndex(v => v.gameVersion === Twns.CommonConstants.GameVersion));
         }
 
         private _createDataForListVersion(): DataForVersionRenderer[] {
@@ -125,7 +125,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -139,7 +139,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -176,12 +176,12 @@ namespace Twns.Common {
             }
 
             const gameVersion       = data.gameVersion;
-            this._labelName.text    = Lang.getGameVersionName(gameVersion) || CommonConstants.ErrorTextForUndefined;
-            this._labelDesc.text    = Lang.getGameVersionDesc(gameVersion) || CommonConstants.ErrorTextForUndefined;
+            this._labelName.text    = Lang.getGameVersionName(gameVersion) || Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = Lang.getGameVersionDesc(gameVersion) || Twns.CommonConstants.ErrorTextForUndefined;
 
             const labelCurrent      = this._labelCurrent;
             labelCurrent.text       = `(${Lang.getText(LangTextType.B0623)})`;
-            labelCurrent.visible    = gameVersion === CommonConstants.GameVersion;
+            labelCurrent.visible    = gameVersion === Twns.CommonConstants.GameVersion;
         }
     }
 

@@ -172,7 +172,7 @@ namespace Twns.WarEvent {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.actHpDeltaValue = null;
             } else {
-                const maxValue          = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
+                const maxValue          = Twns.CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
                 action.actHpDeltaValue  = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
@@ -191,7 +191,7 @@ namespace Twns.WarEvent {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.actHpMultiplierPercentage = null;
             } else {
-                const maxValue                      = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
+                const maxValue                      = Twns.CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
                 action.actHpMultiplierPercentage    = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
@@ -210,7 +210,7 @@ namespace Twns.WarEvent {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.actCapturePointDeltaValue = null;
             } else {
-                const maxValue                      = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
+                const maxValue                      = Twns.CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
                 action.actCapturePointDeltaValue    = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
@@ -229,7 +229,7 @@ namespace Twns.WarEvent {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.actCapturePointMultiplierPercentage = null;
             } else {
-                const maxValue                                  = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
+                const maxValue                                  = Twns.CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
                 action.actCapturePointMultiplierPercentage      = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
@@ -248,7 +248,7 @@ namespace Twns.WarEvent {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.actBuildPointDeltaValue = null;
             } else {
-                const maxValue                  = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
+                const maxValue                  = Twns.CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
                 action.actBuildPointDeltaValue  = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
@@ -267,7 +267,7 @@ namespace Twns.WarEvent {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.actBuildPointMultiplierPercentage = null;
             } else {
-                const maxValue                              = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
+                const maxValue                              = Twns.CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
                 action.actBuildPointMultiplierPercentage    = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
@@ -362,7 +362,7 @@ namespace Twns.WarEvent {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
-            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelLocation(): void {
             const locationIdArray       = this._getAction().conLocationIdArray;

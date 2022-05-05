@@ -448,7 +448,7 @@ namespace Twns.HalfwayReplayWar {
         ): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(LangTextType.B0397),
-                infoText    : Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId()) || CommonConstants.ErrorTextForUndefined,
+                infoText    : Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId()) || Twns.CommonConstants.ErrorTextForUndefined,
                 infoColor   : 0xFFFFFF,
             };
         }
@@ -530,7 +530,7 @@ namespace Twns.HalfwayReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0178),
                 infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleInitialFundDefault),
             };
         }
         private _createDataIncomeMultiplier(
@@ -542,7 +542,7 @@ namespace Twns.HalfwayReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0179),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleIncomeMultiplierDefault),
             };
         }
         private _createDataEnergyAddPctOnLoadCo(
@@ -554,7 +554,7 @@ namespace Twns.HalfwayReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
             };
         }
         private _createDataEnergyGrowthMultiplier(
@@ -566,7 +566,7 @@ namespace Twns.HalfwayReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0181),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
             };
         }
         private _createDataMoveRangeModifier(
@@ -578,7 +578,7 @@ namespace Twns.HalfwayReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0182),
                 infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleMoveRangeModifierDefault),
             };
         }
         private _createDataAttackPowerModifier(
@@ -590,7 +590,7 @@ namespace Twns.HalfwayReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0183),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleOffenseBonusDefault),
             };
         }
         private _createDataVisionRangeModifier(
@@ -602,7 +602,7 @@ namespace Twns.HalfwayReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0184),
                 infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleVisionRangeModifierDefault),
             };
         }
         private _createDataLuckLowerLimit(
@@ -614,7 +614,7 @@ namespace Twns.HalfwayReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0189),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultLowerLimit),
             };
         }
         private _createDataLuckUpperLimit(
@@ -626,7 +626,7 @@ namespace Twns.HalfwayReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0190),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultUpperLimit),
             };
         }
 

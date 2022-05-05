@@ -118,7 +118,7 @@ namespace Twns.MapEditor {
             const { width, height } = war.getTileMap().getMapSize();
             const newWidth          = width + deltaLeft + deltaRight;
             const newHeight         = height + deltaTop + deltaBottom;
-            if ((newWidth <= 0) || (newHeight <= 0) || (newWidth * newHeight > CommonConstants.MapMaxGridsCount)) {
+            if ((newWidth <= 0) || (newHeight <= 0) || (newWidth * newHeight > Twns.CommonConstants.MapMaxGridsCount)) {
                 FloatText.show(Lang.getText(LangTextType.A0265));
                 return;
             }
@@ -141,8 +141,8 @@ namespace Twns.MapEditor {
         }
 
         private _onTouchedBtnDeltaTop(): void {
-            const minValue      = -CommonConstants.MapMaxGridsCount;
-            const maxValue      = CommonConstants.MapMaxGridsCount;
+            const minValue      = -Twns.CommonConstants.MapMaxGridsCount;
+            const maxValue      = Twns.CommonConstants.MapMaxGridsCount;
             const currentValue  = this._deltaTop;
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0857),
@@ -160,8 +160,8 @@ namespace Twns.MapEditor {
             });
         }
         private _onTouchedBtnDeltaBottom(): void {
-            const minValue      = -CommonConstants.MapMaxGridsCount;
-            const maxValue      = CommonConstants.MapMaxGridsCount;
+            const minValue      = -Twns.CommonConstants.MapMaxGridsCount;
+            const maxValue      = Twns.CommonConstants.MapMaxGridsCount;
             const currentValue  = this._deltaBottom;
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0858),
@@ -179,8 +179,8 @@ namespace Twns.MapEditor {
             });
         }
         private _onTouchedBtnDeltaLeft(): void {
-            const minValue      = -CommonConstants.MapMaxGridsCount;
-            const maxValue      = CommonConstants.MapMaxGridsCount;
+            const minValue      = -Twns.CommonConstants.MapMaxGridsCount;
+            const maxValue      = Twns.CommonConstants.MapMaxGridsCount;
             const currentValue  = this._deltaLeft;
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0859),
@@ -198,8 +198,8 @@ namespace Twns.MapEditor {
             });
         }
         private _onTouchedBtnDeltaRight(): void {
-            const minValue      = -CommonConstants.MapMaxGridsCount;
-            const maxValue      = CommonConstants.MapMaxGridsCount;
+            const minValue      = -Twns.CommonConstants.MapMaxGridsCount;
+            const maxValue      = Twns.CommonConstants.MapMaxGridsCount;
             const currentValue  = this._deltaRight;
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0860),
@@ -236,7 +236,7 @@ namespace Twns.MapEditor {
             this._btnDeltaBottom.label      = Lang.getText(LangTextType.B0858);
             this._btnDeltaLeft.label        = Lang.getText(LangTextType.B0859);
             this._btnDeltaRight.label       = Lang.getText(LangTextType.B0860);
-            this._labelTips.text            = Lang.getFormattedText(LangTextType.F0023, CommonConstants.MapMaxGridsCount);
+            this._labelTips.text            = Lang.getFormattedText(LangTextType.F0023, Twns.CommonConstants.MapMaxGridsCount);
         }
 
         private _updateComponentsForData(): void {
@@ -261,7 +261,7 @@ namespace Twns.MapEditor {
             labelNewHeight.text         = "" + newHeight;
             labelNewHeight.textColor    = newHeight > 0 ? 0xffffff : 0xff0000;
             labelNewGrids.text          = `` + newGrids;
-            labelNewGrids.textColor     = ((newGrids > 0) && (newGrids <= CommonConstants.MapMaxGridsCount)) ? 0xffffff : 0xff0000;
+            labelNewGrids.textColor     = ((newGrids > 0) && (newGrids <= Twns.CommonConstants.MapMaxGridsCount)) ? 0xffffff : 0xff0000;
             this._labelDeltaTop.text    = `` + deltaTop;
             this._labelDeltaBottom.text = `` + deltaBottom;
             this._labelDeltaLeft.text   = `` + deltaLeft;

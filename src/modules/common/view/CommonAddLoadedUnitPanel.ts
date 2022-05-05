@@ -313,7 +313,7 @@ namespace Twns.Common {
             label.textColor = errorTips ? ColorValue.Red : ColorValue.Green;
         }
         private _updateComponentsForAiMode(): void {
-            this._labelAiMode.text  = Lang.getUnitAiModeName(this._getUnitData().aiMode ?? Twns.Types.UnitAiMode.Normal) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelAiMode.text  = Lang.getUnitAiModeName(this._getUnitData().aiMode ?? Twns.Types.UnitAiMode.Normal) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateComponentsForIsDiving(): void {
             const data      = this._getOpenData();
@@ -334,11 +334,11 @@ namespace Twns.Common {
             const label = this._labelActionState;
             const state = this._getUnitData().actionState;
             label.text  = state == null
-                ? (Lang.getUnitActionStateText(Twns.Types.UnitActionState.Idle) ?? CommonConstants.ErrorTextForUndefined)
-                : (Lang.getUnitActionStateText(state) ?? CommonConstants.ErrorTextForUndefined);
+                ? (Lang.getUnitActionStateText(Twns.Types.UnitActionState.Idle) ?? Twns.CommonConstants.ErrorTextForUndefined)
+                : (Lang.getUnitActionStateText(state) ?? Twns.CommonConstants.ErrorTextForUndefined);
         }
         private _updateComponentsForUnitType(): void {
-            this._labelUnitType.text = Lang.getUnitName(Twns.Helpers.getExisted(this._getUnitData().unitType)) || CommonConstants.ErrorTextForUndefined;
+            this._labelUnitType.text = Lang.getUnitName(Twns.Helpers.getExisted(this._getUnitData().unitType)) || Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateComponentsForHp(): void {
             const data      = this._getOpenData();
@@ -450,7 +450,7 @@ namespace Twns.Common {
             const playerIndex = unitData.playerIndex;
             if ((playerIndex == null)                               ||
                 (playerIndex > war.getPlayersCountUnneutral())      ||
-                (playerIndex < CommonConstants.WarFirstPlayerIndex)
+                (playerIndex < Twns.CommonConstants.WarFirstPlayerIndex)
             ) {
                 return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0521));
             }

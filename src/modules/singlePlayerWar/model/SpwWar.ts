@@ -82,7 +82,7 @@ namespace Twns.SinglePlayerWar {
         }
         public async getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | null> {
             const playerIndex = this.getPlayerIndexInTurn();
-            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+            if (playerIndex === Twns.CommonConstants.WarNeutralPlayerIndex) {
                 return Lang.getFormattedText(LangTextType.F0022, Lang.getText(LangTextType.B0111), playerIndex);
             } else {
                 return Lang.getFormattedText(LangTextType.F0022, await this.getPlayerInTurn().getNickname(), playerIndex);

@@ -249,7 +249,7 @@ namespace Twns.WarEvent {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
-            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelPlayerIndex(): void {
             const playerIndexArray      = this._getCondition().playerIndexArray;
@@ -274,7 +274,7 @@ namespace Twns.WarEvent {
         }
         private _updateLabelFundComparator(): void {
             const comparator                = Twns.Helpers.getExisted(this._getCondition().fundComparator);
-            this._labelFundComparator.text  = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelFundComparator.text  = Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputEnergyPercentage(): void {
             const energyPercentage              = this._getCondition().energyPercentage;
@@ -282,7 +282,7 @@ namespace Twns.WarEvent {
         }
         private _updateLabelEnergyPercentageComparator(): void {
             const comparator                            = Twns.Helpers.getExisted(this._getCondition().energyPercentageComparator);
-            this._labelEnergyPercentageComparator.text  = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelEnergyPercentageComparator.text  = Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputPlayersCount(): void {
             const playersCount              = this._getCondition().playersCount;
@@ -290,7 +290,7 @@ namespace Twns.WarEvent {
         }
         private _updatePlayersCountComparator(): void {
             const comparator                        = Twns.Helpers.getExisted(this._getCondition().playersCountComparator);
-            this._labelPlayersCountComparator.text  = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelPlayersCountComparator.text  = Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _getCondition(): CommonProto.WarEvent.IWecPlayerPresence {

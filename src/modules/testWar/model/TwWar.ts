@@ -223,7 +223,7 @@ namespace Twns.TestWar {
 
     function _createInitialTurnData(): WarSerialization.ISerialTurnManager {
         return {
-            turnIndex       : CommonConstants.WarFirstTurnIndex,
+            turnIndex       : Twns.CommonConstants.WarFirstTurnIndex,
             playerIndex     : 0,
             turnPhaseCode   : Twns.Types.TurnPhaseCode.WaitBeginTurn,
             enterTurnTime   : Twns.Timer.getServerTimestamp(),
@@ -236,13 +236,13 @@ namespace Twns.TestWar {
             throw Twns.Helpers.newError(`Invalid playersCountUnneutral: ${playersCountUnneutral}`, ClientErrorCode.TwWar_CreateInitialPlayerManagerDataForTw_00);
         }
 
-        const bootTimerParams   = [Twns.Types.BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue];
+        const bootTimerParams   = [Twns.Types.BootTimerType.Regular, Twns.CommonConstants.WarBootTimerRegularDefaultValue];
         const restTimeToBoot    = bootTimerParams[1];
         const players = [_createInitialSinglePlayerData({
             playerIndex         : 0,
             teamIndex           : 0,
             userId              : null,
-            coId                : CommonConstants.CoEmptyId,
+            coId                : Twns.CommonConstants.CoEmptyId,
             restTimeToBoot      : 0,
             unitAndTileSkinId   : 0,
         })];
@@ -256,13 +256,13 @@ namespace Twns.TestWar {
             throw Twns.Helpers.newError(`Invalid ruleForPlayers.`, ClientErrorCode.TwWar_CreateInitialPlayerManagerDataForTw_01);
         }
 
-        for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+        for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
             const teamIndex = WarHelpers.WarRuleHelpers.getTeamIndexByRuleForPlayers(ruleForPlayers, playerIndex);
             players.push(_createInitialSinglePlayerData({
                 playerIndex,
                 teamIndex,
                 userId              : 1,
-                coId                : CommonConstants.CoEmptyId,
+                coId                : Twns.CommonConstants.CoEmptyId,
                 restTimeToBoot,
                 unitAndTileSkinId   : playerIndex,
             }));

@@ -89,7 +89,7 @@ namespace Twns.SinglePlayerWar {
 
         private async _createDataForList(): Promise<DataForSlotRenderer[]> {
             const dataList: DataForSlotRenderer[] = [];
-            for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
+            for (let slotIndex = 0; slotIndex < Twns.CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
                     slotInfo    : await Twns.SinglePlayerMode.SpmModel.getSlotFullData(slotIndex),
@@ -157,7 +157,7 @@ namespace Twns.SinglePlayerWar {
                 labelMapName.text   = `----`;
             } else {
                 const warData   = slotInfo.warData;
-                labelType.text  = Lang.getWarTypeName(Twns.WarHelpers.WarCommonHelpers.getWarType(warData)) || CommonConstants.ErrorTextForUndefined;
+                labelType.text  = Lang.getWarTypeName(Twns.WarHelpers.WarCommonHelpers.getWarType(warData)) || Twns.CommonConstants.ErrorTextForUndefined;
 
                 const slotComment = slotInfo.extraData.slotComment;
                 if (slotComment) {
@@ -166,7 +166,7 @@ namespace Twns.SinglePlayerWar {
                     const mapId         = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
+                        : (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || Twns.CommonConstants.ErrorTextForUndefined);
                 }
             }
         }

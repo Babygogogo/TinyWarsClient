@@ -151,7 +151,7 @@ namespace Twns.MultiCustomRoom {
             const data = this.data;
             if (data) {
                 const playerRuleType    = data.playerRuleType;
-                this._labelName.text    = Lang.getPlayerRuleName(playerRuleType) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelName.text    = Lang.getPlayerRuleName(playerRuleType) ?? Twns.CommonConstants.ErrorTextForUndefined;
                 this._btnHelp.visible   = playerRuleType === PlayerRuleType.BannedCoIdArray;
             }
         }
@@ -313,7 +313,7 @@ namespace Twns.MultiCustomRoom {
 
             const labelValue                    = this._labelValue;
             labelValue.visible                  = true;
-            labelValue.text                     = Lang.getPlayerTeamName(MultiCustomRoom.McrCreateModel.getTeamIndex(playerIndex)) || CommonConstants.ErrorTextForUndefined;
+            labelValue.text                     = Lang.getPlayerTeamName(MultiCustomRoom.McrCreateModel.getTeamIndex(playerIndex)) || Twns.CommonConstants.ErrorTextForUndefined;
             labelValue.textColor                = 0xFFFFFF;
             this._callbackForTouchLabelValue    = () => MultiCustomRoom.McrCreateModel.tickTeamIndex(playerIndex);
         }
@@ -347,7 +347,7 @@ namespace Twns.MultiCustomRoom {
                         PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0057),
                             callback: () => {
-                                MultiCustomRoom.McrCreateModel.setSelfCoId(CommonConstants.CoEmptyId);
+                                MultiCustomRoom.McrCreateModel.setSelfCoId(Twns.CommonConstants.CoEmptyId);
                                 callback();
                             },
                         });
@@ -384,15 +384,15 @@ namespace Twns.MultiCustomRoom {
             const currValue                     = MultiCustomRoom.McrCreateModel.getInitialFund(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
+            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleInitialFundDefault);
             inputValue.restrict                 = `0-9\\-`;
             inputValue.maxChars                 = 7;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                          ||
-                    (value > CommonConstants.WarRuleInitialFundMaxLimit)    ||
-                    (value < CommonConstants.WarRuleInitialFundMinLimit)
+                    (value > Twns.CommonConstants.WarRuleInitialFundMaxLimit)    ||
+                    (value < Twns.CommonConstants.WarRuleInitialFundMinLimit)
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
@@ -408,15 +408,15 @@ namespace Twns.MultiCustomRoom {
             const currValue                     = MultiCustomRoom.McrCreateModel.getIncomeMultiplier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
+            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleIncomeMultiplierDefault);
             inputValue.restrict                 = `0-9`;
             inputValue.maxChars                 = 5;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                              ||
-                    (value > CommonConstants.WarRuleIncomeMultiplierMaxLimit)   ||
-                    (value < CommonConstants.WarRuleIncomeMultiplierMinLimit)
+                    (value > Twns.CommonConstants.WarRuleIncomeMultiplierMaxLimit)   ||
+                    (value < Twns.CommonConstants.WarRuleIncomeMultiplierMinLimit)
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
@@ -432,15 +432,15 @@ namespace Twns.MultiCustomRoom {
             const currValue                     = MultiCustomRoom.McrCreateModel.getEnergyAddPctOnLoadCo(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
+            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
             inputValue.restrict                 = `0-9`;
             inputValue.maxChars                 = 3;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                                      ||
-                    (value > CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
-                    (value < CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
+                    (value > Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
+                    (value < Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
@@ -456,15 +456,15 @@ namespace Twns.MultiCustomRoom {
             const currValue                     = MultiCustomRoom.McrCreateModel.getEnergyGrowthMultiplier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
+            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
             inputValue.restrict                 = `0-9`;
             inputValue.maxChars                 = 5;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                                  ||
-                    (value > CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit) ||
-                    (value < CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)
+                    (value > Twns.CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit) ||
+                    (value < Twns.CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
@@ -495,15 +495,15 @@ namespace Twns.MultiCustomRoom {
             const currValue                     = MultiCustomRoom.McrCreateModel.getMoveRangeModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
+            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleMoveRangeModifierDefault);
             inputValue.restrict                 = `0-9\\-`;
             inputValue.maxChars                 = 3;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                              ||
-                    (value > CommonConstants.WarRuleMoveRangeModifierMaxLimit)  ||
-                    (value < CommonConstants.WarRuleMoveRangeModifierMinLimit)
+                    (value > Twns.CommonConstants.WarRuleMoveRangeModifierMaxLimit)  ||
+                    (value < Twns.CommonConstants.WarRuleMoveRangeModifierMinLimit)
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
@@ -519,15 +519,15 @@ namespace Twns.MultiCustomRoom {
             const currValue                     = MultiCustomRoom.McrCreateModel.getAttackPowerModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
+            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleOffenseBonusDefault);
             inputValue.restrict                 = `0-9\\-`;
             inputValue.maxChars                 = 5;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                          ||
-                    (value > CommonConstants.WarRuleOffenseBonusMaxLimit)   ||
-                    (value < CommonConstants.WarRuleOffenseBonusMinLimit)
+                    (value > Twns.CommonConstants.WarRuleOffenseBonusMaxLimit)   ||
+                    (value < Twns.CommonConstants.WarRuleOffenseBonusMinLimit)
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
@@ -543,15 +543,15 @@ namespace Twns.MultiCustomRoom {
             const currValue                     = MultiCustomRoom.McrCreateModel.getVisionRangeModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
+            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleVisionRangeModifierDefault);
             inputValue.restrict                 = `0-9\\-`;
             inputValue.maxChars                 = 3;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                                  ||
-                    (value > CommonConstants.WarRuleVisionRangeModifierMaxLimit)    ||
-                    (value < CommonConstants.WarRuleVisionRangeModifierMinLimit)
+                    (value > Twns.CommonConstants.WarRuleVisionRangeModifierMaxLimit)    ||
+                    (value < Twns.CommonConstants.WarRuleVisionRangeModifierMinLimit)
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
@@ -567,15 +567,15 @@ namespace Twns.MultiCustomRoom {
             const currValue                     = MultiCustomRoom.McrCreateModel.getLuckLowerLimit(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
+            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultLowerLimit);
             inputValue.restrict                 = `0-9\\-`;
             inputValue.maxChars                 = 4;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                          ||
-                    (value > CommonConstants.WarRuleLuckMaxLimit)           ||
-                    (value < CommonConstants.WarRuleLuckMinLimit)           ||
+                    (value > Twns.CommonConstants.WarRuleLuckMaxLimit)           ||
+                    (value < Twns.CommonConstants.WarRuleLuckMinLimit)           ||
                     (value > MultiCustomRoom.McrCreateModel.getLuckUpperLimit(playerIndex))
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
@@ -592,15 +592,15 @@ namespace Twns.MultiCustomRoom {
             const currValue                     = MultiCustomRoom.McrCreateModel.getLuckUpperLimit(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
+            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultUpperLimit);
             inputValue.restrict                 = `0-9\\-`;
             inputValue.maxChars                 = 4;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                          ||
-                    (value > CommonConstants.WarRuleLuckMaxLimit)           ||
-                    (value < CommonConstants.WarRuleLuckMinLimit)           ||
+                    (value > Twns.CommonConstants.WarRuleLuckMaxLimit)           ||
+                    (value < Twns.CommonConstants.WarRuleLuckMinLimit)           ||
                     (value < MultiCustomRoom.McrCreateModel.getLuckLowerLimit(playerIndex))
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));

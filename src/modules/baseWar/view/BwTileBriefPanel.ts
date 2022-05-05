@@ -123,7 +123,7 @@ namespace Twns.BaseWar {
             const tile                  = war.getTileMap().getTile(gridIndex);
             this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
             this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;
-            this._labelName.text        = Lang.getTileName(tile.getType()) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = Lang.getTileName(tile.getType()) ?? Twns.CommonConstants.ErrorTextForUndefined;
             this._updateTileView();
 
             if (tile.getCurrentHp() != null) {

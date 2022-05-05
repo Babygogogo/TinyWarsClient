@@ -24,7 +24,7 @@ namespace Twns.Common {
         gameConfig          : Config.GameConfig;
         currentCoId         : number | null;
         availableCoIdArray  : number[];
-        callbackOnConfirm   : (coId: number) => void;
+        callbackOnConfirm   : ((coId: number) => void) | null;
     };
     export class CommonChooseSingleCoPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseSingleCoPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
@@ -34,6 +34,7 @@ namespace Twns.Common {
         private readonly _listCo!           : TwnsUiScrollList.UiScrollList<DataForCoRenderer>;
         private readonly _btnConfirm!       : TwnsUiButton.UiButton;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
         private readonly _uiCoInfo!         : TwnsUiCoInfo.UiCoInfo;
 
         private _dataForListCo          : DataForCoRenderer[] = [];
@@ -42,7 +43,8 @@ namespace Twns.Common {
         protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
-                { ui: this._btnCancel,      callback: this._onTouchTapBtnBack },
+                { ui: this._btnCancel,      callback: this.close },
+                { ui: this._btnClose,       callback: this.close },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
@@ -54,6 +56,8 @@ namespace Twns.Common {
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
+
+            this._updateButtons();
             this._initListCo();
         }
         protected _onClosing(): void {
@@ -92,14 +96,11 @@ namespace Twns.Common {
         private _onTouchedBtnConfirm(): void {
             const coId = this._getSelectedCoId();
             if (coId != null) {
-                this._getOpenData().callbackOnConfirm(coId);
+                const callback = this._getOpenData().callbackOnConfirm;
+                (callback) && (callback(coId));
 
                 this.close();
             }
-        }
-
-        private _onTouchTapBtnBack(): void {
-            this.close();
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -113,20 +114,26 @@ namespace Twns.Common {
             this._labelChooseCo.text    = Lang.getText(LangTextType.B0145);
             this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
             this._btnCancel.label       = Lang.getText(LangTextType.B0154);
+            this._btnClose.label        = Lang.getText(LangTextType.B0204);
 
             this._updateComponentsForCoInfo();
         }
 
+        private _updateButtons(): void {
+            const canModify             = this._getOpenData().callbackOnConfirm != null;
+            this._btnConfirm.visible    = canModify;
+            this._btnCancel.visible     = canModify;
+            this._btnClose.visible      = !canModify;
+        }
+
         private _initListCo(): void {
-            this._dataForListCo = this._createDataForListCo();
-            this._listCo.bindData(this._dataForListCo);
+            const dataArray     = this._createDataForListCo();
+            this._dataForListCo = dataArray;
+            this._listCo.bindData(dataArray);
             this._listCo.scrollVerticalTo(0);
 
             const coId = this._getOpenData().currentCoId;
-            this.setAndReviseSelectedIndex(this._dataForListCo.findIndex(data => {
-                const cfg = data.coBasicCfg;
-                return cfg ? cfg.coId === coId : coId == null;
-            }));
+            this.setAndReviseSelectedIndex(Math.max(0, dataArray.findIndex(data => data.coBasicCfg.coId === coId)));
         }
 
         private _createDataForListCo(): DataForCoRenderer[] {

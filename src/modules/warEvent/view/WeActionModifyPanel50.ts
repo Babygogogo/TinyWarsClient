@@ -89,8 +89,8 @@ namespace Twns.WarEvent {
                 title           : Lang.getText(LangTextType.B0455),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
-                maxChars        : CommonConstants.WarEventActionPersistentShowTextMaxLength,
-                tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.WarEventActionPersistentShowTextMaxLength),
+                maxChars        : Twns.CommonConstants.WarEventActionPersistentShowTextMaxLength,
+                tips            : Lang.getFormattedText(LangTextType.F0020, Twns.CommonConstants.WarEventActionPersistentShowTextMaxLength),
                 canBeEmpty      : true,
                 isMultiLine     : true,
                 callback        : panel => {
@@ -125,8 +125,8 @@ namespace Twns.WarEvent {
                 title           : Lang.getText(LangTextType.B0456),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
-                maxChars        : CommonConstants.WarEventActionPersistentShowTextMaxLength,
-                tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.WarEventActionPersistentShowTextMaxLength),
+                maxChars        : Twns.CommonConstants.WarEventActionPersistentShowTextMaxLength,
+                tips            : Lang.getFormattedText(LangTextType.F0020, Twns.CommonConstants.WarEventActionPersistentShowTextMaxLength),
                 canBeEmpty      : true,
                 isMultiLine     : true,
                 callback        : panel => {
@@ -188,7 +188,7 @@ namespace Twns.WarEvent {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
-            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateComponentsForText(): void {

@@ -58,13 +58,13 @@ namespace Twns.Common {
             this._labelAccounts.text        = "" + data.totalAccounts;
 
             const totalOnlineTime           = data.totalOnlineTime;
-            this._labelOnlineTime.text      = totalOnlineTime == null ? CommonConstants.ErrorTextForUndefined : Twns.Helpers.getTimeDurationText(totalOnlineTime);
+            this._labelOnlineTime.text      = totalOnlineTime == null ? Twns.CommonConstants.ErrorTextForUndefined : Twns.Helpers.getTimeDurationText(totalOnlineTime);
 
             const activeAccounts            = data.activeAccounts;
-            this._labelActiveAccounts.text  = activeAccounts == null ? CommonConstants.ErrorTextForUndefined : activeAccounts.join(" / ");
+            this._labelActiveAccounts.text  = activeAccounts == null ? Twns.CommonConstants.ErrorTextForUndefined : activeAccounts.join(" / ");
 
             const newAccounts               = data.newAccounts;
-            this._labelNewAccounts.text     = newAccounts == null ? CommonConstants.ErrorTextForUndefined : newAccounts.join(" / ");
+            this._labelNewAccounts.text     = newAccounts == null ? Twns.CommonConstants.ErrorTextForUndefined : newAccounts.join(" / ");
         }
 
         private _updateComponentsForLanguage(): void {
@@ -87,7 +87,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -101,7 +101,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 }

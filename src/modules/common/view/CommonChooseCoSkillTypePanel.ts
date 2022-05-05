@@ -109,7 +109,7 @@ namespace Twns.Common {
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = Lang.getCoSkillTypeName(this._getData().coSkillType) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName.text = Lang.getCoSkillTypeName(this._getData().coSkillType) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
     }
 }

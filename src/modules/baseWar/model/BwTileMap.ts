@@ -64,7 +64,7 @@ namespace Twns.BaseWar {
 
                 const playerIndex = tile.getPlayerIndex();
                 if ((playerIndex == null)                                   ||
-                    (playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                    (playerIndex < Twns.CommonConstants.WarNeutralPlayerIndex)   ||
                     (playerIndex > playersCountUnneutral)
                 ) {
                     throw Twns.Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTileMap_Init_06);
@@ -235,7 +235,7 @@ namespace Twns.BaseWar {
             }
         }
         public setAllLocationVisible(isVisible: boolean): void {
-            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+            for (let locationId = Twns.CommonConstants.MapMinLocationId; locationId <= Twns.CommonConstants.MapMaxLocationId; ++locationId) {
                 if (isVisible) {
                     this._setLocationVisibleFlags(this.getLocationVisibleFlags() | (1 << (locationId - 1)));
                 } else {

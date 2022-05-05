@@ -249,7 +249,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 * WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp)
                 * playerInTurn.getUnitCostModifier(gridIndex, false, unitType)
                 / 100
-                / CommonConstants.UnitHpNormalizer
+                / Twns.CommonConstants.UnitHpNormalizer
             );
             const unit          = new BwUnit();
             unit.init({
@@ -543,7 +543,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
         const playerInTurn  = war.getPlayerInTurn();
         const playerIndex   = playerInTurn.getPlayerIndex();
-        if ((playerIndex !== CommonConstants.WarNeutralPlayerIndex)         &&
+        if ((playerIndex !== Twns.CommonConstants.WarNeutralPlayerIndex)         &&
             (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
         ) {
             const nickname = await playerInTurn.getNickname();
@@ -2155,7 +2155,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 if (war.getGameConfig().getSystemCfg().isUnitHpRoundedUpWhenHealed) {
                     focusUnit.setCurrentHp(Math.min(
                         focusUnit.getMaxHp(),
-                        (focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()) * CommonConstants.UnitHpNormalizer,
+                        (focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()) * Twns.CommonConstants.UnitHpNormalizer,
                     ));
                 } else {
                     const joinedNormalizedHp = Math.min(
@@ -2163,7 +2163,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                         focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
                     );
                     focusUnit.setCurrentHp(Math.max(
-                        (joinedNormalizedHp - 1) * CommonConstants.UnitHpNormalizer + 1,
+                        (joinedNormalizedHp - 1) * Twns.CommonConstants.UnitHpNormalizer + 1,
                         Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
                     ));
                 }
@@ -2285,7 +2285,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 if (war.getGameConfig().getSystemCfg().isUnitHpRoundedUpWhenHealed) {
                     focusUnit.setCurrentHp(Math.min(
                         focusUnit.getMaxHp(),
-                        (focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()) * CommonConstants.UnitHpNormalizer,
+                        (focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()) * Twns.CommonConstants.UnitHpNormalizer,
                     ));
                 } else {
                     const joinedNormalizedHp = Math.min(
@@ -2293,7 +2293,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                         focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
                     );
                     focusUnit.setCurrentHp(Math.max(
-                        (joinedNormalizedHp - 1) * CommonConstants.UnitHpNormalizer + 1,
+                        (joinedNormalizedHp - 1) * Twns.CommonConstants.UnitHpNormalizer + 1,
                         Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
                     ));
                 }
@@ -2499,16 +2499,16 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 tile.resetByTypeAndPlayerIndex({
                     baseType        : tile.getBaseType(),
                     objectType      : Types.TileObjectType.EmptySilo,
-                    playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex     : Twns.CommonConstants.WarNeutralPlayerIndex,
                 });
 
-                const targetGrids   = GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize: unitMap.getMapSize() });
+                const targetGrids   = GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: Twns.CommonConstants.SiloRadius, mapSize: unitMap.getMapSize() });
                 const targetUnits   : BwUnit[] = [];
                 for (const grid of targetGrids) {
                     const unit = unitMap.getUnitOnMap(grid);
                     if (unit) {
                         targetUnits.push(unit);
-                        unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - CommonConstants.SiloDamage));
+                        unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - Twns.CommonConstants.SiloDamage));
                     }
                 }
             }
@@ -2534,7 +2534,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
             const targetGridIndex = GridIndexHelpers.convertGridIndex(actionExtraData.targetGridIndex);
             if (targetGridIndex) {
-                for (const grid of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize })) {
+                for (const grid of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: Twns.CommonConstants.SiloRadius, mapSize })) {
                     gridVisualEffect.showEffectSiloExplosion(grid);
                 }
             }
@@ -2568,17 +2568,17 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 tile.resetByTypeAndPlayerIndex({
                     baseType    : tile.getBaseType(),
                     objectType  : Types.TileObjectType.EmptySilo,
-                    playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex : Twns.CommonConstants.WarNeutralPlayerIndex,
                 });
 
                 const targetGridIndex   = GridIndexHelpers.convertGridIndex(action.targetGridIndex);
-                const targetGrids       = GridIndexHelpers.getGridsWithinDistance({ origin: Helpers.getExisted(targetGridIndex, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchSilo_01), minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize });
+                const targetGrids       = GridIndexHelpers.getGridsWithinDistance({ origin: Helpers.getExisted(targetGridIndex, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchSilo_01), minDistance: 0, maxDistance: Twns.CommonConstants.SiloRadius, mapSize });
                 const targetUnits       : BwUnit[] = [];
                 for (const grid of targetGrids) {
                     const unit = unitMap.getUnitOnMap(grid);
                     if (unit) {
                         targetUnits.push(unit);
-                        unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - CommonConstants.SiloDamage));
+                        unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - Twns.CommonConstants.SiloDamage));
                     }
                 }
 
@@ -3413,7 +3413,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         targetLostNormalizedHp      : number;
         isAttackerInAttackerCoZone  : boolean;
     }): void {
-        if ((targetLostNormalizedHp == 0) || (attackerPlayer.getCoId() === CommonConstants.CoEmptyId)) {
+        if ((targetLostNormalizedHp == 0) || (attackerPlayer.getCoId() === Twns.CommonConstants.CoEmptyId)) {
             return;
         }
 

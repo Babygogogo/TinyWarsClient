@@ -236,7 +236,7 @@ namespace Twns.MultiCustomRoom {
                 endProps    : { alpha: 1, left: 0 },
             });
 
-            await Twns.Helpers.wait(200 + CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(200 + Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -250,7 +250,7 @@ namespace Twns.MultiCustomRoom {
                 endProps    : { alpha: 0, left: -40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {

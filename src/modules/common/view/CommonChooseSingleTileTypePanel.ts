@@ -93,7 +93,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -107,7 +107,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -167,7 +167,7 @@ namespace Twns.Common {
         private _updateLabelType(): void {
             const data      = this._getData();
             const label     = this._labelType;
-            label.text      = Lang.getTileName(data.newTileType) || CommonConstants.ErrorTextForUndefined;
+            label.text      = Lang.getTileName(data.newTileType) || Twns.CommonConstants.ErrorTextForUndefined;
             label.textColor = data.currentTileType === data.newTileType ? 0x00FF00 : 0xFFFFFF;
         }
         private _updateTileView(): void {
@@ -184,7 +184,7 @@ namespace Twns.Common {
                 tileDecoratorShapeId: null,
                 tileObjectType      : objectType,
                 tileObjectShapeId   : 0,
-                playerIndex         : Twns.Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType) ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : Twns.Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType) ? playerIndex : Twns.CommonConstants.WarNeutralPlayerIndex,
             });
         }
     }

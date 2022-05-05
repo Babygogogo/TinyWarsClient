@@ -143,7 +143,7 @@ namespace Twns.MapEditor {
         private _updateLabelName(): void {
             if (this._checkHasData()) {
                 const data              = this._getData();
-                this._labelName.text    = Lang.getLanguageText({ textArray: data.warEventArray.find(v => v.eventId === data.warEventId)?.eventNameArray }) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelName.text    = Lang.getLanguageText({ textArray: data.warEventArray.find(v => v.eventId === data.warEventId)?.eventNameArray }) ?? Twns.CommonConstants.ErrorTextForUndefined;
             }
         }
 

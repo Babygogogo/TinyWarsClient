@@ -119,7 +119,7 @@ namespace Twns.WarEvent {
             if (data == null) {
                 label.text = ``;
             } else {
-                label.text = Lang.getUnitName(data.newUnitType) || CommonConstants.ErrorTextForUndefined;
+                label.text = Lang.getUnitName(data.newUnitType) || Twns.CommonConstants.ErrorTextForUndefined;
             }
         }
     }

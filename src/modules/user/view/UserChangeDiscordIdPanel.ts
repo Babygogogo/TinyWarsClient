@@ -54,7 +54,7 @@ namespace Twns.User {
             const labelUrl          = this._labelUrl;
             labelUrl.touchEnabled   = true;
             labelUrl.textFlow       = [{
-                text    : CommonConstants.DiscordUrl,
+                text    : Twns.CommonConstants.DiscordUrl,
                 style   : { underline: true },
             }];
 
@@ -86,7 +86,7 @@ namespace Twns.User {
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, `Discord`),
                     callback: () => {
-                        window.open(CommonConstants.DiscordUrl);
+                        window.open(Twns.CommonConstants.DiscordUrl);
                     },
                 });
             }
@@ -127,7 +127,7 @@ namespace Twns.User {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -141,7 +141,7 @@ namespace Twns.User {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 }

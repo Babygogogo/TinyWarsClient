@@ -183,8 +183,8 @@ namespace Twns.WatchWar {
             const playerInfo        = data.playerInfo;
             const playerIndex       = playerInfo.playerIndex;
             const teamIndex         = playerInfo.teamIndex;
-            this._labelIndex.text   = playerIndex == null ? CommonConstants.ErrorTextForUndefined : Lang.getPlayerForceName(playerIndex);
-            this._labelTeam.text    = (teamIndex == null ? null : Lang.getPlayerTeamName(teamIndex)) || CommonConstants.ErrorTextForUndefined;
+            this._labelIndex.text   = playerIndex == null ? Twns.CommonConstants.ErrorTextForUndefined : Lang.getPlayerForceName(playerIndex);
+            this._labelTeam.text    = (teamIndex == null ? null : Lang.getPlayerTeamName(teamIndex)) || Twns.CommonConstants.ErrorTextForUndefined;
 
             if (!playerInfo.isAlive) {
                 this._imgAccept.visible     = false;

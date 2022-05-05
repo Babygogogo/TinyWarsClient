@@ -44,8 +44,8 @@ namespace Twns.MapManagement {
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
 
-            this._inputChinese.maxChars = CommonConstants.MapMaxNameLength;
-            this._inputEnglish.maxChars = CommonConstants.MapMaxNameLength;
+            this._inputChinese.maxChars = Twns.CommonConstants.MapMaxNameLength;
+            this._inputEnglish.maxChars = Twns.CommonConstants.MapMaxNameLength;
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -65,8 +65,8 @@ namespace Twns.MapManagement {
             ];
             if (nameArray.some(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
                 FloatText.show(Lang.getText(LangTextType.A0155));
-            } else if (nameArray.some(v => Twns.Helpers.getExisted(v.text).length > CommonConstants.MapMaxNameLength)) {
-                FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.MapMaxNameLength));
+            } else if (nameArray.some(v => Twns.Helpers.getExisted(v.text).length > Twns.CommonConstants.MapMaxNameLength)) {
+                FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.MapMaxNameLength));
             } else {
                 Twns.WarMap.WarMapProxy.reqMmSetMapName(this._getOpenData().mapId, nameArray);
                 this.close();

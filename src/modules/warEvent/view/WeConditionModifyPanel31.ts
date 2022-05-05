@@ -160,7 +160,7 @@ namespace Twns.WarEvent {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
-            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateImgIsNot(): void {
             this._imgIsNot.visible = !!this._getCondition().WecTileTypeEqualTo?.isNot;
@@ -168,7 +168,7 @@ namespace Twns.WarEvent {
         private _updateComponentsForTileType(): void {
             const tileType              = Twns.Helpers.getExisted(this._getCondition().WecTileTypeEqualTo?.tileType);
             this._inputTileType.text    = `${tileType}`;
-            this._labelTileType.text    = Lang.getTileName(tileType) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelTileType.text    = Lang.getTileName(tileType) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputGridX(): void {
             this._inputGridX.text = `${this._getCondition().WecTileTypeEqualTo?.gridIndex?.x}`;

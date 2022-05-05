@@ -11,7 +11,7 @@ namespace Twns.BaseWar {
     import GridIndex            = Twns.Types.GridIndex;
     import BwGridVisualEffect   = Twns.BaseWar.BwGridVisualEffect;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = CommonConstants.GridSize;
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = Twns.CommonConstants.GridSize;
     const BLOCK_OFFSET_X                                = Math.floor(_GRID_WIDTH * 0.3);
     const BLOCK_OFFSET_Y                                = Math.floor(_GRID_HEIGHT * 0.3);
     const DIVE_OFFSET_X                                 = -_GRID_WIDTH;

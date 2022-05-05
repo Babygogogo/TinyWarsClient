@@ -85,7 +85,7 @@ namespace Twns.Common {
             } = openData;
             const isRoomOwnedBySelf = playerInfoArray.find(v => v.playerIndex === roomOwnerPlayerIndex)?.userId === Twns.User.UserModel.getSelfUserId();
             const dataArray         : DataForPlayerRenderer[] = [];
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 const playerInfo = playerInfoArray.find(v => v.playerIndex === playerIndex);
                 if (playerInfo == null) {
                     throw Twns.Helpers.newError(`CommonWarPlayerInfoPage._updateListPlayer() empty playerInfo.`);
@@ -156,7 +156,7 @@ namespace Twns.Common {
         private _onTouchedGroupCo(): void {
             const data  = this._getData();
             const coId  = data.playerInfo.coId;
-            if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
+            if ((coId != null) && (coId !== Twns.CommonConstants.CoEmptyId)) {
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoInfoPanel, {
                     gameConfig  : data.gameConfig,
                     coId,
@@ -234,7 +234,7 @@ namespace Twns.Common {
             const playerInfo            = data.playerInfo;
             const playerIndex           = playerInfo.playerIndex;
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(playerInfo.teamIndex) || CommonConstants.ErrorTextForUndefined;
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(playerInfo.teamIndex) || Twns.CommonConstants.ErrorTextForUndefined;
             this._imgSkin.source        = Twns.WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(playerInfo.unitAndTileSkinId);
 
             const coId              = playerInfo.coId;
@@ -248,16 +248,16 @@ namespace Twns.Common {
             } else {
                 const gameConfig    = data.gameConfig;
                 const coCfg         = gameConfig.getCoBasicCfg(coId);
-                labelCo.text        = coCfg?.name ?? CommonConstants.ErrorTextForUndefined;
-                imgCoHead.source    = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
-                imgCoInfo.visible   = (coId !== CommonConstants.CoEmptyId);
+                labelCo.text        = coCfg?.name ?? Twns.CommonConstants.ErrorTextForUndefined;
+                imgCoHead.source    = gameConfig.getCoHeadImageSource(coId) ?? Twns.CommonConstants.ErrorTextForUndefined;
+                imgCoInfo.visible   = (coId !== Twns.CommonConstants.CoEmptyId);
             }
 
             const userId        = playerInfo.userId;
             const userInfo      = userId == null ? null : await Twns.User.UserModel.getUserPublicInfo(userId);
             const labelNickname = this._labelNickname;
             if (userInfo) {
-                labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
+                labelNickname.text = userInfo.nickname || Twns.CommonConstants.ErrorTextForUndefined;
             } else {
                 labelNickname.text = playerInfo.isAi ? Lang.getText(LangTextType.B0607) : `??`;
             }
@@ -306,10 +306,10 @@ namespace Twns.Common {
             const stdRank               = stdRankInfo?.currentRank;
             const fogRank               = fogRankInfo?.currentRank;
             this._labelRankStd.text     = stdRankInfo
-                ? `${stdScore == null ? CommonConstants.RankInitialScore : stdScore} (${stdRank == null ? `--` : `${stdRank}${Twns.Helpers.getSuffixForRank(stdRank)}`})`
+                ? `${stdScore == null ? Twns.CommonConstants.RankInitialScore : stdScore} (${stdRank == null ? `--` : `${stdRank}${Twns.Helpers.getSuffixForRank(stdRank)}`})`
                 : `??`;
             this._labelRankFog.text     = fogRankInfo
-                ? `${fogScore == null ? CommonConstants.RankInitialScore : fogScore} (${fogRank == null ? `--` : `${fogRank}${Twns.Helpers.getSuffixForRank(fogRank)}`})`
+                ? `${fogScore == null ? Twns.CommonConstants.RankInitialScore : fogScore} (${fogRank == null ? `--` : `${fogRank}${Twns.Helpers.getSuffixForRank(fogRank)}`})`
                 : `??`;
         }
 

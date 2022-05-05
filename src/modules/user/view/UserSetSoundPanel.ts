@@ -221,7 +221,7 @@ namespace Twns.User {
             this._labelEffectVolume.text    = `${Math.floor(volume * 100)}`;
         }
         private _updateLabelBgmName(): void {
-            this._labelBgmName.text = Lang.getBgmName(Twns.SoundManager.getPlayingBgmCode()) || CommonConstants.ErrorTextForUndefined;
+            this._labelBgmName.text = Lang.getBgmName(Twns.SoundManager.getPlayingBgmCode()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         protected async _showOpenAnimation(): Promise<void> {
@@ -236,7 +236,7 @@ namespace Twns.User {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -250,7 +250,7 @@ namespace Twns.User {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 }

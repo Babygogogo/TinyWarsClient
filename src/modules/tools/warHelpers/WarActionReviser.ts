@@ -128,7 +128,7 @@ namespace Twns.WarHelpers.WarActionReviser {
         }
 
         const unitHp = rawAction.unitHp;
-        if ((unitHp == null) || (unitHp <= 0) || (unitHp > CommonConstants.UnitMaxHp)) {
+        if ((unitHp == null) || (unitHp <= 0) || (unitHp > Twns.CommonConstants.UnitMaxHp)) {
             throw Helpers.newError(`Invalid unitHp: ${unitHp}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_01);
         }
 
@@ -148,7 +148,7 @@ namespace Twns.WarHelpers.WarActionReviser {
         if ((playerInTurn == null)                                      ||
             (playerInTurn.getAliveState() !== PlayerAliveState.Alive)   ||
             (playerIndexInTurn == null)                                 ||
-            (playerIndexInTurn === CommonConstants.WarNeutralPlayerIndex)
+            (playerIndexInTurn === Twns.CommonConstants.WarNeutralPlayerIndex)
         ) {
             throw Helpers.newError(`Invalid playerIndexInTurn: ${playerIndexInTurn}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_04);
         }
@@ -176,7 +176,7 @@ namespace Twns.WarHelpers.WarActionReviser {
         ) {
             throw Helpers.newError(`Invalid unitHp: ${unitHp}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_08);
         }
-        if ((!skillCfg) && (unitHp !== CommonConstants.UnitMaxHp)) {
+        if ((!skillCfg) && (unitHp !== Twns.CommonConstants.UnitMaxHp)) {
             throw Helpers.newError(`Invalid unitHp: ${unitHp}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_09);
         }
 
@@ -188,7 +188,7 @@ namespace Twns.WarHelpers.WarActionReviser {
             * WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp)
             * modifier
             / 100
-            / CommonConstants.UnitHpNormalizer
+            / Twns.CommonConstants.UnitHpNormalizer
         );
         if (cost > fund) {
             throw Helpers.newError(`Invalid cost: ${cost}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_11);
@@ -210,7 +210,7 @@ namespace Twns.WarHelpers.WarActionReviser {
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null)                                                      ||
-            (playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex)   ||
+            (playerInTurn.getPlayerIndex() === Twns.CommonConstants.WarNeutralPlayerIndex)   ||
             (playerInTurn.getAliveState() !== PlayerAliveState.Alive)
         ) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerSurrender_01);
@@ -232,7 +232,7 @@ namespace Twns.WarHelpers.WarActionReviser {
             throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerVoteForDraw_01);
         }
 
-        if ((playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex) ||
+        if ((playerInTurn.getPlayerIndex() === Twns.CommonConstants.WarNeutralPlayerIndex) ||
             (playerInTurn.getHasVotedForDraw())
         ) {
             throw Helpers.newError(`Voted for draw.`, ClientErrorCode.WarActionReviser_RevisePlayerVoteForDraw_02);
@@ -259,7 +259,7 @@ namespace Twns.WarHelpers.WarActionReviser {
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null)                                                      ||
-            (playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex)   ||
+            (playerInTurn.getPlayerIndex() === Twns.CommonConstants.WarNeutralPlayerIndex)   ||
             (playerInTurn.getAliveState() !== PlayerAliveState.Alive)
         ) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerUseCoSkill_01);
@@ -307,7 +307,7 @@ namespace Twns.WarHelpers.WarActionReviser {
         }
 
         const targetPlayerIndex = rawAction.targetPlayerIndex;
-        if ((targetPlayerIndex == null) || (targetPlayerIndex === CommonConstants.WarNeutralPlayerIndex)) {
+        if ((targetPlayerIndex == null) || (targetPlayerIndex === Twns.CommonConstants.WarNeutralPlayerIndex)) {
             throw Helpers.newError(`Invalid targetPlayerIndex: ${targetPlayerIndex}`, ClientErrorCode.WarActionReviser_ReviseSystemDestroyPlayerForce_01);
         }
 
@@ -340,7 +340,7 @@ namespace Twns.WarHelpers.WarActionReviser {
             throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseSystemEndTurn_00);
         }
 
-        if ((playerInTurn.getPlayerIndex() !== CommonConstants.WarNeutralPlayerIndex)   &&
+        if ((playerInTurn.getPlayerIndex() !== Twns.CommonConstants.WarNeutralPlayerIndex)   &&
             (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
         ) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_ReviseSystemEndTurn_01);
@@ -369,7 +369,7 @@ namespace Twns.WarHelpers.WarActionReviser {
             throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseSystemVoteForDraw_00);
         }
 
-        if ((playerInTurn.getPlayerIndex() !== CommonConstants.WarNeutralPlayerIndex)   &&
+        if ((playerInTurn.getPlayerIndex() !== Twns.CommonConstants.WarNeutralPlayerIndex)   &&
             (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
         ) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_ReviseSystemVoteForDraw_01);

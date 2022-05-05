@@ -226,7 +226,7 @@ namespace Twns.BaseWar {
             this._unitView.init(unit).startRunningView();
             this._labelHp.text          = `${unit.getCurrentHp()}`;
             this._labelFuel.text        = `${unit.getCurrentFuel()}`;
-            this._labelName.text        = Lang.getUnitName(unit.getUnitType()) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = Lang.getUnitName(unit.getUnitType()) ?? Twns.CommonConstants.ErrorTextForUndefined;
             this._labelGridIndex.text   = `x${unit.getGridX()} y${unit.getGridY()}`;
 
             if (unit.getCurrentBuildMaterial() != null) {

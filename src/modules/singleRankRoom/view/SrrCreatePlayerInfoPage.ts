@@ -118,7 +118,7 @@ namespace Twns.SingleRankRoom {
         private async _onTouchedGroupCo(): Promise<void> {
             const playerData    = this._getPlayerData();
             const coId          = playerData ? playerData.coId : null;
-            if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
+            if ((coId != null) && (coId !== Twns.CommonConstants.CoEmptyId)) {
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoInfoPanel, {
                     gameConfig      : SingleRankRoom.SrrCreateModel.getGameConfig(),
                     coId,
@@ -179,7 +179,7 @@ namespace Twns.SingleRankRoom {
             const playerIndex           = this._getData().playerIndex;
             const settingsForCommon     = Twns.Helpers.getExisted(roomInfo.settingsForCommon);
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(Twns.Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(Twns.Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex)) || Twns.CommonConstants.ErrorTextForUndefined;
 
             const playerData            = this._getPlayerData();
             this._imgSkin.source        = WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(Twns.Helpers.getExisted(playerData.unitAndTileSkinId));
@@ -191,8 +191,8 @@ namespace Twns.SingleRankRoom {
             const gameConfig            = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion));
             const coCfg                 = gameConfig.getCoBasicCfg(coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
-            this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
-            this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
+            this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._imgCoInfo.visible     = (coId !== Twns.CommonConstants.CoEmptyId) && (!!coCfg);
         }
 
         private _getPlayerData(): CommonProto.Structure.IDataForPlayerInRoom {

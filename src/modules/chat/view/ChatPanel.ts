@@ -75,7 +75,7 @@ namespace Twns.Chat {
 
             this._listChat.setItemRenderer(ChatPageRenderer);
             this._listMessage.setItemRenderer(MessageRenderer);
-            this._inputMessage.maxChars = CommonConstants.ChatMessageMaxLength;
+            this._inputMessage.maxChars = Twns.CommonConstants.ChatMessageMaxLength;
 
             this._updateComponentsForLanguage();
         }
@@ -196,7 +196,7 @@ namespace Twns.Chat {
         private _onTouchedBtnSend(): void {
             const content = (this._inputMessage.text ?? ``).trim();
             if (content) {
-                if (content.length > CommonConstants.ChatMessageMaxLength) {
+                if (content.length > Twns.CommonConstants.ChatMessageMaxLength) {
                     FloatText.show(Lang.getText(LangTextType.B0375));
                 } else {
                     const selectedIndex = this.getSelectedIndex();
@@ -233,7 +233,7 @@ namespace Twns.Chat {
                 endProps    : { alpha: 1, bottom: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected override async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -257,7 +257,7 @@ namespace Twns.Chat {
                 endProps    : { alpha: 0, bottom: -40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -364,7 +364,7 @@ namespace Twns.Chat {
             if (war) {
                 const player = war.getPlayerManager().getPlayerByUserId(Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId()));
                 if ((player) && (player.getAliveState() === Twns.Types.PlayerAliveState.Alive)) {
-                    const toWarAndTeam1 = Twns.Helpers.getExisted(war.getWarId()) * CommonConstants.ChatTeamDivider;
+                    const toWarAndTeam1 = Twns.Helpers.getExisted(war.getWarId()) * Twns.CommonConstants.ChatTeamDivider;
                     if (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.WarAndTeam, toTarget: toWarAndTeam1 })) {
                         dataDict.set(indexForSort, {
                             index       : indexForSort,
@@ -637,10 +637,10 @@ namespace Twns.Chat {
                         : Lang.getCurrentLanguageType()
                     );
                 labelType.text      = Lang.getText(LangTextType.B0376, languageType);
-                labelName.text      = Lang.getChatChannelName(toTarget, languageType) ?? CommonConstants.ErrorTextForUndefined;
+                labelName.text      = Lang.getChatChannelName(toTarget, languageType) ?? Twns.CommonConstants.ErrorTextForUndefined;
 
             } else if (toCategory === ChatCategory.WarAndTeam) {
-                const divider       = CommonConstants.ChatTeamDivider;
+                const divider       = Twns.CommonConstants.ChatTeamDivider;
                 const teamIndex     = toTarget % divider;
                 labelType.text      = Lang.getText(LangTextType.B0377);
                 labelName.text      = `ID:${Math.floor(toTarget / divider)} ${teamIndex === 0 ? Lang.getText(LangTextType.B0379) : Lang.getPlayerTeamName(teamIndex)}`;
@@ -648,7 +648,7 @@ namespace Twns.Chat {
             } else if (toCategory === ChatCategory.Private) {
                 labelType.text = Lang.getText(LangTextType.B0378);
                 labelName.text = ``;
-                Twns.User.UserModel.getUserNickname(toTarget).then(name => labelName.text = name ?? CommonConstants.ErrorTextForUndefined);
+                Twns.User.UserModel.getUserNickname(toTarget).then(name => labelName.text = name ?? Twns.CommonConstants.ErrorTextForUndefined);
 
             } else if (toCategory === ChatCategory.McrRoom) {
                 labelType.text = `${Lang.getText(LangTextType.B0443)} #${toTarget}`;
@@ -662,7 +662,7 @@ namespace Twns.Chat {
                         if (warName) {
                             labelName.text = warName;
                         } else {
-                            labelName.text = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(settingsForMcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                            labelName.text = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(settingsForMcw.mapId)) ?? Twns.CommonConstants.ErrorTextForUndefined;
                         }
                     }
                 });
@@ -679,7 +679,7 @@ namespace Twns.Chat {
                         if (warName) {
                             labelName.text = warName;
                         } else {
-                            labelName.text = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(settingsForCcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                            labelName.text = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(settingsForCcw.mapId)) ?? Twns.CommonConstants.ErrorTextForUndefined;
                         }
                     }
                 });
@@ -697,7 +697,7 @@ namespace Twns.Chat {
 
             } else if (toCategory === ChatCategory.MapReview) {
                 labelType.text = `${Lang.getText(LangTextType.B0892)}`;
-                labelName.text = (await Twns.User.UserModel.getUserBriefInfo(toTarget))?.nickname ?? CommonConstants.ErrorTextForUndefined;
+                labelName.text = (await Twns.User.UserModel.getUserBriefInfo(toTarget))?.nickname ?? Twns.CommonConstants.ErrorTextForUndefined;
 
             } else {
                 throw Twns.Helpers.newError(`Invalid data.`);
@@ -722,7 +722,7 @@ namespace Twns.Chat {
             const data                  = this._getData();
             const message               = data.message;
             const fromUserId            = Twns.Helpers.getExisted(message.fromUserId);
-            this._labelContent.text     = message.content ?? CommonConstants.ErrorTextForUndefined;
+            this._labelContent.text     = message.content ?? Twns.CommonConstants.ErrorTextForUndefined;
             this._labelName.textColor   = fromUserId === Twns.User.UserModel.getSelfUserId() ? 0x00FF00 : 0xFFFFFF;
             this._labelName.text        = `    (${Twns.Helpers.getTimestampShortText(Twns.Helpers.getExisted(message.timestamp))})`;
 

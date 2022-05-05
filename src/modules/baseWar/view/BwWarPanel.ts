@@ -38,7 +38,7 @@ namespace Twns.BaseWar {
                 endProps    : { alpha: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 }

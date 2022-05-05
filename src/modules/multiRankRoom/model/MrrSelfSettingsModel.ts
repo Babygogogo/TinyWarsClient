@@ -49,7 +49,7 @@ namespace Twns.MultiRankRoom.MrrSelfSettingsModel {
                 throw Twns.Helpers.newError(`Empty availableSkinIdList.`, ClientErrorCode.MrrSelfSettingsModel_ResetData_01);
             }
 
-            setCoId(CommonConstants.CoEmptyId);
+            setCoId(Twns.CommonConstants.CoEmptyId);
             setUnitAndTileSkinId(availableSkinIdList.indexOf(selfPlayerIndex) >= 0 ? selfPlayerIndex : availableSkinIdList[0]);
         }
     }
@@ -126,7 +126,7 @@ namespace Twns.MultiRankRoom.MrrSelfSettingsModel {
         }
 
         const availableSkinIdList: number[] = [];
-        for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
+        for (let skinId = Twns.CommonConstants.UnitAndTileMinSkinId; skinId <= Twns.CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
             if (!usedSkinIds.has(skinId)) {
                 availableSkinIdList.push(skinId);
             }

@@ -177,7 +177,7 @@ namespace Twns.WarEvent {
             if (action == null) {
                 label.text = Lang.getText(LangTextType.A0168);
             } else {
-                label.text = WarHelpers.WarEventHelpers.getDescForAction(action, data.war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
+                label.text = WarHelpers.WarEventHelpers.getDescForAction(action, data.war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateBtnSelect(): void {

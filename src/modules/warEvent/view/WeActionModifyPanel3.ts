@@ -90,7 +90,7 @@ namespace Twns.WarEvent {
 
         private _onTouchedBtnAddDialogue(): void {
             const dialogueArray = Twns.Helpers.getExisted(this._getAction().dataArray);
-            if (dialogueArray.length > CommonConstants.WarEventActionDialogueMaxCount) {
+            if (dialogueArray.length > Twns.CommonConstants.WarEventActionDialogueMaxCount) {
                 FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
                 dialogueArray.push(WarHelpers.WarEventHelpers.getDefaultCoDialogueData(this._getOpenData().war.getGameConfig()));
@@ -184,7 +184,7 @@ namespace Twns.WarEvent {
             this._listDialogue.bindData(dataArray);
 
             const label     = this._labelDialoguesCount;
-            const maxCount  = CommonConstants.WarEventActionDialogueMaxCount;
+            const maxCount  = Twns.CommonConstants.WarEventActionDialogueMaxCount;
             const currCount = dataArray.length;
             label.text      = `${Lang.getText(LangTextType.B0675)}: ${currCount} / ${maxCount}`;
             label.textColor = ((currCount <= maxCount) && (currCount > 0)) ? ColorValue.White : ColorValue.Red;
@@ -287,7 +287,7 @@ namespace Twns.WarEvent {
         private _onTouchedBtnInsert(): void {
             const data          = this._getData();
             const dialogueArray = Twns.Helpers.getExisted(data.action.WeaDialogue?.dataArray);
-            if (dialogueArray.length > CommonConstants.WarEventActionDialogueMaxCount) {
+            if (dialogueArray.length > Twns.CommonConstants.WarEventActionDialogueMaxCount) {
                 FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
                 dialogueArray.splice(dialogueArray.indexOf(data.dataForDialogue), 0, WarHelpers.WarEventHelpers.getDefaultCoDialogueData(data.war.getGameConfig()));
@@ -359,8 +359,8 @@ namespace Twns.WarEvent {
                 title           : Lang.getText(LangTextType.B0455),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
-                maxChars        : CommonConstants.WarEventActionDialogueNameMaxLength,
-                tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.WarEventActionDialogueNameMaxLength),
+                maxChars        : Twns.CommonConstants.WarEventActionDialogueNameMaxLength,
+                tips            : Lang.getFormattedText(LangTextType.F0020, Twns.CommonConstants.WarEventActionDialogueNameMaxLength),
                 canBeEmpty      : true,
                 callback        : panel => {
                     const text = (panel.getInputText() || ``).trim();
@@ -399,8 +399,8 @@ namespace Twns.WarEvent {
                 title           : Lang.getText(LangTextType.B0456),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
-                maxChars        : CommonConstants.WarEventActionDialogueNameMaxLength,
-                tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.WarEventActionDialogueNameMaxLength),
+                maxChars        : Twns.CommonConstants.WarEventActionDialogueNameMaxLength,
+                tips            : Lang.getFormattedText(LangTextType.F0020, Twns.CommonConstants.WarEventActionDialogueNameMaxLength),
                 canBeEmpty      : true,
                 callback        : panel => {
                     const text = (panel.getInputText() || ``).trim();
@@ -438,8 +438,8 @@ namespace Twns.WarEvent {
                 title           : Lang.getText(LangTextType.B0455),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
-                maxChars        : CommonConstants.WarEventActionDialogueTextMaxLength,
-                tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.WarEventActionDialogueTextMaxLength),
+                maxChars        : Twns.CommonConstants.WarEventActionDialogueTextMaxLength,
+                tips            : Lang.getFormattedText(LangTextType.F0020, Twns.CommonConstants.WarEventActionDialogueTextMaxLength),
                 canBeEmpty      : true,
                 isMultiLine     : true,
                 callback        : panel => {
@@ -490,8 +490,8 @@ namespace Twns.WarEvent {
                 title           : Lang.getText(LangTextType.B0456),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
-                maxChars        : CommonConstants.WarEventActionDialogueTextMaxLength,
-                tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.WarEventActionDialogueTextMaxLength),
+                maxChars        : Twns.CommonConstants.WarEventActionDialogueTextMaxLength,
+                tips            : Lang.getFormattedText(LangTextType.F0020, Twns.CommonConstants.WarEventActionDialogueTextMaxLength),
                 canBeEmpty      : true,
                 isMultiLine     : true,
                 callback        : panel => {
@@ -551,7 +551,7 @@ namespace Twns.WarEvent {
             } else {
                 groupCoDialogue.visible     = true;
                 this._imgLeftSide.visible   = dataForCoDialogue.side === Twns.Types.WarEventActionDialogueSide.Left;
-                this._labelCo.text          = data.war.getGameConfig().getCoNameAndTierText(Twns.Helpers.getExisted(dataForCoDialogue.coId)) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelCo.text          = data.war.getGameConfig().getCoNameAndTierText(Twns.Helpers.getExisted(dataForCoDialogue.coId)) ?? Twns.CommonConstants.ErrorTextForUndefined;
             }
 
             {

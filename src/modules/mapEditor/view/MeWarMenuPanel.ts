@@ -194,7 +194,7 @@ namespace Twns.MapEditor {
                     title           : Lang.getText(LangTextType.B0163),
                     tips            : null,
                     currentValue    : war.getMapDesignerName(),
-                    maxChars        : CommonConstants.MapMaxDesignerLength,
+                    maxChars        : Twns.CommonConstants.MapMaxDesignerLength,
                     charRestrict    : null,
                     callback        : (panel) => {
                         war.setMapDesignerName(panel.getInputText());
@@ -463,8 +463,8 @@ namespace Twns.MapEditor {
                     name    : Lang.getText(LangTextType.B0709),
                     callback: () => {
                         const currValue = Twns.User.UserModel.getSelfMapEditorAutoSaveTime();
-                        const minValue  = CommonConstants.MapEditorAutoSaveMinTime;
-                        const maxValue  = CommonConstants.MapEditorAutoSaveMaxTime;
+                        const minValue  = Twns.CommonConstants.MapEditorAutoSaveMinTime;
+                        const maxValue  = Twns.CommonConstants.MapEditorAutoSaveMaxTime;
                         Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0709),
                             currentValue    : `${currValue ?? ``}`,

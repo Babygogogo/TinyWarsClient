@@ -123,7 +123,7 @@ namespace Twns.MapEditor {
             this._labelCurrSizeTitle.text   = Lang.getText(LangTextType.B0291);
             this._labelNewSizeTitle.text    = Lang.getText(LangTextType.B0292);
             this._labelTips1.text           = Lang.getText(LangTextType.A0117);
-            this._labelTips2.text           = Lang.getFormattedText(LangTextType.F0023, CommonConstants.MapMaxGridsCount);
+            this._labelTips2.text           = Lang.getFormattedText(LangTextType.F0023, Twns.CommonConstants.MapMaxGridsCount);
         }
     }
 }

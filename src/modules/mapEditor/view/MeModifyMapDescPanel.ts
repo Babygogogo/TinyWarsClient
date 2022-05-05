@@ -85,8 +85,8 @@ namespace Twns.MapEditor {
                 title           : Lang.getText(LangTextType.B0455),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
-                maxChars        : CommonConstants.MapDescriptionMaxLength,
-                tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.MapDescriptionMaxLength),
+                maxChars        : Twns.CommonConstants.MapDescriptionMaxLength,
+                tips            : Lang.getFormattedText(LangTextType.F0020, Twns.CommonConstants.MapDescriptionMaxLength),
                 canBeEmpty      : true,
                 isMultiLine     : true,
                 callback        : panel => {
@@ -126,8 +126,8 @@ namespace Twns.MapEditor {
                 title           : Lang.getText(LangTextType.B0456),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
-                maxChars        : CommonConstants.MapDescriptionMaxLength,
-                tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.MapDescriptionMaxLength),
+                maxChars        : Twns.CommonConstants.MapDescriptionMaxLength,
+                tips            : Lang.getFormattedText(LangTextType.F0020, Twns.CommonConstants.MapDescriptionMaxLength),
                 canBeEmpty      : true,
                 isMultiLine     : true,
                 callback        : panel => {

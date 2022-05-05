@@ -46,7 +46,7 @@ namespace Twns.BaseWar {
             this._labelNickname.text    = openData.nickname;
             this._labelTurnStart.text   = Lang.getText(Twns.Lang.LangTextType.B0679);
             this._imgSkin.source        = Twns.WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(openData.unitAndTileSkinId);
-            this._imgCo.source          = openData.gameConfig.getCoHeadImageSource(openData.coId) ?? CommonConstants.ErrorTextForUndefined;
+            this._imgCo.source          = openData.gameConfig.getCoHeadImageSource(openData.coId) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         protected _onClosing(): void {
             this._clearTimeoutForClose();

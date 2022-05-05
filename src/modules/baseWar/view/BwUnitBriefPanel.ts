@@ -325,7 +325,7 @@ namespace Twns.BaseWar {
                 this._unitView.init(unit).startRunningView();
                 this._labelHp.text      = `${unit.getCurrentHp()}`;
                 this._labelFuel.text    = `${unit.getCurrentFuel()}`;
-                this._labelName.text    = Lang.getUnitName(unit.getUnitType()) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelName.text    = Lang.getUnitName(unit.getUnitType()) ?? Twns.CommonConstants.ErrorTextForUndefined;
 
                 if (unit.getCurrentBuildMaterial() != null) {
                     this._imgState.visible      = true;

@@ -65,8 +65,8 @@ namespace Twns.Common {
             ];
             if (textList.every(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
                 FloatText.show(Lang.getText(LangTextType.A0155));
-            } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > CommonConstants.WarRuleNameMaxLength)) {
-                FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.WarRuleNameMaxLength));
+            } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > Twns.CommonConstants.WarRuleNameMaxLength)) {
+                FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.WarRuleNameMaxLength));
             } else {
                 const openData              = this._getOpenData();
                 openData.templateWarRule.ruleNameArray = textList;

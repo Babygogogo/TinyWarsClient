@@ -50,7 +50,7 @@ namespace Twns.BaseWar {
 
             const forceExpirePlayerIndex = data.forceExpirePlayerIndex;
             if ((forceExpirePlayerIndex != null)                                                                                    &&
-                ((forceExpirePlayerIndex < CommonConstants.WarNeutralPlayerIndex) || (forceExpirePlayerIndex > playersCountUnneutral))
+                ((forceExpirePlayerIndex < Twns.CommonConstants.WarNeutralPlayerIndex) || (forceExpirePlayerIndex > playersCountUnneutral))
             ) {
                 throw Twns.Helpers.newError(`Invalid forceExpirePlayerIndex: ${forceExpirePlayerIndex}`, ClientErrorCode.BwFogMap_Init_02);
             }

@@ -27,8 +27,8 @@ namespace Twns.MultiFreeRoom.MfrCreateModel {
     const _dataForCreateRoom: DataForCreateRoom = {
         settingsForMfw          : {},
 
-        selfPlayerIndex         : CommonConstants.WarFirstPlayerIndex,
-        selfCoId                : CommonConstants.CoEmptyId,
+        selfPlayerIndex         : Twns.CommonConstants.WarFirstPlayerIndex,
+        selfCoId                : Twns.CommonConstants.CoEmptyId,
     };
 
     export async function resetDataByInitialWarData(warData: ISerialWar): Promise<void> {
@@ -36,11 +36,11 @@ namespace Twns.MultiFreeRoom.MfrCreateModel {
         setWarName("");
         setWarPassword("");
         setWarComment("");
-        setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
+        setBootTimerParams([BootTimerType.Regular, Twns.CommonConstants.WarBootTimerRegularDefaultValue]);
 
         const playerData = Twns.Helpers.getExisted(warData.playerManager?.players?.find(v => {
             return (v.aliveState !== Twns.Types.PlayerAliveState.Dead)
-                && (v.playerIndex !== CommonConstants.WarNeutralPlayerIndex)
+                && (v.playerIndex !== Twns.CommonConstants.WarNeutralPlayerIndex)
                 && (v.userId != null);
         }));
         setSelfPlayerIndex(Twns.Helpers.getExisted(playerData.playerIndex));
@@ -57,7 +57,7 @@ namespace Twns.MultiFreeRoom.MfrCreateModel {
     }
 
     export function getTurnsLimit(): number {
-        return getInitialWarData().settingsForCommon?.turnsLimit ?? CommonConstants.WarMaxTurnsLimit;
+        return getInitialWarData().settingsForCommon?.turnsLimit ?? Twns.CommonConstants.WarMaxTurnsLimit;
     }
     export function setTurnsLimit(turnsLimit: number): void {
         Twns.Helpers.getExisted(getInitialWarData().settingsForCommon).turnsLimit = turnsLimit;
@@ -137,7 +137,7 @@ namespace Twns.MultiFreeRoom.MfrCreateModel {
         if ((params) && (params[0] === BootTimerType.Regular)) {
             setBootTimerParams([BootTimerType.Incremental, 60 * 15, 10]);
         } else {
-            setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
+            setBootTimerParams([BootTimerType.Regular, Twns.CommonConstants.WarBootTimerRegularDefaultValue]);
         }
     }
     export function tickTimerRegularTime(): void {

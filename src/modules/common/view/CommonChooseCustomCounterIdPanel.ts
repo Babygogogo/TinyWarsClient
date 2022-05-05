@@ -82,7 +82,7 @@ namespace Twns.Common {
 
         private _updateListLocation(): void {
             const dataArray : DataForCounterIdRenderer[] = [];
-            for (let counterId = CommonConstants.WarCustomCounterMinId; counterId <= CommonConstants.WarCustomCounterMaxId; ++counterId) {
+            for (let counterId = Twns.CommonConstants.WarCustomCounterMinId; counterId <= Twns.CommonConstants.WarCustomCounterMaxId; ++counterId) {
                 dataArray.push({ counterId });
             }
 

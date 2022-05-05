@@ -82,7 +82,7 @@ namespace WarDestructionHelpers {
                 tile.resetByTypeAndPlayerIndex({
                     baseType,
                     objectType      : objectType === TileObjectType.Headquarters ? TileObjectType.City : objectType,
-                    playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex     : Twns.CommonConstants.WarNeutralPlayerIndex,
                 });
                 tile.setCurrentHp(hp);
                 tile.setCurrentBuildPoint(buildPoint);

@@ -57,8 +57,8 @@ namespace Twns.Lang {
         }
 
         const data = getText(t);
-        return data === CommonConstants.ErrorTextForLang
-            ? CommonConstants.ErrorTextForLang
+        return data === Twns.CommonConstants.ErrorTextForLang
+            ? Twns.CommonConstants.ErrorTextForLang
             : Helpers.formatString(data, ...params);
     }
 
@@ -590,7 +590,7 @@ namespace Twns.Lang {
     }
     export async function getGameStartDesc(data: CommonProto.NetMessage.MsgMpwCommonBroadcastGameStart.IS): Promise<string> {
         const playerArray   : string[] = [];
-        let playerIndex     = CommonConstants.WarFirstPlayerIndex;
+        let playerIndex     = Twns.CommonConstants.WarFirstPlayerIndex;
         for (const playerInfo of data.playerInfoList || []) {
             const userId = playerInfo.userId;
             playerArray.push(`P${playerIndex}: ${userId != null ? await User.UserModel.getUserNickname(userId) : `----`}`);

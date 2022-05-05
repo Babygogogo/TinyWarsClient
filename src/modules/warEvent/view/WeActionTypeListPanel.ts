@@ -145,7 +145,7 @@ namespace Twns.WarEvent {
             if (data == null) {
                 label.text = ``;
             } else {
-                label.text = Lang.getWarEventActionTypeName(data.newActionType) || CommonConstants.ErrorTextForUndefined;
+                label.text = Lang.getWarEventActionTypeName(data.newActionType) || Twns.CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateLabelUsingAndSwitch(): void {

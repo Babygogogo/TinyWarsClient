@@ -153,7 +153,7 @@ namespace Twns.User {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -167,7 +167,7 @@ namespace Twns.User {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {
@@ -178,8 +178,8 @@ namespace Twns.User {
                 const labelRegisterTime1    = this._labelRegisterTime1;
                 const labelRegisterTime2    = this._labelRegisterTime2;
                 if (registerTime == null) {
-                    labelRegisterTime1.text     = CommonConstants.ErrorTextForUndefined;
-                    labelRegisterTime2.text     = CommonConstants.ErrorTextForUndefined;
+                    labelRegisterTime1.text     = Twns.CommonConstants.ErrorTextForUndefined;
+                    labelRegisterTime2.text     = Twns.CommonConstants.ErrorTextForUndefined;
                 } else {
                     labelRegisterTime1.text     = Twns.Helpers.getTimestampShortText(registerTime, { hour: false, minute: false, second: false });
                     labelRegisterTime2.text     = Twns.Helpers.getTimestampShortText(registerTime, { year: false, month: false, date: false });
@@ -189,8 +189,8 @@ namespace Twns.User {
                 const labelLastLoginTime1   = this._labelLastLoginTime1;
                 const labelLastLoginTime2   = this._labelLastLoginTime2;
                 if (loginTime == null) {
-                    labelLastLoginTime1.text    = CommonConstants.ErrorTextForUndefined;
-                    labelLastLoginTime2.text    = CommonConstants.ErrorTextForUndefined;
+                    labelLastLoginTime1.text    = Twns.CommonConstants.ErrorTextForUndefined;
+                    labelLastLoginTime2.text    = Twns.CommonConstants.ErrorTextForUndefined;
                 } else {
                     labelLastLoginTime1.text    = Twns.Helpers.getTimestampShortText(loginTime, { hour: false, minute: false, second: false });
                     labelLastLoginTime2.text    = Twns.Helpers.getTimestampShortText(loginTime, { year: false, month: false, date: false });
@@ -261,8 +261,8 @@ namespace Twns.User {
         private async _updateComponentsForStdRank(): Promise<void> {
             const data                      = await Twns.User.UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwStd, 2);
             const rawScore                  = data ? data.currentScore : null;
-            const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            const rankName                  = `(${(await Twns.Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? CommonConstants.ErrorTextForUndefined})`;
+            const score                     = rawScore != null ? rawScore : Twns.CommonConstants.RankInitialScore;
+            const rankName                  = `(${(await Twns.Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? Twns.CommonConstants.ErrorTextForUndefined})`;
             this._labelStdRankScore.text    = `${score} ${rankName}`;
 
             const rank                          = data ? data.currentRank : null;
@@ -272,8 +272,8 @@ namespace Twns.User {
         private async _updateComponentsForFogRank(): Promise<void> {
             const data                      = await Twns.User.UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwFog, 2);
             const rawScore                  = data ? data.currentScore : null;
-            const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            const rankName                  = `(${(await Twns.Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? CommonConstants.ErrorTextForUndefined})`;
+            const score                     = rawScore != null ? rawScore : Twns.CommonConstants.RankInitialScore;
+            const rankName                  = `(${(await Twns.Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? Twns.CommonConstants.ErrorTextForUndefined})`;
             this._labelFogRankScore.text    = `${score} ${rankName}`;
 
             const rank                          = data ? data.currentRank : null;
@@ -299,7 +299,7 @@ namespace Twns.User {
                 warType     : WarType.MrwStd,
                 playersCount: 2,
             }];
-            for (let playersCount = 2; playersCount <= CommonConstants.WarMaxPlayerIndex; ++playersCount) {
+            for (let playersCount = 2; playersCount <= Twns.CommonConstants.WarMaxPlayerIndex; ++playersCount) {
                 dataList.push({
                     index       : index++,
                     userId,
@@ -319,7 +319,7 @@ namespace Twns.User {
                 warType     : WarType.MrwFog,
                 playersCount: 2,
             }];
-            for (let playersCount = 2; playersCount <= CommonConstants.WarMaxPlayerIndex; ++playersCount) {
+            for (let playersCount = 2; playersCount <= Twns.CommonConstants.WarMaxPlayerIndex; ++playersCount) {
                 dataList.push({
                     index       : index++,
                     userId,
@@ -333,7 +333,7 @@ namespace Twns.User {
         private async _updateLabelOnlineTime(): Promise<void> {
             const info                  = await Twns.User.UserModel.getUserPublicInfo(this._getOpenData().userId);
             const onlineTime            = info ? info.onlineTime : null;
-            this._labelOnlineTime.text  = onlineTime == null ? CommonConstants.ErrorTextForUndefined : Twns.Helpers.getTimeDurationText2(onlineTime);
+            this._labelOnlineTime.text  = onlineTime == null ? Twns.CommonConstants.ErrorTextForUndefined : Twns.Helpers.getTimeDurationText2(onlineTime);
         }
     }
 

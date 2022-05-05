@@ -122,7 +122,7 @@ namespace Twns.WarEvent {
         }
 
         private _updateLabelHasFog(): void {
-            this._labelHasFog.text = Lang.getForceFogCodeName(Twns.Helpers.getExisted(this.getAction().forceFogCode)) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelHasFog.text = Lang.getForceFogCodeName(Twns.Helpers.getExisted(this.getAction().forceFogCode)) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateInputTurns(): void {

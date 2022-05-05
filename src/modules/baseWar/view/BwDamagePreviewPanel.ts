@@ -230,7 +230,7 @@ namespace Twns.BaseWar {
             const container     = war.getView().getFieldContainer();
             const contents      = container.getContents();
             const gridIndex     = war.getCursor().getGridIndex();
-            const gridSize      = CommonConstants.GridSize;
+            const gridSize      = Twns.CommonConstants.GridSize;
             const stage         = StageManager.getStage();
             const group         = this._group;
             const groupWidth    = group.width;

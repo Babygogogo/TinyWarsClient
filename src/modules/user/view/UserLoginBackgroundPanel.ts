@@ -93,7 +93,7 @@ namespace Twns.User {
         private _updateComponentsForLanguage(): void {
             this._btnVersion.label  = Lang.getText(LangTextType.B0620);
             this._btnSound.label    = Lang.getText(LangTextType.B0540);
-            this._labelVersion.text = `${Lang.getGameVersionName(CommonConstants.GameVersion)}\nv.${window.CLIENT_VERSION}`;
+            this._labelVersion.text = `${Lang.getGameVersionName(Twns.CommonConstants.GameVersion)}\nv.${window.CLIENT_VERSION}`;
         }
         private _initListLanguage(): void {
             const listLanguage  = this._listLanguage;
@@ -137,7 +137,7 @@ namespace Twns.User {
                 waitTime    : 1700,
             });
 
-            await Twns.Helpers.wait(1700 + CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(1700 + Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -166,7 +166,7 @@ namespace Twns.User {
                 endProps    : { alpha: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
 
         // private _initGroupUnits(): void {

@@ -552,7 +552,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
     }
 
     export function getNormalizedHp(hp: number): number {
-        return Math.ceil(hp / CommonConstants.UnitHpNormalizer);
+        return Math.ceil(hp / Twns.CommonConstants.UnitHpNormalizer);
     }
 
     export function getMapSize(data: Twns.Types.Undefinable<WarSerialization.ISerialTileMap>): Twns.Types.MapSize {
@@ -572,7 +572,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         const mapHeight = mapSize.height;
         return (mapWidth > 0)
             && (mapHeight > 0)
-            && (mapWidth * mapHeight <= CommonConstants.MapMaxGridsCount);
+            && (mapWidth * mapHeight <= Twns.CommonConstants.MapMaxGridsCount);
     }
 
     export function checkIsUnitIdCompact(unitArray: Twns.Types.Undefinable<ISerialUnit[]>): boolean {
@@ -711,7 +711,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             return false;
         }
 
-        return (newUnitData.currentHp ?? CommonConstants.UnitMaxHp) > (oldUnitData.currentHp ?? CommonConstants.UnitMaxHp);
+        return (newUnitData.currentHp ?? Twns.CommonConstants.UnitMaxHp) > (oldUnitData.currentHp ?? Twns.CommonConstants.UnitMaxHp);
     }
     export function checkIsUnitSupplied(oldUnitData: ISerialUnit, newUnitData: ISerialUnit, gameConfig: GameConfig): boolean {
         const unitType = newUnitData.unitType;
@@ -770,7 +770,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             return false;
         }
 
-        return (newUnitData.currentHp ?? CommonConstants.UnitMaxHp) < (oldUnitData.currentHp ?? CommonConstants.UnitMaxHp);
+        return (newUnitData.currentHp ?? Twns.CommonConstants.UnitMaxHp) < (oldUnitData.currentHp ?? Twns.CommonConstants.UnitMaxHp);
     }
 
     // export function updateTilesAndUnits(
@@ -1248,7 +1248,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         const playerIndexSet = new Set<number>();
         for (const playerData of playerManagerData ? playerManagerData.players || [] : []) {
             const playerIndex = playerData.playerIndex;
-            if ((playerIndex != null) && (playerIndex >= CommonConstants.WarFirstPlayerIndex)) {
+            if ((playerIndex != null) && (playerIndex >= Twns.CommonConstants.WarFirstPlayerIndex)) {
                 playerIndexSet.add(playerIndex);
             }
         }
@@ -1280,7 +1280,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
     }
     export function getImageSourceForCoEyeFrame(skinId: number): string {
         switch (skinId) {
-            case CommonConstants.WarNeutralPlayerIndex  : return ``;
+            case Twns.CommonConstants.WarNeutralPlayerIndex  : return ``;
             case 1                                      : return `uncompressedTriangle0001`;
             case 2                                      : return `uncompressedTriangle0002`;
             case 3                                      : return `uncompressedTriangle0003`;
@@ -1350,12 +1350,12 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
                 const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex) ?? null;
                 const unitCategory      = Twns.Helpers.getExisted(skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory());
-                const minNormalizedHp   = skillCfg ? getNormalizedHp(skillCfg[3]) : getNormalizedHp(CommonConstants.UnitMaxHp);
+                const minNormalizedHp   = skillCfg ? getNormalizedHp(skillCfg[3]) : getNormalizedHp(Twns.CommonConstants.UnitMaxHp);
                 for (const unitType of gameConfig.getUnitTypesByCategory(unitCategory) ?? []) {
                     const costModifier  = player.getUnitCostModifier(gridIndex, false, unitType);
                     const cfgCost       = Twns.Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost);
                     const minCost       = skillCfg
-                        ? Math.floor(cfgCost * costModifier * minNormalizedHp * skillCfg[5] / CommonConstants.UnitHpNormalizer / 100)
+                        ? Math.floor(cfgCost * costModifier * minNormalizedHp * skillCfg[5] / Twns.CommonConstants.UnitHpNormalizer / 100)
                         : Math.floor(cfgCost * costModifier);
                     if (minCost <= currentFund) {
                         const tileType = tile.getType();
@@ -1408,8 +1408,8 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
         const playerIndex = unitData.playerIndex;
         if ((playerIndex == null)                               ||
-            (playerIndex < CommonConstants.WarFirstPlayerIndex) ||
-            (playerIndex > CommonConstants.WarMaxPlayerIndex)
+            (playerIndex < Twns.CommonConstants.WarFirstPlayerIndex) ||
+            (playerIndex > Twns.CommonConstants.WarMaxPlayerIndex)
         ) {
             return ClientErrorCode.UnitDataValidation03;
         }

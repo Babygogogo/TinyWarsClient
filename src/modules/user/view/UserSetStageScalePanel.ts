@@ -17,8 +17,8 @@
 namespace Twns.User {
     import NotifyType       = Twns.Notify.NotifyType;
     import LangTextType     = Twns.Lang.LangTextType;
-    import StageMinScale    = CommonConstants.StageMinScale;
-    import StageMaxScale    = CommonConstants.StageMaxScale;
+    import StageMinScale    = Twns.CommonConstants.StageMinScale;
+    import StageMaxScale    = Twns.CommonConstants.StageMaxScale;
 
     export type OpenDataForUserSetStageScalePanel = void;
     export class UserSetStageScalePanel extends TwnsUiPanel.UiPanel<OpenDataForUserSetStageScalePanel> {
@@ -94,13 +94,13 @@ namespace Twns.User {
             this._updateGroupScale();
         }
         private _onTouchEndGroupScale(): void {
-            StageManager.setStageScale(this._selectedScale || CommonConstants.StageMinScale);
+            StageManager.setStageScale(this._selectedScale || Twns.CommonConstants.StageMinScale);
         }
         private _onTouchReleaseOutsideGroupScale(): void {
-            StageManager.setStageScale(this._selectedScale || CommonConstants.StageMinScale);
+            StageManager.setStageScale(this._selectedScale || Twns.CommonConstants.StageMinScale);
         }
         private _onTouchedBtnCancel(): void {
-            StageManager.setStageScale(this._prevScale || CommonConstants.StageMinScale);
+            StageManager.setStageScale(this._prevScale || Twns.CommonConstants.StageMinScale);
 
             this.close();
         }
@@ -111,12 +111,12 @@ namespace Twns.User {
             this._updateView();
         }
         private _onTouchedBtnConfirm(): void {
-            LocalStorage.setStageScale(this._selectedScale || CommonConstants.StageMinScale);
+            LocalStorage.setStageScale(this._selectedScale || Twns.CommonConstants.StageMinScale);
 
             this.close();
         }
         private _onTouchedPanelMask(): void {
-            StageManager.setStageScale(this._prevScale || CommonConstants.StageMinScale);
+            StageManager.setStageScale(this._prevScale || Twns.CommonConstants.StageMinScale);
             Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonCancel01);
 
             this.close();
@@ -137,7 +137,7 @@ namespace Twns.User {
         }
 
         private _updateGroupScale(): void {
-            const scale                 = this._selectedScale || CommonConstants.StageMinScale;
+            const scale                 = this._selectedScale || Twns.CommonConstants.StageMinScale;
             const width                 = this._groupScale.width;
             const pos                   = width * (scale - StageMinScale) / (StageMaxScale - StageMinScale);
             this._imgScalePoint.x       = pos;
@@ -157,7 +157,7 @@ namespace Twns.User {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -171,7 +171,7 @@ namespace Twns.User {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 }

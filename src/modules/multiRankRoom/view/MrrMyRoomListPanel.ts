@@ -305,7 +305,7 @@ namespace Twns.MultiRankRoom {
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -334,7 +334,7 @@ namespace Twns.MultiRankRoom {
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -370,7 +370,7 @@ namespace Twns.MultiRankRoom {
 
             const roomInfo          = await MultiRankRoom.MrrModel.getRoomInfo(roomId);
             this._labelName.text    = roomInfo
-                ? (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(roomInfo.settingsForMrw?.mapId)) ?? CommonConstants.ErrorTextForUndefined)
+                ? (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(roomInfo.settingsForMrw?.mapId)) ?? Twns.CommonConstants.ErrorTextForUndefined)
                 : ``;
         }
 

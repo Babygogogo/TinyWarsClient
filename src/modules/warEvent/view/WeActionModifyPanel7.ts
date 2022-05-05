@@ -113,7 +113,7 @@ namespace Twns.WarEvent {
         }
 
         private _updateLabelBgm(): void {
-            this._labelBgm.text = Lang.getBgmName(this._getOpenData().action.WeaPlayBgm?.bgmCode ?? Twns.Types.BgmCode.None) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelBgm.text = Lang.getBgmName(this._getOpenData().action.WeaPlayBgm?.bgmCode ?? Twns.Types.BgmCode.None) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateGroupUseCoBgm(): void {
@@ -201,7 +201,7 @@ namespace Twns.WarEvent {
         }
 
         private _updateLabelName(): void {
-            this._labelName.text = Lang.getBgmName(this._getData().bgmCode) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName.text = Lang.getBgmName(this._getData().bgmCode) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
     }
 }

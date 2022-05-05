@@ -24,7 +24,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
     import GameConfig           = Config.GameConfig;
 
     const DEFAULT_PLAYER_RULE: WarRule.IDataForPlayerRule = {
-        playerIndex             : CommonConstants.WarNeutralPlayerIndex,
+        playerIndex             : Twns.CommonConstants.WarNeutralPlayerIndex,
         teamIndex               : 0,
         attackPowerModifier     : 0,
         bannedCoIdArray         : [],
@@ -200,8 +200,8 @@ namespace Twns.WarHelpers.WarRuleHelpers {
     }
 
     export function getTeamIndex(baseWarRule: BaseWarRule, playerIndex: number): number {
-        if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
-            return CommonConstants.WarNeutralTeamIndex;
+        if (playerIndex === Twns.CommonConstants.WarNeutralPlayerIndex) {
+            return Twns.CommonConstants.WarNeutralTeamIndex;
         }
 
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
@@ -224,7 +224,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
     }
 
     export function getPlayerRule(baseWarRule: BaseWarRule, playerIndex: number): IDataForPlayerRule {
-        if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+        if (playerIndex === Twns.CommonConstants.WarNeutralPlayerIndex) {
             return DEFAULT_PLAYER_RULE;
         }
 
@@ -284,7 +284,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             if (coIdList.length <= 1) {
                 return coIdList[0];
             } else {
-                return Helpers.pickRandomElement(coIdList.filter(v => v !== CommonConstants.CoEmptyId));
+                return Helpers.pickRandomElement(coIdList.filter(v => v !== Twns.CommonConstants.CoEmptyId));
             }
         }
     }
@@ -346,15 +346,15 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         return {
             playerIndex,
             teamIndex               : playerIndex,
-            initialFund             : CommonConstants.WarRuleInitialFundDefault,
-            incomeMultiplier        : CommonConstants.WarRuleIncomeMultiplierDefault,
-            energyAddPctOnLoadCo    : CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault,
-            energyGrowthMultiplier  : CommonConstants.WarRuleEnergyGrowthMultiplierDefault,
-            moveRangeModifier       : CommonConstants.WarRuleMoveRangeModifierDefault,
-            attackPowerModifier     : CommonConstants.WarRuleOffenseBonusDefault,
-            visionRangeModifier     : CommonConstants.WarRuleVisionRangeModifierDefault,
-            luckLowerLimit          : CommonConstants.WarRuleLuckDefaultLowerLimit,
-            luckUpperLimit          : CommonConstants.WarRuleLuckDefaultUpperLimit,
+            initialFund             : Twns.CommonConstants.WarRuleInitialFundDefault,
+            incomeMultiplier        : Twns.CommonConstants.WarRuleIncomeMultiplierDefault,
+            energyAddPctOnLoadCo    : Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault,
+            energyGrowthMultiplier  : Twns.CommonConstants.WarRuleEnergyGrowthMultiplierDefault,
+            moveRangeModifier       : Twns.CommonConstants.WarRuleMoveRangeModifierDefault,
+            attackPowerModifier     : Twns.CommonConstants.WarRuleOffenseBonusDefault,
+            visionRangeModifier     : Twns.CommonConstants.WarRuleVisionRangeModifierDefault,
+            luckLowerLimit          : Twns.CommonConstants.WarRuleLuckDefaultLowerLimit,
+            luckUpperLimit          : Twns.CommonConstants.WarRuleLuckDefaultUpperLimit,
             bannedCoIdArray         : [],
             bannedUnitTypeArray     : [],
             canActivateCoSkill      : true,
@@ -373,7 +373,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         if (!Helpers.checkIsValidLanguageTextArray({
             list            : templateWarRule.ruleNameArray,
             minTextLength   : 1,
-            maxTextLength   : CommonConstants.WarRuleNameMaxLength,
+            maxTextLength   : Twns.CommonConstants.WarRuleNameMaxLength,
             minTextCount    : 1,
         })) {
             return ClientErrorCode.WarRuleHelpers_GetErrorCodeForTemplateWarRule_00;
@@ -422,7 +422,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         if (!Helpers.checkIsValidLanguageTextArray({
             list            : instanceWarRule.ruleNameArray,
             minTextLength   : 1,
-            maxTextLength   : CommonConstants.WarRuleNameMaxLength,
+            maxTextLength   : Twns.CommonConstants.WarRuleNameMaxLength,
             minTextCount    : 1,
         })) {
             return ClientErrorCode.WarRuleHelpers_GetErrorCodeForInstanceWarRule_00;
@@ -471,7 +471,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         const rulesCount = templateWarRuleArray ? templateWarRuleArray.length : 0;
         if ((!templateWarRuleArray)                                     ||
             (rulesCount <= 0)                               ||
-            (rulesCount > CommonConstants.WarRuleMaxCount)
+            (rulesCount > Twns.CommonConstants.WarRuleMaxCount)
         ) {
             return ClientErrorCode.WarRuleHelpers_GetErrorCodeForWarRuleArray_00;
         }
@@ -524,7 +524,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         for (const data of ruleArray) {
             const playerIndex = data.playerIndex;
             if ((playerIndex == null)                                   ||
-                (playerIndex <  CommonConstants.WarFirstPlayerIndex)    ||
+                (playerIndex <  Twns.CommonConstants.WarFirstPlayerIndex)    ||
                 (playerIndex >  playersCountUnneutral)                  ||
                 (allPlayerIndexSet.has(playerIndex))
             ) {
@@ -533,7 +533,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
 
             const teamIndex = data.teamIndex;
             if ((teamIndex == null)                                 ||
-                (teamIndex <  CommonConstants.WarFirstTeamIndex)    ||
+                (teamIndex <  Twns.CommonConstants.WarFirstTeamIndex)    ||
                 (teamIndex >  playersCountUnneutral)
             ) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_02;
@@ -544,79 +544,79 @@ namespace Twns.WarHelpers.WarRuleHelpers {
 
             const initialFund = data.initialFund;
             if ((initialFund == null)                                       ||
-                (initialFund > CommonConstants.WarRuleInitialFundMaxLimit)  ||
-                (initialFund < CommonConstants.WarRuleInitialFundMinLimit)
+                (initialFund > Twns.CommonConstants.WarRuleInitialFundMaxLimit)  ||
+                (initialFund < Twns.CommonConstants.WarRuleInitialFundMinLimit)
             ) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_03;
             }
 
             const incomeMultiplier = data.incomeMultiplier;
             if ((incomeMultiplier == null)                                              ||
-                (incomeMultiplier > CommonConstants.WarRuleIncomeMultiplierMaxLimit)    ||
-                (incomeMultiplier < CommonConstants.WarRuleIncomeMultiplierMinLimit)
+                (incomeMultiplier > Twns.CommonConstants.WarRuleIncomeMultiplierMaxLimit)    ||
+                (incomeMultiplier < Twns.CommonConstants.WarRuleIncomeMultiplierMinLimit)
             ) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_04;
             }
 
             const energyAddPctOnLoadCo = data.energyAddPctOnLoadCo;
             if ((energyAddPctOnLoadCo == null)                                                  ||
-                (energyAddPctOnLoadCo > CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
-                (energyAddPctOnLoadCo < CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
+                (energyAddPctOnLoadCo > Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
+                (energyAddPctOnLoadCo < Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
             ) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_05;
             }
 
             const energyGrowthMultiplier = data.energyGrowthMultiplier;
             if ((energyGrowthMultiplier == null)                                                    ||
-                (energyGrowthMultiplier > CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit)    ||
-                (energyGrowthMultiplier < CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)
+                (energyGrowthMultiplier > Twns.CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit)    ||
+                (energyGrowthMultiplier < Twns.CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)
             ) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_06;
             }
 
             const moveRangeModifier = data.moveRangeModifier;
             if ((moveRangeModifier == null)                                             ||
-                (moveRangeModifier > CommonConstants.WarRuleMoveRangeModifierMaxLimit)  ||
-                (moveRangeModifier < CommonConstants.WarRuleMoveRangeModifierMinLimit)
+                (moveRangeModifier > Twns.CommonConstants.WarRuleMoveRangeModifierMaxLimit)  ||
+                (moveRangeModifier < Twns.CommonConstants.WarRuleMoveRangeModifierMinLimit)
             ) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_07;
             }
 
             const attackPowerModifier = data.attackPowerModifier;
             if ((attackPowerModifier == null)                                       ||
-                (attackPowerModifier > CommonConstants.WarRuleOffenseBonusMaxLimit) ||
-                (attackPowerModifier < CommonConstants.WarRuleOffenseBonusMinLimit)
+                (attackPowerModifier > Twns.CommonConstants.WarRuleOffenseBonusMaxLimit) ||
+                (attackPowerModifier < Twns.CommonConstants.WarRuleOffenseBonusMinLimit)
             ) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_08;
             }
 
             const visionRangeModifier = data.visionRangeModifier;
             if ((visionRangeModifier == null)                                               ||
-                (visionRangeModifier > CommonConstants.WarRuleVisionRangeModifierMaxLimit)  ||
-                (visionRangeModifier < CommonConstants.WarRuleVisionRangeModifierMinLimit)
+                (visionRangeModifier > Twns.CommonConstants.WarRuleVisionRangeModifierMaxLimit)  ||
+                (visionRangeModifier < Twns.CommonConstants.WarRuleVisionRangeModifierMinLimit)
             ) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_09;
             }
 
             const luckLowerLimit = data.luckLowerLimit;
             if ((luckLowerLimit == null)                                ||
-                (luckLowerLimit > CommonConstants.WarRuleLuckMaxLimit)  ||
-                (luckLowerLimit < CommonConstants.WarRuleLuckMinLimit)
+                (luckLowerLimit > Twns.CommonConstants.WarRuleLuckMaxLimit)  ||
+                (luckLowerLimit < Twns.CommonConstants.WarRuleLuckMinLimit)
             ) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_10;
             }
 
             const luckUpperLimit = data.luckUpperLimit;
             if ((luckUpperLimit == null)                                ||
-                (luckUpperLimit > CommonConstants.WarRuleLuckMaxLimit)  ||
-                (luckUpperLimit < CommonConstants.WarRuleLuckMinLimit)  ||
+                (luckUpperLimit > Twns.CommonConstants.WarRuleLuckMaxLimit)  ||
+                (luckUpperLimit < Twns.CommonConstants.WarRuleLuckMinLimit)  ||
                 (luckUpperLimit < luckLowerLimit)
             ) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_11;
             }
 
             const bannedCoIdArray = data.bannedCoIdArray || [];
-            if (bannedCoIdArray.indexOf(CommonConstants.CoEmptyId) >= 0) {
+            if (bannedCoIdArray.indexOf(Twns.CommonConstants.CoEmptyId) >= 0) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_12;
             }
             if (bannedCoIdArray.some(coId => !gameConfig.checkHasCo(coId))) {
@@ -747,7 +747,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
                     return false;
                 } else {
                     const timeLimit = params[1];
-                    return (timeLimit > 0) && (timeLimit <= CommonConstants.WarBootTimerRegularMaxLimit);
+                    return (timeLimit > 0) && (timeLimit <= Twns.CommonConstants.WarBootTimerRegularMaxLimit);
                 }
 
             } else if (type === BootTimerType.Incremental) {
@@ -757,9 +757,9 @@ namespace Twns.WarHelpers.WarRuleHelpers {
                     const initialTime           = params[1];
                     const incrementTimePerUnit  = params[2];
                     return (initialTime > 0)
-                        && (initialTime <= CommonConstants.WarBootTimerIncrementalMaxLimit)
+                        && (initialTime <= Twns.CommonConstants.WarBootTimerIncrementalMaxLimit)
                         && (incrementTimePerUnit >= 0)
-                        && (incrementTimePerUnit <= CommonConstants.WarBootTimerIncrementalMaxLimit);
+                        && (incrementTimePerUnit <= Twns.CommonConstants.WarBootTimerIncrementalMaxLimit);
                 }
 
             } else {

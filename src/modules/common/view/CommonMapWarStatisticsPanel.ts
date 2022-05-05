@@ -145,12 +145,12 @@ namespace Twns.Common {
         private async _updateLabelRule(): Promise<void> {
             const templateWarRuleId = this._templateWarRuleId;
             const templateWarRule   = (await WarMap.WarMapModel.getRawData(this._getOpenData().mapId))?.templateWarRuleArray?.find(v => v.ruleId === templateWarRuleId);
-            const ruleName          = templateWarRule ? Lang.getLanguageText({ textArray: templateWarRule.ruleNameArray }) ?? CommonConstants.ErrorTextForUndefined : CommonConstants.ErrorTextForUndefined;
+            const ruleName          = templateWarRule ? Lang.getLanguageText({ textArray: templateWarRule.ruleNameArray }) ?? Twns.CommonConstants.ErrorTextForUndefined : Twns.CommonConstants.ErrorTextForUndefined;
             this._labelRule.text    = `#${templateWarRuleId} ${ruleName}`;
         }
 
         private _updateLabelWarType(): void {
-            this._labelWarType.text = Lang.getWarTypeName(this._warType) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelWarType.text = Lang.getWarTypeName(this._warType) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private async _updateComponentsForListStatistics(): Promise<void> {
@@ -217,7 +217,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -231,7 +231,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -305,7 +305,7 @@ namespace Twns.Common {
             this._labelTurnIndex.text   = `${turnIndex ?? `--`}(${turnGames}, ${Math.round(turnGames * 100 / totalGames)}%)`;
 
             const statisticsArray = data.statisticsArray;
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= Twns.CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                 const index     = playerIndex - 1;
                 const group     = this._groupsForPlayers[index];
                 const labels    = this._labelsForStatics[index];

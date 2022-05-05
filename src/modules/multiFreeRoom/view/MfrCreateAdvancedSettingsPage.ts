@@ -121,7 +121,7 @@ namespace Twns.MultiFreeRoom {
             const data = this.data;
             if (data) {
                 const playerRuleType    = data.playerRuleType;
-                this._labelName.text    = Lang.getPlayerRuleName(playerRuleType) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelName.text    = Lang.getPlayerRuleName(playerRuleType) ?? Twns.CommonConstants.ErrorTextForUndefined;
                 this._btnHelp.visible   = playerRuleType === PlayerRuleType.BannedCoIdArray;
             }
         }
@@ -225,7 +225,7 @@ namespace Twns.MultiFreeRoom {
             const warData           = MultiFreeRoom.MfrCreateModel.getInitialWarData();
             const teamIndex         = warData ? WarHelpers.WarRuleHelpers.getTeamIndex(Helpers.getExisted(warData.settingsForCommon?.instanceWarRule), playerIndex) : null;
             const labelValue        = this._labelValue;
-            labelValue.text         = teamIndex == null ? `` : Lang.getPlayerTeamName(teamIndex) ?? CommonConstants.ErrorTextForUndefined;
+            labelValue.text         = teamIndex == null ? `` : Lang.getPlayerTeamName(teamIndex) ?? Twns.CommonConstants.ErrorTextForUndefined;
             labelValue.textColor    = 0xFFFFFF;
         }
         private async _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): Promise<void> {
@@ -247,28 +247,28 @@ namespace Twns.MultiFreeRoom {
             const currValue         = warData ? WarHelpers.WarRuleHelpers.getInitialFund(Helpers.getExisted(warData.settingsForCommon?.instanceWarRule), playerIndex) : null;
             const labelValue        = this._labelValue;
             labelValue.text         = currValue == null ? `` : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleInitialFundDefault);
         }
         private async _updateComponentsForValueAsIncomeMultiplier(playerIndex: number): Promise<void> {
             const warData           = MultiFreeRoom.MfrCreateModel.getInitialWarData();
             const currValue         = warData ? WarHelpers.WarRuleHelpers.getIncomeMultiplier(Helpers.getExisted(warData.settingsForCommon?.instanceWarRule), playerIndex): null;
             const labelValue        = this._labelValue;
             labelValue.text         = currValue == null ? `` : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleIncomeMultiplierDefault);
         }
         private async _updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex: number): Promise<void> {
             const warData           = MultiFreeRoom.MfrCreateModel.getInitialWarData();
             const currValue         = warData ? WarHelpers.WarRuleHelpers.getEnergyAddPctOnLoadCo(Helpers.getExisted(warData.settingsForCommon?.instanceWarRule), playerIndex) : null;
             const labelValue        = this._labelValue;
             labelValue.text         = currValue == null ? `` : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
         }
         private async _updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex: number): Promise<void> {
             const warData           = MultiFreeRoom.MfrCreateModel.getInitialWarData();
             const currValue         = warData ? WarHelpers.WarRuleHelpers.getEnergyGrowthMultiplier(Helpers.getExisted(warData.settingsForCommon?.instanceWarRule), playerIndex) : null;
             const labelValue        = this._labelValue;
             labelValue.text         = currValue == null ? `` : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
         }
         private _updateComponentsForValueAsCanActivateCoSkill(playerIndex: number): void {
             const warData               = MultiFreeRoom.MfrCreateModel.getInitialWarData();
@@ -282,35 +282,35 @@ namespace Twns.MultiFreeRoom {
             const currValue         = warData ? WarHelpers.WarRuleHelpers.getMoveRangeModifier(Helpers.getExisted(warData.settingsForCommon?.instanceWarRule), playerIndex) : null;
             const labelValue        = this._labelValue;
             labelValue.text         = currValue == null ? `` : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleMoveRangeModifierDefault);
         }
         private async _updateComponentsForValueAsAttackPowerModifier(playerIndex: number): Promise<void> {
             const warData           = MultiFreeRoom.MfrCreateModel.getInitialWarData();
             const currValue         = warData ? WarHelpers.WarRuleHelpers.getAttackPowerModifier(Helpers.getExisted(warData.settingsForCommon?.instanceWarRule), playerIndex) : null;
             const labelValue        = this._labelValue;
             labelValue.text         = currValue == null ? `` : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleOffenseBonusDefault);
         }
         private async _updateComponentsForValueAsVisionRangeModifier(playerIndex: number): Promise<void> {
             const warData           = MultiFreeRoom.MfrCreateModel.getInitialWarData();
             const currValue         = warData ? WarHelpers.WarRuleHelpers.getVisionRangeModifier(Helpers.getExisted(warData.settingsForCommon?.instanceWarRule), playerIndex): null;
             const labelValue        = this._labelValue;
             labelValue.text         = currValue == null ? `` : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleVisionRangeModifierDefault);
         }
         private async _updateComponentsForValueAsLuckLowerLimit(playerIndex: number): Promise<void> {
             const warData           = MultiFreeRoom.MfrCreateModel.getInitialWarData();
             const currValue         = warData ? WarHelpers.WarRuleHelpers.getLuckLowerLimit(Helpers.getExisted(warData.settingsForCommon?.instanceWarRule), playerIndex) : null;
             const labelValue        = this._labelValue;
             labelValue.text         = currValue == null ? `` : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultLowerLimit);
         }
         private async _updateComponentsForValueAsLuckUpperLimit(playerIndex: number): Promise<void> {
             const warData           = MultiFreeRoom.MfrCreateModel.getInitialWarData();
             const currValue         = warData ? WarHelpers.WarRuleHelpers.getLuckUpperLimit(Helpers.getExisted(warData.settingsForCommon?.instanceWarRule), playerIndex) : null;
             const labelValue        = this._labelValue;
             labelValue.text         = currValue == null ? `` : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultUpperLimit);
         }
     }
 

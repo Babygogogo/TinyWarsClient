@@ -213,7 +213,7 @@ namespace Twns.MultiRankRoom {
                 })) {
                     dataArray.push({
                         mapId   : Twns.Helpers.getExisted(mapRawData.mapId),
-                        mapName : Lang.getLanguageText({ textArray: mapRawData.mapNameArray }) || CommonConstants.ErrorTextForUndefined,
+                        mapName : Lang.getLanguageText({ textArray: mapRawData.mapNameArray }) || Twns.CommonConstants.ErrorTextForUndefined,
                         panel   : this,
                     });
                 }
@@ -252,7 +252,7 @@ namespace Twns.MultiRankRoom {
             }
 
             const instanceWarRule   = WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRuleArray[0], mapRawData.warEventFullData);
-            const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
+            const bootTimerParams   = Twns.CommonConstants.WarBootTimerDefaultParams;
             const timerType         = bootTimerParams[0] as Twns.Types.BootTimerType;
             const gameConfig        = await Config.ConfigManager.getLatestGameConfig();
             const warEventFullData  = mapRawData.warEventFullData ?? null;
@@ -300,7 +300,7 @@ namespace Twns.MultiRankRoom {
                     },
                     {
                         settingsType    : WarBasicSettingsType.TurnsLimit,
-                        currentValue    : CommonConstants.WarMaxTurnsLimit,
+                        currentValue    : Twns.CommonConstants.WarMaxTurnsLimit,
                         instanceWarRule,
                         gameConfig,
                         warEventFullData,
@@ -404,7 +404,7 @@ namespace Twns.MultiRankRoom {
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -433,7 +433,7 @@ namespace Twns.MultiRankRoom {
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 

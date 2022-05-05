@@ -356,7 +356,7 @@ namespace Twns.WarEvent {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
-            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelPlayerIndex(): void {
             const playerIndexArray      = this._getCondition().playerIndexArray;
@@ -388,35 +388,35 @@ namespace Twns.WarEvent {
         }
         private _updateLabelHpComparator(): void {
             const comparator                = this._getCondition().hpComparator;
-            this._labelHpComparator.text    = comparator == null ? CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelHpComparator.text    = comparator == null ? Twns.CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputHp(): void {
             this._inputHp.text = `${this._getCondition().hp ?? ``}`;
         }
         private _updateLabelFuelPctComparator(): void {
             const comparator                    = this._getCondition().fuelPctComparator;
-            this._labelFuelPctComparator.text   = comparator == null ? CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelFuelPctComparator.text   = comparator == null ? Twns.CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputFuelPct(): void {
             this._inputFuelPct.text = `${this._getCondition().fuelPct ?? ``}`;
         }
         private _updateLabelPriAmmoPctComparator(): void {
             const comparator                        = this._getCondition().priAmmoPctComparator;
-            this._labelPriAmmoPctComparator.text    = comparator == null ? CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelPriAmmoPctComparator.text    = comparator == null ? Twns.CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputPriAmmoPct(): void {
             this._inputPriAmmoPct.text = `${this._getCondition().priAmmoPct ?? ``}`;
         }
         private _updateLabelPromotionComparator(): void {
             const comparator                    = this._getCondition().promotionComparator;
-            this._labelPromotionComparator.text = comparator == null ? CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelPromotionComparator.text = comparator == null ? Twns.CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputPromotion(): void {
             this._inputPromotion.text = `${this._getCondition().promotion ?? ``}`;
         }
         private _updateLabelUnitsCountComparator(): void {
             const comparator                        = Twns.Helpers.getExisted(this._getCondition().unitsCountComparator);
-            this._labelUnitsCountComparator.text    = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelUnitsCountComparator.text    = Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputUnitsCount(): void {
             this._inputUnitsCount.text = `${this._getCondition().unitsCount}`;

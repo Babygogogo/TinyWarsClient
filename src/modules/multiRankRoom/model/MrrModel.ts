@@ -227,7 +227,7 @@ namespace Twns.MultiRankRoom.MrrModel {
         const gameConfig        = Twns.Helpers.getExisted(await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)));
         const mapId             = Twns.Helpers.getExisted(settingsForMrw.mapId);
         const warEventFullData  = (await WarMap.WarMapModel.getRawData(mapId))?.warEventFullData ?? null;
-        const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
+        const bootTimerParams   = Twns.CommonConstants.WarBootTimerDefaultParams;
         const timerType         = bootTimerParams[0] as Twns.Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
@@ -273,7 +273,7 @@ namespace Twns.MultiRankRoom.MrrModel {
                 },
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? Twns.CommonConstants.WarMaxTurnsLimit,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,

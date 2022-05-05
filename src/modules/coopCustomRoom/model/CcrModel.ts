@@ -180,7 +180,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
         const playersCountUnneutral = WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(instanceWarRule);
         const playerDataList        = roomPlayerInfo.playerDataList || [];
         const playerInfoArray       : Twns.Common.PlayerInfo[] = [];
-        for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+        for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
             const playerData    = playerDataList.find(v => v.playerIndex === playerIndex);
             const userId        = playerData?.userId ?? null;
             const isReady       = playerData?.isReady ?? null;
@@ -297,7 +297,7 @@ namespace Twns.CoopCustomRoom.CcrModel {
                 },
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? Twns.CommonConstants.WarMaxTurnsLimit,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,

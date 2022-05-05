@@ -323,7 +323,7 @@ namespace Twns.BaseWar {
                     unitData,
                     mapSize,
                     gameConfig,
-                    playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
+                    playersCountUnneutral   : Twns.CommonConstants.WarMaxPlayerIndex,
                 })) {
                     throw Twns.Helpers.newError(`Invalid unitData: ${JSON.stringify(unitData)}`);
                 }
@@ -543,9 +543,9 @@ namespace Twns.BaseWar {
         private async _callActionSetCustomCounterWithExtraData(action: WarEvent.IWeaSetCustomCounter, isFast: boolean): Promise<void> {
             const multiplierPercentage  = action.multiplierPercentage ?? 100;
             const deltaValue            = action.deltaValue ?? 0;
-            const maxValue              = CommonConstants.WarCustomCounterMaxValue;
+            const maxValue              = Twns.CommonConstants.WarCustomCounterMaxValue;
             const customCounterIdArray  = action.customCounterIdArray;
-            for (let counterId = CommonConstants.WarCustomCounterMinId; counterId <= CommonConstants.WarCustomCounterMaxId; ++counterId) {
+            for (let counterId = Twns.CommonConstants.WarCustomCounterMinId; counterId <= Twns.CommonConstants.WarCustomCounterMaxId; ++counterId) {
                 if ((customCounterIdArray?.length) && (customCounterIdArray.indexOf(counterId) < 0)) {
                     continue;
                 }
@@ -563,9 +563,9 @@ namespace Twns.BaseWar {
         private async _callActionSetCustomCounterWithoutExtraData(action: WarEvent.IWeaSetCustomCounter, isFast: boolean): Promise<void> {
             const multiplierPercentage  = action.multiplierPercentage ?? 100;
             const deltaValue            = action.deltaValue ?? 0;
-            const maxValue              = CommonConstants.WarCustomCounterMaxValue;
+            const maxValue              = Twns.CommonConstants.WarCustomCounterMaxValue;
             const customCounterIdArray  = action.customCounterIdArray;
-            for (let counterId = CommonConstants.WarCustomCounterMinId; counterId <= CommonConstants.WarCustomCounterMaxId; ++counterId) {
+            for (let counterId = Twns.CommonConstants.WarCustomCounterMinId; counterId <= Twns.CommonConstants.WarCustomCounterMaxId; ++counterId) {
                 if ((customCounterIdArray?.length) && (customCounterIdArray.indexOf(counterId) < 0)) {
                     continue;
                 }
@@ -588,7 +588,7 @@ namespace Twns.BaseWar {
         private async _callActionDeprecatedSetPlayerAliveStateWithoutExtraData(action: WarEvent.IWeaDeprecatedSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
             const war = this._getWar();
             const playerIndex = action.playerIndex;
-            if ((playerIndex == null) || (playerIndex === CommonConstants.WarNeutralPlayerIndex)) {
+            if ((playerIndex == null) || (playerIndex === Twns.CommonConstants.WarNeutralPlayerIndex)) {
                 throw Twns.Helpers.newError(`Invalid playerIndex: ${playerIndex}`);
             }
 
@@ -612,7 +612,7 @@ namespace Twns.BaseWar {
             const player                = this._getWar().getPlayer(Twns.Helpers.getExisted(action.playerIndex));
             const multiplierPercentage  = action.multiplierPercentage ?? 100;
             const deltaValue            = action.deltaValue ?? 0;
-            const maxValue              = CommonConstants.WarPlayerMaxFund;
+            const maxValue              = Twns.CommonConstants.WarPlayerMaxFund;
             player.setFund(Math.min(
                 maxValue,
                 Math.max(-maxValue, Math.floor(player.getFund() * multiplierPercentage / 100 + deltaValue)))
@@ -690,7 +690,7 @@ namespace Twns.BaseWar {
             const actFundDeltaValue             = action.actFundDeltaValue ?? 0;
             const actCoEnergyMultiplierPct      = action.actCoEnergyMultiplierPct ?? 100;
             const actCoEnergyDeltaPct           = action.actCoEnergyDeltaPct ?? 0;
-            const maxFund                       = CommonConstants.WarPlayerMaxFund;
+            const maxFund                       = Twns.CommonConstants.WarPlayerMaxFund;
             const actAliveState                 = action.actAliveState;
 
             for (const [playerIndex, player] of this._getWar().getPlayerManager().getAllPlayersDict()) {
@@ -1577,7 +1577,7 @@ namespace Twns.BaseWar {
             const valueRemainder        = condition.valueRemainder;
             const remainderComparator   = Twns.Helpers.getExisted(condition.valueRemainderComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConCustomCounter_01);
             let counter                 = 0;
-            for (let counterId = CommonConstants.WarCustomCounterMinId; counterId <= CommonConstants.WarCustomCounterMaxId; ++counterId) {
+            for (let counterId = Twns.CommonConstants.WarCustomCounterMinId; counterId <= Twns.CommonConstants.WarCustomCounterMaxId; ++counterId) {
                 if ((counterIdArray.length) && (counterIdArray.indexOf(counterId) < 0)) {
                     continue;
                 }

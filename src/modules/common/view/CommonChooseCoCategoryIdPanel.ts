@@ -108,7 +108,7 @@ namespace Twns.Common {
 
         protected _onDataChanged(): void {
             const data = this._getData();
-            this._labelCoCategory.text = data.gameConfig.getCoCategoryCfg(data.coCategoryId)?.name ?? CommonConstants.ErrorTextForUndefined;
+            this._labelCoCategory.text = data.gameConfig.getCoCategoryCfg(data.coCategoryId)?.name ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
     }
 }

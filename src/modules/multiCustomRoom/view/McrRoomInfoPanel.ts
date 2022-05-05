@@ -274,7 +274,7 @@ namespace Twns.MultiCustomRoom {
             const roomId                = this._getOpenData().roomId;
             const playersCountUnneutral = Twns.Helpers.getExisted((await WarMap.WarMapModel.getRawData(Twns.Helpers.getExisted((await MultiCustomRoom.McrModel.getRoomStaticInfo(roomId))?.settingsForMcw?.mapId)))?.playersCountUnneutral);
             const dataArray             : DataForPlayerIndexRenderer[] = [];
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
                     roomId,
                     playerIndex,
@@ -286,7 +286,7 @@ namespace Twns.MultiCustomRoom {
         private _initSclSkinId(): void {
             const roomId    = this._getOpenData().roomId;
             const dataArray : DataForSkinIdRenderer[] = [];
-            for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
+            for (let skinId = Twns.CommonConstants.UnitAndTileMinSkinId; skinId <= Twns.CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
                 dataArray.push({
                     roomId,
                     skinId,
@@ -339,7 +339,7 @@ namespace Twns.MultiCustomRoom {
             const selfPlayerData    = roomPlayerInfo.playerDataList?.find(v => v.userId === userId);
             if (selfPlayerData) {
                 const gameConfig        = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon?.configVersion));
-                this._btnChooseCo.label = gameConfig.getCoBasicCfg(Twns.Helpers.getExisted(selfPlayerData.coId))?.name ?? CommonConstants.ErrorTextForUndefined;
+                this._btnChooseCo.label = gameConfig.getCoBasicCfg(Twns.Helpers.getExisted(selfPlayerData.coId))?.name ?? Twns.CommonConstants.ErrorTextForUndefined;
             }
         }
 
@@ -416,7 +416,7 @@ namespace Twns.MultiCustomRoom {
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -445,7 +445,7 @@ namespace Twns.MultiCustomRoom {
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -570,7 +570,7 @@ namespace Twns.MultiCustomRoom {
                 const instanceWarRule   = (await MultiCustomRoom.McrModel.getRoomStaticInfo(data.roomId))?.settingsForCommon?.instanceWarRule;
                 this._labelName.text    = instanceWarRule
                     ? `P${playerIndex} (${Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(instanceWarRule, playerIndex))})`
-                    : `P${playerIndex} (${CommonConstants.ErrorTextForUndefined})`;
+                    : `P${playerIndex} (${Twns.CommonConstants.ErrorTextForUndefined})`;
             }
         }
         private async _updateState(): Promise<void> {

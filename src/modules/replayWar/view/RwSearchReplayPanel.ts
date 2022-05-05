@@ -99,7 +99,7 @@ namespace Twns.ReplayWar {
 
         private _onFocusOutInputMinGlobalRating(): void {
             const input     = this._inputMinGlobalRating;
-            const maxRating = CommonConstants.ReplayMaxRating;
+            const maxRating = Twns.CommonConstants.ReplayMaxRating;
             if (Number(input.text) > maxRating) {
                 input.text = "" + maxRating;
             }
@@ -107,7 +107,7 @@ namespace Twns.ReplayWar {
 
         private _onFocusOutInputMinMyRating(): void {
             const input     = this._inputMinMyRating;
-            const maxRating = CommonConstants.ReplayMaxRating;
+            const maxRating = Twns.CommonConstants.ReplayMaxRating;
             if (Number(input.text) > maxRating) {
                 input.text = "" + maxRating;
             }
@@ -195,7 +195,7 @@ namespace Twns.ReplayWar {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -209,7 +209,7 @@ namespace Twns.ReplayWar {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 

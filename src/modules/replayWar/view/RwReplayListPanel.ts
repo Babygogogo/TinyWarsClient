@@ -333,7 +333,7 @@ namespace Twns.ReplayWar {
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -367,7 +367,7 @@ namespace Twns.ReplayWar {
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -410,10 +410,10 @@ namespace Twns.ReplayWar {
             } else {
                 const mapId     = replayBriefInfo.mapId;
                 labelId.text    = `ID: ${replayBriefInfo.replayId}`;
-                labelType.text  = Lang.getWarTypeName(Twns.Helpers.getExisted(replayBriefInfo.warType)) ?? CommonConstants.ErrorTextForUndefined;
+                labelType.text  = Lang.getWarTypeName(Twns.Helpers.getExisted(replayBriefInfo.warType)) ?? Twns.CommonConstants.ErrorTextForUndefined;
                 labelName.text  = mapId == null
                     ? `----`
-                    : await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined;
+                    : await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) ?? Twns.CommonConstants.ErrorTextForUndefined;
             }
         }
 

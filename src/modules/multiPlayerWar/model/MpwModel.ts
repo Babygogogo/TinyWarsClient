@@ -261,7 +261,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
                 },
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? Twns.CommonConstants.WarMaxTurnsLimit,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,
@@ -384,7 +384,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
                 },
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? Twns.CommonConstants.WarMaxTurnsLimit,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,
@@ -435,7 +435,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
         return openData;
     }
     async function createDataForCommonWarBasicSettingsPageForMrw(instanceWarRule: IInstanceWarRule, settingsForCommon: ISettingsForCommon, settingsForMrw: ISettingsForMrw): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
+        const bootTimerParams   = Twns.CommonConstants.WarBootTimerDefaultParams;
         const timerType         = bootTimerParams[0] as Twns.Types.BootTimerType;
         const gameConfig        = Twns.Helpers.getExisted(await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)));
         const warEventFullData  = (await WarMap.WarMapModel.getRawData(Twns.Helpers.getExisted(settingsForMrw.mapId)))?.warEventFullData ?? null;
@@ -483,7 +483,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
                 },
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? Twns.CommonConstants.WarMaxTurnsLimit,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,
@@ -598,7 +598,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
                 },
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? Twns.CommonConstants.WarMaxTurnsLimit,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,

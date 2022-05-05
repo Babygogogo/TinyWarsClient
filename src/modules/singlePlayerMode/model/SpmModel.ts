@@ -58,13 +58,13 @@ namespace Twns.SinglePlayerMode.SpmModel {
     }
     export async function getEmptySlotIndexArray(): Promise<number[]> {
         const promiseArray: Promise<boolean>[] = [];
-        for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
+        for (let slotIndex = 0; slotIndex < Twns.CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
             promiseArray.push(checkIsEmpty(slotIndex));
         }
 
         const emptyResultArray      = await Promise.all(promiseArray);
         const emptySlotIndexArray   : number[] = [];
-        for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
+        for (let slotIndex = 0; slotIndex < Twns.CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
             if (emptyResultArray[slotIndex]) {
                 emptySlotIndexArray.push(slotIndex);
             }
@@ -73,7 +73,7 @@ namespace Twns.SinglePlayerMode.SpmModel {
         return emptySlotIndexArray;
     }
     export async function getAvailableIndex(): Promise<number> {
-        for (let index = 0; index < CommonConstants.SpwSaveSlotMaxCount; ++index) {
+        for (let index = 0; index < Twns.CommonConstants.SpwSaveSlotMaxCount; ++index) {
             if (await checkIsEmpty(index)) {
                 return index;
             }
@@ -203,9 +203,9 @@ namespace Twns.SinglePlayerMode.SpmModel {
 
         if (warData.turnManager == null) {
             warData.turnManager = {
-                turnIndex       : CommonConstants.WarFirstTurnIndex,
+                turnIndex       : Twns.CommonConstants.WarFirstTurnIndex,
                 turnPhaseCode   : Twns.Types.TurnPhaseCode.WaitBeginTurn,
-                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex     : Twns.CommonConstants.WarNeutralPlayerIndex,
                 enterTurnTime   : 0,
             };
         }

@@ -35,8 +35,8 @@ namespace Twns.MapEditor.MeModel {
         }
 
         const maxSlotsCount = Twns.User.UserModel.getIsSelfMapCommittee()
-            ? CommonConstants.MapEditorSlotMaxCountForCommittee
-            : CommonConstants.MapEditorSlotMaxCountForNormal;
+            ? Twns.CommonConstants.MapEditorSlotMaxCountForCommittee
+            : Twns.CommonConstants.MapEditorSlotMaxCountForNormal;
         for (let i = 0; i < maxSlotsCount; ++i) {
             if (!MAP_DICT.has(i)) {
                 MAP_DICT.set(i, createEmptyData(i));

@@ -138,7 +138,7 @@ namespace Twns.WarEvent {
             if (data == null) {
                 label.text = ``;
             } else {
-                label.text = Lang.getWarEventConditionTypeName(data.newConditionType) || CommonConstants.ErrorTextForUndefined;
+                label.text = Lang.getWarEventConditionTypeName(data.newConditionType) || Twns.CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateLabelUsingAndSwitch(): void {

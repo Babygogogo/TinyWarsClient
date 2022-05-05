@@ -74,7 +74,7 @@ namespace Twns.MapEditor {
                     if (mapBriefData.mapExtraData?.isEnabled) {
                         dataArray.push({
                             mapId,
-                            mapName     : await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined,
+                            mapName     : await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) ?? Twns.CommonConstants.ErrorTextForUndefined,
                             panel       : this,
                         });
                     }

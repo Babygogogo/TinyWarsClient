@@ -92,7 +92,7 @@ namespace Twns.SinglePlayerMode {
         private async _createDataForList(): Promise<DataForSlotRenderer[]> {
             const dataList  : DataForSlotRenderer[] = [];
             const warData   = this._getOpenData();
-            for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
+            for (let slotIndex = 0; slotIndex < Twns.CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
                     slotInfo    : await Twns.SinglePlayerMode.SpmModel.getSlotFullData(slotIndex),
@@ -135,7 +135,7 @@ namespace Twns.SinglePlayerMode {
             const callback  = () => {
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
                     title       : Lang.getText(LangTextType.B0088),
-                    maxChars    : CommonConstants.SpmSaveSlotCommentMaxLength,
+                    maxChars    : Twns.CommonConstants.SpmSaveSlotCommentMaxLength,
                     currentValue: ``,
                     tips        : Lang.getText(LangTextType.A0144),
                     charRestrict: null,
@@ -174,7 +174,7 @@ namespace Twns.SinglePlayerMode {
                 labelMapName.text   = `----`;
             } else {
                 const warData   = slotInfo.warData;
-                labelType.text  = Lang.getWarTypeName(Twns.WarHelpers.WarCommonHelpers.getWarType(warData)) || CommonConstants.ErrorTextForUndefined;
+                labelType.text  = Lang.getWarTypeName(Twns.WarHelpers.WarCommonHelpers.getWarType(warData)) || Twns.CommonConstants.ErrorTextForUndefined;
 
                 const slotComment = slotInfo.extraData.slotComment;
                 if (slotComment) {
@@ -183,7 +183,7 @@ namespace Twns.SinglePlayerMode {
                     const mapId         = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
+                        : (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || Twns.CommonConstants.ErrorTextForUndefined);
                 }
             }
         }

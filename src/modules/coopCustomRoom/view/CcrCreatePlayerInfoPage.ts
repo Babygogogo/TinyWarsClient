@@ -105,7 +105,7 @@ namespace Twns.CoopCustomRoom {
                 ? (CoopCustomRoom.CcrCreateModel.getSelfCoId())
                 : (WarHelpers.WarRuleHelpers.getPlayerRule(Twns.Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex).fixedCoIdInCcw);
 
-            if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
+            if ((coId != null) && (coId !== Twns.CommonConstants.CoEmptyId)) {
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoInfoPanel, {
                     gameConfig   : CoopCustomRoom.CcrCreateModel.getGameConfig(),
                     coId,
@@ -140,7 +140,7 @@ namespace Twns.CoopCustomRoom {
                                 break;
                             }
                         }
-                        playerRule.fixedCoIdInCcw = CommonConstants.CoEmptyId;
+                        playerRule.fixedCoIdInCcw = Twns.CommonConstants.CoEmptyId;
                         CoopCustomRoom.CcrCreateModel.setAiSkinId(playerIndex, playerIndex);
                         data.page.updateView();
                     };
@@ -271,7 +271,7 @@ namespace Twns.CoopCustomRoom {
 
             const settingsForCommon     = Twns.Helpers.getExisted(roomInfo.settingsForCommon);
             const playerRule            = WarHelpers.WarRuleHelpers.getPlayerRule(Twns.Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(Twns.Helpers.getExisted(playerRule.teamIndex)) || CommonConstants.ErrorTextForUndefined;
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(Twns.Helpers.getExisted(playerRule.teamIndex)) || Twns.CommonConstants.ErrorTextForUndefined;
 
             const isSelfPlayer      = CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex() === playerIndex;
             const isHumanPlayer     = playerRule.fixedCoIdInCcw == null;
@@ -291,8 +291,8 @@ namespace Twns.CoopCustomRoom {
             const gameConfig                = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion));
             const coCfg                     = coId == null ? null : gameConfig.getCoBasicCfg(coId);
             this._labelCo.text              = coCfg ? coCfg.name : `??`;
-            this._imgCoHead.source          = coId == null ? `` : gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
-            this._imgCoInfo.visible         = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
+            this._imgCoHead.source          = coId == null ? `` : gameConfig.getCoHeadImageSource(coId) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._imgCoInfo.visible         = (coId !== Twns.CommonConstants.CoEmptyId) && (!!coCfg);
             this._btnChangeCo.visible       = (isSelfPlayer) || (!isHumanPlayer);
             this._btnChangeSkinId.visible   = (isSelfPlayer) || (!isHumanPlayer);
         }

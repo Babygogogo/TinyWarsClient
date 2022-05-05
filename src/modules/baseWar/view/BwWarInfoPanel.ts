@@ -155,7 +155,7 @@ namespace Twns.BaseWar {
             const war               = this._getOpenData().war;
             const playerRuleArray   = Helpers.getExisted(war.getInstanceWarRule().ruleForPlayers?.playerRuleDataArray, ClientErrorCode.BwWarInfoPanel_UpdateListPlayer_00);
             const dataArray         : DataForPlayerRenderer[] = [];
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playerRuleArray.length; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playerRuleArray.length; ++playerIndex) {
                 dataArray.push({
                     war,
                     playerIndex,
@@ -178,7 +178,7 @@ namespace Twns.BaseWar {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Helpers.resetTween({
@@ -192,7 +192,7 @@ namespace Twns.BaseWar {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -234,7 +234,7 @@ namespace Twns.BaseWar {
             const data              = this._getData();
             const infoType          = data.infoType;
             this._imgBg.visible     = data.index % 2 === 0;
-            this._labelName.text    = getInfoTypeName(infoType) || CommonConstants.ErrorTextForUndefined;
+            this._labelName.text    = getInfoTypeName(infoType) || Twns.CommonConstants.ErrorTextForUndefined;
             this._btnHelp.visible   = false;
         }
     }
@@ -278,7 +278,7 @@ namespace Twns.BaseWar {
             const war                   = data.war;
             const player                = war.getPlayer(playerIndex);
             this._imgSkin.source        = WarHelpers.WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
-            this._imgCo.source          = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
+            this._imgCo.source          = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? Twns.CommonConstants.ErrorTextForUndefined;
             this._labelPlayerName.text  = `P${playerIndex}`;
         }
 
@@ -441,8 +441,8 @@ namespace Twns.BaseWar {
             const { playerIndex, war }  = this._getData();
             const player                = war.getPlayer(playerIndex);
             const currValue             = player.getFund();
-            const maxValue              = CommonConstants.WarRuleInitialFundMaxLimit;
-            const minValue              = CommonConstants.WarRuleInitialFundMinLimit;
+            const maxValue              = Twns.CommonConstants.WarRuleInitialFundMaxLimit;
+            const minValue              = Twns.CommonConstants.WarRuleInitialFundMinLimit;
             PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : `P${player.getPlayerIndex()} ${Lang.getText(LangTextType.B0032)}`,
                 currentValue    : currValue,
@@ -470,8 +470,8 @@ namespace Twns.BaseWar {
         private _modifyAsInitialFund(): void {
             const { war, playerIndex }  = this._getData();
             const currValue             = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
-            const maxValue              = CommonConstants.WarRuleInitialFundMaxLimit;
-            const minValue              = CommonConstants.WarRuleInitialFundMinLimit;
+            const maxValue              = Twns.CommonConstants.WarRuleInitialFundMaxLimit;
+            const minValue              = Twns.CommonConstants.WarRuleInitialFundMinLimit;
             PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0178),
                 currentValue    : currValue,
@@ -487,8 +487,8 @@ namespace Twns.BaseWar {
         private _modifyAsIncomeMultiplier(): void {
             const { war, playerIndex }  = this._getData();
             const currValue             = war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex);
-            const maxValue              = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
-            const minValue              = CommonConstants.WarRuleIncomeMultiplierMinLimit;
+            const maxValue              = Twns.CommonConstants.WarRuleIncomeMultiplierMaxLimit;
+            const minValue              = Twns.CommonConstants.WarRuleIncomeMultiplierMinLimit;
             PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0179),
                 currentValue    : currValue,
@@ -504,8 +504,8 @@ namespace Twns.BaseWar {
         private _modifyAsEnergyAddPctOnLoadCo(): void {
             const { war, playerIndex }  = this._getData();
             const currValue             = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
-            const minValue              = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
-            const maxValue              = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
+            const minValue              = Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
+            const maxValue              = Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
             PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0180),
                 currentValue    : currValue,
@@ -521,8 +521,8 @@ namespace Twns.BaseWar {
         private _modifyAsEnergyGrowthMultiplier(): void {
             const { war, playerIndex }  = this._getData();
             const currValue             = war.getCommonSettingManager().getSettingsEnergyGrowthMultiplier(playerIndex);
-            const minValue              = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
-            const maxValue              = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
+            const minValue              = Twns.CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
+            const maxValue              = Twns.CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
             PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0181),
                 currentValue    : currValue,
@@ -544,8 +544,8 @@ namespace Twns.BaseWar {
         private _modifyAsMoveRangeModifier(): void {
             const { playerIndex, war }  = this._getData();
             const currValue             = war.getCommonSettingManager().getSettingsMoveRangeModifier(playerIndex);
-            const minValue              = CommonConstants.WarRuleMoveRangeModifierMinLimit;
-            const maxValue              = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
+            const minValue              = Twns.CommonConstants.WarRuleMoveRangeModifierMinLimit;
+            const maxValue              = Twns.CommonConstants.WarRuleMoveRangeModifierMaxLimit;
             PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0182),
                 currentValue    : currValue,
@@ -561,8 +561,8 @@ namespace Twns.BaseWar {
         private _modifyAsAttackPowerModifier(): void {
             const { war, playerIndex }  = this._getData();
             const currValue             = war.getCommonSettingManager().getSettingsAttackPowerModifier(playerIndex);
-            const minValue              = CommonConstants.WarRuleOffenseBonusMinLimit;
-            const maxValue              = CommonConstants.WarRuleOffenseBonusMaxLimit;
+            const minValue              = Twns.CommonConstants.WarRuleOffenseBonusMinLimit;
+            const maxValue              = Twns.CommonConstants.WarRuleOffenseBonusMaxLimit;
             PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0183),
                 currentValue    : currValue,
@@ -578,8 +578,8 @@ namespace Twns.BaseWar {
         private _modifyAsVisionRangeModifier(): void {
             const { war, playerIndex }  = this._getData();
             const currValue             = war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex);
-            const minValue              = CommonConstants.WarRuleVisionRangeModifierMinLimit;
-            const maxValue              = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
+            const minValue              = Twns.CommonConstants.WarRuleVisionRangeModifierMinLimit;
+            const maxValue              = Twns.CommonConstants.WarRuleVisionRangeModifierMaxLimit;
             PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0184),
                 currentValue    : currValue,
@@ -595,8 +595,8 @@ namespace Twns.BaseWar {
         private _modifyAsLuckLowerLimit(): void {
             const { war, playerIndex, playerRenderer }  = this._getData();
             const currValue                             = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
-            const minValue                              = CommonConstants.WarRuleLuckMinLimit;
-            const maxValue                              = CommonConstants.WarRuleLuckMaxLimit;
+            const minValue                              = Twns.CommonConstants.WarRuleLuckMinLimit;
+            const maxValue                              = Twns.CommonConstants.WarRuleLuckMaxLimit;
             PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0189),
                 currentValue    : currValue,
@@ -621,8 +621,8 @@ namespace Twns.BaseWar {
         private _modifyAsLuckUpperLimit(): void {
             const { war, playerIndex, playerRenderer }  = this._getData();
             const currValue                             = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
-            const minValue                              = CommonConstants.WarRuleLuckMinLimit;
-            const maxValue                              = CommonConstants.WarRuleLuckMaxLimit;
+            const minValue                              = Twns.CommonConstants.WarRuleLuckMinLimit;
+            const maxValue                              = Twns.CommonConstants.WarRuleLuckMaxLimit;
             PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0190),
                 currentValue    : currValue,
@@ -708,7 +708,7 @@ namespace Twns.BaseWar {
             const war               = data.war;
             const teamIndex         = war.getPlayer(data.playerIndex).getTeamIndex();
             const labelValue        = this._labelValue;
-            labelValue.text         = Lang.getPlayerTeamName(teamIndex) ?? CommonConstants.ErrorTextForUndefined;
+            labelValue.text         = Lang.getPlayerTeamName(teamIndex) ?? Twns.CommonConstants.ErrorTextForUndefined;
             labelValue.textColor    = 0xFFFFFF;
 
             const canModify         = checkCanModifyPlayerInfo(war);
@@ -718,7 +718,7 @@ namespace Twns.BaseWar {
             const data              = this._getData();
             const war               = data.war;
             const labelValue        = this._labelValue;
-            labelValue.text         = war.getGameConfig().getCoNameAndTierText(war.getPlayer(data.playerIndex).getCoId()) ?? CommonConstants.ErrorTextForUndefined;
+            labelValue.text         = war.getGameConfig().getCoNameAndTierText(war.getPlayer(data.playerIndex).getCoId()) ?? Twns.CommonConstants.ErrorTextForUndefined;
             labelValue.textColor    = 0xFFFFFF;
 
             const canModify         = checkCanModifyPlayerInfo(war);
@@ -832,7 +832,7 @@ namespace Twns.BaseWar {
             const currValue         = war.getCommonSettingManager().getSettingsBannedUnitTypeArray(data.playerIndex)?.length ?? 0;
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleBannedUnitTypeCountDefault, true);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleBannedUnitTypeCountDefault, true);
 
             const canModify         = checkCanModifyPlayerInfo(war);
             this._btnModify.visible = canModify;
@@ -844,7 +844,7 @@ namespace Twns.BaseWar {
             const currValue         = WarHelpers.WarRuleHelpers.getInitialFund(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleInitialFundDefault);
 
             const canModify         = checkCanModifyPlayerInfo(war);
             this._btnModify.visible = canModify;
@@ -856,7 +856,7 @@ namespace Twns.BaseWar {
             const currValue         = WarHelpers.WarRuleHelpers.getIncomeMultiplier(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleIncomeMultiplierDefault);
 
             const canModify         = checkCanModifyPlayerInfo(war);
             this._btnModify.visible = canModify;
@@ -868,7 +868,7 @@ namespace Twns.BaseWar {
             const currValue         = WarHelpers.WarRuleHelpers.getEnergyAddPctOnLoadCo(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
 
             const canModify         = checkCanModifyPlayerInfo(war);
             this._btnModify.visible = canModify;
@@ -880,7 +880,7 @@ namespace Twns.BaseWar {
             const currValue         = WarHelpers.WarRuleHelpers.getEnergyGrowthMultiplier(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
 
             const canModify         = checkCanModifyPlayerInfo(war);
             this._btnModify.visible = canModify;
@@ -904,7 +904,7 @@ namespace Twns.BaseWar {
             const currValue         = WarHelpers.WarRuleHelpers.getMoveRangeModifier(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleMoveRangeModifierDefault);
 
             const canModify         = checkCanModifyPlayerInfo(war);
             this._btnModify.visible = canModify;
@@ -916,7 +916,7 @@ namespace Twns.BaseWar {
             const currValue         = WarHelpers.WarRuleHelpers.getAttackPowerModifier(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleOffenseBonusDefault);
 
             const canModify         = checkCanModifyPlayerInfo(war);
             this._btnModify.visible = canModify;
@@ -928,7 +928,7 @@ namespace Twns.BaseWar {
             const currValue         = WarHelpers.WarRuleHelpers.getVisionRangeModifier(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleVisionRangeModifierDefault);
 
             const canModify         = checkCanModifyPlayerInfo(war);
             this._btnModify.visible = canModify;
@@ -940,7 +940,7 @@ namespace Twns.BaseWar {
             const currValue         = WarHelpers.WarRuleHelpers.getLuckLowerLimit(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultLowerLimit);
 
             const canModify         = checkCanModifyPlayerInfo(war);
             this._btnModify.visible = canModify;
@@ -952,7 +952,7 @@ namespace Twns.BaseWar {
             const currValue         = WarHelpers.WarRuleHelpers.getLuckUpperLimit(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
+            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultUpperLimit);
 
             const canModify         = checkCanModifyPlayerInfo(war);
             this._btnModify.visible = canModify;

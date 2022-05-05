@@ -290,7 +290,7 @@ namespace Twns.HalfwayReplayWar {
             const teamIndex             = this._getWar().getVisionTeamIndex();
             this._labelVisionTeam.text  = teamIndex == null
                 ? Lang.getText(LangTextType.B0890)
-                : (Lang.getPlayerTeamName(teamIndex) ?? CommonConstants.ErrorTextForUndefined);
+                : (Lang.getPlayerTeamName(teamIndex) ?? Twns.CommonConstants.ErrorTextForUndefined);
         }
 
         private _updateLabelTurn(): void {

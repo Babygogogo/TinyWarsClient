@@ -332,7 +332,7 @@ namespace Twns.CoopCustomRoom {
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -366,7 +366,7 @@ namespace Twns.CoopCustomRoom {
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -402,7 +402,7 @@ namespace Twns.CoopCustomRoom {
             if (warName) {
                 this._labelName.text = warName;
             } else {
-                Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(settingsForCcw.mapId)).then(v => this._labelName.text = v ?? CommonConstants.ErrorTextForUndefined);
+                Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(settingsForCcw.mapId)).then(v => this._labelName.text = v ?? Twns.CommonConstants.ErrorTextForUndefined);
             }
         }
 

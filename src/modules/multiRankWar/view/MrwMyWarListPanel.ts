@@ -268,7 +268,7 @@ namespace Twns.MultiRankWar {
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -297,7 +297,7 @@ namespace Twns.MultiRankWar {
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -340,7 +340,7 @@ namespace Twns.MultiRankWar {
             if (warSettings == null) {
                 labelName.text  = ``;
             } else {
-                labelName.text  = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(warSettings.settingsForMrw?.mapId)) || CommonConstants.ErrorTextForUndefined;
+                labelName.text  = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(warSettings.settingsForMrw?.mapId)) || Twns.CommonConstants.ErrorTextForUndefined;
             }
         }
 

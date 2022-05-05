@@ -208,7 +208,7 @@ namespace Twns.MapManagement {
             this.currentState   = mapId === data.panel.getSelectedMapId() ? Twns.Types.UiState.Down : Twns.Types.UiState.Up;
             this._labelId.text  = `ID: ${mapId}`;
             labelName.text      = ``;
-            Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v ?? CommonConstants.ErrorTextForUndefined);
+            Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v ?? Twns.CommonConstants.ErrorTextForUndefined);
         }
 
         private _onTouchTapBtnChoose(): void {

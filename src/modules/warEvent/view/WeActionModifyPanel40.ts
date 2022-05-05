@@ -231,7 +231,7 @@ namespace Twns.WarEvent {
             const tileData          = Twns.Helpers.getExisted(this._getAction().actTileData);
             tileData.objectType     = Twns.Types.TileObjectType.Empty;
             tileData.objectShapeId  = null;
-            tileData.playerIndex    = CommonConstants.WarNeutralPlayerIndex;
+            tileData.playerIndex    = Twns.CommonConstants.WarNeutralPlayerIndex;
             Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActIsHighlighted(): void {
@@ -296,7 +296,7 @@ namespace Twns.WarEvent {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
-            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelLocation(): void {
             const locationIdArray       = this._getAction().conLocationIdArray;

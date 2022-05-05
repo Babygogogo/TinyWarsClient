@@ -237,7 +237,7 @@ namespace Twns.SinglePlayerMode {
             this._imgReplay.visible     = data.canReplay;
 
             const userInfo = Twns.Helpers.getExisted(await Twns.User.UserModel.getUserPublicInfo(data.userId));
-            labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
+            labelNickname.text = userInfo.nickname || Twns.CommonConstants.ErrorTextForUndefined;
 
         }
     }

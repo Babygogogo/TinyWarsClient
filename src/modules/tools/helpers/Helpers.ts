@@ -684,7 +684,7 @@ namespace Twns.Helpers {
         const tween = egret.Tween.get(obj)
             .set(beginProps)
             .wait(waitTime || 0)
-            .to(endProps, tweenTime || CommonConstants.DefaultTweenTime, egret.Ease.sineOut);
+            .to(endProps, tweenTime || Twns.CommonConstants.DefaultTweenTime, egret.Ease.sineOut);
         if (callback) {
             tween.call(callback);
         }

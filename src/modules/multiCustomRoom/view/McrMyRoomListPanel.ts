@@ -286,7 +286,7 @@ namespace Twns.MultiCustomRoom {
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -315,7 +315,7 @@ namespace Twns.MultiCustomRoom {
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -367,7 +367,7 @@ namespace Twns.MultiCustomRoom {
             const settingsForMcw    = (await McrModel.getRoomStaticInfo(this._getData().roomId))?.settingsForMcw;
             this._labelName.text    = (settingsForMcw == null)
                 ? ``
-                : (settingsForMcw.warName || (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(settingsForMcw.mapId)))) ?? CommonConstants.ErrorTextForUndefined;
+                : (settingsForMcw.warName || (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(settingsForMcw.mapId)))) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private async _updateImgRed(): Promise<void> {

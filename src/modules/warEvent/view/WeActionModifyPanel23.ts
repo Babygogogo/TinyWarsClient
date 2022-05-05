@@ -136,11 +136,11 @@ namespace Twns.WarEvent {
         }
 
         private _updateLabelPlayerState(): void {
-            this._labelPlayerState.text = Lang.getPlayerAliveStateName(Twns.Helpers.getExisted(this._getAction().playerAliveState)) || CommonConstants.ErrorTextForUndefined;
+            this._labelPlayerState.text = Lang.getPlayerAliveStateName(Twns.Helpers.getExisted(this._getAction().playerAliveState)) || Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelTips(): void {
-            this._labelTips.text = getTipsForPlayerAliveState(Twns.Helpers.getExisted(this._getAction().playerAliveState)) || CommonConstants.ErrorTextForUndefined;
+            this._labelTips.text = getTipsForPlayerAliveState(Twns.Helpers.getExisted(this._getAction().playerAliveState)) || Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _getAction(): CommonProto.WarEvent.IWeaSetPlayerAliveState {

@@ -103,7 +103,7 @@ namespace Twns.Common {
                 throw Helpers.newError(`CommonBanCoPanel._onTouchedBtnConfirm() empty callback.`);
             } else {
                 const bannedCoIdSet = this._bannedCoIdSet;
-                if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
+                if (bannedCoIdSet.has(Twns.CommonConstants.CoEmptyId)) {
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0130),
@@ -178,7 +178,7 @@ namespace Twns.Common {
                 return;
             }
 
-            if (coId === CommonConstants.CoEmptyId) {
+            if (coId === Twns.CommonConstants.CoEmptyId) {
                 PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0130),
@@ -316,7 +316,7 @@ namespace Twns.Common {
         }
 
         private _initComponentsForPreviewCo(): void {
-            this._setPreviewCoId(CommonConstants.CoEmptyId);
+            this._setPreviewCoId(Twns.CommonConstants.CoEmptyId);
         }
 
         private _updateComponentsForPreviewCoId(): void {
@@ -343,7 +343,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Helpers.resetTween({
@@ -358,7 +358,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 0, verticalCenter: -40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -460,7 +460,7 @@ namespace Twns.Common {
             const isAvailable           = !!this._isAvailable;
             this._imgSelected.visible   = isAvailable;
             this._imgUnselected.visible = !isAvailable;
-            this._labelName.text        = this._gameConfig?.getCoBasicCfg(Helpers.getExisted(this._coId))?.name || CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = this._gameConfig?.getCoBasicCfg(Helpers.getExisted(this._coId))?.name || Twns.CommonConstants.ErrorTextForUndefined;
         }
     }
 }

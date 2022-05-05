@@ -79,7 +79,7 @@ namespace Twns.Lobby {
                 endProps    : { alpha: 1, top: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -88,7 +88,7 @@ namespace Twns.Lobby {
                 endProps    : { alpha: 0, top: -40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
 
         private _updateView(): void {
@@ -98,7 +98,7 @@ namespace Twns.Lobby {
         }
 
         private _updateLabelNickname(): void {
-            this._labelNickname.text = Twns.User.UserModel.getSelfNickname() ?? CommonConstants.ErrorTextForUndefined;
+            this._labelNickname.text = Twns.User.UserModel.getSelfNickname() ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateImgAvatar(): void {

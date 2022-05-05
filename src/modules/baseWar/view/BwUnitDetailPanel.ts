@@ -198,8 +198,8 @@ namespace Twns.BaseWar {
         private _updateUnitViewAndLabelName(): void {
             const unit              = this._getOpenData().unit;
             const unitType          = unit.getUnitType();
-            this._labelName.text    = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
-            this._labelName1.text   = Lang.getUnitName(unitType, Lang.getCurrentLanguageType() === Twns.Types.LanguageType.Chinese ? Twns.Types.LanguageType.English : Twns.Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName.text    = Lang.getUnitName(unitType) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelName1.text   = Lang.getUnitName(unitType, Lang.getCurrentLanguageType() === Twns.Types.LanguageType.Chinese ? Twns.Types.LanguageType.English : Twns.Types.LanguageType.Chinese) ?? Twns.CommonConstants.ErrorTextForUndefined;
             this._unitView.update({
                 gameConfig      : unit.getGameConfig(),
                 gridIndex       : { x: 0, y: 0},
@@ -434,7 +434,7 @@ namespace Twns.BaseWar {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -448,7 +448,7 @@ namespace Twns.BaseWar {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -582,7 +582,7 @@ namespace Twns.BaseWar {
         private _updateViewAsActionState(): void {
             const data                  = this._getData();
             this._labelTitle.text       = Lang.getText(LangTextType.B0367);
-            this._labelValue.text       = Lang.getUnitActionStateText(data.unit.getActionState()) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelValue.text       = Lang.getUnitActionStateText(data.unit.getActionState()) ?? Twns.CommonConstants.ErrorTextForUndefined;
             this._groupExtra.visible    = false;
             this._btnModify.visible     = WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
         }
@@ -673,7 +673,7 @@ namespace Twns.BaseWar {
             this._labelTitle.text       = Lang.getText(LangTextType.B0340);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = true;
-            this._labelExtraInfo.text   = Lang.getMoveTypeName(unit.getMoveType()) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelExtraInfo.text   = Lang.getMoveTypeName(unit.getMoveType()) ?? Twns.CommonConstants.ErrorTextForUndefined;
             this._btnModify.visible     = false;
         }
         private _updateViewAsPrimaryWeaponAmmo(): void {
@@ -700,7 +700,7 @@ namespace Twns.BaseWar {
                 groupExtra.visible = false;
             } else {
                 groupExtra.visible          = true;
-                this._labelExtraInfo.text   = Lang.getUnitName(Twns.Helpers.getExisted(unit.getProduceUnitType())) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelExtraInfo.text   = Lang.getUnitName(Twns.Helpers.getExisted(unit.getProduceUnitType())) ?? Twns.CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateViewAsProductionCost(): void {
@@ -746,13 +746,13 @@ namespace Twns.BaseWar {
                 const canShowValue          = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getWatcherTeamIndexesForSelf().has(unit.getTeamIndex()));
                 labelValue.text             = `${canShowValue ? unit.getLoadedUnitsCount() : `??`} / ${maxValue}`;
                 groupExtra.visible          = true;
-                this._labelExtraInfo.text   = Lang.getUnitCategoryName(Twns.Helpers.getExisted(unit.getLoadUnitCategory())) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelExtraInfo.text   = Lang.getUnitCategoryName(Twns.Helpers.getExisted(unit.getLoadUnitCategory())) ?? Twns.CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateViewAsAiMode(): void {
             const data                  = this._getData();
             this._labelTitle.text       = Lang.getText(LangTextType.B0720);
-            this._labelValue.text       = Lang.getUnitAiModeName(data.unit.getAiMode()) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelValue.text       = Lang.getUnitAiModeName(data.unit.getAiMode()) ?? Twns.CommonConstants.ErrorTextForUndefined;
             this._btnModify.visible     = WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
             this._groupExtra.visible    = false;
         }
@@ -1149,7 +1149,7 @@ namespace Twns.BaseWar {
                 this._tileView.source           = Twns.Common.CommonModel.getCachedTileObjectImageSource({
                     version     : Twns.User.UserModel.getSelfSettingsTextureVersion(),
                     themeType   : Twns.Types.TileThemeType.Clear,
-                    skinId      : CommonConstants.UnitAndTileNeutralSkinId,
+                    skinId      : Twns.CommonConstants.UnitAndTileNeutralSkinId,
                     objectType  : Config.ConfigManager.getTileObjectTypeByTileType(targetTileType),
                     isDark      : false,
                     shapeId     : 0,

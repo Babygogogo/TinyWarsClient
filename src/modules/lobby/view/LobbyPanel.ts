@@ -86,7 +86,7 @@ namespace Twns.Lobby {
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, `Discord`),
                     callback: () => {
-                        window.open(CommonConstants.DiscordUrl);
+                        window.open(Twns.CommonConstants.DiscordUrl);
                     },
                 });
             }
@@ -97,7 +97,7 @@ namespace Twns.Lobby {
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, `GitHub`),
                     callback: () => {
-                        window.open(CommonConstants.GithubUrl);
+                        window.open(Twns.CommonConstants.GithubUrl);
                     },
                 });
             }
@@ -105,11 +105,11 @@ namespace Twns.Lobby {
 
         private _onTouchedGroupSwitchVersion(): void {
             if (window?.open) {
-                const isTest = (CommonConstants.GameVersion as any) === Twns.Types.GameVersion.Legacy;
+                const isTest = (Twns.CommonConstants.GameVersion as any) === Twns.Types.GameVersion.Legacy;
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, Lang.getText(isTest ? LangTextType.B0854 : LangTextType.B0854)),
                     callback: () => {
-                        window.open(isTest ? CommonConstants.TestVersionUrl : CommonConstants.LegacyVersionUrl);
+                        window.open(isTest ? Twns.CommonConstants.TestVersionUrl : Twns.CommonConstants.LegacyVersionUrl);
                     },
                 });
             }
@@ -233,7 +233,7 @@ namespace Twns.Lobby {
                 endProps    : { alpha: 1, left: 0 },
             });
 
-            await Twns.Helpers.wait(200 + CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(200 + Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -247,7 +247,7 @@ namespace Twns.Lobby {
                 endProps    : { alpha: 0, left: 20 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
 
         private async _updateComponentsForLanguage(): Promise<void> {
@@ -257,27 +257,27 @@ namespace Twns.Lobby {
             this._labelTips3.text       = `368142455`;
             this._labelTips4.text       = `${Lang.getText(LangTextType.B0538)}:`;
             this._labelTips5.textFlow   = [{
-                text    : CommonConstants.DiscordUrl,
+                text    : Twns.CommonConstants.DiscordUrl,
                 style   : { underline: true },
             }];
             this._labelTips6.text       = `${Lang.getText(LangTextType.B0539)}:`;
             this._labelTips7.textFlow   = [{
-                text    : CommonConstants.GithubUrl,
+                text    : Twns.CommonConstants.GithubUrl,
                 style   : { underline: true },
             }];
 
             const labelTips8    = this._labelTips8;
             const labelTips9    = this._labelTips9;
-            if ((CommonConstants.GameVersion as any) === Twns.Types.GameVersion.Legacy) {
+            if ((Twns.CommonConstants.GameVersion as any) === Twns.Types.GameVersion.Legacy) {
                 labelTips8.text     = `${Lang.getText(LangTextType.B0854)}:`;
                 labelTips9.textFlow = [{
-                    text    : CommonConstants.TestVersionUrl,
+                    text    : Twns.CommonConstants.TestVersionUrl,
                     style   : { underline: true },
                 }];
             } else {
                 labelTips8.text     = `${Lang.getText(LangTextType.B0853)}:`;
                 labelTips9.textFlow = [{
-                    text    : CommonConstants.LegacyVersionUrl,
+                    text    : Twns.CommonConstants.LegacyVersionUrl,
                     style   : { underline: true },
                 }];
             }

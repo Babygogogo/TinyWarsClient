@@ -82,6 +82,7 @@ namespace Twns.PanelHelpers {
         CommonDamageCalculatorPanel         : PanelConfig<Common.OpenDataForCommonDamageCalculatorPanel>;
         CommonDamageChartPanel              : PanelConfig<Common.OpenDataForCommonDamageChartPanel>;
         CommonErrorPanel                    : PanelConfig<Common.OpenDataForCommonErrorPanel>;
+        CommonGameChartPanel                : PanelConfig<Common.OpenDataForCommonGameChartPanel>;
         CommonHelpPanel                     : PanelConfig<Common.OpenDataForCommonHelpPanel>;
         CommonInputPanel                    : PanelConfig<Common.OpenDataForCommonInputPanel>;
         CommonInputIntegerPanel             : PanelConfig<Common.OpenDataForCommonInputIntegerPanel>;
@@ -90,6 +91,7 @@ namespace Twns.PanelHelpers {
         CommonModifyWarRuleNamePanel        : PanelConfig<Common.OpenDataForCommonModifyWarRuleNamePanel>;
         CommonRankListPanel                 : PanelConfig<Common.OpenDataForCommonRankListPanel>;
         CommonServerStatusPanel             : PanelConfig<Common.OpenDataForCommonServerStatusPanel>;
+        CommonTileChartPanel                : PanelConfig<Common.OpenDataForCommonTileChartPanel>;
         CommonWarEventListPanel             : PanelConfig<Common.OpenDataForCommonWarEventListPanel>;
 
         HrwReplayProgressPanel              : PanelConfig<HalfwayReplayWar.OpenDataForHrwReplayProgressPanel>;
@@ -694,6 +696,12 @@ namespace Twns.PanelHelpers {
                 layer       : LayerType.Top,
             },
 
+            CommonGameChartPanel: {
+                cls         : Common?.CommonGameChartPanel,
+                skinName    : `resource/skins/common/CommonGameChartPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
             CommonHelpPanel: {
                 cls         : Common?.CommonHelpPanel,
                 skinName    : `resource/skins/common/CommonHelpPanel.exml`,
@@ -740,6 +748,13 @@ namespace Twns.PanelHelpers {
                 cls         : Common?.CommonServerStatusPanel,
                 skinName    : `resource/skins/common/CommonServerStatusPanel.exml`,
                 layer       : LayerType.Hud0,
+            },
+
+            CommonTileChartPanel: {
+                cls         : Common?.CommonTileChartPanel,
+                skinName    : `resource/skins/common/CommonTileChartPanel.exml`,
+                layer       : LayerType.Hud0,
+                needCache   : true,
             },
 
             CommonWarEventListPanel: {

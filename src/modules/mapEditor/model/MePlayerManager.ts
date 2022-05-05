@@ -16,7 +16,7 @@ namespace Twns.MapEditor {
         public serializeForCreateSfw(): ISerialPlayerManager {
             const maxPlayerIndex    = (this._getWar().getField() as MeField).getMaxPlayerIndex();
             const players           : ISerialPlayer[] = [];
-            for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= maxPlayerIndex; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.WarNeutralPlayerIndex; playerIndex <= maxPlayerIndex; ++playerIndex) {
                 players.push(Twns.MapEditor.MeHelpers.createDefaultISerialPlayer(playerIndex));
             }
 
@@ -28,7 +28,7 @@ namespace Twns.MapEditor {
         public serializeForCreateMfr(): ISerialPlayerManager {
             const maxPlayerIndex    = (this._getWar().getField() as MeField).getMaxPlayerIndex();
             const players           : ISerialPlayer[] = [];
-            for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= maxPlayerIndex; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.WarNeutralPlayerIndex; playerIndex <= maxPlayerIndex; ++playerIndex) {
                 players.push(this.getPlayer(playerIndex).serializeForCreateMfr());
             }
 

@@ -254,7 +254,7 @@ namespace Twns.CoopCustomRoom {
                 endProps    : { alpha: 1, right: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -298,7 +298,7 @@ namespace Twns.CoopCustomRoom {
                 endProps    : { alpha: 0, right: -40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -320,7 +320,7 @@ namespace Twns.CoopCustomRoom {
         protected _onDataChanged(): void {
             const data          = this._getData();
             this.currentState   = data.mapId === data.panel.getSelectedMapId() ? Twns.Types.UiState.Down : Twns.Types.UiState.Up;
-            Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v ?? CommonConstants.ErrorTextForUndefined);
+            Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v ?? Twns.CommonConstants.ErrorTextForUndefined);
         }
 
         private _onTouchTapBtnChoose(): void {

@@ -104,8 +104,8 @@ namespace TwnsUiMapInfo {
         private _onTouchedGroupMyRating(): void {
             const mapId = this._data?.mapInfo?.mapId;
             if (mapId != null) {
-                const minValue = CommonConstants.MapMinRating;
-                const maxValue = CommonConstants.MapMaxRating;
+                const minValue = Twns.CommonConstants.MapMinRating;
+                const maxValue = Twns.CommonConstants.MapMaxRating;
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                     title           : Twns.Lang.getText(LangTextType.B0363),
                     currentValue    : Twns.User.UserModel.getMapRating(mapId) || 0,
@@ -173,7 +173,7 @@ namespace TwnsUiMapInfo {
                 const mapRawData            = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId));
                 const rating                = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
                 const myRating              = Twns.User.UserModel.getMapRating(mapId);
-                labelMapName.text           = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
+                labelMapName.text           = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || Twns.CommonConstants.ErrorTextForUndefined;
                 labelMapId.text             = `${mapId}`;
                 labelPlayersCount.text      = `${mapRawData.playersCountUnneutral}`;
                 labelRating.text            = rating != null ? rating.toFixed(2) : Twns.Lang.getText(LangTextType.B0001);
@@ -219,7 +219,7 @@ namespace TwnsUiMapInfo {
             const mapInfo = data.mapInfo;
             if (mapInfo) {
                 const mapRawData    = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapInfo.mapId));
-                labelDesigner.text  = `${prefix}${mapRawData.designerName || CommonConstants.ErrorTextForUndefined}`;
+                labelDesigner.text  = `${prefix}${mapRawData.designerName || Twns.CommonConstants.ErrorTextForUndefined}`;
                 return;
             }
 
@@ -302,8 +302,8 @@ namespace TwnsUiMapInfo {
                 tileObjectType      : tileObjectType,
                 tileObjectShapeId   : 0,
                 playerIndex         : tileObjectType === Twns.Types.TileObjectType.Headquarters
-                    ? CommonConstants.WarFirstPlayerIndex
-                    : CommonConstants.WarNeutralPlayerIndex,
+                    ? Twns.CommonConstants.WarFirstPlayerIndex
+                    : Twns.CommonConstants.WarNeutralPlayerIndex,
             });
             this._tileView.updateView();
         }

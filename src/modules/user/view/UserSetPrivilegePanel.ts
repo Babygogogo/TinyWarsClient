@@ -83,7 +83,7 @@ namespace Twns.User {
             if (data.userId === this._getUserId()) {
                 const userPublicInfo                = Twns.Helpers.getExisted(data.userPublicInfo);
                 const userPrivilege                 = Twns.Helpers.getExisted(userPublicInfo.userPrivilege);
-                this._labelUserName.text            = userPublicInfo.nickname || CommonConstants.ErrorTextForUndefined;
+                this._labelUserName.text            = userPublicInfo.nickname || Twns.CommonConstants.ErrorTextForUndefined;
                 this._imgCanChat.visible            = !!userPrivilege.canChat;
                 this._imgChatManager.visible        = !!userPrivilege.isChatManager;
                 this._imgCanLogin.visible           = !!userPrivilege.canLogin;

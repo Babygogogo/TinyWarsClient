@@ -191,7 +191,7 @@ namespace Twns.SingleRankRoom.SrrCreateModel {
         const playerInfoList        = getPlayerInfoList();
         const targetPlayerData      = Helpers.getExisted(playerInfoList.find(v => v.playerIndex === playerIndex));
         const oldSkinId             = Helpers.getExisted(targetPlayerData.unitAndTileSkinId);
-        const newSkinId             = oldSkinId % CommonConstants.UnitAndTileMaxSkinId + 1;
+        const newSkinId             = oldSkinId % Twns.CommonConstants.UnitAndTileMaxSkinId + 1;
         // const existingPlayerData    = playerInfoList.find(v => v.unitAndTileSkinId === newSkinId);
         // if (existingPlayerData) {
         //     existingPlayerData.unitAndTileSkinId = oldSkinId;

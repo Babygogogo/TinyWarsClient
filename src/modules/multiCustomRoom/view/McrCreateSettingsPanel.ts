@@ -194,13 +194,13 @@ namespace Twns.MultiCustomRoom {
 
         private async _updateBtnChooseCo(): Promise<void> {
             const gameConfig        = MultiCustomRoom.McrCreateModel.getGameConfig();
-            this._btnChooseCo.label = gameConfig.getCoBasicCfg(MultiCustomRoom.McrCreateModel.getSelfCoId())?.name ?? CommonConstants.ErrorTextForUndefined;
+            this._btnChooseCo.label = gameConfig.getCoBasicCfg(MultiCustomRoom.McrCreateModel.getSelfCoId())?.name ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private async _initSclPlayerIndex(): Promise<void> {
             const playersCountUnneutral = Twns.Helpers.getExisted((await MultiCustomRoom.McrCreateModel.getMapRawData()).playersCountUnneutral);
             const dataArray             : DataForPlayerIndexRenderer[] = [];
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
                     playerIndex,
                 });
@@ -210,7 +210,7 @@ namespace Twns.MultiCustomRoom {
 
         private _initSclSkinId(): void {
             const dataArray: DataForSkinIdRenderer[] = [];
-            for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
+            for (let skinId = Twns.CommonConstants.UnitAndTileMinSkinId; skinId <= Twns.CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
                 dataArray.push({
                     skinId,
                 });
@@ -442,7 +442,7 @@ namespace Twns.MultiCustomRoom {
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -471,7 +471,7 @@ namespace Twns.MultiCustomRoom {
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 

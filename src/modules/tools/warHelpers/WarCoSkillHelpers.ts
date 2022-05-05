@@ -128,7 +128,7 @@ namespace WarCoSkillHelpers {
         const modifier      = cfg[0] * selfFund / 10000 + cfg[1];
         for (const p of war.getPlayerManager().getAllPlayers()) {
             const teamIndex = p.getTeamIndex();
-            if ((teamIndex === selfTeamIndex) || (teamIndex === CommonConstants.WarNeutralTeamIndex)) {
+            if ((teamIndex === selfTeamIndex) || (teamIndex === Twns.CommonConstants.WarNeutralTeamIndex)) {
                 continue;
             }
 
@@ -164,7 +164,7 @@ namespace WarCoSkillHelpers {
         }
 
         const selfPlayerIndex = player.getPlayerIndex();
-        if ((selfPlayerIndex == null) || (selfPlayerIndex === CommonConstants.WarNeutralPlayerIndex)) {
+        if ((selfPlayerIndex == null) || (selfPlayerIndex === Twns.CommonConstants.WarNeutralPlayerIndex)) {
             throw Twns.Helpers.newError(`Invalid selfPlayerIndex: ${selfPlayerIndex}.`, ClientErrorCode.WarCoSkillHelpers_ExeSelfAddUnit_00);
         }
 
@@ -232,7 +232,7 @@ namespace WarCoSkillHelpers {
             const category      = cfg[1];
             const deltaHp       = cfg[2];
             const gameConfig    = war.getGameConfig();
-            const modifier      = deltaHp * CommonConstants.UnitHpNormalizer;
+            const modifier      = deltaHp * Twns.CommonConstants.UnitHpNormalizer;
             for (const unit of unitMap.getAllUnits()) {
                 const unitType  = unit.getUnitType();
                 const gridIndex = unit.getGridIndex();
@@ -251,7 +251,7 @@ namespace WarCoSkillHelpers {
                         if (deltaHp > 0) {
                             unit.setCurrentHp(Math.min(
                                 maxHp,
-                                (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer)
+                                (unit.getNormalizedCurrentHp() + deltaHp) * Twns.CommonConstants.UnitHpNormalizer)
                             );
                         } else {
                             unit.setCurrentHp(Math.max(
@@ -296,7 +296,7 @@ namespace WarCoSkillHelpers {
             const tileCategory  = cfg[2];
             const deltaHp       = cfg[3];
             const gameConfig    = war.getGameConfig();
-            const modifier      = deltaHp * CommonConstants.UnitHpNormalizer;
+            const modifier      = deltaHp * Twns.CommonConstants.UnitHpNormalizer;
             for (const unit of war.getUnitMap().getAllUnits()) {
                 const unitType  = unit.getUnitType();
                 const gridIndex = unit.getGridIndex();
@@ -317,7 +317,7 @@ namespace WarCoSkillHelpers {
                         if (deltaHp > 0) {
                             unit.setCurrentHp(Math.min(
                                 maxHp,
-                                (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer)
+                                (unit.getNormalizedCurrentHp() + deltaHp) * Twns.CommonConstants.UnitHpNormalizer)
                             );
                         } else {
                             unit.setCurrentHp(Math.max(
@@ -743,7 +743,7 @@ namespace WarCoSkillHelpers {
 
         const center            = Twns.Helpers.getExisted(skillData.fixedAreaDamageCenter);
         const mapSize           = unitMap.getMapSize();
-        const hpDamage          = cfg[2] * CommonConstants.UnitHpNormalizer;
+        const hpDamage          = cfg[2] * Twns.CommonConstants.UnitHpNormalizer;
         const isIndiscriminate  = !!cfg[3];
         const actionState       = cfg[4];
         const teamIndex         = player.getTeamIndex();
@@ -1150,7 +1150,7 @@ namespace WarCoSkillHelpers {
             for (let y = 0; y < height; ++y) {
                 if (srcHpMap[x][y] > 0) {
                     const realHpDamage      = Math.min(hpDamage, srcHpMap[x][y] - 1);
-                    const realFundDamage    = Math.floor(srcFundMap[x][y] * realHpDamage / CommonConstants.UnitHpNormalizer);
+                    const realFundDamage    = Math.floor(srcFundMap[x][y] * realHpDamage / Twns.CommonConstants.UnitHpNormalizer);
                     const isSameTeam        = srcSameTeamMap[x][y];
                     if (isIndiscriminate) {
                         hpMap[x][y]             = isSameTeam ? -realHpDamage * 2 : realHpDamage;

@@ -99,7 +99,7 @@ namespace Twns.WarEvent {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.deltaPercentage = null;
             } else {
-                const maxValue          = CommonConstants.WarEventActionSetPlayerCoEnergyMaxDeltaPercentage;
+                const maxValue          = Twns.CommonConstants.WarEventActionSetPlayerCoEnergyMaxDeltaPercentage;
                 action.deltaPercentage  = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
@@ -115,7 +115,7 @@ namespace Twns.WarEvent {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.multiplierPercentage = null;
             } else {
-                const maxValue              = CommonConstants.WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage;
+                const maxValue              = Twns.CommonConstants.WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage;
                 action.multiplierPercentage = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)

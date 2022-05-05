@@ -197,13 +197,13 @@ namespace Twns.MultiFreeRoom {
 
         private async _updateBtnChooseCo(): Promise<void> {
             const cfg               = (await Config.ConfigManager.getGameConfig(MultiFreeRoom.MfrCreateModel.getConfigVersion())).getCoBasicCfg(MultiFreeRoom.MfrCreateModel.getSelfCoId());
-            this._btnChooseCo.label = cfg?.name ?? CommonConstants.ErrorTextForUndefined;
+            this._btnChooseCo.label = cfg?.name ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private async _initSclPlayerIndex(): Promise<void> {
             const playersCountUnneutral = Twns.Helpers.getExisted(MultiFreeRoom.MfrCreateModel.getInitialWarData().playerManager?.players).length - 1;
             const dataArray             : DataForPlayerIndexRenderer[] = [];
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
                     playerIndex,
                 });
@@ -213,7 +213,7 @@ namespace Twns.MultiFreeRoom {
 
         private _initSclSkinId(): void {
             const dataArray: DataForSkinIdRenderer[] = [];
-            for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
+            for (let skinId = Twns.CommonConstants.UnitAndTileMinSkinId; skinId <= Twns.CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
                 dataArray.push({
                     skinId,
                 });
@@ -426,7 +426,7 @@ namespace Twns.MultiFreeRoom {
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -455,7 +455,7 @@ namespace Twns.MultiFreeRoom {
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 

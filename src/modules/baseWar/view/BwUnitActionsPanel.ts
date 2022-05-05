@@ -113,7 +113,7 @@ namespace Twns.BaseWar {
             const container = openData.war.getView().getFieldContainer();
             const contents  = container.getContents();
             const gridIndex = openData.destination;
-            const gridSize  = CommonConstants.GridSize;
+            const gridSize  = Twns.CommonConstants.GridSize;
             const stage     = StageManager.getStage();
             const group     = this._group;
             const point     = contents.localToGlobal(
@@ -175,7 +175,7 @@ namespace Twns.BaseWar {
 
         protected _onDataChanged(): void {
             const data                  = this._getData();
-            this._labelAction.text      = Lang.getUnitActionName(data.actionType) || CommonConstants.ErrorTextForUndefined;
+            this._labelAction.text      = Lang.getUnitActionName(data.actionType) || Twns.CommonConstants.ErrorTextForUndefined;
             this._imgBottomLine.visible = !data.isLastAction;
 
             const unit      = data.unit;
@@ -189,7 +189,7 @@ namespace Twns.BaseWar {
                     labelCost.text = ``;
                 } else {
                     const cost      = data.costForProduceUnit;
-                    labelCost.text  = `${Lang.getText(LangTextType.B0079)}: ${cost != null ? cost : CommonConstants.ErrorTextForUndefined}`;
+                    labelCost.text  = `${Lang.getText(LangTextType.B0079)}: ${cost != null ? cost : Twns.CommonConstants.ErrorTextForUndefined}`;
                 }
                 unitView.visible = true;
                 unitView.init(unit).startRunningView();

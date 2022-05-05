@@ -16,8 +16,8 @@
 namespace Twns.MultiRankRoom {
     import LangTextType     = Twns.Lang.LangTextType;
     import NotifyType       = Twns.Notify.NotifyType;
-    import MaxCount         = CommonConstants.RankMaxConcurrentCount;
-    import MinCount         = CommonConstants.RankMinConcurrentCount;
+    import MaxCount         = Twns.CommonConstants.RankMaxConcurrentCount;
+    import MinCount         = Twns.CommonConstants.RankMinConcurrentCount;
 
     export type OpenDataForMrrSetMaxConcurrentCountPanel = void;
     export class MrrSetMaxConcurrentCountPanel extends TwnsUiPanel.UiPanel<OpenDataForMrrSetMaxConcurrentCountPanel> {
@@ -98,7 +98,7 @@ namespace Twns.MultiRankRoom {
             this._selectedCountForStd   = countForStd;
             this._updateGroupStd();
 
-            this._selectedCountForFog   = Math.min(this._selectedCountForFog ?? 0, CommonConstants.RankMaxConcurrentCount - countForStd);
+            this._selectedCountForFog   = Math.min(this._selectedCountForFog ?? 0, Twns.CommonConstants.RankMaxConcurrentCount - countForStd);
             this._updateGroupFog();
         }
         private _onTouchMoveGroupStd(e: egret.Event): void {
@@ -107,7 +107,7 @@ namespace Twns.MultiRankRoom {
             this._selectedCountForStd   = countForStd;
             this._updateGroupStd();
 
-            this._selectedCountForFog   = Math.min(this._selectedCountForFog ?? 0, CommonConstants.RankMaxConcurrentCount - countForStd);
+            this._selectedCountForFog   = Math.min(this._selectedCountForFog ?? 0, Twns.CommonConstants.RankMaxConcurrentCount - countForStd);
             this._updateGroupFog();
         }
         private _onTouchEndGroupStd(): void {
@@ -123,7 +123,7 @@ namespace Twns.MultiRankRoom {
             this._selectedCountForFog   = countForFog;
             this._updateGroupFog();
 
-            this._selectedCountForStd   = Math.min(this._selectedCountForStd ?? 0, CommonConstants.RankMaxConcurrentCount - countForFog);
+            this._selectedCountForStd   = Math.min(this._selectedCountForStd ?? 0, Twns.CommonConstants.RankMaxConcurrentCount - countForFog);
             this._updateGroupStd();
         }
         private _onTouchMoveGroupFog(e: egret.Event): void {
@@ -132,7 +132,7 @@ namespace Twns.MultiRankRoom {
             this._selectedCountForFog   = countForFog;
             this._updateGroupFog();
 
-            this._selectedCountForStd   = Math.min(this._selectedCountForStd ?? 0, CommonConstants.RankMaxConcurrentCount - countForFog);
+            this._selectedCountForStd   = Math.min(this._selectedCountForStd ?? 0, Twns.CommonConstants.RankMaxConcurrentCount - countForFog);
             this._updateGroupStd();
         }
         private _onTouchEndGroupFog(): void {
@@ -197,7 +197,7 @@ namespace Twns.MultiRankRoom {
                 endProps    : { verticalCenter: 0, alpha: 1 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -211,7 +211,7 @@ namespace Twns.MultiRankRoom {
                 endProps    : { verticalCenter: 40, alpha: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 }

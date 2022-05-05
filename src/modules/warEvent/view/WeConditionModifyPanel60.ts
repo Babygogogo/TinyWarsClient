@@ -220,7 +220,7 @@ namespace Twns.WarEvent {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
-            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelCounterId(): void {
             const counterIdArray        = this._getCondition().counterIdArray;
@@ -232,7 +232,7 @@ namespace Twns.WarEvent {
         }
         private _updateLabelValueComparator(): void {
             const comparator                = Twns.Helpers.getExisted(this._getCondition().valueComparator);
-            this._labelValueComparator.text = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelValueComparator.text = Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputValueDivider(): void {
             const divider                   = this._getCondition().valueDivider;
@@ -244,7 +244,7 @@ namespace Twns.WarEvent {
         }
         private _updateLabelValueRemainderComparator(): void {
             const comparator                            = Twns.Helpers.getExisted(this._getCondition().valueRemainderComparator);
-            this._labelValueRemainderComparator.text    = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelValueRemainderComparator.text    = Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputCounterCount(): void {
             const value                     = this._getCondition().counterCount;
@@ -252,7 +252,7 @@ namespace Twns.WarEvent {
         }
         private _updateLabelCounterCountComparator(): void {
             const comparator                        = Twns.Helpers.getExisted(this._getCondition().counterCountComparator);
-            this._labelCounterCountComparator.text  = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelCounterCountComparator.text  = Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _getCondition(): CommonProto.WarEvent.IWecCustomCounter {

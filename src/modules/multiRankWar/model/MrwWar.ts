@@ -48,7 +48,7 @@ namespace Twns.MultiRankWar {
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getSettingsBootTimerParams(): number[] {
-            return CommonConstants.WarBootTimerDefaultParams;
+            return Twns.CommonConstants.WarBootTimerDefaultParams;
         }
     }
 }

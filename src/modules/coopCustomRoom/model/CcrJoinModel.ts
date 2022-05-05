@@ -49,7 +49,7 @@ namespace Twns.CoopCustomRoom.CcrJoinModel {
     function generateAvailableSkinIdList(roomPlayerInfo: ICcrRoomPlayerInfo): number[] {
         const playerDataList    = Twns.Helpers.getExisted(roomPlayerInfo.playerDataList);
         const idList            : number[] = [];
-        for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
+        for (let skinId = Twns.CommonConstants.UnitAndTileMinSkinId; skinId <= Twns.CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
             if (playerDataList.every(v => v.unitAndTileSkinId !== skinId)) {
                 idList.push(skinId);
             }

@@ -32,7 +32,7 @@ namespace Twns.MapManagement {
             ]);
             this._setIsTouchMaskEnabled();
 
-            this._inputReason.maxChars  = CommonConstants.MapReviewCommentMaxLength;
+            this._inputReason.maxChars  = Twns.CommonConstants.MapReviewCommentMaxLength;
             this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
             this._btnCancel.label       = Lang.getText(LangTextType.B0154);
             this._labelTitle.text       = Lang.getText(LangTextType.B0297);

@@ -84,7 +84,7 @@ namespace Twns.Common {
         private _updateListLocation(): void {
             const openData  = this._getOpenData();
             const dataArray : DataForLocationRenderer[] = [];
-            for (let teamIndex = CommonConstants.WarNeutralTeamIndex; teamIndex <= openData.maxTeamIndex; ++teamIndex) {
+            for (let teamIndex = Twns.CommonConstants.WarNeutralTeamIndex; teamIndex <= openData.maxTeamIndex; ++teamIndex) {
                 dataArray.push({ teamIndex });
             }
 
@@ -103,7 +103,7 @@ namespace Twns.Common {
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = Lang.getPlayerTeamName(this._getData().teamIndex) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName.text = Lang.getPlayerTeamName(this._getData().teamIndex) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
     }
 }

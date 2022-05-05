@@ -42,8 +42,8 @@ namespace Twns.MapEditor {
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
 
-            this._inputChinese.maxChars = CommonConstants.MapMaxNameLength;
-            this._inputEnglish.maxChars = CommonConstants.MapMaxNameLength;
+            this._inputChinese.maxChars = Twns.CommonConstants.MapMaxNameLength;
+            this._inputEnglish.maxChars = Twns.CommonConstants.MapMaxNameLength;
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -65,8 +65,8 @@ namespace Twns.MapEditor {
             ];
             if (textList.every(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
                 FloatText.show(Lang.getText(LangTextType.A0155));
-            } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > CommonConstants.MapMaxNameLength)) {
-                FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.MapMaxNameLength));
+            } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > Twns.CommonConstants.MapMaxNameLength)) {
+                FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.MapMaxNameLength));
             } else {
                 Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).setMapNameArray(textList);
                 Twns.Notify.dispatch(NotifyType.MeMapNameChanged);

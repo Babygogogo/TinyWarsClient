@@ -129,8 +129,8 @@ namespace TwnsUiCoInfo {
             const coId                      = coData.coId;
             const gameConfig                = coData.gameConfig;
             const cfg                       = gameConfig.getCoBasicCfg(coId);
-            this._imgCoPortrait.source      = gameConfig.getCoBustImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
-            this._labelCoName.text          = cfg?.name ?? CommonConstants.ErrorTextForUndefined;
+            this._imgCoPortrait.source      = gameConfig.getCoBustImageSource(coId) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelCoName.text          = cfg?.name ?? Twns.CommonConstants.ErrorTextForUndefined;
             this._labelArtDesigner.text     = cfg?.artDesigner ?? ``;
             this._labelDataDesigner.text    = cfg?.dataDesigner ?? ``;
 
@@ -197,7 +197,7 @@ namespace TwnsUiCoInfo {
             const dataArrayForListSkillDesc : DataForSkillDescRenderer[] = [];
             const rawDesc                   = (gameConfig.getCoSkillDescArray(coId, skillType) || [])[Twns.Lang.getCurrentLanguageType()];
             if (!rawDesc) {
-                dataArrayForListSkillDesc.push({ desc: CommonConstants.ErrorTextForUndefined });
+                dataArrayForListSkillDesc.push({ desc: Twns.CommonConstants.ErrorTextForUndefined });
             } else {
                 for (const desc of rawDesc.split(`\n`)) {
                     dataArrayForListSkillDesc.push({
@@ -220,7 +220,7 @@ namespace TwnsUiCoInfo {
             const data              = this._getData();
             const skillType         = data.coSkillType;
             this.currentState       = data.component.getSelectedSkillType() === skillType ? Twns.Types.UiState.Down : Twns.Types.UiState.Up;
-            this._labelType.text    = Twns.Lang.getCoSkillTypeName(skillType) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelType.text    = Twns.Lang.getCoSkillTypeName(skillType) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         public onItemTapEvent(): void {
@@ -240,7 +240,7 @@ namespace TwnsUiCoInfo {
         protected _onDataChanged(): void {
             const data              = this._getData();
             // this._labelDesc.text    = `- ${ConfigManager.getCoSkillCfg(data.configVersion, data.skillId).desc[Lang.getCurrentLanguageType()]}`;
-            this._labelDesc.text = `- ${data.desc || CommonConstants.ErrorTextForUndefined}`;
+            this._labelDesc.text = `- ${data.desc || Twns.CommonConstants.ErrorTextForUndefined}`;
         }
     }
 }

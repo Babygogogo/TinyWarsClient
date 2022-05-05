@@ -118,7 +118,7 @@ namespace Twns.MapEditor {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = Lang.getLanguageText({ textArray: MapEditor.MeSimModel.getMapRawData().mapNameArray }) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelMapName.text = Lang.getLanguageText({ textArray: MapEditor.MeSimModel.getMapRawData().mapNameArray }) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private async _updateLabelWarRule(): Promise<void> {
@@ -129,7 +129,7 @@ namespace Twns.MapEditor {
                 labelWarRule.text       = Lang.getText(LangTextType.B0321);
                 labelWarRule.textColor  = 0xFFFF00;
             } else {
-                labelWarRule.text       = `(#${templateWarRuleId}) ${Lang.getLanguageText({ textArray: instanceWarRule.ruleNameArray }) ?? CommonConstants.ErrorTextForUndefined}`;
+                labelWarRule.text       = `(#${templateWarRuleId}) ${Lang.getLanguageText({ textArray: instanceWarRule.ruleNameArray }) ?? Twns.CommonConstants.ErrorTextForUndefined}`;
                 labelWarRule.textColor  = 0xFFFFFF;
             }
         }

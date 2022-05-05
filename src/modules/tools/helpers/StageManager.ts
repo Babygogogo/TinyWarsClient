@@ -21,7 +21,7 @@ namespace StageManager {
     let   _stage        : egret.Stage;
     let   _mouseX       : number;
     let   _mouseY       : number;
-    let   _stageScale   = CommonConstants.StageMinScale;
+    let   _stageScale   = Twns.CommonConstants.StageMinScale;
     const _LAYERS       = new Map<LayerType, UiLayer>();
 
     export function init(stg: egret.Stage): void {
@@ -83,7 +83,7 @@ namespace StageManager {
     }
 
     export function setStageScale(scale: number): void {
-        const s = Math.min(Math.max(CommonConstants.StageMinScale, scale), CommonConstants.StageMaxScale);
+        const s = Math.min(Math.max(Twns.CommonConstants.StageMinScale, scale), Twns.CommonConstants.StageMaxScale);
         if (getStageScale() !== s) {
             _stageScale = s;
 

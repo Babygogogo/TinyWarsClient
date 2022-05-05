@@ -267,7 +267,7 @@ namespace Twns.MultiRankRoom {
             const roomInfo              = Twns.Helpers.getExisted(await MultiRankRoom.MrrModel.getRoomInfo(roomId));
             const playersCountUnneutral = Twns.Helpers.getExisted((await WarMap.WarMapModel.getRawData(Twns.Helpers.getExisted(roomInfo.settingsForMrw?.mapId)))?.playersCountUnneutral);
             const dataArray             : DataForPlayerIndexRenderer[] = [];
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
                     roomId,
                     playerIndex,
@@ -279,7 +279,7 @@ namespace Twns.MultiRankRoom {
         private _initSclSkinId(): void {
             const roomId    = this._getOpenData().roomId;
             const dataArray : DataForSkinIdRenderer[] = [];
-            for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
+            for (let skinId = Twns.CommonConstants.UnitAndTileMinSkinId; skinId <= Twns.CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
                 dataArray.push({
                     roomId,
                     skinId,
@@ -361,7 +361,7 @@ namespace Twns.MultiRankRoom {
         private async _updateBtnChooseCo(): Promise<void> {
             const roomInfo          = await MultiRankRoom.MrrModel.getRoomInfo(this._getOpenData().roomId);
             this._btnChooseCo.label = roomInfo
-                ? (await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomInfo.settingsForCommon?.configVersion))).getCoBasicCfg(Twns.Helpers.getExisted(MultiRankRoom.MrrSelfSettingsModel.getCoId()))?.name ?? CommonConstants.ErrorTextForUndefined
+                ? (await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomInfo.settingsForCommon?.configVersion))).getCoBasicCfg(Twns.Helpers.getExisted(MultiRankRoom.MrrSelfSettingsModel.getCoId()))?.name ?? Twns.CommonConstants.ErrorTextForUndefined
                 : ``;
         }
 
@@ -383,10 +383,10 @@ namespace Twns.MultiRankRoom {
             const currentTime                   = Twns.Timer.getServerTimestamp();
             if (timeForStartSetSelfSettings != null) {
                 labelCountdownTitle.text    = Lang.getText(LangTextType.B0593);
-                labelCountdown.text         = Twns.Helpers.getTimeDurationText2(Math.max(0, timeForStartSetSelfSettings + CommonConstants.RankRoomPhaseTime - currentTime));
+                labelCountdown.text         = Twns.Helpers.getTimeDurationText2(Math.max(0, timeForStartSetSelfSettings + Twns.CommonConstants.RankRoomPhaseTime - currentTime));
             } else {
                 labelCountdownTitle.text    = Lang.getText(LangTextType.B0592);
-                labelCountdown.text         = Twns.Helpers.getTimeDurationText2(Math.max(0, Twns.Helpers.getExisted(roomInfo.timeForCreateRoom) + CommonConstants.RankRoomPhaseTime - currentTime));
+                labelCountdown.text         = Twns.Helpers.getTimeDurationText2(Math.max(0, Twns.Helpers.getExisted(roomInfo.timeForCreateRoom) + Twns.CommonConstants.RankRoomPhaseTime - currentTime));
             }
         }
         private async _updateLabelState(): Promise<void> {
@@ -493,7 +493,7 @@ namespace Twns.MultiRankRoom {
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -527,7 +527,7 @@ namespace Twns.MultiRankRoom {
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -694,8 +694,8 @@ namespace Twns.MultiRankRoom {
                             },
                         });
                     };
-                    if ((coId == CommonConstants.CoEmptyId)                                                             &&
-                        ((MultiRankRoom.MrrSelfSettingsModel.getAvailableCoIdArray() || []).some(v => v !== CommonConstants.CoEmptyId))
+                    if ((coId == Twns.CommonConstants.CoEmptyId)                                                             &&
+                        ((MultiRankRoom.MrrSelfSettingsModel.getAvailableCoIdArray() || []).some(v => v !== Twns.CommonConstants.CoEmptyId))
                     ) {
                         Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0208),

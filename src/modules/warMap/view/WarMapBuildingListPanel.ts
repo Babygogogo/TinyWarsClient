@@ -136,7 +136,7 @@ namespace Twns.WarMap {
             const dict              = data.dict;
             const maxPlayerIndex    = data.maxPlayerIndex;
             let totalNum            = 0;
-            for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.WarNeutralPlayerIndex; playerIndex <= Twns.CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                 const num                               = dict.get(playerIndex) || 0;
                 totalNum                                += num;
                 this._labelNumList[playerIndex].text    = playerIndex <= maxPlayerIndex ? `${num}` : `--`;
@@ -152,8 +152,8 @@ namespace Twns.WarMap {
                 tileObjectType      : tileObjectType,
                 tileObjectShapeId   : 0,
                 playerIndex         : tileObjectType === Twns.Types.TileObjectType.Headquarters
-                    ? CommonConstants.WarFirstPlayerIndex
-                    : CommonConstants.WarNeutralPlayerIndex,
+                    ? Twns.CommonConstants.WarFirstPlayerIndex
+                    : Twns.CommonConstants.WarNeutralPlayerIndex,
             });
             this._tileView.updateView();
         }

@@ -114,7 +114,7 @@ namespace LocalStorage {
         storage.setItem(KEY_STAGE_SCALE, `${scale}`);
     }
     export function getStageScale(): number {
-        return parseInt(storage.getItem(KEY_STAGE_SCALE)) || CommonConstants.StageMinScale;
+        return parseInt(storage.getItem(KEY_STAGE_SCALE)) || Twns.CommonConstants.StageMinScale;
     }
 }
 

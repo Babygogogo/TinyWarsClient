@@ -79,7 +79,7 @@ namespace Twns.Common {
             this._labelPasswordTitle.text   = `${Lang.getText(LangTextType.B0171)}:`;
             this._btnCancel.label           = Lang.getText(LangTextType.B0154);
             this._btnConfirm.label          = Lang.getText(LangTextType.B0026);
-            this._labelTips.text            = Lang.getFormattedText(LangTextType.F0068, CommonConstants.WarPasswordMaxLength);
+            this._labelTips.text            = Lang.getFormattedText(LangTextType.F0068, Twns.CommonConstants.WarPasswordMaxLength);
             this._updateLabelWarName();
         }
         private async _updateLabelWarName(): Promise<void> {
@@ -91,7 +91,7 @@ namespace Twns.Common {
             } else {
                 const mapId = openData.mapId;
                 if (mapId != null) {
-                    label.text = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
+                    label.text = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || Twns.CommonConstants.ErrorTextForUndefined;
                 } else {
                     label.text = Lang.getText(LangTextType.B0555);
                 }
@@ -110,7 +110,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -124,7 +124,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 0, verticalCenter: -40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 }

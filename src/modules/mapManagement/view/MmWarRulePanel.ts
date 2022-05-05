@@ -506,7 +506,7 @@ namespace Twns.MapManagement {
         private _createDataTeamIndex(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0019),
-                infoText                : Lang.getPlayerTeamName(Helpers.getExisted(playerRule.teamIndex)) ?? CommonConstants.ErrorTextForUndefined,
+                infoText                : Lang.getPlayerTeamName(Helpers.getExisted(playerRule.teamIndex)) ?? Twns.CommonConstants.ErrorTextForUndefined,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     WarHelpers.WarRuleHelpers.tickTeamIndex(templateWarRule, Helpers.getExisted(playerRule.playerIndex));
@@ -524,7 +524,7 @@ namespace Twns.MapManagement {
                 callbackOnTouchedTitle  : () => PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseCoPanel, {
                     gameConfig,
                     currentCoIdArray        : currentBannedCoIdArray,
-                    forceUnchosenCoIdArray  : [CommonConstants.CoEmptyId],
+                    forceUnchosenCoIdArray  : [Twns.CommonConstants.CoEmptyId],
                     callbackOnConfirm       : bannedCoIdArray => {
                         WarHelpers.WarRuleHelpers.setBannedCoIdArray(templateWarRule, Helpers.getExisted(playerRule.playerIndex), new Set(bannedCoIdArray));
                         this._updateView();
@@ -568,10 +568,10 @@ namespace Twns.MapManagement {
             return {
                 titleText               : Lang.getText(LangTextType.B0178),
                 infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleInitialFundDefault),
                 callbackOnTouchedTitle  : () => {
-                    const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
-                    const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
+                    const maxValue  = Twns.CommonConstants.WarRuleInitialFundMaxLimit;
+                    const minValue  = Twns.CommonConstants.WarRuleInitialFundMinLimit;
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                         title           : Lang.getText(LangTextType.B0178),
                         currentValue    : currValue,
@@ -591,10 +591,10 @@ namespace Twns.MapManagement {
             return {
                 titleText               : Lang.getText(LangTextType.B0179),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleIncomeMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
-                    const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
-                    const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
+                    const maxValue  = Twns.CommonConstants.WarRuleIncomeMultiplierMaxLimit;
+                    const minValue  = Twns.CommonConstants.WarRuleIncomeMultiplierMinLimit;
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                         title           : Lang.getText(LangTextType.B0179),
                         currentValue    : currValue,
@@ -614,10 +614,10 @@ namespace Twns.MapManagement {
             return {
                 titleText               : Lang.getText(LangTextType.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : () => {
-                    const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
-                    const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
+                    const minValue      = Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
+                    const maxValue      = Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                         title           : Lang.getText(LangTextType.B0180),
                         currentValue    : currValue,
@@ -637,10 +637,10 @@ namespace Twns.MapManagement {
             return {
                 titleText               : Lang.getText(LangTextType.B0181),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
-                    const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
-                    const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
+                    const minValue      = Twns.CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
+                    const maxValue      = Twns.CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                         title           : Lang.getText(LangTextType.B0181),
                         currentValue    : currValue,
@@ -660,10 +660,10 @@ namespace Twns.MapManagement {
             return {
                 titleText               : Lang.getText(LangTextType.B0182),
                 infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleMoveRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
-                    const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
-                    const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
+                    const minValue      = Twns.CommonConstants.WarRuleMoveRangeModifierMinLimit;
+                    const maxValue      = Twns.CommonConstants.WarRuleMoveRangeModifierMaxLimit;
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                         title           : Lang.getText(LangTextType.B0182),
                         currentValue    : currValue,
@@ -683,10 +683,10 @@ namespace Twns.MapManagement {
             return {
                 titleText               : Lang.getText(LangTextType.B0183),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleOffenseBonusDefault),
                 callbackOnTouchedTitle  : () => {
-                    const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
-                    const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
+                    const minValue      = Twns.CommonConstants.WarRuleOffenseBonusMinLimit;
+                    const maxValue      = Twns.CommonConstants.WarRuleOffenseBonusMaxLimit;
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                         title           : Lang.getText(LangTextType.B0183),
                         currentValue    : currValue,
@@ -706,10 +706,10 @@ namespace Twns.MapManagement {
             return {
                 titleText               : Lang.getText(LangTextType.B0184),
                 infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleVisionRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
-                    const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
-                    const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
+                    const minValue      = Twns.CommonConstants.WarRuleVisionRangeModifierMinLimit;
+                    const maxValue      = Twns.CommonConstants.WarRuleVisionRangeModifierMaxLimit;
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                         title           : Lang.getText(LangTextType.B0184),
                         currentValue    : currValue,
@@ -730,10 +730,10 @@ namespace Twns.MapManagement {
             return {
                 titleText               : Lang.getText(LangTextType.B0189),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultLowerLimit),
                 callbackOnTouchedTitle  : () => {
-                    const minValue      = CommonConstants.WarRuleLuckMinLimit;
-                    const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
+                    const minValue      = Twns.CommonConstants.WarRuleLuckMinLimit;
+                    const maxValue      = Twns.CommonConstants.WarRuleLuckMaxLimit;
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                         title           : Lang.getText(LangTextType.B0189),
                         currentValue    : currValue,
@@ -761,10 +761,10 @@ namespace Twns.MapManagement {
             return {
                 titleText               : Lang.getText(LangTextType.B0190),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
+                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultUpperLimit),
                 callbackOnTouchedTitle  : () => {
-                    const minValue      = CommonConstants.WarRuleLuckMinLimit;
-                    const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
+                    const minValue      = Twns.CommonConstants.WarRuleLuckMinLimit;
+                    const maxValue      = Twns.CommonConstants.WarRuleLuckMaxLimit;
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                         title           : Lang.getText(LangTextType.B0190),
                         currentValue    : currValue,
@@ -802,7 +802,7 @@ namespace Twns.MapManagement {
                     if (isControlledByAi) {
                         WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, playerIndex, null);
                     } else {
-                        WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, playerIndex, CommonConstants.CoEmptyId);
+                        WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, playerIndex, Twns.CommonConstants.CoEmptyId);
                     }
                     this._updateView();
                 },
@@ -813,7 +813,7 @@ namespace Twns.MapManagement {
             const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
             return {
                 titleText               : Lang.getText(LangTextType.B0644),
-                infoText                : coId == null ? `--` : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined,
+                infoText                : coId == null ? `--` : gameConfig.getCoNameAndTierText(coId) ?? Twns.CommonConstants.ErrorTextForUndefined,
                 infoColor               : coId == null ? 0xFFFFFF : 0x00FF00,
                 callbackOnTouchedTitle  : () => {
                     if (!templateWarRule.ruleAvailability?.canCcw) {
@@ -853,7 +853,7 @@ namespace Twns.MapManagement {
                     if (isControlledByAi) {
                         WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, playerIndex, null);
                     } else {
-                        WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, playerIndex, CommonConstants.CoEmptyId);
+                        WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, playerIndex, Twns.CommonConstants.CoEmptyId);
                     }
                     this._updateView();
                 },
@@ -864,7 +864,7 @@ namespace Twns.MapManagement {
             const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
             return {
                 titleText               : Lang.getText(LangTextType.B0815),
-                infoText                : coId == null ? `--` : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined,
+                infoText                : coId == null ? `--` : gameConfig.getCoNameAndTierText(coId) ?? Twns.CommonConstants.ErrorTextForUndefined,
                 infoColor               : coId == null ? 0xFFFFFF : 0x00FF00,
                 callbackOnTouchedTitle  : () => {
                     if (!templateWarRule.ruleAvailability?.canSrw) {
@@ -957,7 +957,7 @@ namespace Twns.MapManagement {
         }
         private _updateLabelWarEventName(): void {
             const data                      = this._getData();
-            this._labelWarEventName.text    = Lang.getLanguageText({ textArray: data.warEventFullData?.eventArray?.find(v => v.eventId === data.warEventId)?.eventNameArray }) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelWarEventName.text    = Lang.getLanguageText({ textArray: data.warEventFullData?.eventArray?.find(v => v.eventId === data.warEventId)?.eventNameArray }) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
     }
 

@@ -41,8 +41,8 @@ namespace Twns.ChangeLog {
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
 
-            this._inputChinese.maxChars = CommonConstants.ChangeLogTextMaxLength;
-            this._inputEnglish.maxChars = CommonConstants.ChangeLogTextMaxLength;
+            this._inputChinese.maxChars = Twns.CommonConstants.ChangeLogTextMaxLength;
+            this._inputEnglish.maxChars = Twns.CommonConstants.ChangeLogTextMaxLength;
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -64,8 +64,8 @@ namespace Twns.ChangeLog {
             ];
             if (textList.every(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
                 FloatText.show(Lang.getText(LangTextType.A0155));
-            } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > CommonConstants.ChangeLogTextMaxLength)) {
-                FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.ChangeLogTextMaxLength));
+            } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > Twns.CommonConstants.ChangeLogTextMaxLength)) {
+                FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.ChangeLogTextMaxLength));
             } else {
                 Twns.ChangeLog.ChangeLogProxy.reqChangeLogAddMessage(textList);
                 this.close();

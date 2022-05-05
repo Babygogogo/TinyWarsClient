@@ -10,7 +10,7 @@ namespace GridIndexHelpers {
     import Direction            = Twns.Types.Direction;
     import Point                = Twns.Types.Point;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Twns.CommonConstants.GridSize;
     const _ADJACENT_OFFSETS = [
         { offset: { x: -1, y:  0 }, direction: Direction.Left,  clockwiseOffset: { x:  1, y:  1 }, },
         { offset: { x:  1, y:  0 }, direction: Direction.Right, clockwiseOffset: { x: -1, y: -1 }, },

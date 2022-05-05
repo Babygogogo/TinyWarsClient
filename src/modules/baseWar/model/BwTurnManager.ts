@@ -42,7 +42,7 @@ namespace Twns.BaseWar {
 
             const playerIndex = data.playerIndex;
             if ((playerIndex == null)                                   ||
-                (playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                (playerIndex < Twns.CommonConstants.WarNeutralPlayerIndex)   ||
                 (playerIndex > playersCountUnneutral)
             ) {
                 throw Twns.Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTurnManager_Init_01);
@@ -203,7 +203,7 @@ namespace Twns.BaseWar {
             this._setHasUnitOnBeginningTurn(war.getUnitMap().checkHasUnit(playerIndex));
 
             let totalIncome = war.getTileMap().getTotalIncomeForPlayer(playerIndex);
-            if (this.getTurnIndex() === CommonConstants.WarFirstTurnIndex) {
+            if (this.getTurnIndex() === Twns.CommonConstants.WarFirstTurnIndex) {
                 const initialFund = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
                 totalIncome += initialFund;
             }
@@ -220,7 +220,7 @@ namespace Twns.BaseWar {
             const playerIndex = this.getPlayerIndexInTurn();
             const turnIndex = this.getTurnIndex();
             const war = this.getWar();
-            if (turnIndex > CommonConstants.WarFirstTurnIndex) {
+            if (turnIndex > Twns.CommonConstants.WarFirstTurnIndex) {
                 for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
                     if (unit.getPlayerIndex() === playerIndex) {
                         const currentFuel = unit.getCurrentFuel();
@@ -446,7 +446,7 @@ namespace Twns.BaseWar {
                                 recoverAmount,
                                 Math.floor(currentFund * normalizedMaxHp / productionCost)
                             );
-                            const repairAmount = (normalizedRepairHp + normalizedCurrentHp) * CommonConstants.UnitHpNormalizer - currentHp;
+                            const repairAmount = (normalizedRepairHp + normalizedCurrentHp) * Twns.CommonConstants.UnitHpNormalizer - currentHp;
 
                             if (repairAmount > 0) {
                                 const gridIndex = unit.getGridIndex();
@@ -790,7 +790,7 @@ namespace Twns.BaseWar {
                 const restTimeToBoot    = Math.max(
                     0,
                     Math.min(
-                        CommonConstants.WarBootTimerIncrementalMaxLimit,
+                        Twns.CommonConstants.WarBootTimerIncrementalMaxLimit,
                         oldRestTimeToBoot - (currTime - enterTurnTime) + incrementalTime * war.getUnitMap().countAllUnitsForPlayer(playerIndex),
                     ),
                 );
@@ -905,7 +905,7 @@ namespace Twns.BaseWar {
         public getNextAlivePlayerIndex(playerIndex: number, includeNeutral = false): number {
             const data          = this._getNextAliveTurnAndPlayerIndex(null, playerIndex);
             const playerIndex1  = data.playerIndex;
-            if ((playerIndex1 !== CommonConstants.WarNeutralPlayerIndex) || (includeNeutral)) {
+            if ((playerIndex1 !== Twns.CommonConstants.WarNeutralPlayerIndex) || (includeNeutral)) {
                 return playerIndex1;
             } else {
                 const nextData = this._getNextAliveTurnAndPlayerIndex(data.turnIndex, playerIndex1);
@@ -942,7 +942,7 @@ namespace Twns.BaseWar {
             } else {
                 return {
                     turnIndex   : currTurnIndex + 1,
-                    playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex : Twns.CommonConstants.WarNeutralPlayerIndex,
                 };
             }
         }
@@ -1140,12 +1140,12 @@ namespace Twns.BaseWar {
                                 if (deltaHp > 0) {
                                     unit.setCurrentHp(Math.min(
                                         unit.getMaxHp(),
-                                        (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer)
+                                        (unit.getNormalizedCurrentHp() + deltaHp) * Twns.CommonConstants.UnitHpNormalizer)
                                     );
                                 } else {
                                     unit.setCurrentHp(Math.max(
                                         1,
-                                        unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
+                                        unit.getCurrentHp() + deltaHp * Twns.CommonConstants.UnitHpNormalizer
                                     ));
                                 }
                             } else {
@@ -1153,7 +1153,7 @@ namespace Twns.BaseWar {
                                     1,
                                     Math.min(
                                         unit.getMaxHp(),
-                                        unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
+                                        unit.getCurrentHp() + deltaHp * Twns.CommonConstants.UnitHpNormalizer
                                     ),
                                 ));
                             }
@@ -1259,12 +1259,12 @@ namespace Twns.BaseWar {
                             if (deltaHp > 0) {
                                 unit.setCurrentHp(Math.min(
                                     unit.getMaxHp(),
-                                    (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer)
+                                    (unit.getNormalizedCurrentHp() + deltaHp) * Twns.CommonConstants.UnitHpNormalizer)
                                 );
                             } else {
                                 unit.setCurrentHp(Math.max(
                                     1,
-                                    unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
+                                    unit.getCurrentHp() + deltaHp * Twns.CommonConstants.UnitHpNormalizer
                                 ));
                             }
                         } else {
@@ -1272,7 +1272,7 @@ namespace Twns.BaseWar {
                                 1,
                                 Math.min(
                                     unit.getMaxHp(),
-                                    unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
+                                    unit.getCurrentHp() + deltaHp * Twns.CommonConstants.UnitHpNormalizer
                                 ),
                             ));
                         }
@@ -1430,12 +1430,12 @@ namespace Twns.BaseWar {
                             if (deltaHp > 0) {
                                 unit.setCurrentHp(Math.min(
                                     unit.getMaxHp(),
-                                    (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer)
+                                    (unit.getNormalizedCurrentHp() + deltaHp) * Twns.CommonConstants.UnitHpNormalizer)
                                 );
                             } else {
                                 unit.setCurrentHp(Math.max(
                                     1,
-                                    unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
+                                    unit.getCurrentHp() + deltaHp * Twns.CommonConstants.UnitHpNormalizer
                                 ));
                             }
                         } else {
@@ -1443,7 +1443,7 @@ namespace Twns.BaseWar {
                                 1,
                                 Math.min(
                                     unit.getMaxHp(),
-                                    unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
+                                    unit.getCurrentHp() + deltaHp * Twns.CommonConstants.UnitHpNormalizer
                                 ),
                             ));
                         }

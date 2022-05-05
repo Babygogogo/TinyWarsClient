@@ -146,7 +146,7 @@ namespace Twns.Common {
                 } else {
                     Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0893),
-                        content : Lang.getLanguageText({ textArray: mapDesc }) ?? CommonConstants.ErrorTextForUndefined,
+                        content : Lang.getLanguageText({ textArray: mapDesc }) ?? Twns.CommonConstants.ErrorTextForUndefined,
                     });
                 }
 
@@ -193,7 +193,7 @@ namespace Twns.Common {
         private _updateView(): void {
             const data              = this._getData();
             const settingsType      = data.settingsType;
-            this._labelTitle.text   = Lang.getWarBasicSettingsName(settingsType) || CommonConstants.ErrorTextForUndefined;
+            this._labelTitle.text   = Lang.getWarBasicSettingsName(settingsType) || Twns.CommonConstants.ErrorTextForUndefined;
             this._btnModify.visible = data.callbackOnModify != null;
 
             if (settingsType === WarBasicSettingsType.MapId) {
@@ -238,7 +238,7 @@ namespace Twns.Common {
                 labelValue.text = `--`;
                 btnHelp.visible = false;
             } else {
-                labelValue.text = (await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                labelValue.text = (await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId)) ?? Twns.CommonConstants.ErrorTextForUndefined;
                 btnHelp.visible = !!(await WarMap.WarMapModel.getRawData(mapId))?.mapExtraText?.mapDescription?.length;
             }
         }
@@ -266,7 +266,7 @@ namespace Twns.Common {
                 labelValue.text         = Lang.getText(LangTextType.B0321);
                 labelValue.textColor    = 0xFFFF00;
             } else {
-                labelValue.text         = `(#${templateWarRuleId}) ${Lang.getLanguageText({ textArray: instanceWarRule.ruleNameArray }) ?? CommonConstants.ErrorTextForUndefined}`;
+                labelValue.text         = `(#${templateWarRuleId}) ${Lang.getLanguageText({ textArray: instanceWarRule.ruleNameArray }) ?? Twns.CommonConstants.ErrorTextForUndefined}`;
                 labelValue.textColor    = 0xFFFFFF;
             }
             this._btnHelp.visible   = false;
@@ -297,12 +297,12 @@ namespace Twns.Common {
         }
         private _updateViewAsTurnsLimit(): void {
             const data              = this._getData();
-            this._labelValue.text   = `${data.currentValue ?? CommonConstants.WarMaxTurnsLimit}`;
+            this._labelValue.text   = `${data.currentValue ?? Twns.CommonConstants.WarMaxTurnsLimit}`;
             this._btnHelp.visible   = true;
         }
         private _updateViewAsTimerType(): void {
             const data              = this._getData();
-            this._labelValue.text   = Lang.getBootTimerTypeName(data.currentValue as Twns.Types.BootTimerType) || CommonConstants.ErrorTextForUndefined;
+            this._labelValue.text   = Lang.getBootTimerTypeName(data.currentValue as Twns.Types.BootTimerType) || Twns.CommonConstants.ErrorTextForUndefined;
             this._btnHelp.visible   = true;
         }
         private _updateViewAsTimerRegularParam(): void {
@@ -341,7 +341,7 @@ namespace Twns.Common {
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0185),
                 currentValue    : `${currentValue || ``}`,
-                maxChars        : CommonConstants.WarNameMaxLength,
+                maxChars        : Twns.CommonConstants.WarNameMaxLength,
                 charRestrict    : null,
                 tips            : null,
                 callback        : panel => {
@@ -359,9 +359,9 @@ namespace Twns.Common {
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0186),
                 currentValue    : `${currentValue || ``}`,
-                maxChars        : CommonConstants.WarPasswordMaxLength,
+                maxChars        : Twns.CommonConstants.WarPasswordMaxLength,
                 charRestrict    : `0-9`,
-                tips            : Lang.getFormattedText(LangTextType.F0068, CommonConstants.WarPasswordMaxLength),
+                tips            : Lang.getFormattedText(LangTextType.F0068, Twns.CommonConstants.WarPasswordMaxLength),
                 callback        : panel => {
                     const newValue = panel.getInputText() || null;
                     if (newValue != currentValue) {
@@ -377,7 +377,7 @@ namespace Twns.Common {
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0187),
                 currentValue    : `${currentValue || ``}`,
-                maxChars        : CommonConstants.WarCommentMaxLength,
+                maxChars        : Twns.CommonConstants.WarCommentMaxLength,
                 charRestrict    : null,
                 tips            : null,
                 callback        : panel => {
@@ -423,8 +423,8 @@ namespace Twns.Common {
         private _modifyAsTurnsLimit(): void {
             const data          = this._getData();
             const callback      = Twns.Helpers.getExisted(data.callbackOnModify);
-            const minValue      = CommonConstants.WarMinTurnsLimit;
-            const maxValue      = CommonConstants.WarMaxTurnsLimit;
+            const minValue      = Twns.CommonConstants.WarMinTurnsLimit;
+            const maxValue      = Twns.CommonConstants.WarMaxTurnsLimit;
             const currentValue  = Number(data.currentValue) || maxValue;
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0842),
@@ -454,7 +454,7 @@ namespace Twns.Common {
             const data          = this._getData();
             const callback      = Twns.Helpers.getExisted(data.callbackOnModify);
             const minValue      = 1;
-            const maxValue      = CommonConstants.WarBootTimerIncrementalMaxLimit;
+            const maxValue      = Twns.CommonConstants.WarBootTimerIncrementalMaxLimit;
             const currentValue  = Number(data.currentValue) ?? 0;
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0389),
@@ -474,7 +474,7 @@ namespace Twns.Common {
             const data          = this._getData();
             const callback      = Twns.Helpers.getExisted(data.callbackOnModify);
             const minValue      = 0;
-            const maxValue      = CommonConstants.WarBootTimerIncrementalMaxLimit;
+            const maxValue      = Twns.CommonConstants.WarBootTimerIncrementalMaxLimit;
             const currentValue  = Number(data.currentValue) ?? 0;
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0390),
@@ -502,7 +502,7 @@ namespace Twns.Common {
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0605),
                 currentValue    : `${currentValue || ``}`,
-                maxChars        : CommonConstants.SpmSaveSlotCommentMaxLength,
+                maxChars        : Twns.CommonConstants.SpmSaveSlotCommentMaxLength,
                 charRestrict    : null,
                 tips            : null,
                 callback        : panel => {

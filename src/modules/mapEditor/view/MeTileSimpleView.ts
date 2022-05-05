@@ -9,11 +9,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import TileBaseType             = Twns.Types.TileBaseType;
-    import TileDecoratorType        = Twns.Types.TileDecoratorType;
-    import TileObjectType           = Twns.Types.TileObjectType;
+    import TileBaseType             = Types.TileBaseType;
+    import TileDecoratorType        = Types.TileDecoratorType;
+    import TileObjectType           = Types.TileObjectType;
 
-    const { height: GRID_HEIGHT }   = CommonConstants.GridSize;
+    const { height: GRID_HEIGHT }   = Twns.CommonConstants.GridSize;
     export type TileViewData = {
         tileBaseType        : TileBaseType | null;
         tileBaseShapeId     : number | null;
@@ -92,8 +92,8 @@ namespace Twns.MapEditor {
         }
 
         protected _updateImages(): void {
-            const version   = Twns.User.UserModel.getSelfSettingsTextureVersion();
-            const tickCount = Twns.Timer.getTileAnimationTickCount();
+            const version   = User.UserModel.getSelfSettingsTextureVersion();
+            const tickCount = Timer.getTileAnimationTickCount();
 
             {
                 const objectType    = this._objectType;
@@ -102,10 +102,10 @@ namespace Twns.MapEditor {
                     imgObject.visible = false;
                 } else {
                     imgObject.visible = true;
-                    imgObject.source  = Twns.Common.CommonModel.getCachedTileObjectImageSource({
+                    imgObject.source  = Common.CommonModel.getCachedTileObjectImageSource({
                         version,
-                        themeType   : Twns.Types.TileThemeType.Clear,
-                        skinId      : Twns.Helpers.getExisted(this._playerIndex),
+                        themeType   : Types.TileThemeType.Clear,
+                        skinId      : Helpers.getExisted(this._playerIndex),
                         objectType,
                         isDark      : false,
                         shapeId     : this._objectShapeId ?? 0,
@@ -121,13 +121,13 @@ namespace Twns.MapEditor {
                     imgBase.visible = false;
                 } else {
                     imgBase.visible = true;
-                    imgBase.source  = Twns.Common.CommonModel.getCachedTileBaseImageSource({
+                    imgBase.source  = Common.CommonModel.getCachedTileBaseImageSource({
                         version,
-                        themeType   : Twns.Types.TileThemeType.Clear,
-                        skinId      : CommonConstants.UnitAndTileNeutralSkinId,
+                        themeType   : Types.TileThemeType.Clear,
+                        skinId      : Twns.CommonConstants.UnitAndTileNeutralSkinId,
                         baseType,
                         isDark      : false,
-                        shapeId     : Twns.Helpers.getExisted(this._baseShapeId),
+                        shapeId     : Helpers.getExisted(this._baseShapeId),
                         tickCount,
                     });
                 }
@@ -140,13 +140,13 @@ namespace Twns.MapEditor {
                     imgDecorator.visible = false;
                 } else {
                     imgDecorator.visible = true;
-                    imgDecorator.source  = Twns.Common.CommonModel.getCachedTileDecoratorImageSource({
+                    imgDecorator.source  = Common.CommonModel.getCachedTileDecoratorImageSource({
                         version,
-                        themeType   : Twns.Types.TileThemeType.Clear,
-                        skinId      : CommonConstants.UnitAndTileNeutralSkinId,
+                        themeType   : Types.TileThemeType.Clear,
+                        skinId      : Twns.CommonConstants.UnitAndTileNeutralSkinId,
                         decoratorType,
                         isDark      : false,
-                        shapeId     : Twns.Helpers.getExisted(this._decoratorShapeId),
+                        shapeId     : Helpers.getExisted(this._decoratorShapeId),
                         tickCount,
                     });
                 }

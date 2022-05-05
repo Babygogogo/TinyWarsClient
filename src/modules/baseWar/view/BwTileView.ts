@@ -18,7 +18,7 @@ namespace Twns.BaseWar {
     const {
         height  : GRID_HEIGHT,
         width   : GRID_WIDTH,
-    } = CommonConstants.GridSize;
+    } = Twns.CommonConstants.GridSize;
 
     export type DataForTileView = {
         tileData    : ISerialTile;
@@ -78,7 +78,7 @@ namespace Twns.BaseWar {
                 imgObject.source    = Twns.Common.CommonModel.getCachedTileObjectImageSource({
                     version,
                     themeType,
-                    skinId      : ((hasFog) && (objectType !== TileObjectType.Headquarters)) ? CommonConstants.UnitAndTileNeutralSkinId : skinId,
+                    skinId      : ((hasFog) && (objectType !== TileObjectType.Headquarters)) ? Twns.CommonConstants.UnitAndTileNeutralSkinId : skinId,
                     shapeId     : tileData.objectShapeId || 0,
                     objectType,
                     isDark      : hasFog,
@@ -98,7 +98,7 @@ namespace Twns.BaseWar {
                     imgBase.source  = Twns.Common.CommonModel.getCachedTileBaseImageSource({
                         version,
                         themeType,
-                        skinId      : CommonConstants.UnitAndTileNeutralSkinId,
+                        skinId      : Twns.CommonConstants.UnitAndTileNeutralSkinId,
                         shapeId     : tileData.baseShapeId || 0,
                         baseType,
                         isDark      : hasFog,
@@ -117,7 +117,7 @@ namespace Twns.BaseWar {
                     imgDecorator.source     = Twns.Common.CommonModel.getCachedTileDecoratorImageSource({
                         version,
                         themeType,
-                        skinId          : CommonConstants.UnitAndTileNeutralSkinId,
+                        skinId          : Twns.CommonConstants.UnitAndTileNeutralSkinId,
                         decoratorType,
                         shapeId         : tileData.decoratorShapeId ?? null,
                         isDark          : hasFog,

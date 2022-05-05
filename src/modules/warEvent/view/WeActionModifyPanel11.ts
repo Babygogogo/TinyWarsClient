@@ -119,12 +119,12 @@ namespace Twns.WarEvent {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
-            this._labelDesc.text    = WarEventHelpers.getDescForAction(action, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarEventHelpers.getDescForAction(action, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelActionIdArray(): void {
             const actionIdArray             = this._getAction().actionIdArray;
-            this._labelActionIdArray.text   = actionIdArray?.length ? actionIdArray.join(`, `) : CommonConstants.ErrorTextForUndefined;
+            this._labelActionIdArray.text   = actionIdArray?.length ? actionIdArray.join(`, `) : Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _getAction(): CommonProto.WarEvent.IWeaStopPersistentAction {

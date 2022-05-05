@@ -102,7 +102,7 @@ namespace Twns.Common {
             rendererArray.length    = 0;
 
             for (const player of war.getPlayerManager().getAllPlayers().sort((v1, v2) => v1.getPlayerIndex() - v2.getPlayerIndex())) {
-                if (player.getPlayerIndex() == CommonConstants.WarNeutralPlayerIndex) {
+                if (player.getPlayerIndex() == Twns.CommonConstants.WarNeutralPlayerIndex) {
                     continue;
                 }
 
@@ -158,7 +158,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -172,7 +172,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 0, verticalCenter: -40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -229,7 +229,7 @@ namespace Twns.Common {
             const isSelected            = !!this._isSelected;
             this._imgSelected.visible   = isSelected;
             this._imgUnselected.visible = !isSelected;
-            this._labelName.text        = `${this._gameConfig?.getCoBasicCfg(Twns.Helpers.getExisted(this._coId))?.name || CommonConstants.ErrorTextForUndefined}(${this._energy})`;
+            this._labelName.text        = `${this._gameConfig?.getCoBasicCfg(Twns.Helpers.getExisted(this._coId))?.name || Twns.CommonConstants.ErrorTextForUndefined}(${this._energy})`;
         }
     }
 }

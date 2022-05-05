@@ -469,7 +469,7 @@ namespace Twns.MapEditor {
                     tileDecoratorShapeId: null,
                     tileObjectShapeId   : null,
                     tileObjectType      : null,
-                    playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex         : Twns.CommonConstants.WarNeutralPlayerIndex,
                 });
                 tileView.updateView();
 
@@ -484,7 +484,7 @@ namespace Twns.MapEditor {
                     tileDecoratorShapeId: tileDecoratorData.shapeId,
                     tileObjectShapeId   : null,
                     tileObjectType      : null,
-                    playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex         : Twns.CommonConstants.WarNeutralPlayerIndex,
                 });
                 tileView.updateView();
 
@@ -580,7 +580,7 @@ namespace Twns.MapEditor {
                 tileDecoratorShapeId: null,
                 tileObjectType      : null,
                 tileObjectShapeId   : null,
-                playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : Twns.CommonConstants.WarNeutralPlayerIndex,
             });
             tileView.startRunningView();
         }
@@ -591,7 +591,7 @@ namespace Twns.MapEditor {
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : Twns.Types.UnitType.Infantry,
-                playerIndex : CommonConstants.WarFirstPlayerIndex,
+                playerIndex : Twns.CommonConstants.WarFirstPlayerIndex,
             }, this._getWar().getGameConfig());
             unit.startRunning(war);
 

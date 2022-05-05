@@ -302,7 +302,7 @@ namespace Twns.MapEditor {
                 playerRules.playerRuleDataArray = Twns.Helpers.getExisted(playerRules.playerRuleDataArray).filter(v => {
                     const playerIndex = Twns.Helpers.getExisted(v.playerIndex);
                     return (playerIndex <= playersCountUnneutral)
-                        && (playerIndex >= CommonConstants.WarFirstPlayerIndex);
+                        && (playerIndex >= Twns.CommonConstants.WarFirstPlayerIndex);
                 }).sort((v1, v2) => Twns.Helpers.getExisted(v1.playerIndex) - Twns.Helpers.getExisted(v2.playerIndex));
                 revisedTemplateWarRuleArray.push(revisedRule);
             }
@@ -312,7 +312,7 @@ namespace Twns.MapEditor {
 
         public addTemplateWarRule(): void {
             const templateWarRuleArray = this.getTemplateWarRuleArray();
-            templateWarRuleArray.push(WarHelpers.WarRuleHelpers.createDefaultTemplateWarRule(templateWarRuleArray.length, CommonConstants.WarMaxPlayerIndex));
+            templateWarRuleArray.push(WarHelpers.WarRuleHelpers.createDefaultTemplateWarRule(templateWarRuleArray.length, Twns.CommonConstants.WarMaxPlayerIndex));
         }
         public deleteTemplateWarRule(templateWarRuleId: number): void {
             const templateWarRuleArray  = this.getTemplateWarRuleArray();

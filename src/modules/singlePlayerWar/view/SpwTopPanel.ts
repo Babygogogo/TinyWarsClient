@@ -314,7 +314,7 @@ namespace Twns.SinglePlayerWar {
             const war               = this._getOpenData().war;
             const player            = war.getPlayerInTurn();
             this._imgSkin.source    = WarHelpers.WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
-            this._imgCo.source      = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Twns.Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
+            this._imgCo.source      = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Twns.Types.PlayerAliveState.Dead) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelEnergy(): void {
@@ -361,7 +361,7 @@ namespace Twns.SinglePlayerWar {
                     playerIndex,
                 });
             }
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex < playerIndexInTurn; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex < playerIndexInTurn; ++playerIndex) {
                 dataArray.push({
                     war,
                     playerIndex,
@@ -448,7 +448,7 @@ namespace Twns.SinglePlayerWar {
             const data          = this._getData();
             const war           = data.war;
             const player        = war.getPlayer(data.playerIndex);
-            this._imgCo.source  = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Twns.Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
+            this._imgCo.source  = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Twns.Types.PlayerAliveState.Dead) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelFundAndAddFund(): void {

@@ -328,7 +328,7 @@ namespace Twns.Common {
         private _handleTouchedBtnHp(playerData: PlayerData): void {
             const currValue     = playerData.unitHp;
             const minValue      = 1;
-            const maxValue      = CommonConstants.UnitMaxHp;
+            const maxValue      = Twns.CommonConstants.UnitMaxHp;
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0339),
                 currentValue    : currValue,
@@ -555,8 +555,8 @@ namespace Twns.Common {
             const attackerData              = data.attackerData;
             const defenderData              = data.defenderData;
             const gameConfig                = data.gameConfig;
-            this._imgCo1.source             = gameConfig.getCoEyeImageSource(attackerData.coId, true) ?? CommonConstants.ErrorTextForUndefined;
-            this._imgCo2.source             = gameConfig.getCoEyeImageSource(defenderData.coId, true) ?? CommonConstants.ErrorTextForUndefined;
+            this._imgCo1.source             = gameConfig.getCoEyeImageSource(attackerData.coId, true) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._imgCo2.source             = gameConfig.getCoEyeImageSource(defenderData.coId, true) ?? Twns.CommonConstants.ErrorTextForUndefined;
             this._labelHp1.text             = `${attackerData.unitHp}`;
             this._labelHp2.text             = `${defenderData.unitHp}`;
             this._labelPromotion1.text      = `${attackerData.unitPromotion}`;
@@ -584,8 +584,8 @@ namespace Twns.Common {
             {
                 const coSkillType1      = attackerData.coSkillType;
                 const coSkillType2      = defenderData.coSkillType;
-                this._btnSkill1.label   = coSkillType1 == null ? Lang.getText(LangTextType.B0829) : (Lang.getCoSkillTypeName(coSkillType1) ?? CommonConstants.ErrorTextForUndefined);
-                this._btnSkill2.label   = coSkillType2 == null ? Lang.getText(LangTextType.B0829) : (Lang.getCoSkillTypeName(coSkillType2) ?? CommonConstants.ErrorTextForUndefined);
+                this._btnSkill1.label   = coSkillType1 == null ? Lang.getText(LangTextType.B0829) : (Lang.getCoSkillTypeName(coSkillType1) ?? Twns.CommonConstants.ErrorTextForUndefined);
+                this._btnSkill2.label   = coSkillType2 == null ? Lang.getText(LangTextType.B0829) : (Lang.getCoSkillTypeName(coSkillType2) ?? Twns.CommonConstants.ErrorTextForUndefined);
             }
 
             this._updateComponentsForDamage();
@@ -680,7 +680,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Twns.Helpers.resetTween({
@@ -694,7 +694,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 0, verticalCenter: -40 },
             });
 
-            await Twns.Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -718,23 +718,23 @@ namespace Twns.Common {
     }
     function createDefaultPlayerData(): PlayerData {
         return {
-            coId            : CommonConstants.CoEmptyId,
+            coId            : Twns.CommonConstants.CoEmptyId,
             coSkillType     : CoSkillType.Passive,
             unitType        : UnitType.Tank,
-            unitHp          : CommonConstants.UnitMaxHp,
+            unitHp          : Twns.CommonConstants.UnitMaxHp,
             unitWeaponType  : WeaponType.Primary,
             unitPromotion   : 0,
             tileType        : TileType.Plain,
             towersCount     : 0,
             offenseBonus    : 0,
-            upperLuck       : CommonConstants.WarRuleLuckDefaultUpperLimit,
-            lowerLuck       : CommonConstants.WarRuleLuckDefaultLowerLimit,
+            upperLuck       : Twns.CommonConstants.WarRuleLuckDefaultUpperLimit,
+            lowerLuck       : Twns.CommonConstants.WarRuleLuckDefaultLowerLimit,
             fund            : 0,
             citiesCount : 0,
         };
     }
     function getNextCoSkillType(gameConfig: GameConfig, coId: number, skillType: CoSkillType | null): CoSkillType | null {
-        if (coId === CommonConstants.CoEmptyId) {
+        if (coId === Twns.CommonConstants.CoEmptyId) {
             return null;
         }
 
@@ -798,7 +798,7 @@ namespace Twns.Common {
             tileDecoratorShapeId: null,
             tileObjectType      : objectType,
             tileObjectShapeId   : 0,
-            playerIndex         : Twns.Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType) ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+            playerIndex         : Twns.Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType) ? playerIndex : Twns.CommonConstants.WarNeutralPlayerIndex,
         };
     }
 
@@ -919,7 +919,7 @@ namespace Twns.Common {
     function getTileDefenseAmountForUnit(gameConfig: GameConfig, unitType: UnitType, unitHp: number, tileType: TileType): number {
         const tileTemplateCfg = Twns.Helpers.getExisted(gameConfig.getTileTemplateCfgByType(tileType));
         return gameConfig.checkIsUnitTypeInCategory(unitType, tileTemplateCfg.defenseUnitCategory)
-            ? tileTemplateCfg.defenseAmount * Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp) / Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp)
+            ? tileTemplateCfg.defenseAmount * Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp) / Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(Twns.CommonConstants.UnitMaxHp)
             : 0;
     }
     function getCoSkillIdArray(gameConfig: GameConfig, coId: number, skillType: CoSkillType | null): number[] {
@@ -943,7 +943,7 @@ namespace Twns.Common {
         const attackerData          = calculatorData.attackerData;
         const attackerCoId          = attackerData.coId;
         const attackerCoSkillType   = attackerData.coSkillType;
-        if ((attackerCoId === CommonConstants.CoEmptyId) || (attackerCoSkillType == null)) {
+        if ((attackerCoId === Twns.CommonConstants.CoEmptyId) || (attackerCoSkillType == null)) {
             return 0;
         }
 
@@ -1087,7 +1087,7 @@ namespace Twns.Common {
         const defenderData          = calculatorData.defenderData;
         const defenderCoId          = defenderData.coId;
         const defenderCoSkillType   = defenderData.coSkillType;
-        if ((defenderCoId === CommonConstants.CoEmptyId) || (defenderCoSkillType == null)) {
+        if ((defenderCoId === Twns.CommonConstants.CoEmptyId) || (defenderCoSkillType == null)) {
             return 0;
         }
 

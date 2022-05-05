@@ -54,8 +54,8 @@ namespace Twns.BaseWar {
 
             const playerIndex = data.playerIndex;
             if ((playerIndex == null)                               ||
-                (playerIndex > CommonConstants.WarMaxPlayerIndex)   ||
-                (playerIndex < CommonConstants.WarNeutralPlayerIndex)
+                (playerIndex > Twns.CommonConstants.WarMaxPlayerIndex)   ||
+                (playerIndex < Twns.CommonConstants.WarNeutralPlayerIndex)
             ) {
                 throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwPlayer_Init_03);
             }
@@ -64,8 +64,8 @@ namespace Twns.BaseWar {
             const coIsDestroyedInTurn   = Helpers.getExisted(data.coIsDestroyedInTurn, ClientErrorCode.BwPlayer_Init_05);
             const unitAndTileSkinId     = data.unitAndTileSkinId;
             if ((unitAndTileSkinId == null)                                                             ||
-                ((unitAndTileSkinId === 0) && (playerIndex !== CommonConstants.WarNeutralPlayerIndex))  ||
-                ((unitAndTileSkinId !== 0) && (playerIndex === CommonConstants.WarNeutralPlayerIndex))
+                ((unitAndTileSkinId === 0) && (playerIndex !== Twns.CommonConstants.WarNeutralPlayerIndex))  ||
+                ((unitAndTileSkinId !== 0) && (playerIndex === Twns.CommonConstants.WarNeutralPlayerIndex))
             ) {
                 throw Helpers.newError(`Invalid unitAndTileSkinId: ${unitAndTileSkinId}`, ClientErrorCode.BwPlayer_Init_06);
             }
@@ -200,7 +200,7 @@ namespace Twns.BaseWar {
             return Helpers.getExisted(this._playerIndex);
         }
         public checkIsNeutral(): boolean {
-            return this.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex;
+            return this.getPlayerIndex() === Twns.CommonConstants.WarNeutralPlayerIndex;
         }
 
         public getTeamIndex(): number {
@@ -465,7 +465,7 @@ namespace Twns.BaseWar {
         }
 
         public getUnitCostModifier(gridIndex: GridIndex, hasLoadedCo: boolean, unitType: Types.UnitType): number {
-            if (this.getCoId() === CommonConstants.CoEmptyId) {
+            if (this.getCoId() === Twns.CommonConstants.CoEmptyId) {
                 return 1;
             }
 

@@ -203,7 +203,7 @@ namespace Twns.WarEvent {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
-            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelEventId(): void {
             const eventIdArray      = this._getCondition().eventIdArray;
@@ -215,7 +215,7 @@ namespace Twns.WarEvent {
         }
         private _updateLabelTimesInTurnComparator(): void {
             const comparator                = Twns.Helpers.getExisted(this._getCondition().timesInTurnComparator);
-            this._labelTimesInTurnComparator.text  = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelTimesInTurnComparator.text  = Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputTimesTotal(): void {
             const timesTotal            = this._getCondition().timesTotal;
@@ -223,7 +223,7 @@ namespace Twns.WarEvent {
         }
         private _updateLabelTimesTotalComparator(): void {
             const comparator                        = Twns.Helpers.getExisted(this._getCondition().timesTotalComparator);
-            this._labelTimesTotalComparator.text    = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelTimesTotalComparator.text    = Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputEventsCount(): void {
             const eventsCount           = this._getCondition().eventsCount;
@@ -231,7 +231,7 @@ namespace Twns.WarEvent {
         }
         private _updateEventsCountComparator(): void {
             const comparator                        = Twns.Helpers.getExisted(this._getCondition().eventsCountComparator);
-            this._labelEventsCountComparator.text   = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelEventsCountComparator.text   = Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _getCondition(): CommonProto.WarEvent.IWecEventCalledCount {

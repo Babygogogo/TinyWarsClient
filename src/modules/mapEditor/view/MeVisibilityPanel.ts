@@ -94,7 +94,7 @@ namespace Twns.MapEditor {
 
         private _onTouchedBtnShowAllLocations(): void {
             const tileMap = this._getWar().getTileMap();
-            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+            for (let locationId = Twns.CommonConstants.MapMinLocationId; locationId <= Twns.CommonConstants.MapMaxLocationId; ++locationId) {
                 tileMap.setIsLocationVisible(locationId, true);
             }
         }
@@ -103,7 +103,7 @@ namespace Twns.MapEditor {
             const tileMap       = war.getTileMap();
             const drawer        = war.getDrawer();
             const drawerMode    = drawer.getMode();
-            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+            for (let locationId = Twns.CommonConstants.MapMinLocationId; locationId <= Twns.CommonConstants.MapMaxLocationId; ++locationId) {
                 if (((drawerMode === Twns.Types.MapEditorDrawerMode.AddTileToLocation) && (drawer.getDataForAddTileToLocation()?.locationIdArray.some(v => v === locationId)))           ||
                     ((drawerMode === Twns.Types.MapEditorDrawerMode.DeleteTileFromLocation) && (drawer.getDataForDeleteTileFromLocation()?.locationIdArray.some(v => v === locationId)))
                 ) {
@@ -142,7 +142,7 @@ namespace Twns.MapEditor {
         private _updateListLocation(): void {
             const dataArray : DataForLocationRenderer[] = [];
             const war       = this._getWar();
-            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+            for (let locationId = Twns.CommonConstants.MapMinLocationId; locationId <= Twns.CommonConstants.MapMaxLocationId; ++locationId) {
                 dataArray.push({ war, locationId });
             }
             this._listLocation.bindData(dataArray);

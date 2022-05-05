@@ -107,7 +107,7 @@ namespace Twns.MapEditor {
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
             const typeMap = new Map<number, DataForDrawTileDecorator[]>();
-            for (const [decoratorType, cfg] of CommonConstants.TileDecoratorShapeConfigs) {
+            for (const [decoratorType, cfg] of Twns.CommonConstants.TileDecoratorShapeConfigs) {
                 if (!typeMap.has(decoratorType)) {
                     typeMap.set(decoratorType, []);
                 }
@@ -163,7 +163,7 @@ namespace Twns.MapEditor {
         protected _onDataChanged(): void {
             const data                          = this._getData();
             const dataListForDrawTileDecorator  = data.dataListForDrawTileDecorator;
-            this._labelCategory.text            = Lang.getTileDecoratorName(dataListForDrawTileDecorator[0].decoratorType) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelCategory.text            = Lang.getTileDecoratorName(dataListForDrawTileDecorator[0].decoratorType) ?? Twns.CommonConstants.ErrorTextForUndefined;
 
             const dataListForTileDecorator  : DataForTileDecoratorRenderer[] = [];
             const panel                     = data.panel;
@@ -219,7 +219,7 @@ namespace Twns.MapEditor {
                 tileDecoratorShapeId: shapeId,
                 tileObjectShapeId   : null,
                 tileObjectType      : null,
-                playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : Twns.CommonConstants.WarNeutralPlayerIndex,
             });
             tileView.updateView();
         }

@@ -453,7 +453,7 @@ namespace Twns.Types {
     export enum TileCategory {
         None,                       /* 0 */         All,            /* 1 */         LoadableForSeaTransports,   /* 2 */     Destroyable,    /* 3 */
         City,                       /* 4 */         PlainAndRuin,   /* 5 */         Road,                       /* 6 */     Buildings,      /* 7 */
-        DestroyableForDamageChart,  /* 8 */
+        DestroyableForDamageChart,  /* 8 */         Bridges,        /* 9 */         ElementsInTileChartPanel,   /* 10 */
     }
 
     // eslint-disable-next-line no-shadow
@@ -615,6 +615,58 @@ namespace Twns.Types {
         LaunchSilo,
         ProduceUnit,
         Wait,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export const enum TileInfoType {
+        DefenseBonus,
+        Income,
+        Vision,
+        HideUnitCategory,
+        IsDefeatedOnCapture,
+        ProduceUnitCategory,
+        GlobalBonus,
+        RepairUnitCategory,
+        Hp,
+        CapturePoint,
+        BuildPoint,
+        IsHighlighted,
+
+        CrystalRadius,
+        CrystalPriority,
+        CrystalCanAffectSelf,
+        CrystalCanAffectAlly,
+        CrystalCanAffectEnemy,
+        CrystalDeltaFund,
+        CrystalDeltaEnergyPercentage,
+        CrystalDeltaHp,
+        CrystalDeltaFuelPercentage,
+        CrystalDeltaPrimaryAmmoPercentage,
+
+        CannonRangeForLeft,
+        CannonRangeForRight,
+        CannonRangeForUp,
+        CannonRangeForDown,
+        CannonPriority,
+        CannonMaxTargetCount,
+        CannonCanAffectSelf,
+        CannonCanAffectAlly,
+        CannonCanAffectEnemy,
+        CannonDeltaHp,
+        CannonDeltaFuelPercentage,
+        CannonDeltaPrimaryAmmoPercentage,
+
+        LaserTurretRangeForLeft,
+        LaserTurretRangeForRight,
+        LaserTurretRangeForUp,
+        LaserTurretRangeForDown,
+        LaserTurretPriority,
+        LaserTurretCanAffectSelf,
+        LaserTurretCanAffectAlly,
+        LaserTurretCanAffectEnemy,
+        LaserTurretDeltaHp,
+        LaserTurretDeltaFuelPercentage,
+        LaserTurretDeltaPrimaryAmmoPercentage,
     }
 
     // eslint-disable-next-line no-shadow
