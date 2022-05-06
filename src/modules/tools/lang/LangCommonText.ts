@@ -4942,6 +4942,14 @@ namespace Twns.Lang {
             `游戏数据`,
             `Game Chart`,
         ],
+        [LangTextType.B0901]: [
+            `生效中的持续性动作...`,
+            `Ongoing Persistent Actions ...`,
+        ],
+        [LangTextType.B0902]: [
+            `动作数量`,
+            `Number of Actions`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -5768,6 +5776,10 @@ namespace Twns.Lang {
         [LangTextType.F0134]: [
             `必须选中 "%s"。`,
             `"%s" must be chosen.`,
+        ],
+        [LangTextType.F0135]: [
+            `生效中的ID为 %s 的持续性动作的数量 %s %s`,
+            `The number of ongoing persistent actions whose ID is %s %s %s.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

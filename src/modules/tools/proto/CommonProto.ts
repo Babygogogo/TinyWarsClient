@@ -6827,6 +6827,108 @@ declare namespace CommonProto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a WecOngoingPersistentActionPresence. */
+        interface IWecOngoingPersistentActionPresence {
+
+            /** WecOngoingPersistentActionPresence ongoingActionIdArray */
+            ongoingActionIdArray?: (number[]|null);
+
+            /** WecOngoingPersistentActionPresence ongoingActionsCount */
+            ongoingActionsCount?: (number|null);
+
+            /** WecOngoingPersistentActionPresence ongoingActionsCountComparator */
+            ongoingActionsCountComparator?: (number|null);
+        }
+
+        /** Represents a WecOngoingPersistentActionPresence. */
+        class WecOngoingPersistentActionPresence implements IWecOngoingPersistentActionPresence {
+
+            /**
+             * Constructs a new WecOngoingPersistentActionPresence.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.WarEvent.IWecOngoingPersistentActionPresence);
+
+            /** WecOngoingPersistentActionPresence ongoingActionIdArray. */
+            public ongoingActionIdArray: number[];
+
+            /** WecOngoingPersistentActionPresence ongoingActionsCount. */
+            public ongoingActionsCount: number;
+
+            /** WecOngoingPersistentActionPresence ongoingActionsCountComparator. */
+            public ongoingActionsCountComparator: number;
+
+            /**
+             * Creates a new WecOngoingPersistentActionPresence instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns WecOngoingPersistentActionPresence instance
+             */
+            public static create(properties?: CommonProto.WarEvent.IWecOngoingPersistentActionPresence): CommonProto.WarEvent.WecOngoingPersistentActionPresence;
+
+            /**
+             * Encodes the specified WecOngoingPersistentActionPresence message. Does not implicitly {@link CommonProto.WarEvent.WecOngoingPersistentActionPresence.verify|verify} messages.
+             * @param message WecOngoingPersistentActionPresence message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.WarEvent.IWecOngoingPersistentActionPresence, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified WecOngoingPersistentActionPresence message, length delimited. Does not implicitly {@link CommonProto.WarEvent.WecOngoingPersistentActionPresence.verify|verify} messages.
+             * @param message WecOngoingPersistentActionPresence message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.WarEvent.IWecOngoingPersistentActionPresence, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a WecOngoingPersistentActionPresence message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns WecOngoingPersistentActionPresence
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarEvent.WecOngoingPersistentActionPresence;
+
+            /**
+             * Decodes a WecOngoingPersistentActionPresence message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns WecOngoingPersistentActionPresence
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarEvent.WecOngoingPersistentActionPresence;
+
+            /**
+             * Verifies a WecOngoingPersistentActionPresence message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a WecOngoingPersistentActionPresence message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns WecOngoingPersistentActionPresence
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.WarEvent.WecOngoingPersistentActionPresence;
+
+            /**
+             * Creates a plain object from a WecOngoingPersistentActionPresence message. Also converts values to other types if specified.
+             * @param message WecOngoingPersistentActionPresence
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.WarEvent.WecOngoingPersistentActionPresence, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this WecOngoingPersistentActionPresence to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a WarEventCondition. */
         interface IWarEventCondition {
 
@@ -6895,6 +6997,9 @@ declare namespace CommonProto {
 
             /** WarEventCondition WecCustomCounter */
             WecCustomCounter?: (CommonProto.WarEvent.IWecCustomCounter|null);
+
+            /** WarEventCondition WecOngoingPersistentActionPresence */
+            WecOngoingPersistentActionPresence?: (CommonProto.WarEvent.IWecOngoingPersistentActionPresence|null);
         }
 
         /** Represents a WarEventCondition. */
@@ -6971,6 +7076,9 @@ declare namespace CommonProto {
 
             /** WarEventCondition WecCustomCounter. */
             public WecCustomCounter?: (CommonProto.WarEvent.IWecCustomCounter|null);
+
+            /** WarEventCondition WecOngoingPersistentActionPresence. */
+            public WecOngoingPersistentActionPresence?: (CommonProto.WarEvent.IWecOngoingPersistentActionPresence|null);
 
             /**
              * Creates a new WarEventCondition instance using the specified properties.

@@ -258,6 +258,7 @@ namespace Twns.PanelHelpers {
         WeConditionModifyPanel40            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel40>;
         WeConditionModifyPanel50            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel50>;
         WeConditionModifyPanel60            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel60>;
+        WeConditionModifyPanel70            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel70>;
         WeConditionReplacePanel             : PanelConfig<WarEvent.OpenDataForWeConditionReplacePanel>;
         WeConditionTypeListPanel            : PanelConfig<WarEvent.OpenDataForWeConditionTypeListPanel>;
         WeDialogueBackgroundPanel           : PanelConfig<WarEvent.OpenDataForWeDialogueBackgroundPanel>;
@@ -1704,6 +1705,12 @@ namespace Twns.PanelHelpers {
             WeConditionModifyPanel60: {
                 cls         : WarEvent?.WeConditionModifyPanel60,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel60.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            WeConditionModifyPanel70: {
+                cls         : WarEvent?.WeConditionModifyPanel70,
+                skinName    : `resource/skins/warEvent/WeConditionModifyPanel70.exml`,
                 layer       : LayerType.Hud0,
             },
 

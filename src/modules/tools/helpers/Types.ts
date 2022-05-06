@@ -841,6 +841,8 @@ namespace Twns.Types {
         WecUnitPresence,
 
         WecCustomCounter,
+
+        WecOngoingPersistentActionPresence,
     }
 
     // eslint-disable-next-line no-shadow

@@ -59,13 +59,13 @@ namespace Twns.Config.ConfigManager {
     }
 
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
-        const mapping = Helpers.getExisted(Twns.CommonConstants.TileTypeMapping.get(baseType), ClientErrorCode.ConfigManager_GetTileType_00);
+        const mapping = Helpers.getExisted(CommonConstants.TileTypeMapping.get(baseType), ClientErrorCode.ConfigManager_GetTileType_00);
         return Helpers.getExisted(mapping.get(objectType), ClientErrorCode.ConfigManager_GetTileType_01);
     }
 
     export function checkIsValidPlayerIndexForTile(playerIndex: number, baseType: TileBaseType, objectType: TileObjectType): boolean {
-        const neutralPlayerIndex = Twns.CommonConstants.WarNeutralPlayerIndex;
-        if ((playerIndex < neutralPlayerIndex) || (playerIndex > Twns.CommonConstants.WarMaxPlayerIndex)) {
+        const neutralPlayerIndex = CommonConstants.WarNeutralPlayerIndex;
+        if ((playerIndex < neutralPlayerIndex) || (playerIndex > CommonConstants.WarMaxPlayerIndex)) {
             return false;
         }
 
@@ -168,7 +168,7 @@ namespace Twns.Config.ConfigManager {
             && ((data.deltaFuelPercentage ?? data.deltaHp ?? data.deltaPrimaryAmmoPercentage) != null);
     }
     export function checkIsValidPlayerIndex(playerIndex: number, playersCountUnneutral: number): boolean {
-        return (playerIndex >= Twns.CommonConstants.WarNeutralPlayerIndex)
+        return (playerIndex >= CommonConstants.WarNeutralPlayerIndex)
             && (playerIndex <= playersCountUnneutral);
     }
     export function checkIsValidPlayerIndexSubset(playerIndexArray: number[], playersCountUnneutral: number): boolean {
@@ -176,7 +176,7 @@ namespace Twns.Config.ConfigManager {
             && (playerIndexArray.every(v => checkIsValidPlayerIndex(v, playersCountUnneutral)));
     }
     export function checkIsValidTeamIndex(teamIndex: number, playersCountUnneutral: number): boolean {
-        return (teamIndex >= Twns.CommonConstants.WarNeutralTeamIndex)
+        return (teamIndex >= CommonConstants.WarNeutralTeamIndex)
             && (teamIndex <= playersCountUnneutral);
     }
     export function checkIsValidTeamIndexSubset(teamIndexArray: number[], playersCountUnneutral: number): boolean {
@@ -201,20 +201,20 @@ namespace Twns.Config.ConfigManager {
         return true;
     }
     export function checkIsValidLocationId(locationId: number): boolean {
-        return (locationId >= Twns.CommonConstants.MapMinLocationId)
-            && (locationId <= Twns.CommonConstants.MapMaxLocationId);
+        return (locationId >= CommonConstants.MapMinLocationId)
+            && (locationId <= CommonConstants.MapMaxLocationId);
     }
     export function checkIsValidLocationIdSubset(locationIdArray: number[]): boolean {
         return ((new Set(locationIdArray)).size === locationIdArray.length)
             && (locationIdArray.every(v => checkIsValidLocationId(v)));
     }
     export function checkIsValidCustomCounterId(customCounterId: number): boolean {
-        return (customCounterId >= Twns.CommonConstants.WarCustomCounterMinId)
-            && (customCounterId <= Twns.CommonConstants.WarCustomCounterMaxId);
+        return (customCounterId >= CommonConstants.WarCustomCounterMinId)
+            && (customCounterId <= CommonConstants.WarCustomCounterMaxId);
     }
     export function checkIsValidCustomCounterValue(customCounterValue: number): boolean {
-        return (customCounterValue <= Twns.CommonConstants.WarCustomCounterMaxValue)
-            && (customCounterValue >= -Twns.CommonConstants.WarCustomCounterMaxValue);
+        return (customCounterValue <= CommonConstants.WarCustomCounterMaxValue)
+            && (customCounterValue >= -CommonConstants.WarCustomCounterMaxValue);
     }
     export function checkIsValidCustomCounterIdArray(idArray: number[]): boolean {
         return (idArray.every(v => checkIsValidCustomCounterId(v)))
@@ -283,17 +283,25 @@ namespace Twns.Config.ConfigManager {
         return ((new Set(actionStateArray)).size === actionStateArray.length)
             && (actionStateArray.every(v => checkIsValidUnitActionState(v)));
     }
+    export function checkIsValidWarEventActionIdSubset(actionIdArray: number[]): boolean {
+        return (actionIdArray.length <= CommonConstants.WarEventMaxActionsPerMap)
+            && (actionIdArray.length === new Set(actionIdArray).size)
+            && (actionIdArray.every(v => checkIsValidWarEventActionId(v)));
+    }
+    export function checkIsValidWarEventActionId(actionId: number): boolean {
+        return (actionId > 0) && (actionId <= CommonConstants.WarEventMaxActionsPerMap);
+    }
 
     export function getTileBaseTypeByTileType(type: TileType): TileBaseType {
-        return Helpers.getExisted(Twns.CommonConstants.TileTypeToTileBaseType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
+        return Helpers.getExisted(CommonConstants.TileTypeToTileBaseType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
     }
     export function getTileObjectTypeByTileType(type: TileType): TileObjectType {
-        return Helpers.getExisted(Twns.CommonConstants.TileTypeToTileObjectType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
+        return Helpers.getExisted(CommonConstants.TileTypeToTileObjectType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
     }
 
     export function checkCanBeOwnedByUnneutralPlayer(tileType: TileType): boolean {
-        const cfg = Twns.CommonConstants.TileObjectShapeConfigs.get(getTileObjectTypeByTileType(tileType));
-        return (cfg != null) && (cfg.maxPlayerIndex > Twns.CommonConstants.WarNeutralPlayerIndex);
+        const cfg = CommonConstants.TileObjectShapeConfigs.get(getTileObjectTypeByTileType(tileType));
+        return (cfg != null) && (cfg.maxPlayerIndex > CommonConstants.WarNeutralPlayerIndex);
     }
 
     export function getTileBaseImageSource({version, themeType, skinId, baseType, isDark, shapeId, tickCount}: {
@@ -309,7 +317,7 @@ namespace Twns.Config.ConfigManager {
             return ``;
         }
 
-        const cfgForFrame       = Helpers.getExisted(Twns.CommonConstants.TileBaseFrameConfigs.get(version)?.get(baseType), ClientErrorCode.ConfigManager_GetTileBaseImageSource_00);
+        const cfgForFrame       = Helpers.getExisted(CommonConstants.TileBaseFrameConfigs.get(version)?.get(baseType), ClientErrorCode.ConfigManager_GetTileBaseImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
         const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
@@ -335,7 +343,7 @@ namespace Twns.Config.ConfigManager {
             return ``;
         }
 
-        const cfgForFrame       = Helpers.getExisted(Twns.CommonConstants.TileDecoratorFrameConfigs.get(version)?.get(decoratorType), ClientErrorCode.ConfigManager_GetTileDecoratorImageSource_00);
+        const cfgForFrame       = Helpers.getExisted(CommonConstants.TileDecoratorFrameConfigs.get(version)?.get(decoratorType), ClientErrorCode.ConfigManager_GetTileDecoratorImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
         const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
@@ -357,7 +365,7 @@ namespace Twns.Config.ConfigManager {
         shapeId     : number;
         tickCount   : number;
     }): string {
-        const cfgForFrame       = Helpers.getExisted(Twns.CommonConstants.TileObjectFrameConfigs.get(version)?.get(objectType), ClientErrorCode.ConfigManager_GetTileObjectImageSource_00);
+        const cfgForFrame       = Helpers.getExisted(CommonConstants.TileObjectFrameConfigs.get(version)?.get(objectType), ClientErrorCode.ConfigManager_GetTileObjectImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
         const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
@@ -383,7 +391,7 @@ namespace Twns.Config.ConfigManager {
         isMoving    : boolean;
         tickCount   : number;
     }): string {
-        const cfgForUnit        = Helpers.getExisted(Twns.CommonConstants.UnitImageConfigs.get(version)?.get(unitType), ClientErrorCode.ConfigManager_GetUnitImageSource_00);
+        const cfgForUnit        = Helpers.getExisted(CommonConstants.UnitImageConfigs.get(version)?.get(unitType), ClientErrorCode.ConfigManager_GetUnitImageSource_00);
         const cfgForFrame       = isMoving ? cfgForUnit.moving : cfgForUnit.idle;
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
@@ -419,12 +427,12 @@ namespace Twns.Config.ConfigManager {
     }
 
     export function checkIsValidTileObjectShapeId(tileObjectType: TileObjectType, shapeId: Types.Undefinable<number>): boolean {
-        const cfg = Twns.CommonConstants.TileObjectShapeConfigs.get(tileObjectType);
+        const cfg = CommonConstants.TileObjectShapeConfigs.get(tileObjectType);
         return (!!cfg)
             && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
     }
     export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: Types.Undefinable<number>): boolean {
-        const cfg = Twns.CommonConstants.TileBaseShapeConfigs.get(tileBaseType);
+        const cfg = CommonConstants.TileBaseShapeConfigs.get(tileBaseType);
         return (!!cfg)
             && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
     }
@@ -433,26 +441,26 @@ namespace Twns.Config.ConfigManager {
             return shapeId == null;
         }
 
-        const cfg = Twns.CommonConstants.TileDecoratorShapeConfigs.get(type);
+        const cfg = CommonConstants.TileDecoratorShapeConfigs.get(type);
         return (cfg != null)
             && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
     }
 
     export function getSymmetricalTileBaseShapeId(baseType: TileBaseType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
-        const cfg           = Twns.CommonConstants.TileBaseSymmetry.get(baseType);
+        const cfg           = CommonConstants.TileBaseSymmetry.get(baseType);
         const shapeIdList   = cfg ? cfg.get(shapeId || 0) : null;
         return shapeIdList ? shapeIdList[symmetryType] : null;
     }
     export function getSymmetricalTileDecoratorShapeId(decoratorType: TileDecoratorType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
-        const cfg           = Twns.CommonConstants.TileDecoratorSymmetry.get(decoratorType);
+        const cfg           = CommonConstants.TileDecoratorSymmetry.get(decoratorType);
         const shapeIdList   = cfg ? cfg.get(shapeId) : null;
         return shapeIdList ? shapeIdList[symmetryType] : null;
     }
     export function getSymmetricalTileObjectType(objectType: TileObjectType, symmetryType: Types.SymmetryType): TileObjectType {
-        return Helpers.getExisted(Twns.CommonConstants.TileObjectTypeSymmetry.get(objectType))[symmetryType];
+        return Helpers.getExisted(CommonConstants.TileObjectTypeSymmetry.get(objectType))[symmetryType];
     }
     export function getSymmetricalTileObjectShapeId(objectType: TileObjectType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
-        const cfg           = Twns.CommonConstants.TileObjectShapeSymmetry.get(objectType);
+        const cfg           = CommonConstants.TileObjectShapeSymmetry.get(objectType);
         const shapeIdList   = cfg ? cfg.get(shapeId || 0) : null;
         return shapeIdList ? shapeIdList[symmetryType] : null;
     }

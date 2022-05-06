@@ -3604,6 +3604,17 @@ export const enum ServerErrorCode {
     BwWarEventManager_CheckIsMeetConCustomCounter_0008,
     BwWarEventManager_CheckIsMeetConCustomCounter_0009,
 
+    BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_0000,
+    BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_0001,
+    BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_0002,
+    BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_0003,
+    BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_0004,
+    BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_0005,
+    BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_0006,
+    BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_0007,
+    BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_0008,
+    BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_0009,
+
     BwWarEventManager_GetWarEvent_0000,
     BwWarEventManager_GetWarEvent_0001,
     BwWarEventManager_GetWarEvent_0002,

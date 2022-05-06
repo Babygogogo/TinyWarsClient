@@ -1443,6 +1443,17 @@ namespace Twns {
         BwWarEventManager_CheckIsMeetConCustomCounter_08,
         BwWarEventManager_CheckIsMeetConCustomCounter_09,
 
+        BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_00,
+        BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_01,
+        BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_02,
+        BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_03,
+        BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_04,
+        BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_05,
+        BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_06,
+        BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_07,
+        BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_08,
+        BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_09,
+
         BwTurnManager_Init_00,
         BwTurnManager_Init_01,
         BwTurnManager_Init_02,
