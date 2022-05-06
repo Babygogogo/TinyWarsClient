@@ -476,7 +476,7 @@ namespace Twns.WarHelpers.WarRobot {
         const commonSettingManager  = war.getCommonSettingManager();
         for (const player of war.getPlayerManager().getAllPlayers()) {
             const playerIndex = player.getPlayerIndex();
-            if (playerIndex === Twns.CommonConstants.WarNeutralPlayerIndex) {
+            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
                 continue;
             }
 
@@ -486,7 +486,7 @@ namespace Twns.WarHelpers.WarRobot {
 
         for (const tile of war.getTileMap().getAllTiles()) {
             const playerIndex = tile.getPlayerIndex();
-            if (playerIndex === Twns.CommonConstants.WarNeutralPlayerIndex) {
+            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
                 continue;
             }
 
@@ -506,13 +506,13 @@ namespace Twns.WarHelpers.WarRobot {
         await Helpers.checkAndCallLater();
 
         const globalDefenseBonuses = new Map<number, number>();
-        for (let playerIndex = war.getPlayerManager().getTotalPlayersCount(false); playerIndex > Twns.CommonConstants.WarNeutralPlayerIndex; --playerIndex) {
+        for (let playerIndex = war.getPlayerManager().getTotalPlayersCount(false); playerIndex > CommonConstants.WarNeutralPlayerIndex; --playerIndex) {
             globalDefenseBonuses.set(playerIndex, 0);
         }
 
         for (const tile of war.getTileMap().getAllTiles()) {
             const playerIndex = tile.getPlayerIndex();
-            if (playerIndex === Twns.CommonConstants.WarNeutralPlayerIndex) {
+            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
                 continue;
             }
 
@@ -533,7 +533,7 @@ namespace Twns.WarHelpers.WarRobot {
 
         const luckValues            = new Map<number, number>();
         const commonSettingManager  = war.getCommonSettingManager();
-        for (let playerIndex = war.getPlayerManager().getTotalPlayersCount(false); playerIndex > Twns.CommonConstants.WarNeutralPlayerIndex; --playerIndex) {
+        for (let playerIndex = war.getPlayerManager().getTotalPlayersCount(false); playerIndex > CommonConstants.WarNeutralPlayerIndex; --playerIndex) {
             const upperLimit = commonSettingManager.getSettingsLuckUpperLimit(playerIndex);
             const lowerLimit = commonSettingManager.getSettingsLuckLowerLimit(playerIndex);
             luckValues.set(playerIndex, (upperLimit + lowerLimit) / 2);
@@ -827,7 +827,7 @@ namespace Twns.WarHelpers.WarRobot {
                         (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
                         * normalizedHp
                         * WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit) + targetUnit.getPromotionDefenseBonus())
-                        / Twns.CommonConstants.UnitHpNormalizer
+                        / CommonConstants.UnitHpNormalizer
                     );
                     if (!damageMap[x][y]) {
                         damageMap[x][y] = {
@@ -1078,7 +1078,7 @@ namespace Twns.WarHelpers.WarRobot {
                     (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
                     * normalizedHp
                     * WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit) + targetUnit.getPromotionDefenseBonus())
-                    / Twns.CommonConstants.UnitHpNormalizer
+                    / CommonConstants.UnitHpNormalizer
                 );
                 const canDestroy    = damage >= targetUnit.getCurrentHp();
                 let score           = (damage + (canDestroy ? 30 : 0)) * targetUnit.getProductionCfgCost() / 1000 * scalerForUnitValueRatio * (targetUnit.getHasLoadedCo() ? 2 : 1);
@@ -1363,7 +1363,7 @@ namespace Twns.WarHelpers.WarRobot {
                 case TileType.Seaport   : totalScore += -1500; break;
                 default                 : break;
             }
-        } else if (tileTeamIndex !== Twns.CommonConstants.WarNeutralTeamIndex) {
+        } else if (tileTeamIndex !== CommonConstants.WarNeutralTeamIndex) {
             switch (tile.getType()) {
                 case TileType.Factory   : totalScore += 50; break;
                 case TileType.Airport   : totalScore += 20; break;
@@ -1623,7 +1623,7 @@ namespace Twns.WarHelpers.WarRobot {
         await Helpers.checkAndCallLater();
 
         let score = 9999;
-        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: Twns.CommonConstants.SiloRadius, mapSize: commonParams.mapSize })) {
+        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize: commonParams.mapSize })) {
             score += unitValueMap[gridIndex.x][gridIndex.y] ?? 0;
         }
 
@@ -2063,12 +2063,12 @@ namespace Twns.WarHelpers.WarRobot {
                 if ((!targetUnit) || (targetUnit === unit)) {
                     unitValueMap[x][y] = 0;
                 } else {
-                    const value         = Math.min(Twns.CommonConstants.SiloDamage, targetUnit.getCurrentHp() - 1) * targetUnit.getProductionCfgCost();
+                    const value         = Math.min(CommonConstants.SiloDamage, targetUnit.getCurrentHp() - 1) * targetUnit.getProductionCfgCost();
                     unitValueMap[x][y]  = targetUnit.getTeamIndex() === teamIndex ? -value : value;
                 }
             }
         }
-        unitValueMap[gridIndex.x][gridIndex.y] = -Math.min(Twns.CommonConstants.SiloDamage, unit.getCurrentHp() - 1) * unit.getProductionCfgCost();
+        unitValueMap[gridIndex.x][gridIndex.y] = -Math.min(CommonConstants.SiloDamage, unit.getCurrentHp() - 1) * unit.getProductionCfgCost();
 
         let scoreAndGridIndex: { score: number, gridIndex: GridIndex } | null = null;
         for (let x = 0; x < mapWidth; ++x) {
@@ -2401,10 +2401,13 @@ namespace Twns.WarHelpers.WarRobot {
             return null;
         }
 
+        const warEventManager       = war.getWarEventManager();
         const bannedUnitTypeArray   = war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerIndex) ?? [];
         let bestScoreAndUnitType    : { score: number, unitType: UnitType } | null = null;
         for (const unitType of war.getGameConfig().getUnitTypesByCategory(unitCategory) ?? []) {
-            if (bannedUnitTypeArray.indexOf(unitType) >= 0) {
+            if ((bannedUnitTypeArray.indexOf(unitType) >= 0)                                        ||
+                (warEventManager.checkOngoingPersistentActionBannedUnitType(playerIndex, unitType))
+            ) {
                 continue;
             }
 
@@ -2437,7 +2440,7 @@ namespace Twns.WarHelpers.WarRobot {
                 score   : bestScoreAndUnitType.score,
                 action  : { WarActionPlayerProduceUnit: {
                     unitType    : bestScoreAndUnitType.unitType,
-                    unitHp      : Twns.CommonConstants.UnitMaxHp,
+                    unitHp      : CommonConstants.UnitMaxHp,
                     gridIndex,
                 } },
             };
@@ -2448,7 +2451,7 @@ namespace Twns.WarHelpers.WarRobot {
         await Helpers.checkAndCallLater();
 
         const { war, playerIndexInTurn } = commonParams;
-        if (playerIndexInTurn === Twns.CommonConstants.WarNeutralPlayerIndex) {
+        if (playerIndexInTurn === CommonConstants.WarNeutralPlayerIndex) {
             return null;
         }
 
@@ -3348,7 +3351,7 @@ namespace Twns.WarHelpers.WarRobot {
     ];
     async function doGetNextAction(war: BwWar): Promise<IWarActionContainer> {
         const commonParams = await getCommonParams(war);
-        if (war.getPlayerIndexInTurn() === Twns.CommonConstants.WarNeutralPlayerIndex) {
+        if (war.getPlayerIndexInTurn() === CommonConstants.WarNeutralPlayerIndex) {
             throw Helpers.newError(`Invalid playerIndexInTurn.`, ClientErrorCode.SpwRobot_DoGetNextAction_00);
         }
 

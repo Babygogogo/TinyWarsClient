@@ -234,6 +234,7 @@ namespace Twns.PanelHelpers {
         WeActionModifyPanel40               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel40>;
         WeActionModifyPanel41               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel41>;
         WeActionModifyPanel50               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel50>;
+        WeActionModifyPanel51               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel51>;
         WeActionReplacePanel                : PanelConfig<WarEvent.OpenDataForWeActionReplacePanel>;
         WeActionTypeListPanel               : PanelConfig<WarEvent.OpenDataForWeActionTypeListPanel>;
         WeCommandPanel                      : PanelConfig<WarEvent.OpenDataForWeCommandPanel>;
@@ -1561,6 +1562,12 @@ namespace Twns.PanelHelpers {
             WeActionModifyPanel50: {
                 cls         : WarEvent?.WeActionModifyPanel50,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel50.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            WeActionModifyPanel51: {
+                cls         : WarEvent?.WeActionModifyPanel51,
+                skinName    : `resource/skins/warEvent/WeActionModifyPanel51.exml`,
                 layer       : LayerType.Hud0,
             },
 

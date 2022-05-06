@@ -462,6 +462,7 @@ namespace Twns.Lang {
             case WarEventActionType.SetPlayerState                  : return getText(LangTextType.B0810);
             case WarEventActionType.SetPlayerCoEnergy               : return getText(LangTextType.B0756);
             case WarEventActionType.PersistentShowText              : return getText(LangTextType.B0888);
+            case WarEventActionType.PersistentModifyPlayerAttribute : return getText(LangTextType.B0903);
             default                                                 : return null;
         }
     }

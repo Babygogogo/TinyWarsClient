@@ -65,7 +65,7 @@ namespace Twns.BaseWar {
             return Helpers.getExisted(this._settingsForCommon, ClientErrorCode.BwCommonSettingManager_GetSettingsForCommon_00);
         }
         public getTurnsLimit(): number {
-            return this.getSettingsForCommon().turnsLimit ?? Twns.CommonConstants.WarMaxTurnsLimit;
+            return this.getSettingsForCommon().turnsLimit ?? CommonConstants.WarMaxTurnsLimit;
         }
         public getInstanceWarRule(): CommonProto.WarRule.IInstanceWarRule {
             return Helpers.getExisted(this.getSettingsForCommon().instanceWarRule);

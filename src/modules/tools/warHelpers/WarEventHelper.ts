@@ -99,6 +99,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         ActionType.StopPersistentAction,
 
         ActionType.PersistentShowText,
+        ActionType.PersistentModifyPlayerAttribute,
     ];
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -196,7 +197,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
     }
 
     export function checkIsPersistentAction(action: IWarEventAction): boolean {
-        return (action.WeaPersistentShowText != null);
+        return (action.WeaPersistentShowText != null)
+            || (action.WeaPersistentModifyPlayerAttribute != null);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -394,7 +396,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
             || (checkIsValidWeaSetUnitState(action.WeaSetUnitState, mapSize, playersCountUnneutral, gameConfig))
             || (checkIsValidWeaSetTileType(action.WeaSetTileType, mapSize, playersCountUnneutral, gameConfig))
             || (checkIsValidWeaSetTileState(action.WeaSetTileState, mapSize))
-            || (checkIsValidWeaPersistentShowText(action.WeaPersistentShowText));
+            || (checkIsValidWeaPersistentShowText(action.WeaPersistentShowText))
+            || (checkIsValidWeaPersistentModifyPlayerAttribute(action.WeaPersistentModifyPlayerAttribute, playersCountUnneutral, gameConfig));
         }
     function checkIsValidWeaAddUnit({ action, gameConfig, mapSize, playersCountUnneutral }: {
         action                  : Types.Undefinable<CommonProto.WarEvent.IWeaAddUnit>;
@@ -1026,6 +1029,27 @@ namespace Twns.WarHelpers.WarEventHelpers {
             maxTextLength   : CommonConstants.WarEventActionPersistentShowTextMaxLength,
         })) {
             return false;
+        }
+
+        return true;
+    }
+    function checkIsValidWeaPersistentModifyPlayerAttribute(action: Types.Undefinable<CommonProto.WarEvent.IWeaPersistentModifyPlayerAttribute>, playersCountUnneutral: number, gameConfig: GameConfig): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        {
+            const conPlayerIndexArray = action.conPlayerIndexArray;
+            if ((conPlayerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+                return false;
+            }
+        }
+
+        {
+            const actBannedUnitTypeArray = action.actBannedUnitTypeArray;
+            if ((actBannedUnitTypeArray) && (!gameConfig.checkIsValidUnitTypeSubset(actBannedUnitTypeArray))) {
+                return false;
+            }
         }
 
         return true;
@@ -2227,7 +2251,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
             || (getDescForWeaSetUnitState(action.WeaSetUnitState))
             || (getDescForWeaSetTileType(action.WeaSetTileType))
             || (getDescForWeaSetTileState(action.WeaSetTileState))
-            || (getDescForWeaPersistentShowText(action.WeaPersistentShowText));
+            || (getDescForWeaPersistentShowText(action.WeaPersistentShowText))
+            || (getDescForWeaPersistentModifyPlayerAttribute(action.WeaPersistentModifyPlayerAttribute));
     }
     function getDescForWeaAddUnit(data: Types.Undefinable<WarEvent.IWeaAddUnit>): string | null {
         if (!data) {
@@ -2742,6 +2767,35 @@ namespace Twns.WarHelpers.WarEventHelpers {
         } else {
             return Lang.getFormattedText(LangTextType.F0131, rawText.length > 20 ? `${rawText?.substring(0, 20)}...` : rawText);
         }
+    }
+    function getDescForWeaPersistentModifyPlayerAttribute(data: Types.Undefinable<WarEvent.IWeaPersistentModifyPlayerAttribute>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const conPlayerIndexArray           = data.conPlayerIndexArray;
+        const textForConPlayerIndexArray    = conPlayerIndexArray?.length
+            ? conPlayerIndexArray.map(v => `P${v}`).join(`/`)
+            : Lang.getText(LangTextType.B0766);
+
+        const actCanActivateCoSkill         = data.actCanActivateCoSkill;
+        const textForActCanActivateCoSkill  = actCanActivateCoSkill == false
+            ? Lang.getText(LangTextType.A0309)
+            : null;
+
+        const actBannedUnitTypeArray        = data.actBannedUnitTypeArray;
+        const textForActBannedUnitTypeArray = actBannedUnitTypeArray?.length
+            ? Lang.getFormattedText(LangTextType.F0137, actBannedUnitTypeArray.map(v => Lang.getUnitName(v)).join(`/`))
+            : null;
+
+        const textArrayForModifiers = Helpers.getNonNullElements([
+            textForActCanActivateCoSkill,
+            textForActBannedUnitTypeArray,
+        ]);
+        return `${Lang.getFormattedText(
+            LangTextType.F0136,
+            textForConPlayerIndexArray,
+        )} ${textArrayForModifiers.join(` `)}`;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3326,6 +3380,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         else if (action.WeaSetTileType)                     { return getErrorTipForWeaSetTileType(action.WeaSetTileType, war); }
         else if (action.WeaSetTileState)                    { return getErrorTipForWeaSetTileState(action.WeaSetTileState, war); }
         else if (action.WeaPersistentShowText)              { return getErrorTipForWeaPersistentShowText(action.WeaPersistentShowText); }
+        else if (action.WeaPersistentModifyPlayerAttribute) { return getErrorTipForWeaPersistentModifyPlayerAttribute(action.WeaPersistentModifyPlayerAttribute, war, playersCountUnneutral); }
         else {
             return Lang.getText(LangTextType.A0177);
         }
@@ -3867,6 +3922,23 @@ namespace Twns.WarHelpers.WarEventHelpers {
             maxTextLength   : CommonConstants.WarEventActionPersistentShowTextMaxLength
         })) {
             return Lang.getText(LangTextType.A0308);
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaPersistentModifyPlayerAttribute(data: WarEvent.IWeaPersistentModifyPlayerAttribute, war: BwWar, playersCountUnneutral: number): string | null {
+        {
+            const conPlayerIndexArray = data.conPlayerIndexArray;
+            if ((conPlayerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
+            }
+        }
+
+        {
+            const actBannedUnitTypeArray = data.actBannedUnitTypeArray;
+            if ((actBannedUnitTypeArray?.length) && (!war.getGameConfig().checkIsValidUnitTypeSubset(actBannedUnitTypeArray))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0525));
+            }
         }
 
         return null;
@@ -4458,6 +4530,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         else if (action.WeaSetTileType)                     { return ActionType.SetTileType; }
         else if (action.WeaSetTileState)                    { return ActionType.SetTileState; }
         else if (action.WeaPersistentShowText)              { return ActionType.PersistentShowText; }
+        else if (action.WeaPersistentModifyPlayerAttribute) { return ActionType.PersistentModifyPlayerAttribute; }
         else                                                { return null; }
     }
     export function resetAction(action: IWarEventAction, actionType: ActionType): void {
@@ -4609,6 +4682,12 @@ namespace Twns.WarHelpers.WarEventHelpers {
             action.WeaPersistentShowText = {
                 textArray: [],
             };
+        } else if (actionType === ActionType.PersistentModifyPlayerAttribute) {
+            action.WeaPersistentModifyPlayerAttribute = {
+                conPlayerIndexArray     : [],
+                actCanActivateCoSkill   : true,
+                actBannedUnitTypeArray  : [],
+            };
         } else {
             throw Helpers.newError(`Invalid actionType: ${actionType}.`, ClientErrorCode.WarEventHelper_ResetAction_00);
         }
@@ -4639,6 +4718,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         PanelHelpers.close(PanelHelpers.PanelDict.WeActionModifyPanel41);
 
         PanelHelpers.close(PanelHelpers.PanelDict.WeActionModifyPanel50);
+        PanelHelpers.close(PanelHelpers.PanelDict.WeActionModifyPanel51);
 
         if      (action.WeaAddUnit)                         { PanelHelpers.open(PanelHelpers.PanelDict.WeActionModifyPanel1,  { war, fullData, action }); }
         else if (action.WeaSetCustomCounter)                { PanelHelpers.open(PanelHelpers.PanelDict.WeActionModifyPanel2,  { war, fullData, action }); }
@@ -4663,6 +4743,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         else if (action.WeaSetTileState)                    { PanelHelpers.open(PanelHelpers.PanelDict.WeActionModifyPanel41, { war, fullData, action }); }
 
         else if (action.WeaPersistentShowText)              { PanelHelpers.open(PanelHelpers.PanelDict.WeActionModifyPanel50, { war, fullData, action }); }
+        else if (action.WeaPersistentModifyPlayerAttribute) { PanelHelpers.open(PanelHelpers.PanelDict.WeActionModifyPanel51, { war, fullData, action }); }
 
         else {
             throw Helpers.newError(`Invalid action.`, ClientErrorCode.WarEventHelper_OpenActionModifyPanel_00);

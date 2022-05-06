@@ -870,6 +870,7 @@ namespace Twns.Types {
         SetTileState,
 
         PersistentShowText,
+        PersistentModifyPlayerAttribute,
     }
 
     // eslint-disable-next-line no-shadow

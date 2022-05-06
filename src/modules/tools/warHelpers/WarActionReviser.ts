@@ -128,7 +128,7 @@ namespace Twns.WarHelpers.WarActionReviser {
         }
 
         const unitHp = rawAction.unitHp;
-        if ((unitHp == null) || (unitHp <= 0) || (unitHp > Twns.CommonConstants.UnitMaxHp)) {
+        if ((unitHp == null) || (unitHp <= 0) || (unitHp > CommonConstants.UnitMaxHp)) {
             throw Helpers.newError(`Invalid unitHp: ${unitHp}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_01);
         }
 
@@ -148,7 +148,7 @@ namespace Twns.WarHelpers.WarActionReviser {
         if ((playerInTurn == null)                                      ||
             (playerInTurn.getAliveState() !== PlayerAliveState.Alive)   ||
             (playerIndexInTurn == null)                                 ||
-            (playerIndexInTurn === Twns.CommonConstants.WarNeutralPlayerIndex)
+            (playerIndexInTurn === CommonConstants.WarNeutralPlayerIndex)
         ) {
             throw Helpers.newError(`Invalid playerIndexInTurn: ${playerIndexInTurn}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_04);
         }
@@ -156,6 +156,9 @@ namespace Twns.WarHelpers.WarActionReviser {
         const unitType = Helpers.getExisted(rawAction.unitType, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_05);
         if ((war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerIndexInTurn) ?? []).indexOf(unitType) >= 0) {
             throw Helpers.newError(`UnitType is banned by rule: ${unitType}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_06);
+        }
+        if (war.getWarEventManager().checkOngoingPersistentActionBannedUnitType(playerIndexInTurn, unitType)) {
+            throw Helpers.newError(`UnitType is banned by rule: ${unitType}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_07);
         }
 
         const tile                  = war.getTileMap().getTile(gridIndex);
@@ -168,19 +171,19 @@ namespace Twns.WarHelpers.WarActionReviser {
         if ((produceUnitCategory == null)                                           ||
             (!gameConfig.checkIsUnitTypeInCategory(unitType, produceUnitCategory))
         ) {
-            throw Helpers.newError(`Invalid produceUnitCategory: ${produceUnitCategory}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_07);
+            throw Helpers.newError(`Invalid produceUnitCategory: ${produceUnitCategory}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_08);
         }
 
         if ((skillCfg)                                      &&
             ((unitHp > skillCfg[4]) || (unitHp < skillCfg[3]))
         ) {
-            throw Helpers.newError(`Invalid unitHp: ${unitHp}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_08);
-        }
-        if ((!skillCfg) && (unitHp !== Twns.CommonConstants.UnitMaxHp)) {
             throw Helpers.newError(`Invalid unitHp: ${unitHp}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_09);
         }
+        if ((!skillCfg) && (unitHp !== CommonConstants.UnitMaxHp)) {
+            throw Helpers.newError(`Invalid unitHp: ${unitHp}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_10);
+        }
 
-        const cfgCost   = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_10);
+        const cfgCost   = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_11);
         const modifier  = playerInTurn.getUnitCostModifier(gridIndex, false, unitType);
         const cost      = Math.floor(
             cfgCost
@@ -188,10 +191,10 @@ namespace Twns.WarHelpers.WarActionReviser {
             * WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp)
             * modifier
             / 100
-            / Twns.CommonConstants.UnitHpNormalizer
+            / CommonConstants.UnitHpNormalizer
         );
         if (cost > fund) {
-            throw Helpers.newError(`Invalid cost: ${cost}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_11);
+            throw Helpers.newError(`Invalid cost: ${cost}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_12);
         }
 
         return {
@@ -210,7 +213,7 @@ namespace Twns.WarHelpers.WarActionReviser {
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null)                                                      ||
-            (playerInTurn.getPlayerIndex() === Twns.CommonConstants.WarNeutralPlayerIndex)   ||
+            (playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex)   ||
             (playerInTurn.getAliveState() !== PlayerAliveState.Alive)
         ) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerSurrender_01);
@@ -232,7 +235,7 @@ namespace Twns.WarHelpers.WarActionReviser {
             throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerVoteForDraw_01);
         }
 
-        if ((playerInTurn.getPlayerIndex() === Twns.CommonConstants.WarNeutralPlayerIndex) ||
+        if ((playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex) ||
             (playerInTurn.getHasVotedForDraw())
         ) {
             throw Helpers.newError(`Voted for draw.`, ClientErrorCode.WarActionReviser_RevisePlayerVoteForDraw_02);
@@ -259,7 +262,7 @@ namespace Twns.WarHelpers.WarActionReviser {
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null)                                                      ||
-            (playerInTurn.getPlayerIndex() === Twns.CommonConstants.WarNeutralPlayerIndex)   ||
+            (playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex)   ||
             (playerInTurn.getAliveState() !== PlayerAliveState.Alive)
         ) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerUseCoSkill_01);
@@ -307,7 +310,7 @@ namespace Twns.WarHelpers.WarActionReviser {
         }
 
         const targetPlayerIndex = rawAction.targetPlayerIndex;
-        if ((targetPlayerIndex == null) || (targetPlayerIndex === Twns.CommonConstants.WarNeutralPlayerIndex)) {
+        if ((targetPlayerIndex == null) || (targetPlayerIndex === CommonConstants.WarNeutralPlayerIndex)) {
             throw Helpers.newError(`Invalid targetPlayerIndex: ${targetPlayerIndex}`, ClientErrorCode.WarActionReviser_ReviseSystemDestroyPlayerForce_01);
         }
 
@@ -340,7 +343,7 @@ namespace Twns.WarHelpers.WarActionReviser {
             throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseSystemEndTurn_00);
         }
 
-        if ((playerInTurn.getPlayerIndex() !== Twns.CommonConstants.WarNeutralPlayerIndex)   &&
+        if ((playerInTurn.getPlayerIndex() !== CommonConstants.WarNeutralPlayerIndex)   &&
             (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
         ) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_ReviseSystemEndTurn_01);
@@ -369,7 +372,7 @@ namespace Twns.WarHelpers.WarActionReviser {
             throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseSystemVoteForDraw_00);
         }
 
-        if ((playerInTurn.getPlayerIndex() !== Twns.CommonConstants.WarNeutralPlayerIndex)   &&
+        if ((playerInTurn.getPlayerIndex() !== CommonConstants.WarNeutralPlayerIndex)   &&
             (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
         ) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_ReviseSystemVoteForDraw_01);
@@ -794,8 +797,13 @@ namespace Twns.WarHelpers.WarActionReviser {
         if (produceUnitType == null) {
             throw Helpers.newError(`Empty produceUnitType.`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_04);
         }
-        if ((war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerInTurn.getPlayerIndex()) ?? []).indexOf(produceUnitType) >= 0) {
+
+        const playerIndex = playerInTurn.getPlayerIndex();
+        if ((war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerIndex) ?? []).indexOf(produceUnitType) >= 0) {
             throw Helpers.newError(`The produceUnitType is banned by rule: ${produceUnitType}`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_05);
+        }
+        if (war.getWarEventManager().checkOngoingPersistentActionBannedUnitType(playerIndex, produceUnitType)) {
+            throw Helpers.newError(`The produceUnitType is banned by persistent action: ${produceUnitType}`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_06);
         }
 
         const fund          = playerInTurn.getFund();
@@ -809,7 +817,7 @@ namespace Twns.WarHelpers.WarActionReviser {
             (maxLoadCount == null)                          ||
             (focusUnit.getLoadedUnitsCount() >= maxLoadCount)
         ) {
-            throw Helpers.newError(`Invalid focusUnit.`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_06);
+            throw Helpers.newError(`Invalid focusUnit.`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_07);
         }
 
         return {

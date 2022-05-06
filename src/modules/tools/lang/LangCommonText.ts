@@ -1350,6 +1350,10 @@ namespace Twns.Lang {
             `指定的文本不合法`,
             `The specified text is not valid.`,
         ],
+        [LangTextType.A0309]: [
+            `禁止使用CO主动技。`,
+            `Cannot Use CO Power.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -4950,6 +4954,10 @@ namespace Twns.Lang {
             `动作数量`,
             `Number of Actions`,
         ],
+        [LangTextType.B0903]: [
+            `持续性修改玩家属性`,
+            `Persistently Modify Players' Attribute`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -5780,6 +5788,14 @@ namespace Twns.Lang {
         [LangTextType.F0135]: [
             `生效中的ID为 %s 的持续性动作的数量 %s %s`,
             `The number of ongoing persistent actions whose ID is %s %s %s.`,
+        ],
+        [LangTextType.F0136]: [
+            `找到玩家序号为 %s 的所有玩家，并持续性修改他们的属性。`,
+            `Get all players that is %s, then persistently modify their attributes.`,
+        ],
+        [LangTextType.F0137]: [
+            `禁止生产部队: %s。`,
+            `Prohibit the units production: %s.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

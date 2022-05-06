@@ -209,6 +209,43 @@ namespace Twns.BaseWar {
             return Helpers.getExisted(this._ongoingPersistentActionIdSet, ClientErrorCode.BwWarEventManager_GetOngoingPersistentActionIdSet_00);
         }
 
+        public checkOngoingPersistentActionCanActivateCoSkill(playerIndex: number): boolean {
+            for (const actionId of this.getOngoingPersistentActionIdSet()) {
+                const action = this.getWarEventAction(actionId).WeaPersistentModifyPlayerAttribute;
+                if (action == null) {
+                    continue;
+                }
+                if (action.actCanActivateCoSkill !== false) {
+                    continue;
+                }
+
+                const conPlayerIndexArray = action.conPlayerIndexArray;
+                if ((!conPlayerIndexArray?.length) || ((conPlayerIndexArray ?? []).indexOf(playerIndex) >= 0)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        public checkOngoingPersistentActionBannedUnitType(playerIndex: number, unitType: Types.UnitType): boolean {
+            for (const actionId of this.getOngoingPersistentActionIdSet()) {
+                const action = this.getWarEventAction(actionId).WeaPersistentModifyPlayerAttribute;
+                if (action == null) {
+                    continue;
+                }
+                if ((action.actBannedUnitTypeArray ?? []).indexOf(unitType) < 0) {
+                    continue;
+                }
+
+                const conPlayerIndexArray = action.conPlayerIndexArray;
+                if ((!conPlayerIndexArray?.length) || ((conPlayerIndexArray ?? []).indexOf(playerIndex) >= 0)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for calling events.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,6 +293,7 @@ namespace Twns.BaseWar {
             else if (action.WeaSetTileType)                     { await this._callActionSetTileTypeWithExtraData(action.WeaSetTileType, isFastExecute); }
             else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithExtraData(action.WeaSetTileState, isFastExecute); }
             else if (action.WeaPersistentShowText)              { await this._callActionPersistentShowTextWithExtraData(action.WeaPersistentShowText, isFastExecute, warEventActionId); }
+            else if (action.WeaPersistentModifyPlayerAttribute) { await this._callActionPersistentModifyPlayerAttributeWithExtraData(action.WeaPersistentModifyPlayerAttribute, isFastExecute, warEventActionId); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -283,6 +321,7 @@ namespace Twns.BaseWar {
             else if (action.WeaSetTileType)                     { await this._callActionSetTileTypeWithoutExtraData(action.WeaSetTileType, isFastExecute); }
             else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithoutExtraData(action.WeaSetTileState, isFastExecute); }
             else if (action.WeaPersistentShowText)              { await this._callActionPersistentShowTextWithoutExtraData(action.WeaPersistentShowText, isFastExecute, warEventActionId); }
+            else if (action.WeaPersistentModifyPlayerAttribute) { await this._callActionPersistentModifyPlayerAttributeWithoutExtraData(action.WeaPersistentModifyPlayerAttribute, isFastExecute, warEventActionId); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -1082,6 +1121,15 @@ namespace Twns.BaseWar {
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private async _callActionPersistentShowTextWithoutExtraData(action: WarEvent.IWeaPersistentShowText, isFastExecute: boolean, actionId: number): Promise<void> {
+            this.getOngoingPersistentActionIdSet().add(actionId);
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionPersistentModifyPlayerAttributeWithExtraData(action: WarEvent.IWeaPersistentModifyPlayerAttribute, isFastExecute: boolean, actionId: number): Promise<void> {
+            this.getOngoingPersistentActionIdSet().add(actionId);
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionPersistentModifyPlayerAttributeWithoutExtraData(action: WarEvent.IWeaPersistentModifyPlayerAttribute, isFastExecute: boolean, actionId: number): Promise<void> {
             this.getOngoingPersistentActionIdSet().add(actionId);
         }
 

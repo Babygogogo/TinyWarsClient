@@ -408,7 +408,7 @@ namespace Twns.BaseWar {
             isCounter       : boolean;
         }): number {
             const player = this.getPlayer();
-            if (player.getCoId() === Twns.CommonConstants.CoEmptyId) {
+            if (player.getCoId() === CommonConstants.CoEmptyId) {
                 return 0;
             }
 
@@ -742,7 +742,7 @@ namespace Twns.BaseWar {
         }
         private _getMaxAttackRangeModifierByCo(): number {
             const player = this.getPlayer();
-            if (player.getCoId() === Twns.CommonConstants.CoEmptyId) {
+            if (player.getCoId() === CommonConstants.CoEmptyId) {
                 return 0;
             }
 
@@ -867,7 +867,7 @@ namespace Twns.BaseWar {
             }
 
             const player = this.getPlayer();
-            if (player.getCoId() === Twns.CommonConstants.CoEmptyId) {
+            if (player.getCoId() === CommonConstants.CoEmptyId) {
                 return cfgAmount;
             }
 
@@ -1165,7 +1165,7 @@ namespace Twns.BaseWar {
         }
         private _getMoveRangeModifierByCo(): number {
             const player = this.getPlayer();
-            if (player.getCoId() === Twns.CommonConstants.CoEmptyId) {
+            if (player.getCoId() === CommonConstants.CoEmptyId) {
                 return 0;
             }
 
@@ -1502,7 +1502,7 @@ namespace Twns.BaseWar {
                         : Number.MAX_SAFE_INTEGER,
                 );
                 return {
-                    hp  : (normalizedRepairHp + normalizedCurrentHp) * Twns.CommonConstants.UnitHpNormalizer - unit.getCurrentHp(),
+                    hp  : (normalizedRepairHp + normalizedCurrentHp) * CommonConstants.UnitHpNormalizer - unit.getCurrentHp(),
                     cost: Math.floor(normalizedRepairHp * productionCost / normalizedMaxHp),
                 };
             }
@@ -1656,7 +1656,7 @@ namespace Twns.BaseWar {
         }
         private _getVisionRangeModifierByCo(selfGridIndex: GridIndex): number {
             const player = this.getPlayer();
-            if (player.getCoId() === Twns.CommonConstants.CoEmptyId) {
+            if (player.getCoId() === CommonConstants.CoEmptyId) {
                 return 0;
             }
 
@@ -1773,7 +1773,7 @@ namespace Twns.BaseWar {
             if ((maxLoadCount <= 0)                                                     ||
                 (movePath.length !== 1)                                                 ||
                 (this.getLoaderUnitId() != null)                                        ||
-                (player.getCoId() == Twns.CommonConstants.CoEmptyId)                         ||
+                (player.getCoId() == CommonConstants.CoEmptyId)                         ||
                 (war.getUnitMap().getAllCoUnits(playerIndex).length >= maxLoadCount)    ||
                 (player.getCoIsDestroyedInTurn())                                       ||
                 (this.getHasLoadedCo())                                                 ||
@@ -1794,13 +1794,16 @@ namespace Twns.BaseWar {
         }
 
         public checkCanUseCoSkill(skillType: Types.CoSkillType): boolean {
-            const player = this.getPlayer();
-            if ((!player)                                                                                       ||
-                (!this.getHasLoadedCo())                                                                        ||
-                (player.checkCoIsUsingActiveSkill())                                                            ||
-                (!player.getCoSkills(skillType))                                                                ||
-                (player.getCoType() !== Types.CoType.Zoned)                                                     ||
-                (!this.getWar().getCommonSettingManager().getSettingsCanActivateCoSkill(this.getPlayerIndex()))
+            const player        = this.getPlayer();
+            const war           = this.getWar();
+            const playerIndex   = this.getPlayerIndex();
+            if ((!player)                                                                               ||
+                (!this.getHasLoadedCo())                                                                ||
+                (player.checkCoIsUsingActiveSkill())                                                    ||
+                (!player.getCoSkills(skillType))                                                        ||
+                (player.getCoType() !== Types.CoType.Zoned)                                             ||
+                (!war.getCommonSettingManager().getSettingsCanActivateCoSkill(playerIndex))             ||
+                (!war.getWarEventManager().checkOngoingPersistentActionCanActivateCoSkill(playerIndex))
             ) {
                 return false;
             }

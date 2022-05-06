@@ -655,10 +655,13 @@ namespace Twns.SinglePlayerWar {
             } else {
                 const focusUnit         = Helpers.getExisted(this.getFocusUnit());
                 const produceUnitType   = focusUnit.getProduceUnitType();
-                if ((this.getFocusUnitLoaded())                                                                                                                     ||
-                    (this.getMovePath().length !== 1)                                                                                                               ||
-                    (produceUnitType == null)                                                                                                                       ||
-                    ((focusUnit.getWar().getCommonSettingManager().getSettingsBannedUnitTypeArray(focusUnit.getPlayerIndex()) ?? []).indexOf(produceUnitType) >= 0)
+                const war               = focusUnit.getWar();
+                const playerIndex       = focusUnit.getPlayerIndex();
+                if ((this.getFocusUnitLoaded())                                                                                         ||
+                    (this.getMovePath().length !== 1)                                                                                   ||
+                    (produceUnitType == null)                                                                                           ||
+                    ((war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerIndex) ?? []).indexOf(produceUnitType) >= 0)   ||
+                    (war.getWarEventManager().checkOngoingPersistentActionBannedUnitType(playerIndex, produceUnitType))
                 ) {
                     return [];
                 } else {

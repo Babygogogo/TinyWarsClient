@@ -10076,6 +10076,108 @@ declare namespace CommonProto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a WeaPersistentModifyPlayerAttribute. */
+        interface IWeaPersistentModifyPlayerAttribute {
+
+            /** WeaPersistentModifyPlayerAttribute conPlayerIndexArray */
+            conPlayerIndexArray?: (number[]|null);
+
+            /** WeaPersistentModifyPlayerAttribute actBannedUnitTypeArray */
+            actBannedUnitTypeArray?: (number[]|null);
+
+            /** WeaPersistentModifyPlayerAttribute actCanActivateCoSkill */
+            actCanActivateCoSkill?: (boolean|null);
+        }
+
+        /** Represents a WeaPersistentModifyPlayerAttribute. */
+        class WeaPersistentModifyPlayerAttribute implements IWeaPersistentModifyPlayerAttribute {
+
+            /**
+             * Constructs a new WeaPersistentModifyPlayerAttribute.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.WarEvent.IWeaPersistentModifyPlayerAttribute);
+
+            /** WeaPersistentModifyPlayerAttribute conPlayerIndexArray. */
+            public conPlayerIndexArray: number[];
+
+            /** WeaPersistentModifyPlayerAttribute actBannedUnitTypeArray. */
+            public actBannedUnitTypeArray: number[];
+
+            /** WeaPersistentModifyPlayerAttribute actCanActivateCoSkill. */
+            public actCanActivateCoSkill: boolean;
+
+            /**
+             * Creates a new WeaPersistentModifyPlayerAttribute instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns WeaPersistentModifyPlayerAttribute instance
+             */
+            public static create(properties?: CommonProto.WarEvent.IWeaPersistentModifyPlayerAttribute): CommonProto.WarEvent.WeaPersistentModifyPlayerAttribute;
+
+            /**
+             * Encodes the specified WeaPersistentModifyPlayerAttribute message. Does not implicitly {@link CommonProto.WarEvent.WeaPersistentModifyPlayerAttribute.verify|verify} messages.
+             * @param message WeaPersistentModifyPlayerAttribute message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.WarEvent.IWeaPersistentModifyPlayerAttribute, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified WeaPersistentModifyPlayerAttribute message, length delimited. Does not implicitly {@link CommonProto.WarEvent.WeaPersistentModifyPlayerAttribute.verify|verify} messages.
+             * @param message WeaPersistentModifyPlayerAttribute message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.WarEvent.IWeaPersistentModifyPlayerAttribute, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a WeaPersistentModifyPlayerAttribute message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns WeaPersistentModifyPlayerAttribute
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarEvent.WeaPersistentModifyPlayerAttribute;
+
+            /**
+             * Decodes a WeaPersistentModifyPlayerAttribute message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns WeaPersistentModifyPlayerAttribute
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarEvent.WeaPersistentModifyPlayerAttribute;
+
+            /**
+             * Verifies a WeaPersistentModifyPlayerAttribute message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a WeaPersistentModifyPlayerAttribute message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns WeaPersistentModifyPlayerAttribute
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.WarEvent.WeaPersistentModifyPlayerAttribute;
+
+            /**
+             * Creates a plain object from a WeaPersistentModifyPlayerAttribute message. Also converts values to other types if specified.
+             * @param message WeaPersistentModifyPlayerAttribute
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.WarEvent.WeaPersistentModifyPlayerAttribute, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this WeaPersistentModifyPlayerAttribute to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a WarEventAction. */
         interface IWarEventAction {
 
@@ -10138,6 +10240,9 @@ declare namespace CommonProto {
 
             /** WarEventAction WeaPersistentShowText */
             WeaPersistentShowText?: (CommonProto.WarEvent.IWeaPersistentShowText|null);
+
+            /** WarEventAction WeaPersistentModifyPlayerAttribute */
+            WeaPersistentModifyPlayerAttribute?: (CommonProto.WarEvent.IWeaPersistentModifyPlayerAttribute|null);
         }
 
         /** Represents a WarEventAction. */
@@ -10208,6 +10313,9 @@ declare namespace CommonProto {
 
             /** WarEventAction WeaPersistentShowText. */
             public WeaPersistentShowText?: (CommonProto.WarEvent.IWeaPersistentShowText|null);
+
+            /** WarEventAction WeaPersistentModifyPlayerAttribute. */
+            public WeaPersistentModifyPlayerAttribute?: (CommonProto.WarEvent.IWeaPersistentModifyPlayerAttribute|null);
 
             /**
              * Creates a new WarEventAction instance using the specified properties.
