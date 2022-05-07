@@ -75,7 +75,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         setMapId(mapId);
         setConfigVersion(configVersion);
         setGameConfig(await Config.ConfigManager.getGameConfig(configVersion));
-        setSaveSlotIndex(await SinglePlayerMode.SpmModel.getAvailableIndex());
+        setSaveSlotIndex(await SinglePlayerMode.SpmModel.getAvailableSlotIndex());
         setSlotComment(null);
         setPlayerInfoList([]);
         await resetDataByTemplateWarRuleId(Helpers.getExisted((await getMapRawData()).templateWarRuleArray?.find(v => v.ruleAvailability?.canScw)?.ruleId));

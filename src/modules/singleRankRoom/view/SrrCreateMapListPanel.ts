@@ -7,7 +7,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import Twns.Notify               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -23,11 +23,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SingleRankRoom {
-    import LangTextType                     = Twns.Lang.LangTextType;
-    import NotifyType                       = Twns.Notify.NotifyType;
+    import LangTextType                     = Lang.LangTextType;
+    import NotifyType                       = Notify.NotifyType;
     import IDataForMapTag                   = CommonProto.Map.IDataForMapTag;
-    import OpenDataForCommonWarMapInfoPage  = Twns.Common.OpenDataForCommonMapInfoPage;
-    import OpenDataForSpmRankPage           = Twns.SinglePlayerMode.OpenDataForSpmRankPage;
+    import OpenDataForCommonWarMapInfoPage  = Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForSpmRankPage           = SinglePlayerMode.OpenDataForSpmRankPage;
 
     type FiltersForMapList = {
         mapName?        : string | null;
@@ -131,22 +131,23 @@ namespace Twns.SingleRankRoom {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmMainMenuPanel, void 0);
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyTopPanel, void 0);
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.SpmMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
         }
 
         private async _onTouchedBtnNextStep(): Promise<void> {
             const selectedMapId = this.getSelectedMapId();
             if (selectedMapId != null) {
                 this.close();
-                await Twns.SingleRankRoom.SrrCreateModel.resetDataByMapId(selectedMapId);
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SrrCreateSettingsPanel, void 0);
+                await SingleRankRoom.SrrCreateModel.resetDataByMapId(selectedMapId);
+                PanelHelpers.open(PanelHelpers.PanelDict.SrrCreateSettingsPanel, void 0);
+                PanelHelpers.open(PanelHelpers.PanelDict.SrrCreateQuickSettingsPanel, void 0);
             }
         }
 
         private _onTouchedBtnHelp(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0614),
                 content : Lang.getText(LangTextType.R0011),
             });
@@ -173,12 +174,12 @@ namespace Twns.SingleRankRoom {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : Twns.Common.CommonWarMapInfoPage,
+                    pageClass   : Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0436) },
-                    pageClass   : Twns.SinglePlayerMode.SpmRankPage,
+                    pageClass   : SinglePlayerMode.SpmRankPage,
                     pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
             ]);
@@ -195,17 +196,17 @@ namespace Twns.SingleRankRoom {
             (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
 
             const promiseArray: Promise<void>[] = [];
-            for (const mapId of Twns.WarMap.WarMapModel.getEnabledMapIdArray()) {
+            for (const mapId of WarMap.WarMapModel.getEnabledMapIdArray()) {
                 promiseArray.push((async () => {
-                    const mapBriefData = await Twns.WarMap.WarMapModel.getBriefData(mapId);
+                    const mapBriefData = await WarMap.WarMapModel.getBriefData(mapId);
                     if (mapBriefData == null) {
                         return;
                     }
 
-                    const mapExtraData  = Twns.Helpers.getExisted(mapBriefData.mapExtraData);
+                    const mapExtraData  = Helpers.getExisted(mapBriefData.mapExtraData);
                     const mapTag        = mapBriefData.mapTag || {};
-                    const realMapName   = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
-                    const rating        = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
+                    const realMapName   = Helpers.getExisted(await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
+                    const rating        = await WarMap.WarMapModel.getAverageRating(mapId);
                     if ((!mapBriefData.ruleAvailability?.canSrw)                                                ||
                         (!mapExtraData.isEnabled)                                                               ||
                         ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                         ||
@@ -261,7 +262,7 @@ namespace Twns.SingleRankRoom {
             return mapId == null
                 ? null
                 : {
-                    gameConfig  : await Twns.Config.ConfigManager.getLatestGameConfig(),
+                    gameConfig  : await Config.ConfigManager.getLatestGameConfig(),
                     mapInfo     : { mapId },
                 };
         }
@@ -271,82 +272,82 @@ namespace Twns.SingleRankRoom {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnHelp,
                 beginProps  : { alpha: 0, y: -16 },
                 endProps    : { alpha: 1, y: 24 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnSearch,
                 beginProps  : { alpha: 0, y: 40 },
                 endProps    : { alpha: 1, y: 80 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupMapList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnHelp,
                 beginProps  : { alpha: 1, y: 24 },
                 endProps    : { alpha: 0, y: -16 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnSearch,
                 beginProps  : { alpha: 1, y: 80 },
                 endProps    : { alpha: 0, y: 40 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupMapList,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -361,7 +362,7 @@ namespace Twns.SingleRankRoom {
 
         protected _onDataChanged(): void {
             const data          = this._getData();
-            Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v || Twns.CommonConstants.ErrorTextForUndefined);
+            WarMap.WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v || CommonConstants.ErrorTextForUndefined);
         }
 
         public onItemTapEvent(): void {
@@ -369,7 +370,6 @@ namespace Twns.SingleRankRoom {
             data.panel.setAndReviseSelectedMapId(data.mapId);
         }
     }
-
 
     type DataForTabItemRenderer = {
         name: string;

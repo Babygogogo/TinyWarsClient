@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -18,8 +18,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SinglePlayerMode {
-    import LangTextType = Twns.Lang.LangTextType;
-    import NotifyType   = Twns.Notify.NotifyType;
+    import LangTextType = Lang.LangTextType;
+    import NotifyType   = Notify.NotifyType;
 
     export type OpenDataForSpmRankPage = {
         mapId   : number | null;
@@ -59,12 +59,12 @@ namespace Twns.SinglePlayerMode {
                 return;
             }
 
-            const mapRawData    = await Twns.WarMap.WarMapModel.getRawData(mapId);
+            const mapRawData    = await WarMap.WarMapModel.getRawData(mapId);
             const dataArray     : DataForRuleRenderer[] = [];
             for (const templateWarRule of mapRawData?.templateWarRuleArray?.filter(v => v.ruleAvailability?.canSrw) ?? []) {
                 dataArray.push({
                     mapId,
-                    ruleId  : Twns.Helpers.getExisted(templateWarRule.ruleId),
+                    ruleId  : Helpers.getExisted(templateWarRule.ruleId),
                 });
             }
             listRule.bindData(dataArray.sort((v1, v2) => v1.ruleId - v2.ruleId));
@@ -91,7 +91,7 @@ namespace Twns.SinglePlayerMode {
             ]);
 
             this._listStd.setItemRenderer(UserRenderer);
-            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
         }
         protected async _onDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
@@ -123,20 +123,20 @@ namespace Twns.SinglePlayerMode {
             const data          = this._getData();
             const ruleId        = data.ruleId;
             const mapId         = data.mapId;
-            const configVersion = Twns.Helpers.getExisted(Twns.Config.ConfigManager.getLatestConfigVersion());
-            const selfInfo      = Twns.User.UserModel.getSelfInfo()?.userComplexInfo;
+            const configVersion = Helpers.getExisted(Config.ConfigManager.getLatestConfigVersion());
+            const selfInfo      = User.UserModel.getSelfInfo()?.userComplexInfo;
             const selfScore     = selfInfo?.userWarStatistics?.spwArray?.find(v => (v.mapId === mapId) && (v.configVersion === configVersion) && (v.ruleId === ruleId))?.highScore ?? Number.MIN_SAFE_INTEGER;
             const selfPrivilege = selfInfo?.userPrivilege;
             const hasPrivilege  = selfPrivilege?.isAdmin ?? selfPrivilege?.isMapCommittee ?? false;
             const dataArray     : DataForUserRenderer[] = [];
 
-            for (const rankData of (await Twns.SinglePlayerMode.SpmModel.getRankData(mapId))?.find(v => v.ruleId === ruleId)?.infoArray ?? []) {
-                const score = Twns.Helpers.getExisted(rankData.score);
+            for (const rankData of (await SinglePlayerMode.SpmModel.getRankData(mapId))?.find(v => v.ruleId === ruleId)?.infoArray ?? []) {
+                const score = Helpers.getExisted(rankData.score);
                 dataArray.push({
                     index       : 0,
-                    rankId      : Twns.Helpers.getExisted(rankData.rankId),
+                    rankId      : Helpers.getExisted(rankData.rankId),
                     rank        : 0,
-                    userId      : Twns.Helpers.getExisted(rankData.userId),
+                    userId      : Helpers.getExisted(rankData.userId),
                     score,
                     canReplay   : (hasPrivilege) || (selfScore >= score),
                     isLast      : false,
@@ -163,13 +163,13 @@ namespace Twns.SinglePlayerMode {
             this._labelStdNoData.visible    = !length;
             this._listStd.bindData(dataArray);
 
-            const myScore       = Twns.User.UserModel.getSelfInfo()?.userComplexInfo?.userWarStatistics?.spwArray?.find(v => (v.mapId === mapId) && (v.configVersion === configVersion) && (v.ruleId === ruleId))?.highScore;
+            const myScore       = User.UserModel.getSelfInfo()?.userComplexInfo?.userWarStatistics?.spwArray?.find(v => (v.mapId === mapId) && (v.configVersion === configVersion) && (v.ruleId === ruleId))?.highScore;
             const labelMyScore  = this._labelMyScore;
             if (myScore == null) {
                 labelMyScore.text = `--`;
             } else {
                 const rank          = dataArray.find(v => v.score === myScore)?.rank;
-                labelMyScore.text   = rank == null ? `${myScore} (--)` : `${myScore} (${rank}${Twns.Helpers.getSuffixForRank(rank)})`;
+                labelMyScore.text   = rank == null ? `${myScore} (--)` : `${myScore} (${rank}${Helpers.getSuffixForRank(rank)})`;
             }
         }
     }
@@ -209,16 +209,16 @@ namespace Twns.SinglePlayerMode {
         private _onTouchedImgBg(): void {
             const data = this.data;
             if (data) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, { userId: data.userId });
+                PanelHelpers.open(PanelHelpers.PanelDict.UserPanel, { userId: data.userId });
             }
         }
         private async _onTouchedGroupScore(): Promise<void> {
             const data = this._getData();
             if (!data.canReplay) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, { userId: data.userId });
+                PanelHelpers.open(PanelHelpers.PanelDict.UserPanel, { userId: data.userId });
             } else {
-                const replayData = await Twns.SinglePlayerMode.SpmModel.getReplayData(data.rankId);
-                (replayData) && (Twns.FlowManager.gotoReplayWar(replayData, -1));
+                const replayData = await SinglePlayerMode.SpmModel.getReplayData(data.rankId);
+                (replayData) && (FlowManager.gotoReplayWar(replayData, -1));
             }
         }
 
@@ -230,14 +230,14 @@ namespace Twns.SinglePlayerMode {
             const rank                  = data.rank;
             const labelNickname         = this._labelNickname;
             labelNickname.text          = Lang.getText(LangTextType.B0029);
-            this._labelIndex.text       = `${rank}${Twns.Helpers.getSuffixForRank(rank)}`;
+            this._labelIndex.text       = `${rank}${Helpers.getSuffixForRank(rank)}`;
             this._labelScore.text       = `${data.score}`;
             this._imgBg.alpha           = data.index % 2 == 1 ? 0.2 : 0.5;
             this._imgBottomLine.visible = data.isLast;
             this._imgReplay.visible     = data.canReplay;
 
-            const userInfo = Twns.Helpers.getExisted(await Twns.User.UserModel.getUserPublicInfo(data.userId));
-            labelNickname.text = userInfo.nickname || Twns.CommonConstants.ErrorTextForUndefined;
+            const userInfo = Helpers.getExisted(await User.UserModel.getUserPublicInfo(data.userId));
+            labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
 
         }
     }

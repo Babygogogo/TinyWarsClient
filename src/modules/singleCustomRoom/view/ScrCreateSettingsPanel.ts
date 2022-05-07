@@ -9,7 +9,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import Twns.Notify                       from "../../tools/notify/NotifyType";
+// import Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
@@ -25,14 +25,13 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SingleCustomRoom {
-    import ClientErrorCode                          = Twns.ClientErrorCode;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import ScrCreateAdvancedSettingsPage            = SingleCustomRoom.ScrCreateAdvancedSettingsPage;
-    import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarMapInfoPage          = Common.OpenDataForCommonMapInfoPage;
     import ScrCreatePlayerInfoPage                  = SingleCustomRoom.ScrCreatePlayerInfoPage;
-    import LangTextType                             = Twns.Lang.LangTextType;
-    import NotifyType                               = Twns.Notify.NotifyType;
-    import WarBasicSettingsType                     = Twns.Types.WarBasicSettingsType;
+    import LangTextType                             = Lang.LangTextType;
+    import NotifyType                               = Notify.NotifyType;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -80,7 +79,7 @@ namespace Twns.SingleCustomRoom {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : Twns.Common.CommonWarMapInfoPage,
+                    pageClass   : Common.CommonWarMapInfoPage,
                     pageData    : this._createDataForCommonMapInfoPage(),
                 },
                 {
@@ -103,20 +102,20 @@ namespace Twns.SingleCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ScrCreateMapListPanel, null);
+            PanelHelpers.open(PanelHelpers.PanelDict.ScrCreateMapListPanel, null);
         }
         private async _onTouchedBtnConfirm(): Promise<void> {
             const data      = SingleCustomRoom.ScrCreateModel.getData();
             const callback  = () => {
-                Twns.SinglePlayerMode.SpmProxy.reqSpmCreateScw(data);
+                SinglePlayerMode.SpmProxy.reqSpmCreateScw(data);
                 this._btnConfirm.enabled = false;
                 this._resetTimeoutForBtnConfirm();
             };
 
-            if (await SinglePlayerMode.SpmModel.checkIsEmpty(Twns.Helpers.getExisted(data.slotIndex))) {
+            if (await SinglePlayerMode.SpmModel.checkIsEmpty(Helpers.getExisted(data.slotIndex))) {
                 callback();
             } else {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0070),
                     callback,
                 });
@@ -128,10 +127,10 @@ namespace Twns.SingleCustomRoom {
         }
         private _onNotifyMsgSpmCreateScw(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgSpmCreateScw.IS;
-            Twns.FlowManager.gotoSinglePlayerWar({
-                warData         : Twns.Helpers.getExisted(data.warData),
-                slotExtraData   : Twns.Helpers.getExisted(data.extraData),
-                slotIndex       : Twns.Helpers.getExisted(data.slotIndex),
+            FlowManager.gotoSinglePlayerWar({
+                warData         : Helpers.getExisted(data.warData),
+                slotExtraData   : Helpers.getExisted(data.extraData),
+                slotIndex       : Helpers.getExisted(data.slotIndex),
             });
         }
         private _onNotifyScrCreateWarSaveSlotChanged(): void {
@@ -245,7 +244,7 @@ namespace Twns.SingleCustomRoom {
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: () => {
-                            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmCreateSaveSlotsPanel, {
+                            PanelHelpers.open(PanelHelpers.PanelDict.SpmCreateSaveSlotsPanel, {
                                 currentSlotIndex    : SingleCustomRoom.ScrCreateModel.getSaveSlotIndex(),
                                 callback            : slotIndex => {
                                     SingleCustomRoom.ScrCreateModel.setSaveSlotIndex(slotIndex);
@@ -261,7 +260,7 @@ namespace Twns.SingleCustomRoom {
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
-                                throw Twns.Helpers.newError(`Invalid newValue: ${newValue}`, ClientErrorCode.ScrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_00);
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`, ClientErrorCode.ScrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_00);
                             }
                             SingleCustomRoom.ScrCreateModel.setSlotComment(newValue);
                             this._updateCommonWarBasicSettingsPage();
@@ -277,52 +276,52 @@ namespace Twns.SingleCustomRoom {
         // Opening/closing animations.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnConfirm,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnConfirm,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 

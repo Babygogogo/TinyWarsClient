@@ -281,6 +281,9 @@
                             <e:VerticalLayout gap="4" />
                         </e:layout>
                     </e:Group>
+                    <TwnsUiButton:UiButton id="_btnMyWarRoomRecord" label="Record"
+                                           skinName="Skins.Component.Button.ButtonYellow001" width="90" x="270"
+                                           verticalCenter="0" />
                 </e:Group>
             </e:Group>
             <e:layout>

@@ -4623,8 +4623,8 @@ namespace Twns.Lang {
             `War Room Overall Score`,
         ],
         [LangTextType.B0820]: [
-            `挑战模式总排名`,
-            `War Room Overall Rank`,
+            `总排名`,
+            `Overall Rank`,
         ],
         [LangTextType.B0821]: [
             `地图ID`,
@@ -4957,6 +4957,26 @@ namespace Twns.Lang {
         [LangTextType.B0903]: [
             `持续性修改玩家属性`,
             `Persistently Modify Players' Attribute`,
+        ],
+        [LangTextType.B0904]: [
+            `排名`,
+            `Rank`,
+        ],
+        [LangTextType.B0905]: [
+            `记录`,
+            `Record`,
+        ],
+        [LangTextType.B0906]: [
+            `我的挑战模式记录`,
+            `My War Room Records`,
+        ],
+        [LangTextType.B0907]: [
+            `历史最高分`,
+            `High Score`,
+        ],
+        [LangTextType.B0908]: [
+            `快速设置`,
+            `Quick Settings`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

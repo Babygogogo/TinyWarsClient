@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -18,8 +18,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common {
-    import LangTextType = Twns.Lang.LangTextType;
-    import NotifyType   = Twns.Notify.NotifyType;
+    import LangTextType = Lang.LangTextType;
+    import NotifyType   = Notify.NotifyType;
 
     export type OpenDataForCommonRankListPanel = void;
     export class CommonRankListPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonRankListPanel> {
@@ -62,7 +62,7 @@ namespace Twns.Common {
             this._listSpm.setItemRenderer(SpmUserRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            Twns.Common.CommonProxy.reqGetRankList();
+            Common.CommonProxy.reqGetRankList();
 
             this._updateView();
             this._updateComponentsForLanguage();
@@ -109,13 +109,13 @@ namespace Twns.Common {
 
         private _updateComponentsForStd(): void {
             const playersCount  = 2;
-            const warType       = Twns.Types.WarType.MrwStd;
+            const warType       = Types.WarType.MrwStd;
             const dataList      : DataForMrwUserRenderer[] = [];
-            for (const data of Twns.Common.CommonModel.getMrwRankList() || []) {
+            for (const data of Common.CommonModel.getMrwRankList() || []) {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     const userId = data.userId;
                     if (userId == null) {
-                        throw Twns.Helpers.newError(`CommonRankListPanel._updateComponentsForStd() empty userId.`);
+                        throw Helpers.newError(`CommonRankListPanel._updateComponentsForStd() empty userId.`);
                     }
 
                     dataList.push({
@@ -133,13 +133,13 @@ namespace Twns.Common {
 
         private _updateComponentsForFog(): void {
             const playersCount  = 2;
-            const warType       = Twns.Types.WarType.MrwFog;
+            const warType       = Types.WarType.MrwFog;
             const dataList      : DataForMrwUserRenderer[] = [];
-            for (const data of Twns.Common.CommonModel.getMrwRankList() || []) {
+            for (const data of Common.CommonModel.getMrwRankList() || []) {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     const userId = data.userId;
                     if (userId == null) {
-                        throw Twns.Helpers.newError(`CommonRankListPanel._updateComponentsForFog() empty userId.`);
+                        throw Helpers.newError(`CommonRankListPanel._updateComponentsForFog() empty userId.`);
                     }
 
                     dataList.push({
@@ -157,12 +157,12 @@ namespace Twns.Common {
 
         private async _updateComponentsForSpm(): Promise<void> {
             const dataArray: DataForSpmUserRenderer[] = [];
-            for (const data of await Twns.Leaderboard.LeaderboardModel.getSpmOverallTopDataArray() ?? []) {
+            for (const data of await Leaderboard.LeaderboardModel.getSpmOverallTopDataArray() ?? []) {
                 const length    = dataArray.length;
-                const score     = Twns.Helpers.getExisted(data.score);
+                const score     = Helpers.getExisted(data.score);
                 dataArray.push({
                     index   : length + 1,
-                    userId  : Twns.Helpers.getExisted(data.userId),
+                    userId  : Helpers.getExisted(data.userId),
                     score,
                     rank    : length === 0
                         ? 1
@@ -175,32 +175,32 @@ namespace Twns.Common {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -208,7 +208,7 @@ namespace Twns.Common {
         rank        : number;
         userId      : number;
         playersCount: number;
-        warType     : Twns.Types.WarType;
+        warType     : Types.WarType;
     };
     class MrwUserRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMrwUserRenderer> {
         private readonly _group!            : eui.Group;
@@ -231,7 +231,7 @@ namespace Twns.Common {
         private _onTouchedImgBg(): void {
             const data = this.data;
             if (data) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, { userId: data.userId });
+                PanelHelpers.open(PanelHelpers.PanelDict.UserPanel, { userId: data.userId });
             }
         }
 
@@ -249,20 +249,20 @@ namespace Twns.Common {
             const labelScore        = this._labelScore;
             labelNickname.text      = Lang.getText(LangTextType.B0029);
             labelScore.text         = ``;
-            this._labelIndex.text   = `${rank}${Twns.Helpers.getSuffixForRank(rank)}`;
+            this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
             this._imgBg.alpha       = rank % 2 == 1 ? 0.2 : 0.5;
 
-            const userInfo = await Twns.User.UserModel.getUserPublicInfo(data.userId);
+            const userInfo = await User.UserModel.getUserPublicInfo(data.userId);
             if (userInfo == null) {
-                throw Twns.Helpers.newError(`UserRenderer._updateView() empty userInfo.`);
+                throw Helpers.newError(`UserRenderer._updateView() empty userInfo.`);
             }
-            labelNickname.text = userInfo.nickname || Twns.CommonConstants.ErrorTextForUndefined;
+            labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
 
             const rankInfo = (userInfo.userMrwRankInfoArray || []).find(v => {
                 return (v.playersCountUnneutral === data.playersCount) && (v.warType === data.warType);
             });
             if (rankInfo == null) {
-                throw Twns.Helpers.newError(`UserRenderer._updateView() empty rankInfo.`);
+                throw Helpers.newError(`UserRenderer._updateView() empty rankInfo.`);
             } else {
                 labelScore.text = `${rankInfo.currentScore}`;
             }
@@ -296,7 +296,7 @@ namespace Twns.Common {
         private _onTouchedImgBg(): void {
             const data = this.data;
             if (data) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, { userId: data.userId });
+                PanelHelpers.open(PanelHelpers.PanelDict.UserPanel, { userId: data.userId });
             }
         }
 
@@ -309,12 +309,12 @@ namespace Twns.Common {
             const labelNickname     = this._labelNickname;
             const labelScore        = this._labelScore;
             labelNickname.text      = Lang.getText(LangTextType.B0029);
-            labelScore.text         = `${Twns.Helpers.formatString(`%.2f`, data.score)}`;
-            this._labelIndex.text   = `${rank}${Twns.Helpers.getSuffixForRank(rank)}`;
+            labelScore.text         = `${Helpers.formatString(`%.2f`, data.score)}`;
+            this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
             this._imgBg.alpha       = data.index % 2 == 1 ? 0.2 : 0.5;
 
-            const userInfo          = await Twns.User.UserModel.getUserPublicInfo(data.userId);
-            labelNickname.text      = userInfo?.nickname || Twns.CommonConstants.ErrorTextForUndefined;
+            const userInfo          = await User.UserModel.getUserPublicInfo(data.userId);
+            labelNickname.text      = userInfo?.nickname || CommonConstants.ErrorTextForUndefined;
         }
     }
 }

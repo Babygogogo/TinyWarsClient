@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -18,9 +18,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.User {
-    import LangTextType = Twns.Lang.LangTextType;
-    import NotifyType   = Twns.Notify.NotifyType;
-    import WarType      = Twns.Types.WarType;
+    import LangTextType = Lang.LangTextType;
+    import NotifyType   = Notify.NotifyType;
+    import WarType      = Types.WarType;
 
     export type OpenDataForUserPanel = {
         userId  : number;
@@ -51,6 +51,7 @@ namespace Twns.User {
         private readonly _labelSpmRankRankTitle!    : TwnsUiLabel.UiLabel;
         private readonly _labelSpmRankRank!         : TwnsUiLabel.UiLabel;
         private readonly _labelSpmRankRankSuffix!   : TwnsUiLabel.UiLabel;
+        private readonly _btnMyWarRoomRecord!       : TwnsUiButton.UiButton;
 
         private readonly _labelRegisterTimeTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelRegisterTime1!       : TwnsUiLabel.UiLabel;
@@ -91,6 +92,7 @@ namespace Twns.User {
             this._setUiListenerArray([
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
                 { ui: this._btnSetAvatar,       callback: this._onTouchedBtnSetAvatar },
+                { ui: this._btnMyWarRoomRecord, callback: this._onTouchedBtnMyWarRoomRecord },
                 { ui: this._btnClose,           callback: this.close },
             ]);
             this._setIsTouchMaskEnabled();
@@ -102,7 +104,7 @@ namespace Twns.User {
             this._updateView();
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            Twns.User.UserProxy.reqUserGetPublicInfo(this._getOpenData().userId);
+            User.UserProxy.reqUserGetPublicInfo(this._getOpenData().userId);
         }
         protected _onClosing(): void {
             // nothing to do
@@ -116,84 +118,87 @@ namespace Twns.User {
         }
         private _onNotifyMsgUserSetNickname(): void {
             const userId = this._getOpenData().userId;
-            if (userId === Twns.User.UserModel.getSelfUserId()) {
-                Twns.User.UserProxy.reqUserGetPublicInfo(userId);
+            if (userId === User.UserModel.getSelfUserId()) {
+                User.UserProxy.reqUserGetPublicInfo(userId);
             }
         }
         private _onNotifyMsgUserSetDiscordId(): void {
             const userId = this._getOpenData().userId;
-            if (userId === Twns.User.UserModel.getSelfUserId()) {
-                Twns.User.UserProxy.reqUserGetPublicInfo(userId);
+            if (userId === User.UserModel.getSelfUserId()) {
+                User.UserProxy.reqUserGetPublicInfo(userId);
             }
         }
         private _onNotifyMsgUserSetAvatarId(): void {
             const userId = this._getOpenData().userId;
-            if (userId === Twns.User.UserModel.getSelfUserId()) {
-                Twns.User.UserProxy.reqUserGetPublicInfo(userId);
+            if (userId === User.UserModel.getSelfUserId()) {
+                User.UserProxy.reqUserGetPublicInfo(userId);
             }
         }
         private _onTouchedBtnChat(): void {
             const userId = this._getOpenData().userId;
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChatPanel, { toUserId: userId });
+            PanelHelpers.open(PanelHelpers.PanelDict.ChatPanel, { toUserId: userId });
         }
         private _onTouchedBtnSetAvatar(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserSetAvatarPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.UserSetAvatarPanel, void 0);
+        }
+        private _onTouchedBtnMyWarRoomRecord(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.SpmMyWarRoomRecordPanel, void 0);
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {
             const userId    = this._getOpenData().userId;
-            const info      = await Twns.User.UserModel.getUserPublicInfo(userId);
+            const info      = await User.UserModel.getUserPublicInfo(userId);
             if (info) {
                 const registerTime          = info.registerTime;
                 const labelRegisterTime1    = this._labelRegisterTime1;
                 const labelRegisterTime2    = this._labelRegisterTime2;
                 if (registerTime == null) {
-                    labelRegisterTime1.text     = Twns.CommonConstants.ErrorTextForUndefined;
-                    labelRegisterTime2.text     = Twns.CommonConstants.ErrorTextForUndefined;
+                    labelRegisterTime1.text     = CommonConstants.ErrorTextForUndefined;
+                    labelRegisterTime2.text     = CommonConstants.ErrorTextForUndefined;
                 } else {
-                    labelRegisterTime1.text     = Twns.Helpers.getTimestampShortText(registerTime, { hour: false, minute: false, second: false });
-                    labelRegisterTime2.text     = Twns.Helpers.getTimestampShortText(registerTime, { year: false, month: false, date: false });
+                    labelRegisterTime1.text     = Helpers.getTimestampShortText(registerTime, { hour: false, minute: false, second: false });
+                    labelRegisterTime2.text     = Helpers.getTimestampShortText(registerTime, { year: false, month: false, date: false });
                 }
 
                 const loginTime             = info.lastLoginTime;
                 const labelLastLoginTime1   = this._labelLastLoginTime1;
                 const labelLastLoginTime2   = this._labelLastLoginTime2;
                 if (loginTime == null) {
-                    labelLastLoginTime1.text    = Twns.CommonConstants.ErrorTextForUndefined;
-                    labelLastLoginTime2.text    = Twns.CommonConstants.ErrorTextForUndefined;
+                    labelLastLoginTime1.text    = CommonConstants.ErrorTextForUndefined;
+                    labelLastLoginTime2.text    = CommonConstants.ErrorTextForUndefined;
                 } else {
-                    labelLastLoginTime1.text    = Twns.Helpers.getTimestampShortText(loginTime, { hour: false, minute: false, second: false });
-                    labelLastLoginTime2.text    = Twns.Helpers.getTimestampShortText(loginTime, { year: false, month: false, date: false });
+                    labelLastLoginTime1.text    = Helpers.getTimestampShortText(loginTime, { hour: false, minute: false, second: false });
+                    labelLastLoginTime2.text    = Helpers.getTimestampShortText(loginTime, { year: false, month: false, date: false });
                 }
 
                 this._labelLoginCount.text      = `${info.loginCount}`;
@@ -209,16 +214,16 @@ namespace Twns.User {
         }
 
         private _updateBtnChat(): void {
-            this._btnChat.visible = this._getOpenData().userId !== Twns.User.UserModel.getSelfUserId();
+            this._btnChat.visible = this._getOpenData().userId !== User.UserModel.getSelfUserId();
         }
 
         private _updateBtnSetAvatar(): void {
-            this._btnSetAvatar.visible = this._getOpenData().userId === Twns.User.UserModel.getSelfUserId();
+            this._btnSetAvatar.visible = this._getOpenData().userId === User.UserModel.getSelfUserId();
         }
 
         private async _updateImgAvatar(): Promise<void> {
-            const info              = await Twns.User.UserModel.getUserPublicInfo(this._getOpenData().userId);
-            this._imgAvatar.source  = Twns.Config.ConfigManager.getUserAvatarImageSource(info?.avatarId ?? 1);
+            const info              = await User.UserModel.getUserPublicInfo(this._getOpenData().userId);
+            this._imgAvatar.source  = Config.ConfigManager.getUserAvatarImageSource(info?.avatarId ?? 1);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -245,6 +250,7 @@ namespace Twns.User {
             this._labelHistoryFogRatio.text     = Lang.getText(LangTextType.B0553);
             this._btnChat.label                 = Lang.getText(LangTextType.B0383);
             this._btnSetAvatar.label            = Lang.getText(LangTextType.B0707);
+            this._btnMyWarRoomRecord.label      = Lang.getText(LangTextType.B0905);
 
             this._updateLabelTitle();
             this._updateComponentsForStdRank();
@@ -255,40 +261,42 @@ namespace Twns.User {
         }
 
         private async _updateLabelTitle(): Promise<void> {
-            const nickname          = await Twns.User.UserModel.getUserNickname(this._getOpenData().userId);
+            const nickname          = await User.UserModel.getUserNickname(this._getOpenData().userId);
             this._labelTitle.text   = Lang.getFormattedText(LangTextType.F0009, nickname);
         }
         private async _updateComponentsForStdRank(): Promise<void> {
-            const data                      = await Twns.User.UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwStd, 2);
+            const data                      = await User.UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwStd, 2);
             const rawScore                  = data ? data.currentScore : null;
-            const score                     = rawScore != null ? rawScore : Twns.CommonConstants.RankInitialScore;
-            const rankName                  = `(${(await Twns.Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? Twns.CommonConstants.ErrorTextForUndefined})`;
+            const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
+            const rankName                  = `(${(await Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? CommonConstants.ErrorTextForUndefined})`;
             this._labelStdRankScore.text    = `${score} ${rankName}`;
 
             const rank                          = data ? data.currentRank : null;
             this._labelStdRankRank.text         = rank == null ? `--` : `${rank}`;
-            this._labelStdRankRankSuffix.text   = Twns.Helpers.getSuffixForRank(rank) || ``;
+            this._labelStdRankRankSuffix.text   = Helpers.getSuffixForRank(rank) || ``;
         }
         private async _updateComponentsForFogRank(): Promise<void> {
-            const data                      = await Twns.User.UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwFog, 2);
+            const data                      = await User.UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwFog, 2);
             const rawScore                  = data ? data.currentScore : null;
-            const score                     = rawScore != null ? rawScore : Twns.CommonConstants.RankInitialScore;
-            const rankName                  = `(${(await Twns.Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? Twns.CommonConstants.ErrorTextForUndefined})`;
+            const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
+            const rankName                  = `(${(await Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? CommonConstants.ErrorTextForUndefined})`;
             this._labelFogRankScore.text    = `${score} ${rankName}`;
 
             const rank                          = data ? data.currentRank : null;
             this._labelFogRankRank.text         = rank == null ? `--` : `${rank}`;
-            this._labelFogRankRankSuffix.text   = Twns.Helpers.getSuffixForRank(rank) || ``;
+            this._labelFogRankRankSuffix.text   = Helpers.getSuffixForRank(rank) || ``;
         }
         private async _updateComponentsForSpmRank(): Promise<void> {
             const userId                        = this._getOpenData().userId;
-            const rankScore                     = (await Twns.User.UserModel.getUserPublicInfo(userId))?.spmOverallRankScore ?? 0;
-            const rankIndex                     = (await Twns.Leaderboard.LeaderboardModel.getSpmOverallRankIndex(userId)) ?? 0;
-            this._labelSpmRankScore.text        = rankScore > 0 ? Twns.Helpers.formatString(`%.2f`, rankScore) : `--`;
+            this._btnMyWarRoomRecord.visible    = userId === User.UserModel.getSelfUserId();
+
+            const rankScore                     = (await User.UserModel.getUserPublicInfo(userId))?.spmOverallRankScore ?? 0;
+            const rankIndex                     = (await Leaderboard.LeaderboardModel.getSpmOverallRankIndex(userId)) ?? 0;
+            this._labelSpmRankScore.text        = rankScore > 0 ? Helpers.formatString(`%.2f`, rankScore) : `--`;
 
             const isRankValid                   = (rankIndex > 0) && (rankScore > 0);
             this._labelSpmRankRank.text         = isRankValid ? `${rankIndex}` : `--`;
-            this._labelSpmRankRankSuffix.text   = isRankValid ? Twns.Helpers.getSuffixForRank(rankIndex) || `` : ``;
+            this._labelSpmRankRankSuffix.text   = isRankValid ? Helpers.getSuffixForRank(rankIndex) || `` : ``;
         }
         private _updateSclHistoryStd(): void {
             const userId    = this._getOpenData().userId;
@@ -299,7 +307,7 @@ namespace Twns.User {
                 warType     : WarType.MrwStd,
                 playersCount: 2,
             }];
-            for (let playersCount = 2; playersCount <= Twns.CommonConstants.WarMaxPlayerIndex; ++playersCount) {
+            for (let playersCount = 2; playersCount <= CommonConstants.WarMaxPlayerIndex; ++playersCount) {
                 dataList.push({
                     index       : index++,
                     userId,
@@ -319,7 +327,7 @@ namespace Twns.User {
                 warType     : WarType.MrwFog,
                 playersCount: 2,
             }];
-            for (let playersCount = 2; playersCount <= Twns.CommonConstants.WarMaxPlayerIndex; ++playersCount) {
+            for (let playersCount = 2; playersCount <= CommonConstants.WarMaxPlayerIndex; ++playersCount) {
                 dataList.push({
                     index       : index++,
                     userId,
@@ -331,9 +339,9 @@ namespace Twns.User {
             this._sclHistoryFog.bindData(dataList);
         }
         private async _updateLabelOnlineTime(): Promise<void> {
-            const info                  = await Twns.User.UserModel.getUserPublicInfo(this._getOpenData().userId);
+            const info                  = await User.UserModel.getUserPublicInfo(this._getOpenData().userId);
             const onlineTime            = info ? info.onlineTime : null;
-            this._labelOnlineTime.text  = onlineTime == null ? Twns.CommonConstants.ErrorTextForUndefined : Twns.Helpers.getTimeDurationText2(onlineTime);
+            this._labelOnlineTime.text  = onlineTime == null ? CommonConstants.ErrorTextForUndefined : Helpers.getTimeDurationText2(onlineTime);
         }
     }
 
@@ -367,7 +375,7 @@ namespace Twns.User {
                 labelType.text  = `${playersCount}P`;
             }
 
-            const info              = await Twns.User.UserModel.getUserMpwStatisticsData(data.userId, warType, playersCount);
+            const info              = await User.UserModel.getUserMpwStatisticsData(data.userId, warType, playersCount);
             const winCount          = info ? info.wins || 0 : 0;
             const loseCount         = info ? info.loses || 0 : 0;
             const drawCount         = info ? info.draws || 0 : 0;
@@ -375,7 +383,7 @@ namespace Twns.User {
             this._labelWin.text     = `${winCount}`;
             this._labelLose.text    = `${loseCount}`;
             this._labelDraw.text    = `${drawCount}`;
-            this._labelRatio.text   = totalCount ? Twns.Helpers.formatString(`%.2f`, winCount / totalCount * 100) : `--`;
+            this._labelRatio.text   = totalCount ? Helpers.formatString(`%.2f`, winCount / totalCount * 100) : `--`;
         }
     }
 }

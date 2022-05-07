@@ -234,8 +234,8 @@
 		"bin-debug/modules/multiFreeRoom/view/MfrCreatePlayerInfoPage.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrCreateSettingsPanel.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrJoinRoomListPanel.js",
+		"bin-debug/modules/multiFreeRoom/view/MfrMainMenuPanel.js",
 		"bin-debug/modules/baseWar/view/BwTileBriefPanel.js",
-		"bin-debug/modules/multiFreeRoom/view/MfrMyRoomListPanel.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrRoomInfoPanel.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrSearchRoomPanel.js",
 		"bin-debug/modules/baseWar/view/BwTileDetailPanel.js",
@@ -288,6 +288,7 @@
 		"bin-debug/modules/singlePlayerMode/view/SpmCreateSaveSlotsPanel.js",
 		"bin-debug/modules/singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel.js",
 		"bin-debug/modules/singlePlayerMode/view/SpmMainMenuPanel.js",
+		"bin-debug/modules/singlePlayerMode/view/SpmMyWarRoomRecordPanel.js",
 		"bin-debug/modules/baseWar/view/BwWeatherManagerView.js",
 		"bin-debug/modules/singlePlayerMode/view/SpmWarListPanel.js",
 		"bin-debug/modules/broadcast/model/BroadcastModel.js",
@@ -304,6 +305,7 @@
 		"bin-debug/modules/singleRankRoom/model/SrrCreateModel.js",
 		"bin-debug/modules/singleRankRoom/view/SrrCreateMapListPanel.js",
 		"bin-debug/modules/singleRankRoom/view/SrrCreatePlayerInfoPage.js",
+		"bin-debug/modules/singleRankRoom/view/SrrCreateQuickSettingsPanel.js",
 		"bin-debug/modules/singleRankRoom/view/SrrCreateSettingsPanel.js",
 		"bin-debug/modules/broadcast/view/BroadcastPanel.js",
 		"bin-debug/modules/changeLog/model/ChangeLogModel.js",
@@ -454,6 +456,6 @@
 		"bin-debug/modules/watchWar/view/WwMakeRequestDetailPanel.js",
 		"bin-debug/modules/watchWar/view/WwMakeRequestWarsPanel.js",
 		"bin-debug/modules/watchWar/view/WwOngoingWarsPanel.js",
-		"bin-debug/modules/multiFreeRoom/view/MfrMainMenuPanel.js"
+		"bin-debug/modules/multiFreeRoom/view/MfrMyRoomListPanel.js"
 	]
 }

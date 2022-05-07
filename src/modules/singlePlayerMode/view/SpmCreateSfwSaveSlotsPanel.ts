@@ -80,7 +80,7 @@ namespace Twns.SinglePlayerMode {
             this._updateComponentsForLanguage();
 
             this._srlSaveSlot.bindData(await this._createDataForList());
-            this._listSaveSlot.selectedIndex = await Twns.SinglePlayerMode.SpmModel.getAvailableIndex();
+            this._listSaveSlot.selectedIndex = await Twns.SinglePlayerMode.SpmModel.getAvailableSlotIndex();
         }
 
         private _updateComponentsForLanguage(): void {

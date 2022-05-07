@@ -189,6 +189,7 @@ namespace Twns.PanelHelpers {
         SpmCreateSfwSaveSlotsPanel          : PanelConfig<SinglePlayerMode.OpenDataForSpmCreateSfwSaveSlotsPanel>;
         SpmMainMenuPanel                    : PanelConfig<SinglePlayerMode.OpenDataForSpmMainMenuPanel>;
         SpmWarListPanel                     : PanelConfig<SinglePlayerMode.OpenDataForSpmWarListPanel>;
+        SpmMyWarRoomRecordPanel             : PanelConfig<SinglePlayerMode.OpenDataForSpmMyWarRoomRecordPanel>;
 
         SpwLoadWarPanel                     : PanelConfig<SinglePlayerWar.OpenDataForSpwLoadWarPanel>;
         SpwSidePanel                        : PanelConfig<SinglePlayerWar.OpenDataForSpwSidePanel>;
@@ -196,6 +197,7 @@ namespace Twns.PanelHelpers {
         SpwWarMenuPanel                     : PanelConfig<SinglePlayerWar.OpenDataForSpwWarMenuPanel>;
 
         SrrCreateMapListPanel               : PanelConfig<SingleRankRoom.OpenDataForSrrCreateMapListPanel>;
+        SrrCreateQuickSettingsPanel         : PanelConfig<SingleRankRoom.OpenDataForSrrCreateQuickSettingsPanel>;
         SrrCreateSettingsPanel              : PanelConfig<SingleRankRoom.OpenDataForSrrCreateSettingsPanel>;
 
         UserChangeDiscordIdPanel            : PanelConfig<User.OpenDataForUserChangeDiscordIdPanel>;
@@ -1309,6 +1311,12 @@ namespace Twns.PanelHelpers {
                 isExclusive : true,
             },
 
+            SpmMyWarRoomRecordPanel: {
+                cls         : SinglePlayerMode?.SpmMyWarRoomRecordPanel,
+                skinName    : `resource/skins/singlePlayerMode/SpmMyWarRoomRecordPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             SpwLoadWarPanel: {
                 cls         : SinglePlayerWar?.SpwLoadWarPanel,
@@ -1340,6 +1348,12 @@ namespace Twns.PanelHelpers {
                 skinName    : `resource/skins/singleRankRoom/SrrCreateMapListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
+            },
+
+            SrrCreateQuickSettingsPanel: {
+                cls         : SingleRankRoom?.SrrCreateQuickSettingsPanel,
+                skinName    : `resource/skins/singleRankRoom/SrrCreateQuickSettingsPanel.exml`,
+                layer       : LayerType.Hud0,
             },
 
             SrrCreateSettingsPanel: {
