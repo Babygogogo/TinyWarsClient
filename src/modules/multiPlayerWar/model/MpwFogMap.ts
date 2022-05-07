@@ -9,7 +9,7 @@ namespace Twns.MultiPlayerWar {
         public startRunning(war: Twns.MultiPlayerWar.MpwWar): void {
             this._setWar(war);
 
-            const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
+            const visibleTiles = Twns.WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
             for (const tile of war.getTileMap().getAllTiles()) {
                 if (visibleTiles.has(tile)) {
                     tile.setHasFog(false);

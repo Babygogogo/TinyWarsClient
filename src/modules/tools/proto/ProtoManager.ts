@@ -5,8 +5,7 @@
 // import * as protobuf        from "../../../../libs/modules/ProtobufJs/ProtobufJs";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace ProtoManager {
-    import ClientErrorCode          = Twns.ClientErrorCode;
+namespace Twns.ProtoManager {
     import IMessageContainer        = CommonProto.NetMessage.IMessageContainer;
     import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
     import IMapRawData              = CommonProto.Map.IMapRawData;
@@ -22,7 +21,7 @@ namespace ProtoManager {
 
     export function init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            protobuf.load(Twns.ResVersionController.getResVirtualUrl(PROTO_FILENAME)).then(
+            protobuf.load(ResVersionController.getResVirtualUrl(PROTO_FILENAME)).then(
                 protoRoot => {
                     if (!protoRoot) {
                         reject("no root!");
@@ -41,10 +40,10 @@ namespace ProtoManager {
     }
 
     export function encodeAsMessageContainer(action: IMessageContainer): Uint8Array {
-        if (Twns.Helpers.getMessageName(action) != null) {
+        if (Helpers.getMessageName(action) != null) {
             return MessageContainerClass.encode(action).finish();
         } else {
-            throw Twns.Helpers.newError(`ProtoManager.encodeAsMessageContainer() invalid message! ${JSON.stringify(action)}`, ClientErrorCode.ProtoManager_EncodeAsMessageContainer_00);
+            throw Helpers.newError(`ProtoManager.encodeAsMessageContainer() invalid message! ${JSON.stringify(action)}`, ClientErrorCode.ProtoManager_EncodeAsMessageContainer_00);
         }
     }
     export function decodeAsMessageContainer(data: Uint8Array | ArrayBuffer): IMessageContainer {

@@ -11,12 +11,12 @@ namespace Twns.SinglePlayerWar {
             this._setWar(war);
 
             const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
-            const visibleUnits  = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes);
+            const visibleUnits  = Twns.WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes);
             for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
                 unit.setViewVisible(visibleUnits.has(unit));
             }
 
-            const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeams(war, teamIndexes);
+            const visibleTiles = Twns.WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeams(war, teamIndexes);
             for (const tile of war.getTileMap().getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
                 tile.flushDataToView();

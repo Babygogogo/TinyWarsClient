@@ -215,7 +215,7 @@ namespace Twns.BaseWar {
                 for (let x = 0; x < width; ++x) {
                     const gridIndex : Twns.Types.GridIndex = { x, y };
                     const tile      = tileMap.getTile(gridIndex);
-                    layer.getChildAt(GridIndexHelpers.getGridId(gridIndex, mapSize)).visible = locationIdArray.some(v => tile.getHasLocationFlag(v));
+                    layer.getChildAt(Twns.GridIndexHelpers.getGridId(gridIndex, mapSize)).visible = locationIdArray.some(v => tile.getHasLocationFlag(v));
                 }
             }
         }
@@ -353,7 +353,7 @@ namespace Twns.BaseWar {
                     : player.getCoGridIndexListOnMap().filter(gridIndex => {
                         const unit = unitMap.getUnitOnMap(gridIndex);
                         return (!!unit)
-                            && (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            && (Twns.WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 gridIndex,
                                 unitType            : unit.getUnitType(),
@@ -366,13 +366,13 @@ namespace Twns.BaseWar {
                 const matrix = Twns.Helpers.getExisted(areaImgDict.get(playerIndex));
                 for (let x = 0; x < mapWidth; ++x) {
                     for (let y = 0; y < mapHeight; ++y) {
-                        matrix[x][y].visible = (gridIndexList.length > 0) && (radius >= GridIndexHelpers.getMinDistance({ x, y }, gridIndexList));
+                        matrix[x][y].visible = (gridIndexList.length > 0) && (radius >= Twns.GridIndexHelpers.getMinDistance({ x, y }, gridIndexList));
                     }
                 }
 
                 for (const coGridIndex of gridIndexList) {
                     const { x: coX, y: coY } = coGridIndex;
-                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: coGridIndex, minDistance: radius, maxDistance: radius, mapSize })) {
+                    for (const gridIndex of Twns.GridIndexHelpers.getGridsWithinDistance({ origin: coGridIndex, minDistance: radius, maxDistance: radius, mapSize })) {
                         const { x, y }  = gridIndex;
                         const deltaX = x - coX;
                         if (deltaX >= 0) {
@@ -419,7 +419,7 @@ namespace Twns.BaseWar {
         private _onNotifyBwTileLocationFlagSet(e: egret.Event): void {
             const tileMap   = Twns.Helpers.getExisted(this._tileMap);
             const tile      = e.data as Twns.Notify.NotifyData.BwTileLocationFlagSet;
-            const img       = this._locationLayer.getChildAt(GridIndexHelpers.getGridId(tile.getGridIndex(), tileMap.getMapSize()));
+            const img       = this._locationLayer.getChildAt(Twns.GridIndexHelpers.getGridId(tile.getGridIndex(), tileMap.getMapSize()));
             for (let locationId = Twns.CommonConstants.MapMinLocationId; locationId <= Twns.CommonConstants.MapMaxLocationId; ++locationId) {
                 if ((tileMap.getIsLocationVisible(locationId)) && (tile.getHasLocationFlag(locationId))) {
                     img.visible = true;

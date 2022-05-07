@@ -157,7 +157,7 @@ namespace Twns.CoopCustomRoom {
             const selfPlayerData    = roomPlayerInfo.playerDataList?.find(v => v.userId === selfUserId);
             if (selfPlayerData != null) {
                 if (selfPlayerData.isReady) {
-                    FloatText.show(Lang.getText(LangTextType.A0128));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0128));
                 } else {
                     const playerIndex       = Twns.Helpers.getExisted(selfPlayerData.playerIndex);
                     const currentCoId       = selfPlayerData.coId ?? null;
@@ -239,7 +239,7 @@ namespace Twns.CoopCustomRoom {
             }
 
             if (data.roomStaticInfo == null) {
-                FloatText.show(Lang.getText(LangTextType.A0019));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0019));
                 this.close();
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrMyRoomListPanel, void 0);
             } else {
@@ -255,9 +255,9 @@ namespace Twns.CoopCustomRoom {
             if (roomId === this._getOpenData().roomId) {
                 const exitRoomType = data.exitType;
                 if (exitRoomType === Twns.Types.ExitRoomType.DeletedByRoomOwner) {
-                    FloatText.show(Lang.getText(LangTextType.A0127));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0127));
                 } else if (exitRoomType === Twns.Types.ExitRoomType.SelfExit) {
-                    FloatText.show(Lang.getText(LangTextType.A0016));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0016));
                 }
 
                 this.close();
@@ -514,7 +514,7 @@ namespace Twns.CoopCustomRoom {
             }
 
             if (selfPlayerData.isReady) {
-                FloatText.show(Lang.getText(LangTextType.A0128));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0128));
                 return;
             }
 
@@ -522,7 +522,7 @@ namespace Twns.CoopCustomRoom {
             const currPlayerData    = playerDataList.some(v => v.playerIndex === newPlayerIndex);
             if (currPlayerData) {
                 if (currPlayerData !== selfPlayerData) {
-                    FloatText.show(Lang.getText(LangTextType.A0202));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0202));
                 }
             } else {
                 const settingsForCommon     = Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon);
@@ -610,7 +610,7 @@ namespace Twns.CoopCustomRoom {
             }
 
             if (selfPlayerData.isReady) {
-                FloatText.show(Lang.getText(LangTextType.A0128));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0128));
                 return;
             }
 
@@ -618,7 +618,7 @@ namespace Twns.CoopCustomRoom {
             const currPlayerData    = playerDataList.some(v => v.unitAndTileSkinId === newSkinId);
             if (currPlayerData) {
                 if (currPlayerData !== selfPlayerData) {
-                    FloatText.show(Lang.getText(LangTextType.A0203));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0203));
                 }
             } else {
                 CcrProxy.reqCcrSetSelfSettings({

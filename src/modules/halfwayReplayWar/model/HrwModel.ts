@@ -37,7 +37,7 @@ namespace Twns.HalfwayReplayWar.HrwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function loadWar(warData: WarSerialization.ISerialWar): Promise<Twns.HalfwayReplayWar.HrwWar> {
         if (_war) {
-            Logger.warn(`HrwModel.loadWar() another war has been loaded already!`);
+            Twns.Logger.warn(`HrwModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
@@ -373,8 +373,8 @@ namespace Twns.HalfwayReplayWar.HrwModel {
     }
     function mergeTileArrayAfterAction(src: Twns.Types.Undefinable<WarSerialization.ISerialTile[]>, dst: WarSerialization.ISerialTile[]): void {
         for (const tileData of src ?? []) {
-            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.HrwModel_MergeTileArrayAfterAction_00);
-            if (!dst.find(v => GridIndexHelpers.checkIsEqual(Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(v.gridIndex), ClientErrorCode.HrwModel_MergeTileArrayAfterAction_01), gridIndex))) {
+            const gridIndex = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.HrwModel_MergeTileArrayAfterAction_00);
+            if (!dst.find(v => Twns.GridIndexHelpers.checkIsEqual(Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(v.gridIndex), ClientErrorCode.HrwModel_MergeTileArrayAfterAction_01), gridIndex))) {
                 dst.push(tileData);
             }
         }
@@ -438,13 +438,13 @@ namespace Twns.HalfwayReplayWar.HrwModel {
                     return -1;
                 }
 
-                const firstGridIndex1   = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(path1[0].gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_02);
-                const firstGridIndex2   = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(path2[0].gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_03);
-                const lastGridIndex1    = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode1.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_04);
-                const lastGridIndex2    = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode2.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_05);
-                if (GridIndexHelpers.checkIsAdjacent(firstGridIndex1, lastGridIndex2)) {
+                const firstGridIndex1   = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(path1[0].gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_02);
+                const firstGridIndex2   = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(path2[0].gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_03);
+                const lastGridIndex1    = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(lastNode1.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_04);
+                const lastGridIndex2    = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(lastNode2.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_05);
+                if (Twns.GridIndexHelpers.checkIsAdjacent(firstGridIndex1, lastGridIndex2)) {
                     return 1;
-                } else if (GridIndexHelpers.checkIsAdjacent(firstGridIndex2, lastGridIndex1)) {
+                } else if (Twns.GridIndexHelpers.checkIsAdjacent(firstGridIndex2, lastGridIndex1)) {
                     return -1;
                 } else {
                     // 无法判断路径顺序
@@ -480,12 +480,12 @@ namespace Twns.HalfwayReplayWar.HrwModel {
         const length2 = path2.length;
         for (let index1 = 0; index1 < length1; ++index1) {
             const node1         = path1[index1];
-            const gridIndex1    = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(node1.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPath_00);
+            const gridIndex1    = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(node1.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPath_00);
             for (let index2 = 0; index2 < length2; ++index2) {
                 const node2         = path2[index2];
-                const gridIndex2    = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(node2.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPath_01);
+                const gridIndex2    = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(node2.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPath_01);
 
-                if (GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2)) {
+                if (Twns.GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2)) {
                     const dstPath = Twns.Helpers.deepClone(path1);
                     const srcPath = path2;
                     for (let i = 0; ; ++i) {

@@ -93,7 +93,7 @@ namespace Twns.ReplayWar {
             // No need to update units.
 
             const tileMap       = this.getTileMap();
-            const visibleTiles  = WarVisibilityHelpers.getAllTilesVisibleToTeam(this, this.getVisionTeamIndex() ?? this.getPlayerInTurn().getTeamIndex());
+            const visibleTiles  = Twns.WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeam(this, this.getVisionTeamIndex() ?? this.getPlayerInTurn().getTeamIndex());
             for (const tile of tileMap.getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
 
@@ -482,7 +482,7 @@ namespace Twns.ReplayWar {
             this.getView().updatePersistentText();
             Twns.SoundManager.playCoBgmWithWar(this, false);
 
-            FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+            Twns.FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
         }
 
         public getTotalActionsCount(): number {
@@ -499,7 +499,7 @@ namespace Twns.ReplayWar {
                 (this.checkIsInEnd())        ||
                 (this.getIsExecutingAction())
             ) {
-                FloatText.show(Lang.getText(LangTextType.B0110));
+                Twns.FloatText.show(Lang.getText(LangTextType.B0110));
             } else {
                 await this._doExecuteAction(action, isFastExecute);
             }

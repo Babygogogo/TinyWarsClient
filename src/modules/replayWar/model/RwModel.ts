@@ -68,7 +68,7 @@ namespace Twns.ReplayWar.RwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function loadWar(warData: ISerialWar, replayId: number): Promise<RwWar> {
         if (_war) {
-            Logger.warn(`RwModel.loadWar() another war has been loaded already!`);
+            Twns.Logger.warn(`RwModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
@@ -132,7 +132,7 @@ namespace Twns.ReplayWar.RwModel {
 
     export function updateOnMsgReplayGetData(data: MsgReplayGetDataIs): void {
         const encodedWar = data.encodedWar;
-        _replayDataGetter.setData(Twns.Helpers.getExisted(data.replayId), encodedWar ? ProtoManager.decodeAsSerialWar(encodedWar) : null);
+        _replayDataGetter.setData(Twns.Helpers.getExisted(data.replayId), encodedWar ? Twns.ProtoManager.decodeAsSerialWar(encodedWar) : null);
     }
 }
 

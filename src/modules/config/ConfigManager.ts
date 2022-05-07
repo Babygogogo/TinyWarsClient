@@ -28,7 +28,7 @@ namespace Twns.Config.ConfigManager {
                 null,
                 RES.ResourceItem.TYPE_BIN
             );
-            rawConfig = configBin ? ProtoManager.decodeAsFullConfig(configBin) as Types.FullConfig : null;
+            rawConfig = configBin ? Twns.ProtoManager.decodeAsFullConfig(configBin) as Types.FullConfig : null;
 
             if (rawConfig == null) {
                 _gameConfigAccessor.setData(version, null);
@@ -186,12 +186,12 @@ namespace Twns.Config.ConfigManager {
     export function checkIsValidGridIndexSubset(gridIndexArray: CommonProto.Structure.IGridIndex[], mapSize: Types.MapSize): boolean {
         const gridIdSet = new Set<number>();
         for (const g of gridIndexArray) {
-            const gridIndex = GridIndexHelpers.convertGridIndex(g);
-            if ((gridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+            const gridIndex = Twns.GridIndexHelpers.convertGridIndex(g);
+            if ((gridIndex == null) || (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
                 return false;
             }
 
-            const gridId = GridIndexHelpers.getGridId(gridIndex, mapSize);
+            const gridId = Twns.GridIndexHelpers.getGridId(gridIndex, mapSize);
             if (gridIdSet.has(gridId)) {
                 return false;
             }

@@ -182,7 +182,7 @@ namespace Twns.MapEditor {
             if (((drawer.getMode() === Twns.Types.MapEditorDrawerMode.AddTileToLocation) && (drawer.getDataForAddTileToLocation()?.locationIdArray.some(v => v === locationId)))             ||
                 ((drawer.getMode() === Twns.Types.MapEditorDrawerMode.DeleteTileFromLocation) && (drawer.getDataForDeleteTileFromLocation()?.locationIdArray.some(v => v === locationId)))
             ) {
-                FloatText.show(Lang.getText(LangTextType.A0267));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0267));
                 return;
             }
 

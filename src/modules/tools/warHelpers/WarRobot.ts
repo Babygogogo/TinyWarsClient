@@ -378,7 +378,7 @@ namespace Twns.WarHelpers.WarRobot {
             mapSize                 : war.getTileMap().getMapSize(),
             unitsInfoDict,
             unitValueRatio          : await getUnitValueRatio(war, unitsInfoDict, playerIndexInTurn),
-            visibleUnits            : WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, new Set([war.getPlayer(playerIndexInTurn).getTeamIndex()])),
+            visibleUnits            : WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, new Set([war.getPlayer(playerIndexInTurn).getTeamIndex()])),
             globalOffenseBonuses    : await getGlobalOffenseBonuses(war),
             globalDefenseBonuses    : await getGlobalDefenseBonuses(war),
             luckValues              : await getLuckValues(war),
@@ -826,7 +826,7 @@ namespace Twns.WarHelpers.WarRobot {
                     const damage            = Math.floor(
                         (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
                         * normalizedHp
-                        * WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit) + targetUnit.getPromotionDefenseBonus())
+                        * WarHelpers.WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit) + targetUnit.getPromotionDefenseBonus())
                         / CommonConstants.UnitHpNormalizer
                     );
                     if (!damageMap[x][y]) {
@@ -1077,7 +1077,7 @@ namespace Twns.WarHelpers.WarRobot {
                 const damage                = Math.floor(
                     (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
                     * normalizedHp
-                    * WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit) + targetUnit.getPromotionDefenseBonus())
+                    * WarHelpers.WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit) + targetUnit.getPromotionDefenseBonus())
                     / CommonConstants.UnitHpNormalizer
                 );
                 const canDestroy    = damage >= targetUnit.getCurrentHp();
@@ -1397,7 +1397,7 @@ namespace Twns.WarHelpers.WarRobot {
             return 0;
         }
 
-        const discoveredUnits = WarVisibilityHelpers.getDiscoveredUnitsByPath({
+        const discoveredUnits = WarHelpers.WarVisibilityHelpers.getDiscoveredUnitsByPath({
             war             : commonParams.war,
             path            : movePath,
             movingUnit,
@@ -1896,7 +1896,7 @@ namespace Twns.WarHelpers.WarRobot {
             promiseArray.push((async () => {
                 await Helpers.checkAndCallLater();
 
-                const battleDamageInfoArray = WarDamageCalculator.getEstimatedBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
+                const battleDamageInfoArray = WarHelpers.WarDamageCalculator.getEstimatedBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
                 return {
                     score   : await getScoreForActionUnitAttack({
                         commonParams,

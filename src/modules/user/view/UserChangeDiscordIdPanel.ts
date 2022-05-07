@@ -69,11 +69,11 @@ namespace Twns.User {
 
         private _onTouchedBtnConfirm(): void {
             if (this._isRequesting) {
-                FloatText.show(Lang.getText(LangTextType.A0046));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0046));
             } else {
                 const discordId = this._inputDiscordId.text;
                 if (!Twns.Helpers.checkIsDiscordIdValid(discordId)) {
-                    FloatText.show(Lang.getText(LangTextType.A0048));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0048));
                 } else {
                     this._isRequesting = true;
                     Twns.User.UserProxy.reqSetDiscordId(discordId);
@@ -93,7 +93,7 @@ namespace Twns.User {
         }
 
         private _onMsgUserSetDiscordId(): void {
-            FloatText.show(Lang.getText(LangTextType.A0049));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0049));
             this.close();
         }
         private _onMsgUserSetDiscordIdFailed(): void {

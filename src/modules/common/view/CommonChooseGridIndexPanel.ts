@@ -60,27 +60,27 @@ namespace Twns.Common {
 
         public updateOnDeleteGridIndex(gridIndex: GridIndex): void {
             const list = this._listLocation;
-            list.bindData(list.getBoundDataArray()?.filter(v => !GridIndexHelpers.checkIsEqual(gridIndex, v.gridIndex)) ?? []);
+            list.bindData(list.getBoundDataArray()?.filter(v => !Twns.GridIndexHelpers.checkIsEqual(gridIndex, v.gridIndex)) ?? []);
         }
 
         private _onTouchedBtnAdd(): void {
             const x = parseInt(this._inputGridX.text);
             const y = parseInt(this._inputGridY.text);
             if ((isNaN(x)) || (isNaN(y))) {
-                FloatText.show(Lang.getText(LangTextType.A0250));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0250));
                 return;
             }
 
             const gridIndex: GridIndex = { x, y };
-            if (!GridIndexHelpers.checkIsInsideMap(gridIndex, this._getOpenData().mapSize)) {
-                FloatText.show(Lang.getText(LangTextType.A0251));
+            if (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, this._getOpenData().mapSize)) {
+                Twns.FloatText.show(Lang.getText(LangTextType.A0251));
                 return;
             }
 
             const list              = this._listLocation;
             const gridIndexArray    = list.getBoundDataArray()?.map(v => v.gridIndex) ?? [];
-            if (gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))) {
-                FloatText.show(Lang.getText(LangTextType.A0268));
+            if (gridIndexArray.some(v => Twns.GridIndexHelpers.checkIsEqual(v, gridIndex))) {
+                Twns.FloatText.show(Lang.getText(LangTextType.A0268));
                 return;
             }
 

@@ -61,12 +61,12 @@ namespace Twns.User {
 
         private _onMsgUserRegister(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgUserRegister.IS;
-            FloatText.show(Lang.getText(LangTextType.A0004));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0004));
 
             const account   = Twns.Helpers.getExisted(data.account, ClientErrorCode.UserRegisterPanel_OnMsgUserRegister_00);
             const password  = this._inputPassword.text;
-            LocalStorage.setAccount(account);
-            LocalStorage.setPassword(password);
+            Twns.LocalStorage.setAccount(account);
+            Twns.LocalStorage.setPassword(password);
             Twns.User.UserModel.setSelfAccount(account);
             Twns.User.UserModel.setSelfPassword(password);
             Twns.User.UserProxy.reqLogin(account, password, false);
@@ -80,11 +80,11 @@ namespace Twns.User {
             const password = this._inputPassword.text;
             const nickname = this._inputNickname.text;
             if (!Twns.Helpers.checkIsAccountValid(account)) {
-                FloatText.show(Lang.getText(LangTextType.A0001));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0001));
             } else if (!Twns.Helpers.checkIsPasswordValid(password)) {
-                FloatText.show(Lang.getText(LangTextType.A0003));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0003));
             } else if (!Twns.Helpers.checkIsNicknameValid(nickname)) {
-                FloatText.show(Lang.getText(LangTextType.A0002));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0002));
             } else {
                 Twns.User.UserProxy.reqUserRegister(account, password, nickname);
             }

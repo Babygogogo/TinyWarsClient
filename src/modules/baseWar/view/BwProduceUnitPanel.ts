@@ -266,7 +266,7 @@ namespace Twns.BaseWar {
         private _onTouchedGroupProduce(): void {
             const data = this._getData();
             if (data.currentFund < data.minCost) {
-                FloatText.show(Lang.getText(LangTextType.B0053));
+                Twns.FloatText.show(Lang.getText(LangTextType.B0053));
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 return;
             }

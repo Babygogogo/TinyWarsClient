@@ -100,7 +100,7 @@ namespace Twns.MapManagement {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onMsgMmSetMapTag(): void {
-            FloatText.show(Lang.getText(LangTextType.A0151));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0151));
             this.setMapFilters(this._mapFilters);
         }
 

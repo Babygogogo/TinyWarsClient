@@ -352,7 +352,7 @@ namespace Twns.BaseWar {
         }
 
         public checkIsInCoZone(targetGridIndex: GridIndex, coGridIndexOnMap: GridIndex[]): boolean {
-            return GridIndexHelpers.getMinDistance(targetGridIndex, coGridIndexOnMap) <= this.getCoZoneRadius();
+            return Twns.GridIndexHelpers.getMinDistance(targetGridIndex, coGridIndexOnMap) <= this.getCoZoneRadius();
         }
 
         public getCoUsingSkillType(): Types.CoSkillType {

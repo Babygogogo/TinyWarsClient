@@ -15,8 +15,7 @@ namespace Twns.SoundManager {
     import ShortSfxCode         = Types.ShortSfxCode;
     import LongSfxCode          = Types.LongSfxCode;
     import UnitType             = Types.UnitType;
-    import LangTextType         = Twns.Lang.LangTextType;
-    import ClientErrorCode      = Twns.ClientErrorCode;
+    import LangTextType         = Lang.LangTextType;
 
     export const DEFAULT_MUTE   = false;
     export const DEFAULT_VOLUME = 1;

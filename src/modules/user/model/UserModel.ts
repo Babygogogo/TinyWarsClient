@@ -314,11 +314,11 @@ namespace Twns.User.UserModel {
     function _onNotifyMsgUserLogout(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserLogout.IS;
         if (data.reason === Twns.Types.LogoutType.SelfRequest) {
-            FloatText.show(Lang.getText(LangTextType.A0005));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0005));
         } else if (data.reason === Twns.Types.LogoutType.LoginCollision) {
-            FloatText.show(Lang.getText(LangTextType.A0006));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0006));
         } else if (data.reason === Twns.Types.LogoutType.NetworkFailure) {
-            FloatText.show(Lang.getText(LangTextType.A0013));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0013));
         }
 
         setIsLoggedIn(false);

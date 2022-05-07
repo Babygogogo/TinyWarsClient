@@ -148,7 +148,7 @@ namespace Twns.BaseWar {
                 const point         = touchPoints.values().next().value as Twns.Types.Point;
                 const gridIndex     = this._getGridIndexByGlobalXY(point.x, point.y);
                 const currGridIndex = this._getCursor().getGridIndex();
-                if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
+                if (!Twns.GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
                     this._isTouchMovedOrMultiple = true;
                     Twns.Notify.dispatch(NotifyType.BwCursorDragged, {
                         current     : currGridIndex,
@@ -164,7 +164,7 @@ namespace Twns.BaseWar {
                 this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
                 this._initialGlobalTouchPoint   = { x: e.stageX, y: e.stageY };
                 this._isTouchMovedOrMultiple    = false;
-                this._touchIdForTouchingCursor  = GridIndexHelpers.checkIsEqual(this._getCursor().getGridIndex(), this._getGridIndexByLocalXY(e.localX, e.localY))
+                this._touchIdForTouchingCursor  = Twns.GridIndexHelpers.checkIsEqual(this._getCursor().getGridIndex(), this._getGridIndexByLocalXY(e.localX, e.localY))
                     ? touchId
                     : null;
             }
@@ -204,7 +204,7 @@ namespace Twns.BaseWar {
                     if (this._touchIdForTouchingCursor != null) {
                         const gridIndex     = this._getGridIndexByLocalXY(e.localX, e.localY);
                         const currGridIndex = this._getCursor().getGridIndex();
-                        if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
+                        if (!Twns.GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
                             this._isTouchMovedOrMultiple = true;
                             Twns.Notify.dispatch(NotifyType.BwCursorDragged, {
                                 current     : currGridIndex,

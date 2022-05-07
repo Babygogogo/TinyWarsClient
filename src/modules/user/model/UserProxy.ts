@@ -38,7 +38,7 @@ namespace Twns.User.UserProxy {
         Twns.Net.NetManager.send({
             MsgUserLogin: { c: {
                 account,
-                password    : Sha1Generator.b64_sha1(rawPassword),
+                password    : Twns.Sha1Generator.b64_sha1(rawPassword),
                 isAutoRelogin,
             } },
         });
@@ -64,7 +64,7 @@ namespace Twns.User.UserProxy {
         Twns.Net.NetManager.send({
             MsgUserRegister: { c: {
                 account,
-                password: Sha1Generator.b64_sha1(rawPassword),
+                password: Twns.Sha1Generator.b64_sha1(rawPassword),
                 nickname,
             } },
         });
@@ -196,8 +196,8 @@ namespace Twns.User.UserProxy {
 
     export function reqUserSetPassword(oldRawPassword: string, newRawPassword: string): void {
         Twns.Net.NetManager.send({ MsgUserSetPassword: { c: {
-            oldPassword : Sha1Generator.b64_sha1(oldRawPassword),
-            newPassword : Sha1Generator.b64_sha1(newRawPassword),
+            oldPassword : Twns.Sha1Generator.b64_sha1(oldRawPassword),
+            newPassword : Twns.Sha1Generator.b64_sha1(newRawPassword),
         } } });
     }
     function _onMsgUserSetPassword(e: egret.Event): void {

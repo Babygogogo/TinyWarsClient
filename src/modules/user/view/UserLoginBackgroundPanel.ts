@@ -221,7 +221,7 @@ namespace Twns.User {
             const languageType = this._getData().languageType;
             if (Lang.getCurrentLanguageType() !== languageType) {
                 Lang.setLanguageType(languageType);
-                LocalStorage.setLanguageType(languageType);
+                Twns.LocalStorage.setLanguageType(languageType);
                 Twns.Notify.dispatch(NotifyType.LanguageChanged);
             }
         }

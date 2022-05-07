@@ -112,7 +112,7 @@ namespace Twns.CoopCustomRoom {
             this._updateComponentsForLanguage();
         }
         private _onNotifyMsgCcrCreateRoom(): void {
-            FloatText.show(Lang.getText(LangTextType.A0015));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0015));
             Twns.FlowManager.gotoLobby();
         }
 

@@ -55,10 +55,10 @@ namespace Twns.User {
         }
 
         private _onMsgUserSetPassword(): void {
-            FloatText.show(Lang.getText(LangTextType.A0148));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0148));
 
             const password = this._inputNewPassword0.text;
-            LocalStorage.setPassword(password);
+            Twns.LocalStorage.setPassword(password);
             Twns.User.UserModel.setSelfPassword(password);
             this.close();
         }
@@ -69,9 +69,9 @@ namespace Twns.User {
         private _onTouchedBtnConfirm(): void {
             const newPassword = this._inputNewPassword0.text;
             if (!Twns.Helpers.checkIsPasswordValid(newPassword)) {
-                FloatText.show(Lang.getText(LangTextType.A0003));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0003));
             } else if (newPassword !== this._inputNewPassword1.text) {
-                FloatText.show(Lang.getText(LangTextType.A0147));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0147));
             } else {
                 Twns.User.UserProxy.reqUserSetPassword(this._inputOldPassword.text, newPassword);
             }

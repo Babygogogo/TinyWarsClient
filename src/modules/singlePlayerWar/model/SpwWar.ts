@@ -32,14 +32,14 @@ namespace Twns.SinglePlayerWar {
 
         public updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void {
             const teamIndexes   = this.getPlayerManager().getWatcherTeamIndexesForSelf();
-            const visibleUnits  = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, teamIndexes);
+            const visibleUnits  = Twns.WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, teamIndexes);
             for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
                 if (!isFastExecute) {
                     unit.setViewVisible(visibleUnits.has(unit));
                 }
             }
 
-            const visibleTiles  = WarVisibilityHelpers.getAllTilesVisibleToTeams(this, teamIndexes);
+            const visibleTiles  = Twns.WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeams(this, teamIndexes);
             const tileMap       = this.getTileMap();
             for (const tile of tileMap.getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));

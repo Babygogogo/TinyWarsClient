@@ -360,7 +360,7 @@ namespace Twns.BaseWar {
                 const range             = Twns.Helpers.getExisted(actionPlanner.getFocusUnit()?.getFlareMaxRange());
                 for (let x = 0; x < width; ++x) {
                     for (let y = 0; y < height; ++y) {
-                        imgs[x][y].visible = GridIndexHelpers.getDistance(destination, { x, y }) <= range;
+                        imgs[x][y].visible = Twns.GridIndexHelpers.getDistance(destination, { x, y }) <= range;
                     }
                 }
 
@@ -730,7 +730,7 @@ namespace Twns.BaseWar {
                 }
 
                 const cursorGridIndex = actionPlanner.getCursor().getGridIndex();
-                if (actionPlanner.getAvailableDropDestinations()?.some(grid => GridIndexHelpers.checkIsEqual(grid, cursorGridIndex))) {
+                if (actionPlanner.getAvailableDropDestinations()?.some(grid => Twns.GridIndexHelpers.checkIsEqual(grid, cursorGridIndex))) {
                     this._addUnitView(Twns.Helpers.getExisted(actionPlanner.getChoosingUnitForDrop()), cursorGridIndex);
                 }
 
@@ -827,7 +827,7 @@ namespace Twns.BaseWar {
     }
 
     function _createImgForMovePathGrid(prev: GridIndex, curr: GridIndex, next: GridIndex): TwnsUiImage.UiImage | null {
-        const source = Twns.Helpers.getExisted(_PATH_GRID_SOURCES.get(GridIndexHelpers.getAdjacentDirection(prev, curr))).get(GridIndexHelpers.getAdjacentDirection(next, curr));
+        const source = Twns.Helpers.getExisted(_PATH_GRID_SOURCES.get(Twns.GridIndexHelpers.getAdjacentDirection(prev, curr))).get(Twns.GridIndexHelpers.getAdjacentDirection(next, curr));
         if (!source) {
             return null;
         } else {

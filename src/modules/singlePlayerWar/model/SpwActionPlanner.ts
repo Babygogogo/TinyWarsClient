@@ -315,7 +315,7 @@ namespace Twns.SinglePlayerWar {
                 return State.ChoosingAction;
             } else {
                 const previousGridIndex = this.getCursor().getPreviousGridIndex();
-                if ((previousGridIndex != null) && (GridIndexHelpers.checkIsEqual(previousGridIndex, gridIndex))) {
+                if ((previousGridIndex != null) && (Twns.GridIndexHelpers.checkIsEqual(previousGridIndex, gridIndex))) {
                     if (this._getUnitMap().getUnitOnMap(gridIndex)) {
                         return State.RequestingUnitAttackUnit;
                     } else {
@@ -327,7 +327,7 @@ namespace Twns.SinglePlayerWar {
             }
         }
         protected _getNextStateOnTapWhenChoosingDropDestination(gridIndex: GridIndex): State {
-            if (Helpers.getExisted(this.getAvailableDropDestinations()).every(g => !GridIndexHelpers.checkIsEqual(g, gridIndex))) {
+            if (Helpers.getExisted(this.getAvailableDropDestinations()).every(g => !Twns.GridIndexHelpers.checkIsEqual(g, gridIndex))) {
                 return State.ChoosingAction;
             } else {
                 const chosenUnits               = [this.getChoosingUnitForDrop()];
@@ -348,11 +348,11 @@ namespace Twns.SinglePlayerWar {
             }
         }
         protected _getNextStateOnTapWhenChoosingFlareDestination(gridIndex: GridIndex): State {
-            if (GridIndexHelpers.getDistance(this.getMovePathDestination(), gridIndex) > Helpers.getExisted(Helpers.getExisted(this.getFocusUnit()).getFlareMaxRange())) {
+            if (Twns.GridIndexHelpers.getDistance(this.getMovePathDestination(), gridIndex) > Helpers.getExisted(Helpers.getExisted(this.getFocusUnit()).getFlareMaxRange())) {
                 return State.ChoosingAction;
             } else {
                 const previousGridIndex = this.getCursor().getPreviousGridIndex();
-                if ((previousGridIndex != null) && GridIndexHelpers.checkIsEqual(gridIndex, previousGridIndex)) {
+                if ((previousGridIndex != null) && Twns.GridIndexHelpers.checkIsEqual(gridIndex, previousGridIndex)) {
                     return State.RequestingUnitLaunchFlare;
                 } else {
                     return State.ChoosingFlareDestination;
@@ -361,7 +361,7 @@ namespace Twns.SinglePlayerWar {
         }
         protected _getNextStateOnTapWhenChoosingSiloDestination(gridIndex: GridIndex): State {
             const previousGridIndex = this.getCursor().getPreviousGridIndex();
-            if ((previousGridIndex != null) && (GridIndexHelpers.checkIsEqual(gridIndex, previousGridIndex))) {
+            if ((previousGridIndex != null) && (Twns.GridIndexHelpers.checkIsEqual(gridIndex, previousGridIndex))) {
                 return State.RequestingUnitLaunchSilo;
             } else {
                 return State.ChoosingSiloDestination;
@@ -369,7 +369,7 @@ namespace Twns.SinglePlayerWar {
         }
         protected _getNextStateOnTapWhenChoosingProductionTarget(gridIndex: GridIndex): State {
             const previousGridIndex = this.getCursor().getPreviousGridIndex();
-            if ((previousGridIndex != null) && (GridIndexHelpers.checkIsEqual(previousGridIndex, gridIndex))) {
+            if ((previousGridIndex != null) && (Twns.GridIndexHelpers.checkIsEqual(previousGridIndex, gridIndex))) {
                 return State.ChoosingProductionTarget;
             } else {
                 const turnManager       = this._getTurnManager();
@@ -531,7 +531,7 @@ namespace Twns.SinglePlayerWar {
         protected _getActionUnitBeLoaded(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = Helpers.getExisted(this.getFocusUnit());
-            if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
+            if (Twns.GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
                 return [];
             } else {
                 const loader = this._getUnitMap().getUnitOnMap(destination);
@@ -543,7 +543,7 @@ namespace Twns.SinglePlayerWar {
         protected _getActionUnitJoin(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = Helpers.getExisted(this.getFocusUnit());
-            if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
+            if (Twns.GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
                 return [];
             } else {
                 const target = this._getUnitMap().getUnitOnMap(destination);
@@ -639,7 +639,7 @@ namespace Twns.SinglePlayerWar {
                 const playerIndex   = focusUnit.getPlayerIndex();
                 const unitMap       = this._getUnitMap();
                 if (focusUnit.checkIsAdjacentUnitSupplier()) {
-                    for (const gridIndex of GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this.getMapSize())) {
+                    for (const gridIndex of Twns.GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this.getMapSize())) {
                         const unit = unitMap.getUnitOnMap(gridIndex);
                         if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
                             return [{ actionType: UnitActionType.Supply, callback: () => this._setStateRequestingUnitSupply() }];
@@ -669,21 +669,21 @@ namespace Twns.SinglePlayerWar {
                     if (Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) < 1) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
-                            callback            : () => FloatText.show(Lang.getText(LangTextType.B0051)),
+                            callback            : () => Twns.FloatText.show(Lang.getText(LangTextType.B0051)),
                             costForProduceUnit,
                             produceUnitType,
                         }];
                     } else if (focusUnit.getLoadedUnitsCount() >= Helpers.getExisted(focusUnit.getMaxLoadUnitsCount())) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
-                            callback            : () => FloatText.show(Lang.getText(LangTextType.B0052)),
+                            callback            : () => Twns.FloatText.show(Lang.getText(LangTextType.B0052)),
                             costForProduceUnit,
                             produceUnitType,
                         }];
                     } else if ((this._getWar()).getPlayerInTurn().getFund() < costForProduceUnit) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
-                            callback            : () => FloatText.show(Lang.getText(LangTextType.B0053)),
+                            callback            : () => Twns.FloatText.show(Lang.getText(LangTextType.B0053)),
                             costForProduceUnit,
                             produceUnitType,
                         }];
@@ -731,7 +731,7 @@ namespace Twns.SinglePlayerWar {
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected _getMoveCost(targetGridIndex: GridIndex, movingUnit: BaseWar.BwUnit): number | null {
-            if (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
+            if (!Twns.GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
                 return null;
             } else {
                 const existingUnit = this._getUnitMap().getVisibleUnitOnMap(targetGridIndex);
@@ -765,7 +765,7 @@ namespace Twns.SinglePlayerWar {
                     const existingUnit = unitMap.getVisibleUnitOnMap(moveGridIndex);
                     return ((!existingUnit) || (existingUnit === unit))
                         && (hasAmmo)
-                        && ((canAttackAfterMove) || (GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex)));
+                        && ((canAttackAfterMove) || (Twns.GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex)));
                 },
             });
 

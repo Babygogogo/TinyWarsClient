@@ -264,10 +264,10 @@ namespace Twns.BaseWar {
             for (const pathNode of path) {
                 const visionRange = unit.getVisionRangeForPlayer(playerIndex, pathNode);
                 if (visionRange) {
-                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: pathNode, minDistance: 0, maxDistance: 1, mapSize })) {
+                    for (const gridIndex of Twns.GridIndexHelpers.getGridsWithinDistance({ origin: pathNode, minDistance: 0, maxDistance: 1, mapSize })) {
                         mapFromPath[gridIndex.x][gridIndex.y] = Visibility.TrueVision;
                     }
-                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: pathNode, minDistance: 2, maxDistance: visionRange, mapSize })) {
+                    for (const gridIndex of Twns.GridIndexHelpers.getGridsWithinDistance({ origin: pathNode, minDistance: 2, maxDistance: visionRange, mapSize })) {
                         if (unit.checkIsTrueVision(gridIndex)) {
                             mapFromPath[gridIndex.x][gridIndex.y] = Visibility.TrueVision;
                         } else {
@@ -287,13 +287,13 @@ namespace Twns.BaseWar {
             const map       = this._getMapFromPath(playerIndex);
             const mapSize   = this.getMapSize();
             for (const value of visibilityArray) {
-                const gridIndex                 = GridIndexHelpers.getGridIndexByGridId(Math.floor(value / 10), mapSize);
+                const gridIndex                 = Twns.GridIndexHelpers.getGridIndexByGridId(Math.floor(value / 10), mapSize);
                 map[gridIndex.x][gridIndex.y]   = value % 10;
             }
         }
         public updateMapFromPathsByFlare(playerIndex: number, flareGridIndex: GridIndex, flareRadius: number): void {
             const map = this._getMapFromPath(playerIndex);
-            for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: flareGridIndex, minDistance: 0, maxDistance: flareRadius, mapSize: this.getMapSize() })) {
+            for (const gridIndex of Twns.GridIndexHelpers.getGridsWithinDistance({ origin: flareGridIndex, minDistance: 0, maxDistance: flareRadius, mapSize: this.getMapSize() })) {
                 map[gridIndex.x][gridIndex.y] = 2;
             }
         }
@@ -346,7 +346,7 @@ namespace Twns.BaseWar {
                         for (let y = 0; y < height; ++y) {
                             const tileGridIndex = { x, y };
                             const visionRange   = tileMap.getTile(tileGridIndex).getVisionRangeForPlayer(playerIndex);
-                            if ((visionRange != null) && (GridIndexHelpers.getDistance(gridIndex, tileGridIndex) <= visionRange)) {
+                            if ((visionRange != null) && (Twns.GridIndexHelpers.getDistance(gridIndex, tileGridIndex) <= visionRange)) {
                                 return Visibility.InsideVision;
                             }
                         }
@@ -376,7 +376,7 @@ namespace Twns.BaseWar {
 
                         const visionRange = tile.getVisionRangeForTeamIndexes(teamIndexes);
                         if (visionRange != null) {
-                            for (const g of GridIndexHelpers.getGridsWithinDistance({ origin: tileGridIndex, minDistance: 0, maxDistance: visionRange, mapSize })) {
+                            for (const g of Twns.GridIndexHelpers.getGridsWithinDistance({ origin: tileGridIndex, minDistance: 0, maxDistance: visionRange, mapSize })) {
                                 if (resultMap[g.x][g.y] === Visibility.OutsideVision) {
                                     resultMap[g.x][g.y] = Visibility.InsideVision;
                                 }
@@ -405,7 +405,7 @@ namespace Twns.BaseWar {
                         if (unit) {
                             const visionRange = unit.getVisionRangeForPlayer(playerIndex, unitGridIndex);
                             if (visionRange != null) {
-                                const distance = GridIndexHelpers.getDistance(gridIndex, unitGridIndex);
+                                const distance = Twns.GridIndexHelpers.getDistance(gridIndex, unitGridIndex);
                                 if (distance <= 1) {
                                     return Visibility.TrueVision;
                                 }
@@ -440,12 +440,12 @@ namespace Twns.BaseWar {
                         if (unit) {
                             const visionRange = unit.getVisionRangeForTeamIndexes(teamIndexes, unitGridIndex);
                             if (visionRange != null) {
-                                for (const g of GridIndexHelpers.getGridsWithinDistance({ origin: unitGridIndex, minDistance: 0, maxDistance: 1, mapSize })) {
+                                for (const g of Twns.GridIndexHelpers.getGridsWithinDistance({ origin: unitGridIndex, minDistance: 0, maxDistance: 1, mapSize })) {
                                     resultMap[g.x][g.y] = Visibility.TrueVision;
                                 }
 
                                 const isTrueVision = unit.checkIsTrueVision(unitGridIndex);
-                                for (const g of GridIndexHelpers.getGridsWithinDistance({ origin: unitGridIndex, minDistance: 2, maxDistance: visionRange, mapSize })) {
+                                for (const g of Twns.GridIndexHelpers.getGridsWithinDistance({ origin: unitGridIndex, minDistance: 2, maxDistance: visionRange, mapSize })) {
                                     if (isTrueVision) {
                                         resultMap[g.x][g.y] = Visibility.TrueVision;
                                     } else {

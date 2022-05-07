@@ -203,7 +203,7 @@ namespace Twns.BaseWar {
             }
 
             const gridIndex = data.unit.getGridIndex();
-            if (GridIndexHelpers.checkIsEqual(gridIndex, cursor.getGridIndex())) {
+            if (Twns.GridIndexHelpers.checkIsEqual(gridIndex, cursor.getGridIndex())) {
                 Twns.Notify.dispatch(NotifyType.BwCursorTapped, {
                     current : gridIndex,
                     tappedOn: gridIndex,

@@ -150,7 +150,7 @@ namespace Twns.BaseWar {
         }): Promise<void> {
             this.showUnitAnimation(UnitAnimationType.Move);
 
-            const startingPoint = GridIndexHelpers.createPointByGridIndex(path[0]);
+            const startingPoint = Twns.GridIndexHelpers.createPointByGridIndex(path[0]);
             this.x              = startingPoint.x;
             this.y              = startingPoint.y;
 
@@ -182,7 +182,7 @@ namespace Twns.BaseWar {
                     if (isDiving) {
                         tween.call(() => {
                             this.visible = (i === path.length - 1)
-                                && (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                                && (Twns.WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                     war,
                                     gridIndex,
                                     unitType,
@@ -193,7 +193,7 @@ namespace Twns.BaseWar {
                         });
                     } else {
                         tween.call(() => {
-                            this.visible = (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            this.visible = (Twns.WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 gridIndex           : path[i - 1],
                                 unitType,
@@ -201,7 +201,7 @@ namespace Twns.BaseWar {
                                 unitPlayerIndex     : playerIndex,
                                 observerTeamIndexes : watcherTeamIndexes,
                             }))
-                            || (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            || (Twns.WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 gridIndex,
                                 unitType,
@@ -213,7 +213,7 @@ namespace Twns.BaseWar {
                     }
                 }
 
-                tween.to(GridIndexHelpers.createPointByGridIndex(gridIndex), 200);
+                tween.to(Twns.GridIndexHelpers.createPointByGridIndex(gridIndex), 200);
             }
 
             const endingGridIndex = path[path.length - 1];
@@ -222,7 +222,7 @@ namespace Twns.BaseWar {
                     tween.call(() => {
                         this._setImgUnitFlippedX(playerIndex % 2 === 0);
                         if ((isBlocked)                                         &&
-                            (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            (Twns.WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 unitType,
                                 isDiving,
@@ -250,7 +250,7 @@ namespace Twns.BaseWar {
                         cursor.setIsVisible(true);
                         this._setImgUnitFlippedX(playerIndex % 2 === 0);
                         if ((isBlocked)                                         &&
-                            (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            (Twns.WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 unitType,
                                 isDiving,
@@ -275,7 +275,7 @@ namespace Twns.BaseWar {
         }): Promise<void> {
             this.showUnitAnimation(UnitAnimationType.Move);
 
-            const startingPoint = GridIndexHelpers.createPointByGridIndex(Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(path[0].gridIndex), ClientErrorCode.BwUnitView_MoveAlongExtraPath_00));
+            const startingPoint = Twns.GridIndexHelpers.createPointByGridIndex(Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(path[0].gridIndex), ClientErrorCode.BwUnitView_MoveAlongExtraPath_00));
             this.x              = startingPoint.x;
             this.y              = startingPoint.y;
 
@@ -289,7 +289,7 @@ namespace Twns.BaseWar {
 
             for (let i = 1; i < path.length; ++i) {
                 const node          = path[i];
-                const gridIndex     = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(node.gridIndex), ClientErrorCode.BwUnitView_MoveAlongExtraPath_01);
+                const gridIndex     = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(node.gridIndex), ClientErrorCode.BwUnitView_MoveAlongExtraPath_01);
                 const currentX      = gridIndex.x;
                 const previousNode  = path[i - 1];
                 const previousX     = Twns.Helpers.getExisted(previousNode.gridIndex?.x, ClientErrorCode.BwUnitView_MoveAlongExtraPath_02);
@@ -301,7 +301,7 @@ namespace Twns.BaseWar {
                 tween.call(() => {
                     this.visible = (!!previousNode.isVisible) || (!!node.isVisible);
                 });
-                tween.to(GridIndexHelpers.createPointByGridIndex(gridIndex), 200);
+                tween.to(Twns.GridIndexHelpers.createPointByGridIndex(gridIndex), 200);
             }
 
             const endingNode        = path[path.length - 1];
@@ -314,7 +314,7 @@ namespace Twns.BaseWar {
                 });
             }
 
-            const endingGridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(endingNode.gridIndex), ClientErrorCode.BwUnitView_MoveAlongExtraPath_03);
+            const endingGridIndex = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(endingNode.gridIndex), ClientErrorCode.BwUnitView_MoveAlongExtraPath_03);
             return new Promise<void>(resolve => {
                 if (!aiming) {
                     tween.call(() => {

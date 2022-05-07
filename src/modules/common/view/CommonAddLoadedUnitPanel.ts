@@ -126,7 +126,7 @@ namespace Twns.Common {
             const unitData  = this._getUnitData();
             const errorTips = getErrorTipsForAddUnit({ war: openData.war, unitData });
             if (errorTips) {
-                FloatText.show(errorTips);
+                Twns.FloatText.show(errorTips);
             } else {
                 openData.callback(unitData);
                 this.close();
@@ -442,7 +442,7 @@ namespace Twns.Common {
             return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0525));
         }
 
-        if (!GridIndexHelpers.checkIsInsideMap(Twns.Helpers.getExisted(unitData.gridIndex), war.getTileMap().getMapSize())) {
+        if (!Twns.GridIndexHelpers.checkIsInsideMap(Twns.Helpers.getExisted(unitData.gridIndex), war.getTileMap().getMapSize())) {
             return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0531));
         }
 

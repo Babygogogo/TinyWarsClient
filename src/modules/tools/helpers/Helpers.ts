@@ -11,8 +11,7 @@ namespace Twns.Helpers {
     import ILanguageText        = CommonProto.Structure.ILanguageText;
     import IMessageContainer    = CommonProto.NetMessage.IMessageContainer;
     import IWarActionContainer  = CommonProto.WarAction.IWarActionContainer;
-    import LangTextType         = Twns.Lang.LangTextType;
-    import ClientErrorCode      = Twns.ClientErrorCode;
+    import LangTextType         = Lang.LangTextType;
 
     const COLOR_MATRIX_FILTERS = {
         [ColorType.Gray]: new egret.ColorMatrixFilter([
@@ -567,7 +566,7 @@ namespace Twns.Helpers {
 
         return {
             getData: (key: KeyType): Promise<DataType | null> => {
-                const serverTimestamp = Twns.Timer.getServerTimestamp();
+                const serverTimestamp = Timer.getServerTimestamp();
                 if ((dataDict.has(key))                                                     &&
                     (serverTimestamp - (dataTimestampDict.get(key) ?? 0) <= dataExpireTime)
                 ) {
@@ -613,7 +612,7 @@ namespace Twns.Helpers {
             },
 
             setData : (key: KeyType, data: DataType | null): void => {
-                dataTimestampDict.set(key, Twns.Timer.getServerTimestamp());
+                dataTimestampDict.set(key, Timer.getServerTimestamp());
                 dataDict.set(key, data);
 
                 for (const cb of requestDict.get(key) ?? []) {
@@ -684,7 +683,7 @@ namespace Twns.Helpers {
         const tween = egret.Tween.get(obj)
             .set(beginProps)
             .wait(waitTime || 0)
-            .to(endProps, tweenTime || Twns.CommonConstants.DefaultTweenTime, egret.Ease.sineOut);
+            .to(endProps, tweenTime || CommonConstants.DefaultTweenTime, egret.Ease.sineOut);
         if (callback) {
             tween.call(callback);
         }

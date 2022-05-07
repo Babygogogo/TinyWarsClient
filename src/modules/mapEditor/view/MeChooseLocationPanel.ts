@@ -78,7 +78,7 @@ namespace Twns.MapEditor {
         private _onTouchedBtnConfirm(): void {
             const selectedDataArray = this._listLocation.getSelectedDataArray();
             if (!selectedDataArray?.length) {
-                FloatText.show(Lang.getText(LangTextType.A0266));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0266));
             } else {
                 const drawer            = this._getWar().getDrawer();
                 const locationIdArray   = selectedDataArray.map(v => v.locationId).sort((v1, v2) => v1 - v2);

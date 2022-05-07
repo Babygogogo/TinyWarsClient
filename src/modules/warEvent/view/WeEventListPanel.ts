@@ -103,7 +103,7 @@ namespace Twns.WarEvent {
                 content : Lang.getText(LangTextType.A0188),
                 callback: () => {
                     const result = WarHelpers.WarEventHelpers.checkAndDeleteUnusedComponents(Twns.Helpers.getExisted(openData.war.getWarEventManager().getWarEventFullData()));
-                    FloatText.show(Lang.getFormattedText(LangTextType.F0063, result.deletedNodesCount, result.deletedConditionsCount, result.deletedActionsCount));
+                    Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0063, result.deletedNodesCount, result.deletedConditionsCount, result.deletedActionsCount));
                     Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });

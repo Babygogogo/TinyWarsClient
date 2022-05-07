@@ -257,7 +257,7 @@ namespace Twns.MapEditor {
             const mapWidth      = mapSize.width;
             const mapHeight     = mapSize.height;
             if (mapWidth !== mapHeight) {
-                FloatText.show(Lang.getText(LangTextType.A0295));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0295));
                 return;
             }
 
@@ -281,7 +281,7 @@ namespace Twns.MapEditor {
             const mapWidth      = mapSize.width;
             const mapHeight     = mapSize.height;
             if (mapWidth !== mapHeight) {
-                FloatText.show(Lang.getText(LangTextType.A0295));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0295));
                 return;
             }
 
@@ -305,7 +305,7 @@ namespace Twns.MapEditor {
             const mapWidth      = mapSize.width;
             const mapHeight     = mapSize.height;
             if (mapWidth !== mapHeight) {
-                FloatText.show(Lang.getText(LangTextType.A0295));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0295));
                 return;
             }
 
@@ -329,7 +329,7 @@ namespace Twns.MapEditor {
             const mapWidth      = mapSize.width;
             const mapHeight     = mapSize.height;
             if (mapWidth !== mapHeight) {
-                FloatText.show(Lang.getText(LangTextType.A0295));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0295));
                 return;
             }
 
@@ -430,7 +430,7 @@ namespace Twns.MapEditor {
             const mapWidth      = mapSize.width;
             const mapHeight     = mapSize.height;
             if (mapWidth !== mapHeight) {
-                FloatText.show(Lang.getText(LangTextType.A0295));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0295));
                 return;
             }
 
@@ -454,7 +454,7 @@ namespace Twns.MapEditor {
             const mapWidth      = mapSize.width;
             const mapHeight     = mapSize.height;
             if (mapWidth !== mapHeight) {
-                FloatText.show(Lang.getText(LangTextType.A0295));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0295));
                 return;
             }
 
@@ -478,7 +478,7 @@ namespace Twns.MapEditor {
             const mapWidth      = mapSize.width;
             const mapHeight     = mapSize.height;
             if (mapWidth !== mapHeight) {
-                FloatText.show(Lang.getText(LangTextType.A0295));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0295));
                 return;
             }
 
@@ -502,7 +502,7 @@ namespace Twns.MapEditor {
             const mapWidth      = mapSize.width;
             const mapHeight     = mapSize.height;
             if (mapWidth !== mapHeight) {
-                FloatText.show(Lang.getText(LangTextType.A0295));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0295));
                 return;
             }
 
@@ -678,7 +678,7 @@ namespace Twns.MapEditor {
         }
 
         if ((srcTile.getMaxHp() !== null) && (war.getUnitMap().getUnitOnMap(dstGridIndex))) {
-            WarDestructionHelpers.destroyUnitOnMap(war, dstGridIndex, true);
+            Twns.WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, dstGridIndex, true);
         }
         dstTile.init(tileData, war.getGameConfig());
         dstTile.startRunning(war);

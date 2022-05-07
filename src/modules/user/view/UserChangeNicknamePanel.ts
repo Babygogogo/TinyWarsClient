@@ -57,11 +57,11 @@ namespace Twns.User {
 
         private _onTouchedBtnConfirm(): void {
             if (this._isRequesting) {
-                FloatText.show(Lang.getText(LangTextType.A0046));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0046));
             } else {
                 const nickname = this._inputNickname.text;
                 if (!Twns.Helpers.checkIsNicknameValid(nickname)) {
-                    FloatText.show(Lang.getText(LangTextType.A0002));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0002));
                 } else {
                     this._isRequesting = true;
                     Twns.User.UserProxy.reqSetNickname(nickname);
@@ -70,7 +70,7 @@ namespace Twns.User {
         }
 
         private _onMsgUserSetNickname(): void {
-            FloatText.show(Lang.getText(LangTextType.A0047));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0047));
             this.close();
         }
         private _onMsgUserSetNicknameFailed(): void {

@@ -66,9 +66,9 @@ namespace Twns.ChangeLog {
                 { languageType: Twns.Types.LanguageType.English, text: englishText || chineseText },
             ];
             if (textList.every(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
-                FloatText.show(Lang.getText(LangTextType.A0155));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0155));
             } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > Twns.CommonConstants.ChangeLogTextMaxLength)) {
-                FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.ChangeLogTextMaxLength));
+                Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.ChangeLogTextMaxLength));
             } else {
                 Twns.ChangeLog.ChangeLogProxy.reqChangeLogModifyMessage(this._getOpenData().messageId, textList);
                 this.close();

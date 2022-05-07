@@ -76,7 +76,7 @@ namespace Twns.SinglePlayerMode {
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MrrMainMenuPanel, void 0);
         }
         private _onTouchedBtnCampaign(): void {
-            FloatText.show(Lang.getText(LangTextType.A0053));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0053));
         }
         private _onTouchedBtnCreateWarRoom(): void {
             this.close();

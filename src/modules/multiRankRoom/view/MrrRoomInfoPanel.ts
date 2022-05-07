@@ -189,7 +189,7 @@ namespace Twns.MultiRankRoom {
             const selfPlayerData    = roomInfo ? roomInfo.playerDataList?.find(v => v.userId === selfUserId) : null;
             if (selfPlayerData != null) {
                 if (selfPlayerData.isReady) {
-                    FloatText.show(Lang.getText(LangTextType.A0207));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0207));
                 } else {
                     const currentCoId = MultiRankRoom.MrrSelfSettingsModel.getCoId();
                     Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
@@ -253,7 +253,7 @@ namespace Twns.MultiRankRoom {
         private _onNotifyMsgMrrDeleteRoomByServer(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMrrDeleteRoomByServer.IS;
             if (data.roomId === this._getOpenData().roomId) {
-                FloatText.show(Lang.getText(LangTextType.A0019));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0019));
                 this.close();
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MrrMyRoomListPanel, void 0);
             }
@@ -563,7 +563,7 @@ namespace Twns.MultiRankRoom {
         }
 
         public async onItemTapEvent(): Promise<void> {
-            FloatText.show(Lang.getText(LangTextType.A0209));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0209));
         }
         private _onNotifyLanguageChanged(): void {
             this._updateLabelName();
@@ -627,14 +627,14 @@ namespace Twns.MultiRankRoom {
                 return;
             }
             if (selfPlayerData.isReady) {
-                FloatText.show(Lang.getText(LangTextType.A0207));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0207));
                 return;
             }
 
             const newSkinId         = data.skinId;
             const currPlayerData    = playerDataList?.some(v => (v.isReady) && (v.unitAndTileSkinId === newSkinId));
             if ((currPlayerData) && (currPlayerData !== selfPlayerData)) {
-                FloatText.show(Lang.getText(LangTextType.A0203));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0203));
             } else {
                 MultiRankRoom.MrrSelfSettingsModel.setUnitAndTileSkinId(newSkinId);
             }
@@ -683,7 +683,7 @@ namespace Twns.MultiRankRoom {
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             if ((selfPlayerData) && (selfPlayerData.isReady !== isReady)) {
                 if (!isReady) {
-                    FloatText.show(Lang.getText(LangTextType.A0205));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0205));
                 } else {
                     const coId      = Twns.Helpers.getExisted(MultiRankRoom.MrrSelfSettingsModel.getCoId());
                     const callback  = () => {

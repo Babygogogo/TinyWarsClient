@@ -1,16 +1,15 @@
 
 // import Notify           from "../notify/Notify";
-// import Twns.Notify   from "../notify/NotifyType";
+// import Notify   from "../notify/NotifyType";
 // import TwnsUiPanel      from "../ui/UiPanel";
 // import CommonConstants  from "./CommonConstants";
 // import Helpers          from "./Helpers";
 // import Types            from "./Types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace StageManager {
-    import LayerType            = Twns.Types.LayerType;
-    import NotifyType           = Twns.Notify.NotifyType;
-    import ClientErrorCode      = Twns.ClientErrorCode;
+namespace Twns.StageManager {
+    import LayerType            = Types.LayerType;
+    import NotifyType           = Notify.NotifyType;
 
     // The game is in landscape mode, which means that its design max height equals its design width, 960.
     const DESIGN_WIDTH         = 960;
@@ -21,7 +20,7 @@ namespace StageManager {
     let   _stage        : egret.Stage;
     let   _mouseX       : number;
     let   _mouseY       : number;
-    let   _stageScale   = Twns.CommonConstants.StageMinScale;
+    let   _stageScale   = CommonConstants.StageMinScale;
     const _LAYERS       = new Map<LayerType, UiLayer>();
 
     export function init(stg: egret.Stage): void {
@@ -79,11 +78,11 @@ namespace StageManager {
     }
 
     export function getLayer(layer: LayerType): UiLayer {
-        return Twns.Helpers.getExisted(_LAYERS.get(layer));
+        return Helpers.getExisted(_LAYERS.get(layer));
     }
 
     export function setStageScale(scale: number): void {
-        const s = Math.min(Math.max(Twns.CommonConstants.StageMinScale, scale), Twns.CommonConstants.StageMaxScale);
+        const s = Math.min(Math.max(CommonConstants.StageMinScale, scale), CommonConstants.StageMaxScale);
         if (getStageScale() !== s) {
             _stageScale = s;
 
@@ -96,7 +95,7 @@ namespace StageManager {
 
     function _addLayer(layerType: LayerType): void {
         if (_LAYERS.has(layerType)) {
-            throw Twns.Helpers.newError(`StageManager._addLayer() duplicated layer: ${layerType}.`, ClientErrorCode.StageManager_AddLayer_00);
+            throw Helpers.newError(`StageManager._addLayer() duplicated layer: ${layerType}.`, ClientErrorCode.StageManager_AddLayer_00);
         }
 
         const layer = new UiLayer();
@@ -109,14 +108,14 @@ namespace StageManager {
         _mouseY = e.stageY;
     }
     function _onMouseWheel(e: egret.Event): void {
-        Twns.Notify.dispatch(NotifyType.MouseWheel, e.data * ((egret.Capabilities.os === `Unknown` || navigator?.userAgent?.toLowerCase()?.includes(`firefox`)) ? 40 : 1));
+        Notify.dispatch(NotifyType.MouseWheel, e.data * ((egret.Capabilities.os === `Unknown` || navigator?.userAgent?.toLowerCase()?.includes(`firefox`)) ? 40 : 1));
     }
 
     function _onTouchBegin(e: egret.TouchEvent): void {
-        Twns.Notify.dispatch(NotifyType.GlobalTouchBegin, e);
+        Notify.dispatch(NotifyType.GlobalTouchBegin, e);
     }
     function _onTouchMove(e: egret.TouchEvent): void {
-        Twns.Notify.dispatch(NotifyType.GlobalTouchMove, e);
+        Notify.dispatch(NotifyType.GlobalTouchMove, e);
     }
 
     class UiLayer extends eui.UILayer {

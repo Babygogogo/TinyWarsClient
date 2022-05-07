@@ -84,7 +84,7 @@ namespace Twns.Broadcast {
                 group.visible = true;
 
                 label.setRichText(textList.join("    "));
-                const stageWidth    = StageManager.getStage().stageWidth;
+                const stageWidth    = Twns.StageManager.getStage().stageWidth;
                 const textWidth     = label.width;
                 egret.Tween.get(label, { loop: true })
                     .set({ x: stageWidth })

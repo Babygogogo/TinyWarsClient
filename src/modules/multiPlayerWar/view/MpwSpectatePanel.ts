@@ -114,7 +114,7 @@ namespace Twns.MultiPlayerWar {
                 }
             }
 
-            FloatText.show(Lang.getText(LangTextType.A0299));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0299));
         }
 
         private async _onTouchedBtnHandleRequest(): Promise<void> {
@@ -124,7 +124,7 @@ namespace Twns.MultiPlayerWar {
                     warId,
                 });
             } else {
-                FloatText.show(Lang.getText(LangTextType.A0300));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0300));
             }
         }
 
@@ -135,7 +135,7 @@ namespace Twns.MultiPlayerWar {
                     warId,
                 });
             } else {
-                FloatText.show(Lang.getText(LangTextType.A0301));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0301));
             }
         }
 

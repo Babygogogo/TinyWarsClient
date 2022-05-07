@@ -81,7 +81,7 @@ namespace Twns.MultiFreeRoom {
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmMainMenuPanel, void 0);
         }
         private _onTouchedBtnCreateRoom(): void {
-            FloatText.show(Lang.getText(LangTextType.A0198));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0198));
         }
         private _onTouchedBtnJoinRoom(): void {
             this.close();

@@ -64,9 +64,9 @@ namespace Twns.MapEditor {
                 { languageType: Twns.Types.LanguageType.English, text: englishText || chineseText },
             ];
             if (textList.every(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
-                FloatText.show(Lang.getText(LangTextType.A0155));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0155));
             } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > Twns.CommonConstants.MapMaxNameLength)) {
-                FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.MapMaxNameLength));
+                Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.MapMaxNameLength));
             } else {
                 Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).setMapNameArray(textList);
                 Twns.Notify.dispatch(NotifyType.MeMapNameChanged);

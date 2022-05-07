@@ -12,14 +12,13 @@
 // import WarCommonHelpers from "./WarCommonHelpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace WarCoSkillHelpers {
-    import ClientErrorCode      = Twns.ClientErrorCode;
-    import BwPlayer             = Twns.BaseWar.BwPlayer;
-    import GridIndex            = Twns.Types.GridIndex;
+namespace Twns.WarHelpers.WarCoSkillHelpers {
+    import BwPlayer             = BaseWar.BwPlayer;
+    import GridIndex            = Types.GridIndex;
     import Structure            = CommonProto.Structure;
     import IDataForUseCoSkill   = Structure.IDataForUseCoSkill;
-    import BwUnitMap            = Twns.BaseWar.BwUnitMap;
-    import BwWar                = Twns.BaseWar.BwWar;
+    import BwUnitMap            = BaseWar.BwUnitMap;
+    import BwWar                = BaseWar.BwWar;
     import ICoSkillCfg          = CommonProto.Config.ICoSkillCfg;
 
     type DamageMaps = {
@@ -43,7 +42,7 @@ namespace WarCoSkillHelpers {
         hasExtraData    : boolean;
         isFastExecute   : boolean;
     }): void {
-        const skillCfg          = Twns.Helpers.getExisted(war.getGameConfig().getCoSkillCfg(skillId));
+        const skillCfg          = Helpers.getExisted(war.getGameConfig().getCoSkillCfg(skillId));
         const coGridIndexList   = player.getCoGridIndexListOnMap();
         const unitMap           = war.getUnitMap();
 
@@ -128,7 +127,7 @@ namespace WarCoSkillHelpers {
         const modifier      = cfg[0] * selfFund / 10000 + cfg[1];
         for (const p of war.getPlayerManager().getAllPlayers()) {
             const teamIndex = p.getTeamIndex();
-            if ((teamIndex === selfTeamIndex) || (teamIndex === Twns.CommonConstants.WarNeutralTeamIndex)) {
+            if ((teamIndex === selfTeamIndex) || (teamIndex === CommonConstants.WarNeutralTeamIndex)) {
                 continue;
             }
 
@@ -152,7 +151,7 @@ namespace WarCoSkillHelpers {
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeSelfAddUnitWithoutExtraData({ skillCfg, player, war, coGridIndexList, isFastExecute }: {
-        skillCfg        : Twns.Types.CoSkillCfg;
+        skillCfg        : Types.CoSkillCfg;
         player          : BwPlayer;
         war             : BwWar;
         coGridIndexList : GridIndex[];
@@ -164,8 +163,8 @@ namespace WarCoSkillHelpers {
         }
 
         const selfPlayerIndex = player.getPlayerIndex();
-        if ((selfPlayerIndex == null) || (selfPlayerIndex === Twns.CommonConstants.WarNeutralPlayerIndex)) {
-            throw Twns.Helpers.newError(`Invalid selfPlayerIndex: ${selfPlayerIndex}.`, ClientErrorCode.WarCoSkillHelpers_ExeSelfAddUnit_00);
+        if ((selfPlayerIndex == null) || (selfPlayerIndex === CommonConstants.WarNeutralPlayerIndex)) {
+            throw Helpers.newError(`Invalid selfPlayerIndex: ${selfPlayerIndex}.`, ClientErrorCode.WarCoSkillHelpers_ExeSelfAddUnit_00);
         }
 
         const coZoneRadius  = player.getCoZoneRadius();
@@ -183,7 +182,7 @@ namespace WarCoSkillHelpers {
 
             const tileType = tile.getType();
             if ((!gameConfig.checkIsTileTypeInCategory(tileType, cfg[1]))   ||
-                (!Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                (!WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                     gridIndex,
                     coSkillAreaType         : cfg[0],
                     getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -195,7 +194,7 @@ namespace WarCoSkillHelpers {
 
             // cfg:（范围类别，地形类别，部队种类，hp，状态（0=未行动，1=已行动））
             const unitId = unitMap.getNextUnitId();
-            const unit = new Twns.BaseWar.BwUnit();
+            const unit = new BaseWar.BwUnit();
             unit.init({
                 gridIndex,
                 unitId,
@@ -219,7 +218,7 @@ namespace WarCoSkillHelpers {
     }
     function exeSelfHpGainWithoutExtraData({ war, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         war             : BwWar;
-        skillCfg        : Twns.Types.CoSkillCfg;
+        skillCfg        : Types.CoSkillCfg;
         unitMap         : BwUnitMap;
         player          : BwPlayer;
         coGridIndexList : GridIndex[];
@@ -232,7 +231,7 @@ namespace WarCoSkillHelpers {
             const category      = cfg[1];
             const deltaHp       = cfg[2];
             const gameConfig    = war.getGameConfig();
-            const modifier      = deltaHp * Twns.CommonConstants.UnitHpNormalizer;
+            const modifier      = deltaHp * CommonConstants.UnitHpNormalizer;
             for (const unit of unitMap.getAllUnits()) {
                 const unitType  = unit.getUnitType();
                 const gridIndex = unit.getGridIndex();
@@ -240,7 +239,7 @@ namespace WarCoSkillHelpers {
                 const currentHp = unit.getCurrentHp();
                 if ((unit.getPlayerIndex() === playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -251,7 +250,7 @@ namespace WarCoSkillHelpers {
                         if (deltaHp > 0) {
                             unit.setCurrentHp(Math.min(
                                 maxHp,
-                                (unit.getNormalizedCurrentHp() + deltaHp) * Twns.CommonConstants.UnitHpNormalizer)
+                                (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer)
                             );
                         } else {
                             unit.setCurrentHp(Math.max(
@@ -281,7 +280,7 @@ namespace WarCoSkillHelpers {
         // nothing to do
     }
     function exeEnemyHpGainWithoutExtraData({ skillCfg, war, player, coGridIndexList, isFastExecute }: {
-        skillCfg        : Twns.Types.CoSkillCfg;
+        skillCfg        : Types.CoSkillCfg;
         war             : BwWar;
         player          : BwPlayer;
         coGridIndexList : GridIndex[];
@@ -296,7 +295,7 @@ namespace WarCoSkillHelpers {
             const tileCategory  = cfg[2];
             const deltaHp       = cfg[3];
             const gameConfig    = war.getGameConfig();
-            const modifier      = deltaHp * Twns.CommonConstants.UnitHpNormalizer;
+            const modifier      = deltaHp * CommonConstants.UnitHpNormalizer;
             for (const unit of war.getUnitMap().getAllUnits()) {
                 const unitType  = unit.getUnitType();
                 const gridIndex = unit.getGridIndex();
@@ -306,7 +305,7 @@ namespace WarCoSkillHelpers {
                 if ((unit.getTeamIndex() !== teamIndex)                             &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, unitCategory))  &&
                     (gameConfig.checkIsTileTypeInCategory(tileType, tileCategory))  &&
-                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -317,7 +316,7 @@ namespace WarCoSkillHelpers {
                         if (deltaHp > 0) {
                             unit.setCurrentHp(Math.min(
                                 maxHp,
-                                (unit.getNormalizedCurrentHp() + deltaHp) * Twns.CommonConstants.UnitHpNormalizer)
+                                (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer)
                             );
                         } else {
                             unit.setCurrentHp(Math.max(
@@ -348,7 +347,7 @@ namespace WarCoSkillHelpers {
     }
     function exeSelfFuelGainWithoutExtraData({ war, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         war             : BwWar;
-        skillCfg        : Twns.Types.CoSkillCfg;
+        skillCfg        : Types.CoSkillCfg;
         unitMap         : BwUnitMap;
         player          : BwPlayer;
         coGridIndexList : GridIndex[];
@@ -366,7 +365,7 @@ namespace WarCoSkillHelpers {
                 const gridIndex = unit.getGridIndex();
                 if ((unit.getPlayerIndex() === playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -400,7 +399,7 @@ namespace WarCoSkillHelpers {
     }
     function exeEnemyFuelGainWithoutExtraData({ war, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         war             : BwWar;
-        skillCfg        : Twns.Types.CoSkillCfg;
+        skillCfg        : Types.CoSkillCfg;
         unitMap         : BwUnitMap;
         player          : BwPlayer;
         coGridIndexList : GridIndex[];
@@ -418,7 +417,7 @@ namespace WarCoSkillHelpers {
                 const gridIndex = unit.getGridIndex();
                 if ((unit.getPlayerIndex() !== playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -452,7 +451,7 @@ namespace WarCoSkillHelpers {
     }
     function exeSelfMaterialGainWithoutExtraData({ war, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         war             : BwWar;
-        skillCfg        : Twns.Types.CoSkillCfg;
+        skillCfg        : Types.CoSkillCfg;
         unitMap         : BwUnitMap;
         player          : BwPlayer;
         coGridIndexList : GridIndex[];
@@ -476,7 +475,7 @@ namespace WarCoSkillHelpers {
                 const gridIndex = unit.getGridIndex();
                 if ((unit.getPlayerIndex() === playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -484,7 +483,7 @@ namespace WarCoSkillHelpers {
                     }))
                 ) {
                     if (maxBuildMaterial != null) {
-                        const currentBuildMaterial = Twns.Helpers.getExisted(unit.getCurrentBuildMaterial());
+                        const currentBuildMaterial = Helpers.getExisted(unit.getCurrentBuildMaterial());
                         if (modifier > 0) {
                             unit.setCurrentBuildMaterial(Math.min(
                                 maxBuildMaterial,
@@ -500,7 +499,7 @@ namespace WarCoSkillHelpers {
                     }
 
                     if (maxProduceMaterial != null) {
-                        const currentProduceMaterial = Twns.Helpers.getExisted(unit.getCurrentProduceMaterial());
+                        const currentProduceMaterial = Helpers.getExisted(unit.getCurrentProduceMaterial());
                         if (modifier > 0) {
                             unit.setCurrentProduceMaterial(Math.min(
                                 maxProduceMaterial,
@@ -527,7 +526,7 @@ namespace WarCoSkillHelpers {
     }
     function exeEnemyMaterialGainWithoutExtraData({ war, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         war             : BwWar;
-        skillCfg        : Twns.Types.CoSkillCfg;
+        skillCfg        : Types.CoSkillCfg;
         unitMap         : BwUnitMap;
         player          : BwPlayer;
         coGridIndexList : GridIndex[];
@@ -551,7 +550,7 @@ namespace WarCoSkillHelpers {
                 const gridIndex = unit.getGridIndex();
                 if ((unit.getPlayerIndex() !== playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -559,7 +558,7 @@ namespace WarCoSkillHelpers {
                     }))
                 ) {
                     if (maxBuildMaterial != null) {
-                        const currentBuildMaterial = Twns.Helpers.getExisted(unit.getCurrentBuildMaterial());
+                        const currentBuildMaterial = Helpers.getExisted(unit.getCurrentBuildMaterial());
                         if (modifier > 0) {
                             unit.setCurrentBuildMaterial(Math.min(
                                 maxBuildMaterial,
@@ -575,7 +574,7 @@ namespace WarCoSkillHelpers {
                     }
 
                     if (maxProduceMaterial != null) {
-                        const currentProduceMaterial = Twns.Helpers.getExisted(unit.getCurrentProduceMaterial());
+                        const currentProduceMaterial = Helpers.getExisted(unit.getCurrentProduceMaterial());
                         if (modifier > 0) {
                             unit.setCurrentProduceMaterial(Math.min(
                                 maxProduceMaterial,
@@ -602,7 +601,7 @@ namespace WarCoSkillHelpers {
     }
     function exeSelfPrimaryAmmoGainWithoutExtraData({ war, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         war             : BwWar;
-        skillCfg        : Twns.Types.CoSkillCfg;
+        skillCfg        : Types.CoSkillCfg;
         unitMap         : BwUnitMap;
         player          : BwPlayer;
         coGridIndexList : GridIndex[];
@@ -623,10 +622,10 @@ namespace WarCoSkillHelpers {
 
                 const unitType      = unit.getUnitType();
                 const gridIndex     = unit.getGridIndex();
-                const currentAmmo   = Twns.Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo());
+                const currentAmmo   = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo());
                 if ((unit.getPlayerIndex() === playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -658,7 +657,7 @@ namespace WarCoSkillHelpers {
     }
     function exeEnemyPrimaryAmmoGainWithoutExtraData({ war, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         war             : BwWar;
-        skillCfg        : Twns.Types.CoSkillCfg;
+        skillCfg        : Types.CoSkillCfg;
         unitMap         : BwUnitMap;
         player          : BwPlayer;
         coGridIndexList : GridIndex[];
@@ -679,10 +678,10 @@ namespace WarCoSkillHelpers {
 
                 const unitType      = unit.getUnitType();
                 const gridIndex     = unit.getGridIndex();
-                const currentAmmo   = Twns.Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo());
+                const currentAmmo   = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo());
                 if ((unit.getPlayerIndex() !== playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -722,7 +721,7 @@ namespace WarCoSkillHelpers {
             return;
         }
 
-        const center            = Twns.Helpers.getExisted(skillData.fixedAreaDamageCenter);
+        const center            = Helpers.getExisted(skillData.fixedAreaDamageCenter);
         const gridVisualEffect  = war.getGridVisualEffect();
         for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: center as GridIndex, minDistance: 0, maxDistance: cfg[1], mapSize: unitMap.getMapSize() })) {
             gridVisualEffect.showEffectExplosion(gridIndex);
@@ -741,9 +740,9 @@ namespace WarCoSkillHelpers {
             return;
         }
 
-        const center            = Twns.Helpers.getExisted(skillData.fixedAreaDamageCenter);
+        const center            = Helpers.getExisted(skillData.fixedAreaDamageCenter);
         const mapSize           = unitMap.getMapSize();
-        const hpDamage          = cfg[2] * Twns.CommonConstants.UnitHpNormalizer;
+        const hpDamage          = cfg[2] * CommonConstants.UnitHpNormalizer;
         const isIndiscriminate  = !!cfg[3];
         const actionState       = cfg[4];
         const teamIndex         = player.getTeamIndex();
@@ -774,7 +773,7 @@ namespace WarCoSkillHelpers {
         // nothing to do
     }
     function exeSelfPromotionGainWithoutExtraData({ skillCfg, unitMap, player, coGridIndexList, isFastExecute, war }: {
-        skillCfg        : Twns.Types.CoSkillCfg;
+        skillCfg        : Types.CoSkillCfg;
         unitMap         : BwUnitMap;
         player          : BwPlayer;
         coGridIndexList : GridIndex[];
@@ -794,14 +793,14 @@ namespace WarCoSkillHelpers {
                 const gridIndex = unit.getGridIndex();
                 if ((unit.getPlayerIndex() === playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
                         coZoneRadius            : zoneRadius
                     }))
                 ) {
-                    const currentPromotion = Twns.Helpers.getExisted(unit.getCurrentPromotion());
+                    const currentPromotion = Helpers.getExisted(unit.getCurrentPromotion());
                     unit.setCurrentPromotion(Math.max(
                         0,
                         Math.min(
@@ -823,7 +822,7 @@ namespace WarCoSkillHelpers {
     }
     function exeSelfUnitActionStateWithoutExtraData({ war, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         war             : BwWar;
-        skillCfg        : Twns.Types.CoSkillCfg;
+        skillCfg        : Types.CoSkillCfg;
         unitMap         : BwUnitMap;
         player          : BwPlayer;
         coGridIndexList : GridIndex[];
@@ -834,9 +833,9 @@ namespace WarCoSkillHelpers {
             const playerIndex   = player.getPlayerIndex();
             const zoneRadius    = player.getCoZoneRadius();
             const category      = cfg[1];
-            const actionState   : Twns.Types.UnitActionState = cfg[2];
-            if ((actionState !== Twns.Types.UnitActionState.Acted) && (actionState !== Twns.Types.UnitActionState.Idle)) {
-                throw Twns.Helpers.newError(`Invalid actionState: ${actionState}`, ClientErrorCode.WarCoSkillHelpers_ExeSelfUnitActionState_00);
+            const actionState   : Types.UnitActionState = cfg[2];
+            if ((actionState !== Types.UnitActionState.Acted) && (actionState !== Types.UnitActionState.Idle)) {
+                throw Helpers.newError(`Invalid actionState: ${actionState}`, ClientErrorCode.WarCoSkillHelpers_ExeSelfUnitActionState_00);
             }
 
             const gameConfig = war.getGameConfig();
@@ -845,7 +844,7 @@ namespace WarCoSkillHelpers {
                 const gridIndex = unit.getGridIndex();
                 if ((unit.getPlayerIndex() === playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -867,7 +866,7 @@ namespace WarCoSkillHelpers {
     }
     function exeSelfFlareAmmoGainWithoutExtraData({ war, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         war             : BwWar;
-        skillCfg        : Twns.Types.CoSkillCfg;
+        skillCfg        : Types.CoSkillCfg;
         unitMap         : BwUnitMap;
         player          : BwPlayer;
         coGridIndexList : GridIndex[];
@@ -888,10 +887,10 @@ namespace WarCoSkillHelpers {
 
                 const unitType      = unit.getUnitType();
                 const gridIndex     = unit.getGridIndex();
-                const currentAmmo   = Twns.Helpers.getExisted(unit.getFlareCurrentAmmo(), ClientErrorCode.WarCoSkillHelpers_ExeSelfFlareAmmoGain_00);
+                const currentAmmo   = Helpers.getExisted(unit.getFlareCurrentAmmo(), ClientErrorCode.WarCoSkillHelpers_ExeSelfFlareAmmoGain_00);
                 if ((unit.getPlayerIndex() === playerIndex)                     &&
                     (gameConfig.checkIsUnitTypeInCategory(unitType, category))  &&
-                    (Twns.WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap: () => coGridIndexList,
@@ -917,7 +916,7 @@ namespace WarCoSkillHelpers {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeChangeWeatherWithExtraData({ skillCfg, war, player, skillData, isFastExecute }: {
-        skillCfg        : Twns.Types.CoSkillCfg;
+        skillCfg        : Types.CoSkillCfg;
         war             : BwWar;
         player          : BwPlayer;
         skillData       : IDataForUseCoSkill;
@@ -929,14 +928,14 @@ namespace WarCoSkillHelpers {
             const playerIndex       = player.getPlayerIndex();
             const fogMap            = war.getFogMap();
             const hasFog            = fogMap.checkHasFogCurrently();
-            weatherManager.setForceWeatherType(Twns.Helpers.getExisted(skillData.newWeatherType, ClientErrorCode.WarCoSkillHelpers_ExeChangeWeatherWithExtraData_00));
+            weatherManager.setForceWeatherType(Helpers.getExisted(skillData.newWeatherType, ClientErrorCode.WarCoSkillHelpers_ExeChangeWeatherWithExtraData_00));
             weatherManager.setExpirePlayerIndex(playerIndex);
             weatherManager.setExpireTurnIndex(war.getTurnManager().getTurnIndex() + cfg[0]);
             // war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
             if ((!hasFog) && (fogMap.checkHasFogCurrently()) && (cfg[1])) {
                 const mapSize           = fogMap.getMapSize();
-                const visibilityArray   : Twns.Types.Visibility[] = new Array(mapSize.width * mapSize.height);
-                visibilityArray.fill(Twns.Types.Visibility.TrueVision);
+                const visibilityArray   : Types.Visibility[] = new Array(mapSize.width * mapSize.height);
+                visibilityArray.fill(Types.Visibility.TrueVision);
                 fogMap.resetMapFromPathsForPlayer(playerIndex, visibilityArray);
             }
 
@@ -947,7 +946,7 @@ namespace WarCoSkillHelpers {
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeChangeWeatherWithoutExtraData({ skillCfg, war, player, skillData, isFastExecute }: {
-        skillCfg        : Twns.Types.CoSkillCfg;
+        skillCfg        : Types.CoSkillCfg;
         war             : BwWar;
         player          : BwPlayer;
         skillData       : IDataForUseCoSkill;
@@ -959,14 +958,14 @@ namespace WarCoSkillHelpers {
             const playerIndex       = player.getPlayerIndex();
             const fogMap            = war.getFogMap();
             const hasFog            = fogMap.checkHasFogCurrently();
-            weatherManager.setForceWeatherType(Twns.Helpers.getExisted(skillData.newWeatherType, ClientErrorCode.WarCoSkillHelpers_ExeChangeWeatherWithoutExtraData_00));
+            weatherManager.setForceWeatherType(Helpers.getExisted(skillData.newWeatherType, ClientErrorCode.WarCoSkillHelpers_ExeChangeWeatherWithoutExtraData_00));
             weatherManager.setExpirePlayerIndex(playerIndex);
             weatherManager.setExpireTurnIndex(war.getTurnManager().getTurnIndex() + cfg[0]);
             // war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
             if ((!hasFog) && (fogMap.checkHasFogCurrently()) && (cfg[1])) {
                 const mapSize           = fogMap.getMapSize();
-                const visibilityArray   : Twns.Types.Visibility[] = new Array(mapSize.width * mapSize.height);
-                visibilityArray.fill(Twns.Types.Visibility.TrueVision);
+                const visibilityArray   : Types.Visibility[] = new Array(mapSize.width * mapSize.height);
+                visibilityArray.fill(Types.Visibility.TrueVision);
                 fogMap.resetMapFromPathsForPlayer(playerIndex, visibilityArray);
             }
 
@@ -992,8 +991,8 @@ namespace WarCoSkillHelpers {
             if (cfg) {
                 const unitMap   = war.getUnitMap();
                 const teamIndex = player.getTeamIndex();
-                const valueMap  = Twns.Helpers.getExisted(getValueMap(unitMap, teamIndex));
-                const center    = Twns.Helpers.getExisted(getFixedAreaDamageCenter(war, valueMap, cfg));
+                const valueMap  = Helpers.getExisted(getValueMap(unitMap, teamIndex));
+                const center    = Helpers.getExisted(getFixedAreaDamageCenter(war, valueMap, cfg));
                 dataForUseCoSkill.fixedAreaDamageCenter = center;
             }
         }
@@ -1001,7 +1000,7 @@ namespace WarCoSkillHelpers {
         {
             const cfg = skillCfg?.changeWeather;
             if (cfg) {
-                dataForUseCoSkill.newWeatherType = Twns.Helpers.pickRandomElement(cfg.slice(2), war.getRandomNumberManager().getRandomNumber());
+                dataForUseCoSkill.newWeatherType = Helpers.pickRandomElement(cfg.slice(2), war.getRandomNumberManager().getRandomNumber());
             }
         }
 
@@ -1029,7 +1028,7 @@ namespace WarCoSkillHelpers {
             return getFixedAreaDamageCenterForType5({ war, valueMaps, radius, hpDamage, isIndiscriminate });
 
         } else {
-            throw Twns.Helpers.newError(`Invalid targetType: ${targetType}`, ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenter_00);
+            throw Helpers.newError(`Invalid targetType: ${targetType}`, ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenter_00);
         }
     }
 
@@ -1045,7 +1044,7 @@ namespace WarCoSkillHelpers {
         if (centers.length === 1) {
             return centers[0];
         } else {
-            return Twns.Helpers.getExisted(Twns.Helpers.pickRandomElement(centers, war.getRandomNumberManager().getRandomNumber()), ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenterForType1_00);
+            return Helpers.getExisted(Helpers.pickRandomElement(centers, war.getRandomNumberManager().getRandomNumber()), ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenterForType1_00);
         }
     }
 
@@ -1061,7 +1060,7 @@ namespace WarCoSkillHelpers {
         if (centers.length === 1) {
             return centers[0];
         } else {
-            return Twns.Helpers.getExisted(Twns.Helpers.pickRandomElement(centers, war.getRandomNumberManager().getRandomNumber()), ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenterForType2_00);
+            return Helpers.getExisted(Helpers.pickRandomElement(centers, war.getRandomNumberManager().getRandomNumber()), ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenterForType2_00);
         }
     }
 
@@ -1089,7 +1088,7 @@ namespace WarCoSkillHelpers {
         if (centers.length === 1) {
             return centers[0];
         } else {
-            return Twns.Helpers.getExisted(Twns.Helpers.pickRandomElement(centers, war.getRandomNumberManager().getRandomNumber()), ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenterForType4_00);
+            return Helpers.getExisted(Helpers.pickRandomElement(centers, war.getRandomNumberManager().getRandomNumber()), ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenterForType4_00);
         }
     }
 
@@ -1105,16 +1104,16 @@ namespace WarCoSkillHelpers {
         if (centers.length === 1) {
             return centers[0];
         } else {
-            return Twns.Helpers.getExisted(Twns.Helpers.pickRandomElement(centers, war.getRandomNumberManager().getRandomNumber()), ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenterForType5_00);
+            return Helpers.getExisted(Helpers.pickRandomElement(centers, war.getRandomNumberManager().getRandomNumber()), ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenterForType5_00);
         }
     }
 
     function getValueMap(unitMap: BwUnitMap, teamIndex: number): ValueMaps {
         const { width, height } = unitMap.getMapSize();
-        const hpMap             = Twns.Helpers.createEmptyMap(width, height, 0);
-        const fundMap           = Twns.Helpers.createEmptyMap(width, height, 0);
-        const capturerMap       = Twns.Helpers.createEmptyMap(width, height, false);
-        const sameTeamMap       = Twns.Helpers.createEmptyMap(width, height, false);
+        const hpMap             = Helpers.createEmptyMap(width, height, 0);
+        const fundMap           = Helpers.createEmptyMap(width, height, 0);
+        const capturerMap       = Helpers.createEmptyMap(width, height, false);
+        const sameTeamMap       = Helpers.createEmptyMap(width, height, false);
         for (let x = 0; x < width; ++x) {
             for (let y = 0; y < height; ++y) {
                 const unit = unitMap.getUnitOnMap({ x, y });
@@ -1142,15 +1141,15 @@ namespace WarCoSkillHelpers {
         const width             = srcHpMap.length;
         const height            = srcHpMap[0].length;
 
-        const hpMap             = Twns.Helpers.createEmptyMap(width, height, 0);
-        const fundMap           = Twns.Helpers.createEmptyMap(width, height, 0);
-        const unitCountMap      = Twns.Helpers.createEmptyMap(width, height, 0);
-        const capturerValueMap  = Twns.Helpers.createEmptyMap(width, height, 0);
+        const hpMap             = Helpers.createEmptyMap(width, height, 0);
+        const fundMap           = Helpers.createEmptyMap(width, height, 0);
+        const unitCountMap      = Helpers.createEmptyMap(width, height, 0);
+        const capturerValueMap  = Helpers.createEmptyMap(width, height, 0);
         for (let x = 0; x < width; ++x) {
             for (let y = 0; y < height; ++y) {
                 if (srcHpMap[x][y] > 0) {
                     const realHpDamage      = Math.min(hpDamage, srcHpMap[x][y] - 1);
-                    const realFundDamage    = Math.floor(srcFundMap[x][y] * realHpDamage / Twns.CommonConstants.UnitHpNormalizer);
+                    const realFundDamage    = Math.floor(srcFundMap[x][y] * realHpDamage / CommonConstants.UnitHpNormalizer);
                     const isSameTeam        = srcSameTeamMap[x][y];
                     if (isIndiscriminate) {
                         hpMap[x][y]             = isSameTeam ? -realHpDamage * 2 : realHpDamage;

@@ -113,7 +113,7 @@ namespace Twns.MapManagement {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyMsgMmSetMapEnabled(): void {
-            FloatText.show(Lang.getText(LangTextType.A0081));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0081));
             this.setMapFilters(this._mapFilters);
         }
 

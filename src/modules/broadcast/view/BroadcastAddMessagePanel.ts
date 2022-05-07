@@ -94,9 +94,9 @@ namespace Twns.Broadcast {
                 textList.push({ languageType: Twns.Types.LanguageType.English, text: englishText });
             }
             if (textList.every(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
-                FloatText.show(Lang.getText(LangTextType.A0155));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0155));
             } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > Twns.CommonConstants.BroadcastTextMaxLength)) {
-                FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.BroadcastTextMaxLength));
+                Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.BroadcastTextMaxLength));
             } else {
                 const startTime = this._startTime;
                 Twns.Broadcast.BroadcastProxy.reqBroadcastAddMessage(textList, startTime, startTime + this._duration);

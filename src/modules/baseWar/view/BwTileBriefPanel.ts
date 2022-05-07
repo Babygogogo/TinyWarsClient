@@ -96,7 +96,7 @@ namespace Twns.BaseWar {
         private _onNotifyMeTileChanged(e: egret.Event): void {
             const data  = e.data as Notify.NotifyData.MeTileChanged;
             const war   = this._getOpenData().war;
-            if ((war.getIsRunning()) && (GridIndexHelpers.checkIsEqual(data.gridIndex, war.getCursor().getGridIndex()))) {
+            if ((war.getIsRunning()) && (Twns.GridIndexHelpers.checkIsEqual(data.gridIndex, war.getCursor().getGridIndex()))) {
                 this._updateView();
             }
         }

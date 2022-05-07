@@ -101,7 +101,7 @@ namespace TwnsUiPanel {
                 throw Twns.Helpers.newError(`UiPanel2.initOnOpening() !this._checkIsReadyForOpen().`);
             }
 
-            const stage = StageManager.getStage();
+            const stage = Twns.StageManager.getStage();
             this.resize(stage.stageWidth, stage.stageHeight);
             this._resetSoundForCommonButtons();
 
@@ -313,7 +313,7 @@ namespace TwnsUiPanel {
 
     function createTouchMask(): eui.Group {
         const mask          = new eui.Group();
-        const stage         = StageManager.getStage();
+        const stage         = Twns.StageManager.getStage();
         mask.width          = stage.stageWidth;
         mask.height         = stage.stageHeight;
         mask.touchEnabled   = true;

@@ -12,7 +12,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import Twns.Notify               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -27,14 +27,14 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType               = Twns.Notify.NotifyType;
-    import LangTextType             = Twns.Lang.LangTextType;
-    import UnitType                 = Twns.Types.UnitType;
-    import TileType                 = Twns.Types.TileType;
+    import NotifyType               = Notify.NotifyType;
+    import LangTextType             = Lang.LangTextType;
+    import UnitType                 = Types.UnitType;
+    import TileType                 = Types.TileType;
     import GameConfig               = Config.GameConfig;
 
     // eslint-disable-next-line no-shadow
-    enum UnitInfoType {
+    const enum UnitInfoType {
         Hp,
         ProductionCost,
         Movement,
@@ -113,7 +113,7 @@ namespace Twns.BaseWar {
         }
 
         private _onNotifyUnitAnimationTick(): void {
-            this._unitView.updateOnAnimationTick(Twns.Timer.getUnitAnimationTickCount());
+            this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
         }
 
         private _onNotifyUnitStateIndicatorTick(): void {
@@ -125,7 +125,7 @@ namespace Twns.BaseWar {
         }
 
         private _onTouchedBtnUnitsInfo(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonDamageChartPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonDamageChartPanel, {
                 gameConfig  : this._getOpenData().unit.getGameConfig(),
             });
             this.close();
@@ -139,7 +139,7 @@ namespace Twns.BaseWar {
                 return;
             }
 
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0029),
                 callback: () => {
                     if ((!war.getIsRunning()) || (war.getIsExecutingAction())) {
@@ -164,7 +164,7 @@ namespace Twns.BaseWar {
 
                     unit.getLoaderUnit()?.updateView();
                     war.getActionPlanner().setStateIdle();
-                    Twns.Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as Twns.Notify.NotifyData.BwUnitChanged);
+                    Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as Notify.NotifyData.BwUnitChanged);
 
                     this.close();
                 },
@@ -198,21 +198,21 @@ namespace Twns.BaseWar {
         private _updateUnitViewAndLabelName(): void {
             const unit              = this._getOpenData().unit;
             const unitType          = unit.getUnitType();
-            this._labelName.text    = Lang.getUnitName(unitType) ?? Twns.CommonConstants.ErrorTextForUndefined;
-            this._labelName1.text   = Lang.getUnitName(unitType, Lang.getCurrentLanguageType() === Twns.Types.LanguageType.Chinese ? Twns.Types.LanguageType.English : Twns.Types.LanguageType.Chinese) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelName.text    = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName1.text   = Lang.getUnitName(unitType, Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
             this._unitView.update({
                 gameConfig      : unit.getGameConfig(),
                 gridIndex       : { x: 0, y: 0},
                 skinId          : unit.getSkinId(),
                 unitType        : unit.getUnitType(),
                 actionState     : unit.getActionState(),
-            }, Twns.Timer.getUnitAnimationTickCount());
+            }, Timer.getUnitAnimationTickCount());
         }
 
         private _updateListInfo(): void {
             const unit      = this._getOpenData().unit;
             const war       = unit.getWar();
-            const dataArray : DataForInfoRenderer[] = Twns.Helpers.getNonNullElements([
+            const dataArray : DataForInfoRenderer[] = Helpers.getNonNullElements([
                 this._createInfoHp(war, unit),
                 this._createInfoProductionCost(war, unit),
                 this._createInfoMovement(war, unit),
@@ -377,7 +377,7 @@ namespace Twns.BaseWar {
                 };
         }
         private _createInfoAiMode(war: BwWar, unit: BwUnit): DataForInfoRenderer | null {
-            return ((war.getWarType() !== Twns.Types.WarType.Me) && (unit.getPlayer().getUserId() != null))
+            return ((war.getWarType() !== Types.WarType.Me) && (unit.getPlayer().getUserId() != null))
                 ? null
                 : {
                     index       : 0,
@@ -399,7 +399,7 @@ namespace Twns.BaseWar {
 
             const dataList  : DataForDamageRenderer[] = [];
             let index       = 0;
-            for (const targetUnitType of gameConfig.getUnitTypesByCategory(Twns.Types.UnitCategory.All) ?? []) {
+            for (const targetUnitType of gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
                 dataList.push({
                     gameConfig,
                     index,
@@ -409,7 +409,7 @@ namespace Twns.BaseWar {
                 });
                 ++index;
             }
-            for (const targetTileType of gameConfig.getTileTypesByCategory(Twns.Types.TileCategory.DestroyableForDamageChart) ?? []) {
+            for (const targetTileType of gameConfig.getTileTypesByCategory(Types.TileCategory.DestroyableForDamageChart) ?? []) {
                 dataList.push({
                     gameConfig,
                     index,
@@ -423,32 +423,32 @@ namespace Twns.BaseWar {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -478,7 +478,7 @@ namespace Twns.BaseWar {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
-            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
 
             this._labelValue.touchEnabled   = true;
         }
@@ -522,7 +522,7 @@ namespace Twns.BaseWar {
             } else if (infoType === UnitInfoType.AiMode) {
                 this._modifyAsAiMode();
             } else {
-                throw Twns.Helpers.newError(`Invalid infoType: ${infoType}`);
+                throw Helpers.newError(`Invalid infoType: ${infoType}`);
             }
         }
         private _onTouchedLabelValue(): void {
@@ -576,13 +576,13 @@ namespace Twns.BaseWar {
             } else if (infoType === UnitInfoType.AiMode) {
                 this._updateViewAsAiMode();
             } else {
-                throw Twns.Helpers.newError(`Invalid infoType: ${infoType}`);
+                throw Helpers.newError(`Invalid infoType: ${infoType}`);
             }
         }
         private _updateViewAsActionState(): void {
             const data                  = this._getData();
             this._labelTitle.text       = Lang.getText(LangTextType.B0367);
-            this._labelValue.text       = Lang.getUnitActionStateText(data.unit.getActionState()) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelValue.text       = Lang.getUnitActionStateText(data.unit.getActionState()) ?? CommonConstants.ErrorTextForUndefined;
             this._groupExtra.visible    = false;
             this._btnModify.visible     = WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
         }
@@ -673,7 +673,7 @@ namespace Twns.BaseWar {
             this._labelTitle.text       = Lang.getText(LangTextType.B0340);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = true;
-            this._labelExtraInfo.text   = Lang.getMoveTypeName(unit.getMoveType()) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelExtraInfo.text   = Lang.getMoveTypeName(unit.getMoveType()) ?? CommonConstants.ErrorTextForUndefined;
             this._btnModify.visible     = false;
         }
         private _updateViewAsPrimaryWeaponAmmo(): void {
@@ -700,7 +700,7 @@ namespace Twns.BaseWar {
                 groupExtra.visible = false;
             } else {
                 groupExtra.visible          = true;
-                this._labelExtraInfo.text   = Lang.getUnitName(Twns.Helpers.getExisted(unit.getProduceUnitType())) ?? Twns.CommonConstants.ErrorTextForUndefined;
+                this._labelExtraInfo.text   = Lang.getUnitName(Helpers.getExisted(unit.getProduceUnitType())) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateViewAsProductionCost(): void {
@@ -746,13 +746,13 @@ namespace Twns.BaseWar {
                 const canShowValue          = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getWatcherTeamIndexesForSelf().has(unit.getTeamIndex()));
                 labelValue.text             = `${canShowValue ? unit.getLoadedUnitsCount() : `??`} / ${maxValue}`;
                 groupExtra.visible          = true;
-                this._labelExtraInfo.text   = Lang.getUnitCategoryName(Twns.Helpers.getExisted(unit.getLoadUnitCategory())) ?? Twns.CommonConstants.ErrorTextForUndefined;
+                this._labelExtraInfo.text   = Lang.getUnitCategoryName(Helpers.getExisted(unit.getLoadUnitCategory())) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateViewAsAiMode(): void {
             const data                  = this._getData();
             this._labelTitle.text       = Lang.getText(LangTextType.B0720);
-            this._labelValue.text       = Lang.getUnitAiModeName(data.unit.getAiMode()) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelValue.text       = Lang.getUnitAiModeName(data.unit.getAiMode()) ?? CommonConstants.ErrorTextForUndefined;
             this._btnModify.visible     = WarHelpers.WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
             this._groupExtra.visible    = false;
         }
@@ -766,11 +766,11 @@ namespace Twns.BaseWar {
 
             const unit      = data.unit;
             const state     = unit.getActionState();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title       : Lang.getText(LangTextType.B0349),
                 content     : Lang.getText(LangTextType.A0113),
                 callback    : () => {
-                    unit.setActionState(state === Twns.Types.UnitActionState.Acted ? Twns.Types.UnitActionState.Idle : Twns.Types.UnitActionState.Acted);
+                    unit.setActionState(state === Types.UnitActionState.Acted ? Types.UnitActionState.Idle : Types.UnitActionState.Acted);
                     unit.updateView();
                     war.getActionPlanner().setStateIdle();
                     this._updateView();
@@ -788,7 +788,7 @@ namespace Twns.BaseWar {
             }
 
             const minValue  = 0;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0347),
                 currentValue    : unit.getCurrentBuildMaterial() ?? 0,
                 minValue,
@@ -809,7 +809,7 @@ namespace Twns.BaseWar {
             }
 
             const minValue      = 0;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0349),
                 currentValue    : unit.getFlareCurrentAmmo() ?? 0,
                 minValue,
@@ -832,7 +832,7 @@ namespace Twns.BaseWar {
             const currValue = unit.getCurrentFuel();
             const maxValue  = unit.getMaxFuel();
             const minValue  = 0;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0342),
                 currentValue    : currValue,
                 minValue,
@@ -854,7 +854,7 @@ namespace Twns.BaseWar {
 
             const unit          = data.unit;
             const hasLoadedCo   = unit.getHasLoadedCo();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0243),
                 callback: () => {
                     unit.setHasLoadedCo(!hasLoadedCo);
@@ -875,7 +875,7 @@ namespace Twns.BaseWar {
             const currValue = unit.getCurrentHp();
             const maxValue  = unit.getMaxHp();
             const minValue  = 1;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0339),
                 currentValue    : currValue,
                 minValue,
@@ -896,7 +896,7 @@ namespace Twns.BaseWar {
 
             const unit      = data.unit;
             const isDiving  = unit.getIsDiving();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content     : Lang.getText(LangTextType.A0114),
                 callback    : () => {
                     unit.setIsDiving(!isDiving);
@@ -918,7 +918,7 @@ namespace Twns.BaseWar {
 
             const currValue = unit.getPrimaryWeaponCurrentAmmo();
             const minValue  = 0;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0350),
                 currentValue    : currValue ?? 0,
                 minValue,
@@ -941,7 +941,7 @@ namespace Twns.BaseWar {
 
             const currValue = unit.getCurrentProduceMaterial();
             const minValue  = 0;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0348),
                 currentValue    : currValue ?? 0,
                 minValue,
@@ -966,7 +966,7 @@ namespace Twns.BaseWar {
 
             const currValue = unit.getCurrentPromotion();
             const minValue  = 0;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0370),
                 currentValue    : currValue ?? 0,
                 minValue,
@@ -1004,7 +1004,7 @@ namespace Twns.BaseWar {
                 return;
             }
 
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAddLoadedUnitPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonAddLoadedUnitPanel, {
                 war,
                 loaderUnit  : unit,
                 callback    : unitData => {
@@ -1028,7 +1028,7 @@ namespace Twns.BaseWar {
                     this._updateView();
                     war.getActionPlanner().setStateIdle();
 
-                    Twns.Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex: unit.getGridIndex() } as Twns.Notify.NotifyData.BwUnitChanged);
+                    Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex: unit.getGridIndex() } as Notify.NotifyData.BwUnitChanged);
                 },
             });
         }
@@ -1040,23 +1040,23 @@ namespace Twns.BaseWar {
 
             const unit      = data.unit;
             const aiMode    = unit.getAiMode();
-            if (aiMode === Twns.Types.UnitAiMode.NoMove) {
-                unit.setAiMode(Twns.Types.UnitAiMode.Normal);
-            } else if (aiMode === Twns.Types.UnitAiMode.Normal) {
-                unit.setAiMode(Twns.Types.UnitAiMode.WaitUntilCanAttack);
+            if (aiMode === Types.UnitAiMode.NoMove) {
+                unit.setAiMode(Types.UnitAiMode.Normal);
+            } else if (aiMode === Types.UnitAiMode.Normal) {
+                unit.setAiMode(Types.UnitAiMode.WaitUntilCanAttack);
             } else {
-                unit.setAiMode(Twns.Types.UnitAiMode.NoMove);
+                unit.setAiMode(Types.UnitAiMode.NoMove);
             }
             this._updateView();
             FloatText.show(Lang.getText(LangTextType.B0724));
         }
 
         private _onTouchedLabelAsAiMode(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0720),
                 content : Lang.getText(LangTextType.R0010),
             });
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
     }
 
@@ -1084,13 +1084,13 @@ namespace Twns.BaseWar {
                 { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
                 { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
-            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
 
             this._conView.addChild(this._unitView);
         }
 
         private _onNotifyUnitAnimationTick(): void {
-            this._unitView.updateOnAnimationTick(Twns.Timer.getUnitAnimationTickCount());
+            this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
         }
 
         private _onNotifyUnitStateIndicatorTick(): void {
@@ -1119,20 +1119,20 @@ namespace Twns.BaseWar {
                     gridIndex       : { x: 0, y: 0 },
                     unitType        : targetUnitType,
                     playerIndex     : data.playerIndex,
-                    actionState     : Twns.Types.UnitActionState.Idle,
-                }, Twns.Timer.getUnitAnimationTickCount());
+                    actionState     : Types.UnitActionState.Idle,
+                }, Timer.getUnitAnimationTickCount());
 
-                const attackCfg                 = Twns.Helpers.getExisted(gameConfig.getDamageChartCfgs(attackUnitType));
-                const targetArmorType           = Twns.Helpers.getExisted(gameConfig.getUnitTemplateCfg(targetUnitType)?.armorType);
-                const primaryAttackDamage       = attackCfg[targetArmorType][Twns.Types.WeaponType.Primary].damage;
-                const secondaryAttackDamage     = attackCfg[targetArmorType][Twns.Types.WeaponType.Secondary].damage;
+                const attackCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(attackUnitType));
+                const targetArmorType           = Helpers.getExisted(gameConfig.getUnitTemplateCfg(targetUnitType)?.armorType);
+                const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
+                const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
                 this._labelPrimaryAttack.text   = primaryAttackDamage == null ? `--` : `${primaryAttackDamage}`;
                 this._labelSecondaryAttack.text = secondaryAttackDamage == null ? `--` : `${secondaryAttackDamage}`;
 
-                const defendCfg                 = Twns.Helpers.getExisted(gameConfig.getDamageChartCfgs(targetUnitType));
-                const attackerArmorType         = Twns.Helpers.getExisted(gameConfig.getUnitTemplateCfg(attackUnitType)?.armorType);
-                const primaryDefendDamage       = defendCfg[attackerArmorType][Twns.Types.WeaponType.Primary].damage;
-                const secondaryDefendDamage     = defendCfg[attackerArmorType][Twns.Types.WeaponType.Secondary].damage;
+                const defendCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(targetUnitType));
+                const attackerArmorType         = Helpers.getExisted(gameConfig.getUnitTemplateCfg(attackUnitType)?.armorType);
+                const primaryDefendDamage       = defendCfg[attackerArmorType][Types.WeaponType.Primary].damage;
+                const secondaryDefendDamage     = defendCfg[attackerArmorType][Types.WeaponType.Secondary].damage;
                 this._labelPrimaryDefend.text   = primaryDefendDamage == null ? `--` : `${primaryDefendDamage}`;
                 this._labelSecondaryDefend.text = secondaryDefendDamage == null ? `--` : `${secondaryDefendDamage}`;
 
@@ -1140,20 +1140,20 @@ namespace Twns.BaseWar {
                 this._unitView.visible = false;
                 this._tileView.visible = true;
 
-                const targetTileType            = Twns.Helpers.getExisted(data.targetTileType);
-                const attackCfg                 = Twns.Helpers.getExisted(gameConfig.getDamageChartCfgs(attackUnitType));
-                const targetCfg                 = Twns.Helpers.getExisted(gameConfig.getTileTemplateCfgByType(targetTileType));
-                const targetArmorType           = Twns.Helpers.getExisted(targetCfg.armorType);
-                const primaryAttackDamage       = attackCfg[targetArmorType][Twns.Types.WeaponType.Primary].damage;
-                const secondaryAttackDamage     = attackCfg[targetArmorType][Twns.Types.WeaponType.Secondary].damage;
-                this._tileView.source           = Twns.Common.CommonModel.getCachedTileObjectImageSource({
-                    version     : Twns.User.UserModel.getSelfSettingsTextureVersion(),
-                    themeType   : Twns.Types.TileThemeType.Clear,
-                    skinId      : Twns.CommonConstants.UnitAndTileNeutralSkinId,
+                const targetTileType            = Helpers.getExisted(data.targetTileType);
+                const attackCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(attackUnitType));
+                const targetCfg                 = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(targetTileType));
+                const targetArmorType           = Helpers.getExisted(targetCfg.armorType);
+                const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
+                const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
+                this._tileView.source           = Common.CommonModel.getCachedTileObjectImageSource({
+                    version     : User.UserModel.getSelfSettingsTextureVersion(),
+                    themeType   : Types.TileThemeType.Clear,
+                    skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                     objectType  : Config.ConfigManager.getTileObjectTypeByTileType(targetTileType),
                     isDark      : false,
                     shapeId     : 0,
-                    tickCount   : Twns.Timer.getTileAnimationTickCount(),
+                    tickCount   : Timer.getTileAnimationTickCount(),
                 });
                 this._labelPrimaryAttack.text   = primaryAttackDamage == null ? `--` : `${primaryAttackDamage}`;
                 this._labelSecondaryAttack.text = secondaryAttackDamage == null ? `--` : `${secondaryAttackDamage}`;

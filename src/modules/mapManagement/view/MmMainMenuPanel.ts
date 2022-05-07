@@ -55,7 +55,7 @@ namespace Twns.MapManagement {
             this.close();
         }
         private _onMsgMmReloadAllMaps(): void {
-            FloatText.show(Lang.getText(LangTextType.A0075));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0075));
         }
         private _onNotifyLanguageChanged(): void {
             this._updateView();

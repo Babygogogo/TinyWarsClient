@@ -57,9 +57,9 @@ namespace Twns.User {
                 { ui: this._groupRememberPassword,  callback: this._onTouchedGroupRememberPassword },
             ]);
 
-            const isRememberPassword                = LocalStorage.getIsRememberPassword();
-            this._inputAccount.text                 = LocalStorage.getAccount();
-            this._inputPassword.text                = isRememberPassword ? LocalStorage.getPassword() : ``;
+            const isRememberPassword                = Twns.LocalStorage.getIsRememberPassword();
+            this._inputAccount.text                 = Twns.LocalStorage.getAccount();
+            this._inputPassword.text                = isRememberPassword ? Twns.LocalStorage.getPassword() : ``;
             this._btnLogin.enabled                  = true;
             this._imgRememberPasswordCheck.visible  = isRememberPassword;
             this._btnLogin.setShortSfxCode(Twns.Types.ShortSfxCode.ButtonConfirm01);
@@ -73,7 +73,7 @@ namespace Twns.User {
         }
 
         private _onMsgUserLogin(): void {
-            FloatText.show(Lang.getText(LangTextType.A0000));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0000));
             this._btnLogin.enabled = false;
         }
         private _onNotifyLanguageChanged(): void {
@@ -85,18 +85,18 @@ namespace Twns.User {
         }
 
         private _onTouchedBtnLogin(): void {
-            NoSleepManager.enable();
+            Twns.NoSleepManager.enable();
 
             const account  = this._inputAccount.text;
             const password = this._inputPassword.text;
             if (!Twns.Helpers.checkIsAccountValid(account)) {
-                FloatText.show(Lang.getText(LangTextType.A0001));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0001));
             } else {
                 if (!Twns.Helpers.checkIsPasswordValid(password)) {
-                    FloatText.show(Lang.getText(LangTextType.A0003));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0003));
                 } else {
-                    LocalStorage.setAccount(account);
-                    LocalStorage.setPassword(password);
+                    Twns.LocalStorage.setAccount(account);
+                    Twns.LocalStorage.setPassword(password);
                     Twns.User.UserModel.setSelfAccount(account);
                     Twns.User.UserModel.setSelfPassword(password);
                     Twns.User.UserProxy.reqLogin(account, password, false);
@@ -105,18 +105,18 @@ namespace Twns.User {
         }
 
         private _onTouchedBtnRegister(): void {
-            NoSleepManager.enable();
+            Twns.NoSleepManager.enable();
 
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserRegisterPanel, void 0);
         }
 
         private _onTouchedBtnForgetPassword(): void {
-            FloatText.show(Lang.getText(LangTextType.A0115));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0115));
         }
 
         private _onTouchedGroupRememberPassword(): void {
-            const isRemember = LocalStorage.getIsRememberPassword();
-            LocalStorage.setIsRememberPassword(!isRemember);
+            const isRemember = Twns.LocalStorage.getIsRememberPassword();
+            Twns.LocalStorage.setIsRememberPassword(!isRemember);
             Twns.SoundManager.playShortSfx(isRemember ? Twns.Types.ShortSfxCode.ButtonCancel01 : Twns.Types.ShortSfxCode.ButtonConfirm01);
             this._imgRememberPasswordCheck.visible = !isRemember;
         }

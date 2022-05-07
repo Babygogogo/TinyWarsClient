@@ -68,9 +68,9 @@ namespace Twns.WarEvent {
                 { languageType: Twns.Types.LanguageType.English, text: englishText || chineseText },
             ];
             if (textList.every(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
-                FloatText.show(Lang.getText(LangTextType.A0155));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0155));
             } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > Twns.CommonConstants.WarEventNameMaxLength)) {
-                FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.WarEventNameMaxLength));
+                Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.WarEventNameMaxLength));
             } else {
                 const openData = this._getOpenData();
                 Twns.Helpers.getExisted(openData.war.getWarEventManager().getWarEvent(openData.warEventId)).eventNameArray = textList;

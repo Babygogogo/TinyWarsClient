@@ -186,7 +186,7 @@ namespace Twns.Chat {
             const currTime  = Twns.Timer.getServerTimestamp();
             const cdTime    = Twns.Chat.ChatModel.getTimestampForNextReqAllMessages() - currTime;
             if (cdTime > 0) {
-                FloatText.show(Lang.getFormattedText(LangTextType.F0026, cdTime));
+                Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0026, cdTime));
             } else {
                 Twns.Chat.ChatModel.setTimestampForNextReqAllMessages(currTime + 30);
                 Twns.Chat.ChatProxy.reqGetAllMessages();
@@ -197,7 +197,7 @@ namespace Twns.Chat {
             const content = (this._inputMessage.text ?? ``).trim();
             if (content) {
                 if (content.length > Twns.CommonConstants.ChatMessageMaxLength) {
-                    FloatText.show(Lang.getText(LangTextType.B0375));
+                    Twns.FloatText.show(Lang.getText(LangTextType.B0375));
                 } else {
                     const selectedIndex = this.getSelectedIndex();
                     const data          = selectedIndex != null ? this._dataForListChat[selectedIndex] : null;

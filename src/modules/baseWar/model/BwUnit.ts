@@ -71,7 +71,7 @@ namespace Twns.BaseWar {
             const playerIndex       = Helpers.getExisted(unitData.playerIndex, ClientErrorCode.BwUnit_Init_00);
             const unitType          = Helpers.getExisted(unitData.unitType, ClientErrorCode.BwUnit_Init_01) as UnitType;
             const unitId            = Helpers.getExisted(unitData.unitId, ClientErrorCode.BwUnit_Init_02);
-            const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex), ClientErrorCode.BwUnit_Init_03);
+            const gridIndex         = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(unitData.gridIndex), ClientErrorCode.BwUnit_Init_03);
             const unitTemplateCfg   = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType), ClientErrorCode.BwUnit_Init_04);
             this.setGridIndex(gridIndex);
             this.setUnitId(unitId);
@@ -794,7 +794,7 @@ namespace Twns.BaseWar {
             const teamIndex         = this.getTeamIndex();
             const unitOnDestination = unitMap.getUnitOnMap(destination);
             if ((pathLength > 1) && (unitOnDestination)) {
-                if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                if (Twns.WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     observerTeamIndex   : teamIndex,
                     gridIndex           : destination,
@@ -816,7 +816,7 @@ namespace Twns.BaseWar {
                 return false;
             }
 
-            const distance = GridIndexHelpers.getDistance(destination, targetGridIndex);
+            const distance = Twns.GridIndexHelpers.getDistance(destination, targetGridIndex);
             if ((distance > maxAttackRange) || (distance < minAttackRange)) {
                 return false;
             }
@@ -1531,7 +1531,7 @@ namespace Twns.BaseWar {
                 && (this.getLoaderUnitId() == null)
                 && (unit.getLoaderUnitId() == null)
                 && (this.getPlayerIndex() === unit.getPlayerIndex())
-                && (GridIndexHelpers.getDistance(thisGridIndex, unitGridIndex) === 1)
+                && (Twns.GridIndexHelpers.getDistance(thisGridIndex, unitGridIndex) === 1)
                 && (unit.checkCanBeSupplied());
         }
 
@@ -1871,7 +1871,7 @@ namespace Twns.BaseWar {
                     maxMoveCost     : this.getFinalMoveRange(),
                     mapSize,
                     moveCostGetter  : gridIndex => {
-                        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
+                        if (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
                             return null;
                         } else {
                             const existingUnit = unitMap.getUnitOnMap(gridIndex);
@@ -1889,7 +1889,7 @@ namespace Twns.BaseWar {
                     minAttackRange,
                     maxAttackRange,
                     checkCanAttack: (moveGridIndex: GridIndex, targetGridIndex: GridIndex): boolean => {
-                        const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, selfGridIndex);
+                        const hasMoved = !Twns.GridIndexHelpers.checkIsEqual(moveGridIndex, selfGridIndex);
                         if (((this.getLoaderUnitId() == null) || (hasMoved))    &&
                             ((this.checkCanAttackAfterMove()) || (!hasMoved))
                         ) {

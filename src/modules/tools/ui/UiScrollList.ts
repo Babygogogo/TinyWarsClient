@@ -230,7 +230,7 @@ namespace TwnsUiScrollList {
                 return;
             }
 
-            const { x, y } = this.globalToLocal(StageManager.getMouseX(), StageManager.getMouseY(), this._mousePoint);
+            const { x, y } = this.globalToLocal(Twns.StageManager.getMouseX(), Twns.StageManager.getMouseY(), this._mousePoint);
             if ((x >= 0) && (x <= this.width) && (y >= 0) && (y <= this.height)) {
                 this.stopAnimation();
 

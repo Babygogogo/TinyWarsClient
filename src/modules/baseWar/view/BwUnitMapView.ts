@@ -240,7 +240,7 @@ namespace Twns.BaseWar {
         private _resetVisibleForAllUnitsOnMap(): void {
             const unitMap       = this._getUnitMap();
             const war           = unitMap.getWar();
-            const visibleUnits  = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
+            const visibleUnits  = Twns.WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
             for (const unit of unitMap.getAllUnitsOnMap()) {
                 unit.setViewVisible(visibleUnits.has(unit));
             }

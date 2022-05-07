@@ -66,7 +66,7 @@ namespace Twns.Common {
         private async _onTouchedBtnConfirm(): Promise<void> {
             const openData = this._getOpenData();
             if (this._inputWarPassword.text !== openData.password) {
-                FloatText.show(Lang.getText(LangTextType.A0017));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0017));
             } else {
                 openData.callbackOnSucceed();
                 this.close();

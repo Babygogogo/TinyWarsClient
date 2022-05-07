@@ -64,9 +64,9 @@ namespace Twns.MapManagement {
                 { languageType: Twns.Types.LanguageType.English, text: (this._inputEnglish.text || ``).trim() },
             ];
             if (nameArray.some(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
-                FloatText.show(Lang.getText(LangTextType.A0155));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0155));
             } else if (nameArray.some(v => Twns.Helpers.getExisted(v.text).length > Twns.CommonConstants.MapMaxNameLength)) {
-                FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.MapMaxNameLength));
+                Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.MapMaxNameLength));
             } else {
                 Twns.WarMap.WarMapProxy.reqMmSetMapName(this._getOpenData().mapId, nameArray);
                 this.close();

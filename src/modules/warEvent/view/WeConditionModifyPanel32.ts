@@ -136,7 +136,7 @@ namespace Twns.WarEvent {
         private _onTouchedBtnGridIndex(): void {
             const condition = this._getCondition();
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseGridIndexPanel, {
-                currentGridIndexArray   : Twns.Helpers.getNonNullElements(condition.gridIndexArray?.map(v => GridIndexHelpers.convertGridIndex(v)) ?? []),
+                currentGridIndexArray   : Twns.Helpers.getNonNullElements(condition.gridIndexArray?.map(v => Twns.GridIndexHelpers.convertGridIndex(v)) ?? []),
                 mapSize                 : this._getOpenData().war.getTileMap().getMapSize(),
                 callbackOnConfirm       : gridIndexArray => {
                     condition.gridIndexArray = gridIndexArray;

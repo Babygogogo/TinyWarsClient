@@ -137,7 +137,7 @@ namespace Twns.MapEditor {
 
         private _onNotifyMsgUserSetMapEditorAutoSaveTime(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgUserSetMapEditorAutoSaveTime.IS;
-            FloatText.show(Lang.getText(data.time == null ? LangTextType.A0248 : LangTextType.A0247));
+            Twns.FloatText.show(Lang.getText(data.time == null ? LangTextType.A0248 : LangTextType.A0247));
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -481,7 +481,7 @@ namespace Twns.MapEditor {
                                 } else {
                                     const value = Number(text);
                                     if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                        FloatText.show(Lang.getText(LangTextType.A0098));
+                                        Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                                     } else {
                                         if (currValue !== value) {
                                             Twns.User.UserProxy.reqSetMapEditorAutoSaveTime(value);
@@ -503,7 +503,7 @@ namespace Twns.MapEditor {
                     const mapRawData    = war.serializeForMap();
                     const errorCode     = await MapEditor.MeHelpers.getErrorCodeForMapRawData(mapRawData);
                     if (errorCode) {
-                        FloatText.show(Lang.getErrorText(errorCode));
+                        Twns.FloatText.show(Lang.getErrorText(errorCode));
                         return;
                     }
 
@@ -538,7 +538,7 @@ namespace Twns.MapEditor {
                     const mapRawData    = war.serializeForMap();
                     const errorCode     = await MapEditor.MeHelpers.getErrorCodeForMapRawData(mapRawData);
                     if (errorCode) {
-                        FloatText.show(Lang.getErrorText(errorCode));
+                        Twns.FloatText.show(Lang.getErrorText(errorCode));
                         return;
                     }
 
@@ -610,7 +610,7 @@ namespace Twns.MapEditor {
                     name    : Lang.getText(LangTextType.B0681),
                     callback: () => {
                         if (navigator?.clipboard?.readText == null) {
-                            FloatText.show(Lang.getText(LangTextType.A0275));
+                            Twns.FloatText.show(Lang.getText(LangTextType.A0275));
                             return;
                         }
 
@@ -653,13 +653,13 @@ namespace Twns.MapEditor {
                 name    : Lang.getText(LangTextType.B0680),
                 callback: () => {
                     if (navigator?.clipboard?.writeText == null) {
-                        FloatText.show(Lang.getText(LangTextType.A0275));
+                        Twns.FloatText.show(Lang.getText(LangTextType.A0275));
                         return;
                     }
 
                     navigator.clipboard.writeText(JSON.stringify(this._getWar().serializeForMap()));
 
-                    FloatText.show(Lang.getText(LangTextType.A0235));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0235));
                 },
             };
         }

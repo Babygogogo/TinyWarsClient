@@ -332,7 +332,7 @@ namespace Twns.MapEditor.MeHelpers {
     function getNewTileDataListForResize(mapRawData: IMapRawData, newWidth: number, newHeight: number): ISerialTile[] {
         const tileList: ISerialTile[] = [];
         for (const tileData of mapRawData.tileDataArray || []) {
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
+            const gridIndex = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(tileData.gridIndex));
             if ((gridIndex.x < newWidth) && (gridIndex.y < newHeight)) {
                 tileList.push(tileData);
             }
@@ -353,7 +353,7 @@ namespace Twns.MapEditor.MeHelpers {
     function getNewUnitDataListForResize(mapRawData: IMapRawData, newWidth: number, newHeight: number): ISerialUnit[] {
         const unitDataArray: ISerialUnit[] = [];
         for (const unitData of mapRawData.unitDataArray || []) {
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
+            const gridIndex = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(unitData.gridIndex));
             if ((gridIndex.x < newWidth) && (gridIndex.y < newHeight)) {
                 unitDataArray.push(unitData);
             }
@@ -400,7 +400,7 @@ namespace Twns.MapEditor.MeHelpers {
         const height        = Helpers.getExisted(mapRawData.mapHeight);
         const tileDataList  : ISerialTile[] = [];
         for (const tileData of Helpers.getExisted(mapRawData.tileDataArray)) {
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
+            const gridIndex = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(tileData.gridIndex));
             const newX      = gridIndex.x + offsetX;
             const newY      = gridIndex.y + offsetY;
             if ((newX >= 0) && (newX < width) && (newY >= 0) && (newY < height)) {
@@ -429,7 +429,7 @@ namespace Twns.MapEditor.MeHelpers {
         const height        = Helpers.getExisted(mapRawData.mapHeight);
         const unitDataArray : ISerialUnit[] = [];
         for (const unitData of mapRawData.unitDataArray || []) {
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
+            const gridIndex = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(unitData.gridIndex));
             const newX      = gridIndex.x + offsetX;
             const newY      = gridIndex.y + offsetY;
             if ((newX >= 0) && (newX < width) && (newY >= 0) && (newY < height)) {
@@ -607,7 +607,7 @@ namespace Twns.MapEditor.MeHelpers {
         return TileBridgeAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
     function checkCanRoadOrBridgeLinkToTile(tileMap: BaseWar.BwTileMap, gridIndex1: GridIndex, gridIndex2: GridIndex): boolean {
-        if (!GridIndexHelpers.checkIsInsideMap(gridIndex2, tileMap.getMapSize())) {
+        if (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex2, tileMap.getMapSize())) {
             return true;
         }
 
@@ -633,11 +633,11 @@ namespace Twns.MapEditor.MeHelpers {
         const isAdjacent3           = checkIsPlasma(tileMap, { x: x + 1, y }) ? 1 : 0;
         const isAdjacent2           = checkIsPlasma(tileMap, { x, y: y + 1 }) ? 1 : 0;
         const isAdjacent1           = checkIsPlasma(tileMap, { x, y: y - 1 }) ? 1 : 0;
-        const isAdjacentToMeteor    = GridIndexHelpers.getAdjacentGrids(gridIndex, tileMap.getMapSize()).some(v => tileMap.getTile(v).getType() === TileType.Meteor);
+        const isAdjacentToMeteor    = Twns.GridIndexHelpers.getAdjacentGrids(gridIndex, tileMap.getMapSize()).some(v => tileMap.getTile(v).getType() === TileType.Meteor);
         return Helpers.getExisted(TilePlasmaAutoShapeIdMap.get(isAdjacentToMeteor))[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
     function checkIsPlasma(tileMap: BaseWar.BwTileMap, gridIndex: GridIndex): boolean {
-        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+        if (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
             return true;
         }
 
@@ -653,8 +653,8 @@ namespace Twns.MapEditor.MeHelpers {
         return TilePipeAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
     function checkCanLinkToPipe(tileMap: BaseWar.BwTileMap, origin: GridIndex, direction: Types.Direction): boolean {
-        const gridIndex = GridIndexHelpers.getAdjacentGrid(origin, direction);
-        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+        const gridIndex = Twns.GridIndexHelpers.getAdjacentGrid(origin, direction);
+        if (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
             return true;
         }
 
@@ -694,8 +694,8 @@ namespace Twns.MapEditor.MeHelpers {
                         continue;
                     }
 
-                    const g = GridIndexHelpers.add(gridIndex, { x: offsetX, y: offsetY });
-                    const t = GridIndexHelpers.checkIsInsideMap(g, mapSize) ? tileMap.getTile(g).getBaseType() : null;
+                    const g = Twns.GridIndexHelpers.add(gridIndex, { x: offsetX, y: offsetY });
+                    const t = Twns.GridIndexHelpers.checkIsInsideMap(g, mapSize) ? tileMap.getTile(g).getBaseType() : null;
                     if ((t != null)              &&
                         (t !== TileBaseType.Sea) &&
                         (t !== TileBaseType.Beach)
@@ -714,8 +714,8 @@ namespace Twns.MapEditor.MeHelpers {
         } else if (baseType === TileBaseType.Beach) {
             const shapeId = tile.getBaseShapeId();
             if ((shapeId === 0) || (shapeId === 4) || (shapeId === 8) || (shapeId === 12)) {
-                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
-                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
+                const isSea1 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
@@ -727,8 +727,8 @@ namespace Twns.MapEditor.MeHelpers {
                 }
 
             } else if ((shapeId === 1) || (shapeId === 5) || (shapeId === 9) || (shapeId === 13)) {
-                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 }));
-                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 }));
+                const isSea1 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: -1, y: -1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: 1, y: -1 }));
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
@@ -740,8 +740,8 @@ namespace Twns.MapEditor.MeHelpers {
                 }
 
             } else if ((shapeId === 2) || (shapeId === 6) || (shapeId === 10) || (shapeId === 14)) {
-                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 }));
-                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
+                const isSea1 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: 1, y: -1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
@@ -753,8 +753,8 @@ namespace Twns.MapEditor.MeHelpers {
                 }
 
             } else if ((shapeId === 3) || (shapeId === 7) || (shapeId === 11) || (shapeId === 15)) {
-                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 }));
-                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
+                const isSea1 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: -1, y: -1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
@@ -766,22 +766,22 @@ namespace Twns.MapEditor.MeHelpers {
                 }
 
             } else if ((shapeId === 16) || (shapeId === 20) || (shapeId === 24) || (shapeId === 28)) {
-                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 })))
+                return (checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: 1, y: 1 })))
                     ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Shore,    shapeId: 1 };
 
             } else if ((shapeId === 17) || (shapeId === 21) || (shapeId === 25) || (shapeId === 29)) {
-                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 })))
+                return (checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: -1, y: 1 })))
                     ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Shore,    shapeId: 4 };
 
             } else if ((shapeId === 18) || (shapeId === 22) || (shapeId === 26) || (shapeId === 30)) {
-                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 })))
+                return (checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: -1, y: -1 })))
                     ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Shore,    shapeId: 8 };
 
             } else if ((shapeId === 19) || (shapeId === 23) || (shapeId === 27) || (shapeId === 31)) {
-                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 })))
+                return (checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: 1, y: -1 })))
                     ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Shore,    shapeId: 2 };
 
@@ -799,7 +799,7 @@ namespace Twns.MapEditor.MeHelpers {
         };
     }
     function checkIsSeaOrEmpty(tileMap: BaseWar.BwTileMap, gridIndex: GridIndex): boolean {
-        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+        if (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
             return true;
         } else {
             return tileMap.getTile(gridIndex)?.getBaseType() === TileBaseType.Sea;
@@ -978,7 +978,7 @@ namespace Twns.MapEditor.MeHelpers {
     }
 
     export async function getCriticalErrorCodeForMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
-        if (ProtoManager.encodeAsMapRawData(mapRawData).byteLength > Twns.CommonConstants.MapMaxFileSize) {
+        if (Twns.ProtoManager.encodeAsMapRawData(mapRawData).byteLength > Twns.CommonConstants.MapMaxFileSize) {
             return ClientErrorCode.MeUtility_GetSevereErrorCodeForMapRawData_00;
         }
 

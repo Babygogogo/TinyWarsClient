@@ -129,7 +129,7 @@ namespace Twns.WatchWar {
         }
 
         private _onNotifyMsgMpwWatchMakeRequest(): void {
-            FloatText.show(Lang.getText(LangTextType.A0060));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0060));
             reqDataArray(this._warFilter);
         }
 
@@ -152,7 +152,7 @@ namespace Twns.WatchWar {
 
             const warId = data.warId;
             if (await Twns.WatchWar.WwModel.getWatchOutgoingInfo(warId) == null) {
-                FloatText.show(Lang.getText(LangTextType.A0297));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0297));
             } else {
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WwMakeRequestDetailPanel, {
                     warId,

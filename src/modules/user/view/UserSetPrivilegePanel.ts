@@ -94,7 +94,7 @@ namespace Twns.User {
         }
 
         private _onNotifyMsgUserSetPrivilege(): void {
-            FloatText.show(Lang.getText(LangTextType.A0157));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0157));
             this.close();
         }
 

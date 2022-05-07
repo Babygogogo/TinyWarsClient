@@ -69,11 +69,11 @@ namespace Twns.ChangeLog {
             this._updateListMessageAndLabelNoMessage();
         }
         private _onMsgChangeLogAddMessage(): void {
-            FloatText.show(Lang.getText(LangTextType.A0154));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0154));
             Twns.ChangeLog.ChangeLogProxy.reqChangeLogGetMessageList();
         }
         private _onMsgChangeLogModifyMessage(): void {
-            FloatText.show(Lang.getText(LangTextType.A0154));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0154));
             Twns.ChangeLog.ChangeLogProxy.reqChangeLogGetMessageList();
         }
 

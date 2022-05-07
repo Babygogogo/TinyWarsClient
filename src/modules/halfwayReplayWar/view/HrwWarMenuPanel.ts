@@ -285,7 +285,7 @@ namespace Twns.HalfwayReplayWar {
                 name    : Lang.getText(LangTextType.B0325),
                 callback: () => {
                     if (war.getIsExecutingAction()) {
-                        FloatText.show(Lang.getText(LangTextType.A0103));
+                        Twns.FloatText.show(Lang.getText(LangTextType.A0103));
                     } else {
                         Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmCreateSfwSaveSlotsPanel, war.serializeForCreateSfw());
                     }
@@ -299,14 +299,14 @@ namespace Twns.HalfwayReplayWar {
                 name    : Lang.getText(LangTextType.B0557),
                 callback: () => {
                     if (war.getPlayerManager().getAliveOrDyingTeamsCount(false) < 2) {
-                        FloatText.show(Lang.getText(LangTextType.A0199));
+                        Twns.FloatText.show(Lang.getText(LangTextType.A0199));
                         return;
                     }
 
                     const warData   = war.serializeForCreateMfr();
                     const errorCode = new TestWar.TwWar().getErrorCodeForInitForMfw(warData, war.getGameConfig());
                     if (errorCode) {
-                        FloatText.show(Lang.getErrorText(errorCode));
+                        Twns.FloatText.show(Lang.getErrorText(errorCode));
                         return;
                     }
 

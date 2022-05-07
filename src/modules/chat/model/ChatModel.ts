@@ -35,7 +35,7 @@ namespace Twns.Chat.ChatModel {
     export function updateOnAddMessage(msg: IChatMessage, showFloatText: boolean): void {
         const fromUserId = msg.fromUserId;
         if (fromUserId == null) {
-            Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
+            Twns.Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
         } else {
             const msgToCategory = msg.toCategory;
             const msgToTarget   = Twns.Helpers.getExisted(msg.toTarget);
@@ -48,7 +48,7 @@ namespace Twns.Chat.ChatModel {
             } else if (msgToCategory === ChatCategory.WarAndTeam) {
                 addMessage(ChatCategory.WarAndTeam, msg, msgToTarget);
                 if ((!isSentBySelf) && (showFloatText) && (!Twns.PanelHelpers.getRunningPanel(Twns.PanelHelpers.PanelDict.ChatPanel))) {
-                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => Twns.FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else if (msgToCategory === ChatCategory.Private) {
@@ -57,36 +57,36 @@ namespace Twns.Chat.ChatModel {
                 } else {
                     addMessage(ChatCategory.Private, msg, fromUserId);
                     if ((showFloatText) && (!Twns.PanelHelpers.getRunningPanel(Twns.PanelHelpers.PanelDict.ChatPanel))) {
-                        Twns.User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                        Twns.User.UserModel.getUserNickname(fromUserId).then(name => Twns.FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                     }
                 }
 
             } else if (msgToCategory === ChatCategory.McrRoom) {
                 addMessage(msgToCategory, msg, msgToTarget);
                 if ((!isSentBySelf) && (showFloatText) && (!Twns.PanelHelpers.getRunningPanel(Twns.PanelHelpers.PanelDict.ChatPanel))) {
-                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => Twns.FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else if (msgToCategory === ChatCategory.MfrRoom) {
                 addMessage(msgToCategory, msg, msgToTarget);
                 if ((!isSentBySelf) && (showFloatText) && (!Twns.PanelHelpers.getRunningPanel(Twns.PanelHelpers.PanelDict.ChatPanel))) {
-                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => Twns.FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else if (msgToCategory === ChatCategory.CcrRoom) {
                 addMessage(msgToCategory, msg, msgToTarget);
                 if ((!isSentBySelf) && (showFloatText) && (!Twns.PanelHelpers.getRunningPanel(Twns.PanelHelpers.PanelDict.ChatPanel))) {
-                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => Twns.FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else if (msgToCategory === ChatCategory.MapReview) {
                 addMessage(msgToCategory, msg, msgToTarget);
                 if ((!isSentBySelf) && (showFloatText) && (!Twns.PanelHelpers.getRunningPanel(Twns.PanelHelpers.PanelDict.ChatPanel))) {
-                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => Twns.FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else {
-                Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
+                Twns.Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
             }
         }
     }

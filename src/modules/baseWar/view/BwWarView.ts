@@ -127,7 +127,7 @@ namespace Twns.BaseWar {
         }
 
         public tweenGridToCentralArea(gridIndex: GridIndex): void {
-            const stage             = StageManager.getStage();
+            const stage             = Twns.StageManager.getStage();
             const gridSize          = Twns.CommonConstants.GridSize;
             const container         = this._fieldContainer;
             const contents          = container.getContents();
@@ -157,7 +157,7 @@ namespace Twns.BaseWar {
             container.tweenContentToPoint(newPoint.x, newPoint.y, false);
         }
         public moveGridToCenter(gridIndex: GridIndex): void {
-            const stage = StageManager.getStage();
+            const stage = Twns.StageManager.getStage();
             this._moveGridToPoint(gridIndex, stage.stageWidth / 2, stage.stageHeight / 2);
         }
         private _moveGridToPoint(gridIndex: GridIndex, x: number, y: number): void {

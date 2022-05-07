@@ -91,7 +91,7 @@ namespace Twns.WarEvent {
 
         private _onFocusOutInputGridX(): void {
             const data      = this._getOpenData();
-            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.action.WeaSetViewpoint?.gridIndex));
+            const gridIndex = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(data.action.WeaSetViewpoint?.gridIndex));
             const newGridX  = Math.max(0, Math.min(parseInt(this._inputGridX.text) || 0, data.war.getTileMap().getMapSize().width - 1));
             if (newGridX !== gridIndex.x) {
                 gridIndex.x = newGridX;
@@ -100,7 +100,7 @@ namespace Twns.WarEvent {
         }
         private _onFocusOutInputGridY(): void {
             const data      = this._getOpenData();
-            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.action.WeaSetViewpoint?.gridIndex));
+            const gridIndex = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(data.action.WeaSetViewpoint?.gridIndex));
             const newGridY  = Math.max(0, Math.min(parseInt(this._inputGridY.text) || 0, data.war.getTileMap().getMapSize().height - 1));
             if (newGridY !== gridIndex.y) {
                 gridIndex.y = newGridY;
@@ -136,7 +136,7 @@ namespace Twns.WarEvent {
         private _updateComponentsForGridIndex(): void {
             const inputX    = this._inputGridX;
             const inputY    = this._inputGridY;
-            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(this._getOpenData().action.WeaSetViewpoint?.gridIndex));
+            const gridIndex = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(this._getOpenData().action.WeaSetViewpoint?.gridIndex));
             inputX.text     = `${gridIndex.x}`;
             inputY.text     = `${gridIndex.y}`;
         }

@@ -131,7 +131,7 @@ namespace Twns.CoopCustomRoom {
             const playerRule    = Twns.Helpers.getExisted(playerRuleArray.find(v => v.playerIndex === playerIndex));
             if (playerIndex === CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex()) {
                 if (humanPlayerIndexSet.size < 2) {
-                    FloatText.show(Lang.getText(LangTextType.A0222));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0222));
                 } else {
                     const callback = () => {
                         for (const p of humanPlayerIndexSet) {

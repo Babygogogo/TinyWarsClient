@@ -109,7 +109,7 @@ namespace Twns.MultiCustomRoom {
             const roomId    = Twns.Helpers.getExisted(data.roomId);
             this.close();
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrRoomInfoPanel, { roomId });
-            FloatText.show(Lang.getFormattedText(LangTextType.F0069, roomId));
+            Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0069, roomId));
         }
 
         private _onNotifyMsgMcrGetRoomPlayerInfo(e: egret.Event): void {
@@ -148,7 +148,7 @@ namespace Twns.MultiCustomRoom {
                     if (joinData) {
                         McrProxy.reqMcrJoinRoom(joinData);
                     } else {
-                        FloatText.show(Lang.getText(LangTextType.A0145));
+                        Twns.FloatText.show(Lang.getText(LangTextType.A0145));
                     }
                 };
                 if (!settingsForMcw.warPassword) {

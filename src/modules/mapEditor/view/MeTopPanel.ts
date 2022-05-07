@@ -6,7 +6,7 @@
 // import Types                            from "../../tools/helpers/Types";
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-// import Twns.Notify                   from "../../tools/notify/NotifyType";
+// import Notify                   from "../../tools/notify/NotifyType";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 // import TwnsUiPanel                      from "../../tools/ui/UiPanel";
@@ -24,11 +24,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import MeDrawer                 = Twns.MapEditor.MeDrawer;
+    import MeDrawer                 = MapEditor.MeDrawer;
     import MeWar                    = MapEditor.MeWar;
-    import NotifyType               = Twns.Notify.NotifyType;
-    import DrawerMode               = Twns.Types.MapEditorDrawerMode;
-    import LangTextType             = Twns.Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
+    import DrawerMode               = Types.MapEditorDrawerMode;
+    import LangTextType             = Lang.LangTextType;
 
     export type OpenDataForMeTopPanel = void;
     export class MeTopPanel extends TwnsUiPanel.UiPanel<OpenDataForMeTopPanel> {
@@ -76,7 +76,7 @@ namespace Twns.MapEditor {
         private readonly _labelLocation!                : TwnsUiLabel.UiLabel;
 
         private _unitView   = new BaseWar.BwUnitView();
-        private _tileView   = new Twns.MapEditor.MeTileSimpleView();
+        private _tileView   = new MapEditor.MeTileSimpleView();
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -140,7 +140,7 @@ namespace Twns.MapEditor {
         }
 
         private _getWar(): MeWar {
-            return Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
+            return Helpers.getExisted(MapEditor.MeModel.getWar());
         }
         private _getDrawer(): MeDrawer {
             return this._getWar().getDrawer();
@@ -153,18 +153,18 @@ namespace Twns.MapEditor {
             this._updateComponentsForLanguage();
         }
         private async _onNotifyTimeTick(): Promise<void> {
-            const autoSaveTime = Twns.User.UserModel.getSelfMapEditorAutoSaveTime();
-            if ((!autoSaveTime) || (Twns.Timer.getServerTimestamp() % autoSaveTime !== 0)) {
+            const autoSaveTime = User.UserModel.getSelfMapEditorAutoSaveTime();
+            if ((!autoSaveTime) || (Timer.getServerTimestamp() % autoSaveTime !== 0)) {
                 return;
             }
 
-            const war = Twns.MapEditor.MeModel.getWar();
+            const war = MapEditor.MeModel.getWar();
             if ((war == null) || (!war.getIsMapModified()) || (war.getIsReviewingMap())) {
                 return;
             }
 
             const slotIndex = war.getMapSlotIndex();
-            if (slotIndex === Twns.MapEditor.MeModel.getReviewingMapSlotIndex()) {
+            if (slotIndex === MapEditor.MeModel.getReviewingMapSlotIndex()) {
                 return;
             }
 
@@ -172,7 +172,7 @@ namespace Twns.MapEditor {
             if (await MapEditor.MeHelpers.getCriticalErrorCodeForMapRawData(mapRawData)) {
                 FloatText.show(Lang.getText(LangTextType.A0304));
             } else {
-                Twns.MapEditor.MeProxy.reqMeSubmitMap(slotIndex, mapRawData, false);
+                MapEditor.MeProxy.reqMeSubmitMap(slotIndex, mapRawData, false);
             }
         }
         private _onNotifyTileAnimationTick(): void {
@@ -235,51 +235,51 @@ namespace Twns.MapEditor {
             } else {
                 FloatText.show(Lang.getText(LangTextType.A0093));
             }
-            Twns.FlowManager.gotoLobby();
+            FlowManager.gotoLobby();
         }
 
         private _onTouchedGroupModePreview(): void {
             this._getDrawer().setModePreview();
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDrawTileBase(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeChooseTileBasePanel, void 0);
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeChooseTileBasePanel, void 0);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDrawTileDecorator(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeChooseTileDecoratorPanel, void 0);
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeChooseTileDecoratorPanel, void 0);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDrawTileObject(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeChooseTileObjectPanel, void 0);
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeChooseTileObjectPanel, void 0);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDrawUnit(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeChooseUnitPanel, void 0);
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeChooseUnitPanel, void 0);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDeleteTileObject(): void {
             this._getDrawer().setModeDeleteTileObject();
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDrawLocation(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeChooseLocationPanel, { isAdd: true });
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeChooseLocationPanel, { isAdd: true });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDeleteLocation(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeChooseLocationPanel, { isAdd: false });
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeChooseLocationPanel, { isAdd: false });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedBtnSaveMap(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeConfirmSaveMapPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeConfirmSaveMapPanel, void 0);
         }
         private _onTouchedBtnLoadMap(): void {
             const war = this._getWar();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0072),
                 callback: async () => {
                     const slotIndex = war.getMapSlotIndex();
-                    const data      = Twns.MapEditor.MeModel.getData(slotIndex);
+                    const data      = MapEditor.MeModel.getData(slotIndex);
                     war.stopRunning();
                     await war.initWithMapEditorData(
                         {
@@ -295,59 +295,59 @@ namespace Twns.MapEditor {
             });
         }
         private _onTouchedBtnReviewAccept(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmAcceptMapPanel, { war: this._getWar() });
+            PanelHelpers.open(PanelHelpers.PanelDict.MmAcceptMapPanel, { war: this._getWar() });
         }
         private _onTouchedBtnReviewReject(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmRejectMapPanel, { war: this._getWar() });
+            PanelHelpers.open(PanelHelpers.PanelDict.MmRejectMapPanel, { war: this._getWar() });
         }
         private _onTouchedBtnWarRule(): void {
             const war = this._getWar();
             if (!war.getIsReviewingMap()) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeWarRulePanel, void 0);
+                PanelHelpers.open(PanelHelpers.PanelDict.MeWarRulePanel, void 0);
             } else {
                 if (war.getTemplateWarRuleArray().length) {
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeWarRulePanel, void 0);
+                    PanelHelpers.open(PanelHelpers.PanelDict.MeWarRulePanel, void 0);
                 } else {
                     FloatText.show(Lang.getText(LangTextType.A0100));
                 }
             }
         }
         private _onTouchedBtnWarEvent(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeEventListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.WeEventListPanel, {
                 war: this._getWar(),
             });
         }
         private _onTouchedBtnMapTag(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeMapTagPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeMapTagPanel, void 0);
         }
         private _onTouchedGroupModeDeleteTileDecorator(): void {
             this._getDrawer().setModeDeleteTileDecorator();
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDeleteUnit(): void {
             this._getDrawer().setModeDeleteUnit();
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onTouchedBtnVisibility(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeVisibilityPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeVisibilityPanel, void 0);
         }
         private _onTouchedBtnSymmetry(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeSymmetryPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeSymmetryPanel, void 0);
         }
         private _onTouchedBtnSettings(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserSettingsPanel,  void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.UserSettingsPanel,  void 0);
         }
         private _onTouchedBtnChat(): void {
             const war = this._getWar();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChatPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.ChatPanel, {
                 toMapReviewTarget: war.getIsReviewingMap()
                     ? war.getMapDesignerUserId()
-                    : Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId())
+                    : Helpers.getExisted(User.UserModel.getSelfUserId())
             });
         }
         private _onTouchedBtnMenu(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeWarMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeWarMenuPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -425,16 +425,16 @@ namespace Twns.MapEditor {
             this._updateUnitView();
 
             const mode = this._getDrawer().getMode();
-            Twns.Helpers.changeColor(this._groupModePreview,             mode === Twns.Types.MapEditorDrawerMode.Preview ? Twns.Types.ColorType.White : Twns.Types.ColorType.Origin);
-            Twns.Helpers.changeColor(this._groupModeDrawTileBase,        mode === Twns.Types.MapEditorDrawerMode.DrawTileBase ? Twns.Types.ColorType.White : Twns.Types.ColorType.Origin);
-            Twns.Helpers.changeColor(this._groupModeDrawTileDecorator,   mode === Twns.Types.MapEditorDrawerMode.DrawTileDecorator ? Twns.Types.ColorType.White : Twns.Types.ColorType.Origin);
-            Twns.Helpers.changeColor(this._groupModeDeleteTileDecorator, mode === Twns.Types.MapEditorDrawerMode.DeleteTileDecorator ? Twns.Types.ColorType.White : Twns.Types.ColorType.Origin);
-            Twns.Helpers.changeColor(this._groupModeDrawTileObject,      mode === Twns.Types.MapEditorDrawerMode.DrawTileObject ? Twns.Types.ColorType.White : Twns.Types.ColorType.Origin);
-            Twns.Helpers.changeColor(this._groupModeDeleteTileObject,    mode === Twns.Types.MapEditorDrawerMode.DeleteTileObject ? Twns.Types.ColorType.White : Twns.Types.ColorType.Origin);
-            Twns.Helpers.changeColor(this._groupModeDrawUnit,            mode === Twns.Types.MapEditorDrawerMode.DrawUnit ? Twns.Types.ColorType.White : Twns.Types.ColorType.Origin);
-            Twns.Helpers.changeColor(this._groupModeDeleteUnit,          mode === Twns.Types.MapEditorDrawerMode.DeleteUnit ? Twns.Types.ColorType.White : Twns.Types.ColorType.Origin);
-            Twns.Helpers.changeColor(this._groupModeDrawLocation,        mode === Twns.Types.MapEditorDrawerMode.AddTileToLocation ? Twns.Types.ColorType.White : Twns.Types.ColorType.Origin);
-            Twns.Helpers.changeColor(this._groupModeDeleteLocation,      mode === Twns.Types.MapEditorDrawerMode.DeleteTileFromLocation ? Twns.Types.ColorType.White : Twns.Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModePreview,             mode === Types.MapEditorDrawerMode.Preview ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDrawTileBase,        mode === Types.MapEditorDrawerMode.DrawTileBase ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDrawTileDecorator,   mode === Types.MapEditorDrawerMode.DrawTileDecorator ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDeleteTileDecorator, mode === Types.MapEditorDrawerMode.DeleteTileDecorator ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDrawTileObject,      mode === Types.MapEditorDrawerMode.DrawTileObject ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDeleteTileObject,    mode === Types.MapEditorDrawerMode.DeleteTileObject ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDrawUnit,            mode === Types.MapEditorDrawerMode.DrawUnit ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDeleteUnit,          mode === Types.MapEditorDrawerMode.DeleteUnit ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDrawLocation,        mode === Types.MapEditorDrawerMode.AddTileToLocation ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDeleteLocation,      mode === Types.MapEditorDrawerMode.DeleteTileFromLocation ? Types.ColorType.White : Types.ColorType.Origin);
         }
 
         // private _updateLabelMode(): void {
@@ -461,7 +461,7 @@ namespace Twns.MapEditor {
             if (mode === DrawerMode.DrawTileBase) {
                 con.visible = true;
 
-                const tileBaseData = Twns.Helpers.getExisted(drawer.getDrawTargetTileBaseData());
+                const tileBaseData = Helpers.getExisted(drawer.getDrawTargetTileBaseData());
                 tileView.init({
                     tileBaseShapeId     : tileBaseData.shapeId,
                     tileBaseType        : tileBaseData.baseType,
@@ -469,14 +469,14 @@ namespace Twns.MapEditor {
                     tileDecoratorShapeId: null,
                     tileObjectShapeId   : null,
                     tileObjectType      : null,
-                    playerIndex         : Twns.CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex         : CommonConstants.WarNeutralPlayerIndex,
                 });
                 tileView.updateView();
 
             } else if (mode === DrawerMode.DrawTileDecorator) {
                 con.visible = true;
 
-                const tileDecoratorData = Twns.Helpers.getExisted(drawer.getDrawTargetTileDecoratorData());
+                const tileDecoratorData = Helpers.getExisted(drawer.getDrawTargetTileDecoratorData());
                 tileView.init({
                     tileBaseShapeId     : null,
                     tileBaseType        : null,
@@ -484,14 +484,14 @@ namespace Twns.MapEditor {
                     tileDecoratorShapeId: tileDecoratorData.shapeId,
                     tileObjectShapeId   : null,
                     tileObjectType      : null,
-                    playerIndex         : Twns.CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex         : CommonConstants.WarNeutralPlayerIndex,
                 });
                 tileView.updateView();
 
             } else if (mode === DrawerMode.DrawTileObject) {
                 con.visible = true;
 
-                const tileObjectData = Twns.Helpers.getExisted(drawer.getDrawTargetTileObjectData());
+                const tileObjectData = Helpers.getExisted(drawer.getDrawTargetTileObjectData());
                 tileView.init({
                     tileBaseShapeId     : null,
                     tileBaseType        : null,
@@ -514,7 +514,7 @@ namespace Twns.MapEditor {
             const unitView  = this._unitView;
             if (drawer.getMode() === DrawerMode.DrawUnit) {
                 con.visible = true;
-                unitView.init(Twns.Helpers.getExisted(drawer.getDrawTargetUnit()));
+                unitView.init(Helpers.getExisted(drawer.getDrawTargetUnit()));
                 unitView.tickStateAnimationFrame();
                 unitView.tickUnitAnimationFrame();
             } else {
@@ -580,7 +580,7 @@ namespace Twns.MapEditor {
                 tileDecoratorShapeId: null,
                 tileObjectType      : null,
                 tileObjectShapeId   : null,
-                playerIndex         : Twns.CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : CommonConstants.WarNeutralPlayerIndex,
             });
             tileView.startRunningView();
         }
@@ -590,8 +590,8 @@ namespace Twns.MapEditor {
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
-                unitType    : Twns.Types.UnitType.Infantry,
-                playerIndex : Twns.CommonConstants.WarFirstPlayerIndex,
+                unitType    : Types.UnitType.Infantry,
+                playerIndex : CommonConstants.WarFirstPlayerIndex,
             }, this._getWar().getGameConfig());
             unit.startRunning(war);
 

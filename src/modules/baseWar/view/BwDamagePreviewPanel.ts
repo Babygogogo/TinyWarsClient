@@ -101,7 +101,7 @@ namespace Twns.BaseWar {
                     return true;
                 }
 
-                const distance = GridIndexHelpers.getMinDistance(attackerGridIndex, attackerPlayer.getCoGridIndexListOnMap());
+                const distance = Twns.GridIndexHelpers.getMinDistance(attackerGridIndex, attackerPlayer.getCoGridIndexListOnMap());
                 return (distance != null) && (distance <= attackerPlayer.getCoZoneRadius());
             });
             const getIsAffectedByCo2    = Twns.Helpers.createLazyFunc((): boolean => {
@@ -109,7 +109,7 @@ namespace Twns.BaseWar {
                     return true;
                 }
 
-                const distance = GridIndexHelpers.getMinDistance(defenderGridIndex, defenderPlayer.getCoGridIndexListOnMap());
+                const distance = Twns.GridIndexHelpers.getMinDistance(defenderGridIndex, defenderPlayer.getCoGridIndexListOnMap());
                 return (distance != null) && (distance <= defenderPlayer.getCoZoneRadius());
             });
 
@@ -194,13 +194,13 @@ namespace Twns.BaseWar {
                     group.visible = false;
                 } else {
                     const attackerUnitId        = attackerUnit.getUnitId();
-                    const battleDamageInfoArray = WarDamageCalculator.getEstimatedBattleDamage({
+                    const battleDamageInfoArray = Twns.WarHelpers.WarDamageCalculator.getEstimatedBattleDamage({
                         war,
                         attackerMovePath: movePath,
                         launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
                         targetGridIndex : gridIndex,
                     });
-                    const damages = WarDamageCalculator.getAttackAndCounterDamage({
+                    const damages = Twns.WarHelpers.WarDamageCalculator.getAttackAndCounterDamage({
                         battleDamageInfoArray,
                         attackerUnitId,
                         targetGridIndex     : gridIndex,
@@ -231,7 +231,7 @@ namespace Twns.BaseWar {
             const contents      = container.getContents();
             const gridIndex     = war.getCursor().getGridIndex();
             const gridSize      = Twns.CommonConstants.GridSize;
-            const stage         = StageManager.getStage();
+            const stage         = Twns.StageManager.getStage();
             const group         = this._group;
             const groupWidth    = group.width;
             const groupHeight   = group.height;

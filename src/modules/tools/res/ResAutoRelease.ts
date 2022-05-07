@@ -1,7 +1,7 @@
 
 // import Logger from "../helpers/Logger";
 
-namespace ResAutoRelease {
+namespace Twns.ResAutoRelease {
     const RELEASE_INTERVAL  = window.CLIENT_VERSION === "DEVELOP" ? 3 : 30;
     const NO_RELEASE_DICT   : { [path: string]: boolean } = {
         // "resource/assets/texture/unit/v1_unit.png"  : true,

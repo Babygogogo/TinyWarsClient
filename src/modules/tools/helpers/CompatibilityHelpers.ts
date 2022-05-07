@@ -138,7 +138,7 @@ namespace Twns.CompatibilityHelpers {
 
         if (window.addEventListener) {
             window.addEventListener("popstate", () => {
-                FloatText.show(Lang.getText(LangTextType.A0194));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0194));
             }, false);
         }
     }

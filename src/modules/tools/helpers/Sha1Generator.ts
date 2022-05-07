@@ -1,5 +1,6 @@
 
-namespace Sha1Generator {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.Sha1Generator {
     /*
     * A JavaScript implementation of the Secure Hash Algorithm, SHA-1, as defined
     * in FIPS 180-1

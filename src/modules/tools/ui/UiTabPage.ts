@@ -23,7 +23,7 @@ namespace TwnsUiTabPage {
             this._setOpenData(data);
             parent.addChild(this);
 
-            Logger.warn("UiTabPage opened: " + this.skinName);
+            Twns.Logger.warn("UiTabPage opened: " + this.skinName);
             this._doOpen();
         }
 

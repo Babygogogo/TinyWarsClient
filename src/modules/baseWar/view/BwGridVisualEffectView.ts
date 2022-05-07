@@ -138,7 +138,7 @@ namespace Twns.BaseWar {
         img.scaleX          = 2;
         img.scaleY          = 2;
 
-        const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos   = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.x       = BLOCK_OFFSET_X + pos.x;
         img.y       = BLOCK_OFFSET_Y + pos.y;
 
@@ -152,7 +152,7 @@ namespace Twns.BaseWar {
 
     function createEffectDive(gridIndex: GridIndex): egret.DisplayObject {
         const img       = new TwnsUiImage.UiImage(`c04_t08_s07_f01`);
-        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos       = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.smoothing   = false;
         img.x           = DIVE_OFFSET_X + pos.x;
         img.y           = DIVE_OFFSET_Y + pos.y;
@@ -168,7 +168,7 @@ namespace Twns.BaseWar {
 
     function createEffectExplosion(gridIndex: GridIndex): egret.DisplayObject {
         const img       = new TwnsUiImage.UiImage(`c04_t08_s01_f01`);
-        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos       = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.smoothing   = false;
         img.x           = EXPLOSION_OFFSET_X + pos.x;
         img.y           = EXPLOSION_OFFSET_Y + pos.y;
@@ -188,7 +188,7 @@ namespace Twns.BaseWar {
 
     function createEffectDamage(gridIndex: GridIndex): egret.DisplayObject {
         const img       = new TwnsUiImage.UiImage(`c04_t08_s02_f01`);
-        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos       = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.smoothing   = false;
         img.x           = DAMAGE_OFFSET_X + pos.x;
         img.y           = DAMAGE_OFFSET_Y + pos.y;
@@ -209,7 +209,7 @@ namespace Twns.BaseWar {
         img.scaleX          = 2;
         img.scaleY          = 2;
 
-        const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos   = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.x       = SUPPLY_OFFSET_X + pos.x;
         img.y       = SUPPLY_OFFSET_Y + pos.y;
 
@@ -228,7 +228,7 @@ namespace Twns.BaseWar {
         img.scaleX          = 2;
         img.scaleY          = 2;
 
-        const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos   = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.x       = REPAIR_OFFSET_X + pos.x;
         img.y       = REPAIR_OFFSET_Y + pos.y;
 
@@ -242,7 +242,7 @@ namespace Twns.BaseWar {
 
     function createEffectSiloExplosion(gridIndex: GridIndex): egret.DisplayObject {
         const img       = new TwnsUiImage.UiImage(`c04_t08_s02_f01`);
-        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos       = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.smoothing   = false;
         img.x           = DAMAGE_OFFSET_X + pos.x;
         img.y           = DAMAGE_OFFSET_Y + pos.y;
@@ -264,7 +264,7 @@ namespace Twns.BaseWar {
 
     function createEffectSkillActivation(gridIndex: GridIndex): egret.DisplayObject {
         const img       = new TwnsUiImage.UiImage(`c04_t08_s06_f01`);
-        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos       = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.smoothing   = false;
         img.x           = SKILL_ACTIVATION_OFFSET_X + pos.x;
         img.y           = SKILL_ACTIVATION_OFFSET_Y + pos.y;
@@ -280,7 +280,7 @@ namespace Twns.BaseWar {
 
     function createEffectCharge(gridIndex: GridIndex): egret.DisplayObject {
         const img       = new TwnsUiImage.UiImage(`c04_t08_s06_f11`);
-        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos       = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.smoothing   = false;
         img.x           = SKILL_ACTIVATION_OFFSET_X + pos.x;
         img.y           = SKILL_ACTIVATION_OFFSET_Y + pos.y;
@@ -296,7 +296,7 @@ namespace Twns.BaseWar {
 
     function createEffectSurface(gridIndex: GridIndex): egret.DisplayObject {
         const img       = new TwnsUiImage.UiImage(`c04_t08_s08_f01`);
-        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos       = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.smoothing   = false;
         img.x           = DAMAGE_OFFSET_X + pos.x;
         img.y           = DAMAGE_OFFSET_Y + pos.y;

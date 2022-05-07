@@ -418,7 +418,7 @@ namespace Twns.MapEditor {
 
             const symmetryType = this.getSymmetricalDrawType();
             const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
-            if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
+            if ((symGridIndex) && (!Twns.GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 const t2 = tileMap.getTile(symGridIndex);
                 t2.init({
                     gridIndex       : t2.getGridIndex(),
@@ -465,7 +465,7 @@ namespace Twns.MapEditor {
 
             const symmetryType = this.getSymmetricalDrawType();
             const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
-            if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
+            if ((symGridIndex) && (!Twns.GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 const t2 = tileMap.getTile(symGridIndex);
                 t2.init({
                     gridIndex       : t2.getGridIndex(),
@@ -496,7 +496,7 @@ namespace Twns.MapEditor {
             const objectType        = targetObjectData.objectType;
             const isAttackableTile  = !!gameConfig.getTileTemplateCfgByType(Twns.Config.ConfigManager.getTileType(baseType, objectType))?.maxHp;
             if ((isAttackableTile) && (unitMap.getUnitOnMap(gridIndex))) {
-                FloatText.show(Lang.getText(LangTextType.A0269));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0269));
                 return;
             }
 
@@ -521,7 +521,7 @@ namespace Twns.MapEditor {
 
             const symmetryType = this.getSymmetricalDrawType();
             const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
-            if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
+            if ((symGridIndex) && (!Twns.GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 if ((isAttackableTile) && (unitMap.getUnitOnMap(symGridIndex))) {
                     return;
                 }
@@ -551,7 +551,7 @@ namespace Twns.MapEditor {
             const war   = this._getWar();
             const tile  = war.getTileMap().getTile(gridIndex);
             if (tile.getMaxHp() != null) {
-                FloatText.show(Lang.getFormattedText(LangTextType.F0067, Lang.getTileName(tile.getType())));
+                Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0067, Lang.getTileName(tile.getType())));
                 return;
             }
 
@@ -583,7 +583,7 @@ namespace Twns.MapEditor {
 
             const symmetryType = this.getSymmetricalDrawType();
             const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
-            if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
+            if ((symGridIndex) && (!Twns.GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 const t2 = tileMap.getTile(symGridIndex);
                 t2.deleteTileDecorator();
                 t2.flushDataToView();
@@ -601,7 +601,7 @@ namespace Twns.MapEditor {
 
             const symmetryType = this.getSymmetricalDrawType();
             const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
-            if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
+            if ((symGridIndex) && (!Twns.GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 const t2 = tileMap.getTile(symGridIndex);
                 t2.deleteTileObject();
                 t2.flushDataToView();
@@ -613,7 +613,7 @@ namespace Twns.MapEditor {
             const unit = this._getWar().getUnitMap().getUnitOnMap(gridIndex);
             if (unit) {
                 const war = this._getWar();
-                WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+                Twns.WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
                 if (unit.getHasLoadedCo()) {
                     war.getTileMap().getView().updateCoZone();
                 }

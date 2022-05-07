@@ -9,7 +9,7 @@ namespace Twns.HalfwayReplayWar {
         public startRunning(war: Twns.BaseWar.BwWar): void {
             this._setWar(war);
 
-            const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeam(war, war.getPlayerInTurn().getTeamIndex());
+            const visibleTiles = Twns.WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeam(war, war.getPlayerInTurn().getTeamIndex());
             for (const tile of war.getTileMap().getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
             }

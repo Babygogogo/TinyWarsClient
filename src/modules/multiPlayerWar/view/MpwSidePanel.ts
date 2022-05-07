@@ -164,7 +164,7 @@ namespace Twns.MultiPlayerWar {
         private _onTouchedBtnEndTurn(): void {
             const war = this._getOpenData().war;
             if ((war.getDrawVoteManager().getRemainingVotes()) && (!war.getPlayerInTurn().getHasVotedForDraw())) {
-                FloatText.show(Lang.getText(LangTextType.A0034));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0034));
             } else {
                 PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0036),

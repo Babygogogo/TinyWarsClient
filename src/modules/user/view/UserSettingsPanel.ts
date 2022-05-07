@@ -111,14 +111,14 @@ namespace Twns.User {
                 callbackOnLeft  : () => {
                     const languageType = Types.LanguageType.Chinese;
                     Lang.setLanguageType(languageType);
-                    LocalStorage.setLanguageType(languageType);
+                    Twns.LocalStorage.setLanguageType(languageType);
 
                     Notify.dispatch(NotifyType.LanguageChanged);
                 },
                 callbackOnRight : () => {
                     const languageType = Types.LanguageType.English;
                     Lang.setLanguageType(languageType);
-                    LocalStorage.setLanguageType(languageType);
+                    Twns.LocalStorage.setLanguageType(languageType);
 
                     Notify.dispatch(NotifyType.LanguageChanged);
                 },
@@ -150,11 +150,11 @@ namespace Twns.User {
                 rightTextType   : LangTextType.B0562,
                 callbackOnLeft  : () => {
                     Timer.startUnitAnimationTick();
-                    LocalStorage.setShowUnitAnimation(true);
+                    Twns.LocalStorage.setShowUnitAnimation(true);
                 },
                 callbackOnRight : () => {
                     Timer.stopUnitAnimationTick();
-                    LocalStorage.setShowUnitAnimation(false);
+                    Twns.LocalStorage.setShowUnitAnimation(false);
                 },
                 checkerForLeftOn: () => {
                     return Timer.checkIsUnitAnimationTicking();
@@ -166,11 +166,11 @@ namespace Twns.User {
                 rightTextType   : LangTextType.B0562,
                 callbackOnLeft  : () => {
                     Timer.startTileAnimationTick();
-                    LocalStorage.setShowTileAnimation(true);
+                    Twns.LocalStorage.setShowTileAnimation(true);
                 },
                 callbackOnRight : () => {
                     Timer.stopTileAnimationTick();
-                    LocalStorage.setShowTileAnimation(false);
+                    Twns.LocalStorage.setShowTileAnimation(false);
                 },
                 checkerForLeftOn: () => {
                     return Timer.checkIsTileAnimationTicking();

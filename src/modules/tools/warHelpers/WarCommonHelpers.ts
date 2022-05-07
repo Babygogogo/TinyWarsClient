@@ -16,21 +16,20 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarHelpers.WarCommonHelpers {
-    import GridIndex        = Twns.Types.GridIndex;
-    import MovableArea      = Twns.Types.MovableArea;
-    import AttackableArea   = Twns.Types.AttackableArea;
-    import MapSize          = Twns.Types.MapSize;
-    import MovePathNode     = Twns.Types.MovePathNode;
-    import UnitType         = Twns.Types.UnitType;
-    import TileType         = Twns.Types.TileType;
-    import WarType          = Twns.Types.WarType;
-    import Visibility       = Twns.Types.Visibility;
-    import LangTextType     = Twns.Lang.LangTextType;
-    import CoSkillAreaType  = Twns.Types.CoSkillAreaType;
+    import GridIndex        = Types.GridIndex;
+    import MovableArea      = Types.MovableArea;
+    import AttackableArea   = Types.AttackableArea;
+    import MapSize          = Types.MapSize;
+    import MovePathNode     = Types.MovePathNode;
+    import UnitType         = Types.UnitType;
+    import TileType         = Types.TileType;
+    import WarType          = Types.WarType;
+    import Visibility       = Types.Visibility;
+    import LangTextType     = Lang.LangTextType;
+    import CoSkillAreaType  = Types.CoSkillAreaType;
     import ISerialUnit      = WarSerialization.ISerialUnit;
     import ISerialWar       = WarSerialization.ISerialWar;
     import WarSerialization = CommonProto.WarSerialization;
-    import ClientErrorCode  = Twns.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
     type AvailableMovableGrid = {
@@ -132,12 +131,12 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         };
 
         if ((tileType === TileType.Crystal) || (tileType === TileType.CustomCrystal)) {
-            for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: tileGridIndex, minDistance: 0, maxDistance: Twns.Helpers.getExisted(tile.getCustomCrystalData()?.radius), mapSize })) {
+            for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: tileGridIndex, minDistance: 0, maxDistance: Helpers.getExisted(tile.getCustomCrystalData()?.radius), mapSize })) {
                 addGrid(gridIndex.x, gridIndex.y);
             }
 
         } else if ((tileType === TileType.CustomCannon) || (tile.checkIsNormalCannon())) {
-            const { rangeForDown, rangeForLeft, rangeForRight, rangeForUp } = Twns.Helpers.getExisted(tile.getCustomCannonData());
+            const { rangeForDown, rangeForLeft, rangeForRight, rangeForUp } = Helpers.getExisted(tile.getCustomCannonData());
             if (rangeForDown) {
                 for (let deltaY = 1; deltaY <= rangeForDown; ++deltaY) {
                     const y = tileGridY + deltaY;
@@ -200,7 +199,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             }
 
         } else if ((tileType === TileType.LaserTurret) || (tileType === TileType.CustomLaserTurret)) {
-            const { rangeForDown, rangeForLeft, rangeForRight, rangeForUp } = Twns.Helpers.getExisted(tile.getCustomLaserTurretData());
+            const { rangeForDown, rangeForLeft, rangeForRight, rangeForUp } = Helpers.getExisted(tile.getCustomLaserTurretData());
             if (rangeForDown) {
                 for (let deltaY = 0; deltaY < rangeForDown; ++deltaY) {
                     const y = tileGridY + deltaY + 1;
@@ -240,7 +239,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
         } else {
             // TODO: handle other tile types
-            throw Twns.Helpers.newError(`WarCommonHelpers.createAttackableAreaForTile() invalid tileType: ${tileType}`);
+            throw Helpers.newError(`WarCommonHelpers.createAttackableAreaForTile() invalid tileType: ${tileType}`);
         }
 
         return area;
@@ -268,34 +267,34 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
     export function getRevisedPath({ war, rawPath, launchUnitId }: {
         war             : BaseWar.BwWar;
-        rawPath         : Twns.Types.Undefinable<CommonProto.Structure.IMovePath>;
-        launchUnitId    : Twns.Types.Undefinable<number>;
-    }): Twns.Types.MovePath {
+        rawPath         : Types.Undefinable<CommonProto.Structure.IMovePath>;
+        launchUnitId    : Types.Undefinable<number>;
+    }): Types.MovePath {
         if (rawPath == null) {
-            throw Twns.Helpers.newError(`Empty rawPath.`, ClientErrorCode.BwHelpers_GetRevisedPath_00);
+            throw Helpers.newError(`Empty rawPath.`, ClientErrorCode.BwHelpers_GetRevisedPath_00);
         }
 
         const rawPathNodes = rawPath.nodes;
         if ((rawPathNodes == null) || (!rawPathNodes.length)) {
-            throw Twns.Helpers.newError(`Empty rawPathNodes.`, ClientErrorCode.BwHelpers_GetRevisedPath_01);
+            throw Helpers.newError(`Empty rawPathNodes.`, ClientErrorCode.BwHelpers_GetRevisedPath_01);
         }
 
-        const beginningGridIndex    = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(rawPathNodes[0]), ClientErrorCode.BwHelpers_GetRevisedPath_02);
+        const beginningGridIndex    = Helpers.getExisted(GridIndexHelpers.convertGridIndex(rawPathNodes[0]), ClientErrorCode.BwHelpers_GetRevisedPath_02);
         const playerInTurn          = war.getPlayerInTurn();
         const unitMap               = war.getUnitMap();
         const focusUnit             = launchUnitId != null ? unitMap.getUnitLoadedById(launchUnitId) : unitMap.getUnitOnMap(beginningGridIndex);
         if ((!focusUnit)                                                    ||
             (focusUnit.getPlayerIndex() !== playerInTurn.getPlayerIndex())  ||
-            (focusUnit.getActionState() !== Twns.Types.UnitActionState.Idle)     ||
-            (war.getTurnPhaseCode() !== Twns.Types.TurnPhaseCode.Main)
+            (focusUnit.getActionState() !== Types.UnitActionState.Idle)     ||
+            (war.getTurnPhaseCode() !== Types.TurnPhaseCode.Main)
         ) {
-            throw Twns.Helpers.newError(`Invalid focusUnit.`, ClientErrorCode.BwHelpers_GetRevisedPath_03);
+            throw Helpers.newError(`Invalid focusUnit.`, ClientErrorCode.BwHelpers_GetRevisedPath_03);
         }
 
         if (launchUnitId != null) {
             const gridIndex = focusUnit.getGridIndex();
             if (!GridIndexHelpers.checkIsEqual(gridIndex, beginningGridIndex)) {
-                throw Twns.Helpers.newError(`Invalid gridIndex.`, ClientErrorCode.BwHelpers_GetRevisedPath_04);
+                throw Helpers.newError(`Invalid gridIndex.`, ClientErrorCode.BwHelpers_GetRevisedPath_04);
             }
         }
 
@@ -314,14 +313,14 @@ namespace Twns.WarHelpers.WarCommonHelpers {
                 (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))                            ||
                 (revisedNodes.some(g => GridIndexHelpers.checkIsEqual(g, gridIndex)))
             ) {
-                throw Twns.Helpers.newError(`Invalid gridIndex.`, ClientErrorCode.BwHelpers_GetRevisedPath_05);
+                throw Helpers.newError(`Invalid gridIndex.`, ClientErrorCode.BwHelpers_GetRevisedPath_05);
             }
 
             const tile              = tileMap.getTile(gridIndex);
-            const fuelConsumption   = Twns.Helpers.getExisted(tile.getMoveCostByUnit(focusUnit), ClientErrorCode.BwHelpers_GetRevisedPath_06);
+            const fuelConsumption   = Helpers.getExisted(tile.getMoveCostByUnit(focusUnit), ClientErrorCode.BwHelpers_GetRevisedPath_06);
             rawTotalFuelConsumption += fuelConsumption;
             if (rawTotalFuelConsumption > maxFuelConsumption) {
-                throw Twns.Helpers.newError(`Invalid rawTotalFuelConsumption: ${rawTotalFuelConsumption}`, ClientErrorCode.BwHelpers_GetRevisedPath_07);
+                throw Helpers.newError(`Invalid rawTotalFuelConsumption: ${rawTotalFuelConsumption}`, ClientErrorCode.BwHelpers_GetRevisedPath_07);
             }
 
             const existingUnit = unitMap.getUnitOnMap(gridIndex);
@@ -329,7 +328,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
                 const unitType          = existingUnit.getUnitType();
                 const isDiving          = existingUnit.getIsDiving();
                 const unitPlayerIndex   = existingUnit.getPlayerIndex();
-                if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                if (WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     gridIndex,
                     unitType,
@@ -337,7 +336,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
                     unitPlayerIndex,
                     observerTeamIndex   : teamIndexInTurn,
                 })) {
-                    throw Twns.Helpers.newError(`There is a blocking visible unit.`, ClientErrorCode.BwHelpers_GetRevisedPath_08);
+                    throw Helpers.newError(`There is a blocking visible unit.`, ClientErrorCode.BwHelpers_GetRevisedPath_08);
                 } else {
                     isBlocked = true;
                 }
@@ -366,13 +365,13 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             if (unit == null) {
                 return false;
             } else {
-                return WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                return WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     gridIndex           : destination,
                     unitType            : unit.getUnitType(),
                     isDiving            : unit.getIsDiving(),
                     unitPlayerIndex     : unit.getPlayerIndex(),
-                    observerTeamIndex   : Twns.Helpers.getExisted(unitMap.getUnitOnMap(rawPath[0])).getTeamIndex(),
+                    observerTeamIndex   : Helpers.getExisted(unitMap.getUnitOnMap(rawPath[0])).getTeamIndex(),
                 });
             }
         }
@@ -407,7 +406,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             ++index;
         }
 
-        const distanceMap   = Twns.Helpers.createEmptyMap<number>(mapSize.width);
+        const distanceMap   = Helpers.createEmptyMap<number>(mapSize.width);
         let maxDistance     = 0;
         for (let x = 0; x < mapSize.width; ++x) {
             if (area[x]) {
@@ -547,15 +546,15 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             return (distance != null) && (distance <= coZoneRadius);
 
         } else {
-            throw Twns.Helpers.newError(`Invalid coSkillAreaType: ${coSkillAreaType}`, ClientErrorCode.WarCommonHelpers_CheckIsGridIndexInsideCoSkillArea_00);
+            throw Helpers.newError(`Invalid coSkillAreaType: ${coSkillAreaType}`, ClientErrorCode.WarCommonHelpers_CheckIsGridIndexInsideCoSkillArea_00);
         }
     }
 
     export function getNormalizedHp(hp: number): number {
-        return Math.ceil(hp / Twns.CommonConstants.UnitHpNormalizer);
+        return Math.ceil(hp / CommonConstants.UnitHpNormalizer);
     }
 
-    export function getMapSize(data: Twns.Types.Undefinable<WarSerialization.ISerialTileMap>): Twns.Types.MapSize {
+    export function getMapSize(data: Types.Undefinable<WarSerialization.ISerialTileMap>): Types.MapSize {
         let width   = 0;
         let height  = 0;
 
@@ -567,15 +566,15 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
         return { width, height };
     }
-    export function checkIsValidMapSize(mapSize: Twns.Types.MapSize): boolean {
+    export function checkIsValidMapSize(mapSize: Types.MapSize): boolean {
         const mapWidth  = mapSize.width;
         const mapHeight = mapSize.height;
         return (mapWidth > 0)
             && (mapHeight > 0)
-            && (mapWidth * mapHeight <= Twns.CommonConstants.MapMaxGridsCount);
+            && (mapWidth * mapHeight <= CommonConstants.MapMaxGridsCount);
     }
 
-    export function checkIsUnitIdCompact(unitArray: Twns.Types.Undefinable<ISerialUnit[]>): boolean {
+    export function checkIsUnitIdCompact(unitArray: Types.Undefinable<ISerialUnit[]>): boolean {
         if ((unitArray == null) || (unitArray.length <= 0)) {
             return true;
         }
@@ -601,32 +600,32 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         return true;
     }
 
-    export function checkIsStateRequesting(state: Twns.Types.ActionPlannerState): boolean {
-        return (state === Twns.Types.ActionPlannerState.RequestingPlayerActivateSkill)
-            || (state === Twns.Types.ActionPlannerState.RequestingPlayerBeginTurn)
-            || (state === Twns.Types.ActionPlannerState.RequestingPlayerDeleteUnit)
-            || (state === Twns.Types.ActionPlannerState.RequestingPlayerEndTurn)
-            || (state === Twns.Types.ActionPlannerState.RequestingPlayerSurrender)
-            || (state === Twns.Types.ActionPlannerState.RequestingPlayerVoteForDraw)
-            || (state === Twns.Types.ActionPlannerState.RequestingPlayerProduceUnit)
-            || (state === Twns.Types.ActionPlannerState.RequestingPlayerUseCoSkill)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitAttackUnit)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitAttackTile)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitBeLoaded)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitBuildTile)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitCaptureTile)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitDive)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitDrop)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitJoin)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitLaunchFlare)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitLaunchSilo)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitLoadCo)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitProduceUnit)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitSupply)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitSurface)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitUseCoPower)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitUseCoSuperPower)
-            || (state === Twns.Types.ActionPlannerState.RequestingUnitWait);
+    export function checkIsStateRequesting(state: Types.ActionPlannerState): boolean {
+        return (state === Types.ActionPlannerState.RequestingPlayerActivateSkill)
+            || (state === Types.ActionPlannerState.RequestingPlayerBeginTurn)
+            || (state === Types.ActionPlannerState.RequestingPlayerDeleteUnit)
+            || (state === Types.ActionPlannerState.RequestingPlayerEndTurn)
+            || (state === Types.ActionPlannerState.RequestingPlayerSurrender)
+            || (state === Types.ActionPlannerState.RequestingPlayerVoteForDraw)
+            || (state === Types.ActionPlannerState.RequestingPlayerProduceUnit)
+            || (state === Types.ActionPlannerState.RequestingPlayerUseCoSkill)
+            || (state === Types.ActionPlannerState.RequestingUnitAttackUnit)
+            || (state === Types.ActionPlannerState.RequestingUnitAttackTile)
+            || (state === Types.ActionPlannerState.RequestingUnitBeLoaded)
+            || (state === Types.ActionPlannerState.RequestingUnitBuildTile)
+            || (state === Types.ActionPlannerState.RequestingUnitCaptureTile)
+            || (state === Types.ActionPlannerState.RequestingUnitDive)
+            || (state === Types.ActionPlannerState.RequestingUnitDrop)
+            || (state === Types.ActionPlannerState.RequestingUnitJoin)
+            || (state === Types.ActionPlannerState.RequestingUnitLaunchFlare)
+            || (state === Types.ActionPlannerState.RequestingUnitLaunchSilo)
+            || (state === Types.ActionPlannerState.RequestingUnitLoadCo)
+            || (state === Types.ActionPlannerState.RequestingUnitProduceUnit)
+            || (state === Types.ActionPlannerState.RequestingUnitSupply)
+            || (state === Types.ActionPlannerState.RequestingUnitSurface)
+            || (state === Types.ActionPlannerState.RequestingUnitUseCoPower)
+            || (state === Types.ActionPlannerState.RequestingUnitUseCoSuperPower)
+            || (state === Types.ActionPlannerState.RequestingUnitWait);
     }
 
     /**
@@ -636,12 +635,12 @@ namespace Twns.WarHelpers.WarCommonHelpers {
     export function moveUnit({ war, pathNodes, launchUnitId, fuelConsumption }: {
         war             : BaseWar.BwWar;
         pathNodes       : GridIndex[];
-        launchUnitId    : Twns.Types.Undefinable<number>;
+        launchUnitId    : Types.Undefinable<number>;
         fuelConsumption : number;
     }): void {
         const unitMap               = war.getUnitMap();
         const beginningGridIndex    = pathNodes[0];
-        const focusUnit             = Twns.Helpers.getExisted(unitMap.getUnit(beginningGridIndex, launchUnitId));
+        const focusUnit             = Helpers.getExisted(unitMap.getUnit(beginningGridIndex, launchUnitId));
         war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
         focusUnit.setCurrentFuel(focusUnit.getCurrentFuel() - fuelConsumption);
         if (launchUnitId == null) {
@@ -667,7 +666,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
     }
     export async function moveExtraUnit({ war, movingUnitAndPath, aiming, deleteViewAfterMoving }: {
         war                     : BaseWar.BwWar;
-        movingUnitAndPath       : Twns.Types.Undefinable<CommonProto.Structure.IMovingUnitAndPath>;
+        movingUnitAndPath       : Types.Undefinable<CommonProto.Structure.IMovingUnitAndPath>;
         aiming                  : GridIndex | null;
         deleteViewAfterMoving   : boolean;
     }): Promise<BaseWar.BwUnitView | null> {
@@ -682,12 +681,12 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
         const movingPath = movingUnitAndPath.path;
         if (movingPath == null) {
-            throw Twns.Helpers.newError(`Empty movingPath.`, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_00);
+            throw Helpers.newError(`Empty movingPath.`, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_00);
         }
 
         const unitMap           = war.getUnitMap();
         const unitMapView       = unitMap.getView();
-        const movingUnitView    = unitMap.getUnitById(Twns.Helpers.getExisted(movingUnitData.unitId, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_01))?.getView();
+        const movingUnitView    = unitMap.getUnitById(Helpers.getExisted(movingUnitData.unitId, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_01))?.getView();
         (movingUnitView) && (unitMapView.removeUnit(movingUnitView));
 
         const virtualUnit = new BaseWar.BwUnit();
@@ -711,7 +710,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             return false;
         }
 
-        return (newUnitData.currentHp ?? Twns.CommonConstants.UnitMaxHp) > (oldUnitData.currentHp ?? Twns.CommonConstants.UnitMaxHp);
+        return (newUnitData.currentHp ?? CommonConstants.UnitMaxHp) > (oldUnitData.currentHp ?? CommonConstants.UnitMaxHp);
     }
     export function checkIsUnitSupplied(oldUnitData: ISerialUnit, newUnitData: ISerialUnit, gameConfig: GameConfig): boolean {
         const unitType = newUnitData.unitType;
@@ -719,7 +718,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             return false;
         }
 
-        const unitCfg = Twns.Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType), ClientErrorCode.WarCommonHelpers_CheckIsUnitSupplied_00);
+        const unitCfg = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType), ClientErrorCode.WarCommonHelpers_CheckIsUnitSupplied_00);
         {
             const maxFuel = unitCfg.maxFuel;
             if ((newUnitData.currentFuel ?? maxFuel) > (oldUnitData.currentFuel ?? maxFuel)) {
@@ -770,7 +769,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             return false;
         }
 
-        return (newUnitData.currentHp ?? Twns.CommonConstants.UnitMaxHp) < (oldUnitData.currentHp ?? Twns.CommonConstants.UnitMaxHp);
+        return (newUnitData.currentHp ?? CommonConstants.UnitMaxHp) < (oldUnitData.currentHp ?? CommonConstants.UnitMaxHp);
     }
 
     // export function updateTilesAndUnits(
@@ -850,22 +849,22 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         const gameConfig                = war.getGameConfig();
         const playerArrayAfterAction    = commonExtraData.playerArrayAfterAction ?? [];
         for (const playerData of playerArrayAfterAction) {
-            const player = war.getPlayer(Twns.Helpers.getExisted(playerData.playerIndex, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_00));
+            const player = war.getPlayer(Helpers.getExisted(playerData.playerIndex, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_00));
             player.init(playerData, gameConfig);
             player.startRunning(war);
         }
 
         const unitMap = war.getUnitMap();
-        unitMap.setNextUnitId(Twns.Helpers.getExisted(commonExtraData.nextUnitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_01));
+        unitMap.setNextUnitId(Helpers.getExisted(commonExtraData.nextUnitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_01));
 
         const unitArrayAfterAction  = commonExtraData.unitArrayAfterAction ?? [];
         const destroyedUnitIdArray  = commonExtraData.destroyedUnitIdArray ?? [];
-        if (unitArrayAfterAction.some(v => destroyedUnitIdArray.indexOf(Twns.Helpers.getExisted(v.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_02)) >= 0)) {
-            throw Twns.Helpers.newError(`WarCommonHelpers.handleCommonExtraDataForWarActions() unitArrayAfterAction and destroyedUnitIdArray overlapped!`, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_03);
+        if (unitArrayAfterAction.some(v => destroyedUnitIdArray.indexOf(Helpers.getExisted(v.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_02)) >= 0)) {
+            throw Helpers.newError(`WarCommonHelpers.handleCommonExtraDataForWarActions() unitArrayAfterAction and destroyedUnitIdArray overlapped!`, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_03);
         }
 
         const movingUnitAndPath     = commonExtraData.movingUnitAndPath;
-        const movingUnitId          = movingUnitAndPath ? Twns.Helpers.getExisted(movingUnitAndPath.unit?.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_04) : null;
+        const movingUnitId          = movingUnitAndPath ? Helpers.getExisted(movingUnitAndPath.unit?.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_04) : null;
         const movingUnit            = movingUnitId == null ? null : unitMap.getUnitById(movingUnitId);
         const gridVisualEffect      = war.getGridVisualEffect();
         let isShownExplosionEffect  = false;
@@ -925,7 +924,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             }
         }
         for (const unitData of unitArrayAfterAction) {
-            const unitId    = Twns.Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_05);
+            const unitId    = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_05);
             const unit      = unitMap.getUnitById(unitId);
             if (unit) {
                 unitMap.removeUnitById(unitId, true);
@@ -935,7 +934,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
         const updatedViewUnits = new Set<BaseWar.BwUnit>();
         for (const unitData of unitArrayAfterAction) {
-            const unitId        = Twns.Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_06);
+            const unitId        = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_06);
             const existingUnit  = tempRemovedUnits.get(unitId);
             if (existingUnit) {
                 const existingUnitData = existingUnit.serialize();
@@ -1013,7 +1012,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
         const tileMap = war.getTileMap();
         for (const tileData of commonExtraData.tileArrayAfterAction ?? []) {
-            const gridIndex         = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_07);
+            const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_07);
             const tile              = tileMap.getTile(gridIndex);
             const hpBeforeAction    = tile.getCurrentHp();
             tile.init(tileData, gameConfig);
@@ -1045,7 +1044,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
         if ((!isFastExecute) && (isShownExplosionEffect)) {
             war.getView().showVibration();
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.Explode);
+            SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
             return true;
         } else {
             return false;
@@ -1080,18 +1079,18 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         return gridIndex.x * mapHeight + gridIndex.y;
     }
 
-    export function getIdleBuildingGridIndex(war: BaseWar.BwWar): Twns.Types.GridIndex | null {
+    export function getIdleBuildingGridIndex(war: BaseWar.BwWar): Types.GridIndex | null {
         const playerIndex               = war.getPlayerIndexInTurn();
         const field                     = war.getField();
         const tileMap                   = field.getTileMap();
         const unitMap                   = field.getUnitMap();
         const { x: currX, y: currY }    = field.getCursor().getGridIndex();
         const { width, height}          = tileMap.getMapSize();
-        const checkIsIdle               = (gridIndex: Twns.Types.GridIndex): boolean => {
+        const checkIsIdle               = (gridIndex: Types.GridIndex): boolean => {
             if (tileMap.getTile(gridIndex).checkIsUnitProducerForPlayer(playerIndex)) {
                 const unit = unitMap.getUnitOnMap(gridIndex);
                 if ((!unit)                                                                                     ||
-                    ((unit.getActionState() === Twns.Types.UnitActionState.Idle) && (unit.getPlayerIndex() === playerIndex))
+                    ((unit.getActionState() === Types.UnitActionState.Idle) && (unit.getPlayerIndex() === playerIndex))
                 ) {
                     return true;
                 }
@@ -1123,15 +1122,15 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
         return null;
     }
-    export function getIdleUnitGridIndex(war: BaseWar.BwWar): Twns.Types.GridIndex | null {
+    export function getIdleUnitGridIndex(war: BaseWar.BwWar): Types.GridIndex | null {
         const playerIndex               = war.getPlayerIndexInTurn();
         const field                     = war.getField();
         const unitMap                   = field.getUnitMap();
         const { x: currX, y: currY }    = field.getCursor().getGridIndex();
         const { width, height}          = unitMap.getMapSize();
-        const checkIsIdle               = (gridIndex: Twns.Types.GridIndex): boolean => {
+        const checkIsIdle               = (gridIndex: Types.GridIndex): boolean => {
             const unit = unitMap.getUnitOnMap(gridIndex);
-            return (unit?.getPlayerIndex() === playerIndex) && (unit.getActionState() === Twns.Types.UnitActionState.Idle);
+            return (unit?.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle);
         };
 
         for (let y = currY; y < height; ++y) {
@@ -1178,15 +1177,15 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
     export function getMapId(warData: ISerialWar): number | null {
         if (warData.settingsForMcw) {
-            return Twns.Helpers.getExisted(warData.settingsForMcw.mapId);
+            return Helpers.getExisted(warData.settingsForMcw.mapId);
         } else if (warData.settingsForMrw) {
-            return Twns.Helpers.getExisted(warData.settingsForMrw.mapId);
+            return Helpers.getExisted(warData.settingsForMrw.mapId);
         } else if (warData.settingsForScw) {
-            return Twns.Helpers.getExisted(warData.settingsForScw.mapId);
+            return Helpers.getExisted(warData.settingsForScw.mapId);
         } else if (warData.settingsForCcw) {
-            return Twns.Helpers.getExisted(warData.settingsForCcw.mapId);
+            return Helpers.getExisted(warData.settingsForCcw.mapId);
         } else if (warData.settingsForSrw) {
-            return Twns.Helpers.getExisted(warData.settingsForSrw.mapId);
+            return Helpers.getExisted(warData.settingsForSrw.mapId);
         } else {
             return null;
         }
@@ -1236,19 +1235,19 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         }
     }
 
-    export function checkCanCheatInWar(warType: Twns.Types.WarType): boolean {
-        return (warType === Twns.Types.WarType.ScwFog)
-            || (warType === Twns.Types.WarType.ScwStd)
-            || (warType === Twns.Types.WarType.SfwFog)
-            || (warType === Twns.Types.WarType.SfwStd)
-            || (warType === Twns.Types.WarType.Me);
+    export function checkCanCheatInWar(warType: Types.WarType): boolean {
+        return (warType === Types.WarType.ScwFog)
+            || (warType === Types.WarType.ScwStd)
+            || (warType === Types.WarType.SfwFog)
+            || (warType === Types.WarType.SfwStd)
+            || (warType === Types.WarType.Me);
     }
 
-    export function getPlayersCountUnneutral(playerManagerData: Twns.Types.Undefinable<WarSerialization.ISerialPlayerManager>): number {
+    export function getPlayersCountUnneutral(playerManagerData: Types.Undefinable<WarSerialization.ISerialPlayerManager>): number {
         const playerIndexSet = new Set<number>();
         for (const playerData of playerManagerData ? playerManagerData.players || [] : []) {
             const playerIndex = playerData.playerIndex;
-            if ((playerIndex != null) && (playerIndex >= Twns.CommonConstants.WarFirstPlayerIndex)) {
+            if ((playerIndex != null) && (playerIndex >= CommonConstants.WarFirstPlayerIndex)) {
                 playerIndexSet.add(playerIndex);
             }
         }
@@ -1280,16 +1279,16 @@ namespace Twns.WarHelpers.WarCommonHelpers {
     }
     export function getImageSourceForCoEyeFrame(skinId: number): string {
         switch (skinId) {
-            case Twns.CommonConstants.WarNeutralPlayerIndex  : return ``;
+            case CommonConstants.WarNeutralPlayerIndex  : return ``;
             case 1                                      : return `uncompressedTriangle0001`;
             case 2                                      : return `uncompressedTriangle0002`;
             case 3                                      : return `uncompressedTriangle0003`;
             case 4                                      : return `uncompressedTriangle0004`;
             case 5                                      : return `uncompressedTriangle0005`;
-            default                                     : throw Twns.Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.WarCommonHelpers_GetImageSourceForCoEyeFrame_00);
+            default                                     : throw Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.WarCommonHelpers_GetImageSourceForCoEyeFrame_00);
         }
     }
-    export function getImageSourceForCoHeadFrame(skinId: Twns.Types.Undefinable<number>): string {
+    export function getImageSourceForCoHeadFrame(skinId: Types.Undefinable<number>): string {
         switch (skinId) {
             case 1  : return `uncompressedRectangle0002`;
             case 2  : return `uncompressedRectangle0003`;
@@ -1308,7 +1307,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             case 3  : return 0xF9D803;
             case 4  : return 0x3ADA22;
             case 5  : return 0x000000;
-            default : throw Twns.Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.WarCommonHelpers_GetTextColorForSkinId_00);
+            default : throw Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.WarCommonHelpers_GetTextColorForSkinId_00);
         }
     }
     export function getTextStrokeForSkinId(skinId: number): number {
@@ -1319,7 +1318,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             case 3  : return 0;
             case 4  : return 0;
             case 5  : return 1;
-            default : throw Twns.Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.WarCommonHelpers_GetTextStrokeForSkinId_00);
+            default : throw Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.WarCommonHelpers_GetTextStrokeForSkinId_00);
         }
     }
 
@@ -1330,7 +1329,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         {
             let idleUnitsCount = 0;
             for (const unit of unitMap.getAllUnitsOnMap()) {
-                if ((unit.getPlayerIndex() === playerIndex) && (unit.getActionState() === Twns.Types.UnitActionState.Idle)) {
+                if ((unit.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle)) {
                     ++idleUnitsCount;
                 }
             }
@@ -1339,7 +1338,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
         {
             const player            = war.getPlayer(playerIndex);
-            const idleBuildingsDict = new Map<Twns.Types.TileType, GridIndex[]>();
+            const idleBuildingsDict = new Map<Types.TileType, GridIndex[]>();
             const gameConfig        = war.getGameConfig();
             const currentFund       = player.getFund();
             for (const tile of war.getTileMap().getAllTiles()) {
@@ -1349,20 +1348,20 @@ namespace Twns.WarHelpers.WarCommonHelpers {
                 }
 
                 const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex) ?? null;
-                const unitCategory      = Twns.Helpers.getExisted(skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory());
-                const minNormalizedHp   = skillCfg ? getNormalizedHp(skillCfg[3]) : getNormalizedHp(Twns.CommonConstants.UnitMaxHp);
+                const unitCategory      = Helpers.getExisted(skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory());
+                const minNormalizedHp   = skillCfg ? getNormalizedHp(skillCfg[3]) : getNormalizedHp(CommonConstants.UnitMaxHp);
                 for (const unitType of gameConfig.getUnitTypesByCategory(unitCategory) ?? []) {
                     const costModifier  = player.getUnitCostModifier(gridIndex, false, unitType);
-                    const cfgCost       = Twns.Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost);
+                    const cfgCost       = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost);
                     const minCost       = skillCfg
-                        ? Math.floor(cfgCost * costModifier * minNormalizedHp * skillCfg[5] / Twns.CommonConstants.UnitHpNormalizer / 100)
+                        ? Math.floor(cfgCost * costModifier * minNormalizedHp * skillCfg[5] / CommonConstants.UnitHpNormalizer / 100)
                         : Math.floor(cfgCost * costModifier);
                     if (minCost <= currentFund) {
                         const tileType = tile.getType();
                         if (!idleBuildingsDict.has(tileType)) {
                             idleBuildingsDict.set(tileType, [gridIndex]);
                         } else {
-                            Twns.Helpers.getExisted(idleBuildingsDict.get(tileType)).push(gridIndex);
+                            Helpers.getExisted(idleBuildingsDict.get(tileType)).push(gridIndex);
                         }
                         break;
                     }
@@ -1390,8 +1389,8 @@ namespace Twns.WarHelpers.WarCommonHelpers {
     export function getErrorCodeForUnitDataIgnoringUnitId({ unitData, mapSize, playersCountUnneutral, gameConfig }: {
         unitData                : CommonProto.WarSerialization.ISerialUnit;
         gameConfig              : GameConfig;
-        mapSize                 : Twns.Types.Undefinable<Twns.Types.MapSize>;
-        playersCountUnneutral   : Twns.Types.Undefinable<number>;
+        mapSize                 : Types.Undefinable<Types.MapSize>;
+        playersCountUnneutral   : Types.Undefinable<number>;
     }): ClientErrorCode {
         const gridIndex = GridIndexHelpers.convertGridIndex(unitData.gridIndex);
         if (gridIndex == null) {
@@ -1408,8 +1407,8 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
         const playerIndex = unitData.playerIndex;
         if ((playerIndex == null)                               ||
-            (playerIndex < Twns.CommonConstants.WarFirstPlayerIndex) ||
-            (playerIndex > Twns.CommonConstants.WarMaxPlayerIndex)
+            (playerIndex < CommonConstants.WarFirstPlayerIndex) ||
+            (playerIndex > CommonConstants.WarMaxPlayerIndex)
         ) {
             return ClientErrorCode.UnitDataValidation03;
         }
@@ -1488,8 +1487,8 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
         const actionState = unitData.actionState;
         if ((actionState != null)                           &&
-            (actionState !== Twns.Types.UnitActionState.Idle)    &&
-            (actionState !== Twns.Types.UnitActionState.Acted)
+            (actionState !== Types.UnitActionState.Idle)    &&
+            (actionState !== Types.UnitActionState.Acted)
         ) {
             return ClientErrorCode.UnitDataValidation15;
         }

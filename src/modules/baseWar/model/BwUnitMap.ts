@@ -52,7 +52,7 @@ namespace Twns.BaseWar {
                 unit.init(unitData, gameConfig);
 
                 const gridIndex = unit.getGridIndex();
-                if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+                if ((!gridIndex) || (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
                     throw Twns.Helpers.newError(`Invalid gridIndex: ${gridIndex.x}, ${gridIndex.y}`, ClientErrorCode.BwUnitMap_Init_03);
                 }
 
@@ -92,7 +92,7 @@ namespace Twns.BaseWar {
 
                 const gridIndex1 = loader.getGridIndex();
                 const gridIndex2 = loadedUnit.getGridIndex();
-                if ((!gridIndex1) || (!gridIndex2) || (!GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2))) {
+                if ((!gridIndex1) || (!gridIndex2) || (!Twns.GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2))) {
                     throw Twns.Helpers.newError(`Invalid gridIndex.`, ClientErrorCode.BwUnitMap_Init_11);
                 }
 
@@ -159,7 +159,7 @@ namespace Twns.BaseWar {
             const war           = this.getWar();
             const units         : ISerialUnit[] = [];
             const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
-            for (const unit of WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+            for (const unit of Twns.WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
                 units.push(unit.serializeForCreateSfw());
 
                 if (teamIndexes.has(unit.getTeamIndex())) {
@@ -179,7 +179,7 @@ namespace Twns.BaseWar {
             const war           = this.getWar();
             const units         : ISerialUnit[] = [];
             const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
-            for (const unit of WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+            for (const unit of Twns.WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
                 units.push(unit.serializeForCreateMfr());
 
                 if (teamIndexes.has(unit.getTeamIndex())) {
@@ -273,7 +273,7 @@ namespace Twns.BaseWar {
             }
 
             const war = this.getWar();
-            return (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+            return (Twns.WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                 war,
                 unitType            : unit.getUnitType(),
                 isDiving            : unit.getIsDiving(),
@@ -353,7 +353,7 @@ namespace Twns.BaseWar {
             }
 
             const gridIndex = unit.getGridIndex();
-            if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+            if ((!gridIndex) || (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
                 throw Twns.Helpers.newError(`BwUnitMap.setUnitOnMap() the unit is outside map! gridIndex: ${JSON.stringify(gridIndex)}`);
             }
             if (this.getUnitOnMap(gridIndex)) {

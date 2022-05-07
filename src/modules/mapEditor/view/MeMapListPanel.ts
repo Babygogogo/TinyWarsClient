@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -19,9 +19,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import NotifyType       = Twns.Notify.NotifyType;
+    import NotifyType       = Notify.NotifyType;
     import IMapEditorData   = CommonProto.Map.IMapEditorData;
-    import LangTextType     = Twns.Lang.LangTextType;
+    import LangTextType     = Lang.LangTextType;
 
     export type OpenDataForMeMapListPanel = void;
     export class MeMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForMeMapListPanel> {
@@ -49,7 +49,7 @@ namespace Twns.MapEditor {
             this._updateComponentsForLanguage();
             this._labelLoading.visible = true;
 
-            Twns.MapEditor.MeProxy.reqMeGetMapDataList();
+            MapEditor.MeProxy.reqMeGetMapDataList();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -79,7 +79,7 @@ namespace Twns.MapEditor {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifySMeGetDataList(): void {
-            const newData               = this._createDataForListMap(Twns.MapEditor.MeModel.getDataDict());
+            const newData               = this._createDataForListMap(MapEditor.MeModel.getDataDict());
             this._dataForListMap        = newData;
             this._labelLoading.visible  = false;
 
@@ -96,7 +96,7 @@ namespace Twns.MapEditor {
         }
 
         private _onTouchTapBtnBack(): void {
-            Twns.FlowManager.gotoLobby();
+            FlowManager.gotoLobby();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -133,7 +133,7 @@ namespace Twns.MapEditor {
 
             } else {
                 this._labelNoData.visible = false;
-                this._zoomMap.showMapByMapData(mapData, await Twns.Config.ConfigManager.getLatestGameConfig());
+                this._zoomMap.showMapByMapData(mapData, await Config.ConfigManager.getLatestGameConfig());
             }
         }
     }
@@ -154,16 +154,17 @@ namespace Twns.MapEditor {
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
                 { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
-            this._btnChoose.setShortSfxCode(Twns.Types.ShortSfxCode.None);
+            this._btnChoose.setShortSfxCode(Types.ShortSfxCode.None);
+            this._btnNext.setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected _onDataChanged(): void {
             const data                  = this._getData();
             const mapData               = data.mapData;
             const mapRawData            = mapData.mapRawData;
-            const status                = Twns.Helpers.getExisted(mapData.reviewStatus);
-            this.currentState           = data.index === data.panel.getSelectedIndex() ? Twns.Types.UiState.Down : Twns.Types.UiState.Up;
-            this._labelStatus.text      = Lang.getMapReviewStatusText(status) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            const status                = Helpers.getExisted(mapData.reviewStatus);
+            this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+            this._labelStatus.text      = Lang.getMapReviewStatusText(status) ?? CommonConstants.ErrorTextForUndefined;
             this._labelStatus.textColor = getReviewStatusTextColor(status);
             this._labelName.text        = Lang.getLanguageText({ textArray: mapRawData ? mapRawData.mapNameArray : [] }) || `(${Lang.getText(LangTextType.B0277)})`;
         }
@@ -178,34 +179,34 @@ namespace Twns.MapEditor {
             const mapData       = data.mapData;
             const reviewStatus  = mapData.reviewStatus;
 
-            if (reviewStatus === Twns.Types.MapReviewStatus.Rejected) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
+            if (reviewStatus === Types.MapReviewStatus.Rejected) {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0305),
                     content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                     callback: () => {
-                        Twns.FlowManager.gotoMapEditorWar(Twns.Helpers.getExisted(mapData.mapRawData), Twns.Helpers.getExisted(mapData.slotIndex), false);
+                        FlowManager.gotoMapEditorWar(Helpers.getExisted(mapData.mapRawData), Helpers.getExisted(mapData.slotIndex), false);
                     },
                 });
-            } else if (reviewStatus === Twns.Types.MapReviewStatus.Accepted) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
+            } else if (reviewStatus === Types.MapReviewStatus.Accepted) {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0326),
                     content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                     callback: () => {
-                        Twns.FlowManager.gotoMapEditorWar(Twns.Helpers.getExisted(mapData.mapRawData), Twns.Helpers.getExisted(mapData.slotIndex), false);
+                        FlowManager.gotoMapEditorWar(Helpers.getExisted(mapData.mapRawData), Helpers.getExisted(mapData.slotIndex), false);
                     },
                 });
             } else {
-                Twns.FlowManager.gotoMapEditorWar(mapData.mapRawData, Twns.Helpers.getExisted(mapData.slotIndex), false);
+                FlowManager.gotoMapEditorWar(mapData.mapRawData, Helpers.getExisted(mapData.slotIndex), false);
             }
         }
     }
 
-    function getReviewStatusTextColor(status: Twns.Types.MapReviewStatus): number {
+    function getReviewStatusTextColor(status: Types.MapReviewStatus): number {
         switch (status) {
-            case Twns.Types.MapReviewStatus.None     : return 0xffffff;
-            case Twns.Types.MapReviewStatus.Reviewing: return 0xffff00;
-            case Twns.Types.MapReviewStatus.Rejected : return 0xff0000;
-            case Twns.Types.MapReviewStatus.Accepted : return 0x00ff00;
+            case Types.MapReviewStatus.None     : return 0xffffff;
+            case Types.MapReviewStatus.Reviewing: return 0xffff00;
+            case Types.MapReviewStatus.Rejected : return 0xff0000;
+            case Types.MapReviewStatus.Accepted : return 0x00ff00;
             default                             : return 0xffffff;
         }
     }

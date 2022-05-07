@@ -90,13 +90,13 @@ namespace Twns.Common {
             const mapId         = this._getOpenData().mapId;
             const nextRuleId    = await getNextRuleId(mapId, this._templateWarRuleId);
             if (nextRuleId == null) {
-                FloatText.show(Lang.getText(LangTextType.A0302));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0302));
                 return;
             }
 
             const nextWarType = await getNextWarType(WarType.Undefined, mapId, nextRuleId);
             if (nextWarType == null) {
-                FloatText.show(Lang.getText(LangTextType.A0302));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0302));
                 return;
             }
 
@@ -108,7 +108,7 @@ namespace Twns.Common {
         private async _onTouchedBtnWarType(): Promise<void> {
             const nextWarType = await getNextWarType(this._warType, this._getOpenData().mapId, this._templateWarRuleId);
             if (nextWarType == null) {
-                FloatText.show(Lang.getText(LangTextType.A0302));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0302));
                 return;
             }
 

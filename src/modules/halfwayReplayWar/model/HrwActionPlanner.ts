@@ -124,7 +124,7 @@ namespace Twns.HalfwayReplayWar {
             }
         }
         protected _getNextStateOnTapWhenChoosingDropDestination(gridIndex: GridIndex): State {
-            if (Helpers.getExisted(this.getAvailableDropDestinations()).every(g => !GridIndexHelpers.checkIsEqual(g, gridIndex))) {
+            if (Helpers.getExisted(this.getAvailableDropDestinations()).every(g => !Twns.GridIndexHelpers.checkIsEqual(g, gridIndex))) {
                 return State.ChoosingAction;
             } else {
                 const chosenUnits               = [this.getChoosingUnitForDrop()];
@@ -145,7 +145,7 @@ namespace Twns.HalfwayReplayWar {
             }
         }
         protected _getNextStateOnTapWhenChoosingFlareDestination(gridIndex: GridIndex): State {
-            if (GridIndexHelpers.getDistance(this.getMovePathDestination(), gridIndex) > Helpers.getExisted(Helpers.getExisted(this.getFocusUnit()).getFlareMaxRange())) {
+            if (Twns.GridIndexHelpers.getDistance(this.getMovePathDestination(), gridIndex) > Helpers.getExisted(Helpers.getExisted(this.getFocusUnit()).getFlareMaxRange())) {
                 return State.ChoosingAction;
             } else {
                 return State.ChoosingFlareDestination;
@@ -156,7 +156,7 @@ namespace Twns.HalfwayReplayWar {
         }
         protected _getNextStateOnTapWhenChoosingProductionTarget(gridIndex: GridIndex): State {
             const previousGridIndex = this.getCursor().getPreviousGridIndex();
-            if ((previousGridIndex) && GridIndexHelpers.checkIsEqual(previousGridIndex, gridIndex)) {
+            if ((previousGridIndex) && Twns.GridIndexHelpers.checkIsEqual(previousGridIndex, gridIndex)) {
                 return State.ChoosingProductionTarget;
             } else {
                 const turnManager       = this._getTurnManager();
@@ -318,7 +318,7 @@ namespace Twns.HalfwayReplayWar {
         protected _getActionUnitBeLoaded(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = Helpers.getExisted(this.getFocusUnit());
-            if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
+            if (Twns.GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
                 return [];
             } else {
                 const loader = this._getUnitMap().getUnitOnMap(destination);
@@ -332,7 +332,7 @@ namespace Twns.HalfwayReplayWar {
         protected _getActionUnitJoin(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = Helpers.getExisted(this.getFocusUnit());
-            if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
+            if (Twns.GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
                 return [];
             } else {
                 const target = this._getUnitMap().getUnitOnMap(destination);
@@ -428,7 +428,7 @@ namespace Twns.HalfwayReplayWar {
                 const playerIndex   = focusUnit.getPlayerIndex();
                 const unitMap       = this._getUnitMap();
                 if (focusUnit.checkIsAdjacentUnitSupplier()) {
-                    for (const gridIndex of GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this.getMapSize())) {
+                    for (const gridIndex of Twns.GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this.getMapSize())) {
                         const unit = unitMap.getUnitOnMap(gridIndex);
                         if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
                             return [{ actionType: UnitActionType.Supply, callback: () => {
@@ -460,21 +460,21 @@ namespace Twns.HalfwayReplayWar {
                     if (Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) < 1) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
-                            callback            : () => FloatText.show(Lang.getText(LangTextType.B0051)),
+                            callback            : () => Twns.FloatText.show(Lang.getText(LangTextType.B0051)),
                             costForProduceUnit,
                             produceUnitType,
                         }];
                     } else if (focusUnit.getLoadedUnitsCount() >= Helpers.getExisted(focusUnit.getMaxLoadUnitsCount())) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
-                            callback            : () => FloatText.show(Lang.getText(LangTextType.B0052)),
+                            callback            : () => Twns.FloatText.show(Lang.getText(LangTextType.B0052)),
                             costForProduceUnit,
                             produceUnitType,
                         }];
                     } else if (this._getWar().getPlayerInTurn().getFund() < focusUnit.getProduceUnitCost()) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
-                            callback            : () => FloatText.show(Lang.getText(LangTextType.B0053)),
+                            callback            : () => Twns.FloatText.show(Lang.getText(LangTextType.B0053)),
                             costForProduceUnit,
                             produceUnitType,
                         }];

@@ -76,7 +76,7 @@ namespace Twns.WarHelpers.WarActionReviser {
             throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_RevisePlayerDeleteUnit_00);
         }
 
-        const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(rawAction.gridIndex), ClientErrorCode.WarActionReviser_RevisePlayerDeleteUnit_01);
+        const gridIndex         = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(rawAction.gridIndex), ClientErrorCode.WarActionReviser_RevisePlayerDeleteUnit_01);
         const playerIndexInTurn = war.getPlayerIndexInTurn();
         const playerInTurn      = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
@@ -134,8 +134,8 @@ namespace Twns.WarHelpers.WarActionReviser {
 
         const unitMap   = war.getUnitMap();
         const mapSize   = unitMap.getMapSize();
-        const gridIndex = GridIndexHelpers.convertGridIndex(rawAction.gridIndex);
-        if ((gridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+        const gridIndex = Twns.GridIndexHelpers.convertGridIndex(rawAction.gridIndex);
+        if ((gridIndex == null) || (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
             throw Helpers.newError(`Invalid gridIndex.`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_02);
         }
 
@@ -397,8 +397,8 @@ namespace Twns.WarHelpers.WarActionReviser {
 
         const tileMap           = war.getTileMap();
         const mapSize           = tileMap.getMapSize();
-        const targetGridIndex   = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
-        if ((targetGridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))) {
+        const targetGridIndex   = Twns.GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
+        if ((targetGridIndex == null) || (!Twns.GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))) {
             throw Helpers.newError(`Invalid targetGridIndex.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackTile_02);
         }
 
@@ -441,8 +441,8 @@ namespace Twns.WarHelpers.WarActionReviser {
 
         const unitMap           = war.getUnitMap();
         const mapSize           = unitMap.getMapSize();
-        const targetGridIndex   = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
-        if ((targetGridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))) {
+        const targetGridIndex   = Twns.GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
+        if ((targetGridIndex == null) || (!Twns.GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))) {
             throw Helpers.newError(`Invalid targetGridIndex.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackUnit_02);
         }
 
@@ -682,12 +682,12 @@ namespace Twns.WarHelpers.WarActionReviser {
         const focusUnit         = Helpers.getExisted(unitMap.getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_03);
         const mapSize           = unitMap.getMapSize();
         const flareMaxRange     = Helpers.getExisted(focusUnit.getFlareMaxRange(), ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_04);
-        const targetGridIndex   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex), ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_05);
+        const targetGridIndex   = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex), ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_05);
         if ((rawPathNodes.length !== 1)                                                     ||
             (!focusUnit.getFlareCurrentAmmo())                                              ||
             (!war.getFogMap().checkHasFogCurrently())                                       ||
-            (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))                  ||
-            (GridIndexHelpers.getDistance(targetGridIndex, revisedPath.nodes[0]) > flareMaxRange)
+            (!Twns.GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))                  ||
+            (Twns.GridIndexHelpers.getDistance(targetGridIndex, revisedPath.nodes[0]) > flareMaxRange)
         ) {
             throw Helpers.newError(`Can not launch.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_06);
         }
@@ -727,9 +727,9 @@ namespace Twns.WarHelpers.WarActionReviser {
             throw Helpers.newError(`Can not launch silo.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchSilo_04);
         }
 
-        const targetGridIndex = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
+        const targetGridIndex = Twns.GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
         if ((targetGridIndex == null)                                       ||
-            (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))
+            (!Twns.GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))
         ) {
             throw Helpers.newError(`Invalid targetGridIndex.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchSilo_05);
         }
@@ -1012,10 +1012,10 @@ namespace Twns.WarHelpers.WarActionReviser {
 
         for (let i = 0; i < destinationsCount; ++i) {
             const data              = destinations[i];
-            const droppingGridIndex = GridIndexHelpers.convertGridIndex(data.gridIndex);
+            const droppingGridIndex = Twns.GridIndexHelpers.convertGridIndex(data.gridIndex);
             if ((!droppingGridIndex)                                                        ||
-                (!GridIndexHelpers.checkIsInsideMap(droppingGridIndex, mapSize))            ||
-                (!GridIndexHelpers.checkIsAdjacent(droppingGridIndex, loaderEndingGridIndex))
+                (!Twns.GridIndexHelpers.checkIsInsideMap(droppingGridIndex, mapSize))            ||
+                (!Twns.GridIndexHelpers.checkIsAdjacent(droppingGridIndex, loaderEndingGridIndex))
             ) {
                 return false;
             }
@@ -1056,7 +1056,7 @@ namespace Twns.WarHelpers.WarActionReviser {
                     return false;
                 }
 
-                if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                if (Twns.WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     gridIndex           : droppingGridIndex,
                     unitType,
@@ -1070,10 +1070,10 @@ namespace Twns.WarHelpers.WarActionReviser {
 
             for (let j = i + 1; j < destinationsCount; ++j) {
                 const nextData  = destinations[j];
-                const gridIndex = GridIndexHelpers.convertGridIndex(nextData.gridIndex);
+                const gridIndex = Twns.GridIndexHelpers.convertGridIndex(nextData.gridIndex);
                 if ((!gridIndex)                                                    ||
                     (droppingUnitId === nextData.unitId)                            ||
-                    (GridIndexHelpers.checkIsEqual(droppingGridIndex, gridIndex))
+                    (Twns.GridIndexHelpers.checkIsEqual(droppingGridIndex, gridIndex))
                 ) {
                     return false;
                 }
@@ -1108,7 +1108,7 @@ namespace Twns.WarHelpers.WarActionReviser {
             }
 
             const playerIndex = focusUnit.getPlayerIndex();
-            for (const gridIndex of GridIndexHelpers.getAdjacentGrids(destination, mapSize)) {
+            for (const gridIndex of Twns.GridIndexHelpers.getAdjacentGrids(destination, mapSize)) {
                 const unit = unitMap.getUnitOnMap(gridIndex);
                 if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
                     return true;

@@ -168,7 +168,7 @@ namespace Twns.MapEditor {
             if (selectedRule != null) {
                 const war = this._getWar();
                 if (war.getTemplateWarRuleArray().length <= 1) {
-                    FloatText.show(Lang.getText(LangTextType.A0096));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0096));
                 } else {
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                         content : Lang.getText(LangTextType.A0097),
@@ -184,7 +184,7 @@ namespace Twns.MapEditor {
         private _onTouchedBtnAddRule(): void {
             const war = this._getWar();
             if (war.getTemplateWarRuleArray().length >= Twns.CommonConstants.WarRuleMaxCount) {
-                FloatText.show(Lang.getText(LangTextType.A0099));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0099));
             } else {
                 war.addTemplateWarRule();
                 this._resetView();
@@ -1026,7 +1026,7 @@ namespace Twns.MapEditor {
                     ? null
                     : () => {
                         if (!templateWarRule.ruleAvailability?.canCcw) {
-                            FloatText.show(Lang.getText(LangTextType.A0221));
+                            Twns.FloatText.show(Lang.getText(LangTextType.A0221));
                             return;
                         }
 
@@ -1051,7 +1051,7 @@ namespace Twns.MapEditor {
                     ? null
                     : () => {
                         if (!templateWarRule.ruleAvailability?.canCcw) {
-                            FloatText.show(Lang.getText(LangTextType.A0221));
+                            Twns.FloatText.show(Lang.getText(LangTextType.A0221));
                             return;
                         }
 
@@ -1081,7 +1081,7 @@ namespace Twns.MapEditor {
                     ? null
                     : () => {
                         if (!templateWarRule.ruleAvailability?.canSrw) {
-                            FloatText.show(Lang.getText(LangTextType.A0276));
+                            Twns.FloatText.show(Lang.getText(LangTextType.A0276));
                             return;
                         }
 
@@ -1106,7 +1106,7 @@ namespace Twns.MapEditor {
                     ? null
                     : () => {
                         if (!templateWarRule.ruleAvailability?.canSrw) {
-                            FloatText.show(Lang.getText(LangTextType.A0276));
+                            Twns.FloatText.show(Lang.getText(LangTextType.A0276));
                             return;
                         }
 

@@ -514,12 +514,12 @@ namespace Twns.Common {
         private _onTouchedBtnSaveState(): void {
             _savedData = cloneCalculatorData(this._getCalculatorData());
 
-            FloatText.show(Lang.getText(LangTextType.A0288));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0288));
         }
         private _onTouchedBtnLoadState(): void {
             const savedData = _savedData;
             if (savedData == null) {
-                FloatText.show(Lang.getText(LangTextType.A0289));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0289));
             } else {
                 this._setCalculatorData(cloneCalculatorData(savedData));
                 this._updateView();
@@ -1137,7 +1137,7 @@ namespace Twns.Common {
         const amountFromCo          = getDefenseModifierByCo(calculatorData);
         const amountFromGlobalTiles = defenderData.towersCount * (gameConfig.getTileTemplateCfgByType(TileType.CommandTower)?.globalDefenseBonus ?? 0);
 
-        return WarDamageCalculator.getDamageMultiplierForDefenseBonus(amountFromTile + amountFromPromotion + amountFromCo + amountFromGlobalTiles);
+        return Twns.WarHelpers.WarDamageCalculator.getDamageMultiplierForDefenseBonus(amountFromTile + amountFromPromotion + amountFromCo + amountFromGlobalTiles);
     }
     function getAttackDamage({ luckValue, isCounter, calculatorData, cfgAttackDamage }: {
         luckValue           : number;

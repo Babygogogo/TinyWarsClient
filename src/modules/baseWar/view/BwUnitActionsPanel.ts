@@ -114,7 +114,7 @@ namespace Twns.BaseWar {
             const contents  = container.getContents();
             const gridIndex = openData.destination;
             const gridSize  = Twns.CommonConstants.GridSize;
-            const stage     = StageManager.getStage();
+            const stage     = Twns.StageManager.getStage();
             const group     = this._group;
             const point     = contents.localToGlobal(
                 (gridIndex.x + 1) * gridSize.width,

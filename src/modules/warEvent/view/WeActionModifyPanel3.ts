@@ -91,7 +91,7 @@ namespace Twns.WarEvent {
         private _onTouchedBtnAddDialogue(): void {
             const dialogueArray = Twns.Helpers.getExisted(this._getAction().dataArray);
             if (dialogueArray.length > Twns.CommonConstants.WarEventActionDialogueMaxCount) {
-                FloatText.show(Lang.getText(LangTextType.A0228));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
                 dialogueArray.push(WarHelpers.WarEventHelpers.getDefaultCoDialogueData(this._getOpenData().war.getGameConfig()));
                 Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
@@ -124,7 +124,7 @@ namespace Twns.WarEvent {
             const dialogueAction    = Twns.Helpers.getExisted(action.WeaDialogue);
             const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForAction(openData.fullData, action, war);
             if (errorTip) {
-                FloatText.show(errorTip);
+                Twns.FloatText.show(errorTip);
                 return;
             }
 
@@ -288,7 +288,7 @@ namespace Twns.WarEvent {
             const data          = this._getData();
             const dialogueArray = Twns.Helpers.getExisted(data.action.WeaDialogue?.dataArray);
             if (dialogueArray.length > Twns.CommonConstants.WarEventActionDialogueMaxCount) {
-                FloatText.show(Lang.getText(LangTextType.A0228));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
                 dialogueArray.splice(dialogueArray.indexOf(data.dataForDialogue), 0, WarHelpers.WarEventHelpers.getDefaultCoDialogueData(data.war.getGameConfig()));
                 Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);

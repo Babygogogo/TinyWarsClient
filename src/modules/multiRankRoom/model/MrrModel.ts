@@ -107,7 +107,7 @@ namespace Twns.MultiRankRoom.MrrModel {
         const coId              = data.coId;
         const unitAndTileSkinId = data.unitAndTileSkinId;
         if (roomInfo.playerDataList == null) {
-            Logger.warn(`MrrModel.updateOnMsgMrrSetSelfSettings() roomInfo.playerDataList == null.`);
+            Twns.Logger.warn(`MrrModel.updateOnMsgMrrSetSelfSettings() roomInfo.playerDataList == null.`);
             roomInfo.playerDataList = [{
                 playerIndex,
                 userId              : null,
@@ -123,7 +123,7 @@ namespace Twns.MultiRankRoom.MrrModel {
                 playerData.isReady              = true;
                 playerData.unitAndTileSkinId    = unitAndTileSkinId;
             } else {
-                Logger.warn(`MrrModel.updateOnMsgMrrSetSelfSettings() playerData == null.`);
+                Twns.Logger.warn(`MrrModel.updateOnMsgMrrSetSelfSettings() playerData == null.`);
                 dataArray.push({
                     playerIndex,
                     userId              : null,

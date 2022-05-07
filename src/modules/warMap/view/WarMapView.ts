@@ -292,7 +292,7 @@ namespace Twns.WarMap {
 
             for (const rawTileData of tileDataArray) {
                 const tileData                  = Twns.Helpers.deepClone(rawTileData) as Twns.Types.WarMapTileViewData;
-                const gridIndex                 = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
+                const gridIndex                 = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(tileData.gridIndex));
                 tileData.skinId                 = players ? (players.find(v => v.playerIndex === tileData.playerIndex)?.unitAndTileSkinId ?? null) : null;
                 map[gridIndex.x][gridIndex.y]   = tileData;
             }
@@ -401,7 +401,7 @@ namespace Twns.WarMap {
         let width   = 0;
         let height  = 0;
         for (const tile of tileDataArray) {
-            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(tile.gridIndex));
+            const gridIndex = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(tile.gridIndex));
             width           = Math.max(gridIndex.x + 1, width);
             height          = Math.max(gridIndex.y + 1, height);
         }
@@ -487,8 +487,8 @@ namespace Twns.WarMap {
                 unitViews.push(layer.getChildAt(i) as WarMapUnitView);
             }
             unitViews.sort((v1, v2): number => {
-                const g1 = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(v1.getUnitData()?.gridIndex));
-                const g2 = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(v2.getUnitData()?.gridIndex));
+                const g1 = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(v1.getUnitData()?.gridIndex));
+                const g2 = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(v2.getUnitData()?.gridIndex));
                 const y1 = g1.y;
                 const y2 = g2.y;
                 return y1 !== y2 ? y1 - y2 : g1.x - g2.x;

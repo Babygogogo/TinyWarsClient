@@ -3,7 +3,8 @@
 // import ProtoTypes       from "../proto/ProtoTypes";
 // import CommonConstants  from "./CommonConstants";
 
-namespace LocalStorage {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.LocalStorage {
     import storage                      = egret.localStorage;
 
     const KEY_PREFIX                    = "TinyWarsStorage_";
@@ -52,15 +53,15 @@ namespace LocalStorage {
         return data ? JSON.parse(data) : null;
     }
 
-    export function setLanguageType(language: Twns.Types.LanguageType): void {
+    export function setLanguageType(language: Types.LanguageType): void {
         storage.setItem(KEY_LANGUAGE, "" + language);
     }
-    export function getLanguageType(): Twns.Types.LanguageType {
+    export function getLanguageType(): Types.LanguageType {
         const t = parseInt(storage.getItem(KEY_LANGUAGE));
-        if ((t === Twns.Types.LanguageType.English) || (t === Twns.Types.LanguageType.Chinese)) {
+        if ((t === Types.LanguageType.English) || (t === Types.LanguageType.Chinese)) {
             return t;
         } else {
-            return Twns.Types.LanguageType.English;
+            return Types.LanguageType.English;
         }
     }
 
@@ -114,7 +115,7 @@ namespace LocalStorage {
         storage.setItem(KEY_STAGE_SCALE, `${scale}`);
     }
     export function getStageScale(): number {
-        return parseInt(storage.getItem(KEY_STAGE_SCALE)) || Twns.CommonConstants.StageMinScale;
+        return parseInt(storage.getItem(KEY_STAGE_SCALE)) || CommonConstants.StageMinScale;
     }
 }
 

@@ -71,7 +71,7 @@ namespace Twns.MapEditor.MeModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function loadWar(mapRawData: Twns.Types.Undefinable<IMapRawData>, slotIndex: number, isReview: boolean): Promise<MeWar> {
         if (_war) {
-            Logger.warn(`MeManager.loadWar() another war has been loaded already!`);
+            Twns.Logger.warn(`MeManager.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 

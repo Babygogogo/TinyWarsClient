@@ -52,8 +52,8 @@ namespace Twns.SinglePlayerMode.SpmProxy {
             } else {
                 Twns.SinglePlayerMode.SpmModel.setSlotFullData(slotIndex, {
                     slotIndex,
-                    warData     : ProtoManager.decodeAsSerialWar(Twns.Helpers.getExisted(slotData.encodedWarData)),
-                    extraData   : ProtoManager.decodeAsSpmWarSaveSlotExtraData(Twns.Helpers.getExisted(slotData.encodedExtraData)),
+                    warData     : Twns.ProtoManager.decodeAsSerialWar(Twns.Helpers.getExisted(slotData.encodedWarData)),
+                    extraData   : Twns.ProtoManager.decodeAsSpmWarSaveSlotExtraData(Twns.Helpers.getExisted(slotData.encodedExtraData)),
                 });
             }
             Twns.Notify.dispatch(NotifyType.MsgSpmGetWarSaveFullData, data);

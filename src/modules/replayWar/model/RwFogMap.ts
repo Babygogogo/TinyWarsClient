@@ -8,7 +8,7 @@ namespace Twns.ReplayWar {
         public startRunning(war: Twns.ReplayWar.RwWar): void {
             this._setWar(war);
 
-            const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeam(war, war.getPlayerInTurn().getTeamIndex());
+            const visibleTiles = Twns.WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeam(war, war.getPlayerInTurn().getTeamIndex());
             for (const tile of war.getTileMap().getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
             }

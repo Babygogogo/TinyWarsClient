@@ -24,7 +24,7 @@ namespace Twns.Lang {
 
     let _languageType = LanguageType.Chinese;
     export function init(): void {
-        setLanguageType(LocalStorage.getLanguageType());
+        setLanguageType(Twns.LocalStorage.getLanguageType());
     }
 
     export function getCurrentLanguageType(): LanguageType {

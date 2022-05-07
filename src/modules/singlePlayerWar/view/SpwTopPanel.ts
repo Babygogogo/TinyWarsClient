@@ -147,13 +147,13 @@ namespace Twns.SinglePlayerWar {
         }
 
         private _onNotifyMsgSpmSaveScw(): void {
-            FloatText.show(Lang.getText(LangTextType.A0073));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0073));
         }
         private _onNotifyMsgSpmSaveSfw(): void {
-            FloatText.show(Lang.getText(LangTextType.A0073));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0073));
         }
         private _onNotifyMsgSpmSaveSrw(): void {
-            FloatText.show(Lang.getText(LangTextType.A0073));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0073));
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,7 +192,7 @@ namespace Twns.SinglePlayerWar {
 
         private _onTouchedBtnSave(): void {
             if (!this._checkCanDoAction()) {
-                FloatText.show(Lang.getText(LangTextType.A0239));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0239));
                 return;
             }
 
@@ -217,13 +217,13 @@ namespace Twns.SinglePlayerWar {
 
         private async _onTouchedBtnLoad(): Promise<void> {
             if (!this._checkCanDoAction()) {
-                FloatText.show(Lang.getText(LangTextType.A0239));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0239));
                 return;
             }
 
             const slotInfo = await Twns.SinglePlayerMode.SpmModel.getSlotFullData(this._getOpenData().war.getSaveSlotIndex());
             if (slotInfo == null) {
-                FloatText.show(Lang.getText(LangTextType.A0303));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0303));
                 return;
             }
 

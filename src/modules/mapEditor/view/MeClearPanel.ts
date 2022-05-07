@@ -72,7 +72,7 @@ namespace Twns.MapEditor {
             const height        = Twns.Helpers.getExisted(this._newHeight);
             const gridsCount    = width * height;
             if ((!gridsCount) || (gridsCount <= 0)) {
-                FloatText.show(Lang.getText(LangTextType.A0087));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0087));
             } else {
                 const war = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
                 war.stopRunning();

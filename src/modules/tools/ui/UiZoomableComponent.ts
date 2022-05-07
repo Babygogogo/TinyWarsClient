@@ -227,7 +227,7 @@ namespace TwnsUiZoomableComponent {
         }
 
         private _onNotifyMouseWheel(e: egret.Event): void {
-            this.setZoomByScroll(StageManager.getMouseX(), StageManager.getMouseY(), e.data);
+            this.setZoomByScroll(Twns.StageManager.getMouseX(), Twns.StageManager.getMouseY(), e.data);
         }
 
         private _onTouchBegin(e: egret.TouchEvent): void {

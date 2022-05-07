@@ -396,7 +396,7 @@ namespace Twns.SingleCustomRoom {
                     (value > Twns.CommonConstants.WarRuleInitialFundMaxLimit)    ||
                     (value < Twns.CommonConstants.WarRuleInitialFundMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setInitialFund(playerIndex, value);
                 }
@@ -420,7 +420,7 @@ namespace Twns.SingleCustomRoom {
                     (value > Twns.CommonConstants.WarRuleIncomeMultiplierMaxLimit)   ||
                     (value < Twns.CommonConstants.WarRuleIncomeMultiplierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setIncomeMultiplier(playerIndex, value);
                 }
@@ -444,7 +444,7 @@ namespace Twns.SingleCustomRoom {
                     (value > Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
                     (value < Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setEnergyAddPctOnLoadCo(playerIndex, value);
                 }
@@ -468,7 +468,7 @@ namespace Twns.SingleCustomRoom {
                     (value > Twns.CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit) ||
                     (value < Twns.CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setEnergyGrowthMultiplier(playerIndex, value);
                 }
@@ -507,7 +507,7 @@ namespace Twns.SingleCustomRoom {
                     (value > Twns.CommonConstants.WarRuleMoveRangeModifierMaxLimit)  ||
                     (value < Twns.CommonConstants.WarRuleMoveRangeModifierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setMoveRangeModifier(playerIndex, value);
                 }
@@ -531,7 +531,7 @@ namespace Twns.SingleCustomRoom {
                     (value > Twns.CommonConstants.WarRuleOffenseBonusMaxLimit)   ||
                     (value < Twns.CommonConstants.WarRuleOffenseBonusMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setAttackPowerModifier(playerIndex, value);
                 }
@@ -555,7 +555,7 @@ namespace Twns.SingleCustomRoom {
                     (value > Twns.CommonConstants.WarRuleVisionRangeModifierMaxLimit)    ||
                     (value < Twns.CommonConstants.WarRuleVisionRangeModifierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setVisionRangeModifier(playerIndex, value);
                 }
@@ -580,7 +580,7 @@ namespace Twns.SingleCustomRoom {
                     (value < Twns.CommonConstants.WarRuleLuckMinLimit)           ||
                     (value > SingleCustomRoom.ScrCreateModel.getLuckUpperLimit(playerIndex))
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setLuckLowerLimit(playerIndex, value);
                 }
@@ -605,7 +605,7 @@ namespace Twns.SingleCustomRoom {
                     (value < Twns.CommonConstants.WarRuleLuckMinLimit)           ||
                     (value < SingleCustomRoom.ScrCreateModel.getLuckLowerLimit(playerIndex))
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setLuckUpperLimit(playerIndex, value);
                 }

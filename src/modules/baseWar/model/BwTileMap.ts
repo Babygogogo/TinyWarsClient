@@ -48,8 +48,8 @@ namespace Twns.BaseWar {
 
             const map = Twns.Helpers.createEmptyMap<Twns.BaseWar.BwTile>(mapWidth, mapHeight);
             for (const tileData of tiles) {
-                const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.BwTileMap_Init_03);
-                if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
+                const gridIndex = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.BwTileMap_Init_03);
+                if (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
                     throw Twns.Helpers.newError(`The gridIndex is not inside the map.`, ClientErrorCode.BwTileMap_Init_04);
                 }
 
@@ -87,7 +87,7 @@ namespace Twns.BaseWar {
         }): void {
             const map = this._getMap();
             for (const tileData of data ? data.tiles || [] : []) {
-                const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
+                const gridIndex = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(tileData.gridIndex));
                 map[gridIndex.x][gridIndex.y].fastInit(tileData, gameConfig);
             }
 

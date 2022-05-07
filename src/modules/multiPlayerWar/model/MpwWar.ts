@@ -44,19 +44,19 @@ namespace Twns.MultiPlayerWar {
 
         public updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void {
             const watcherTeamIndexes    = this.getPlayerManager().getWatcherTeamIndexesForSelf();
-            const visibleUnitsOnMap     = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, watcherTeamIndexes);
+            const visibleUnitsOnMap     = Twns.WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, watcherTeamIndexes);
             for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
                 if (visibleUnitsOnMap.has(unit)) {
                     if (!isFastExecute) {
                         unit.setViewVisible(true);
                     }
                 } else {
-                    WarDestructionHelpers.removeUnitOnMap(this, unit.getGridIndex());
+                    Twns.WarHelpers.WarDestructionHelpers.removeUnitOnMap(this, unit.getGridIndex());
                 }
             }
-            WarDestructionHelpers.removeInvisibleLoadedUnits(this, watcherTeamIndexes);
+            Twns.WarHelpers.WarDestructionHelpers.removeInvisibleLoadedUnits(this, watcherTeamIndexes);
 
-            const visibleTiles  = WarVisibilityHelpers.getAllTilesVisibleToTeams(this, watcherTeamIndexes);
+            const visibleTiles  = Twns.WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeams(this, watcherTeamIndexes);
             const tileMap       = this.getTileMap();
             for (const tile of tileMap.getAllTiles()) {
                 if (visibleTiles.has(tile)) {
@@ -87,7 +87,7 @@ namespace Twns.MultiPlayerWar {
                 return;
             }
 
-            const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeams(this, new Set([visionTeamIndex]));
+            const visibleTiles = Twns.WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeams(this, new Set([visionTeamIndex]));
             for (const tile of this.getTileMap().getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
 

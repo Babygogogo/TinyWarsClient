@@ -95,7 +95,7 @@ namespace Twns.MapManagement {
                 allWarEventIdArray      : Twns.Helpers.getNonNullElements(mapRawData.warEventFullData?.eventArray?.map(v => v.eventId) ?? []),
             });
             if (errorCode) {
-                FloatText.show(Lang.getErrorText(errorCode));
+                Twns.FloatText.show(Lang.getErrorText(errorCode));
                 return;
             }
 

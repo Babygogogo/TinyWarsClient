@@ -136,17 +136,17 @@ namespace Twns.MapManagement {
         }
 
         private _onNotifyMsgMmAddWarRule(): void {
-            FloatText.show(Lang.getText(LangTextType.A0283));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0283));
             this._resetView();
         }
 
         private _onNotifyMsgMmDeleteWarRule(): void {
-            FloatText.show(Lang.getText(LangTextType.A0293));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0293));
             this._resetView();
         }
 
         private _onNotifyMsgMmSetWarRuleAvailability(): void {
-            FloatText.show(Lang.getText(LangTextType.A0287));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0287));
             this._resetView();
         }
 
@@ -181,7 +181,7 @@ namespace Twns.MapManagement {
             if (ruleId != null) {
                 const mapRawData = this._getOpenData().mapRawData;
                 if ((mapRawData.templateWarRuleArray ?? []).length <= 1) {
-                    FloatText.show(Lang.getText(LangTextType.A0291));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0291));
                     return;
                 }
 
@@ -794,7 +794,7 @@ namespace Twns.MapManagement {
                 infoColor               : isControlledByAi ? 0x00FF00 : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     if (!templateWarRule.ruleAvailability?.canCcw) {
-                        FloatText.show(Lang.getText(LangTextType.A0221));
+                        Twns.FloatText.show(Lang.getText(LangTextType.A0221));
                         return;
                     }
 
@@ -817,7 +817,7 @@ namespace Twns.MapManagement {
                 infoColor               : coId == null ? 0xFFFFFF : 0x00FF00,
                 callbackOnTouchedTitle  : () => {
                     if (!templateWarRule.ruleAvailability?.canCcw) {
-                        FloatText.show(Lang.getText(LangTextType.A0221));
+                        Twns.FloatText.show(Lang.getText(LangTextType.A0221));
                         return;
                     }
 
@@ -845,7 +845,7 @@ namespace Twns.MapManagement {
                 infoColor               : isControlledByAi ? 0x00FF00 : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     if (!templateWarRule.ruleAvailability?.canSrw) {
-                        FloatText.show(Lang.getText(LangTextType.A0276));
+                        Twns.FloatText.show(Lang.getText(LangTextType.A0276));
                         return;
                     }
 
@@ -868,7 +868,7 @@ namespace Twns.MapManagement {
                 infoColor               : coId == null ? 0xFFFFFF : 0x00FF00,
                 callbackOnTouchedTitle  : () => {
                     if (!templateWarRule.ruleAvailability?.canSrw) {
-                        FloatText.show(Lang.getText(LangTextType.A0276));
+                        Twns.FloatText.show(Lang.getText(LangTextType.A0276));
                         return;
                     }
 

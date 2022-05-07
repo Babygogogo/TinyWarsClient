@@ -107,7 +107,7 @@ namespace Twns.MultiFreeRoom {
             const roomId    = Twns.Helpers.getExisted(data.roomId);
             this.close();
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MfrRoomInfoPanel, { roomId });
-            FloatText.show(Lang.getFormattedText(LangTextType.F0069, roomId));
+            Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0069, roomId));
         }
 
         private _onNotifyMsgMfrGetRoomStaticInfo(e: egret.Event): void {
@@ -148,7 +148,7 @@ namespace Twns.MultiFreeRoom {
                     if (joinData) {
                         MfrProxy.reqMfrJoinRoom(joinData);
                     } else {
-                        FloatText.show(Lang.getText(LangTextType.A0145));
+                        Twns.FloatText.show(Lang.getText(LangTextType.A0145));
                     }
                 };
 

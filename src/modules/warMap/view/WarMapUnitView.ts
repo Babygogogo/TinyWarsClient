@@ -51,7 +51,7 @@ namespace Twns.WarMap {
         public update(data: Twns.Types.WarMapUnitViewData, tickCount?: number): void {
             this._setUnitData(data);
 
-            const gridIndex = Twns.Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex));
+            const gridIndex = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(data.gridIndex));
             this._isDark    = data.actionState === Twns.Types.UnitActionState.Acted;
             this.x          = gridIndex.x * GRID_WIDTH - GRID_WIDTH / 4;
             this.y          = gridIndex.y * GRID_HEIGHT - GRID_HEIGHT / 2;

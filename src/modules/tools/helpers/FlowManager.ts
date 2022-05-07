@@ -73,10 +73,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.FlowManager {
-    import ClientErrorCode  = Twns.ClientErrorCode;
-    import LangTextType     = Twns.Lang.LangTextType;
+    import LangTextType     = Lang.LangTextType;
     import NotifyType       = Notify.NotifyType;
-    import NetMessageCodes  = Twns.Net.NetMessageCodes;
+    import NetMessageCodes  = Net.NetMessageCodes;
     import WarType          = Types.WarType;
 
     const _NET_EVENTS = [
@@ -97,20 +96,20 @@ namespace Twns.FlowManager {
     }
     async function doStartGame(stage: egret.Stage): Promise<void> {
         await ResVersionController.init();
-        Twns.CompatibilityHelpers.init();
-        Twns.Net.NetManager.addListeners(_NET_EVENTS);
+        CompatibilityHelpers.init();
+        Net.NetManager.addListeners(_NET_EVENTS);
         Notify.addEventListeners(_NOTIFY_EVENTS);
-        StageManager.init(stage);
-        await Promise.all([ResManager.init(), ProtoManager.init()]);
-        StageManager.setStageScale(LocalStorage.getStageScale());
+        Twns.StageManager.init(stage);
+        await Promise.all([Twns.ResManager.init(), Twns.ProtoManager.init()]);
+        Twns.StageManager.setStageScale(Twns.LocalStorage.getStageScale());
 
         Lang.init();
-        NoSleepManager.init();
+        Twns.NoSleepManager.init();
         Config.ConfigManager.init();
-        Twns.Net.NetManager.init();
+        Net.NetManager.init();
         MultiPlayerWar.MpwProxy.init();
         MultiPlayerWar.MpwModel.init();
-        Twns.Timer.init();
+        Timer.init();
         User.UserProxy.init();
         User.UserModel.init();
         WarMap.WarMapProxy.init();
@@ -140,7 +139,7 @@ namespace Twns.FlowManager {
         _removeLoadingDom();
         gotoLogin();
 
-        await ResManager.loadMainRes();
+        await Twns.ResManager.loadMainRes();
         (_checkCanFirstGoToLobby()) && (gotoLobby());
     }
 
@@ -160,7 +159,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.UserLoginPanel, void 0);
         PanelHelpers.open(PanelHelpers.PanelDict.BroadcastPanel, void 0);
 
-        Twns.SoundManager.playBgm(Types.BgmCode.Lobby01);
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
     export function gotoLobby(): void {
         _hasOnceWentToLobby = true;
@@ -185,7 +184,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.LobbyTopRightPanel, void 0);
         PanelHelpers.open(PanelHelpers.PanelDict.LobbyPanel, void 0);
 
-        Twns.SoundManager.playBgm(Types.BgmCode.Lobby01);
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 
     export async function gotoMultiPlayerWar(data: CommonProto.WarSerialization.ISerialWar): Promise<void> {
@@ -207,7 +206,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.BwUnitBriefPanel, { war });
         PanelHelpers.open(PanelHelpers.PanelDict.BroadcastPanel, void 0);
 
-        Twns.SoundManager.playCoBgmWithWar(war, true);
+        SoundManager.playCoBgmWithWar(war, true);
     }
     export async function gotoReplayWar(warData: CommonProto.WarSerialization.ISerialWar, replayId: number): Promise<void> {
         const war = await ReplayWar.RwModel.loadWar(warData, replayId);
@@ -227,7 +226,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.BwUnitBriefPanel, { war });
         PanelHelpers.open(PanelHelpers.PanelDict.BroadcastPanel, void 0);
 
-        Twns.SoundManager.playCoBgmWithWar(war, true);
+        SoundManager.playCoBgmWithWar(war, true);
     }
     export async function gotoHalfwayReplayWar(warData: CommonProto.WarSerialization.ISerialWar): Promise<void> {
         const war = await HalfwayReplayWar.HrwModel.loadWar(warData);
@@ -247,7 +246,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.BwUnitBriefPanel, { war });
         PanelHelpers.open(PanelHelpers.PanelDict.BroadcastPanel, void 0);
 
-        Twns.SoundManager.playCoBgmWithWar(war, true);
+        SoundManager.playCoBgmWithWar(war, true);
     }
     export async function gotoSinglePlayerWar({ warData, slotIndex, slotExtraData }: {
         slotIndex       : number;
@@ -272,7 +271,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.BwUnitBriefPanel, { war });
         PanelHelpers.open(PanelHelpers.PanelDict.BroadcastPanel, void 0);
 
-        Twns.SoundManager.playCoBgmWithWar(war, true);
+        SoundManager.playCoBgmWithWar(war, true);
 
         await SinglePlayerWar.SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war);
     }
@@ -294,7 +293,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.BwUnitBriefPanel, { war });
         PanelHelpers.open(PanelHelpers.PanelDict.BroadcastPanel, void 0);
 
-        Twns.SoundManager.playBgm(Types.BgmCode.MapEditor01);
+        SoundManager.playBgm(Types.BgmCode.MapEditor01);
     }
 
     export function gotoMyWarListPanel(warType: WarType): void {
@@ -340,7 +339,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.LobbyBackgroundPanel, void 0);
         PanelHelpers.open(PanelHelpers.PanelDict.MfrCreateSettingsPanel, void 0);
 
-        Twns.SoundManager.playBgm(Types.BgmCode.Lobby01);
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -404,7 +403,7 @@ namespace Twns.FlowManager {
     function _checkCanFirstGoToLobby(): boolean {
         return (!_hasOnceWentToLobby)
             && (User.UserModel.getIsLoggedIn())
-            && (ResManager.checkIsLoadedMainResource())
+            && (Twns.ResManager.checkIsLoadedMainResource())
             && (Config.ConfigManager.getLatestConfigVersion() != null);
     }
 
@@ -432,7 +431,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.LobbyBackgroundPanel, void 0);
         PanelHelpers.open(PanelHelpers.PanelDict.LobbyTopRightPanel, void 0);
 
-        Twns.SoundManager.playBgm(Types.BgmCode.Lobby01);
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 
     function _gotoMrwMyWarListPanel(): void {

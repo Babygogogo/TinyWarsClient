@@ -155,9 +155,9 @@ namespace Twns.HalfwayReplayWar {
             }
 
             if (!war.getIsRunning()) {
-                FloatText.show(Lang.getText(LangTextType.A0040));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0040));
             } else if (war.getIsExecutingAction()) {
-                FloatText.show(Lang.getText(LangTextType.A0044));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0044));
             } else {
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.HrwReplayProgressPanel, { war });
             }
@@ -176,11 +176,11 @@ namespace Twns.HalfwayReplayWar {
             war.setIsAutoReplay(false);
 
             if (!war.getIsRunning()) {
-                FloatText.show(Lang.getText(LangTextType.A0040));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0040));
             } else if (war.getIsExecutingAction()) {
-                FloatText.show(Lang.getText(LangTextType.A0044));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0044));
             } else if (war.checkIsInBeginning()) {
-                FloatText.show(Lang.getText(LangTextType.A0042));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0042));
             } else {
                 await Twns.Helpers.checkAndCallLater();
                 await war.loadPreviousCheckpoint();
@@ -193,11 +193,11 @@ namespace Twns.HalfwayReplayWar {
             war.setIsAutoReplay(false);
 
             if (!war.getIsRunning()) {
-                FloatText.show(Lang.getText(LangTextType.A0040));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0040));
             } else if (war.getIsExecutingAction()) {
-                FloatText.show(Lang.getText(LangTextType.A0044));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0044));
             } else if (war.checkIsInBeginning()) {
-                FloatText.show(Lang.getText(LangTextType.A0042));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0042));
             } else {
                 await Twns.Helpers.checkAndCallLater();
                 await war.loadCheckpoint(0);
@@ -210,11 +210,11 @@ namespace Twns.HalfwayReplayWar {
             war.setIsAutoReplay(false);
 
             if (!war.getIsRunning()) {
-                FloatText.show(Lang.getText(LangTextType.A0040));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0040));
             } else if (war.getIsExecutingAction()) {
-                FloatText.show(Lang.getText(LangTextType.A0044));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0044));
             } else if (war.checkIsInEnd()) {
-                FloatText.show(Lang.getText(LangTextType.A0043));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0043));
             } else {
                 await Twns.Helpers.checkAndCallLater();
                 await war.loadNextCheckpoint();
@@ -227,11 +227,11 @@ namespace Twns.HalfwayReplayWar {
             war.setIsAutoReplay(false);
 
             if (!war.getIsRunning()) {
-                FloatText.show(Lang.getText(LangTextType.A0040));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0040));
             } else if (war.getIsExecutingAction()) {
-                FloatText.show(Lang.getText(LangTextType.A0044));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0044));
             } else if (war.checkIsInEnd()) {
-                FloatText.show(Lang.getText(LangTextType.A0043));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0043));
             } else {
                 await Twns.Helpers.checkAndCallLater();
                 await war.loadCheckpoint(war.getAllCheckpointInfoArray().length - 1);
@@ -242,7 +242,7 @@ namespace Twns.HalfwayReplayWar {
         private _onTouchedBtnPlay(): void {
             const war = this._getWar();
             if (war.checkIsInEnd()) {
-                FloatText.show(Lang.getText(LangTextType.A0041));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0041));
             } else {
                 war.setIsAutoReplay(true);
             }

@@ -98,7 +98,7 @@ namespace Twns.BaseWar {
         }
         private _onNotifyBwUnitChanged(e: egret.Event): void {
             const data = e.data as Notify.NotifyData.BwUnitChanged;
-            if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData().war.getCursor().getGridIndex())) {
+            if (Twns.GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData().war.getCursor().getGridIndex())) {
                 this._updateView();
             }
         }
@@ -161,7 +161,7 @@ namespace Twns.BaseWar {
             const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
 
             if ((unitOnMap)                                         &&
-                (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                (Twns.WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                     war,
                     gridIndex,
                     unitType            : unitOnMap.getUnitType(),
@@ -224,7 +224,7 @@ namespace Twns.BaseWar {
             const isLeftSide    = this._isLeftSide;
             const cellList      = this._cellList;
             const length        = this._unitList.length;
-            this._group.x       = isLeftSide ? _CELL_WIDTH : StageManager.getStage().stageWidth - _CELL_WIDTH * (length + 1);
+            this._group.x       = isLeftSide ? _CELL_WIDTH : Twns.StageManager.getStage().stageWidth - _CELL_WIDTH * (length + 1);
             for (let i = 0; i < length; ++i) {
                 cellList[i].x = isLeftSide ? _CELL_WIDTH * i : (length - 1 - i) * _CELL_WIDTH;
             }

@@ -90,19 +90,19 @@ namespace Twns.HalfwayReplayWar {
 
         public updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void {
             const watcherTeamIndexes    = this.getPlayerManager().getWatcherTeamIndexesForSelf();
-            const visibleUnitsOnMap     = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, watcherTeamIndexes);
+            const visibleUnitsOnMap     = Twns.WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, watcherTeamIndexes);
             for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
                 if (visibleUnitsOnMap.has(unit)) {
                     if (!isFastExecute) {
                         unit.setViewVisible(true);
                     }
                 } else {
-                    WarDestructionHelpers.removeUnitOnMap(this, unit.getGridIndex());
+                    Twns.WarHelpers.WarDestructionHelpers.removeUnitOnMap(this, unit.getGridIndex());
                 }
             }
-            WarDestructionHelpers.removeInvisibleLoadedUnits(this, watcherTeamIndexes);
+            Twns.WarHelpers.WarDestructionHelpers.removeInvisibleLoadedUnits(this, watcherTeamIndexes);
 
-            const visibleTiles  = WarVisibilityHelpers.getAllTilesVisibleToTeams(this, watcherTeamIndexes);
+            const visibleTiles  = Twns.WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeams(this, watcherTeamIndexes);
             const tileMap       = this.getTileMap();
             for (const tile of tileMap.getAllTiles()) {
                 if (visibleTiles.has(tile)) {
@@ -133,7 +133,7 @@ namespace Twns.HalfwayReplayWar {
                 return;
             }
 
-            const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeams(this, new Set([visionTeamIndex]));
+            const visibleTiles = Twns.WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeams(this, new Set([visionTeamIndex]));
             for (const tile of this.getTileMap().getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
 
@@ -499,7 +499,7 @@ namespace Twns.HalfwayReplayWar {
             this.getView().updatePersistentText();
             Twns.SoundManager.playCoBgmWithWar(this, false);
 
-            FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+            Twns.FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
         }
 
         public getTotalActionsCount(): number {
@@ -516,7 +516,7 @@ namespace Twns.HalfwayReplayWar {
                 (this.checkIsInEnd())        ||
                 (this.getIsExecutingAction())
             ) {
-                FloatText.show(Lang.getText(LangTextType.B0110));
+                Twns.FloatText.show(Lang.getText(LangTextType.B0110));
             } else {
                 await this._doExecuteAction(action, isFastExecute);
             }

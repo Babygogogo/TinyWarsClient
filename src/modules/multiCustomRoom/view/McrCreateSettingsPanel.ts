@@ -155,7 +155,7 @@ namespace Twns.MultiCustomRoom {
             this._updateBtnChooseCo();
         }
         private _onNotifyMsgMcrCreateRoom(): void {
-            FloatText.show(Lang.getText(LangTextType.A0015));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0015));
             Twns.FlowManager.gotoLobby();
         }
         private _onNotifyMsgMcrCreateRoomFailed(): void {

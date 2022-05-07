@@ -56,7 +56,7 @@ namespace Twns.User {
             this._setIsTouchMaskEnabled();
             this._setCallbackOnTouchedMask(() => this._onTouchedPanelMask());
 
-            const scale         = StageManager.getStageScale();
+            const scale         = Twns.StageManager.getStageScale();
             this._prevScale     = scale;
             this._selectedScale = scale;
 
@@ -80,7 +80,7 @@ namespace Twns.User {
             const width         = this._groupScale.width;
             const scale         = Math.floor(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (StageMaxScale - StageMinScale) + StageMinScale);
             this._selectedScale = scale;
-            StageManager.setStageScale(scale);
+            Twns.StageManager.setStageScale(scale);
             this._updateGroupScale();
         }
         private _onTouchMoveGroupScale(e: egret.Event): void {
@@ -90,33 +90,33 @@ namespace Twns.User {
             const width         = this._groupScale.width;
             const scale         = Math.floor(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (StageMaxScale - StageMinScale) + StageMinScale);
             this._selectedScale = scale;
-            StageManager.setStageScale(scale);
+            Twns.StageManager.setStageScale(scale);
             this._updateGroupScale();
         }
         private _onTouchEndGroupScale(): void {
-            StageManager.setStageScale(this._selectedScale || Twns.CommonConstants.StageMinScale);
+            Twns.StageManager.setStageScale(this._selectedScale || Twns.CommonConstants.StageMinScale);
         }
         private _onTouchReleaseOutsideGroupScale(): void {
-            StageManager.setStageScale(this._selectedScale || Twns.CommonConstants.StageMinScale);
+            Twns.StageManager.setStageScale(this._selectedScale || Twns.CommonConstants.StageMinScale);
         }
         private _onTouchedBtnCancel(): void {
-            StageManager.setStageScale(this._prevScale || Twns.CommonConstants.StageMinScale);
+            Twns.StageManager.setStageScale(this._prevScale || Twns.CommonConstants.StageMinScale);
 
             this.close();
         }
         private _onTouchedBtnDefault(): void {
             this._selectedScale = StageMinScale;
-            StageManager.setStageScale(StageMinScale);
+            Twns.StageManager.setStageScale(StageMinScale);
 
             this._updateView();
         }
         private _onTouchedBtnConfirm(): void {
-            LocalStorage.setStageScale(this._selectedScale || Twns.CommonConstants.StageMinScale);
+            Twns.LocalStorage.setStageScale(this._selectedScale || Twns.CommonConstants.StageMinScale);
 
             this.close();
         }
         private _onTouchedPanelMask(): void {
-            StageManager.setStageScale(this._prevScale || Twns.CommonConstants.StageMinScale);
+            Twns.StageManager.setStageScale(this._prevScale || Twns.CommonConstants.StageMinScale);
             Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonCancel01);
 
             this.close();

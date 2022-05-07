@@ -46,7 +46,7 @@ namespace Twns.SinglePlayerWar.SpwModel {
         slotExtraData   : ISpmWarSaveSlotExtraData;
     }): Promise<SpwWar> {
         if (getWar()) {
-            Logger.warn(`SpwModel.loadWar() another war has been loaded already!`);
+            Twns.Logger.warn(`SpwModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 

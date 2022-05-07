@@ -148,7 +148,7 @@ namespace Twns.WarEvent {
                 }
             } else {
                 if (Twns.WarHelpers.WarEventHelpers.getAllSubNodesAndConditionsForNode({ fullData, nodeId: candidateNodeId }).nodeIdSet.has(parentNodeId)) {
-                    FloatText.show(Lang.getText(LangTextType.A0179));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0179));
                     return;
                 }
 
@@ -181,7 +181,7 @@ namespace Twns.WarEvent {
                 }
             } else {
                 if (Twns.WarHelpers.WarEventHelpers.getAllSubNodesAndConditionsForNode({ fullData, nodeId: newNodeId }).nodeIdSet.has(parentNodeId)) {
-                    FloatText.show(Lang.getText(LangTextType.A0179));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0179));
                     return;
                 }
 

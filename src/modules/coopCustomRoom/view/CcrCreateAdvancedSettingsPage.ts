@@ -405,7 +405,7 @@ namespace Twns.CoopCustomRoom {
                     (value > Twns.CommonConstants.WarRuleInitialFundMaxLimit)    ||
                     (value < Twns.CommonConstants.WarRuleInitialFundMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     CoopCustomRoom.CcrCreateModel.setInitialFund(playerIndex, value);
                 }
@@ -429,7 +429,7 @@ namespace Twns.CoopCustomRoom {
                     (value > Twns.CommonConstants.WarRuleIncomeMultiplierMaxLimit)   ||
                     (value < Twns.CommonConstants.WarRuleIncomeMultiplierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     CoopCustomRoom.CcrCreateModel.setIncomeMultiplier(playerIndex, value);
                 }
@@ -453,7 +453,7 @@ namespace Twns.CoopCustomRoom {
                     (value > Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
                     (value < Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     CoopCustomRoom.CcrCreateModel.setEnergyAddPctOnLoadCo(playerIndex, value);
                 }
@@ -477,7 +477,7 @@ namespace Twns.CoopCustomRoom {
                     (value > Twns.CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit) ||
                     (value < Twns.CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     CoopCustomRoom.CcrCreateModel.setEnergyGrowthMultiplier(playerIndex, value);
                 }
@@ -516,7 +516,7 @@ namespace Twns.CoopCustomRoom {
                     (value > Twns.CommonConstants.WarRuleMoveRangeModifierMaxLimit)  ||
                     (value < Twns.CommonConstants.WarRuleMoveRangeModifierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     CoopCustomRoom.CcrCreateModel.setMoveRangeModifier(playerIndex, value);
                 }
@@ -540,7 +540,7 @@ namespace Twns.CoopCustomRoom {
                     (value > Twns.CommonConstants.WarRuleOffenseBonusMaxLimit)   ||
                     (value < Twns.CommonConstants.WarRuleOffenseBonusMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     CoopCustomRoom.CcrCreateModel.setAttackPowerModifier(playerIndex, value);
                 }
@@ -564,7 +564,7 @@ namespace Twns.CoopCustomRoom {
                     (value > Twns.CommonConstants.WarRuleVisionRangeModifierMaxLimit)    ||
                     (value < Twns.CommonConstants.WarRuleVisionRangeModifierMinLimit)
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     CoopCustomRoom.CcrCreateModel.setVisionRangeModifier(playerIndex, value);
                 }
@@ -589,7 +589,7 @@ namespace Twns.CoopCustomRoom {
                     (value < Twns.CommonConstants.WarRuleLuckMinLimit)           ||
                     (value > CoopCustomRoom.CcrCreateModel.getLuckUpperLimit(playerIndex))
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     CoopCustomRoom.CcrCreateModel.setLuckLowerLimit(playerIndex, value);
                 }
@@ -614,7 +614,7 @@ namespace Twns.CoopCustomRoom {
                     (value < Twns.CommonConstants.WarRuleLuckMinLimit)           ||
                     (value < CoopCustomRoom.CcrCreateModel.getLuckLowerLimit(playerIndex))
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0098));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     CoopCustomRoom.CcrCreateModel.setLuckUpperLimit(playerIndex, value);
                 }
@@ -635,7 +635,7 @@ namespace Twns.CoopCustomRoom {
                     CoopCustomRoom.CcrCreateModel.deleteAiSkinId(playerIndex);
                 } else {
                     if (playerIndex === CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex()) {
-                        FloatText.show(Lang.getText(LangTextType.A0220));
+                        Twns.FloatText.show(Lang.getText(LangTextType.A0220));
                     } else {
                         CoopCustomRoom.CcrCreateModel.setAiCoId(playerIndex, Twns.CommonConstants.CoEmptyId);
                         CoopCustomRoom.CcrCreateModel.setAiSkinId(playerIndex, playerIndex);
@@ -655,7 +655,7 @@ namespace Twns.CoopCustomRoom {
 
             this._callbackForTouchLabelValue = () => {
                 if (playerIndex === CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex()) {
-                    FloatText.show(Lang.getText(LangTextType.A0220));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0220));
                 } else {
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                         gameConfig,

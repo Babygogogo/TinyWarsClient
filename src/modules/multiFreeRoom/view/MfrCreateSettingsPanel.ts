@@ -161,7 +161,7 @@ namespace Twns.MultiFreeRoom {
             this._updateBtnChooseCo();
         }
         private _onNotifyMsgMfrCreateRoom(): void {
-            FloatText.show(Lang.getText(LangTextType.A0015));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0015));
             Twns.FlowManager.gotoLobby();
         }
 
@@ -499,7 +499,7 @@ namespace Twns.MultiFreeRoom {
                     (playerData.aliveState === Twns.Types.PlayerAliveState.Dead) ||
                     (playerData.userId == null)
                 ) {
-                    FloatText.show(Lang.getText(LangTextType.A0204));
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0204));
                 } else {
                     creator.setSelfPlayerIndex(playerIndex);
 

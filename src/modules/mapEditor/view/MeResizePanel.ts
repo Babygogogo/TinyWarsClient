@@ -119,7 +119,7 @@ namespace Twns.MapEditor {
             const newWidth          = width + deltaLeft + deltaRight;
             const newHeight         = height + deltaTop + deltaBottom;
             if ((newWidth <= 0) || (newHeight <= 0) || (newWidth * newHeight > Twns.CommonConstants.MapMaxGridsCount)) {
-                FloatText.show(Lang.getText(LangTextType.A0265));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0265));
                 return;
             }
 

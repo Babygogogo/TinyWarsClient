@@ -74,7 +74,7 @@ namespace Twns.MapEditor {
             const warData   = MapEditor.MeMfwModel.getWarData();
             const errorCode = new TestWar.TwWar().getErrorCodeForInitForMfw(warData, await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(warData.settingsForCommon?.configVersion)));
             if (errorCode) {
-                FloatText.show(Lang.getErrorText(errorCode));
+                Twns.FloatText.show(Lang.getErrorText(errorCode));
             } else {
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0201),

@@ -36,7 +36,7 @@ namespace Twns.PanelHelpers {
         const panel = Twns.Helpers.getExisted(getRunningPanel(config), ClientErrorCode.PanelManager_OpenViaRunningPanel_00);
         await panel.updateWithOpenData(openData);
 
-        Logger.warn(`Panel opened via running: ${config.skinName}`);
+        Twns.Logger.warn(`Panel opened via running: ${config.skinName}`);
         return panel;
     }
     async function openViaCachedPanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel.UiPanel<T>> {
@@ -45,13 +45,13 @@ namespace Twns.PanelHelpers {
         if (config.isExclusive) {
             closeAllPanelsInLayerExcept(layerType, [config]);
         }
-        StageManager.getLayer(layerType).addChild(panel);
+        Twns.StageManager.getLayer(layerType).addChild(panel);
 
         await panel.initOnOpening(openData);
 
         addRunningPanel(config, panel);
 
-        Logger.warn(`Panel opened via cache: ${config.skinName}`);
+        Twns.Logger.warn(`Panel opened via cache: ${config.skinName}`);
         return panel;
     }
     async function openViaCreatePanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel.UiPanel<T>> {
@@ -60,7 +60,7 @@ namespace Twns.PanelHelpers {
         if (config.isExclusive) {
             closeAllPanelsInLayerExcept(layerType, [config]);
         }
-        StageManager.getLayer(layerType).addChild(panel);
+        Twns.StageManager.getLayer(layerType).addChild(panel);
 
         if (!panel.getIsChildrenCreated()) {
             await new Promise<void>(resolve => panel.once(TwnsUiPanel.EVENT_PANEL_CHILDREN_CREATED, resolve, null));
@@ -73,7 +73,7 @@ namespace Twns.PanelHelpers {
             addCachedPanel(config, panel);
         }
 
-        Logger.warn(`Panel opened via creating: ${config.skinName}`);
+        Twns.Logger.warn(`Panel opened via creating: ${config.skinName}`);
         return panel;
     }
 
@@ -90,7 +90,7 @@ namespace Twns.PanelHelpers {
     async function doClose<T>(config: PanelConfig<T>): Promise<void> {
         const panel = getRunningPanel(config);
         if (panel == null) {
-            Logger.warn(`Panel close ignored because it's not opened: ${config.skinName}`);
+            Twns.Logger.warn(`Panel close ignored because it's not opened: ${config.skinName}`);
             return;
         }
 
@@ -100,7 +100,7 @@ namespace Twns.PanelHelpers {
         (parent) && (parent.removeChild(panel));
         deleteRunningPanel(config);
 
-        Logger.warn(`Panel closed: ${config.skinName}`);
+        Twns.Logger.warn(`Panel closed: ${config.skinName}`);
     }
     export async function closeAllPanelsExcept(exceptions: PanelConfig<any>[] = []): Promise<void> {
         const promiseArray: Promise<void>[] = [];

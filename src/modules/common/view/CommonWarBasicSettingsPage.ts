@@ -142,7 +142,7 @@ namespace Twns.Common {
                     ? (await WarMap.WarMapModel.getRawData(mapId))?.mapExtraText?.mapDescription
                     : (null);
                 if (mapDesc == null) {
-                    FloatText.show(Lang.getText(LangTextType.B0894));
+                    Twns.FloatText.show(Lang.getText(LangTextType.B0894));
                 } else {
                     Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0893),
