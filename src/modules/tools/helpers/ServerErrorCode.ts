@@ -5699,6 +5699,17 @@ export const enum ServerErrorCode {
     StoreForSpwRanking_GetScoreForWarData_0008,
     StoreForSpwRanking_GetScoreForWarData_0009,
 
+    StoreForSpwRanking_GetTurnIndexForWarData_0000,
+    StoreForSpwRanking_GetTurnIndexForWarData_0001,
+    StoreForSpwRanking_GetTurnIndexForWarData_0002,
+    StoreForSpwRanking_GetTurnIndexForWarData_0003,
+    StoreForSpwRanking_GetTurnIndexForWarData_0004,
+    StoreForSpwRanking_GetTurnIndexForWarData_0005,
+    StoreForSpwRanking_GetTurnIndexForWarData_0006,
+    StoreForSpwRanking_GetTurnIndexForWarData_0007,
+    StoreForSpwRanking_GetTurnIndexForWarData_0008,
+    StoreForSpwRanking_GetTurnIndexForWarData_0009,
+
     UserManager_Init_0000,
     UserManager_Init_0001,
     UserManager_Init_0002,

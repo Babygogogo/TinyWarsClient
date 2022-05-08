@@ -98,7 +98,7 @@ namespace Twns.SingleRankRoom {
 
         private _updateComponentsForLanguage(): void {
             this._labelTitle.text           = Lang.getText(LangTextType.B0908);
-            this._labelWarRuleTitle.text    = Lang.getText(LangTextType.B0318);
+            this._labelWarRuleTitle.text    = Lang.getText(LangTextType.B0909);
             this._labelSaveSlotTitle.text   = Lang.getText(LangTextType.B0606);
             this._labelHighScoreTitle.text  = Lang.getText(LangTextType.B0907);
         }

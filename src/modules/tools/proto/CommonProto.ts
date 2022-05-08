@@ -56166,6 +56166,9 @@ declare namespace CommonProto {
 
                 /** SpmRankSingleInfo score */
                 score?: (number|null);
+
+                /** SpmRankSingleInfo turnIndex */
+                turnIndex?: (number|null);
             }
 
             /** Represents a SpmRankSingleInfo. */
@@ -56185,6 +56188,9 @@ declare namespace CommonProto {
 
                 /** SpmRankSingleInfo score. */
                 public score: number;
+
+                /** SpmRankSingleInfo turnIndex. */
+                public turnIndex: number;
 
                 /**
                  * Creates a new SpmRankSingleInfo instance using the specified properties.

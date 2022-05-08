@@ -83,6 +83,7 @@ namespace Twns.SinglePlayerMode {
         private readonly _labelStdNoData!       : TwnsUiLabel.UiLabel;
         private readonly _labelStdNickname!     : TwnsUiLabel.UiLabel;
         private readonly _labelStdScore!        : TwnsUiLabel.UiLabel;
+        private readonly _labelTurnIndex!       : TwnsUiLabel.UiLabel;
         private readonly _listStd!              : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
 
         protected _onOpened(): void {
@@ -117,6 +118,7 @@ namespace Twns.SinglePlayerMode {
             this._labelStdNoData.text       = Lang.getText(LangTextType.B0278);
             this._labelStdNickname.text     = Lang.getText(LangTextType.B0175);
             this._labelStdScore.text        = Lang.getText(LangTextType.B0579);
+            this._labelTurnIndex.text       = Lang.getText(LangTextType.B0091);
         }
 
         private async _updateComponentsForStd(): Promise<void> {
@@ -138,6 +140,7 @@ namespace Twns.SinglePlayerMode {
                     rank        : 0,
                     userId      : Helpers.getExisted(rankData.userId),
                     score,
+                    turnIndex   : Helpers.getExisted(rankData.turnIndex),
                     canReplay   : (hasPrivilege) || (selfScore >= score),
                     isLast      : false,
                 });
@@ -180,6 +183,7 @@ namespace Twns.SinglePlayerMode {
         rank        : number;
         userId      : number;
         score       : number;
+        turnIndex   : number;
         canReplay   : boolean;
         isLast      : boolean;
     };
@@ -189,15 +193,16 @@ namespace Twns.SinglePlayerMode {
         private readonly _imgBottomLine!    : TwnsUiImage.UiImage;
         private readonly _labelIndex!       : TwnsUiLabel.UiLabel;
         private readonly _labelNickname!    : TwnsUiLabel.UiLabel;
-
-        private readonly _groupScore!       : eui.Group;
         private readonly _labelScore!       : TwnsUiLabel.UiLabel;
+
+        private readonly _groupTurnIndex!   : eui.Group;
+        private readonly _labelTurnIndex!   : TwnsUiLabel.UiLabel;
         private readonly _imgReplay!        : TwnsUiImage.UiImage;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._imgBg,          callback: this._onTouchedImgBg },
-                { ui: this._groupScore,     callback: this._onTouchedGroupScore },
+                { ui: this._imgBg,              callback: this._onTouchedImgBg },
+                { ui: this._groupTurnIndex,     callback: this._onTouchedGroupTurnIndex },
             ]);
             this._imgBg.touchEnabled = true;
         }
@@ -212,7 +217,7 @@ namespace Twns.SinglePlayerMode {
                 PanelHelpers.open(PanelHelpers.PanelDict.UserPanel, { userId: data.userId });
             }
         }
-        private async _onTouchedGroupScore(): Promise<void> {
+        private async _onTouchedGroupTurnIndex(): Promise<void> {
             const data = this._getData();
             if (!data.canReplay) {
                 PanelHelpers.open(PanelHelpers.PanelDict.UserPanel, { userId: data.userId });
@@ -232,6 +237,7 @@ namespace Twns.SinglePlayerMode {
             labelNickname.text          = Lang.getText(LangTextType.B0029);
             this._labelIndex.text       = `${rank}${Helpers.getSuffixForRank(rank)}`;
             this._labelScore.text       = `${data.score}`;
+            this._labelTurnIndex.text   = `${data.turnIndex}`;
             this._imgBg.alpha           = data.index % 2 == 1 ? 0.2 : 0.5;
             this._imgBottomLine.visible = data.isLast;
             this._imgReplay.visible     = data.canReplay;

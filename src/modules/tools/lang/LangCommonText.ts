@@ -4978,6 +4978,14 @@ namespace Twns.Lang {
             `快速设置`,
             `Quick Settings`,
         ],
+        [LangTextType.B0909]: [
+            `难度`,
+            `Difficulty`,
+        ],
+        [LangTextType.B0910]: [
+            `地形属性表`,
+            `Tiles Info`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [

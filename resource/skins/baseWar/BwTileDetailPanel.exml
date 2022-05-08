@@ -4,7 +4,7 @@
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                          scale9Grid="1,1,2,2" locked="true" />
-    <e:Group id="_group" width="640" horizontalCenter="0" height="340" verticalCenter="0">
+    <e:Group id="_group" width="640" horizontalCenter="0" height="360" verticalCenter="0">
         <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.9" left="0" right="0" top="0" bottom="0"
                              source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
         <e:Group left="30" top="20" bottom="20">
@@ -48,7 +48,7 @@
                 </e:List>
             </TwnsUiScrollList:UiScrollList>
         </e:Group>
-        <e:Group width="240" right="30" top="20" bottom="70" locked="true">
+        <e:Group id="_groupMoveCost" width="240" right="30" top="20" bottom="70" visible="false">
             <TwnsUiLabel:UiLabel id="_labelMoveCost" text="移动基础消耗表" size="20" textColor="0xFFFFFF" y="0" left="0"
                                  bold="true" />
             <TwnsUiScrollList:UiScrollList id="_listMoveCost" left="0" top="30" bottom="0" width="240">
@@ -73,7 +73,59 @@
                 </e:List>
             </TwnsUiScrollList:UiScrollList>
         </e:Group>
-        <TwnsUiButton:UiButton id="_btnClose" label="Close" skinName="Skins.Component.Button.ButtonYellow003"
-                               bottom="20" right="30" width="100" height="30" />
+        <e:Group id="_groupDamageChart" right="30" top="20" bottom="70" visible="true">
+            <TwnsUiLabel:UiLabel id="_labelDamageChart" text="基础伤害表" size="20" textColor="0xFFFFFF" y="0" left="0"
+                                 bold="true" />
+            <e:Group x="0" top="30" bottom="0">
+                <e:Group x="0" width="260" height="24">
+                    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorBlack0002"
+                                         alpha="0.9" scale9Grid="1,1,2,2" />
+                    <TwnsUiLabel:UiLabel id="_labelMain1" text="Main" size="10" textColor="0xFFFFFF" x="46"
+                                         verticalCenter="1" />
+                    <TwnsUiLabel:UiLabel id="_labelSub1" text="Sub" size="10" textColor="0xFFFFFF" x="96"
+                                         verticalCenter="1" />
+                    <TwnsUiLabel:UiLabel id="_labelMain2" text="Main" size="10" textColor="0xFFFFFF" x="176"
+                                         verticalCenter="1" y="16" />
+                    <TwnsUiLabel:UiLabel id="_labelSub2" text="Sub" size="10" textColor="0xFFFFFF" x="226"
+                                         verticalCenter="1" y="26" />
+                </e:Group>
+                <TwnsUiScrollList:UiScrollList id="_listDamageChart" width="260" x="0" top="24" bottom="0">
+                    <e:List>
+                        <e:itemRendererSkinName>
+                            <e:Skin width="130" height="24">
+                                <e:Group id="_group" left="0" right="0" top="0" bottom="0">
+                                    <TwnsUiImage:UiImage id="_imgBg" source="uncompressedColorBlack0002" left="0"
+                                                         right="0" top="0" bottom="0" scale9Grid="1,1,2,2" alpha="0.9"
+                                                         locked="true" />
+                                    <e:Group id="_conView" y="3" scaleX="0.81" scaleY="0.81" x="10"
+                                             touchChildren="false" touchEnabled="false">
+                                        <TwnsUiImage:UiImage id="_tileView" y="-24" />
+                                    </e:Group>
+                                    <TwnsUiImage:UiImage bottom="0" scale9Grid="1,1,2,2"
+                                                         source="uncompressedColorWhite0000" width="1" top="0"
+                                                         smoothing="false" alpha="0.5" left="0" />
+                                    <TwnsUiLabel:UiLabel id="_labelPrimaryAttack" text="999" size="15"
+                                                         textColor="0xffffff" verticalCenter="1" x="46" />
+                                    <TwnsUiLabel:UiLabel id="_labelSecondaryAttack" text="999" size="15"
+                                                         textColor="0xFFFFFF" verticalCenter="1" x="96" />
+                                </e:Group>
+                            </e:Skin>
+                        </e:itemRendererSkinName>
+                        <e:layout>
+                            <e:TileLayout orientation="rows" horizontalGap="0" verticalGap="0" requestedColumnCount="2" />
+                        </e:layout>
+                    </e:List>
+                </TwnsUiScrollList:UiScrollList>
+            </e:Group>
+        </e:Group>
+        <e:Group right="30" bottom="20">
+            <TwnsUiButton:UiButton id="_btnTilesInfo" label="部队属性表" skinName="Skins.Component.Button.ButtonBlue002"
+                                   x="0" width="90" height="30" y="0" />
+            <TwnsUiButton:UiButton id="_btnClose" label="Close" skinName="Skins.Component.Button.ButtonYellow003"
+                                   width="100" height="30" x="97" y="0" />
+            <e:layout>
+                <e:HorizontalLayout gap="20" />
+            </e:layout>
+        </e:Group>
     </e:Group>
 </e:Skin>
