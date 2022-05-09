@@ -1006,12 +1006,13 @@ namespace Twns.WarHelpers.WarRobot {
                 if (!GridIndexHelpers.checkIsInsideMap(g, mapSize)) {
                     return null;
                 } else {
-                    const existingUnit = unitMap.getUnitOnMap(g);
-                    if ((existingUnit) && (existingUnit.getTeamIndex() != attackerTeamIndex)) {
-                        return null;
-                    } else {
-                        return commonParams.getCachedMoveCost(attackerUnit, tileMap.getTile(g));
-                    }
+                    // const existingUnit = unitMap.getUnitOnMap(g);
+                    // if ((existingUnit) && (existingUnit.getTeamIndex() != attackerTeamIndex)) {
+                    //     return null;
+                    // } else {
+                    //     return commonParams.getCachedMoveCost(attackerUnit, tileMap.getTile(g));
+                    // }
+                    return commonParams.getCachedMoveCost(attackerUnit, tileMap.getTile(g));
                 }
             },
         });
@@ -1495,8 +1496,10 @@ namespace Twns.WarHelpers.WarRobot {
         const tileMap                   = war.getTileMap();
         const unitHpDict                = new Map<BwUnit, number>();
         const tileHpDict                = new Map<BwTile, number>();
-        const scalerForSelfDamage       = Math.pow(1 / Math.max(1, unitValueRatio), 1) * 9999;
-        const scalerForEnemyDamage      = Math.pow(Math.max(1, unitValueRatio), 1) * 9999;
+        // const scalerForSelfDamage       = Math.pow(1 / Math.max(1, unitValueRatio), 1) * 9999;
+        // const scalerForEnemyDamage      = Math.pow(Math.max(1, unitValueRatio), 1) * 9999;
+        const scalerForSelfDamage       = Math.pow(1 / Math.max(1, unitValueRatio), 1);
+        const scalerForEnemyDamage      = Math.pow(Math.max(1, unitValueRatio), 1);
 
         let totalScore = 0;
         for (const battleDamageInfo of battleDamageInfoArray) {
