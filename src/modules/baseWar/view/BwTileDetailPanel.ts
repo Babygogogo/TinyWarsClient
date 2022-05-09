@@ -263,7 +263,7 @@ namespace Twns.BaseWar {
             const tile              = this._getOpenData().tile;
             const gameConfig        = tile.getGameConfig();
             const targetTileType    = tile.getType();
-            const playerIndex       = tile.getPlayerIndex();
+            const playerIndex       = CommonConstants.WarFirstPlayerIndex;
 
             const dataArray : DataForDamageRenderer[] = [];
             let index       = 0;

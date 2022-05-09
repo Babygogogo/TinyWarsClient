@@ -199,7 +199,7 @@ namespace Twns.Common {
                 tileDecoratorShapeId: null,
                 tileObjectType      : CommonConstants.TileTypeToTileObjectType.get(tileType) ?? null,
                 tileObjectShapeId   : 0,
-                playerIndex         : Config.ConfigManager.checkCanBeOwnedByUnneutralPlayer(tileType) ? CommonConstants.WarFirstPlayerIndex : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : CommonConstants.WarNeutralPlayerIndex,
             });
             tileView.updateView();
         }
