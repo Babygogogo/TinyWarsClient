@@ -76,37 +76,37 @@ namespace Twns.WarHelpers.WarRobot {
         [TileType.TempSeaport]  : 10,
         [TileType.TempAirport]  : 10,
     };
-    const _PRODUCTION_CANDIDATES: { [tileType: number]: { [unitType: number]: number } } = {
+    const _PRODUCTION_CANDIDATES: { [tileType: number]: { [unitType: number]: number | null } } = {
         [TileType.Factory]: {
-            [UnitType.Infantry]     : 500,
-            [UnitType.Mech]         : -200,
-            [UnitType.Bike]         : 520,
-            [UnitType.Recon]        : 100,
-            [UnitType.Flare]        : 100,
-            [UnitType.AntiAir]      : 300,
-            [UnitType.Tank]         : 650,
-            [UnitType.MediumTank]   : 600,
-            [UnitType.WarTank]      : 550,
-            [UnitType.Artillery]    : 400,
-            [UnitType.AntiTank]     : 350,
-            [UnitType.Rockets]      : 600,
-            [UnitType.Missiles]     : -9999,
-            [UnitType.Rig]          : -9999,
+            [UnitType.Infantry]         : 500,
+            [UnitType.Mech]             : -200,
+            [UnitType.Bike]             : 520,
+            [UnitType.Recon]            : 100,
+            [UnitType.Flare]            : 100,
+            [UnitType.AntiAir]          : 300,
+            [UnitType.Tank]             : 650,
+            [UnitType.MediumTank]       : 600,
+            [UnitType.WarTank]          : 550,
+            [UnitType.Artillery]        : 400,
+            [UnitType.AntiTank]         : 350,
+            [UnitType.Rockets]          : 600,
+            [UnitType.Missiles]         : -1000,
+            [UnitType.Rig]              : null,
         },
         [TileType.Airport]: {
             [UnitType.Fighter]          : 200,
             [UnitType.Bomber]           : 200,
             [UnitType.Duster]           : 400,
             [UnitType.BattleCopter]     : 600,
-            [UnitType.TransportCopter]  : -9999,
+            [UnitType.TransportCopter]  : null,
         },
         [TileType.Seaport]: {
-            [UnitType.Battleship]   : 300,
-            [UnitType.Carrier]      : -9999,
-            [UnitType.Submarine]    : 300,
-            [UnitType.Cruiser]      : 300,
-            [UnitType.Lander]       : -9999,
-            [UnitType.Gunboat]      : 0,
+            [UnitType.Battleship]       : 300,
+            [UnitType.Carrier]          : -9999,
+            [UnitType.Submarine]        : 300,
+            [UnitType.Cruiser]          : 300,
+            [UnitType.Lander]           : null,
+            [UnitType.Gunboat]          : 0,
         },
     };
     const _DAMAGE_SCORE_SCALERS: { [attackerType: number]: { [defenderType: number]: number } } = {
@@ -1701,16 +1701,14 @@ namespace Twns.WarHelpers.WarRobot {
             return null;
         }
 
-        if ((producingUnitType === UnitType.TransportCopter)    ||
-            (producingUnitType === UnitType.Rig)                ||
-            (producingUnitType === UnitType.Lander)
-        ) {
+        const tileMap   = war.getTileMap();
+        const tileType  = tileMap.getTile(producingGridIndex).getType();
+        let score       = _PRODUCTION_CANDIDATES[tileType][producingUnitType];
+        if (score == null) {
             return null;
         }
 
         const playerIndexInTurn = commonParams.playerIndexInTurn;
-        const tileMap           = war.getTileMap();
-        const tileType          = tileMap.getTile(producingGridIndex).getType();
         const gameConfig        = war.getGameConfig();
         const player            = war.getPlayerManager().getPlayer(playerIndexInTurn);
         const producingUnit     = new BwUnit();
@@ -1736,7 +1734,6 @@ namespace Twns.WarHelpers.WarRobot {
             }
         }
 
-        let score                           = Helpers.getExisted(_PRODUCTION_CANDIDATES[tileType][producingUnitType], ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_01);
         const producingTeamIndex            = producingUnit.getTeamIndex();
         const producingUnitCurrentHp        = producingUnit.getCurrentHp();
         const producingUnitMaxAttackRange   = producingUnit.getFinalMaxAttackRange();
@@ -1789,9 +1786,10 @@ namespace Twns.WarHelpers.WarRobot {
 
                     if (turnsCount != null) {
                         const damage    = Math.min(baseDamage, unitCurrentHp);
-                        canAttack       = true;
                         score           += damage * unit.getProductionCfgCost() / 1000 * Math.max(1, unitValueRatio) / turnsCount;
                     }
+
+                    canAttack = true;
                 }
             }
 
