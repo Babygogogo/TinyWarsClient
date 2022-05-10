@@ -41,23 +41,23 @@ namespace Twns.SoundManager {
 
     const _SOUND_PATH   = "resource/assets/sound/";
     const _BGM_PARAMS   = new Map<BgmCode, BgmParams>([
-        [ BgmCode.Lobby01,      { name: "lobby01.mp3",      start: 16.07,   end: 58.07  } ],
-        [ BgmCode.MapEditor01,  { name: "mapEditor01.mp3",  start: 0.7,     end: 36     } ],
-        [ BgmCode.Power00,      { name: "power00.mp3",      start: 2.97,    end: 38     } ],
-        [ BgmCode.Co0000,       { name: "co0000.mp3",       start: 8.5,     end: 72.5   } ],
-        [ BgmCode.Co0001,       { name: "co0001.mp3",       start: 1.75,    end: 56.75  } ],
-        [ BgmCode.Co0002,       { name: "co0002.mp3",       start: 1,       end: 65     } ],
-        [ BgmCode.Co0003,       { name: "co0003.mp3",       start: 4.0,     end: 58.6   } ],
-        [ BgmCode.Co0004,       { name: "co0004.mp3",       start: 3.25,    end: 61.35  } ],
-        [ BgmCode.Co0005,       { name: "co0005.mp3",       start: 1.92,    end: 63     } ],
-        [ BgmCode.Co0006,       { name: "co0006.mp3",       start: 0.7,     end: 66     } ],
-        [ BgmCode.Co0007,       { name: "co0007.mp3",       start: 1.15,    end: 60     } ],
-        [ BgmCode.Co0008,       { name: "co0008.mp3",       start: 3.83,    end: 65     } ],
-        [ BgmCode.Co0009,       { name: "co0009.mp3",       start: 0.7,     end: 72     } ],
-        [ BgmCode.Co0010,       { name: "co0010.mp3",       start: 4.95,    end: 62     } ],
-        [ BgmCode.Co0011,       { name: "co0011.mp3",       start: 7.45,    end: 61.2   } ],
-        [ BgmCode.Co0042,       { name: "co0042.mp3",       start: 7.6,     end: 60.1   } ],
-        [ BgmCode.Co9999,       { name: "co9999.mp3",       start: 4.7,     end: 115.44 } ],
+        [ BgmCode.Lobby01,      { name: "lobby01.ogg",      start: 16.07,   end: 58.07  } ],
+        [ BgmCode.MapEditor01,  { name: "mapEditor01.ogg",  start: 0.7,     end: 36     } ],
+        [ BgmCode.Power00,      { name: "power00.ogg",      start: 2.97,    end: 38     } ],
+        [ BgmCode.Co0000,       { name: "co0000.ogg",       start: 8.5,     end: 72.5   } ],    // no co
+        [ BgmCode.Co0001,       { name: "co0001.ogg",       start: 1.75,    end: 56.75  } ],    // will
+        [ BgmCode.Co0002,       { name: "co0002.ogg",       start: 1,       end: 65     } ],    // isabella
+        [ BgmCode.Co0003,       { name: "co0003.ogg",       start: 4.0,     end: 58.6   } ],    // waylon
+        [ BgmCode.Co0004,       { name: "co0004.ogg",       start: 3.25,    end: 61.35  } ],    // Forsythe
+        [ BgmCode.Co0005,       { name: "co0005.ogg",       start: 1.92,    end: 63     } ],    // gage
+        [ BgmCode.Co0006,       { name: "co0006.ogg",       start: 0.7,     end: 66     } ],    // tasha
+        [ BgmCode.Co0007,       { name: "co0007.ogg",       start: 1.15,    end: 60     } ],    // brenner
+        [ BgmCode.Co0008,       { name: "co0008.ogg",       start: 3.83,    end: 65     } ],    // greyfield
+        [ BgmCode.Co0009,       { name: "co0009.ogg",       start: 0.7,     end: 72     } ],    // tabitha
+        [ BgmCode.Co0010,       { name: "co0010.ogg",       start: 4.95,    end: 62     } ],    // lin
+        [ BgmCode.Co0011,       { name: "co0011.ogg",       start: 6.72,    end: 60.42  } ],    // caulder
+        [ BgmCode.Co0042,       { name: "co0042.ogg",       start: 7.6,     end: 60.1   } ],    // penny
+        [ BgmCode.Co9999,       { name: "co9999.ogg",       start: 4.6,     end: 115.34 } ],
         // [ BgmCode.War06,        { name: "war06.mp3",        start: 0.05,    end: 118.19 } ],
     ]);
     const _SHORT_SFX_PARAM = new Map<ShortSfxCode, ShortSfxParams>([
