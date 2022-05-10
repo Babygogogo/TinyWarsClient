@@ -56,6 +56,7 @@ namespace Twns.SoundManager {
         [ BgmCode.Co0009,       { name: "co0009.ogg",       start: 0.7,     end: 72     } ],    // tabitha
         [ BgmCode.Co0010,       { name: "co0010.ogg",       start: 4.95,    end: 62     } ],    // lin
         [ BgmCode.Co0011,       { name: "co0011.ogg",       start: 6.72,    end: 60.42  } ],    // caulder
+        [ BgmCode.Co0013,       { name: "co0013.ogg",       start: 1.2,     end: 63.98  } ],    // hawk
         [ BgmCode.Co0042,       { name: "co0042.ogg",       start: 7.6,     end: 60.1   } ],    // penny
         [ BgmCode.Co9999,       { name: "co9999.ogg",       start: 4.6,     end: 115.34 } ],
         // [ BgmCode.War06,        { name: "war06.mp3",        start: 0.05,    end: 118.19 } ],

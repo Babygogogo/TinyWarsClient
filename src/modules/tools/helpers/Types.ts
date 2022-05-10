@@ -322,6 +322,7 @@ namespace Twns.Types {
         Co0010,
         Co0011,
         Co0042,
+        Co0013,
         Co9999,
     }
 

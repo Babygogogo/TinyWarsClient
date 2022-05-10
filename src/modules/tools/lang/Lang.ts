@@ -24,7 +24,7 @@ namespace Twns.Lang {
 
     let _languageType = LanguageType.Chinese;
     export function init(): void {
-        setLanguageType(Twns.LocalStorage.getLanguageType());
+        setLanguageType(LocalStorage.getLanguageType());
     }
 
     export function getCurrentLanguageType(): LanguageType {
@@ -407,6 +407,7 @@ namespace Twns.Lang {
             case BgmCode.Co0009         : return getText(LangTextType.B0658);
             case BgmCode.Co0010         : return getText(LangTextType.B0653);
             case BgmCode.Co0011         : return getText(LangTextType.B0659);
+            case BgmCode.Co0013         : return getText(LangTextType.B0911);
             case BgmCode.Co0042         : return getText(LangTextType.B0706);
             case BgmCode.Co9999         : return getText(LangTextType.B0639);
             default                     : return null;

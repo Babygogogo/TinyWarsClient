@@ -4986,6 +4986,10 @@ namespace Twns.Lang {
             `地形属性表`,
             `Tiles Info`,
         ],
+        [LangTextType.B0911]: [
+            `Hawke's Theme (Hawk)`,
+            `Hawke's Theme (Hawk)`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
