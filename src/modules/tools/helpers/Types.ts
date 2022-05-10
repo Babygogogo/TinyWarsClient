@@ -91,6 +91,13 @@ namespace Twns.Types {
     export interface UserAvatarCfg extends CommonProto.Config.IUserAvatarCfg {
         avatarId    : number;
     }
+    export interface BgmCfg extends CommonProto.Config.IBgmCfg {
+        bgmCode     : number;
+        filename    : string;
+        bgmName     : string;
+        sortWeight  : number;
+        loopParams  : number[];
+    }
     export interface FullConfig extends CommonProto.Config.FullConfig {
         System          : SystemCfg;
         TileCategory    : TileCategoryCfg[];
@@ -109,6 +116,7 @@ namespace Twns.Types {
         Weather         : WeatherCfg[];
         WeatherCategory : WeatherCategoryCfg[];
         UserAvatar      : UserAvatarCfg[];
+        Bgm             : BgmCfg[];
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -304,26 +312,13 @@ namespace Twns.Types {
     }
 
     // eslint-disable-next-line no-shadow
-    export enum BgmCode {
-        None        = 0,
-        Lobby01,
-        MapEditor01,
-        Power00,
-        Co0000,
-        Co0001,
-        Co0002,
-        Co0003,
-        Co0004,
-        Co0005,
-        Co0006,
-        Co0007,
-        Co0008,
-        Co0009,
-        Co0010,
-        Co0011,
-        Co0042,
-        Co0013,
-        Co9999,
+    export const enum BgmCode {
+        None            = 0,
+
+        CoEmpty         = 9999,
+        Lobby01         = 10000,
+        MapEditor01     = 10100,
+        Power00         = 10200,
     }
 
     // eslint-disable-next-line no-shadow

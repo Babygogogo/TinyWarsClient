@@ -138,12 +138,12 @@ namespace Twns.User {
             soundManager.setIsEffectMute(!soundManager.getIsEffectMute());
             this._updateGroupEffectMute();
         }
-        private _onTouchedBtnPrevBgm(): void {
-            SoundManager.playPreviousBgm();
+        private async _onTouchedBtnPrevBgm(): Promise<void> {
+            SoundManager.playPreviousBgm(await Config.ConfigManager.getLatestGameConfig());
             this._updateLabelBgmName();
         }
-        private _onTouchedBtnNextBgm(): void {
-            SoundManager.playNextBgm();
+        private async _onTouchedBtnNextBgm(): Promise<void> {
+            SoundManager.playNextBgm(await Config.ConfigManager.getLatestGameConfig());
             this._updateLabelBgmName();
         }
         private _onTouchedBtnCancel(): void {
@@ -220,8 +220,8 @@ namespace Twns.User {
             this._imgEffectBar.width        = pos;
             this._labelEffectVolume.text    = `${Math.floor(volume * 100)}`;
         }
-        private _updateLabelBgmName(): void {
-            this._labelBgmName.text = Lang.getBgmName(SoundManager.getPlayingBgmCode()) || CommonConstants.ErrorTextForUndefined;
+        private async _updateLabelBgmName(): Promise<void> {
+            this._labelBgmName.text = (await Config.ConfigManager.getLatestGameConfig()).getBgmCfg(SoundManager.getPlayingBgmCode())?.bgmName ?? CommonConstants.ErrorTextForUndefined;
         }
 
         protected async _showOpenAnimation(): Promise<void> {

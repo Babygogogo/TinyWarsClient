@@ -11,25 +11,16 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SoundManager {
     import SoundType            = Types.SoundType;
-    import BgmCode              = Types.BgmCode;
     import ShortSfxCode         = Types.ShortSfxCode;
     import LongSfxCode          = Types.LongSfxCode;
     import UnitType             = Types.UnitType;
+    import BgmCfg               = Types.BgmCfg;
+    import BgmCode              = Types.BgmCode;
     import LangTextType         = Lang.LangTextType;
 
     export const DEFAULT_MUTE   = false;
     export const DEFAULT_VOLUME = 1;
 
-    const AllBgmMinCode = BgmCode.Lobby01;
-    const AllBgmMaxCode = BgmCode.Co9999;
-    const CoBgmMinCode  = BgmCode.Co0001;
-    const CoBgmMaxCode  = BgmCode.Co9999;
-
-    type BgmParams = {
-        name    : string;
-        start   : number;
-        end     : number;
-    };
     type LongSfxParams = {
         name    : string;
         start   : number;
@@ -39,29 +30,8 @@ namespace Twns.SoundManager {
         name    : string;
     };
 
-    const _SOUND_PATH   = "resource/assets/sound/";
-    const _BGM_PARAMS   = new Map<BgmCode, BgmParams>([
-        [ BgmCode.Lobby01,      { name: "lobby01.ogg",      start: 16.07,   end: 58.07  } ],
-        [ BgmCode.MapEditor01,  { name: "mapEditor01.ogg",  start: 0.7,     end: 36     } ],
-        [ BgmCode.Power00,      { name: "power00.ogg",      start: 2.97,    end: 38     } ],
-        [ BgmCode.Co0000,       { name: "co0000.ogg",       start: 8.5,     end: 72.5   } ],    // no co
-        [ BgmCode.Co0001,       { name: "co0001.ogg",       start: 1.75,    end: 56.75  } ],    // will
-        [ BgmCode.Co0002,       { name: "co0002.ogg",       start: 1,       end: 65     } ],    // isabella
-        [ BgmCode.Co0003,       { name: "co0003.ogg",       start: 4.0,     end: 58.6   } ],    // waylon
-        [ BgmCode.Co0004,       { name: "co0004.ogg",       start: 3.25,    end: 61.35  } ],    // Forsythe
-        [ BgmCode.Co0005,       { name: "co0005.ogg",       start: 1.92,    end: 63     } ],    // gage
-        [ BgmCode.Co0006,       { name: "co0006.ogg",       start: 0.7,     end: 66     } ],    // tasha
-        [ BgmCode.Co0007,       { name: "co0007.ogg",       start: 1.15,    end: 60     } ],    // brenner
-        [ BgmCode.Co0008,       { name: "co0008.ogg",       start: 3.83,    end: 65     } ],    // greyfield
-        [ BgmCode.Co0009,       { name: "co0009.ogg",       start: 0.7,     end: 72     } ],    // tabitha
-        [ BgmCode.Co0010,       { name: "co0010.ogg",       start: 4.95,    end: 62     } ],    // lin
-        [ BgmCode.Co0011,       { name: "co0011.ogg",       start: 6.72,    end: 60.42  } ],    // caulder
-        [ BgmCode.Co0013,       { name: "co0013.ogg",       start: 1.2,     end: 63.98  } ],    // hawk
-        [ BgmCode.Co0042,       { name: "co0042.ogg",       start: 7.6,     end: 60.1   } ],    // penny
-        [ BgmCode.Co9999,       { name: "co9999.ogg",       start: 4.6,     end: 115.34 } ],
-        // [ BgmCode.War06,        { name: "war06.mp3",        start: 0.05,    end: 118.19 } ],
-    ]);
-    const _SHORT_SFX_PARAM = new Map<ShortSfxCode, ShortSfxParams>([
+    const _SOUND_PATH       = "resource/assets/sound/";
+    const _SHORT_SFX_PARAM  = new Map<ShortSfxCode, ShortSfxParams>([
         [ ShortSfxCode.ButtonNeutral01,     { name: "buttonNeutral01.mp3"   } ],
         [ ShortSfxCode.ButtonConfirm01,     { name: "buttonConfirm01.mp3"   } ],
         [ ShortSfxCode.ButtonCancel01,      { name: "buttonCancel01.mp3"    } ],
@@ -107,15 +77,22 @@ namespace Twns.SoundManager {
         [ UnitType.Gunboat,         LongSfxCode.NavalMove   ],
     ]);
     const _UNIT_MOVE_FADEOUT_TIME = 0.6;
+    const _BGM_CONFIG_FOR_LOBBY_01  : BgmCfg = {
+        bgmCode     : BgmCode.Lobby01,
+        loopParams  : [160700, 580700],
+        bgmName     : `Wandering Path (Lobby)`,
+        filename    : `lobby01.ogg`,
+        sortWeight  : 1,
+    };
 
     let _isInitialized              = false;
     let _audioContext               : AudioContext;
 
     let _bgmMute                    = DEFAULT_MUTE;
     let _bgmVolume                  = DEFAULT_VOLUME;    // 音量范围是0～1，1为最大音量
-    let _playingBgmCode             = BgmCode.None;
+    let _playingBgmCode             : number = BgmCode.None;
 
-    const _bgmBufferCache           = new Map<BgmCode, AudioBuffer>();
+    const _bgmBufferCache           = new Map<number, AudioBuffer>();
     let _bgmGain                    : GainNode;
     let _bgmSourceNode              : AudioBufferSourceNode | null = null;
 
@@ -192,28 +169,27 @@ namespace Twns.SoundManager {
         _stopAllShortSfx();
     }
 
-    export function playPreviousBgm(): void {
-        const code = getPlayingBgmCode() - 1;
-        playBgm(code >= AllBgmMinCode ? code : AllBgmMaxCode);
-    }
-    export function playNextBgm(): void {
-        const code = getPlayingBgmCode() + 1;
-        playBgm(code <= AllBgmMaxCode ? code : AllBgmMinCode);
-    }
-    export function playRandomCoBgm(): void {
-        playBgm(Math.floor(Math.random() * (CoBgmMaxCode - CoBgmMinCode + 1)) + CoBgmMinCode);
-    }
-    export function playCoBgm(coId: number): void {
-        const bgmFileName = `co${Helpers.getNumText(Math.floor(coId / 10000), 4)}.mp3`;
-        for (const [bgmCode, param] of _BGM_PARAMS) {
-            if (param.name === bgmFileName) {
-                playBgm(bgmCode);
-                return;
-            }
+    export function playPreviousBgm(gameConfig: Config.GameConfig): void {
+        const bgmCodeArray  = gameConfig.getAllBgmCodeArray();
+        const index         = bgmCodeArray.indexOf(getPlayingBgmCode());
+        if (index < 0) {
+            playBgm(BgmCode.Lobby01);
+        } else {
+            const length = bgmCodeArray.length;
+            playBgm(bgmCodeArray[(index + length - 1) % length]);
         }
-
-        // playRandomCoBgm();
-        playBgm(BgmCode.Co0000);
+    }
+    export function playNextBgm(gameConfig: Config.GameConfig): void {
+        const bgmCodeArray  = gameConfig.getAllBgmCodeArray();
+        const index         = bgmCodeArray.indexOf(getPlayingBgmCode());
+        if (index < 0) {
+            playBgm(BgmCode.Lobby01);
+        } else {
+            playBgm(bgmCodeArray[(index + 1) % bgmCodeArray.length]);
+        }
+    }
+    export function playCoBgm(coId: number, gameConfig: Config.GameConfig): void {
+        playBgm(gameConfig.getCoBasicCfg(coId)?.bgmCode ?? BgmCode.CoEmpty);
     }
     export function playCoBgmWithWar(war: BaseWar.BwWar, force: boolean): void {
         const player = war.getPlayerInTurn();
@@ -224,12 +200,13 @@ namespace Twns.SoundManager {
         if (player.checkCoIsUsingActiveSkill()) {
             playBgm(BgmCode.Power00);
         } else {
-            playCoBgm(player.getCoId());
+            playCoBgm(player.getCoId(), war.getGameConfig());
         }
     }
 
-    export function checkIsValidBgmCode(bgmCode: BgmCode): boolean {
-        return (bgmCode === BgmCode.None) || (_BGM_PARAMS.has(bgmCode));
+    export function checkIsValidBgmCode(bgmCode: number, gameConfig: Config.GameConfig): boolean {
+        return (bgmCode === BgmCode.None)           ||
+            (gameConfig.getBgmCfg(bgmCode) != null);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -281,14 +258,14 @@ namespace Twns.SoundManager {
         }
     }
 
-    function _setPlayingBgmCode(bgmCode: BgmCode): void {
+    function _setPlayingBgmCode(bgmCode: number): void {
         _playingBgmCode = bgmCode;
     }
-    export function getPlayingBgmCode(): BgmCode {
+    export function getPlayingBgmCode(): number {
         return _playingBgmCode;
     }
     /** 播放背景音乐，同时只能有一个在播放 */
-    export function playBgm(bgmCode: BgmCode, forcePlayFromBeginning = false): void {
+    export function playBgm(bgmCode: number, forcePlayFromBeginning = false): void {
         if (!_isInitialized) {
             return;
         }
@@ -304,14 +281,16 @@ namespace Twns.SoundManager {
             _playBgmForNormal(bgmCode);
         }
     }
-    async function _playBgmForNormal(bgmCode: BgmCode): Promise<void> {
-        const params        = Helpers.getExisted(_BGM_PARAMS.get(bgmCode), ClientErrorCode.SoundManager_PlayBgmForNormal_00);
+    async function _playBgmForNormal(bgmCode: number): Promise<void> {
+        const bgmCfg        = bgmCode === BgmCode.Lobby01
+            ? _BGM_CONFIG_FOR_LOBBY_01
+            : Helpers.getExisted((await Config.ConfigManager.getLatestGameConfig()).getBgmCfg(bgmCode), ClientErrorCode.SoundManager_PlayBgmForNormal_00);
         const cacheDict     = _bgmBufferCache;
         const cachedBuffer  = cacheDict.get(bgmCode);
         if (cachedBuffer) {
-            _doPlayBgmForNormal(cachedBuffer, params);
+            _doPlayBgmForNormal(cachedBuffer, bgmCfg);
         } else {
-            const path          = getResourcePath(params.name, SoundType.Bgm);
+            const path          = getResourcePath(bgmCfg.filename, SoundType.Bgm);
             const audioBuffer   = await loadAudioBuffer(path).catch(err => {
                 // CompatibilityHelpers.showError(err); throw err;
                 Logger.error(`SoundManager._playBgmForNormal() loadAudioBuffer error: ${(err as Error).message}.`);
@@ -324,11 +303,11 @@ namespace Twns.SoundManager {
 
             cacheDict.set(bgmCode, audioBuffer);
             if (bgmCode === getPlayingBgmCode()) {
-                _doPlayBgmForNormal(audioBuffer, params);
+                _doPlayBgmForNormal(audioBuffer, bgmCfg);
             }
         }
     }
-    function _doPlayBgmForNormal(buffer: AudioBuffer, params: BgmParams): void {
+    function _doPlayBgmForNormal(buffer: AudioBuffer, params: BgmCfg): void {
         if (!buffer) {
             return;
         }
@@ -337,8 +316,8 @@ namespace Twns.SoundManager {
 
         _bgmSourceNode              = _audioContext.createBufferSource();
         _bgmSourceNode.buffer       = buffer;
-        _bgmSourceNode.loopStart    = params.start;
-        _bgmSourceNode.loopEnd      = params.end;
+        _bgmSourceNode.loopStart    = params.loopParams[0] / 10000;
+        _bgmSourceNode.loopEnd      = params.loopParams[1] / 10000;
         _bgmSourceNode.loop         = true;
         _bgmSourceNode.connect(_bgmGain);
         _bgmSourceNode.start();

@@ -20,7 +20,6 @@ namespace Twns.Lang {
     import PlayerRuleType           = Types.PlayerRuleType;
     import GameVersion              = Types.GameVersion;
     import WeatherType              = Types.WeatherType;
-    import BgmCode                  = Types.BgmCode;
 
     let _languageType = LanguageType.Chinese;
     export function init(): void {
@@ -386,31 +385,6 @@ namespace Twns.Lang {
             case Types.TurnPhaseCode.WaitBeginTurn  : return getText(LangTextType.B0474);
             case Types.TurnPhaseCode.Main           : return getText(LangTextType.B0475);
             default                                 : return null;
-        }
-    }
-
-    export function getBgmName(code: BgmCode): string | null {
-        switch (code) {
-            case BgmCode.None           : return getText(LangTextType.B0001);
-            case BgmCode.Lobby01        : return getText(LangTextType.B0632);
-            case BgmCode.MapEditor01    : return getText(LangTextType.B0633);
-            case BgmCode.Power00        : return getText(LangTextType.B0660);
-            case BgmCode.Co0000         : return getText(LangTextType.B0638);
-            case BgmCode.Co0001         : return getText(LangTextType.B0634);
-            case BgmCode.Co0002         : return getText(LangTextType.B0636);
-            case BgmCode.Co0003         : return getText(LangTextType.B0656);
-            case BgmCode.Co0004         : return getText(LangTextType.B0655);
-            case BgmCode.Co0005         : return getText(LangTextType.B0637);
-            case BgmCode.Co0006         : return getText(LangTextType.B0654);
-            case BgmCode.Co0007         : return getText(LangTextType.B0635);
-            case BgmCode.Co0008         : return getText(LangTextType.B0657);
-            case BgmCode.Co0009         : return getText(LangTextType.B0658);
-            case BgmCode.Co0010         : return getText(LangTextType.B0653);
-            case BgmCode.Co0011         : return getText(LangTextType.B0659);
-            case BgmCode.Co0013         : return getText(LangTextType.B0911);
-            case BgmCode.Co0042         : return getText(LangTextType.B0706);
-            case BgmCode.Co9999         : return getText(LangTextType.B0639);
-            default                     : return null;
         }
     }
 

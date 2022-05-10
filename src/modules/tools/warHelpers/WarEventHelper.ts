@@ -383,7 +383,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             || (checkIsValidWeaSetViewpoint(action.WeaSetViewpoint, mapSize))
             || (checkIsValidWeaSetWeather(action.WeaSetWeather, gameConfig))
             || (checkIsValidWeaSimpleDialogue(action.WeaSimpleDialogue, gameConfig))
-            || (checkIsValidWeaPlayBgm(action.WeaPlayBgm))
+            || (checkIsValidWeaPlayBgm(action.WeaPlayBgm, gameConfig))
             || (checkIsValidWeaSetForceFogCode(action.WeaSetForceFogCode))
             || (checkIsValidWeaSetCustomCounter(action.WeaSetCustomCounter))
             || (checkIsValidWeaDeprecatedSetPlayerAliveState(action.WeaDeprecatedSetPlayerAliveState, playersCountUnneutral))
@@ -585,7 +585,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWeaPlayBgm(action: Types.Undefinable<CommonProto.WarEvent.IWeaPlayBgm>): boolean {
+    function checkIsValidWeaPlayBgm(action: Types.Undefinable<CommonProto.WarEvent.IWeaPlayBgm>, gameConfig: Config.GameConfig): boolean {
         if (action == null) {
             return false;
         }
@@ -595,7 +595,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         const bgmCode = action.bgmCode;
-        return (bgmCode != null) && (bgmCode <= Types.BgmCode.Co9999);
+        return (bgmCode != null) && (gameConfig.getBgmCfg(bgmCode) != null);
     }
     function checkIsValidWeaSetForceFogCode(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetForceFogCode>): boolean {
         if (action == null) {
@@ -2238,7 +2238,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             || (getDescForWeaSetViewpoint(action.WeaSetViewpoint))
             || (getDescForWeaSetWeather(action.WeaSetWeather))
             || (getDescForWeaSimpleDialogue(action.WeaSimpleDialogue, gameConfig))
-            || (getDescForWeaPlayBgm(action.WeaPlayBgm))
+            || (getDescForWeaPlayBgm(action.WeaPlayBgm, gameConfig))
             || (getDescForWeaSetForceFogCode(action.WeaSetForceFogCode))
             || (getDescForWeaSetCustomCounter(action.WeaSetCustomCounter))
             || (getDescForWeaDeprecatedSetPlayerAliveState(action.WeaDeprecatedSetPlayerAliveState))
@@ -2328,7 +2328,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return Lang.getFormattedText(LangTextType.F0085, coNameArray.join(`, `));
         }
     }
-    function getDescForWeaPlayBgm(data: Types.Undefinable<WarEvent.IWeaPlayBgm>): string | null {
+    function getDescForWeaPlayBgm(data: Types.Undefinable<WarEvent.IWeaPlayBgm>, gameConfig: Config.GameConfig): string | null {
         if (data == null) {
             return null;
         }
@@ -2337,7 +2337,10 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return Lang.getText(LangTextType.A0262);
         } else {
             const bgmCode = data.bgmCode;
-            return `${Lang.getText(LangTextType.B0750)}: ${bgmCode == null ? CommonConstants.ErrorTextForUndefined : Lang.getBgmName(bgmCode)}`;
+            return `${Lang.getText(LangTextType.B0750)}: ${bgmCode == null
+                ? CommonConstants.ErrorTextForUndefined
+                : (gameConfig.getBgmCfg(bgmCode)?.bgmName ?? CommonConstants.ErrorTextForUndefined)
+            }`;
         }
     }
     function getDescForWeaSetForceFogCode(data: Types.Undefinable<WarEvent.IWeaSetForceFogCode>): string | null {
@@ -3361,12 +3364,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         // todo: add more tips for the future actions.
         const playersCountUnneutral = war.getPlayersCountUnneutral();
+        const gameConfig            = war.getGameConfig();
         if      (action.WeaAddUnit)                         { return getErrorTipForWeaAddUnit(action.WeaAddUnit, war); }
         else if (action.WeaDialogue)                        { return getErrorTipForWeaDialogue(action.WeaDialogue, war); }
         else if (action.WeaSetViewpoint)                    { return getErrorTipForWeaSetViewpoint(action.WeaSetViewpoint, war); }
         else if (action.WeaSetWeather)                      { return getErrorTipForWeaSetWeather(action.WeaSetWeather, war); }
         else if (action.WeaSimpleDialogue)                  { return getErrorTipForWeaSimpleDialogue(action.WeaSimpleDialogue, war); }
-        else if (action.WeaPlayBgm)                         { return getErrorTipForWeaPlayBgm(action.WeaPlayBgm); }
+        else if (action.WeaPlayBgm)                         { return getErrorTipForWeaPlayBgm(action.WeaPlayBgm, gameConfig); }
         else if (action.WeaSetForceFogCode)                 { return getErrorTipForWeaSetForceFogCode(action.WeaSetForceFogCode); }
         else if (action.WeaSetCustomCounter)                { return getErrorTipForWeaSetCustomCounter(action.WeaSetCustomCounter); }
         else if (action.WeaDeprecatedSetPlayerAliveState)   { return getErrorTipForWeaDeprecatedSetPlayerAliveState(action.WeaDeprecatedSetPlayerAliveState, playersCountUnneutral); }
@@ -3524,13 +3528,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return null;
     }
-    function getErrorTipForWeaPlayBgm(data: WarEvent.IWeaPlayBgm): string | null {
+    function getErrorTipForWeaPlayBgm(data: WarEvent.IWeaPlayBgm, gameConfig: Config.GameConfig): string | null {
         if (data.useCoBgm) {
             return null;
         }
 
         const bgmCode = data.bgmCode;
-        return ((bgmCode == null) || (!SoundManager.checkIsValidBgmCode(bgmCode)))
+        return ((bgmCode == null) || (!SoundManager.checkIsValidBgmCode(bgmCode, gameConfig)))
             ? Lang.getText(LangTextType.A0263)
             : null;
     }
