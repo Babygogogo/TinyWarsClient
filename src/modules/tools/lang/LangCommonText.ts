@@ -4990,6 +4990,38 @@ namespace Twns.Lang {
             `Hawke's Theme (Hawk)`,
             `Hawke's Theme (Hawk)`,
         ],
+        [LangTextType.B0912]: [
+            `The Beast's Theme`,
+            `The Beast's Theme`,
+        ],
+        [LangTextType.B0913]: [
+            `First Strike (Lobby)`,
+            `First Strike (Lobby)`,
+        ],
+        [LangTextType.B0914]: [
+            `Destructive Tendencies`,
+            `Destructive Tendencies`,
+        ],
+        [LangTextType.B0915]: [
+            `Apocalypse - Chaos Suite`,
+            `Apocalypse - Chaos Suite`,
+        ],
+        [LangTextType.B0916]: [
+            `Stormy Times (Power)`,
+            `Stormy Times (Power)`,
+        ],
+        [LangTextType.B0917]: [
+            `Road to War`,
+            `Road to War`,
+        ],
+        [LangTextType.B0918]: [
+            `The Way of Sadness`,
+            `The Way of Sadness`,
+        ],
+        [LangTextType.B0919]: [
+            `Battle Ready`,
+            `Battle Ready`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [

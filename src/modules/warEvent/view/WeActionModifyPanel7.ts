@@ -114,7 +114,8 @@ namespace Twns.WarEvent {
 
         private _updateLabelBgm(): void {
             const data          = this._getOpenData();
-            this._labelBgm.text = data.war.getGameConfig().getBgmCfg(data.action.WeaPlayBgm?.bgmCode ?? Types.BgmCode.None)?.bgmName ?? CommonConstants.ErrorTextForUndefined;
+            const bgmCfg        = CommonConstants.BgmConfigDict.get(data.action.WeaPlayBgm?.bgmCode ?? Types.BgmCode.None);
+            this._labelBgm.text = bgmCfg ? Lang.getText(bgmCfg.bgmNameTextType) : CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateGroupUseCoBgm(): void {
@@ -123,11 +124,10 @@ namespace Twns.WarEvent {
 
         private _createDataForListBgm(): DataForBgmRenderer[] {
             const openData      = this._getOpenData();
-            const gameConfig    = openData.war.getGameConfig();
             const actionData    = Helpers.getExisted(openData.action.WeaPlayBgm);
             const dataArray     : DataForBgmRenderer[] = [];
-            for (const bgmCode of openData.war.getGameConfig().getAllBgmCodeArray()) {
-                dataArray.push({ actionData, bgmCode, gameConfig });
+            for (const bgmCode of CommonConstants.BgmCodeArray) {
+                dataArray.push({ actionData, bgmCode });
             }
             return dataArray;
         }
@@ -135,7 +135,6 @@ namespace Twns.WarEvent {
 
     type DataForBgmRenderer = {
         bgmCode     : Types.BgmCode;
-        gameConfig  : Config.GameConfig;
         actionData  : CommonProto.WarEvent.IWeaPlayBgm;
     };
     class BgmRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForBgmRenderer> {
@@ -190,8 +189,8 @@ namespace Twns.WarEvent {
         }
 
         private _updateLabelName(): void {
-            const data              = this._getData();
-            this._labelName.text    = data.gameConfig.getBgmCfg(data.bgmCode)?.bgmName ?? CommonConstants.ErrorTextForUndefined;
+            const bgmCfg            = CommonConstants.BgmConfigDict.get(this._getData().bgmCode);
+            this._labelName.text    = bgmCfg ? Lang.getText(bgmCfg.bgmNameTextType) : CommonConstants.ErrorTextForUndefined;
         }
     }
 }

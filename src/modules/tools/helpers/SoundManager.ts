@@ -14,7 +14,6 @@ namespace Twns.SoundManager {
     import ShortSfxCode         = Types.ShortSfxCode;
     import LongSfxCode          = Types.LongSfxCode;
     import UnitType             = Types.UnitType;
-    import BgmCfg               = Types.BgmCfg;
     import BgmCode              = Types.BgmCode;
     import LangTextType         = Lang.LangTextType;
 
@@ -76,14 +75,7 @@ namespace Twns.SoundManager {
         [ UnitType.Lander,          LongSfxCode.NavalMove   ],
         [ UnitType.Gunboat,         LongSfxCode.NavalMove   ],
     ]);
-    const _UNIT_MOVE_FADEOUT_TIME = 0.6;
-    const _BGM_CONFIG_FOR_LOBBY_01  : BgmCfg = {
-        bgmCode     : BgmCode.Lobby01,
-        loopParams  : [160700, 580700],
-        bgmName     : `Wandering Path (Lobby)`,
-        filename    : `lobby01.ogg`,
-        sortWeight  : 1,
-    };
+    const _UNIT_MOVE_FADEOUT_TIME   = 0.6;
 
     let _isInitialized              = false;
     let _audioContext               : AudioContext;
@@ -169,8 +161,8 @@ namespace Twns.SoundManager {
         _stopAllShortSfx();
     }
 
-    export function playPreviousBgm(gameConfig: Config.GameConfig): void {
-        const bgmCodeArray  = gameConfig.getAllBgmCodeArray();
+    export function playPreviousBgm(): void {
+        const bgmCodeArray  = CommonConstants.BgmCodeArray;
         const index         = bgmCodeArray.indexOf(getPlayingBgmCode());
         if (index < 0) {
             playBgm(BgmCode.Lobby01);
@@ -179,8 +171,8 @@ namespace Twns.SoundManager {
             playBgm(bgmCodeArray[(index + length - 1) % length]);
         }
     }
-    export function playNextBgm(gameConfig: Config.GameConfig): void {
-        const bgmCodeArray  = gameConfig.getAllBgmCodeArray();
+    export function playNextBgm(): void {
+        const bgmCodeArray  = CommonConstants.BgmCodeArray;
         const index         = bgmCodeArray.indexOf(getPlayingBgmCode());
         if (index < 0) {
             playBgm(BgmCode.Lobby01);
@@ -204,9 +196,9 @@ namespace Twns.SoundManager {
         }
     }
 
-    export function checkIsValidBgmCode(bgmCode: number, gameConfig: Config.GameConfig): boolean {
-        return (bgmCode === BgmCode.None)           ||
-            (gameConfig.getBgmCfg(bgmCode) != null);
+    export function checkIsValidBgmCode(bgmCode: number): boolean {
+        return (bgmCode === BgmCode.None)                       ||
+            (CommonConstants.BgmConfigDict.get(bgmCode) != null);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -282,9 +274,7 @@ namespace Twns.SoundManager {
         }
     }
     async function _playBgmForNormal(bgmCode: number): Promise<void> {
-        const bgmCfg        = bgmCode === BgmCode.Lobby01
-            ? _BGM_CONFIG_FOR_LOBBY_01
-            : Helpers.getExisted((await Config.ConfigManager.getLatestGameConfig()).getBgmCfg(bgmCode), ClientErrorCode.SoundManager_PlayBgmForNormal_00);
+        const bgmCfg        = Helpers.getExisted(CommonConstants.BgmConfigDict.get(bgmCode), ClientErrorCode.SoundManager_PlayBgmForNormal_00);
         const cacheDict     = _bgmBufferCache;
         const cachedBuffer  = cacheDict.get(bgmCode);
         if (cachedBuffer) {
@@ -307,7 +297,7 @@ namespace Twns.SoundManager {
             }
         }
     }
-    function _doPlayBgmForNormal(buffer: AudioBuffer, params: BgmCfg): void {
+    function _doPlayBgmForNormal(buffer: AudioBuffer, params: Types.BgmCfg): void {
         if (!buffer) {
             return;
         }
@@ -316,8 +306,8 @@ namespace Twns.SoundManager {
 
         _bgmSourceNode              = _audioContext.createBufferSource();
         _bgmSourceNode.buffer       = buffer;
-        _bgmSourceNode.loopStart    = params.loopParams[0] / 10000;
-        _bgmSourceNode.loopEnd      = params.loopParams[1] / 10000;
+        _bgmSourceNode.loopStart    = params.loopStart;
+        _bgmSourceNode.loopEnd      = params.loopEnd;
         _bgmSourceNode.loop         = true;
         _bgmSourceNode.connect(_bgmGain);
         _bgmSourceNode.start();

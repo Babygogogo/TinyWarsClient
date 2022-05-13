@@ -91,13 +91,6 @@ namespace Twns.Types {
     export interface UserAvatarCfg extends CommonProto.Config.IUserAvatarCfg {
         avatarId    : number;
     }
-    export interface BgmCfg extends CommonProto.Config.IBgmCfg {
-        bgmCode     : number;
-        filename    : string;
-        bgmName     : string;
-        sortWeight  : number;
-        loopParams  : number[];
-    }
     export interface FullConfig extends CommonProto.Config.FullConfig {
         System          : SystemCfg;
         TileCategory    : TileCategoryCfg[];
@@ -116,7 +109,6 @@ namespace Twns.Types {
         Weather         : WeatherCfg[];
         WeatherCategory : WeatherCategoryCfg[];
         UserAvatar      : UserAvatarCfg[];
-        Bgm             : BgmCfg[];
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -268,6 +260,14 @@ namespace Twns.Types {
         isShown?    : boolean;
         errorCode?  : ClientErrorCode;
     }
+
+    export type BgmCfg = {
+        filename        : string;
+        bgmNameTextType : Lang.LangTextType;
+        sortWeight      : number;
+        loopStart       : number;
+        loopEnd         : number;
+    };
 
     ////////////////////////////////////////////////////////////////////////////////
     // Enums.

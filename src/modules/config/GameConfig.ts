@@ -27,7 +27,6 @@ namespace Twns.Config {
     import WeatherCategory      = Types.WeatherCategory;
     import WeatherCategoryCfg   = Types.WeatherCategoryCfg;
     import UserAvatarCfg        = Types.UserAvatarCfg;
-    import BgmCfg               = Types.BgmCfg;
 
     export class GameConfig {
         private readonly _version                   : string;
@@ -50,7 +49,6 @@ namespace Twns.Config {
         private readonly _damageChartCfgDict        : Map<UnitType, { [armorType: number]: { [weaponType: number]: DamageChartCfg } }>;
         private readonly _unitPromotionCfgDict      : Map<number, UnitPromotionCfg>;
         private readonly _secondaryWeaponFlagDict   : Map<UnitType, boolean>;
-        private readonly _bgmCfgDict                : Map<number, BgmCfg>;
 
         private _availableCoArray   : CoBasicCfg[] | null = null;
         private _coTierArray        : number[] | null = null;
@@ -77,7 +75,6 @@ namespace Twns.Config {
             this._weatherCfgDict            = _destructWeatherCfg(rawConfig.Weather);
             this._weatherCategoryCfgDict    = _destructWeatherCategoryCfg(rawConfig.WeatherCategory);
             this._userAvatarCfgDict         = _destructUserAvatarCfg(rawConfig.UserAvatar);
-            this._bgmCfgDict                = _destructBgmCfg(rawConfig.Bgm);
             this._damageChartCfgDict        = damageChartCfg;
             this._unitPromotionCfgDict      = unitPromotionCfg;
             this._secondaryWeaponFlagDict   = _getSecondaryWeaponFlags(damageChartCfg);
@@ -375,25 +372,6 @@ namespace Twns.Config {
                 default                     : return null;
             }
         }
-
-        public getBgmCfg(bgmCode: number): BgmCfg | null {
-            return this._bgmCfgDict.get(bgmCode) ?? null;
-        }
-        public getAllBgmCodeArray(): number[] {
-            if (this._allBgmCodeArray) {
-                return this._allBgmCodeArray;
-            } else {
-                const cfgArray: BgmCfg[] = [];
-                for (const [, cfg] of this._bgmCfgDict) {
-                    cfgArray.push(cfg);
-                }
-
-                const bgmCodeArray      = cfgArray.sort((v1, v2) => v1.sortWeight - v2.sortWeight).map(v => v.bgmCode);
-                this._allBgmCodeArray   = bgmCodeArray;
-
-                return bgmCodeArray;
-            }
-        }
     }
 
     function _destructSystemCfg(data: SystemCfg): SystemCfg {
@@ -524,13 +502,6 @@ namespace Twns.Config {
         const dst = new Map<number, UserAvatarCfg>();
         for (const d of data) {
             dst.set(d.avatarId, d);
-        }
-        return dst;
-    }
-    function _destructBgmCfg(data: BgmCfg[]): Map<number, BgmCfg> {
-        const dst = new Map<number, BgmCfg>();
-        for (const d of data) {
-            dst.set(d.bgmCode, d);
         }
         return dst;
     }
