@@ -1166,32 +1166,32 @@ namespace Twns.CommonConstants {
     ]);
 
     export const BgmConfigDict = new Map<number, Types.BgmCfg>([
-        [ BgmCode.Lobby01,  { filename: `lobby01.ogg`,      bgmNameTextType: LangTextType.B0632,    sortWeight: 1,          loopStart: 16.07,   loopEnd: 58.07      } ],
-        [ 1,                { filename: `co0001.ogg`,       bgmNameTextType: LangTextType.B0634,    sortWeight: 10001,      loopStart: 1.75,    loopEnd: 56.75      } ],    // will
-        [ 2,                { filename: `co0002.ogg`,       bgmNameTextType: LangTextType.B0636,    sortWeight: 10002,      loopStart: 1,       loopEnd: 65,        } ],    // Isabella
-        [ 3,                { filename: `co0003.ogg`,       bgmNameTextType: LangTextType.B0656,    sortWeight: 10008,      loopStart: 4,       loopEnd: 58.6       } ],    // waylon
-        [ 4,                { filename: `co0004.ogg`,       bgmNameTextType: LangTextType.B0655,    sortWeight: 10005,      loopStart: 3.25,    loopEnd: 61.35      } ],    // forsythe
-        [ 5,                { filename: `co0005.ogg`,       bgmNameTextType: LangTextType.B0637,    sortWeight: 10007,      loopStart: 1.92,    loopEnd: 63         } ],    // gage
-        [ 6,                { filename: `co0006.ogg`,       bgmNameTextType: LangTextType.B0654,    sortWeight: 10006,      loopStart: 0.7,     loopEnd: 66         } ],    // tasha
-        [ 7,                { filename: `co0007.ogg`,       bgmNameTextType: LangTextType.B0635,    sortWeight: 10003,      loopStart: 1,       loopEnd: 59.824     } ],    // brenner
-        [ 8,                { filename: `co0008.ogg`,       bgmNameTextType: LangTextType.B0657,    sortWeight: 10009,      loopStart: 3.83,    loopEnd: 65         } ],    // greyfield
-        [ 9,                { filename: `co0009.ogg`,       bgmNameTextType: LangTextType.B0658,    sortWeight: 10010,      loopStart: 0.7,     loopEnd: 72         } ],    // tabitha
-        [ 10,               { filename: `co0010.ogg`,       bgmNameTextType: LangTextType.B0653,    sortWeight: 10004,      loopStart: 4.95,    loopEnd: 62         } ],    // lin
-        [ 11,               { filename: `co0011.ogg`,       bgmNameTextType: LangTextType.B0659,    sortWeight: 10012,      loopStart: 6.7200,  loopEnd: 60.42      } ],    // caulder
-        [ 13,               { filename: `co0013.ogg`,       bgmNameTextType: LangTextType.B0911,    sortWeight: 10100,      loopStart: 1.2,     loopEnd: 63.98      } ],    // hawk
-        [ 14,               { filename: `co0014.ogg`,       bgmNameTextType: LangTextType.B0912,    sortWeight: 10014,      loopStart: 1.1,     loopEnd: 64.117     } ],    // the beast
-        [ 42,               { filename: `co0042.ogg`,       bgmNameTextType: LangTextType.B0706,    sortWeight: 10011,      loopStart: 7.6,     loopEnd: 60.1       } ],    // penny
-        [ 9998,             { filename: `co9998.ogg`,       bgmNameTextType: LangTextType.B0639,    sortWeight: 30000,      loopStart: 4.6,     loopEnd: 115.34     } ],    // rutty
-        [ 9999,             { filename: `co9999.ogg`,       bgmNameTextType: LangTextType.B0638,    sortWeight: 10013,      loopStart: 8.5,     loopEnd: 72.5       } ],    // no co
-        [ 10001,            { filename: `lobby02.ogg`,      bgmNameTextType: LangTextType.B0913,    sortWeight: 2,          loopStart: 3.608,   loopEnd: 34.333     } ],    // first strike (lobby)
-        [ 10100,            { filename: `mapEditor01.ogg`,  bgmNameTextType: LangTextType.B0633,    sortWeight: 3,          loopStart: 0.7,     loopEnd: 36         } ],    // design time (map editor)
-        [ 10200,            { filename: `power00.ogg`,      bgmNameTextType: LangTextType.B0660,    sortWeight: 4,          loopStart: 2.97,    loopEnd: 38         } ],    // power up (power)
-        [ 10201,            { filename: `power01.ogg`,      bgmNameTextType: LangTextType.B0916,    sortWeight: 5,          loopStart: 2.794,   loopEnd: 40.689     } ],    // stormy times (power)
-        [ 20000,            { filename: `story0001.ogg`,    bgmNameTextType: LangTextType.B0914,    sortWeight: 20000,      loopStart: 4,       loopEnd: 46.677     } ],    // Destructive Tendencies
-        [ 20001,            { filename: `story0002.ogg`,    bgmNameTextType: LangTextType.B0915,    sortWeight: 20001,      loopStart: 0,       loopEnd: 42.364     } ],    // Apocalypse - Chaos Suite
-        [ 20002,            { filename: `story0003.ogg`,    bgmNameTextType: LangTextType.B0917,    sortWeight: 20002,      loopStart: 1.304,   loopEnd: 51.115     } ],    // road to war
-        [ 20003,            { filename: `story0004.ogg`,    bgmNameTextType: LangTextType.B0918,    sortWeight: 20003,      loopStart: 1.676,   loopEnd: 32.276     } ],    // the way of sadness
-        [ 20004,            { filename: `story0005.ogg`,    bgmNameTextType: LangTextType.B0919,    sortWeight: 20004,      loopStart: 4.619,   loopEnd: 35.595     } ],    // battle ready
+        [ BgmCode.Lobby01,  { filename: `lobby01.m4a`,      bgmNameTextType: LangTextType.B0632,    sortWeight: 1,          loopStart: 16.07,   loopEnd: 58.07      } ],
+        [ 1,                { filename: `co0001.m4a`,       bgmNameTextType: LangTextType.B0634,    sortWeight: 10001,      loopStart: 1.75,    loopEnd: 56.75      } ],    // will
+        [ 2,                { filename: `co0002.m4a`,       bgmNameTextType: LangTextType.B0636,    sortWeight: 10002,      loopStart: 1,       loopEnd: 65,        } ],    // Isabella
+        [ 3,                { filename: `co0003.m4a`,       bgmNameTextType: LangTextType.B0656,    sortWeight: 10008,      loopStart: 4,       loopEnd: 58.6       } ],    // waylon
+        [ 4,                { filename: `co0004.m4a`,       bgmNameTextType: LangTextType.B0655,    sortWeight: 10005,      loopStart: 3.25,    loopEnd: 61.35      } ],    // forsythe
+        [ 5,                { filename: `co0005.m4a`,       bgmNameTextType: LangTextType.B0637,    sortWeight: 10007,      loopStart: 1.92,    loopEnd: 63         } ],    // gage
+        [ 6,                { filename: `co0006.m4a`,       bgmNameTextType: LangTextType.B0654,    sortWeight: 10006,      loopStart: 0.7,     loopEnd: 66         } ],    // tasha
+        [ 7,                { filename: `co0007.m4a`,       bgmNameTextType: LangTextType.B0635,    sortWeight: 10003,      loopStart: 1,       loopEnd: 59.824     } ],    // brenner
+        [ 8,                { filename: `co0008.m4a`,       bgmNameTextType: LangTextType.B0657,    sortWeight: 10009,      loopStart: 3.83,    loopEnd: 65         } ],    // greyfield
+        [ 9,                { filename: `co0009.m4a`,       bgmNameTextType: LangTextType.B0658,    sortWeight: 10010,      loopStart: 0.7,     loopEnd: 72         } ],    // tabitha
+        [ 10,               { filename: `co0010.m4a`,       bgmNameTextType: LangTextType.B0653,    sortWeight: 10004,      loopStart: 4.95,    loopEnd: 62         } ],    // lin
+        [ 11,               { filename: `co0011.m4a`,       bgmNameTextType: LangTextType.B0659,    sortWeight: 10012,      loopStart: 6.7200,  loopEnd: 60.42      } ],    // caulder
+        [ 13,               { filename: `co0013.m4a`,       bgmNameTextType: LangTextType.B0911,    sortWeight: 10100,      loopStart: 1.2,     loopEnd: 63.98      } ],    // hawk
+        [ 14,               { filename: `co0014.m4a`,       bgmNameTextType: LangTextType.B0912,    sortWeight: 10014,      loopStart: 1.1,     loopEnd: 64.117     } ],    // the beast
+        [ 42,               { filename: `co0042.m4a`,       bgmNameTextType: LangTextType.B0706,    sortWeight: 10011,      loopStart: 7.6,     loopEnd: 60.1       } ],    // penny
+        [ 9998,             { filename: `co9998.m4a`,       bgmNameTextType: LangTextType.B0639,    sortWeight: 30000,      loopStart: 4.6,     loopEnd: 115.34     } ],    // rutty
+        [ 9999,             { filename: `co9999.m4a`,       bgmNameTextType: LangTextType.B0638,    sortWeight: 10013,      loopStart: 8.5,     loopEnd: 72.5       } ],    // no co
+        [ 10001,            { filename: `lobby02.m4a`,      bgmNameTextType: LangTextType.B0913,    sortWeight: 2,          loopStart: 3.608,   loopEnd: 34.333     } ],    // first strike (lobby)
+        [ 10100,            { filename: `mapEditor01.m4a`,  bgmNameTextType: LangTextType.B0633,    sortWeight: 3,          loopStart: 0.7,     loopEnd: 36         } ],    // design time (map editor)
+        [ 10200,            { filename: `power00.m4a`,      bgmNameTextType: LangTextType.B0660,    sortWeight: 4,          loopStart: 2.97,    loopEnd: 38         } ],    // power up (power)
+        [ 10201,            { filename: `power01.m4a`,      bgmNameTextType: LangTextType.B0916,    sortWeight: 5,          loopStart: 2.794,   loopEnd: 40.689     } ],    // stormy times (power)
+        [ 20000,            { filename: `story0001.m4a`,    bgmNameTextType: LangTextType.B0914,    sortWeight: 20000,      loopStart: 4,       loopEnd: 46.677     } ],    // Destructive Tendencies
+        [ 20001,            { filename: `story0002.m4a`,    bgmNameTextType: LangTextType.B0915,    sortWeight: 20001,      loopStart: 0,       loopEnd: 42.364     } ],    // Apocalypse - Chaos Suite
+        [ 20002,            { filename: `story0003.m4a`,    bgmNameTextType: LangTextType.B0917,    sortWeight: 20002,      loopStart: 1.304,   loopEnd: 51.115     } ],    // road to war
+        [ 20003,            { filename: `story0004.m4a`,    bgmNameTextType: LangTextType.B0918,    sortWeight: 20003,      loopStart: 1.676,   loopEnd: 32.276     } ],    // the way of sadness
+        [ 20004,            { filename: `story0005.m4a`,    bgmNameTextType: LangTextType.B0919,    sortWeight: 20004,      loopStart: 4.619,   loopEnd: 35.595     } ],    // battle ready
     ]);
     export const BgmCodeArray = [...BgmConfigDict].sort((v1, v2) => v1[1].sortWeight - v2[1].sortWeight).map(v => v[0]);
 }
