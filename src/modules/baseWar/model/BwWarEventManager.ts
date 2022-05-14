@@ -356,7 +356,7 @@ namespace Twns.BaseWar {
                 const unitId                = unitMap.getNextUnitId();
                 const unitType              = Helpers.getExisted(unitData.unitType);
                 const moveType              = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.moveType);
-                const rawGridIndex          = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(unitData.gridIndex));
+                const rawGridIndex          = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
                 if (WarHelpers.WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
@@ -430,7 +430,7 @@ namespace Twns.BaseWar {
 
         private async _callActionSetViewpointWithExtraData(action: WarEvent.IWeaSetViewpoint, isFast: boolean): Promise<void> {
             const war       = this._getWar();
-            const gridIndex = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(action.gridIndex), ClientErrorCode.BwWarEventManager_CallActionSetViewpointWithExtraData_00);
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(action.gridIndex), ClientErrorCode.BwWarEventManager_CallActionSetViewpointWithExtraData_00);
             const cursor    = war.getCursor();
             cursor.setGridIndex(gridIndex);
             cursor.updateView();
@@ -445,7 +445,7 @@ namespace Twns.BaseWar {
         }
         private async _callActionSetViewpointWithoutExtraData(action: WarEvent.IWeaSetViewpoint, isFast: boolean): Promise<void> {
             const war       = this._getWar();
-            const gridIndex = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(action.gridIndex), ClientErrorCode.BwWarEventManager_CallActionSetViewpointWithoutExtraData_00);
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(action.gridIndex), ClientErrorCode.BwWarEventManager_CallActionSetViewpointWithoutExtraData_00);
             const cursor    = war.getCursor();
             cursor.setGridIndex(gridIndex);
             cursor.updateView();
@@ -813,7 +813,7 @@ namespace Twns.BaseWar {
             const playerIndexArray              = action.conPlayerIndexArray ?? [];
             const teamIndexArray                = action.conTeamIndexArray ?? [];
             const locationIdArray               = action.conLocationIdArray ?? [];
-            const gridIndexArray                = action.conGridIndexArray?.map(v => Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_00)) ?? [];
+            const gridIndexArray                = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_00)) ?? [];
             const unitTypeArray                 = action.conUnitTypeArray ?? [];
             const actionStateArray              = action.conActionStateArray ?? [];
             const hasLoadedCo                   = action.conHasLoadedCo;
@@ -855,7 +855,7 @@ namespace Twns.BaseWar {
                         ((unitTypeArray.length) && (unitTypeArray.indexOf(unit.getUnitType()) < 0))                             ||
                         ((playerIndexArray.length) && (playerIndexArray.indexOf(unit.getPlayerIndex()) < 0))                    ||
                         ((teamIndexArray.length) && (teamIndexArray.indexOf(unit.getTeamIndex()) < 0))                          ||
-                        ((gridIndexArray.length) && (!gridIndexArray.some(v => Twns.GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
+                        ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
                         ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))                  ||
                         ((actionStateArray.length) && (actionStateArray.indexOf(unit.getActionState()) < 0))                    ||
                         ((hasLoadedCo != null) && (unit.getHasLoadedCo() !== hasLoadedCo))
@@ -907,7 +907,7 @@ namespace Twns.BaseWar {
                     }
 
                     if (destroyUnit) {
-                        Twns.WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
+                        WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
 
                     } else {
                         unit.setCurrentHp(Helpers.getValueInRange({
@@ -971,7 +971,7 @@ namespace Twns.BaseWar {
             const actIsModifyTileObject     = (action.actIsModifyTileObject) || (action.actIsModifyTileObject == null);
             const conIsHighlighted          = action.conIsHighlighted;
             const conLocationIdArray        = action.conLocationIdArray ?? [];
-            const conGridIndexArray         = action.conGridIndexArray?.map(v => Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_03)) ?? [];
+            const conGridIndexArray         = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_03)) ?? [];
             const unitMap                   = war.getUnitMap();
             const tileMap                   = war.getTileMap();
             const mapSize                   = tileMap.getMapSize();
@@ -982,7 +982,7 @@ namespace Twns.BaseWar {
                     const gridIndex : Types.GridIndex = { x, y };
                     const tile      = tileMap.getTile(gridIndex);
                     if (((conIsHighlighted != null) && (tile.getIsHighlighted() !== conIsHighlighted))                              ||
-                        ((conGridIndexArray.length) && (!conGridIndexArray.some(v => Twns.GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
+                        ((conGridIndexArray.length) && (!conGridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
                         ((conLocationIdArray.length) && (!conLocationIdArray.some(v => tile.getHasLocationFlag(v))))
                     ) {
                         continue;
@@ -992,7 +992,7 @@ namespace Twns.BaseWar {
                     const actObjectType = actIsModifyTileObject ? rawActObjectType : tile.getObjectType();
                     if (unitMap.getUnitOnMap(gridIndex)) {
                         if (actDestroyUnit) {
-                            Twns.WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
+                            WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
                         } else if (gameConfig.getTileTemplateCfgByType(Config.ConfigManager.getTileType(actBaseType, actObjectType))?.maxHp != null) {
                             continue;
                         }
@@ -1032,7 +1032,7 @@ namespace Twns.BaseWar {
             const mapHeight                             = mapSize.height;
             const conIsHighlighted                      = action.conIsHighlighted;
             const conLocationIdArray                    = action.conLocationIdArray ?? [];
-            const conGridIndexArray                     = action.conGridIndexArray?.map(v => Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_00)) ?? [];
+            const conGridIndexArray                     = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_00)) ?? [];
             const actHpMultiplierPercentage             = action.actHpMultiplierPercentage;
             const actHpDeltaValue                       = action.actHpDeltaValue;
             const actBuildPointMultiplierPercentage     = action.actBuildPointMultiplierPercentage;
@@ -1047,7 +1047,7 @@ namespace Twns.BaseWar {
                     const gridIndex : Types.GridIndex = { x, y };
                     const tile      = tileMap.getTile(gridIndex);
                     if (((conIsHighlighted != null) && (tile.getIsHighlighted() !== conIsHighlighted))                              ||
-                        ((conGridIndexArray.length) && (!conGridIndexArray.some(v => Twns.GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
+                        ((conGridIndexArray.length) && (!conGridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
                         ((conLocationIdArray.length) && (!conLocationIdArray.some(v => tile.getHasLocationFlag(v))))
                     ) {
                         continue;
@@ -1164,6 +1164,7 @@ namespace Twns.BaseWar {
                 throw Helpers.newError(`Empty conditionIdArray and subNodeIdArray.`);
             }
 
+            let isMeetAnyConditionOrNode = false;
             if (conditionIdArray) {
                 for (const conditionId of conditionIdArray) {
                     const isConditionMet = this._checkIsMeetCondition(conditionId);
@@ -1173,6 +1174,7 @@ namespace Twns.BaseWar {
                     if ((!isAnd) && (isConditionMet)) {
                         return true;
                     }
+                    isMeetAnyConditionOrNode ||= isConditionMet;
                 }
             }
 
@@ -1185,10 +1187,11 @@ namespace Twns.BaseWar {
                     if ((!isAnd) && (isSubNodeMet)) {
                         return true;
                     }
+                    isMeetAnyConditionOrNode ||= isSubNodeMet;
                 }
             }
 
-            return true;
+            return isMeetAnyConditionOrNode;
         }
         private _checkIsMeetCondition(conditionId: number): boolean {
             const condition = this._getCondition(conditionId);
@@ -1481,14 +1484,14 @@ namespace Twns.BaseWar {
         }
 
         private _checkIsMeetConTilePlayerIndexEqualTo(condition: WarEvent.IWecTilePlayerIndexEqualTo): boolean {
-            const tile  = this._getWar().getTileMap().getTile(Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(condition.gridIndex), ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePlayerIndexEqualTo_00));
+            const tile  = this._getWar().getTileMap().getTile(Helpers.getExisted(GridIndexHelpers.convertGridIndex(condition.gridIndex), ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePlayerIndexEqualTo_00));
             const isNot = condition.isNot;
             return (tile.getPlayerIndex() === Helpers.getExisted(condition.playerIndex, ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePlayerIndexEqualTo_01))
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
         private _checkIsMeetConTileTypeEqualTo(condition: WarEvent.IWecTileTypeEqualTo): boolean {
-            const tile  = this._getWar().getTileMap().getTile(Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(condition.gridIndex), ClientErrorCode.BwWarEventManager_CheckIsMeetConTileTypeEqualTo_00));
+            const tile  = this._getWar().getTileMap().getTile(Helpers.getExisted(GridIndexHelpers.convertGridIndex(condition.gridIndex), ClientErrorCode.BwWarEventManager_CheckIsMeetConTileTypeEqualTo_00));
             const isNot = condition.isNot;
             return (tile.getType() === Helpers.getExisted(condition.tileType, ClientErrorCode.BwWarEventManager_CheckIsMeetConTileTypeEqualTo_01))
                 ? (isNot ? false : true)
@@ -1498,7 +1501,7 @@ namespace Twns.BaseWar {
             const playerIndexArray      = condition.playerIndexArray ?? [];
             const teamIndexArray        = condition.teamIndexArray ?? [];
             const locationIdArray       = condition.locationIdArray ?? [];
-            const gridIndexArray        = condition.gridIndexArray?.map(v => Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePresence_00)) ?? [];
+            const gridIndexArray        = condition.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePresence_00)) ?? [];
             const tileTypeArray         = condition.tileTypeArray ?? [];
             const war                   = this._getWar();
             const tileMap               = war.getTileMap();
@@ -1513,7 +1516,7 @@ namespace Twns.BaseWar {
                     if (((tileTypeArray.length) && (tileTypeArray.indexOf(tile.getType()) < 0))                                 ||
                         ((playerIndexArray.length) && (playerIndexArray.indexOf(tile.getPlayerIndex()) < 0))                    ||
                         ((teamIndexArray.length) && (teamIndexArray.indexOf(tile.getTeamIndex()) < 0))                          ||
-                        ((gridIndexArray.length) && (!gridIndexArray.some(v => Twns.GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
+                        ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
                         ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))
                     ) {
                         continue;
@@ -1533,7 +1536,7 @@ namespace Twns.BaseWar {
             const playerIndexArray      = condition.playerIndexArray ?? [];
             const teamIndexArray        = condition.teamIndexArray ?? [];
             const locationIdArray       = condition.locationIdArray ?? [];
-            const gridIndexArray        = condition.gridIndexArray?.map(v => Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_00)) ?? [];
+            const gridIndexArray        = condition.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_00)) ?? [];
             const unitTypeArray         = condition.unitTypeArray ?? [];
             const actionStateArray      = condition.actionStateArray ?? [];
             const hasLoadedCo           = condition.hasLoadedCo;
@@ -1556,7 +1559,7 @@ namespace Twns.BaseWar {
                     ((unitTypeArray.length) && (unitTypeArray.indexOf(unit.getUnitType()) < 0))                             ||
                     ((playerIndexArray.length) && (playerIndexArray.indexOf(unit.getPlayerIndex()) < 0))                    ||
                     ((teamIndexArray.length) && (teamIndexArray.indexOf(unit.getTeamIndex()) < 0))                          ||
-                    ((gridIndexArray.length) && (!gridIndexArray.some(v => Twns.GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
+                    ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
                     ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))                  ||
                     ((actionStateArray.length) && (actionStateArray.indexOf(unit.getActionState()) < 0))                    ||
                     ((hasLoadedCo != null) && (unit.getHasLoadedCo() !== hasLoadedCo))
@@ -1711,14 +1714,14 @@ namespace Twns.BaseWar {
         }
 
         const maxDistance = Math.max(
-            Twns.GridIndexHelpers.getDistance(origin, { x: 0,                    y: 0 }),
-            Twns.GridIndexHelpers.getDistance(origin, { x: 0,                    y: mapSize.height - 1 }),
-            Twns.GridIndexHelpers.getDistance(origin, { x: mapSize.width - 1,    y: 0 }),
-            Twns.GridIndexHelpers.getDistance(origin, { x: mapSize.width - 1,    y: mapSize.height - 1 }),
+            GridIndexHelpers.getDistance(origin, { x: 0,                    y: 0 }),
+            GridIndexHelpers.getDistance(origin, { x: 0,                    y: mapSize.height - 1 }),
+            GridIndexHelpers.getDistance(origin, { x: mapSize.width - 1,    y: 0 }),
+            GridIndexHelpers.getDistance(origin, { x: mapSize.width - 1,    y: mapSize.height - 1 }),
         );
 
         for (let distance = 0; distance <= maxDistance; ++distance) {
-            const gridIndex = Twns.GridIndexHelpers.getGridsWithinDistance(
+            const gridIndex = GridIndexHelpers.getGridsWithinDistance(
                 {
                     origin, minDistance: distance, maxDistance: distance, mapSize, predicate: (g): boolean => {
                         if (unitMap.getUnitOnMap(g)) {
