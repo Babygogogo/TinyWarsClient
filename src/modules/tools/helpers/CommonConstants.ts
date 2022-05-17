@@ -41,7 +41,7 @@ namespace Twns.CommonConstants {
     export const ChangeLogTextListMaxLength             = 2;
     export const ChangeLogMessageListMaxLength          = 100;
 
-    export const BgmCode = {
+    export const BgmSfxCode = {
         None        : 0,
         CoEmpty     : 9999,
         Lobby       : 10000,

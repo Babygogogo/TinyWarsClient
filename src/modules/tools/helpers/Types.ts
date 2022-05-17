@@ -323,17 +323,6 @@ namespace Twns.Types {
         Explode,
     }
 
-    // eslint-disable-next-line no-shadow
-    export enum LongSfxCode {
-        None,
-        FootMove,
-        TankMove,
-        TireMove,
-        CopterMove,
-        JetMove,
-        NavalMove,
-    }
-
     export const UiState = {
         Up  : "up",
         Down: "down",

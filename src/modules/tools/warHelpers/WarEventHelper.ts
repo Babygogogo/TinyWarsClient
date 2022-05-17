@@ -4569,7 +4569,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         } else if (actionType === ActionType.PlayBgm) {
             action.WeaPlayBgm = {
                 useCoBgm        : false,
-                bgmCode         : CommonConstants.BgmCode.None,
+                bgmCode         : CommonConstants.BgmSfxCode.None,
             };
         } else if (actionType === ActionType.SetForceFogCode) {
             action.WeaSetForceFogCode = {

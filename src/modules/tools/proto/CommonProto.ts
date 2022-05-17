@@ -800,6 +800,9 @@ declare namespace CommonProto {
             /** UnitTemplateCfg lang */
             lang?: (number|null);
 
+            /** UnitTemplateCfg moveSfx */
+            moveSfx?: (number|null);
+
             /** UnitTemplateCfg animParams */
             animParams?: (number[]|null);
         }
@@ -914,6 +917,9 @@ declare namespace CommonProto {
 
             /** UnitTemplateCfg lang. */
             public lang: number;
+
+            /** UnitTemplateCfg moveSfx. */
+            public moveSfx: number;
 
             /** UnitTemplateCfg animParams. */
             public animParams: number[];
@@ -2546,6 +2552,9 @@ declare namespace CommonProto {
             /** BgmSfxCfg filename */
             filename?: (string|null);
 
+            /** BgmSfxCfg isBgm */
+            isBgm?: (number|null);
+
             /** BgmSfxCfg lang */
             lang?: (number|null);
 
@@ -2573,6 +2582,9 @@ declare namespace CommonProto {
 
             /** BgmSfxCfg filename. */
             public filename: string;
+
+            /** BgmSfxCfg isBgm. */
+            public isBgm: number;
 
             /** BgmSfxCfg lang. */
             public lang: number;

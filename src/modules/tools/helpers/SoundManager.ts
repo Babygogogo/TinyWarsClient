@@ -12,18 +12,11 @@
 namespace Twns.SoundManager {
     import SoundType            = Types.SoundType;
     import ShortSfxCode         = Types.ShortSfxCode;
-    import LongSfxCode          = Types.LongSfxCode;
-    import UnitType             = Types.UnitType;
     import LangTextType         = Lang.LangTextType;
 
     export const DEFAULT_MUTE   = false;
     export const DEFAULT_VOLUME = 1;
 
-    type LongSfxParams = {
-        name    : string;
-        start   : number;
-        end     : number;
-    };
     type ShortSfxParams = {
         name    : string;
     };
@@ -38,42 +31,6 @@ namespace Twns.SoundManager {
         [ ShortSfxCode.CursorMove01,        { name: "cursorMove01.mp3"      } ],
         [ ShortSfxCode.Explode,             { name: "explode.mp3"           } ],
     ]);
-    const _LONG_SFX_PARAMS = new Map<LongSfxCode, LongSfxParams>([
-        [ LongSfxCode.NavalMove,        { name: "navalMove.mp3",    start: 1.52,    end: 2.61                       } ], // 0.37
-        [ LongSfxCode.CopterMove,       { name: "copterMove.mp3",   start: 0.06,    end: 0.06 + (0.351 - 0.047) * 4 } ],
-        [ LongSfxCode.JetMove,          { name: "jetMove.mp3",      start: 1.518,   end: 1.518 + 0.192 * 1          } ],
-        [ LongSfxCode.TireMove,         { name: "tireMove.mp3",     start: 0.62,    end: 0.62 + 0.266 * 1           } ],
-        [ LongSfxCode.FootMove,         { name: "footMove.mp3",     start: 0.00,    end: 0.153                      } ],
-        [ LongSfxCode.TankMove,         { name: "tankMove.mp3",     start: 0.15,    end: 0.25                       } ],
-    ]);
-    const _UNIT_MOVE_SFX_CODES = new Map<UnitType, LongSfxCode>([
-        [ UnitType.Infantry,        LongSfxCode.FootMove    ],
-        [ UnitType.Mech,            LongSfxCode.FootMove    ],
-        [ UnitType.Bike,            LongSfxCode.TireMove    ],
-        [ UnitType.Recon,           LongSfxCode.TireMove    ],
-        [ UnitType.Flare,           LongSfxCode.TankMove    ],
-        [ UnitType.AntiAir,         LongSfxCode.TankMove    ],
-        [ UnitType.Tank,            LongSfxCode.TankMove    ],
-        [ UnitType.MediumTank,      LongSfxCode.TankMove    ],
-        [ UnitType.WarTank,         LongSfxCode.TankMove    ],
-        [ UnitType.Artillery,       LongSfxCode.TankMove    ],
-        [ UnitType.AntiTank,        LongSfxCode.TireMove    ],
-        [ UnitType.Rockets,         LongSfxCode.TireMove    ],
-        [ UnitType.Missiles,        LongSfxCode.TireMove    ],
-        [ UnitType.Rig,             LongSfxCode.TankMove    ],
-        [ UnitType.Fighter,         LongSfxCode.JetMove     ],
-        [ UnitType.Bomber,          LongSfxCode.JetMove     ],
-        [ UnitType.Duster,          LongSfxCode.CopterMove  ],
-        [ UnitType.BattleCopter,    LongSfxCode.CopterMove  ],
-        [ UnitType.TransportCopter, LongSfxCode.CopterMove  ],
-        [ UnitType.Seaplane,        LongSfxCode.JetMove     ],
-        [ UnitType.Battleship,      LongSfxCode.NavalMove   ],
-        [ UnitType.Carrier,         LongSfxCode.NavalMove   ],
-        [ UnitType.Submarine,       LongSfxCode.NavalMove   ],
-        [ UnitType.Cruiser,         LongSfxCode.NavalMove   ],
-        [ UnitType.Lander,          LongSfxCode.NavalMove   ],
-        [ UnitType.Gunboat,         LongSfxCode.NavalMove   ],
-    ]);
     const _UNIT_MOVE_FADEOUT_TIME   = 0.6;
 
     let _isInitialized              = false;
@@ -81,7 +38,7 @@ namespace Twns.SoundManager {
 
     let _bgmMute                    = DEFAULT_MUTE;
     let _bgmVolume                  = DEFAULT_VOLUME;    // 音量范围是0～1，1为最大音量
-    let _playingBgmCode             = CommonConstants.BgmCode.None;
+    let _playingBgmCode             = CommonConstants.BgmSfxCode.None;
 
     const _bgmBufferCache           = new Map<number, AudioBuffer>();
     let _bgmGain                    : GainNode;
@@ -89,10 +46,10 @@ namespace Twns.SoundManager {
 
     let _sfxMute                    = DEFAULT_MUTE;
     let _sfxVolume                  = DEFAULT_VOLUME;
-    let _playingLongSfxCode         = LongSfxCode.None;
+    let _playingLongSfxCode         = CommonConstants.BgmSfxCode.None;
     let _timeoutIdForStopLongSfx    : number | null = null;
 
-    const _longSfxBufferCache       = new Map<LongSfxCode, AudioBuffer>();
+    const _longSfxBufferCache       = new Map<number, AudioBuffer>();
     const _shortSfxBufferCache      = new Map<ShortSfxCode, AudioBuffer>();
     let _shortSfxGain               : GainNode;
     let _longSfxGain                : GainNode;
@@ -138,7 +95,7 @@ namespace Twns.SoundManager {
         _initEffectMute();
         _initEffectVolume();
 
-        playBgm(CommonConstants.BgmCode.Lobby);
+        playBgm(CommonConstants.BgmSfxCode.Lobby);
     }
 
     export function resume(): void {
@@ -164,7 +121,7 @@ namespace Twns.SoundManager {
         const bgmCodeArray  = (await Config.ConfigManager.getLatestGameConfig()).getAllBgmCodeArray();
         const index         = bgmCodeArray.indexOf(getPlayingBgmCode());
         if (index < 0) {
-            playBgm(CommonConstants.BgmCode.Lobby);
+            playBgm(CommonConstants.BgmSfxCode.Lobby);
         } else {
             const length = bgmCodeArray.length;
             playBgm(bgmCodeArray[(index + length - 1) % length]);
@@ -174,13 +131,13 @@ namespace Twns.SoundManager {
         const bgmCodeArray  = (await Config.ConfigManager.getLatestGameConfig()).getAllBgmCodeArray();
         const index         = bgmCodeArray.indexOf(getPlayingBgmCode());
         if (index < 0) {
-            playBgm(CommonConstants.BgmCode.Lobby);
+            playBgm(CommonConstants.BgmSfxCode.Lobby);
         } else {
             playBgm(bgmCodeArray[(index + 1) % bgmCodeArray.length]);
         }
     }
     export function playCoBgm(coId: number, gameConfig: Config.GameConfig): void {
-        playBgm(gameConfig.getCoBasicCfg(coId)?.bgmCode ?? CommonConstants.BgmCode.CoEmpty);
+        playBgm(gameConfig.getCoBasicCfg(coId)?.bgmCode ?? CommonConstants.BgmSfxCode.CoEmpty);
     }
     export function playCoBgmWithWar(war: BaseWar.BwWar, force: boolean): void {
         const player = war.getPlayerInTurn();
@@ -189,7 +146,7 @@ namespace Twns.SoundManager {
         }
 
         if (player.checkCoIsUsingActiveSkill()) {
-            playBgm(CommonConstants.BgmCode.CoPower);
+            playBgm(CommonConstants.BgmSfxCode.CoPower);
         } else {
             playCoBgm(player.getCoId(), war.getGameConfig());
         }
@@ -450,7 +407,7 @@ namespace Twns.SoundManager {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // 长音效，同时只能有一个在播放
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function playLongSfxForMoveUnit(unitType: Types.UnitType): void {
+    export function playLongSfxForMoveUnit(unitType: Types.UnitType, gameConfig: Config.GameConfig): void {
         if (_timeoutIdForStopLongSfx != null) {
             egret.clearTimeout(_timeoutIdForStopLongSfx);
             _timeoutIdForStopLongSfx = null;
@@ -460,9 +417,9 @@ namespace Twns.SoundManager {
         }
 
         _updateLongSfxVolume();
-        playLongSfx(Helpers.getExisted(_UNIT_MOVE_SFX_CODES.get(unitType), ClientErrorCode.SoundManager_PlayLongSfxForMoveUnit_00));
+        playLongSfx(Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.moveSfx, ClientErrorCode.SoundManager_PlayLongSfxForMoveUnit_00), gameConfig);
     }
-    export function fadeoutLongSfxForMoveUnit(): void {
+    export function fadeoutLongSfxForMoveUnit(gameConfig: Config.GameConfig): void {
         const gain = _longSfxGain?.gain;
         if (gain == null) {
             return;
@@ -473,10 +430,10 @@ namespace Twns.SoundManager {
         gain.cancelScheduledValues(currentTime);
         gain.setValueAtTime(volume, currentTime);
         if (volume <= 0) {
-            playLongSfx(LongSfxCode.None);
+            playLongSfx(CommonConstants.BgmSfxCode.None, gameConfig);
         } else {
             gain.exponentialRampToValueAtTime(0.01, currentTime + _UNIT_MOVE_FADEOUT_TIME);
-            _timeoutIdForStopLongSfx = egret.setTimeout(() => playLongSfx(LongSfxCode.None), null, _UNIT_MOVE_FADEOUT_TIME * 1000);
+            _timeoutIdForStopLongSfx = egret.setTimeout(() => playLongSfx(CommonConstants.BgmSfxCode.None, gameConfig), null, _UNIT_MOVE_FADEOUT_TIME * 1000);
         }
     }
 
@@ -488,14 +445,14 @@ namespace Twns.SoundManager {
         }
     }
 
-    function _setPlayingLongSfxCode(longSfxCode: LongSfxCode): void {
+    function _setPlayingLongSfxCode(longSfxCode: number): void {
         _playingLongSfxCode = longSfxCode;
     }
-    export function getPlayingLongSfxCode(): LongSfxCode {
+    export function getPlayingLongSfxCode(): number {
         return _playingLongSfxCode;
     }
     /** 播放长音效，同时只能有一个在播放 */
-    function playLongSfx(longSfxCode: LongSfxCode, forcePlayFromBeginning = false): void {
+    function playLongSfx(longSfxCode: number, gameConfig: Config.GameConfig, forcePlayFromBeginning = false): void {
         if (!_isInitialized) {
             return;
         }
@@ -508,17 +465,17 @@ namespace Twns.SoundManager {
 
         if ((getPlayingLongSfxCode() !== longSfxCode) || (forcePlayFromBeginning)) {
             _setPlayingLongSfxCode(longSfxCode);
-            _playLongSfxForNormal(longSfxCode);
+            _playLongSfxForNormal(longSfxCode, gameConfig);
         }
     }
-    async function _playLongSfxForNormal(longSfxCode: LongSfxCode): Promise<void> {
-        const params        = Helpers.getExisted(_LONG_SFX_PARAMS.get(longSfxCode), ClientErrorCode.SoundManager_PlayLongSfxForNormal_00);
+    async function _playLongSfxForNormal(longSfxCode: number, gameConfig: Config.GameConfig): Promise<void> {
+        const params        = Helpers.getExisted(gameConfig.getBgmSfxCfg(longSfxCode), ClientErrorCode.SoundManager_PlayLongSfxForNormal_00);
         const cacheDict     = _longSfxBufferCache;
         const cachedBuffer  = cacheDict.get(longSfxCode);
         if (cachedBuffer) {
             _doPlayLongSfxForNormal(cachedBuffer, params);
         } else {
-            const path          = getResourcePath(params.name, SoundType.Sfx);
+            const path          = getResourcePath(params.filename, SoundType.Sfx);
             const audioBuffer   = await loadAudioBuffer(path).catch(err => {
                 // CompatibilityHelpers.showError(err); throw err;
                 Logger.error(`SoundManager._playLongSfxForNormal() loadAudioBuffer error: ${(err as Error).message}.`);
@@ -534,7 +491,7 @@ namespace Twns.SoundManager {
             _doPlayLongSfxForNormal(audioBuffer, params);
         }
     }
-    function _doPlayLongSfxForNormal(buffer: AudioBuffer, params: LongSfxParams): void {
+    function _doPlayLongSfxForNormal(buffer: AudioBuffer, cfg: Types.BgmSfxCfg): void {
         if (!buffer) {
             return;
         }
@@ -543,8 +500,8 @@ namespace Twns.SoundManager {
 
         _longSfxSourceNode              = _audioContext.createBufferSource();
         _longSfxSourceNode.buffer       = buffer;
-        _longSfxSourceNode.loopStart    = params.start;
-        _longSfxSourceNode.loopEnd      = params.end;
+        _longSfxSourceNode.loopStart    = Helpers.getExisted(cfg.loopStart) / 10000;
+        _longSfxSourceNode.loopEnd      = Helpers.getExisted(cfg.loopEnd) / 10000;
         _longSfxSourceNode.loop         = true;
         _longSfxSourceNode.connect(_longSfxGain);
         _longSfxSourceNode.start();

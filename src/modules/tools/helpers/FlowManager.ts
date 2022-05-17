@@ -159,7 +159,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.UserLoginPanel, void 0);
         PanelHelpers.open(PanelHelpers.PanelDict.BroadcastPanel, void 0);
 
-        SoundManager.playBgm(CommonConstants.BgmCode.Lobby);
+        SoundManager.playBgm(CommonConstants.BgmSfxCode.Lobby);
     }
     export function gotoLobby(): void {
         _hasOnceWentToLobby = true;
@@ -184,7 +184,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.LobbyTopRightPanel, void 0);
         PanelHelpers.open(PanelHelpers.PanelDict.LobbyPanel, void 0);
 
-        SoundManager.playBgm(CommonConstants.BgmCode.Lobby);
+        SoundManager.playBgm(CommonConstants.BgmSfxCode.Lobby);
     }
 
     export async function gotoMultiPlayerWar(data: CommonProto.WarSerialization.ISerialWar): Promise<void> {
@@ -293,7 +293,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.BwUnitBriefPanel, { war });
         PanelHelpers.open(PanelHelpers.PanelDict.BroadcastPanel, void 0);
 
-        SoundManager.playBgm(CommonConstants.BgmCode.MapEditor);
+        SoundManager.playBgm(CommonConstants.BgmSfxCode.MapEditor);
     }
 
     export function gotoMyWarListPanel(warType: WarType): void {
@@ -339,7 +339,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.LobbyBackgroundPanel, void 0);
         PanelHelpers.open(PanelHelpers.PanelDict.MfrCreateSettingsPanel, void 0);
 
-        SoundManager.playBgm(CommonConstants.BgmCode.Lobby);
+        SoundManager.playBgm(CommonConstants.BgmSfxCode.Lobby);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -430,7 +430,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.LobbyBackgroundPanel, void 0);
         PanelHelpers.open(PanelHelpers.PanelDict.LobbyTopRightPanel, void 0);
 
-        SoundManager.playBgm(CommonConstants.BgmCode.Lobby);
+        SoundManager.playBgm(CommonConstants.BgmSfxCode.Lobby);
     }
 
     function _gotoMrwMyWarListPanel(): void {

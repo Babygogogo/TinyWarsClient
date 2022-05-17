@@ -159,13 +159,14 @@ namespace Twns.BaseWar {
             const playerIndex           = unit.getPlayerIndex();
             const unitType              = unit.getUnitType();
             const watcherTeamIndexes    = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+            const gameConfig            = war.getGameConfig();
             const isAlwaysVisible       = watcherTeamIndexes.has(unit.getTeamIndex());
             const tween                 = egret.Tween.get(this);
             if (isAlwaysVisible) {
                 this.visible = true;
             }
             if ((path.length > 0) || (aiming)) {
-                SoundManager.playLongSfxForMoveUnit(unitType);
+                SoundManager.playLongSfxForMoveUnit(unitType, gameConfig);
             }
 
             for (let i = 1; i < path.length; ++i) {
@@ -233,7 +234,7 @@ namespace Twns.BaseWar {
                         ) {
                             war.getGridVisualEffect().showEffectBlock(endingGridIndex);
                         }
-                        SoundManager.fadeoutLongSfxForMoveUnit();
+                        SoundManager.fadeoutLongSfxForMoveUnit(gameConfig);
 
                         resolve();
                     });
@@ -261,7 +262,7 @@ namespace Twns.BaseWar {
                         ) {
                             war.getGridVisualEffect().showEffectBlock(endingGridIndex);
                         }
-                        SoundManager.fadeoutLongSfxForMoveUnit();
+                        SoundManager.fadeoutLongSfxForMoveUnit(gameConfig);
 
                         resolve();
                     });
@@ -283,8 +284,9 @@ namespace Twns.BaseWar {
             const war           = unit.getWar();
             const unitType      = unit.getUnitType();
             const tween         = egret.Tween.get(this);
+            const gameConfig    = war.getGameConfig();
             if ((path.length > 0) || (aiming)) {
-                SoundManager.playLongSfxForMoveUnit(unitType);
+                SoundManager.playLongSfxForMoveUnit(unitType, gameConfig);
             }
 
             for (let i = 1; i < path.length; ++i) {
@@ -324,7 +326,7 @@ namespace Twns.BaseWar {
                         }
                         (deleteViewAfterMoving) && (unitMapView.removeUnit(this));
 
-                        SoundManager.fadeoutLongSfxForMoveUnit();
+                        SoundManager.fadeoutLongSfxForMoveUnit(gameConfig);
 
                         resolve();
                     });
@@ -346,7 +348,7 @@ namespace Twns.BaseWar {
                         }
                         (deleteViewAfterMoving) && (unitMapView.removeUnit(this));
 
-                        SoundManager.fadeoutLongSfxForMoveUnit();
+                        SoundManager.fadeoutLongSfxForMoveUnit(gameConfig);
 
                         resolve();
                     });

@@ -402,7 +402,7 @@ namespace Twns.Config {
             return this._bgmSfxCfgDict.get(code) ?? null;
         }
         public checkIsBgm(code: number): boolean {
-            return this.getBgmSfxCfg(code) != null;
+            return !!this.getBgmSfxCfg(code)?.isBgm;
         }
         public getAllBgmCodeArray(): number[] {
             if (this._allBgmCodeArray) {
@@ -410,7 +410,9 @@ namespace Twns.Config {
             } else {
                 const cfgArray: BgmSfxCfg[] = [];
                 for (const [, cfg] of this._bgmSfxCfgDict) {
-                    cfgArray.push(cfg);
+                    if (cfg.isBgm) {
+                        cfgArray.push(cfg);
+                    }
                 }
 
                 const bgmCodeArray      = cfgArray.sort((v1, v2) => (v1.sortWeight ?? Number.MAX_SAFE_INTEGER) - (v2.sortWeight ?? Number.MAX_SAFE_INTEGER)).map(v => v.code);
