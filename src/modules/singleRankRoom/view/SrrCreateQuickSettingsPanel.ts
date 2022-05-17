@@ -122,7 +122,7 @@ namespace Twns.SingleRankRoom {
             }
 
             const mapId         = SrrCreateModel.getMapId();
-            const configVersion = Config.ConfigManager.getLatestConfigVersion();
+            const configVersion = await Config.ConfigManager.getLatestConfigVersion();
             const score         = User.UserModel.getSelfInfo()?.userComplexInfo?.userWarStatistics?.spwArray?.find(v => (v.configVersion === configVersion) && (v.mapId === mapId) && (v.ruleId === ruleId))?.highScore;
             if (score == null) {
                 label.text = `--`;

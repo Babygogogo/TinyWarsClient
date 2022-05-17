@@ -9,22 +9,22 @@
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import WarDestructionHelpers    from "../../tools/warHelpers/WarDestructionHelpers";
 // import MeUtility                from "./MeUtility";
 // import TwnsMeWar                from "./MeWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import LangTextType         = Twns.Lang.LangTextType;
-    import NotifyType           = Twns.Notify.NotifyType;
-    import DrawerMode           = Twns.Types.MapEditorDrawerMode;
-    import GridIndex            = Twns.Types.GridIndex;
-    import SymmetryType         = Twns.Types.SymmetryType;
-    import UnitType             = Twns.Types.UnitType;
-    import TileBaseType         = Twns.Types.TileBaseType;
-    import TileDecoratorType    = Twns.Types.TileDecoratorType;
-    import TileObjectType       = Twns.Types.TileObjectType;
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
+    import DrawerMode           = Types.MapEditorDrawerMode;
+    import GridIndex            = Types.GridIndex;
+    import SymmetryType         = Types.SymmetryType;
+    import UnitType             = Types.UnitType;
+    import TileBaseType         = Types.TileBaseType;
+    import TileDecoratorType    = Types.TileDecoratorType;
+    import TileObjectType       = Types.TileObjectType;
 
     export type DataForDrawTileObject = {
         objectType  : TileObjectType;
@@ -51,17 +51,17 @@ namespace Twns.MapEditor {
     };
 
     export class MeDrawer {
-        private _war?                           : Twns.MapEditor.MeWar;
+        private _war?                           : MapEditor.MeWar;
         private _mode                           = DrawerMode.Preview;
         private _drawTargetTileObjectData       : DataForDrawTileObject | null = null;
         private _drawTargetTileBaseData         : DataForDrawTileBase | null = null;
         private _drawTargetTileDecoratorData    : DataForDrawTileDecorator | null = null;
-        private _drawTargetUnit                 : Twns.BaseWar.BwUnit | null = null;
+        private _drawTargetUnit                 : BaseWar.BwUnit | null = null;
         private _dataForAddTileToLocation       : DataForAddTileToLocation | null = null;
         private _dataForDeleteTileFromLocation  : DataForDeleteTileFromLocation | null = null;
         private _symmetricalDrawType            = SymmetryType.None;
 
-        private _notifyListeners: Twns.Notify.Listener[] = [
+        private _notifyListeners: Notify.Listener[] = [
             { type: NotifyType.BwCursorTapped,     callback: this._onNotifyBwCursorTapped },
             { type: NotifyType.BwCursorDragged,    callback: this._onNotifyBwCursorDragged },
         ];
@@ -70,36 +70,36 @@ namespace Twns.MapEditor {
             return this;
         }
 
-        public startRunning(war: Twns.MapEditor.MeWar): void {
+        public startRunning(war: MapEditor.MeWar): void {
             this._setWar(war);
-            Twns.Notify.addEventListeners(this._notifyListeners, this);
+            Notify.addEventListeners(this._notifyListeners, this);
         }
         public stopRunning(): void {
             delete this._war;
 
-            Twns.Notify.removeEventListeners(this._notifyListeners, this);
+            Notify.removeEventListeners(this._notifyListeners, this);
         }
 
         private _onNotifyBwCursorTapped(e: egret.Event): void {
-            const data      = e.data as Twns.Notify.NotifyData.BwCursorTapped;
+            const data      = e.data as Notify.NotifyData.BwCursorTapped;
             const gridIndex = data.tappedOn;
             this._handleAction(gridIndex);
         }
         private _onNotifyBwCursorDragged(e: egret.Event): void {
-            const data = e.data as Twns.Notify.NotifyData.BwCursorDragged;
+            const data = e.data as Notify.NotifyData.BwCursorDragged;
             this._handleAction(data.draggedTo);
         }
 
-        private _setWar(war: Twns.MapEditor.MeWar): void {
+        private _setWar(war: MapEditor.MeWar): void {
             this._war = war;
         }
-        private _getWar(): Twns.MapEditor.MeWar {
-            return Twns.Helpers.getExisted(this._war);
+        private _getWar(): MapEditor.MeWar {
+            return Helpers.getExisted(this._war);
         }
 
         private _setMode(mode: DrawerMode): void {
             this._mode = mode;
-            Twns.Notify.dispatch(NotifyType.MeDrawerModeChanged);
+            Notify.dispatch(NotifyType.MeDrawerModeChanged);
         }
         public setModeDeleteUnit(): void {
             this._setMode(DrawerMode.DeleteUnit);
@@ -156,7 +156,7 @@ namespace Twns.MapEditor {
 
         public setModeDrawUnit(data: DataForDrawUnit): void {
             const war   = this._getWar();
-            const unit  = new Twns.BaseWar.BwUnit();
+            const unit  = new BaseWar.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
@@ -168,10 +168,10 @@ namespace Twns.MapEditor {
             this._setDrawTargetUnit(unit);
             this._setMode(DrawerMode.DrawUnit);
         }
-        private _setDrawTargetUnit(unit: Twns.BaseWar.BwUnit): void {
+        private _setDrawTargetUnit(unit: BaseWar.BwUnit): void {
             this._drawTargetUnit = unit;
         }
-        public getDrawTargetUnit(): Twns.BaseWar.BwUnit | null {
+        public getDrawTargetUnit(): BaseWar.BwUnit | null {
             return this._drawTargetUnit;
         }
 
@@ -209,12 +209,12 @@ namespace Twns.MapEditor {
             const tileMap       = war.getTileMap();
             const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
-                if (tile.getType() !== Twns.Types.TileType.Road) {
+                if (tile.getType() !== Types.TileType.Road) {
                     continue;
                 }
 
                 const gridIndex = tile.getGridIndex();
-                const shapeId   = Twns.MapEditor.MeHelpers.getAutoRoadShapeId(tileMap, gridIndex);
+                const shapeId   = MapEditor.MeHelpers.getAutoRoadShapeId(tileMap, gridIndex);
                 if (shapeId !== tile.getObjectShapeId()) {
                     tile.init({
                         gridIndex       : tile.getGridIndex(),
@@ -229,7 +229,7 @@ namespace Twns.MapEditor {
                     tile.startRunning(war);
                     tile.flushDataToView();
 
-                    Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
+                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.NotifyData.MeTileChanged);
                 }
             }
         }
@@ -239,16 +239,16 @@ namespace Twns.MapEditor {
             const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
                 const tileType = tile.getType();
-                if ((tileType !== Twns.Types.TileType.BridgeOnBeach) &&
-                    (tileType !== Twns.Types.TileType.BridgeOnPlain) &&
-                    (tileType !== Twns.Types.TileType.BridgeOnRiver) &&
-                    (tileType !== Twns.Types.TileType.BridgeOnSea)
+                if ((tileType !== Types.TileType.BridgeOnBeach) &&
+                    (tileType !== Types.TileType.BridgeOnPlain) &&
+                    (tileType !== Types.TileType.BridgeOnRiver) &&
+                    (tileType !== Types.TileType.BridgeOnSea)
                 ) {
                     continue;
                 }
 
                 const gridIndex = tile.getGridIndex();
-                const shapeId   = Twns.MapEditor.MeHelpers.getAutoBridgeShapeId(tileMap, gridIndex);
+                const shapeId   = MapEditor.MeHelpers.getAutoBridgeShapeId(tileMap, gridIndex);
                 if (shapeId !== tile.getObjectShapeId()) {
                     tile.init({
                         gridIndex       : tile.getGridIndex(),
@@ -263,7 +263,7 @@ namespace Twns.MapEditor {
                     tile.startRunning(war);
                     tile.flushDataToView();
 
-                    Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
+                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.NotifyData.MeTileChanged);
                 }
             }
         }
@@ -272,12 +272,12 @@ namespace Twns.MapEditor {
             const tileMap       = war.getTileMap();
             const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
-                if (tile.getType() !== Twns.Types.TileType.Plasma) {
+                if (tile.getType() !== Types.TileType.Plasma) {
                     continue;
                 }
 
                 const gridIndex = tile.getGridIndex();
-                const shapeId   = Twns.MapEditor.MeHelpers.getAutoPlasmaShapeId(tileMap, gridIndex);
+                const shapeId   = MapEditor.MeHelpers.getAutoPlasmaShapeId(tileMap, gridIndex);
                 if (shapeId !== tile.getObjectShapeId()) {
                     tile.init({
                         gridIndex       : tile.getGridIndex(),
@@ -292,7 +292,7 @@ namespace Twns.MapEditor {
                     tile.startRunning(war);
                     tile.flushDataToView();
 
-                    Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
+                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.NotifyData.MeTileChanged);
                 }
             }
         }
@@ -301,12 +301,12 @@ namespace Twns.MapEditor {
             const tileMap       = war.getTileMap();
             const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
-                if (tile.getType() !== Twns.Types.TileType.Pipe) {
+                if (tile.getType() !== Types.TileType.Pipe) {
                     continue;
                 }
 
                 const gridIndex = tile.getGridIndex();
-                const shapeId   = Twns.MapEditor.MeHelpers.getAutoPipeShapeId(tileMap, gridIndex);
+                const shapeId   = MapEditor.MeHelpers.getAutoPipeShapeId(tileMap, gridIndex);
                 if (shapeId !== tile.getObjectShapeId()) {
                     tile.init({
                         gridIndex       : tile.getGridIndex(),
@@ -321,7 +321,7 @@ namespace Twns.MapEditor {
                     tile.startRunning(war);
                     tile.flushDataToView();
 
-                    Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
+                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.NotifyData.MeTileChanged);
                 }
             }
         }
@@ -331,7 +331,7 @@ namespace Twns.MapEditor {
             const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
                 const gridIndex         = tile.getGridIndex();
-                const targetBaseData    = Twns.MapEditor.MeHelpers.getAutoTileDecoratorTypeAndShapeId(tileMap, gridIndex);
+                const targetBaseData    = MapEditor.MeHelpers.getAutoTileDecoratorTypeAndShapeId(tileMap, gridIndex);
                 const decoratorType     = targetBaseData.decoratorType;
                 const decoratorShapeId  = targetBaseData.shapeId;
                 tile.init({
@@ -349,7 +349,7 @@ namespace Twns.MapEditor {
                 tile.startRunning(war);
                 tile.flushDataToView();
 
-                Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
+                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.NotifyData.MeTileChanged);
             }
         }
 
@@ -386,7 +386,7 @@ namespace Twns.MapEditor {
                 // nothing to do
 
             } else {
-                throw Twns.Helpers.newError(`MeDrawer._handleAction() invalid mode.`);
+                throw Helpers.newError(`MeDrawer._handleAction() invalid mode.`);
             }
 
             this._getWar().setIsMapModified(true);
@@ -395,7 +395,7 @@ namespace Twns.MapEditor {
             const war               = this._getWar();
             const tileMap           = war.getTileMap();
             const tile              = tileMap.getTile(gridIndex);
-            const targetBaseData    = Twns.Helpers.getExisted(this.getDrawTargetTileBaseData());
+            const targetBaseData    = Helpers.getExisted(this.getDrawTargetTileBaseData());
             const baseType          = targetBaseData.baseType;
             const baseShapeId       = targetBaseData.shapeId;
             const gameConfig        = war.getGameConfig();
@@ -414,11 +414,11 @@ namespace Twns.MapEditor {
             tile.startRunning(war);
             tile.flushDataToView();
 
-            Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
+            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
-            const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
-            if ((symGridIndex) && (!Twns.GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
+            const symGridIndex = MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
+            if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 const t2 = tileMap.getTile(symGridIndex);
                 t2.init({
                     gridIndex       : t2.getGridIndex(),
@@ -428,14 +428,14 @@ namespace Twns.MapEditor {
                     decoratorType   : t2.getDecoratorType(),
                     decoratorShapeId: t2.getDecoratorShapeId(),
                     baseType        : baseType,
-                    baseShapeId     : Twns.Config.ConfigManager.getSymmetricalTileBaseShapeId(baseType, baseShapeId, symmetryType),
+                    baseShapeId     : Config.ConfigManager.getSymmetricalTileBaseShapeId(baseType, baseShapeId, symmetryType),
                     locationFlags   : t2.getLocationFlags(),
                     isHighlighted   : t2.getIsHighlighted(),
                 }, gameConfig);
                 t2.startRunning(war);
                 t2.flushDataToView();
 
-                Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Twns.Notify.NotifyData.MeTileChanged);
+                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Notify.NotifyData.MeTileChanged);
             }
         }
         private _handleDrawTileDecorator(gridIndex: GridIndex): void {
@@ -443,7 +443,7 @@ namespace Twns.MapEditor {
             const tileMap           = war.getTileMap();
             const gameConfig        = war.getGameConfig();
             const tile              = tileMap.getTile(gridIndex);
-            const targetBaseData    = Twns.Helpers.getExisted(this.getDrawTargetTileDecoratorData());
+            const targetBaseData    = Helpers.getExisted(this.getDrawTargetTileDecoratorData());
             const decoratorType     = targetBaseData.decoratorType;
             const decoratorShapeId  = targetBaseData.shapeId;
             tile.init({
@@ -461,11 +461,11 @@ namespace Twns.MapEditor {
             tile.startRunning(war);
             tile.flushDataToView();
 
-            Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
+            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
-            const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
-            if ((symGridIndex) && (!Twns.GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
+            const symGridIndex = MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
+            if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 const t2 = tileMap.getTile(symGridIndex);
                 t2.init({
                     gridIndex       : t2.getGridIndex(),
@@ -475,14 +475,14 @@ namespace Twns.MapEditor {
                     baseType        : t2.getBaseType(),
                     baseShapeId     : t2.getBaseShapeId(),
                     decoratorType,
-                    decoratorShapeId: Twns.Config.ConfigManager.getSymmetricalTileDecoratorShapeId(decoratorType, decoratorShapeId, symmetryType),
+                    decoratorShapeId: Config.ConfigManager.getSymmetricalTileDecoratorShapeId(decoratorType, decoratorShapeId, symmetryType),
                     locationFlags   : t2.getLocationFlags(),
                     isHighlighted   : t2.getIsHighlighted(),
                 }, gameConfig);
                 t2.startRunning(war);
                 t2.flushDataToView();
 
-                Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Twns.Notify.NotifyData.MeTileChanged);
+                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Notify.NotifyData.MeTileChanged);
             }
         }
         private _handleDrawTileObject(gridIndex: GridIndex): void {
@@ -491,12 +491,12 @@ namespace Twns.MapEditor {
             const tileMap           = war.getTileMap();
             const unitMap           = war.getUnitMap();
             const tile              = tileMap.getTile(gridIndex);
-            const targetObjectData  = Twns.Helpers.getExisted(this.getDrawTargetTileObjectData());
+            const targetObjectData  = Helpers.getExisted(this.getDrawTargetTileObjectData());
             const baseType          = tile.getBaseType();
             const objectType        = targetObjectData.objectType;
-            const isAttackableTile  = !!gameConfig.getTileTemplateCfgByType(Twns.Config.ConfigManager.getTileType(baseType, objectType))?.maxHp;
+            const isAttackableTile  = !!gameConfig.getTileTemplateCfgByType(Config.ConfigManager.getTileType(baseType, objectType))?.maxHp;
             if ((isAttackableTile) && (unitMap.getUnitOnMap(gridIndex))) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0269));
+                FloatText.show(Lang.getText(LangTextType.A0269));
                 return;
             }
 
@@ -517,11 +517,11 @@ namespace Twns.MapEditor {
             tile.startRunning(war);
             tile.flushDataToView();
 
-            Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
+            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
-            const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
-            if ((symGridIndex) && (!Twns.GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
+            const symGridIndex = MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
+            if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 if ((isAttackableTile) && (unitMap.getUnitOnMap(symGridIndex))) {
                     return;
                 }
@@ -535,43 +535,44 @@ namespace Twns.MapEditor {
                     decoratorShapeId: t2.getDecoratorShapeId(),
                     playerIndex,
                     objectType,
-                    objectShapeId   : Twns.Config.ConfigManager.getSymmetricalTileObjectShapeId(objectType, objectShapeId, symmetryType),
+                    objectShapeId   : Config.ConfigManager.getSymmetricalTileObjectShapeId(objectType, objectShapeId, symmetryType),
                     locationFlags   : t2.getLocationFlags(),
                     isHighlighted   : t2.getIsHighlighted(),
                 }, gameConfig);
                 t2.startRunning(war);
                 t2.flushDataToView();
 
-                Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Twns.Notify.NotifyData.MeTileChanged);
+                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Notify.NotifyData.MeTileChanged);
             }
         }
         private _handleDrawUnit(gridIndex: GridIndex): void {
             this._handleDeleteUnit(gridIndex);
 
-            const war   = this._getWar();
-            const tile  = war.getTileMap().getTile(gridIndex);
+            const war           = this._getWar();
+            const gameConfig    = war.getGameConfig();
+            const tile          = war.getTileMap().getTile(gridIndex);
             if (tile.getMaxHp() != null) {
-                Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0067, Lang.getTileName(tile.getType())));
+                FloatText.show(Lang.getFormattedText(LangTextType.F0067, Lang.getTileName(tile.getType(), gameConfig)));
                 return;
             }
 
             const unitMap       = war.getUnitMap();
             const unitId        = unitMap.getNextUnitId();
-            const targetUnit    = Twns.Helpers.getExisted(this.getDrawTargetUnit());
-            const unit          = new Twns.BaseWar.BwUnit();
+            const targetUnit    = Helpers.getExisted(this.getDrawTargetUnit());
+            const unit          = new BaseWar.BwUnit();
             unit.init({
                 gridIndex,
                 playerIndex : targetUnit.getPlayerIndex(),
                 unitType    : targetUnit.getUnitType(),
                 unitId,
-            }, war.getGameConfig());
+            }, gameConfig);
             unit.startRunning(this._getWar());
             unit.startRunningView();
 
             unitMap.setUnitOnMap(unit);
             unitMap.setNextUnitId(unitId + 1);
 
-            Twns.Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as Twns.Notify.NotifyData.BwUnitChanged);
+            Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as Notify.NotifyData.BwUnitChanged);
         }
         private _handleDeleteTileDecorator(gridIndex: GridIndex): void {
             const tileMap   = this._getWar().getTileMap();
@@ -579,16 +580,16 @@ namespace Twns.MapEditor {
             tile.deleteTileDecorator();
             tile.flushDataToView();
 
-            Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
+            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
-            const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
-            if ((symGridIndex) && (!Twns.GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
+            const symGridIndex = MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
+            if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 const t2 = tileMap.getTile(symGridIndex);
                 t2.deleteTileDecorator();
                 t2.flushDataToView();
 
-                Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Twns.Notify.NotifyData.MeTileChanged);
+                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Notify.NotifyData.MeTileChanged);
             }
         }
         private _handleDeleteTileObject(gridIndex: GridIndex): void {
@@ -597,28 +598,28 @@ namespace Twns.MapEditor {
             tile.deleteTileObject();
             tile.flushDataToView();
 
-            Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Twns.Notify.NotifyData.MeTileChanged);
+            Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as Notify.NotifyData.MeTileChanged);
 
             const symmetryType = this.getSymmetricalDrawType();
-            const symGridIndex = Twns.MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
-            if ((symGridIndex) && (!Twns.GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
+            const symGridIndex = MapEditor.MeHelpers.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
+            if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 const t2 = tileMap.getTile(symGridIndex);
                 t2.deleteTileObject();
                 t2.flushDataToView();
 
-                Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Twns.Notify.NotifyData.MeTileChanged);
+                Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as Notify.NotifyData.MeTileChanged);
             }
         }
         private _handleDeleteUnit(gridIndex: GridIndex): void {
             const unit = this._getWar().getUnitMap().getUnitOnMap(gridIndex);
             if (unit) {
                 const war = this._getWar();
-                Twns.WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+                WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
                 if (unit.getHasLoadedCo()) {
                     war.getTileMap().getView().updateCoZone();
                 }
 
-                Twns.Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as Twns.Notify.NotifyData.BwUnitChanged);
+                Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as Notify.NotifyData.BwUnitChanged);
             }
         }
         private _handleAddTileToLocation(gridIndex: GridIndex): void {

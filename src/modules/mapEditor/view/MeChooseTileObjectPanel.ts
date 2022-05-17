@@ -54,7 +54,7 @@ namespace Twns.MapEditor {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this._resetListPlayerIndex(Twns.CommonConstants.WarNeutralPlayerIndex);
+            this._resetListPlayerIndex(CommonConstants.WarNeutralPlayerIndex);
             this._updateListRecent();
             this._updateListTileObject();
         }
@@ -73,7 +73,7 @@ namespace Twns.MapEditor {
             }
         }
 
-        public updateOnChooseTileObject(data: DataForDrawTileObject): void {
+        public async updateOnChooseTileObject(data: DataForDrawTileObject): Promise<void> {
             const dataList      = this._dataListForRecent;
             const filteredList  = dataList.filter(v => {
                 const oldData = v.dataForDrawTileObject;
@@ -85,6 +85,7 @@ namespace Twns.MapEditor {
             dataList[0]         = {
                 dataForDrawTileObject   : data,
                 panel                   : this,
+                gameConfig              : await Config.ConfigManager.getLatestGameConfig(),
             };
             for (const v of filteredList) {
                 if (dataList.length < MAX_RECENT_COUNT) {
@@ -138,7 +139,7 @@ namespace Twns.MapEditor {
 
         private _resetListPlayerIndex(selectedPlayerIndex: number | null): void {
             const dataArray: DataForPlayerIndexRenderer[] = [];
-            for (let playerIndex = Twns.CommonConstants.WarNeutralPlayerIndex; playerIndex <= Twns.CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+            for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                 dataArray.push({
                     playerIndex,
                     panel       : this,
@@ -150,7 +151,7 @@ namespace Twns.MapEditor {
             list.setSelectedIndex(list.getFirstIndex(v => v.playerIndex === selectedPlayerIndex) ?? (dataArray.length ? 0 : -1));
         }
 
-        private _updateListTileObject(): void {
+        private async _updateListTileObject(): Promise<void> {
             const playerIndex       = this._listPlayerIndex.getSelectedData()?.playerIndex;
             const listTileObject    = this._listTileObject;
             if (playerIndex == null) {
@@ -158,8 +159,9 @@ namespace Twns.MapEditor {
                 return;
             }
 
-            const dataArray: DataForTileObjectRenderer[] = [];
-            for (const [objectType, cfg] of Twns.CommonConstants.TileObjectShapeConfigs) {
+            const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
+            const dataArray     : DataForTileObjectRenderer[] = [];
+            for (const [objectType, cfg] of CommonConstants.TileObjectShapeConfigs) {
                 if ((playerIndex < cfg.minPlayerIndex) || (playerIndex > cfg.maxPlayerIndex)) {
                     continue;
                 }
@@ -171,8 +173,9 @@ namespace Twns.MapEditor {
                         dataForDrawTileObject   : {
                             objectType,
                             playerIndex,
-                            shapeId
+                            shapeId,
                         },
+                        gameConfig,
                     });
                 }
             }
@@ -205,6 +208,7 @@ namespace Twns.MapEditor {
 
     type DataForTileObjectRenderer = {
         dataForDrawTileObject   : DataForDrawTileObject;
+        gameConfig              : Config.GameConfig;
         panel                   : MeChooseTileObjectPanel;
     };
     class TileObjectRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileObjectRenderer> {
@@ -235,7 +239,7 @@ namespace Twns.MapEditor {
             const data                  = this._getData();
             const dataForDrawTileObject = data.dataForDrawTileObject;
             const tileObjectType        = dataForDrawTileObject.objectType;
-            this._labelName.text        = Lang.getTileName(Config.ConfigManager.getTileType(Types.TileBaseType.Plain, tileObjectType)) || Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = Lang.getTileName(Config.ConfigManager.getTileType(Types.TileBaseType.Plain, tileObjectType), data.gameConfig) || CommonConstants.ErrorTextForUndefined;
             this._tileView.init({
                 tileObjectType,
                 tileObjectShapeId   : dataForDrawTileObject.shapeId,

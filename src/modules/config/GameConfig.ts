@@ -27,6 +27,7 @@ namespace Twns.Config {
     import WeatherCategory      = Types.WeatherCategory;
     import WeatherCategoryCfg   = Types.WeatherCategoryCfg;
     import UserAvatarCfg        = Types.UserAvatarCfg;
+    import BgmSfxCfg            = Types.BgmSfxCfg;
 
     export class GameConfig {
         private readonly _version                   : string;
@@ -49,6 +50,7 @@ namespace Twns.Config {
         private readonly _damageChartCfgDict        : Map<UnitType, { [armorType: number]: { [weaponType: number]: DamageChartCfg } }>;
         private readonly _unitPromotionCfgDict      : Map<number, UnitPromotionCfg>;
         private readonly _secondaryWeaponFlagDict   : Map<UnitType, boolean>;
+        private readonly _bgmSfxCfgDict             : Map<number, BgmSfxCfg>;
 
         private _availableCoArray   : CoBasicCfg[] | null = null;
         private _coTierArray        : number[] | null = null;
@@ -75,6 +77,7 @@ namespace Twns.Config {
             this._weatherCfgDict            = _destructWeatherCfg(rawConfig.Weather);
             this._weatherCategoryCfgDict    = _destructWeatherCategoryCfg(rawConfig.WeatherCategory);
             this._userAvatarCfgDict         = _destructUserAvatarCfg(rawConfig.UserAvatar);
+            this._bgmSfxCfgDict             = _destructBgmSfxCfg(rawConfig.BgmSfx);
             this._damageChartCfgDict        = damageChartCfg;
             this._unitPromotionCfgDict      = unitPromotionCfg;
             this._secondaryWeaponFlagDict   = _getSecondaryWeaponFlags(damageChartCfg);
@@ -118,6 +121,28 @@ namespace Twns.Config {
         }
         public checkIsValidUnitType(unitType: UnitType): boolean {
             return this._unitTemplateCfgDict.has(unitType);
+        }
+        public getFirstUnitType(): number {
+            return this._unitTemplateCfgDict.keys().next().value;
+        }
+        public getUnitImageSource({ version, skinId, unitType, isDark, isMoving, tickCount }: {
+            version     : Types.UnitAndTileTextureVersion;
+            skinId      : number;
+            unitType    : UnitType;
+            isDark      : boolean;
+            isMoving    : boolean;
+            tickCount   : number;
+        }): string {
+            const cfg               = Helpers.getExisted(this.getUnitTemplateCfg(unitType)?.animParams);
+            const index             = version * 4 + (isMoving ? 2 : 0);
+            const ticksPerFrame     = cfg[index + 1];
+            const textForDark       = isDark ? `state01` : `state00`;
+            const textForMoving     = isMoving ? `act01` : `act00`;
+            const textForVersion    = `ver${Helpers.getNumText(version)}`;
+            const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
+            const textForType       = `type${Helpers.getNumText(unitType)}`;
+            const textForFrame      = `frame${Helpers.getNumText(Math.floor((tickCount % (cfg[index] * ticksPerFrame)) / ticksPerFrame))}`;
+            return `unit_${textForVersion}_${textForType}_${textForDark}_${textForMoving}_${textForSkin}_${textForFrame}`;
         }
 
         public getUnitCategoryCfg(category: UnitCategory): UnitCategoryCfg | null {
@@ -372,6 +397,28 @@ namespace Twns.Config {
                 default                     : return null;
             }
         }
+
+        public getBgmSfxCfg(code: number): BgmSfxCfg | null {
+            return this._bgmSfxCfgDict.get(code) ?? null;
+        }
+        public checkIsBgm(code: number): boolean {
+            return this.getBgmSfxCfg(code) != null;
+        }
+        public getAllBgmCodeArray(): number[] {
+            if (this._allBgmCodeArray) {
+                return this._allBgmCodeArray;
+            } else {
+                const cfgArray: BgmSfxCfg[] = [];
+                for (const [, cfg] of this._bgmSfxCfgDict) {
+                    cfgArray.push(cfg);
+                }
+
+                const bgmCodeArray      = cfgArray.sort((v1, v2) => (v1.sortWeight ?? Number.MAX_SAFE_INTEGER) - (v2.sortWeight ?? Number.MAX_SAFE_INTEGER)).map(v => v.code);
+                this._allBgmCodeArray   = bgmCodeArray;
+
+                return bgmCodeArray;
+            }
+        }
     }
 
     function _destructSystemCfg(data: SystemCfg): SystemCfg {
@@ -502,6 +549,13 @@ namespace Twns.Config {
         const dst = new Map<number, UserAvatarCfg>();
         for (const d of data) {
             dst.set(d.avatarId, d);
+        }
+        return dst;
+    }
+    function _destructBgmSfxCfg(data: BgmSfxCfg[]): Map<number, BgmSfxCfg> {
+        const dst = new Map<number, BgmSfxCfg>();
+        for (const d of data) {
+            dst.set(d.code, d);
         }
         return dst;
     }

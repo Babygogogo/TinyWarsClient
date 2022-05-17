@@ -23,7 +23,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor.MeHelpers {
     import BwTile               = BaseWar.BwTile;
-    import MeWar                = MapEditor.MeWar;
     import LangTextType         = Lang.LangTextType;
     import GridIndex            = Types.GridIndex;
     import TileType             = Types.TileType;
@@ -182,12 +181,12 @@ namespace Twns.MapEditor.MeHelpers {
             baseType        : tileBaseType,
             decoratorType   : null,
             objectType      : TileObjectType.Empty,
-            playerIndex     : Twns.CommonConstants.WarNeutralPlayerIndex,
+            playerIndex     : CommonConstants.WarNeutralPlayerIndex,
         };
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function createISerialWar(data: CommonProto.Map.IMapEditorData): WarSerialization.ISerialWar {
+    export async function createISerialWar(data: CommonProto.Map.IMapEditorData): Promise<WarSerialization.ISerialWar> {
         const mapRawData                    = Helpers.deepClone(Helpers.getExisted(data.mapRawData));
         const templateWarRuleArray          = mapRawData.templateWarRuleArray;
         const unitDataArray                 = mapRawData.unitDataArray || [];
@@ -196,7 +195,7 @@ namespace Twns.MapEditor.MeHelpers {
         instanceWarRule.warEventFullData    = mapRawData.warEventFullData;
         return {
             settingsForCommon   : {
-                configVersion   : Config.ConfigManager.getLatestConfigVersion(),
+                configVersion   : await Config.ConfigManager.getLatestConfigVersion(),
                 instanceWarRule,
             },
             settingsForMcw          : null,
@@ -212,9 +211,9 @@ namespace Twns.MapEditor.MeHelpers {
             },
             playerManager           : createISerialPlayerManager(),
             turnManager             : {
-                turnIndex       : Twns.CommonConstants.WarFirstTurnIndex,
+                turnIndex       : CommonConstants.WarFirstTurnIndex,
                 turnPhaseCode   : Types.TurnPhaseCode.WaitBeginTurn,
-                playerIndex     : Twns.CommonConstants.WarNeutralPlayerIndex,
+                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
                 enterTurnTime   : 0,
             },
             field                   : {
@@ -234,7 +233,7 @@ namespace Twns.MapEditor.MeHelpers {
     }
     function createISerialPlayerManager(): WarSerialization.ISerialPlayerManager {
         const players: WarSerialization.ISerialPlayer[] = [];
-        for (let playerIndex = Twns.CommonConstants.WarNeutralPlayerIndex; playerIndex <= Twns.CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+        for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
             players.push(createDefaultISerialPlayer(playerIndex));
         }
 
@@ -272,7 +271,7 @@ namespace Twns.MapEditor.MeHelpers {
     }
     function createRevisedTemplateWarRuleForMeWar(templateWarRule: Types.Undefinable<ITemplateWarRule>): ITemplateWarRule {
         if (templateWarRule == null) {
-            return WarHelpers.WarRuleHelpers.createDefaultTemplateWarRule(0, Twns.CommonConstants.WarMaxPlayerIndex);
+            return WarHelpers.WarRuleHelpers.createDefaultTemplateWarRule(0, CommonConstants.WarMaxPlayerIndex);
         } else {
             const revisedTemplateWarRule            = Helpers.deepClone(templateWarRule);
             revisedTemplateWarRule.ruleForPlayers   = createRevisedRuleForPlayersForMeWar(revisedTemplateWarRule.ruleForPlayers);
@@ -283,11 +282,11 @@ namespace Twns.MapEditor.MeHelpers {
         const playerRuleArray = ruleForPlayers?.playerRuleDataArray;
         if (playerRuleArray == null) {
             return {
-                playerRuleDataArray : WarHelpers.WarRuleHelpers.createDefaultPlayerRuleList(Twns.CommonConstants.WarMaxPlayerIndex),
+                playerRuleDataArray : WarHelpers.WarRuleHelpers.createDefaultPlayerRuleList(CommonConstants.WarMaxPlayerIndex),
             };
         } else {
             const revisedPlayerRuleArray: CommonProto.WarRule.IDataForPlayerRule[] = [];
-            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= Twns.CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                 revisedPlayerRuleArray.push(Helpers.deepClone(playerRuleArray.find(v => v.playerIndex === playerIndex)) ?? WarHelpers.WarRuleHelpers.createDefaultPlayerRule(playerIndex));
             }
             return {
@@ -332,7 +331,7 @@ namespace Twns.MapEditor.MeHelpers {
     function getNewTileDataListForResize(mapRawData: IMapRawData, newWidth: number, newHeight: number): ISerialTile[] {
         const tileList: ISerialTile[] = [];
         for (const tileData of mapRawData.tileDataArray || []) {
-            const gridIndex = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(tileData.gridIndex));
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
             if ((gridIndex.x < newWidth) && (gridIndex.y < newHeight)) {
                 tileList.push(tileData);
             }
@@ -353,7 +352,7 @@ namespace Twns.MapEditor.MeHelpers {
     function getNewUnitDataListForResize(mapRawData: IMapRawData, newWidth: number, newHeight: number): ISerialUnit[] {
         const unitDataArray: ISerialUnit[] = [];
         for (const unitData of mapRawData.unitDataArray || []) {
-            const gridIndex = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(unitData.gridIndex));
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
             if ((gridIndex.x < newWidth) && (gridIndex.y < newHeight)) {
                 unitDataArray.push(unitData);
             }
@@ -400,7 +399,7 @@ namespace Twns.MapEditor.MeHelpers {
         const height        = Helpers.getExisted(mapRawData.mapHeight);
         const tileDataList  : ISerialTile[] = [];
         for (const tileData of Helpers.getExisted(mapRawData.tileDataArray)) {
-            const gridIndex = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(tileData.gridIndex));
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
             const newX      = gridIndex.x + offsetX;
             const newY      = gridIndex.y + offsetY;
             if ((newX >= 0) && (newX < width) && (newY >= 0) && (newY < height)) {
@@ -429,7 +428,7 @@ namespace Twns.MapEditor.MeHelpers {
         const height        = Helpers.getExisted(mapRawData.mapHeight);
         const unitDataArray : ISerialUnit[] = [];
         for (const unitData of mapRawData.unitDataArray || []) {
-            const gridIndex = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(unitData.gridIndex));
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
             const newX      = gridIndex.x + offsetX;
             const newY      = gridIndex.y + offsetY;
             if ((newX >= 0) && (newX < width) && (newY >= 0) && (newY < height)) {
@@ -607,7 +606,7 @@ namespace Twns.MapEditor.MeHelpers {
         return TileBridgeAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
     function checkCanRoadOrBridgeLinkToTile(tileMap: BaseWar.BwTileMap, gridIndex1: GridIndex, gridIndex2: GridIndex): boolean {
-        if (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex2, tileMap.getMapSize())) {
+        if (!GridIndexHelpers.checkIsInsideMap(gridIndex2, tileMap.getMapSize())) {
             return true;
         }
 
@@ -633,11 +632,11 @@ namespace Twns.MapEditor.MeHelpers {
         const isAdjacent3           = checkIsPlasma(tileMap, { x: x + 1, y }) ? 1 : 0;
         const isAdjacent2           = checkIsPlasma(tileMap, { x, y: y + 1 }) ? 1 : 0;
         const isAdjacent1           = checkIsPlasma(tileMap, { x, y: y - 1 }) ? 1 : 0;
-        const isAdjacentToMeteor    = Twns.GridIndexHelpers.getAdjacentGrids(gridIndex, tileMap.getMapSize()).some(v => tileMap.getTile(v).getType() === TileType.Meteor);
+        const isAdjacentToMeteor    = GridIndexHelpers.getAdjacentGrids(gridIndex, tileMap.getMapSize()).some(v => tileMap.getTile(v).getType() === TileType.Meteor);
         return Helpers.getExisted(TilePlasmaAutoShapeIdMap.get(isAdjacentToMeteor))[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
     function checkIsPlasma(tileMap: BaseWar.BwTileMap, gridIndex: GridIndex): boolean {
-        if (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
             return true;
         }
 
@@ -653,8 +652,8 @@ namespace Twns.MapEditor.MeHelpers {
         return TilePipeAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
     function checkCanLinkToPipe(tileMap: BaseWar.BwTileMap, origin: GridIndex, direction: Types.Direction): boolean {
-        const gridIndex = Twns.GridIndexHelpers.getAdjacentGrid(origin, direction);
-        if (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+        const gridIndex = GridIndexHelpers.getAdjacentGrid(origin, direction);
+        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
             return true;
         }
 
@@ -694,8 +693,8 @@ namespace Twns.MapEditor.MeHelpers {
                         continue;
                     }
 
-                    const g = Twns.GridIndexHelpers.add(gridIndex, { x: offsetX, y: offsetY });
-                    const t = Twns.GridIndexHelpers.checkIsInsideMap(g, mapSize) ? tileMap.getTile(g).getBaseType() : null;
+                    const g = GridIndexHelpers.add(gridIndex, { x: offsetX, y: offsetY });
+                    const t = GridIndexHelpers.checkIsInsideMap(g, mapSize) ? tileMap.getTile(g).getBaseType() : null;
                     if ((t != null)              &&
                         (t !== TileBaseType.Sea) &&
                         (t !== TileBaseType.Beach)
@@ -714,8 +713,8 @@ namespace Twns.MapEditor.MeHelpers {
         } else if (baseType === TileBaseType.Beach) {
             const shapeId = tile.getBaseShapeId();
             if ((shapeId === 0) || (shapeId === 4) || (shapeId === 8) || (shapeId === 12)) {
-                const isSea1 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
-                const isSea2 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
+                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
@@ -727,8 +726,8 @@ namespace Twns.MapEditor.MeHelpers {
                 }
 
             } else if ((shapeId === 1) || (shapeId === 5) || (shapeId === 9) || (shapeId === 13)) {
-                const isSea1 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: -1, y: -1 }));
-                const isSea2 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: 1, y: -1 }));
+                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 }));
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
@@ -740,8 +739,8 @@ namespace Twns.MapEditor.MeHelpers {
                 }
 
             } else if ((shapeId === 2) || (shapeId === 6) || (shapeId === 10) || (shapeId === 14)) {
-                const isSea1 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: 1, y: -1 }));
-                const isSea2 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
+                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
@@ -753,8 +752,8 @@ namespace Twns.MapEditor.MeHelpers {
                 }
 
             } else if ((shapeId === 3) || (shapeId === 7) || (shapeId === 11) || (shapeId === 15)) {
-                const isSea1 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: -1, y: -1 }));
-                const isSea2 = checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
+                const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 }));
+                const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
@@ -766,22 +765,22 @@ namespace Twns.MapEditor.MeHelpers {
                 }
 
             } else if ((shapeId === 16) || (shapeId === 20) || (shapeId === 24) || (shapeId === 28)) {
-                return (checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: 1, y: 1 })))
+                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 })))
                     ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Shore,    shapeId: 1 };
 
             } else if ((shapeId === 17) || (shapeId === 21) || (shapeId === 25) || (shapeId === 29)) {
-                return (checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: -1, y: 1 })))
+                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 })))
                     ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Shore,    shapeId: 4 };
 
             } else if ((shapeId === 18) || (shapeId === 22) || (shapeId === 26) || (shapeId === 30)) {
-                return (checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: -1, y: -1 })))
+                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 })))
                     ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Shore,    shapeId: 8 };
 
             } else if ((shapeId === 19) || (shapeId === 23) || (shapeId === 27) || (shapeId === 31)) {
-                return (checkIsSeaOrEmpty(tileMap, Twns.GridIndexHelpers.add(gridIndex, { x: 1, y: -1 })))
+                return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 })))
                     ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Shore,    shapeId: 2 };
 
@@ -799,7 +798,7 @@ namespace Twns.MapEditor.MeHelpers {
         };
     }
     function checkIsSeaOrEmpty(tileMap: BaseWar.BwTileMap, gridIndex: GridIndex): boolean {
-        if (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
             return true;
         } else {
             return tileMap.getTile(gridIndex)?.getBaseType() === TileBaseType.Sea;
@@ -878,7 +877,7 @@ namespace Twns.MapEditor.MeHelpers {
     function getErrorCodeForMapDesigner(mapDesigner: Types.Undefinable<string>): ClientErrorCode {
         if ((mapDesigner == null)                                       ||
             (mapDesigner.length <= 0)                                   ||
-            (mapDesigner.length > Twns.CommonConstants.MapMaxDesignerLength)
+            (mapDesigner.length > CommonConstants.MapMaxDesignerLength)
         ) {
             return ClientErrorCode.MeHelpers_GetErrorCodeForMapDesigner_00;
         } else {
@@ -888,7 +887,7 @@ namespace Twns.MapEditor.MeHelpers {
     function getErrorCodeForMapNameArray(mapNameList: Types.Undefinable<CommonProto.Structure.ILanguageText[]>): ClientErrorCode {
         if (!Helpers.checkIsValidLanguageTextArray({
             list            : mapNameList,
-            maxTextLength   : Twns.CommonConstants.MapMaxNameLength,
+            maxTextLength   : CommonConstants.MapMaxNameLength,
             minTextLength   : 1,
             minTextCount    : 1,
         })) {
@@ -908,7 +907,7 @@ namespace Twns.MapEditor.MeHelpers {
                 list            : mapDescription,
                 minTextCount    : 1,
                 minTextLength   : 1,
-                maxTextLength   : Twns.CommonConstants.MapDescriptionMaxLength,
+                maxTextLength   : CommonConstants.MapDescriptionMaxLength,
             }))
         ) {
             return ClientErrorCode.MeHelpers_GetErrorCodeForMapExtraText_00;
@@ -926,8 +925,8 @@ namespace Twns.MapEditor.MeHelpers {
     function getErrorCodeForPlayersCountUnneutral(mapRawData: IMapRawData): ClientErrorCode {
         const playersCountUnneutral = mapRawData.playersCountUnneutral;
         if ((playersCountUnneutral == null)                                 ||
-            (playersCountUnneutral <= Twns.CommonConstants.WarFirstPlayerIndex)  ||
-            (playersCountUnneutral > Twns.CommonConstants.WarMaxPlayerIndex)
+            (playersCountUnneutral <= CommonConstants.WarFirstPlayerIndex)  ||
+            (playersCountUnneutral > CommonConstants.WarMaxPlayerIndex)
         ) {
             return ClientErrorCode.MeHelpers_GetErrorCodeForPlayersCountUnneutral_00;
         }
@@ -936,7 +935,7 @@ namespace Twns.MapEditor.MeHelpers {
         for (const tileData of mapRawData.tileDataArray || []) {
             const playerIndex = tileData.playerIndex;
             if ((playerIndex == null)                                   ||
-                (playerIndex < Twns.CommonConstants.WarNeutralPlayerIndex)   ||
+                (playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
                 (playerIndex > playersCountUnneutral)
             ) {
                 return ClientErrorCode.MeHelpers_GetErrorCodeForPlayersCountUnneutral_01;
@@ -946,7 +945,7 @@ namespace Twns.MapEditor.MeHelpers {
         for (const unitData of mapRawData.unitDataArray || []) {
             const playerIndex = unitData.playerIndex;
             if ((playerIndex == null)                                   ||
-                (playerIndex < Twns.CommonConstants.WarFirstPlayerIndex)     ||
+                (playerIndex < CommonConstants.WarFirstPlayerIndex)     ||
                 (playerIndex > playersCountUnneutral)
             ) {
                 return ClientErrorCode.MeHelpers_GetErrorCodeForPlayersCountUnneutral_02;
@@ -955,7 +954,7 @@ namespace Twns.MapEditor.MeHelpers {
         }
 
         for (const playerIndex of playerIndexSet) {
-            if ((playerIndex > Twns.CommonConstants.WarFirstPlayerIndex) &&
+            if ((playerIndex > CommonConstants.WarFirstPlayerIndex) &&
                 (!playerIndexSet.has(playerIndex - 1))
             ) {
                 return ClientErrorCode.MeHelpers_GetErrorCodeForPlayersCountUnneutral_03;
@@ -978,13 +977,13 @@ namespace Twns.MapEditor.MeHelpers {
     }
 
     export async function getCriticalErrorCodeForMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
-        if (Twns.ProtoManager.encodeAsMapRawData(mapRawData).byteLength > Twns.CommonConstants.MapMaxFileSize) {
+        if (ProtoManager.encodeAsMapRawData(mapRawData).byteLength > CommonConstants.MapMaxFileSize) {
             return ClientErrorCode.MeUtility_GetSevereErrorCodeForMapRawData_00;
         }
 
         try {
             const war = new MeWar();
-            war.initWithMapEditorData(
+            await war.initWithMapEditorData(
                 {
                     mapRawData,
                     slotIndex: 0,

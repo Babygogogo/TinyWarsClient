@@ -113,8 +113,8 @@ namespace Twns.ReplayWar {
         public async getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | null> {
             return `${Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn())} ${this._getDescSuffix()}`;
         }
-        public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | null> {
-            return `${Lang.getText(LangTextType.B0095)} ${Lang.getUnitName(Twns.Helpers.getExisted(action.unitType))} ${this._getDescSuffix()}`;
+        public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit, gameConfig: GameConfig): Promise<string | null> {
+            return `${Lang.getText(LangTextType.B0095)} ${Lang.getUnitName(Twns.Helpers.getExisted(action.unitType), gameConfig)} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | null> {
             return `${await this.getPlayerInTurn().getNickname()} ${Lang.getText(action.deprecatedIsBoot ? LangTextType.B0396: LangTextType.B0055)} ${this._getDescSuffix()}`;

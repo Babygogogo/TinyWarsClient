@@ -101,10 +101,14 @@ namespace Twns.Common {
         }
 
         private _updateListUnitType(): void {
-            const openData  = this._getOpenData();
-            const dataArray : DataForUnitTypeRenderer[] = [];
+            const openData      = this._getOpenData();
+            const gameConfig    = openData.gameConfig;
+            const dataArray     : DataForUnitTypeRenderer[] = [];
             for (const unitType of openData.gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
-                dataArray.push({ unitType });
+                dataArray.push({
+                    unitType,
+                    gameConfig,
+                });
             }
 
             const unitTypeArray = openData.currentUnitTypeArray;
@@ -117,13 +121,15 @@ namespace Twns.Common {
 
     type DataForUnitTypeRenderer = {
         unitType    : UnitType;
+        gameConfig  : GameConfig;
     };
     class UnitTypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitTypeRenderer> {
         private readonly _groupShow!        : eui.Group;
         private readonly _labelUnitName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelUnitName.text = Lang.getUnitName(this._getData().unitType) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            const data                  = this._getData();
+            this._labelUnitName.text    = Lang.getUnitName(data.unitType, data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
         }
     }
 }

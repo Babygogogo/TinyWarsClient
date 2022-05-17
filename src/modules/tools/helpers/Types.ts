@@ -23,6 +23,7 @@ namespace Twns.Types {
         defenseAmount       : number;
         defenseUnitCategory : UnitCategory;
         visionRange         : number;
+        lang                : number;
     }
     export interface UnitTemplateCfg extends CommonProto.Config.IUnitTemplateCfg {
         type                    : UnitType;
@@ -35,6 +36,8 @@ namespace Twns.Types {
         fuelConsumptionPerTurn  : number;
         productionCost          : number;
         visionRange             : number;
+        lang                    : number;
+        animParams              : number[];
     }
     export interface DamageChartCfg extends CommonProto.Config.IDamageChartCfg {
         attackerType: UnitType;
@@ -91,6 +94,10 @@ namespace Twns.Types {
     export interface UserAvatarCfg extends CommonProto.Config.IUserAvatarCfg {
         avatarId    : number;
     }
+    export interface BgmSfxCfg extends CommonProto.Config.IBgmSfxCfg {
+        code        : number;
+        filename    : string;
+    }
     export interface FullConfig extends CommonProto.Config.FullConfig {
         System          : SystemCfg;
         TileCategory    : TileCategoryCfg[];
@@ -109,6 +116,7 @@ namespace Twns.Types {
         Weather         : WeatherCfg[];
         WeatherCategory : WeatherCategoryCfg[];
         UserAvatar      : UserAvatarCfg[];
+        BgmSfx          : BgmSfxCfg[];
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -261,14 +269,6 @@ namespace Twns.Types {
         errorCode?  : ClientErrorCode;
     }
 
-    export type BgmCfg = {
-        filename        : string;
-        bgmNameTextType : Lang.LangTextType;
-        sortWeight      : number;
-        loopStart       : number;
-        loopEnd         : number;
-    };
-
     ////////////////////////////////////////////////////////////////////////////////
     // Enums.
     ////////////////////////////////////////////////////////////////////////////////
@@ -312,16 +312,6 @@ namespace Twns.Types {
     }
 
     // eslint-disable-next-line no-shadow
-    export const enum BgmCode {
-        None            = 0,
-
-        CoEmpty         = 9999,
-        Lobby01         = 10000,
-        MapEditor01     = 10100,
-        Power00         = 10200,
-    }
-
-    // eslint-disable-next-line no-shadow
     export enum ShortSfxCode {
         None,
         ButtonNeutral01,
@@ -336,12 +326,12 @@ namespace Twns.Types {
     // eslint-disable-next-line no-shadow
     export enum LongSfxCode {
         None,
-        NavalMove,
-        CopterMove,
-        JetMove,
-        TireMove,
         FootMove,
         TankMove,
+        TireMove,
+        CopterMove,
+        JetMove,
+        NavalMove,
     }
 
     export const UiState = {

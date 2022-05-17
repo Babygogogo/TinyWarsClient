@@ -97,7 +97,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Helpers.resetTween({
@@ -111,7 +111,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -166,10 +166,11 @@ namespace Twns.Common {
         }
 
         private _updateLabelType(): void {
-            const data      = this._getData();
-            const label     = this._labelType;
-            label.text      = Lang.getUnitName(data.newUnitType) || Twns.CommonConstants.ErrorTextForUndefined;
-            label.textColor = data.currentUnitType === data.newUnitType ? 0x00FF00 : 0xFFFFFF;
+            const data          = this._getData();
+            const label         = this._labelType;
+            const newUnitType   = data.newUnitType;
+            label.text          = Lang.getUnitName(newUnitType, data.gameConfig) || CommonConstants.ErrorTextForUndefined;
+            label.textColor     = data.currentUnitType === newUnitType ? 0x00FF00 : 0xFFFFFF;
         }
         private _updateUnitView(): void {
             const data = this._getData();

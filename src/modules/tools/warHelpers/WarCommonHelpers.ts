@@ -1372,7 +1372,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             for (const [tileType, gridIndexArray] of idleBuildingsDict) {
                 textArrayForBuildings.push(Lang.getFormattedText(
                     LangTextType.F0007, gridIndexArray.length,
-                    Lang.getTileName(tileType),
+                    Lang.getTileName(tileType, gameConfig),
                     gridIndexArray.map(v => `(${v.x}, ${v.y})`).join(`, `)),
                 );
             }

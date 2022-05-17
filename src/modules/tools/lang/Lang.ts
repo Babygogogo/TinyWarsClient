@@ -83,54 +83,9 @@ namespace Twns.Lang {
         }
     }
 
-    export function getTileName(tileType: Types.TileType, languageType?: LanguageType): string | null {
-        switch (tileType) {
-            case Types.TileType.Plain               : return getText(LangTextType.B1000, languageType);
-            case Types.TileType.River               : return getText(LangTextType.B1001, languageType);
-            case Types.TileType.Sea                 : return getText(LangTextType.B1002, languageType);
-            case Types.TileType.Beach               : return getText(LangTextType.B1003, languageType);
-            case Types.TileType.Road                : return getText(LangTextType.B1004, languageType);
-            case Types.TileType.BridgeOnPlain       : return getText(LangTextType.B1005, languageType);
-            case Types.TileType.BridgeOnRiver       : return getText(LangTextType.B1006, languageType);
-            case Types.TileType.BridgeOnBeach       : return getText(LangTextType.B1007, languageType);
-            case Types.TileType.BridgeOnSea         : return getText(LangTextType.B1008, languageType);
-            case Types.TileType.Wood                : return getText(LangTextType.B1009, languageType);
-            case Types.TileType.Mountain            : return getText(LangTextType.B1010, languageType);
-            case Types.TileType.Wasteland           : return getText(LangTextType.B1011, languageType);
-            case Types.TileType.Ruins               : return getText(LangTextType.B1012, languageType);
-            case Types.TileType.Fire                : return getText(LangTextType.B1013, languageType);
-            case Types.TileType.Rough               : return getText(LangTextType.B1014, languageType);
-            case Types.TileType.MistOnSea           : return getText(LangTextType.B1015, languageType);
-            case Types.TileType.Reef                : return getText(LangTextType.B1016, languageType);
-            case Types.TileType.Plasma              : return getText(LangTextType.B1017, languageType);
-            case Types.TileType.Pipe                : return getText(LangTextType.B1018, languageType);
-            case Types.TileType.Meteor              : return getText(LangTextType.B1019, languageType);
-            case Types.TileType.Silo                : return getText(LangTextType.B1020, languageType);
-            case Types.TileType.EmptySilo           : return getText(LangTextType.B1021, languageType);
-            case Types.TileType.Headquarters        : return getText(LangTextType.B1022, languageType);
-            case Types.TileType.City                : return getText(LangTextType.B1023, languageType);
-            case Types.TileType.CommandTower        : return getText(LangTextType.B1024, languageType);
-            case Types.TileType.Radar               : return getText(LangTextType.B1025, languageType);
-            case Types.TileType.Factory             : return getText(LangTextType.B1026, languageType);
-            case Types.TileType.Airport             : return getText(LangTextType.B1027, languageType);
-            case Types.TileType.Seaport             : return getText(LangTextType.B1028, languageType);
-            case Types.TileType.TempAirport         : return getText(LangTextType.B1029, languageType);
-            case Types.TileType.TempSeaport         : return getText(LangTextType.B1030, languageType);
-            case Types.TileType.MistOnPlain         : return getText(LangTextType.B1031, languageType);
-            case Types.TileType.MistOnRiver         : return getText(LangTextType.B1032, languageType);
-            case Types.TileType.MistOnBeach         : return getText(LangTextType.B1033, languageType);
-            case Types.TileType.Crystal             : return getText(LangTextType.B1034, languageType);
-            case Types.TileType.CustomCrystal       : return getText(LangTextType.B1035, languageType);
-            case Types.TileType.CannonDown          : return getText(LangTextType.B1036, languageType);
-            case Types.TileType.CannonLeft          : return getText(LangTextType.B1041, languageType);
-            case Types.TileType.CannonRight         : return getText(LangTextType.B1042, languageType);
-            case Types.TileType.CannonUp            : return getText(LangTextType.B1043, languageType);
-            case Types.TileType.CustomCannon        : return getText(LangTextType.B1037, languageType);
-            case Types.TileType.LaserTurret         : return getText(LangTextType.B1038, languageType);
-            case Types.TileType.CustomLaserTurret   : return getText(LangTextType.B1039, languageType);
-            case Types.TileType.PipeJoint           : return getText(LangTextType.B1040, languageType);
-            default                                 : return null;
-        }
+    export function getTileName(tileType: Types.TileType, gameConfig: Config.GameConfig, languageType?: LanguageType): string | null {
+        const textType = gameConfig.getTileTemplateCfgByType(tileType)?.lang;
+        return textType == null ? null : getText(textType, languageType);
     }
 
     export function getTileDecoratorName(decoratorType: Types.TileDecoratorType): string | null {
@@ -141,36 +96,9 @@ namespace Twns.Lang {
         }
     }
 
-    export function getUnitName(unitType: Types.UnitType, languageType?: LanguageType): string | null {
-        switch (unitType) {
-            case Types.UnitType.Infantry        : return getText(LangTextType.B1200, languageType);
-            case Types.UnitType.Mech            : return getText(LangTextType.B1201, languageType);
-            case Types.UnitType.Bike            : return getText(LangTextType.B1202, languageType);
-            case Types.UnitType.Recon           : return getText(LangTextType.B1203, languageType);
-            case Types.UnitType.Flare           : return getText(LangTextType.B1204, languageType);
-            case Types.UnitType.AntiAir         : return getText(LangTextType.B1205, languageType);
-            case Types.UnitType.Tank            : return getText(LangTextType.B1206, languageType);
-            case Types.UnitType.MediumTank      : return getText(LangTextType.B1207, languageType);
-            case Types.UnitType.WarTank         : return getText(LangTextType.B1208, languageType);
-            case Types.UnitType.Artillery       : return getText(LangTextType.B1209, languageType);
-            case Types.UnitType.AntiTank        : return getText(LangTextType.B1210, languageType);
-            case Types.UnitType.Rockets         : return getText(LangTextType.B1211, languageType);
-            case Types.UnitType.Missiles        : return getText(LangTextType.B1212, languageType);
-            case Types.UnitType.Rig             : return getText(LangTextType.B1213, languageType);
-            case Types.UnitType.Fighter         : return getText(LangTextType.B1214, languageType);
-            case Types.UnitType.Bomber          : return getText(LangTextType.B1215, languageType);
-            case Types.UnitType.Duster          : return getText(LangTextType.B1216, languageType);
-            case Types.UnitType.BattleCopter    : return getText(LangTextType.B1217, languageType);
-            case Types.UnitType.TransportCopter : return getText(LangTextType.B1218, languageType);
-            case Types.UnitType.Seaplane        : return getText(LangTextType.B1219, languageType);
-            case Types.UnitType.Battleship      : return getText(LangTextType.B1220, languageType);
-            case Types.UnitType.Carrier         : return getText(LangTextType.B1221, languageType);
-            case Types.UnitType.Submarine       : return getText(LangTextType.B1222, languageType);
-            case Types.UnitType.Cruiser         : return getText(LangTextType.B1223, languageType);
-            case Types.UnitType.Lander          : return getText(LangTextType.B1224, languageType);
-            case Types.UnitType.Gunboat         : return getText(LangTextType.B1225, languageType);
-            default                             : return null;
-        }
+    export function getUnitName(unitType: Types.UnitType, gameConfig: Config.GameConfig, languageType?: LanguageType): string | null {
+        const textType = gameConfig.getUnitTemplateCfg(unitType)?.lang;
+        return textType == null ? null : getText(textType, languageType);
     }
 
     export function getUnitActionName(actionType: Types.UnitActionType): string | null{

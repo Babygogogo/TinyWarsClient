@@ -590,7 +590,7 @@ namespace Twns.MapEditor {
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
-                unitType    : Types.UnitType.Infantry,
+                unitType    : war.getGameConfig().getFirstUnitType(),
                 playerIndex : CommonConstants.WarFirstPlayerIndex,
             }, this._getWar().getGameConfig());
             unit.startRunning(war);

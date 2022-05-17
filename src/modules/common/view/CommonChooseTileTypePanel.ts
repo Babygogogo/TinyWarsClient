@@ -4,7 +4,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
@@ -12,10 +12,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common {
-    import LangTextType = Twns.Lang.LangTextType;
-    import NotifyType   = Twns.Notify.NotifyType;
-    import TileType     = Twns.Types.TileType;
-    import GameConfig   = Twns.Config.GameConfig;
+    import LangTextType = Lang.LangTextType;
+    import NotifyType   = Notify.NotifyType;
+    import TileType     = Types.TileType;
+    import GameConfig   = Config.GameConfig;
 
     export type OpenDataForCommonChooseTileTypePanel = {
         gameConfig              : GameConfig;
@@ -84,27 +84,33 @@ namespace Twns.Common {
         }
 
         private _updateListTileType(): void {
-            const dataArray : DataForTileTypeRenderer[] = [];
-            for (const tileType of this._getOpenData().gameConfig.getTileTypesByCategory(Twns.Types.TileCategory.All) ?? []) {
-                dataArray.push({ tileType });
+            const gameConfig    = this._getOpenData().gameConfig;
+            const dataArray     : DataForTileTypeRenderer[] = [];
+            for (const tileType of gameConfig.getTileTypesByCategory(Types.TileCategory.All) ?? []) {
+                dataArray.push({
+                    tileType,
+                    gameConfig,
+                });
             }
 
             const tileTypeArray = this._getOpenData().currentTileTypeArray;
             const list          = this._listTileType;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => tileTypeArray.indexOf(v.tileType) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => tileTypeArray.indexOf(v.tileType) >= 0 ? i : null)));
         }
     }
 
     type DataForTileTypeRenderer = {
         tileType    : TileType;
+        gameConfig  : GameConfig;
     };
     class TileTypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileTypeRenderer> {
         private readonly _groupShow!        : eui.Group;
         private readonly _labelTileName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelTileName.text = Lang.getTileName(this._getData().tileType) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            const data                  = this._getData();
+            this._labelTileName.text    = Lang.getTileName(data.tileType, data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
         }
     }
 }

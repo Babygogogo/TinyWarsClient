@@ -198,8 +198,9 @@ namespace Twns.BaseWar {
         private _updateUnitViewAndLabelName(): void {
             const unit              = this._getOpenData().unit;
             const unitType          = unit.getUnitType();
-            this._labelName.text    = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
-            this._labelName1.text   = Lang.getUnitName(unitType, Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
+            const gameConfig        = unit.getGameConfig();
+            this._labelName.text    = Lang.getUnitName(unitType, gameConfig) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName1.text   = Lang.getUnitName(unitType, gameConfig, Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
             this._unitView.update({
                 gameConfig      : unit.getGameConfig(),
                 gridIndex       : { x: 0, y: 0},
@@ -700,7 +701,7 @@ namespace Twns.BaseWar {
                 groupExtra.visible = false;
             } else {
                 groupExtra.visible          = true;
-                this._labelExtraInfo.text   = Lang.getUnitName(Helpers.getExisted(unit.getProduceUnitType())) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelExtraInfo.text   = Lang.getUnitName(Helpers.getExisted(unit.getProduceUnitType()), unit.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateViewAsProductionCost(): void {

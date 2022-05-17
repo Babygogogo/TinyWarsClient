@@ -547,6 +547,9 @@ declare namespace CommonProto {
 
             /** TileTemplateCfg loadCoUnitCategory */
             loadCoUnitCategory?: (number|null);
+
+            /** TileTemplateCfg lang */
+            lang?: (number|null);
         }
 
         /** Represents a TileTemplateCfg. */
@@ -617,6 +620,9 @@ declare namespace CommonProto {
 
             /** TileTemplateCfg loadCoUnitCategory. */
             public loadCoUnitCategory: number;
+
+            /** TileTemplateCfg lang. */
+            public lang: number;
 
             /**
              * Creates a new TileTemplateCfg instance using the specified properties.
@@ -790,6 +796,12 @@ declare namespace CommonProto {
 
             /** UnitTemplateCfg flareRadius */
             flareRadius?: (number|null);
+
+            /** UnitTemplateCfg lang */
+            lang?: (number|null);
+
+            /** UnitTemplateCfg animParams */
+            animParams?: (number[]|null);
         }
 
         /** Represents an UnitTemplateCfg. */
@@ -899,6 +911,12 @@ declare namespace CommonProto {
 
             /** UnitTemplateCfg flareRadius. */
             public flareRadius: number;
+
+            /** UnitTemplateCfg lang. */
+            public lang: number;
+
+            /** UnitTemplateCfg animParams. */
+            public animParams: number[];
 
             /**
              * Creates a new UnitTemplateCfg instance using the specified properties.
@@ -2519,6 +2537,126 @@ declare namespace CommonProto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a BgmSfxCfg. */
+        interface IBgmSfxCfg {
+
+            /** BgmSfxCfg code */
+            code?: (number|null);
+
+            /** BgmSfxCfg filename */
+            filename?: (string|null);
+
+            /** BgmSfxCfg lang */
+            lang?: (number|null);
+
+            /** BgmSfxCfg sortWeight */
+            sortWeight?: (number|null);
+
+            /** BgmSfxCfg loopStart */
+            loopStart?: (number|null);
+
+            /** BgmSfxCfg loopEnd */
+            loopEnd?: (number|null);
+        }
+
+        /** Represents a BgmSfxCfg. */
+        class BgmSfxCfg implements IBgmSfxCfg {
+
+            /**
+             * Constructs a new BgmSfxCfg.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.Config.IBgmSfxCfg);
+
+            /** BgmSfxCfg code. */
+            public code: number;
+
+            /** BgmSfxCfg filename. */
+            public filename: string;
+
+            /** BgmSfxCfg lang. */
+            public lang: number;
+
+            /** BgmSfxCfg sortWeight. */
+            public sortWeight: number;
+
+            /** BgmSfxCfg loopStart. */
+            public loopStart: number;
+
+            /** BgmSfxCfg loopEnd. */
+            public loopEnd: number;
+
+            /**
+             * Creates a new BgmSfxCfg instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns BgmSfxCfg instance
+             */
+            public static create(properties?: CommonProto.Config.IBgmSfxCfg): CommonProto.Config.BgmSfxCfg;
+
+            /**
+             * Encodes the specified BgmSfxCfg message. Does not implicitly {@link CommonProto.Config.BgmSfxCfg.verify|verify} messages.
+             * @param message BgmSfxCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.Config.IBgmSfxCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified BgmSfxCfg message, length delimited. Does not implicitly {@link CommonProto.Config.BgmSfxCfg.verify|verify} messages.
+             * @param message BgmSfxCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.Config.IBgmSfxCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a BgmSfxCfg message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns BgmSfxCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.Config.BgmSfxCfg;
+
+            /**
+             * Decodes a BgmSfxCfg message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns BgmSfxCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.Config.BgmSfxCfg;
+
+            /**
+             * Verifies a BgmSfxCfg message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a BgmSfxCfg message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns BgmSfxCfg
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.Config.BgmSfxCfg;
+
+            /**
+             * Creates a plain object from a BgmSfxCfg message. Also converts values to other types if specified.
+             * @param message BgmSfxCfg
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.Config.BgmSfxCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this BgmSfxCfg to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a FullConfig. */
         interface IFullConfig {
 
@@ -2572,6 +2710,9 @@ declare namespace CommonProto {
 
             /** FullConfig UserAvatar */
             UserAvatar?: (CommonProto.Config.IUserAvatarCfg[]|null);
+
+            /** FullConfig BgmSfx */
+            BgmSfx?: (CommonProto.Config.IBgmSfxCfg[]|null);
         }
 
         /** Represents a FullConfig. */
@@ -2633,6 +2774,9 @@ declare namespace CommonProto {
 
             /** FullConfig UserAvatar. */
             public UserAvatar: CommonProto.Config.IUserAvatarCfg[];
+
+            /** FullConfig BgmSfx. */
+            public BgmSfx: CommonProto.Config.IBgmSfxCfg[];
 
             /**
              * Creates a new FullConfig instance using the specified properties.
@@ -30584,6 +30728,9 @@ declare namespace CommonProto {
         /** Properties of a MsgCommonLatestConfigVersion. */
         interface IMsgCommonLatestConfigVersion {
 
+            /** MsgCommonLatestConfigVersion c */
+            c?: (CommonProto.NetMessage.MsgCommonLatestConfigVersion.IC|null);
+
             /** MsgCommonLatestConfigVersion s */
             s?: (CommonProto.NetMessage.MsgCommonLatestConfigVersion.IS|null);
         }
@@ -30596,6 +30743,9 @@ declare namespace CommonProto {
              * @param [properties] Properties to set
              */
             constructor(properties?: CommonProto.NetMessage.IMsgCommonLatestConfigVersion);
+
+            /** MsgCommonLatestConfigVersion c. */
+            public c?: (CommonProto.NetMessage.MsgCommonLatestConfigVersion.IC|null);
 
             /** MsgCommonLatestConfigVersion s. */
             public s?: (CommonProto.NetMessage.MsgCommonLatestConfigVersion.IS|null);
@@ -30672,6 +30822,90 @@ declare namespace CommonProto {
         }
 
         namespace MsgCommonLatestConfigVersion {
+
+            /** Properties of a C. */
+            interface IC {
+            }
+
+            /** Represents a C. */
+            class C implements IC {
+
+                /**
+                 * Constructs a new C.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgCommonLatestConfigVersion.IC);
+
+                /**
+                 * Creates a new C instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns C instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgCommonLatestConfigVersion.IC): CommonProto.NetMessage.MsgCommonLatestConfigVersion.C;
+
+                /**
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgCommonLatestConfigVersion.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgCommonLatestConfigVersion.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgCommonLatestConfigVersion.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgCommonLatestConfigVersion.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgCommonLatestConfigVersion.C;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgCommonLatestConfigVersion.C;
+
+                /**
+                 * Verifies a C message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a C message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns C
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgCommonLatestConfigVersion.C;
+
+                /**
+                 * Creates a plain object from a C message. Also converts values to other types if specified.
+                 * @param message C
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgCommonLatestConfigVersion.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this C to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
 
             /** Properties of a S. */
             interface IS {

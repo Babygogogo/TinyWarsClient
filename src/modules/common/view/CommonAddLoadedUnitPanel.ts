@@ -10,7 +10,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import Twns.Notify               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -25,14 +25,14 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common {
-    import NotifyType               = Twns.Notify.NotifyType;
-    import ColorValue               = Twns.Types.ColorValue;
+    import NotifyType               = Notify.NotifyType;
+    import ColorValue               = Types.ColorValue;
     import FocusEvent               = egret.FocusEvent;
-    import LangTextType             = Twns.Lang.LangTextType;
+    import LangTextType             = Lang.LangTextType;
 
     export type OpenDataForCommonAddLoadedUnitPanel = {
-        war         : Twns.BaseWar.BwWar;
-        loaderUnit  : Twns.BaseWar.BwUnit;
+        war         : BaseWar.BwWar;
+        loaderUnit  : BaseWar.BwUnit;
         callback    : (unitData: CommonProto.WarSerialization.ISerialUnit) => void;
     };
     export class CommonAddLoadedUnitPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonAddLoadedUnitPanel> {
@@ -111,7 +111,7 @@ namespace Twns.Common {
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             const loaderUnit = this._getOpenData().loaderUnit;
-            this._resetUnitData((loaderUnit.getGameConfig().getUnitTypesByCategory(Twns.Helpers.getExisted(loaderUnit.getLoadUnitCategory())) ?? [])[0]);
+            this._resetUnitData((loaderUnit.getGameConfig().getUnitTypesByCategory(Helpers.getExisted(loaderUnit.getLoadUnitCategory())) ?? [])[0]);
             this._updateView();
         }
         protected _onClosing(): void {
@@ -126,7 +126,7 @@ namespace Twns.Common {
             const unitData  = this._getUnitData();
             const errorTips = getErrorTipsForAddUnit({ war: openData.war, unitData });
             if (errorTips) {
-                Twns.FloatText.show(errorTips);
+                FloatText.show(errorTips);
             } else {
                 openData.callback(unitData);
                 this.close();
@@ -136,12 +136,12 @@ namespace Twns.Common {
         private _onTouchedBtnAiMode(): void {
             const unitData  = this._getUnitData();
             const aiMode    = unitData.aiMode;
-            if (aiMode === Twns.Types.UnitAiMode.NoMove) {
-                unitData.aiMode = Twns.Types.UnitAiMode.Normal;
-            } else if ((aiMode === Twns.Types.UnitAiMode.Normal) || (aiMode == null)) {
-                unitData.aiMode = Twns.Types.UnitAiMode.WaitUntilCanAttack;
+            if (aiMode === Types.UnitAiMode.NoMove) {
+                unitData.aiMode = Types.UnitAiMode.Normal;
+            } else if ((aiMode === Types.UnitAiMode.Normal) || (aiMode == null)) {
+                unitData.aiMode = Types.UnitAiMode.WaitUntilCanAttack;
             } else {
-                unitData.aiMode = Twns.Types.UnitAiMode.NoMove;
+                unitData.aiMode = Types.UnitAiMode.NoMove;
             }
             this._updateComponentsForData();
         }
@@ -157,20 +157,20 @@ namespace Twns.Common {
         }
         private _onTouchedBtnActionState(): void {
             const unitData = this._getUnitData();
-            if (unitData.actionState === Twns.Types.UnitActionState.Acted) {
+            if (unitData.actionState === Types.UnitActionState.Acted) {
                 unitData.actionState = null;
             } else {
-                unitData.actionState = Twns.Types.UnitActionState.Acted;
+                unitData.actionState = Types.UnitActionState.Acted;
             }
             this._updateComponentsForData();
         }
         private _onTouchedBtnUnitType(): void {
             const data          = this._getOpenData();
             const loaderUnit    = data.loaderUnit;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleUnitTypePanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleUnitTypePanel, {
                 gameConfig      : loaderUnit.getGameConfig(),
-                currentUnitType : Twns.Helpers.getExisted(this._getUnitData().unitType),
-                unitTypeArray   : loaderUnit.getGameConfig().getUnitTypesByCategory(Twns.Helpers.getExisted(loaderUnit.getLoadUnitCategory())) ?? [],
+                currentUnitType : Helpers.getExisted(this._getUnitData().unitType),
+                unitTypeArray   : loaderUnit.getGameConfig().getUnitTypesByCategory(Helpers.getExisted(loaderUnit.getLoadUnitCategory())) ?? [],
                 playerIndex     : loaderUnit.getPlayerIndex(),
                 callback        : unitType => {
                     this._resetUnitData(unitType);
@@ -181,7 +181,7 @@ namespace Twns.Common {
         private _onFocusOutInputHp(): void {
             const data      = this._getOpenData();
             const unitData  = this._getUnitData();
-            const maxHp     = Twns.Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Twns.Helpers.getExisted(unitData.unitType))?.maxHp);
+            const maxHp     = Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxHp);
             const currentHp = unitData.currentHp == null ? maxHp : unitData.currentHp;
             const newHp     = Math.max(0, Math.min(parseInt(this._inputHp.text) || 0, maxHp));
             if (newHp !== currentHp) {
@@ -192,7 +192,7 @@ namespace Twns.Common {
         private _onFocusOutInputFuel(): void {
             const data          = this._getOpenData();
             const unitData      = this._getUnitData();
-            const maxFuel       = Twns.Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Twns.Helpers.getExisted(unitData.unitType))?.maxFuel);
+            const maxFuel       = Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxFuel);
             const currentFuel   = unitData.currentFuel == null ? maxFuel : unitData.currentFuel;
             const newFuel       = Math.max(0, Math.min(parseInt(this._inputFuel.text) || 0, maxFuel));
             if (newFuel !== currentFuel) {
@@ -214,7 +214,7 @@ namespace Twns.Common {
         private _onFocusOutInputPrimaryAmmo(): void {
             const data          = this._getOpenData();
             const unitData      = this._getUnitData();
-            const maxAmmo       = Twns.Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Twns.Helpers.getExisted(unitData.unitType))?.primaryWeaponMaxAmmo);
+            const maxAmmo       = Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.primaryWeaponMaxAmmo);
             const currentAmmo   = unitData.primaryWeaponCurrentAmmo == null ? maxAmmo : unitData.primaryWeaponCurrentAmmo;
             const newAmmo       = Math.max(0, Math.min(parseInt(this._inputPrimaryAmmo.text) || 0, maxAmmo));
             if (newAmmo !== currentAmmo) {
@@ -225,7 +225,7 @@ namespace Twns.Common {
         private _onFocusOutInputFlareAmmo(): void {
             const data          = this._getOpenData();
             const unitData      = this._getUnitData();
-            const maxAmmo       = Twns.Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Twns.Helpers.getExisted(unitData.unitType))?.flareMaxAmmo);
+            const maxAmmo       = Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.flareMaxAmmo);
             const currentAmmo   = unitData.flareCurrentAmmo == null ? maxAmmo : unitData.flareCurrentAmmo;
             const newAmmo       = Math.max(0, Math.min(parseInt(this._inputFlareAmmo.text) || 0, maxAmmo));
             if (newAmmo !== currentAmmo) {
@@ -236,7 +236,7 @@ namespace Twns.Common {
         private _onFocusOutInputBuildMaterial(): void {
             const data              = this._getOpenData();
             const unitData          = this._getUnitData();
-            const maxMaterial       = Twns.Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Twns.Helpers.getExisted(unitData.unitType))?.maxBuildMaterial);
+            const maxMaterial       = Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxBuildMaterial);
             const currentMaterial   = unitData.currentBuildMaterial == null ? maxMaterial : unitData.currentBuildMaterial;
             const newMaterial       = Math.max(0, Math.min(parseInt(this._inputBuildMaterial.text) || 0, maxMaterial));
             if (newMaterial !== currentMaterial) {
@@ -247,7 +247,7 @@ namespace Twns.Common {
         private _onFocusOutInputProduceMaterial(): void {
             const data              = this._getOpenData();
             const unitData          = this._getUnitData();
-            const maxMaterial       = Twns.Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Twns.Helpers.getExisted(unitData.unitType))?.maxProduceMaterial);
+            const maxMaterial       = Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxProduceMaterial);
             const currentMaterial   = unitData.currentProduceMaterial == null ? maxMaterial : unitData.currentProduceMaterial;
             const newMaterial       = Math.max(0, Math.min(parseInt(this._inputProduceMaterial.text) || 0, maxMaterial));
             if (newMaterial !== currentMaterial) {
@@ -313,13 +313,13 @@ namespace Twns.Common {
             label.textColor = errorTips ? ColorValue.Red : ColorValue.Green;
         }
         private _updateComponentsForAiMode(): void {
-            this._labelAiMode.text  = Lang.getUnitAiModeName(this._getUnitData().aiMode ?? Twns.Types.UnitAiMode.Normal) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelAiMode.text  = Lang.getUnitAiModeName(this._getUnitData().aiMode ?? Types.UnitAiMode.Normal) ?? CommonConstants.ErrorTextForUndefined;
         }
         private _updateComponentsForIsDiving(): void {
             const data      = this._getOpenData();
             const group     = this._groupIsDiving;
             const unitData  = this._getUnitData();
-            const unitCfg   = data.war.getGameConfig().getUnitTemplateCfg(Twns.Helpers.getExisted(unitData.unitType));
+            const unitCfg   = data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType));
             if ((!unitCfg) || (!unitCfg.diveCfgs)) {
                 group.visible = false;
             } else {
@@ -334,11 +334,11 @@ namespace Twns.Common {
             const label = this._labelActionState;
             const state = this._getUnitData().actionState;
             label.text  = state == null
-                ? (Lang.getUnitActionStateText(Twns.Types.UnitActionState.Idle) ?? Twns.CommonConstants.ErrorTextForUndefined)
-                : (Lang.getUnitActionStateText(state) ?? Twns.CommonConstants.ErrorTextForUndefined);
+                ? (Lang.getUnitActionStateText(Types.UnitActionState.Idle) ?? CommonConstants.ErrorTextForUndefined)
+                : (Lang.getUnitActionStateText(state) ?? CommonConstants.ErrorTextForUndefined);
         }
         private _updateComponentsForUnitType(): void {
-            this._labelUnitType.text = Lang.getUnitName(Twns.Helpers.getExisted(this._getUnitData().unitType)) || Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelUnitType.text = Lang.getUnitName(Helpers.getExisted(this._getUnitData().unitType), this._getOpenData().war.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined;
         }
         private _updateComponentsForHp(): void {
             const data      = this._getOpenData();
@@ -346,7 +346,7 @@ namespace Twns.Common {
             const unitData  = this._getUnitData();
             const currentHp = unitData.currentHp;
             input.text      = currentHp == null
-                ? `${data.war.getGameConfig().getUnitTemplateCfg(Twns.Helpers.getExisted(unitData.unitType))?.maxHp}`
+                ? `${data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxHp}`
                 : `${currentHp}`;
         }
         private _updateComponentsForFuel(): void {
@@ -355,7 +355,7 @@ namespace Twns.Common {
             const unitData      = this._getUnitData();
             const currentFuel   = unitData.currentFuel;
             input.text          = currentFuel == null
-                ? `${data.war.getGameConfig().getUnitTemplateCfg(Twns.Helpers.getExisted(unitData.unitType))?.maxFuel}`
+                ? `${data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxFuel}`
                 : `${currentFuel}`;
         }
         private _updateComponentsForPromotion(): void {
@@ -365,7 +365,7 @@ namespace Twns.Common {
             const data      = this._getOpenData();
             const group     = this._groupPrimaryAmmo;
             const unitData  = this._getUnitData();
-            const maxAmmo   = data.war.getGameConfig().getUnitTemplateCfg(Twns.Helpers.getExisted(unitData.unitType))?.primaryWeaponMaxAmmo;
+            const maxAmmo   = data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.primaryWeaponMaxAmmo;
             if (!maxAmmo) {
                 group.visible = false;
             } else {
@@ -379,7 +379,7 @@ namespace Twns.Common {
             const data      = this._getOpenData();
             const group     = this._groupFlareAmmo;
             const unitData  = this._getUnitData();
-            const maxAmmo   = data.war.getGameConfig().getUnitTemplateCfg(Twns.Helpers.getExisted(unitData.unitType))?.flareMaxAmmo;
+            const maxAmmo   = data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.flareMaxAmmo;
             if (!maxAmmo) {
                 group.visible = false;
             } else {
@@ -393,7 +393,7 @@ namespace Twns.Common {
             const data          = this._getOpenData();
             const group         = this._groupBuildMaterial;
             const unitData      = this._getUnitData();
-            const maxMaterial   = data.war.getGameConfig().getUnitTemplateCfg(Twns.Helpers.getExisted(unitData.unitType))?.maxBuildMaterial;
+            const maxMaterial   = data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxBuildMaterial;
             if (!maxMaterial) {
                 group.visible = false;
             } else {
@@ -407,7 +407,7 @@ namespace Twns.Common {
             const data          = this._getOpenData();
             const group         = this._groupProduceMaterial;
             const unitData      = this._getUnitData();
-            const maxMaterial   = data.war.getGameConfig().getUnitTemplateCfg(Twns.Helpers.getExisted(unitData.unitType))?.maxProduceMaterial;
+            const maxMaterial   = data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxProduceMaterial;
             if (!maxMaterial) {
                 group.visible = false;
             } else {
@@ -418,31 +418,31 @@ namespace Twns.Common {
             }
         }
 
-        private _resetUnitData(unitType: Twns.Types.UnitType): void {
+        private _resetUnitData(unitType: Types.UnitType): void {
             const loaderUnit    = this._getOpenData().loaderUnit;
             this._unitData      = {
-                gridIndex   : Twns.Helpers.deepClone(loaderUnit.getGridIndex()),
+                gridIndex   : Helpers.deepClone(loaderUnit.getGridIndex()),
                 unitType,
                 playerIndex : loaderUnit.getPlayerIndex(),
                 loaderUnitId: loaderUnit.getUnitId(),
             };
         }
         private _getUnitData(): CommonProto.WarSerialization.ISerialUnit {
-            return Twns.Helpers.getExisted(this._unitData);
+            return Helpers.getExisted(this._unitData);
         }
     }
 
     function getErrorTipsForAddUnit({ unitData, war }: {
         unitData    : CommonProto.WarSerialization.ISerialUnit;
-        war         : Twns.BaseWar.BwWar;
+        war         : BaseWar.BwWar;
     }): string | null {
         const gameConfig    = war.getGameConfig();
-        const unitCfg       = gameConfig.getUnitTemplateCfg(Twns.Helpers.getExisted(unitData.unitType));
+        const unitCfg       = gameConfig.getUnitTemplateCfg(Helpers.getExisted(unitData.unitType));
         if (unitCfg == null) {
             return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0525));
         }
 
-        if (!Twns.GridIndexHelpers.checkIsInsideMap(Twns.Helpers.getExisted(unitData.gridIndex), war.getTileMap().getMapSize())) {
+        if (!GridIndexHelpers.checkIsInsideMap(Helpers.getExisted(unitData.gridIndex), war.getTileMap().getMapSize())) {
             return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0531));
         }
 
@@ -450,7 +450,7 @@ namespace Twns.Common {
             const playerIndex = unitData.playerIndex;
             if ((playerIndex == null)                               ||
                 (playerIndex > war.getPlayersCountUnneutral())      ||
-                (playerIndex < Twns.CommonConstants.WarFirstPlayerIndex)
+                (playerIndex < CommonConstants.WarFirstPlayerIndex)
             ) {
                 return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0521));
             }
@@ -459,8 +459,8 @@ namespace Twns.Common {
         {
             const actionState = unitData.actionState;
             if ((actionState != null)                           &&
-                (actionState !== Twns.Types.UnitActionState.Acted)   &&
-                (actionState !== Twns.Types.UnitActionState.Idle)
+                (actionState !== Types.UnitActionState.Acted)   &&
+                (actionState !== Types.UnitActionState.Idle)
             ) {
                 return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0526));
             }

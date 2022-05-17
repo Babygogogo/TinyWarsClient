@@ -4986,324 +4986,393 @@ namespace Twns.Lang {
             `地形属性表`,
             `Tiles Info`,
         ],
-        [LangTextType.B0911]: [
-            `Hawke's Theme (Hawk)`,
-            `Hawke's Theme (Hawk)`,
-        ],
-        [LangTextType.B0912]: [
-            `The Beast's Theme`,
-            `The Beast's Theme`,
-        ],
-        [LangTextType.B0913]: [
-            `First Strike (Lobby)`,
-            `First Strike (Lobby)`,
-        ],
-        [LangTextType.B0914]: [
-            `Destructive Tendencies`,
-            `Destructive Tendencies`,
-        ],
-        [LangTextType.B0915]: [
-            `Apocalypse - Chaos Suite`,
-            `Apocalypse - Chaos Suite`,
-        ],
-        [LangTextType.B0916]: [
-            `Stormy Times (Power)`,
-            `Stormy Times (Power)`,
-        ],
-        [LangTextType.B0917]: [
-            `Road to War`,
-            `Road to War`,
-        ],
-        [LangTextType.B0918]: [
-            `The Way of Sadness`,
-            `The Way of Sadness`,
-        ],
-        [LangTextType.B0919]: [
-            `Battle Ready`,
-            `Battle Ready`,
-        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        [LangTextType.B1000]: [
+        [LangTextType.Tile0000]: [
             `平原`,
             `Plain`,
         ],
-        [LangTextType.B1001]: [
+        [LangTextType.Tile0001]: [
             `河流`,
             `River`,
         ],
-        [LangTextType.B1002]: [
+        [LangTextType.Tile0002]: [
             `海洋`,
             `Sea`,
         ],
-        [LangTextType.B1003]: [
+        [LangTextType.Tile0003]: [
             `沙滩`,
             `Beach`,
         ],
-        [LangTextType.B1004]: [
+        [LangTextType.Tile0004]: [
             `道路`,
             `Road`,
         ],
-        [LangTextType.B1005]: [
+        [LangTextType.Tile0005]: [
             `桥梁(平原)`,
             `BridgeOnPlain`,
         ],
-        [LangTextType.B1006]: [
+        [LangTextType.Tile0006]: [
             `桥梁(河)`,
             `BridgeOnRiver`,
         ],
-        [LangTextType.B1007]: [
+        [LangTextType.Tile0007]: [
             `桥梁(沙滩)`,
             `BridgeOnBeach`,
         ],
-        [LangTextType.B1008]: [
+        [LangTextType.Tile0008]: [
             `桥梁(海)`,
             `BridgeOnSea`,
         ],
-        [LangTextType.B1009]: [
+        [LangTextType.Tile0009]: [
             `森林`,
             `Wood`,
         ],
-        [LangTextType.B1010]: [
+        [LangTextType.Tile0010]: [
             `高山`,
             `Mountain`,
         ],
-        [LangTextType.B1011]: [
+        [LangTextType.Tile0011]: [
             `荒野`,
             `Wasteland`,
         ],
-        [LangTextType.B1012]: [
+        [LangTextType.Tile0012]: [
             `废墟`,
             `Ruins`,
         ],
-        [LangTextType.B1013]: [
+        [LangTextType.Tile0013]: [
             `火堆`,
             `Fire`,
         ],
-        [LangTextType.B1014]: [
+        [LangTextType.Tile0014]: [
             `巨浪`,
             `Rough`,
         ],
-        [LangTextType.B1015]: [
+        [LangTextType.Tile0015]: [
             `迷雾(海)`,
             `MistOnSea`,
         ],
-        [LangTextType.B1016]: [
+        [LangTextType.Tile0016]: [
             `礁石`,
             `Reef`,
         ],
-        [LangTextType.B1017]: [
+        [LangTextType.Tile0017]: [
             `等离子`,
             `Plasma`,
         ],
-        [LangTextType.B1018]: [
+        [LangTextType.Tile0018]: [
             `超级等离子`,
             `SuperPlasma`,
         ],
-        [LangTextType.B1019]: [
+        [LangTextType.Tile0019]: [
             `陨石`,
             `Meteor`,
         ],
-        [LangTextType.B1020]: [
+        [LangTextType.Tile0020]: [
             `导弹井`,
             `Silo`,
         ],
-        [LangTextType.B1021]: [
+        [LangTextType.Tile0021]: [
             `空导弹井`,
             `EmptySilo`,
         ],
-        [LangTextType.B1022]: [
+        [LangTextType.Tile0022]: [
             `指挥部`,
             `Headquarters`,
         ],
-        [LangTextType.B1023]: [
+        [LangTextType.Tile0023]: [
             `城市`,
             `City`,
         ],
-        [LangTextType.B1024]: [
+        [LangTextType.Tile0024]: [
             `指挥塔`,
             `CommandTower`,
         ],
-        [LangTextType.B1025]: [
+        [LangTextType.Tile0025]: [
             `雷达`,
             `Radar`,
         ],
-        [LangTextType.B1026]: [
+        [LangTextType.Tile0026]: [
             `工厂`,
             `Factory`,
         ],
-        [LangTextType.B1027]: [
+        [LangTextType.Tile0027]: [
             `机场`,
             `Airport`,
         ],
-        [LangTextType.B1028]: [
+        [LangTextType.Tile0028]: [
             `海港`,
             `Seaport`,
         ],
-        [LangTextType.B1029]: [
+        [LangTextType.Tile0029]: [
             `临时机场`,
             `TempAirport`,
         ],
-        [LangTextType.B1030]: [
+        [LangTextType.Tile0030]: [
             `临时海港`,
             `TempSeaport`,
         ],
-        [LangTextType.B1031]: [
+        [LangTextType.Tile0031]: [
             `迷雾(平原)`,
             `MistOnPlain`,
         ],
-        [LangTextType.B1032]: [
+        [LangTextType.Tile0032]: [
             `迷雾(河)`,
             `MistOnRiver`,
         ],
-        [LangTextType.B1033]: [
+        [LangTextType.Tile0033]: [
             `迷雾(沙滩)`,
             `MistOnBeach`,
         ],
-        [LangTextType.B1034]: [
+        [LangTextType.Tile0034]: [
             `水晶`,
             `Crystal`,
         ],
-        [LangTextType.B1035]: [
+        [LangTextType.Tile0035]: [
             `神秘水晶`,
             `Myst.Crystal`,
         ],
-        [LangTextType.B1036]: [
+        [LangTextType.Tile0036]: [
             `加农炮(下)`,
             `Cannon(Down)`,
         ],
-        [LangTextType.B1037]: [
+        [LangTextType.Tile0037]: [
             `神秘加农炮`,
             `Myst.Cannon`,
         ],
-        [LangTextType.B1038]: [
+        [LangTextType.Tile0038]: [
             `激光炮`,
             `LaserTurret`,
         ],
-        [LangTextType.B1039]: [
+        [LangTextType.Tile0039]: [
             `神秘激光炮`,
             `Myst.LaserTurret`,
         ],
-        [LangTextType.B1040]: [
+        [LangTextType.Tile0040]: [
             `管道接口`,
             `Joint`,
         ],
-        [LangTextType.B1041]: [
+        [LangTextType.Tile0041]: [
             `加农炮(左)`,
             `Cannon(Left)`,
         ],
-        [LangTextType.B1042]: [
+        [LangTextType.Tile0042]: [
             `加农炮(右)`,
             `Cannon(Right)`,
         ],
-        [LangTextType.B1043]: [
+        [LangTextType.Tile0043]: [
             `加农炮(上)`,
             `Cannon(Up)`,
         ],
-
-        [LangTextType.B1200]: [
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [LangTextType.Unit0000]: [
             `步兵`,
             `Infantry`,
         ],
-        [LangTextType.B1201]: [
+        [LangTextType.Unit0001]: [
             `反坦克兵`,
             `Mech`,
         ],
-        [LangTextType.B1202]: [
+        [LangTextType.Unit0002]: [
             `摩托兵`,
             `Bike`,
         ],
-        [LangTextType.B1203]: [
+        [LangTextType.Unit0003]: [
             `侦察车`,
             `Recon`,
         ],
-        [LangTextType.B1204]: [
+        [LangTextType.Unit0004]: [
             `照明车`,
             `Flare`,
         ],
-        [LangTextType.B1205]: [
+        [LangTextType.Unit0005]: [
             `防空车`,
             `AntiAir`,
         ],
-        [LangTextType.B1206]: [
+        [LangTextType.Unit0006]: [
             `轻型坦克`,
             `Tank`,
         ],
-        [LangTextType.B1207]: [
+        [LangTextType.Unit0007]: [
             `中型坦克`,
             `MediumTank`,
         ],
-        [LangTextType.B1208]: [
+        [LangTextType.Unit0008]: [
             `弩级坦克`,
             `WarTank`,
         ],
-        [LangTextType.B1209]: [
+        [LangTextType.Unit0009]: [
             `自行火炮`,
             `Artillery`,
         ],
-        [LangTextType.B1210]: [
+        [LangTextType.Unit0010]: [
             `反坦克炮`,
             `AntiTank`,
         ],
-        [LangTextType.B1211]: [
+        [LangTextType.Unit0011]: [
             `火箭炮`,
             `Rockets`,
         ],
-        [LangTextType.B1212]: [
+        [LangTextType.Unit0012]: [
             `防空导弹车`,
             `Missiles`,
         ],
-        [LangTextType.B1213]: [
+        [LangTextType.Unit0013]: [
             `工程车`,
             `Rig`,
         ],
-        [LangTextType.B1214]: [
+        [LangTextType.Unit0014]: [
             `战斗机`,
             `Fighter`,
         ],
-        [LangTextType.B1215]: [
+        [LangTextType.Unit0015]: [
             `轰炸机`,
             `Bomber`,
         ],
-        [LangTextType.B1216]: [
+        [LangTextType.Unit0016]: [
             `攻击机`,
             `Duster`,
         ],
-        [LangTextType.B1217]: [
+        [LangTextType.Unit0017]: [
             `武装直升机`,
             `BattleCopter`,
         ],
-        [LangTextType.B1218]: [
+        [LangTextType.Unit0018]: [
             `运输直升机`,
             `TransportCopter`,
         ],
-        [LangTextType.B1219]: [
+        [LangTextType.Unit0019]: [
             `舰载机`,
             `Seaplane`,
         ],
-        [LangTextType.B1220]: [
+        [LangTextType.Unit0020]: [
             `战列舰`,
             `Battleship`,
         ],
-        [LangTextType.B1221]: [
+        [LangTextType.Unit0021]: [
             `航母`,
             `Carrier`,
         ],
-        [LangTextType.B1222]: [
+        [LangTextType.Unit0022]: [
             `潜艇`,
             `Submarine`,
         ],
-        [LangTextType.B1223]: [
+        [LangTextType.Unit0023]: [
             `驱逐舰`,
             `Cruiser`,
         ],
-        [LangTextType.B1224]: [
+        [LangTextType.Unit0024]: [
             `登陆舰`,
             `Lander`,
         ],
-        [LangTextType.B1225]: [
+        [LangTextType.Unit0025]: [
             `炮艇`,
             `Gunboat`,
+        ],
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [LangTextType.Bgm0000]: [
+            `Wandering Path (Lobby)`,
+            `Wandering Path (Lobby)`,
+        ],
+        [LangTextType.Bgm0001]: [
+            `Design Time (Map Editor)`,
+            `Design Time (Map Editor)`,
+        ],
+        [LangTextType.Bgm0002]: [
+            `We Will Prevail (Will)`,
+            `We Will Prevail (Will)`,
+        ],
+        [LangTextType.Bgm0003]: [
+            `Hope Never Dies (Brenner)`,
+            `Hope Never Dies (Brenner)`,
+        ],
+        [LangTextType.Bgm0004]: [
+            `Lost Memories (Isabella)`,
+            `Lost Memories (Isabella)`,
+        ],
+        [LangTextType.Bgm0005]: [
+            `Proud Soldier (Gage)`,
+            `Proud Soldier (Gage)`,
+        ],
+        [LangTextType.Bgm0006]: [
+            `Days of Ruin (No CO)`,
+            `Days of Ruin (No CO)`,
+        ],
+        [LangTextType.Bgm0007]: [
+            `Rutty (??)`,
+            `Rutty (??)`,
+        ],
+        [LangTextType.Bgm0008]: [
+            `Supreme Logician (Lin)`,
+            `Supreme Logician (Lin)`,
+        ],
+        [LangTextType.Bgm0009]: [
+            `Goddess of Revenge (Tasha)`,
+            `Goddess of Revenge (Tasha)`,
+        ],
+        [LangTextType.Bgm0010]: [
+            `Hero of Legend (Forsythe)`,
+            `Hero of Legend (Forsythe)`,
+        ],
+        [LangTextType.Bgm0011]: [
+            `Flight of the Coward (Waylon)`,
+            `Flight of the Coward (Waylon)`,
+        ],
+        [LangTextType.Bgm0012]: [
+            `Madman's Reign (Greyfield)`,
+            `Madman's Reign (Greyfield)`,
+        ],
+        [LangTextType.Bgm0013]: [
+            `Cruel Rose (Tabitha)`,
+            `Cruel Rose (Tabitha)`,
+        ],
+        [LangTextType.Bgm0014]: [
+            `Puppet Master (Caulder)`,
+            `Puppet Master (Caulder)`,
+        ],
+        [LangTextType.Bgm0015]: [
+            `Power Up (Power)`,
+            `Power Up (Power)`,
+        ],
+        [LangTextType.Bgm0016]: [
+            `Hawke's Theme (Hawk)`,
+            `Hawke's Theme (Hawk)`,
+        ],
+        [LangTextType.Bgm0017]: [
+            `The Beast's Theme`,
+            `The Beast's Theme`,
+        ],
+        [LangTextType.Bgm0018]: [
+            `First Strike (Lobby)`,
+            `First Strike (Lobby)`,
+        ],
+        [LangTextType.Bgm0019]: [
+            `Destructive Tendencies`,
+            `Destructive Tendencies`,
+        ],
+        [LangTextType.Bgm0020]: [
+            `Apocalypse - Chaos Suite`,
+            `Apocalypse - Chaos Suite`,
+        ],
+        [LangTextType.Bgm0021]: [
+            `Stormy Times (Power)`,
+            `Stormy Times (Power)`,
+        ],
+        [LangTextType.Bgm0022]: [
+            `Road to War`,
+            `Road to War`,
+        ],
+        [LangTextType.Bgm0023]: [
+            `The Way of Sadness`,
+            `The Way of Sadness`,
+        ],
+        [LangTextType.Bgm0024]: [
+            `Battle Ready`,
+            `Battle Ready`,
+        ],
+        [LangTextType.Bgm0025]: [
+            `Mr. Bear (Penny)`,
+            `Mr. Bear (Penny)`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

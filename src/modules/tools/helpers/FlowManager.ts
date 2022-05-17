@@ -99,12 +99,12 @@ namespace Twns.FlowManager {
         CompatibilityHelpers.init();
         Net.NetManager.addListeners(_NET_EVENTS);
         Notify.addEventListeners(_NOTIFY_EVENTS);
-        Twns.StageManager.init(stage);
-        await Promise.all([Twns.ResManager.init(), Twns.ProtoManager.init()]);
-        Twns.StageManager.setStageScale(Twns.LocalStorage.getStageScale());
+        StageManager.init(stage);
+        await Promise.all([ResManager.init(), ProtoManager.init()]);
+        StageManager.setStageScale(LocalStorage.getStageScale());
 
         Lang.init();
-        Twns.NoSleepManager.init();
+        NoSleepManager.init();
         Config.ConfigManager.init();
         Net.NetManager.init();
         MultiPlayerWar.MpwProxy.init();
@@ -139,7 +139,7 @@ namespace Twns.FlowManager {
         _removeLoadingDom();
         gotoLogin();
 
-        await Twns.ResManager.loadMainRes();
+        await ResManager.loadMainRes();
         (_checkCanFirstGoToLobby()) && (gotoLobby());
     }
 
@@ -159,7 +159,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.UserLoginPanel, void 0);
         PanelHelpers.open(PanelHelpers.PanelDict.BroadcastPanel, void 0);
 
-        SoundManager.playBgm(Types.BgmCode.Lobby01);
+        SoundManager.playBgm(CommonConstants.BgmCode.Lobby);
     }
     export function gotoLobby(): void {
         _hasOnceWentToLobby = true;
@@ -184,7 +184,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.LobbyTopRightPanel, void 0);
         PanelHelpers.open(PanelHelpers.PanelDict.LobbyPanel, void 0);
 
-        SoundManager.playBgm(Types.BgmCode.Lobby01);
+        SoundManager.playBgm(CommonConstants.BgmCode.Lobby);
     }
 
     export async function gotoMultiPlayerWar(data: CommonProto.WarSerialization.ISerialWar): Promise<void> {
@@ -293,7 +293,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.BwUnitBriefPanel, { war });
         PanelHelpers.open(PanelHelpers.PanelDict.BroadcastPanel, void 0);
 
-        SoundManager.playBgm(Types.BgmCode.MapEditor01);
+        SoundManager.playBgm(CommonConstants.BgmCode.MapEditor);
     }
 
     export function gotoMyWarListPanel(warType: WarType): void {
@@ -339,7 +339,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.LobbyBackgroundPanel, void 0);
         PanelHelpers.open(PanelHelpers.PanelDict.MfrCreateSettingsPanel, void 0);
 
-        SoundManager.playBgm(Types.BgmCode.Lobby01);
+        SoundManager.playBgm(CommonConstants.BgmCode.Lobby);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -403,8 +403,7 @@ namespace Twns.FlowManager {
     function _checkCanFirstGoToLobby(): boolean {
         return (!_hasOnceWentToLobby)
             && (User.UserModel.getIsLoggedIn())
-            && (Twns.ResManager.checkIsLoadedMainResource())
-            && (Config.ConfigManager.getLatestConfigVersion() != null);
+            && (ResManager.checkIsLoadedMainResource());
     }
 
     function _removeLoadingDom(): void {
@@ -431,7 +430,7 @@ namespace Twns.FlowManager {
         PanelHelpers.open(PanelHelpers.PanelDict.LobbyBackgroundPanel, void 0);
         PanelHelpers.open(PanelHelpers.PanelDict.LobbyTopRightPanel, void 0);
 
-        SoundManager.playBgm(Types.BgmCode.Lobby01);
+        SoundManager.playBgm(CommonConstants.BgmCode.Lobby);
     }
 
     function _gotoMrwMyWarListPanel(): void {

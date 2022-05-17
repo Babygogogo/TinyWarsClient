@@ -56,7 +56,7 @@ namespace Twns.WarEvent {
             this._updateView();
         }
         protected _onClosing(): void {
-            SoundManager.playBgm(Types.BgmCode.MapEditor01);
+            SoundManager.playBgm(CommonConstants.BgmCode.MapEditor);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +74,7 @@ namespace Twns.WarEvent {
         private _onTouchedGroupUseCoBgm(): void {
             const action        = Helpers.getExisted(this._getOpenData().action.WeaPlayBgm);
             action.useCoBgm     = !action.useCoBgm;
-            action.bgmCode      = Types.BgmCode.None;
+            action.bgmCode      = CommonConstants.BgmCode.None;
 
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
@@ -97,7 +97,7 @@ namespace Twns.WarEvent {
             this._updateGroupUseCoBgm();
 
             const list      = this._listBgm;
-            const bgmCode   = this._getOpenData().action.WeaPlayBgm?.bgmCode ?? Types.BgmCode.None;
+            const bgmCode   = this._getOpenData().action.WeaPlayBgm?.bgmCode ?? CommonConstants.BgmCode.None;
             list.bindData(this._createDataForListBgm());
             list.setSelectedIndex(list.getFirstIndex(v => v.bgmCode === bgmCode) ?? -1);
         }
@@ -114,8 +114,8 @@ namespace Twns.WarEvent {
 
         private _updateLabelBgm(): void {
             const data          = this._getOpenData();
-            const bgmCfg        = CommonConstants.BgmConfigDict.get(data.action.WeaPlayBgm?.bgmCode ?? Types.BgmCode.None);
-            this._labelBgm.text = bgmCfg ? Lang.getText(bgmCfg.bgmNameTextType) : CommonConstants.ErrorTextForUndefined;
+            const langTextType  = data.war.getGameConfig().getBgmSfxCfg(data.action.WeaPlayBgm?.bgmCode ?? CommonConstants.BgmCode.None)?.lang;
+            this._labelBgm.text = langTextType != null ? Lang.getText(langTextType) : CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateGroupUseCoBgm(): void {
@@ -126,15 +126,21 @@ namespace Twns.WarEvent {
             const openData      = this._getOpenData();
             const actionData    = Helpers.getExisted(openData.action.WeaPlayBgm);
             const dataArray     : DataForBgmRenderer[] = [];
-            for (const bgmCode of CommonConstants.BgmCodeArray) {
-                dataArray.push({ actionData, bgmCode });
+            const gameConfig    = openData.war.getGameConfig();
+            for (const bgmCode of gameConfig.getAllBgmCodeArray()) {
+                dataArray.push({
+                    actionData,
+                    bgmCode,
+                    gameConfig
+                });
             }
             return dataArray;
         }
     }
 
     type DataForBgmRenderer = {
-        bgmCode     : Types.BgmCode;
+        bgmCode     : number;
+        gameConfig  : Config.GameConfig;
         actionData  : CommonProto.WarEvent.IWeaPlayBgm;
     };
     class BgmRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForBgmRenderer> {
@@ -189,8 +195,9 @@ namespace Twns.WarEvent {
         }
 
         private _updateLabelName(): void {
-            const bgmCfg            = CommonConstants.BgmConfigDict.get(this._getData().bgmCode);
-            this._labelName.text    = bgmCfg ? Lang.getText(bgmCfg.bgmNameTextType) : CommonConstants.ErrorTextForUndefined;
+            const data              = this._getData();
+            const langTextType      = data.gameConfig.getBgmSfxCfg(data.bgmCode)?.lang;
+            this._labelName.text    = langTextType != null ? Lang.getText(langTextType) : CommonConstants.ErrorTextForUndefined;
         }
     }
 }

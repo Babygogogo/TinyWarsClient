@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
@@ -17,7 +17,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType           = Twns.Notify.NotifyType;
+    import NotifyType           = Notify.NotifyType;
 
     const _IMAGE_SOURCE_HP      = `c04_t10_s00_f00`;
     const _IMAGE_SOURCE_CAPTURE = `c04_t10_s04_f00`;
@@ -28,12 +28,12 @@ namespace Twns.BaseWar {
     // const _CELL_WIDTH           = 80;
 
     export type OpenDataForBwTileBriefPanel = {
-        war : Twns.BaseWar.BwWar;
+        war : BaseWar.BwWar;
     };
     export class BwTileBriefPanel extends TwnsUiPanel.UiPanel<OpenDataForBwTileBriefPanel> {
         private readonly _group!            : eui.Group;
         private readonly _conTileView!      : eui.Group;
-        private readonly _tileView          = new Twns.BaseWar.BwTileView();
+        private readonly _tileView          = new BaseWar.BwTileView();
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
         private readonly _labelGridIndex!   : TwnsUiLabel.UiLabel;
         private readonly _labelState!       : TwnsUiLabel.UiLabel;
@@ -87,8 +87,8 @@ namespace Twns.BaseWar {
         }
         private _onNotifyBwActionPlannerStateChanged(): void {
             const planner = this._getOpenData().war.getActionPlanner();
-            if ((planner.getPreviousState() === Twns.Types.ActionPlannerState.ExecutingAction) &&
-                (planner.getState() !== Twns.Types.ActionPlannerState.ExecutingAction)
+            if ((planner.getPreviousState() === Types.ActionPlannerState.ExecutingAction) &&
+                (planner.getState() !== Types.ActionPlannerState.ExecutingAction)
             ) {
                 this._updateView();
             }
@@ -96,7 +96,7 @@ namespace Twns.BaseWar {
         private _onNotifyMeTileChanged(e: egret.Event): void {
             const data  = e.data as Notify.NotifyData.MeTileChanged;
             const war   = this._getOpenData().war;
-            if ((war.getIsRunning()) && (Twns.GridIndexHelpers.checkIsEqual(data.gridIndex, war.getCursor().getGridIndex()))) {
+            if ((war.getIsRunning()) && (GridIndexHelpers.checkIsEqual(data.gridIndex, war.getCursor().getGridIndex()))) {
                 this._updateView();
             }
         }
@@ -110,8 +110,8 @@ namespace Twns.BaseWar {
         private _onTouchedThis(): void {
             const war   = this._getOpenData().war;
             const tile  = war.getTileMap().getTile(war.getCursor().getGridIndex());
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwTileDetailPanel, { tile });
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            PanelHelpers.open(PanelHelpers.PanelDict.BwTileDetailPanel, { tile });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +123,7 @@ namespace Twns.BaseWar {
             const tile                  = war.getTileMap().getTile(gridIndex);
             this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
             this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;
-            this._labelName.text        = Lang.getTileName(tile.getType()) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = Lang.getTileName(tile.getType(), war.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined;
             this._updateTileView();
 
             if (tile.getCurrentHp() != null) {
@@ -187,24 +187,24 @@ namespace Twns.BaseWar {
         // }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, bottom: -40 },
                 endProps    : { alpha: 1, bottom: 0 },
                 tweenTime   : 50,
             });
 
-            await Twns.Helpers.wait(50);
+            await Helpers.wait(50);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, bottom: 0 },
                 endProps    : { alpha: 0, bottom: -40 },
                 tweenTime   : 50,
             });
 
-            await Twns.Helpers.wait(50);
+            await Helpers.wait(50);
         }
     }
 }

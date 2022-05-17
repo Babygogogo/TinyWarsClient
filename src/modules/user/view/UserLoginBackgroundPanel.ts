@@ -10,7 +10,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import Twns.Notify               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -22,8 +22,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.User {
-    import NotifyType               = Twns.Notify.NotifyType;
-    import LangTextType             = Twns.Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
+    import LangTextType             = Lang.LangTextType;
 
     export type OpenDataForUserLoginBackgroundPanel = void;
     export class UserLoginBackgroundPanel extends TwnsUiPanel.UiPanel<OpenDataForUserLoginBackgroundPanel> {
@@ -56,9 +56,9 @@ namespace Twns.User {
             this._updateComponentsForLanguage();
             this._initListLanguage();
 
-            if (Twns.Config.ConfigManager.getLatestConfigVersion()) {
-                // this._initGroupUnits();
-            }
+            // if (Config.ConfigManager.getLatestConfigVersion()) {
+            //     this._initGroupUnits();
+            // }
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             // nothing to do
@@ -72,101 +72,101 @@ namespace Twns.User {
         }
         private _onNotifyUnitAnimationTick(): void {
             const group = this._groupUnits;
-            const tick  = Twns.Timer.getUnitAnimationTickCount();
+            const tick  = Timer.getUnitAnimationTickCount();
             for (let i = group.numChildren - 1; i >= 0; --i) {
-                ((group.getChildAt(i) as eui.Component).getChildAt(0) as Twns.WarMap.WarMapUnitView).updateOnAnimationTick(tick);
+                ((group.getChildAt(i) as eui.Component).getChildAt(0) as WarMap.WarMapUnitView).updateOnAnimationTick(tick);
             }
         }
         private _onMsgCommonLatestConfigVersion(): void {
             // this._initGroupUnits();
         }
         private _onTouchedSelf(): void {
-            Twns.SoundManager.init();
+            SoundManager.init();
         }
         private _onTouchedBtnVersion(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChangeVersionPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChangeVersionPanel, void 0);
         }
         private _onTouchedBtnSound(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserSetSoundPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.UserSetSoundPanel, void 0);
         }
 
         private _updateComponentsForLanguage(): void {
             this._btnVersion.label  = Lang.getText(LangTextType.B0620);
             this._btnSound.label    = Lang.getText(LangTextType.B0540);
-            this._labelVersion.text = `${Lang.getGameVersionName(Twns.CommonConstants.GameVersion)}\nv.${window.CLIENT_VERSION}`;
+            this._labelVersion.text = `${Lang.getGameVersionName(CommonConstants.GameVersion)}\nv.${window.CLIENT_VERSION}`;
         }
         private _initListLanguage(): void {
             const listLanguage  = this._listLanguage;
             const languageType  = Lang.getCurrentLanguageType();
             const dataArray     : DataForLanguageRenderer[] = [
-                { languageType: Twns.Types.LanguageType.Chinese },
-                { languageType: Twns.Types.LanguageType.English },
+                { languageType: Types.LanguageType.Chinese },
+                { languageType: Types.LanguageType.English },
             ];
             listLanguage.bindData(dataArray);
             listLanguage.setSelectedIndex(dataArray.findIndex(v => v.languageType === languageType));
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgBackground,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._listLanguage,
                 waitTime    : 1400,
                 beginProps  : { left: -40, alpha: 0 },
                 endProps    : { left: 0, alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupRightButton,
                 waitTime    : 1500,
                 beginProps  : { right: -40, alpha: 0 },
                 endProps    : { right: 0, alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._labelVersion,
                 waitTime    : 1600,
                 beginProps  : { right: -20, alpha: 0 },
                 endProps    : { right: 20, alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupCopyright,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
                 waitTime    : 1700,
             });
 
-            await Twns.Helpers.wait(1700 + Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(1700 + CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgBackground,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._listLanguage,
                 beginProps  : { left: 0, alpha: 1 },
                 endProps    : { left: -40, alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._labelVersion,
                 beginProps  : { right: 20, alpha: 1 },
                 endProps    : { right: -20, alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupRightButton,
                 beginProps  : { right: 0, alpha: 1 },
                 endProps    : { right: -40, alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupCopyright,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         // private _initGroupUnits(): void {
@@ -195,7 +195,7 @@ namespace Twns.User {
     }
 
     type DataForLanguageRenderer = {
-        languageType: Twns.Types.LanguageType;
+        languageType: Types.LanguageType;
     };
     class LanguageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForLanguageRenderer> {
         private readonly _labelLanguage!    : TwnsUiLabel.UiLabel;
@@ -221,8 +221,8 @@ namespace Twns.User {
             const languageType = this._getData().languageType;
             if (Lang.getCurrentLanguageType() !== languageType) {
                 Lang.setLanguageType(languageType);
-                Twns.LocalStorage.setLanguageType(languageType);
-                Twns.Notify.dispatch(NotifyType.LanguageChanged);
+                LocalStorage.setLanguageType(languageType);
+                Notify.dispatch(NotifyType.LanguageChanged);
             }
         }
 

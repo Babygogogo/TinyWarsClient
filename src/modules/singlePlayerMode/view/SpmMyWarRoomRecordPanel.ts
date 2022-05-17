@@ -80,7 +80,7 @@ namespace Twns.SinglePlayerMode {
         }
 
         private async _updateComponentsForHighScore(): Promise<void> {
-            const configVersion     = Config.ConfigManager.getLatestConfigVersion();
+            const configVersion     = await Config.ConfigManager.getLatestConfigVersion();
             const spwArray          = User.UserModel.getSelfInfo()?.userComplexInfo?.userWarStatistics?.spwArray ?? [];
             const mapRawDataArray   = await Promise.all(spwArray.map(v => WarMap.WarMapModel.getRawData(Helpers.getExisted(v.mapId))));
             const dataArray         : DataForHighScoreRenderer[] = [];

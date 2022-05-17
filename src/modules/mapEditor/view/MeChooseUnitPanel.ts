@@ -51,7 +51,7 @@ namespace Twns.MapEditor {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this._resetListPlayerIndex(Twns.CommonConstants.WarFirstPlayerIndex);
+            this._resetListPlayerIndex(CommonConstants.WarFirstPlayerIndex);
             this._updateListUnit();
             this._updateListRecent();
         }
@@ -70,7 +70,7 @@ namespace Twns.MapEditor {
             }
         }
 
-        public updateOnChooseUnit(data: DataForDrawUnit): void {
+        public async updateOnChooseUnit(data: DataForDrawUnit): Promise<void> {
             const dataList      = this._dataListForRecent;
             const filteredList  = dataList.filter(v => {
                 const oldData = v.dataForDrawUnit;
@@ -79,8 +79,9 @@ namespace Twns.MapEditor {
             });
             dataList.length     = 0;
             dataList[0]         = {
-                dataForDrawUnit: data,
-                panel   : this,
+                dataForDrawUnit : data,
+                panel           : this,
+                gameConfig      : await Config.ConfigManager.getLatestGameConfig(),
             };
             for (const v of filteredList) {
                 if (dataList.length < MAX_RECENT_COUNT) {
@@ -109,7 +110,7 @@ namespace Twns.MapEditor {
 
         private _resetListPlayerIndex(selectedPlayerIndex: number | null): void {
             const dataArray: DataForPlayerIndexRenderer[] = [];
-            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= Twns.CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                 dataArray.push({
                     playerIndex,
                     panel       : this,
@@ -129,14 +130,16 @@ namespace Twns.MapEditor {
                 return;
             }
 
-            const dataArray: DataForUnitRenderer[] = [];
-            for (const unitType of (await Config.ConfigManager.getLatestGameConfig()).getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
+            const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
+            const dataArray     : DataForUnitRenderer[] = [];
+            for (const unitType of gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
                 dataArray.push({
                     panel           : this,
                     dataForDrawUnit : {
                         playerIndex,
                         unitType,
                     },
+                    gameConfig,
                 });
             }
 
@@ -169,6 +172,7 @@ namespace Twns.MapEditor {
     type DataForUnitRenderer = {
         dataForDrawUnit : DataForDrawUnit;
         panel           : MeChooseUnitPanel;
+        gameConfig      : Config.GameConfig;
     };
     class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
         private readonly _group!        : eui.Group;
@@ -200,7 +204,7 @@ namespace Twns.MapEditor {
             const dataForDrawUnit   = data.dataForDrawUnit;
             const unitType          = dataForDrawUnit.unitType;
             const war               = Helpers.getExisted(MapEditor.MeModel.getWar());
-            this._labelName.text    = Lang.getUnitName(unitType) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelName.text    = Lang.getUnitName(unitType, data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
 
             const unitView  = this._unitView;
             const unit      = new BaseWar.BwUnit();

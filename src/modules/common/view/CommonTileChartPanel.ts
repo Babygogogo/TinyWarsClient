@@ -176,12 +176,13 @@ namespace Twns.Common {
             const tileType      = this._listTile.getSelectedData()?.tileType;
             const labelName     = this._labelName;
             const labelName1    = this._labelName1;
+            const gameConfig    = this._getOpenData().gameConfig;
             if (tileType== null) {
                 labelName.text  = ``;
                 labelName1.text = ``;
             } else {
-                labelName.text  = Lang.getTileName(tileType) ?? CommonConstants.ErrorTextForUndefined;
-                labelName1.text = Lang.getTileName(tileType, Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
+                labelName.text  = Lang.getTileName(tileType, gameConfig) ?? CommonConstants.ErrorTextForUndefined;
+                labelName1.text = Lang.getTileName(tileType, gameConfig, Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
 
@@ -352,6 +353,7 @@ namespace Twns.Common {
                 dataArray.push({
                     tileType,
                     panel   : this,
+                    gameConfig,
                 });
             }
 
@@ -362,6 +364,7 @@ namespace Twns.Common {
     type DataForTileRenderer = {
         tileType        : TileType;
         panel           : CommonTileChartPanel;
+        gameConfig      : Config.GameConfig;
     };
     class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileRenderer> {
         private readonly _imgChoose!    : eui.Image;
@@ -369,7 +372,7 @@ namespace Twns.Common {
 
         protected _onDataChanged(): void {
             const data              = this._getData();
-            this._labelName.text    = Lang.getTileName(data.tileType) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName.text    = Lang.getTileName(data.tileType, data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {

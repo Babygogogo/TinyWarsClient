@@ -141,8 +141,10 @@ namespace Twns.BaseWar {
         private _updateLabelName(): void {
             const data              = this._getOpenData();
             const tile              = data.tile;
-            this._labelName.text    = Lang.getTileName(tile.getType()) ?? CommonConstants.ErrorTextForUndefined;
-            this._labelName1.text   = Lang.getTileName(tile.getType(), Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
+            const tileType          = tile.getType();
+            const gameConfig        = tile.getGameConfig();
+            this._labelName.text    = Lang.getTileName(tileType, gameConfig) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName1.text   = Lang.getTileName(tileType, gameConfig, Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateTileView(): void {

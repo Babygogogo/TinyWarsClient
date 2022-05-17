@@ -26,16 +26,16 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
 
     const _dataForCreateRoom: DataForCreateRoom = {
         settingsForCommon       : {
-            turnsLimit          : Twns.CommonConstants.WarMaxTurnsLimit,
+            turnsLimit          : CommonConstants.WarMaxTurnsLimit,
             instanceWarRule     : {
                 templateWarRuleId   : null,
             },
         },
         settingsForCcw          : {},
 
-        selfCoId                : Twns.CommonConstants.CoEmptyId,
-        selfPlayerIndex         : Twns.CommonConstants.WarFirstPlayerIndex,
-        selfUnitAndTileSkinId   : Twns.CommonConstants.UnitAndTileMinSkinId,
+        selfCoId                : CommonConstants.CoEmptyId,
+        selfPlayerIndex         : CommonConstants.WarFirstPlayerIndex,
+        selfUnitAndTileSkinId   : CommonConstants.UnitAndTileMinSkinId,
         aiSkinInfoArray         : [],
     };
     let _gameConfig: GameConfig | null = null;
@@ -46,14 +46,14 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
         setMapId(mapId);
-        setConfigVersion(Helpers.getExisted(Config.ConfigManager.getLatestConfigVersion()));
+        setConfigVersion(await Config.ConfigManager.getLatestConfigVersion());
         setGameConfig(await Config.ConfigManager.getLatestGameConfig());
         setWarName("");
         setWarPassword("");
         setWarComment("");
-        setBootTimerParams([BootTimerType.Regular, Twns.CommonConstants.WarBootTimerRegularDefaultValue]);
-        setTurnsLimit(Twns.CommonConstants.WarMaxTurnsLimit);
-        setSelfPlayerIndex(Twns.CommonConstants.WarFirstPlayerIndex);
+        setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
+        setTurnsLimit(CommonConstants.WarMaxTurnsLimit);
+        setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
         await resetDataByTemplateWarRuleId(Helpers.getExisted((await getMapRawData()).templateWarRuleArray?.find(v => v.ruleAvailability?.canCcw)?.ruleId));
     }
     export function getData(): DataForCreateRoom {
@@ -209,9 +209,9 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
     }
     export function tickUnitAndTileSkinId(playerIndex: number): void {
         if (playerIndex === getSelfPlayerIndex()) {
-            setSelfUnitAndTileSkinId(getSelfUnitAndTileSkinId() % Twns.CommonConstants.UnitAndTileMaxSkinId + 1);
+            setSelfUnitAndTileSkinId(getSelfUnitAndTileSkinId() % CommonConstants.UnitAndTileMaxSkinId + 1);
         } else {
-            setAiSkinId(playerIndex, getAiSkinId(playerIndex) % Twns.CommonConstants.UnitAndTileMaxSkinId + 1);
+            setAiSkinId(playerIndex, getAiSkinId(playerIndex) % CommonConstants.UnitAndTileMaxSkinId + 1);
         }
     }
 
@@ -279,7 +279,7 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
         if ((params) && (params[0] === BootTimerType.Regular)) {
             setBootTimerParams([BootTimerType.Incremental, 60 * 15, 10]);
         } else {
-            setBootTimerParams([BootTimerType.Regular, Twns.CommonConstants.WarBootTimerRegularDefaultValue]);
+            setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
         }
     }
     export function tickTimerRegularTime(): void {

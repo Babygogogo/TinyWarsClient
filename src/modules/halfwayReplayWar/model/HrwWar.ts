@@ -149,7 +149,7 @@ namespace Twns.HalfwayReplayWar {
         public async getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | null> {
             return `${Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn())} ${this._getDescSuffix()}`;
         }
-        public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | null> {
+        public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit, gameConfig: GameConfig): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0095)} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | null> {

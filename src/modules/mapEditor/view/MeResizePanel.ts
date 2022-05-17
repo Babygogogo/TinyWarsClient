@@ -5,7 +5,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
@@ -16,8 +16,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import LangTextType     = Twns.Lang.LangTextType;
-    import NotifyType       = Twns.Notify.NotifyType;
+    import LangTextType     = Lang.LangTextType;
+    import NotifyType       = Notify.NotifyType;
 
     export type OpenDataForMeResizePanel = void;
     export class MeResizePanel extends TwnsUiPanel.UiPanel<OpenDataForMeResizePanel> {
@@ -110,24 +110,24 @@ namespace Twns.MapEditor {
             const deltaBottom   = this._deltaBottom;
             if ((deltaLeft === 0) && (deltaRight === 0) && (deltaTop === 0) && (deltaBottom === 0)) {
                 this.close();
-                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.MeWarMenuPanel);
+                PanelHelpers.close(PanelHelpers.PanelDict.MeWarMenuPanel);
                 return;
             }
 
-            const war               = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
+            const war               = Helpers.getExisted(MapEditor.MeModel.getWar());
             const { width, height } = war.getTileMap().getMapSize();
             const newWidth          = width + deltaLeft + deltaRight;
             const newHeight         = height + deltaTop + deltaBottom;
-            if ((newWidth <= 0) || (newHeight <= 0) || (newWidth * newHeight > Twns.CommonConstants.MapMaxGridsCount)) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0265));
+            if ((newWidth <= 0) || (newHeight <= 0) || (newWidth * newHeight > CommonConstants.MapMaxGridsCount)) {
+                FloatText.show(Lang.getText(LangTextType.A0265));
                 return;
             }
 
-            const tempData = Twns.MapEditor.MeHelpers.resizeMap(war.serializeForMap(), width + Math.max(0, deltaLeft) + Math.max(0, deltaRight), height + Math.max(0, deltaTop) + Math.max(0, deltaBottom));
+            const tempData = MapEditor.MeHelpers.resizeMap(war.serializeForMap(), width + Math.max(0, deltaLeft) + Math.max(0, deltaRight), height + Math.max(0, deltaTop) + Math.max(0, deltaBottom));
             war.stopRunning();
-            war.initWithMapEditorData(
+            await war.initWithMapEditorData(
                 {
-                    mapRawData  : Twns.MapEditor.MeHelpers.resizeMap(Twns.MapEditor.MeHelpers.addOffset(tempData, deltaLeft, deltaTop), newWidth, newHeight),
+                    mapRawData  : MapEditor.MeHelpers.resizeMap(MapEditor.MeHelpers.addOffset(tempData, deltaLeft, deltaTop), newWidth, newHeight),
                     slotIndex   : war.getMapSlotIndex(),
                 },
                 war.getGameConfig(),
@@ -137,14 +137,14 @@ namespace Twns.MapEditor {
                 .startRunningView();
 
             this.close();
-            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.MeWarMenuPanel);
+            PanelHelpers.close(PanelHelpers.PanelDict.MeWarMenuPanel);
         }
 
         private _onTouchedBtnDeltaTop(): void {
-            const minValue      = -Twns.CommonConstants.MapMaxGridsCount;
-            const maxValue      = Twns.CommonConstants.MapMaxGridsCount;
+            const minValue      = -CommonConstants.MapMaxGridsCount;
+            const maxValue      = CommonConstants.MapMaxGridsCount;
             const currentValue  = this._deltaTop;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0857),
                 currentValue,
                 minValue,
@@ -160,10 +160,10 @@ namespace Twns.MapEditor {
             });
         }
         private _onTouchedBtnDeltaBottom(): void {
-            const minValue      = -Twns.CommonConstants.MapMaxGridsCount;
-            const maxValue      = Twns.CommonConstants.MapMaxGridsCount;
+            const minValue      = -CommonConstants.MapMaxGridsCount;
+            const maxValue      = CommonConstants.MapMaxGridsCount;
             const currentValue  = this._deltaBottom;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0858),
                 currentValue,
                 minValue,
@@ -179,10 +179,10 @@ namespace Twns.MapEditor {
             });
         }
         private _onTouchedBtnDeltaLeft(): void {
-            const minValue      = -Twns.CommonConstants.MapMaxGridsCount;
-            const maxValue      = Twns.CommonConstants.MapMaxGridsCount;
+            const minValue      = -CommonConstants.MapMaxGridsCount;
+            const maxValue      = CommonConstants.MapMaxGridsCount;
             const currentValue  = this._deltaLeft;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0859),
                 currentValue,
                 minValue,
@@ -198,10 +198,10 @@ namespace Twns.MapEditor {
             });
         }
         private _onTouchedBtnDeltaRight(): void {
-            const minValue      = -Twns.CommonConstants.MapMaxGridsCount;
-            const maxValue      = Twns.CommonConstants.MapMaxGridsCount;
+            const minValue      = -CommonConstants.MapMaxGridsCount;
+            const maxValue      = CommonConstants.MapMaxGridsCount;
             const currentValue  = this._deltaRight;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0860),
                 currentValue,
                 minValue,
@@ -236,11 +236,11 @@ namespace Twns.MapEditor {
             this._btnDeltaBottom.label      = Lang.getText(LangTextType.B0858);
             this._btnDeltaLeft.label        = Lang.getText(LangTextType.B0859);
             this._btnDeltaRight.label       = Lang.getText(LangTextType.B0860);
-            this._labelTips.text            = Lang.getFormattedText(LangTextType.F0023, Twns.CommonConstants.MapMaxGridsCount);
+            this._labelTips.text            = Lang.getFormattedText(LangTextType.F0023, CommonConstants.MapMaxGridsCount);
         }
 
         private _updateComponentsForData(): void {
-            const war                   = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
+            const war                   = Helpers.getExisted(MapEditor.MeModel.getWar());
             const { width, height }     = war.getTileMap().getMapSize();
             this._labelCurrWidth.text   = "" + width;
             this._labelCurrHeight.text  = "" + height;
@@ -261,7 +261,7 @@ namespace Twns.MapEditor {
             labelNewHeight.text         = "" + newHeight;
             labelNewHeight.textColor    = newHeight > 0 ? 0xffffff : 0xff0000;
             labelNewGrids.text          = `` + newGrids;
-            labelNewGrids.textColor     = ((newGrids > 0) && (newGrids <= Twns.CommonConstants.MapMaxGridsCount)) ? 0xffffff : 0xff0000;
+            labelNewGrids.textColor     = ((newGrids > 0) && (newGrids <= CommonConstants.MapMaxGridsCount)) ? 0xffffff : 0xff0000;
             this._labelDeltaTop.text    = `` + deltaTop;
             this._labelDeltaBottom.text = `` + deltaBottom;
             this._labelDeltaLeft.text   = `` + deltaLeft;

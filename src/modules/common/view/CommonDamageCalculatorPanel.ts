@@ -10,14 +10,14 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common {
-    import LangTextType = Twns.Lang.LangTextType;
-    import NotifyType   = Twns.Notify.NotifyType;
-    import GameConfig   = Twns.Config.GameConfig;
-    import CoSkillType  = Twns.Types.CoSkillType;
-    import UnitType     = Twns.Types.UnitType;
-    import TileType     = Twns.Types.TileType;
-    import WeaponType   = Twns.Types.WeaponType;
-    import WeatherType  = Twns.Types.WeatherType;
+    import LangTextType = Lang.LangTextType;
+    import NotifyType   = Notify.NotifyType;
+    import GameConfig   = Config.GameConfig;
+    import CoSkillType  = Types.CoSkillType;
+    import UnitType     = Types.UnitType;
+    import TileType     = Types.TileType;
+    import WeaponType   = Types.WeaponType;
+    import WeatherType  = Types.WeatherType;
 
     type PlayerData = {
         coId            : number;
@@ -136,10 +136,10 @@ namespace Twns.Common {
         private readonly _labelDefendTitle!     : TwnsUiLabel.UiLabel;
         private readonly _labelDefendDamage!    : TwnsUiLabel.UiLabel;
 
-        private readonly _unitView1             = new Twns.WarMap.WarMapUnitView();
-        private readonly _unitView2             = new Twns.WarMap.WarMapUnitView();
-        private readonly _tileView1             = new Twns.MapEditor.MeTileSimpleView();
-        private readonly _tileView2             = new Twns.MapEditor.MeTileSimpleView();
+        private readonly _unitView1             = new WarMap.WarMapUnitView();
+        private readonly _unitView2             = new WarMap.WarMapUnitView();
+        private readonly _tileView1             = new MapEditor.MeTileSimpleView();
+        private readonly _tileView2             = new MapEditor.MeTileSimpleView();
 
         private _calculatorData?                : CalculatorData;
 
@@ -220,7 +220,7 @@ namespace Twns.Common {
             this._calculatorData = data;
         }
         private _getCalculatorData(): CalculatorData {
-            return Twns.Helpers.getExisted(this._calculatorData);
+            return Helpers.getExisted(this._calculatorData);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -232,7 +232,7 @@ namespace Twns.Common {
         }
         private _handleTouchedImgCo(playerData: PlayerData): void {
             const gameConfig = this._getCalculatorData().gameConfig;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                 gameConfig,
                 currentCoId         : playerData.coId,
                 availableCoIdArray  : gameConfig.getEnabledCoArray().map(v => v.coId),
@@ -242,7 +242,7 @@ namespace Twns.Common {
                 },
             });
 
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onTouchedBtnSkill1(): void {
@@ -264,10 +264,10 @@ namespace Twns.Common {
         }
         private _handleTouchedConUnitView(playerData: PlayerData, playerIndex: number): void {
             const gameConfig = this._getCalculatorData().gameConfig;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleUnitTypePanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleUnitTypePanel, {
                 gameConfig,
                 currentUnitType : playerData.unitType,
-                unitTypeArray   : gameConfig.getUnitTypesByCategory(Twns.Types.UnitCategory.All) ?? [],
+                unitTypeArray   : gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? [],
                 playerIndex,
                 callback        : unitType => {
                     if (playerData.unitType !== unitType) {
@@ -288,12 +288,12 @@ namespace Twns.Common {
         }
         private _doReviseWeaponType(playerData1: PlayerData, playerData2: PlayerData): void {
             const gameConfig    = this._getCalculatorData().gameConfig;
-            const armorType2    = Twns.Helpers.getExisted(gameConfig.getUnitTemplateCfg(playerData2.unitType)?.armorType);
+            const armorType2    = Helpers.getExisted(gameConfig.getUnitTemplateCfg(playerData2.unitType)?.armorType);
             const damageCfg     = (gameConfig.getDamageChartCfgs(playerData1.unitType) ?? {})[armorType2];
-            if (damageCfg[Twns.Types.WeaponType.Primary].damage != null) {
-                playerData1.unitWeaponType = Twns.Types.WeaponType.Primary;
-            } else if (damageCfg[Twns.Types.WeaponType.Secondary].damage != null) {
-                playerData1.unitWeaponType = Twns.Types.WeaponType.Secondary;
+            if (damageCfg[Types.WeaponType.Primary].damage != null) {
+                playerData1.unitWeaponType = Types.WeaponType.Primary;
+            } else if (damageCfg[Types.WeaponType.Secondary].damage != null) {
+                playerData1.unitWeaponType = Types.WeaponType.Secondary;
             } else {
                 playerData1.unitWeaponType = null;
             }
@@ -307,10 +307,11 @@ namespace Twns.Common {
         }
         private _handleTouchedConTileView(playerData: PlayerData, playerIndex: number): void {
             const gameConfig            = this._getCalculatorData().gameConfig;
-            const destroyableTileTypes  = gameConfig.getTileTypesByCategory(Twns.Types.TileCategory.Destroyable) ?? [];
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleTileTypePanel, {
-                currentTileType : Twns.Types.TileType.Plain,
-                tileTypeArray   : gameConfig.getTileTypesByCategory(Twns.Types.TileCategory.All)?.filter(v => destroyableTileTypes.indexOf(v) < 0) ?? [],
+            const destroyableTileTypes  = gameConfig.getTileTypesByCategory(Types.TileCategory.Destroyable) ?? [];
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleTileTypePanel, {
+                gameConfig,
+                currentTileType : Types.TileType.Plain,
+                tileTypeArray   : gameConfig.getTileTypesByCategory(Types.TileCategory.All)?.filter(v => destroyableTileTypes.indexOf(v) < 0) ?? [],
                 playerIndex,
                 callback        : tileType => {
                     playerData.tileType = tileType;
@@ -328,8 +329,8 @@ namespace Twns.Common {
         private _handleTouchedBtnHp(playerData: PlayerData): void {
             const currValue     = playerData.unitHp;
             const minValue      = 1;
-            const maxValue      = Twns.CommonConstants.UnitMaxHp;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            const maxValue      = CommonConstants.UnitMaxHp;
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0339),
                 currentValue    : currValue,
                 minValue,
@@ -377,7 +378,7 @@ namespace Twns.Common {
             const currValue     = playerData.towersCount;
             const minValue      = 0;
             const maxValue      = 999;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0833),
                 currentValue    : currValue,
                 minValue,
@@ -400,7 +401,7 @@ namespace Twns.Common {
             const currValue     = playerData.offenseBonus;
             const minValue      = -10000;
             const maxValue      = 10000;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0183),
                 currentValue    : currValue,
                 minValue,
@@ -423,7 +424,7 @@ namespace Twns.Common {
             const currValue     = playerData.upperLuck;
             const minValue      = playerData.lowerLuck;
             const maxValue      = 10000;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0190),
                 currentValue    : currValue,
                 minValue,
@@ -446,7 +447,7 @@ namespace Twns.Common {
             const currValue     = playerData.lowerLuck;
             const minValue      = -10000;
             const maxValue      = playerData.upperLuck;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0189),
                 currentValue    : currValue,
                 minValue,
@@ -469,7 +470,7 @@ namespace Twns.Common {
             const currValue     = playerData.fund;
             const minValue      = -10000000;
             const maxValue      = 10000000;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0032),
                 currentValue    : currValue,
                 minValue,
@@ -492,7 +493,7 @@ namespace Twns.Common {
             const currValue     = playerData.citiesCount;
             const minValue      = 0;
             const maxValue      = 999;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0834),
                 currentValue    : currValue,
                 minValue,
@@ -514,12 +515,12 @@ namespace Twns.Common {
         private _onTouchedBtnSaveState(): void {
             _savedData = cloneCalculatorData(this._getCalculatorData());
 
-            Twns.FloatText.show(Lang.getText(LangTextType.A0288));
+            FloatText.show(Lang.getText(LangTextType.A0288));
         }
         private _onTouchedBtnLoadState(): void {
             const savedData = _savedData;
             if (savedData == null) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0289));
+                FloatText.show(Lang.getText(LangTextType.A0289));
             } else {
                 this._setCalculatorData(cloneCalculatorData(savedData));
                 this._updateView();
@@ -538,7 +539,7 @@ namespace Twns.Common {
             this._updateComponentsForLanguage();
         }
         private _onNotifyUnitAnimationTick(): void {
-            const tickCount = Twns.Timer.getUnitAnimationTickCount();
+            const tickCount = Timer.getUnitAnimationTickCount();
             this._unitView1.updateOnAnimationTick(tickCount);
             this._unitView2.updateOnAnimationTick(tickCount);
         }
@@ -555,8 +556,8 @@ namespace Twns.Common {
             const attackerData              = data.attackerData;
             const defenderData              = data.defenderData;
             const gameConfig                = data.gameConfig;
-            this._imgCo1.source             = gameConfig.getCoEyeImageSource(attackerData.coId, true) ?? Twns.CommonConstants.ErrorTextForUndefined;
-            this._imgCo2.source             = gameConfig.getCoEyeImageSource(defenderData.coId, true) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._imgCo1.source             = gameConfig.getCoEyeImageSource(attackerData.coId, true) ?? CommonConstants.ErrorTextForUndefined;
+            this._imgCo2.source             = gameConfig.getCoEyeImageSource(defenderData.coId, true) ?? CommonConstants.ErrorTextForUndefined;
             this._labelHp1.text             = `${attackerData.unitHp}`;
             this._labelHp2.text             = `${defenderData.unitHp}`;
             this._labelPromotion1.text      = `${attackerData.unitPromotion}`;
@@ -584,8 +585,8 @@ namespace Twns.Common {
             {
                 const coSkillType1      = attackerData.coSkillType;
                 const coSkillType2      = defenderData.coSkillType;
-                this._btnSkill1.label   = coSkillType1 == null ? Lang.getText(LangTextType.B0829) : (Lang.getCoSkillTypeName(coSkillType1) ?? Twns.CommonConstants.ErrorTextForUndefined);
-                this._btnSkill2.label   = coSkillType2 == null ? Lang.getText(LangTextType.B0829) : (Lang.getCoSkillTypeName(coSkillType2) ?? Twns.CommonConstants.ErrorTextForUndefined);
+                this._btnSkill1.label   = coSkillType1 == null ? Lang.getText(LangTextType.B0829) : (Lang.getCoSkillTypeName(coSkillType1) ?? CommonConstants.ErrorTextForUndefined);
+                this._btnSkill2.label   = coSkillType2 == null ? Lang.getText(LangTextType.B0829) : (Lang.getCoSkillTypeName(coSkillType2) ?? CommonConstants.ErrorTextForUndefined);
             }
 
             this._updateComponentsForDamage();
@@ -641,9 +642,9 @@ namespace Twns.Common {
             const counterDamageDict = new Map<number, { range: DamageRange | null, possibility: number }>();
             for (const info of revisedAttackDamageInfoArray) {
                 const unitHp        = Math.max(calculatorData.defenderData.unitHp - info.damage, 0);
-                const normalizedHp  = Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp);
+                const normalizedHp  = WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp);
                 if (counterDamageDict.has(normalizedHp)) {
-                    Twns.Helpers.getExisted(counterDamageDict.get(normalizedHp)).possibility += info.possibility;
+                    Helpers.getExisted(counterDamageDict.get(normalizedHp)).possibility += info.possibility;
                     continue;
                 }
 
@@ -658,7 +659,7 @@ namespace Twns.Common {
             const textArray: string[] = [];
             for (const [normalizedHp, info] of counterDamageDict) {
                 const range                 = info.range;
-                const textForPossibility    = `(${Twns.Helpers.formatString(`%.2f`, info.possibility * 100)}%)`;
+                const textForPossibility    = `(${Helpers.formatString(`%.2f`, info.possibility * 100)}%)`;
                 if (range == null) {
                     textArray.push(`@${normalizedHp}HP${textForPossibility}: ${Lang.getText(LangTextType.B0836)}`);
                 } else {
@@ -669,32 +670,32 @@ namespace Twns.Common {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: -40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: -40 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -702,15 +703,15 @@ namespace Twns.Common {
     function cloneCalculatorData(data: CalculatorData): CalculatorData {
         return {
             gameConfig      : data.gameConfig,
-            weatherType     : Twns.Helpers.deepClone(data.weatherType),
-            attackerData    : Twns.Helpers.deepClone(data.attackerData),
-            defenderData    : Twns.Helpers.deepClone(data.defenderData),
+            weatherType     : Helpers.deepClone(data.weatherType),
+            attackerData    : Helpers.deepClone(data.attackerData),
+            defenderData    : Helpers.deepClone(data.defenderData),
         };
     }
 
     async function createDefaultCalculatorData(): Promise<CalculatorData> {
         return {
-            gameConfig      : await Twns.Config.ConfigManager.getLatestGameConfig(),
+            gameConfig      : await Config.ConfigManager.getLatestGameConfig(),
             weatherType     : WeatherType.Clear,
             attackerData    : createDefaultPlayerData(),
             defenderData    : createDefaultPlayerData(),
@@ -718,23 +719,23 @@ namespace Twns.Common {
     }
     function createDefaultPlayerData(): PlayerData {
         return {
-            coId            : Twns.CommonConstants.CoEmptyId,
+            coId            : CommonConstants.CoEmptyId,
             coSkillType     : CoSkillType.Passive,
             unitType        : UnitType.Tank,
-            unitHp          : Twns.CommonConstants.UnitMaxHp,
+            unitHp          : CommonConstants.UnitMaxHp,
             unitWeaponType  : WeaponType.Primary,
             unitPromotion   : 0,
             tileType        : TileType.Plain,
             towersCount     : 0,
             offenseBonus    : 0,
-            upperLuck       : Twns.CommonConstants.WarRuleLuckDefaultUpperLimit,
-            lowerLuck       : Twns.CommonConstants.WarRuleLuckDefaultLowerLimit,
+            upperLuck       : CommonConstants.WarRuleLuckDefaultUpperLimit,
+            lowerLuck       : CommonConstants.WarRuleLuckDefaultLowerLimit,
             fund            : 0,
             citiesCount : 0,
         };
     }
     function getNextCoSkillType(gameConfig: GameConfig, coId: number, skillType: CoSkillType | null): CoSkillType | null {
-        if (coId === Twns.CommonConstants.CoEmptyId) {
+        if (coId === CommonConstants.CoEmptyId) {
             return null;
         }
 
@@ -780,7 +781,7 @@ namespace Twns.Common {
             return null;
         }
     }
-    function createUnitViewData(unitType: UnitType, playerIndex: number, gameConfig: GameConfig): Twns.Types.WarMapUnitViewData {
+    function createUnitViewData(unitType: UnitType, playerIndex: number, gameConfig: GameConfig): Types.WarMapUnitViewData {
         return {
             gridIndex   : { x: 0, y: 0 },
             unitType,
@@ -788,9 +789,9 @@ namespace Twns.Common {
             gameConfig,
         };
     }
-    function createTileViewData(tileType: TileType, playerIndex: number): Twns.MapEditor.TileViewData {
-        const objectType    = Twns.Config.ConfigManager.getTileObjectTypeByTileType(tileType);
-        const baseType      = Twns.Config.ConfigManager.getTileBaseTypeByTileType(tileType);
+    function createTileViewData(tileType: TileType, playerIndex: number): MapEditor.TileViewData {
+        const objectType    = Config.ConfigManager.getTileObjectTypeByTileType(tileType);
+        const baseType      = Config.ConfigManager.getTileBaseTypeByTileType(tileType);
         return {
             tileBaseType        : baseType,
             tileBaseShapeId     : 0,
@@ -798,7 +799,7 @@ namespace Twns.Common {
             tileDecoratorShapeId: null,
             tileObjectType      : objectType,
             tileObjectShapeId   : 0,
-            playerIndex         : Twns.Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType) ? playerIndex : Twns.CommonConstants.WarNeutralPlayerIndex,
+            playerIndex         : Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType) ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
         };
     }
 
@@ -878,13 +879,13 @@ namespace Twns.Common {
         attackerUnitType    : UnitType;
         defenderUnitType    : UnitType;
         weaponType          : WeaponType | null;
-    }): Twns.Types.Undefinable<number> {
+    }): Types.Undefinable<number> {
         if (weaponType == null) {
             return null;
         }
 
-        const armorType = Twns.Helpers.getExisted(gameConfig.getUnitTemplateCfg(defenderUnitType)?.armorType);
-        return Twns.Helpers.getExisted(gameConfig.getDamageChartCfgs(attackerUnitType))[armorType][weaponType].damage;
+        const armorType = Helpers.getExisted(gameConfig.getUnitTemplateCfg(defenderUnitType)?.armorType);
+        return Helpers.getExisted(gameConfig.getDamageChartCfgs(attackerUnitType))[armorType][weaponType].damage;
     }
     function getLuckLimitModifierByCo(calculatorData: CalculatorData): { lower: number, upper: number } {
         const gameConfig        = calculatorData.gameConfig;
@@ -917,9 +918,9 @@ namespace Twns.Common {
         };
     }
     function getTileDefenseAmountForUnit(gameConfig: GameConfig, unitType: UnitType, unitHp: number, tileType: TileType): number {
-        const tileTemplateCfg = Twns.Helpers.getExisted(gameConfig.getTileTemplateCfgByType(tileType));
+        const tileTemplateCfg = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(tileType));
         return gameConfig.checkIsUnitTypeInCategory(unitType, tileTemplateCfg.defenseUnitCategory)
-            ? tileTemplateCfg.defenseAmount * Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp) / Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(Twns.CommonConstants.UnitMaxHp)
+            ? tileTemplateCfg.defenseAmount * WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp) / WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp)
             : 0;
     }
     function getCoSkillIdArray(gameConfig: GameConfig, coId: number, skillType: CoSkillType | null): number[] {
@@ -943,7 +944,7 @@ namespace Twns.Common {
         const attackerData          = calculatorData.attackerData;
         const attackerCoId          = attackerData.coId;
         const attackerCoSkillType   = attackerData.coSkillType;
-        if ((attackerCoId === Twns.CommonConstants.CoEmptyId) || (attackerCoSkillType == null)) {
+        if ((attackerCoId === CommonConstants.CoEmptyId) || (attackerCoSkillType == null)) {
             return 0;
         }
 
@@ -953,8 +954,8 @@ namespace Twns.Common {
         const attackerTileType          = attackerData.tileType;
         const attackerFund              = attackerData.fund;
         const attackerPromotion         = attackerData.unitPromotion;
-        const attackerTileCountDict     = new Map<Twns.Types.TileCategory, number>([
-            [Twns.Types.TileCategory.City, attackerData.citiesCount],
+        const attackerTileCountDict     = new Map<Types.TileCategory, number>([
+            [Types.TileCategory.City, attackerData.citiesCount],
         ]);
 
         let modifier = 0;
@@ -994,7 +995,7 @@ namespace Twns.Common {
                 if ((cfg)                                                           &&
                     (gameConfig.checkIsUnitTypeInCategory(attackerUnitType, cfg[1]))
                 ) {
-                    const tileCategory      : Twns.Types.TileCategory = cfg[2];
+                    const tileCategory      : Types.TileCategory = cfg[2];
                     const modifierPerTile   = cfg[3];
                     const currentTileCount  = attackerTileCountDict.get(tileCategory) ?? 0;
                     modifier                += modifierPerTile * currentTileCount;
@@ -1006,7 +1007,7 @@ namespace Twns.Common {
                 if ((cfg)                                                           &&
                     (gameConfig.checkIsUnitTypeInCategory(attackerUnitType, cfg[1]))
                 ) {
-                    modifier += cfg[2] / 100 * Twns.Helpers.getExisted(gameConfig.getTileTemplateCfgByType(attackerTileType)?.defenseAmount);
+                    modifier += cfg[2] / 100 * Helpers.getExisted(gameConfig.getTileTemplateCfgByType(attackerTileType)?.defenseAmount);
                 }
             }
 
@@ -1087,7 +1088,7 @@ namespace Twns.Common {
         const defenderData          = calculatorData.defenderData;
         const defenderCoId          = defenderData.coId;
         const defenderCoSkillType   = defenderData.coSkillType;
-        if ((defenderCoId === Twns.CommonConstants.CoEmptyId) || (defenderCoSkillType == null)) {
+        if ((defenderCoId === CommonConstants.CoEmptyId) || (defenderCoSkillType == null)) {
             return 0;
         }
 
@@ -1123,7 +1124,7 @@ namespace Twns.Common {
                 if ((cfg)                                                           &&
                     (gameConfig.checkIsUnitTypeInCategory(defenderUnitType, cfg[1]))
                 ) {
-                    modifier += cfg[2] / 100 * Twns.Helpers.getExisted(gameConfig.getTileTemplateCfgByType(defenderTileType)?.defenseAmount);
+                    modifier += cfg[2] / 100 * Helpers.getExisted(gameConfig.getTileTemplateCfgByType(defenderTileType)?.defenseAmount);
                 }
             }
         }
@@ -1137,7 +1138,7 @@ namespace Twns.Common {
         const amountFromCo          = getDefenseModifierByCo(calculatorData);
         const amountFromGlobalTiles = defenderData.towersCount * (gameConfig.getTileTemplateCfgByType(TileType.CommandTower)?.globalDefenseBonus ?? 0);
 
-        return Twns.WarHelpers.WarDamageCalculator.getDamageMultiplierForDefenseBonus(amountFromTile + amountFromPromotion + amountFromCo + amountFromGlobalTiles);
+        return WarHelpers.WarDamageCalculator.getDamageMultiplierForDefenseBonus(amountFromTile + amountFromPromotion + amountFromCo + amountFromGlobalTiles);
     }
     function getAttackDamage({ luckValue, isCounter, calculatorData, cfgAttackDamage }: {
         luckValue           : number;
@@ -1155,7 +1156,7 @@ namespace Twns.Common {
         const defenseBonusMultiplier    = getDefenseBonusMultiplier(calculatorData);
         return Math.max(0, Math.floor(0.000001 +
             (cfgAttackDamage * attackBonusMultiplier + luckValue)   *
-            (Twns.WarHelpers.WarCommonHelpers.getNormalizedHp(attackerHp) / 10)     *
+            (WarHelpers.WarCommonHelpers.getNormalizedHp(attackerHp) / 10)     *
             defenseBonusMultiplier
         ));
     }

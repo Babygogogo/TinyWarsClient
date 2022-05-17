@@ -8,7 +8,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
@@ -21,11 +21,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import BwWar                = BaseWar.BwWar;
-    import NotifyType           = Twns.Notify.NotifyType;
-    import BwUnit               = BaseWar.BwUnit;
+    import BwWar        = BaseWar.BwWar;
+    import NotifyType   = Notify.NotifyType;
+    import BwUnit       = BaseWar.BwUnit;
 
-    const _CELL_WIDTH           = 70;
+    const _CELL_WIDTH   = 70;
 
     export type OpenDataForBwUnitBriefPanel = {
         war : BwWar;
@@ -84,8 +84,8 @@ namespace Twns.BaseWar {
         }
         private _onNotifyBwActionPlannerStateSet(): void {
             const planner = this._getOpenData().war.getActionPlanner();
-            if ((planner.getPreviousState() === Twns.Types.ActionPlannerState.ExecutingAction) &&
-                (planner.getState() !== Twns.Types.ActionPlannerState.ExecutingAction)
+            if ((planner.getPreviousState() === Types.ActionPlannerState.ExecutingAction) &&
+                (planner.getState() !== Types.ActionPlannerState.ExecutingAction)
             ) {
                 this._updateView();
             }
@@ -98,7 +98,7 @@ namespace Twns.BaseWar {
         }
         private _onNotifyBwUnitChanged(e: egret.Event): void {
             const data = e.data as Notify.NotifyData.BwUnitChanged;
-            if (Twns.GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData().war.getCursor().getGridIndex())) {
+            if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData().war.getCursor().getGridIndex())) {
                 this._updateView();
             }
         }
@@ -123,10 +123,10 @@ namespace Twns.BaseWar {
         }
 
         private _onCellTouchTap(e: egret.TouchEvent): void {
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
             for (let i = 0; i < this._cellList.length; ++i) {
                 if (this._cellList[i] === e.currentTarget) {
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwUnitDetailPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.BwUnitDetailPanel, {
                         unit        : this._unitList[i],
                         canDelete   : this._getOpenData().war.getCanCheat(),
                     });
@@ -161,7 +161,7 @@ namespace Twns.BaseWar {
             const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
 
             if ((unitOnMap)                                         &&
-                (Twns.WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                (WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                     war,
                     gridIndex,
                     unitType            : unitOnMap.getUnitType(),
@@ -224,7 +224,7 @@ namespace Twns.BaseWar {
             const isLeftSide    = this._isLeftSide;
             const cellList      = this._cellList;
             const length        = this._unitList.length;
-            this._group.x       = isLeftSide ? _CELL_WIDTH : Twns.StageManager.getStage().stageWidth - _CELL_WIDTH * (length + 1);
+            this._group.x       = isLeftSide ? _CELL_WIDTH : StageManager.getStage().stageWidth - _CELL_WIDTH * (length + 1);
             for (let i = 0; i < length; ++i) {
                 cellList[i].x = isLeftSide ? _CELL_WIDTH * i : (length - 1 - i) * _CELL_WIDTH;
             }
@@ -240,24 +240,24 @@ namespace Twns.BaseWar {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, bottom: -40 },
                 endProps    : { alpha: 1, bottom: 0 },
                 tweenTime   : 50,
             });
 
-            await Twns.Helpers.wait(50);
+            await Helpers.wait(50);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, bottom: 0 },
                 endProps    : { alpha: 0, bottom: -40 },
                 tweenTime   : 50,
             });
 
-            await Twns.Helpers.wait(50);
+            await Helpers.wait(50);
         }
     }
 
@@ -277,7 +277,7 @@ namespace Twns.BaseWar {
         private readonly _imgHp!        : TwnsUiImage.UiImage;
         private readonly _imgFuel!      : TwnsUiImage.UiImage;
         private readonly _imgState!     : TwnsUiImage.UiImage;
-        private readonly _unitView      = new Twns.BaseWar.BwUnitView();
+        private readonly _unitView      = new BaseWar.BwUnitView();
 
         private _unit               : BwUnit | null = null;
         private _isChildrenCreated  = false;
@@ -321,11 +321,11 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             if (this._isChildrenCreated) {
-                const unit = Twns.Helpers.getExisted(this._unit);
+                const unit = Helpers.getExisted(this._unit);
                 this._unitView.init(unit).startRunningView();
                 this._labelHp.text      = `${unit.getCurrentHp()}`;
                 this._labelFuel.text    = `${unit.getCurrentFuel()}`;
-                this._labelName.text    = Lang.getUnitName(unit.getUnitType()) ?? Twns.CommonConstants.ErrorTextForUndefined;
+                this._labelName.text    = Lang.getUnitName(unit.getUnitType(), unit.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined;
 
                 if (unit.getCurrentBuildMaterial() != null) {
                     this._imgState.visible      = true;

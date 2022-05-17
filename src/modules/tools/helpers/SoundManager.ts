@@ -14,7 +14,6 @@ namespace Twns.SoundManager {
     import ShortSfxCode         = Types.ShortSfxCode;
     import LongSfxCode          = Types.LongSfxCode;
     import UnitType             = Types.UnitType;
-    import BgmCode              = Types.BgmCode;
     import LangTextType         = Lang.LangTextType;
 
     export const DEFAULT_MUTE   = false;
@@ -82,7 +81,7 @@ namespace Twns.SoundManager {
 
     let _bgmMute                    = DEFAULT_MUTE;
     let _bgmVolume                  = DEFAULT_VOLUME;    // 音量范围是0～1，1为最大音量
-    let _playingBgmCode             : number = BgmCode.None;
+    let _playingBgmCode             = CommonConstants.BgmCode.None;
 
     const _bgmBufferCache           = new Map<number, AudioBuffer>();
     let _bgmGain                    : GainNode;
@@ -139,7 +138,7 @@ namespace Twns.SoundManager {
         _initEffectMute();
         _initEffectVolume();
 
-        playBgm(BgmCode.Lobby01);
+        playBgm(CommonConstants.BgmCode.Lobby);
     }
 
     export function resume(): void {
@@ -161,27 +160,27 @@ namespace Twns.SoundManager {
         _stopAllShortSfx();
     }
 
-    export function playPreviousBgm(): void {
-        const bgmCodeArray  = CommonConstants.BgmCodeArray;
+    export async function playPreviousBgm(): Promise<void> {
+        const bgmCodeArray  = (await Config.ConfigManager.getLatestGameConfig()).getAllBgmCodeArray();
         const index         = bgmCodeArray.indexOf(getPlayingBgmCode());
         if (index < 0) {
-            playBgm(BgmCode.Lobby01);
+            playBgm(CommonConstants.BgmCode.Lobby);
         } else {
             const length = bgmCodeArray.length;
             playBgm(bgmCodeArray[(index + length - 1) % length]);
         }
     }
-    export function playNextBgm(): void {
-        const bgmCodeArray  = CommonConstants.BgmCodeArray;
+    export async function playNextBgm(): Promise<void> {
+        const bgmCodeArray  = (await Config.ConfigManager.getLatestGameConfig()).getAllBgmCodeArray();
         const index         = bgmCodeArray.indexOf(getPlayingBgmCode());
         if (index < 0) {
-            playBgm(BgmCode.Lobby01);
+            playBgm(CommonConstants.BgmCode.Lobby);
         } else {
             playBgm(bgmCodeArray[(index + 1) % bgmCodeArray.length]);
         }
     }
     export function playCoBgm(coId: number, gameConfig: Config.GameConfig): void {
-        playBgm(gameConfig.getCoBasicCfg(coId)?.bgmCode ?? BgmCode.CoEmpty);
+        playBgm(gameConfig.getCoBasicCfg(coId)?.bgmCode ?? CommonConstants.BgmCode.CoEmpty);
     }
     export function playCoBgmWithWar(war: BaseWar.BwWar, force: boolean): void {
         const player = war.getPlayerInTurn();
@@ -190,15 +189,10 @@ namespace Twns.SoundManager {
         }
 
         if (player.checkCoIsUsingActiveSkill()) {
-            playBgm(BgmCode.Power00);
+            playBgm(CommonConstants.BgmCode.CoPower);
         } else {
             playCoBgm(player.getCoId(), war.getGameConfig());
         }
-    }
-
-    export function checkIsValidBgmCode(bgmCode: number): boolean {
-        return (bgmCode === BgmCode.None)                       ||
-            (CommonConstants.BgmConfigDict.get(bgmCode) != null);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -274,7 +268,7 @@ namespace Twns.SoundManager {
         }
     }
     async function _playBgmForNormal(bgmCode: number): Promise<void> {
-        const bgmCfg        = Helpers.getExisted(CommonConstants.BgmConfigDict.get(bgmCode), ClientErrorCode.SoundManager_PlayBgmForNormal_00);
+        const bgmCfg        = Helpers.getExisted((await Config.ConfigManager.getLatestGameConfig()).getBgmSfxCfg(bgmCode), ClientErrorCode.SoundManager_PlayBgmForNormal_00);
         const cacheDict     = _bgmBufferCache;
         const cachedBuffer  = cacheDict.get(bgmCode);
         if (cachedBuffer) {
@@ -297,7 +291,7 @@ namespace Twns.SoundManager {
             }
         }
     }
-    function _doPlayBgmForNormal(buffer: AudioBuffer, params: Types.BgmCfg): void {
+    function _doPlayBgmForNormal(buffer: AudioBuffer, params: Types.BgmSfxCfg): void {
         if (!buffer) {
             return;
         }
@@ -306,8 +300,8 @@ namespace Twns.SoundManager {
 
         _bgmSourceNode              = _audioContext.createBufferSource();
         _bgmSourceNode.buffer       = buffer;
-        _bgmSourceNode.loopStart    = params.loopStart;
-        _bgmSourceNode.loopEnd      = params.loopEnd;
+        _bgmSourceNode.loopStart    = Helpers.getExisted(params.loopStart) / 10000;
+        _bgmSourceNode.loopEnd      = Helpers.getExisted(params.loopEnd) / 10000;
         _bgmSourceNode.loop         = true;
         _bgmSourceNode.connect(_bgmGain);
         _bgmSourceNode.start();

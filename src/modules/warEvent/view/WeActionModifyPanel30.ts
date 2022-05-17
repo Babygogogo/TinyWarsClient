@@ -217,7 +217,7 @@ namespace Twns.WarEvent {
         private _onTouchedBtnGridIndex(): void {
             const action = this._getAction();
             PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseGridIndexPanel, {
-                currentGridIndexArray   : Helpers.getNonNullElements(action.conGridIndexArray?.map(v => Twns.GridIndexHelpers.convertGridIndex(v)) ?? []),
+                currentGridIndexArray   : Helpers.getNonNullElements(action.conGridIndexArray?.map(v => GridIndexHelpers.convertGridIndex(v)) ?? []),
                 mapSize                 : this._getOpenData().war.getTileMap().getMapSize(),
                 callbackOnConfirm       : gridIndexArray => {
                     action.conGridIndexArray = gridIndexArray;
@@ -598,7 +598,8 @@ namespace Twns.WarEvent {
         }
         private _updateLabelUnitType(): void {
             const unitTypeArray         = this._getAction().conUnitTypeArray;
-            this._labelUnitType.text    = unitTypeArray?.length ? unitTypeArray.map(v => Lang.getUnitName(v)).join(`, `) : Lang.getText(LangTextType.B0776);
+            const gameConfig            = this._getOpenData().war.getGameConfig();
+            this._labelUnitType.text    = unitTypeArray?.length ? unitTypeArray.map(v => Lang.getUnitName(v, gameConfig)).join(`, `) : Lang.getText(LangTextType.B0776);
         }
         private _updateLabelLocation(): void {
             const locationIdArray       = this._getAction().conLocationIdArray;

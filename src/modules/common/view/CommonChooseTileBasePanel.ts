@@ -8,7 +8,7 @@
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -21,12 +21,13 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common {
-    import DataForDrawTileBase  = Twns.MapEditor.DataForDrawTileBase;
-    import LangTextType         = Twns.Lang.LangTextType;
-    import NotifyType           = Twns.Notify.NotifyType;
+    import DataForDrawTileBase  = MapEditor.DataForDrawTileBase;
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
 
     export type OpenDataForCommonChooseTileBasePanel = {
-        callback: (baseType: Twns.Types.TileBaseType, shapeId: number) => void;
+        gameConfig  : Config.GameConfig;
+        callback    : (baseType: Types.TileBaseType, shapeId: number) => void;
     };
     export class CommonChooseTileBasePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseTileBasePanel> {
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
@@ -69,14 +70,14 @@ namespace Twns.Common {
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
             const typeMap = new Map<number, DataForDrawTileBase[]>();
-            for (const [baseType, cfg] of Twns.CommonConstants.TileBaseShapeConfigs) {
+            for (const [baseType, cfg] of CommonConstants.TileBaseShapeConfigs) {
                 if (!typeMap.has(baseType)) {
                     typeMap.set(baseType, []);
                 }
 
-                const list = Twns.Helpers.getExisted(typeMap.get(baseType));
+                const list = Helpers.getExisted(typeMap.get(baseType));
                 for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
-                    if ((baseType === Twns.Types.TileBaseType.Sea) && (shapeId !== 0)) {
+                    if ((baseType === Types.TileBaseType.Sea) && (shapeId !== 0)) {
                         continue;
                     }
 
@@ -87,10 +88,13 @@ namespace Twns.Common {
                 }
             }
 
-            const callback  = this._getOpenData().callback;
-            const dataArray : DataForCategoryRenderer[] = [];
+            const openData      = this._getOpenData();
+            const callback      = openData.callback;
+            const gameConfig    = openData.gameConfig;
+            const dataArray     : DataForCategoryRenderer[] = [];
             for (const [, dataListForDrawTileBase] of typeMap) {
                 dataArray.push({
+                    gameConfig,
                     dataListForDrawTileBase,
                     callback,
                 });
@@ -107,7 +111,8 @@ namespace Twns.Common {
 
     type DataForCategoryRenderer = {
         dataListForDrawTileBase : DataForDrawTileBase[];
-        callback                : (baseType: Twns.Types.TileBaseType, shapeId: number) => void;
+        gameConfig              : Config.GameConfig;
+        callback                : (baseType: Types.TileBaseType, shapeId: number) => void;
     };
     class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
         private readonly _labelCategory!    : TwnsUiLabel.UiLabel;
@@ -116,13 +121,13 @@ namespace Twns.Common {
         protected _onOpened(): void {
             this._listTileBase.setItemRenderer(TileBaseRenderer);
             this._listTileBase.setScrollPolicyH(eui.ScrollPolicy.OFF);
-            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected _onDataChanged(): void {
             const data                      = this._getData();
             const dataListForDrawTileBase   = data.dataListForDrawTileBase;
-            this._labelCategory.text        = Lang.getTileName(Twns.Config.ConfigManager.getTileType(dataListForDrawTileBase[0].baseType, Twns.Types.TileObjectType.Empty)) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelCategory.text        = Lang.getTileName(Config.ConfigManager.getTileType(dataListForDrawTileBase[0].baseType, Types.TileObjectType.Empty), data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
 
             const dataListForTileBase   : DataForTileBaseRenderer[] = [];
             const callback              = data.callback;
@@ -138,13 +143,13 @@ namespace Twns.Common {
 
     type DataForTileBaseRenderer = {
         dataForDrawTileBase : DataForDrawTileBase;
-        callback            : (baseType: Twns.Types.TileBaseType, shapeId: number) => void;
+        callback            : (baseType: Types.TileBaseType, shapeId: number) => void;
     };
     class TileBaseRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileBaseRenderer> {
         private readonly _group!        : eui.Group;
         private readonly _conTileView!  : eui.Group;
 
-        private _tileView   = new Twns.MapEditor.MeTileSimpleView();
+        private _tileView   = new MapEditor.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -173,7 +178,7 @@ namespace Twns.Common {
                 tileDecoratorShapeId: null,
                 tileObjectShapeId   : null,
                 tileObjectType      : null,
-                playerIndex         : Twns.CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : CommonConstants.WarNeutralPlayerIndex,
             });
             this._tileView.updateView();
         }
@@ -182,7 +187,7 @@ namespace Twns.Common {
             const data                  = this._getData();
             const dataForDrawTileBase   = data.dataForDrawTileBase;
             data.callback(dataForDrawTileBase.baseType, dataForDrawTileBase.shapeId);
-            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonChooseTileBasePanel);
+            PanelHelpers.close(PanelHelpers.PanelDict.CommonChooseTileBasePanel);
         }
     }
 }

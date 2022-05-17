@@ -81,11 +81,12 @@ namespace Twns.WarEvent {
         }
 
         private _onTouchedBtnAddUnit(): void {
-            const unitArray = Helpers.getExisted(this._getOpenData().action.WeaAddUnit?.unitArray);
+            const openData  = this._getOpenData();
+            const unitArray = Helpers.getExisted(openData.action.WeaAddUnit?.unitArray);
             if (unitArray.length > CommonConstants.WarEventActionAddUnitMaxCount) {
                 FloatText.show(Lang.getText(LangTextType.A0189));
             } else {
-                unitArray.push(WarHelpers.WarEventHelpers.getDefaultAddUnitData());
+                unitArray.push(WarHelpers.WarEventHelpers.getDefaultAddUnitData(openData.war.getGameConfig()));
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -520,7 +521,7 @@ namespace Twns.WarEvent {
         }
         private _updateComponentsForUnitType(): void {
             const data                  = this._getData();
-            this._labelUnitType.text    = Lang.getUnitName(Helpers.getExisted(data.dataForAddUnit.unitData?.unitType)) || CommonConstants.ErrorTextForUndefined;
+            this._labelUnitType.text    = Lang.getUnitName(Helpers.getExisted(data.dataForAddUnit.unitData?.unitType), data.war.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined;
         }
         private _updateComponentsForHp(): void {
             const data      = this._getData();

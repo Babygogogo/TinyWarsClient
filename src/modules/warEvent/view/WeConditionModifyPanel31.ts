@@ -5,7 +5,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import Twns.Notify               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -17,8 +17,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
-    import LangTextType             = Twns.Lang.LangTextType;
-    import NotifyType               = Twns.Notify.NotifyType;
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
@@ -76,21 +76,21 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionTypeListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.WeConditionTypeListPanel, {
                 fullData    : openData.fullData,
                 condition   : openData.condition,
                 war         : openData.war,
             });
         }
         private _onTouchedGroupIsNot(): void {
-            const data  = Twns.Helpers.getExisted(this._getCondition().WecTileTypeEqualTo);
+            const data  = Helpers.getExisted(this._getCondition().WecTileTypeEqualTo);
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
-            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnTileType(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0718),
                 content : generateDescForTileTypes(this._getOpenData().war.getGameConfig()),
             });
@@ -100,10 +100,10 @@ namespace Twns.WarEvent {
             if ((isNaN(value)) || (!this._getOpenData().war.getGameConfig().checkIsValidTileType(value))) {
                 this._updateComponentsForTileType();
             } else {
-                Twns.Helpers.getExisted(this._getCondition().WecTileTypeEqualTo).tileType = value;
+                Helpers.getExisted(this._getCondition().WecTileTypeEqualTo).tileType = value;
                 this._updateLabelDescAndLabelError();
                 this._updateComponentsForTileType();
-                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputGridX(): void {
@@ -112,10 +112,10 @@ namespace Twns.WarEvent {
                 this._updateInputGridX();
             } else {
                 const mapSize = this._getOpenData().war.getTileMap().getMapSize();
-                Twns.Helpers.getExisted(this._getCondition().WecTileTypeEqualTo?.gridIndex).x = Math.max(0, Math.min(mapSize.width - 1, value));
+                Helpers.getExisted(this._getCondition().WecTileTypeEqualTo?.gridIndex).x = Math.max(0, Math.min(mapSize.width - 1, value));
                 this._updateLabelDescAndLabelError();
                 this._updateInputGridX();
-                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputGridY(): void {
@@ -124,10 +124,10 @@ namespace Twns.WarEvent {
                 this._updateInputGridY();
             } else {
                 const mapSize = this._getOpenData().war.getTileMap().getMapSize();
-                Twns.Helpers.getExisted(this._getCondition().WecTileTypeEqualTo?.gridIndex).y = Math.max(0, Math.min(mapSize.height - 1, value));
+                Helpers.getExisted(this._getCondition().WecTileTypeEqualTo?.gridIndex).y = Math.max(0, Math.min(mapSize.height - 1, value));
                 this._updateLabelDescAndLabelError();
                 this._updateInputGridY();
-                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
@@ -159,16 +159,16 @@ namespace Twns.WarEvent {
             const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
-            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
+            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateImgIsNot(): void {
             this._imgIsNot.visible = !!this._getCondition().WecTileTypeEqualTo?.isNot;
         }
         private _updateComponentsForTileType(): void {
-            const tileType              = Twns.Helpers.getExisted(this._getCondition().WecTileTypeEqualTo?.tileType);
+            const tileType              = Helpers.getExisted(this._getCondition().WecTileTypeEqualTo?.tileType);
             this._inputTileType.text    = `${tileType}`;
-            this._labelTileType.text    = Lang.getTileName(tileType) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelTileType.text    = Lang.getTileName(tileType, this._getOpenData().war.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputGridX(): void {
             this._inputGridX.text = `${this._getCondition().WecTileTypeEqualTo?.gridIndex?.x}`;
@@ -183,7 +183,7 @@ namespace Twns.WarEvent {
     }
 
     function generateDescForTileTypes(gameConfig: Config.GameConfig): string {
-        return gameConfig.getTileTypesByCategory(Twns.Types.TileCategory.All)?.map(tileType => `${tileType}: ${Lang.getTileName(tileType)}`).join(`\n`) ?? ``;
+        return gameConfig.getTileTypesByCategory(Types.TileCategory.All)?.map(tileType => `${tileType}: ${Lang.getTileName(tileType, gameConfig)}`).join(`\n`) ?? ``;
     }
 }
 

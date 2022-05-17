@@ -125,7 +125,7 @@ namespace Twns.SinglePlayerMode {
             const data          = this._getData();
             const ruleId        = data.ruleId;
             const mapId         = data.mapId;
-            const configVersion = Helpers.getExisted(Config.ConfigManager.getLatestConfigVersion());
+            const configVersion = await Config.ConfigManager.getLatestConfigVersion();
             const selfInfo      = User.UserModel.getSelfInfo()?.userComplexInfo;
             const selfScore     = selfInfo?.userWarStatistics?.spwArray?.find(v => (v.mapId === mapId) && (v.configVersion === configVersion) && (v.ruleId === ruleId))?.highScore ?? Number.MIN_SAFE_INTEGER;
             const selfPrivilege = selfInfo?.userPrivilege;

@@ -8,7 +8,7 @@
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -21,9 +21,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import DataForDrawTileBase  = Twns.MapEditor.DataForDrawTileBase;
-    import LangTextType         = Twns.Lang.LangTextType;
-    import NotifyType           = Twns.Notify.NotifyType;
+    import DataForDrawTileBase  = MapEditor.DataForDrawTileBase;
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
 
     const MAX_RECENT_COUNT = 10;
 
@@ -117,16 +117,16 @@ namespace Twns.MapEditor {
             this._imgFill.visible = this._needFill;
         }
 
-        private _createDataForListCategory(): DataForCategoryRenderer[] {
+        private async _createDataForListCategory(): Promise<DataForCategoryRenderer[]> {
             const typeMap = new Map<number, DataForDrawTileBase[]>();
-            for (const [baseType, cfg] of Twns.CommonConstants.TileBaseShapeConfigs) {
+            for (const [baseType, cfg] of CommonConstants.TileBaseShapeConfigs) {
                 if (!typeMap.has(baseType)) {
                     typeMap.set(baseType, []);
                 }
 
-                const list = Twns.Helpers.getExisted(typeMap.get(baseType));
+                const list = Helpers.getExisted(typeMap.get(baseType));
                 for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
-                    if ((baseType === Twns.Types.TileBaseType.Sea) && (shapeId !== 0)) {
+                    if ((baseType === Types.TileBaseType.Sea) && (shapeId !== 0)) {
                         continue;
                     }
 
@@ -137,19 +137,21 @@ namespace Twns.MapEditor {
                 }
             }
 
-            const dataList: DataForCategoryRenderer[] = [];
+            const dataList      : DataForCategoryRenderer[] = [];
+            const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
             for (const [, dataListForDrawTileBase] of typeMap) {
                 dataList.push({
                     dataListForDrawTileBase,
                     panel                   : this,
+                    gameConfig,
                 });
             }
 
             return dataList;
         }
 
-        private _updateListTileObject(): void {
-            this._listCategory.bindData(this._createDataForListCategory());
+        private async _updateListTileObject(): Promise<void> {
+            this._listCategory.bindData(await this._createDataForListCategory());
             this._listCategory.scrollVerticalTo(0);
         }
 
@@ -162,6 +164,7 @@ namespace Twns.MapEditor {
     type DataForCategoryRenderer = {
         dataListForDrawTileBase : DataForDrawTileBase[];
         panel                   : MeChooseTileBasePanel;
+        gameConfig              : Config.GameConfig;
     };
     class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
         private readonly _labelCategory!    : TwnsUiLabel.UiLabel;
@@ -175,7 +178,7 @@ namespace Twns.MapEditor {
         protected _onDataChanged(): void {
             const data                      = this._getData();
             const dataListForDrawTileBase   = data.dataListForDrawTileBase;
-            this._labelCategory.text        = Lang.getTileName(Twns.Config.ConfigManager.getTileType(dataListForDrawTileBase[0].baseType, Twns.Types.TileObjectType.Empty)) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelCategory.text        = Lang.getTileName(Config.ConfigManager.getTileType(dataListForDrawTileBase[0].baseType, Types.TileObjectType.Empty), data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
 
             const dataListForTileBase   : DataForTileBaseRenderer[] = [];
             const panel                 = data.panel;
@@ -197,7 +200,7 @@ namespace Twns.MapEditor {
         private readonly _group!        : eui.Group;
         private readonly _conTileView!  : eui.Group;
 
-        private _tileView   = new Twns.MapEditor.MeTileSimpleView();
+        private _tileView   = new MapEditor.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -226,7 +229,7 @@ namespace Twns.MapEditor {
                 tileDecoratorShapeId: null,
                 tileObjectShapeId   : null,
                 tileObjectType      : null,
-                playerIndex         : Twns.CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : CommonConstants.WarNeutralPlayerIndex,
             });
             this._tileView.updateView();
         }
@@ -238,12 +241,12 @@ namespace Twns.MapEditor {
             if (!panel.getNeedFill()) {
                 panel.updateOnChooseTileBase(dataForDrawTileBase);
                 panel.close();
-                Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawTileBase(dataForDrawTileBase);
+                Helpers.getExisted(MapEditor.MeModel.getWar()).getDrawer().setModeDrawTileBase(dataForDrawTileBase);
             } else {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0089),
                     callback: () => {
-                        const war           = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
+                        const war           = Helpers.getExisted(MapEditor.MeModel.getWar());
                         const gameConfig    = war.getGameConfig();
                         for (const tile of war.getTileMap().getAllTiles()) {
                             tile.init({
@@ -262,7 +265,7 @@ namespace Twns.MapEditor {
 
                         panel.updateOnChooseTileBase(dataForDrawTileBase);
                         panel.close();
-                        Twns.Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: war.getCursor().getGridIndex() } as Twns.Notify.NotifyData.MeTileChanged);
+                        Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: war.getCursor().getGridIndex() } as Notify.NotifyData.MeTileChanged);
                     },
                 });
             }

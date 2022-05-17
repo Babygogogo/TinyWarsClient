@@ -70,7 +70,7 @@ namespace Twns.SingleRankRoom.SrrCreateModel {
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
         setMapId(mapId);
-        setConfigVersion(Helpers.getExisted(Config.ConfigManager.getLatestConfigVersion()));
+        setConfigVersion(await Config.ConfigManager.getLatestConfigVersion());
         setGameConfig(await Config.ConfigManager.getLatestGameConfig());
         setSaveSlotIndex(await SinglePlayerMode.SpmModel.getAvailableSlotIndex());
         setSlotComment(null);

@@ -4,18 +4,18 @@
 // import NetManager           from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import CommonModel          from "./CommonModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common.CommonProxy {
-    import NotifyType       = Twns.Notify.NotifyType;
+    import NotifyType       = Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
-    import NetMessageCodes  = Twns.Net.NetMessageCodes;
+    import NetMessageCodes  = Net.NetMessageCodes;
 
     export function init(): void {
-        Twns.Net.NetManager.addListeners([
+        Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgCommonHeartbeat,           callback: _onMsgCommonHeartbeat },
             { msgCode: NetMessageCodes.MsgCommonError,               callback: _onMsgCommonError, },
             { msgCode: NetMessageCodes.MsgCommonLatestConfigVersion, callback: _onMsgCommonLatestConfigVersion },
@@ -25,7 +25,7 @@ namespace Twns.Common.CommonProxy {
     }
 
     export function reqCommonHeartbeat(counter: number): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgCommonHeartbeat: { c: {
                 counter,
             } },
@@ -34,7 +34,7 @@ namespace Twns.Common.CommonProxy {
     function _onMsgCommonHeartbeat(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgCommonHeartbeat.IS;
         if (!data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgCommonHeartbeat, data);
+            Notify.dispatch(NotifyType.MsgCommonHeartbeat, data);
         }
     }
 
@@ -43,31 +43,36 @@ namespace Twns.Common.CommonProxy {
         // const data = e.data as CommonProto.NetMessage.MsgCommonError.IS;
     }
 
+    export function reqCommonLatestConfigVersion(): void {
+        Net.NetManager.send({
+            MsgCommonLatestConfigVersion: { c: {} },
+        });
+    }
     function _onMsgCommonLatestConfigVersion(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgCommonLatestConfigVersion.IS;
-        Twns.Config.ConfigManager.setLatestConfigVersion(Twns.Helpers.getExisted(data.version));
+        Config.ConfigManager.setLatestConfigVersion(Helpers.getExisted(data.version));
 
-        Twns.Notify.dispatch(NotifyType.MsgCommonLatestConfigVersion, data);
+        Notify.dispatch(NotifyType.MsgCommonLatestConfigVersion, data);
     }
 
     export function reqCommonGetServerStatus(): void {
-        Twns.Net.NetManager.send({ MsgCommonGetServerStatus: { c: {} }, });
+        Net.NetManager.send({ MsgCommonGetServerStatus: { c: {} }, });
     }
     function _onMsgCommonGetServerStatus(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCommonGetServerStatus.IS;
         if (!data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgCommonGetServerStatus, data);
+            Notify.dispatch(NotifyType.MsgCommonGetServerStatus, data);
         }
     }
 
     export function reqGetRankList(): void {
-        Twns.Net.NetManager.send({ MsgCommonGetRankList: { c: {} } });
+        Net.NetManager.send({ MsgCommonGetRankList: { c: {} } });
     }
     function _onMsgCommonGetRankList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCommonGetRankList.IS;
         if (!data.errorCode) {
-            Twns.Common.CommonModel.setMrwRankArray(data.mrwRankDataArray || []);
-            Twns.Notify.dispatch(NotifyType.MsgCommonGetRankList, data);
+            Common.CommonModel.setMrwRankArray(data.mrwRankDataArray || []);
+            Notify.dispatch(NotifyType.MsgCommonGetRankList, data);
         }
     }
 }

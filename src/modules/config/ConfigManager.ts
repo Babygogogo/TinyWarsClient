@@ -13,13 +13,14 @@ namespace Twns.Config.ConfigManager {
     import TileDecoratorType    = Types.TileDecoratorType;
     import TileObjectType       = Types.TileObjectType;
     import TileType             = Types.TileType;
-    import UnitType             = Types.UnitType;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Initializers.
     ////////////////////////////////////////////////////////////////////////////////
-    let _latestConfigVersion    : string | null = null;
-    const _gameConfigAccessor   = Helpers.createCachedDataAccessor<string, GameConfig>({
+    const _latestVersionAccessor    = Helpers.createCachedDataAccessor<null, string>({
+        reqData : () => Common.CommonProxy.reqCommonLatestConfigVersion(),
+    });
+    const _gameConfigAccessor       = Helpers.createCachedDataAccessor<string, GameConfig>({
         reqData : async (version: string) => {
             let rawConfig   : Types.FullConfig | null = null;
             const configBin = await RES.getResByUrl(
@@ -28,7 +29,7 @@ namespace Twns.Config.ConfigManager {
                 null,
                 RES.ResourceItem.TYPE_BIN
             );
-            rawConfig = configBin ? Twns.ProtoManager.decodeAsFullConfig(configBin) as Types.FullConfig : null;
+            rawConfig = configBin ? ProtoManager.decodeAsFullConfig(configBin) as Types.FullConfig : null;
 
             if (rawConfig == null) {
                 _gameConfigAccessor.setData(version, null);
@@ -45,17 +46,17 @@ namespace Twns.Config.ConfigManager {
         // nothing to do.
     }
 
-    export function getLatestConfigVersion(): string | null {
-        return _latestConfigVersion;
+    export async function getLatestConfigVersion(): Promise<string> {
+        return Helpers.getExisted(await _latestVersionAccessor.getData(null));
     }
     export function setLatestConfigVersion(version: string): void {
-        _latestConfigVersion = version;
+        _latestVersionAccessor.setData(null, version);
     }
     export async function getGameConfig(version: string): Promise<GameConfig> {
         return Helpers.getExisted(await _gameConfigAccessor.getData(version));
     }
     export async function getLatestGameConfig(): Promise<GameConfig> {
-        return await getGameConfig(Helpers.getExisted(getLatestConfigVersion()));
+        return await getGameConfig(await getLatestConfigVersion());
     }
 
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
@@ -186,12 +187,12 @@ namespace Twns.Config.ConfigManager {
     export function checkIsValidGridIndexSubset(gridIndexArray: CommonProto.Structure.IGridIndex[], mapSize: Types.MapSize): boolean {
         const gridIdSet = new Set<number>();
         for (const g of gridIndexArray) {
-            const gridIndex = Twns.GridIndexHelpers.convertGridIndex(g);
-            if ((gridIndex == null) || (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+            const gridIndex = GridIndexHelpers.convertGridIndex(g);
+            if ((gridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
                 return false;
             }
 
-            const gridId = Twns.GridIndexHelpers.getGridId(gridIndex, mapSize);
+            const gridId = GridIndexHelpers.getGridId(gridIndex, mapSize);
             if (gridIdSet.has(gridId)) {
                 return false;
             }
@@ -381,26 +382,6 @@ namespace Twns.Config.ConfigManager {
 
     export function getUnitAndTileDefaultSkinId(playerIndex: number): number {
         return playerIndex;
-    }
-
-    export function getUnitImageSource({ version, skinId, unitType, isDark, isMoving, tickCount }: {
-        version     : Types.UnitAndTileTextureVersion;
-        skinId      : number;
-        unitType    : UnitType;
-        isDark      : boolean;
-        isMoving    : boolean;
-        tickCount   : number;
-    }): string {
-        const cfgForUnit        = Helpers.getExisted(CommonConstants.UnitImageConfigs.get(version)?.get(unitType), ClientErrorCode.ConfigManager_GetUnitImageSource_00);
-        const cfgForFrame       = isMoving ? cfgForUnit.moving : cfgForUnit.idle;
-        const ticksPerFrame     = cfgForFrame.ticksPerFrame;
-        const textForDark       = isDark ? `state01` : `state00`;
-        const textForMoving     = isMoving ? `act01` : `act00`;
-        const textForVersion    = `ver${Helpers.getNumText(version)}`;
-        const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
-        const textForType       = `type${Helpers.getNumText(unitType)}`;
-        const textForFrame      = `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`;
-        return `unit_${textForVersion}_${textForType}_${textForDark}_${textForMoving}_${textForSkin}_${textForFrame}`;
     }
 
     export function getWeatherImageSource(weatherType: Types.WeatherType): string {

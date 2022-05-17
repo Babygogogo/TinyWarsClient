@@ -153,7 +153,8 @@ namespace Twns.WarEvent {
         }
         private _updateLabelActBannedUnitTypeArray(): void {
             const unitTypeArray                     = this._getAction().actBannedUnitTypeArray;
-            this._labelActBannedUnitTypeArray.text  = unitTypeArray?.length ? unitTypeArray.map(v => Lang.getUnitName(v)).join(`, `) : `--`;
+            const gameConfig                        = this._getOpenData().war.getGameConfig();
+            this._labelActBannedUnitTypeArray.text  = unitTypeArray?.length ? unitTypeArray.map(v => Lang.getUnitName(v, gameConfig)).join(`, `) : `--`;
         }
         private _updateLabelActCanActivateCoSkill(): void {
             const canActivateCoSkill                = this._getAction().actCanActivateCoSkill;

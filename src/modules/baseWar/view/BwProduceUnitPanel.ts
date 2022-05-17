@@ -266,7 +266,7 @@ namespace Twns.BaseWar {
         private _onTouchedGroupProduce(): void {
             const data = this._getData();
             if (data.currentFund < data.minCost) {
-                Twns.FloatText.show(Lang.getText(LangTextType.B0053));
+                FloatText.show(Lang.getText(LangTextType.B0053));
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 return;
             }
@@ -301,7 +301,7 @@ namespace Twns.BaseWar {
                         Math.floor(data.currentFund * CommonConstants.UnitMaxHp / (data.cfgCost * data.costModifier * skillCfg[5] / 100) / normalizer) * normalizer
                     );
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
-                        title           : `${Lang.getUnitName(unitType)} HP`,
+                        title           : Lang.getText(LangTextType.B0339),
                         currentValue    : maxHp,
                         maxValue        : maxHp,
                         minValue        : minHp,
@@ -324,14 +324,15 @@ namespace Twns.BaseWar {
             const labelCost         = this._labelCost;
             const labelName         = this._labelName;
             const labelProduce      = this._labelProduce;
+            const unit              = data.unit;
             labelCost.text          = `${data.minCost}G`;
             labelCost.textColor     = isFundEnough ? 0xFFFFFF : 0x667A85;
-            labelName.text          = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
+            labelName.text          = Lang.getUnitName(unitType, unit.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined;
             labelName.textColor     = isFundEnough ? 0xFFFFFF : 0x667A85;
             labelProduce.textColor  = isFundEnough ? 0x000000 : 0xFFFFFF;
             labelProduce.text       = Lang.getText(LangTextType.B0691);
             this._imgProduce.source = isFundEnough ? `uncompressedColorYellow0001` : `uncompressedColorGrey0002`;
-            this._unitView.init(data.unit).startRunningView();
+            this._unitView.init(unit).startRunningView();
         }
     }
 }

@@ -158,7 +158,7 @@ namespace Twns.Common {
                 .set({ alpha: 0, right: -40 })
                 .to({ alpha: 1, right: 0 }, 200);
 
-            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Helpers.resetTween({
@@ -179,7 +179,7 @@ namespace Twns.Common {
                 .set({ alpha: 1, right: 0 })
                 .to({ alpha: 0, right: -40 }, 200);
 
-            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -201,12 +201,13 @@ namespace Twns.Common {
                 : dataArray[selectedIndex];
             if (data) {
                 const unitType          = data.unitType;
-                this._labelName.text    = Lang.getUnitName(unitType) ?? Twns.CommonConstants.ErrorTextForUndefined;
-                this._labelName1.text   = Lang.getUnitName(unitType, Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? Twns.CommonConstants.ErrorTextForUndefined;
+                const gameConfig        = data.gameConfig;
+                this._labelName.text    = Lang.getUnitName(unitType, gameConfig) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelName1.text   = Lang.getUnitName(unitType, gameConfig, Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
                 this._unitView.update({
                     gameConfig      : this._getOpenData().gameConfig,
                     gridIndex       : { x: 0, y: 0 },
-                    playerIndex     : Twns.CommonConstants.WarFirstPlayerIndex,
+                    playerIndex     : CommonConstants.WarFirstPlayerIndex,
                     unitType,
                     actionState     : Types.UnitActionState.Idle,
                 }, Timer.getUnitAnimationTickCount());
@@ -227,18 +228,18 @@ namespace Twns.Common {
                 const unitType          = unitData.unitType;
                 const unitTemplateCfg   = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType));
                 const dataArray         : DataForInfoRenderer[] = Helpers.getNonNullElements([
-                    this._createInfoHp(unitTemplateCfg),
-                    this._createInfoProductionCost(unitTemplateCfg),
-                    this._createInfoMovement(unitTemplateCfg),
-                    this._createInfoFuel(unitTemplateCfg),
-                    this._createInfoAttackRange(unitTemplateCfg),
-                    this._createInfoVision(unitTemplateCfg),
-                    this._createInfoPrimaryWeaponAmmo(unitTemplateCfg),
-                    this._createInfoBuildMaterial(unitTemplateCfg),
-                    this._createInfoProduceMaterial(unitTemplateCfg),
-                    this._createInfoFlareAmmo(unitTemplateCfg),
-                    this._createInfoIsDiver(unitTemplateCfg),
-                    this._createInfoLoadUnit(unitTemplateCfg),
+                    this._createInfoHp(unitTemplateCfg, gameConfig),
+                    this._createInfoProductionCost(unitTemplateCfg, gameConfig),
+                    this._createInfoMovement(unitTemplateCfg, gameConfig),
+                    this._createInfoFuel(unitTemplateCfg, gameConfig),
+                    this._createInfoAttackRange(unitTemplateCfg, gameConfig),
+                    this._createInfoVision(unitTemplateCfg, gameConfig),
+                    this._createInfoPrimaryWeaponAmmo(unitTemplateCfg, gameConfig),
+                    this._createInfoBuildMaterial(unitTemplateCfg, gameConfig),
+                    this._createInfoProduceMaterial(unitTemplateCfg, gameConfig),
+                    this._createInfoFlareAmmo(unitTemplateCfg, gameConfig),
+                    this._createInfoIsDiver(unitTemplateCfg, gameConfig),
+                    this._createInfoLoadUnit(unitTemplateCfg, gameConfig),
                 ]);
                 let index = 0;
                 for (const data of dataArray) {
@@ -256,102 +257,114 @@ namespace Twns.Common {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Util functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _createInfoHp(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoHp(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer {
             return {
                 index           : 0,
                 infoType        : UnitInfoType.Hp,
                 unitTemplateCfg,
+                gameConfig,
             };
         }
-        private _createInfoProductionCost(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoProductionCost(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.ProductionCost,
                 unitTemplateCfg,
+                gameConfig,
             };
         }
-        private _createInfoMovement(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoMovement(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Movement,
                 unitTemplateCfg,
+                gameConfig,
             };
         }
-        private _createInfoFuel(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoFuel(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Fuel,
                 unitTemplateCfg,
+                gameConfig,
             };
         }
-        private _createInfoAttackRange(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoAttackRange(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer | null {
             return unitTemplateCfg.minAttackRange == null
                 ? null
                 : {
                     index       : 0,
                     infoType    : UnitInfoType.AttackRange,
                     unitTemplateCfg,
+                    gameConfig,
                 };
         }
-        private _createInfoVision(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoVision(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Vision,
                 unitTemplateCfg,
+                gameConfig,
             };
         }
-        private _createInfoPrimaryWeaponAmmo(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoPrimaryWeaponAmmo(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer | null {
             return unitTemplateCfg.primaryWeaponMaxAmmo == null
                 ? null
                 : {
                     index       : 0,
                     infoType    : UnitInfoType.PrimaryWeaponAmmo,
                     unitTemplateCfg,
+                    gameConfig,
                 };
         }
-        private _createInfoBuildMaterial(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoBuildMaterial(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer | null {
             return unitTemplateCfg.maxBuildMaterial == null
                 ? null
                 : {
                     index       : 0,
                     infoType    : UnitInfoType.BuildMaterial,
                     unitTemplateCfg,
+                    gameConfig,
                 };
         }
-        private _createInfoProduceMaterial(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoProduceMaterial(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer | null {
             return unitTemplateCfg.maxProduceMaterial == null
                 ? null
                 : {
                     index       : 0,
                     infoType    : UnitInfoType.ProduceMaterial,
                     unitTemplateCfg,
+                    gameConfig,
                 };
         }
-        private _createInfoFlareAmmo(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoFlareAmmo(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer | null {
             return unitTemplateCfg.flareMaxAmmo == null
                 ? null
                 : {
                     index       : 0,
                     infoType    : UnitInfoType.FlareAmmo,
                     unitTemplateCfg,
+                    gameConfig,
                 };
         }
-        private _createInfoIsDiver(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoIsDiver(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer | null {
             return !unitTemplateCfg.diveCfgs
                 ? null
                 : {
                     index       : 0,
                     infoType    : UnitInfoType.IsDiver,
                     unitTemplateCfg,
+                    gameConfig,
                 };
         }
-        private _createInfoLoadUnit(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoLoadUnit(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer | null {
             return unitTemplateCfg.loadUnitCategory == null
                 ? null
                 : {
                     index       : 0,
                     infoType    : UnitInfoType.LoadUnit,
                     unitTemplateCfg,
+                    gameConfig,
                 };
         }
 
@@ -363,7 +376,7 @@ namespace Twns.Common {
             if (dataForUnit) {
                 const gameConfig        = dataForUnit.gameConfig;
                 const attackUnitType    = dataForUnit.unitType;
-                const playerIndex       = Twns.CommonConstants.WarFirstPlayerIndex;
+                const playerIndex       = CommonConstants.WarFirstPlayerIndex;
                 let index               = 0;
                 for (const targetUnitType of gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
                     dataArray.push({
@@ -428,7 +441,7 @@ namespace Twns.Common {
 
         protected _onDataChanged(): void {
             const data              = this._getData();
-            this._labelName.text    = Lang.getUnitName(data.unitType) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelName.text    = Lang.getUnitName(data.unitType, data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _onTouchedImgChoose(): void {
@@ -441,6 +454,7 @@ namespace Twns.Common {
         index           : number;
         infoType        : UnitInfoType;
         unitTemplateCfg : CommonProto.Config.IUnitTemplateCfg;
+        gameConfig      : GameConfig;
     };
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
         private readonly _imgBg!            : TwnsUiImage.UiImage;
@@ -571,7 +585,7 @@ namespace Twns.Common {
             this._labelTitle.text       = Lang.getText(LangTextType.B0340);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = true;
-            this._labelExtraInfo.text   = Lang.getMoveTypeName(Helpers.getExisted(unit.moveType)) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelExtraInfo.text   = Lang.getMoveTypeName(Helpers.getExisted(unit.moveType)) ?? CommonConstants.ErrorTextForUndefined;
         }
         private _updateViewAsPrimaryWeaponAmmo(): void {
             const data                  = this._getData();
@@ -595,7 +609,7 @@ namespace Twns.Common {
                 groupExtra.visible = false;
             } else {
                 groupExtra.visible          = true;
-                this._labelExtraInfo.text   = Lang.getUnitName(Helpers.getExisted(unit.produceUnitType)) ?? Twns.CommonConstants.ErrorTextForUndefined;
+                this._labelExtraInfo.text   = Lang.getUnitName(Helpers.getExisted(unit.produceUnitType), data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateViewAsProductionCost(): void {
@@ -626,7 +640,7 @@ namespace Twns.Common {
             } else {
                 labelValue.text             = `0 / ${maxValue}`;
                 groupExtra.visible          = true;
-                this._labelExtraInfo.text   = Lang.getUnitCategoryName(Helpers.getExisted(unit.loadUnitCategory)) ?? Twns.CommonConstants.ErrorTextForUndefined;
+                this._labelExtraInfo.text   = Lang.getUnitCategoryName(Helpers.getExisted(unit.loadUnitCategory)) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
     }
@@ -723,7 +737,7 @@ namespace Twns.Common {
                 this._tileView.source           = Common.CommonModel.getCachedTileObjectImageSource({
                     version     : User.UserModel.getSelfSettingsTextureVersion(),
                     themeType   : Types.TileThemeType.Clear,
-                    skinId      : Twns.CommonConstants.UnitAndTileNeutralSkinId,
+                    skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                     objectType  : Config.ConfigManager.getTileObjectTypeByTileType(targetTileType),
                     isDark      : false,
                     shapeId     : 0,
