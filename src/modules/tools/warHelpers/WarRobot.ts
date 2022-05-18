@@ -21,7 +21,6 @@ namespace Twns.WarHelpers.WarRobot {
     import MovableArea          = Types.MovableArea;
     import MovePathNode         = Types.MovePathNode;
     import TileType             = Types.TileType;
-    import UnitType             = Types.UnitType;
     import UnitActionState      = Types.UnitActionState;
     import UnitAiMode           = Types.UnitAiMode;
     import CoSkillType          = Types.CoSkillType;
@@ -75,39 +74,6 @@ namespace Twns.WarHelpers.WarRobot {
         [TileType.Radar]        : 20, //50,
         [TileType.TempSeaport]  : 10,
         [TileType.TempAirport]  : 10,
-    };
-    const _PRODUCTION_CANDIDATES: { [tileType: number]: { [unitType: number]: number | null } } = {
-        [TileType.Factory]: {
-            [UnitType.Infantry]         : 500,
-            [UnitType.Mech]             : -200,
-            [UnitType.Bike]             : 520,
-            [UnitType.Recon]            : 100,
-            [UnitType.Flare]            : 100,
-            [UnitType.AntiAir]          : 300,
-            [UnitType.Tank]             : 650,
-            [UnitType.MediumTank]       : 600,
-            [UnitType.WarTank]          : 550,
-            [UnitType.Artillery]        : 400,
-            [UnitType.AntiTank]         : 350,
-            [UnitType.Rockets]          : 600,
-            [UnitType.Missiles]         : -1000,
-            [UnitType.Rig]              : null,
-        },
-        [TileType.Airport]: {
-            [UnitType.Fighter]          : 200,
-            [UnitType.Bomber]           : 200,
-            [UnitType.Duster]           : 400,
-            [UnitType.BattleCopter]     : 600,
-            [UnitType.TransportCopter]  : null,
-        },
-        [TileType.Seaport]: {
-            [UnitType.Battleship]       : 300,
-            [UnitType.Carrier]          : -9999,
-            [UnitType.Submarine]        : 300,
-            [UnitType.Cruiser]          : 300,
-            [UnitType.Lander]           : null,
-            [UnitType.Gunboat]          : 0,
-        },
     };
     // const _DISTANCE_SCORE_SCALERS: { [tileType: number]: number } = {
     //     [TileType.Airport]      : 1.2,
@@ -1430,11 +1396,7 @@ namespace Twns.WarHelpers.WarRobot {
     async function getScoreForActionUnitLoadCo(unit: BwUnit): Promise<number> {
         await Helpers.checkAndCallLater();
 
-        if (unit.getUnitType() !== Types.UnitType.Tank) {
-            return -9999;
-        } else {
-            return unit.getCurrentHp() * 100;
-        }
+        return (unit.getTemplateCfg().aiLoadCoScore ?? 0) + unit.getCurrentHp() * 100;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1447,23 +1409,16 @@ namespace Twns.WarHelpers.WarRobot {
     async function getScoreForActionPlayerProduceUnit({ commonParams, producingGridIndex, producingUnitType, idleFactoriesCount, getMinTurnsCountForAttack }: {
         commonParams                : CommonParams;
         producingGridIndex          : GridIndex;
-        producingUnitType           : UnitType;
+        producingUnitType           : number;
         idleFactoriesCount          : number;
         getMinTurnsCountForAttack   : (attackerUnit: BwUnit, targetGridIndex: GridIndex) => Promise<number | null>;
     }): Promise<number | null> {
         await Helpers.checkAndCallLater();
 
-        const war = commonParams.war;
-        if (((!_IS_NEED_VISIBILITY) || (!war.getFogMap().checkHasFogCurrently()))               &&
-            ((producingUnitType === UnitType.Flare) || (producingUnitType === UnitType.Recon))
-        ) {
-            return null;
-        }
-
+        const war       = commonParams.war;
         const tileMap   = war.getTileMap();
-        const tileType  = tileMap.getTile(producingGridIndex).getType();
-        let score       = _PRODUCTION_CANDIDATES[tileType][producingUnitType];
-        if (score == null) {
+        let score       = (war.getGameConfig().getUnitTemplateCfg(producingUnitType)?.aiProductionScore ?? [])[war.getFogMap().checkHasFogCurrently() ? 1 : 0];
+        if ((score == null) || (score <= -999999)) {
             return null;
         }
 
@@ -1483,14 +1438,6 @@ namespace Twns.WarHelpers.WarRobot {
         const restFund          = player.getFund() - productionCost;
         if (restFund < 0) {
             return null;
-        }
-
-        if (producingUnitType !== UnitType.Infantry) {
-            const unitCfg               = Helpers.getExisted(war.getGameConfig().getUnitTemplateCfg(UnitType.Infantry), ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_00);
-            const restFactoriesCount    = tileType === TileType.Factory ? idleFactoriesCount - 1 : idleFactoriesCount;
-            if (restFactoriesCount * unitCfg.productionCost > restFund) {
-                return null;
-            }
         }
 
         const producingTeamIndex            = producingUnit.getTeamIndex();
@@ -2163,7 +2110,7 @@ namespace Twns.WarHelpers.WarRobot {
 
         const warEventManager       = war.getWarEventManager();
         const bannedUnitTypeArray   = war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerIndex) ?? [];
-        let bestScoreAndUnitType    : { score: number, unitType: UnitType } | null = null;
+        let bestScoreAndUnitType    : { score: number, unitType: number } | null = null;
         for (const unitType of war.getGameConfig().getUnitTypesByCategory(unitCategory) ?? []) {
             if ((bannedUnitTypeArray.indexOf(unitType) >= 0)                                        ||
                 (warEventManager.checkOngoingPersistentActionBannedUnitType(playerIndex, unitType))

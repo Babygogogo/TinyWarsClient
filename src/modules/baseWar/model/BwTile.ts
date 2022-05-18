@@ -85,7 +85,7 @@ namespace Twns.BaseWar {
         public deserialize(data: ISerialTile, gameConfig: GameConfig): void {
             this._setGameConfig(gameConfig);
 
-            const gridIndex = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(data.gridIndex), ClientErrorCode.BwTile_Deserialize_00);
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex), ClientErrorCode.BwTile_Deserialize_00);
             const gridX     = gridIndex.x;
             const gridY     = gridIndex.y;
             if ((gridX < 0)                                                 ||
@@ -260,7 +260,7 @@ namespace Twns.BaseWar {
         public serializeForCreateSfw(): ISerialTile {
             const war       = this.getWar();
             const gridIndex = this.getGridIndex();
-            if (Twns.WarHelpers.WarVisibilityHelpers.checkIsTileVisibleToTeams(war, gridIndex, war.getPlayerManager().getWatcherTeamIndexesForSelf())) {
+            if (WarHelpers.WarVisibilityHelpers.checkIsTileVisibleToTeams(war, gridIndex, war.getPlayerManager().getWatcherTeamIndexesForSelf())) {
                 return this.serialize();
 
             } else {
@@ -845,7 +845,7 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for hide unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public checkCanHideUnit(unitType: Types.UnitType): boolean {
+        public checkCanHideUnit(unitType: number): boolean {
             const category = this.getCfgHideUnitCategory();
             return category == null
                 ? false

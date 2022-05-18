@@ -418,7 +418,7 @@ namespace Twns.Common {
             }
         }
 
-        private _resetUnitData(unitType: Types.UnitType): void {
+        private _resetUnitData(unitType: number): void {
             const loaderUnit    = this._getOpenData().loaderUnit;
             this._unitData      = {
                 gridIndex   : Helpers.deepClone(loaderUnit.getGridIndex()),

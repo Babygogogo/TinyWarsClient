@@ -227,7 +227,7 @@ namespace Twns.BaseWar {
 
             return true;
         }
-        public checkOngoingPersistentActionBannedUnitType(playerIndex: number, unitType: Types.UnitType): boolean {
+        public checkOngoingPersistentActionBannedUnitType(playerIndex: number, unitType: number): boolean {
             for (const actionId of this.getOngoingPersistentActionIdSet()) {
                 const action = this.getWarEventAction(actionId).WeaPersistentModifyPlayerAttribute;
                 if (action == null) {

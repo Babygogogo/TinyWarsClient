@@ -2,7 +2,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Config {
     import TileType             = Types.TileType;
-    import UnitType             = Types.UnitType;
     import WeatherType          = Types.WeatherType;
     import UnitCategory         = Types.UnitCategory;
     import TileCategory         = Types.TileCategory;
@@ -36,10 +35,10 @@ namespace Twns.Config {
         private readonly _tileCategoryCfgDict       : Map<TileCategory, TileCategoryCfg>;
         private readonly _unitCategoryCfgDict       : Map<UnitCategory, UnitCategoryCfg>;
         private readonly _tileTemplateCfgDict       : Map<TileType, TileTemplateCfg>;
-        private readonly _unitTemplateCfgDict       : Map<UnitType, UnitTemplateCfg>;
+        private readonly _unitTemplateCfgDict       : Map<number, UnitTemplateCfg>;
         private readonly _moveCostCfgDict           : Map<TileType, { [moveType: number]: MoveCostCfg }>;
-        private readonly _visionBonusCfgDict        : Map<UnitType, { [tileType: number]: VisionBonusCfg }>;
-        private readonly _buildableTileCfgDict      : Map<UnitType, { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } }>;
+        private readonly _visionBonusCfgDict        : Map<number, { [tileType: number]: VisionBonusCfg }>;
+        private readonly _buildableTileCfgDict      : Map<number, { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } }>;
         private readonly _playerRankCfgDict         : Map<number, PlayerRankCfg>;
         private readonly _coCategoryCfgDict         : Map<number, CoCategoryCfg>;
         private readonly _coBasicCfgDict            : Map<number, CoBasicCfg>;
@@ -47,9 +46,9 @@ namespace Twns.Config {
         private readonly _weatherCfgDict            : Map<WeatherType, WeatherCfg>;
         private readonly _weatherCategoryCfgDict    : Map<WeatherCategory, WeatherCategoryCfg>;
         private readonly _userAvatarCfgDict         : Map<number, UserAvatarCfg>;
-        private readonly _damageChartCfgDict        : Map<UnitType, { [armorType: number]: { [weaponType: number]: DamageChartCfg } }>;
+        private readonly _damageChartCfgDict        : Map<number, { [armorType: number]: { [weaponType: number]: DamageChartCfg } }>;
         private readonly _unitPromotionCfgDict      : Map<number, UnitPromotionCfg>;
-        private readonly _secondaryWeaponFlagDict   : Map<UnitType, boolean>;
+        private readonly _secondaryWeaponFlagDict   : Map<number, boolean>;
         private readonly _bgmSfxCfgDict             : Map<number, BgmSfxCfg>;
 
         private _availableCoArray   : CoBasicCfg[] | null = null;
@@ -116,10 +115,10 @@ namespace Twns.Config {
             return typeArray ? typeArray.indexOf(tileType) >= 0 : false;
         }
 
-        public getUnitTemplateCfg(unitType: UnitType): UnitTemplateCfg | null {
+        public getUnitTemplateCfg(unitType: number): UnitTemplateCfg | null {
             return this._unitTemplateCfgDict.get(unitType) ?? null;
         }
-        public checkIsValidUnitType(unitType: UnitType): boolean {
+        public checkIsValidUnitType(unitType: number): boolean {
             return this._unitTemplateCfgDict.has(unitType);
         }
         public getFirstUnitType(): number {
@@ -128,7 +127,7 @@ namespace Twns.Config {
         public getUnitImageSource({ version, skinId, unitType, isDark, isMoving, tickCount }: {
             version     : Types.UnitAndTileTextureVersion;
             skinId      : number;
-            unitType    : UnitType;
+            unitType    : number;
             isDark      : boolean;
             isMoving    : boolean;
             tickCount   : number;
@@ -148,15 +147,15 @@ namespace Twns.Config {
         public getUnitCategoryCfg(category: UnitCategory): UnitCategoryCfg | null {
             return this._unitCategoryCfgDict.get(category) ?? null;
         }
-        public getUnitTypesByCategory(category: UnitCategory): UnitType[] | null {
+        public getUnitTypesByCategory(category: UnitCategory): number[] | null {
             const cfg = this.getUnitCategoryCfg(category);
             return cfg ? cfg.unitTypes ?? [] : null;
         }
-        public checkIsUnitTypeInCategory(unitType: UnitType, category: UnitCategory): boolean {
+        public checkIsUnitTypeInCategory(unitType: number, category: UnitCategory): boolean {
             const typeArray = this.getUnitTypesByCategory(category);
             return typeArray ? typeArray.indexOf(unitType) >= 0 : false;
         }
-        public checkIsValidUnitTypeSubset(unitTypeArray: UnitType[]): boolean {
+        public checkIsValidUnitTypeSubset(unitTypeArray: number[]): boolean {
             if ((new Set(unitTypeArray)).size !== unitTypeArray.length) {
                 return false;
             }
@@ -174,10 +173,10 @@ namespace Twns.Config {
             return this._unitPromotionCfgDict.get(promotion)?.defenseBonus ?? 0;
         }
 
-        public getDamageChartCfgs(attackerType: UnitType): { [armorType: number]: { [weaponType: number]: DamageChartCfg } } | null {
+        public getDamageChartCfgs(attackerType: number): { [armorType: number]: { [weaponType: number]: DamageChartCfg } } | null {
             return this._damageChartCfgDict.get(attackerType) ?? null;
         }
-        public checkHasSecondaryWeapon(unitType: UnitType): boolean {
+        public checkHasSecondaryWeapon(unitType: number): boolean {
             return this._secondaryWeaponFlagDict.get(unitType) ?? false;
         }
 
@@ -207,11 +206,11 @@ namespace Twns.Config {
             return typeArray;
         }
 
-        public getBuildableTileCfgs(unitType: UnitType): { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } } | null {
+        public getBuildableTileCfgs(unitType: number): { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } } | null {
             return this._buildableTileCfgDict.get(unitType) ?? null;
         }
 
-        public getVisionBonusCfg(unitType: UnitType): { [tileType: number]: VisionBonusCfg } | null {
+        public getVisionBonusCfg(unitType: number): { [tileType: number]: VisionBonusCfg } | null {
             return this._visionBonusCfgDict.get(unitType) ?? null;
         }
 
@@ -447,15 +446,15 @@ namespace Twns.Config {
         }
         return dst;
     }
-    function _destructUnitTemplateCfg(data: UnitTemplateCfg[]): Map<UnitType, UnitTemplateCfg> {
-        const dst = new Map<UnitType, UnitTemplateCfg>();
+    function _destructUnitTemplateCfg(data: UnitTemplateCfg[]): Map<number, UnitTemplateCfg> {
+        const dst = new Map<number, UnitTemplateCfg>();
         for (const d of data) {
             dst.set(d.type, d);
         }
         return dst;
     }
-    function _destructDamageChartCfg(data: DamageChartCfg[]): Map<UnitType, { [armorType: number]: { [weaponType: number]: DamageChartCfg } }> {
-        const dst = new Map<UnitType, { [armorType: number]: { [weaponType: number]: DamageChartCfg } }>();
+    function _destructDamageChartCfg(data: DamageChartCfg[]): Map<number, { [armorType: number]: { [weaponType: number]: DamageChartCfg } }> {
+        const dst = new Map<number, { [armorType: number]: { [weaponType: number]: DamageChartCfg } }>();
         for (const d of data) {
             const attackerType                  = d.attackerType;
             const armorType                     = d.armorType;
@@ -483,8 +482,8 @@ namespace Twns.Config {
         }
         return dst;
     }
-    function _destructVisionBonusCfg(data: VisionBonusCfg[]): Map<UnitType, { [tileType: number]: VisionBonusCfg }> {
-        const dst = new Map<UnitType, { [tileType: number]: VisionBonusCfg }>();
+    function _destructVisionBonusCfg(data: VisionBonusCfg[]): Map<number, { [tileType: number]: VisionBonusCfg }> {
+        const dst = new Map<number, { [tileType: number]: VisionBonusCfg }>();
         for (const d of data) {
             const unitType      = d.unitType;
             const subData       = dst.get(unitType) ?? {};
@@ -493,8 +492,8 @@ namespace Twns.Config {
         }
         return dst;
     }
-    function _destructBuildableTileCfg(data: BuildableTileCfg[]): Map<UnitType, { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } }> {
-        const dst = new Map<UnitType, { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } }>();
+    function _destructBuildableTileCfg(data: BuildableTileCfg[]): Map<number, { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } }> {
+        const dst = new Map<number, { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } }>();
         for (const d of data) {
             const unitType                          = d.unitType;
             const srcBaseType                       = d.srcBaseType;
@@ -568,8 +567,8 @@ namespace Twns.Config {
         }
         return maxPromotion;
     }
-    function _getSecondaryWeaponFlags(chartCfgs: Map<UnitType, { [armorType: number]: { [weaponType: number]: DamageChartCfg } }>): Map<UnitType, boolean> {
-        const flags = new Map<UnitType, boolean>();
+    function _getSecondaryWeaponFlags(chartCfgs: Map<number, { [armorType: number]: { [weaponType: number]: DamageChartCfg } }>): Map<number, boolean> {
+        const flags = new Map<number, boolean>();
         for (const [attackerType, cfgs] of chartCfgs) {
             let hasWeapon = false;
             for (const armorType in cfgs) {

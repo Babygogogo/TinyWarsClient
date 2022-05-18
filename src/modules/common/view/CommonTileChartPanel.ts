@@ -22,7 +22,6 @@
 namespace Twns.Common {
     import NotifyType       = Notify.NotifyType;
     import LangTextType     = Lang.LangTextType;
-    import UnitType         = Types.UnitType;
     import TileType         = Types.TileType;
     import GameConfig       = Config.GameConfig;
     import TileInfoType     = Types.TileInfoType;
@@ -801,7 +800,7 @@ namespace Twns.Common {
     type DataForMoveCostRenderer = {
         index           : number;
         gameConfig      : GameConfig;
-        unitType        : UnitType;
+        unitType        : number;
         tileCfg         : CommonProto.Config.ITileTemplateCfg;
     };
     class MoveCostRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMoveCostRenderer> {
@@ -863,7 +862,7 @@ namespace Twns.Common {
         index               : number;
         targetTileType      : Types.TileType;
         playerIndex?        : number;
-        attackerUnitType    : UnitType;
+        attackerUnitType    : number;
     };
     class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDamageRenderer> {
         private readonly _group!                : eui.Group;

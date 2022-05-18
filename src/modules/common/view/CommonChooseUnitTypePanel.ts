@@ -14,13 +14,12 @@
 namespace Twns.Common {
     import LangTextType = Lang.LangTextType;
     import NotifyType   = Notify.NotifyType;
-    import UnitType     = Types.UnitType;
     import GameConfig   = Config.GameConfig;
 
     export type OpenDataForCommonChooseUnitTypePanel = {
         gameConfig              : GameConfig;
-        currentUnitTypeArray    : UnitType[];
-        callbackOnConfirm       : ((unitTypeArray: UnitType[]) => void) | null;
+        currentUnitTypeArray    : number[];
+        callbackOnConfirm       : ((unitTypeArray: number[]) => void) | null;
     };
     export class CommonChooseUnitTypePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseUnitTypePanel> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -120,7 +119,7 @@ namespace Twns.Common {
     }
 
     type DataForUnitTypeRenderer = {
-        unitType    : UnitType;
+        unitType    : number;
         gameConfig  : GameConfig;
     };
     class UnitTypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitTypeRenderer> {

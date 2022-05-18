@@ -139,10 +139,10 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         getPlayerRule(baseWarRule, playerIndex).canActivateCoSkill = value;
     }
 
-    export function getBannedUnitTypeArray(baseWarRule: BaseWarRule, playerIndex: number): Types.UnitType[] | null {
+    export function getBannedUnitTypeArray(baseWarRule: BaseWarRule, playerIndex: number): number[] | null {
         return getPlayerRule(baseWarRule, playerIndex).bannedUnitTypeArray ?? null;
     }
-    export function setBannedUnitTypeArray(baseWarRule: BaseWarRule, playerIndex: number, unitTypeArray: Types.UnitType[]): void {
+    export function setBannedUnitTypeArray(baseWarRule: BaseWarRule, playerIndex: number, unitTypeArray: number[]): void {
         const playerRule        = getPlayerRule(baseWarRule, playerIndex);
         const bannedUnitTypeSet = new Set(unitTypeArray);
         if (playerRule.bannedUnitTypeArray == null) {

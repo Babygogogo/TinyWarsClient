@@ -28,7 +28,6 @@ namespace Twns.BaseWar {
     import BwTile           = BaseWar.BwTile;
     import LangTextType     = Lang.LangTextType;
     import NotifyType       = Notify.NotifyType;
-    import UnitType         = Types.UnitType;
     import GameConfig       = Config.GameConfig;
     import TileInfoType     = Types.TileInfoType;
 
@@ -1577,7 +1576,7 @@ namespace Twns.BaseWar {
     type DataForMoveCostRenderer = {
         index           : number;
         gameConfig      : GameConfig;
-        unitType        : UnitType;
+        unitType        : number;
         tileCfg         : CommonProto.Config.ITileTemplateCfg;
         playerIndex     : number;
     };
@@ -1640,7 +1639,7 @@ namespace Twns.BaseWar {
         index               : number;
         targetTileType      : Types.TileType;
         playerIndex?        : number;
-        attackerUnitType    : UnitType;
+        attackerUnitType    : number;
     };
     class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDamageRenderer> {
         private readonly _group!                : eui.Group;

@@ -29,7 +29,6 @@
 namespace Twns.BaseWar {
     import NotifyType               = Notify.NotifyType;
     import LangTextType             = Lang.LangTextType;
-    import UnitType                 = Types.UnitType;
     import TileType                 = Types.TileType;
     import GameConfig               = Config.GameConfig;
 
@@ -1064,9 +1063,9 @@ namespace Twns.BaseWar {
     type DataForDamageRenderer = {
         gameConfig      : GameConfig;
         index           : number;
-        attackUnitType  : UnitType;
+        attackUnitType  : number;
         playerIndex?    : number;
-        targetUnitType? : UnitType;
+        targetUnitType? : number;
         targetTileType? : TileType;
     };
     class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDamageRenderer> {

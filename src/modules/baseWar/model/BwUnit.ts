@@ -20,7 +20,6 @@ namespace Twns.BaseWar {
     import TileType             = Types.TileType;
     import TileObjectType       = Types.TileObjectType;
     import TileBaseType         = Types.TileBaseType;
-    import UnitType             = Types.UnitType;
     import UnitAiMode           = Types.UnitAiMode;
     import MoveType             = Types.MoveType;
     import GridIndex            = Types.GridIndex;
@@ -69,7 +68,7 @@ namespace Twns.BaseWar {
             }
 
             const playerIndex       = Helpers.getExisted(unitData.playerIndex, ClientErrorCode.BwUnit_Init_00);
-            const unitType          = Helpers.getExisted(unitData.unitType, ClientErrorCode.BwUnit_Init_01) as UnitType;
+            const unitType          = Helpers.getExisted(unitData.unitType, ClientErrorCode.BwUnit_Init_01);
             const unitId            = Helpers.getExisted(unitData.unitId, ClientErrorCode.BwUnit_Init_02);
             const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex), ClientErrorCode.BwUnit_Init_03);
             const unitTemplateCfg   = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType), ClientErrorCode.BwUnit_Init_04);
@@ -187,12 +186,12 @@ namespace Twns.BaseWar {
         private _setTemplateCfg(cfg: UnitTemplateCfg): void {
             this._templateCfg = cfg;
         }
-        private _getTemplateCfg(): UnitTemplateCfg {
+        public getTemplateCfg(): UnitTemplateCfg {
             return Helpers.getExisted(this._templateCfg);
         }
 
-        public getUnitType(): UnitType {
-            return Helpers.getExisted(this._getTemplateCfg().type);
+        public getUnitType(): number {
+            return Helpers.getExisted(this.getTemplateCfg().type);
         }
         private _getDamageChartCfg(): { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } } {
             return Helpers.getExisted(this.getGameConfig().getDamageChartCfgs(this.getUnitType()));
@@ -274,7 +273,7 @@ namespace Twns.BaseWar {
         // Functions for hp and armor.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxHp(): number {
-            return this._getTemplateCfg().maxHp;
+            return this.getTemplateCfg().maxHp;
         }
         public getNormalizedMaxHp(): number {
             return WarHelpers.WarCommonHelpers.getNormalizedHp(this.getMaxHp());
@@ -302,11 +301,11 @@ namespace Twns.BaseWar {
         }
 
         public getArmorType(): ArmorType {
-            return Helpers.getExisted(this._getTemplateCfg()?.armorType);
+            return Helpers.getExisted(this.getTemplateCfg()?.armorType);
         }
 
         public checkIsArmorAffectByLuck(): boolean {
-            return this._getTemplateCfg()?.isAffectedByLuck === 1;
+            return this.getTemplateCfg()?.isAffectedByLuck === 1;
         }
 
         public updateByRepairData(data: CommonProto.Structure.IDataForModifyUnit): void {
@@ -356,7 +355,7 @@ namespace Twns.BaseWar {
         }
 
         public getPrimaryWeaponMaxAmmo(): number | null {
-            return this._getTemplateCfg().primaryWeaponMaxAmmo ?? null;
+            return this.getTemplateCfg().primaryWeaponMaxAmmo ?? null;
         }
 
         public getPrimaryWeaponCurrentAmmo(): number | null {
@@ -727,10 +726,10 @@ namespace Twns.BaseWar {
         }
 
         public getMinAttackRange(): number | null {
-            return this._getTemplateCfg().minAttackRange ?? null;
+            return this.getTemplateCfg().minAttackRange ?? null;
         }
         public getCfgMaxAttackRange(): number | null {
-            return this._getTemplateCfg().maxAttackRange ?? null;
+            return this.getTemplateCfg().maxAttackRange ?? null;
         }
         public getFinalMaxAttackRange(): number | null {
             const cfgRange = this.getCfgMaxAttackRange();
@@ -772,10 +771,10 @@ namespace Twns.BaseWar {
         }
 
         public checkCanAttackAfterMove(): boolean {
-            return this._getTemplateCfg()?.canAttackAfterMove === 1;
+            return this.getTemplateCfg()?.canAttackAfterMove === 1;
         }
         public checkCanAttackDivingUnits(): boolean {
-            return this._getTemplateCfg()?.canAttackDivingUnits === 1;
+            return this.getTemplateCfg()?.canAttackDivingUnits === 1;
         }
 
         public checkCanAttackTargetAfterMovePath(movePath: GridIndex[], targetGridIndex: GridIndex): boolean {
@@ -852,7 +851,7 @@ namespace Twns.BaseWar {
         }
 
         public checkIsCapturer(): boolean {
-            return this._getTemplateCfg()?.canCaptureTile === 1;
+            return this.getTemplateCfg()?.canCaptureTile === 1;
         }
         public checkCanCaptureTile(tile: BwTile): boolean {
             return (this.checkIsCapturer())
@@ -916,11 +915,11 @@ namespace Twns.BaseWar {
         }
 
         public checkIsDivingByDefault(): boolean {
-            return Config.ConfigManager.checkIsUnitDivingByDefaultWithTemplateCfg(this._getTemplateCfg());
+            return Config.ConfigManager.checkIsUnitDivingByDefaultWithTemplateCfg(this.getTemplateCfg());
         }
 
         public checkIsDiver(): boolean {
-            return !!this._getTemplateCfg().diveCfgs;
+            return !!this.getTemplateCfg().diveCfgs;
         }
         public checkCanDive(): boolean {
             return (this.checkIsDiver()) && (!this.getIsDiving());
@@ -944,7 +943,7 @@ namespace Twns.BaseWar {
         }
 
         public getMaxFuel(): number {
-            return this._getTemplateCfg().maxFuel;
+            return this.getTemplateCfg().maxFuel;
         }
 
         public getUsedFuel(): number {
@@ -955,7 +954,7 @@ namespace Twns.BaseWar {
             return this._getCfgFuelConsumptionPerTurn() + this._getFuelConsumptionModifierByCo();
         }
         private _getCfgFuelConsumptionPerTurn(): number {
-            const templateCfg = this._getTemplateCfg();
+            const templateCfg = this.getTemplateCfg();
             if (!this.getIsDiving()) {
                 return templateCfg.fuelConsumptionPerTurn;
             } else {
@@ -993,7 +992,7 @@ namespace Twns.BaseWar {
         }
 
         public checkIsDestroyedOnOutOfFuel(): boolean {
-            return this._getTemplateCfg()?.isDestroyedOnOutOfFuel === 1;
+            return this.getTemplateCfg()?.isDestroyedOnOutOfFuel === 1;
         }
 
         public checkIsFuelInShort(): boolean {
@@ -1008,15 +1007,15 @@ namespace Twns.BaseWar {
         // Functions for flare.
         ////////////////////////////////////////////////////////////////////////////////
         public getFlareRadius(): number | null {
-            return this._getTemplateCfg().flareRadius ?? null;
+            return this.getTemplateCfg().flareRadius ?? null;
         }
 
         public getFlareMaxRange(): number | null {
-            return this._getTemplateCfg().flareMaxRange ?? null;
+            return this.getTemplateCfg().flareMaxRange ?? null;
         }
 
         public getFlareMaxAmmo(): number | null {
-            return this._getTemplateCfg().flareMaxAmmo ?? null;
+            return this.getTemplateCfg().flareMaxAmmo ?? null;
         }
 
         public getFlareCurrentAmmo(): number | null {
@@ -1092,8 +1091,8 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public getProduceUnitType(): UnitType | null {
-            return this._getTemplateCfg().produceUnitType ?? null;
+        public getProduceUnitType(): number | null {
+            return this.getTemplateCfg().produceUnitType ?? null;
         }
 
         public getProduceUnitCost(): number {
@@ -1108,7 +1107,7 @@ namespace Twns.BaseWar {
         }
 
         public getMaxProduceMaterial(): number | null {
-            return this._getTemplateCfg().maxProduceMaterial ?? null;
+            return this.getTemplateCfg().maxProduceMaterial ?? null;
         }
 
         public getCurrentProduceMaterial(): number | null {
@@ -1144,7 +1143,7 @@ namespace Twns.BaseWar {
         // Functions for move.
         ////////////////////////////////////////////////////////////////////////////////
         public getCfgMoveRange(): number {
-            return this._getTemplateCfg().moveRange;
+            return this.getTemplateCfg().moveRange;
         }
         public getFinalMoveRange(): number {
             const currentFuel = this.getCurrentFuel();
@@ -1241,14 +1240,14 @@ namespace Twns.BaseWar {
         }
 
         public getMoveType(): MoveType {
-            return this._getTemplateCfg().moveType;
+            return this.getTemplateCfg().moveType;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce self.
         ////////////////////////////////////////////////////////////////////////////////
         public getProductionCfgCost(): number {
-            return this._getTemplateCfg().productionCost;
+            return this.getTemplateCfg().productionCost;
         }
         public getProductionFinalCost(): number {
             return Math.floor(this.getProductionCfgCost() * this.getPlayer().getUnitCostModifier(this.getGridIndex(), this.getHasLoadedCo(), this.getUnitType()));
@@ -1293,7 +1292,7 @@ namespace Twns.BaseWar {
         // Functions for launch silo.
         ////////////////////////////////////////////////////////////////////////////////
         public checkCanLaunchSiloOnTile(tile: BwTile): boolean {
-            return (this._getTemplateCfg()?.canLaunchSilo === 1) && (tile.getType() === TileType.Silo);
+            return (this.getTemplateCfg()?.canLaunchSilo === 1) && (tile.getType() === TileType.Silo);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1340,7 +1339,7 @@ namespace Twns.BaseWar {
         }
 
         public getMaxBuildMaterial(): number | null {
-            return this._getTemplateCfg().maxBuildMaterial ?? null;
+            return this.getTemplateCfg().maxBuildMaterial ?? null;
         }
 
         public getCurrentBuildMaterial(): number | null {
@@ -1376,7 +1375,7 @@ namespace Twns.BaseWar {
         // Functions for load unit.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxLoadUnitsCount(): number | null {
-            return this._getTemplateCfg().maxLoadUnitsCount ?? null;
+            return this.getTemplateCfg().maxLoadUnitsCount ?? null;
         }
         public getLoadedUnitsCount(): number {
             return this.getLoadedUnits().length;
@@ -1386,7 +1385,7 @@ namespace Twns.BaseWar {
         }
 
         public getLoadUnitCategory(): Types.UnitCategory | null {
-            return this._getTemplateCfg().loadUnitCategory ?? null;
+            return this.getTemplateCfg().loadUnitCategory ?? null;
         }
 
         public checkHasLoadUnitId(id: number): boolean {
@@ -1399,7 +1398,7 @@ namespace Twns.BaseWar {
         }
 
         public checkCanLoadUnit(unit: BwUnit): boolean {
-            const cfg                   = this._getTemplateCfg();
+            const cfg                   = this.getTemplateCfg();
             const gameConfig            = this.getGameConfig();
             const maxLoadUnitsCount     = this.getMaxLoadUnitsCount();
             const loadableTileCategory  = cfg.loadableTileCategory;
@@ -1414,21 +1413,21 @@ namespace Twns.BaseWar {
         }
 
         public checkCanDropLoadedUnit(tileType: TileType): boolean {
-            const cfg                   = this._getTemplateCfg();
+            const cfg                   = this.getTemplateCfg();
             const loadableTileCategory  = cfg.loadableTileCategory;
             return (cfg.canDropLoadedUnits === 1)
                 && (loadableTileCategory != null)
                 && (this.getGameConfig().checkIsTileTypeInCategory(tileType, loadableTileCategory));
         }
         public getCfgCanDropLoadedUnit(): boolean {
-            return this._getTemplateCfg().loadableTileCategory != null;
+            return this.getTemplateCfg().loadableTileCategory != null;
         }
 
         public checkCanLaunchLoadedUnit(): boolean {
-            return this._getTemplateCfg()?.canLaunchLoadedUnits === 1;
+            return this.getTemplateCfg()?.canLaunchLoadedUnits === 1;
         }
         public checkCanSupplyLoadedUnit(): boolean {
-            return this._getTemplateCfg()?.canSupplyLoadedUnits === 1;
+            return this.getTemplateCfg()?.canSupplyLoadedUnits === 1;
         }
         private _checkCanRepairLoadedUnit(unit: BwUnit): boolean {
             return (this.getNormalizedRepairHpForLoadedUnit() != null)
@@ -1436,7 +1435,7 @@ namespace Twns.BaseWar {
                 && ((!unit.checkIsFullHp()) || (unit.checkCanBeSupplied()));
         }
         public getNormalizedRepairHpForLoadedUnit(): number | null {
-            return this._getTemplateCfg().repairAmountForLoadedUnits ?? null;
+            return this.getTemplateCfg().repairAmountForLoadedUnits ?? null;
         }
 
         public getNormalizedRepairAmountAndCostModifier(): { amountModifier: number, costMultiplierPct: number } {
@@ -1512,7 +1511,7 @@ namespace Twns.BaseWar {
         // Functions for supply unit.
         ////////////////////////////////////////////////////////////////////////////////
         public checkIsAdjacentUnitSupplier(): boolean {
-            return this._getTemplateCfg()?.canSupplyAdjacentUnits === 1;
+            return this.getTemplateCfg()?.canSupplyAdjacentUnits === 1;
         }
         public checkCanSupplyAdjacentUnit(unit: BwUnit): boolean {
             const thisGridIndex = this.getGridIndex();
@@ -1588,7 +1587,7 @@ namespace Twns.BaseWar {
         // Functions for vision.
         ////////////////////////////////////////////////////////////////////////////////
         public getCfgVisionRange(): number {
-            return this._getTemplateCfg().visionRange;
+            return this.getTemplateCfg().visionRange;
         }
         public getVisionRangeBonusOnTile(tileType: TileType): number {
             const cfgs  = this._getVisionBonusCfg();

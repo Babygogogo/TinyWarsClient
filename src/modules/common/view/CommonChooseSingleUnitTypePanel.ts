@@ -18,15 +18,14 @@
 namespace Twns.Common {
     import NotifyType           = Notify.NotifyType;
     import LangTextType         = Lang.LangTextType;
-    import UnitType             = Types.UnitType;
     import GameConfig           = Config.GameConfig;
 
     export type OpenDataForCommonChooseSingleUnitTypePanel = {
         gameConfig      : GameConfig;
-        currentUnitType : UnitType;
-        unitTypeArray   : UnitType[];
+        currentUnitType : number;
+        unitTypeArray   : number[];
         playerIndex     : number;
-        callback        : (unitType: UnitType) => void;
+        callback        : (unitType: number) => void;
     };
     export class CommonChooseSingleUnitTypePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseSingleUnitTypePanel> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
@@ -117,10 +116,10 @@ namespace Twns.Common {
 
     type DataForTypeRenderer = {
         gameConfig      : GameConfig;
-        currentUnitType : UnitType;
-        newUnitType     : UnitType;
+        currentUnitType : number;
+        newUnitType     : number;
         playerIndex     : number;
-        callback        : (unitType: UnitType) => void;
+        callback        : (unitType: number) => void;
     };
     class TypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTypeRenderer> {
         private readonly _conUnitView!  : eui.Group;

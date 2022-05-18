@@ -28,7 +28,6 @@
 namespace Twns.BaseWar {
     import NotifyType           = Notify.NotifyType;
     import LangTextType         = Lang.LangTextType;
-    import UnitType             = Types.UnitType;
     import GridIndex            = Types.GridIndex;
     import BwWar                = BaseWar.BwWar;
 
@@ -200,7 +199,7 @@ namespace Twns.BaseWar {
     }
 
     type DataForUnitRenderer = {
-        unitType                : UnitType;
+        unitType                : number;
         unit                    : BaseWar.BwUnit;
         minCost                 : number;
         cfgCost                 : number;

@@ -7,7 +7,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common.CommonModel {
-    import UnitType                 = Types.UnitType;
     import TileThemeType            = Types.TileThemeType;
     import TileBaseType             = Types.TileBaseType;
     import TileDecoratorType        = Types.TileDecoratorType;
@@ -21,7 +20,7 @@ namespace Twns.Common.CommonModel {
     };
 
     let _unitAndTileTexturePrefix       = `v01_`;
-    const _unitImageSourceDict          = new Map<TextureVersion, Map<boolean, Map<boolean, Map<number, Map<UnitType, FrameCfg>>>>>();
+    const _unitImageSourceDict          = new Map<TextureVersion, Map<boolean, Map<boolean, Map<number, Map<number, FrameCfg>>>>>();
     const _tileBaseImageSourceDict      = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<TileBaseType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
     const _tileDecoratorImageSourceDict = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<TileDecoratorType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
     const _tileObjectImageSourceDict    = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<TileObjectType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
@@ -60,7 +59,7 @@ namespace Twns.Common.CommonModel {
         gameConfig  : Config.GameConfig;
         version     : TextureVersion;
         skinId      : number;
-        unitType    : UnitType;
+        unitType    : number;
         isDark      : boolean;
         isMoving    : boolean;
         tickCount   : number;

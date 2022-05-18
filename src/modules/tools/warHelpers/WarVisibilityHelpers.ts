@@ -16,7 +16,7 @@ namespace Twns.WarHelpers.WarVisibilityHelpers {
         { war, gridIndex, unitType, isDiving, unitPlayerIndex, observerTeamIndex }: {
             war                 : BaseWar.BwWar;
             gridIndex           : GridIndex;
-            unitType            : Types.UnitType;
+            unitType            : number;
             isDiving            : boolean;
             unitPlayerIndex     : number;
             observerTeamIndex   : number;
@@ -35,7 +35,7 @@ namespace Twns.WarHelpers.WarVisibilityHelpers {
         { war, gridIndex, unitType, isDiving, unitPlayerIndex, observerTeamIndexes }: {
             war                 : BaseWar.BwWar;
             gridIndex           : GridIndex;
-            unitType            : Types.UnitType;
+            unitType            : number;
             isDiving            : boolean;
             unitPlayerIndex     : number;
             observerTeamIndexes : Set<number>;

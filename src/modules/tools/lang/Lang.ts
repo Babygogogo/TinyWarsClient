@@ -96,7 +96,7 @@ namespace Twns.Lang {
         }
     }
 
-    export function getUnitName(unitType: Types.UnitType, gameConfig: Config.GameConfig, languageType?: LanguageType): string | null {
+    export function getUnitName(unitType: number, gameConfig: Config.GameConfig, languageType?: LanguageType): string | null {
         const textType = gameConfig.getUnitTemplateCfg(unitType)?.lang;
         return textType == null ? null : getText(textType, languageType);
     }

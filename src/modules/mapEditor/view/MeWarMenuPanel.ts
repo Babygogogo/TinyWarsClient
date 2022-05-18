@@ -14,7 +14,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import Twns.Notify               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -44,12 +44,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import DataForDrawUnit          = Twns.MapEditor.DataForDrawUnit;
-    import NotifyType               = Twns.Notify.NotifyType;
-    import UnitType                 = Twns.Types.UnitType;
-    import TileBaseType             = Twns.Types.TileBaseType;
-    import TileObjectType           = Twns.Types.TileObjectType;
-    import LangTextType             = Twns.Lang.LangTextType;
+    import DataForDrawUnit          = MapEditor.DataForDrawUnit;
+    import NotifyType               = Notify.NotifyType;
+    import TileBaseType             = Types.TileBaseType;
+    import TileObjectType           = Types.TileObjectType;
+    import LangTextType             = Lang.LangTextType;
 
     // eslint-disable-next-line no-shadow
     enum TwnsMeWarMenuType {
@@ -115,7 +114,7 @@ namespace Twns.MapEditor {
         }
 
         private _getWar(): MeWar {
-            return Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
+            return Helpers.getExisted(MapEditor.MeModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,13 +122,13 @@ namespace Twns.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgSpmCreateSfw.IS;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
-                    Twns.FlowManager.gotoSinglePlayerWar({
-                        slotIndex       : Twns.Helpers.getExisted(data.slotIndex),
-                        slotExtraData   : Twns.Helpers.getExisted(data.extraData),
-                        warData         : Twns.Helpers.getExisted(data.warData),
+                    FlowManager.gotoSinglePlayerWar({
+                        slotIndex       : Helpers.getExisted(data.slotIndex),
+                        slotExtraData   : Helpers.getExisted(data.extraData),
+                        warData         : Helpers.getExisted(data.warData),
                     });
                 },
             });
@@ -137,7 +136,7 @@ namespace Twns.MapEditor {
 
         private _onNotifyMsgUserSetMapEditorAutoSaveTime(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgUserSetMapEditorAutoSaveTime.IS;
-            Twns.FloatText.show(Lang.getText(data.time == null ? LangTextType.A0248 : LangTextType.A0247));
+            FloatText.show(Lang.getText(data.time == null ? LangTextType.A0248 : LangTextType.A0247));
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -164,37 +163,37 @@ namespace Twns.MapEditor {
                 this._menuType = TwnsMeWarMenuType.Main;
                 this._updateListCommand();
             } else {
-                throw Twns.Helpers.newError(`McwWarMenuPanel._onTouchedBtnBack() invalid this._menuType: ${type}`);
+                throw Helpers.newError(`McwWarMenuPanel._onTouchedBtnBack() invalid this._menuType: ${type}`);
             }
         }
 
         private _onTouchedBtnModifyMapName(): void {
             const war = this._getWar();
             if (!war.getIsReviewingMap()) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeModifyMapNamePanel, void 0);
+                PanelHelpers.open(PanelHelpers.PanelDict.MeModifyMapNamePanel, void 0);
             }
         }
 
         private _onTouchedBtnMapDesc(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeModifyMapDescPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.MeModifyMapDescPanel, {
                 war : this._getWar(),
             });
         }
 
         private _onTouchedBtnModifyMapSize(): void {
             if (!this._getWar().getIsReviewingMap()) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeResizePanel, void 0);
+                PanelHelpers.open(PanelHelpers.PanelDict.MeResizePanel, void 0);
             }
         }
 
         private _onTouchedBtnModifyMapDesigner(): void {
             const war = this._getWar();
             if (!war.getIsReviewingMap()) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonInputPanel, {
                     title           : Lang.getText(LangTextType.B0163),
                     tips            : null,
                     currentValue    : war.getMapDesignerName(),
-                    maxChars        : Twns.CommonConstants.MapMaxDesignerLength,
+                    maxChars        : CommonConstants.MapMaxDesignerLength,
                     charRestrict    : null,
                     callback        : (panel) => {
                         war.setMapDesignerName(panel.getInputText());
@@ -279,7 +278,7 @@ namespace Twns.MapEditor {
 
                 if (tileObjectType == TileObjectType.Empty) {
                     if (dictForTileBases.has(tileBaseType)) {
-                        ++Twns.Helpers.getExisted(dictForTileBases.get(tileBaseType)).count;
+                        ++Helpers.getExisted(dictForTileBases.get(tileBaseType)).count;
                     } else {
                         dictForTileBases.set(tileBaseType, {
                             baseType    : tileBaseType,
@@ -291,7 +290,7 @@ namespace Twns.MapEditor {
                     }
                 } else {
                     if (dictForTileObjects.has(tileObjectType)) {
-                        ++Twns.Helpers.getExisted(dictForTileObjects.get(tileObjectType)).count;
+                        ++Helpers.getExisted(dictForTileObjects.get(tileObjectType)).count;
                     } else {
                         dictForTileObjects.set(tileObjectType, {
                             baseType    : null,
@@ -321,17 +320,17 @@ namespace Twns.MapEditor {
         }
 
         private _updateListUnit(): void {
-            const dict = new Map<UnitType, Map<number, DataForUnitRenderer>>();
+            const dict = new Map<number, Map<number, DataForUnitRenderer>>();
             for (const unit of this._getWar().getUnitMap().getAllUnits()) {
                 const unitType = unit.getUnitType();
                 if (!dict.has(unitType)) {
                     dict.set(unitType, new Map());
                 }
 
-                const subDict       = Twns.Helpers.getExisted(dict.get(unitType));
+                const subDict       = Helpers.getExisted(dict.get(unitType));
                 const playerIndex   = unit.getPlayerIndex();
                 if (subDict.has(playerIndex)) {
-                    ++Twns.Helpers.getExisted(subDict.get(playerIndex)).count;
+                    ++Helpers.getExisted(subDict.get(playerIndex)).count;
                 } else {
                     subDict.set(playerIndex, {
                         count           : 1,
@@ -372,12 +371,12 @@ namespace Twns.MapEditor {
             } else if (type === TwnsMeWarMenuType.Advanced) {
                 return this._createDataForAdvancedMenu();
             } else {
-                throw Twns.Helpers.newError(`Invalid menuType: ${type}`);
+                throw Helpers.newError(`Invalid menuType: ${type}`);
             }
         }
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
-            return Twns.Helpers.getNonNullElements([
+            return Helpers.getNonNullElements([
                 this._createCommandClear(),
                 this._createCommandResize(),
                 this._createCommandSimulation(),
@@ -390,7 +389,7 @@ namespace Twns.MapEditor {
         }
 
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
-            return Twns.Helpers.getNonNullElements([
+            return Helpers.getNonNullElements([
                 this._createCommandAutoSaveMap(),
                 this._createCommandImport(),
                 this._createCommandImportFromClipboard(),
@@ -432,10 +431,10 @@ namespace Twns.MapEditor {
                 return {
                     name    : Lang.getText(LangTextType.B0650),
                     callback: () => {
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                             title   : Lang.getText(LangTextType.B0650),
                             content : war.getIsMapModified() ? Lang.getText(LangTextType.A0143) : Lang.getText(LangTextType.A0225),
-                            callback: () => Twns.FlowManager.gotoMyWarListPanel(war.getWarType()),
+                            callback: () => FlowManager.gotoMyWarListPanel(war.getWarType()),
                         });
                     },
                 };
@@ -446,10 +445,10 @@ namespace Twns.MapEditor {
             return {
                 name    : Lang.getText(LangTextType.B0054),
                 callback: () => {
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                         title   : Lang.getText(LangTextType.B0054),
                         content : this._getWar().getIsMapModified() ? Lang.getText(LangTextType.A0143) : Lang.getText(LangTextType.A0025),
-                        callback: () => Twns.FlowManager.gotoLobby(),
+                        callback: () => FlowManager.gotoLobby(),
                     });
                 },
             };
@@ -462,10 +461,10 @@ namespace Twns.MapEditor {
                 return {
                     name    : Lang.getText(LangTextType.B0709),
                     callback: () => {
-                        const currValue = Twns.User.UserModel.getSelfMapEditorAutoSaveTime();
-                        const minValue  = Twns.CommonConstants.MapEditorAutoSaveMinTime;
-                        const maxValue  = Twns.CommonConstants.MapEditorAutoSaveMaxTime;
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
+                        const currValue = User.UserModel.getSelfMapEditorAutoSaveTime();
+                        const minValue  = CommonConstants.MapEditorAutoSaveMinTime;
+                        const maxValue  = CommonConstants.MapEditorAutoSaveMaxTime;
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0709),
                             currentValue    : `${currValue ?? ``}`,
                             maxChars        : 4,
@@ -476,15 +475,15 @@ namespace Twns.MapEditor {
                                 const text  = panel.getInputText();
                                 if (!text) {
                                     if (currValue != null) {
-                                        Twns.User.UserProxy.reqSetMapEditorAutoSaveTime(null);
+                                        User.UserProxy.reqSetMapEditorAutoSaveTime(null);
                                     }
                                 } else {
                                     const value = Number(text);
                                     if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                        Twns.FloatText.show(Lang.getText(LangTextType.A0098));
+                                        FloatText.show(Lang.getText(LangTextType.A0098));
                                     } else {
                                         if (currValue !== value) {
-                                            Twns.User.UserProxy.reqSetMapEditorAutoSaveTime(value);
+                                            User.UserProxy.reqSetMapEditorAutoSaveTime(value);
                                         }
                                     }
                                 }
@@ -503,23 +502,23 @@ namespace Twns.MapEditor {
                     const mapRawData    = war.serializeForMap();
                     const errorCode     = await MapEditor.MeHelpers.getErrorCodeForMapRawData(mapRawData);
                     if (errorCode) {
-                        Twns.FloatText.show(Lang.getErrorText(errorCode));
+                        FloatText.show(Lang.getErrorText(errorCode));
                         return;
                     }
 
                     const cb = () => {
                         MapEditor.MeSimModel.resetData(mapRawData, war.serializeForCreateSfw());
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeSimSettingsPanel, void 0);
+                        PanelHelpers.open(PanelHelpers.PanelDict.MeSimSettingsPanel, void 0);
                         this.close();
                     };
 
                     if (!war.getIsMapModified()) {
                         cb();
                     } else {
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content         : Lang.getText(LangTextType.A0142),
                             callback        : () => {
-                                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeConfirmSaveMapPanel, void 0);
+                                PanelHelpers.open(PanelHelpers.PanelDict.MeConfirmSaveMapPanel, void 0);
                             },
                             callbackOnCancel: () => {
                                 cb();
@@ -538,23 +537,23 @@ namespace Twns.MapEditor {
                     const mapRawData    = war.serializeForMap();
                     const errorCode     = await MapEditor.MeHelpers.getErrorCodeForMapRawData(mapRawData);
                     if (errorCode) {
-                        Twns.FloatText.show(Lang.getErrorText(errorCode));
+                        FloatText.show(Lang.getErrorText(errorCode));
                         return;
                     }
 
                     const cb = () => {
                         MapEditor.MeMfwModel.resetData(mapRawData, war.serializeForCreateMfr());
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeMfwSettingsPanel, void 0);
+                        PanelHelpers.open(PanelHelpers.PanelDict.MeMfwSettingsPanel, void 0);
                         this.close();
                     };
 
                     if (!war.getIsMapModified()) {
                         cb();
                     } else {
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content         : Lang.getText(LangTextType.A0142),
                             callback        : () => {
-                                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeConfirmSaveMapPanel, void 0);
+                                PanelHelpers.open(PanelHelpers.PanelDict.MeConfirmSaveMapPanel, void 0);
                             },
                             callbackOnCancel: () => {
                                 cb();
@@ -571,7 +570,7 @@ namespace Twns.MapEditor {
                 return {
                     name    : Lang.getText(LangTextType.B0391),
                     callback: () => {
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeClearPanel, void 0);
+                        PanelHelpers.open(PanelHelpers.PanelDict.MeClearPanel, void 0);
                     },
                 };
             }
@@ -583,7 +582,7 @@ namespace Twns.MapEditor {
                 return {
                     name    : Lang.getText(LangTextType.B0290),
                     callback: () => {
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeResizePanel, void 0);
+                        PanelHelpers.open(PanelHelpers.PanelDict.MeResizePanel, void 0);
                     },
                 };
             }
@@ -596,7 +595,7 @@ namespace Twns.MapEditor {
                     name    : Lang.getText(LangTextType.B0313),
                     callback: () => {
                         this.close();
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeImportPanel, void 0);
+                        PanelHelpers.open(PanelHelpers.PanelDict.MeImportPanel, void 0);
                     },
                 };
             }
@@ -610,11 +609,11 @@ namespace Twns.MapEditor {
                     name    : Lang.getText(LangTextType.B0681),
                     callback: () => {
                         if (navigator?.clipboard?.readText == null) {
-                            Twns.FloatText.show(Lang.getText(LangTextType.A0275));
+                            FloatText.show(Lang.getText(LangTextType.A0275));
                             return;
                         }
 
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0237),
                             callback: async () => {
                                 war.stopRunning();
@@ -653,13 +652,13 @@ namespace Twns.MapEditor {
                 name    : Lang.getText(LangTextType.B0680),
                 callback: () => {
                     if (navigator?.clipboard?.writeText == null) {
-                        Twns.FloatText.show(Lang.getText(LangTextType.A0275));
+                        FloatText.show(Lang.getText(LangTextType.A0275));
                         return;
                     }
 
                     navigator.clipboard.writeText(JSON.stringify(this._getWar().serializeForMap()));
 
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0235));
+                    FloatText.show(Lang.getText(LangTextType.A0235));
                 },
             };
         }
@@ -692,7 +691,7 @@ namespace Twns.MapEditor {
         baseType    : TileBaseType | null;
         objectType  : TileObjectType | null;
         count       : number;
-        tileType    : Twns.Types.TileType;
+        tileType    : Types.TileType;
         playerIndex : number;
     };
 
@@ -701,7 +700,7 @@ namespace Twns.MapEditor {
         private readonly _labelNum!     : TwnsUiLabel.UiLabel;
         private readonly _conTileView!  : eui.Group;
 
-        private _tileView   = new Twns.MapEditor.MeTileSimpleView();
+        private _tileView   = new MapEditor.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -771,7 +770,7 @@ namespace Twns.MapEditor {
             const dataForDrawUnit   = data.dataForDrawUnit;
             this._labelNum.text    = "" + data.count;
 
-            const war   = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
+            const war   = Helpers.getExisted(MapEditor.MeModel.getWar());
             const unit  = new BaseWar.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
@@ -788,8 +787,8 @@ namespace Twns.MapEditor {
 
         public onItemTapEvent(): void {
             const data = this._getData();
-            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.MeChooseUnitPanel);
-            Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawUnit(data.dataForDrawUnit);
+            PanelHelpers.close(PanelHelpers.PanelDict.MeChooseUnitPanel);
+            Helpers.getExisted(MapEditor.MeModel.getWar()).getDrawer().setModeDrawUnit(data.dataForDrawUnit);
         }
     }
 }

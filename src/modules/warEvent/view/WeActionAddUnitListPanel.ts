@@ -80,7 +80,7 @@ namespace Twns.WarEvent {
     }
 
     type DataForTypeRenderer = {
-        newUnitType     : Types.UnitType;
+        newUnitType     : number;
         dataForAddUnit  : IDataForAddUnit;
         gameConfig      : Config.GameConfig;
     };
@@ -122,7 +122,7 @@ namespace Twns.WarEvent {
         }
     }
 
-    function resetUnitType(data: IDataForAddUnit, unitType: Types.UnitType): void {
+    function resetUnitType(data: IDataForAddUnit, unitType: number): void {
         const unitData = Helpers.getExisted(data.unitData);
         if (unitData.unitType !== unitType) {
             unitData.unitType                   = unitType;

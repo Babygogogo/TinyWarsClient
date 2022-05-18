@@ -803,6 +803,12 @@ declare namespace CommonProto {
             /** UnitTemplateCfg moveSfx */
             moveSfx?: (number|null);
 
+            /** UnitTemplateCfg aiProductionScore */
+            aiProductionScore?: (number[]|null);
+
+            /** UnitTemplateCfg aiLoadCoScore */
+            aiLoadCoScore?: (number|null);
+
             /** UnitTemplateCfg animParams */
             animParams?: (number[]|null);
         }
@@ -920,6 +926,12 @@ declare namespace CommonProto {
 
             /** UnitTemplateCfg moveSfx. */
             public moveSfx: number;
+
+            /** UnitTemplateCfg aiProductionScore. */
+            public aiProductionScore: number[];
+
+            /** UnitTemplateCfg aiLoadCoScore. */
+            public aiLoadCoScore: number;
 
             /** UnitTemplateCfg animParams. */
             public animParams: number[];

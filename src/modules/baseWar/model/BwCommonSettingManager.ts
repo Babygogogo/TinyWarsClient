@@ -105,7 +105,7 @@ namespace Twns.BaseWar {
         public getSettingsLuckUpperLimit(playerIndex: number): number {
             return WarHelpers.WarRuleHelpers.getLuckUpperLimit(this.getInstanceWarRule(), playerIndex);
         }
-        public getSettingsBannedUnitTypeArray(playerIndex: number): Types.UnitType[] | null {
+        public getSettingsBannedUnitTypeArray(playerIndex: number): number[] | null {
             return WarHelpers.WarRuleHelpers.getBannedUnitTypeArray(this.getInstanceWarRule(), playerIndex);
         }
         public getSettingsCanActivateCoSkill(playerIndex: number): boolean {

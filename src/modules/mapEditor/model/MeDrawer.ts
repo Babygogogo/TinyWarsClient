@@ -21,7 +21,6 @@ namespace Twns.MapEditor {
     import DrawerMode           = Types.MapEditorDrawerMode;
     import GridIndex            = Types.GridIndex;
     import SymmetryType         = Types.SymmetryType;
-    import UnitType             = Types.UnitType;
     import TileBaseType         = Types.TileBaseType;
     import TileDecoratorType    = Types.TileDecoratorType;
     import TileObjectType       = Types.TileObjectType;
@@ -40,7 +39,7 @@ namespace Twns.MapEditor {
         shapeId         : number;
     };
     export type DataForDrawUnit = {
-        unitType    : UnitType;
+        unitType    : number;
         playerIndex : number;
     };
     export type DataForAddTileToLocation = {

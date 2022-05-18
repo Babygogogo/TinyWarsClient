@@ -26,7 +26,7 @@ namespace Twns.Types {
         lang                : number;
     }
     export interface UnitTemplateCfg extends CommonProto.Config.IUnitTemplateCfg {
-        type                    : UnitType;
+        type                    : number;
         maxHp                   : number;
         armorType               : ArmorType;
         isAffectedByLuck        : number;
@@ -40,7 +40,7 @@ namespace Twns.Types {
         animParams              : number[];
     }
     export interface DamageChartCfg extends CommonProto.Config.IDamageChartCfg {
-        attackerType: UnitType;
+        attackerType: number;
         armorType   : ArmorType;
         weaponType  : WeaponType;
     }
@@ -54,12 +54,12 @@ namespace Twns.Types {
         defenseBonus: number;
     }
     export interface VisionBonusCfg extends CommonProto.Config.IVisionBonusCfg {
-        unitType    : UnitType;
+        unitType    : number;
         tileType    : TileType;
         visionBonus : number;
     }
     export interface BuildableTileCfg extends CommonProto.Config.IBuildableTileCfg {
-        unitType        : UnitType;
+        unitType        : number;
         srcBaseType     : TileBaseType;
         srcObjectType   : TileObjectType;
         dstBaseType     : TileBaseType;
@@ -402,17 +402,6 @@ namespace Twns.Types {
         MistOnRiver,    /* 32 */        MistOnBeach,    /* 33 */        Crystal,            /* 34 */        CustomCrystal,  /* 35 */
         CannonUp,       /* 36 */        CannonDown,     /* 37 */        CannonLeft,         /* 38 */        CannonRight,    /* 39 */
         CustomCannon,   /* 40 */        LaserTurret,    /* 41 */        CustomLaserTurret,  /* 42 */        PipeJoint,      /* 43 */
-    }
-
-    // eslint-disable-next-line no-shadow
-    export enum UnitType {
-        Infantry,        /* 0 */            Mech,            /* 1 */            Bike,            /* 2 */            Recon,           /* 3 */
-        Flare,           /* 4 */            AntiAir,         /* 5 */            Tank,            /* 6 */            MediumTank,      /* 7 */
-        WarTank,         /* 8 */            Artillery,       /* 9 */            AntiTank,        /* 10 */           Rockets,         /* 11 */
-        Missiles,        /* 12 */           Rig,             /* 13 */           Fighter,         /* 14 */           Bomber,          /* 15 */
-        Duster,          /* 16 */           BattleCopter,    /* 17 */           TransportCopter, /* 18 */           Seaplane,        /* 19 */
-        Battleship,      /* 20 */           Carrier,         /* 21 */           Submarine,       /* 22 */           Cruiser,         /* 23 */
-        Lander,          /* 24 */           Gunboat,         /* 25 */
     }
 
     // eslint-disable-next-line no-shadow

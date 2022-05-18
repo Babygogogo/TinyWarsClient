@@ -2258,7 +2258,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         if (!data) {
             return null;
         } else {
-            const unitCountDict = new Map<Types.UnitType, number>();
+            const unitCountDict = new Map<number, number>();
             for (const unitData of data.unitArray || []) {
                 const unitType = Helpers.getExisted(unitData.unitData?.unitType);
                 unitCountDict.set(unitType, (unitCountDict.get(unitType) || 0) + 1);

@@ -4,14 +4,14 @@
 // import ProtoTypes   from "../../tools/proto/ProtoTypes";
 // import SpwModel     from "./SpwModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SinglePlayerWar.SpwLocalProxy {
-    import GridIndex    = Twns.Types.GridIndex;
-    import UnitType     = Twns.Types.UnitType;
+    import GridIndex    = Types.GridIndex;
     import IMovePath    = CommonProto.Structure.IMovePath;
-    import BwWar        = Twns.BaseWar.BwWar;
+    import BwWar        = BaseWar.BwWar;
 
     export function reqPlayerDeleteUnit(war: BwWar, gridIndex: GridIndex): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerDeleteUnit   : {
                 gridIndex,
@@ -20,7 +20,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
     }
 
     export function reqPlayerEndTurn(war: BwWar): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerEndTurn  : {},
         });
@@ -29,10 +29,10 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
     export function reqPlayerProduceUnit({ war, gridIndex, unitType, unitHp }: {
         war         : BwWar;
         gridIndex   : GridIndex;
-        unitType    : UnitType;
+        unitType    : number;
         unitHp      : number;
     }): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerProduceUnit  : {
                 gridIndex,
@@ -42,8 +42,8 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
         });
     }
 
-    export function reqPlayerUseCoSkill(war: BwWar, skillType: Twns.Types.CoSkillType): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+    export function reqPlayerUseCoSkill(war: BwWar, skillType: Types.CoSkillType): void {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerUseCoSkill   : {
                 skillType,
@@ -52,7 +52,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
     }
 
     export function reqPlayerVoteForDraw(war: BwWar, isAgree: boolean): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerVoteForDraw  : {
                 isAgree,
@@ -61,7 +61,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
     }
 
     export function reqPlayerSurrender(war: BwWar): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerSurrender    : {
             },
@@ -74,7 +74,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
         launchUnitId    : number | null;
         targetGridIndex : GridIndex;
     }): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitAttackUnit : {
                 path,
@@ -90,7 +90,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
         launchUnitId    : number | null;
         targetGridIndex : GridIndex;
     }): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitAttackTile : {
                 path,
@@ -101,7 +101,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
     }
 
     export function reqUnitBeLoaded(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitBeLoaded   : {
                 path,
@@ -111,7 +111,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
     }
 
     export function reqUnitBuildTile(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitBuildTile  : {
                 path,
@@ -121,7 +121,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
     }
 
     export function reqUnitCaptureTile(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitCaptureTile: {
                 path,
@@ -131,7 +131,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
     }
 
     export function reqUnitDive(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitDive   : {
                 path,
@@ -144,9 +144,9 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
         war             : BwWar;
         path            : IMovePath;
         launchUnitId    : number | null;
-        dropDestinations: Twns.Types.DropDestination[];
+        dropDestinations: Types.DropDestination[];
     }): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitDropUnit   : {
                 path,
@@ -157,7 +157,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
     }
 
     export function reqUnitJoin(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitJoinUnit   : {
                 path,
@@ -172,7 +172,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
         launchUnitId    : number | null;
         targetGridIndex : GridIndex;
     }): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitLaunchFlare    : {
                 path,
@@ -188,7 +188,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
         launchUnitId    : number | null;
         targetGridIndex : GridIndex;
     }): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitLaunchSilo : {
                 path,
@@ -199,7 +199,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
     }
 
     export function reqUnitLoadCo(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitLoadCo : {
                 path,
@@ -209,7 +209,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
     }
 
     export function reqUnitProduceUnit(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitProduceUnit    : {
                 path,
@@ -219,7 +219,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
     }
 
     export function reqUnitSupply(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitSupplyUnit : {
                 path,
@@ -229,7 +229,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
     }
 
     export function reqUnitSurface(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitSurface    : {
                 path,
@@ -240,11 +240,11 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
 
     export function reqUnitUseCoSkill({ war, skillType, path, launchUnitId }: {
         war             : BwWar;
-        skillType       : Twns.Types.CoSkillType;
+        skillType       : Types.CoSkillType;
         path            : IMovePath;
         launchUnitId    : number | null;
     }): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitUseCoSkill : {
                 skillType,
@@ -255,7 +255,7 @@ namespace Twns.SinglePlayerWar.SpwLocalProxy {
     }
 
     export function reqUnitWait(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        Twns.SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitWait   : {
                 path,

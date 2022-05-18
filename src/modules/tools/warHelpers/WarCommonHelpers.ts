@@ -21,7 +21,6 @@ namespace Twns.WarHelpers.WarCommonHelpers {
     import AttackableArea   = Types.AttackableArea;
     import MapSize          = Types.MapSize;
     import MovePathNode     = Types.MovePathNode;
-    import UnitType         = Types.UnitType;
     import TileType         = Types.TileType;
     import WarType          = Types.WarType;
     import Visibility       = Types.Visibility;
@@ -1400,7 +1399,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             return ClientErrorCode.UnitDataValidation01;
         }
 
-        const unitType = unitData.unitType as UnitType;
+        const unitType = unitData.unitType;
         if (unitType == null) {
             return ClientErrorCode.UnitDataValidation02;
         }

@@ -352,7 +352,7 @@ namespace Twns.BaseWar {
         }
 
         public checkIsInCoZone(targetGridIndex: GridIndex, coGridIndexOnMap: GridIndex[]): boolean {
-            return Twns.GridIndexHelpers.getMinDistance(targetGridIndex, coGridIndexOnMap) <= this.getCoZoneRadius();
+            return GridIndexHelpers.getMinDistance(targetGridIndex, coGridIndexOnMap) <= this.getCoZoneRadius();
         }
 
         public getCoUsingSkillType(): Types.CoSkillType {
@@ -468,7 +468,7 @@ namespace Twns.BaseWar {
             }
         }
 
-        public getUnitCostModifier(gridIndex: GridIndex, hasLoadedCo: boolean, unitType: Types.UnitType): number {
+        public getUnitCostModifier(gridIndex: GridIndex, hasLoadedCo: boolean, unitType: number): number {
             if (this.getCoId() === CommonConstants.CoEmptyId) {
                 return 1;
             }

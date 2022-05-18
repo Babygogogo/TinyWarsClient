@@ -14,7 +14,6 @@ namespace Twns.Common {
     import NotifyType   = Notify.NotifyType;
     import GameConfig   = Config.GameConfig;
     import CoSkillType  = Types.CoSkillType;
-    import UnitType     = Types.UnitType;
     import TileType     = Types.TileType;
     import WeaponType   = Types.WeaponType;
     import WeatherType  = Types.WeatherType;
@@ -22,7 +21,7 @@ namespace Twns.Common {
     type PlayerData = {
         coId            : number;
         coSkillType     : CoSkillType | null;
-        unitType        : UnitType;
+        unitType        : number;
         unitHp          : number;
         unitWeaponType  : WeaponType | null;
         unitPromotion   : number;
@@ -710,18 +709,19 @@ namespace Twns.Common {
     }
 
     async function createDefaultCalculatorData(): Promise<CalculatorData> {
+        const gameConfig = await Config.ConfigManager.getLatestGameConfig();
         return {
-            gameConfig      : await Config.ConfigManager.getLatestGameConfig(),
+            gameConfig,
             weatherType     : WeatherType.Clear,
-            attackerData    : createDefaultPlayerData(),
-            defenderData    : createDefaultPlayerData(),
+            attackerData    : createDefaultPlayerData(gameConfig),
+            defenderData    : createDefaultPlayerData(gameConfig),
         };
     }
-    function createDefaultPlayerData(): PlayerData {
+    function createDefaultPlayerData(gameConfig: GameConfig): PlayerData {
         return {
             coId            : CommonConstants.CoEmptyId,
             coSkillType     : CoSkillType.Passive,
-            unitType        : UnitType.Tank,
+            unitType        : gameConfig.getFirstUnitType(),
             unitHp          : CommonConstants.UnitMaxHp,
             unitWeaponType  : WeaponType.Primary,
             unitPromotion   : 0,
@@ -761,7 +761,7 @@ namespace Twns.Common {
             return null;
         }
     }
-    function getNextUnitWeaponType(gameConfig: GameConfig, unitType: UnitType, weaponType: WeaponType | null): WeaponType | null {
+    function getNextUnitWeaponType(gameConfig: GameConfig, unitType: number, weaponType: WeaponType | null): WeaponType | null {
         const cfg = gameConfig.getUnitTemplateCfg(unitType);
         if (weaponType == null) {
             if (cfg?.primaryWeaponMaxAmmo != null) {
@@ -781,7 +781,7 @@ namespace Twns.Common {
             return null;
         }
     }
-    function createUnitViewData(unitType: UnitType, playerIndex: number, gameConfig: GameConfig): Types.WarMapUnitViewData {
+    function createUnitViewData(unitType: number, playerIndex: number, gameConfig: GameConfig): Types.WarMapUnitViewData {
         return {
             gridIndex   : { x: 0, y: 0 },
             unitType,
@@ -876,8 +876,8 @@ namespace Twns.Common {
 
     function getCfgDamage({ gameConfig, attackerUnitType, defenderUnitType, weaponType }: {
         gameConfig          : GameConfig;
-        attackerUnitType    : UnitType;
-        defenderUnitType    : UnitType;
+        attackerUnitType    : number;
+        defenderUnitType    : number;
         weaponType          : WeaponType | null;
     }): Types.Undefinable<number> {
         if (weaponType == null) {
@@ -917,7 +917,7 @@ namespace Twns.Common {
             upper   : attackerData.upperLuck + limitFromCo.upper,
         };
     }
-    function getTileDefenseAmountForUnit(gameConfig: GameConfig, unitType: UnitType, unitHp: number, tileType: TileType): number {
+    function getTileDefenseAmountForUnit(gameConfig: GameConfig, unitType: number, unitHp: number, tileType: TileType): number {
         const tileTemplateCfg = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(tileType));
         return gameConfig.checkIsUnitTypeInCategory(unitType, tileTemplateCfg.defenseUnitCategory)
             ? tileTemplateCfg.defenseAmount * WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp) / WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp)

@@ -407,7 +407,7 @@ namespace Twns.SoundManager {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // 长音效，同时只能有一个在播放
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function playLongSfxForMoveUnit(unitType: Types.UnitType, gameConfig: Config.GameConfig): void {
+    export function playLongSfxForMoveUnit(unitType: number, gameConfig: Config.GameConfig): void {
         if (_timeoutIdForStopLongSfx != null) {
             egret.clearTimeout(_timeoutIdForStopLongSfx);
             _timeoutIdForStopLongSfx = null;

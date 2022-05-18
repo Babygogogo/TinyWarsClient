@@ -2,11 +2,12 @@
 // import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
 // import Types                    from "../../tools/helpers/Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import GridIndex        = Twns.Types.GridIndex;
-    import State            = Twns.Types.ActionPlannerState;
+    import GridIndex        = Types.GridIndex;
+    import State            = Types.ActionPlannerState;
 
-    export class MeActionPlanner extends Twns.BaseWar.BwActionPlanner {
+    export class MeActionPlanner extends BaseWar.BwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting common state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +31,7 @@ namespace Twns.MapEditor {
             // nothing to do
         }
 
-        public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: Twns.Types.UnitType, unitHp: number): void {
+        public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: number, unitHp: number): void {
             // nothing to do
         }
 
@@ -102,40 +103,40 @@ namespace Twns.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getActionUnitBeLoaded(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitJoin(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitJoin(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitUseCoSuperPower(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitUseCoPower(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitLoadCo(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitLoadCo(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitCapture(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitCapture(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitDive(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitDive(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitSurface(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitSurface(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitBuildTile(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitBuildTile(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitSupply(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitSupply(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitProduceUnit(): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitWait(hasOtherAction: boolean): Twns.BaseWar.DataForUnitAction[] {
+        protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitAction[] {
             return [];
         }
     }
