@@ -387,7 +387,7 @@ namespace Twns.Common {
                     });
                     ++index;
                 }
-                for (const targetTileType of gameConfig.getTileTypesByCategory(Types.TileCategory.DestroyableForDamageChart) ?? []) {
+                for (const targetTileType of gameConfig.getTileTypeArrayForDamageChart()) {
                     dataArray.push({
                         index,
                         gameConfig,
@@ -584,7 +584,7 @@ namespace Twns.Common {
             this._labelTitle.text       = Lang.getText(LangTextType.B0340);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = true;
-            this._labelExtraInfo.text   = Lang.getMoveTypeName(Helpers.getExisted(unit.moveType)) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelExtraInfo.text   = Lang.getMoveTypeName(Helpers.getExisted(unit.moveType), data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
         }
         private _updateViewAsPrimaryWeaponAmmo(): void {
             const data                  = this._getData();
@@ -639,7 +639,7 @@ namespace Twns.Common {
             } else {
                 labelValue.text             = `0 / ${maxValue}`;
                 groupExtra.visible          = true;
-                this._labelExtraInfo.text   = Lang.getUnitCategoryName(Helpers.getExisted(unit.loadUnitCategory)) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelExtraInfo.text   = Lang.getUnitCategoryName(Helpers.getExisted(unit.loadUnitCategory), data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
     }

@@ -155,42 +155,14 @@ namespace Twns.Lang {
         }
     }
 
-    export function getMoveTypeName(t: Types.MoveType): string | null {
-        switch (t) {
-            case Types.MoveType.Air         : return getText(LangTextType.B0117);
-            case Types.MoveType.Infantry    : return getText(LangTextType.B0112);
-            case Types.MoveType.Mech        : return getText(LangTextType.B0113);
-            case Types.MoveType.Ship        : return getText(LangTextType.B0118);
-            case Types.MoveType.Tank        : return getText(LangTextType.B0114);
-            case Types.MoveType.TireA       : return getText(LangTextType.B0115);
-            case Types.MoveType.TireB       : return getText(LangTextType.B0116);
-            case Types.MoveType.Transport   : return getText(LangTextType.B0119);
-            default                         : return null;
-        }
+    export function getMoveTypeName(moveType: number, gameConfig: Config.GameConfig): string | null {
+        const langTextType = gameConfig.getMoveTypeCfg(moveType)?.lang;
+        return langTextType != null ? Lang.getText(langTextType) : null;
     }
 
-    export function getUnitCategoryName(t: Types.UnitCategory): string | null {
-        switch (t) {
-            case Types.UnitCategory.None                : return getText(LangTextType.B0001);
-            case Types.UnitCategory.All                 : return getText(LangTextType.B0120);
-            case Types.UnitCategory.Ground              : return getText(LangTextType.B0121);
-            case Types.UnitCategory.Naval               : return getText(LangTextType.B0122);
-            case Types.UnitCategory.Air                 : return getText(LangTextType.B0123);
-            case Types.UnitCategory.GroundOrNaval       : return getText(LangTextType.B0124);
-            case Types.UnitCategory.GroundOrAir         : return getText(LangTextType.B0125);
-            case Types.UnitCategory.Direct              : return getText(LangTextType.B0126);
-            case Types.UnitCategory.Indirect            : return getText(LangTextType.B0127);
-            case Types.UnitCategory.Foot                : return getText(LangTextType.B0128);
-            case Types.UnitCategory.Infantry            : return getText(LangTextType.B0129);
-            case Types.UnitCategory.Vehicle             : return getText(LangTextType.B0130);
-            case Types.UnitCategory.DirectMachine       : return getText(LangTextType.B0131);
-            case Types.UnitCategory.Transport           : return getText(LangTextType.B0132);
-            case Types.UnitCategory.LargeNaval          : return getText(LangTextType.B0133);
-            case Types.UnitCategory.Copter              : return getText(LangTextType.B0134);
-            case Types.UnitCategory.Tank                : return getText(LangTextType.B0135);
-            case Types.UnitCategory.AirExceptSeaplane   : return getText(LangTextType.B0136);
-            default                                     : return null;
-        }
+    export function getUnitCategoryName(unitCategory: Types.UnitCategory, gameConfig: Config.GameConfig): string | null {
+        const langTextType = gameConfig.getUnitCategoryCfg(unitCategory)?.lang;
+        return langTextType != null ? Lang.getText(langTextType) : null;
     }
 
     export function getWarTypeName(type: Types.WarType): string | null {

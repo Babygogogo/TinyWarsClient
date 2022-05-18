@@ -5374,6 +5374,112 @@ namespace Twns.Lang {
             `Mr. Bear (Penny)`,
             `Mr. Bear (Penny)`,
         ],
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [LangTextType.MoveType0000]: [
+            `步兵`,
+            `Inf`,
+        ],
+        [LangTextType.MoveType0001]: [
+            `反坦克兵`,
+            `Mech`,
+        ],
+        [LangTextType.MoveType0002]: [
+            `履带`,
+            `Tank`,
+        ],
+        [LangTextType.MoveType0003]: [
+            `轮胎A`,
+            `TireA`,
+        ],
+        [LangTextType.MoveType0004]: [
+            `轮胎B`,
+            `TireB`,
+        ],
+        [LangTextType.MoveType0005]: [
+            `飞行`,
+            `Air`,
+        ],
+        [LangTextType.MoveType0006]: [
+            `航行`,
+            `Ship`,
+        ],
+        [LangTextType.MoveType0007]: [
+            `运输`,
+            `Trans`,
+        ],
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [LangTextType.UnitCategory0000]: [
+            `无`,
+            `None`,
+        ],
+        [LangTextType.UnitCategory0001]: [
+            `全部`,
+            `All`,
+        ],
+        [LangTextType.UnitCategory0002]: [
+            `陆军`,
+            `Ground`,
+        ],
+        [LangTextType.UnitCategory0003]: [
+            `海军`,
+            `Naval`,
+        ],
+        [LangTextType.UnitCategory0004]: [
+            `空军`,
+            `Air`,
+        ],
+        [LangTextType.UnitCategory0005]: [
+            `陆军&海军`,
+            `Ground & Naval`,
+        ],
+        [LangTextType.UnitCategory0006]: [
+            `陆军&空军`,
+            `Ground & Air`,
+        ],
+        [LangTextType.UnitCategory0007]: [
+            `近战`,
+            `Direct`,
+        ],
+        [LangTextType.UnitCategory0008]: [
+            `远程`,
+            `Indirect`,
+        ],
+        [LangTextType.UnitCategory0009]: [
+            `步行`,
+            `Foot`,
+        ],
+        [LangTextType.UnitCategory0010]: [
+            `步兵系`,
+            `Inf`,
+        ],
+        [LangTextType.UnitCategory0011]: [
+            `车辆系`,
+            `Vehicle`,
+        ],
+        [LangTextType.UnitCategory0012]: [
+            `近战机械`,
+            `DirectMachine`,
+        ],
+        [LangTextType.UnitCategory0013]: [
+            `运输系`,
+            `Transport`,
+        ],
+        [LangTextType.UnitCategory0014]: [
+            `大型船只`,
+            `LargeNaval`,
+        ],
+        [LangTextType.UnitCategory0015]: [
+            `直升机`,
+            `Copter`,
+        ],
+        [LangTextType.UnitCategory0016]: [
+            `坦克`,
+            `Tank`,
+        ],
+        [LangTextType.UnitCategory0017]: [
+            `空军除舰载机`,
+            `AirExceptSeaplane`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Format strings.

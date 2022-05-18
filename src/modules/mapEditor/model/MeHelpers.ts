@@ -610,20 +610,22 @@ namespace Twns.MapEditor.MeHelpers {
             return true;
         }
 
-        const tile2         = tileMap.getTile(gridIndex2);
-        const objectType2   = tile2.getObjectType();
-        if ((objectType2 === TileObjectType.Bridge) || (objectType2 === TileObjectType.Road)) {
-            return true;
-        }
+        // const tile2         = tileMap.getTile(gridIndex2);
+        // const objectType2   = tile2.getObjectType();
+        // if ((objectType2 === TileObjectType.Bridge) || (objectType2 === TileObjectType.Road)) {
+        //     return true;
+        // }
 
-        const baseType1 = tileMap.getTile(gridIndex1).getBaseType();
-        if ((baseType1 === TileBaseType.River) || (baseType1 === TileBaseType.Sea)) {
-            if (tile2.getMoveCostByMoveType(Types.MoveType.Tank) != null) {
-                return true;
-            }
-        }
+        // const baseType1 = tileMap.getTile(gridIndex1).getBaseType();
+        // if ((baseType1 === TileBaseType.River) || (baseType1 === TileBaseType.Sea)) {
+        //     if (tile2.getMoveCostByMoveType(Types.MoveType.Tank) != null) {
+        //         return true;
+        //     }
+        // }
 
-        return false;
+        // return false;
+
+        return !!tileMap.getTile(gridIndex2).getTemplateCfg().canConnectRoad;
     }
 
     export function getAutoPlasmaShapeId(tileMap: BaseWar.BwTileMap, gridIndex: GridIndex): number {

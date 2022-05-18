@@ -409,7 +409,7 @@ namespace Twns.BaseWar {
                 });
                 ++index;
             }
-            for (const targetTileType of gameConfig.getTileTypesByCategory(Types.TileCategory.DestroyableForDamageChart) ?? []) {
+            for (const targetTileType of gameConfig.getTileTypeArrayForDamageChart()) {
                 dataList.push({
                     gameConfig,
                     index,
@@ -673,7 +673,7 @@ namespace Twns.BaseWar {
             this._labelTitle.text       = Lang.getText(LangTextType.B0340);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = true;
-            this._labelExtraInfo.text   = Lang.getMoveTypeName(unit.getMoveType()) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelExtraInfo.text   = Lang.getMoveTypeName(unit.getMoveType(), unit.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined;
             this._btnModify.visible     = false;
         }
         private _updateViewAsPrimaryWeaponAmmo(): void {
@@ -746,7 +746,7 @@ namespace Twns.BaseWar {
                 const canShowValue          = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getWatcherTeamIndexesForSelf().has(unit.getTeamIndex()));
                 labelValue.text             = `${canShowValue ? unit.getLoadedUnitsCount() : `??`} / ${maxValue}`;
                 groupExtra.visible          = true;
-                this._labelExtraInfo.text   = Lang.getUnitCategoryName(Helpers.getExisted(unit.getLoadUnitCategory())) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelExtraInfo.text   = Lang.getUnitCategoryName(Helpers.getExisted(unit.getLoadUnitCategory()), war.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateViewAsAiMode(): void {

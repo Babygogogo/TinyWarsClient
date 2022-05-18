@@ -183,7 +183,7 @@ namespace Twns.WarEvent {
     }
 
     function generateDescForTileTypes(gameConfig: Config.GameConfig): string {
-        return gameConfig.getTileTypesByCategory(Types.TileCategory.All)?.map(tileType => `${tileType}: ${Lang.getTileName(tileType, gameConfig)}`).join(`\n`) ?? ``;
+        return gameConfig.getAllTileTypeArray().map(tileType => `${tileType}: ${Lang.getTileName(tileType, gameConfig)}`).join(`\n`) ?? ``;
     }
 }
 

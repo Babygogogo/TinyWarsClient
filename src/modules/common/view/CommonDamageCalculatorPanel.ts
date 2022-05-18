@@ -305,12 +305,11 @@ namespace Twns.Common {
             this._handleTouchedConTileView(this._getCalculatorData().defenderData, 2);
         }
         private _handleTouchedConTileView(playerData: PlayerData, playerIndex: number): void {
-            const gameConfig            = this._getCalculatorData().gameConfig;
-            const destroyableTileTypes  = gameConfig.getTileTypesByCategory(Types.TileCategory.Destroyable) ?? [];
+            const gameConfig = this._getCalculatorData().gameConfig;
             PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleTileTypePanel, {
                 gameConfig,
                 currentTileType : Types.TileType.Plain,
-                tileTypeArray   : gameConfig.getTileTypesByCategory(Types.TileCategory.All)?.filter(v => destroyableTileTypes.indexOf(v) < 0) ?? [],
+                tileTypeArray   : gameConfig.getTileTypeArrayForUnattackable(),
                 playerIndex,
                 callback        : tileType => {
                     playerData.tileType = tileType;
@@ -954,9 +953,6 @@ namespace Twns.Common {
         const attackerTileType          = attackerData.tileType;
         const attackerFund              = attackerData.fund;
         const attackerPromotion         = attackerData.unitPromotion;
-        const attackerTileCountDict     = new Map<Types.TileCategory, number>([
-            [Types.TileCategory.City, attackerData.citiesCount],
-        ]);
 
         let modifier = 0;
         for (const skillId of getCoSkillIdArray(gameConfig, attackerCoId, attackerCoSkillType)) {
@@ -995,10 +991,9 @@ namespace Twns.Common {
                 if ((cfg)                                                           &&
                     (gameConfig.checkIsUnitTypeInCategory(attackerUnitType, cfg[1]))
                 ) {
-                    const tileCategory      : Types.TileCategory = cfg[2];
+                    // TODO: 这里做了简化处理（因为只有kindle有这个技能），以后如果有类似的新技能，就需要完整实现地形计数逻辑
                     const modifierPerTile   = cfg[3];
-                    const currentTileCount  = attackerTileCountDict.get(tileCategory) ?? 0;
-                    modifier                += modifierPerTile * currentTileCount;
+                    modifier                += modifierPerTile * attackerData.citiesCount;
                 }
             }
 

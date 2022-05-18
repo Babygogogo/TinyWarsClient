@@ -4,7 +4,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
@@ -12,10 +12,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common {
-    import LangTextType = Twns.Lang.LangTextType;
-    import NotifyType   = Twns.Notify.NotifyType;
-    import WeatherType  = Twns.Types.WeatherType;
-    import GameConfig   = Twns.Config.GameConfig;
+    import LangTextType = Lang.LangTextType;
+    import NotifyType   = Notify.NotifyType;
+    import WeatherType  = Types.WeatherType;
+    import GameConfig   = Config.GameConfig;
 
     export type OpenDataForCommonChooseWeatherTypePanel = {
         gameConfig              : GameConfig;
@@ -86,14 +86,14 @@ namespace Twns.Common {
         private _updateListLocation(): void {
             const openData  = this._getOpenData();
             const dataArray : DataForWeatherTypeRenderer[] = [];
-            for (const weatherType of openData.gameConfig.getWeatherTypesByCategory(Twns.Types.WeatherCategory.All) ?? []) {
+            for (const weatherType of openData.gameConfig.getAvailableWeatherTypes()) {
                 dataArray.push({ weatherType });
             }
 
             const weatherTypeArray  = openData.currentWeatherTypeArray;
             const list              = this._listLocation;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => weatherTypeArray.indexOf(v.weatherType) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => weatherTypeArray.indexOf(v.weatherType) >= 0 ? i : null)));
         }
     }
 

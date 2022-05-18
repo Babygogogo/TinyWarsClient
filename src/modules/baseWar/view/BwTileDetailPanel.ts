@@ -455,12 +455,11 @@ namespace Twns.BaseWar {
             }
         }
         private _updateViewAsDefenseBonus(): void {
-            const data                  = this._getData();
-            const tile                  = data.tile;
+            const tile                  = this._getData().tile;
             this._labelTitle.text       = Lang.getText(LangTextType.B0352);
             this._labelValue.text       = `${tile.getDefenseAmount()}`;
             this._groupExtra.visible    = true;
-            this._labelExtraInfo.text   = Lang.getUnitCategoryName(tile.getDefenseUnitCategory()) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelExtraInfo.text   = Lang.getUnitCategoryName(tile.getDefenseUnitCategory(), tile.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined;
             this._imgModify.visible     = false;
         }
         private _updateViewAsIncome(): void {
@@ -487,10 +486,10 @@ namespace Twns.BaseWar {
             }
         }
         private _updateViewAsHideUnitCategory(): void {
-            const data                  = this._getData();
-            const unitCategory          = data.tile.getCfgHideUnitCategory();
+            const tile                  = this._getData().tile;
+            const unitCategory          = tile.getCfgHideUnitCategory();
             this._labelTitle.text       = Lang.getText(LangTextType.B0356);
-            this._labelValue.text       = unitCategory == null ? `--` : (Lang.getUnitCategoryName(unitCategory) ?? CommonConstants.ErrorTextForUndefined);
+            this._labelValue.text       = unitCategory == null ? `--` : (Lang.getUnitCategoryName(unitCategory, tile.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined);
             this._groupExtra.visible    = false;
             this._imgModify.visible     = false;
         }
@@ -502,10 +501,10 @@ namespace Twns.BaseWar {
             this._imgModify.visible     = false;
         }
         private _updateViewAsProduceUnitCategory(): void {
-            const data                  = this._getData();
-            const unitCategory          = data.tile.getCfgProduceUnitCategory();
+            const tile                  = this._getData().tile;
+            const unitCategory          = tile.getCfgProduceUnitCategory();
             this._labelTitle.text       = Lang.getText(LangTextType.B0358);
-            this._labelValue.text       = unitCategory == null ? `--` : (Lang.getUnitCategoryName(unitCategory) ?? CommonConstants.ErrorTextForUndefined);
+            this._labelValue.text       = unitCategory == null ? `--` : (Lang.getUnitCategoryName(unitCategory, tile.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined);
             this._groupExtra.visible    = false;
             this._imgModify.visible     = false;
         }
@@ -524,7 +523,7 @@ namespace Twns.BaseWar {
             this._labelTitle.text       = Lang.getText(LangTextType.B0360);
             this._labelValue.text       = `${tile.getCfgNormalizedRepairHp()}`;
             this._groupExtra.visible    = true;
-            this._labelExtraInfo.text   = unitCategory == null ? `--` : (Lang.getUnitCategoryName(unitCategory) ?? CommonConstants.ErrorTextForUndefined);
+            this._labelExtraInfo.text   = unitCategory == null ? `--` : (Lang.getUnitCategoryName(unitCategory, tile.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined);
             this._imgModify.visible     = false;
         }
         private _updateViewAsHp(): void {

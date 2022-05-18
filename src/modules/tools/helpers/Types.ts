@@ -13,7 +13,7 @@ namespace Twns.Types {
         maxBanCount                 : number;
     }
     export interface TileCategoryCfg extends CommonProto.Config.ITileCategoryCfg {
-        category: TileCategory;
+        category    : number;
     }
     export interface UnitCategoryCfg extends CommonProto.Config.IUnitCategoryCfg {
         category: UnitCategory;
@@ -28,10 +28,10 @@ namespace Twns.Types {
     export interface UnitTemplateCfg extends CommonProto.Config.IUnitTemplateCfg {
         type                    : number;
         maxHp                   : number;
-        armorType               : ArmorType;
+        armorType               : number;
         isAffectedByLuck        : number;
         moveRange               : number;
-        moveType                : MoveType;
+        moveType                : number;
         maxFuel                 : number;
         fuelConsumptionPerTurn  : number;
         productionCost          : number;
@@ -41,12 +41,12 @@ namespace Twns.Types {
     }
     export interface DamageChartCfg extends CommonProto.Config.IDamageChartCfg {
         attackerType: number;
-        armorType   : ArmorType;
+        armorType   : number;
         weaponType  : WeaponType;
     }
     export interface MoveCostCfg extends CommonProto.Config.IMoveCostCfg {
         tileType    : TileType;
-        moveType    : MoveType;
+        moveType    : number;
     }
     export interface UnitPromotionCfg extends CommonProto.Config.IUnitPromotionCfg {
         promotion   : number;
@@ -89,7 +89,7 @@ namespace Twns.Types {
         weatherType : number;
     }
     export interface WeatherCategoryCfg extends CommonProto.Config.IWeatherCategoryCfg {
-        category: WeatherCategory;
+        category    : number;
     }
     export interface UserAvatarCfg extends CommonProto.Config.IUserAvatarCfg {
         avatarId    : number;
@@ -97,6 +97,10 @@ namespace Twns.Types {
     export interface BgmSfxCfg extends CommonProto.Config.IBgmSfxCfg {
         code        : number;
         filename    : string;
+    }
+    export interface MoveTypeCfg extends CommonProto.Config.IMoveTypeCfg {
+        moveType    : number;
+        lang        : number;
     }
     export interface FullConfig extends CommonProto.Config.FullConfig {
         System          : SystemCfg;
@@ -117,6 +121,7 @@ namespace Twns.Types {
         WeatherCategory : WeatherCategoryCfg[];
         UserAvatar      : UserAvatarCfg[];
         BgmSfx          : BgmSfxCfg[];
+        MoveType        : MoveTypeCfg[];
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -352,12 +357,6 @@ namespace Twns.Types {
     }
 
     // eslint-disable-next-line no-shadow
-    export enum MoveType {
-        Infantry,  /* 0 */            Mech,      /* 1 */            TireA,     /* 2 */            TireB,     /* 3 */
-        Tank,      /* 4 */            Air,       /* 5 */            Ship,      /* 6 */            Transport, /* 7 */
-    }
-
-    // eslint-disable-next-line no-shadow
     export enum TileThemeType {
         Clear,
         Sandstorm,
@@ -409,31 +408,7 @@ namespace Twns.Types {
         None,          /* 0 */            All,               /* 1 */            Ground,        /* 2 */            Naval,         /* 3 */
         Air,           /* 4 */            GroundOrNaval,     /* 5 */            GroundOrAir,   /* 6 */            Direct,        /* 7 */
         Indirect,      /* 8 */            Foot,              /* 9 */            Infantry,      /* 10 */           Vehicle,       /* 11 */
-        DirectMachine, /* 12 */           Transport,         /* 13 */           LargeNaval,    /* 14 */           Copter,        /* 15 */
-        Tank,          /* 16 */           AirExceptSeaplane, /* 17 */
-    }
-
-    // eslint-disable-next-line no-shadow
-    export enum TileCategory {
-        None,                       /* 0 */         All,            /* 1 */         LoadableForSeaTransports,   /* 2 */     Destroyable,    /* 3 */
-        City,                       /* 4 */         PlainAndRuin,   /* 5 */         Road,                       /* 6 */     Buildings,      /* 7 */
-        DestroyableForDamageChart,  /* 8 */         Bridges,        /* 9 */         ElementsInTileChartPanel,   /* 10 */
-    }
-
-    // eslint-disable-next-line no-shadow
-    export const enum WeatherCategory {
-        None,       All,        Snowy,
-    }
-
-    // eslint-disable-next-line no-shadow
-    export enum ArmorType {
-        Infantry,        /* 0 */            Mech,            /* 1 */            Bike,            /* 2 */            Recon,           /* 3 */
-        Flare,           /* 4 */            AntiAir,         /* 5 */            Tank,            /* 6 */            MediumTank,      /* 7 */
-        WarTank,         /* 8 */            Artillery,       /* 9 */            AntiTank,        /* 10 */           Rockets,         /* 11 */
-        Missiles,        /* 12 */           Rig,             /* 13 */           Fighter,         /* 14 */           Bomber,          /* 15 */
-        Duster,          /* 16 */           BattleCopter,    /* 17 */           TransportCopter, /* 18 */           Seaplane,        /* 19 */
-        Battleship,      /* 20 */           Carrier,         /* 21 */           Submarine,       /* 22 */           Cruiser,         /* 23 */
-        Lander,          /* 24 */           Gunboat,         /* 25 */           Meteor,          /* 26 */
+        DirectMachine, /* 12 */           Transport,         /* 13 */           LargeNaval,    /* 14 */
     }
 
     // eslint-disable-next-line no-shadow

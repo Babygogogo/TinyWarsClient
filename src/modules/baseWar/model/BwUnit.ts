@@ -16,12 +16,10 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
     import UnitActionState      = Types.UnitActionState;
-    import ArmorType            = Types.ArmorType;
     import TileType             = Types.TileType;
     import TileObjectType       = Types.TileObjectType;
     import TileBaseType         = Types.TileBaseType;
     import UnitAiMode           = Types.UnitAiMode;
-    import MoveType             = Types.MoveType;
     import GridIndex            = Types.GridIndex;
     import UnitTemplateCfg      = Types.UnitTemplateCfg;
     import ISerialUnit          = CommonProto.WarSerialization.ISerialUnit;
@@ -300,7 +298,7 @@ namespace Twns.BaseWar {
             return (currentHp != null) && (currentHp == this.getMaxHp());
         }
 
-        public getArmorType(): ArmorType {
+        public getArmorType(): number {
             return Helpers.getExisted(this.getTemplateCfg()?.armorType);
         }
 
@@ -394,7 +392,7 @@ namespace Twns.BaseWar {
                 && (currentAmmo <= maxAmmo * 0.4);
         }
 
-        public getPrimaryWeaponBaseDamage(armorType: ArmorType): number | null {
+        public getPrimaryWeaponBaseDamage(armorType: number): number | null {
             return this.getPrimaryWeaponCurrentAmmo()
                 ? this.getCfgBaseDamage(armorType, Types.WeaponType.Primary)
                 : null;
@@ -421,7 +419,7 @@ namespace Twns.BaseWar {
             const playerIndex               = this.getPlayerIndex();
             const promotion                 = this.getCurrentPromotion();
             const hasLoadedCo               = this.getHasLoadedCo();
-            const tileCountDict             = new Map<Types.TileCategory, number>();
+            const tileCountDict             = new Map<number, number>();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             let modifier                    = 0;
             for (const skillId of player.getCoCurrentSkills()) {
@@ -484,7 +482,7 @@ namespace Twns.BaseWar {
                             coZoneRadius,
                         })))
                     ) {
-                        const tileCategory      : Types.TileCategory = cfg[2];
+                        const tileCategory      = cfg[2];
                         const modifierPerTile   = cfg[3];
                         const currentTileCount  = tileCountDict.get(tileCategory);
                         if (currentTileCount != null) {
@@ -707,21 +705,21 @@ namespace Twns.BaseWar {
             return this.getGameConfig().checkHasSecondaryWeapon(this.getUnitType());
         }
 
-        public getCfgSecondaryWeaponBaseDamage(armorType: ArmorType): number | null {
+        public getCfgSecondaryWeaponBaseDamage(armorType: number): number | null {
             return this.getCfgBaseDamage(armorType, Types.WeaponType.Secondary);
         }
-        public getSecondaryWeaponBaseDamage(armorType: ArmorType): number | null {
+        public getSecondaryWeaponBaseDamage(armorType: number): number | null {
             return this.checkHasSecondaryWeapon()
                 ? this.getCfgSecondaryWeaponBaseDamage(armorType)
                 : null;
         }
 
-        public getCfgBaseDamage(targetArmorType: Types.ArmorType, weaponType: Types.WeaponType): number | null {
+        public getCfgBaseDamage(targetArmorType: number, weaponType: Types.WeaponType): number | null {
             const cfgs  = this._getDamageChartCfg();
             const cfg   = cfgs ? cfgs[targetArmorType] : null;
             return cfg ? (cfg[weaponType]?.damage ?? null) : null;
         }
-        public getBaseDamage(armorType: ArmorType): number | null {
+        public getBaseDamage(armorType: number): number | null {
             return this.getPrimaryWeaponBaseDamage(armorType) ?? this.getSecondaryWeaponBaseDamage(armorType);
         }
 
@@ -1239,7 +1237,7 @@ namespace Twns.BaseWar {
             return modifier;
         }
 
-        public getMoveType(): MoveType {
+        public getMoveType(): number {
             return this.getTemplateCfg().moveType;
         }
 

@@ -17,6 +17,11 @@ namespace Twns.Lang {
         Bgm0010, Bgm0011, Bgm0012, Bgm0013, Bgm0014, Bgm0015, Bgm0016, Bgm0017, Bgm0018, Bgm0019,
         Bgm0020, Bgm0021, Bgm0022, Bgm0023, Bgm0024, Bgm0025, Bgm0026, Bgm0027, Bgm0028, Bgm0029,
 
+        MoveType0000 = 40000, MoveType0001, MoveType0002, MoveType0003, MoveType0004, MoveType0005, MoveType0006, MoveType0007, MoveType0008, MoveType0009,
+
+        UnitCategory0000 = 41000,           UnitCategory0001, UnitCategory0002, UnitCategory0003, UnitCategory0004, UnitCategory0005, UnitCategory0006, UnitCategory0007, UnitCategory0008, UnitCategory0009,
+        UnitCategory0010, UnitCategory0011, UnitCategory0012, UnitCategory0013, UnitCategory0014, UnitCategory0015, UnitCategory0016, UnitCategory0017, UnitCategory0018, UnitCategory0019,
+
         A0000, A0001, A0002, A0003, A0004, A0005, A0006, A0007, A0008, A0009,
         A0010, A0011, A0012, A0013, A0014, A0015, A0016, A0017, A0018, A0019,
         A0020, A0021, A0022, A0023, A0024, A0025, A0026, A0027, A0028, A0029,

@@ -1704,7 +1704,7 @@ namespace Twns.BaseWar {
         origin              : Types.GridIndex;
         unitMap             : BwUnitMap;
         tileMap             : BwTileMap;
-        moveType            : Types.MoveType;
+        moveType            : number;
         needMovableTile     : boolean;
         canBeBlockedByUnit  : boolean;
     }): Types.GridIndex | null {

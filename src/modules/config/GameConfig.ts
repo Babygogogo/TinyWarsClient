@@ -4,7 +4,6 @@ namespace Twns.Config {
     import TileType             = Types.TileType;
     import WeatherType          = Types.WeatherType;
     import UnitCategory         = Types.UnitCategory;
-    import TileCategory         = Types.TileCategory;
     import WeaponType           = Types.WeaponType;
     import UnitTemplateCfg      = Types.UnitTemplateCfg;
     import TileTemplateCfg      = Types.TileTemplateCfg;
@@ -23,16 +22,16 @@ namespace Twns.Config {
     import CoSkillCfg           = Types.CoSkillCfg;
     import CoSkillType          = Types.CoSkillType;
     import WeatherCfg           = Types.WeatherCfg;
-    import WeatherCategory      = Types.WeatherCategory;
     import WeatherCategoryCfg   = Types.WeatherCategoryCfg;
     import UserAvatarCfg        = Types.UserAvatarCfg;
     import BgmSfxCfg            = Types.BgmSfxCfg;
+    import MoveTypeCfg          = Types.MoveTypeCfg;
 
     export class GameConfig {
         private readonly _version                   : string;
         private readonly _systemCfg                 : SystemCfg;
         private readonly _unitMaxPromotion          : number;
-        private readonly _tileCategoryCfgDict       : Map<TileCategory, TileCategoryCfg>;
+        private readonly _tileCategoryCfgDict       : Map<number, TileCategoryCfg>;
         private readonly _unitCategoryCfgDict       : Map<UnitCategory, UnitCategoryCfg>;
         private readonly _tileTemplateCfgDict       : Map<TileType, TileTemplateCfg>;
         private readonly _unitTemplateCfgDict       : Map<number, UnitTemplateCfg>;
@@ -44,12 +43,13 @@ namespace Twns.Config {
         private readonly _coBasicCfgDict            : Map<number, CoBasicCfg>;
         private readonly _coSkillCfgDict            : Map<number, CoSkillCfg>;
         private readonly _weatherCfgDict            : Map<WeatherType, WeatherCfg>;
-        private readonly _weatherCategoryCfgDict    : Map<WeatherCategory, WeatherCategoryCfg>;
+        private readonly _weatherCategoryCfgDict    : Map<number, WeatherCategoryCfg>;
         private readonly _userAvatarCfgDict         : Map<number, UserAvatarCfg>;
         private readonly _damageChartCfgDict        : Map<number, { [armorType: number]: { [weaponType: number]: DamageChartCfg } }>;
         private readonly _unitPromotionCfgDict      : Map<number, UnitPromotionCfg>;
         private readonly _secondaryWeaponFlagDict   : Map<number, boolean>;
         private readonly _bgmSfxCfgDict             : Map<number, BgmSfxCfg>;
+        private readonly _moveTypeCfgDict           : Map<number, MoveTypeCfg>;
 
         private _availableCoArray   : CoBasicCfg[] | null = null;
         private _coTierArray        : number[] | null = null;
@@ -77,6 +77,7 @@ namespace Twns.Config {
             this._weatherCategoryCfgDict    = _destructWeatherCategoryCfg(rawConfig.WeatherCategory);
             this._userAvatarCfgDict         = _destructUserAvatarCfg(rawConfig.UserAvatar);
             this._bgmSfxCfgDict             = _destructBgmSfxCfg(rawConfig.BgmSfx);
+            this._moveTypeCfgDict           = _destructMoveTypeCfg(rawConfig.MoveType);
             this._damageChartCfgDict        = damageChartCfg;
             this._unitPromotionCfgDict      = unitPromotionCfg;
             this._secondaryWeaponFlagDict   = _getSecondaryWeaponFlags(damageChartCfg);
@@ -102,16 +103,36 @@ namespace Twns.Config {
         public checkIsValidTileType(tileType: TileType): boolean {
             return this._tileTemplateCfgDict.has(tileType);
         }
-
-        public getTileCategoryCfg(category: TileCategory): TileCategoryCfg | null {
-            return this._tileCategoryCfgDict.get(category) ?? null;
+        public getAllTileTypeArray(): number[] {
+            return [...this._tileTemplateCfgDict].map(v => v[0]);
         }
-        public getTileTypesByCategory(category: TileCategory): TileType[] | null {
-            const cfg = this.getTileCategoryCfg(category);
+        public getTileTypeArrayForTileChart(): number[] {
+            return [...this._tileTemplateCfgDict]
+                .filter(v => v[1].sortWeightForTileChart != null)
+                .sort((v1, v2) => Helpers.getExisted(v1[1].sortWeightForTileChart) - Helpers.getExisted(v2[1].sortWeightForTileChart))
+                .map(v => v[0]);
+        }
+        public getTileTypeArrayForDamageChart(): number[] {
+            return [...this._tileTemplateCfgDict]
+                .filter(v => v[1].sortWeightForDamageChart != null)
+                .sort((v1, v2) => Helpers.getExisted(v1[1].sortWeightForDamageChart) - Helpers.getExisted(v2[1].sortWeightForDamageChart))
+                .map(v => v[0]);
+        }
+        public getTileTypeArrayForUnattackable(): number[] {
+            return [...this._tileTemplateCfgDict]
+                .filter(v => v[1].maxHp == null)
+                .map(v => v[0]);
+        }
+
+        public getTileCategoryCfg(tileCategory: number): TileCategoryCfg | null {
+            return this._tileCategoryCfgDict.get(tileCategory) ?? null;
+        }
+        public getTileTypesByCategory(tileCategory: number): TileType[] | null {
+            const cfg = this.getTileCategoryCfg(tileCategory);
             return cfg ? cfg.tileTypes ?? [] : null;
         }
-        public checkIsTileTypeInCategory(tileType: TileType, category: TileCategory): boolean {
-            const typeArray = this.getTileTypesByCategory(category);
+        public checkIsTileTypeInCategory(tileType: TileType, tileCategory: number): boolean {
+            const typeArray = this.getTileTypesByCategory(tileCategory);
             return typeArray ? typeArray.indexOf(tileType) >= 0 : false;
         }
 
@@ -187,14 +208,14 @@ namespace Twns.Config {
             return this._weatherCfgDict.get(weatherType) ?? null;
         }
 
-        public getWeatherCategoryCfg(category: WeatherCategory): WeatherCategoryCfg | null {
+        public getWeatherCategoryCfg(category: number): WeatherCategoryCfg | null {
             return this._weatherCategoryCfgDict.get(category) ?? null;
         }
-        public getWeatherTypesByCategory(category: WeatherCategory): WeatherType[] | null {
+        public getWeatherTypesByCategory(category: number): WeatherType[] | null {
             const cfg = this.getWeatherCategoryCfg(category);
             return cfg ? cfg.weatherTypes ?? [] : null;
         }
-        public checkIsWeatherTypeInCategory(weatherType: WeatherType, category: WeatherCategory): boolean {
+        public checkIsWeatherTypeInCategory(weatherType: WeatherType, category: number): boolean {
             const typeArray = this.getWeatherTypesByCategory(category);
             return typeArray ? typeArray.indexOf(weatherType) >= 0 : false;
         }
@@ -420,13 +441,17 @@ namespace Twns.Config {
                 return bgmCodeArray;
             }
         }
+
+        public getMoveTypeCfg(moveType: number): MoveTypeCfg | null {
+            return this._moveTypeCfgDict.get(moveType) ?? null;
+        }
     }
 
     function _destructSystemCfg(data: SystemCfg): SystemCfg {
         return Helpers.deepClone(data);
     }
-    function _destructTileCategoryCfg(data: TileCategoryCfg[]): Map<TileCategory, TileCategoryCfg> {
-        const dst = new Map<TileCategory, TileCategoryCfg>();
+    function _destructTileCategoryCfg(data: TileCategoryCfg[]): Map<number, TileCategoryCfg> {
+        const dst = new Map<number, TileCategoryCfg>();
         for (const d of data) {
             dst.set(d.category, d);
         }
@@ -539,8 +564,8 @@ namespace Twns.Config {
         }
         return dst;
     }
-    function _destructWeatherCategoryCfg(data: WeatherCategoryCfg[]): Map<WeatherCategory, WeatherCategoryCfg> {
-        const dst = new Map<WeatherCategory, WeatherCategoryCfg>();
+    function _destructWeatherCategoryCfg(data: WeatherCategoryCfg[]): Map<number, WeatherCategoryCfg> {
+        const dst = new Map<number, WeatherCategoryCfg>();
         for (const d of data) {
             dst.set(d.category, d);
         }
@@ -557,6 +582,13 @@ namespace Twns.Config {
         const dst = new Map<number, BgmSfxCfg>();
         for (const d of data) {
             dst.set(d.code, d);
+        }
+        return dst;
+    }
+    function _destructMoveTypeCfg(data: MoveTypeCfg[]): Map<number, MoveTypeCfg> {
+        const dst = new Map<number, MoveTypeCfg>();
+        for (const d of data) {
+            dst.set(d.moveType, d);
         }
         return dst;
     }

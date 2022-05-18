@@ -12,16 +12,14 @@ namespace Twns.WarHelpers.WarVisibilityHelpers {
     import GridIndex        = Types.GridIndex;
     import Visibility       = Types.Visibility;
 
-    export function checkIsUnitOnMapVisibleToTeam(
-        { war, gridIndex, unitType, isDiving, unitPlayerIndex, observerTeamIndex }: {
-            war                 : BaseWar.BwWar;
-            gridIndex           : GridIndex;
-            unitType            : number;
-            isDiving            : boolean;
-            unitPlayerIndex     : number;
-            observerTeamIndex   : number;
-        }
-    ): boolean {
+    export function checkIsUnitOnMapVisibleToTeam({ war, gridIndex, unitType, isDiving, unitPlayerIndex, observerTeamIndex }: {
+        war                 : BaseWar.BwWar;
+        gridIndex           : GridIndex;
+        unitType            : number;
+        isDiving            : boolean;
+        unitPlayerIndex     : number;
+        observerTeamIndex   : number;
+    }): boolean {
         return checkIsUnitOnMapVisibleToTeams({
             war,
             gridIndex,
@@ -31,16 +29,14 @@ namespace Twns.WarHelpers.WarVisibilityHelpers {
             observerTeamIndexes : new Set<number>([observerTeamIndex])
         });
     }
-    export function checkIsUnitOnMapVisibleToTeams(
-        { war, gridIndex, unitType, isDiving, unitPlayerIndex, observerTeamIndexes }: {
-            war                 : BaseWar.BwWar;
-            gridIndex           : GridIndex;
-            unitType            : number;
-            isDiving            : boolean;
-            unitPlayerIndex     : number;
-            observerTeamIndexes : Set<number>;
-        }
-    ): boolean {
+    export function checkIsUnitOnMapVisibleToTeams({ war, gridIndex, unitType, isDiving, unitPlayerIndex, observerTeamIndexes }: {
+        war                 : BaseWar.BwWar;
+        gridIndex           : GridIndex;
+        unitType            : number;
+        isDiving            : boolean;
+        unitPlayerIndex     : number;
+        observerTeamIndexes : Set<number>;
+    }): boolean {
         const playerManager = war.getPlayerManager();
         if (observerTeamIndexes.has(playerManager.getTeamIndex(unitPlayerIndex))) {
             return true;

@@ -86,7 +86,7 @@ namespace Twns.Common {
         private _updateListTileType(): void {
             const gameConfig    = this._getOpenData().gameConfig;
             const dataArray     : DataForTileTypeRenderer[] = [];
-            for (const tileType of gameConfig.getTileTypesByCategory(Types.TileCategory.All) ?? []) {
+            for (const tileType of gameConfig.getAllTileTypeArray()) {
                 dataArray.push({
                     tileType,
                     gameConfig,

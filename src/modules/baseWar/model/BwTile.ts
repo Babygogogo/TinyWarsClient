@@ -323,7 +323,7 @@ namespace Twns.BaseWar {
         private _setTemplateCfg(cfg: TileTemplateCfg): void {
             this._templateCfg = cfg;
         }
-        private _getTemplateCfg(): Types.TileTemplateCfg {
+        public getTemplateCfg(): Types.TileTemplateCfg {
             return Helpers.getExisted(this._templateCfg);
         }
 
@@ -399,7 +399,7 @@ namespace Twns.BaseWar {
         // Functions for hp and armor.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxHp(): number | null {
-            return this._getTemplateCfg().maxHp ?? null;
+            return this.getTemplateCfg().maxHp ?? null;
         }
 
         public getCurrentHp(): number | null {
@@ -420,19 +420,19 @@ namespace Twns.BaseWar {
             this._currentHp = hp;
         }
 
-        public getArmorType(): Types.ArmorType | null {
-            return this._getTemplateCfg().armorType ?? null;
+        public getArmorType(): number | null {
+            return this.getTemplateCfg().armorType ?? null;
         }
 
         public checkIsArmorAffectByLuck(): boolean {
-            return this._getTemplateCfg().isAffectedByLuck === 1;
+            return this.getTemplateCfg().isAffectedByLuck === 1;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for build.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxBuildPoint(): number | null {
-            return this._getTemplateCfg().maxBuildPoint ?? null;
+            return this.getTemplateCfg().maxBuildPoint ?? null;
         }
 
         public getCurrentBuildPoint(): number | null {
@@ -457,7 +457,7 @@ namespace Twns.BaseWar {
         // Functions for capture.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxCapturePoint(): number | null {
-            return this._getTemplateCfg().maxCapturePoint ?? null;
+            return this.getTemplateCfg().maxCapturePoint ?? null;
         }
 
         public getCurrentCapturePoint(): number | null {
@@ -479,7 +479,7 @@ namespace Twns.BaseWar {
         }
 
         public checkIsDefeatOnCapture(): boolean {
-            const cfg = this._getTemplateCfg();
+            const cfg = this.getTemplateCfg();
             return cfg.isDefeatedOnCapture === 1;
         }
 
@@ -546,7 +546,7 @@ namespace Twns.BaseWar {
             return Math.floor(this.getDefenseAmount() / 10);
         }
         public getDefenseAmount(): number {
-            return this._getTemplateCfg().defenseAmount;
+            return this.getTemplateCfg().defenseAmount;
         }
         public getDefenseAmountForUnit(unit: BwUnit): number {
             return this.checkCanDefendUnit(unit)
@@ -555,7 +555,7 @@ namespace Twns.BaseWar {
         }
 
         public getDefenseUnitCategory(): Types.UnitCategory {
-            return this._getTemplateCfg().defenseUnitCategory;
+            return this.getTemplateCfg().defenseUnitCategory;
         }
         public checkCanDefendUnit(unit: BwUnit): boolean {
             return this.getGameConfig().checkIsUnitTypeInCategory(unit.getUnitType(), this.getDefenseUnitCategory());
@@ -589,7 +589,7 @@ namespace Twns.BaseWar {
         // Functions for type.
         ////////////////////////////////////////////////////////////////////////////////
         public getType(): TileType {
-            return this._getTemplateCfg().type;
+            return this.getTemplateCfg().type;
         }
 
         public resetByTypeAndPlayerIndex({ baseType, objectType, playerIndex }: {
@@ -656,7 +656,7 @@ namespace Twns.BaseWar {
         // Functions for income.
         ////////////////////////////////////////////////////////////////////////////////
         public getCfgIncome(): number {
-            return this._getTemplateCfg().incomePerTurn ?? 0;
+            return this.getTemplateCfg().incomePerTurn ?? 0;
         }
         public getIncomeForPlayer(playerIndex: number): number {
             if (this.getPlayerIndex() !== playerIndex) {
@@ -719,7 +719,7 @@ namespace Twns.BaseWar {
             return Helpers.getExisted(this.getGameConfig().getMoveCostCfg(Config.ConfigManager.getTileType(this.getBaseType(), this.getObjectType())));
         }
 
-        public getMoveCostByMoveType(moveType: Types.MoveType): number | null {
+        public getMoveCostByMoveType(moveType: number): number | null {
             return this._getMoveCostCfg()[moveType]?.cost ?? null;
         }
         public getMoveCostByUnit(unit: BwUnit): number | null {
@@ -766,11 +766,11 @@ namespace Twns.BaseWar {
         // Functions for repair/supply unit.
         ////////////////////////////////////////////////////////////////////////////////
         public getRepairUnitCategory(): Types.UnitCategory | null {
-            return this._getTemplateCfg().repairUnitCategory ?? null;
+            return this.getTemplateCfg().repairUnitCategory ?? null;
         }
 
         public getCfgNormalizedRepairHp(): number | null {
-            return this._getTemplateCfg().repairAmount ?? null;
+            return this.getTemplateCfg().repairAmount ?? null;
         }
 
         public getNormalizedRepairAmountAndCostModifier(): { amountModifier: number, costMultiplierPct: number } {
@@ -858,14 +858,14 @@ namespace Twns.BaseWar {
         }
 
         public getCfgHideUnitCategory(): Types.UnitCategory | null {
-            return this._getTemplateCfg().hideUnitCategory ?? null;
+            return this.getTemplateCfg().hideUnitCategory ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce unit.
         ////////////////////////////////////////////////////////////////////////////////
         public getCfgProduceUnitCategory(): Types.UnitCategory | null {
-            return this._getTemplateCfg().produceUnitCategory ?? null;
+            return this.getTemplateCfg().produceUnitCategory ?? null;
         }
         public getProduceUnitCategoryForPlayer(playerIndex: number): Types.UnitCategory | null {
             if (this.getPlayerIndex() !== playerIndex) {
@@ -922,10 +922,10 @@ namespace Twns.BaseWar {
         // Functions for vision.
         ////////////////////////////////////////////////////////////////////////////////
         public getCfgVisionRange(): number {
-            return this._getTemplateCfg().visionRange;
+            return this.getTemplateCfg().visionRange;
         }
         public checkIsVisionEnabledForAllPlayers(): boolean {
-            return this._getTemplateCfg().isVisionEnabledForAllPlayers === 1;
+            return this.getTemplateCfg().isVisionEnabledForAllPlayers === 1;
         }
 
         public getVisionRangeForPlayer(playerIndex: number): number | null {
@@ -987,17 +987,17 @@ namespace Twns.BaseWar {
         // Functions for global attack/defense bonus.
         ////////////////////////////////////////////////////////////////////////////////
         public getGlobalAttackBonus(): number | null {
-            return this._getTemplateCfg().globalAttackBonus ?? null;
+            return this.getTemplateCfg().globalAttackBonus ?? null;
         }
         public getGlobalDefenseBonus(): number | null {
-            return this._getTemplateCfg().globalDefenseBonus ?? null;
+            return this.getTemplateCfg().globalDefenseBonus ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for load co.
         ////////////////////////////////////////////////////////////////////////////////
         public getLoadCoUnitCategory(): Types.UnitCategory | null {
-            return this._getTemplateCfg().loadCoUnitCategory ?? null;
+            return this.getTemplateCfg().loadCoUnitCategory ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
