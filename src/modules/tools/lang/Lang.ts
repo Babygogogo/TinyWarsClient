@@ -160,7 +160,7 @@ namespace Twns.Lang {
         return langTextType != null ? Lang.getText(langTextType) : null;
     }
 
-    export function getUnitCategoryName(unitCategory: Types.UnitCategory, gameConfig: Config.GameConfig): string | null {
+    export function getUnitCategoryName(unitCategory: number, gameConfig: Config.GameConfig): string | null {
         const langTextType = gameConfig.getUnitCategoryCfg(unitCategory)?.lang;
         return langTextType != null ? Lang.getText(langTextType) : null;
     }

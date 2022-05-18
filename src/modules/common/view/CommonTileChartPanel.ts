@@ -308,7 +308,7 @@ namespace Twns.Common {
             const tileCfg       = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(tileType));
             const dataArray     : DataForMoveCostRenderer[] = [];
             let index           = 0;
-            for (const unitType of gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
+            for (const unitType of gameConfig.getAllUnitTypeArray()) {
                 dataArray.push({
                     index,
                     gameConfig,
@@ -332,7 +332,7 @@ namespace Twns.Common {
             const playerIndex   = CommonConstants.WarFirstPlayerIndex;
             const dataArray     : DataForDamageRenderer[] = [];
             let index           = 0;
-            for (const attackerUnitType of gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
+            for (const attackerUnitType of gameConfig.getAllUnitTypeArray()) {
                 dataArray.push({
                     gameConfig,
                     index,

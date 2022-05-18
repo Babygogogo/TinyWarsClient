@@ -377,7 +377,7 @@ namespace Twns.Common {
                 const attackUnitType    = dataForUnit.unitType;
                 const playerIndex       = CommonConstants.WarFirstPlayerIndex;
                 let index               = 0;
-                for (const targetUnitType of gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
+                for (const targetUnitType of gameConfig.getAllUnitTypeArray()) {
                     dataArray.push({
                         index,
                         gameConfig,
@@ -404,7 +404,7 @@ namespace Twns.Common {
         private _createDataForListUnit(): DataForUnitRenderer[] {
             const data          : DataForUnitRenderer[] = [];
             const gameConfig    = this._getOpenData().gameConfig;
-            const unitTypes     = gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? [];
+            const unitTypes     = gameConfig.getAllUnitTypeArray();
             for (let index = 0; index < unitTypes.length; ++index) {
                 data.push({
                     gameConfig,

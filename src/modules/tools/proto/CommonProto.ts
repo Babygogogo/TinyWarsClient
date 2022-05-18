@@ -554,6 +554,9 @@ declare namespace CommonProto {
             /** TileTemplateCfg loadCoUnitCategory */
             loadCoUnitCategory?: (number|null);
 
+            /** TileTemplateCfg blockEnemyUnitCategory */
+            blockEnemyUnitCategory?: (number|null);
+
             /** TileTemplateCfg lang */
             lang?: (number|null);
 
@@ -635,6 +638,9 @@ declare namespace CommonProto {
 
             /** TileTemplateCfg loadCoUnitCategory. */
             public loadCoUnitCategory: number;
+
+            /** TileTemplateCfg blockEnemyUnitCategory. */
+            public blockEnemyUnitCategory: number;
 
             /** TileTemplateCfg lang. */
             public lang: number;
@@ -827,6 +833,9 @@ declare namespace CommonProto {
             /** UnitTemplateCfg moveSfx */
             moveSfx?: (number|null);
 
+            /** UnitTemplateCfg layer */
+            layer?: (number|null);
+
             /** UnitTemplateCfg aiProductionScore */
             aiProductionScore?: (number[]|null);
 
@@ -950,6 +959,9 @@ declare namespace CommonProto {
 
             /** UnitTemplateCfg moveSfx. */
             public moveSfx: number;
+
+            /** UnitTemplateCfg layer. */
+            public layer: number;
 
             /** UnitTemplateCfg aiProductionScore. */
             public aiProductionScore: number[];

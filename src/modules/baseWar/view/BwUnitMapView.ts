@@ -13,7 +13,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
     import NotifyType           = Notify.NotifyType;
-    import UnitCategory         = Types.UnitCategory;
     import ActionPlannerState   = Types.ActionPlannerState;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
@@ -225,15 +224,11 @@ namespace Twns.BaseWar {
         }
 
         private _getLayerByUnitType(unitType: number): egret.DisplayObjectContainer {
-            const gameConfig = this._getUnitMap().getWar().getGameConfig();
-            if (gameConfig.checkIsUnitTypeInCategory(unitType, UnitCategory.Air)) {
-                return this._layerForAir;
-            } else if (gameConfig.checkIsUnitTypeInCategory(unitType, UnitCategory.Ground)) {
-                return this._layerForGround;
-            } else if (gameConfig.checkIsUnitTypeInCategory(unitType, UnitCategory.Naval)) {
-                return this._layerForNaval;
-            } else {
-                throw Helpers.newError(`Invalid unitType: ${unitType}`);
+            switch (this._getUnitMap().getWar().getGameConfig().getUnitTemplateCfg(unitType)?.layer) {
+                case CommonConstants.UnitDisplayLayer.Air       : return this._layerForAir;
+                case CommonConstants.UnitDisplayLayer.Ground    : return this._layerForGround;
+                case CommonConstants.UnitDisplayLayer.Sea       : return this._layerForNaval;
+                default                                         : throw Helpers.newError(`Invalid layer.`, ClientErrorCode.BwUnitMapView_GetLayerByUnitType_00);
             }
         }
 

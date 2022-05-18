@@ -246,7 +246,7 @@ namespace Twns.BaseWar {
 
             const dataArray : DataForMoveCostRenderer[] = [];
             let index       = 0;
-            for (const unitType of gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
+            for (const unitType of gameConfig.getAllUnitTypeArray()) {
                 dataArray.push({
                     index,
                     gameConfig,
@@ -268,7 +268,7 @@ namespace Twns.BaseWar {
 
             const dataArray : DataForDamageRenderer[] = [];
             let index       = 0;
-            for (const attackerUnitType of gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
+            for (const attackerUnitType of gameConfig.getAllUnitTypeArray()) {
                 dataArray.push({
                     gameConfig,
                     index,

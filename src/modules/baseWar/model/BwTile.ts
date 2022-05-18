@@ -554,7 +554,7 @@ namespace Twns.BaseWar {
                 : 0;
         }
 
-        public getDefenseUnitCategory(): Types.UnitCategory {
+        public getDefenseUnitCategory(): number {
             return this.getTemplateCfg().defenseUnitCategory;
         }
         public checkCanDefendUnit(unit: BwUnit): boolean {
@@ -726,12 +726,12 @@ namespace Twns.BaseWar {
             const tileType      = this.getType();
             const unitType      = unit.getUnitType();
             const war           = this.getWar();
-            const gameConfig = war.getGameConfig();
-            if (((tileType === TileType.Seaport) || (tileType === TileType.TempSeaport))        &&
-                (this.getTeamIndex() !== unit.getTeamIndex())                                   &&
-                (gameConfig.checkIsUnitTypeInCategory(unitType, Types.UnitCategory.LargeNaval))
-            ) {
-                return null;
+            const gameConfig    = war.getGameConfig();
+            if (this.getTeamIndex() !== unit.getTeamIndex()) {
+                const blockEnemyUnitCategory = this.getTemplateCfg().blockEnemyUnitCategory;
+                if ((blockEnemyUnitCategory != null) && (gameConfig.checkIsUnitTypeInCategory(unitType, blockEnemyUnitCategory))) {
+                    return null;
+                }
             }
 
             const rawCost = this.getMoveCostByMoveType(unit.getMoveType());
@@ -765,7 +765,7 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for repair/supply unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public getRepairUnitCategory(): Types.UnitCategory | null {
+        public getRepairUnitCategory(): number | null {
             return this.getTemplateCfg().repairUnitCategory ?? null;
         }
 
@@ -854,20 +854,20 @@ namespace Twns.BaseWar {
 
         public checkIsUnitHider(): boolean {
             const category = this.getCfgHideUnitCategory();
-            return (category != null) && (category != Types.UnitCategory.None);
+            return (category != null) && (!!this.getGameConfig().getUnitCategoryCfg(category)?.unitTypes?.length);
         }
 
-        public getCfgHideUnitCategory(): Types.UnitCategory | null {
+        public getCfgHideUnitCategory(): number | null {
             return this.getTemplateCfg().hideUnitCategory ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public getCfgProduceUnitCategory(): Types.UnitCategory | null {
+        public getCfgProduceUnitCategory(): number | null {
             return this.getTemplateCfg().produceUnitCategory ?? null;
         }
-        public getProduceUnitCategoryForPlayer(playerIndex: number): Types.UnitCategory | null {
+        public getProduceUnitCategoryForPlayer(playerIndex: number): number | null {
             if (this.getPlayerIndex() !== playerIndex) {
                 return null;
             } else {
@@ -911,11 +911,11 @@ namespace Twns.BaseWar {
 
         public checkIsCfgUnitProducer(): boolean {
             const category = this.getCfgProduceUnitCategory();
-            return (category != null) && (category !== Types.UnitCategory.None);
+            return (category != null) && (!!this.getGameConfig().getUnitCategoryCfg(category)?.unitTypes?.length);
         }
         public checkIsUnitProducerForPlayer(playerIndex: number): boolean {
             const category = this.getProduceUnitCategoryForPlayer(playerIndex);
-            return (category != null) && (category !== Types.UnitCategory.None);
+            return (category != null) && (!!this.getGameConfig().getUnitCategoryCfg(category)?.unitTypes?.length);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -996,7 +996,7 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for load co.
         ////////////////////////////////////////////////////////////////////////////////
-        public getLoadCoUnitCategory(): Types.UnitCategory | null {
+        public getLoadCoUnitCategory(): number | null {
             return this.getTemplateCfg().loadCoUnitCategory ?? null;
         }
 

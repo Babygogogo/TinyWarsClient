@@ -103,7 +103,7 @@ namespace Twns.Common {
             const openData      = this._getOpenData();
             const gameConfig    = openData.gameConfig;
             const dataArray     : DataForUnitTypeRenderer[] = [];
-            for (const unitType of openData.gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
+            for (const unitType of openData.gameConfig.getAllUnitTypeArray()) {
                 dataArray.push({
                     unitType,
                     gameConfig,

@@ -49,6 +49,12 @@ namespace Twns.CommonConstants {
         CoPower     : 10200,
     };
 
+    export const UnitDisplayLayer = {
+        Air         : 3,
+        Ground      : 2,
+        Sea         : 1,
+    };
+
     export const MapMaxGridsCount                       = 1000;
     export const MapMaxNameLength                       = 30;
     export const MapMaxDesignerLength                   = 30;

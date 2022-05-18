@@ -399,7 +399,7 @@ namespace Twns.BaseWar {
 
             const dataList  : DataForDamageRenderer[] = [];
             let index       = 0;
-            for (const targetUnitType of gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
+            for (const targetUnitType of gameConfig.getAllUnitTypeArray()) {
                 dataList.push({
                     gameConfig,
                     index,

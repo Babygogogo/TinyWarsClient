@@ -3,7 +3,6 @@
 namespace Twns.Config {
     import TileType             = Types.TileType;
     import WeatherType          = Types.WeatherType;
-    import UnitCategory         = Types.UnitCategory;
     import WeaponType           = Types.WeaponType;
     import UnitTemplateCfg      = Types.UnitTemplateCfg;
     import TileTemplateCfg      = Types.TileTemplateCfg;
@@ -32,7 +31,7 @@ namespace Twns.Config {
         private readonly _systemCfg                 : SystemCfg;
         private readonly _unitMaxPromotion          : number;
         private readonly _tileCategoryCfgDict       : Map<number, TileCategoryCfg>;
-        private readonly _unitCategoryCfgDict       : Map<UnitCategory, UnitCategoryCfg>;
+        private readonly _unitCategoryCfgDict       : Map<number, UnitCategoryCfg>;
         private readonly _tileTemplateCfgDict       : Map<TileType, TileTemplateCfg>;
         private readonly _unitTemplateCfgDict       : Map<number, UnitTemplateCfg>;
         private readonly _moveCostCfgDict           : Map<TileType, { [moveType: number]: MoveCostCfg }>;
@@ -165,15 +164,18 @@ namespace Twns.Config {
             return `unit_${textForVersion}_${textForType}_${textForDark}_${textForMoving}_${textForSkin}_${textForFrame}`;
         }
 
-        public getUnitCategoryCfg(category: UnitCategory): UnitCategoryCfg | null {
-            return this._unitCategoryCfgDict.get(category) ?? null;
+        public getUnitCategoryCfg(unitCategory: number): UnitCategoryCfg | null {
+            return this._unitCategoryCfgDict.get(unitCategory) ?? null;
         }
-        public getUnitTypesByCategory(category: UnitCategory): number[] | null {
-            const cfg = this.getUnitCategoryCfg(category);
+        public getUnitTypesByCategory(unitCategory: number): number[] | null {
+            const cfg = this.getUnitCategoryCfg(unitCategory);
             return cfg ? cfg.unitTypes ?? [] : null;
         }
-        public checkIsUnitTypeInCategory(unitType: number, category: UnitCategory): boolean {
-            const typeArray = this.getUnitTypesByCategory(category);
+        public getAllUnitTypeArray(): number[] {
+            return [...this._unitCategoryCfgDict].map(v => v[0]);
+        }
+        public checkIsUnitTypeInCategory(unitType: number, unitCategory: number): boolean {
+            const typeArray = this.getUnitTypesByCategory(unitCategory);
             return typeArray ? typeArray.indexOf(unitType) >= 0 : false;
         }
         public checkIsValidUnitTypeSubset(unitTypeArray: number[]): boolean {
@@ -457,8 +459,8 @@ namespace Twns.Config {
         }
         return dst;
     }
-    function _destructUnitCategoryCfg(data: UnitCategoryCfg[]): Map<UnitCategory, UnitCategoryCfg> {
-        const dst = new Map<UnitCategory, UnitCategoryCfg>();
+    function _destructUnitCategoryCfg(data: UnitCategoryCfg[]): Map<number, UnitCategoryCfg> {
+        const dst = new Map<number, UnitCategoryCfg>();
         for (const d of data) {
             dst.set(d.category, d);
         }

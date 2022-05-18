@@ -68,7 +68,7 @@ namespace Twns.WarEvent {
             const gameConfig        = openData.gameConfig;
 
             const dataArray: DataForTypeRenderer[] = [];
-            for (const newUnitType of openData.gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
+            for (const newUnitType of openData.gameConfig.getAllUnitTypeArray()) {
                 dataArray.push({
                     newUnitType,
                     dataForAddUnit,

@@ -266,7 +266,7 @@ namespace Twns.Common {
             PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleUnitTypePanel, {
                 gameConfig,
                 currentUnitType : playerData.unitType,
-                unitTypeArray   : gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? [],
+                unitTypeArray   : gameConfig.getAllUnitTypeArray(),
                 playerIndex,
                 callback        : unitType => {
                     if (playerData.unitType !== unitType) {

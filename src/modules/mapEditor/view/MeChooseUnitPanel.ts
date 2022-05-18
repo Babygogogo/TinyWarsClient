@@ -132,7 +132,7 @@ namespace Twns.MapEditor {
 
             const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
             const dataArray     : DataForUnitRenderer[] = [];
-            for (const unitType of gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
+            for (const unitType of gameConfig.getAllUnitTypeArray()) {
                 dataArray.push({
                     panel           : this,
                     dataForDrawUnit : {

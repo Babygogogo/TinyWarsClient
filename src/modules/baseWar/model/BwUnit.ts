@@ -1382,7 +1382,7 @@ namespace Twns.BaseWar {
             return this.getWar()?.getUnitMap()?.getUnitsLoadedByLoader(this, false) || [];
         }
 
-        public getLoadUnitCategory(): Types.UnitCategory | null {
+        public getLoadUnitCategory(): number | null {
             return this.getTemplateCfg().loadUnitCategory ?? null;
         }
 

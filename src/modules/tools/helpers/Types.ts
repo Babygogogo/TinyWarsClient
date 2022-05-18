@@ -16,12 +16,12 @@ namespace Twns.Types {
         category    : number;
     }
     export interface UnitCategoryCfg extends CommonProto.Config.IUnitCategoryCfg {
-        category: UnitCategory;
+        category    : number;
     }
     export interface TileTemplateCfg extends CommonProto.Config.ITileTemplateCfg {
         type                : TileType;
         defenseAmount       : number;
-        defenseUnitCategory : UnitCategory;
+        defenseUnitCategory : number;
         visionRange         : number;
         lang                : number;
     }
@@ -401,14 +401,6 @@ namespace Twns.Types {
         MistOnRiver,    /* 32 */        MistOnBeach,    /* 33 */        Crystal,            /* 34 */        CustomCrystal,  /* 35 */
         CannonUp,       /* 36 */        CannonDown,     /* 37 */        CannonLeft,         /* 38 */        CannonRight,    /* 39 */
         CustomCannon,   /* 40 */        LaserTurret,    /* 41 */        CustomLaserTurret,  /* 42 */        PipeJoint,      /* 43 */
-    }
-
-    // eslint-disable-next-line no-shadow
-    export enum UnitCategory {
-        None,          /* 0 */            All,               /* 1 */            Ground,        /* 2 */            Naval,         /* 3 */
-        Air,           /* 4 */            GroundOrNaval,     /* 5 */            GroundOrAir,   /* 6 */            Direct,        /* 7 */
-        Indirect,      /* 8 */            Foot,              /* 9 */            Infantry,      /* 10 */           Vehicle,       /* 11 */
-        DirectMachine, /* 12 */           Transport,         /* 13 */           LargeNaval,    /* 14 */
     }
 
     // eslint-disable-next-line no-shadow
