@@ -64,87 +64,6 @@ namespace Twns.Config.ConfigManager {
         return Helpers.getExisted(mapping.get(objectType), ClientErrorCode.ConfigManager_GetTileType_01);
     }
 
-    export function checkIsValidPlayerIndexForTile(playerIndex: number, baseType: TileBaseType, objectType: TileObjectType): boolean {
-        const neutralPlayerIndex = CommonConstants.WarNeutralPlayerIndex;
-        if ((playerIndex < neutralPlayerIndex) || (playerIndex > CommonConstants.WarMaxPlayerIndex)) {
-            return false;
-        }
-
-        if (objectType === TileObjectType.Airport) {
-            return true;
-        } else if (objectType === TileObjectType.Bridge) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.City) {
-            return true;
-        } else if (objectType === TileObjectType.CommandTower) {
-            return true;
-        } else if (objectType === TileObjectType.Empty) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.EmptySilo) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.Factory) {
-            return true;
-        } else if (objectType === TileObjectType.Fire) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.Pipe) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.Headquarters) {
-            return playerIndex !== neutralPlayerIndex;
-        } else if (objectType === TileObjectType.Meteor) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.Mist) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.Mountain) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.Plasma) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.Radar) {
-            return true;
-        } else if (objectType === TileObjectType.Reef) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.Road) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.Rough) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.Ruins) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.Seaport) {
-            return true;
-        } else if (objectType === TileObjectType.Silo) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.TempAirport) {
-            return true;
-        } else if (objectType === TileObjectType.TempSeaport) {
-            return true;
-        } else if (objectType === TileObjectType.Wasteland) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.Wood) {
-            return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.Crystal) {
-            return true;
-        } else if (objectType === TileObjectType.CustomCrystal) {
-            return true;
-        } else if (objectType === TileObjectType.CannonUp) {
-            return true;
-        } else if (objectType === TileObjectType.CannonDown) {
-            return true;
-        } else if (objectType === TileObjectType.CannonLeft) {
-            return true;
-        } else if (objectType === TileObjectType.CannonRight) {
-            return true;
-        } else if (objectType === TileObjectType.CustomCannon) {
-            return true;
-        } else if (objectType === TileObjectType.LaserTurret) {
-            return true;
-        } else if (objectType === TileObjectType.CustomLaserTurret) {
-            return true;
-        } else if (objectType === TileObjectType.PipeJoint) {
-            return playerIndex === neutralPlayerIndex;
-        } else {
-            return false;
-        }
-    }
-
     export function checkIsValidTurnPhaseCode(turnPhaseCode: Types.TurnPhaseCode): boolean {
         return (turnPhaseCode === Types.TurnPhaseCode.Main)
             || (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn);
@@ -296,14 +215,6 @@ namespace Twns.Config.ConfigManager {
     export function getTileBaseTypeByTileType(type: TileType): TileBaseType {
         return Helpers.getExisted(CommonConstants.TileTypeToTileBaseType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
     }
-    export function getTileObjectTypeByTileType(type: TileType): TileObjectType {
-        return Helpers.getExisted(CommonConstants.TileTypeToTileObjectType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
-    }
-
-    export function checkCanBeOwnedByUnneutralPlayer(tileType: TileType): boolean {
-        const cfg = CommonConstants.TileObjectShapeConfigs.get(getTileObjectTypeByTileType(tileType));
-        return (cfg != null) && (cfg.maxPlayerIndex > CommonConstants.WarNeutralPlayerIndex);
-    }
 
     export function getTileBaseImageSource({version, themeType, skinId, baseType, isDark, shapeId, tickCount}: {
         version     : Types.UnitAndTileTextureVersion;
@@ -407,11 +318,6 @@ namespace Twns.Config.ConfigManager {
         return (diveCfgs != null) && (!!diveCfgs[1]);
     }
 
-    export function checkIsValidTileObjectShapeId(tileObjectType: TileObjectType, shapeId: Types.Undefinable<number>): boolean {
-        const cfg = CommonConstants.TileObjectShapeConfigs.get(tileObjectType);
-        return (!!cfg)
-            && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
-    }
     export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: Types.Undefinable<number>): boolean {
         const cfg = CommonConstants.TileBaseShapeConfigs.get(tileBaseType);
         return (!!cfg)

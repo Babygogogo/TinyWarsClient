@@ -577,8 +577,8 @@ namespace Twns.Common {
             this._labelWeather.text         = Lang.getWeatherName(data.weatherType);
             this._unitView1.update(createUnitViewData(attackerData.unitType, 1, gameConfig));
             this._unitView2.update(createUnitViewData(defenderData.unitType, 2, gameConfig));
-            this._tileView1.init(createTileViewData(attackerData.tileType, 1)).updateView();
-            this._tileView2.init(createTileViewData(defenderData.tileType, 2)).updateView();
+            this._tileView1.init(createTileViewData(attackerData.tileType, 1, gameConfig)).updateView();
+            this._tileView2.init(createTileViewData(defenderData.tileType, 2, gameConfig)).updateView();
 
             {
                 const coSkillType1      = attackerData.coSkillType;
@@ -788,8 +788,8 @@ namespace Twns.Common {
             gameConfig,
         };
     }
-    function createTileViewData(tileType: TileType, playerIndex: number): MapEditor.TileViewData {
-        const objectType    = Config.ConfigManager.getTileObjectTypeByTileType(tileType);
+    function createTileViewData(tileType: TileType, playerIndex: number, gameConfig: GameConfig): MapEditor.TileViewData {
+        const objectType    = Helpers.getExisted(gameConfig.getTileObjectTypeByTileType(tileType));
         const baseType      = Config.ConfigManager.getTileBaseTypeByTileType(tileType);
         return {
             tileBaseType        : baseType,
@@ -798,7 +798,7 @@ namespace Twns.Common {
             tileDecoratorShapeId: null,
             tileObjectType      : objectType,
             tileObjectShapeId   : 0,
-            playerIndex         : Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType) ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+            playerIndex         : gameConfig.checkIsValidPlayerIndexForTileObject({ playerIndex, tileObjectType: objectType }) ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
         };
     }
 

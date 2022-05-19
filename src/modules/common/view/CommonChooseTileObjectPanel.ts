@@ -65,18 +65,21 @@ namespace Twns.Common {
         }
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
-            const mapping = new Map<number, DataForDrawTileObject[]>();
-            for (const [objectType, cfg] of CommonConstants.TileObjectShapeConfigs) {
-                for (let playerIndex = cfg.minPlayerIndex; playerIndex <= cfg.maxPlayerIndex; ++playerIndex) {
+            const openData      = this._getOpenData();
+            const gameConfig    = openData.gameConfig;
+            const mapping       = new Map<number, DataForDrawTileObject[]>();
+            for (const cfg of gameConfig.getAllTileObjectCfgArray()) {
+                const playerIndexRange = Helpers.getExisted(cfg.playerIndexRange);
+                for (let playerIndex = playerIndexRange[0]; playerIndex <= playerIndexRange[1]; ++playerIndex) {
                     if (!mapping.has(playerIndex)) {
                         mapping.set(playerIndex, []);
                     }
 
                     const dataListForDrawTileObject = Helpers.getExisted(mapping.get(playerIndex));
-                    const shapesCount               = User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0 ? cfg.shapesCountForV0 : cfg.shapesCount;
+                    const shapesCount               = Helpers.getExisted(User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0 ? cfg.shapesCountForV0 : cfg.shapesCount);
                     for (let shapeId = 0; shapeId < shapesCount; ++shapeId) {
                         dataListForDrawTileObject.push({
-                            objectType,
+                            objectType  : cfg.tileObjectType,
                             playerIndex,
                             shapeId
                         });
@@ -84,9 +87,7 @@ namespace Twns.Common {
                 }
             }
 
-            const openData      = this._getOpenData();
             const dataArray     : DataForCategoryRenderer[] = [];
-            const gameConfig    = openData.gameConfig;
             const callback      = openData.callback;
             for (const [, dataListForDrawTileObject] of mapping) {
                 dataArray.push({

@@ -177,7 +177,8 @@ namespace Twns.Common {
         private _updateTileView(): void {
             const data          = this._getData();
             const tileType      = data.newTileType;
-            const objectType    = Config.ConfigManager.getTileObjectTypeByTileType(tileType);
+            const gameConfig    = data.gameConfig;
+            const objectType    = Helpers.getExisted(gameConfig.getTileObjectTypeByTileType(tileType));
             const baseType      = Config.ConfigManager.getTileBaseTypeByTileType(tileType);
             const playerIndex   = data.playerIndex;
 
@@ -188,7 +189,7 @@ namespace Twns.Common {
                 tileDecoratorShapeId: null,
                 tileObjectType      : objectType,
                 tileObjectShapeId   : 0,
-                playerIndex         : Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType) ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : gameConfig.checkIsValidPlayerIndexForTileObject({ playerIndex, tileObjectType: objectType }) ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
             });
         }
     }

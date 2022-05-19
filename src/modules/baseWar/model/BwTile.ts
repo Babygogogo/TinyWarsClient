@@ -98,8 +98,8 @@ namespace Twns.BaseWar {
             const objectType    = Helpers.getExisted(data.objectType, ClientErrorCode.BwTile_Deserialize_02) as TileObjectType;
             const baseType      = Helpers.getExisted(data.baseType, ClientErrorCode.BwTile_Deserialize_03) as TileBaseType;
             const playerIndex   = data.playerIndex;
-            if ((playerIndex == null)                                                           ||
-                (!Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType))
+            if ((playerIndex == null)                                                                           ||
+                (!gameConfig.checkIsValidPlayerIndexForTileObject({ playerIndex, tileObjectType: objectType }))
             ) {
                 throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTile_Deserialize_04);
             }
@@ -160,7 +160,7 @@ namespace Twns.BaseWar {
             }
 
             const objectShapeId = data.objectShapeId;
-            if (!Config.ConfigManager.checkIsValidTileObjectShapeId(objectType, objectShapeId)) {
+            if (!gameConfig.checkIsValidTileObjectShapeId(objectType, objectShapeId)) {
                 throw Helpers.newError(`Invalid objectShapeId: ${objectShapeId}`, ClientErrorCode.BwTile_Deserialize_12);
             }
 
@@ -597,7 +597,8 @@ namespace Twns.BaseWar {
             objectType      : TileObjectType;
             playerIndex     : number;
         }): void {
-            if (!Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType)) {
+            const gameConfig = this.getGameConfig();
+            if (!gameConfig.checkIsValidPlayerIndexForTileObject({ playerIndex, tileObjectType: objectType })) {
                 throw Helpers.newError(`Invalid playerIndex: ${playerIndex}, baseType: ${baseType}, objectType: ${objectType}`);
             }
 
@@ -612,23 +613,24 @@ namespace Twns.BaseWar {
                 decoratorShapeId: this.getDecoratorShapeId(),
                 locationFlags   : this.getLocationFlags(),
                 isHighlighted   : this.getIsHighlighted(),
-            }, this.getGameConfig());
+            }, gameConfig);
             this.startRunning(this.getWar());
         }
 
         public resetOnTileObjectDestroyed(): void {
+            const gameConfig = this.getGameConfig();
             this.init({
                 gridIndex       : this.getGridIndex(),
                 playerIndex     : CommonConstants.WarNeutralPlayerIndex,
                 baseType        : this.getBaseType(),
                 baseShapeId     : this.getBaseShapeId(),
                 objectType      : TileObjectType.Empty,
-                objectShapeId   : getNewObjectShapeIdOnObjectDestroyed(this.getObjectType(), this.getObjectShapeId()),
+                objectShapeId   : getNewObjectShapeIdOnObjectDestroyed(this.getObjectType(), this.getObjectShapeId(), gameConfig),
                 decoratorType   : this.getDecoratorType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
                 locationFlags   : this.getLocationFlags(),
                 isHighlighted   : this.getIsHighlighted(),
-            }, this.getGameConfig());
+            }, gameConfig);
             this.startRunning(this.getWar());
         }
 
@@ -1264,31 +1266,14 @@ namespace Twns.BaseWar {
         }
     }
 
-    function getNewObjectShapeIdOnObjectDestroyed(oldType: TileObjectType, oldShapeId: number): number {
-        if ((oldType === TileObjectType.CannonDown)         ||
-            (oldType === TileObjectType.CannonLeft)         ||
-            (oldType === TileObjectType.CannonRight)        ||
-            (oldType === TileObjectType.CannonUp)           ||
-            (oldType === TileObjectType.CustomCannon)       ||
-            (oldType === TileObjectType.CustomCrystal)      ||
-            (oldType === TileObjectType.CustomLaserTurret)  ||
-            (oldType === TileObjectType.Meteor)             ||
-            (oldType === TileObjectType.Crystal)            ||
-            (oldType === TileObjectType.LaserTurret)
-        ) {
-            return 3;
-        } else if (oldType === TileObjectType.PipeJoint) {
-            if (oldShapeId === 0) {
-                return 1;
-            } else if (oldShapeId === 1) {
-                return 2;
-            } else {
-                // throw Helpers.newError(`Invalid oldType and oldShapeId: ${oldType}, ${oldShapeId}`, ServerErrorCode.BwTile_GetNewObjectShapeIdOnObjectDestroyed_0000);
-                return 0;
+    function getNewObjectShapeIdOnObjectDestroyed(oldType: TileObjectType, oldShapeId: number, gameConfig: GameConfig): number {
+        const shapeIdArray = Helpers.getExisted(gameConfig.getTileObjectCfg(oldType)?.shapeIdAfterDestruction);
+        for (let i = 1; i < shapeIdArray.length; i += 2) {
+            if (shapeIdArray[i] === oldShapeId) {
+                return shapeIdArray[i + 1];
             }
-        } else {
-            return 0;
         }
+        return shapeIdArray[0];
     }
 }
 

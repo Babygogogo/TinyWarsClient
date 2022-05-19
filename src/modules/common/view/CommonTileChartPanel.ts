@@ -197,7 +197,7 @@ namespace Twns.Common {
                 tileBaseShapeId     : 0,
                 tileDecoratorType   : null,
                 tileDecoratorShapeId: null,
-                tileObjectType      : CommonConstants.TileTypeToTileObjectType.get(tileType) ?? null,
+                tileObjectType      : this._getOpenData().gameConfig.getTileTemplateCfgByType(tileType)?.toTileObjectType ?? null,
                 tileObjectShapeId   : 0,
                 playerIndex         : CommonConstants.WarNeutralPlayerIndex,
             });

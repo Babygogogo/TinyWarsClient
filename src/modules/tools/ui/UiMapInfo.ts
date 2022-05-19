@@ -183,7 +183,7 @@ namespace TwnsUiMapInfo {
                 labelMapSize.text           = `${mapRawData.mapWidth} x ${mapRawData.mapHeight}`;
                 imgSetMyRating.visible      = true;
                 imgWarStatistics.visible    = true;
-                this._listTile.bindData(generateDataForListTile(Twns.Helpers.getExisted(mapRawData.tileDataArray)));
+                this._listTile.bindData(generateDataForListTile(Twns.Helpers.getExisted(mapRawData.tileDataArray), await Twns.Config.ConfigManager.getLatestGameConfig()));
 
                 return;
             }
@@ -201,7 +201,7 @@ namespace TwnsUiMapInfo {
                 labelMapSize.text           = `${mapSize.width} x ${mapSize.height}`;
                 imgSetMyRating.visible      = false;
                 imgWarStatistics.visible    = false;
-                this._listTile.bindData(generateDataForListTile(Twns.Helpers.getExisted(tileMapData.tiles)));
+                this._listTile.bindData(generateDataForListTile(Twns.Helpers.getExisted(tileMapData.tiles), await Twns.Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(warData.settingsForCommon?.configVersion))));
 
                 return;
             }
@@ -231,7 +231,7 @@ namespace TwnsUiMapInfo {
         }
     }
 
-    function generateDataForListTile(tileDataArray: CommonProto.WarSerialization.ISerialTile[]): DataForTileRenderer[] {
+    function generateDataForListTile(tileDataArray: CommonProto.WarSerialization.ISerialTile[], gameConfig: Twns.Config.GameConfig): DataForTileRenderer[] {
         const tileCountDict = new Map<TileType, number>();
         for (const tile of tileDataArray || []) {
             const tileType = Twns.Config.ConfigManager.getTileType(Twns.Helpers.getExisted(tile.baseType), Twns.Helpers.getExisted(tile.objectType));
@@ -245,6 +245,7 @@ namespace TwnsUiMapInfo {
             dataArray.push({
                 tileType,
                 num     : tileCountDict.get(tileType) || 0,
+                gameConfig,
             });
         }
         return dataArray;
@@ -261,6 +262,7 @@ namespace TwnsUiMapInfo {
         TileType.Radar,
     ];
     type DataForTileRenderer = {
+        gameConfig      : Twns.Config.GameConfig;
         tileType        : Twns.Types.TileType;
         num             : number;
     };
@@ -293,7 +295,7 @@ namespace TwnsUiMapInfo {
             const data          = this._getData();
             this._labelNum.text = `x${data.num}`;
 
-            const tileObjectType = Twns.Config.ConfigManager.getTileObjectTypeByTileType(data.tileType);
+            const tileObjectType = data.gameConfig.getTileObjectTypeByTileType(data.tileType);
             this._tileView.init({
                 tileBaseType        : null,
                 tileBaseShapeId     : null,

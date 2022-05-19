@@ -161,17 +161,18 @@ namespace Twns.MapEditor {
 
             const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
             const dataArray     : DataForTileObjectRenderer[] = [];
-            for (const [objectType, cfg] of CommonConstants.TileObjectShapeConfigs) {
-                if ((playerIndex < cfg.minPlayerIndex) || (playerIndex > cfg.maxPlayerIndex)) {
+            for (const cfg of gameConfig.getAllTileObjectCfgArray()) {
+                const playerIndexRange = Helpers.getExisted(cfg.playerIndexRange);
+                if ((playerIndex < playerIndexRange[0]) || (playerIndex > playerIndexRange[1])) {
                     continue;
                 }
 
-                const shapesCount = User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0 ? cfg.shapesCountForV0 : cfg.shapesCount;
+                const shapesCount = Helpers.getExisted(User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0 ? cfg.shapesCountForV0 : cfg.shapesCount);
                 for (let shapeId = 0; shapeId < shapesCount; ++shapeId) {
                     dataArray.push({
                         panel                   : this,
                         dataForDrawTileObject   : {
-                            objectType,
+                            objectType  : cfg.tileObjectType,
                             playerIndex,
                             shapeId,
                         },

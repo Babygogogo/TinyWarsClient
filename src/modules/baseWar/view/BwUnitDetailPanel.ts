@@ -1150,7 +1150,7 @@ namespace Twns.BaseWar {
                     version     : User.UserModel.getSelfSettingsTextureVersion(),
                     themeType   : Types.TileThemeType.Clear,
                     skinId      : CommonConstants.UnitAndTileNeutralSkinId,
-                    objectType  : Config.ConfigManager.getTileObjectTypeByTileType(targetTileType),
+                    objectType  : Helpers.getExisted(gameConfig.getTileObjectTypeByTileType(targetTileType)),
                     isDark      : false,
                     shapeId     : 0,
                     tickCount   : Timer.getTileAnimationTickCount(),
