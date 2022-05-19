@@ -493,7 +493,7 @@ namespace Twns.MapEditor {
             const targetObjectData  = Helpers.getExisted(this.getDrawTargetTileObjectData());
             const baseType          = tile.getBaseType();
             const objectType        = targetObjectData.objectType;
-            const isAttackableTile  = !!gameConfig.getTileTemplateCfgByType(Config.ConfigManager.getTileType(baseType, objectType))?.maxHp;
+            const isAttackableTile  = !!gameConfig.getTileTemplateCfgByType(Helpers.getExisted(gameConfig.getTileType(baseType, objectType)))?.maxHp;
             if ((isAttackableTile) && (unitMap.getUnitOnMap(gridIndex))) {
                 FloatText.show(Lang.getText(LangTextType.A0269));
                 return;

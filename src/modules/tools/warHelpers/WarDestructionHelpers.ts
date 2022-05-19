@@ -8,7 +8,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarHelpers.WarDestructionHelpers {
     import GridIndex        = Types.GridIndex;
-    import TileObjectType   = Types.TileObjectType;
     import BwWar            = BaseWar.BwWar;
 
     export function destroyUnitOnMap(war: BwWar, gridIndex: GridIndex, showExplosionEffect: boolean): void {
@@ -73,15 +72,15 @@ namespace Twns.WarHelpers.WarDestructionHelpers {
 
         for (const tile of tileMap.getAllTiles()) {
             if (tile.getPlayerIndex() === playerIndex) {
-                const baseType      = tile.getBaseType();
-                const objectType    = tile.getObjectType();
-                const hp            = tile.getCurrentHp();
-                const buildPoint    = tile.getCurrentBuildPoint();
-                const capturePoint  = tile.getCurrentCapturePoint();
+                const baseType          = tile.getBaseType();
+                const tileObjectType    = tile.getObjectType();
+                const hp                = tile.getCurrentHp();
+                const buildPoint        = tile.getCurrentBuildPoint();
+                const capturePoint      = tile.getCurrentCapturePoint();
                 tile.resetByTypeAndPlayerIndex({
                     baseType,
-                    objectType      : objectType === TileObjectType.Headquarters ? TileObjectType.City : objectType,
-                    playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                    objectType  : tile.getGameConfig().getTileObjectCfg(tileObjectType)?.typeAfterOwnerChange ?? tileObjectType,
+                    playerIndex : CommonConstants.WarNeutralPlayerIndex,
                 });
                 tile.setCurrentHp(hp);
                 tile.setCurrentBuildPoint(buildPoint);

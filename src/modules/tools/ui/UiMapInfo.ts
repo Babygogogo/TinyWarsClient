@@ -234,7 +234,7 @@ namespace TwnsUiMapInfo {
     function generateDataForListTile(tileDataArray: CommonProto.WarSerialization.ISerialTile[], gameConfig: Twns.Config.GameConfig): DataForTileRenderer[] {
         const tileCountDict = new Map<TileType, number>();
         for (const tile of tileDataArray || []) {
-            const tileType = Twns.Config.ConfigManager.getTileType(Twns.Helpers.getExisted(tile.baseType), Twns.Helpers.getExisted(tile.objectType));
+            const tileType = gameConfig.getTileType(Twns.Helpers.getExisted(tile.baseType), Twns.Helpers.getExisted(tile.objectType));
             if (tileType != null) {
                 tileCountDict.set(tileType, (tileCountDict.get(tileType) || 0) + 1);
             }

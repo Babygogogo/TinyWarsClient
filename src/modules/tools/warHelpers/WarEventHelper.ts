@@ -2663,7 +2663,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const actIsModifyTileDecorator  = (data.actIsModifyTileDecorator) || (data.actIsModifyTileDecorator == null);
         const actIsModifyTileObject     = (data.actIsModifyTileObject) || (data.actIsModifyTileObject == null);
         const actTileType               = (actIsModifyTileBase || actIsModifyTileDecorator || actIsModifyTileObject) && (actTileBaseType != null) && (actTileObjectType != null)
-            ? Config.ConfigManager.getTileType(actTileBaseType, actTileObjectType)
+            ? gameConfig.getTileType(actTileBaseType, actTileObjectType)
             : null;
         const textForActTileData    = actTileType != null
             ? Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0718), Lang.getTileName(actTileType, gameConfig))

@@ -7,6 +7,7 @@ namespace Twns.Config {
     import UnitTemplateCfg      = Types.UnitTemplateCfg;
     import TileTemplateCfg      = Types.TileTemplateCfg;
     import TileObjectCfg        = Types.TileObjectCfg;
+    import TileTypeMappingCfg   = Types.TileTypeMappingCfg;
     import DamageChartCfg       = Types.DamageChartCfg;
     import BuildableTileCfg     = Types.BuildableTileCfg;
     import VisionBonusCfg       = Types.VisionBonusCfg;
@@ -35,6 +36,7 @@ namespace Twns.Config {
         private readonly _unitCategoryCfgDict       : Map<number, UnitCategoryCfg>;
         private readonly _tileTemplateCfgDict       : Map<TileType, TileTemplateCfg>;
         private readonly _tileObjectCfgDict         : Map<number, TileObjectCfg>;
+        private readonly _tileTypeMappingCfgDict    : Map<number, Map<number, TileTypeMappingCfg>>;
         private readonly _unitTemplateCfgDict       : Map<number, UnitTemplateCfg>;
         private readonly _moveCostCfgDict           : Map<TileType, { [moveType: number]: MoveCostCfg }>;
         private readonly _visionBonusCfgDict        : Map<number, { [tileType: number]: VisionBonusCfg }>;
@@ -67,6 +69,7 @@ namespace Twns.Config {
             this._unitCategoryCfgDict       = _destructUnitCategoryCfg(rawConfig.UnitCategory);
             this._tileTemplateCfgDict       = _destructTileTemplateCfg(rawConfig.TileTemplate);
             this._tileObjectCfgDict         = _destructTileObjectCfg(rawConfig.TileObject);
+            this._tileTypeMappingCfgDict    = _destructTileTypeMappingCfg(rawConfig.TileTypeMapping);
             this._unitTemplateCfgDict       = _destructUnitTemplateCfg(rawConfig.UnitTemplate);
             this._moveCostCfgDict           = _destructMoveCostCfg(rawConfig.MoveCost);
             this._visionBonusCfgDict        = _destructVisionBonusCfg(rawConfig.VisionBonus);
@@ -150,6 +153,10 @@ namespace Twns.Config {
             const shapesCount = this.getTileObjectCfg(tileObjectType)?.shapesCount;
             return (shapesCount != null)
                 && ((shapeId == null) || ((shapeId >= 0) && (shapeId < shapesCount)));
+        }
+
+        public getTileType(tileBaseType: number, tileObjectType: number): number | null {
+            return this._tileTypeMappingCfgDict.get(tileBaseType)?.get(tileObjectType)?.tileType ?? null;
         }
 
         public getTileCategoryCfg(tileCategory: number): TileCategoryCfg | null {
@@ -506,6 +513,16 @@ namespace Twns.Config {
         const dst = new Map<TileType, TileObjectCfg>();
         for (const d of data) {
             dst.set(d.tileObjectType, d);
+        }
+        return dst;
+    }
+    function _destructTileTypeMappingCfg(data: TileTypeMappingCfg[]): Map<number, Map<number, TileTypeMappingCfg>> {
+        const dst = new Map<number, Map<number, TileTypeMappingCfg>>();
+        for (const d of data) {
+            const tileBaseType          = d.tileBaseType;
+            const subData               = dst.get(tileBaseType) ?? new Map<number, TileTypeMappingCfg>();
+            subData.set(d.tileObjectType, d);
+            dst.set(tileBaseType, subData);
         }
         return dst;
     }

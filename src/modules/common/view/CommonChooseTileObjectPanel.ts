@@ -171,8 +171,9 @@ namespace Twns.Common {
         protected _onDataChanged(): void {
             const data                  = this._getData();
             const dataForDrawTileObject = data.dataForDrawTileObject;
+            const gameConfig            = data.gameConfig;
             const tileObjectType        = dataForDrawTileObject.objectType;
-            this._labelName.text        = Lang.getTileName(Config.ConfigManager.getTileType(Types.TileBaseType.Plain, tileObjectType), data.gameConfig) || CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = Lang.getTileName(Helpers.getExisted(gameConfig.getTileType(Types.TileBaseType.Plain, tileObjectType)), gameConfig) || CommonConstants.ErrorTextForUndefined;
             this._tileView.init({
                 tileObjectType,
                 tileObjectShapeId   : dataForDrawTileObject.shapeId,

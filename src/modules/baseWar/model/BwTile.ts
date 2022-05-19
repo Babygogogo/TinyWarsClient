@@ -104,7 +104,7 @@ namespace Twns.BaseWar {
                 throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTile_Deserialize_04);
             }
 
-            const templateCfg       = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(Config.ConfigManager.getTileType(baseType, objectType)));
+            const templateCfg       = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(Helpers.getExisted(gameConfig.getTileType(baseType, objectType))));
             const maxBuildPoint     = templateCfg.maxBuildPoint;
             const currentBuildPoint = data.currentBuildPoint;
             if (maxBuildPoint == null) {
@@ -718,7 +718,7 @@ namespace Twns.BaseWar {
         // Functions for move cost.
         ////////////////////////////////////////////////////////////////////////////////
         private _getMoveCostCfg(): { [moveType: number]: Types.MoveCostCfg } {
-            return Helpers.getExisted(this.getGameConfig().getMoveCostCfg(Config.ConfigManager.getTileType(this.getBaseType(), this.getObjectType())));
+            return Helpers.getExisted(this.getGameConfig().getMoveCostCfg(this.getType()));
         }
 
         public getMoveCostByMoveType(moveType: number): number | null {

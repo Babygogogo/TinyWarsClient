@@ -993,7 +993,7 @@ namespace Twns.BaseWar {
                     if (unitMap.getUnitOnMap(gridIndex)) {
                         if (actDestroyUnit) {
                             WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
-                        } else if (gameConfig.getTileTemplateCfgByType(Config.ConfigManager.getTileType(actBaseType, actObjectType))?.maxHp != null) {
+                        } else if (gameConfig.getTileTemplateCfgByType(Helpers.getExisted(gameConfig.getTileType(actBaseType, actObjectType)))?.maxHp != null) {
                             continue;
                         }
                     }

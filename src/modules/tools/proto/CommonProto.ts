@@ -751,6 +751,9 @@ declare namespace CommonProto {
 
             /** TileObjectCfg sortWeight */
             sortWeight?: (number|null);
+
+            /** TileObjectCfg typeAfterOwnerChange */
+            typeAfterOwnerChange?: (number|null);
         }
 
         /** Represents a TileObjectCfg. */
@@ -779,6 +782,9 @@ declare namespace CommonProto {
 
             /** TileObjectCfg sortWeight. */
             public sortWeight: number;
+
+            /** TileObjectCfg typeAfterOwnerChange. */
+            public typeAfterOwnerChange: number;
 
             /**
              * Creates a new TileObjectCfg instance using the specified properties.
@@ -846,6 +852,108 @@ declare namespace CommonProto {
 
             /**
              * Converts this TileObjectCfg to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a TileTypeMappingCfg. */
+        interface ITileTypeMappingCfg {
+
+            /** TileTypeMappingCfg tileBaseType */
+            tileBaseType?: (number|null);
+
+            /** TileTypeMappingCfg tileObjectType */
+            tileObjectType?: (number|null);
+
+            /** TileTypeMappingCfg tileType */
+            tileType?: (number|null);
+        }
+
+        /** Represents a TileTypeMappingCfg. */
+        class TileTypeMappingCfg implements ITileTypeMappingCfg {
+
+            /**
+             * Constructs a new TileTypeMappingCfg.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.Config.ITileTypeMappingCfg);
+
+            /** TileTypeMappingCfg tileBaseType. */
+            public tileBaseType: number;
+
+            /** TileTypeMappingCfg tileObjectType. */
+            public tileObjectType: number;
+
+            /** TileTypeMappingCfg tileType. */
+            public tileType: number;
+
+            /**
+             * Creates a new TileTypeMappingCfg instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns TileTypeMappingCfg instance
+             */
+            public static create(properties?: CommonProto.Config.ITileTypeMappingCfg): CommonProto.Config.TileTypeMappingCfg;
+
+            /**
+             * Encodes the specified TileTypeMappingCfg message. Does not implicitly {@link CommonProto.Config.TileTypeMappingCfg.verify|verify} messages.
+             * @param message TileTypeMappingCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.Config.ITileTypeMappingCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified TileTypeMappingCfg message, length delimited. Does not implicitly {@link CommonProto.Config.TileTypeMappingCfg.verify|verify} messages.
+             * @param message TileTypeMappingCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.Config.ITileTypeMappingCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a TileTypeMappingCfg message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns TileTypeMappingCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.Config.TileTypeMappingCfg;
+
+            /**
+             * Decodes a TileTypeMappingCfg message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns TileTypeMappingCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.Config.TileTypeMappingCfg;
+
+            /**
+             * Verifies a TileTypeMappingCfg message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a TileTypeMappingCfg message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns TileTypeMappingCfg
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.Config.TileTypeMappingCfg;
+
+            /**
+             * Creates a plain object from a TileTypeMappingCfg message. Also converts values to other types if specified.
+             * @param message TileTypeMappingCfg
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.Config.TileTypeMappingCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this TileTypeMappingCfg to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -2951,6 +3059,9 @@ declare namespace CommonProto {
             /** FullConfig TileObject */
             TileObject?: (CommonProto.Config.ITileObjectCfg[]|null);
 
+            /** FullConfig TileTypeMapping */
+            TileTypeMapping?: (CommonProto.Config.ITileTypeMappingCfg[]|null);
+
             /** FullConfig UnitCategory */
             UnitCategory?: (CommonProto.Config.IUnitCategoryCfg[]|null);
 
@@ -3020,6 +3131,9 @@ declare namespace CommonProto {
 
             /** FullConfig TileObject. */
             public TileObject: CommonProto.Config.ITileObjectCfg[];
+
+            /** FullConfig TileTypeMapping. */
+            public TileTypeMapping: CommonProto.Config.ITileTypeMappingCfg[];
 
             /** FullConfig UnitCategory. */
             public UnitCategory: CommonProto.Config.IUnitCategoryCfg[];

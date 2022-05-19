@@ -1734,7 +1734,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                     tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
                     tile.resetByTypeAndPlayerIndex({
                         baseType        : tile.getBaseType(),
-                        objectType      : tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType,
+                        objectType      : tile.getGameConfig().getTileObjectCfg(tileObjectType)?.typeAfterOwnerChange ?? tileObjectType,
                         playerIndex     : focusUnit.getPlayerIndex(),
                     });
                 }
@@ -1828,7 +1828,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                     tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
                     tile.resetByTypeAndPlayerIndex({
                         baseType    : tile.getBaseType(),
-                        objectType  : tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType,
+                        objectType  : tile.getGameConfig().getTileObjectCfg(tileObjectType)?.typeAfterOwnerChange ?? tileObjectType,
                         playerIndex : focusUnit.getPlayerIndex(),
                     });
                 }

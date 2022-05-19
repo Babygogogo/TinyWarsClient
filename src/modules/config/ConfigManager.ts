@@ -59,11 +59,6 @@ namespace Twns.Config.ConfigManager {
         return await getGameConfig(await getLatestConfigVersion());
     }
 
-    export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
-        const mapping = Helpers.getExisted(CommonConstants.TileTypeMapping.get(baseType), ClientErrorCode.ConfigManager_GetTileType_00);
-        return Helpers.getExisted(mapping.get(objectType), ClientErrorCode.ConfigManager_GetTileType_01);
-    }
-
     export function checkIsValidTurnPhaseCode(turnPhaseCode: Types.TurnPhaseCode): boolean {
         return (turnPhaseCode === Types.TurnPhaseCode.Main)
             || (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn);

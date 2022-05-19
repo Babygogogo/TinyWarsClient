@@ -29,6 +29,11 @@ namespace Twns.Types {
         tileObjectType          : number;
         shapeIdAfterDestruction : number[];
     }
+    export interface TileTypeMappingCfg extends CommonProto.Config.ITileTypeMappingCfg {
+        tileBaseType            : number;
+        tileObjectType          : number;
+        tileType                : number;
+    }
     export interface UnitTemplateCfg extends CommonProto.Config.IUnitTemplateCfg {
         type                    : number;
         maxHp                   : number;
@@ -112,6 +117,7 @@ namespace Twns.Types {
         UnitCategory    : UnitCategoryCfg[];
         TileTemplate    : TileTemplateCfg[];
         TileObject      : TileObjectCfg[];
+        TileTypeMapping : TileTypeMappingCfg[];
         UnitTemplate    : UnitTemplateCfg[];
         DamageChart     : DamageChartCfg[];
         MoveCost        : MoveCostCfg[];
