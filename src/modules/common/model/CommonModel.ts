@@ -97,7 +97,8 @@ namespace Twns.Common.CommonModel {
         return Helpers.getExisted(cfg.source);
     }
 
-    export function getCachedTileBaseImageSource(params: {
+    export function getCachedTileBaseImageSource({ gameConfig, version, themeType, skinId, baseType, isDark, shapeId, tickCount } : {
+        gameConfig  : Config.GameConfig;
         version     : TextureVersion;
         themeType   : TileThemeType;
         skinId      : number;
@@ -106,7 +107,6 @@ namespace Twns.Common.CommonModel {
         shapeId     : number;
         tickCount   : number;
     }): string {
-        const { version, themeType, skinId, baseType, isDark, shapeId, tickCount } = params;
         if (!_tileBaseImageSourceDict.has(version)) {
             _tileBaseImageSourceDict.set(version, new Map());
         }
@@ -144,7 +144,7 @@ namespace Twns.Common.CommonModel {
         const cfg = Helpers.getExisted(dict6.get(tickCount));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
-            cfg.source  = Config.ConfigManager.getTileBaseImageSource(params);
+            cfg.source  = gameConfig.getTileBaseImageSource({ version, themeType, skinId, baseType, isDark, shapeId, tickCount });
         }
 
         return Helpers.getExisted(cfg.source);
@@ -210,7 +210,8 @@ namespace Twns.Common.CommonModel {
         return Helpers.getExisted(cfg.source);
     }
 
-    export function getCachedTileObjectImageSource(params: {
+    export function getCachedTileObjectImageSource({ gameConfig, version, themeType, skinId, objectType, isDark, shapeId, tickCount }: {
+        gameConfig  : Config.GameConfig;
         version     : TextureVersion;
         themeType   : TileThemeType;
         skinId      : number;
@@ -219,7 +220,6 @@ namespace Twns.Common.CommonModel {
         shapeId     : number;
         tickCount   : number;
     }): string {
-        const { version, themeType, skinId, objectType, isDark, shapeId, tickCount } = params;
         if (!_tileObjectImageSourceDict.has(version)) {
             _tileObjectImageSourceDict.set(version, new Map());
         }
@@ -257,7 +257,7 @@ namespace Twns.Common.CommonModel {
         const cfg = Helpers.getExisted(dict6.get(tickCount));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
-            cfg.source  = Config.ConfigManager.getTileObjectImageSource(params);
+            cfg.source  = gameConfig.getTileObjectImageSource({ version, themeType, skinId, objectType, isDark, shapeId, tickCount });
         }
 
         return Helpers.getExisted(cfg.source);

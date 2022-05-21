@@ -11,8 +11,6 @@
 namespace Twns.Config.ConfigManager {
     import TileBaseType         = Types.TileBaseType;
     import TileDecoratorType    = Types.TileDecoratorType;
-    import TileObjectType       = Types.TileObjectType;
-    import TileType             = Types.TileType;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Initializers.
@@ -207,36 +205,6 @@ namespace Twns.Config.ConfigManager {
         return (actionId > 0) && (actionId <= CommonConstants.WarEventMaxActionsPerMap);
     }
 
-    export function getTileBaseTypeByTileType(type: TileType): TileBaseType {
-        return Helpers.getExisted(CommonConstants.TileTypeToTileBaseType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
-    }
-
-    export function getTileBaseImageSource({version, themeType, skinId, baseType, isDark, shapeId, tickCount}: {
-        version     : Types.UnitAndTileTextureVersion;
-        themeType   : Types.TileThemeType;
-        skinId      : number;
-        baseType    : TileBaseType;
-        isDark      : boolean;
-        shapeId     : number;
-        tickCount   : number;
-    }): string {
-        if (baseType === TileBaseType.Empty) {
-            return ``;
-        }
-
-        const cfgForFrame       = Helpers.getExisted(CommonConstants.TileBaseFrameConfigs.get(version)?.get(baseType), ClientErrorCode.ConfigManager_GetTileBaseImageSource_00);
-        const ticksPerFrame     = cfgForFrame.ticksPerFrame;
-        const textForDark       = isDark ? `state01` : `state00`;
-        const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
-        const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
-        const textForVersion    = `ver${Helpers.getNumText(version)}`;
-        const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
-        const textForType       = `type${Helpers.getNumText(baseType)}`;
-        const textForFrame      = ticksPerFrame < Number.MAX_VALUE
-            ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
-            : `frame00`;
-        return `tileBase_${textForVersion}_${textForTheme}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
-    }
     export function getTileDecoratorImageSource({version, themeType, skinId, decoratorType, isDark, shapeId, tickCount}: {
         version         : Types.UnitAndTileTextureVersion;
         themeType       : Types.TileThemeType;
@@ -262,28 +230,6 @@ namespace Twns.Config.ConfigManager {
             ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
             : `frame00`;
         return `tileDecorator_${textForVersion}_${textForTheme}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
-    }
-    export function getTileObjectImageSource({version, themeType, skinId, objectType, isDark, shapeId, tickCount}: {
-        version     : Types.UnitAndTileTextureVersion;
-        themeType   : Types.TileThemeType;
-        skinId      : number;
-        objectType  : TileObjectType;
-        isDark      : boolean;
-        shapeId     : number;
-        tickCount   : number;
-    }): string {
-        const cfgForFrame       = Helpers.getExisted(CommonConstants.TileObjectFrameConfigs.get(version)?.get(objectType), ClientErrorCode.ConfigManager_GetTileObjectImageSource_00);
-        const ticksPerFrame     = cfgForFrame.ticksPerFrame;
-        const textForDark       = isDark ? `state01` : `state00`;
-        const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
-        const textForShapeId    = `shape${Helpers.getNumText(shapeId)}`;
-        const textForVersion    = `ver${Helpers.getNumText(version)}`;
-        const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
-        const textForType       = `type${Helpers.getNumText(objectType)}`;
-        const textForFrame      = ticksPerFrame < Number.MAX_VALUE
-            ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
-            : `frame00`;
-        return `tileObject_${textForVersion}_${textForTheme}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
     }
 
     export function getUnitAndTileDefaultSkinId(playerIndex: number): number {
@@ -313,11 +259,6 @@ namespace Twns.Config.ConfigManager {
         return (diveCfgs != null) && (!!diveCfgs[1]);
     }
 
-    export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: Types.Undefinable<number>): boolean {
-        const cfg = CommonConstants.TileBaseShapeConfigs.get(tileBaseType);
-        return (!!cfg)
-            && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
-    }
     export function checkIsValidTileDecoratorShapeId(type: Types.Undefinable<TileDecoratorType>, shapeId: Types.Undefinable<number>): boolean {
         if (type == null) {
             return shapeId == null;
@@ -336,14 +277,6 @@ namespace Twns.Config.ConfigManager {
     export function getSymmetricalTileDecoratorShapeId(decoratorType: TileDecoratorType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
         const cfg           = CommonConstants.TileDecoratorSymmetry.get(decoratorType);
         const shapeIdList   = cfg ? cfg.get(shapeId) : null;
-        return shapeIdList ? shapeIdList[symmetryType] : null;
-    }
-    export function getSymmetricalTileObjectType(objectType: TileObjectType, symmetryType: Types.SymmetryType): TileObjectType {
-        return Helpers.getExisted(CommonConstants.TileObjectTypeSymmetry.get(objectType))[symmetryType];
-    }
-    export function getSymmetricalTileObjectShapeId(objectType: TileObjectType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
-        const cfg           = CommonConstants.TileObjectShapeSymmetry.get(objectType);
-        const shapeIdList   = cfg ? cfg.get(shapeId || 0) : null;
         return shapeIdList ? shapeIdList[symmetryType] : null;
     }
     export function checkIsTileBaseSymmetrical(params: {
@@ -371,14 +304,6 @@ namespace Twns.Config.ConfigManager {
         } else {
             return getSymmetricalTileDecoratorShapeId(decoratorType, shapeId1, symmetryType) === shapeId2;
         }
-    }
-    export function checkIsTileObjectSymmetrical(params: {
-        objectType  : TileObjectType;
-        shapeId1    : number;
-        shapeId2    : number;
-        symmetryType: Types.SymmetryType;
-    }): boolean {
-        return getSymmetricalTileObjectShapeId(params.objectType, params.shapeId1, params.symmetryType) === (params.shapeId2 || 0);
     }
 }
 

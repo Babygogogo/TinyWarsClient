@@ -1,32 +1,34 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Config {
-    import TileType             = Types.TileType;
-    import WeatherType          = Types.WeatherType;
-    import WeaponType           = Types.WeaponType;
-    import UnitTemplateCfg      = Types.UnitTemplateCfg;
-    import TileTemplateCfg      = Types.TileTemplateCfg;
-    import TileObjectCfg        = Types.TileObjectCfg;
-    import TileTypeMappingCfg   = Types.TileTypeMappingCfg;
-    import DamageChartCfg       = Types.DamageChartCfg;
-    import BuildableTileCfg     = Types.BuildableTileCfg;
-    import VisionBonusCfg       = Types.VisionBonusCfg;
-    import CoBasicCfg           = Types.CoBasicCfg;
-    import SystemCfg            = Types.SystemCfg;
-    import TileCategoryCfg      = Types.TileCategoryCfg;
-    import CoType               = Types.CoType;
-    import UnitCategoryCfg      = Types.UnitCategoryCfg;
-    import MoveCostCfg          = Types.MoveCostCfg;
-    import UnitPromotionCfg     = Types.UnitPromotionCfg;
-    import PlayerRankCfg        = Types.PlayerRankCfg;
-    import CoCategoryCfg        = Types.CoCategoryCfg;
-    import CoSkillCfg           = Types.CoSkillCfg;
-    import CoSkillType          = Types.CoSkillType;
-    import WeatherCfg           = Types.WeatherCfg;
-    import WeatherCategoryCfg   = Types.WeatherCategoryCfg;
-    import UserAvatarCfg        = Types.UserAvatarCfg;
-    import BgmSfxCfg            = Types.BgmSfxCfg;
-    import MoveTypeCfg          = Types.MoveTypeCfg;
+    import TileType                 = Types.TileType;
+    import WeatherType              = Types.WeatherType;
+    import WeaponType               = Types.WeaponType;
+    import UnitTemplateCfg          = Types.UnitTemplateCfg;
+    import TileTemplateCfg          = Types.TileTemplateCfg;
+    import TileBaseCfg              = Types.TileBaseCfg;
+    import TileObjectCfg            = Types.TileObjectCfg;
+    import TileObjectSymmetryCfg    = Types.TileObjectSymmetryCfg;
+    import TileTypeMappingCfg       = Types.TileTypeMappingCfg;
+    import DamageChartCfg           = Types.DamageChartCfg;
+    import BuildableTileCfg         = Types.BuildableTileCfg;
+    import VisionBonusCfg           = Types.VisionBonusCfg;
+    import CoBasicCfg               = Types.CoBasicCfg;
+    import SystemCfg                = Types.SystemCfg;
+    import TileCategoryCfg          = Types.TileCategoryCfg;
+    import CoType                   = Types.CoType;
+    import UnitCategoryCfg          = Types.UnitCategoryCfg;
+    import MoveCostCfg              = Types.MoveCostCfg;
+    import UnitPromotionCfg         = Types.UnitPromotionCfg;
+    import PlayerRankCfg            = Types.PlayerRankCfg;
+    import CoCategoryCfg            = Types.CoCategoryCfg;
+    import CoSkillCfg               = Types.CoSkillCfg;
+    import CoSkillType              = Types.CoSkillType;
+    import WeatherCfg               = Types.WeatherCfg;
+    import WeatherCategoryCfg       = Types.WeatherCategoryCfg;
+    import UserAvatarCfg            = Types.UserAvatarCfg;
+    import BgmSfxCfg                = Types.BgmSfxCfg;
+    import MoveTypeCfg              = Types.MoveTypeCfg;
 
     export class GameConfig {
         private readonly _version                   : string;
@@ -35,7 +37,9 @@ namespace Twns.Config {
         private readonly _tileCategoryCfgDict       : Map<number, TileCategoryCfg>;
         private readonly _unitCategoryCfgDict       : Map<number, UnitCategoryCfg>;
         private readonly _tileTemplateCfgDict       : Map<TileType, TileTemplateCfg>;
+        private readonly _tileBaseCfgDict           : Map<number, TileBaseCfg>;
         private readonly _tileObjectCfgDict         : Map<number, TileObjectCfg>;
+        private readonly _tileObjectSymmetryCfgDict : Map<number, Map<number, TileObjectSymmetryCfg>>;
         private readonly _tileTypeMappingCfgDict    : Map<number, Map<number, TileTypeMappingCfg>>;
         private readonly _unitTemplateCfgDict       : Map<number, UnitTemplateCfg>;
         private readonly _moveCostCfgDict           : Map<TileType, { [moveType: number]: MoveCostCfg }>;
@@ -64,11 +68,12 @@ namespace Twns.Config {
 
             this._version                   = version;
             this._systemCfg                 = _destructSystemCfg(rawConfig.System);
-            this._unitMaxPromotion          = _getUnitMaxPromotion(unitPromotionCfg);
             this._tileCategoryCfgDict       = _destructTileCategoryCfg(rawConfig.TileCategory);
             this._unitCategoryCfgDict       = _destructUnitCategoryCfg(rawConfig.UnitCategory);
             this._tileTemplateCfgDict       = _destructTileTemplateCfg(rawConfig.TileTemplate);
+            this._tileBaseCfgDict           = _destructTileBaseCfg(rawConfig.TileBase);
             this._tileObjectCfgDict         = _destructTileObjectCfg(rawConfig.TileObject);
+            this._tileObjectSymmetryCfgDict = _destructTileObjectSymmetryCfg(rawConfig.TileObjectSymmetry);
             this._tileTypeMappingCfgDict    = _destructTileTypeMappingCfg(rawConfig.TileTypeMapping);
             this._unitTemplateCfgDict       = _destructUnitTemplateCfg(rawConfig.UnitTemplate);
             this._moveCostCfgDict           = _destructMoveCostCfg(rawConfig.MoveCost);
@@ -85,6 +90,7 @@ namespace Twns.Config {
             this._moveTypeCfgDict           = _destructMoveTypeCfg(rawConfig.MoveType);
             this._damageChartCfgDict        = damageChartCfg;
             this._unitPromotionCfgDict      = unitPromotionCfg;
+            this._unitMaxPromotion          = _getUnitMaxPromotion(unitPromotionCfg);
             this._secondaryWeaponFlagDict   = _getSecondaryWeaponFlags(damageChartCfg);
         }
 
@@ -104,6 +110,9 @@ namespace Twns.Config {
 
         public getTileTemplateCfgByType(tileType: TileType): TileTemplateCfg | null {
             return this._tileTemplateCfgDict.get(tileType) ?? null;
+        }
+        public getTileBaseTypeByTileType(tileType: TileType): number | null {
+            return this.getTileTemplateCfgByType(tileType)?.toTileBaseType ?? null;
         }
         public getTileObjectTypeByTileType(tileType: TileType): Types.TileObjectType | null {
             return this.getTileTemplateCfgByType(tileType)?.toTileObjectType ?? null;
@@ -132,6 +141,50 @@ namespace Twns.Config {
                 .map(v => v[0]);
         }
 
+        public getTileBaseCfg(tileBaseType: number): TileBaseCfg | null {
+            return this._tileBaseCfgDict.get(tileBaseType) ?? null;
+        }
+        public getAllEnabledTileBaseCfgArray(): TileBaseCfg[] {
+            return [...this._tileBaseCfgDict].filter(v => v[1].isEnabled).map(v => v[1]).sort((v1, v2) => v1.tileBaseType - v2.tileBaseType);
+        }
+        public getDefaultTileBaseType(): number {
+            for (const [tileBaseType, cfg] of this._tileBaseCfgDict) {
+                if (cfg.isDefault) {
+                    return tileBaseType;
+                }
+            }
+            throw Helpers.newError(`No default tile base type.`);
+        }
+        public checkIsValidTileBaseShapeId(tileBaseType: number, shapeId: Types.Undefinable<number>): boolean {
+            const cfg = this.getTileBaseCfg(tileBaseType);
+            return (!!cfg?.isEnabled)
+                && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
+        }
+        public getTileBaseImageSource({ version, themeType, skinId, baseType, isDark, shapeId, tickCount }: {
+            version     : Types.UnitAndTileTextureVersion;
+            themeType   : Types.TileThemeType;
+            skinId      : number;
+            baseType    : number;
+            isDark      : boolean;
+            shapeId     : number;
+            tickCount   : number;
+        }): string {
+            const cfg               = Helpers.getExisted(this.getTileBaseCfg(baseType));
+            const cfgForFrame       = Helpers.getExisted(version === Types.UnitAndTileTextureVersion.V0 ? cfg.animParamsForV0 : cfg.animParams);
+            const ticksPerFrame     = cfgForFrame[1];
+            const textForDark       = isDark ? `state01` : `state00`;
+            const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
+            const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
+            const textForVersion    = `ver${Helpers.getNumText(version)}`;
+            const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
+            const textForType       = `type${Helpers.getNumText(baseType)}`;
+            const textForFrame      = ticksPerFrame < 999999
+                ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame[0] * ticksPerFrame)) / ticksPerFrame))}`
+                : `frame00`;
+            return `tileBase_${textForVersion}_${textForTheme}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getTileObjectCfg(tileObjectType: number): TileObjectCfg | null {
             return this._tileObjectCfgDict.get(tileObjectType) ?? null;
         }
@@ -154,11 +207,53 @@ namespace Twns.Config {
             return (shapesCount != null)
                 && ((shapeId == null) || ((shapeId >= 0) && (shapeId < shapesCount)));
         }
+        public getSymmetricalTileObjectType(tileObjectType: number, symmetryType: Types.SymmetryType): number {
+            return Helpers.getExisted(this.getTileObjectCfg(tileObjectType)?.symmetryTypes)[symmetryType];
+        }
+        public getTileObjectImageSource({ version, themeType, skinId, objectType, isDark, shapeId, tickCount }: {
+            version     : Types.UnitAndTileTextureVersion;
+            themeType   : Types.TileThemeType;
+            skinId      : number;
+            objectType  : number;
+            isDark      : boolean;
+            shapeId     : number;
+            tickCount   : number;
+        }): string {
+            const cfg               = Helpers.getExisted(this.getTileObjectCfg(objectType));
+            const cfgForFrame       = Helpers.getExisted(version === Types.UnitAndTileTextureVersion.V0 ? cfg.animParamsForV0 : cfg.animParams);
+            const ticksPerFrame     = cfgForFrame[1];
+            const textForDark       = isDark ? `state01` : `state00`;
+            const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
+            const textForShapeId    = `shape${Helpers.getNumText(shapeId)}`;
+            const textForVersion    = `ver${Helpers.getNumText(version)}`;
+            const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
+            const textForType       = `type${Helpers.getNumText(objectType)}`;
+            const textForFrame      = ticksPerFrame < 999999
+                ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame[0] * ticksPerFrame)) / ticksPerFrame))}`
+                : `frame00`;
+            return `tileObject_${textForVersion}_${textForTheme}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
+        }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getSymmetricalTileObjectShapeId(tileObjectType: number, shapeId: number, symmetryType: Types.SymmetryType): number | null {
+            const shapeIdArray = this._tileObjectSymmetryCfgDict.get(tileObjectType)?.get(shapeId)?.symmetryShapeIds;
+            return shapeIdArray ? shapeIdArray[symmetryType] : null;
+        }
+        public checkIsTileObjectSymmetrical({ objectType, shapeId1, shapeId2, symmetryType }: {
+            objectType      : number;
+            shapeId1        : number;
+            shapeId2        : number;
+            symmetryType    : Types.SymmetryType;
+        }): boolean {
+            return this.getSymmetricalTileObjectShapeId(objectType, shapeId1, symmetryType) === (shapeId2 || 0);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getTileType(tileBaseType: number, tileObjectType: number): number | null {
             return this._tileTypeMappingCfgDict.get(tileBaseType)?.get(tileObjectType)?.tileType ?? null;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getTileCategoryCfg(tileCategory: number): TileCategoryCfg | null {
             return this._tileCategoryCfgDict.get(tileCategory) ?? null;
         }
@@ -181,7 +276,7 @@ namespace Twns.Config {
             return this._unitTemplateCfgDict.keys().next().value;
         }
         public getAllUnitTypeArray(): number[] {
-            return [...this._unitTemplateCfgDict].map(v => v[0]);
+            return [...this._unitTemplateCfgDict].map(v => v[0]).sort((v1, v2) => v1 - v2);
         }
         public getUnitImageSource({ version, skinId, unitType, isDark, isMoving, tickCount }: {
             version     : Types.UnitAndTileTextureVersion;
@@ -509,10 +604,27 @@ namespace Twns.Config {
         }
         return dst;
     }
-    function _destructTileObjectCfg(data: TileObjectCfg[]): Map<TileType, TileObjectCfg> {
-        const dst = new Map<TileType, TileObjectCfg>();
+    function _destructTileBaseCfg(data: TileBaseCfg[]): Map<number, TileBaseCfg> {
+        const dst = new Map<number, TileBaseCfg>();
+        for (const d of data) {
+            dst.set(d.tileBaseType, d);
+        }
+        return dst;
+    }
+    function _destructTileObjectCfg(data: TileObjectCfg[]): Map<number, TileObjectCfg> {
+        const dst = new Map<number, TileObjectCfg>();
         for (const d of data) {
             dst.set(d.tileObjectType, d);
+        }
+        return dst;
+    }
+    function _destructTileObjectSymmetryCfg(data: TileObjectSymmetryCfg[]): Map<number, Map<number, TileObjectSymmetryCfg>> {
+        const dst = new Map<number, Map<number, TileObjectSymmetryCfg>>();
+        for (const d of data) {
+            const tileObjectType    = d.tileObjectType;
+            const subData           = dst.get(tileObjectType) ?? new Map<number, TileObjectSymmetryCfg>();
+            subData.set(d.shapeId, d);
+            dst.set(tileObjectType, subData);
         }
         return dst;
     }

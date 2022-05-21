@@ -148,51 +148,49 @@ namespace Twns.BaseWar {
             }
 
             // 处理海岸独立的残留数据
-            if ((baseType === Types.TileBaseType.Sea) && (data.baseShapeId)) {
-                data.decoratorType      = Types.TileDecoratorType.Shore;
-                data.decoratorShapeId   = data.baseShapeId;
-                data.baseShapeId        = 0;
+            if ((baseType === 3 /*Types.TileBaseType.Sea*/) && (data.baseShapeId)) {
+                throw Helpers.newError(`Deprecated seashore data: ${baseType}, ${data.baseShapeId}`, ClientErrorCode.BwTile_Deserialize_11);
             }
 
             const baseShapeId = data.baseShapeId;
-            if (!Config.ConfigManager.checkIsValidTileBaseShapeId(baseType, baseShapeId)) {
-                throw Helpers.newError(`Invalid baseShapeId: ${baseShapeId}`, ClientErrorCode.BwTile_Deserialize_11);
+            if (!gameConfig.checkIsValidTileBaseShapeId(baseType, baseShapeId)) {
+                throw Helpers.newError(`Invalid baseShapeId: ${baseShapeId}`, ClientErrorCode.BwTile_Deserialize_12);
             }
 
             const objectShapeId = data.objectShapeId;
             if (!gameConfig.checkIsValidTileObjectShapeId(objectType, objectShapeId)) {
-                throw Helpers.newError(`Invalid objectShapeId: ${objectShapeId}`, ClientErrorCode.BwTile_Deserialize_12);
+                throw Helpers.newError(`Invalid objectShapeId: ${objectShapeId}`, ClientErrorCode.BwTile_Deserialize_13);
             }
 
             const decoratorType     = data.decoratorType ?? null;
             const decoratorShapeId  = data.decoratorShapeId ?? null;
             if (!Config.ConfigManager.checkIsValidTileDecoratorShapeId(decoratorType, decoratorShapeId)) {
-                throw Helpers.newError(`Invalid decoratorType/shapeId: ${decoratorType}, ${decoratorShapeId}`, ClientErrorCode.BwTile_Deserialize_13);
+                throw Helpers.newError(`Invalid decoratorType/shapeId: ${decoratorType}, ${decoratorShapeId}`, ClientErrorCode.BwTile_Deserialize_14);
             }
 
             const tileType          = templateCfg.type;
             const customCrystalData = data.customCrystalData ?? null;
             if ((customCrystalData != null) && (tileType !== TileType.CustomCrystal)) {
-                throw Helpers.newError(`CustomCrystalData is present while the tile is not CustomCrystal.`, ClientErrorCode.BwTile_Deserialize_14);
+                throw Helpers.newError(`CustomCrystalData is present while the tile is not CustomCrystal.`, ClientErrorCode.BwTile_Deserialize_15);
             }
             if ((customCrystalData != null) && (!Config.ConfigManager.checkIsValidCustomCrystalData(customCrystalData))) {
-                throw Helpers.newError(`Invalid customCrystalData.`, ClientErrorCode.BwTile_Deserialize_15);
+                throw Helpers.newError(`Invalid customCrystalData.`, ClientErrorCode.BwTile_Deserialize_16);
             }
 
             const customCannonData = data.customCannonData ?? null;
             if ((customCannonData != null) && (tileType !== TileType.CustomCannon)) {
-                throw Helpers.newError(`CustomCannonData is present while the tile is not CustomCannon.`, ClientErrorCode.BwTile_Deserialize_16);
+                throw Helpers.newError(`CustomCannonData is present while the tile is not CustomCannon.`, ClientErrorCode.BwTile_Deserialize_17);
             }
             if ((customCannonData != null) && (!Config.ConfigManager.checkIsValidCustomCannonData(customCannonData))) {
-                throw Helpers.newError(`Invalid customCannonData.`, ClientErrorCode.BwTile_Deserialize_17);
+                throw Helpers.newError(`Invalid customCannonData.`, ClientErrorCode.BwTile_Deserialize_18);
             }
 
             const customLaserTurretData = data.customLaserTurretData ?? null;
             if ((customLaserTurretData != null) && (tileType !== TileType.CustomLaserTurret)) {
-                throw Helpers.newError(`CustomLaserTurretData is present while the tile is not CustomLaserTurret.`, ClientErrorCode.BwTile_Deserialize_18);
+                throw Helpers.newError(`CustomLaserTurretData is present while the tile is not CustomLaserTurret.`, ClientErrorCode.BwTile_Deserialize_19);
             }
             if ((customLaserTurretData != null) && (!Config.ConfigManager.checkIsValidCustomLaserTurretData(customLaserTurretData))) {
-                throw Helpers.newError(`Invalid customLaserTurretData.`, ClientErrorCode.BwTile_Deserialize_19);
+                throw Helpers.newError(`Invalid customLaserTurretData.`, ClientErrorCode.BwTile_Deserialize_20);
             }
 
             this._setTemplateCfg(templateCfg);
@@ -341,6 +339,7 @@ namespace Twns.BaseWar {
         public flushDataToView(): void {
             const view = this.getView();
             view.setData({
+                gameConfig  : this.getGameConfig(),
                 tileData    : this.serialize(),
                 hasFog      : this.getHasFog(),
                 skinId      : this.getSkinId(),

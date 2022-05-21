@@ -241,7 +241,7 @@ namespace Twns.MapEditor {
             const dataForDrawTileObject = data.dataForDrawTileObject;
             const tileObjectType        = dataForDrawTileObject.objectType;
             const gameConfig            = data.gameConfig;
-            this._labelName.text        = Lang.getTileName(Helpers.getExisted(gameConfig.getTileType(Types.TileBaseType.Plain, tileObjectType)), gameConfig) || CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = Lang.getTileObjectName(tileObjectType, gameConfig) ?? CommonConstants.ErrorTextForUndefined;
             this._tileView.init({
                 tileObjectType,
                 tileObjectShapeId   : dataForDrawTileObject.shapeId,
@@ -250,6 +250,7 @@ namespace Twns.MapEditor {
                 tileDecoratorType   : null,
                 tileDecoratorShapeId: null,
                 playerIndex         : dataForDrawTileObject.playerIndex,
+                gameConfig
             });
             this._tileView.updateView();
         }

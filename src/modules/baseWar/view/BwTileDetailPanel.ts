@@ -150,6 +150,7 @@ namespace Twns.BaseWar {
             const tile      = this._getOpenData().tile;
             const tileView  = this._tileView;
             tileView.setData({
+                gameConfig  : tile.getGameConfig(),
                 tileData    : tile.serialize(),
                 hasFog      : tile.getHasFog(),
                 skinId      : tile.getSkinId(),

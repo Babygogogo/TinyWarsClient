@@ -56,9 +56,10 @@ namespace Twns.WarMap {
         private _updateListTile(): void {
             const openData      = this._getOpenData();
             const gameConfig    = openData.gameConfig;
+            const tileBaseType  = gameConfig.getDefaultTileBaseType();
             const dict          = new Map<number, Map<number, number>>();
             for (const tileData of openData.tileDataArray || []) {
-                const template = gameConfig.getTileTemplateCfgByType(Helpers.getExisted(gameConfig.getTileType(Types.TileBaseType.Plain, Helpers.getExisted(tileData.objectType))));
+                const template = gameConfig.getTileTemplateCfgByType(Helpers.getExisted(gameConfig.getTileType(tileBaseType, Helpers.getExisted(tileData.objectType))));
                 if ((template) && (template.maxCapturePoint != null)) {
                     const tileType = template.type;
                     if (!dict.has(tileType)) {
@@ -145,7 +146,8 @@ namespace Twns.WarMap {
             }
             this._labelTotalNum.text = `${totalNum}`;
 
-            const tileObjectType = data.gameConfig.getTileObjectTypeByTileType(data.tileType);
+            const gameConfig        = data.gameConfig;
+            const tileObjectType    = gameConfig.getTileObjectTypeByTileType(data.tileType);
             this._tileView.init({
                 tileBaseType        : null,
                 tileBaseShapeId     : null,
@@ -153,9 +155,8 @@ namespace Twns.WarMap {
                 tileDecoratorShapeId: null,
                 tileObjectType      : tileObjectType,
                 tileObjectShapeId   : 0,
-                playerIndex         : tileObjectType === Types.TileObjectType.Headquarters
-                    ? CommonConstants.WarFirstPlayerIndex
-                    : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                gameConfig,
             });
             this._tileView.updateView();
         }

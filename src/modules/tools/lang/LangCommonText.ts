@@ -5165,6 +5165,147 @@ namespace Twns.Lang {
             `Cannon(Up)`,
         ],
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [LangTextType.TileObject0000]: [
+            `无`,
+            `None`,
+        ],
+        [LangTextType.TileObject0001]: [
+            `道路`,
+            `Road`,
+        ],
+        [LangTextType.TileObject0002]: [
+            `桥梁`,
+            `Bridge`,
+        ],
+        [LangTextType.TileObject0003]: [
+            `森林`,
+            `Wood`,
+        ],
+        [LangTextType.TileObject0004]: [
+            `高山`,
+            `Mountain`,
+        ],
+        [LangTextType.TileObject0005]: [
+            `荒野`,
+            `Wasteland`,
+        ],
+        [LangTextType.TileObject0006]: [
+            `废墟`,
+            `Ruins`,
+        ],
+        [LangTextType.TileObject0007]: [
+            `火堆`,
+            `Fire`,
+        ],
+        [LangTextType.TileObject0008]: [
+            `巨浪`,
+            `Rough`,
+        ],
+        [LangTextType.TileObject0009]: [
+            `迷雾`,
+            `Mist`,
+        ],
+        [LangTextType.TileObject0010]: [
+            `礁石`,
+            `Reef`,
+        ],
+        [LangTextType.TileObject0011]: [
+            `等离子`,
+            `Plasma`,
+        ],
+        [LangTextType.TileObject0012]: [
+            `陨石`,
+            `Meteor`,
+        ],
+        [LangTextType.TileObject0013]: [
+            `导弹井`,
+            `Silo`,
+        ],
+        [LangTextType.TileObject0014]: [
+            `空导弹井`,
+            `EmptySilo`,
+        ],
+        [LangTextType.TileObject0015]: [
+            `指挥部`,
+            `Headquarters`,
+        ],
+        [LangTextType.TileObject0016]: [
+            `城市`,
+            `City`,
+        ],
+        [LangTextType.TileObject0017]: [
+            `指挥塔`,
+            `CommandTower`,
+        ],
+        [LangTextType.TileObject0018]: [
+            `雷达`,
+            `Radar`,
+        ],
+        [LangTextType.TileObject0019]: [
+            `工厂`,
+            `Factory`,
+        ],
+        [LangTextType.TileObject0020]: [
+            `机场`,
+            `Airport`,
+        ],
+        [LangTextType.TileObject0021]: [
+            `海港`,
+            `Seaport`,
+        ],
+        [LangTextType.TileObject0022]: [
+            `临时机场`,
+            `TempAirport`,
+        ],
+        [LangTextType.TileObject0023]: [
+            `临时海港`,
+            `TempSeaport`,
+        ],
+        [LangTextType.TileObject0024]: [
+            `管道`,
+            `Pipe`,
+        ],
+        [LangTextType.TileObject0025]: [
+            `水晶`,
+            `Crystal`,
+        ],
+        [LangTextType.TileObject0026]: [
+            `神秘水晶`,
+            `Myst.Crystal`,
+        ],
+        [LangTextType.TileObject0027]: [
+            `加农炮(上)`,
+            `Cannon(Up)`,
+        ],
+        [LangTextType.TileObject0028]: [
+            `加农炮(下)`,
+            `Cannon(Down)`,
+        ],
+        [LangTextType.TileObject0029]: [
+            `加农炮(左)`,
+            `Cannon(Left)`,
+        ],
+        [LangTextType.TileObject0030]: [
+            `加农炮(右)`,
+            `Cannon(Right)`,
+        ],
+        [LangTextType.TileObject0031]: [
+            `神秘加农炮`,
+            `Myst.Cannon`,
+        ],
+        [LangTextType.TileObject0032]: [
+            `激光炮`,
+            `LaserTurret`,
+        ],
+        [LangTextType.TileObject0033]: [
+            `神秘激光炮`,
+            `Myst.LaserTurret`,
+        ],
+        [LangTextType.TileObject0034]: [
+            `管道接口`,
+            `Joint`,
+        ],
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.Unit0000]: [
             `步兵`,
             `Infantry`,

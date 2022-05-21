@@ -22,6 +22,11 @@ namespace Twns.Lang {
         UnitCategory0000 = 41000,           UnitCategory0001, UnitCategory0002, UnitCategory0003, UnitCategory0004, UnitCategory0005, UnitCategory0006, UnitCategory0007, UnitCategory0008, UnitCategory0009,
         UnitCategory0010, UnitCategory0011, UnitCategory0012, UnitCategory0013, UnitCategory0014, UnitCategory0015, UnitCategory0016, UnitCategory0017, UnitCategory0018, UnitCategory0019,
 
+        TileObject0000 = 42000,         TileObject0001, TileObject0002, TileObject0003, TileObject0004, TileObject0005, TileObject0006, TileObject0007, TileObject0008, TileObject0009,
+        TileObject0010, TileObject0011, TileObject0012, TileObject0013, TileObject0014, TileObject0015, TileObject0016, TileObject0017, TileObject0018, TileObject0019,
+        TileObject0020, TileObject0021, TileObject0022, TileObject0023, TileObject0024, TileObject0025, TileObject0026, TileObject0027, TileObject0028, TileObject0029,
+        TileObject0030, TileObject0031, TileObject0032, TileObject0033, TileObject0034, TileObject0035, TileObject0036, TileObject0037, TileObject0038, TileObject0039,
+
         A0000, A0001, A0002, A0003, A0004, A0005, A0006, A0007, A0008, A0009,
         A0010, A0011, A0012, A0013, A0014, A0015, A0016, A0017, A0018, A0019,
         A0020, A0021, A0022, A0023, A0024, A0025, A0026, A0027, A0028, A0029,

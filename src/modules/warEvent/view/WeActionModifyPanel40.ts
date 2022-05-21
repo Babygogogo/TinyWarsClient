@@ -197,7 +197,8 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnActTileDecorator(): void {
             PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseTileDecoratorPanel, {
-                callback: (decoratorType, decoratorShapeId) => {
+                gameConfig  : this._getOpenData().war.getGameConfig(),
+                callback    : (decoratorType, decoratorShapeId) => {
                     const tileData              = Helpers.getExisted(this._getAction().actTileData);
                     tileData.decoratorType      = decoratorType;
                     tileData.decoratorShapeId   = decoratorShapeId;
@@ -332,6 +333,7 @@ namespace Twns.WarEvent {
                 tileDecoratorType   : tileData.decoratorType ?? null,
                 tileDecoratorShapeId: tileData.decoratorShapeId ?? null,
                 playerIndex         : Helpers.getExisted(tileData.playerIndex),
+                gameConfig          : this._getOpenData().war.getGameConfig(),
             });
             tileView.updateView();
         }

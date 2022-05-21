@@ -5,15 +5,10 @@
 namespace Twns.CommonConstants {
     import TileBaseType         = Types.TileBaseType;
     import TileDecoratorType    = Types.TileDecoratorType;
-    import TileObjectType       = Types.TileObjectType;
-    import TileType             = Types.TileType;
 
     type FrameCfg = {
         framesCount     : number;
         ticksPerFrame   : number;
-    };
-    type TileBaseShapeCfg = {
-        shapesCount     : number;
     };
     type TileDecoratorShapeCfg = {
         shapesCount     : number;
@@ -106,6 +101,7 @@ namespace Twns.CommonConstants {
     export const UnitAndTileNeutralSkinId               = 0;
 
     export const CoEmptyId                              = 0;
+    export const TileBaseEmptyType                      = 0;
 
     export const WarNeutralPlayerIndex                  = 0;
     export const WarFirstPlayerIndex                    = 1;
@@ -169,79 +165,6 @@ namespace Twns.CommonConstants {
     export const StageMaxScale      = 300;
     export const DefaultTweenTime   = 200;
 
-    export const TileTypeToTileBaseType = new Map<TileType, TileBaseType>([
-        [TileType.Airport,              TileBaseType.Plain],
-        [TileType.Beach,                TileBaseType.Beach],
-        [TileType.BridgeOnBeach,        TileBaseType.Beach],
-        [TileType.BridgeOnPlain,        TileBaseType.Plain],
-        [TileType.BridgeOnRiver,        TileBaseType.River],
-        [TileType.BridgeOnSea,          TileBaseType.Sea],
-        [TileType.City,                 TileBaseType.Plain],
-        [TileType.CommandTower,         TileBaseType.Plain],
-        [TileType.EmptySilo,            TileBaseType.Plain],
-        [TileType.Factory,              TileBaseType.Plain],
-        [TileType.Fire,                 TileBaseType.Plain],
-        [TileType.Pipe,                 TileBaseType.Plain],
-        [TileType.Headquarters,         TileBaseType.Plain],
-        [TileType.Meteor,               TileBaseType.Plain],
-        [TileType.MistOnBeach,          TileBaseType.Beach],
-        [TileType.MistOnPlain,          TileBaseType.Plain],
-        [TileType.MistOnRiver,          TileBaseType.River],
-        [TileType.MistOnSea,            TileBaseType.Sea],
-        [TileType.Mountain,             TileBaseType.Plain],
-        [TileType.Plain,                TileBaseType.Plain],
-        [TileType.Plasma,               TileBaseType.Plain],
-        [TileType.Radar,                TileBaseType.Plain],
-        [TileType.Reef,                 TileBaseType.Sea],
-        [TileType.River,                TileBaseType.River],
-        [TileType.Road,                 TileBaseType.Plain],
-        [TileType.Rough,                TileBaseType.Sea],
-        [TileType.Ruins,                TileBaseType.Plain],
-        [TileType.Sea,                  TileBaseType.Sea],
-        [TileType.Seaport,              TileBaseType.Sea],
-        [TileType.Silo,                 TileBaseType.Plain],
-        [TileType.TempAirport,          TileBaseType.Plain],
-        [TileType.TempSeaport,          TileBaseType.Plain],
-        [TileType.Wasteland,            TileBaseType.Plain],
-        [TileType.Wood,                 TileBaseType.Plain],
-        [TileType.Crystal,              TileBaseType.Plain],
-        [TileType.CustomCrystal,        TileBaseType.Plain],
-        [TileType.CannonUp,             TileBaseType.Plain],
-        [TileType.CannonDown,           TileBaseType.Plain],
-        [TileType.CannonLeft,           TileBaseType.Plain],
-        [TileType.CannonRight,          TileBaseType.Plain],
-        [TileType.CustomCannon,         TileBaseType.Plain],
-        [TileType.LaserTurret,          TileBaseType.Plain],
-        [TileType.CustomLaserTurret,    TileBaseType.Plain],
-        [TileType.PipeJoint,            TileBaseType.Plain],
-    ]);
-
-    export const TileBaseFrameConfigs = new Map([
-        [
-            Types.UnitAndTileTextureVersion.V0,
-            new Map<TileBaseType, FrameCfg >([
-                [ TileBaseType.Beach,   { framesCount: 6,   ticksPerFrame: 1                }],
-                [ TileBaseType.Plain,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileBaseType.River,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileBaseType.Sea,     { framesCount: 6,   ticksPerFrame: 1                }],
-            ]),
-        ],
-        [
-            Types.UnitAndTileTextureVersion.V1,
-            new Map<TileBaseType, FrameCfg >([
-                [ TileBaseType.Beach,   { framesCount: 6,   ticksPerFrame: 1                }],
-                [ TileBaseType.Plain,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileBaseType.River,   { framesCount: 4,   ticksPerFrame: 2                }],
-                [ TileBaseType.Sea,     { framesCount: 6,   ticksPerFrame: 1                }],
-            ]),
-        ],
-    ]);
-    export const TileBaseShapeConfigs = new Map<TileBaseType, TileBaseShapeCfg>([
-        [ TileBaseType.Beach,   { shapesCount: 37,  }],
-        [ TileBaseType.Plain,   { shapesCount: 1,   }],
-        [ TileBaseType.River,   { shapesCount: 16,  }],
-        [ TileBaseType.Sea,     { shapesCount: 1,   }],
-    ]);
     export const TileDecoratorFrameConfigs = new Map([
         [
             Types.UnitAndTileTextureVersion.V0,
@@ -258,88 +181,6 @@ namespace Twns.CommonConstants {
     ]);
     export const TileDecoratorShapeConfigs = new Map<TileDecoratorType, TileDecoratorShapeCfg>([
         [ TileDecoratorType.Shore, { shapesCount: 47 } ],
-    ]);
-    export const TileObjectFrameConfigs = new Map([
-        [
-            Types.UnitAndTileTextureVersion.V0,
-            new Map<TileObjectType, FrameCfg>([
-                [ TileObjectType.Empty,             { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Airport,           { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.Bridge,            { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.City,              { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.CommandTower,      { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.EmptySilo,         { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Factory,           { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.Fire,              { framesCount: 5,   ticksPerFrame: 1                } ],
-                [ TileObjectType.Pipe,              { framesCount: 3,   ticksPerFrame: 1                } ],
-                [ TileObjectType.Headquarters,      { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.Meteor,            { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Mist,              { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Mountain,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Plasma,            { framesCount: 3,   ticksPerFrame: 1                } ],
-                [ TileObjectType.Radar,             { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.Reef,              { framesCount: 6,   ticksPerFrame: 1                } ],
-                [ TileObjectType.Road,              { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Rough,             { framesCount: 6,   ticksPerFrame: 1                } ],
-                [ TileObjectType.Ruins,             { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Seaport,           { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.Silo,              { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.TempAirport,       { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.TempSeaport,       { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Wasteland,         { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Wood,              { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Crystal,           { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.CustomCrystal,     { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.CannonUp,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.CannonDown,        { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.CannonLeft,        { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.CannonRight,       { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.CustomCannon,      { framesCount: 8,   ticksPerFrame: 1                } ],
-                [ TileObjectType.LaserTurret,       { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.CustomLaserTurret, { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.PipeJoint,         { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-            ]),
-        ],
-        [
-            Types.UnitAndTileTextureVersion.V1,
-            new Map<TileObjectType, FrameCfg >([
-                [ TileObjectType.Empty,             { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Airport,           { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.Bridge,            { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.City,              { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.CommandTower,      { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.EmptySilo,         { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Factory,           { framesCount: 4,   ticksPerFrame: 3                } ],
-                [ TileObjectType.Fire,              { framesCount: 5,   ticksPerFrame: 1                } ],
-                [ TileObjectType.Pipe,              { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Headquarters,      { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.Meteor,            { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Mist,              { framesCount: 5,   ticksPerFrame: 1                } ],
-                [ TileObjectType.Mountain,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Plasma,            { framesCount: 4,   ticksPerFrame: 1                } ],
-                [ TileObjectType.Radar,             { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.Reef,              { framesCount: 6,   ticksPerFrame: 1                } ],
-                [ TileObjectType.Road,              { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Rough,             { framesCount: 6,   ticksPerFrame: 1                } ],
-                [ TileObjectType.Ruins,             { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Seaport,           { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.Silo,              { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.TempAirport,       { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.TempSeaport,       { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Wasteland,         { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Wood,              { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.Crystal,           { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.CustomCrystal,     { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.CannonUp,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.CannonDown,        { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.CannonLeft,        { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.CannonRight,       { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.CustomCannon,      { framesCount: 4,   ticksPerFrame: 3                } ],
-                [ TileObjectType.LaserTurret,       { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-                [ TileObjectType.CustomLaserTurret, { framesCount: 2,   ticksPerFrame: 3                } ],
-                [ TileObjectType.PipeJoint,         { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE } ],
-            ]),
-        ],
     ]);
 
     export const TileBaseSymmetry = new Map<TileBaseType, Map<number, number[]>>([
@@ -512,220 +353,14 @@ namespace Twns.CommonConstants {
             [   46, [   46,     46,     46,     46,     46, ]],
         ])],
     ]);
-    export const TileObjectTypeSymmetry = new Map<TileObjectType, TileObjectType[]>([
-        // 类型                                 上下翻转                            左下右上                            左右翻转                            左上右下                                逆时针180  // 图块变换
-        [ TileObjectType.Empty,             [ TileObjectType.Empty,             TileObjectType.Empty,               TileObjectType.Empty,               TileObjectType.Empty,               TileObjectType.Empty                ] ],
-        [ TileObjectType.Road,              [ TileObjectType.Road,              TileObjectType.Road,                TileObjectType.Road,                TileObjectType.Road,                TileObjectType.Road                 ] ],
-        [ TileObjectType.Bridge,            [ TileObjectType.Bridge,            TileObjectType.Bridge,              TileObjectType.Bridge,              TileObjectType.Bridge,              TileObjectType.Bridge               ] ],
-        [ TileObjectType.Wood,              [ TileObjectType.Wood,              TileObjectType.Wood,                TileObjectType.Wood,                TileObjectType.Wood,                TileObjectType.Wood                 ] ],
-        [ TileObjectType.Mountain,          [ TileObjectType.Mountain,          TileObjectType.Mountain,            TileObjectType.Mountain,            TileObjectType.Mountain,            TileObjectType.Mountain             ] ],
-        [ TileObjectType.Wasteland,         [ TileObjectType.Wasteland,         TileObjectType.Wasteland,           TileObjectType.Wasteland,           TileObjectType.Wasteland,           TileObjectType.Wasteland            ] ],
-        [ TileObjectType.Ruins,             [ TileObjectType.Ruins,             TileObjectType.Ruins,               TileObjectType.Ruins,               TileObjectType.Ruins,               TileObjectType.Ruins                ] ],
-        [ TileObjectType.Fire,              [ TileObjectType.Fire,              TileObjectType.Fire,                TileObjectType.Fire,                TileObjectType.Fire,                TileObjectType.Fire                 ] ],
-        [ TileObjectType.Rough,             [ TileObjectType.Rough,             TileObjectType.Rough,               TileObjectType.Rough,               TileObjectType.Rough,               TileObjectType.Rough                ] ],
-        [ TileObjectType.Mist,              [ TileObjectType.Mist,              TileObjectType.Mist,                TileObjectType.Mist,                TileObjectType.Mist,                TileObjectType.Mist                 ] ],
-        [ TileObjectType.Reef,              [ TileObjectType.Reef,              TileObjectType.Reef,                TileObjectType.Reef,                TileObjectType.Reef,                TileObjectType.Reef                 ] ],
-        [ TileObjectType.Plasma,            [ TileObjectType.Plasma,            TileObjectType.Plasma,              TileObjectType.Plasma,              TileObjectType.Plasma,              TileObjectType.Plasma               ] ],
-        [ TileObjectType.Meteor,            [ TileObjectType.Meteor,            TileObjectType.Meteor,              TileObjectType.Meteor,              TileObjectType.Meteor,              TileObjectType.Meteor               ] ],
-        [ TileObjectType.Silo,              [ TileObjectType.Silo,              TileObjectType.Silo,                TileObjectType.Silo,                TileObjectType.Silo,                TileObjectType.Silo                 ] ],
-        [ TileObjectType.EmptySilo,         [ TileObjectType.EmptySilo,         TileObjectType.EmptySilo,           TileObjectType.EmptySilo,           TileObjectType.EmptySilo,           TileObjectType.EmptySilo            ] ],
-        [ TileObjectType.Headquarters,      [ TileObjectType.Headquarters,      TileObjectType.Headquarters,        TileObjectType.Headquarters,        TileObjectType.Headquarters,        TileObjectType.Headquarters         ] ],
-        [ TileObjectType.City,              [ TileObjectType.City,              TileObjectType.City,                TileObjectType.City,                TileObjectType.City,                TileObjectType.City                 ] ],
-        [ TileObjectType.CommandTower,      [ TileObjectType.CommandTower,      TileObjectType.CommandTower,        TileObjectType.CommandTower,        TileObjectType.CommandTower,        TileObjectType.CommandTower         ] ],
-        [ TileObjectType.Radar,             [ TileObjectType.Radar,             TileObjectType.Radar,               TileObjectType.Radar,               TileObjectType.Radar,               TileObjectType.Radar                ] ],
-        [ TileObjectType.Factory,           [ TileObjectType.Factory,           TileObjectType.Factory,             TileObjectType.Factory,             TileObjectType.Factory,             TileObjectType.Factory              ] ],
-        [ TileObjectType.Airport,           [ TileObjectType.Airport,           TileObjectType.Airport,             TileObjectType.Airport,             TileObjectType.Airport,             TileObjectType.Airport              ] ],
-        [ TileObjectType.Seaport,           [ TileObjectType.Seaport,           TileObjectType.Seaport,             TileObjectType.Seaport,             TileObjectType.Seaport,             TileObjectType.Seaport              ] ],
-        [ TileObjectType.TempAirport,       [ TileObjectType.TempAirport,       TileObjectType.TempAirport,         TileObjectType.TempAirport,         TileObjectType.TempAirport,         TileObjectType.TempAirport          ] ],
-        [ TileObjectType.TempSeaport,       [ TileObjectType.TempSeaport,       TileObjectType.TempSeaport,         TileObjectType.TempSeaport,         TileObjectType.TempSeaport,         TileObjectType.TempSeaport          ] ],
-        [ TileObjectType.Pipe,              [ TileObjectType.Pipe,              TileObjectType.Pipe,                TileObjectType.Pipe,                TileObjectType.Pipe,                TileObjectType.Pipe                 ] ],
-        [ TileObjectType.Crystal,           [ TileObjectType.Crystal,           TileObjectType.Crystal,             TileObjectType.Crystal,             TileObjectType.Crystal,             TileObjectType.Crystal              ] ],
-        [ TileObjectType.CustomCrystal,     [ TileObjectType.CustomCrystal,     TileObjectType.CustomCrystal,       TileObjectType.CustomCrystal,       TileObjectType.CustomCrystal,       TileObjectType.CustomCrystal        ] ],
-        [ TileObjectType.CannonUp,          [ TileObjectType.CannonDown,        TileObjectType.CannonLeft,          TileObjectType.CannonUp,            TileObjectType.CannonRight,         TileObjectType.CannonDown           ] ],
-        [ TileObjectType.CannonDown,        [ TileObjectType.CannonUp,          TileObjectType.CannonRight,         TileObjectType.CannonDown,          TileObjectType.CannonLeft,          TileObjectType.CannonUp             ] ],
-        [ TileObjectType.CannonLeft,        [ TileObjectType.CannonLeft,        TileObjectType.CannonUp,            TileObjectType.CannonRight,         TileObjectType.CannonDown,          TileObjectType.CannonRight          ] ],
-        [ TileObjectType.CannonRight,       [ TileObjectType.CannonRight,       TileObjectType.CannonDown,          TileObjectType.CannonLeft,          TileObjectType.CannonUp,            TileObjectType.CannonLeft           ] ],
-        [ TileObjectType.CustomCannon,      [ TileObjectType.CustomCannon,      TileObjectType.CustomCannon,        TileObjectType.CustomCannon,        TileObjectType.CustomCannon,        TileObjectType.CustomCannon         ] ],
-        [ TileObjectType.LaserTurret,       [ TileObjectType.LaserTurret,       TileObjectType.LaserTurret,         TileObjectType.LaserTurret,         TileObjectType.LaserTurret,         TileObjectType.LaserTurret          ] ],
-        [ TileObjectType.CustomLaserTurret, [ TileObjectType.CustomLaserTurret, TileObjectType.CustomLaserTurret,   TileObjectType.CustomLaserTurret,   TileObjectType.CustomLaserTurret,   TileObjectType.CustomLaserTurret    ] ],
-        [ TileObjectType.PipeJoint,         [ TileObjectType.PipeJoint,         TileObjectType.PipeJoint,           TileObjectType.PipeJoint,           TileObjectType.PipeJoint,           TileObjectType.PipeJoint            ] ],
 
-    ]);
-    export const TileObjectShapeSymmetry = new Map<TileObjectType, Map<number, number[]>>([
-        // 原图     上下翻转 左下右上 左右翻转 左上右下 逆时针180  // 图块变换
-        [TileObjectType.Empty, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-            [   1,  [   1,      2,      1,      2,      1,  ]],
-            [   2,  [   2,      1,      2,      1,      2,  ]],
-        ])],
-        [TileObjectType.Road, new Map([
-            [   0,  [   0,      1,      0,      1,      0,  ]],
-            [   1,  [   1,      0,      1,      0,      1,  ]],
-            [   2,  [   4,      2,      3,      5,      5,  ]],
-            [   3,  [   5,      4,      2,      3,      4,  ]],
-            [   4,  [   2,      3,      5,      4,      3,  ]],
-            [   5,  [   3,      5,      4,      2,      2,  ]],
-            [   6,  [   7,      8,      6,      9,      7,  ]],
-            [   7,  [   6,      9,      7,      8,      6,  ]],
-            [   8,  [   8,      6,      9,      7,      9,  ]],
-            [   9,  [   9,      7,      8,      6,      8,  ]],
-            [   10, [   10,     10,     10,     10,     10, ]],
-        ])],
-        [TileObjectType.Bridge, new Map([
-            [   0,  [   0,      1,      0,      1,      0,  ]],
-            [   1,  [   1,      0,      1,      0,      1,  ]],
-            [   2,  [   4,      2,      3,      5,      5,  ]],
-            [   3,  [   5,      4,      2,      3,      4,  ]],
-            [   4,  [   2,      3,      5,      4,      3,  ]],
-            [   5,  [   3,      5,      4,      2,      2,  ]],
-            [   6,  [   7,      8,      6,      9,      7,  ]],
-            [   7,  [   6,      9,      7,      8,      6,  ]],
-            [   8,  [   8,      6,      9,      7,      9,  ]],
-            [   9,  [   9,      7,      8,      6,      8,  ]],
-            [   10, [   10,     10,     10,     10,     10, ]],
-        ])],
-        [TileObjectType.Wood, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Mountain, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Wasteland, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Ruins, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Fire, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Rough, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Mist, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Reef, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Plasma, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-            [   1,  [   3,      2,      1,      4,      3,  ]],
-            [   2,  [   2,      1,      4,      3,      4,  ]],
-            [   3,  [   1,      4,      3,      2,      1,  ]],
-            [   4,  [   4,      3,      2,      1,      2,  ]],
-            [   5,  [   7,      6,      5,      8,      7,  ]],
-            [   6,  [   6,      5,      8,      7,      8,  ]],
-            [   7,  [   5,      8,      7,      6,      5,  ]],
-            [   8,  [   8,      7,      6,      5,      6,  ]],
-            [   9,  [   10,     9,      12,     11,     11, ]],
-            [   10, [   9,      12,     11,     10,     12, ]],
-            [   11, [   12,     11,     10,     9,      9,  ]],
-            [   12, [   11,     10,     9,      12,     10, ]],
-            [   13, [   13,     13,     13,     13,     13, ]],
-            [   14, [   14,     15,     14,     15,     14, ]],
-            [   15, [   15,     14,     15,     14,     15, ]],
-            [   16, [   18,     19,     16,     17,     18, ]],
-            [   17, [   17,     18,     19,     16,     19, ]],
-            [   18, [   16,     17,     18,     19,     16, ]],
-            [   19, [   19,     16,     17,     18,     17, ]],
-            [   20, [   21,     23,     22,     20,     23, ]],
-            [   21, [   20,     21,     23,     22,     22, ]],
-            [   22, [   23,     22,     20,     21,     21, ]],
-            [   23, [   22,     20,     21,     23,     20, ]],
-            [   24, [   24,     25,     24,     25,     24, ]],
-            [   25, [   25,     24,     25,     24,     25, ]],
-            [   26, [   26,     27,     28,     29,     28, ]],
-            [   27, [   29,     26,     27,     28,     29, ]],
-            [   28, [   28,     29,     26,     27,     26, ]],
-            [   29, [   27,     28,     29,     26,     27, ]],
-        ])],
-        [TileObjectType.Meteor, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Silo, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.EmptySilo, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Headquarters, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.City, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.CommandTower, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Radar, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Factory, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Airport, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Seaport, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.TempAirport, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.TempSeaport, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Pipe, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-            [   1,  [   3,      2,      1,      4,      3,  ]],
-            [   2,  [   2,      1,      4,      3,      4,  ]],
-            [   3,  [   1,      4,      3,      2,      1,  ]],
-            [   4,  [   4,      3,      2,      1,      2,  ]],
-            [   5,  [   7,      6,      5,      8,      7,  ]],
-            [   6,  [   6,      5,      8,      7,      8,  ]],
-            [   7,  [   5,      8,      7,      6,      5,  ]],
-            [   8,  [   8,      7,      6,      5,      6,  ]],
-            [   9,  [   10,     9,      12,     11,     11, ]],
-            [   10, [   9,      12,     11,     10,     12, ]],
-            [   11, [   12,     11,     10,     9,      9,  ]],
-            [   12, [   11,     10,     9,      12,     10, ]],
-            [   13, [   13,     13,     13,     13,     13, ]],
-            [   14, [   14,     15,     14,     15,     14, ]],
-            [   15, [   15,     14,     15,     14,     15, ]],
-        ])],
-        [TileObjectType.Crystal, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.CustomCrystal, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.CannonUp, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.CannonDown, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.CannonLeft, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.CannonRight, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.CustomCannon, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.LaserTurret, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.CustomLaserTurret, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.PipeJoint, new Map([
-            [   0,  [   0,      1,      0,      1,      0,  ]],
-            [   1,  [   1,      0,      1,      0,      1,  ]],
-        ])],
-    ]);
+    // const textArray: string[] = [];
+    // for (const [tileObjectType, cfg] of [...TileObjectShapeSymmetry].sort((v1, v2) => v1[0] - v2[0])) {
+    //     for (const [shapeId, shapeIdArray] of [...cfg].sort((v1, v2) => v1[0] - v2[0])) {
+    //         textArray.push(`${tileObjectType},        ${shapeId},    ${shapeIdArray.join(`, `)}`);
+    //     }
+    // }
+    // console.log(textArray.join(`\n`));
 
     export const TileDefaultCrystalData: CommonProto.WarSerialization.ITileCustomCrystalData = {
         radius                      : 2,

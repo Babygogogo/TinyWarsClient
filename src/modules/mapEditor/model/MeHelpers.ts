@@ -142,7 +142,7 @@ namespace Twns.MapEditor.MeHelpers {
     ];
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function createDefaultMapRawData(slotIndex: number): Promise<IMapRawData> {
+    export async function createDefaultMapRawData(slotIndex: number, gameConfig: Config.GameConfig): Promise<IMapRawData> {
         const mapWidth  = 20;
         const mapHeight = 15;
         return {
@@ -156,7 +156,7 @@ namespace Twns.MapEditor.MeHelpers {
             mapHeight,
             playersCountUnneutral   : 2,
             modifiedTime            : Timer.getServerTimestamp(),
-            tileDataArray           : createDefaultTileDataArray(mapWidth, mapHeight, TileBaseType.Plain),
+            tileDataArray           : createDefaultTileDataArray(mapWidth, mapHeight, gameConfig.getDefaultTileBaseType()),
             unitDataArray           : [],
             warEventFullData        : {
                 eventArray          : [],
@@ -296,7 +296,12 @@ namespace Twns.MapEditor.MeHelpers {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function clearMap(mapRawData: IMapRawData, newWidth: number, newHeight: number): IMapRawData {
+    export function clearMap({ mapRawData, newWidth, newHeight, gameConfig }: {
+        mapRawData  : IMapRawData;
+        newWidth    : number;
+        newHeight   : number;
+        gameConfig  : Config.GameConfig;
+    }): IMapRawData {
         return {
             mapId                   : mapRawData.mapId,
             designerName            : mapRawData.designerName,
@@ -307,12 +312,17 @@ namespace Twns.MapEditor.MeHelpers {
             playersCountUnneutral   : mapRawData.playersCountUnneutral,
             warEventFullData        : mapRawData.warEventFullData,
             modifiedTime            : Timer.getServerTimestamp(),
-            tileDataArray           : createDefaultTileDataArray(newWidth, newHeight, TileBaseType.Plain),
+            tileDataArray           : createDefaultTileDataArray(newWidth, newHeight, gameConfig.getDefaultTileBaseType()),
             unitDataArray           : null,
             templateWarRuleArray    : mapRawData.templateWarRuleArray,
         };
     }
-    export function resizeMap(mapRawData: IMapRawData, newWidth: number, newHeight: number): IMapRawData {
+    export function resizeMap({ mapRawData, newWidth, newHeight, gameConfig }: {
+        mapRawData  : IMapRawData;
+        newWidth    : number;
+        newHeight   : number;
+        gameConfig  : Config.GameConfig;
+    }): IMapRawData {
         return {
             mapId                   : mapRawData.mapId,
             designerName            : mapRawData.designerName,
@@ -323,12 +333,17 @@ namespace Twns.MapEditor.MeHelpers {
             playersCountUnneutral   : mapRawData.playersCountUnneutral,
             warEventFullData        : mapRawData.warEventFullData,
             modifiedTime            : Timer.getServerTimestamp(),
-            tileDataArray           : getNewTileDataListForResize(mapRawData, newWidth, newHeight),
+            tileDataArray           : getNewTileDataListForResize({ mapRawData, newWidth, newHeight, gameConfig }),
             unitDataArray           : getNewUnitDataListForResize(mapRawData, newWidth, newHeight),
             templateWarRuleArray    : mapRawData.templateWarRuleArray,
         };
     }
-    function getNewTileDataListForResize(mapRawData: IMapRawData, newWidth: number, newHeight: number): ISerialTile[] {
+    function getNewTileDataListForResize({ mapRawData, newWidth, newHeight, gameConfig }: {
+        mapRawData  : IMapRawData;
+        newWidth    : number;
+        newHeight   : number;
+        gameConfig  : Config.GameConfig;
+    }): ISerialTile[] {
         const tileList: ISerialTile[] = [];
         for (const tileData of mapRawData.tileDataArray || []) {
             const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
@@ -337,12 +352,13 @@ namespace Twns.MapEditor.MeHelpers {
             }
         }
 
-        const oldWidth  = Helpers.getExisted(mapRawData.mapWidth);
-        const oldHeight = Helpers.getExisted(mapRawData.mapHeight);
+        const oldWidth      = Helpers.getExisted(mapRawData.mapWidth);
+        const oldHeight     = Helpers.getExisted(mapRawData.mapHeight);
+        const tileBaseType  = gameConfig.getDefaultTileBaseType();
         for (let x = 0; x < newWidth; ++x) {
             for (let y = 0; y < newHeight; ++y) {
                 if ((x >= oldWidth) || (y >= oldHeight)) {
-                    tileList.push(createDefaultTileData({ x, y }, TileBaseType.Plain));
+                    tileList.push(createDefaultTileData({ x, y }, tileBaseType));
                 }
             }
         }
@@ -378,7 +394,12 @@ namespace Twns.MapEditor.MeHelpers {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function addOffset(mapRawData: IMapRawData, offsetX: number, offsetY: number): IMapRawData {
+    export function addOffset({ mapRawData, offsetX, offsetY, gameConfig }: {
+        mapRawData  : IMapRawData;
+        offsetX     : number;
+        offsetY     : number;
+        gameConfig  : Config.GameConfig;
+    }): IMapRawData {
         return {
             mapId                   : mapRawData.mapId,
             designerName            : mapRawData.designerName,
@@ -388,13 +409,18 @@ namespace Twns.MapEditor.MeHelpers {
             mapHeight               : mapRawData.mapHeight,
             playersCountUnneutral   : mapRawData.playersCountUnneutral,
             modifiedTime            : Timer.getServerTimestamp(),
-            tileDataArray           : getNewTileDataListForOffset(mapRawData, offsetX, offsetY),
+            tileDataArray           : getNewTileDataListForOffset({ mapRawData, offsetX, offsetY, gameConfig }),
             unitDataArray           : getNewUnitDataListForOffset(mapRawData, offsetX, offsetY),
             templateWarRuleArray    : mapRawData.templateWarRuleArray,
             warEventFullData        : mapRawData.warEventFullData,
         };
     }
-    function getNewTileDataListForOffset(mapRawData: IMapRawData, offsetX: number, offsetY: number): ISerialTile[] {
+    function getNewTileDataListForOffset({ mapRawData, offsetX, offsetY, gameConfig }: {
+        mapRawData  : IMapRawData;
+        offsetX     : number;
+        offsetY     : number;
+        gameConfig  : Config.GameConfig;
+    }): ISerialTile[] {
         const width         = Helpers.getExisted(mapRawData.mapWidth);
         const height        = Helpers.getExisted(mapRawData.mapHeight);
         const tileDataList  : ISerialTile[] = [];
@@ -409,6 +435,7 @@ namespace Twns.MapEditor.MeHelpers {
             }
         }
 
+        const tileBaseType = gameConfig.getDefaultTileBaseType();
         for (let x = 0; x < width; ++x) {
             for (let y = 0; y < height; ++y) {
                 if (((offsetX > 0) && (x < offsetX))            ||
@@ -416,7 +443,7 @@ namespace Twns.MapEditor.MeHelpers {
                     ((offsetY > 0) && (y < offsetY))            ||
                     ((offsetY < 0) && (y >= height + offsetY))
                 ) {
-                    tileDataList.push(createDefaultTileData({ x, y }, TileBaseType.Plain));
+                    tileDataList.push(createDefaultTileData({ x, y }, tileBaseType));
                 }
             }
         }
@@ -565,8 +592,9 @@ namespace Twns.MapEditor.MeHelpers {
         const baseType      = tile1.getBaseType();
         const objectType    = tile1.getObjectType();
         const decoratorType = tile1.getDecoratorType();
+        const gameConfig    = tile1.getGameConfig();
         return (baseType === tile2.getBaseType())
-            && (Config.ConfigManager.getSymmetricalTileObjectType(objectType, symmetryType) === tile2.getObjectType())
+            && (gameConfig.getSymmetricalTileObjectType(objectType, symmetryType) === tile2.getObjectType())
             && (decoratorType == tile2.getDecoratorType())
             && (Config.ConfigManager.checkIsTileBaseSymmetrical({
                 baseType,
@@ -574,7 +602,7 @@ namespace Twns.MapEditor.MeHelpers {
                 shapeId2    : tile2.getBaseShapeId(),
                 symmetryType,
             }))
-            && (Config.ConfigManager.checkIsTileObjectSymmetrical({
+            && (gameConfig.checkIsTileObjectSymmetrical({
                 objectType,
                 shapeId1    : tile1.getObjectShapeId(),
                 shapeId2    : tile2.getObjectShapeId(),

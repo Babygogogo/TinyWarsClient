@@ -5,7 +5,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -16,14 +16,14 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
-    import NotifyType           = Twns.Notify.NotifyType;
+    import NotifyType           = Notify.NotifyType;
     import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
     import IWarEventAction      = CommonProto.WarEvent.IWarEventAction;
-    import ActionType           = Twns.Types.WarEventActionType;
-    import LangTextType         = Twns.Lang.LangTextType;
+    import ActionType           = Types.WarEventActionType;
+    import LangTextType         = Lang.LangTextType;
 
     export type OpenDataForWeActionTypeListPanel = {
-        war         : Twns.BaseWar.BwWar;
+        war         : BaseWar.BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
@@ -73,7 +73,7 @@ namespace Twns.WarEvent {
             const war       = openData.war;
 
             const dataArray: DataForTypeRenderer[] = [];
-            for (const newActionType of Twns.WarHelpers.WarEventHelpers.getActionTypeArray()) {
+            for (const newActionType of WarHelpers.WarEventHelpers.getActionTypeArray()) {
                 dataArray.push({
                     war,
                     fullData,
@@ -86,7 +86,7 @@ namespace Twns.WarEvent {
     }
 
     type DataForTypeRenderer = {
-        war             : Twns.BaseWar.BwWar;
+        war             : BaseWar.BwWar;
         fullData        : CommonProto.Map.IWarEventFullData;
         newActionType   : ActionType;
         action          : IWarEventAction;
@@ -120,12 +120,13 @@ namespace Twns.WarEvent {
 
             const actionType    = data.newActionType;
             const action        = data.action;
-            if (actionType !== Twns.WarHelpers.WarEventHelpers.getActionType(action)) {
-                Twns.WarHelpers.WarEventHelpers.resetAction(action, actionType);
-                Twns.WarHelpers.WarEventHelpers.openActionModifyPanel(data.war, data.fullData, action);
-                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel);
+            const war           = data.war;
+            if (actionType !== WarHelpers.WarEventHelpers.getActionType(action)) {
+                WarHelpers.WarEventHelpers.resetAction(action, actionType, war.getGameConfig());
+                WarHelpers.WarEventHelpers.openActionModifyPanel(war, data.fullData, action);
+                PanelHelpers.close(PanelHelpers.PanelDict.WeActionTypeListPanel);
 
-                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onNotifyLanguageChanged(): void {        // DONE
@@ -145,7 +146,7 @@ namespace Twns.WarEvent {
             if (data == null) {
                 label.text = ``;
             } else {
-                label.text = Lang.getWarEventActionTypeName(data.newActionType) || Twns.CommonConstants.ErrorTextForUndefined;
+                label.text = Lang.getWarEventActionTypeName(data.newActionType) || CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateLabelUsingAndSwitch(): void {
@@ -156,7 +157,7 @@ namespace Twns.WarEvent {
                 labelUsing.visible  = false;
                 labelSwitch.visible = false;
             } else {
-                const isUsing       = Twns.WarHelpers.WarEventHelpers.getActionType(data.action) === data.newActionType;
+                const isUsing       = WarHelpers.WarEventHelpers.getActionType(data.action) === data.newActionType;
                 labelUsing.visible  = isUsing;
                 labelSwitch.visible = !isUsing;
             }

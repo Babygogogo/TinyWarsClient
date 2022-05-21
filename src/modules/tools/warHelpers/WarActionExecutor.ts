@@ -2498,7 +2498,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
                 tile.resetByTypeAndPlayerIndex({
                     baseType        : tile.getBaseType(),
-                    objectType      : Types.TileObjectType.EmptySilo,
+                    objectType      : Helpers.getExisted((tile.getGameConfig().getTileObjectCfg(tile.getObjectType())?.launchSiloParams ?? [])[1]),
                     playerIndex     : CommonConstants.WarNeutralPlayerIndex,
                 });
 
@@ -2567,7 +2567,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 const tile = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
                 tile.resetByTypeAndPlayerIndex({
                     baseType    : tile.getBaseType(),
-                    objectType  : Types.TileObjectType.EmptySilo,
+                    objectType  : Helpers.getExisted((tile.getGameConfig().getTileObjectCfg(tile.getObjectType())?.launchSiloParams ?? [])[1]),
                     playerIndex : CommonConstants.WarNeutralPlayerIndex,
                 });
 

@@ -10,8 +10,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor.MeModel {
-    import MeWar            = Twns.MapEditor.MeWar;
-    import MapReviewStatus  = Twns.Types.MapReviewStatus;
+    import MeWar            = MapEditor.MeWar;
+    import MapReviewStatus  = Types.MapReviewStatus;
     import IMapRawData      = CommonProto.Map.IMapRawData;
     import IMapEditorData   = CommonProto.Map.IMapEditorData;
 
@@ -25,18 +25,18 @@ namespace Twns.MapEditor.MeModel {
     export async function resetDataList(rawDataList: IMapEditorData[]): Promise<void> {
         MAP_DICT.clear();
         for (const data of rawDataList || []) {
-            const slotIndex = Twns.Helpers.getExisted(data.slotIndex);
+            const slotIndex = Helpers.getExisted(data.slotIndex);
             MAP_DICT.set(slotIndex, {
                 slotIndex,
                 reviewStatus    : data.reviewStatus,
-                mapRawData      : convertBaseSeaToDecoratorShore(data.mapRawData),
+                mapRawData      : data.mapRawData,
                 reviewComment   : data.reviewComment,
             });
         }
 
-        const maxSlotsCount = Twns.User.UserModel.getIsSelfMapCommittee()
-            ? Twns.CommonConstants.MapEditorSlotMaxCountForCommittee
-            : Twns.CommonConstants.MapEditorSlotMaxCountForNormal;
+        const maxSlotsCount = User.UserModel.getIsSelfMapCommittee()
+            ? CommonConstants.MapEditorSlotMaxCountForCommittee
+            : CommonConstants.MapEditorSlotMaxCountForNormal;
         for (let i = 0; i < maxSlotsCount; ++i) {
             if (!MAP_DICT.has(i)) {
                 MAP_DICT.set(i, createEmptyData(i));
@@ -47,7 +47,7 @@ namespace Twns.MapEditor.MeModel {
         MAP_DICT.set(slotIndex, {
             slotIndex,
             reviewStatus: data.reviewStatus,
-            mapRawData  : convertBaseSeaToDecoratorShore(data.mapRawData),
+            mapRawData  : data.mapRawData,
         });
     }
     export function getDataDict(): Map<number, IMapEditorData> {
@@ -69,20 +69,20 @@ namespace Twns.MapEditor.MeModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar(mapRawData: Twns.Types.Undefinable<IMapRawData>, slotIndex: number, isReview: boolean): Promise<MeWar> {
+    export async function loadWar(mapRawData: Types.Undefinable<IMapRawData>, slotIndex: number, isReview: boolean): Promise<MeWar> {
         if (_war) {
-            Twns.Logger.warn(`MeManager.loadWar() another war has been loaded already!`);
+            Logger.warn(`MeManager.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
-        mapRawData = mapRawData || await Twns.MapEditor.MeHelpers.createDefaultMapRawData(slotIndex);
+        const gameConfig = await Config.ConfigManager.getLatestGameConfig();
         _war = new MeWar();
         await _war.initWithMapEditorData(
             {
-                mapRawData,
+                mapRawData  : mapRawData ?? await MapEditor.MeHelpers.createDefaultMapRawData(slotIndex, gameConfig),
                 slotIndex
             },
-            await Twns.Config.ConfigManager.getLatestGameConfig()
+            gameConfig
         );
         _war.setIsMapModified(false);
         _war.setIsReviewingMap(isReview);
@@ -109,26 +109,6 @@ namespace Twns.MapEditor.MeModel {
             reviewStatus: MapReviewStatus.None,
             mapRawData  : null,
         };
-    }
-
-    function convertBaseSeaToDecoratorShore(mapRawData: Twns.Types.Undefinable<IMapRawData>): IMapRawData | null {
-        if (mapRawData == null) {
-            return null;
-        }
-
-        for (const tileData of mapRawData.tileDataArray || []) {
-            if (tileData.baseType !== Twns.Types.TileBaseType.Sea) {
-                continue;
-            }
-
-            const shapeId = tileData.baseShapeId;
-            if (shapeId) {
-                tileData.decoratorType      = Twns.Types.TileDecoratorType.Shore;
-                tileData.decoratorShapeId   = shapeId;
-                tileData.baseShapeId        = 0;
-            }
-        }
-        return mapRawData;
     }
 }
 

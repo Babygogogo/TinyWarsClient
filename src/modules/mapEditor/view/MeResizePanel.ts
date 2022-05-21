@@ -123,11 +123,27 @@ namespace Twns.MapEditor {
                 return;
             }
 
-            const tempData = MapEditor.MeHelpers.resizeMap(war.serializeForMap(), width + Math.max(0, deltaLeft) + Math.max(0, deltaRight), height + Math.max(0, deltaTop) + Math.max(0, deltaBottom));
+            const gameConfig    = war.getGameConfig();
+            const tempData      = MapEditor.MeHelpers.resizeMap({
+                mapRawData  : war.serializeForMap(),
+                newWidth    : width + Math.max(0, deltaLeft) + Math.max(0, deltaRight),
+                newHeight   : height + Math.max(0, deltaTop) + Math.max(0, deltaBottom),
+                gameConfig,
+            });
             war.stopRunning();
             await war.initWithMapEditorData(
                 {
-                    mapRawData  : MapEditor.MeHelpers.resizeMap(MapEditor.MeHelpers.addOffset(tempData, deltaLeft, deltaTop), newWidth, newHeight),
+                    mapRawData  : MapEditor.MeHelpers.resizeMap({
+                        mapRawData: MapEditor.MeHelpers.addOffset({
+                            mapRawData  : tempData,
+                            offsetX     : deltaLeft,
+                            offsetY     : deltaTop,
+                            gameConfig,
+                        }),
+                        newWidth,
+                        newHeight,
+                        gameConfig,
+                    }),
                     slotIndex   : war.getMapSlotIndex(),
                 },
                 war.getGameConfig(),

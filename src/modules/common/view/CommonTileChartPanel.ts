@@ -191,15 +191,17 @@ namespace Twns.Common {
                 return;
             }
 
-            const tileView  = this._tileView;
+            const tileView      = this._tileView;
+            const gameConfig    = this._getOpenData().gameConfig;
             tileView.init({
-                tileBaseType        : CommonConstants.TileTypeToTileBaseType.get(tileType) ?? null,
+                tileBaseType        : gameConfig.getTileTemplateCfgByType(tileType)?.toTileBaseType ?? null,
                 tileBaseShapeId     : 0,
                 tileDecoratorType   : null,
                 tileDecoratorShapeId: null,
-                tileObjectType      : this._getOpenData().gameConfig.getTileTemplateCfgByType(tileType)?.toTileObjectType ?? null,
+                tileObjectType      : gameConfig.getTileTemplateCfgByType(tileType)?.toTileObjectType ?? null,
                 tileObjectShapeId   : 0,
                 playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                gameConfig,
             });
             tileView.updateView();
         }

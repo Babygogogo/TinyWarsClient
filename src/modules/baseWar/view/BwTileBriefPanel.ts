@@ -152,6 +152,7 @@ namespace Twns.BaseWar {
             const tile      = war.getTileMap().getTile(war.getCursor().getGridIndex());
             const tileView  = this._tileView;
             tileView.setData({
+                gameConfig  : tile.getGameConfig(),
                 tileData    : tile.serialize(),
                 hasFog      : tile.getHasFog(),
                 skinId      : tile.getSkinId(),

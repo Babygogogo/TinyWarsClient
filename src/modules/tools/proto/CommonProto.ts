@@ -569,6 +569,9 @@ declare namespace CommonProto {
             /** TileTemplateCfg sortWeightForDamageChart */
             sortWeightForDamageChart?: (number|null);
 
+            /** TileTemplateCfg toTileBaseType */
+            toTileBaseType?: (number|null);
+
             /** TileTemplateCfg toTileObjectType */
             toTileObjectType?: (number|null);
         }
@@ -657,6 +660,9 @@ declare namespace CommonProto {
             /** TileTemplateCfg sortWeightForDamageChart. */
             public sortWeightForDamageChart: number;
 
+            /** TileTemplateCfg toTileBaseType. */
+            public toTileBaseType: number;
+
             /** TileTemplateCfg toTileObjectType. */
             public toTileObjectType: number;
 
@@ -731,6 +737,126 @@ declare namespace CommonProto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a TileBaseCfg. */
+        interface ITileBaseCfg {
+
+            /** TileBaseCfg tileBaseType */
+            tileBaseType?: (number|null);
+
+            /** TileBaseCfg shapesCount */
+            shapesCount?: (number|null);
+
+            /** TileBaseCfg isEnabled */
+            isEnabled?: (number|null);
+
+            /** TileBaseCfg isDefault */
+            isDefault?: (number|null);
+
+            /** TileBaseCfg animParams */
+            animParams?: (number[]|null);
+
+            /** TileBaseCfg animParamsForV0 */
+            animParamsForV0?: (number[]|null);
+        }
+
+        /** Represents a TileBaseCfg. */
+        class TileBaseCfg implements ITileBaseCfg {
+
+            /**
+             * Constructs a new TileBaseCfg.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.Config.ITileBaseCfg);
+
+            /** TileBaseCfg tileBaseType. */
+            public tileBaseType: number;
+
+            /** TileBaseCfg shapesCount. */
+            public shapesCount: number;
+
+            /** TileBaseCfg isEnabled. */
+            public isEnabled: number;
+
+            /** TileBaseCfg isDefault. */
+            public isDefault: number;
+
+            /** TileBaseCfg animParams. */
+            public animParams: number[];
+
+            /** TileBaseCfg animParamsForV0. */
+            public animParamsForV0: number[];
+
+            /**
+             * Creates a new TileBaseCfg instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns TileBaseCfg instance
+             */
+            public static create(properties?: CommonProto.Config.ITileBaseCfg): CommonProto.Config.TileBaseCfg;
+
+            /**
+             * Encodes the specified TileBaseCfg message. Does not implicitly {@link CommonProto.Config.TileBaseCfg.verify|verify} messages.
+             * @param message TileBaseCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.Config.ITileBaseCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified TileBaseCfg message, length delimited. Does not implicitly {@link CommonProto.Config.TileBaseCfg.verify|verify} messages.
+             * @param message TileBaseCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.Config.ITileBaseCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a TileBaseCfg message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns TileBaseCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.Config.TileBaseCfg;
+
+            /**
+             * Decodes a TileBaseCfg message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns TileBaseCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.Config.TileBaseCfg;
+
+            /**
+             * Verifies a TileBaseCfg message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a TileBaseCfg message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns TileBaseCfg
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.Config.TileBaseCfg;
+
+            /**
+             * Creates a plain object from a TileBaseCfg message. Also converts values to other types if specified.
+             * @param message TileBaseCfg
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.Config.TileBaseCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this TileBaseCfg to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a TileObjectCfg. */
         interface ITileObjectCfg {
 
@@ -754,6 +880,21 @@ declare namespace CommonProto {
 
             /** TileObjectCfg typeAfterOwnerChange */
             typeAfterOwnerChange?: (number|null);
+
+            /** TileObjectCfg launchSiloParams */
+            launchSiloParams?: (number[]|null);
+
+            /** TileObjectCfg lang */
+            lang?: (number|null);
+
+            /** TileObjectCfg animParams */
+            animParams?: (number[]|null);
+
+            /** TileObjectCfg animParamsForV0 */
+            animParamsForV0?: (number[]|null);
+
+            /** TileObjectCfg symmetryTypes */
+            symmetryTypes?: (number[]|null);
         }
 
         /** Represents a TileObjectCfg. */
@@ -785,6 +926,21 @@ declare namespace CommonProto {
 
             /** TileObjectCfg typeAfterOwnerChange. */
             public typeAfterOwnerChange: number;
+
+            /** TileObjectCfg launchSiloParams. */
+            public launchSiloParams: number[];
+
+            /** TileObjectCfg lang. */
+            public lang: number;
+
+            /** TileObjectCfg animParams. */
+            public animParams: number[];
+
+            /** TileObjectCfg animParamsForV0. */
+            public animParamsForV0: number[];
+
+            /** TileObjectCfg symmetryTypes. */
+            public symmetryTypes: number[];
 
             /**
              * Creates a new TileObjectCfg instance using the specified properties.
@@ -852,6 +1008,108 @@ declare namespace CommonProto {
 
             /**
              * Converts this TileObjectCfg to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a TileObjectSymmetryCfg. */
+        interface ITileObjectSymmetryCfg {
+
+            /** TileObjectSymmetryCfg tileObjectType */
+            tileObjectType?: (number|null);
+
+            /** TileObjectSymmetryCfg shapeId */
+            shapeId?: (number|null);
+
+            /** TileObjectSymmetryCfg symmetryShapeIds */
+            symmetryShapeIds?: (number[]|null);
+        }
+
+        /** Represents a TileObjectSymmetryCfg. */
+        class TileObjectSymmetryCfg implements ITileObjectSymmetryCfg {
+
+            /**
+             * Constructs a new TileObjectSymmetryCfg.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.Config.ITileObjectSymmetryCfg);
+
+            /** TileObjectSymmetryCfg tileObjectType. */
+            public tileObjectType: number;
+
+            /** TileObjectSymmetryCfg shapeId. */
+            public shapeId: number;
+
+            /** TileObjectSymmetryCfg symmetryShapeIds. */
+            public symmetryShapeIds: number[];
+
+            /**
+             * Creates a new TileObjectSymmetryCfg instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns TileObjectSymmetryCfg instance
+             */
+            public static create(properties?: CommonProto.Config.ITileObjectSymmetryCfg): CommonProto.Config.TileObjectSymmetryCfg;
+
+            /**
+             * Encodes the specified TileObjectSymmetryCfg message. Does not implicitly {@link CommonProto.Config.TileObjectSymmetryCfg.verify|verify} messages.
+             * @param message TileObjectSymmetryCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.Config.ITileObjectSymmetryCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified TileObjectSymmetryCfg message, length delimited. Does not implicitly {@link CommonProto.Config.TileObjectSymmetryCfg.verify|verify} messages.
+             * @param message TileObjectSymmetryCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.Config.ITileObjectSymmetryCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a TileObjectSymmetryCfg message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns TileObjectSymmetryCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.Config.TileObjectSymmetryCfg;
+
+            /**
+             * Decodes a TileObjectSymmetryCfg message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns TileObjectSymmetryCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.Config.TileObjectSymmetryCfg;
+
+            /**
+             * Verifies a TileObjectSymmetryCfg message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a TileObjectSymmetryCfg message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns TileObjectSymmetryCfg
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.Config.TileObjectSymmetryCfg;
+
+            /**
+             * Creates a plain object from a TileObjectSymmetryCfg message. Also converts values to other types if specified.
+             * @param message TileObjectSymmetryCfg
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.Config.TileObjectSymmetryCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this TileObjectSymmetryCfg to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -1043,9 +1301,6 @@ declare namespace CommonProto {
             /** UnitTemplateCfg canCaptureTile */
             canCaptureTile?: (number|null);
 
-            /** UnitTemplateCfg canLaunchSilo */
-            canLaunchSilo?: (number|null);
-
             /** UnitTemplateCfg productionCost */
             productionCost?: (number|null);
 
@@ -1169,9 +1424,6 @@ declare namespace CommonProto {
 
             /** UnitTemplateCfg canCaptureTile. */
             public canCaptureTile: number;
-
-            /** UnitTemplateCfg canLaunchSilo. */
-            public canLaunchSilo: number;
 
             /** UnitTemplateCfg productionCost. */
             public productionCost: number;
@@ -3056,8 +3308,14 @@ declare namespace CommonProto {
             /** FullConfig TileCategory */
             TileCategory?: (CommonProto.Config.ITileCategoryCfg[]|null);
 
+            /** FullConfig TileBase */
+            TileBase?: (CommonProto.Config.ITileBaseCfg[]|null);
+
             /** FullConfig TileObject */
             TileObject?: (CommonProto.Config.ITileObjectCfg[]|null);
+
+            /** FullConfig TileObjectSymmetry */
+            TileObjectSymmetry?: (CommonProto.Config.ITileObjectSymmetryCfg[]|null);
 
             /** FullConfig TileTypeMapping */
             TileTypeMapping?: (CommonProto.Config.ITileTypeMappingCfg[]|null);
@@ -3129,8 +3387,14 @@ declare namespace CommonProto {
             /** FullConfig TileCategory. */
             public TileCategory: CommonProto.Config.ITileCategoryCfg[];
 
+            /** FullConfig TileBase. */
+            public TileBase: CommonProto.Config.ITileBaseCfg[];
+
             /** FullConfig TileObject. */
             public TileObject: CommonProto.Config.ITileObjectCfg[];
+
+            /** FullConfig TileObjectSymmetry. */
+            public TileObjectSymmetry: CommonProto.Config.ITileObjectSymmetryCfg[];
 
             /** FullConfig TileTypeMapping. */
             public TileTypeMapping: CommonProto.Config.ITileTypeMappingCfg[];

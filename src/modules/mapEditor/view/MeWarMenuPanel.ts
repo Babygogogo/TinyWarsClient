@@ -270,7 +270,9 @@ namespace Twns.MapEditor {
         private _updateListTile(): void {
             const dictForTileBases      = new Map<TileBaseType, DataForTileRenderer>();
             const dictForTileObjects    = new Map<TileObjectType, DataForTileRenderer>();
-            for (const tile of this._getWar().getTileMap().getAllTiles()) {
+            const war                   = this._getWar();
+            const gameConfig            = war.getGameConfig();
+            for (const tile of war.getTileMap().getAllTiles()) {
                 const tileObjectType    = tile.getObjectType();
                 const tileBaseType      = tile.getBaseType();
                 const tileType          = tile.getType();
@@ -286,6 +288,7 @@ namespace Twns.MapEditor {
                             count       : 1,
                             tileType,
                             playerIndex,
+                            gameConfig,
                         });
                     }
                 } else {
@@ -298,6 +301,7 @@ namespace Twns.MapEditor {
                             count       : 1,
                             tileType,
                             playerIndex,
+                            gameConfig,
                         });
                     }
                 }
@@ -693,6 +697,7 @@ namespace Twns.MapEditor {
         count       : number;
         tileType    : Types.TileType;
         playerIndex : number;
+        gameConfig  : Config.GameConfig;
     };
 
     class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileRenderer> {
@@ -730,6 +735,7 @@ namespace Twns.MapEditor {
                 tileObjectType      : data.objectType,
                 tileObjectShapeId   : 0,
                 playerIndex         : data.playerIndex,
+                gameConfig          : data.gameConfig,
             });
             this._tileView.updateView();
         }

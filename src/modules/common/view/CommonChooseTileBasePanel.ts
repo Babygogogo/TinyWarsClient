@@ -69,29 +69,26 @@ namespace Twns.Common {
         }
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
-            const typeMap = new Map<number, DataForDrawTileBase[]>();
-            for (const [baseType, cfg] of CommonConstants.TileBaseShapeConfigs) {
-                if (!typeMap.has(baseType)) {
-                    typeMap.set(baseType, []);
+            const openData      = this._getOpenData();
+            const gameConfig    = openData.gameConfig;
+            const typeMap       = new Map<number, DataForDrawTileBase[]>();
+            for (const cfg of gameConfig.getAllEnabledTileBaseCfgArray()) {
+                const tileBaseType = cfg.tileBaseType;
+                if (!typeMap.has(tileBaseType)) {
+                    typeMap.set(tileBaseType, []);
                 }
 
-                const list = Helpers.getExisted(typeMap.get(baseType));
+                const list = Helpers.getExisted(typeMap.get(tileBaseType));
                 for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
-                    if ((baseType === Types.TileBaseType.Sea) && (shapeId !== 0)) {
-                        continue;
-                    }
-
                     list.push({
-                        baseType,
+                        baseType: tileBaseType,
                         shapeId,
                     });
                 }
             }
 
-            const openData      = this._getOpenData();
-            const callback      = openData.callback;
-            const gameConfig    = openData.gameConfig;
-            const dataArray     : DataForCategoryRenderer[] = [];
+            const callback  = openData.callback;
+            const dataArray : DataForCategoryRenderer[] = [];
             for (const [, dataListForDrawTileBase] of typeMap) {
                 dataArray.push({
                     gameConfig,
@@ -136,6 +133,7 @@ namespace Twns.Common {
                 dataListForTileBase.push({
                     dataForDrawTileBase,
                     callback,
+                    gameConfig,
                 });
             }
             this._listTileBase.bindData(dataListForTileBase);
@@ -143,6 +141,7 @@ namespace Twns.Common {
     }
 
     type DataForTileBaseRenderer = {
+        gameConfig          : Config.GameConfig;
         dataForDrawTileBase : DataForDrawTileBase;
         callback            : (baseType: Types.TileBaseType, shapeId: number) => void;
     };
@@ -180,6 +179,7 @@ namespace Twns.Common {
                 tileObjectShapeId   : null,
                 tileObjectType      : null,
                 playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                gameConfig          : data.gameConfig,
             });
             this._tileView.updateView();
         }

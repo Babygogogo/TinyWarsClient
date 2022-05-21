@@ -534,7 +534,7 @@ namespace Twns.MapEditor {
                     decoratorShapeId: t2.getDecoratorShapeId(),
                     playerIndex,
                     objectType,
-                    objectShapeId   : Config.ConfigManager.getSymmetricalTileObjectShapeId(objectType, objectShapeId, symmetryType),
+                    objectShapeId   : gameConfig.getSymmetricalTileObjectShapeId(objectType, objectShapeId, symmetryType),
                     locationFlags   : t2.getLocationFlags(),
                     isHighlighted   : t2.getIsHighlighted(),
                 }, gameConfig);

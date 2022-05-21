@@ -295,7 +295,8 @@ namespace TwnsUiMapInfo {
             const data          = this._getData();
             this._labelNum.text = `x${data.num}`;
 
-            const tileObjectType = data.gameConfig.getTileObjectTypeByTileType(data.tileType);
+            const gameConfig        = data.gameConfig;
+            const tileObjectType    = gameConfig.getTileObjectTypeByTileType(data.tileType);
             this._tileView.init({
                 tileBaseType        : null,
                 tileBaseShapeId     : null,
@@ -303,9 +304,8 @@ namespace TwnsUiMapInfo {
                 tileDecoratorShapeId: null,
                 tileObjectType      : tileObjectType,
                 tileObjectShapeId   : 0,
-                playerIndex         : tileObjectType === Twns.Types.TileObjectType.Headquarters
-                    ? Twns.CommonConstants.WarFirstPlayerIndex
-                    : Twns.CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : Twns.CommonConstants.WarNeutralPlayerIndex,
+                gameConfig
             });
             this._tileView.updateView();
         }

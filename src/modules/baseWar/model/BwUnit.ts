@@ -1290,7 +1290,10 @@ namespace Twns.BaseWar {
         // Functions for launch silo.
         ////////////////////////////////////////////////////////////////////////////////
         public checkCanLaunchSiloOnTile(tile: BwTile): boolean {
-            return (this.getTemplateCfg()?.canLaunchSilo === 1) && (tile.getType() === TileType.Silo);
+            const gameConfig        = this.getGameConfig();
+            const launchSiloParams  = gameConfig.getTileObjectCfg(tile.getObjectType())?.launchSiloParams;
+            return (launchSiloParams != null)
+                && (gameConfig.checkIsUnitTypeInCategory(this.getUnitType(), launchSiloParams[0]));
         }
 
         ////////////////////////////////////////////////////////////////////////////////

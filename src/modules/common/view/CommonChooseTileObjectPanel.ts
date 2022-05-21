@@ -173,7 +173,8 @@ namespace Twns.Common {
             const dataForDrawTileObject = data.dataForDrawTileObject;
             const gameConfig            = data.gameConfig;
             const tileObjectType        = dataForDrawTileObject.objectType;
-            this._labelName.text        = Lang.getTileName(Helpers.getExisted(gameConfig.getTileType(Types.TileBaseType.Plain, tileObjectType)), gameConfig) || CommonConstants.ErrorTextForUndefined;
+            const langTextType          = gameConfig.getTileObjectCfg(tileObjectType)?.lang;
+            this._labelName.text        = langTextType == null ? CommonConstants.ErrorTextForUndefined : Lang.getText(langTextType);
             this._tileView.init({
                 tileObjectType,
                 tileObjectShapeId   : dataForDrawTileObject.shapeId,
@@ -182,6 +183,7 @@ namespace Twns.Common {
                 tileDecoratorType   : null,
                 tileDecoratorShapeId: null,
                 playerIndex         : dataForDrawTileObject.playerIndex,
+                gameConfig,
             });
             this._tileView.updateView();
         }

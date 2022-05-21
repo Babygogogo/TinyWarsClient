@@ -4535,7 +4535,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         else if (action.WeaPersistentModifyPlayerAttribute) { return ActionType.PersistentModifyPlayerAttribute; }
         else                                                { return null; }
     }
-    export function resetAction(action: IWarEventAction, actionType: ActionType): void {
+    export function resetAction(action: IWarEventAction, actionType: ActionType, gameConfig: GameConfig): void {
         const commonData = action.WeaCommonData;
         for (const key in action) {
             delete action[key as keyof IWarEventAction];
@@ -4664,7 +4664,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                     gridIndex   : null,
                     playerIndex : CommonConstants.WarNeutralPlayerIndex,
                     objectType  : Types.TileObjectType.Empty,
-                    baseType    : Types.TileBaseType.Plain,
+                    baseType    : gameConfig.getDefaultTileBaseType(),
                 },
                 actIsModifyTileBase         : true,
                 actIsModifyTileDecorator    : true,

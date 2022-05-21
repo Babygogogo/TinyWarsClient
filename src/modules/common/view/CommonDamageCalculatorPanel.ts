@@ -790,7 +790,7 @@ namespace Twns.Common {
     }
     function createTileViewData(tileType: TileType, playerIndex: number, gameConfig: GameConfig): MapEditor.TileViewData {
         const objectType    = Helpers.getExisted(gameConfig.getTileObjectTypeByTileType(tileType));
-        const baseType      = Config.ConfigManager.getTileBaseTypeByTileType(tileType);
+        const baseType      = Helpers.getExisted(gameConfig.getTileBaseTypeByTileType(tileType));
         return {
             tileBaseType        : baseType,
             tileBaseShapeId     : 0,
@@ -799,6 +799,7 @@ namespace Twns.Common {
             tileObjectType      : objectType,
             tileObjectShapeId   : 0,
             playerIndex         : gameConfig.checkIsValidPlayerIndexForTileObject({ playerIndex, tileObjectType: objectType }) ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+            gameConfig,
         };
     }
 

@@ -87,6 +87,10 @@ namespace Twns.Lang {
         const textType = gameConfig.getTileTemplateCfgByType(tileType)?.lang;
         return textType == null ? null : getText(textType, languageType);
     }
+    export function getTileObjectName(tileObjectType: number, gameConfig: Config.GameConfig): string | null {
+        const textType = gameConfig.getTileObjectCfg(tileObjectType)?.lang;
+        return textType == null ? null : getText(textType);
+    }
 
     export function getTileDecoratorName(decoratorType: Types.TileDecoratorType): string | null {
         switch (decoratorType) {

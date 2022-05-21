@@ -10,19 +10,19 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import TileObjectType       = Twns.Types.TileObjectType;
-    import TileBaseType         = Twns.Types.TileBaseType;
-    import TileDecoratorType    = Twns.Types.TileDecoratorType;
+    import TileObjectType       = Types.TileObjectType;
+    import TileDecoratorType    = Types.TileDecoratorType;
     import ISerialTile          = CommonProto.WarSerialization.ISerialTile;
 
     const {
         height  : GRID_HEIGHT,
         width   : GRID_WIDTH,
-    } = Twns.CommonConstants.GridSize;
+    } = CommonConstants.GridSize;
 
     export type DataForTileView = {
+        gameConfig  : Config.GameConfig;
         tileData    : ISerialTile;
-        themeType   : Twns.Types.TileThemeType;
+        themeType   : Types.TileThemeType;
         hasFog      : boolean;
         skinId      : number;
     };
@@ -63,22 +63,24 @@ namespace Twns.BaseWar {
         }
 
         public updateView(): void {
-            const data      = Twns.Helpers.getExisted(this.getData());
-            const skinId    = data.skinId;
-            const hasFog    = data.hasFog;
-            const tileData  = data.tileData;
-            const themeType = data.themeType;
-            const version   = Twns.User.UserModel.getSelfSettingsTextureVersion();
-            const tickCount = Twns.Timer.getTileAnimationTickCount();
+            const data          = Helpers.getExisted(this.getData());
+            const skinId        = data.skinId;
+            const hasFog        = data.hasFog;
+            const tileData      = data.tileData;
+            const themeType     = data.themeType;
+            const gameConfig    = data.gameConfig;
+            const version       = User.UserModel.getSelfSettingsTextureVersion();
+            const tickCount     = Timer.getTileAnimationTickCount();
 
             {
-                const objectType    = Twns.Helpers.getExisted(tileData.objectType);
+                const objectType    = Helpers.getExisted(tileData.objectType);
                 const imgObject     = this.getImgObject();
                 imgObject.visible   = true;
-                imgObject.source    = Twns.Common.CommonModel.getCachedTileObjectImageSource({
+                imgObject.source    = Common.CommonModel.getCachedTileObjectImageSource({
+                    gameConfig,
                     version,
                     themeType,
-                    skinId      : ((hasFog) && (objectType !== TileObjectType.Headquarters)) ? Twns.CommonConstants.UnitAndTileNeutralSkinId : skinId,
+                    skinId      : ((hasFog) && (objectType !== TileObjectType.Headquarters)) ? CommonConstants.UnitAndTileNeutralSkinId : skinId,
                     shapeId     : tileData.objectShapeId || 0,
                     objectType,
                     isDark      : hasFog,
@@ -90,15 +92,16 @@ namespace Twns.BaseWar {
                 const baseType  = tileData.baseType;
                 const imgBase   = this.getImgBase();
                 if (baseType == null) {
-                    throw Twns.Helpers.newError(`BwTileView.updateView() empty baseType.`);
-                } else if (baseType === TileBaseType.Empty) {
+                    throw Helpers.newError(`BwTileView.updateView() empty baseType.`);
+                } else if (baseType === CommonConstants.TileBaseEmptyType) {
                     imgBase.visible = false;
                 } else {
                     imgBase.visible = true;
-                    imgBase.source  = Twns.Common.CommonModel.getCachedTileBaseImageSource({
+                    imgBase.source  = Common.CommonModel.getCachedTileBaseImageSource({
+                        gameConfig,
                         version,
                         themeType,
-                        skinId      : Twns.CommonConstants.UnitAndTileNeutralSkinId,
+                        skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                         shapeId     : tileData.baseShapeId || 0,
                         baseType,
                         isDark      : hasFog,
@@ -114,10 +117,10 @@ namespace Twns.BaseWar {
                     imgDecorator.visible = false;
                 } else {
                     imgDecorator.visible    = true;
-                    imgDecorator.source     = Twns.Common.CommonModel.getCachedTileDecoratorImageSource({
+                    imgDecorator.source     = Common.CommonModel.getCachedTileDecoratorImageSource({
                         version,
                         themeType,
-                        skinId          : Twns.CommonConstants.UnitAndTileNeutralSkinId,
+                        skinId          : CommonConstants.UnitAndTileNeutralSkinId,
                         decoratorType,
                         shapeId         : tileData.decoratorShapeId ?? null,
                         isDark          : hasFog,

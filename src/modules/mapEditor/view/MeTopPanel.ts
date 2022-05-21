@@ -278,15 +278,15 @@ namespace Twns.MapEditor {
             PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0072),
                 callback: async () => {
-                    const slotIndex = war.getMapSlotIndex();
-                    const data      = MapEditor.MeModel.getData(slotIndex);
+                    const slotIndex     = war.getMapSlotIndex();
+                    const gameConfig    = war.getGameConfig();
                     war.stopRunning();
                     await war.initWithMapEditorData(
                         {
-                            mapRawData: (data ? data.mapRawData : null) || await MapEditor.MeHelpers.createDefaultMapRawData(slotIndex),
+                            mapRawData  : MapEditor.MeModel.getData(slotIndex)?.mapRawData ?? await MapEditor.MeHelpers.createDefaultMapRawData(slotIndex, gameConfig),
                             slotIndex,
                         },
-                        war.getGameConfig()
+                        gameConfig
                     );
                     war.setIsMapModified(false);
                     war.startRunning()
@@ -454,10 +454,11 @@ namespace Twns.MapEditor {
         // }
 
         private _updateTileView(): void {
-            const drawer    = this._getDrawer();
-            const mode      = drawer.getMode();
-            const con       = this._conTileView;
-            const tileView  = this._tileView;
+            const drawer        = this._getDrawer();
+            const mode          = drawer.getMode();
+            const con           = this._conTileView;
+            const tileView      = this._tileView;
+            const gameConfig    = this._getWar().getGameConfig();
             if (mode === DrawerMode.DrawTileBase) {
                 con.visible = true;
 
@@ -470,6 +471,7 @@ namespace Twns.MapEditor {
                     tileObjectShapeId   : null,
                     tileObjectType      : null,
                     playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                    gameConfig
                 });
                 tileView.updateView();
 
@@ -485,6 +487,7 @@ namespace Twns.MapEditor {
                     tileObjectShapeId   : null,
                     tileObjectType      : null,
                     playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                    gameConfig
                 });
                 tileView.updateView();
 
@@ -500,6 +503,7 @@ namespace Twns.MapEditor {
                     tileObjectShapeId   : tileObjectData.shapeId,
                     tileObjectType      : tileObjectData.objectType,
                     playerIndex         : tileObjectData.playerIndex,
+                    gameConfig
                 });
                 tileView.updateView();
 
@@ -581,6 +585,7 @@ namespace Twns.MapEditor {
                 tileObjectType      : null,
                 tileObjectShapeId   : null,
                 playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                gameConfig          : this._getWar().getGameConfig(),
             });
             tileView.startRunningView();
         }

@@ -81,6 +81,7 @@ namespace Twns.MapEditor {
             dataList[0]         = {
                 dataForDrawTileBase : data,
                 panel               : this,
+                gameConfig          : Helpers.getExisted(MeModel.getWar()?.getGameConfig()),
             };
             for (const v of filteredList) {
                 if (dataList.length < MAX_RECENT_COUNT) {
@@ -118,27 +119,24 @@ namespace Twns.MapEditor {
         }
 
         private async _createDataForListCategory(): Promise<DataForCategoryRenderer[]> {
-            const typeMap = new Map<number, DataForDrawTileBase[]>();
-            for (const [baseType, cfg] of CommonConstants.TileBaseShapeConfigs) {
-                if (!typeMap.has(baseType)) {
-                    typeMap.set(baseType, []);
+            const typeMap       = new Map<number, DataForDrawTileBase[]>();
+            const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
+            for (const cfg of gameConfig.getAllEnabledTileBaseCfgArray()) {
+                const tileBaseType = cfg.tileBaseType;
+                if (!typeMap.has(tileBaseType)) {
+                    typeMap.set(tileBaseType, []);
                 }
 
-                const list = Helpers.getExisted(typeMap.get(baseType));
+                const list = Helpers.getExisted(typeMap.get(tileBaseType));
                 for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
-                    if ((baseType === Types.TileBaseType.Sea) && (shapeId !== 0)) {
-                        continue;
-                    }
-
                     list.push({
-                        baseType,
+                        baseType: tileBaseType,
                         shapeId,
                     });
                 }
             }
 
             const dataList      : DataForCategoryRenderer[] = [];
-            const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
             for (const [, dataListForDrawTileBase] of typeMap) {
                 dataList.push({
                     dataListForDrawTileBase,
@@ -187,6 +185,7 @@ namespace Twns.MapEditor {
                 dataListForTileBase.push({
                     panel,
                     dataForDrawTileBase,
+                    gameConfig,
                 });
             }
             this._listTileBase.bindData(dataListForTileBase);
@@ -196,6 +195,7 @@ namespace Twns.MapEditor {
     type DataForTileBaseRenderer = {
         dataForDrawTileBase : DataForDrawTileBase;
         panel               : MeChooseTileBasePanel;
+        gameConfig          : Config.GameConfig;
     };
     class TileBaseRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileBaseRenderer> {
         private readonly _group!        : eui.Group;
@@ -231,6 +231,7 @@ namespace Twns.MapEditor {
                 tileObjectShapeId   : null,
                 tileObjectType      : null,
                 playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                gameConfig          : data.gameConfig,
             });
             this._tileView.updateView();
         }

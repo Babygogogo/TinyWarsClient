@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -17,9 +17,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import DataForDrawTileDecorator = Twns.MapEditor.DataForDrawTileDecorator;
-    import LangTextType             = Twns.Lang.LangTextType;
-    import NotifyType               = Twns.Notify.NotifyType;
+    import DataForDrawTileDecorator = MapEditor.DataForDrawTileDecorator;
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
 
     const MAX_RECENT_COUNT = 10;
 
@@ -66,8 +66,9 @@ namespace Twns.MapEditor {
             });
             dataList.length     = 0;
             dataList[0]         = {
-                dataForDrawTileDecorator : data,
-                panel               : this,
+                dataForDrawTileDecorator    : data,
+                panel                       : this,
+                gameConfig                  : Helpers.getExisted(MeModel.getWar()?.getGameConfig()),
             };
             for (const v of filteredList) {
                 if (dataList.length < MAX_RECENT_COUNT) {
@@ -87,10 +88,10 @@ namespace Twns.MapEditor {
         }
 
         private _onTouchedBtnAutoFill(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0233),
                 callback: () => {
-                    Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().autoFillTileDecorators();
+                    Helpers.getExisted(MapEditor.MeModel.getWar()).getDrawer().autoFillTileDecorators();
                     this.close();
                 },
             });
@@ -107,14 +108,14 @@ namespace Twns.MapEditor {
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
             const typeMap = new Map<number, DataForDrawTileDecorator[]>();
-            for (const [decoratorType, cfg] of Twns.CommonConstants.TileDecoratorShapeConfigs) {
+            for (const [decoratorType, cfg] of CommonConstants.TileDecoratorShapeConfigs) {
                 if (!typeMap.has(decoratorType)) {
                     typeMap.set(decoratorType, []);
                 }
 
-                const list = Twns.Helpers.getExisted(typeMap.get(decoratorType));
+                const list = Helpers.getExisted(typeMap.get(decoratorType));
                 for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
-                    if ((decoratorType === Twns.Types.TileDecoratorType.Shore) && (shapeId === 0)) {
+                    if ((decoratorType === Types.TileDecoratorType.Shore) && (shapeId === 0)) {
                         continue;
                     }
 
@@ -125,11 +126,13 @@ namespace Twns.MapEditor {
                 }
             }
 
-            const dataList: DataForCategoryRenderer[] = [];
+            const gameConfig    = Helpers.getExisted(MapEditor.MeModel.getWar()?.getGameConfig());
+            const dataList      : DataForCategoryRenderer[] = [];
             for (const [, dataListForDrawTileDecorator] of typeMap) {
                 dataList.push({
                     dataListForDrawTileDecorator,
                     panel                       : this,
+                    gameConfig,
                 });
             }
 
@@ -148,8 +151,9 @@ namespace Twns.MapEditor {
     }
 
     type DataForCategoryRenderer = {
-        dataListForDrawTileDecorator: DataForDrawTileDecorator[];
-        panel                       : MeChooseTileDecoratorPanel;
+        dataListForDrawTileDecorator    : DataForDrawTileDecorator[];
+        panel                           : MeChooseTileDecoratorPanel;
+        gameConfig                      : Config.GameConfig;
     };
     class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
         private readonly _labelCategory!        : TwnsUiLabel.UiLabel;
@@ -163,14 +167,16 @@ namespace Twns.MapEditor {
         protected _onDataChanged(): void {
             const data                          = this._getData();
             const dataListForDrawTileDecorator  = data.dataListForDrawTileDecorator;
-            this._labelCategory.text            = Lang.getTileDecoratorName(dataListForDrawTileDecorator[0].decoratorType) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelCategory.text            = Lang.getTileDecoratorName(dataListForDrawTileDecorator[0].decoratorType) ?? CommonConstants.ErrorTextForUndefined;
 
             const dataListForTileDecorator  : DataForTileDecoratorRenderer[] = [];
             const panel                     = data.panel;
+            const gameConfig                = data.gameConfig;
             for (const dataForDrawTileDecorator of dataListForDrawTileDecorator) {
                 dataListForTileDecorator.push({
                     panel,
                     dataForDrawTileDecorator,
+                    gameConfig,
                 });
             }
             this._listTileDecorator.bindData(dataListForTileDecorator);
@@ -178,15 +184,16 @@ namespace Twns.MapEditor {
     }
 
     type DataForTileDecoratorRenderer = {
-        dataForDrawTileDecorator : DataForDrawTileDecorator;
-        panel               : MeChooseTileDecoratorPanel;
+        dataForDrawTileDecorator    : DataForDrawTileDecorator;
+        panel                       : MeChooseTileDecoratorPanel;
+        gameConfig                  : Config.GameConfig;
     };
     class TileDecoratorRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileDecoratorRenderer> {
         private readonly _group!        : eui.Group;
         private readonly _conTileView!  : eui.Group;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
-        private _tileView   = new Twns.MapEditor.MeTileSimpleView();
+        private _tileView   = new MapEditor.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -219,7 +226,8 @@ namespace Twns.MapEditor {
                 tileDecoratorShapeId: shapeId,
                 tileObjectShapeId   : null,
                 tileObjectType      : null,
-                playerIndex         : Twns.CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                gameConfig          : data.gameConfig,
             });
             tileView.updateView();
         }
@@ -230,7 +238,7 @@ namespace Twns.MapEditor {
             const dataForDrawTileDecorator  = data.dataForDrawTileDecorator;
             panel.updateOnChooseTileDecorator(dataForDrawTileDecorator);
             panel.close();
-            Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getDrawer().setModeDrawTileDecorator(dataForDrawTileDecorator);
+            Helpers.getExisted(MapEditor.MeModel.getWar()).getDrawer().setModeDrawTileDecorator(dataForDrawTileDecorator);
         }
     }
 }
