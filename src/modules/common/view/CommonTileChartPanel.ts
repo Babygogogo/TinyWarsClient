@@ -194,11 +194,11 @@ namespace Twns.Common {
             const tileView      = this._tileView;
             const gameConfig    = this._getOpenData().gameConfig;
             tileView.init({
-                tileBaseType        : gameConfig.getTileTemplateCfgByType(tileType)?.toTileBaseType ?? null,
+                tileBaseType        : gameConfig.getTileTemplateCfg(tileType)?.toTileBaseType ?? null,
                 tileBaseShapeId     : 0,
                 tileDecoratorType   : null,
                 tileDecoratorShapeId: null,
-                tileObjectType      : gameConfig.getTileTemplateCfgByType(tileType)?.toTileObjectType ?? null,
+                tileObjectType      : gameConfig.getTileTemplateCfg(tileType)?.toTileObjectType ?? null,
                 tileObjectShapeId   : 0,
                 playerIndex         : CommonConstants.WarNeutralPlayerIndex,
                 gameConfig,
@@ -215,7 +215,7 @@ namespace Twns.Common {
             }
 
             const gameConfig        = this._getOpenData().gameConfig;
-            const tileTemplateCfg   = gameConfig.getTileTemplateCfgByType(tileType);
+            const tileTemplateCfg   = gameConfig.getTileTemplateCfg(tileType);
             if (tileTemplateCfg == null) {
                 listInfo.clear();
                 return;
@@ -279,7 +279,7 @@ namespace Twns.Common {
         private _updateGroupMoveCost(): void {
             const group             = this._groupMoveCost;
             const tileType          = this._listTile.getSelectedData()?.tileType;
-            const tileTemplateCfg   = tileType == null ? null : this._getOpenData().gameConfig.getTileTemplateCfgByType(tileType);
+            const tileTemplateCfg   = tileType == null ? null : this._getOpenData().gameConfig.getTileTemplateCfg(tileType);
             if ((tileTemplateCfg == null) || (tileTemplateCfg.maxHp)) {
                 group.visible = false;
             } else {
@@ -291,7 +291,7 @@ namespace Twns.Common {
         private _updateGroupDamageChart(): void {
             const group             = this._groupDamageChart;
             const tileType          = this._listTile.getSelectedData()?.tileType;
-            const tileTemplateCfg   = tileType == null ? null : this._getOpenData().gameConfig.getTileTemplateCfgByType(tileType);
+            const tileTemplateCfg   = tileType == null ? null : this._getOpenData().gameConfig.getTileTemplateCfg(tileType);
             if ((tileTemplateCfg == null) || (!tileTemplateCfg.maxHp)) {
                 group.visible = false;
             } else {
@@ -307,7 +307,7 @@ namespace Twns.Common {
             }
 
             const gameConfig    = this._getOpenData().gameConfig;
-            const tileCfg       = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(tileType));
+            const tileCfg       = Helpers.getExisted(gameConfig.getTileTemplateCfg(tileType));
             const dataArray     : DataForMoveCostRenderer[] = [];
             let index           = 0;
             for (const unitType of gameConfig.getAllUnitTypeArray()) {
@@ -921,7 +921,7 @@ namespace Twns.Common {
             }, Timer.getUnitAnimationTickCount());
 
             const attackCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(attackerUnitType));
-            const targetArmorType           = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(targetTileType)?.armorType);
+            const targetArmorType           = Helpers.getExisted(gameConfig.getTileTemplateCfg(targetTileType)?.armorType);
             const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
             const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
             this._labelPrimaryAttack.text   = primaryAttackDamage == null ? `--` : `${primaryAttackDamage}`;

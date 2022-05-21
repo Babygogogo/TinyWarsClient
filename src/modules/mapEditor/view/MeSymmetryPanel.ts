@@ -665,17 +665,17 @@ namespace Twns.MapEditor {
         const dstTile               = tileMap.getTile(dstGridIndex);
         const srcTile               = tileMap.getTile(Helpers.getExisted(MapEditor.MeHelpers.getSymmetricalGridIndex(dstGridIndex, symmetryType, tileMap.getMapSize())));
         const tileData              = Helpers.deepClone(srcTile.serialize());
-        const decoratorType         = srcTile.getDecoratorType();
+        const decoratorType         = srcTile.getDecorationType();
         const decoratorShapeId      = srcTile.getDecoratorShapeId();
         const objectType            = srcTile.getObjectType();
         tileData.gridIndex          = dstGridIndex;
         tileData.isHighlighted      = dstTile.getIsHighlighted();
         tileData.locationFlags      = dstTile.getLocationFlags();
-        tileData.baseShapeId        = Config.ConfigManager.getSymmetricalTileBaseShapeId(srcTile.getBaseType(), srcTile.getBaseShapeId(), symmetryType);
+        tileData.baseShapeId        = gameConfig.getSymmetricalTileBaseShapeId(srcTile.getBaseType(), srcTile.getBaseShapeId(), symmetryType);
         tileData.objectType         = gameConfig.getSymmetricalTileObjectType(objectType, symmetryType);
         tileData.objectShapeId      = gameConfig.getSymmetricalTileObjectShapeId(objectType, srcTile.getObjectShapeId(), symmetryType);
         if ((decoratorType != null) && (decoratorShapeId != null)) {
-            tileData.decoratorShapeId = Config.ConfigManager.getSymmetricalTileDecoratorShapeId(decoratorType, decoratorShapeId, symmetryType);
+            tileData.decoratorShapeId = gameConfig.getSymmetricalTileDecoratorShapeId(decoratorType, decoratorShapeId, symmetryType);
         }
 
         if ((srcTile.getMaxHp() !== null) && (war.getUnitMap().getUnitOnMap(dstGridIndex))) {

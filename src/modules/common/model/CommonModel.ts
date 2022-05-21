@@ -150,21 +150,18 @@ namespace Twns.Common.CommonModel {
         return Helpers.getExisted(cfg.source);
     }
 
-    export function getCachedTileDecoratorImageSource(params: {
-        version         : TextureVersion;
-        themeType       : TileThemeType;
-        skinId          : number;
-        decoratorType   : TileDecoratorType | null;
-        isDark          : boolean;
-        shapeId         : number | null;
-        tickCount       : number;
+    export function getCachedTileDecoratorImageSource({ version, themeType, skinId, tileDecorationType, isDark, shapeId, tickCount, gameConfig }: {
+        version             : TextureVersion;
+        themeType           : TileThemeType;
+        skinId              : number;
+        tileDecorationType  : TileDecoratorType | null;
+        isDark              : boolean;
+        shapeId             : number;
+        tickCount           : number;
+        gameConfig          : Config.GameConfig;
     }): string {
-        const { version, themeType, skinId, decoratorType, isDark, shapeId, tickCount } = params;
-        if ((decoratorType == null)                     ||
-            (decoratorType === TileDecoratorType.Empty) ||
-            (shapeId == null)
-        ) {
-            return "";
+        if (tileDecorationType == null) {
+            return ``;
         }
 
         if (!_tileDecoratorImageSourceDict.has(version)) {
@@ -182,11 +179,11 @@ namespace Twns.Common.CommonModel {
         }
 
         const dict3 = Helpers.getExisted(dict2.get(skinId));
-        if (!dict3.has(decoratorType)) {
-            dict3.set(decoratorType, new Map());
+        if (!dict3.has(tileDecorationType)) {
+            dict3.set(tileDecorationType, new Map());
         }
 
-        const dict4 = Helpers.getExisted(dict3.get(decoratorType));
+        const dict4 = Helpers.getExisted(dict3.get(tileDecorationType));
         if (!dict4.has(isDark)) {
             dict4.set(isDark, new Map());
         }
@@ -204,7 +201,7 @@ namespace Twns.Common.CommonModel {
         const cfg = Helpers.getExisted(dict6.get(tickCount));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
-            cfg.source  = Config.ConfigManager.getTileDecoratorImageSource(params);
+            cfg.source  = gameConfig.getTileDecorationImageSource({ version, themeType, skinId, tileDecorationType, isDark, shapeId, tickCount });
         }
 
         return Helpers.getExisted(cfg.source);

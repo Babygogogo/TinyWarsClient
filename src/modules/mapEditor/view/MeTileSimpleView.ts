@@ -125,7 +125,7 @@ namespace Twns.MapEditor {
             {
                 const baseType  = this._baseType;
                 const imgBase   = this.getImgBase();
-                if ((baseType == null) || (baseType === CommonConstants.TileBaseEmptyType)) {
+                if (baseType == null) {
                     imgBase.visible = false;
                 } else {
                     imgBase.visible = true;
@@ -145,7 +145,7 @@ namespace Twns.MapEditor {
             {
                 const decoratorType = this._decoratorType;
                 const imgDecorator  = this.getImgDecorator();
-                if ((decoratorType == null) || (decoratorType === TileDecoratorType.Empty)) {
+                if (decoratorType == null) {
                     imgDecorator.visible = false;
                 } else {
                     imgDecorator.visible = true;
@@ -153,10 +153,11 @@ namespace Twns.MapEditor {
                         version,
                         themeType   : Types.TileThemeType.Clear,
                         skinId      : CommonConstants.UnitAndTileNeutralSkinId,
-                        decoratorType,
+                        tileDecorationType: decoratorType,
                         isDark      : false,
                         shapeId     : Helpers.getExisted(this._decoratorShapeId),
                         tickCount,
+                        gameConfig,
                     });
                 }
             }

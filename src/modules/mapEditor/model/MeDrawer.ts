@@ -34,7 +34,7 @@ namespace Twns.MapEditor {
         baseType    : TileBaseType;
         shapeId     : number;
     };
-    export type DataForDrawTileDecorator = {
+    export type DataForDrawTileDecoration = {
         decoratorType   : TileDecoratorType;
         shapeId         : number;
     };
@@ -54,7 +54,7 @@ namespace Twns.MapEditor {
         private _mode                           = DrawerMode.Preview;
         private _drawTargetTileObjectData       : DataForDrawTileObject | null = null;
         private _drawTargetTileBaseData         : DataForDrawTileBase | null = null;
-        private _drawTargetTileDecoratorData    : DataForDrawTileDecorator | null = null;
+        private _drawTargetTileDecoratorData    : DataForDrawTileDecoration | null = null;
         private _drawTargetUnit                 : BaseWar.BwUnit | null = null;
         private _dataForAddTileToLocation       : DataForAddTileToLocation | null = null;
         private _dataForDeleteTileFromLocation  : DataForDeleteTileFromLocation | null = null;
@@ -128,7 +128,7 @@ namespace Twns.MapEditor {
             this._setDrawTargetTileDecoratorData(null);
             this._setMode(DrawerMode.DrawTileBase);
         }
-        public setModeDrawTileDecorator(data: DataForDrawTileDecorator): void {
+        public setModeDrawTileDecorator(data: DataForDrawTileDecoration): void {
             this._setDrawTargetTileObjectData(null);
             this._setDrawTargetTileBaseData(null);
             this._setDrawTargetTileDecoratorData(data);
@@ -146,10 +146,10 @@ namespace Twns.MapEditor {
         public getDrawTargetTileBaseData(): DataForDrawTileBase | null {
             return this._drawTargetTileBaseData;
         }
-        private _setDrawTargetTileDecoratorData(data: DataForDrawTileDecorator | null): void {
+        private _setDrawTargetTileDecoratorData(data: DataForDrawTileDecoration | null): void {
             this._drawTargetTileDecoratorData = data;
         }
-        public getDrawTargetTileDecoratorData(): DataForDrawTileDecorator | null {
+        public getDrawTargetTileDecoratorData(): DataForDrawTileDecoration | null {
             return this._drawTargetTileDecoratorData;
         }
 
@@ -403,7 +403,7 @@ namespace Twns.MapEditor {
                 playerIndex     : tile.getPlayerIndex(),
                 objectType      : tile.getObjectType(),
                 objectShapeId   : tile.getObjectShapeId(),
-                decoratorType   : tile.getDecoratorType(),
+                decoratorType   : tile.getDecorationType(),
                 decoratorShapeId: tile.getDecoratorShapeId(),
                 baseType,
                 baseShapeId,
@@ -424,10 +424,10 @@ namespace Twns.MapEditor {
                     playerIndex     : t2.getPlayerIndex(),
                     objectType      : t2.getObjectType(),
                     objectShapeId   : t2.getObjectShapeId(),
-                    decoratorType   : t2.getDecoratorType(),
+                    decoratorType   : t2.getDecorationType(),
                     decoratorShapeId: t2.getDecoratorShapeId(),
                     baseType        : baseType,
-                    baseShapeId     : Config.ConfigManager.getSymmetricalTileBaseShapeId(baseType, baseShapeId, symmetryType),
+                    baseShapeId     : gameConfig.getSymmetricalTileBaseShapeId(baseType, baseShapeId, symmetryType),
                     locationFlags   : t2.getLocationFlags(),
                     isHighlighted   : t2.getIsHighlighted(),
                 }, gameConfig);
@@ -474,7 +474,7 @@ namespace Twns.MapEditor {
                     baseType        : t2.getBaseType(),
                     baseShapeId     : t2.getBaseShapeId(),
                     decoratorType,
-                    decoratorShapeId: Config.ConfigManager.getSymmetricalTileDecoratorShapeId(decoratorType, decoratorShapeId, symmetryType),
+                    decoratorShapeId: gameConfig.getSymmetricalTileDecoratorShapeId(decoratorType, decoratorShapeId, symmetryType),
                     locationFlags   : t2.getLocationFlags(),
                     isHighlighted   : t2.getIsHighlighted(),
                 }, gameConfig);
@@ -493,7 +493,7 @@ namespace Twns.MapEditor {
             const targetObjectData  = Helpers.getExisted(this.getDrawTargetTileObjectData());
             const baseType          = tile.getBaseType();
             const objectType        = targetObjectData.objectType;
-            const isAttackableTile  = !!gameConfig.getTileTemplateCfgByType(Helpers.getExisted(gameConfig.getTileType(baseType, objectType)))?.maxHp;
+            const isAttackableTile  = !!gameConfig.getTileTemplateCfg(Helpers.getExisted(gameConfig.getTileType(baseType, objectType)))?.maxHp;
             if ((isAttackableTile) && (unitMap.getUnitOnMap(gridIndex))) {
                 FloatText.show(Lang.getText(LangTextType.A0269));
                 return;
@@ -505,7 +505,7 @@ namespace Twns.MapEditor {
                 gridIndex       : tile.getGridIndex(),
                 baseType,
                 baseShapeId     : tile.getBaseShapeId(),
-                decoratorType   : tile.getDecoratorType(),
+                decoratorType   : tile.getDecorationType(),
                 decoratorShapeId: tile.getDecoratorShapeId(),
                 playerIndex,
                 objectType,
@@ -530,7 +530,7 @@ namespace Twns.MapEditor {
                     gridIndex       : t2.getGridIndex(),
                     baseType        : t2.getBaseType(),
                     baseShapeId     : t2.getBaseShapeId(),
-                    decoratorType   : t2.getDecoratorType(),
+                    decoratorType   : t2.getDecorationType(),
                     decoratorShapeId: t2.getDecoratorShapeId(),
                     playerIndex,
                     objectType,

@@ -27,6 +27,8 @@ namespace Twns.Lang {
         TileObject0020, TileObject0021, TileObject0022, TileObject0023, TileObject0024, TileObject0025, TileObject0026, TileObject0027, TileObject0028, TileObject0029,
         TileObject0030, TileObject0031, TileObject0032, TileObject0033, TileObject0034, TileObject0035, TileObject0036, TileObject0037, TileObject0038, TileObject0039,
 
+        TileDecoration0000 = 43000, TileDecoration0001, TileDecoration0002, TileDecoration0003, TileDecoration0004, TileDecoration0005, TileDecoration0006, TileDecoration0007, TileDecoration0008, TileDecoration0009,
+
         A0000, A0001, A0002, A0003, A0004, A0005, A0006, A0007, A0008, A0009,
         A0010, A0011, A0012, A0013, A0014, A0015, A0016, A0017, A0018, A0019,
         A0020, A0021, A0022, A0023, A0024, A0025, A0026, A0027, A0028, A0029,

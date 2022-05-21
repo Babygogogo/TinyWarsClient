@@ -381,13 +381,14 @@ namespace Twns.WarMap {
             return tileData == null
                 ? ``
                 : Common.CommonModel.getCachedTileDecoratorImageSource({
-                    version         : User.UserModel.getSelfSettingsTextureVersion(),
-                    themeType       : Types.TileThemeType.Clear,
-                    decoratorType   : tileData.decoratorType ?? null,
-                    shapeId         : tileData.decoratorShapeId ?? null,
-                    isDark          : false,
-                    skinId          : CommonConstants.UnitAndTileNeutralSkinId,
+                    version             : User.UserModel.getSelfSettingsTextureVersion(),
+                    themeType           : Types.TileThemeType.Clear,
+                    tileDecorationType  : tileData.decoratorType ?? null,
+                    shapeId             : tileData.decoratorShapeId ?? 0,
+                    isDark              : false,
+                    skinId              : CommonConstants.UnitAndTileNeutralSkinId,
                     tickCount,
+                    gameConfig,
                 });
         }
 
@@ -404,7 +405,7 @@ namespace Twns.WarMap {
                     gameConfig,
                     version     : User.UserModel.getSelfSettingsTextureVersion(),
                     themeType   : Types.TileThemeType.Clear,
-                    objectType  : tileData.objectType || Types.TileObjectType.Empty,
+                    objectType  : tileData.objectType || CommonConstants.TileObjectEmptyType,
                     shapeId     : tileData.objectShapeId || 0,
                     isDark      : false,
                     skinId      : Helpers.getExisted(tileData.skinId || tileData.playerIndex),

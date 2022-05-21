@@ -68,7 +68,7 @@ namespace Twns.PanelHelpers {
         CommonChooseSingleUnitTypePanel     : PanelConfig<Common.OpenDataForCommonChooseSingleUnitTypePanel>;
         CommonChooseTeamIndexPanel          : PanelConfig<Common.OpenDataForCommonChooseTeamIndexPanel>;
         CommonChooseTileBasePanel           : PanelConfig<Common.OpenDataForCommonChooseTileBasePanel>;
-        CommonChooseTileDecoratorPanel      : PanelConfig<Common.OpenDataForCommonChooseTileDecoratorPanel>;
+        CommonChooseTileDecorationPanel     : PanelConfig<Common.OpenDataForCommonChooseTileDecorationPanel>;
         CommonChooseTileObjectPanel         : PanelConfig<Common.OpenDataForCommonChooseTileObjectPanel>;
         CommonChooseTileTypePanel           : PanelConfig<Common.OpenDataForCommonChooseTileTypePanel>;
         CommonChooseUnitActionStatePanel    : PanelConfig<Common.OpenDataForCommonChooseUnitActionStatePanel>;
@@ -118,7 +118,7 @@ namespace Twns.PanelHelpers {
         MeAddWarEventToRulePanel            : PanelConfig<MapEditor.OpenDataForMeAddWarEventToRulePanel>;
         MeAvailableCoPanel                  : PanelConfig<MapEditor.OpenDataForMeAvailableCoPanel>;
         MeChooseTileBasePanel               : PanelConfig<MapEditor.OpenDataForMeChooseTileBasePanel>;
-        MeChooseTileDecoratorPanel          : PanelConfig<MapEditor.OpenDataForMeChooseTileDecoratorPanel>;
+        MeChooseTileDecorationPanel         : PanelConfig<MapEditor.OpenDataForMeChooseTileDecorationPanel>;
         MeChooseTileObjectPanel             : PanelConfig<MapEditor.OpenDataForMeChooseTileObjectPanel>;
         MeChooseUnitPanel                   : PanelConfig<MapEditor.OpenDataForMeChooseUnitPanel>;
         MeClearPanel                        : PanelConfig<MapEditor.OpenDataForMeClearPanel>;
@@ -614,8 +614,8 @@ namespace Twns.PanelHelpers {
                 layer       : LayerType.Hud0,
             },
 
-            CommonChooseTileDecoratorPanel: {
-                cls         : Common?.CommonChooseTileDecoratorPanel,
+            CommonChooseTileDecorationPanel: {
+                cls         : Common?.CommonChooseTileDecorationPanel,
                 skinName    : `resource/skins/common/CommonChooseTileDecoratorPanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -906,9 +906,9 @@ namespace Twns.PanelHelpers {
                 needCache   : true,
             },
 
-            MeChooseTileDecoratorPanel: {
-                cls         : MapEditor?.MeChooseTileDecoratorPanel,
-                skinName    : `resource/skins/mapEditor/MeChooseTileDecoratorPanel.exml`,
+            MeChooseTileDecorationPanel: {
+                cls         : MapEditor?.MeChooseTileDecorationPanel,
+                skinName    : `resource/skins/mapEditor/MeChooseTileDecorationPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },

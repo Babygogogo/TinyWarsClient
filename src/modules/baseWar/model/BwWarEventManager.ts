@@ -993,7 +993,7 @@ namespace Twns.BaseWar {
                     if (unitMap.getUnitOnMap(gridIndex)) {
                         if (actDestroyUnit) {
                             WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
-                        } else if (gameConfig.getTileTemplateCfgByType(Helpers.getExisted(gameConfig.getTileType(actBaseType, actObjectType)))?.maxHp != null) {
+                        } else if (gameConfig.getTileTemplateCfg(Helpers.getExisted(gameConfig.getTileType(actBaseType, actObjectType)))?.maxHp != null) {
                             continue;
                         }
                     }
@@ -1003,7 +1003,7 @@ namespace Twns.BaseWar {
                         playerIndex         : actIsModifyTileObject ? actTileData.playerIndex : tile.getPlayerIndex(),
                         baseType            : actBaseType,
                         baseShapeId         : actIsModifyTileBase ? actTileData.baseShapeId : tile.getBaseShapeId(),
-                        decoratorType       : actIsModifyTileDecorator ? actTileData.decoratorType : tile.getDecoratorType(),
+                        decoratorType       : actIsModifyTileDecorator ? actTileData.decoratorType : tile.getDecorationType(),
                         decoratorShapeId    : actIsModifyTileDecorator ? actTileData.decoratorShapeId : tile.getDecoratorShapeId(),
                         objectType          : actObjectType,
                         objectShapeId       : actIsModifyTileObject ? actTileData.objectShapeId : tile.getObjectShapeId(),

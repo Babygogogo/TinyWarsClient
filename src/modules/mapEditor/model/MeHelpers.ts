@@ -26,7 +26,6 @@ namespace Twns.MapEditor.MeHelpers {
     import LangTextType         = Lang.LangTextType;
     import GridIndex            = Types.GridIndex;
     import TileType             = Types.TileType;
-    import TileObjectType       = Types.TileObjectType;
     import TileBaseType         = Types.TileBaseType;
     import SymmetryType         = Types.SymmetryType;
     import LanguageType         = Types.LanguageType;
@@ -180,7 +179,7 @@ namespace Twns.MapEditor.MeHelpers {
             gridIndex,
             baseType        : tileBaseType,
             decoratorType   : null,
-            objectType      : TileObjectType.Empty,
+            objectType      : CommonConstants.TileObjectEmptyType,
             playerIndex     : CommonConstants.WarNeutralPlayerIndex,
         };
     }
@@ -591,12 +590,12 @@ namespace Twns.MapEditor.MeHelpers {
     function checkIsSymmetrical(tile1: BwTile, tile2: BwTile, symmetryType: SymmetryType): boolean {
         const baseType      = tile1.getBaseType();
         const objectType    = tile1.getObjectType();
-        const decoratorType = tile1.getDecoratorType();
+        const decoratorType = tile1.getDecorationType();
         const gameConfig    = tile1.getGameConfig();
         return (baseType === tile2.getBaseType())
             && (gameConfig.getSymmetricalTileObjectType(objectType, symmetryType) === tile2.getObjectType())
-            && (decoratorType == tile2.getDecoratorType())
-            && (Config.ConfigManager.checkIsTileBaseSymmetrical({
+            && (decoratorType == tile2.getDecorationType())
+            && (gameConfig.checkIsTileBaseSymmetrical({
                 baseType,
                 shapeId1    : tile1.getBaseShapeId(),
                 shapeId2    : tile2.getBaseShapeId(),
@@ -608,8 +607,8 @@ namespace Twns.MapEditor.MeHelpers {
                 shapeId2    : tile2.getObjectShapeId(),
                 symmetryType,
             }))
-            && (Config.ConfigManager.checkIsTileDecoratorSymmetrical({
-                decoratorType,
+            && (gameConfig.checkIsTileDecoratorSymmetrical({
+                tileDecorationType: decoratorType,
                 shapeId1    : tile1.getDecoratorShapeId(),
                 shapeId2    : tile2.getDecoratorShapeId(),
                 symmetryType,
@@ -690,7 +689,7 @@ namespace Twns.MapEditor.MeHelpers {
         const tile          = tileMap.getTile(gridIndex);
         const objectType    = tile.getObjectType();
         const objectShapeId = tile.getObjectShapeId();
-        if (objectType === Types.TileObjectType.Empty) {
+        if (objectType === CommonConstants.TileObjectEmptyType) {
             return ((objectShapeId === 1) && ((direction === Types.Direction.Left) || (direction === Types.Direction.Right)))
                 || ((objectShapeId === 2) && ((direction === Types.Direction.Up) || (direction === Types.Direction.Down)));
         } else if (objectType === Types.TileObjectType.Pipe) {

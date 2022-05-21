@@ -104,7 +104,7 @@ namespace Twns.BaseWar {
                 throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTile_Deserialize_04);
             }
 
-            const templateCfg       = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(Helpers.getExisted(gameConfig.getTileType(baseType, objectType))));
+            const templateCfg       = Helpers.getExisted(gameConfig.getTileTemplateCfg(Helpers.getExisted(gameConfig.getTileType(baseType, objectType))));
             const maxBuildPoint     = templateCfg.maxBuildPoint;
             const currentBuildPoint = data.currentBuildPoint;
             if (maxBuildPoint == null) {
@@ -164,7 +164,7 @@ namespace Twns.BaseWar {
 
             const decoratorType     = data.decoratorType ?? null;
             const decoratorShapeId  = data.decoratorShapeId ?? null;
-            if (!Config.ConfigManager.checkIsValidTileDecoratorShapeId(decoratorType, decoratorShapeId)) {
+            if (!gameConfig.checkIsValidTileDecoratorShapeId(decoratorType, decoratorShapeId)) {
                 throw Helpers.newError(`Invalid decoratorType/shapeId: ${decoratorType}, ${decoratorShapeId}`, ClientErrorCode.BwTile_Deserialize_14);
             }
 
@@ -219,6 +219,7 @@ namespace Twns.BaseWar {
                 gridIndex               : this.getGridIndex(),
                 baseType                : this.getBaseType(),
                 objectType              : this.getObjectType(),
+                decoratorType           : this.getDecorationType(),
                 playerIndex             : this.getPlayerIndex(),
 
                 customCrystalData       : this._customCrystalData,
@@ -241,9 +242,6 @@ namespace Twns.BaseWar {
             const objectShapeId = this.getObjectShapeId();
             (objectShapeId !== 0) && (data.objectShapeId = objectShapeId);
 
-            const decoratorType = this.getDecoratorType();
-            (decoratorType !== TileDecoratorType.Empty) && (data.decoratorType = decoratorType);
-
             const decoratorShapeId = this.getDecoratorShapeId();
             (decoratorShapeId !== 0) && (data.decoratorShapeId = decoratorShapeId);
 
@@ -262,14 +260,13 @@ namespace Twns.BaseWar {
                 return this.serialize();
 
             } else {
-                const baseType      = this.getBaseType();
-                const objectType    = this.getObjectType();
                 const playerIndex   = this.getPlayerIndex();
                 const data          : ISerialTile = {
                     gridIndex,
-                    baseType,
-                    objectType,
-                    playerIndex             : objectType === Types.TileObjectType.Headquarters ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                    baseType                : this.getBaseType(),
+                    objectType              : this.getObjectType(),
+                    decoratorType           : this.getDecorationType(),
+                    playerIndex             : this.getTemplateCfg().isAlwaysShowOwner ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
 
                     customCrystalData       : this._customCrystalData,
                     customCannonData        : this._customCannonData,
@@ -284,9 +281,6 @@ namespace Twns.BaseWar {
 
                 const objectShapeId = this.getObjectShapeId();
                 (objectShapeId !== 0) && (data.objectShapeId = objectShapeId);
-
-                const decoratorType = this.getDecoratorType();
-                (decoratorType !== TileDecoratorType.Empty) && (data.decoratorType = decoratorType);
 
                 const decoratorShapeId = this.getDecoratorShapeId();
                 (decoratorShapeId !== 0) && (data.decoratorShapeId = decoratorShapeId);
@@ -365,7 +359,7 @@ namespace Twns.BaseWar {
         private _setDecoratorType(decoratorType: TileDecoratorType | null): void {
             this._decoratorType = decoratorType;
         }
-        public getDecoratorType(): TileDecoratorType | null {
+        public getDecorationType(): TileDecoratorType | null {
             return Helpers.getDefined(this._decoratorType, ClientErrorCode.BwTile_GetDecoratorType_00);
         }
 
@@ -608,7 +602,7 @@ namespace Twns.BaseWar {
                 playerIndex,
                 baseShapeId     : baseType === this.getBaseType() ? this.getBaseShapeId() : null,
                 objectShapeId   : objectType === this.getObjectType() ? this.getObjectShapeId() : null,
-                decoratorType   : this.getDecoratorType(),
+                decoratorType   : this.getDecorationType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
                 locationFlags   : this.getLocationFlags(),
                 isHighlighted   : this.getIsHighlighted(),
@@ -623,9 +617,9 @@ namespace Twns.BaseWar {
                 playerIndex     : CommonConstants.WarNeutralPlayerIndex,
                 baseType        : this.getBaseType(),
                 baseShapeId     : this.getBaseShapeId(),
-                objectType      : TileObjectType.Empty,
+                objectType      : CommonConstants.TileObjectEmptyType,
                 objectShapeId   : getNewObjectShapeIdOnObjectDestroyed(this.getObjectType(), this.getObjectShapeId(), gameConfig),
-                decoratorType   : this.getDecoratorType(),
+                decoratorType   : this.getDecorationType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
                 locationFlags   : this.getLocationFlags(),
                 isHighlighted   : this.getIsHighlighted(),
@@ -643,9 +637,9 @@ namespace Twns.BaseWar {
                 playerIndex     : CommonConstants.WarNeutralPlayerIndex,
                 baseType        : this.getBaseType(),
                 baseShapeId     : this.getBaseShapeId(),
-                objectType      : TileObjectType.Empty,
+                objectType      : CommonConstants.TileObjectEmptyType,
                 objectShapeId   : null,
-                decoratorType   : this.getDecoratorType(),
+                decoratorType   : this.getDecorationType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
                 locationFlags   : this.getLocationFlags(),
                 isHighlighted   : this.getIsHighlighted(),

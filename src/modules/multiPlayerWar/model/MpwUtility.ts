@@ -13,7 +13,7 @@ namespace Twns.MultiPlayerWar.MpwUtility {
         tile.deserialize({
             gridIndex       : tile.getGridIndex(),
             baseType        : tile.getBaseType(),
-            decoratorType   : tile.getDecoratorType(),
+            decoratorType   : tile.getDecorationType(),
             objectType      : tile.getObjectType(),
             playerIndex     : tile.getType() === Twns.Types.TileType.Headquarters ? tile.getPlayerIndex() : Twns.CommonConstants.WarNeutralPlayerIndex,
             baseShapeId     : tile.getBaseShapeId(),

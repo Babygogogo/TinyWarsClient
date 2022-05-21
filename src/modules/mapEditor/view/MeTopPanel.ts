@@ -247,7 +247,7 @@ namespace Twns.MapEditor {
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDrawTileDecorator(): void {
-            PanelHelpers.open(PanelHelpers.PanelDict.MeChooseTileDecoratorPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeChooseTileDecorationPanel, void 0);
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDrawTileObject(): void {

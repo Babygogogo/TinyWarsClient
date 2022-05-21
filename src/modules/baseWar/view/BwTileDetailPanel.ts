@@ -242,7 +242,7 @@ namespace Twns.BaseWar {
             const openData      = this._getOpenData();
             const tile          = openData.tile;
             const gameConfig    = tile.getGameConfig();
-            const tileCfg       = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(tile.getType()));
+            const tileCfg       = Helpers.getExisted(gameConfig.getTileTemplateCfg(tile.getType()));
             const playerIndex   = tile.getPlayerIndex() || 1;
 
             const dataArray : DataForMoveCostRenderer[] = [];
@@ -1693,7 +1693,7 @@ namespace Twns.BaseWar {
             }, Timer.getUnitAnimationTickCount());
 
             const attackCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(attackerUnitType));
-            const targetArmorType           = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(targetTileType)?.armorType);
+            const targetArmorType           = Helpers.getExisted(gameConfig.getTileTemplateCfg(targetTileType)?.armorType);
             const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
             const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
             this._labelPrimaryAttack.text   = primaryAttackDamage == null ? `--` : `${primaryAttackDamage}`;

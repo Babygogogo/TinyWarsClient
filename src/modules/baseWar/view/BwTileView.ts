@@ -10,8 +10,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import TileObjectType       = Types.TileObjectType;
-    import TileDecoratorType    = Types.TileDecoratorType;
     import ISerialTile          = CommonProto.WarSerialization.ISerialTile;
 
     const {
@@ -71,6 +69,7 @@ namespace Twns.BaseWar {
             const gameConfig    = data.gameConfig;
             const version       = User.UserModel.getSelfSettingsTextureVersion();
             const tickCount     = Timer.getTileAnimationTickCount();
+            const tileBaseType  = Helpers.getExisted(tileData.baseType);
 
             {
                 const objectType    = Helpers.getExisted(tileData.objectType);
@@ -80,7 +79,7 @@ namespace Twns.BaseWar {
                     gameConfig,
                     version,
                     themeType,
-                    skinId      : ((hasFog) && (objectType !== TileObjectType.Headquarters)) ? CommonConstants.UnitAndTileNeutralSkinId : skinId,
+                    skinId      : ((hasFog) && (!gameConfig.getTileTemplateCfgByBaseTypeAndObjectType(tileBaseType, objectType)?.isAlwaysShowOwner)) ? CommonConstants.UnitAndTileNeutralSkinId : skinId,
                     shapeId     : tileData.objectShapeId || 0,
                     objectType,
                     isDark      : hasFog,
@@ -89,42 +88,36 @@ namespace Twns.BaseWar {
             }
 
             {
-                const baseType  = tileData.baseType;
                 const imgBase   = this.getImgBase();
-                if (baseType == null) {
-                    throw Helpers.newError(`BwTileView.updateView() empty baseType.`);
-                } else if (baseType === CommonConstants.TileBaseEmptyType) {
-                    imgBase.visible = false;
-                } else {
-                    imgBase.visible = true;
-                    imgBase.source  = Common.CommonModel.getCachedTileBaseImageSource({
-                        gameConfig,
-                        version,
-                        themeType,
-                        skinId      : CommonConstants.UnitAndTileNeutralSkinId,
-                        shapeId     : tileData.baseShapeId || 0,
-                        baseType,
-                        isDark      : hasFog,
-                        tickCount,
-                    });
-                }
+                imgBase.visible = true;
+                imgBase.source  = Common.CommonModel.getCachedTileBaseImageSource({
+                    gameConfig,
+                    version,
+                    themeType,
+                    skinId      : CommonConstants.UnitAndTileNeutralSkinId,
+                    shapeId     : tileData.baseShapeId || 0,
+                    baseType    : tileBaseType,
+                    isDark      : hasFog,
+                    tickCount,
+                });
             }
 
             {
                 const decoratorType     = tileData.decoratorType;
                 const imgDecorator      = this.getImgDecorator();
-                if ((decoratorType == null) || (decoratorType == TileDecoratorType.Empty)) {
+                if (decoratorType == null) {
                     imgDecorator.visible = false;
                 } else {
                     imgDecorator.visible    = true;
                     imgDecorator.source     = Common.CommonModel.getCachedTileDecoratorImageSource({
                         version,
                         themeType,
-                        skinId          : CommonConstants.UnitAndTileNeutralSkinId,
-                        decoratorType,
-                        shapeId         : tileData.decoratorShapeId ?? null,
-                        isDark          : hasFog,
+                        skinId              : CommonConstants.UnitAndTileNeutralSkinId,
+                        tileDecorationType  : decoratorType,
+                        shapeId             : tileData.decoratorShapeId ?? 0,
+                        isDark              : hasFog,
                         tickCount,
+                        gameConfig,
                     });
                 }
             }

@@ -918,7 +918,7 @@ namespace Twns.Common {
         };
     }
     function getTileDefenseAmountForUnit(gameConfig: GameConfig, unitType: number, unitHp: number, tileType: TileType): number {
-        const tileTemplateCfg = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(tileType));
+        const tileTemplateCfg = Helpers.getExisted(gameConfig.getTileTemplateCfg(tileType));
         return gameConfig.checkIsUnitTypeInCategory(unitType, tileTemplateCfg.defenseUnitCategory)
             ? tileTemplateCfg.defenseAmount * WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp) / WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp)
             : 0;
@@ -1003,7 +1003,7 @@ namespace Twns.Common {
                 if ((cfg)                                                           &&
                     (gameConfig.checkIsUnitTypeInCategory(attackerUnitType, cfg[1]))
                 ) {
-                    modifier += cfg[2] / 100 * Helpers.getExisted(gameConfig.getTileTemplateCfgByType(attackerTileType)?.defenseAmount);
+                    modifier += cfg[2] / 100 * Helpers.getExisted(gameConfig.getTileTemplateCfg(attackerTileType)?.defenseAmount);
                 }
             }
 
@@ -1070,7 +1070,7 @@ namespace Twns.Common {
         const attackerData          = calculatorData.attackerData;
         const amountFromPromotion   = gameConfig.getUnitPromotionAttackBonus(attackerData.unitPromotion);
         const amountFromWarRule     = attackerData.offenseBonus;
-        const amountFromGlobalTiles = attackerData.towersCount * (gameConfig.getTileTemplateCfgByType(TileType.CommandTower)?.globalAttackBonus ?? 0);
+        const amountFromGlobalTiles = attackerData.towersCount * (gameConfig.getTileTemplateCfg(TileType.CommandTower)?.globalAttackBonus ?? 0);
         const amountFromCo          = getAttackModifierByCo({ isCounter, calculatorData });
 
         const totalAmount = amountFromWarRule
@@ -1120,7 +1120,7 @@ namespace Twns.Common {
                 if ((cfg)                                                           &&
                     (gameConfig.checkIsUnitTypeInCategory(defenderUnitType, cfg[1]))
                 ) {
-                    modifier += cfg[2] / 100 * Helpers.getExisted(gameConfig.getTileTemplateCfgByType(defenderTileType)?.defenseAmount);
+                    modifier += cfg[2] / 100 * Helpers.getExisted(gameConfig.getTileTemplateCfg(defenderTileType)?.defenseAmount);
                 }
             }
         }
@@ -1132,7 +1132,7 @@ namespace Twns.Common {
         const amountFromTile        = getTileDefenseAmountForUnit(gameConfig, defenderData.unitType, defenderData.unitHp, defenderData.tileType);
         const amountFromPromotion   = gameConfig.getUnitPromotionDefenseBonus(defenderData.unitPromotion);
         const amountFromCo          = getDefenseModifierByCo(calculatorData);
-        const amountFromGlobalTiles = defenderData.towersCount * (gameConfig.getTileTemplateCfgByType(TileType.CommandTower)?.globalDefenseBonus ?? 0);
+        const amountFromGlobalTiles = defenderData.towersCount * (gameConfig.getTileTemplateCfg(TileType.CommandTower)?.globalDefenseBonus ?? 0);
 
         return WarHelpers.WarDamageCalculator.getDamageMultiplierForDefenseBonus(amountFromTile + amountFromPromotion + amountFromCo + amountFromGlobalTiles);
     }

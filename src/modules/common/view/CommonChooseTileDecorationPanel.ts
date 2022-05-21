@@ -17,15 +17,15 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common {
-    import DataForDrawTileDecorator = Twns.MapEditor.DataForDrawTileDecorator;
+    import DataForDrawTileDecorator = Twns.MapEditor.DataForDrawTileDecoration;
     import LangTextType             = Twns.Lang.LangTextType;
     import NotifyType               = Twns.Notify.NotifyType;
 
-    export type OpenDataForCommonChooseTileDecoratorPanel = {
+    export type OpenDataForCommonChooseTileDecorationPanel = {
         gameConfig  : Config.GameConfig;
         callback    : (decoratorType: Twns.Types.TileDecoratorType, shapeId: number) => void;
     };
-    export class CommonChooseTileDecoratorPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseTileDecoratorPanel> {
+    export class CommonChooseTileDecorationPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseTileDecorationPanel> {
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
@@ -65,27 +65,24 @@ namespace Twns.Common {
         }
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
-            const typeMap = new Map<number, DataForDrawTileDecorator[]>();
-            for (const [decoratorType, cfg] of Twns.CommonConstants.TileDecoratorShapeConfigs) {
-                if (!typeMap.has(decoratorType)) {
-                    typeMap.set(decoratorType, []);
+            const gameConfig    = this._getOpenData().gameConfig;
+            const typeMap       = new Map<number, DataForDrawTileDecorator[]>();
+            for (const cfg of gameConfig.getAllTileDecorationCfgArray()) {
+                const tileDecorationType = cfg.tileDecorationType;
+                if (!typeMap.has(tileDecorationType)) {
+                    typeMap.set(tileDecorationType, []);
                 }
 
-                const list = Twns.Helpers.getExisted(typeMap.get(decoratorType));
+                const list = Twns.Helpers.getExisted(typeMap.get(tileDecorationType));
                 for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
-                    if ((decoratorType === Twns.Types.TileDecoratorType.Shore) && (shapeId === 0)) {
-                        continue;
-                    }
-
                     list.push({
-                        decoratorType,
+                        decoratorType: tileDecorationType,
                         shapeId,
                     });
                 }
             }
 
-            const gameConfig    = this._getOpenData().gameConfig;
-            const dataArray     : DataForCategoryRenderer[] = [];
+            const dataArray : DataForCategoryRenderer[] = [];
             const callback  = this._getOpenData().callback;
             for (const [, dataListForDrawTileDecorator] of typeMap) {
                 dataArray.push({
@@ -121,10 +118,10 @@ namespace Twns.Common {
         protected _onDataChanged(): void {
             const data                          = this._getData();
             const dataListForDrawTileDecorator  = data.dataListForDrawTileDecorator;
-            this._labelCategory.text            = Lang.getTileDecoratorName(dataListForDrawTileDecorator[0].decoratorType) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            const gameConfig                    = data.gameConfig;
+            this._labelCategory.text            = Lang.getTileDecorationName(dataListForDrawTileDecorator[0].decoratorType, gameConfig) ?? Twns.CommonConstants.ErrorTextForUndefined;
 
             const dataListForTileDecorator  : DataForTileDecoratorRenderer[] = [];
-            const gameConfig                = data.gameConfig;
             const callback                  = data.callback;
             for (const dataForDrawTileDecorator of dataListForDrawTileDecorator) {
                 dataListForTileDecorator.push({
@@ -190,7 +187,7 @@ namespace Twns.Common {
             const data                      = this._getData();
             const dataForDrawTileDecorator  = data.dataForDrawTileDecorator;
             data.callback(dataForDrawTileDecorator.decoratorType, dataForDrawTileDecorator.shapeId);
-            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonChooseTileDecoratorPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonChooseTileDecorationPanel);
         }
     }
 }

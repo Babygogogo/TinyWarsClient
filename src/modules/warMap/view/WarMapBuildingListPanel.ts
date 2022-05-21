@@ -59,7 +59,7 @@ namespace Twns.WarMap {
             const tileBaseType  = gameConfig.getDefaultTileBaseType();
             const dict          = new Map<number, Map<number, number>>();
             for (const tileData of openData.tileDataArray || []) {
-                const template = gameConfig.getTileTemplateCfgByType(Helpers.getExisted(gameConfig.getTileType(tileBaseType, Helpers.getExisted(tileData.objectType))));
+                const template = gameConfig.getTileTemplateCfg(Helpers.getExisted(gameConfig.getTileType(tileBaseType, Helpers.getExisted(tileData.objectType))));
                 if ((template) && (template.maxCapturePoint != null)) {
                     const tileType = template.type;
                     if (!dict.has(tileType)) {

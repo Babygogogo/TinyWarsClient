@@ -125,7 +125,7 @@ namespace Twns.Common {
             const data                      = this._getData();
             const dataListForDrawTileBase   = data.dataListForDrawTileBase;
             const gameConfig                = data.gameConfig;
-            this._labelCategory.text        = Lang.getTileName(Helpers.getExisted(gameConfig.getTileType(dataListForDrawTileBase[0].baseType, Types.TileObjectType.Empty)), gameConfig) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelCategory.text        = Lang.getTileBaseName(dataListForDrawTileBase[0].baseType, gameConfig) ?? CommonConstants.ErrorTextForUndefined;
 
             const dataListForTileBase   : DataForTileBaseRenderer[] = [];
             const callback              = data.callback;

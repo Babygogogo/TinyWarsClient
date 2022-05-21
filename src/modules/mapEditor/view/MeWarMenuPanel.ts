@@ -278,7 +278,7 @@ namespace Twns.MapEditor {
                 const tileType          = tile.getType();
                 const playerIndex       = tile.getPlayerIndex();
 
-                if (tileObjectType == TileObjectType.Empty) {
+                if (tileObjectType == CommonConstants.TileObjectEmptyType) {
                     if (dictForTileBases.has(tileBaseType)) {
                         ++Helpers.getExisted(dictForTileBases.get(tileBaseType)).count;
                     } else {

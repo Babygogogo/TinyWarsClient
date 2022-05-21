@@ -84,20 +84,20 @@ namespace Twns.Lang {
     }
 
     export function getTileName(tileType: Types.TileType, gameConfig: Config.GameConfig, languageType?: LanguageType): string | null {
-        const textType = gameConfig.getTileTemplateCfgByType(tileType)?.lang;
+        const textType = gameConfig.getTileTemplateCfg(tileType)?.lang;
         return textType == null ? null : getText(textType, languageType);
+    }
+    export function getTileBaseName(tileBaseType: number, gameConfig: Config.GameConfig): string | null {
+        const tileType = gameConfig.getTileType(tileBaseType, CommonConstants.TileObjectEmptyType);
+        return tileType == null ? null : getTileName(tileType, gameConfig);
     }
     export function getTileObjectName(tileObjectType: number, gameConfig: Config.GameConfig): string | null {
         const textType = gameConfig.getTileObjectCfg(tileObjectType)?.lang;
         return textType == null ? null : getText(textType);
     }
-
-    export function getTileDecoratorName(decoratorType: Types.TileDecoratorType): string | null {
-        switch (decoratorType) {
-            case Types.TileDecoratorType.Shore : return getText(LangTextType.B0663);
-            case Types.TileDecoratorType.Empty  : return getText(LangTextType.B0001);
-            default                             : return null;
-        }
+    export function getTileDecorationName(tileDecorationType: number, gameConfig: Config.GameConfig): string | null {
+        const textType = gameConfig.getTileDecorationCfg(tileDecorationType)?.lang;
+        return textType == null ? null : getText(textType);
     }
 
     export function getUnitName(unitType: number, gameConfig: Config.GameConfig, languageType?: LanguageType): string | null {

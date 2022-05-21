@@ -4663,7 +4663,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 actTileData     : {
                     gridIndex   : null,
                     playerIndex : CommonConstants.WarNeutralPlayerIndex,
-                    objectType  : Types.TileObjectType.Empty,
+                    objectType  : CommonConstants.TileObjectEmptyType,
                     baseType    : gameConfig.getDefaultTileBaseType(),
                 },
                 actIsModifyTileBase         : true,

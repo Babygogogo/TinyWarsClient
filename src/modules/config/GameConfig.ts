@@ -1,97 +1,106 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Config {
-    import TileType                 = Types.TileType;
-    import WeatherType              = Types.WeatherType;
-    import WeaponType               = Types.WeaponType;
-    import UnitTemplateCfg          = Types.UnitTemplateCfg;
-    import TileTemplateCfg          = Types.TileTemplateCfg;
-    import TileBaseCfg              = Types.TileBaseCfg;
-    import TileObjectCfg            = Types.TileObjectCfg;
-    import TileObjectSymmetryCfg    = Types.TileObjectSymmetryCfg;
-    import TileTypeMappingCfg       = Types.TileTypeMappingCfg;
-    import DamageChartCfg           = Types.DamageChartCfg;
-    import BuildableTileCfg         = Types.BuildableTileCfg;
-    import VisionBonusCfg           = Types.VisionBonusCfg;
-    import CoBasicCfg               = Types.CoBasicCfg;
-    import SystemCfg                = Types.SystemCfg;
-    import TileCategoryCfg          = Types.TileCategoryCfg;
-    import CoType                   = Types.CoType;
-    import UnitCategoryCfg          = Types.UnitCategoryCfg;
-    import MoveCostCfg              = Types.MoveCostCfg;
-    import UnitPromotionCfg         = Types.UnitPromotionCfg;
-    import PlayerRankCfg            = Types.PlayerRankCfg;
-    import CoCategoryCfg            = Types.CoCategoryCfg;
-    import CoSkillCfg               = Types.CoSkillCfg;
-    import CoSkillType              = Types.CoSkillType;
-    import WeatherCfg               = Types.WeatherCfg;
-    import WeatherCategoryCfg       = Types.WeatherCategoryCfg;
-    import UserAvatarCfg            = Types.UserAvatarCfg;
-    import BgmSfxCfg                = Types.BgmSfxCfg;
-    import MoveTypeCfg              = Types.MoveTypeCfg;
+    import TileType                     = Types.TileType;
+    import WeatherType                  = Types.WeatherType;
+    import WeaponType                   = Types.WeaponType;
+    import UnitTemplateCfg              = Types.UnitTemplateCfg;
+    import TileTemplateCfg              = Types.TileTemplateCfg;
+    import TileBaseCfg                  = Types.TileBaseCfg;
+    import TileBaseSymmetryCfg          = Types.TileBaseSymmetryCfg;
+    import TileObjectCfg                = Types.TileObjectCfg;
+    import TileObjectSymmetryCfg        = Types.TileObjectSymmetryCfg;
+    import TileDecorationCfg            = Types.TileDecorationCfg;
+    import TileDecorationSymmetryCfg    = Types.TileDecorationSymmetryCfg;
+    import TileTypeMappingCfg           = Types.TileTypeMappingCfg;
+    import DamageChartCfg               = Types.DamageChartCfg;
+    import BuildableTileCfg             = Types.BuildableTileCfg;
+    import VisionBonusCfg               = Types.VisionBonusCfg;
+    import CoBasicCfg                   = Types.CoBasicCfg;
+    import SystemCfg                    = Types.SystemCfg;
+    import TileCategoryCfg              = Types.TileCategoryCfg;
+    import CoType                       = Types.CoType;
+    import UnitCategoryCfg              = Types.UnitCategoryCfg;
+    import MoveCostCfg                  = Types.MoveCostCfg;
+    import UnitPromotionCfg             = Types.UnitPromotionCfg;
+    import PlayerRankCfg                = Types.PlayerRankCfg;
+    import CoCategoryCfg                = Types.CoCategoryCfg;
+    import CoSkillCfg                   = Types.CoSkillCfg;
+    import CoSkillType                  = Types.CoSkillType;
+    import WeatherCfg                   = Types.WeatherCfg;
+    import WeatherCategoryCfg           = Types.WeatherCategoryCfg;
+    import UserAvatarCfg                = Types.UserAvatarCfg;
+    import BgmSfxCfg                    = Types.BgmSfxCfg;
+    import MoveTypeCfg                  = Types.MoveTypeCfg;
 
     export class GameConfig {
-        private readonly _version                   : string;
-        private readonly _systemCfg                 : SystemCfg;
-        private readonly _unitMaxPromotion          : number;
-        private readonly _tileCategoryCfgDict       : Map<number, TileCategoryCfg>;
-        private readonly _unitCategoryCfgDict       : Map<number, UnitCategoryCfg>;
-        private readonly _tileTemplateCfgDict       : Map<TileType, TileTemplateCfg>;
-        private readonly _tileBaseCfgDict           : Map<number, TileBaseCfg>;
-        private readonly _tileObjectCfgDict         : Map<number, TileObjectCfg>;
-        private readonly _tileObjectSymmetryCfgDict : Map<number, Map<number, TileObjectSymmetryCfg>>;
-        private readonly _tileTypeMappingCfgDict    : Map<number, Map<number, TileTypeMappingCfg>>;
-        private readonly _unitTemplateCfgDict       : Map<number, UnitTemplateCfg>;
-        private readonly _moveCostCfgDict           : Map<TileType, { [moveType: number]: MoveCostCfg }>;
-        private readonly _visionBonusCfgDict        : Map<number, { [tileType: number]: VisionBonusCfg }>;
-        private readonly _buildableTileCfgDict      : Map<number, { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } }>;
-        private readonly _playerRankCfgDict         : Map<number, PlayerRankCfg>;
-        private readonly _coCategoryCfgDict         : Map<number, CoCategoryCfg>;
-        private readonly _coBasicCfgDict            : Map<number, CoBasicCfg>;
-        private readonly _coSkillCfgDict            : Map<number, CoSkillCfg>;
-        private readonly _weatherCfgDict            : Map<WeatherType, WeatherCfg>;
-        private readonly _weatherCategoryCfgDict    : Map<number, WeatherCategoryCfg>;
-        private readonly _userAvatarCfgDict         : Map<number, UserAvatarCfg>;
-        private readonly _damageChartCfgDict        : Map<number, { [armorType: number]: { [weaponType: number]: DamageChartCfg } }>;
-        private readonly _unitPromotionCfgDict      : Map<number, UnitPromotionCfg>;
-        private readonly _secondaryWeaponFlagDict   : Map<number, boolean>;
-        private readonly _bgmSfxCfgDict             : Map<number, BgmSfxCfg>;
-        private readonly _moveTypeCfgDict           : Map<number, MoveTypeCfg>;
+        private readonly _version                       : string;
+        private readonly _systemCfg                     : SystemCfg;
+        private readonly _unitMaxPromotion              : number;
+        private readonly _tileCategoryCfgDict           : Map<number, TileCategoryCfg>;
+        private readonly _unitCategoryCfgDict           : Map<number, UnitCategoryCfg>;
+        private readonly _tileTemplateCfgDict           : Map<TileType, TileTemplateCfg>;
+        private readonly _tileBaseCfgDict               : Map<number, TileBaseCfg>;
+        private readonly _tileBaseSymmetryCfgDict       : Map<number, Map<number, TileBaseSymmetryCfg>>;
+        private readonly _tileObjectCfgDict             : Map<number, TileObjectCfg>;
+        private readonly _tileObjectSymmetryCfgDict     : Map<number, Map<number, TileObjectSymmetryCfg>>;
+        private readonly _tileDecorationCfgDict         : Map<number, TileDecorationCfg>;
+        private readonly _tileDecorationSymmetryCfgDict : Map<number, Map<number, TileDecorationSymmetryCfg>>;
+        private readonly _tileTypeMappingCfgDict        : Map<number, Map<number, TileTypeMappingCfg>>;
+        private readonly _unitTemplateCfgDict           : Map<number, UnitTemplateCfg>;
+        private readonly _moveCostCfgDict               : Map<TileType, { [moveType: number]: MoveCostCfg }>;
+        private readonly _visionBonusCfgDict            : Map<number, { [tileType: number]: VisionBonusCfg }>;
+        private readonly _buildableTileCfgDict          : Map<number, { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } }>;
+        private readonly _playerRankCfgDict             : Map<number, PlayerRankCfg>;
+        private readonly _coCategoryCfgDict             : Map<number, CoCategoryCfg>;
+        private readonly _coBasicCfgDict                : Map<number, CoBasicCfg>;
+        private readonly _coSkillCfgDict                : Map<number, CoSkillCfg>;
+        private readonly _weatherCfgDict                : Map<WeatherType, WeatherCfg>;
+        private readonly _weatherCategoryCfgDict        : Map<number, WeatherCategoryCfg>;
+        private readonly _userAvatarCfgDict             : Map<number, UserAvatarCfg>;
+        private readonly _damageChartCfgDict            : Map<number, { [armorType: number]: { [weaponType: number]: DamageChartCfg } }>;
+        private readonly _unitPromotionCfgDict          : Map<number, UnitPromotionCfg>;
+        private readonly _secondaryWeaponFlagDict       : Map<number, boolean>;
+        private readonly _bgmSfxCfgDict                 : Map<number, BgmSfxCfg>;
+        private readonly _moveTypeCfgDict               : Map<number, MoveTypeCfg>;
 
         private _availableCoArray   : CoBasicCfg[] | null = null;
         private _coTierArray        : number[] | null = null;
         private _allBgmCodeArray    : number[] | null = null;
 
         public constructor(version: string, rawConfig: Types.FullConfig) {
-            const unitPromotionCfg          = _destructUnitPromotionCfg(rawConfig.UnitPromotion);
-            const damageChartCfg            = _destructDamageChartCfg(rawConfig.DamageChart);
+            const unitPromotionCfg              = _destructUnitPromotionCfg(rawConfig.UnitPromotion);
+            const damageChartCfg                = _destructDamageChartCfg(rawConfig.DamageChart);
 
-            this._version                   = version;
-            this._systemCfg                 = _destructSystemCfg(rawConfig.System);
-            this._tileCategoryCfgDict       = _destructTileCategoryCfg(rawConfig.TileCategory);
-            this._unitCategoryCfgDict       = _destructUnitCategoryCfg(rawConfig.UnitCategory);
-            this._tileTemplateCfgDict       = _destructTileTemplateCfg(rawConfig.TileTemplate);
-            this._tileBaseCfgDict           = _destructTileBaseCfg(rawConfig.TileBase);
-            this._tileObjectCfgDict         = _destructTileObjectCfg(rawConfig.TileObject);
-            this._tileObjectSymmetryCfgDict = _destructTileObjectSymmetryCfg(rawConfig.TileObjectSymmetry);
-            this._tileTypeMappingCfgDict    = _destructTileTypeMappingCfg(rawConfig.TileTypeMapping);
-            this._unitTemplateCfgDict       = _destructUnitTemplateCfg(rawConfig.UnitTemplate);
-            this._moveCostCfgDict           = _destructMoveCostCfg(rawConfig.MoveCost);
-            this._visionBonusCfgDict        = _destructVisionBonusCfg(rawConfig.VisionBonus);
-            this._buildableTileCfgDict      = _destructBuildableTileCfg(rawConfig.BuildableTile);
-            this._playerRankCfgDict         = _destructPlayerRankCfg(rawConfig.PlayerRank);
-            this._coCategoryCfgDict         = _destructCoCategoryCfg(rawConfig.CoCategory);
-            this._coBasicCfgDict            = _destructCoBasicCfg(rawConfig.CoBasic);
-            this._coSkillCfgDict            = _destructCoSkillCfg(rawConfig.CoSkill);
-            this._weatherCfgDict            = _destructWeatherCfg(rawConfig.Weather);
-            this._weatherCategoryCfgDict    = _destructWeatherCategoryCfg(rawConfig.WeatherCategory);
-            this._userAvatarCfgDict         = _destructUserAvatarCfg(rawConfig.UserAvatar);
-            this._bgmSfxCfgDict             = _destructBgmSfxCfg(rawConfig.BgmSfx);
-            this._moveTypeCfgDict           = _destructMoveTypeCfg(rawConfig.MoveType);
-            this._damageChartCfgDict        = damageChartCfg;
-            this._unitPromotionCfgDict      = unitPromotionCfg;
-            this._unitMaxPromotion          = _getUnitMaxPromotion(unitPromotionCfg);
-            this._secondaryWeaponFlagDict   = _getSecondaryWeaponFlags(damageChartCfg);
+            this._version                       = version;
+            this._systemCfg                     = _destructSystemCfg(rawConfig.System);
+            this._tileCategoryCfgDict           = _destructTileCategoryCfg(rawConfig.TileCategory);
+            this._unitCategoryCfgDict           = _destructUnitCategoryCfg(rawConfig.UnitCategory);
+            this._tileTemplateCfgDict           = _destructTileTemplateCfg(rawConfig.TileTemplate);
+            this._tileBaseCfgDict               = _destructTileBaseCfg(rawConfig.TileBase);
+            this._tileBaseSymmetryCfgDict       = _destructTileBaseSymmetryCfg(rawConfig.TileBaseSymmetry);
+            this._tileObjectCfgDict             = _destructTileObjectCfg(rawConfig.TileObject);
+            this._tileObjectSymmetryCfgDict     = _destructTileObjectSymmetryCfg(rawConfig.TileObjectSymmetry);
+            this._tileDecorationCfgDict         = _destructTileDecorationCfg(rawConfig.TileDecoration);
+            this._tileDecorationSymmetryCfgDict = _destructTileDecorationSymmetryCfg(rawConfig.TileDecorationSymmetry);
+            this._tileTypeMappingCfgDict        = _destructTileTypeMappingCfg(rawConfig.TileTypeMapping);
+            this._unitTemplateCfgDict           = _destructUnitTemplateCfg(rawConfig.UnitTemplate);
+            this._moveCostCfgDict               = _destructMoveCostCfg(rawConfig.MoveCost);
+            this._visionBonusCfgDict            = _destructVisionBonusCfg(rawConfig.VisionBonus);
+            this._buildableTileCfgDict          = _destructBuildableTileCfg(rawConfig.BuildableTile);
+            this._playerRankCfgDict             = _destructPlayerRankCfg(rawConfig.PlayerRank);
+            this._coCategoryCfgDict             = _destructCoCategoryCfg(rawConfig.CoCategory);
+            this._coBasicCfgDict                = _destructCoBasicCfg(rawConfig.CoBasic);
+            this._coSkillCfgDict                = _destructCoSkillCfg(rawConfig.CoSkill);
+            this._weatherCfgDict                = _destructWeatherCfg(rawConfig.Weather);
+            this._weatherCategoryCfgDict        = _destructWeatherCategoryCfg(rawConfig.WeatherCategory);
+            this._userAvatarCfgDict             = _destructUserAvatarCfg(rawConfig.UserAvatar);
+            this._bgmSfxCfgDict                 = _destructBgmSfxCfg(rawConfig.BgmSfx);
+            this._moveTypeCfgDict               = _destructMoveTypeCfg(rawConfig.MoveType);
+            this._damageChartCfgDict            = damageChartCfg;
+            this._unitPromotionCfgDict          = unitPromotionCfg;
+            this._unitMaxPromotion              = _getUnitMaxPromotion(unitPromotionCfg);
+            this._secondaryWeaponFlagDict       = _getSecondaryWeaponFlags(damageChartCfg);
         }
 
         public getVersion(): string {
@@ -108,14 +117,18 @@ namespace Twns.Config {
             return this.getSystemCfg().energyGrowthMultiplierArray[1];
         }
 
-        public getTileTemplateCfgByType(tileType: TileType): TileTemplateCfg | null {
+        public getTileTemplateCfg(tileType: TileType): TileTemplateCfg | null {
             return this._tileTemplateCfgDict.get(tileType) ?? null;
         }
+        public getTileTemplateCfgByBaseTypeAndObjectType(tileBaseType: number, tileObjectType: number): TileTemplateCfg | null {
+            const tileType = this.getTileType(tileBaseType, tileObjectType);
+            return tileType == null ? null : this.getTileTemplateCfg(tileType);
+        }
         public getTileBaseTypeByTileType(tileType: TileType): number | null {
-            return this.getTileTemplateCfgByType(tileType)?.toTileBaseType ?? null;
+            return this.getTileTemplateCfg(tileType)?.toTileBaseType ?? null;
         }
         public getTileObjectTypeByTileType(tileType: TileType): Types.TileObjectType | null {
-            return this.getTileTemplateCfgByType(tileType)?.toTileObjectType ?? null;
+            return this.getTileTemplateCfg(tileType)?.toTileObjectType ?? null;
         }
         public checkIsValidTileType(tileType: TileType): boolean {
             return this._tileTemplateCfgDict.has(tileType);
@@ -185,6 +198,20 @@ namespace Twns.Config {
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getSymmetricalTileBaseShapeId(tileBaseType: number, shapeId: number, symmetryType: Types.SymmetryType): number | null {
+            const shapeIdList = this._tileBaseSymmetryCfgDict.get(tileBaseType)?.get(shapeId)?.symmetryShapeIds;
+            return shapeIdList ? shapeIdList[symmetryType] : null;
+        }
+        public checkIsTileBaseSymmetrical({ baseType, shapeId1, shapeId2, symmetryType }: {
+            baseType    : number;
+            shapeId1    : number;
+            shapeId2    : number;
+            symmetryType: Types.SymmetryType;
+        }): boolean {
+            return this.getSymmetricalTileBaseShapeId(baseType, shapeId1, symmetryType) === (shapeId2 || 0);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getTileObjectCfg(tileObjectType: number): TileObjectCfg | null {
             return this._tileObjectCfgDict.get(tileObjectType) ?? null;
         }
@@ -246,6 +273,74 @@ namespace Twns.Config {
             symmetryType    : Types.SymmetryType;
         }): boolean {
             return this.getSymmetricalTileObjectShapeId(objectType, shapeId1, symmetryType) === (shapeId2 || 0);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getTileDecorationCfg(tileDecorationType: number): TileDecorationCfg | null {
+            return this._tileDecorationCfgDict.get(tileDecorationType) ?? null;
+        }
+        public getAllTileDecorationCfgArray(): TileDecorationCfg[] {
+            return [...this._tileDecorationCfgDict].sort((v1, v2) => v1[0] - v2[0]).map(v => v[1]);
+        }
+        public checkIsValidTileDecoratorShapeId(tileDecorationType: Types.Undefinable<number>, shapeId: Types.Undefinable<number>): boolean {
+            if (tileDecorationType == null) {
+                return shapeId == null;
+            }
+
+            const cfg = this.getTileDecorationCfg(tileDecorationType);
+            return (cfg != null)
+                && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
+        }
+        public getTileDecorationImageSource({version, themeType, skinId, tileDecorationType, isDark, shapeId, tickCount}: {
+            version             : Types.UnitAndTileTextureVersion;
+            themeType           : Types.TileThemeType;
+            skinId              : number;
+            tileDecorationType  : number | null;
+            isDark              : boolean;
+            shapeId             : number;
+            tickCount           : number;
+        }): string {
+            if (tileDecorationType == null) {
+                return ``;
+            }
+
+            const cfg               = Helpers.getExisted(this.getTileDecorationCfg(tileDecorationType));
+            const cfgForFrame       = Helpers.getExisted(version === Types.UnitAndTileTextureVersion.V0 ? cfg.animParamsForV0 : cfg.animParams);
+            const ticksPerFrame     = cfgForFrame[1];
+            const textForDark       = isDark ? `state01` : `state00`;
+            const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
+            const textForShapeId    = `shape${Helpers.getNumText(shapeId)}`;
+            const textForVersion    = `ver${Helpers.getNumText(version)}`;
+            const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
+            const textForType       = `type${Helpers.getNumText(tileDecorationType)}`;
+            const textForFrame      = ticksPerFrame < 999999
+                ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame[0] * ticksPerFrame)) / ticksPerFrame))}`
+                : `frame00`;
+            return `tileDecorator_${textForVersion}_${textForTheme}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getSymmetricalTileDecoratorShapeId(tileDecorationType: number, shapeId: number, symmetryType: Types.SymmetryType): number | null {
+            const shapeIdArray = this._tileDecorationSymmetryCfgDict.get(tileDecorationType)?.get(shapeId)?.symmetryShapeIds;
+            return shapeIdArray ? shapeIdArray[symmetryType] : null;
+        }
+        public checkIsTileDecoratorSymmetrical({ tileDecorationType, shapeId1, shapeId2, symmetryType }: {
+            tileDecorationType  : number | null;
+            shapeId1            : Types.Undefinable<number>;
+            shapeId2            : Types.Undefinable<number>;
+            symmetryType        : Types.SymmetryType;
+        }): boolean {
+            if (tileDecorationType == null) {
+                return (shapeId1 == null) && (shapeId2 == null);
+            }
+
+            if (shapeId1 == null) {
+                return shapeId2 == null;
+            } else if (shapeId2 == null) {
+                return shapeId1 == null;
+            } else {
+                return this.getSymmetricalTileDecoratorShapeId(tileDecorationType, shapeId1, symmetryType) === shapeId2;
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -611,6 +706,16 @@ namespace Twns.Config {
         }
         return dst;
     }
+    function _destructTileBaseSymmetryCfg(data: TileBaseSymmetryCfg[]): Map<number, Map<number, TileBaseSymmetryCfg>> {
+        const dst = new Map<number, Map<number, TileBaseSymmetryCfg>>();
+        for (const d of data) {
+            const tileBaseType    = d.tileBaseType;
+            const subData           = dst.get(tileBaseType) ?? new Map<number, TileBaseSymmetryCfg>();
+            subData.set(d.shapeId, d);
+            dst.set(tileBaseType, subData);
+        }
+        return dst;
+    }
     function _destructTileObjectCfg(data: TileObjectCfg[]): Map<number, TileObjectCfg> {
         const dst = new Map<number, TileObjectCfg>();
         for (const d of data) {
@@ -625,6 +730,23 @@ namespace Twns.Config {
             const subData           = dst.get(tileObjectType) ?? new Map<number, TileObjectSymmetryCfg>();
             subData.set(d.shapeId, d);
             dst.set(tileObjectType, subData);
+        }
+        return dst;
+    }
+    function _destructTileDecorationCfg(data: TileDecorationCfg[]): Map<number, TileDecorationCfg> {
+        const dst = new Map<number, TileDecorationCfg>();
+        for (const d of data) {
+            dst.set(d.tileDecorationType, d);
+        }
+        return dst;
+    }
+    function _destructTileDecorationSymmetryCfg(data: TileDecorationSymmetryCfg[]): Map<number, Map<number, TileDecorationSymmetryCfg>> {
+        const dst = new Map<number, Map<number, TileDecorationSymmetryCfg>>();
+        for (const d of data) {
+            const tileDecorationType    = d.tileDecorationType;
+            const subData           = dst.get(tileDecorationType) ?? new Map<number, TileDecorationSymmetryCfg>();
+            subData.set(d.shapeId, d);
+            dst.set(tileDecorationType, subData);
         }
         return dst;
     }

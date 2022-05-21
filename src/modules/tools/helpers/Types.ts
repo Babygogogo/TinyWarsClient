@@ -29,12 +29,26 @@ namespace Twns.Types {
         tileBaseType    : number;
         shapesCount     : number;
     }
+    export interface TileBaseSymmetryCfg extends CommonProto.Config.ITileBaseSymmetryCfg {
+        tileBaseType            : number;
+        shapeId                 : number;
+        symmetryShapeIds        : number[];
+    }
     export interface TileObjectCfg extends CommonProto.Config.ITileObjectCfg {
         tileObjectType          : number;
         shapeIdAfterDestruction : number[];
     }
     export interface TileObjectSymmetryCfg extends CommonProto.Config.ITileObjectSymmetryCfg {
         tileObjectType          : number;
+        shapeId                 : number;
+        symmetryShapeIds        : number[];
+    }
+    export interface TileDecorationCfg extends CommonProto.Config.ITileDecorationCfg {
+        tileDecorationType      : number;
+        shapesCount             : number;
+    }
+    export interface TileDecorationSymmetryCfg extends CommonProto.Config.ITileDecorationSymmetryCfg {
+        tileDecorationType      : number;
         shapeId                 : number;
         symmetryShapeIds        : number[];
     }
@@ -121,29 +135,32 @@ namespace Twns.Types {
         lang        : number;
     }
     export interface FullConfig extends CommonProto.Config.FullConfig {
-        System              : SystemCfg;
-        TileCategory        : TileCategoryCfg[];
-        UnitCategory        : UnitCategoryCfg[];
-        TileTemplate        : TileTemplateCfg[];
-        TileBase            : TileBaseCfg[];
-        TileObject          : TileObjectCfg[];
-        TileObjectSymmetry  : TileObjectSymmetryCfg[];
-        TileTypeMapping     : TileTypeMappingCfg[];
-        UnitTemplate        : UnitTemplateCfg[];
-        DamageChart         : DamageChartCfg[];
-        MoveCost            : MoveCostCfg[];
-        UnitPromotion       : UnitPromotionCfg[];
-        VisionBonus         : VisionBonusCfg[];
-        BuildableTile       : BuildableTileCfg[];
-        PlayerRank          : PlayerRankCfg[];
-        CoCategory          : CoCategoryCfg[];
-        CoBasic             : CoBasicCfg[];
-        CoSkill             : CoSkillCfg[];
-        Weather             : WeatherCfg[];
-        WeatherCategory     : WeatherCategoryCfg[];
-        UserAvatar          : UserAvatarCfg[];
-        BgmSfx              : BgmSfxCfg[];
-        MoveType            : MoveTypeCfg[];
+        System                  : SystemCfg;
+        TileCategory            : TileCategoryCfg[];
+        UnitCategory            : UnitCategoryCfg[];
+        TileTemplate            : TileTemplateCfg[];
+        TileBase                : TileBaseCfg[];
+        TileBaseSymmetry        : TileBaseSymmetryCfg[];
+        TileObject              : TileObjectCfg[];
+        TileObjectSymmetry      : TileObjectSymmetryCfg[];
+        TileDecoration          : TileDecorationCfg[];
+        TileDecorationSymmetry  : TileDecorationSymmetryCfg[];
+        TileTypeMapping         : TileTypeMappingCfg[];
+        UnitTemplate            : UnitTemplateCfg[];
+        DamageChart             : DamageChartCfg[];
+        MoveCost                : MoveCostCfg[];
+        UnitPromotion           : UnitPromotionCfg[];
+        VisionBonus             : VisionBonusCfg[];
+        BuildableTile           : BuildableTileCfg[];
+        PlayerRank              : PlayerRankCfg[];
+        CoCategory              : CoCategoryCfg[];
+        CoBasic                 : CoBasicCfg[];
+        CoSkill                 : CoSkillCfg[];
+        Weather                 : WeatherCfg[];
+        WeatherCategory         : WeatherCategoryCfg[];
+        UserAvatar              : UserAvatarCfg[];
+        BgmSfx                  : BgmSfxCfg[];
+        MoveType                : MoveTypeCfg[];
     }
 
     ////////////////////////////////////////////////////////////////////////////////

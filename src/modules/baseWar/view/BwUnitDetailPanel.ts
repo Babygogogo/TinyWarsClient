@@ -1142,7 +1142,7 @@ namespace Twns.BaseWar {
 
                 const targetTileType            = Helpers.getExisted(data.targetTileType);
                 const attackCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(attackUnitType));
-                const targetCfg                 = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(targetTileType));
+                const targetCfg                 = Helpers.getExisted(gameConfig.getTileTemplateCfg(targetTileType));
                 const targetArmorType           = Helpers.getExisted(targetCfg.armorType);
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
