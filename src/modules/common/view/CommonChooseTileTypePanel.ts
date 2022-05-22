@@ -14,13 +14,12 @@
 namespace Twns.Common {
     import LangTextType = Lang.LangTextType;
     import NotifyType   = Notify.NotifyType;
-    import TileType     = Types.TileType;
     import GameConfig   = Config.GameConfig;
 
     export type OpenDataForCommonChooseTileTypePanel = {
         gameConfig              : GameConfig;
-        currentTileTypeArray    : TileType[];
-        callbackOnConfirm       : (tileTypeArray: TileType[]) => void;
+        currentTileTypeArray    : number[];
+        callbackOnConfirm       : (tileTypeArray: number[]) => void;
     };
     export class CommonChooseTileTypePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseTileTypePanel> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -101,7 +100,7 @@ namespace Twns.Common {
     }
 
     type DataForTileTypeRenderer = {
-        tileType    : TileType;
+        tileType    : number;
         gameConfig  : GameConfig;
     };
     class TileTypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileTypeRenderer> {

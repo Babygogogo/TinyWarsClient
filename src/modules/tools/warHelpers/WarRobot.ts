@@ -20,7 +20,6 @@ namespace Twns.WarHelpers.WarRobot {
     import GridIndex            = Types.GridIndex;
     import MovableArea          = Types.MovableArea;
     import MovePathNode         = Types.MovePathNode;
-    import TileType             = Types.TileType;
     import UnitActionState      = Types.UnitActionState;
     import UnitAiMode           = Types.UnitAiMode;
     import CoSkillType          = Types.CoSkillType;
@@ -64,17 +63,6 @@ namespace Twns.WarHelpers.WarRobot {
     };
 
     const _IS_NEED_VISIBILITY = true;
-    const _TILE_VALUE: { [tileType: number]: number } = {
-        [TileType.Headquarters] : 20, //50,
-        [TileType.Factory]      : 30, //75,
-        [TileType.Airport]      : 25, //60,
-        [TileType.Seaport]      : 25, //60,
-        [TileType.City]         : 20, //50,
-        [TileType.CommandTower] : 30, //75,
-        [TileType.Radar]        : 20, //50,
-        [TileType.TempSeaport]  : 10,
-        [TileType.TempAirport]  : 10,
-    };
     // const _DISTANCE_SCORE_SCALERS: { [tileType: number]: number } = {
     //     [TileType.Airport]      : 1.2,
     //     [TileType.City]         : 1.1,
@@ -1085,21 +1073,14 @@ namespace Twns.WarHelpers.WarRobot {
             }
         }
 
-        const unitTeamIndex = unit.getTeamIndex();
-        const tileTeamIndex = tile.getTeamIndex();
-        if (tileTeamIndex === unitTeamIndex) {
-            switch (tile.getType()) {
-                case TileType.Factory   : totalScore += -5000; break;
-                case TileType.Airport   : totalScore += -2000; break;
-                case TileType.Seaport   : totalScore += -1500; break;
-                default                 : break;
-            }
-        } else if (tileTeamIndex !== CommonConstants.WarNeutralTeamIndex) {
-            switch (tile.getType()) {
-                case TileType.Factory   : totalScore += 50; break;
-                case TileType.Airport   : totalScore += 20; break;
-                case TileType.Seaport   : totalScore += 15; break;
-                default                 : break;
+        const unitTeamIndex         = unit.getTeamIndex();
+        const tileTeamIndex         = tile.getTeamIndex();
+        const aiScoreArrayForStay   = tile.getTemplateCfg().aiScoreForStay;
+        if (aiScoreArrayForStay) {
+            if (tileTeamIndex === unitTeamIndex) {
+                totalScore += aiScoreArrayForStay[0] ?? 0;
+            } else if (tileTeamIndex !== CommonConstants.WarNeutralTeamIndex) {
+                totalScore += aiScoreArrayForStay[1] ?? 0;
             }
         }
 
@@ -1208,7 +1189,7 @@ namespace Twns.WarHelpers.WarRobot {
         }
 
         return (Math.min(normalizedMaxHp, rawNormalizedNewHp) >= currentCapturePoint)
-            ? (_TILE_VALUE[tile.getType()] ?? 0)
+            ? (tile.getTemplateCfg().aiScoreForCapture ?? 0)
             : 0;
     }
 
@@ -1229,7 +1210,7 @@ namespace Twns.WarHelpers.WarRobot {
         // const scalerForSelfDamage       = Math.pow(1 / Math.max(1, unitValueRatio), 1) * 9999;
         // const scalerForEnemyDamage      = Math.pow(Math.max(1, unitValueRatio), 1) * 9999;
         const scalerForSelfDamage       = Math.pow(1 / Math.max(1, unitValueRatio), 1);
-        const scalerForEnemyDamage      = Math.pow(Math.max(1, unitValueRatio), 1);
+        const scalerForEnemyDamage      = Math.pow(Math.max(1, unitValueRatio), 1) * 3;
 
         let totalScore = 0;
         for (const battleDamageInfo of battleDamageInfoArray) {
@@ -1282,14 +1263,10 @@ namespace Twns.WarHelpers.WarRobot {
                             if ((captureAmount != null) && (capturePoint != null)) {
                                 score *= captureAmount >= capturePoint ? 2 : 1.1;
 
-                                const tileType2 = tile2.getType();
-                                if (tileType2 === TileType.Headquarters) {
+                                if (tile2.checkIsDefeatOnCapture()) {
                                     score *= 10000;
-                                } else if (
-                                    (tileType2 === TileType.Factory)    ||
-                                    (tileType2 === TileType.Airport)    ||
-                                    (tileType2 === TileType.Seaport)
-                                ) {
+                                }
+                                if (tile2.getCfgProduceUnitCategory()) {
                                     score *= 5;
                                 }
                             }
@@ -1332,7 +1309,7 @@ namespace Twns.WarHelpers.WarRobot {
         const turnsCount = Math.ceil(currentCapturePoint / captureAmount);
         return turnsCount > 2
             ? 1
-            : (_TILE_VALUE[tile.getType()] ?? 0) / turnsCount;
+            : (tile.getTemplateCfg().aiScoreForCapture ?? 0) / turnsCount;
     }
 
     async function getScoreForActionUnitDive(unit: BwUnit): Promise<number> {
@@ -1406,11 +1383,10 @@ namespace Twns.WarHelpers.WarRobot {
         return 999999999;
     }
 
-    async function getScoreForActionPlayerProduceUnit({ commonParams, producingGridIndex, producingUnitType, idleFactoriesCount, getMinTurnsCountForAttack }: {
+    async function getScoreForActionPlayerProduceUnit({ commonParams, producingGridIndex, producingUnitType, getMinTurnsCountForAttack }: {
         commonParams                : CommonParams;
         producingGridIndex          : GridIndex;
         producingUnitType           : number;
-        idleFactoriesCount          : number;
         getMinTurnsCountForAttack   : (attackerUnit: BwUnit, targetGridIndex: GridIndex) => Promise<number | null>;
     }): Promise<number | null> {
         await Helpers.checkAndCallLater();
@@ -2093,10 +2069,9 @@ namespace Twns.WarHelpers.WarRobot {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The available action generators for production.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function getBestScoreAndActionPlayerProduceUnitWithGridIndex({ commonParams, gridIndex, idleFactoriesCount, getMinTurnsCountForAttack }: {
+    async function getBestScoreAndActionPlayerProduceUnitWithGridIndex({ commonParams, gridIndex, getMinTurnsCountForAttack }: {
         commonParams                : CommonParams;
         gridIndex                   : GridIndex;
-        idleFactoriesCount          : number;
         getMinTurnsCountForAttack   : (attackerUnit: BwUnit, targetGridIndex: GridIndex) => Promise<number | null>;
     }): Promise<ScoreAndAction | null> {
         await Helpers.checkAndCallLater();
@@ -2122,7 +2097,6 @@ namespace Twns.WarHelpers.WarRobot {
                 commonParams,
                 producingGridIndex          : gridIndex,
                 producingUnitType           : unitType,
-                idleFactoriesCount,
                 getMinTurnsCountForAttack,
             });
             if (score == null) {
@@ -2165,7 +2139,6 @@ namespace Twns.WarHelpers.WarRobot {
         const idleBuildingPosList   : GridIndex[] = [];
         const unitMap               = war.getUnitMap();
         const tileMap               = war.getTileMap();
-        let idleFactoriesCount      = 0;
 
         for (const tile of war.getTileMap().getAllTiles()) {
             const gridIndex = tile.getGridIndex();
@@ -2173,9 +2146,6 @@ namespace Twns.WarHelpers.WarRobot {
                 (tile.checkIsUnitProducerForPlayer(playerIndexInTurn))
             ) {
                 idleBuildingPosList.push(gridIndex);
-                if (tile.getType() === TileType.Factory) {
-                    ++idleFactoriesCount;
-                }
             }
         }
 
@@ -2248,7 +2218,6 @@ namespace Twns.WarHelpers.WarRobot {
             promiseArray.push(getBestScoreAndActionPlayerProduceUnitWithGridIndex({
                 commonParams,
                 gridIndex,
-                idleFactoriesCount,
                 getMinTurnsCountForAttack,
             }));
         }

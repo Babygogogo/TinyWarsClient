@@ -18,14 +18,13 @@
 namespace Twns.Common {
     import NotifyType           = Notify.NotifyType;
     import LangTextType         = Lang.LangTextType;
-    import TileType             = Types.TileType;
 
     export type OpenDataForCommonChooseSingleTileTypePanel = {
         gameConfig      : Config.GameConfig;
-        currentTileType : TileType;
-        tileTypeArray   : TileType[];
+        currentTileType : number;
+        tileTypeArray   : number[];
         playerIndex     : number;
-        callback        : (tileType: TileType) => void;
+        callback        : (tileType: number) => void;
     };
     export class CommonChooseSingleTileTypePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseSingleTileTypePanel> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
@@ -116,10 +115,10 @@ namespace Twns.Common {
 
     type DataForTypeRenderer = {
         gameConfig      : Config.GameConfig;
-        currentTileType : TileType;
-        newTileType     : TileType;
+        currentTileType : number;
+        newTileType     : number;
         playerIndex     : number;
-        callback        : (tileType: TileType) => void;
+        callback        : (tileType: number) => void;
     };
     class TypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTypeRenderer> {
         private readonly _conTileView!  : eui.Group;

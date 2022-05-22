@@ -46,8 +46,6 @@
 namespace Twns.MapEditor {
     import DataForDrawUnit          = MapEditor.DataForDrawUnit;
     import NotifyType               = Notify.NotifyType;
-    import TileBaseType             = Types.TileBaseType;
-    import TileObjectType           = Types.TileObjectType;
     import LangTextType             = Lang.LangTextType;
 
     // eslint-disable-next-line no-shadow
@@ -268,8 +266,8 @@ namespace Twns.MapEditor {
         }
 
         private _updateListTile(): void {
-            const dictForTileBases      = new Map<TileBaseType, DataForTileRenderer>();
-            const dictForTileObjects    = new Map<TileObjectType, DataForTileRenderer>();
+            const dictForTileBases      = new Map<number, DataForTileRenderer>();
+            const dictForTileObjects    = new Map<number, DataForTileRenderer>();
             const war                   = this._getWar();
             const gameConfig            = war.getGameConfig();
             for (const tile of war.getTileMap().getAllTiles()) {
@@ -278,7 +276,7 @@ namespace Twns.MapEditor {
                 const tileType          = tile.getType();
                 const playerIndex       = tile.getPlayerIndex();
 
-                if (tileObjectType == CommonConstants.TileObjectEmptyType) {
+                if (tileObjectType == CommonConstants.TileObjectType.Empty) {
                     if (dictForTileBases.has(tileBaseType)) {
                         ++Helpers.getExisted(dictForTileBases.get(tileBaseType)).count;
                     } else {
@@ -692,10 +690,10 @@ namespace Twns.MapEditor {
     }
 
     type DataForTileRenderer = {
-        baseType    : TileBaseType | null;
-        objectType  : TileObjectType | null;
+        baseType    : number | null;
+        objectType  : number | null;
         count       : number;
-        tileType    : Types.TileType;
+        tileType    : number;
         playerIndex : number;
         gameConfig  : Config.GameConfig;
     };

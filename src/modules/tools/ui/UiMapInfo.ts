@@ -24,7 +24,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiMapInfo {
     import NotifyType       = Twns.Notify.NotifyType;
-    import TileType         = Twns.Types.TileType;
     import LangTextType     = Twns.Lang.LangTextType;
 
     type DataForUiMapInfo = {
@@ -232,7 +231,7 @@ namespace TwnsUiMapInfo {
     }
 
     function generateDataForListTile(tileDataArray: CommonProto.WarSerialization.ISerialTile[], gameConfig: Twns.Config.GameConfig): DataForTileRenderer[] {
-        const tileCountDict = new Map<TileType, number>();
+        const tileCountDict = new Map<number, number>();
         for (const tile of tileDataArray || []) {
             const tileType = gameConfig.getTileType(Twns.Helpers.getExisted(tile.baseType), Twns.Helpers.getExisted(tile.objectType));
             if (tileType != null) {
@@ -241,7 +240,7 @@ namespace TwnsUiMapInfo {
         }
 
         const dataArray: DataForTileRenderer[] = [];
-        for (const tileType of TileTypes) {
+        for (const tileType of gameConfig.getTileTypeArrayForMapInfo()) {
             dataArray.push({
                 tileType,
                 num     : tileCountDict.get(tileType) || 0,
@@ -251,19 +250,9 @@ namespace TwnsUiMapInfo {
         return dataArray;
     }
 
-    const TileTypes: TileType[] = [
-        TileType.Factory,
-        TileType.City,
-        TileType.Airport,
-        TileType.TempAirport,
-        TileType.Seaport,
-        TileType.TempSeaport,
-        TileType.CommandTower,
-        TileType.Radar,
-    ];
     type DataForTileRenderer = {
         gameConfig      : Twns.Config.GameConfig;
-        tileType        : Twns.Types.TileType;
+        tileType        : number;
         num             : number;
     };
     class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileRenderer> {

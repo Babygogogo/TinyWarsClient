@@ -105,7 +105,7 @@ namespace Twns.CoopCustomRoom {
                 ? (CoopCustomRoom.CcrCreateModel.getSelfCoId())
                 : (WarHelpers.WarRuleHelpers.getPlayerRule(Twns.Helpers.getExisted(settingsForCommon.instanceWarRule), playerIndex).fixedCoIdInCcw);
 
-            if ((coId != null) && (coId !== Twns.CommonConstants.CoEmptyId)) {
+            if ((coId != null) && (coId !== Twns.CommonConstants.CoIdEmpty)) {
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoInfoPanel, {
                     gameConfig   : CoopCustomRoom.CcrCreateModel.getGameConfig(),
                     coId,
@@ -140,7 +140,7 @@ namespace Twns.CoopCustomRoom {
                                 break;
                             }
                         }
-                        playerRule.fixedCoIdInCcw = Twns.CommonConstants.CoEmptyId;
+                        playerRule.fixedCoIdInCcw = Twns.CommonConstants.CoIdEmpty;
                         CoopCustomRoom.CcrCreateModel.setAiSkinId(playerIndex, playerIndex);
                         data.page.updateView();
                     };
@@ -292,7 +292,7 @@ namespace Twns.CoopCustomRoom {
             const coCfg                     = coId == null ? null : gameConfig.getCoBasicCfg(coId);
             this._labelCo.text              = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source          = coId == null ? `` : gameConfig.getCoHeadImageSource(coId) ?? Twns.CommonConstants.ErrorTextForUndefined;
-            this._imgCoInfo.visible         = (coId !== Twns.CommonConstants.CoEmptyId) && (!!coCfg);
+            this._imgCoInfo.visible         = (coId !== Twns.CommonConstants.CoIdEmpty) && (!!coCfg);
             this._btnChangeCo.visible       = (isSelfPlayer) || (!isHumanPlayer);
             this._btnChangeSkinId.visible   = (isSelfPlayer) || (!isHumanPlayer);
         }

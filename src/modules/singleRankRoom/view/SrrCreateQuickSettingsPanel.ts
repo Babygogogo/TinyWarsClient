@@ -227,7 +227,7 @@ namespace Twns.SingleRankRoom {
         private async _onTouchedGroupCo(): Promise<void> {
             const playerData    = this._getPlayerData();
             const coId          = playerData ? playerData.coId : null;
-            if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
+            if ((coId != null) && (coId !== CommonConstants.CoIdEmpty)) {
                 PanelHelpers.open(PanelHelpers.PanelDict.CommonCoInfoPanel, {
                     gameConfig      : SingleRankRoom.SrrCreateModel.getGameConfig(),
                     coId,
@@ -301,7 +301,7 @@ namespace Twns.SingleRankRoom {
             const coCfg                 = gameConfig.getCoBasicCfg(coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
-            this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
+            this._imgCoInfo.visible     = (coId !== CommonConstants.CoIdEmpty) && (!!coCfg);
         }
 
         private _getPlayerData(): CommonProto.Structure.IDataForPlayerInRoom {

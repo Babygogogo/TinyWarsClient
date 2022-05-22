@@ -21,21 +21,18 @@ namespace Twns.MapEditor {
     import DrawerMode           = Types.MapEditorDrawerMode;
     import GridIndex            = Types.GridIndex;
     import SymmetryType         = Types.SymmetryType;
-    import TileBaseType         = Types.TileBaseType;
-    import TileDecoratorType    = Types.TileDecoratorType;
-    import TileObjectType       = Types.TileObjectType;
 
     export type DataForDrawTileObject = {
-        objectType  : TileObjectType;
+        objectType  : number;
         shapeId     : number;
         playerIndex : number;
     };
     export type DataForDrawTileBase = {
-        baseType    : TileBaseType;
+        baseType    : number;
         shapeId     : number;
     };
     export type DataForDrawTileDecoration = {
-        decoratorType   : TileDecoratorType;
+        decoratorType   : number;
         shapeId         : number;
     };
     export type DataForDrawUnit = {
@@ -208,7 +205,7 @@ namespace Twns.MapEditor {
             const tileMap       = war.getTileMap();
             const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
-                if (tile.getType() !== Types.TileType.Road) {
+                if (tile.getObjectType() !== CommonConstants.TileObjectType.Road) {
                     continue;
                 }
 
@@ -237,12 +234,7 @@ namespace Twns.MapEditor {
             const tileMap       = war.getTileMap();
             const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
-                const tileType = tile.getType();
-                if ((tileType !== Types.TileType.BridgeOnBeach) &&
-                    (tileType !== Types.TileType.BridgeOnPlain) &&
-                    (tileType !== Types.TileType.BridgeOnRiver) &&
-                    (tileType !== Types.TileType.BridgeOnSea)
-                ) {
+                if (tile.getObjectType() !== CommonConstants.TileObjectType.Bridge) {
                     continue;
                 }
 
@@ -271,7 +263,7 @@ namespace Twns.MapEditor {
             const tileMap       = war.getTileMap();
             const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
-                if (tile.getType() !== Types.TileType.Plasma) {
+                if (tile.getObjectType() !== CommonConstants.TileObjectType.Plasma) {
                     continue;
                 }
 
@@ -300,7 +292,7 @@ namespace Twns.MapEditor {
             const tileMap       = war.getTileMap();
             const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
-                if (tile.getType() !== Types.TileType.Pipe) {
+                if (tile.getObjectType() !== CommonConstants.TileObjectType.Pipe) {
                     continue;
                 }
 

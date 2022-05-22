@@ -100,7 +100,7 @@ namespace Twns.MultiFreeRoom {
             const playerIndex       = this._getData().playerIndex;
             const initialWarData    = MultiFreeRoom.MfrCreateModel.getInitialWarData();
             const coId              = initialWarData.playerManager?.players?.find(v => v.playerIndex === playerIndex)?.coId;
-            if ((coId != null) && (coId !== Twns.CommonConstants.CoEmptyId)) {
+            if ((coId != null) && (coId !== Twns.CommonConstants.CoIdEmpty)) {
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoInfoPanel, {
                     gameConfig   : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(initialWarData.settingsForCommon?.configVersion)),
                     coId,
@@ -139,7 +139,7 @@ namespace Twns.MultiFreeRoom {
             const coCfg                 = gameConfig.getCoBasicCfg(coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? Twns.CommonConstants.ErrorTextForUndefined;
-            this._imgCoInfo.visible     = (coId !== Twns.CommonConstants.CoEmptyId) && (!!coCfg);
+            this._imgCoInfo.visible     = (coId !== Twns.CommonConstants.CoIdEmpty) && (!!coCfg);
 
             const userInfo              = MultiFreeRoom.MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await Twns.User.UserModel.getUserPublicInfo(Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId())) : null;
             const labelNickname         = this._labelNickname;

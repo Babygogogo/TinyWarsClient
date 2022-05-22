@@ -35,7 +35,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
         },
         settingsForMcw          : {},
 
-        selfCoId                : CommonConstants.CoEmptyId,
+        selfCoId                : CommonConstants.CoIdEmpty,
         selfPlayerIndex         : CommonConstants.WarFirstPlayerIndex,
         selfUnitAndTileSkinId   : CommonConstants.UnitAndTileMinSkinId,
     };

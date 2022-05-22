@@ -18,18 +18,18 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiPlayerWar {
-    import LangTextType             = Twns.Lang.LangTextType;
+    import LangTextType             = Lang.LangTextType;
     import WarAction                = CommonProto.WarAction;
 
     export abstract class MpwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new MultiPlayerWar.MpwPlayerManager();
-        private readonly _field                 = new Twns.MultiPlayerWar.MpwField();
+        private readonly _field                 = new MultiPlayerWar.MpwField();
         private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
 
         private _visionTeamIndex    : number | null = null;
 
-        public getField(): Twns.MultiPlayerWar.MpwField {
+        public getField(): MultiPlayerWar.MpwField {
             return this._field;
         }
         public getPlayerManager(): MultiPlayerWar.MpwPlayerManager {
@@ -44,26 +44,26 @@ namespace Twns.MultiPlayerWar {
 
         public updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void {
             const watcherTeamIndexes    = this.getPlayerManager().getWatcherTeamIndexesForSelf();
-            const visibleUnitsOnMap     = Twns.WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, watcherTeamIndexes);
+            const visibleUnitsOnMap     = WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, watcherTeamIndexes);
             for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
                 if (visibleUnitsOnMap.has(unit)) {
                     if (!isFastExecute) {
                         unit.setViewVisible(true);
                     }
                 } else {
-                    Twns.WarHelpers.WarDestructionHelpers.removeUnitOnMap(this, unit.getGridIndex());
+                    WarHelpers.WarDestructionHelpers.removeUnitOnMap(this, unit.getGridIndex());
                 }
             }
-            Twns.WarHelpers.WarDestructionHelpers.removeInvisibleLoadedUnits(this, watcherTeamIndexes);
+            WarHelpers.WarDestructionHelpers.removeInvisibleLoadedUnits(this, watcherTeamIndexes);
 
-            const visibleTiles  = Twns.WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeams(this, watcherTeamIndexes);
+            const visibleTiles  = WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeams(this, watcherTeamIndexes);
             const tileMap       = this.getTileMap();
             for (const tile of tileMap.getAllTiles()) {
                 if (visibleTiles.has(tile)) {
                     tile.setHasFog(false);
                 } else {
                     if (!tile.getHasFog()) {
-                        Twns.MultiPlayerWar.MpwUtility.resetTileDataAsHasFog(tile);
+                        WarHelpers.WarCommonHelpers.resetTileDataAsHasFog(tile);
                     }
                 }
 
@@ -87,7 +87,7 @@ namespace Twns.MultiPlayerWar {
                 return;
             }
 
-            const visibleTiles = Twns.WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeams(this, new Set([visionTeamIndex]));
+            const visibleTiles = WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeams(this, new Set([visionTeamIndex]));
             for (const tile of this.getTileMap().getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
 
@@ -125,7 +125,7 @@ namespace Twns.MultiPlayerWar {
         }
         public async getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | null> {
             const playerIndex = this.getPlayerIndexInTurn();
-            if (playerIndex === Twns.CommonConstants.WarNeutralPlayerIndex) {
+            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
                 return Lang.getFormattedText(LangTextType.F0022, Lang.getText(LangTextType.B0111), playerIndex);
             } else {
                 return Lang.getFormattedText(LangTextType.F0022, await this.getPlayerInTurn().getNickname(), playerIndex);
@@ -135,7 +135,7 @@ namespace Twns.MultiPlayerWar {
             return `${Lang.getText(LangTextType.B0451)}`;
         }
         public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | null> {
-            const playerIndex = Twns.Helpers.getExisted(action.extraData?.targetPlayerIndex);
+            const playerIndex = Helpers.getExisted(action.extraData?.targetPlayerIndex);
             return `p${playerIndex} ${await this.getPlayer(playerIndex).getNickname()} ${Lang.getText(LangTextType.B0450)}`;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | null> {
@@ -200,12 +200,12 @@ namespace Twns.MultiPlayerWar {
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getBootRestTime(playerIndex: number): number | null {
-            if (playerIndex === Twns.CommonConstants.WarNeutralPlayerIndex) {
+            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
                 return null;
             } else {
                 const restTime = this.getPlayer(playerIndex).getRestTimeToBoot();
                 if (playerIndex === this.getPlayerIndexInTurn()) {
-                    return (this.getEnterTurnTime() + restTime - Twns.Timer.getServerTimestamp()) || null;
+                    return (this.getEnterTurnTime() + restTime - Timer.getServerTimestamp()) || null;
                 } else {
                     return restTime;
                 }
@@ -234,7 +234,7 @@ namespace Twns.MultiPlayerWar {
         }
         public tickVisionTeamIndex(): number | null {
             const teamIndexArray = [...this.getPlayerManager().getWatcherTeamIndexesForSelf()].sort((v1, v2) => v1 - v2);
-            Twns.Helpers.deleteElementFromArray(teamIndexArray, Twns.CommonConstants.WarNeutralTeamIndex);
+            Helpers.deleteElementFromArray(teamIndexArray, CommonConstants.WarNeutralTeamIndex);
 
             const currentVisionTeamIndex    = this.getVisionTeamIndex();
             const newVisionTeamIndex        = currentVisionTeamIndex == null

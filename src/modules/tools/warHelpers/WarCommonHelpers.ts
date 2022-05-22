@@ -21,7 +21,6 @@ namespace Twns.WarHelpers.WarCommonHelpers {
     import AttackableArea   = Types.AttackableArea;
     import MapSize          = Types.MapSize;
     import MovePathNode     = Types.MovePathNode;
-    import TileType         = Types.TileType;
     import WarType          = Types.WarType;
     import Visibility       = Types.Visibility;
     import LangTextType     = Lang.LangTextType;
@@ -112,7 +111,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
     }
     export function createAttackableAreaForTile(tile: BaseWar.BwTile, mapSize: MapSize): AttackableArea {
         const area          : AttackableArea = [];
-        const tileType      = tile.getType();
+        const mapWeaponType = tile.getTemplateCfg().mapWeaponType;
         const tileGridIndex = tile.getGridIndex();
         const tileGridX     = tileGridIndex.x;
         const tileGridY     = tileGridIndex.y;
@@ -129,12 +128,12 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             }
         };
 
-        if ((tileType === TileType.Crystal) || (tileType === TileType.CustomCrystal)) {
+        if ((mapWeaponType === Types.MapWeaponType.Crystal) || (mapWeaponType === Types.MapWeaponType.CustomCrystal)) {
             for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: tileGridIndex, minDistance: 0, maxDistance: Helpers.getExisted(tile.getCustomCrystalData()?.radius), mapSize })) {
                 addGrid(gridIndex.x, gridIndex.y);
             }
 
-        } else if ((tileType === TileType.CustomCannon) || (tile.checkIsNormalCannon())) {
+        } else if ((mapWeaponType === Types.MapWeaponType.CustomCannon) || (tile.checkIsNormalCannon())) {
             const { rangeForDown, rangeForLeft, rangeForRight, rangeForUp } = Helpers.getExisted(tile.getCustomCannonData());
             if (rangeForDown) {
                 for (let deltaY = 1; deltaY <= rangeForDown; ++deltaY) {
@@ -197,7 +196,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
                 }
             }
 
-        } else if ((tileType === TileType.LaserTurret) || (tileType === TileType.CustomLaserTurret)) {
+        } else if ((mapWeaponType === Types.MapWeaponType.LaserTurret) || (mapWeaponType === Types.MapWeaponType.CustomLaserTurret)) {
             const { rangeForDown, rangeForLeft, rangeForRight, rangeForUp } = Helpers.getExisted(tile.getCustomLaserTurretData());
             if (rangeForDown) {
                 for (let deltaY = 0; deltaY < rangeForDown; ++deltaY) {
@@ -238,7 +237,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
         } else {
             // TODO: handle other tile types
-            throw Helpers.newError(`WarCommonHelpers.createAttackableAreaForTile() invalid tileType: ${tileType}`);
+            throw Helpers.newError(`WarCommonHelpers.createAttackableAreaForTile() invalid mapWeaponType: ${mapWeaponType}`);
         }
 
         return area;
@@ -1050,7 +1049,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         }
     }
 
-    export function getAdjacentPlasmas(tileMap: BaseWar.BwTileMap, origin: GridIndex): GridIndex[] {
+    export function getConnectedGridIndexArrayWithTileType(tileMap: BaseWar.BwTileMap, origin: GridIndex, tileType: number): GridIndex[] {
         const plasmas           = [origin];
         const mapSize           = tileMap.getMapSize();
         const mapHeight         = mapSize.height;
@@ -1059,7 +1058,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         let i = 0;
         while (i < plasmas.length) {
             for (const adjacentGridIndex of GridIndexHelpers.getAdjacentGrids(plasmas[i], mapSize)) {
-                if (tileMap.getTile(adjacentGridIndex).getType() === TileType.Plasma) {
+                if (tileMap.getTile(adjacentGridIndex).getType() === tileType) {
                     const searchIndex = getIndexOfGridIndex(mapHeight, adjacentGridIndex);
                     if (!searchedIndexes.has(searchIndex)) {
                         searchedIndexes.add(searchIndex);
@@ -1072,6 +1071,24 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
         plasmas.shift();
         return plasmas;
+    }
+
+    export function resetTileDataAsHasFog(tile: BaseWar.BwTile): void {
+        tile.setHasFog(true);
+
+        tile.deserialize({
+            gridIndex       : tile.getGridIndex(),
+            baseType        : tile.getBaseType(),
+            decoratorType   : tile.getDecorationType(),
+            objectType      : tile.getObjectType(),
+            playerIndex     : tile.getTemplateCfg().isAlwaysShowOwner ? tile.getPlayerIndex() : CommonConstants.WarNeutralPlayerIndex,
+            baseShapeId     : tile.getBaseShapeId(),
+            decoratorShapeId: tile.getDecoratorShapeId(),
+            objectShapeId   : tile.getObjectShapeId(),
+            currentHp       : tile.getCurrentHp(),
+            locationFlags   : tile.getLocationFlags(),
+            isHighlighted   : tile.getIsHighlighted(),
+        }, tile.getGameConfig());
     }
 
     function getIndexOfGridIndex(mapHeight: number, gridIndex: GridIndex): number {
@@ -1337,7 +1354,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
         {
             const player            = war.getPlayer(playerIndex);
-            const idleBuildingsDict = new Map<Types.TileType, GridIndex[]>();
+            const idleBuildingsDict = new Map<number, GridIndex[]>();
             const gameConfig        = war.getGameConfig();
             const currentFund       = player.getFund();
             for (const tile of war.getTileMap().getAllTiles()) {

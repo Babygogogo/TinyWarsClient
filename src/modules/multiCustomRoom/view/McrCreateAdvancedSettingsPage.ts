@@ -347,7 +347,7 @@ namespace Twns.MultiCustomRoom {
                         PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0057),
                             callback: () => {
-                                MultiCustomRoom.McrCreateModel.setSelfCoId(Twns.CommonConstants.CoEmptyId);
+                                MultiCustomRoom.McrCreateModel.setSelfCoId(Twns.CommonConstants.CoIdEmpty);
                                 callback();
                             },
                         });

@@ -195,7 +195,7 @@ namespace Twns.Common {
         }
 
         private _initComponentsForPreviewCo(): void {
-            this._setPreviewCoId(Twns.CommonConstants.CoEmptyId);
+            this._setPreviewCoId(Twns.CommonConstants.CoIdEmpty);
         }
 
         private _updateComponentsForPreviewCoId(): void {

@@ -8,9 +8,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common.CommonModel {
     import TileThemeType            = Types.TileThemeType;
-    import TileBaseType             = Types.TileBaseType;
-    import TileDecoratorType        = Types.TileDecoratorType;
-    import TileObjectType           = Types.TileObjectType;
     import TextureVersion           = Types.UnitAndTileTextureVersion;
     import IDataForMrwPlayerRank    = CommonProto.Structure.IDataForMrwPlayerRank;
 
@@ -21,9 +18,9 @@ namespace Twns.Common.CommonModel {
 
     let _unitAndTileTexturePrefix       = `v01_`;
     const _unitImageSourceDict          = new Map<TextureVersion, Map<boolean, Map<boolean, Map<number, Map<number, FrameCfg>>>>>();
-    const _tileBaseImageSourceDict      = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<TileBaseType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
-    const _tileDecoratorImageSourceDict = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<TileDecoratorType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
-    const _tileObjectImageSourceDict    = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<TileObjectType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
+    const _tileBaseImageSourceDict      = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<number, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
+    const _tileDecoratorImageSourceDict = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<number, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
+    const _tileObjectImageSourceDict    = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<number, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
 
     let _mrwRankArray: IDataForMrwPlayerRank[] | null = null;
 
@@ -102,7 +99,7 @@ namespace Twns.Common.CommonModel {
         version     : TextureVersion;
         themeType   : TileThemeType;
         skinId      : number;
-        baseType    : TileBaseType;
+        baseType    : number;
         isDark      : boolean;
         shapeId     : number;
         tickCount   : number;
@@ -154,7 +151,7 @@ namespace Twns.Common.CommonModel {
         version             : TextureVersion;
         themeType           : TileThemeType;
         skinId              : number;
-        tileDecorationType  : TileDecoratorType | null;
+        tileDecorationType  : number | null;
         isDark              : boolean;
         shapeId             : number;
         tickCount           : number;
@@ -212,7 +209,7 @@ namespace Twns.Common.CommonModel {
         version     : TextureVersion;
         themeType   : TileThemeType;
         skinId      : number;
-        objectType  : TileObjectType;
+        objectType  : number;
         isDark      : boolean;
         shapeId     : number;
         tickCount   : number;

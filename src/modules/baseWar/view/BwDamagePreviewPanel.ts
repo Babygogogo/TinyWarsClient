@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 // import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
@@ -14,9 +14,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import NotifyType       = Twns.Notify.NotifyType;
-    import LangTextType     = Twns.Lang.LangTextType;
-    import BwWar            = BaseWar.BwWar;
+    import NotifyType       = Notify.NotifyType;
+    import LangTextType     = Lang.LangTextType;
 
     export type OpenDataForBwDamagePreviewPanel = {
         war: BwWar;
@@ -72,7 +71,7 @@ namespace Twns.BaseWar {
             const defenderGridIndex = war.getCursor().getGridIndex();
             const defenderUnit      = war.getUnitMap().getUnitOnMap(defenderGridIndex);
             if (defenderUnit == null) {
-                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonForbidden01);
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 return;
             }
 
@@ -80,9 +79,9 @@ namespace Twns.BaseWar {
             const tileMap               = war.getTileMap();
             const commonSettingsManager = war.getCommonSettingManager();
             const allTiles              = tileMap.getAllTiles();
-            const allCities             = allTiles.filter(v => v.getType() === Twns.Types.TileType.City);
-            const allCommandTowers      = allTiles.filter(v => v.getType() === Twns.Types.TileType.CommandTower);
-            const attackerUnit          = Twns.Helpers.getExisted(actionPlanner.getFocusUnit());
+            const allCities             = allTiles.filter(v => v.getType() === CommonConstants.TileType.City);
+            const allCommandTowers      = allTiles.filter(v => v.getType() === CommonConstants.TileType.CommandTower);
+            const attackerUnit          = Helpers.getExisted(actionPlanner.getFocusUnit());
             const attackerPlayer        = attackerUnit.getPlayer();
             const attackerGridIndex     = actionPlanner.getMovePathDestination();
             const attackerPlayerIndex   = attackerUnit.getPlayerIndex();
@@ -96,24 +95,24 @@ namespace Twns.BaseWar {
             const canSeeHiddenInfo2     = (!hasFog) || (watcherTeamIndexes.has(defenderPlayer.getTeamIndex()));
             const coSkillType1          = attackerPlayer.getCoUsingSkillType();
             const coSkillType2          = defenderPlayer.getCoUsingSkillType();
-            const getIsAffectedByCo1    = Twns.Helpers.createLazyFunc((): boolean => {
+            const getIsAffectedByCo1    = Helpers.createLazyFunc((): boolean => {
                 if (attackerUnit.getHasLoadedCo()) {
                     return true;
                 }
 
-                const distance = Twns.GridIndexHelpers.getMinDistance(attackerGridIndex, attackerPlayer.getCoGridIndexListOnMap());
+                const distance = GridIndexHelpers.getMinDistance(attackerGridIndex, attackerPlayer.getCoGridIndexListOnMap());
                 return (distance != null) && (distance <= attackerPlayer.getCoZoneRadius());
             });
-            const getIsAffectedByCo2    = Twns.Helpers.createLazyFunc((): boolean => {
+            const getIsAffectedByCo2    = Helpers.createLazyFunc((): boolean => {
                 if (defenderUnit.getHasLoadedCo()) {
                     return true;
                 }
 
-                const distance = Twns.GridIndexHelpers.getMinDistance(defenderGridIndex, defenderPlayer.getCoGridIndexListOnMap());
+                const distance = GridIndexHelpers.getMinDistance(defenderGridIndex, defenderPlayer.getCoGridIndexListOnMap());
                 return (distance != null) && (distance <= defenderPlayer.getCoZoneRadius());
             });
 
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonDamageCalculatorPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonDamageCalculatorPanel, {
                 data: {
                     gameConfig   : war.getGameConfig(),
                     weatherType     : war.getWeatherManager().getCurrentWeatherType(),
@@ -121,13 +120,13 @@ namespace Twns.BaseWar {
                         coId            : attackerPlayer.getCoId(),
                         coSkillType     : attackerPlayer.checkCoIsUsingActiveSkill()
                             ? coSkillType1
-                            : (getIsAffectedByCo1() ? Twns.Types.CoSkillType.Passive : null),
+                            : (getIsAffectedByCo1() ? Types.CoSkillType.Passive : null),
                         unitType        : attackerUnit.getUnitType(),
                         unitHp          : attackerUnit.getCurrentHp(),
                         unitWeaponType  : (attackerUnit.getPrimaryWeaponBaseDamage(defenderArmorType) != null)
-                            ? (Twns.Types.WeaponType.Primary)
+                            ? (Types.WeaponType.Primary)
                             : (attackerUnit.getSecondaryWeaponBaseDamage(defenderArmorType) != null
-                                ? Twns.Types.WeaponType.Secondary
+                                ? Types.WeaponType.Secondary
                                 : null
                             ),
                         unitPromotion   : attackerUnit.getCurrentPromotion(),
@@ -143,13 +142,13 @@ namespace Twns.BaseWar {
                         coId            : defenderPlayer.getCoId(),
                         coSkillType     : defenderPlayer.checkCoIsUsingActiveSkill()
                             ? coSkillType2
-                            : (getIsAffectedByCo2() ? Twns.Types.CoSkillType.Passive : null),
+                            : (getIsAffectedByCo2() ? Types.CoSkillType.Passive : null),
                         unitType        : defenderUnit.getUnitType(),
                         unitHp          : defenderUnit.getCurrentHp(),
                         unitWeaponType  : (defenderUnit.getPrimaryWeaponBaseDamage(attackerArmorType) != null)
-                            ? (Twns.Types.WeaponType.Primary)
+                            ? (Types.WeaponType.Primary)
                             : (defenderUnit.getSecondaryWeaponBaseDamage(attackerArmorType) != null
-                                ? Twns.Types.WeaponType.Secondary
+                                ? Types.WeaponType.Secondary
                                 : null
                             ),
                         unitPromotion   : defenderUnit.getCurrentPromotion(),
@@ -163,7 +162,7 @@ namespace Twns.BaseWar {
                     },
                 },
             });
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,23 +183,23 @@ namespace Twns.BaseWar {
             const labelCounterValue = this._labelCounterValue;
             const state             = actionPlanner.getState();
 
-            if ((state === Twns.Types.ActionPlannerState.MakingMovePath)     ||
-                (state === Twns.Types.ActionPlannerState.ChoosingAttackTarget)
+            if ((state === Types.ActionPlannerState.MakingMovePath)     ||
+                (state === Types.ActionPlannerState.ChoosingAttackTarget)
             ) {
                 const unitMap       = war.getUnitMap();
-                const attackerUnit  = Twns.Helpers.getExisted(actionPlanner.getFocusUnit());
+                const attackerUnit  = Helpers.getExisted(actionPlanner.getFocusUnit());
                 const movePath      = actionPlanner.getMovePath();
                 if (!attackerUnit.checkCanAttackTargetAfterMovePath(movePath, gridIndex)) {
                     group.visible = false;
                 } else {
                     const attackerUnitId        = attackerUnit.getUnitId();
-                    const battleDamageInfoArray = Twns.WarHelpers.WarDamageCalculator.getEstimatedBattleDamage({
+                    const battleDamageInfoArray = WarHelpers.WarDamageCalculator.getEstimatedBattleDamage({
                         war,
                         attackerMovePath: movePath,
                         launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
                         targetGridIndex : gridIndex,
                     });
-                    const damages = Twns.WarHelpers.WarDamageCalculator.getAttackAndCounterDamage({
+                    const damages = WarHelpers.WarDamageCalculator.getAttackAndCounterDamage({
                         battleDamageInfoArray,
                         attackerUnitId,
                         targetGridIndex     : gridIndex,
@@ -230,8 +229,8 @@ namespace Twns.BaseWar {
             const container     = war.getView().getFieldContainer();
             const contents      = container.getContents();
             const gridIndex     = war.getCursor().getGridIndex();
-            const gridSize      = Twns.CommonConstants.GridSize;
-            const stage         = Twns.StageManager.getStage();
+            const gridSize      = CommonConstants.GridSize;
+            const stage         = StageManager.getStage();
             const group         = this._group;
             const groupWidth    = group.width;
             const groupHeight   = group.height;

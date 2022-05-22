@@ -694,8 +694,8 @@ namespace Twns.MultiRankRoom {
                             },
                         });
                     };
-                    if ((coId == Twns.CommonConstants.CoEmptyId)                                                             &&
-                        ((MultiRankRoom.MrrSelfSettingsModel.getAvailableCoIdArray() || []).some(v => v !== Twns.CommonConstants.CoEmptyId))
+                    if ((coId == Twns.CommonConstants.CoIdEmpty)                                                             &&
+                        ((MultiRankRoom.MrrSelfSettingsModel.getAvailableCoIdArray() || []).some(v => v !== Twns.CommonConstants.CoIdEmpty))
                     ) {
                         Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0208),

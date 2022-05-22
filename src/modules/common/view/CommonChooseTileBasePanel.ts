@@ -27,7 +27,7 @@ namespace Twns.Common {
 
     export type OpenDataForCommonChooseTileBasePanel = {
         gameConfig  : Config.GameConfig;
-        callback    : (baseType: Types.TileBaseType, shapeId: number) => void;
+        callback    : (baseType: number, shapeId: number) => void;
     };
     export class CommonChooseTileBasePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseTileBasePanel> {
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
@@ -109,7 +109,7 @@ namespace Twns.Common {
     type DataForCategoryRenderer = {
         dataListForDrawTileBase : DataForDrawTileBase[];
         gameConfig              : Config.GameConfig;
-        callback                : (baseType: Types.TileBaseType, shapeId: number) => void;
+        callback                : (baseType: number, shapeId: number) => void;
     };
     class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
         private readonly _labelCategory!    : TwnsUiLabel.UiLabel;
@@ -143,7 +143,7 @@ namespace Twns.Common {
     type DataForTileBaseRenderer = {
         gameConfig          : Config.GameConfig;
         dataForDrawTileBase : DataForDrawTileBase;
-        callback            : (baseType: Types.TileBaseType, shapeId: number) => void;
+        callback            : (baseType: number, shapeId: number) => void;
     };
     class TileBaseRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileBaseRenderer> {
         private readonly _group!        : eui.Group;

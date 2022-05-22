@@ -554,11 +554,17 @@ declare namespace CommonProto {
             /** TileTemplateCfg isAffectedByLuck */
             isAffectedByLuck?: (number|null);
 
+            /** TileTemplateCfg destroyConnectedTypeWhenDestroyed */
+            destroyConnectedTypeWhenDestroyed?: (number|null);
+
             /** TileTemplateCfg loadCoUnitCategory */
             loadCoUnitCategory?: (number|null);
 
             /** TileTemplateCfg blockEnemyUnitCategory */
             blockEnemyUnitCategory?: (number|null);
+
+            /** TileTemplateCfg mapWeaponType */
+            mapWeaponType?: (number|null);
 
             /** TileTemplateCfg lang */
             lang?: (number|null);
@@ -572,11 +578,20 @@ declare namespace CommonProto {
             /** TileTemplateCfg sortWeightForDamageChart */
             sortWeightForDamageChart?: (number|null);
 
+            /** TileTemplateCfg sortWeightForMapInfo */
+            sortWeightForMapInfo?: (number|null);
+
             /** TileTemplateCfg toTileBaseType */
             toTileBaseType?: (number|null);
 
             /** TileTemplateCfg toTileObjectType */
             toTileObjectType?: (number|null);
+
+            /** TileTemplateCfg aiScoreForCapture */
+            aiScoreForCapture?: (number|null);
+
+            /** TileTemplateCfg aiScoreForStay */
+            aiScoreForStay?: (number[]|null);
         }
 
         /** Represents a TileTemplateCfg. */
@@ -648,11 +663,17 @@ declare namespace CommonProto {
             /** TileTemplateCfg isAffectedByLuck. */
             public isAffectedByLuck: number;
 
+            /** TileTemplateCfg destroyConnectedTypeWhenDestroyed. */
+            public destroyConnectedTypeWhenDestroyed: number;
+
             /** TileTemplateCfg loadCoUnitCategory. */
             public loadCoUnitCategory: number;
 
             /** TileTemplateCfg blockEnemyUnitCategory. */
             public blockEnemyUnitCategory: number;
+
+            /** TileTemplateCfg mapWeaponType. */
+            public mapWeaponType: number;
 
             /** TileTemplateCfg lang. */
             public lang: number;
@@ -666,11 +687,20 @@ declare namespace CommonProto {
             /** TileTemplateCfg sortWeightForDamageChart. */
             public sortWeightForDamageChart: number;
 
+            /** TileTemplateCfg sortWeightForMapInfo. */
+            public sortWeightForMapInfo: number;
+
             /** TileTemplateCfg toTileBaseType. */
             public toTileBaseType: number;
 
             /** TileTemplateCfg toTileObjectType. */
             public toTileObjectType: number;
+
+            /** TileTemplateCfg aiScoreForCapture. */
+            public aiScoreForCapture: number;
+
+            /** TileTemplateCfg aiScoreForStay. */
+            public aiScoreForStay: number[];
 
             /**
              * Creates a new TileTemplateCfg instance using the specified properties.
@@ -3623,6 +3653,102 @@ declare namespace CommonProto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a MapWeaponCfg. */
+        interface IMapWeaponCfg {
+
+            /** MapWeaponCfg mapWeaponType */
+            mapWeaponType?: (number|null);
+
+            /** MapWeaponCfg isCustom */
+            isCustom?: (number|null);
+        }
+
+        /** Represents a MapWeaponCfg. */
+        class MapWeaponCfg implements IMapWeaponCfg {
+
+            /**
+             * Constructs a new MapWeaponCfg.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.Config.IMapWeaponCfg);
+
+            /** MapWeaponCfg mapWeaponType. */
+            public mapWeaponType: number;
+
+            /** MapWeaponCfg isCustom. */
+            public isCustom: number;
+
+            /**
+             * Creates a new MapWeaponCfg instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MapWeaponCfg instance
+             */
+            public static create(properties?: CommonProto.Config.IMapWeaponCfg): CommonProto.Config.MapWeaponCfg;
+
+            /**
+             * Encodes the specified MapWeaponCfg message. Does not implicitly {@link CommonProto.Config.MapWeaponCfg.verify|verify} messages.
+             * @param message MapWeaponCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.Config.IMapWeaponCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MapWeaponCfg message, length delimited. Does not implicitly {@link CommonProto.Config.MapWeaponCfg.verify|verify} messages.
+             * @param message MapWeaponCfg message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.Config.IMapWeaponCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MapWeaponCfg message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MapWeaponCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.Config.MapWeaponCfg;
+
+            /**
+             * Decodes a MapWeaponCfg message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MapWeaponCfg
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.Config.MapWeaponCfg;
+
+            /**
+             * Verifies a MapWeaponCfg message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MapWeaponCfg message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MapWeaponCfg
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.Config.MapWeaponCfg;
+
+            /**
+             * Creates a plain object from a MapWeaponCfg message. Also converts values to other types if specified.
+             * @param message MapWeaponCfg
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.Config.MapWeaponCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MapWeaponCfg to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a FullConfig. */
         interface IFullConfig {
 
@@ -3703,6 +3829,9 @@ declare namespace CommonProto {
 
             /** FullConfig MoveType */
             MoveType?: (CommonProto.Config.IMoveTypeCfg[]|null);
+
+            /** FullConfig MapWeapon */
+            MapWeapon?: (CommonProto.Config.IMapWeaponCfg[]|null);
         }
 
         /** Represents a FullConfig. */
@@ -3791,6 +3920,9 @@ declare namespace CommonProto {
 
             /** FullConfig MoveType. */
             public MoveType: CommonProto.Config.IMoveTypeCfg[];
+
+            /** FullConfig MapWeapon. */
+            public MapWeapon: CommonProto.Config.IMapWeaponCfg[];
 
             /**
              * Creates a new FullConfig instance using the specified properties.

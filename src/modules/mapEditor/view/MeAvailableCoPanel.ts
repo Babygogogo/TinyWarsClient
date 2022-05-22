@@ -88,7 +88,7 @@ namespace Twns.MapEditor {
 
         private _onTouchedBtnConfirm(): void {
             const bannedCoIdSet = this._bannedCoIdSet;
-            if (bannedCoIdSet.has(Twns.CommonConstants.CoEmptyId)) {
+            if (bannedCoIdSet.has(Twns.CommonConstants.CoIdEmpty)) {
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0130),

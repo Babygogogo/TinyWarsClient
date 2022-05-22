@@ -29,7 +29,6 @@
 namespace Twns.BaseWar {
     import NotifyType               = Notify.NotifyType;
     import LangTextType             = Lang.LangTextType;
-    import TileType                 = Types.TileType;
     import GameConfig               = Config.GameConfig;
 
     // eslint-disable-next-line no-shadow
@@ -1066,7 +1065,7 @@ namespace Twns.BaseWar {
         attackUnitType  : number;
         playerIndex?    : number;
         targetUnitType? : number;
-        targetTileType? : TileType;
+        targetTileType? : number;
     };
     class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDamageRenderer> {
         private readonly _group!                : eui.Group;

@@ -405,7 +405,7 @@ namespace Twns.WarMap {
                     gameConfig,
                     version     : User.UserModel.getSelfSettingsTextureVersion(),
                     themeType   : Types.TileThemeType.Clear,
-                    objectType  : tileData.objectType || CommonConstants.TileObjectEmptyType,
+                    objectType  : tileData.objectType || CommonConstants.TileObjectType.Empty,
                     shapeId     : tileData.objectShapeId || 0,
                     isDark      : false,
                     skinId      : Helpers.getExisted(tileData.skinId || tileData.playerIndex),

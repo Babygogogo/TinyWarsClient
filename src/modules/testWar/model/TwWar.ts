@@ -241,7 +241,7 @@ namespace Twns.TestWar {
             playerIndex         : 0,
             teamIndex           : 0,
             userId              : null,
-            coId                : CommonConstants.CoEmptyId,
+            coId                : CommonConstants.CoIdEmpty,
             restTimeToBoot      : 0,
             unitAndTileSkinId   : 0,
         })];
@@ -261,7 +261,7 @@ namespace Twns.TestWar {
                 playerIndex,
                 teamIndex,
                 userId              : 1,
-                coId                : CommonConstants.CoEmptyId,
+                coId                : CommonConstants.CoIdEmpty,
                 restTimeToBoot,
                 unitAndTileSkinId   : playerIndex,
             }));

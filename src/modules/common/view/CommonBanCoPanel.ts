@@ -103,7 +103,7 @@ namespace Twns.Common {
                 throw Helpers.newError(`CommonBanCoPanel._onTouchedBtnConfirm() empty callback.`);
             } else {
                 const bannedCoIdSet = this._bannedCoIdSet;
-                if (bannedCoIdSet.has(Twns.CommonConstants.CoEmptyId)) {
+                if (bannedCoIdSet.has(Twns.CommonConstants.CoIdEmpty)) {
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0130),
@@ -178,7 +178,7 @@ namespace Twns.Common {
                 return;
             }
 
-            if (coId === Twns.CommonConstants.CoEmptyId) {
+            if (coId === Twns.CommonConstants.CoIdEmpty) {
                 PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0130),
@@ -316,7 +316,7 @@ namespace Twns.Common {
         }
 
         private _initComponentsForPreviewCo(): void {
-            this._setPreviewCoId(Twns.CommonConstants.CoEmptyId);
+            this._setPreviewCoId(Twns.CommonConstants.CoIdEmpty);
         }
 
         private _updateComponentsForPreviewCoId(): void {

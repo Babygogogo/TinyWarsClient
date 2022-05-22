@@ -284,7 +284,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             if (coIdList.length <= 1) {
                 return coIdList[0];
             } else {
-                return Helpers.pickRandomElement(coIdList.filter(v => v !== CommonConstants.CoEmptyId));
+                return Helpers.pickRandomElement(coIdList.filter(v => v !== CommonConstants.CoIdEmpty));
             }
         }
     }
@@ -616,7 +616,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             }
 
             const bannedCoIdArray = data.bannedCoIdArray || [];
-            if (bannedCoIdArray.indexOf(CommonConstants.CoEmptyId) >= 0) {
+            if (bannedCoIdArray.indexOf(CommonConstants.CoIdEmpty) >= 0) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_12;
             }
             if (bannedCoIdArray.some(coId => !gameConfig.checkHasCo(coId))) {

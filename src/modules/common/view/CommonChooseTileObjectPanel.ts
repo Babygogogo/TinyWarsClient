@@ -23,7 +23,7 @@ namespace Twns.Common {
 
     export type OpenDataForCommonChooseTileObjectPanel = {
         gameConfig  : Config.GameConfig;
-        callback    : (tileObjectType: Types.TileObjectType, shapeId: number, playerIndex: number) => void;
+        callback    : (tileObjectType: number, shapeId: number, playerIndex: number) => void;
     };
     export class CommonChooseTileObjectPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseTileObjectPanel> {
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
@@ -110,7 +110,7 @@ namespace Twns.Common {
     type DataForCategoryRenderer = {
         dataListForDrawTileObject   : DataForDrawTileObject[];
         gameConfig                  : Config.GameConfig;
-        callback                    : (tileObjectType: Types.TileObjectType, shapeId: number, playerIndex: number) => void;
+        callback                    : (tileObjectType: number, shapeId: number, playerIndex: number) => void;
     };
     class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
         private readonly _labelCategory!    : TwnsUiLabel.UiLabel;
@@ -142,7 +142,7 @@ namespace Twns.Common {
     type DataForTileObjectRenderer = {
         gameConfig              : Config.GameConfig;
         dataForDrawTileObject   : DataForDrawTileObject;
-        callback                : (tileObjectType: Types.TileObjectType, shapeId: number, playerIndex: number) => void;
+        callback                : (tileObjectType: number, shapeId: number, playerIndex: number) => void;
     };
     class TileObjectRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileObjectRenderer> {
         private readonly _group!        : eui.Group;

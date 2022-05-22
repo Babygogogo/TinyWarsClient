@@ -9,18 +9,14 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import TileBaseType             = Types.TileBaseType;
-    import TileDecoratorType        = Types.TileDecoratorType;
-    import TileObjectType           = Types.TileObjectType;
-
     const { height: GRID_HEIGHT }   = CommonConstants.GridSize;
-    export type TileViewData = {
+    export type TileViewData        = {
         gameConfig          : Config.GameConfig;
-        tileBaseType        : TileBaseType | null;
+        tileBaseType        : number | null;
         tileBaseShapeId     : number | null;
-        tileDecoratorType   : TileDecoratorType | null;
+        tileDecoratorType   : number | null;
         tileDecoratorShapeId: number | null;
-        tileObjectType      : TileObjectType | null;
+        tileObjectType      : number | null;
         tileObjectShapeId   : number | null;
         playerIndex         : number;
     };
@@ -31,11 +27,11 @@ namespace Twns.MapEditor {
         private readonly _imgObject     = new TwnsUiImage.UiImage();
 
         private _gameConfig         : Config.GameConfig | null = null;
-        private _baseType           : TileBaseType | null = null;
+        private _baseType           : number | null = null;
         private _baseShapeId        : number | null = null;
-        private _decoratorType      : TileDecoratorType | null = null;
+        private _decoratorType      : number | null = null;
         private _decoratorShapeId   : number | null = null;
-        private _objectType         : TileObjectType | null = null;
+        private _objectType         : number | null = null;
         private _objectShapeId      : number | null = null;
         private _playerIndex        : number | null = null;
 

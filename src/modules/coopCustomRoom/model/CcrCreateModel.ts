@@ -33,7 +33,7 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
         },
         settingsForCcw          : {},
 
-        selfCoId                : CommonConstants.CoEmptyId,
+        selfCoId                : CommonConstants.CoIdEmpty,
         selfPlayerIndex         : CommonConstants.WarFirstPlayerIndex,
         selfUnitAndTileSkinId   : CommonConstants.UnitAndTileMinSkinId,
         aiSkinInfoArray         : [],

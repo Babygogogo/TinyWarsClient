@@ -27,7 +27,6 @@ namespace Twns.WarHelpers.WarActionExecutor {
     import GridIndex                            = Types.GridIndex;
     import UnitActionState                      = Types.UnitActionState;
     import MovePath                             = Types.MovePath;
-    import TileType                             = Types.TileType;
     import WarAction                            = CommonProto.WarAction;
     import IWarActionContainer                  = WarAction.IWarActionContainer;
     import IWarActionPlayerDeleteUnit           = WarAction.IWarActionPlayerDeleteUnit;
@@ -3342,10 +3341,11 @@ namespace Twns.WarHelpers.WarActionExecutor {
             };
         }
 
-        const destroyedTileSet = new Set([tile]);
-        if (tile.getType() === TileType.Meteor) {
+        const destroyedTileSet          = new Set([tile]);
+        const destroyConnectedTileType  = tile.getTemplateCfg().destroyConnectedTypeWhenDestroyed;
+        if (destroyConnectedTileType != null) {
             const tileMap = war.getTileMap();
-            for (const g of WarHelpers.WarCommonHelpers.getAdjacentPlasmas(tileMap, gridIndex)) {
+            for (const g of WarCommonHelpers.getConnectedGridIndexArrayWithTileType(tileMap, gridIndex, destroyConnectedTileType)) {
                 const plasmaTile = tileMap.getTile(g);
                 plasmaTile.resetOnTileObjectDestroyed();
                 destroyedTileSet.add(plasmaTile);
@@ -3413,7 +3413,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         targetLostNormalizedHp      : number;
         isAttackerInAttackerCoZone  : boolean;
     }): void {
-        if ((targetLostNormalizedHp == 0) || (attackerPlayer.getCoId() === CommonConstants.CoEmptyId)) {
+        if ((targetLostNormalizedHp == 0) || (attackerPlayer.getCoId() === CommonConstants.CoIdEmpty)) {
             return;
         }
 

@@ -25,11 +25,8 @@ namespace Twns.MapEditor.MeHelpers {
     import BwTile               = BaseWar.BwTile;
     import LangTextType         = Lang.LangTextType;
     import GridIndex            = Types.GridIndex;
-    import TileType             = Types.TileType;
-    import TileBaseType         = Types.TileBaseType;
     import SymmetryType         = Types.SymmetryType;
     import LanguageType         = Types.LanguageType;
-    import TileDecoratorType    = Types.TileDecoratorType;
     import IMapRawData          = CommonProto.Map.IMapRawData;
     import WarSerialization     = CommonProto.WarSerialization;
     import ITemplateWarRule     = CommonProto.WarRule.ITemplateWarRule;
@@ -165,7 +162,7 @@ namespace Twns.MapEditor.MeHelpers {
             },
         };
     }
-    function createDefaultTileDataArray(mapWidth: number, mapHeight: number, tileBaseType: TileBaseType): ISerialTile[] {
+    function createDefaultTileDataArray(mapWidth: number, mapHeight: number, tileBaseType: number): ISerialTile[] {
         const dataList: ISerialTile[] = [];
         for (let x = 0; x < mapWidth; ++x) {
             for (let y = 0; y < mapHeight; ++y) {
@@ -174,12 +171,12 @@ namespace Twns.MapEditor.MeHelpers {
         }
         return dataList;
     }
-    function createDefaultTileData(gridIndex: GridIndex, tileBaseType: TileBaseType): ISerialTile {
+    function createDefaultTileData(gridIndex: GridIndex, tileBaseType: number): ISerialTile {
         return {
             gridIndex,
             baseType        : tileBaseType,
             decoratorType   : null,
-            objectType      : CommonConstants.TileObjectEmptyType,
+            objectType      : CommonConstants.TileObjectType.Empty,
             playerIndex     : CommonConstants.WarNeutralPlayerIndex,
         };
     }
@@ -661,7 +658,7 @@ namespace Twns.MapEditor.MeHelpers {
         const isAdjacent3           = checkIsPlasma(tileMap, { x: x + 1, y }) ? 1 : 0;
         const isAdjacent2           = checkIsPlasma(tileMap, { x, y: y + 1 }) ? 1 : 0;
         const isAdjacent1           = checkIsPlasma(tileMap, { x, y: y - 1 }) ? 1 : 0;
-        const isAdjacentToMeteor    = GridIndexHelpers.getAdjacentGrids(gridIndex, tileMap.getMapSize()).some(v => tileMap.getTile(v).getType() === TileType.Meteor);
+        const isAdjacentToMeteor    = GridIndexHelpers.getAdjacentGrids(gridIndex, tileMap.getMapSize()).some(v => tileMap.getTile(v).getObjectType() === CommonConstants.TileObjectType.Meteor);
         return Helpers.getExisted(TilePlasmaAutoShapeIdMap.get(isAdjacentToMeteor))[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
     function checkIsPlasma(tileMap: BaseWar.BwTileMap, gridIndex: GridIndex): boolean {
@@ -669,8 +666,7 @@ namespace Twns.MapEditor.MeHelpers {
             return true;
         }
 
-        const tileType = tileMap.getTile(gridIndex).getType();
-        return (tileType === TileType.Plasma);
+        return tileMap.getTile(gridIndex).getObjectType() === CommonConstants.TileObjectType.Plasma;
     }
 
     export function getAutoPipeShapeId(tileMap: BaseWar.BwTileMap, gridIndex: GridIndex): number {
@@ -689,12 +685,12 @@ namespace Twns.MapEditor.MeHelpers {
         const tile          = tileMap.getTile(gridIndex);
         const objectType    = tile.getObjectType();
         const objectShapeId = tile.getObjectShapeId();
-        if (objectType === CommonConstants.TileObjectEmptyType) {
+        if (objectType === CommonConstants.TileObjectType.Empty) {
             return ((objectShapeId === 1) && ((direction === Types.Direction.Left) || (direction === Types.Direction.Right)))
                 || ((objectShapeId === 2) && ((direction === Types.Direction.Up) || (direction === Types.Direction.Down)));
-        } else if (objectType === Types.TileObjectType.Pipe) {
+        } else if (objectType === CommonConstants.TileObjectType.Pipe) {
             return true;
-        } else if (objectType === Types.TileObjectType.PipeJoint) {
+        } else if (objectType === CommonConstants.TileObjectType.PipeJoint) {
             return ((objectShapeId === 0) && ((direction === Types.Direction.Left) || (direction === Types.Direction.Right)))
                 || ((objectShapeId === 1) && ((direction === Types.Direction.Up) || (direction === Types.Direction.Down)));
         } else {
@@ -702,7 +698,7 @@ namespace Twns.MapEditor.MeHelpers {
         }
     }
 
-    export function getAutoTileDecoratorTypeAndShapeId(tileMap: BaseWar.BwTileMap, gridIndex: GridIndex): { decoratorType: TileDecoratorType | null, shapeId: number | null } {
+    export function getAutoTileDecoratorTypeAndShapeId(tileMap: BaseWar.BwTileMap, gridIndex: GridIndex): { decoratorType: number | null, shapeId: number | null } {
         const tile = tileMap.getTile(gridIndex);
         if (tile == null) {
             return {
@@ -712,7 +708,7 @@ namespace Twns.MapEditor.MeHelpers {
         }
 
         const baseType = tile.getBaseType();
-        if (baseType === TileBaseType.Sea) {
+        if (baseType === CommonConstants.TileBaseType.Sea) {
             const mapSize   = tileMap.getMapSize();
             let weight      = Math.pow(2, 7);
             let index       = 0;
@@ -724,9 +720,9 @@ namespace Twns.MapEditor.MeHelpers {
 
                     const g = GridIndexHelpers.add(gridIndex, { x: offsetX, y: offsetY });
                     const t = GridIndexHelpers.checkIsInsideMap(g, mapSize) ? tileMap.getTile(g).getBaseType() : null;
-                    if ((t != null)              &&
-                        (t !== TileBaseType.Sea) &&
-                        (t !== TileBaseType.Beach)
+                    if ((t != null)                                 &&
+                        (t !== CommonConstants.TileBaseType.Sea)    &&
+                        (t !== CommonConstants.TileBaseType.Beach)
                     ) {
                         index += weight;
                     }
@@ -735,23 +731,23 @@ namespace Twns.MapEditor.MeHelpers {
             }
 
             return {
-                decoratorType   : TileDecoratorType.Shore,
+                decoratorType   : CommonConstants.TileDecorationType.Shore,
                 shapeId         : TileDecoratorAutoShapeIdArray[index],
             };
 
-        } else if (baseType === TileBaseType.Beach) {
+        } else if (baseType === CommonConstants.TileBaseType.Beach) {
             const shapeId = tile.getBaseShapeId();
             if ((shapeId === 0) || (shapeId === 4) || (shapeId === 8) || (shapeId === 12)) {
                 const isSea1 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
                 const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
                 if (isSea1) {
                     return isSea2
-                        ? { decoratorType: null,                        shapeId: null }
-                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 1 };
+                        ? { decoratorType: null,                                        shapeId: null }
+                        : { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 1 };
                 } else {
                     return isSea2
-                        ? { decoratorType: TileDecoratorType.Shore,    shapeId: 4 }
-                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 5 };
+                        ? { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 4 }
+                        : { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 5 };
                 }
 
             } else if ((shapeId === 1) || (shapeId === 5) || (shapeId === 9) || (shapeId === 13)) {
@@ -759,12 +755,12 @@ namespace Twns.MapEditor.MeHelpers {
                 const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 }));
                 if (isSea1) {
                     return isSea2
-                        ? { decoratorType: null,                        shapeId: null }
-                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 2 };
+                        ? { decoratorType: null,                                        shapeId: null }
+                        : { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 2 };
                 } else {
                     return isSea2
-                        ? { decoratorType: TileDecoratorType.Shore,    shapeId: 8 }
-                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 10 };
+                        ? { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 8 }
+                        : { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 10 };
                 }
 
             } else if ((shapeId === 2) || (shapeId === 6) || (shapeId === 10) || (shapeId === 14)) {
@@ -772,12 +768,12 @@ namespace Twns.MapEditor.MeHelpers {
                 const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
                 if (isSea1) {
                     return isSea2
-                        ? { decoratorType: null,                        shapeId: null }
-                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 1 };
+                        ? { decoratorType: null,                                        shapeId: null }
+                        : { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 1 };
                 } else {
                     return isSea2
-                        ? { decoratorType: TileDecoratorType.Shore,    shapeId: 2 }
-                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 3 };
+                        ? { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 2 }
+                        : { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 3 };
                 }
 
             } else if ((shapeId === 3) || (shapeId === 7) || (shapeId === 11) || (shapeId === 15)) {
@@ -785,33 +781,33 @@ namespace Twns.MapEditor.MeHelpers {
                 const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
                 if (isSea1) {
                     return isSea2
-                        ? { decoratorType: null,                        shapeId: null }
-                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 4 };
+                        ? { decoratorType: null,                                        shapeId: null }
+                        : { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 4 };
                 } else {
                     return isSea2
-                        ? { decoratorType: TileDecoratorType.Shore,    shapeId: 8 }
-                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 12 };
+                        ? { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 8 }
+                        : { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 12 };
                 }
 
             } else if ((shapeId === 16) || (shapeId === 20) || (shapeId === 24) || (shapeId === 28)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 })))
-                    ? { decoratorType: null,                        shapeId: null }
-                    : { decoratorType: TileDecoratorType.Shore,    shapeId: 1 };
+                    ? { decoratorType: null,                                        shapeId: null }
+                    : { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 1 };
 
             } else if ((shapeId === 17) || (shapeId === 21) || (shapeId === 25) || (shapeId === 29)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 })))
-                    ? { decoratorType: null,                        shapeId: null }
-                    : { decoratorType: TileDecoratorType.Shore,    shapeId: 4 };
+                    ? { decoratorType: null,                                        shapeId: null }
+                    : { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 4 };
 
             } else if ((shapeId === 18) || (shapeId === 22) || (shapeId === 26) || (shapeId === 30)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 })))
-                    ? { decoratorType: null,                        shapeId: null }
-                    : { decoratorType: TileDecoratorType.Shore,    shapeId: 8 };
+                    ? { decoratorType: null,                                        shapeId: null }
+                    : { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 8 };
 
             } else if ((shapeId === 19) || (shapeId === 23) || (shapeId === 27) || (shapeId === 31)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 })))
-                    ? { decoratorType: null,                        shapeId: null }
-                    : { decoratorType: TileDecoratorType.Shore,    shapeId: 2 };
+                    ? { decoratorType: null,                                        shapeId: null }
+                    : { decoratorType: CommonConstants.TileDecorationType.Shore,    shapeId: 2 };
 
             } else {
                 return {
@@ -830,7 +826,7 @@ namespace Twns.MapEditor.MeHelpers {
         if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
             return true;
         } else {
-            return tileMap.getTile(gridIndex)?.getBaseType() === TileBaseType.Sea;
+            return tileMap.getTile(gridIndex)?.getBaseType() === CommonConstants.TileBaseType.Sea;
         }
     }
 

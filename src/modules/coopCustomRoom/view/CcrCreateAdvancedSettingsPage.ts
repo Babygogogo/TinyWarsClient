@@ -357,7 +357,7 @@ namespace Twns.CoopCustomRoom {
                             PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0057),
                                 callback: () => {
-                                    CoopCustomRoom.CcrCreateModel.setSelfCoId(Twns.CommonConstants.CoEmptyId);
+                                    CoopCustomRoom.CcrCreateModel.setSelfCoId(Twns.CommonConstants.CoIdEmpty);
                                     callback();
                                 },
                             });
@@ -637,7 +637,7 @@ namespace Twns.CoopCustomRoom {
                     if (playerIndex === CoopCustomRoom.CcrCreateModel.getSelfPlayerIndex()) {
                         Twns.FloatText.show(Lang.getText(LangTextType.A0220));
                     } else {
-                        CoopCustomRoom.CcrCreateModel.setAiCoId(playerIndex, Twns.CommonConstants.CoEmptyId);
+                        CoopCustomRoom.CcrCreateModel.setAiCoId(playerIndex, Twns.CommonConstants.CoIdEmpty);
                         CoopCustomRoom.CcrCreateModel.setAiSkinId(playerIndex, playerIndex);
                     }
                 }

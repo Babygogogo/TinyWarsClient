@@ -88,7 +88,7 @@ namespace Twns.WarMap {
     type DataForTileRenderer = {
         gameConfig      : GameConfig;
         maxPlayerIndex  : number;
-        tileType        : Types.TileType;
+        tileType        : number;
         dict            : Map<number, number>;
     };
     class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileRenderer> {

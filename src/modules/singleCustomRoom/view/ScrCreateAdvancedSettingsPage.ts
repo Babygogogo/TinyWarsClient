@@ -348,7 +348,7 @@ namespace Twns.SingleCustomRoom {
                             PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0057),
                                 callback: () => {
-                                    SingleCustomRoom.ScrCreateModel.setCoId(playerIndex, Twns.CommonConstants.CoEmptyId);
+                                    SingleCustomRoom.ScrCreateModel.setCoId(playerIndex, Twns.CommonConstants.CoIdEmpty);
                                     callback();
                                 },
                             });

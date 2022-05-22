@@ -83,12 +83,12 @@ namespace Twns.Lang {
         }
     }
 
-    export function getTileName(tileType: Types.TileType, gameConfig: Config.GameConfig, languageType?: LanguageType): string | null {
+    export function getTileName(tileType: number, gameConfig: Config.GameConfig, languageType?: LanguageType): string | null {
         const textType = gameConfig.getTileTemplateCfg(tileType)?.lang;
         return textType == null ? null : getText(textType, languageType);
     }
     export function getTileBaseName(tileBaseType: number, gameConfig: Config.GameConfig): string | null {
-        const tileType = gameConfig.getTileType(tileBaseType, CommonConstants.TileObjectEmptyType);
+        const tileType = gameConfig.getTileType(tileBaseType, CommonConstants.TileObjectType.Empty);
         return tileType == null ? null : getTileName(tileType, gameConfig);
     }
     export function getTileObjectName(tileObjectType: number, gameConfig: Config.GameConfig): string | null {

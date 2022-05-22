@@ -14,7 +14,6 @@ namespace Twns.Common {
     import NotifyType   = Notify.NotifyType;
     import GameConfig   = Config.GameConfig;
     import CoSkillType  = Types.CoSkillType;
-    import TileType     = Types.TileType;
     import WeaponType   = Types.WeaponType;
     import WeatherType  = Types.WeatherType;
 
@@ -25,7 +24,7 @@ namespace Twns.Common {
         unitHp          : number;
         unitWeaponType  : WeaponType | null;
         unitPromotion   : number;
-        tileType        : TileType;
+        tileType        : number;
         towersCount     : number;
         offenseBonus    : number;
         upperLuck       : number;
@@ -308,7 +307,7 @@ namespace Twns.Common {
             const gameConfig = this._getCalculatorData().gameConfig;
             PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleTileTypePanel, {
                 gameConfig,
-                currentTileType : Types.TileType.Plain,
+                currentTileType : playerData.tileType,
                 tileTypeArray   : gameConfig.getTileTypeArrayForUnattackable(),
                 playerIndex,
                 callback        : tileType => {
@@ -718,13 +717,13 @@ namespace Twns.Common {
     }
     function createDefaultPlayerData(gameConfig: GameConfig): PlayerData {
         return {
-            coId            : CommonConstants.CoEmptyId,
+            coId            : CommonConstants.CoIdEmpty,
             coSkillType     : CoSkillType.Passive,
             unitType        : gameConfig.getFirstUnitType(),
             unitHp          : CommonConstants.UnitMaxHp,
             unitWeaponType  : WeaponType.Primary,
             unitPromotion   : 0,
-            tileType        : TileType.Plain,
+            tileType        : Helpers.getExisted(gameConfig.getTileType(gameConfig.getDefaultTileBaseType(), CommonConstants.TileObjectType.Empty)),
             towersCount     : 0,
             offenseBonus    : 0,
             upperLuck       : CommonConstants.WarRuleLuckDefaultUpperLimit,
@@ -734,7 +733,7 @@ namespace Twns.Common {
         };
     }
     function getNextCoSkillType(gameConfig: GameConfig, coId: number, skillType: CoSkillType | null): CoSkillType | null {
-        if (coId === CommonConstants.CoEmptyId) {
+        if (coId === CommonConstants.CoIdEmpty) {
             return null;
         }
 
@@ -788,7 +787,7 @@ namespace Twns.Common {
             gameConfig,
         };
     }
-    function createTileViewData(tileType: TileType, playerIndex: number, gameConfig: GameConfig): MapEditor.TileViewData {
+    function createTileViewData(tileType: number, playerIndex: number, gameConfig: GameConfig): MapEditor.TileViewData {
         const objectType    = Helpers.getExisted(gameConfig.getTileObjectTypeByTileType(tileType));
         const baseType      = Helpers.getExisted(gameConfig.getTileBaseTypeByTileType(tileType));
         return {
@@ -917,7 +916,7 @@ namespace Twns.Common {
             upper   : attackerData.upperLuck + limitFromCo.upper,
         };
     }
-    function getTileDefenseAmountForUnit(gameConfig: GameConfig, unitType: number, unitHp: number, tileType: TileType): number {
+    function getTileDefenseAmountForUnit(gameConfig: GameConfig, unitType: number, unitHp: number, tileType: number): number {
         const tileTemplateCfg = Helpers.getExisted(gameConfig.getTileTemplateCfg(tileType));
         return gameConfig.checkIsUnitTypeInCategory(unitType, tileTemplateCfg.defenseUnitCategory)
             ? tileTemplateCfg.defenseAmount * WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp) / WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp)
@@ -944,7 +943,7 @@ namespace Twns.Common {
         const attackerData          = calculatorData.attackerData;
         const attackerCoId          = attackerData.coId;
         const attackerCoSkillType   = attackerData.coSkillType;
-        if ((attackerCoId === CommonConstants.CoEmptyId) || (attackerCoSkillType == null)) {
+        if ((attackerCoId === CommonConstants.CoIdEmpty) || (attackerCoSkillType == null)) {
             return 0;
         }
 
@@ -1070,7 +1069,7 @@ namespace Twns.Common {
         const attackerData          = calculatorData.attackerData;
         const amountFromPromotion   = gameConfig.getUnitPromotionAttackBonus(attackerData.unitPromotion);
         const amountFromWarRule     = attackerData.offenseBonus;
-        const amountFromGlobalTiles = attackerData.towersCount * (gameConfig.getTileTemplateCfg(TileType.CommandTower)?.globalAttackBonus ?? 0);
+        const amountFromGlobalTiles = attackerData.towersCount * (gameConfig.getTileTemplateCfg(CommonConstants.TileType.CommandTower)?.globalAttackBonus ?? 0);
         const amountFromCo          = getAttackModifierByCo({ isCounter, calculatorData });
 
         const totalAmount = amountFromWarRule
@@ -1084,15 +1083,15 @@ namespace Twns.Common {
         const defenderData          = calculatorData.defenderData;
         const defenderCoId          = defenderData.coId;
         const defenderCoSkillType   = defenderData.coSkillType;
-        if ((defenderCoId === CommonConstants.CoEmptyId) || (defenderCoSkillType == null)) {
+        if ((defenderCoId === CommonConstants.CoIdEmpty) || (defenderCoSkillType == null)) {
             return 0;
         }
 
-        const gameConfig         = calculatorData.gameConfig;
-        const defenderUnitType      = defenderData.unitType;
-        const defenderTileType      = defenderData.tileType;
-        const defenderPromotion     = defenderData.unitPromotion;
-        let modifier = 0;
+        const gameConfig        = calculatorData.gameConfig;
+        const defenderUnitType  = defenderData.unitType;
+        const defenderTileType  = defenderData.tileType;
+        const defenderPromotion = defenderData.unitPromotion;
+        let modifier            = 0;
         for (const skillId of getCoSkillIdArray(gameConfig, defenderCoId, defenderCoSkillType)) {
             const skillCfg = gameConfig.getCoSkillCfg(skillId);
             {
@@ -1132,7 +1131,7 @@ namespace Twns.Common {
         const amountFromTile        = getTileDefenseAmountForUnit(gameConfig, defenderData.unitType, defenderData.unitHp, defenderData.tileType);
         const amountFromPromotion   = gameConfig.getUnitPromotionDefenseBonus(defenderData.unitPromotion);
         const amountFromCo          = getDefenseModifierByCo(calculatorData);
-        const amountFromGlobalTiles = defenderData.towersCount * (gameConfig.getTileTemplateCfg(TileType.CommandTower)?.globalDefenseBonus ?? 0);
+        const amountFromGlobalTiles = defenderData.towersCount * (gameConfig.getTileTemplateCfg(CommonConstants.TileType.CommandTower)?.globalDefenseBonus ?? 0);
 
         return WarHelpers.WarDamageCalculator.getDamageMultiplierForDefenseBonus(amountFromTile + amountFromPromotion + amountFromCo + amountFromGlobalTiles);
     }

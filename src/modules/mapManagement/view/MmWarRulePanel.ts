@@ -524,7 +524,7 @@ namespace Twns.MapManagement {
                 callbackOnTouchedTitle  : () => PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseCoPanel, {
                     gameConfig,
                     currentCoIdArray        : currentBannedCoIdArray,
-                    forceUnchosenCoIdArray  : [Twns.CommonConstants.CoEmptyId],
+                    forceUnchosenCoIdArray  : [Twns.CommonConstants.CoIdEmpty],
                     callbackOnConfirm       : bannedCoIdArray => {
                         WarHelpers.WarRuleHelpers.setBannedCoIdArray(templateWarRule, Helpers.getExisted(playerRule.playerIndex), new Set(bannedCoIdArray));
                         this._updateView();
@@ -802,7 +802,7 @@ namespace Twns.MapManagement {
                     if (isControlledByAi) {
                         WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, playerIndex, null);
                     } else {
-                        WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, playerIndex, Twns.CommonConstants.CoEmptyId);
+                        WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, playerIndex, Twns.CommonConstants.CoIdEmpty);
                     }
                     this._updateView();
                 },
@@ -853,7 +853,7 @@ namespace Twns.MapManagement {
                     if (isControlledByAi) {
                         WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, playerIndex, null);
                     } else {
-                        WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, playerIndex, Twns.CommonConstants.CoEmptyId);
+                        WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, playerIndex, Twns.CommonConstants.CoIdEmpty);
                     }
                     this._updateView();
                 },

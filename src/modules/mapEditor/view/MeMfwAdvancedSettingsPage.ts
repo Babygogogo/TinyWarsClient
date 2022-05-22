@@ -128,7 +128,7 @@ namespace Twns.MapEditor {
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
                         Twns.MapEditor.MeMfwModel.setIsControlledByPlayer(playerIndex, !isControlledByPlayer);
-                        Twns.MapEditor.MeMfwModel.setCoId(playerIndex, Twns.CommonConstants.CoEmptyId);
+                        Twns.MapEditor.MeMfwModel.setCoId(playerIndex, Twns.CommonConstants.CoIdEmpty);
                         this._updateView();
                     });
                 },

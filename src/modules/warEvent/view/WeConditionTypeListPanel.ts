@@ -4,7 +4,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -15,14 +15,14 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
-    import NotifyType           = Twns.Notify.NotifyType;
+    import NotifyType           = Notify.NotifyType;
     import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
     import IWarEventCondition   = CommonProto.WarEvent.IWarEventCondition;
-    import ConditionType        = Twns.Types.WarEventConditionType;
-    import LangTextType         = Twns.Lang.LangTextType;
+    import ConditionType        = Types.WarEventConditionType;
+    import LangTextType         = Lang.LangTextType;
 
     export type OpenDataForWeConditionTypeListPanel = {
-        war         : Twns.BaseWar.BwWar;
+        war         : BaseWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
@@ -70,7 +70,7 @@ namespace Twns.WarEvent {
             const fullData  = openData.fullData;
             const war       = openData.war;
             const dataArray: DataForTypeRenderer[] = [];
-            for (const newConditionType of Twns.WarHelpers.WarEventHelpers.getConditionTypeArray()) {
+            for (const newConditionType of WarHelpers.WarEventHelpers.getConditionTypeArray()) {
                 dataArray.push({
                     war,
                     fullData,
@@ -83,7 +83,7 @@ namespace Twns.WarEvent {
     }
 
     type DataForTypeRenderer = {
-        war             : Twns.BaseWar.BwWar;
+        war             : BaseWar.BwWar;
         fullData        : CommonProto.Map.IWarEventFullData;
         newConditionType: ConditionType;
         condition       : IWarEventCondition;
@@ -113,12 +113,13 @@ namespace Twns.WarEvent {
             const data          = this._getData();
             const conditionType = data.newConditionType;
             const condition     = data.condition;
-            if (conditionType !== Twns.WarHelpers.WarEventHelpers.getConditionType(condition)) {
-                Twns.WarHelpers.WarEventHelpers.resetCondition(condition, conditionType);
-                Twns.WarHelpers.WarEventHelpers.openConditionModifyPanel({ fullData: data.fullData, condition, war: data.war });
-                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionTypeListPanel);
+            const war           = data.war;
+            if (conditionType !== WarHelpers.WarEventHelpers.getConditionType(condition)) {
+                WarHelpers.WarEventHelpers.resetCondition(condition, conditionType, war.getGameConfig());
+                WarHelpers.WarEventHelpers.openConditionModifyPanel({ fullData: data.fullData, condition, war });
+                PanelHelpers.close(PanelHelpers.PanelDict.WeConditionTypeListPanel);
 
-                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
         private _onNotifyLanguageChanged(): void {        // DONE
@@ -138,7 +139,7 @@ namespace Twns.WarEvent {
             if (data == null) {
                 label.text = ``;
             } else {
-                label.text = Lang.getWarEventConditionTypeName(data.newConditionType) || Twns.CommonConstants.ErrorTextForUndefined;
+                label.text = Lang.getWarEventConditionTypeName(data.newConditionType) || CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateLabelUsingAndSwitch(): void {
@@ -149,7 +150,7 @@ namespace Twns.WarEvent {
                 labelUsing.visible  = false;
                 labelSwitch.visible = false;
             } else {
-                const isUsing       = Twns.WarHelpers.WarEventHelpers.getConditionType(data.condition) === data.newConditionType;
+                const isUsing       = WarHelpers.WarEventHelpers.getConditionType(data.condition) === data.newConditionType;
                 labelUsing.visible  = isUsing;
                 labelSwitch.visible = !isUsing;
             }

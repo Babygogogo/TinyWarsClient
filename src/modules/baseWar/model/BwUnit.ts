@@ -16,9 +16,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
     import UnitActionState      = Types.UnitActionState;
-    import TileType             = Types.TileType;
-    import TileObjectType       = Types.TileObjectType;
-    import TileBaseType         = Types.TileBaseType;
     import UnitAiMode           = Types.UnitAiMode;
     import GridIndex            = Types.GridIndex;
     import UnitTemplateCfg      = Types.UnitTemplateCfg;
@@ -405,7 +402,7 @@ namespace Twns.BaseWar {
             isCounter       : boolean;
         }): number {
             const player = this.getPlayer();
-            if (player.getCoId() === CommonConstants.CoEmptyId) {
+            if (player.getCoId() === CommonConstants.CoIdEmpty) {
                 return 0;
             }
 
@@ -739,7 +736,7 @@ namespace Twns.BaseWar {
         }
         private _getMaxAttackRangeModifierByCo(): number {
             const player = this.getPlayer();
-            if (player.getCoId() === CommonConstants.CoEmptyId) {
+            if (player.getCoId() === CommonConstants.CoIdEmpty) {
                 return 0;
             }
 
@@ -864,7 +861,7 @@ namespace Twns.BaseWar {
             }
 
             const player = this.getPlayer();
-            if (player.getCoId() === CommonConstants.CoEmptyId) {
+            if (player.getCoId() === CommonConstants.CoIdEmpty) {
                 return cfgAmount;
             }
 
@@ -1162,7 +1159,7 @@ namespace Twns.BaseWar {
         }
         private _getMoveRangeModifierByCo(): number {
             const player = this.getPlayer();
-            if (player.getCoId() === CommonConstants.CoEmptyId) {
+            if (player.getCoId() === CommonConstants.CoIdEmpty) {
                 return 0;
             }
 
@@ -1329,7 +1326,7 @@ namespace Twns.BaseWar {
                 && (this.getBuildTargetTileCfg(tileBaseType, tileObjectType) != null);
         }
 
-        public getBuildTargetTileCfg(baseType: TileBaseType, objectType: TileObjectType): Types.BuildableTileCfg | null {
+        public getBuildTargetTileCfg(baseType: number, objectType: number): Types.BuildableTileCfg | null {
             const buildableCfgs = this._getBuildableTileCfg();
             const cfgs          = buildableCfgs ? buildableCfgs[baseType] : null;
             return cfgs ? (cfgs[objectType] ?? null) : null;
@@ -1413,7 +1410,7 @@ namespace Twns.BaseWar {
                 && (this.getLoadedUnitsCount() < maxLoadUnitsCount);
         }
 
-        public checkCanDropLoadedUnit(tileType: TileType): boolean {
+        public checkCanDropLoadedUnit(tileType: number): boolean {
             const cfg                   = this.getTemplateCfg();
             const loadableTileCategory  = cfg.loadableTileCategory;
             return (cfg.canDropLoadedUnits === 1)
@@ -1590,7 +1587,7 @@ namespace Twns.BaseWar {
         public getCfgVisionRange(): number {
             return this.getTemplateCfg().visionRange;
         }
-        public getVisionRangeBonusOnTile(tileType: TileType): number {
+        public getVisionRangeBonusOnTile(tileType: number): number {
             const cfgs  = this._getVisionBonusCfg();
             const cfg   = cfgs ? cfgs[tileType] : null;
             return cfg ? cfg.visionBonus || 0 : 0;
@@ -1656,7 +1653,7 @@ namespace Twns.BaseWar {
         }
         private _getVisionRangeModifierByCo(selfGridIndex: GridIndex): number {
             const player = this.getPlayer();
-            if (player.getCoId() === CommonConstants.CoEmptyId) {
+            if (player.getCoId() === CommonConstants.CoIdEmpty) {
                 return 0;
             }
 
@@ -1773,7 +1770,7 @@ namespace Twns.BaseWar {
             if ((maxLoadCount <= 0)                                                     ||
                 (movePath.length !== 1)                                                 ||
                 (this.getLoaderUnitId() != null)                                        ||
-                (player.getCoId() == CommonConstants.CoEmptyId)                         ||
+                (player.getCoId() == CommonConstants.CoIdEmpty)                         ||
                 (war.getUnitMap().getAllCoUnits(playerIndex).length >= maxLoadCount)    ||
                 (player.getCoIsDestroyedInTurn())                                       ||
                 (this.getHasLoadedCo())                                                 ||

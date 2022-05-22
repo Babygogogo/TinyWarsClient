@@ -232,7 +232,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnDeleteActTileObject(): void {
             const tileData          = Helpers.getExisted(this._getAction().actTileData);
-            tileData.objectType     = CommonConstants.TileObjectEmptyType;
+            tileData.objectType     = CommonConstants.TileObjectType.Empty;
             tileData.objectShapeId  = null;
             tileData.playerIndex    = CommonConstants.WarNeutralPlayerIndex;
             Notify.dispatch(NotifyType.WarEventFullDataChanged);

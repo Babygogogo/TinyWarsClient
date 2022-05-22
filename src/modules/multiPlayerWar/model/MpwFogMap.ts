@@ -4,18 +4,19 @@
 // import MpwUtility           from "./MpwUtility";
 // import TwnsMpwWar           from "./MpwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiPlayerWar {
-    export class MpwFogMap extends Twns.BaseWar.BwFogMap {
-        public startRunning(war: Twns.MultiPlayerWar.MpwWar): void {
+    export class MpwFogMap extends BaseWar.BwFogMap {
+        public startRunning(war: MultiPlayerWar.MpwWar): void {
             this._setWar(war);
 
-            const visibleTiles = Twns.WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
+            const visibleTiles = WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
             for (const tile of war.getTileMap().getAllTiles()) {
                 if (visibleTiles.has(tile)) {
                     tile.setHasFog(false);
                 } else {
                     if (!tile.getHasFog()) {
-                        Twns.MultiPlayerWar.MpwUtility.resetTileDataAsHasFog(tile);
+                        WarHelpers.WarCommonHelpers.resetTileDataAsHasFog(tile);
                     }
                 }
             }

@@ -488,7 +488,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
     function checkIsValidDataForCoDialogue(data: CommonProto.WarEvent.WeaDialogue.IDataForCoDialogue, gameConfig: GameConfig): boolean {
         const coId = data.coId;
         if ((coId == null)                          ||
-            (coId === CommonConstants.CoEmptyId)    ||
+            (coId === CommonConstants.CoIdEmpty)    ||
             (gameConfig.getCoBasicCfg(coId) == null)
         ) {
             return false;
@@ -3469,7 +3469,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             if (dataForCoDialogue) {
                 const { coId, side, textArray, nameArray } = dataForCoDialogue;
                 if ((coId == null)                                                                                          ||
-                    (coId === CommonConstants.CoEmptyId)                                                                    ||
+                    (coId === CommonConstants.CoIdEmpty)                                                                    ||
                     (gameConfig.getCoNameAndTierText(coId) == null)                                                         ||
                     ((side !== Types.WarEventActionDialogueSide.Left) && (side !== Types.WarEventActionDialogueSide.Right)) ||
                     (!Helpers.checkIsValidLanguageTextArray({
@@ -3955,7 +3955,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             if (dataForCoDialogue) {
                 const { coId, side, textArray, nameArray } = dataForCoDialogue;
                 if ((coId == null)                                                                                          ||
-                    (coId === CommonConstants.CoEmptyId)                                                                    ||
+                    (coId === CommonConstants.CoIdEmpty)                                                                    ||
                     (gameConfig.getCoNameAndTierText(coId) == null)                                                         ||
                     ((side !== Types.WarEventActionDialogueSide.Left) && (side !== Types.WarEventActionDialogueSide.Right)) ||
                     (!Helpers.checkIsValidLanguageTextArray({
@@ -4268,7 +4268,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         else if (condition.WecOngoingPersistentActionPresence)  { return ConditionType.WecOngoingPersistentActionPresence; }
         else                                                    { return null; }
     }
-    export function resetCondition(condition: IWarEventCondition, conditionType: ConditionType): void {
+    export function resetCondition(condition: IWarEventCondition, conditionType: ConditionType, gameConfig: GameConfig): void {
         const commonData = condition.WecCommonData;
         for (const key in condition) {
             delete condition[key as keyof IWarEventCondition];
@@ -4388,7 +4388,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             condition.WecTileTypeEqualTo = {
                 isNot       : false,
                 gridIndex   : { x: 0, y: 0 },
-                tileType    : Types.TileType.Plain,
+                tileType    : gameConfig.getTileType(gameConfig.getDefaultTileBaseType(), CommonConstants.TileObjectType.Empty),
             };
         } else if (conditionType === ConditionType.WecTilePresence) {
             condition.WecTilePresence = {
@@ -4663,7 +4663,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 actTileData     : {
                     gridIndex   : null,
                     playerIndex : CommonConstants.WarNeutralPlayerIndex,
-                    objectType  : CommonConstants.TileObjectEmptyType,
+                    objectType  : CommonConstants.TileObjectType.Empty,
                     baseType    : gameConfig.getDefaultTileBaseType(),
                 },
                 actIsModifyTileBase         : true,

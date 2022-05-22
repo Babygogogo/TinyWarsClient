@@ -15,10 +15,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import TileType                     = Types.TileType;
-    import TileObjectType               = Types.TileObjectType;
-    import TileDecoratorType            = Types.TileDecoratorType;
-    import TileBaseType                 = Types.TileBaseType;
     import TileTemplateCfg              = Types.TileTemplateCfg;
     import ITileCustomCrystalData       = CommonProto.WarSerialization.ITileCustomCrystalData;
     import ITileCustomCannonData        = CommonProto.WarSerialization.ITileCustomCannonData;
@@ -32,9 +28,9 @@ namespace Twns.BaseWar {
         private _gridX?                 : number;
         private _gridY?                 : number;
         private _playerIndex?           : number;
-        private _baseType?              : TileBaseType;
-        private _decoratorType?         : TileDecoratorType | null;
-        private _objectType?            : TileObjectType;
+        private _baseType?              : number;
+        private _decoratorType?         : number | null;
+        private _objectType?            : number;
 
         private _baseShapeId?           : number;
         private _decoratorShapeId?      : number | null;
@@ -95,8 +91,8 @@ namespace Twns.BaseWar {
                 throw Helpers.newError(`Invalid gridX and/or gridY: ${gridX}, ${gridY}`, ClientErrorCode.BwTile_Deserialize_01);
             }
 
-            const objectType    = Helpers.getExisted(data.objectType, ClientErrorCode.BwTile_Deserialize_02) as TileObjectType;
-            const baseType      = Helpers.getExisted(data.baseType, ClientErrorCode.BwTile_Deserialize_03) as TileBaseType;
+            const objectType    = Helpers.getExisted(data.objectType, ClientErrorCode.BwTile_Deserialize_02);
+            const baseType      = Helpers.getExisted(data.baseType, ClientErrorCode.BwTile_Deserialize_03);
             const playerIndex   = data.playerIndex;
             if ((playerIndex == null)                                                                           ||
                 (!gameConfig.checkIsValidPlayerIndexForTileObject({ playerIndex, tileObjectType: objectType }))
@@ -168,9 +164,9 @@ namespace Twns.BaseWar {
                 throw Helpers.newError(`Invalid decoratorType/shapeId: ${decoratorType}, ${decoratorShapeId}`, ClientErrorCode.BwTile_Deserialize_14);
             }
 
-            const tileType          = templateCfg.type;
+            const mapWeaponType     = templateCfg.mapWeaponType;
             const customCrystalData = data.customCrystalData ?? null;
-            if ((customCrystalData != null) && (tileType !== TileType.CustomCrystal)) {
+            if ((customCrystalData != null) && (mapWeaponType !== Types.MapWeaponType.CustomCrystal)) {
                 throw Helpers.newError(`CustomCrystalData is present while the tile is not CustomCrystal.`, ClientErrorCode.BwTile_Deserialize_15);
             }
             if ((customCrystalData != null) && (!Config.ConfigManager.checkIsValidCustomCrystalData(customCrystalData))) {
@@ -178,7 +174,7 @@ namespace Twns.BaseWar {
             }
 
             const customCannonData = data.customCannonData ?? null;
-            if ((customCannonData != null) && (tileType !== TileType.CustomCannon)) {
+            if ((customCannonData != null) && (mapWeaponType !== Types.MapWeaponType.CustomCannon)) {
                 throw Helpers.newError(`CustomCannonData is present while the tile is not CustomCannon.`, ClientErrorCode.BwTile_Deserialize_17);
             }
             if ((customCannonData != null) && (!Config.ConfigManager.checkIsValidCustomCannonData(customCannonData))) {
@@ -186,7 +182,7 @@ namespace Twns.BaseWar {
             }
 
             const customLaserTurretData = data.customLaserTurretData ?? null;
-            if ((customLaserTurretData != null) && (tileType !== TileType.CustomLaserTurret)) {
+            if ((customLaserTurretData != null) && (mapWeaponType !== Types.MapWeaponType.CustomLaserTurret)) {
                 throw Helpers.newError(`CustomLaserTurretData is present while the tile is not CustomLaserTurret.`, ClientErrorCode.BwTile_Deserialize_19);
             }
             if ((customLaserTurretData != null) && (!Config.ConfigManager.checkIsValidCustomLaserTurretData(customLaserTurretData))) {
@@ -342,24 +338,24 @@ namespace Twns.BaseWar {
             view.updateView();
         }
 
-        private _setBaseType(baseType: TileBaseType): void {
+        private _setBaseType(baseType: number): void {
             this._baseType = baseType;
         }
-        public getBaseType(): TileBaseType {
+        public getBaseType(): number {
             return Helpers.getExisted(this._baseType);
         }
 
-        private _setObjectType(objectType: TileObjectType): void {
+        private _setObjectType(objectType: number): void {
             this._objectType = objectType;
         }
-        public getObjectType(): TileObjectType {
+        public getObjectType(): number {
             return Helpers.getExisted(this._objectType);
         }
 
-        private _setDecoratorType(decoratorType: TileDecoratorType | null): void {
+        private _setDecoratorType(decoratorType: number | null): void {
             this._decoratorType = decoratorType;
         }
-        public getDecorationType(): TileDecoratorType | null {
+        public getDecorationType(): number | null {
             return Helpers.getDefined(this._decoratorType, ClientErrorCode.BwTile_GetDecoratorType_00);
         }
 
@@ -581,13 +577,13 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for type.
         ////////////////////////////////////////////////////////////////////////////////
-        public getType(): TileType {
+        public getType(): number {
             return this.getTemplateCfg().type;
         }
 
         public resetByTypeAndPlayerIndex({ baseType, objectType, playerIndex }: {
-            baseType        : TileBaseType;
-            objectType      : TileObjectType;
+            baseType        : number;
+            objectType      : number;
             playerIndex     : number;
         }): void {
             const gameConfig = this.getGameConfig();
@@ -617,7 +613,7 @@ namespace Twns.BaseWar {
                 playerIndex     : CommonConstants.WarNeutralPlayerIndex,
                 baseType        : this.getBaseType(),
                 baseShapeId     : this.getBaseShapeId(),
-                objectType      : CommonConstants.TileObjectEmptyType,
+                objectType      : CommonConstants.TileObjectType.Empty,
                 objectShapeId   : getNewObjectShapeIdOnObjectDestroyed(this.getObjectType(), this.getObjectShapeId(), gameConfig),
                 decoratorType   : this.getDecorationType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
@@ -637,7 +633,7 @@ namespace Twns.BaseWar {
                 playerIndex     : CommonConstants.WarNeutralPlayerIndex,
                 baseType        : this.getBaseType(),
                 baseShapeId     : this.getBaseShapeId(),
-                objectType      : CommonConstants.TileObjectEmptyType,
+                objectType      : CommonConstants.TileObjectType.Empty,
                 objectShapeId   : null,
                 decoratorType   : this.getDecorationType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
@@ -999,27 +995,23 @@ namespace Twns.BaseWar {
         // Functions for map weapon.
         ////////////////////////////////////////////////////////////////////////////////
         public checkIsMapWeapon(): boolean {
-            const type = this.getType();
-            // TODO
-            return (type === TileType.Crystal)
-                || (type === TileType.CustomCrystal)
-                || (type === TileType.CannonDown)
-                || (type === TileType.CannonLeft)
-                || (type === TileType.CannonRight)
-                || (type === TileType.CannonUp)
-                || (type === TileType.CustomCannon)
-                || (type === TileType.LaserTurret)
-                || (type === TileType.CustomLaserTurret);
+            return this.getTemplateCfg().mapWeaponType != null;
+        }
+        public checkIsCustomMapWeapon(): boolean {
+            const mapWeaponType = this.getTemplateCfg().mapWeaponType;
+            return mapWeaponType == null
+                ? false
+                : !!this.getGameConfig().getMapWeaponCfg(mapWeaponType).isCustom;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for crystal data.
         ////////////////////////////////////////////////////////////////////////////////
         public getCustomCrystalData(): ITileCustomCrystalData | null {
-            const tileType = this.getType();
-            if (tileType === TileType.Crystal) {
+            const mapWeaponType = this.getTemplateCfg().mapWeaponType;
+            if (mapWeaponType === Types.MapWeaponType.Crystal) {
                 return CommonConstants.TileDefaultCrystalData;
-            } else if (tileType === TileType.CustomCrystal) {
+            } else if (mapWeaponType === Types.MapWeaponType.CustomCrystal) {
                 return this._customCrystalData ?? CommonConstants.TileDefaultCrystalData;
             } else {
                 return null;
@@ -1079,16 +1071,16 @@ namespace Twns.BaseWar {
         // Functions for cannon data.
         ////////////////////////////////////////////////////////////////////////////////
         public getCustomCannonData(): ITileCustomCannonData | null {
-            const tileType = this.getType();
-            if (tileType === TileType.CannonDown) {
+            const mapWeaponType = this.getTemplateCfg().mapWeaponType;
+            if (mapWeaponType === Types.MapWeaponType.CannonDown) {
                 return CommonConstants.TileDefaultCannonDownData;
-            } else if (tileType === TileType.CannonLeft) {
+            } else if (mapWeaponType === Types.MapWeaponType.CannonLeft) {
                 return CommonConstants.TileDefaultCannonLeftData;
-            } else if (tileType === TileType.CannonUp) {
+            } else if (mapWeaponType === Types.MapWeaponType.CannonUp) {
                 return CommonConstants.TileDefaultCannonUpData;
-            } else if (tileType === TileType.CannonRight) {
+            } else if (mapWeaponType === Types.MapWeaponType.CannonRight) {
                 return CommonConstants.TileDefaultCannonRightData;
-            } else if (tileType === TileType.CustomCannon) {
+            } else if (mapWeaponType === Types.MapWeaponType.CustomCannon) {
                 return this._customCannonData ?? CommonConstants.TileDefaultCustomCannonData;
             } else {
                 return null;
@@ -1099,11 +1091,11 @@ namespace Twns.BaseWar {
         }
 
         public checkIsNormalCannon(): boolean {
-            const tileType = this.getType();
-            return (tileType === TileType.CannonRight)
-                || (tileType === TileType.CannonUp)
-                || (tileType === TileType.CannonLeft)
-                || (tileType === TileType.CannonDown);
+            const mapWeaponType = this.getTemplateCfg().mapWeaponType;
+            return (mapWeaponType === Types.MapWeaponType.CannonRight)
+                || (mapWeaponType === Types.MapWeaponType.CannonUp)
+                || (mapWeaponType === Types.MapWeaponType.CannonLeft)
+                || (mapWeaponType === Types.MapWeaponType.CannonDown);
         }
         private _initCustomCannonData(): void {
             if (this._customCannonData == null) {
@@ -1167,10 +1159,10 @@ namespace Twns.BaseWar {
         // Functions for cannon data.
         ////////////////////////////////////////////////////////////////////////////////
         public getCustomLaserTurretData(): ITileCustomLaserTurretData | null {
-            const tileType = this.getType();
-            if (tileType === TileType.LaserTurret) {
+            const mapWeaponType = this.getTemplateCfg().mapWeaponType;
+            if (mapWeaponType === Types.MapWeaponType.LaserTurret) {
                 return CommonConstants.TileDefaultCustomLaserTurretData;
-            } else if (tileType === TileType.CustomLaserTurret) {
+            } else if (mapWeaponType === Types.MapWeaponType.CustomLaserTurret) {
                 return this._customLaserTurretData ?? CommonConstants.TileDefaultCustomLaserTurretData;
             } else {
                 return null;
@@ -1259,7 +1251,7 @@ namespace Twns.BaseWar {
         }
     }
 
-    function getNewObjectShapeIdOnObjectDestroyed(oldType: TileObjectType, oldShapeId: number, gameConfig: GameConfig): number {
+    function getNewObjectShapeIdOnObjectDestroyed(oldType: number, oldShapeId: number, gameConfig: GameConfig): number {
         const shapeIdArray = Helpers.getExisted(gameConfig.getTileObjectCfg(oldType)?.shapeIdAfterDestruction);
         for (let i = 1; i < shapeIdArray.length; i += 2) {
             if (shapeIdArray[i] === oldShapeId) {
