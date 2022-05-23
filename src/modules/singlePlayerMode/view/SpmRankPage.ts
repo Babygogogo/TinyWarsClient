@@ -129,7 +129,7 @@ namespace Twns.SinglePlayerMode {
             const selfInfo      = User.UserModel.getSelfInfo()?.userComplexInfo;
             const selfScore     = selfInfo?.userWarStatistics?.spwArray?.find(v => (v.mapId === mapId) && (v.configVersion === configVersion) && (v.ruleId === ruleId))?.highScore ?? Number.MIN_SAFE_INTEGER;
             const selfPrivilege = selfInfo?.userPrivilege;
-            const hasPrivilege  = selfPrivilege?.isAdmin ?? selfPrivilege?.isMapCommittee ?? false;
+            const hasPrivilege  = (selfPrivilege?.isAdmin || selfPrivilege?.isMapCommittee) ?? false;
             const dataArray     : DataForUserRenderer[] = [];
 
             for (const rankData of (await SinglePlayerMode.SpmModel.getRankData(mapId))?.find(v => v.ruleId === ruleId)?.infoArray ?? []) {
