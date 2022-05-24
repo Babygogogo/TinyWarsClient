@@ -1822,6 +1822,49 @@ namespace Twns.WarHelpers.WarRobot {
         return getBestScoreAndAction(await Promise.all(promiseArray), commonParams);
     }
 
+    async function getScoreAndActionUnitProduceUnit(commonParams: CommonParams, unit: BwUnit, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
+        await Helpers.checkAndCallLater();
+
+        if ((pathNodes.length !== 1) || (unit.getLoaderUnitId() != null)) {
+            return null;
+        }
+
+        const produceUnitType   = unit.getProduceUnitType();
+        const material          = unit.getCurrentProduceMaterial();
+        const maxLoadUnitsCount = unit.getMaxLoadUnitsCount();
+        const war               = commonParams.war;
+        const playerIndex       = commonParams.playerIndexInTurn;
+        if ((produceUnitType == null)                                                                                           ||
+            (material == null)                                                                                                  ||
+            (material <= 0)                                                                                                     ||
+            (maxLoadUnitsCount == null)                                                                                         ||
+            (unit.getLoadedUnitsCount() >= maxLoadUnitsCount)                                                                   ||
+            ((war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerIndex) ?? []).indexOf(produceUnitType) >= 0)   ||
+            (war.getWarEventManager().checkOngoingPersistentActionBannedUnitType(playerIndex, produceUnitType))
+        ) {
+            return null;
+        }
+
+        const score = (war.getGameConfig().getUnitTemplateCfg(produceUnitType)?.aiProductionScore ?? [])[war.getFogMap().checkHasFogCurrently() ? 1 : 0];
+        if ((score == null)                                             ||
+            (unit.getProduceUnitCost() > war.getPlayerInTurn().getFund())
+         ) {
+            return null;
+        }
+
+        return {
+            score   : score + 1,
+            action  : { WarActionUnitProduceUnit: {
+                path    : {
+                    nodes           : pathNodes,
+                    fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                    isBlocked       : false,
+                },
+                launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
+            }},
+        };
+    }
+
     async function getScoreAndActionUnitSurface(unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
         await Helpers.checkAndCallLater();
 
@@ -1963,6 +2006,7 @@ namespace Twns.WarHelpers.WarRobot {
             getScoreAndActionUnitDropUnit({ commonParams, unit, gridIndex, pathNodes }),
             getScoreAndActionUnitLaunchSilo(commonParams, unit, gridIndex, pathNodes),
             getScoreAndActionUnitLaunchFlare(commonParams, unit, gridIndex, pathNodes),
+            getScoreAndActionUnitProduceUnit(commonParams, unit, pathNodes),
             getScoreAndActionUnitSurface(unit, gridIndex, pathNodes),
             getScoreAndActionUnitWait(unit, pathNodes),
             getScoreAndActionUnitLoadCo(unit, pathNodes),
