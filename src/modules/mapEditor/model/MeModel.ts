@@ -29,7 +29,7 @@ namespace Twns.MapEditor.MeModel {
             MAP_DICT.set(slotIndex, {
                 slotIndex,
                 reviewStatus    : data.reviewStatus,
-                mapRawData      : data.mapRawData,
+                mapRawData      : convertBaseSeaToDecoratorShore(data.mapRawData),
                 reviewComment   : data.reviewComment,
             });
         }
@@ -47,7 +47,7 @@ namespace Twns.MapEditor.MeModel {
         MAP_DICT.set(slotIndex, {
             slotIndex,
             reviewStatus: data.reviewStatus,
-            mapRawData  : data.mapRawData,
+            mapRawData  : convertBaseSeaToDecoratorShore(data.mapRawData),
         });
     }
     export function getDataDict(): Map<number, IMapEditorData> {
@@ -75,8 +75,8 @@ namespace Twns.MapEditor.MeModel {
             unloadWar();
         }
 
-        const gameConfig = await Config.ConfigManager.getLatestGameConfig();
-        _war = new MeWar();
+        const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
+        _war                = new MeWar();
         await _war.initWithMapEditorData(
             {
                 mapRawData  : mapRawData ?? await MapEditor.MeHelpers.createDefaultMapRawData(slotIndex, gameConfig),
@@ -109,6 +109,21 @@ namespace Twns.MapEditor.MeModel {
             reviewStatus: MapReviewStatus.None,
             mapRawData  : null,
         };
+    }
+
+    function convertBaseSeaToDecoratorShore(mapRawData: Types.Undefinable<IMapRawData>): IMapRawData | null {
+        if (mapRawData == null) {
+            return null;
+        }
+
+        for (const tileData of mapRawData.tileDataArray || []) {
+            if (tileData.baseType !== CommonConstants.TileBaseType.Sea) {
+                continue;
+            }
+
+            tileData.baseShapeId = null;
+        }
+        return mapRawData;
     }
 }
 
