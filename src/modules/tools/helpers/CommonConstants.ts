@@ -110,12 +110,32 @@ namespace Twns.CommonConstants {
         City            : 23,
         CommandTower    : 24,
     };
+    export const WeatherAnimationType = {
+        Sandstorm       : 2,
+        Snowy           : 3,
+        Rainy           : 4,
+    };
+    export const MapWeaponType = {
+        Crystal             : 1,
+        CustomCrystal       : 2,
+        CannonUp            : 3,
+        CannonDown          : 4,
+        CannonLeft          : 5,
+        CannonRight         : 6,
+        CustomCannon        : 7,
+        LaserTurret         : 8,
+        CustomLaserTurret   : 9,
+    };
+    export const PlayerIndex = {
+        Neutral : 0,
+        First   : 1,
+        Max     : 5,
+    };
+    export const TeamIndex = {
+        Neutral : 0,
+        First   : 1,
+    };
 
-    export const WarNeutralPlayerIndex                  = 0;
-    export const WarFirstPlayerIndex                    = 1;
-    export const WarMaxPlayerIndex                      = 5;
-    export const WarNeutralTeamIndex                    = 0;
-    export const WarFirstTeamIndex                      = 1;
     export const WarFirstTurnIndex                      = 1;
     export const WarPlayerMaxFund                       = 1_000_000_000;
     export const WarCustomCounterMaxValue               = 1_000_000_000;

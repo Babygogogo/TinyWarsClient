@@ -54,7 +54,7 @@ namespace Twns.MapEditor {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this._resetListPlayerIndex(CommonConstants.WarNeutralPlayerIndex);
+            this._resetListPlayerIndex(CommonConstants.PlayerIndex.Neutral);
             this._updateListRecent();
             this._updateListTileObject();
         }
@@ -139,7 +139,7 @@ namespace Twns.MapEditor {
 
         private _resetListPlayerIndex(selectedPlayerIndex: number | null): void {
             const dataArray: DataForPlayerIndexRenderer[] = [];
-            for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+            for (let playerIndex = CommonConstants.PlayerIndex.Neutral; playerIndex <= CommonConstants.PlayerIndex.Max; ++playerIndex) {
                 dataArray.push({
                     playerIndex,
                     panel       : this,

@@ -6,7 +6,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import Twns.Notify               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -15,12 +15,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
-    import NotifyType               = Twns.Notify.NotifyType;
+    import NotifyType               = Notify.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
-    import LangTextType             = Twns.Lang.LangTextType;
-    import BwWar                    = Twns.BaseWar.BwWar;
-    import WeatherType              = Twns.Types.WeatherType;
+    import LangTextType             = Lang.LangTextType;
+    import BwWar                    = BaseWar.BwWar;
 
     export type OpenDataForWeActionModifyPanel5 = {
         war         : BwWar;
@@ -71,24 +70,16 @@ namespace Twns.WarEvent {
         }
 
         private _onTouchedBtnWeather(): void {
-            const action            = Twns.Helpers.getExisted(this._getOpenData().action.WeaSetWeather);
-            const weatherType = action.weatherType;
-            if (weatherType === WeatherType.Clear) {
-                action.weatherType = WeatherType.Rainy;
-            } else if (weatherType === WeatherType.Rainy) {
-                action.weatherType = WeatherType.Sandstorm;
-            } else if (weatherType === WeatherType.Sandstorm) {
-                action.weatherType = WeatherType.Snowy;
-            } else {
-                action.weatherType = WeatherType.Clear;
-            }
+            const openData      = this._getOpenData();
+            const action        = Helpers.getExisted(openData.action.WeaSetWeather);
+            action.weatherType  = openData.war.getGameConfig().getNextWeatherType(action.weatherType);
 
-            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -96,11 +87,11 @@ namespace Twns.WarEvent {
         }
 
         private _onFocusOutInputTurns(): void {
-            const data = Twns.Helpers.getExisted(this._getOpenData().action.WeaSetWeather);
+            const data = Helpers.getExisted(this._getOpenData().action.WeaSetWeather);
             const newTurns  = Math.min(parseInt(this._inputTurns.text)) || 0;
             if (newTurns !== data.weatherTurnsCount) {
                 data.weatherTurnsCount = newTurns;
-                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
@@ -126,7 +117,8 @@ namespace Twns.WarEvent {
         }
 
         private _updateLabelWeather(): void {
-            this._labelWeather.text = Lang.getWeatherName(Twns.Helpers.getExisted(this._getOpenData().action.WeaSetWeather?.weatherType));
+            const openData          = this._getOpenData();
+            this._labelWeather.text = Lang.getWeatherName(Helpers.getExisted(openData.action.WeaSetWeather?.weatherType), openData.war.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateInputTurns(): void {

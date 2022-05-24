@@ -542,7 +542,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
         const playerInTurn  = war.getPlayerInTurn();
         const playerIndex   = playerInTurn.getPlayerIndex();
-        if ((playerIndex !== CommonConstants.WarNeutralPlayerIndex)         &&
+        if ((playerIndex !== CommonConstants.PlayerIndex.Neutral)         &&
             (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
         ) {
             const nickname = await playerInTurn.getNickname();
@@ -2498,7 +2498,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 tile.resetByTypeAndPlayerIndex({
                     baseType        : tile.getBaseType(),
                     objectType      : Helpers.getExisted((tile.getGameConfig().getTileObjectCfg(tile.getObjectType())?.launchSiloParams ?? [])[1]),
-                    playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex     : CommonConstants.PlayerIndex.Neutral,
                 });
 
                 const targetGrids   = GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize: unitMap.getMapSize() });
@@ -2567,7 +2567,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 tile.resetByTypeAndPlayerIndex({
                     baseType    : tile.getBaseType(),
                     objectType  : Helpers.getExisted((tile.getGameConfig().getTileObjectCfg(tile.getObjectType())?.launchSiloParams ?? [])[1]),
-                    playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex : CommonConstants.PlayerIndex.Neutral,
                 });
 
                 const targetGridIndex   = GridIndexHelpers.convertGridIndex(action.targetGridIndex);

@@ -128,12 +128,12 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             }
         };
 
-        if ((mapWeaponType === Types.MapWeaponType.Crystal) || (mapWeaponType === Types.MapWeaponType.CustomCrystal)) {
+        if ((mapWeaponType === CommonConstants.MapWeaponType.Crystal) || (mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal)) {
             for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: tileGridIndex, minDistance: 0, maxDistance: Helpers.getExisted(tile.getCustomCrystalData()?.radius), mapSize })) {
                 addGrid(gridIndex.x, gridIndex.y);
             }
 
-        } else if ((mapWeaponType === Types.MapWeaponType.CustomCannon) || (tile.checkIsNormalCannon())) {
+        } else if ((mapWeaponType === CommonConstants.MapWeaponType.CustomCannon) || (tile.checkIsNormalCannon())) {
             const { rangeForDown, rangeForLeft, rangeForRight, rangeForUp } = Helpers.getExisted(tile.getCustomCannonData());
             if (rangeForDown) {
                 for (let deltaY = 1; deltaY <= rangeForDown; ++deltaY) {
@@ -196,7 +196,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
                 }
             }
 
-        } else if ((mapWeaponType === Types.MapWeaponType.LaserTurret) || (mapWeaponType === Types.MapWeaponType.CustomLaserTurret)) {
+        } else if ((mapWeaponType === CommonConstants.MapWeaponType.LaserTurret) || (mapWeaponType === CommonConstants.MapWeaponType.CustomLaserTurret)) {
             const { rangeForDown, rangeForLeft, rangeForRight, rangeForUp } = Helpers.getExisted(tile.getCustomLaserTurretData());
             if (rangeForDown) {
                 for (let deltaY = 0; deltaY < rangeForDown; ++deltaY) {
@@ -1081,7 +1081,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
             baseType        : tile.getBaseType(),
             decoratorType   : tile.getDecorationType(),
             objectType      : tile.getObjectType(),
-            playerIndex     : tile.getTemplateCfg().isAlwaysShowOwner ? tile.getPlayerIndex() : CommonConstants.WarNeutralPlayerIndex,
+            playerIndex     : tile.getTemplateCfg().isAlwaysShowOwner ? tile.getPlayerIndex() : CommonConstants.PlayerIndex.Neutral,
             baseShapeId     : tile.getBaseShapeId(),
             decoratorShapeId: tile.getDecoratorShapeId(),
             objectShapeId   : tile.getObjectShapeId(),
@@ -1263,7 +1263,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
         const playerIndexSet = new Set<number>();
         for (const playerData of playerManagerData ? playerManagerData.players || [] : []) {
             const playerIndex = playerData.playerIndex;
-            if ((playerIndex != null) && (playerIndex >= CommonConstants.WarFirstPlayerIndex)) {
+            if ((playerIndex != null) && (playerIndex >= CommonConstants.PlayerIndex.First)) {
                 playerIndexSet.add(playerIndex);
             }
         }
@@ -1295,7 +1295,7 @@ namespace Twns.WarHelpers.WarCommonHelpers {
     }
     export function getImageSourceForCoEyeFrame(skinId: number): string {
         switch (skinId) {
-            case CommonConstants.WarNeutralPlayerIndex  : return ``;
+            case CommonConstants.PlayerIndex.Neutral  : return ``;
             case 1                                      : return `uncompressedTriangle0001`;
             case 2                                      : return `uncompressedTriangle0002`;
             case 3                                      : return `uncompressedTriangle0003`;
@@ -1423,8 +1423,8 @@ namespace Twns.WarHelpers.WarCommonHelpers {
 
         const playerIndex = unitData.playerIndex;
         if ((playerIndex == null)                               ||
-            (playerIndex < CommonConstants.WarFirstPlayerIndex) ||
-            (playerIndex > CommonConstants.WarMaxPlayerIndex)
+            (playerIndex < CommonConstants.PlayerIndex.First) ||
+            (playerIndex > CommonConstants.PlayerIndex.Max)
         ) {
             return ClientErrorCode.UnitDataValidation03;
         }

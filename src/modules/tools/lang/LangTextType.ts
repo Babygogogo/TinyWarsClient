@@ -29,6 +29,8 @@ namespace Twns.Lang {
 
         TileDecoration0000 = 43000, TileDecoration0001, TileDecoration0002, TileDecoration0003, TileDecoration0004, TileDecoration0005, TileDecoration0006, TileDecoration0007, TileDecoration0008, TileDecoration0009,
 
+        WeatherType0000 = 44000, WeatherType0001, WeatherType0002, WeatherType0003, WeatherType0004, WeatherType0005, WeatherType0006, WeatherType0007, WeatherType0008, WeatherType0009,
+
         A0000, A0001, A0002, A0003, A0004, A0005, A0006, A0007, A0008, A0009,
         A0010, A0011, A0012, A0013, A0014, A0015, A0016, A0017, A0018, A0019,
         A0020, A0021, A0022, A0023, A0024, A0025, A0026, A0027, A0028, A0029,

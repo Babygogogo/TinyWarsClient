@@ -82,7 +82,7 @@ namespace Twns.Common {
             const gameConfig        = openData.gameConfig;
             const playerRuleArray   = Helpers.getExisted(openData.instanceWarRule?.ruleForPlayers?.playerRuleDataArray);
             const dataArray         : DataForPlayerRenderer[] = [];
-            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playerRuleArray.length; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.PlayerIndex.First; playerIndex <= playerRuleArray.length; ++playerIndex) {
                 dataArray.push({
                     gameConfig,
                     playerRule          : Helpers.getExisted(playerRuleArray.find(v => v.playerIndex === playerIndex)),

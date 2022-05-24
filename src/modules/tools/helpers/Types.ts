@@ -408,19 +408,6 @@ namespace Twns.Types {
     }
 
     // eslint-disable-next-line no-shadow
-    export const enum MapWeaponType {
-        Crystal             = 1,
-        CustomCrystal       = 2,
-        CannonUp            = 3,
-        CannonDown          = 4,
-        CannonLeft          = 5,
-        CannonRight         = 6,
-        CustomCannon        = 7,
-        LaserTurret         = 8,
-        CustomLaserTurret   = 9,
-    }
-
-    // eslint-disable-next-line no-shadow
     export enum UnitActionState {
         Idle,   /* 0 */         Acted,  /* 1 */
     }
@@ -462,14 +449,6 @@ namespace Twns.Types {
     export enum WeatherFogType {
         Fog         = 1,
         NoFog       = 2,
-    }
-
-    // eslint-disable-next-line no-shadow
-    export enum WeatherType {
-        Clear       = 1,
-        Sandstorm   = 2,
-        Snowy       = 3,
-        Rainy       = 4,
     }
 
     // eslint-disable-next-line no-shadow

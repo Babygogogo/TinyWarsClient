@@ -1,7 +1,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Config {
-    import WeatherType                  = Types.WeatherType;
     import WeaponType                   = Types.WeaponType;
     import UnitTemplateCfg              = Types.UnitTemplateCfg;
     import TileTemplateCfg              = Types.TileTemplateCfg;
@@ -55,7 +54,7 @@ namespace Twns.Config {
         private readonly _coCategoryCfgDict             : Map<number, CoCategoryCfg>;
         private readonly _coBasicCfgDict                : Map<number, CoBasicCfg>;
         private readonly _coSkillCfgDict                : Map<number, CoSkillCfg>;
-        private readonly _weatherCfgDict                : Map<WeatherType, WeatherCfg>;
+        private readonly _weatherCfgDict                : Map<number, WeatherCfg>;
         private readonly _weatherCategoryCfgDict        : Map<number, WeatherCategoryCfg>;
         private readonly _userAvatarCfgDict             : Map<number, UserAvatarCfg>;
         private readonly _damageChartCfgDict            : Map<number, { [armorType: number]: { [weaponType: number]: DamageChartCfg } }>;
@@ -437,30 +436,44 @@ namespace Twns.Config {
             return this._secondaryWeaponFlagDict.get(unitType) ?? false;
         }
 
-        public checkIsValidWeatherType(weatherType: WeatherType): boolean {
+        public checkIsValidWeatherType(weatherType: number): boolean {
             return this._weatherCfgDict.has(weatherType);
         }
-        public getWeatherCfg(weatherType: WeatherType): WeatherCfg | null {
+        public getWeatherCfg(weatherType: number): WeatherCfg | null {
             return this._weatherCfgDict.get(weatherType) ?? null;
+        }
+        public getDefaultWeatherType(): number {
+            for (const [weatherType, cfg] of this._weatherCfgDict) {
+                if (cfg.isDefault) {
+                    return weatherType;
+                }
+            }
+            throw Helpers.newError(`No default weather type.`);
+        }
+        public getNextWeatherType(weatherType: Types.Undefinable<number>): number {
+            const weatherTypeArray = this.getAvailableWeatherTypes();
+            return weatherType == null
+                ? weatherTypeArray[0]
+                : weatherTypeArray[(weatherTypeArray.indexOf(weatherType) + 1) % weatherTypeArray.length];
+        }
+        public getAvailableWeatherTypes(): number[] {
+            const typeArray: number[] = [];
+            for (const [weatherType] of this._weatherCfgDict) {
+                typeArray.push(weatherType);
+            }
+            return typeArray;
         }
 
         public getWeatherCategoryCfg(category: number): WeatherCategoryCfg | null {
             return this._weatherCategoryCfgDict.get(category) ?? null;
         }
-        public getWeatherTypesByCategory(category: number): WeatherType[] | null {
+        public getWeatherTypesByCategory(category: number): number[] | null {
             const cfg = this.getWeatherCategoryCfg(category);
             return cfg ? cfg.weatherTypes ?? [] : null;
         }
-        public checkIsWeatherTypeInCategory(weatherType: WeatherType, category: number): boolean {
+        public checkIsWeatherTypeInCategory(weatherType: number, category: number): boolean {
             const typeArray = this.getWeatherTypesByCategory(category);
             return typeArray ? typeArray.indexOf(weatherType) >= 0 : false;
-        }
-        public getAvailableWeatherTypes(): WeatherType[] {
-            const typeArray: WeatherType[] = [];
-            for (const [weatherType] of this._weatherCfgDict) {
-                typeArray.push(weatherType);
-            }
-            return typeArray;
         }
 
         public getBuildableTileCfgs(unitType: number): { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } } | null {
@@ -682,7 +695,7 @@ namespace Twns.Config {
             return this._moveTypeCfgDict.get(moveType) ?? null;
         }
 
-        public getMapWeaponCfg(mapWeaponType: Types.MapWeaponType): MapWeaponCfg {
+        public getMapWeaponCfg(mapWeaponType: number): MapWeaponCfg {
             return Helpers.getExisted(this._mapWeaponCfgDict.get(mapWeaponType));
         }
     }
@@ -858,8 +871,8 @@ namespace Twns.Config {
         }
         return dst;
     }
-    function _destructWeatherCfg(data: WeatherCfg[]): Map<WeatherType, WeatherCfg> {
-        const dst = new Map<WeatherType, WeatherCfg>();
+    function _destructWeatherCfg(data: WeatherCfg[]): Map<number, WeatherCfg> {
+        const dst = new Map<number, WeatherCfg>();
         for (const d of data) {
             dst.set(d.weatherType, d);
         }

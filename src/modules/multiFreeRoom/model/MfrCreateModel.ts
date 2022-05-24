@@ -27,7 +27,7 @@ namespace Twns.MultiFreeRoom.MfrCreateModel {
     const _dataForCreateRoom: DataForCreateRoom = {
         settingsForMfw          : {},
 
-        selfPlayerIndex         : Twns.CommonConstants.WarFirstPlayerIndex,
+        selfPlayerIndex         : Twns.CommonConstants.PlayerIndex.First,
         selfCoId                : Twns.CommonConstants.CoIdEmpty,
     };
 
@@ -40,7 +40,7 @@ namespace Twns.MultiFreeRoom.MfrCreateModel {
 
         const playerData = Twns.Helpers.getExisted(warData.playerManager?.players?.find(v => {
             return (v.aliveState !== Twns.Types.PlayerAliveState.Dead)
-                && (v.playerIndex !== Twns.CommonConstants.WarNeutralPlayerIndex)
+                && (v.playerIndex !== Twns.CommonConstants.PlayerIndex.Neutral)
                 && (v.userId != null);
         }));
         setSelfPlayerIndex(Twns.Helpers.getExisted(playerData.playerIndex));

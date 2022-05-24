@@ -5,7 +5,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import Twns.Notify               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -17,8 +17,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
-    import LangTextType             = Twns.Lang.LangTextType;
-    import NotifyType               = Twns.Notify.NotifyType;
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
@@ -73,7 +73,7 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionTypeListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.WeConditionTypeListPanel, {
                 fullData    : openData.fullData,
                 condition   : openData.condition,
                 war         : openData.war,
@@ -84,12 +84,12 @@ namespace Twns.WarEvent {
         }
         private _onTouchedBtnWeatherType(): void {
             const condition = this._getCondition();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseWeatherTypePanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseWeatherTypePanel, {
                 gameConfig              : this._getOpenData().war.getGameConfig(),
                 currentWeatherTypeArray : condition.weatherTypeArray ?? [],
                 callbackOnConfirm       : weatherTypeArray => {
                     condition.weatherTypeArray = weatherTypeArray;
-                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -103,7 +103,7 @@ namespace Twns.WarEvent {
             } else {
                 condition.hasFogCurrently = null;
             }
-            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _updateView(): void {
@@ -131,12 +131,13 @@ namespace Twns.WarEvent {
             const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
-            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
+            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelWeatherType(): void {
             const weatherTypeArray      = this._getCondition().weatherTypeArray;
-            this._labelWeatherType.text = weatherTypeArray?.length ? weatherTypeArray.map(v => Lang.getWeatherName(v)).join(`, `) : Lang.getText(LangTextType.B0776);
+            const gameConfig            = this._getOpenData().war.getGameConfig();
+            this._labelWeatherType.text = weatherTypeArray?.length ? weatherTypeArray.map(v => Lang.getWeatherName(v, gameConfig)).join(`, `) : Lang.getText(LangTextType.B0776);
         }
         private _updateLabelHasFogCurrently(): void {
             const hasFogCurrently           = this._getCondition().hasFogCurrently;
@@ -144,7 +145,7 @@ namespace Twns.WarEvent {
         }
 
         private _getCondition(): CommonProto.WarEvent.IWecWeatherAndFog {
-            return Twns.Helpers.getExisted(this._getOpenData().condition.WecWeatherAndFog);
+            return Helpers.getExisted(this._getOpenData().condition.WecWeatherAndFog);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {
             this._imgInnerTouchMask.visible = isEnabled;

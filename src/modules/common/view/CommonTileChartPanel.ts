@@ -199,7 +199,7 @@ namespace Twns.Common {
                 tileDecoratorShapeId: null,
                 tileObjectType      : gameConfig.getTileTemplateCfg(tileType)?.toTileObjectType ?? null,
                 tileObjectShapeId   : 0,
-                playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : CommonConstants.PlayerIndex.Neutral,
                 gameConfig,
             });
             tileView.updateView();
@@ -330,7 +330,7 @@ namespace Twns.Common {
 
             const openData      = this._getOpenData();
             const gameConfig    = openData.gameConfig;
-            const playerIndex   = CommonConstants.WarFirstPlayerIndex;
+            const playerIndex   = CommonConstants.PlayerIndex.First;
             const dataArray     : DataForDamageRenderer[] = [];
             let index           = 0;
             for (const attackerUnitType of gameConfig.getAllUnitTypeArray()) {
@@ -854,7 +854,7 @@ namespace Twns.Common {
             this._unitView.update({
                 gameConfig,
                 gridIndex       : { x: 0, y: 0 },
-                playerIndex     : CommonConstants.WarFirstPlayerIndex,
+                playerIndex     : CommonConstants.PlayerIndex.First,
                 unitType        : data.unitType,
                 actionState     : Types.UnitActionState.Idle,
             }, Timer.getUnitAnimationTickCount());
@@ -1040,7 +1040,7 @@ namespace Twns.Common {
     }
     function createInfoCrystalRadius(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
         const mapWeaponType = tileTemplateCfg.mapWeaponType;
-        return ((mapWeaponType !== Types.MapWeaponType.Crystal) && (mapWeaponType !== Types.MapWeaponType.CustomCrystal))
+        return ((mapWeaponType !== CommonConstants.MapWeaponType.Crystal) && (mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal))
             ? null
             : {
                 index       : 0,
@@ -1050,7 +1050,7 @@ namespace Twns.Common {
             };
     }
     function createInfoCrystalPriority(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomCrystal)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1060,7 +1060,7 @@ namespace Twns.Common {
             };
     }
     function createInfoCrystalCanAffectSelf(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomCrystal)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1070,7 +1070,7 @@ namespace Twns.Common {
             };
     }
     function createInfoCrystalCanAffectAlly(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomCrystal)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1080,7 +1080,7 @@ namespace Twns.Common {
             };
     }
     function createInfoCrystalCanAffectEnemy(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomCrystal)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1090,7 +1090,7 @@ namespace Twns.Common {
             };
     }
     function createInfoCrystalDeltaFund(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomCrystal)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1100,7 +1100,7 @@ namespace Twns.Common {
             };
     }
     function createInfoCrystalDeltaEnergyPercentage(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomCrystal)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1111,7 +1111,7 @@ namespace Twns.Common {
     }
     function createInfoCrystalDeltaHp(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
         const mapWeaponType = tileTemplateCfg.mapWeaponType;
-        return ((mapWeaponType !== Types.MapWeaponType.Crystal) && (mapWeaponType !== Types.MapWeaponType.CustomCrystal))
+        return ((mapWeaponType !== CommonConstants.MapWeaponType.Crystal) && (mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal))
             ? null
             : {
                 index       : 0,
@@ -1121,7 +1121,7 @@ namespace Twns.Common {
             };
     }
     function createInfoCrystalDeltaFuelPercentage(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomCrystal)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1131,7 +1131,7 @@ namespace Twns.Common {
             };
     }
     function createInfoCrystalDeltaPrimaryAmmoPercentage(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomCrystal)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1142,7 +1142,7 @@ namespace Twns.Common {
     }
     function createInfoCannonRangeForUp(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
         const mapWeaponType = tileTemplateCfg.mapWeaponType;
-        return ((mapWeaponType !== Types.MapWeaponType.CannonUp) && (mapWeaponType !== Types.MapWeaponType.CustomCannon))
+        return ((mapWeaponType !== CommonConstants.MapWeaponType.CannonUp) && (mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon))
             ? null
             : {
                 index       : 0,
@@ -1153,7 +1153,7 @@ namespace Twns.Common {
     }
     function createInfoCannonRangeForDown(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
         const mapWeaponType = tileTemplateCfg.mapWeaponType;
-        return ((mapWeaponType !== Types.MapWeaponType.CannonDown) && (mapWeaponType !== Types.MapWeaponType.CustomCannon))
+        return ((mapWeaponType !== CommonConstants.MapWeaponType.CannonDown) && (mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon))
             ? null
             : {
                 index       : 0,
@@ -1164,7 +1164,7 @@ namespace Twns.Common {
     }
     function createInfoCannonRangeForLeft(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
         const mapWeaponType = tileTemplateCfg.mapWeaponType;
-        return ((mapWeaponType !== Types.MapWeaponType.CannonLeft) && (mapWeaponType !== Types.MapWeaponType.CustomCannon))
+        return ((mapWeaponType !== CommonConstants.MapWeaponType.CannonLeft) && (mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon))
             ? null
             : {
                 index       : 0,
@@ -1175,7 +1175,7 @@ namespace Twns.Common {
     }
     function createInfoCannonRangeForRight(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
         const mapWeaponType = tileTemplateCfg.mapWeaponType;
-        return ((mapWeaponType !== Types.MapWeaponType.CannonRight) && (mapWeaponType !== Types.MapWeaponType.CustomCannon))
+        return ((mapWeaponType !== CommonConstants.MapWeaponType.CannonRight) && (mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon))
             ? null
             : {
                 index       : 0,
@@ -1185,7 +1185,7 @@ namespace Twns.Common {
             };
     }
     function createInfoCannonPriority(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomCannon)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)
             ? null
             : {
                 index       : 0,
@@ -1195,7 +1195,7 @@ namespace Twns.Common {
             };
     }
     function createInfoCannonMaxTargetCount(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomCannon)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)
             ? null
             : {
                 index       : 0,
@@ -1205,7 +1205,7 @@ namespace Twns.Common {
             };
     }
     function createInfoCannonCanAffectSelf(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomCannon)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)
             ? null
             : {
                 index       : 0,
@@ -1215,7 +1215,7 @@ namespace Twns.Common {
             };
     }
     function createInfoCannonCanAffectAlly(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomCannon)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)
             ? null
             : {
                 index       : 0,
@@ -1225,7 +1225,7 @@ namespace Twns.Common {
             };
     }
     function createInfoCannonCanAffectEnemy(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomCannon)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)
             ? null
             : {
                 index       : 0,
@@ -1236,7 +1236,7 @@ namespace Twns.Common {
     }
     function createInfoCannonDeltaHp(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
         const mapWeaponType = tileTemplateCfg.mapWeaponType;
-        return ((mapWeaponType !== Types.MapWeaponType.CannonRight) && (mapWeaponType !== Types.MapWeaponType.CannonLeft) && (mapWeaponType !== Types.MapWeaponType.CannonDown) && (mapWeaponType !== Types.MapWeaponType.CannonUp) && (mapWeaponType !== Types.MapWeaponType.CustomCannon))
+        return ((mapWeaponType !== CommonConstants.MapWeaponType.CannonRight) && (mapWeaponType !== CommonConstants.MapWeaponType.CannonLeft) && (mapWeaponType !== CommonConstants.MapWeaponType.CannonDown) && (mapWeaponType !== CommonConstants.MapWeaponType.CannonUp) && (mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon))
             ? null
             : {
                 index       : 0,
@@ -1246,7 +1246,7 @@ namespace Twns.Common {
             };
     }
     function createInfoCannonDeltaFuelPercentage(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomCannon)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)
             ? null
             : {
                 index       : 0,
@@ -1256,7 +1256,7 @@ namespace Twns.Common {
             };
     }
     function createInfoCannonDeltaPrimaryAmmoPercentage(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomCannon)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)
             ? null
             : {
                 index       : 0,
@@ -1267,7 +1267,7 @@ namespace Twns.Common {
     }
     function createInfoLaserTurretRangeForUp(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
         const mapWeaponType = tileTemplateCfg.mapWeaponType;
-        return ((mapWeaponType !== Types.MapWeaponType.CustomLaserTurret) && (mapWeaponType !== Types.MapWeaponType.LaserTurret))
+        return ((mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret) && (mapWeaponType !== CommonConstants.MapWeaponType.LaserTurret))
             ? null
             : {
                 index       : 0,
@@ -1278,7 +1278,7 @@ namespace Twns.Common {
     }
     function createInfoLaserTurretRangeForDown(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
         const mapWeaponType = tileTemplateCfg.mapWeaponType;
-        return ((mapWeaponType !== Types.MapWeaponType.CustomLaserTurret) && (mapWeaponType !== Types.MapWeaponType.LaserTurret))
+        return ((mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret) && (mapWeaponType !== CommonConstants.MapWeaponType.LaserTurret))
             ? null
             : {
                 index       : 0,
@@ -1289,7 +1289,7 @@ namespace Twns.Common {
     }
     function createInfoLaserTurretRangeForLeft(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
         const mapWeaponType = tileTemplateCfg.mapWeaponType;
-        return ((mapWeaponType !== Types.MapWeaponType.CustomLaserTurret) && (mapWeaponType !== Types.MapWeaponType.LaserTurret))
+        return ((mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret) && (mapWeaponType !== CommonConstants.MapWeaponType.LaserTurret))
             ? null
             : {
                 index       : 0,
@@ -1300,7 +1300,7 @@ namespace Twns.Common {
     }
     function createInfoLaserTurretRangeForRight(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
         const mapWeaponType = tileTemplateCfg.mapWeaponType;
-        return ((mapWeaponType !== Types.MapWeaponType.CustomLaserTurret) && (mapWeaponType !== Types.MapWeaponType.LaserTurret))
+        return ((mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret) && (mapWeaponType !== CommonConstants.MapWeaponType.LaserTurret))
             ? null
             : {
                 index       : 0,
@@ -1310,7 +1310,7 @@ namespace Twns.Common {
             };
     }
     function createInfoLaserTurretPriority(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomLaserTurret)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)
             ? null
             : {
                 index       : 0,
@@ -1320,7 +1320,7 @@ namespace Twns.Common {
             };
     }
     function createInfoLaserTurretCanAffectSelf(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomLaserTurret)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)
             ? null
             : {
                 index       : 0,
@@ -1330,7 +1330,7 @@ namespace Twns.Common {
             };
     }
     function createInfoLaserTurretCanAffectAlly(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomLaserTurret)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)
             ? null
             : {
                 index       : 0,
@@ -1340,7 +1340,7 @@ namespace Twns.Common {
             };
     }
     function createInfoLaserTurretCanAffectEnemy(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomLaserTurret)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)
             ? null
             : {
                 index       : 0,
@@ -1351,7 +1351,7 @@ namespace Twns.Common {
     }
     function createInfoLaserTurretDeltaHp(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
         const mapWeaponType = tileTemplateCfg.mapWeaponType;
-        return ((mapWeaponType !== Types.MapWeaponType.CustomLaserTurret) && (mapWeaponType !== Types.MapWeaponType.LaserTurret))
+        return ((mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret) && (mapWeaponType !== CommonConstants.MapWeaponType.LaserTurret))
             ? null
             : {
                 index       : 0,
@@ -1361,7 +1361,7 @@ namespace Twns.Common {
             };
     }
     function createInfoLaserTurretDeltaFuelPercentage(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomLaserTurret)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)
             ? null
             : {
                 index       : 0,
@@ -1371,7 +1371,7 @@ namespace Twns.Common {
             };
     }
     function createInfoLaserTurretDeltaPrimaryAmmoPercentage(tileTemplateCfg: Types.TileTemplateCfg, gameConfig: Config.GameConfig): DataForInfoRenderer | null {
-        return (tileTemplateCfg.mapWeaponType !== Types.MapWeaponType.CustomLaserTurret)
+        return (tileTemplateCfg.mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)
             ? null
             : {
                 index       : 0,

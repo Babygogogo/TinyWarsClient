@@ -31,7 +31,7 @@ namespace Twns.BaseWar {
             const playerArray = data.players;
             if ((!playerArray)                                              ||
                 (playerArray.length < 3)                                    ||
-                (playerArray.length > Twns.CommonConstants.WarMaxPlayerIndex + 1)
+                (playerArray.length > Twns.CommonConstants.PlayerIndex.Max + 1)
             ) {
                 throw Twns.Helpers.newError(`Invalid playerArray.`, ClientErrorCode.BwPlayerManager_Init_01);
             }
@@ -56,17 +56,17 @@ namespace Twns.BaseWar {
                 newPlayerMap.set(playerIndex, player);
             }
 
-            if (!newPlayerMap.has(Twns.CommonConstants.WarNeutralPlayerIndex)) {
+            if (!newPlayerMap.has(Twns.CommonConstants.PlayerIndex.Neutral)) {
                 throw Twns.Helpers.newError(`No WarNeutralPlayerIndex.`, ClientErrorCode.BwPlayerManager_Init_04);
             }
 
             for (const [playerIndex] of newPlayerMap) {
-                if ((playerIndex > Twns.CommonConstants.WarNeutralPlayerIndex) && (!newPlayerMap.has(playerIndex - 1))) {
+                if ((playerIndex > Twns.CommonConstants.PlayerIndex.Neutral) && (!newPlayerMap.has(playerIndex - 1))) {
                     throw Twns.Helpers.newError(`Non-continuous`, ClientErrorCode.BwPlayerManager_Init_05);
                 }
             }
 
-            if ((newPlayerMap.size < 3) || (newPlayerMap.size > Twns.CommonConstants.WarMaxPlayerIndex + 1)) {
+            if ((newPlayerMap.size < 3) || (newPlayerMap.size > Twns.CommonConstants.PlayerIndex.Max + 1)) {
                 throw Twns.Helpers.newError(`Invalid playersCount: ${newPlayerMap.size}`, ClientErrorCode.BwPlayerManager_Init_06);
             }
 
@@ -184,7 +184,7 @@ namespace Twns.BaseWar {
             let count = 0;
             for (const [playerIndex, player] of this._players) {
                 if ((player.getAliveState() !== PlayerAliveState.Dead)                          &&
-                    ((includeNeutral) || (playerIndex !== Twns.CommonConstants.WarNeutralPlayerIndex))
+                    ((includeNeutral) || (playerIndex !== Twns.CommonConstants.PlayerIndex.Neutral))
                 ) {
                     ++count;
                 }
@@ -197,7 +197,7 @@ namespace Twns.BaseWar {
             for (const [playerIndex, player] of this._players) {
                 const aliveState = player.getAliveState();
                 if (((aliveState === PlayerAliveState.Alive) || (aliveState === PlayerAliveState.Dying))   &&
-                    ((includeNeutral) || (playerIndex !== Twns.CommonConstants.WarNeutralPlayerIndex))
+                    ((includeNeutral) || (playerIndex !== Twns.CommonConstants.PlayerIndex.Neutral))
                 ) {
                     teamIndexes.add(player.getTeamIndex());
                 }
@@ -237,7 +237,7 @@ namespace Twns.BaseWar {
 
         public checkHasAliveWatcherTeam(watcherUserId: number): boolean {
             for (const [playerIndex, player] of this._players) {
-                if ((playerIndex !== Twns.CommonConstants.WarNeutralPlayerIndex) &&
+                if ((playerIndex !== Twns.CommonConstants.PlayerIndex.Neutral) &&
                     (player.getAliveState() !== PlayerAliveState.Dead)
                 ) {
                     if ((player.getUserId() === watcherUserId) || (player.getWatchOngoingSrcUserIds().has(watcherUserId))) {

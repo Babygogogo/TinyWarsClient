@@ -194,7 +194,7 @@ namespace Twns.WarHelpers.WarRobot {
         const commonSettingManager  = war.getCommonSettingManager();
         for (const player of war.getPlayerManager().getAllPlayers()) {
             const playerIndex = player.getPlayerIndex();
-            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+            if (playerIndex === CommonConstants.PlayerIndex.Neutral) {
                 continue;
             }
 
@@ -204,7 +204,7 @@ namespace Twns.WarHelpers.WarRobot {
 
         for (const tile of war.getTileMap().getAllTiles()) {
             const playerIndex = tile.getPlayerIndex();
-            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+            if (playerIndex === CommonConstants.PlayerIndex.Neutral) {
                 continue;
             }
 
@@ -224,13 +224,13 @@ namespace Twns.WarHelpers.WarRobot {
         await Helpers.checkAndCallLater();
 
         const globalDefenseBonuses = new Map<number, number>();
-        for (let playerIndex = war.getPlayerManager().getTotalPlayersCount(false); playerIndex > CommonConstants.WarNeutralPlayerIndex; --playerIndex) {
+        for (let playerIndex = war.getPlayerManager().getTotalPlayersCount(false); playerIndex > CommonConstants.PlayerIndex.Neutral; --playerIndex) {
             globalDefenseBonuses.set(playerIndex, 0);
         }
 
         for (const tile of war.getTileMap().getAllTiles()) {
             const playerIndex = tile.getPlayerIndex();
-            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+            if (playerIndex === CommonConstants.PlayerIndex.Neutral) {
                 continue;
             }
 
@@ -251,7 +251,7 @@ namespace Twns.WarHelpers.WarRobot {
 
         const luckValues            = new Map<number, number>();
         const commonSettingManager  = war.getCommonSettingManager();
-        for (let playerIndex = war.getPlayerManager().getTotalPlayersCount(false); playerIndex > CommonConstants.WarNeutralPlayerIndex; --playerIndex) {
+        for (let playerIndex = war.getPlayerManager().getTotalPlayersCount(false); playerIndex > CommonConstants.PlayerIndex.Neutral; --playerIndex) {
             const upperLimit = commonSettingManager.getSettingsLuckUpperLimit(playerIndex);
             const lowerLimit = commonSettingManager.getSettingsLuckLowerLimit(playerIndex);
             luckValues.set(playerIndex, (upperLimit + lowerLimit) / 2);
@@ -1079,7 +1079,7 @@ namespace Twns.WarHelpers.WarRobot {
         if (aiScoreArrayForStay) {
             if (tileTeamIndex === unitTeamIndex) {
                 totalScore += aiScoreArrayForStay[0] ?? 0;
-            } else if (tileTeamIndex !== CommonConstants.WarNeutralTeamIndex) {
+            } else if (tileTeamIndex !== CommonConstants.TeamIndex.Neutral) {
                 totalScore += aiScoreArrayForStay[1] ?? 0;
             }
         }
@@ -2132,7 +2132,7 @@ namespace Twns.WarHelpers.WarRobot {
         await Helpers.checkAndCallLater();
 
         const { war, playerIndexInTurn } = commonParams;
-        if (playerIndexInTurn === CommonConstants.WarNeutralPlayerIndex) {
+        if (playerIndexInTurn === CommonConstants.PlayerIndex.Neutral) {
             return null;
         }
 
@@ -3027,7 +3027,7 @@ namespace Twns.WarHelpers.WarRobot {
     ];
     async function doGetNextAction(war: BwWar): Promise<IWarActionContainer> {
         const commonParams = await getCommonParams(war);
-        if (war.getPlayerIndexInTurn() === CommonConstants.WarNeutralPlayerIndex) {
+        if (war.getPlayerIndexInTurn() === CommonConstants.PlayerIndex.Neutral) {
             throw Helpers.newError(`Invalid playerIndexInTurn.`, ClientErrorCode.SpwRobot_DoGetNextAction_00);
         }
 

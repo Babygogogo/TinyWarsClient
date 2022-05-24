@@ -210,7 +210,7 @@ namespace Twns.SinglePlayerMode.SpmModel {
             warData.turnManager = {
                 turnIndex       : CommonConstants.WarFirstTurnIndex,
                 turnPhaseCode   : Types.TurnPhaseCode.WaitBeginTurn,
-                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex     : CommonConstants.PlayerIndex.Neutral,
                 enterTurnTime   : 0,
             };
         }

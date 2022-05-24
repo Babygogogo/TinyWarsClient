@@ -48,16 +48,16 @@ namespace Twns.MapEditor.MeSimModel {
         const settingsForCommon = Helpers.getExisted(getWarData().settingsForCommon);
         const mapRawData        = getMapRawData();
         const playersCount      = Helpers.getExisted(mapRawData.playersCountUnneutral);
+        const gameConfig        = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
 
         if (templateWarRuleId == null) {
-            settingsForCommon.instanceWarRule = WarHelpers.WarRuleHelpers.createDefaultInstanceWarRule(playersCount);
+            settingsForCommon.instanceWarRule = WarHelpers.WarRuleHelpers.createDefaultInstanceWarRule(playersCount, gameConfig);
         } else {
             const templateWarRule               = Helpers.getExisted(mapRawData.templateWarRuleArray?.find(v => v.ruleId === templateWarRuleId));
             settingsForCommon.instanceWarRule   = WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRule, mapRawData.warEventFullData);
         }
 
-        const gameConfig = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
-        for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
+        for (let playerIndex = CommonConstants.PlayerIndex.First; playerIndex <= playersCount; ++playerIndex) {
             setCoId(playerIndex, WarHelpers.WarRuleHelpers.getRandomCoIdWithSettingsForCommon(settingsForCommon.instanceWarRule, playerIndex, gameConfig));
         }
     }
@@ -101,7 +101,7 @@ namespace Twns.MapEditor.MeSimModel {
     }
     export function tickUnitAndTileSkinId(playerIndex: number): void {
         const currSkinId        = getUnitAndTileSkinId(playerIndex);
-        const newSkinId         = currSkinId % Twns.CommonConstants.UnitAndTileMaxSkinId + 1;
+        const newSkinId         = currSkinId % CommonConstants.UnitAndTileMaxSkinId + 1;
         // const existingPlayer    = getWarData().playerManager?.players?.find(v => v.unitAndTileSkinId === newSkinId);
         // if (existingPlayer) {
         //     setUnitAndTileSkinId(Helpers.getExisted(existingPlayer.playerIndex), currSkinId);

@@ -102,7 +102,7 @@ namespace Twns.Common {
             rendererArray.length    = 0;
 
             for (const player of war.getPlayerManager().getAllPlayers().sort((v1, v2) => v1.getPlayerIndex() - v2.getPlayerIndex())) {
-                if (player.getPlayerIndex() == Twns.CommonConstants.WarNeutralPlayerIndex) {
+                if (player.getPlayerIndex() == Twns.CommonConstants.PlayerIndex.Neutral) {
                     continue;
                 }
 

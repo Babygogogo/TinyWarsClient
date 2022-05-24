@@ -177,7 +177,7 @@ namespace Twns.MapEditor.MeHelpers {
             baseType        : tileBaseType,
             decoratorType   : null,
             objectType      : CommonConstants.TileObjectType.Empty,
-            playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+            playerIndex     : CommonConstants.PlayerIndex.Neutral,
         };
     }
 
@@ -186,7 +186,7 @@ namespace Twns.MapEditor.MeHelpers {
         const mapRawData                    = Helpers.deepClone(Helpers.getExisted(data.mapRawData));
         const templateWarRuleArray          = mapRawData.templateWarRuleArray;
         const unitDataArray                 = mapRawData.unitDataArray || [];
-        const templateWarRule               = createRevisedTemplateWarRuleForMeWar(templateWarRuleArray ? templateWarRuleArray[0] : null);
+        const templateWarRule               = createRevisedTemplateWarRuleForMeWar(templateWarRuleArray ? templateWarRuleArray[0] : null, await Config.ConfigManager.getLatestGameConfig());
         const instanceWarRule               = WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRule, mapRawData.warEventFullData);
         instanceWarRule.warEventFullData    = mapRawData.warEventFullData;
         return {
@@ -209,7 +209,7 @@ namespace Twns.MapEditor.MeHelpers {
             turnManager             : {
                 turnIndex       : CommonConstants.WarFirstTurnIndex,
                 turnPhaseCode   : Types.TurnPhaseCode.WaitBeginTurn,
-                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex     : CommonConstants.PlayerIndex.Neutral,
                 enterTurnTime   : 0,
             },
             field                   : {
@@ -229,7 +229,7 @@ namespace Twns.MapEditor.MeHelpers {
     }
     function createISerialPlayerManager(): WarSerialization.ISerialPlayerManager {
         const players: WarSerialization.ISerialPlayer[] = [];
-        for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+        for (let playerIndex = CommonConstants.PlayerIndex.Neutral; playerIndex <= CommonConstants.PlayerIndex.Max; ++playerIndex) {
             players.push(createDefaultISerialPlayer(playerIndex));
         }
 
@@ -254,20 +254,20 @@ namespace Twns.MapEditor.MeHelpers {
         };
     }
 
-    export function createRevisedTemplateWarRuleArrayForMeWar(srcTemplateWarRuleArray: Types.Undefinable<ITemplateWarRule[]>): ITemplateWarRule[] {
+    export function createRevisedTemplateWarRuleArrayForMeWar(srcTemplateWarRuleArray: Types.Undefinable<ITemplateWarRule[]>, gameConfig: Config.GameConfig): ITemplateWarRule[] {
         if (!srcTemplateWarRuleArray?.length) {
-            return [createRevisedTemplateWarRuleForMeWar(null)];
+            return [createRevisedTemplateWarRuleForMeWar(null, gameConfig)];
         } else {
             const revisedTemplateWarRuleArray: ITemplateWarRule[] = [];
             for (const templateWarRule of srcTemplateWarRuleArray) {
-                revisedTemplateWarRuleArray.push(createRevisedTemplateWarRuleForMeWar(templateWarRule));
+                revisedTemplateWarRuleArray.push(createRevisedTemplateWarRuleForMeWar(templateWarRule, gameConfig));
             }
             return revisedTemplateWarRuleArray;
         }
     }
-    function createRevisedTemplateWarRuleForMeWar(templateWarRule: Types.Undefinable<ITemplateWarRule>): ITemplateWarRule {
+    function createRevisedTemplateWarRuleForMeWar(templateWarRule: Types.Undefinable<ITemplateWarRule>, gameConfig: Config.GameConfig): ITemplateWarRule {
         if (templateWarRule == null) {
-            return WarHelpers.WarRuleHelpers.createDefaultTemplateWarRule(0, CommonConstants.WarMaxPlayerIndex);
+            return WarHelpers.WarRuleHelpers.createDefaultTemplateWarRule(0, CommonConstants.PlayerIndex.Max, gameConfig);
         } else {
             const revisedTemplateWarRule            = Helpers.deepClone(templateWarRule);
             revisedTemplateWarRule.ruleForPlayers   = createRevisedRuleForPlayersForMeWar(revisedTemplateWarRule.ruleForPlayers);
@@ -278,11 +278,11 @@ namespace Twns.MapEditor.MeHelpers {
         const playerRuleArray = ruleForPlayers?.playerRuleDataArray;
         if (playerRuleArray == null) {
             return {
-                playerRuleDataArray : WarHelpers.WarRuleHelpers.createDefaultPlayerRuleList(CommonConstants.WarMaxPlayerIndex),
+                playerRuleDataArray : WarHelpers.WarRuleHelpers.createDefaultPlayerRuleList(CommonConstants.PlayerIndex.Max),
             };
         } else {
             const revisedPlayerRuleArray: CommonProto.WarRule.IDataForPlayerRule[] = [];
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+            for (let playerIndex = CommonConstants.PlayerIndex.First; playerIndex <= CommonConstants.PlayerIndex.Max; ++playerIndex) {
                 revisedPlayerRuleArray.push(Helpers.deepClone(playerRuleArray.find(v => v.playerIndex === playerIndex)) ?? WarHelpers.WarRuleHelpers.createDefaultPlayerRule(playerIndex));
             }
             return {
@@ -950,8 +950,8 @@ namespace Twns.MapEditor.MeHelpers {
     function getErrorCodeForPlayersCountUnneutral(mapRawData: IMapRawData): ClientErrorCode {
         const playersCountUnneutral = mapRawData.playersCountUnneutral;
         if ((playersCountUnneutral == null)                                 ||
-            (playersCountUnneutral <= CommonConstants.WarFirstPlayerIndex)  ||
-            (playersCountUnneutral > CommonConstants.WarMaxPlayerIndex)
+            (playersCountUnneutral <= CommonConstants.PlayerIndex.First)  ||
+            (playersCountUnneutral > CommonConstants.PlayerIndex.Max)
         ) {
             return ClientErrorCode.MeHelpers_GetErrorCodeForPlayersCountUnneutral_00;
         }
@@ -960,7 +960,7 @@ namespace Twns.MapEditor.MeHelpers {
         for (const tileData of mapRawData.tileDataArray || []) {
             const playerIndex = tileData.playerIndex;
             if ((playerIndex == null)                                   ||
-                (playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                (playerIndex < CommonConstants.PlayerIndex.Neutral)   ||
                 (playerIndex > playersCountUnneutral)
             ) {
                 return ClientErrorCode.MeHelpers_GetErrorCodeForPlayersCountUnneutral_01;
@@ -970,7 +970,7 @@ namespace Twns.MapEditor.MeHelpers {
         for (const unitData of mapRawData.unitDataArray || []) {
             const playerIndex = unitData.playerIndex;
             if ((playerIndex == null)                                   ||
-                (playerIndex < CommonConstants.WarFirstPlayerIndex)     ||
+                (playerIndex < CommonConstants.PlayerIndex.First)     ||
                 (playerIndex > playersCountUnneutral)
             ) {
                 return ClientErrorCode.MeHelpers_GetErrorCodeForPlayersCountUnneutral_02;
@@ -979,7 +979,7 @@ namespace Twns.MapEditor.MeHelpers {
         }
 
         for (const playerIndex of playerIndexSet) {
-            if ((playerIndex > CommonConstants.WarFirstPlayerIndex) &&
+            if ((playerIndex > CommonConstants.PlayerIndex.First) &&
                 (!playerIndexSet.has(playerIndex - 1))
             ) {
                 return ClientErrorCode.MeHelpers_GetErrorCodeForPlayersCountUnneutral_03;

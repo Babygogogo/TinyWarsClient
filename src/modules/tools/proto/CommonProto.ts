@@ -3221,6 +3221,9 @@ declare namespace CommonProto {
             /** WeatherCfg weatherType */
             weatherType?: (number|null);
 
+            /** WeatherCfg isDefault */
+            isDefault?: (number|null);
+
             /** WeatherCfg fog */
             fog?: (number|null);
 
@@ -3235,6 +3238,18 @@ declare namespace CommonProto {
 
             /** WeatherCfg tileVisionFixed */
             tileVisionFixed?: (number[]|null);
+
+            /** WeatherCfg icon */
+            icon?: (string|null);
+
+            /** WeatherCfg lang */
+            lang?: (number|null);
+
+            /** WeatherCfg anim */
+            anim?: (number|null);
+
+            /** WeatherCfg tileTheme */
+            tileTheme?: (number|null);
         }
 
         /** Represents a WeatherCfg. */
@@ -3248,6 +3263,9 @@ declare namespace CommonProto {
 
             /** WeatherCfg weatherType. */
             public weatherType: number;
+
+            /** WeatherCfg isDefault. */
+            public isDefault: number;
 
             /** WeatherCfg fog. */
             public fog: number;
@@ -3263,6 +3281,18 @@ declare namespace CommonProto {
 
             /** WeatherCfg tileVisionFixed. */
             public tileVisionFixed: number[];
+
+            /** WeatherCfg icon. */
+            public icon: string;
+
+            /** WeatherCfg lang. */
+            public lang: number;
+
+            /** WeatherCfg anim. */
+            public anim: number;
+
+            /** WeatherCfg tileTheme. */
+            public tileTheme: number;
 
             /**
              * Creates a new WeatherCfg instance using the specified properties.

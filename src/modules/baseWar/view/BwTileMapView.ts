@@ -271,7 +271,7 @@ namespace Twns.BaseWar {
                     matrix.length = mapWidth;
                 }
 
-                for (let playerIndex = playersCount + 1; playerIndex <= Twns.CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+                for (let playerIndex = playersCount + 1; playerIndex <= Twns.CommonConstants.PlayerIndex.Max; ++playerIndex) {
                     for (const column of imageDict.get(playerIndex) || []) {
                         for (const img of column || []) {
                             (img) && (img.parent) && (img.parent.removeChild(img));

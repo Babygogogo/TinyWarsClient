@@ -648,7 +648,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const playerIndex   = action.playerIndex;
         if ((playerIndex == null)                                   ||
-            (playerIndex <= CommonConstants.WarNeutralPlayerIndex)  ||
+            (playerIndex <= CommonConstants.PlayerIndex.Neutral)  ||
             (playerIndex > playersCountUnneutral)
         ) {
             return false;
@@ -674,7 +674,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const playerIndex   = action.playerIndex;
         if ((playerIndex == null)                                   ||
-            (playerIndex <= CommonConstants.WarNeutralPlayerIndex)  ||
+            (playerIndex <= CommonConstants.PlayerIndex.Neutral)  ||
             (playerIndex > playersCountUnneutral)
         ) {
             return false;
@@ -700,7 +700,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const playerIndex   = action.playerIndex;
         if ((playerIndex == null)                                   ||
-            (playerIndex <= CommonConstants.WarNeutralPlayerIndex)  ||
+            (playerIndex <= CommonConstants.PlayerIndex.Neutral)  ||
             (playerIndex > playersCountUnneutral)
         ) {
             return false;
@@ -1162,7 +1162,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return false;
         }
         if ((playerIndexEqualTo == null)                                ||
-            (playerIndexEqualTo < CommonConstants.WarFirstPlayerIndex)  ||
+            (playerIndexEqualTo < CommonConstants.PlayerIndex.First)  ||
             (playerIndexEqualTo > playersCountUnneutral)
         ) {
             return false;
@@ -1191,7 +1191,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             if (playerIndexArray) {
                 const playerIndexSet = new Set<number>();
                 for (const playerIndex of playerIndexArray) {
-                    if ((playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                    if ((playerIndex < CommonConstants.PlayerIndex.Neutral)   ||
                         (playerIndex > playersCountUnneutral)                   ||
                         (playerIndexSet.has(playerIndex))
                     ) {
@@ -1325,7 +1325,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             if (playerIndexArray) {
                 const playerIndexSet = new Set<number>();
                 for (const playerIndex of playerIndexArray) {
-                    if ((playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                    if ((playerIndex < CommonConstants.PlayerIndex.Neutral)   ||
                         (playerIndex > playersCountUnneutral)                   ||
                         (playerIndexSet.has(playerIndex))
                     ) {
@@ -1346,7 +1346,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const valueEqualTo = condition.valueEqualTo;
         return (valueEqualTo != null)
-            && (valueEqualTo >= CommonConstants.WarNeutralPlayerIndex)
+            && (valueEqualTo >= CommonConstants.PlayerIndex.Neutral)
             && (valueEqualTo <= playersCountUnneutral);
     }
     function checkIsValidWecPlayerIndexInTurnGreaterThan(condition: Types.Undefinable<CommonProto.WarEvent.IWecPlayerIndexInTurnGreaterThan>, playersCountUnneutral: number): boolean {
@@ -1356,7 +1356,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const valueEqualTo = condition.valueGreaterThan;
         return (valueEqualTo != null)
-            && (valueEqualTo >= CommonConstants.WarNeutralPlayerIndex)
+            && (valueEqualTo >= CommonConstants.PlayerIndex.Neutral)
             && (valueEqualTo <= playersCountUnneutral);
     }
     function checkIsValidWecPlayerIndexInTurnLessThan(condition: Types.Undefinable<CommonProto.WarEvent.IWecPlayerIndexInTurnLessThan>, playersCountUnneutral: number): boolean {
@@ -1366,7 +1366,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const valueEqualTo = condition.valueLessThan;
         return (valueEqualTo != null)
-            && (valueEqualTo >= CommonConstants.WarNeutralPlayerIndex)
+            && (valueEqualTo >= CommonConstants.PlayerIndex.Neutral)
             && (valueEqualTo <= playersCountUnneutral);
     }
     function checkIsValidWecTurnPhaseEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecTurnPhaseEqualTo>): boolean {
@@ -1453,7 +1453,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         if (playerIndexArray) {
             const playerIndexSet = new Set<number>();
             for (const playerIndex of playerIndexArray) {
-                if ((playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                if ((playerIndex < CommonConstants.PlayerIndex.Neutral)   ||
                     (playerIndex > playersCountUnneutral)                   ||
                     (playerIndexSet.has(playerIndex))
                 ) {
@@ -1467,7 +1467,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         if (teamIndexArray) {
             const teamIndexSet = new Set<number>();
             for (const teamIndex of teamIndexArray) {
-                if ((teamIndex < CommonConstants.WarNeutralTeamIndex)   ||
+                if ((teamIndex < CommonConstants.TeamIndex.Neutral)   ||
                     (teamIndex > playersCountUnneutral)                 ||
                     (teamIndexSet.has(teamIndex))
                 ) {
@@ -1798,7 +1798,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             || (getDescForWecTurnIndexRemainderEqualTo(con.WecTurnIndexRemainderEqualTo))
             || (getDescForWecTurnAndPlayer(con.WecTurnAndPlayer))
             || (getDescForWecTurnPhaseEqualTo(con.WecTurnPhaseEqualTo))
-            || (getDescForWecWeatherAndFog(con.WecWeatherAndFog))
+            || (getDescForWecWeatherAndFog(con.WecWeatherAndFog, gameConfig))
             || (getDescForWecTilePlayerIndexEqualTo(con.WecTilePlayerIndexEqualTo))
             || (getDescForWecTileTypeEqualTo(con.WecTileTypeEqualTo, gameConfig))
             || (getDescForWecTilePresence(con.WecTilePresence, gameConfig))
@@ -2010,14 +2010,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0057 : LangTextType.F0058, Lang.getTurnPhaseName(Helpers.getExisted(data.valueEqualTo)))
             : null;
     }
-    function getDescForWecWeatherAndFog(data: Types.Undefinable<WarEvent.IWecWeatherAndFog>): string | null {
+    function getDescForWecWeatherAndFog(data: Types.Undefinable<WarEvent.IWecWeatherAndFog>, gameConfig: GameConfig): string | null {
         if (data == null) {
             return null;
         }
 
         const weatherTypeArray          = data.weatherTypeArray;
         const textForWeatherTypeArray   = weatherTypeArray?.length
-            ? weatherTypeArray.map(v => Lang.getWeatherName(v)).join(`/`)
+            ? weatherTypeArray.map(v => Lang.getWeatherName(v, gameConfig)).join(`/`)
             : Lang.getFormattedText(LangTextType.F0097, Lang.getText(LangTextType.B0705));
 
         const hasFogCurrently           = data.hasFogCurrently;
@@ -2236,7 +2236,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         return (getDescForWeaAddUnit(action.WeaAddUnit, gameConfig))
             || (getDescForWeaDialogue(action.WeaDialogue, gameConfig))
             || (getDescForWeaSetViewpoint(action.WeaSetViewpoint))
-            || (getDescForWeaSetWeather(action.WeaSetWeather))
+            || (getDescForWeaSetWeather(action.WeaSetWeather, gameConfig))
             || (getDescForWeaSimpleDialogue(action.WeaSimpleDialogue, gameConfig))
             || (getDescForWeaPlayBgm(action.WeaPlayBgm, gameConfig))
             || (getDescForWeaSetForceFogCode(action.WeaSetForceFogCode))
@@ -2298,13 +2298,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const gridIndex = data.gridIndex;
         return Lang.getFormattedText(LangTextType.F0075, gridIndex?.x, gridIndex?.y);
     }
-    function getDescForWeaSetWeather(data: Types.Undefinable<WarEvent.IWeaSetWeather>): string | null {
+    function getDescForWeaSetWeather(data: Types.Undefinable<WarEvent.IWeaSetWeather>, gameConfig: GameConfig): string | null {
         if (data == null) {
             return null;
         }
 
         const weatherTurnsCount = Helpers.getExisted(data.weatherTurnsCount, ClientErrorCode.WarEventHelper_GetDescForWeaSetWeather_00);
-        const weatherName       = Lang.getWeatherName(Helpers.getExisted(data.weatherType, ClientErrorCode.WarEventHelper_GetDescForWeaSetWeather_01));
+        const weatherName       = Lang.getWeatherName(Helpers.getExisted(data.weatherType, ClientErrorCode.WarEventHelper_GetDescForWeaSetWeather_01), gameConfig);
         return (weatherTurnsCount == 0)
             ? Lang.getFormattedText(LangTextType.F0077, weatherName)
             : Lang.getFormattedText(LangTextType.F0076, weatherName, weatherTurnsCount);
@@ -2981,7 +2981,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         const playersCountUnneutral = war.getPlayersCountUnneutral();
-        if (data.playerIndexArray?.some(v => (v < CommonConstants.WarNeutralPlayerIndex) || (v > playersCountUnneutral))) {
+        if (data.playerIndexArray?.some(v => (v < CommonConstants.PlayerIndex.Neutral) || (v > playersCountUnneutral))) {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
         }
 
@@ -3109,7 +3109,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const playersCountUnneutral = war.getPlayersCountUnneutral();
-            if (data.playerIndexArray?.some(v => (v < CommonConstants.WarNeutralPlayerIndex) || (v > playersCountUnneutral))) {
+            if (data.playerIndexArray?.some(v => (v < CommonConstants.PlayerIndex.Neutral) || (v > playersCountUnneutral))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
             }
         }
@@ -3149,7 +3149,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const playerIndex = data.playerIndex;
         if ((playerIndex == null)                                               ||
-            (playerIndex < CommonConstants.WarNeutralPlayerIndex)               ||
+            (playerIndex < CommonConstants.PlayerIndex.Neutral)               ||
             (playerIndex > war.getPlayerManager().getTotalPlayersCount(true))
         ) {
             return Lang.getText(LangTextType.A0255);
@@ -3198,10 +3198,10 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         const playersCountUnneutral = war.getPlayersCountUnneutral();
-        if (data.playerIndexArray?.some(v => (v < CommonConstants.WarNeutralPlayerIndex) || (v > playersCountUnneutral))) {
+        if (data.playerIndexArray?.some(v => (v < CommonConstants.PlayerIndex.Neutral) || (v > playersCountUnneutral))) {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
         }
-        if (data.teamIndexArray?.some(v => (v < CommonConstants.WarNeutralTeamIndex) || (v > playersCountUnneutral))) {
+        if (data.teamIndexArray?.some(v => (v < CommonConstants.TeamIndex.Neutral) || (v > playersCountUnneutral))) {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0377));
         }
 
@@ -3237,10 +3237,10 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         const playersCountUnneutral = war.getPlayersCountUnneutral();
-        if (data.playerIndexArray?.some(v => (v < CommonConstants.WarNeutralPlayerIndex) || (v > playersCountUnneutral))) {
+        if (data.playerIndexArray?.some(v => (v < CommonConstants.PlayerIndex.Neutral) || (v > playersCountUnneutral))) {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
         }
-        if (data.teamIndexArray?.some(v => (v < CommonConstants.WarNeutralTeamIndex) || (v > playersCountUnneutral))) {
+        if (data.teamIndexArray?.some(v => (v < CommonConstants.TeamIndex.Neutral) || (v > playersCountUnneutral))) {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0377));
         }
 
@@ -3573,9 +3573,9 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const playerIndex = data.playerIndex;
         if ((playerIndex == null)                               ||
             (playerIndex > playersCountUnneutral)               ||
-            (playerIndex < CommonConstants.WarFirstPlayerIndex)
+            (playerIndex < CommonConstants.PlayerIndex.First)
         ) {
-            return `${Lang.getText(LangTextType.A0212)} (${CommonConstants.WarFirstPlayerIndex} ~ ${playersCountUnneutral})`;
+            return `${Lang.getText(LangTextType.A0212)} (${CommonConstants.PlayerIndex.First} ~ ${playersCountUnneutral})`;
         }
 
         const playerAliveState: Types.Undefinable<PlayerAliveState> = data.playerAliveState;
@@ -3596,9 +3596,9 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const playerIndex = data.playerIndex;
         if ((playerIndex == null)                               ||
             (playerIndex > playersCountUnneutral)               ||
-            (playerIndex < CommonConstants.WarFirstPlayerIndex)
+            (playerIndex < CommonConstants.PlayerIndex.First)
         ) {
-            return `${Lang.getText(LangTextType.A0212)} (${CommonConstants.WarFirstPlayerIndex} ~ ${playersCountUnneutral})`;
+            return `${Lang.getText(LangTextType.A0212)} (${CommonConstants.PlayerIndex.First} ~ ${playersCountUnneutral})`;
         }
 
         const { deltaValue, multiplierPercentage } = data;
@@ -3618,9 +3618,9 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const playerIndex = data.playerIndex;
         if ((playerIndex == null)                               ||
             (playerIndex > playersCountUnneutral)               ||
-            (playerIndex < CommonConstants.WarFirstPlayerIndex)
+            (playerIndex < CommonConstants.PlayerIndex.First)
         ) {
-            return `${Lang.getText(LangTextType.A0212)} (${CommonConstants.WarFirstPlayerIndex} ~ ${playersCountUnneutral})`;
+            return `${Lang.getText(LangTextType.A0212)} (${CommonConstants.PlayerIndex.First} ~ ${playersCountUnneutral})`;
         }
 
         const { deltaPercentage, multiplierPercentage } = data;
@@ -4319,17 +4319,17 @@ namespace Twns.WarHelpers.WarEventHelpers {
         } else if (conditionType === ConditionType.WecPlayerIndexInTurnEqualTo) {
             condition.WecPlayerIndexInTurnEqualTo = {
                 isNot           : false,
-                valueEqualTo    : CommonConstants.WarFirstPlayerIndex,
+                valueEqualTo    : CommonConstants.PlayerIndex.First,
             };
         } else if (conditionType === ConditionType.WecPlayerIndexInTurnGreaterThan) {
             condition.WecPlayerIndexInTurnGreaterThan = {
                 isNot           : false,
-                valueGreaterThan: CommonConstants.WarFirstPlayerIndex,
+                valueGreaterThan: CommonConstants.PlayerIndex.First,
             };
         } else if (conditionType === ConditionType.WecPlayerIndexInTurnLessThan) {
             condition.WecPlayerIndexInTurnLessThan = {
                 isNot           : false,
-                valueLessThan   : CommonConstants.WarFirstPlayerIndex,
+                valueLessThan   : CommonConstants.PlayerIndex.First,
             };
         } else if (conditionType === ConditionType.WecEventCalledCountTotalEqualTo) {
             condition.WecEventCalledCountTotalEqualTo = {
@@ -4362,7 +4362,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         } else if (conditionType === ConditionType.WecPlayerAliveStateEqualTo) {
             condition.WecPlayerAliveStateEqualTo = {
                 isNot               : false,
-                playerIndexEqualTo  : CommonConstants.WarFirstPlayerIndex,
+                playerIndexEqualTo  : CommonConstants.PlayerIndex.First,
                 aliveStateEqualTo   : PlayerAliveState.Alive,
             };
         } else if (conditionType === ConditionType.WecPlayerPresence) {
@@ -4559,7 +4559,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             };
         } else if (actionType === ActionType.SetWeather) {
             action.WeaSetWeather = {
-                weatherType         : Types.WeatherType.Clear,
+                weatherType         : gameConfig.getDefaultWeatherType(),
                 weatherTurnsCount   : 0,
             };
         } else if (actionType === ActionType.SimpleDialogue) {
@@ -4662,7 +4662,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             action.WeaSetTileType = {
                 actTileData     : {
                     gridIndex   : null,
-                    playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex : CommonConstants.PlayerIndex.Neutral,
                     objectType  : CommonConstants.TileObjectType.Empty,
                     baseType    : gameConfig.getDefaultTileBaseType(),
                 },
@@ -5170,7 +5170,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             needMovableTile     : true,
             unitData            : {
                 gridIndex       : { x: 0, y: 0 },
-                playerIndex     : CommonConstants.WarFirstPlayerIndex,
+                playerIndex     : CommonConstants.PlayerIndex.First,
                 unitType        : gameConfig.getFirstUnitType(),
             },
         };

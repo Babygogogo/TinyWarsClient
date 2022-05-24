@@ -64,7 +64,7 @@ namespace Twns.BaseWar {
 
                 const playerIndex = tile.getPlayerIndex();
                 if ((playerIndex == null)                                   ||
-                    (playerIndex < Twns.CommonConstants.WarNeutralPlayerIndex)   ||
+                    (playerIndex < Twns.CommonConstants.PlayerIndex.Neutral)   ||
                     (playerIndex > playersCountUnneutral)
                 ) {
                     throw Twns.Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTileMap_Init_06);

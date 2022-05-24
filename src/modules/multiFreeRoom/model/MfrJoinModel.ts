@@ -33,7 +33,7 @@ namespace Twns.MultiFreeRoom.MfrJoinModel {
         for (const player of Twns.Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.playerManager?.players)) {
             const playerIndex = Twns.Helpers.getExisted(player.playerIndex);
             if ((player.aliveState !== Twns.Types.PlayerAliveState.Dead)         &&
-                (playerIndex !== Twns.CommonConstants.WarNeutralPlayerIndex)     &&
+                (playerIndex !== Twns.CommonConstants.PlayerIndex.Neutral)     &&
                 (playerDataArray.every(v => v.playerIndex !== playerIndex))
             ) {
                 indexArray.push(playerIndex);

@@ -307,7 +307,7 @@ namespace Twns.User {
                 warType     : WarType.MrwStd,
                 playersCount: 2,
             }];
-            for (let playersCount = 2; playersCount <= CommonConstants.WarMaxPlayerIndex; ++playersCount) {
+            for (let playersCount = 2; playersCount <= CommonConstants.PlayerIndex.Max; ++playersCount) {
                 dataList.push({
                     index       : index++,
                     userId,
@@ -327,7 +327,7 @@ namespace Twns.User {
                 warType     : WarType.MrwFog,
                 playersCount: 2,
             }];
-            for (let playersCount = 2; playersCount <= CommonConstants.WarMaxPlayerIndex; ++playersCount) {
+            for (let playersCount = 2; playersCount <= CommonConstants.PlayerIndex.Max; ++playersCount) {
                 dataList.push({
                     index       : index++,
                     userId,

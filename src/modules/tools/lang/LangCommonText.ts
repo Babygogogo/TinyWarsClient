@@ -5630,6 +5630,23 @@ namespace Twns.Lang {
             `空军除舰载机`,
             `AirExceptSeaplane`,
         ],
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [LangTextType.WeatherType0000]: [
+            `正常天气`,
+            `Normal`,
+        ],
+        [LangTextType.WeatherType0001]: [
+            `沙尘暴`,
+            `Sandstorm`,
+        ],
+        [LangTextType.WeatherType0002]: [
+            `雪天`,
+            `Snowy`,
+        ],
+        [LangTextType.WeatherType0003]: [
+            `雨天`,
+            `Rainy`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Format strings.

@@ -230,7 +230,7 @@ namespace Twns.MapEditor {
                 tileDecoratorShapeId: null,
                 tileObjectShapeId   : null,
                 tileObjectType      : null,
-                playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : CommonConstants.PlayerIndex.Neutral,
                 gameConfig          : data.gameConfig,
             });
             this._tileView.updateView();

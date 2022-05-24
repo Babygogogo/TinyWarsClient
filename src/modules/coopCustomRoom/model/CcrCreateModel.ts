@@ -34,7 +34,7 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
         settingsForCcw          : {},
 
         selfCoId                : CommonConstants.CoIdEmpty,
-        selfPlayerIndex         : CommonConstants.WarFirstPlayerIndex,
+        selfPlayerIndex         : CommonConstants.PlayerIndex.First,
         selfUnitAndTileSkinId   : CommonConstants.UnitAndTileMinSkinId,
         aiSkinInfoArray         : [],
     };
@@ -53,7 +53,7 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
         setWarComment("");
         setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
         setTurnsLimit(CommonConstants.WarMaxTurnsLimit);
-        setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
+        setSelfPlayerIndex(CommonConstants.PlayerIndex.First);
         await resetDataByTemplateWarRuleId(Helpers.getExisted((await getMapRawData()).templateWarRuleArray?.find(v => v.ruleAvailability?.canCcw)?.ruleId));
     }
     export function getData(): DataForCreateRoom {

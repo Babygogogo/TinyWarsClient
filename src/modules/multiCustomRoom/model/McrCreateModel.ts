@@ -36,7 +36,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
         settingsForMcw          : {},
 
         selfCoId                : CommonConstants.CoIdEmpty,
-        selfPlayerIndex         : CommonConstants.WarFirstPlayerIndex,
+        selfPlayerIndex         : CommonConstants.PlayerIndex.First,
         selfUnitAndTileSkinId   : CommonConstants.UnitAndTileMinSkinId,
     };
     let _gameConfig: GameConfig | null = null;
@@ -54,7 +54,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
         setWarComment("");
         setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
         setTurnsLimit(CommonConstants.WarMaxTurnsLimit);
-        setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
+        setSelfPlayerIndex(CommonConstants.PlayerIndex.First);
         await resetDataByTemplateWarRuleId(Helpers.getExisted((await getMapRawData()).templateWarRuleArray?.find(v => v.ruleAvailability?.canMcw)?.ruleId));
     }
     export function getData(): DataForCreateRoom {
@@ -94,7 +94,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
     export async function resetDataByTemplateWarRuleId(templateWarRuleId: number | null): Promise<void> {
         const mapRawData = await getMapRawData();
         if (templateWarRuleId == null) {
-            const instanceWarRule = WarHelpers.WarRuleHelpers.createDefaultInstanceWarRule(Helpers.getExisted(mapRawData.playersCountUnneutral));
+            const instanceWarRule = WarHelpers.WarRuleHelpers.createDefaultInstanceWarRule(Helpers.getExisted(mapRawData.playersCountUnneutral), getGameConfig());
             setInstanceWarRule(instanceWarRule);
         } else {
             const templateWarRule = Helpers.getExisted(mapRawData.templateWarRuleArray?.find(r => r.ruleId === templateWarRuleId));

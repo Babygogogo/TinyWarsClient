@@ -148,7 +148,7 @@ namespace Twns.WarHelpers.WarActionReviser {
         if ((playerInTurn == null)                                      ||
             (playerInTurn.getAliveState() !== PlayerAliveState.Alive)   ||
             (playerIndexInTurn == null)                                 ||
-            (playerIndexInTurn === CommonConstants.WarNeutralPlayerIndex)
+            (playerIndexInTurn === CommonConstants.PlayerIndex.Neutral)
         ) {
             throw Helpers.newError(`Invalid playerIndexInTurn: ${playerIndexInTurn}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_04);
         }
@@ -213,7 +213,7 @@ namespace Twns.WarHelpers.WarActionReviser {
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null)                                                      ||
-            (playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex)   ||
+            (playerInTurn.getPlayerIndex() === CommonConstants.PlayerIndex.Neutral)   ||
             (playerInTurn.getAliveState() !== PlayerAliveState.Alive)
         ) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerSurrender_01);
@@ -235,7 +235,7 @@ namespace Twns.WarHelpers.WarActionReviser {
             throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerVoteForDraw_01);
         }
 
-        if ((playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex) ||
+        if ((playerInTurn.getPlayerIndex() === CommonConstants.PlayerIndex.Neutral) ||
             (playerInTurn.getHasVotedForDraw())
         ) {
             throw Helpers.newError(`Voted for draw.`, ClientErrorCode.WarActionReviser_RevisePlayerVoteForDraw_02);
@@ -262,7 +262,7 @@ namespace Twns.WarHelpers.WarActionReviser {
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null)                                                      ||
-            (playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex)   ||
+            (playerInTurn.getPlayerIndex() === CommonConstants.PlayerIndex.Neutral)   ||
             (playerInTurn.getAliveState() !== PlayerAliveState.Alive)
         ) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerUseCoSkill_01);
@@ -310,7 +310,7 @@ namespace Twns.WarHelpers.WarActionReviser {
         }
 
         const targetPlayerIndex = rawAction.targetPlayerIndex;
-        if ((targetPlayerIndex == null) || (targetPlayerIndex === CommonConstants.WarNeutralPlayerIndex)) {
+        if ((targetPlayerIndex == null) || (targetPlayerIndex === CommonConstants.PlayerIndex.Neutral)) {
             throw Helpers.newError(`Invalid targetPlayerIndex: ${targetPlayerIndex}`, ClientErrorCode.WarActionReviser_ReviseSystemDestroyPlayerForce_01);
         }
 
@@ -343,7 +343,7 @@ namespace Twns.WarHelpers.WarActionReviser {
             throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseSystemEndTurn_00);
         }
 
-        if ((playerInTurn.getPlayerIndex() !== CommonConstants.WarNeutralPlayerIndex)   &&
+        if ((playerInTurn.getPlayerIndex() !== CommonConstants.PlayerIndex.Neutral)   &&
             (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
         ) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_ReviseSystemEndTurn_01);
@@ -372,7 +372,7 @@ namespace Twns.WarHelpers.WarActionReviser {
             throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseSystemVoteForDraw_00);
         }
 
-        if ((playerInTurn.getPlayerIndex() !== CommonConstants.WarNeutralPlayerIndex)   &&
+        if ((playerInTurn.getPlayerIndex() !== CommonConstants.PlayerIndex.Neutral)   &&
             (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
         ) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_ReviseSystemVoteForDraw_01);

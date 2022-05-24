@@ -225,7 +225,7 @@ namespace Twns.SinglePlayerWar.SpwModel {
 
         // Handle the dying players (destroy force).
         const playersCount = playerManager.getTotalPlayersCount(false);
-        for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
+        for (let playerIndex = Twns.CommonConstants.PlayerIndex.First; playerIndex <= playersCount; ++playerIndex) {
             const player = playerManager.getPlayer(playerIndex);
             if (player.getAliveState() === Types.PlayerAliveState.Dying) {
                 await handleSystemDestroyPlayerForce(war, playerIndex);

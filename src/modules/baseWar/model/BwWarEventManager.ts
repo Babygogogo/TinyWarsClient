@@ -361,7 +361,7 @@ namespace Twns.BaseWar {
                     unitData,
                     mapSize,
                     gameConfig,
-                    playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
+                    playersCountUnneutral   : CommonConstants.PlayerIndex.Max,
                 })) {
                     throw Helpers.newError(`Invalid unitData: ${JSON.stringify(unitData)}`);
                 }
@@ -626,7 +626,7 @@ namespace Twns.BaseWar {
         private async _callActionDeprecatedSetPlayerAliveStateWithoutExtraData(action: WarEvent.IWeaDeprecatedSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
             const war = this._getWar();
             const playerIndex = action.playerIndex;
-            if ((playerIndex == null) || (playerIndex === CommonConstants.WarNeutralPlayerIndex)) {
+            if ((playerIndex == null) || (playerIndex === CommonConstants.PlayerIndex.Neutral)) {
                 throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`);
             }
 

@@ -277,7 +277,7 @@ namespace Twns.MultiFreeRoom {
             const roomId                = this._getOpenData().roomId;
             const playersCountUnneutral = Twns.Helpers.getExisted((await MfrModel.getRoomStaticInfo(roomId))?.settingsForMfw?.initialWarData?.playerManager?.players).length - 1;
             const dataArray             : DataForPlayerIndexRenderer[] = [];
-            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.PlayerIndex.First; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
                     roomId,
                     playerIndex,

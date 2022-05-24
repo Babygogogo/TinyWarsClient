@@ -155,7 +155,7 @@ namespace Twns.BaseWar {
             const war               = this._getOpenData().war;
             const playerRuleArray   = Helpers.getExisted(war.getInstanceWarRule().ruleForPlayers?.playerRuleDataArray, ClientErrorCode.BwWarInfoPanel_UpdateListPlayer_00);
             const dataArray         : DataForPlayerRenderer[] = [];
-            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playerRuleArray.length; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.PlayerIndex.First; playerIndex <= playerRuleArray.length; ++playerIndex) {
                 dataArray.push({
                     war,
                     playerIndex,

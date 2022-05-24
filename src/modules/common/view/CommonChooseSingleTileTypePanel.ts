@@ -188,7 +188,7 @@ namespace Twns.Common {
                 tileDecoratorShapeId: null,
                 tileObjectType      : objectType,
                 tileObjectShapeId   : 0,
-                playerIndex         : gameConfig.checkIsValidPlayerIndexForTileObject({ playerIndex, tileObjectType: objectType }) ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : gameConfig.checkIsValidPlayerIndexForTileObject({ playerIndex, tileObjectType: objectType }) ? playerIndex : CommonConstants.PlayerIndex.Neutral,
                 gameConfig
             });
         }

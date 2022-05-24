@@ -326,8 +326,8 @@ namespace Twns.WarEvent {
             const data              = this._getData();
             const unitData          = Helpers.getExisted(data.dataForAddUnit.unitData);
             const newPlayerIndex    = Math.max(
-                CommonConstants.WarFirstPlayerIndex,
-                Math.min(parseInt(this._inputPlayerIndex.text) || 0, CommonConstants.WarMaxPlayerIndex)
+                CommonConstants.PlayerIndex.First,
+                Math.min(parseInt(this._inputPlayerIndex.text) || 0, CommonConstants.PlayerIndex.Max)
             );
             if (newPlayerIndex !== unitData.playerIndex) {
                 unitData.playerIndex = newPlayerIndex;
@@ -631,7 +631,7 @@ namespace Twns.WarEvent {
             const playerIndex = unitData.playerIndex;
             if ((playerIndex == null)                               ||
                 (playerIndex > war.getPlayersCountUnneutral())      ||
-                (playerIndex < CommonConstants.WarFirstPlayerIndex)
+                (playerIndex < CommonConstants.PlayerIndex.First)
             ) {
                 return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0521));
             }

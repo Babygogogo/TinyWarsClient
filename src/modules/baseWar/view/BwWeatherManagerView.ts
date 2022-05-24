@@ -1,9 +1,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import ClientErrorCode  = Twns.ClientErrorCode;
-    import WeatherType      = Twns.Types.WeatherType;
-
     const RAIN_DENSITY      = 0.3;
     const RAIN_ANGLE        = 20;
     const SNOW_DENSITY      = 0.3;
@@ -12,14 +9,14 @@ namespace Twns.BaseWar {
     const SANDSTORM_ANGLE   = 70;
 
     export class BwWeatherManagerView extends eui.Component {
-        private _weatherManager?        : Twns.BaseWar.BwWeatherManager;
+        private _weatherManager?        : BaseWar.BwWeatherManager;
         private _containerForRain       = new eui.Component();
         private _imgArrayForRain        : TwnsUiImage.UiImage[] = [];
         private _containerForSnow       = new eui.Component();
         private _imgArrayForSnow        : TwnsUiImage.UiImage[] = [];
         private _containerForSandstorm  = new eui.Component();
         private _imgArrayForSandstorm   : TwnsUiImage.UiImage[] = [];
-        private _showingWeatherType     = WeatherType.Clear;
+        private _showingWeatherType     : number | null = null;
 
         public constructor() {
             super();
@@ -54,7 +51,7 @@ namespace Twns.BaseWar {
             }
         }
 
-        public init(manager: Twns.BaseWar.BwWeatherManager): void {
+        public init(manager: BaseWar.BwWeatherManager): void {
             this._setWeatherManager(manager);
         }
 
@@ -67,10 +64,10 @@ namespace Twns.BaseWar {
             this._stopView();
         }
 
-        private _getWeatherManager(): Twns.BaseWar.BwWeatherManager {
-            return Twns.Helpers.getExisted(this._weatherManager, ClientErrorCode.BwWeatherManagerView_GetWeatherManager_00);
+        private _getWeatherManager(): BaseWar.BwWeatherManager {
+            return Helpers.getExisted(this._weatherManager, ClientErrorCode.BwWeatherManagerView_GetWeatherManager_00);
         }
-        private _setWeatherManager(manager: Twns.BaseWar.BwWeatherManager): void {
+        private _setWeatherManager(manager: BaseWar.BwWeatherManager): void {
             this._weatherManager = manager;
         }
 
@@ -79,19 +76,20 @@ namespace Twns.BaseWar {
         }
 
         public resetView(isForce: boolean): void {
-            const weatherType = this._getWeatherManager().getCurrentWeatherType();
+            const weatherManager    = this._getWeatherManager();
+            const weatherType       = weatherManager.getCurrentWeatherType();
             if ((!isForce) && (weatherType === this._showingWeatherType)) {
                 return;
             }
 
-            this._stopView();
-
             this._showingWeatherType = weatherType;
-            switch (weatherType) {
-                case WeatherType.Rainy      : this._showRain();         break;
-                case WeatherType.Sandstorm  : this._showSandstorm();    break;
-                case WeatherType.Snowy      : this._showSnow();         break;
-                default                     :                           break;
+
+            this._stopView();
+            switch (weatherManager.getWar().getGameConfig().getWeatherCfg(weatherType)?.anim) {
+                case CommonConstants.WeatherAnimationType.Rainy     : this._showRain();         break;
+                case CommonConstants.WeatherAnimationType.Sandstorm : this._showSandstorm();    break;
+                case CommonConstants.WeatherAnimationType.Snowy     : this._showSnow();         break;
+                default                                             :                           break;
             }
         }
         private _stopView(): void {

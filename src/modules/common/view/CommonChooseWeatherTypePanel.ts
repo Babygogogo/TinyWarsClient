@@ -14,13 +14,12 @@
 namespace Twns.Common {
     import LangTextType = Lang.LangTextType;
     import NotifyType   = Notify.NotifyType;
-    import WeatherType  = Types.WeatherType;
     import GameConfig   = Config.GameConfig;
 
     export type OpenDataForCommonChooseWeatherTypePanel = {
         gameConfig              : GameConfig;
-        currentWeatherTypeArray : WeatherType[];
-        callbackOnConfirm       : (weatherTypeArray: WeatherType[]) => void;
+        currentWeatherTypeArray : number[];
+        callbackOnConfirm       : (weatherTypeArray: number[]) => void;
     };
     export class CommonChooseWeatherTypePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseWeatherTypePanel> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -84,10 +83,14 @@ namespace Twns.Common {
         }
 
         private _updateListLocation(): void {
-            const openData  = this._getOpenData();
-            const dataArray : DataForWeatherTypeRenderer[] = [];
+            const openData      = this._getOpenData();
+            const gameConfig    = openData.gameConfig;
+            const dataArray     : DataForWeatherTypeRenderer[] = [];
             for (const weatherType of openData.gameConfig.getAvailableWeatherTypes()) {
-                dataArray.push({ weatherType });
+                dataArray.push({
+                    weatherType,
+                    gameConfig,
+                });
             }
 
             const weatherTypeArray  = openData.currentWeatherTypeArray;
@@ -98,14 +101,16 @@ namespace Twns.Common {
     }
 
     type DataForWeatherTypeRenderer = {
-        weatherType : WeatherType;
+        gameConfig  : Config.GameConfig;
+        weatherType : number;
     };
     class WeatherTypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWeatherTypeRenderer> {
         private readonly _groupShow!    : eui.Group;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = Lang.getWeatherName(this._getData().weatherType);
+            const data              = this._getData();
+            this._labelName.text    = Lang.getWeatherName(data.weatherType, data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
         }
     }
 }

@@ -58,7 +58,7 @@ namespace Twns.MapEditor {
             this.setMapDesignerName(Helpers.getExisted(mapRawData.designerName));
             this.setMapNameArray(Helpers.getExisted(mapRawData.mapNameArray));
             this.setMapDescArray(mapRawData.mapExtraText?.mapDescription ?? []);
-            this._setTemplateWarRuleArray(MapEditor.MeHelpers.createRevisedTemplateWarRuleArrayForMeWar(mapRawData.templateWarRuleArray));
+            this._setTemplateWarRuleArray(MapEditor.MeHelpers.createRevisedTemplateWarRuleArrayForMeWar(mapRawData.templateWarRuleArray, gameConfig));
             this.setMapTag(mapRawData.mapTag || {});
         }
 
@@ -302,7 +302,7 @@ namespace Twns.MapEditor {
                 playerRules.playerRuleDataArray = Helpers.getExisted(playerRules.playerRuleDataArray).filter(v => {
                     const playerIndex = Helpers.getExisted(v.playerIndex);
                     return (playerIndex <= playersCountUnneutral)
-                        && (playerIndex >= CommonConstants.WarFirstPlayerIndex);
+                        && (playerIndex >= CommonConstants.PlayerIndex.First);
                 }).sort((v1, v2) => Helpers.getExisted(v1.playerIndex) - Helpers.getExisted(v2.playerIndex));
                 revisedTemplateWarRuleArray.push(revisedRule);
             }
@@ -312,7 +312,7 @@ namespace Twns.MapEditor {
 
         public addTemplateWarRule(): void {
             const templateWarRuleArray = this.getTemplateWarRuleArray();
-            templateWarRuleArray.push(WarHelpers.WarRuleHelpers.createDefaultTemplateWarRule(templateWarRuleArray.length, CommonConstants.WarMaxPlayerIndex));
+            templateWarRuleArray.push(WarHelpers.WarRuleHelpers.createDefaultTemplateWarRule(templateWarRuleArray.length, CommonConstants.PlayerIndex.Max, this.getGameConfig()));
         }
         public deleteTemplateWarRule(templateWarRuleId: number): void {
             const templateWarRuleArray  = this.getTemplateWarRuleArray();

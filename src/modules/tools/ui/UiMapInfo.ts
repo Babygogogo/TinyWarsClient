@@ -293,7 +293,7 @@ namespace TwnsUiMapInfo {
                 tileDecoratorShapeId: null,
                 tileObjectType      : tileObjectType,
                 tileObjectShapeId   : 0,
-                playerIndex         : Twns.CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : Twns.CommonConstants.PlayerIndex.Neutral,
                 gameConfig
             });
             this._tileView.updateView();

@@ -166,7 +166,7 @@ namespace Twns.BaseWar {
 
             const mapWeaponType     = templateCfg.mapWeaponType;
             const customCrystalData = data.customCrystalData ?? null;
-            if ((customCrystalData != null) && (mapWeaponType !== Types.MapWeaponType.CustomCrystal)) {
+            if ((customCrystalData != null) && (mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)) {
                 throw Helpers.newError(`CustomCrystalData is present while the tile is not CustomCrystal.`, ClientErrorCode.BwTile_Deserialize_15);
             }
             if ((customCrystalData != null) && (!Config.ConfigManager.checkIsValidCustomCrystalData(customCrystalData))) {
@@ -174,7 +174,7 @@ namespace Twns.BaseWar {
             }
 
             const customCannonData = data.customCannonData ?? null;
-            if ((customCannonData != null) && (mapWeaponType !== Types.MapWeaponType.CustomCannon)) {
+            if ((customCannonData != null) && (mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)) {
                 throw Helpers.newError(`CustomCannonData is present while the tile is not CustomCannon.`, ClientErrorCode.BwTile_Deserialize_17);
             }
             if ((customCannonData != null) && (!Config.ConfigManager.checkIsValidCustomCannonData(customCannonData))) {
@@ -182,7 +182,7 @@ namespace Twns.BaseWar {
             }
 
             const customLaserTurretData = data.customLaserTurretData ?? null;
-            if ((customLaserTurretData != null) && (mapWeaponType !== Types.MapWeaponType.CustomLaserTurret)) {
+            if ((customLaserTurretData != null) && (mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)) {
                 throw Helpers.newError(`CustomLaserTurretData is present while the tile is not CustomLaserTurret.`, ClientErrorCode.BwTile_Deserialize_19);
             }
             if ((customLaserTurretData != null) && (!Config.ConfigManager.checkIsValidCustomLaserTurretData(customLaserTurretData))) {
@@ -262,7 +262,7 @@ namespace Twns.BaseWar {
                     baseType                : this.getBaseType(),
                     objectType              : this.getObjectType(),
                     decoratorType           : this.getDecorationType(),
-                    playerIndex             : this.getTemplateCfg().isAlwaysShowOwner ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex             : this.getTemplateCfg().isAlwaysShowOwner ? playerIndex : CommonConstants.PlayerIndex.Neutral,
 
                     customCrystalData       : this._customCrystalData,
                     customCannonData        : this._customCannonData,
@@ -610,7 +610,7 @@ namespace Twns.BaseWar {
             const gameConfig = this.getGameConfig();
             this.init({
                 gridIndex       : this.getGridIndex(),
-                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex     : CommonConstants.PlayerIndex.Neutral,
                 baseType        : this.getBaseType(),
                 baseShapeId     : this.getBaseShapeId(),
                 objectType      : CommonConstants.TileObjectType.Empty,
@@ -630,7 +630,7 @@ namespace Twns.BaseWar {
         public deleteTileObject(): void {
             this.init({
                 gridIndex       : this.getGridIndex(),
-                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex     : CommonConstants.PlayerIndex.Neutral,
                 baseType        : this.getBaseType(),
                 baseShapeId     : this.getBaseShapeId(),
                 objectType      : CommonConstants.TileObjectType.Empty,
@@ -1009,9 +1009,9 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         public getCustomCrystalData(): ITileCustomCrystalData | null {
             const mapWeaponType = this.getTemplateCfg().mapWeaponType;
-            if (mapWeaponType === Types.MapWeaponType.Crystal) {
+            if (mapWeaponType === CommonConstants.MapWeaponType.Crystal) {
                 return CommonConstants.TileDefaultCrystalData;
-            } else if (mapWeaponType === Types.MapWeaponType.CustomCrystal) {
+            } else if (mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal) {
                 return this._customCrystalData ?? CommonConstants.TileDefaultCrystalData;
             } else {
                 return null;
@@ -1072,15 +1072,15 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         public getCustomCannonData(): ITileCustomCannonData | null {
             const mapWeaponType = this.getTemplateCfg().mapWeaponType;
-            if (mapWeaponType === Types.MapWeaponType.CannonDown) {
+            if (mapWeaponType === CommonConstants.MapWeaponType.CannonDown) {
                 return CommonConstants.TileDefaultCannonDownData;
-            } else if (mapWeaponType === Types.MapWeaponType.CannonLeft) {
+            } else if (mapWeaponType === CommonConstants.MapWeaponType.CannonLeft) {
                 return CommonConstants.TileDefaultCannonLeftData;
-            } else if (mapWeaponType === Types.MapWeaponType.CannonUp) {
+            } else if (mapWeaponType === CommonConstants.MapWeaponType.CannonUp) {
                 return CommonConstants.TileDefaultCannonUpData;
-            } else if (mapWeaponType === Types.MapWeaponType.CannonRight) {
+            } else if (mapWeaponType === CommonConstants.MapWeaponType.CannonRight) {
                 return CommonConstants.TileDefaultCannonRightData;
-            } else if (mapWeaponType === Types.MapWeaponType.CustomCannon) {
+            } else if (mapWeaponType === CommonConstants.MapWeaponType.CustomCannon) {
                 return this._customCannonData ?? CommonConstants.TileDefaultCustomCannonData;
             } else {
                 return null;
@@ -1092,10 +1092,10 @@ namespace Twns.BaseWar {
 
         public checkIsNormalCannon(): boolean {
             const mapWeaponType = this.getTemplateCfg().mapWeaponType;
-            return (mapWeaponType === Types.MapWeaponType.CannonRight)
-                || (mapWeaponType === Types.MapWeaponType.CannonUp)
-                || (mapWeaponType === Types.MapWeaponType.CannonLeft)
-                || (mapWeaponType === Types.MapWeaponType.CannonDown);
+            return (mapWeaponType === CommonConstants.MapWeaponType.CannonRight)
+                || (mapWeaponType === CommonConstants.MapWeaponType.CannonUp)
+                || (mapWeaponType === CommonConstants.MapWeaponType.CannonLeft)
+                || (mapWeaponType === CommonConstants.MapWeaponType.CannonDown);
         }
         private _initCustomCannonData(): void {
             if (this._customCannonData == null) {
@@ -1160,9 +1160,9 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         public getCustomLaserTurretData(): ITileCustomLaserTurretData | null {
             const mapWeaponType = this.getTemplateCfg().mapWeaponType;
-            if (mapWeaponType === Types.MapWeaponType.LaserTurret) {
+            if (mapWeaponType === CommonConstants.MapWeaponType.LaserTurret) {
                 return CommonConstants.TileDefaultCustomLaserTurretData;
-            } else if (mapWeaponType === Types.MapWeaponType.CustomLaserTurret) {
+            } else if (mapWeaponType === CommonConstants.MapWeaponType.CustomLaserTurret) {
                 return this._customLaserTurretData ?? CommonConstants.TileDefaultCustomLaserTurretData;
             } else {
                 return null;
@@ -1237,17 +1237,8 @@ namespace Twns.BaseWar {
         }
 
         public getTileThemeType(): Types.TileThemeType {
-            const war           = this.getWar();
-            const weatherType   = war.getWeatherManager().getCurrentWeatherType();
-            if (weatherType === Types.WeatherType.Rainy) {
-                return Types.TileThemeType.Rainy;
-            } else if (weatherType === Types.WeatherType.Sandstorm) {
-                return Types.TileThemeType.Sandstorm;
-            } else if (weatherType === Types.WeatherType.Snowy) {
-                return Types.TileThemeType.Snowy;
-            } else {
-                return Types.TileThemeType.Clear;
-            }
+            const war = this.getWar();
+            return Helpers.getExisted(war.getGameConfig().getWeatherCfg(war.getWeatherManager().getCurrentWeatherType())?.tileTheme);
         }
     }
 

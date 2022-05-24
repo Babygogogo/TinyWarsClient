@@ -85,7 +85,7 @@ namespace Twns.Common {
             } = openData;
             const isRoomOwnedBySelf = playerInfoArray.find(v => v.playerIndex === roomOwnerPlayerIndex)?.userId === Twns.User.UserModel.getSelfUserId();
             const dataArray         : DataForPlayerRenderer[] = [];
-            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.PlayerIndex.First; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 const playerInfo = playerInfoArray.find(v => v.playerIndex === playerIndex);
                 if (playerInfo == null) {
                     throw Twns.Helpers.newError(`CommonWarPlayerInfoPage._updateListPlayer() empty playerInfo.`);

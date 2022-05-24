@@ -15,7 +15,6 @@ namespace Twns.Common {
     import GameConfig   = Config.GameConfig;
     import CoSkillType  = Types.CoSkillType;
     import WeaponType   = Types.WeaponType;
-    import WeatherType  = Types.WeatherType;
 
     type PlayerData = {
         coId            : number;
@@ -34,7 +33,7 @@ namespace Twns.Common {
     };
     type CalculatorData = {
         gameConfig      : GameConfig;
-        weatherType     : WeatherType;
+        weatherType     : number;
         attackerData    : PlayerData;
         defenderData    : PlayerData;
     };
@@ -573,7 +572,7 @@ namespace Twns.Common {
             this._labelCity2.text           = `${defenderData.citiesCount}`;
             this._labelWeapon1.text         = getWeaponTypeName(attackerData.unitWeaponType);
             this._labelWeapon2.text         = getWeaponTypeName(defenderData.unitWeaponType);
-            this._labelWeather.text         = Lang.getWeatherName(data.weatherType);
+            this._labelWeather.text         = Lang.getWeatherName(data.weatherType, gameConfig) ?? CommonConstants.ErrorTextForUndefined;
             this._unitView1.update(createUnitViewData(attackerData.unitType, 1, gameConfig));
             this._unitView2.update(createUnitViewData(defenderData.unitType, 2, gameConfig));
             this._tileView1.init(createTileViewData(attackerData.tileType, 1, gameConfig)).updateView();
@@ -710,7 +709,7 @@ namespace Twns.Common {
         const gameConfig = await Config.ConfigManager.getLatestGameConfig();
         return {
             gameConfig,
-            weatherType     : WeatherType.Clear,
+            weatherType     : gameConfig.getDefaultWeatherType(),
             attackerData    : createDefaultPlayerData(gameConfig),
             defenderData    : createDefaultPlayerData(gameConfig),
         };
@@ -797,7 +796,7 @@ namespace Twns.Common {
             tileDecoratorShapeId: null,
             tileObjectType      : objectType,
             tileObjectShapeId   : 0,
-            playerIndex         : gameConfig.checkIsValidPlayerIndexForTileObject({ playerIndex, tileObjectType: objectType }) ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+            playerIndex         : gameConfig.checkIsValidPlayerIndexForTileObject({ playerIndex, tileObjectType: objectType }) ? playerIndex : CommonConstants.PlayerIndex.Neutral,
             gameConfig,
         };
     }

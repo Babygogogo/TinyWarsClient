@@ -19,7 +19,6 @@ namespace Twns.Lang {
     import WarEventActionType       = Types.WarEventActionType;
     import PlayerRuleType           = Types.PlayerRuleType;
     import GameVersion              = Types.GameVersion;
-    import WeatherType              = Types.WeatherType;
 
     let _languageType = LanguageType.Chinese;
     export function init(): void {
@@ -99,10 +98,13 @@ namespace Twns.Lang {
         const textType = gameConfig.getTileDecorationCfg(tileDecorationType)?.lang;
         return textType == null ? null : getText(textType);
     }
-
     export function getUnitName(unitType: number, gameConfig: Config.GameConfig, languageType?: LanguageType): string | null {
         const textType = gameConfig.getUnitTemplateCfg(unitType)?.lang;
         return textType == null ? null : getText(textType, languageType);
+    }
+    export function getWeatherName(weatherType: number, gameConfig: Config.GameConfig): string | null {
+        const textType = gameConfig.getWeatherCfg(weatherType)?.lang;
+        return textType == null ? null : getText(textType);
     }
 
     export function getUnitActionName(actionType: Types.UnitActionType): string | null{
@@ -367,15 +369,6 @@ namespace Twns.Lang {
         }
     }
 
-    export function getWeatherName(weatherType: WeatherType): string {
-        switch (weatherType) {
-            case WeatherType.Clear      : return getText(LangTextType.B0701);
-            case WeatherType.Sandstorm  : return getText(LangTextType.B0702);
-            case WeatherType.Snowy      : return getText(LangTextType.B0703);
-            case WeatherType.Rainy      : return getText(LangTextType.B0704);
-            default                     : throw Helpers.newError(`Invalid weatherType: ${weatherType}`, ClientErrorCode.Lang_GetWeatherName_00);
-        }
-    }
 
     export function getValueComparatorName(comparator: Types.ValueComparator): string | null {
         switch (comparator) {
@@ -471,7 +464,7 @@ namespace Twns.Lang {
     }
     export async function getGameStartDesc(data: CommonProto.NetMessage.MsgMpwCommonBroadcastGameStart.IS): Promise<string> {
         const playerArray   : string[] = [];
-        let playerIndex     = CommonConstants.WarFirstPlayerIndex;
+        let playerIndex     = CommonConstants.PlayerIndex.First;
         for (const playerInfo of data.playerInfoList || []) {
             const userId = playerInfo.userId;
             playerArray.push(`P${playerIndex}: ${userId != null ? await User.UserModel.getUserNickname(userId) : `----`}`);

@@ -80,7 +80,7 @@ namespace Twns.WarHelpers.WarDestructionHelpers {
                 tile.resetByTypeAndPlayerIndex({
                     baseType,
                     objectType  : tile.getGameConfig().getTileObjectCfg(tileObjectType)?.typeAfterOwnerChange ?? tileObjectType,
-                    playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex : CommonConstants.PlayerIndex.Neutral,
                 });
                 tile.setCurrentHp(hp);
                 tile.setCurrentBuildPoint(buildPoint);

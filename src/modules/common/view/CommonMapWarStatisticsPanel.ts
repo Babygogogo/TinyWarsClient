@@ -305,7 +305,7 @@ namespace Twns.Common {
             this._labelTurnIndex.text   = `${turnIndex ?? `--`}(${turnGames}, ${Math.round(turnGames * 100 / totalGames)}%)`;
 
             const statisticsArray = data.statisticsArray;
-            for (let playerIndex = Twns.CommonConstants.WarFirstPlayerIndex; playerIndex <= Twns.CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+            for (let playerIndex = Twns.CommonConstants.PlayerIndex.First; playerIndex <= Twns.CommonConstants.PlayerIndex.Max; ++playerIndex) {
                 const index     = playerIndex - 1;
                 const group     = this._groupsForPlayers[index];
                 const labels    = this._labelsForStatics[index];

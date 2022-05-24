@@ -205,7 +205,7 @@ namespace Twns.Common {
                 this._unitView.update({
                     gameConfig      : this._getOpenData().gameConfig,
                     gridIndex       : { x: 0, y: 0 },
-                    playerIndex     : CommonConstants.WarFirstPlayerIndex,
+                    playerIndex     : CommonConstants.PlayerIndex.First,
                     unitType,
                     actionState     : Types.UnitActionState.Idle,
                 }, Timer.getUnitAnimationTickCount());
@@ -374,7 +374,7 @@ namespace Twns.Common {
             if (dataForUnit) {
                 const gameConfig        = dataForUnit.gameConfig;
                 const attackUnitType    = dataForUnit.unitType;
-                const playerIndex       = CommonConstants.WarFirstPlayerIndex;
+                const playerIndex       = CommonConstants.PlayerIndex.First;
                 let index               = 0;
                 for (const targetUnitType of gameConfig.getAllUnitTypeArray()) {
                     dataArray.push({

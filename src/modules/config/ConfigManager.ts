@@ -78,7 +78,7 @@ namespace Twns.Config.ConfigManager {
             && ((data.deltaFuelPercentage ?? data.deltaHp ?? data.deltaPrimaryAmmoPercentage) != null);
     }
     export function checkIsValidPlayerIndex(playerIndex: number, playersCountUnneutral: number): boolean {
-        return (playerIndex >= CommonConstants.WarNeutralPlayerIndex)
+        return (playerIndex >= CommonConstants.PlayerIndex.Neutral)
             && (playerIndex <= playersCountUnneutral);
     }
     export function checkIsValidPlayerIndexSubset(playerIndexArray: number[], playersCountUnneutral: number): boolean {
@@ -86,7 +86,7 @@ namespace Twns.Config.ConfigManager {
             && (playerIndexArray.every(v => checkIsValidPlayerIndex(v, playersCountUnneutral)));
     }
     export function checkIsValidTeamIndex(teamIndex: number, playersCountUnneutral: number): boolean {
-        return (teamIndex >= CommonConstants.WarNeutralTeamIndex)
+        return (teamIndex >= CommonConstants.TeamIndex.Neutral)
             && (teamIndex <= playersCountUnneutral);
     }
     export function checkIsValidTeamIndexSubset(teamIndexArray: number[], playersCountUnneutral: number): boolean {
@@ -204,16 +204,6 @@ namespace Twns.Config.ConfigManager {
 
     export function getUnitAndTileDefaultSkinId(playerIndex: number): number {
         return playerIndex;
-    }
-
-    export function getWeatherImageSource(weatherType: Types.WeatherType): string {
-        switch (weatherType) {
-            case Types.WeatherType.Clear        : return `commonIcon0026`;
-            case Types.WeatherType.Rainy        : return `commonIcon0027`;
-            case Types.WeatherType.Sandstorm    : return `commonIcon0028`;
-            case Types.WeatherType.Snowy        : return `commonIcon0022`;
-            default                             : throw Helpers.newError(`ConfigManager.getWeatherImageSource() invalid weatherType: ${weatherType}`);
-        }
     }
 
     export function getDialogueBackgroundImage(backgroundId: number): string {

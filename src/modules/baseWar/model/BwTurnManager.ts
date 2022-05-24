@@ -41,7 +41,7 @@ namespace Twns.BaseWar {
 
             const playerIndex = data.playerIndex;
             if ((playerIndex == null)                                   ||
-                (playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                (playerIndex < CommonConstants.PlayerIndex.Neutral)   ||
                 (playerIndex > playersCountUnneutral)
             ) {
                 throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTurnManager_Init_01);
@@ -549,14 +549,14 @@ namespace Twns.BaseWar {
             const mapSize           = tileMap.getMapSize();
             const allTileArray      = tileMap.getAllTiles().filter(v => v.getPlayerIndex() === playerIndex);
             {
-                const crystalArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === Types.MapWeaponType.Crystal)
+                const crystalArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.Crystal)
                     .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
                 for (const tile of crystalArray) {
                     await handleMapWeaponTileCrystalWithExtraData(data, war, tile, isFastExecute);
                 }
             }
             {
-                const customCrystalArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === Types.MapWeaponType.CustomCrystal)
+                const customCrystalArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal)
                     .sort((v1, v2) => {
                         const priority1 = v1.getCustomCrystalData()?.priority ?? 0;
                         const priority2 = v2.getCustomCrystalData()?.priority ?? 0;
@@ -578,7 +578,7 @@ namespace Twns.BaseWar {
                 }
             }
             {
-                const customCannonArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === Types.MapWeaponType.CustomCannon)
+                const customCannonArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomCannon)
                     .sort((v1, v2) => {
                         const priority1 = v1.getCustomCannonData()?.priority ?? 0;
                         const priority2 = v2.getCustomCannonData()?.priority ?? 0;
@@ -593,14 +593,14 @@ namespace Twns.BaseWar {
                 }
             }
             {
-                const laserTurretArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === Types.MapWeaponType.LaserTurret)
+                const laserTurretArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.LaserTurret)
                     .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
                 for (const tile of laserTurretArray) {
                     await handleMapWeaponTileLaserTurretWithExtraData(data, war, tile, isFastExecute);
                 }
             }
             {
-                const customLaserTurretArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === Types.MapWeaponType.CustomLaserTurret)
+                const customLaserTurretArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomLaserTurret)
                     .sort((v1, v2) => {
                         const priority1 = v1.getCustomLaserTurretData()?.priority ?? 0;
                         const priority2 = v2.getCustomLaserTurretData()?.priority ?? 0;
@@ -624,14 +624,14 @@ namespace Twns.BaseWar {
             const allTileArray      = tileMap.getAllTiles().filter(v => v.getPlayerIndex() === playerIndex);
 
             {
-                const crystalArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === Types.MapWeaponType.Crystal)
+                const crystalArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.Crystal)
                     .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
                 for (const tile of crystalArray) {
                     await handleMapWeaponTileCrystalWithoutExtraData(war, tile, isFastExecute);
                 }
             }
             {
-                const customCrystalArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === Types.MapWeaponType.CustomCrystal)
+                const customCrystalArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal)
                     .sort((v1, v2) => {
                         const priority1 = v1.getCustomCrystalData()?.priority ?? 0;
                         const priority2 = v2.getCustomCrystalData()?.priority ?? 0;
@@ -653,7 +653,7 @@ namespace Twns.BaseWar {
                 }
             }
             {
-                const customCannonArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === Types.MapWeaponType.CustomCannon)
+                const customCannonArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomCannon)
                     .sort((v1, v2) => {
                         const priority1 = v1.getCustomCannonData()?.priority ?? 0;
                         const priority2 = v2.getCustomCannonData()?.priority ?? 0;
@@ -668,14 +668,14 @@ namespace Twns.BaseWar {
                 }
             }
             {
-                const laserTurretArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === Types.MapWeaponType.LaserTurret)
+                const laserTurretArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.LaserTurret)
                     .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
                 for (const tile of laserTurretArray) {
                     await handleMapWeaponTileLaserTurretWithoutExtraData(war, tile, isFastExecute);
                 }
             }
             {
-                const customLaserTurretArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === Types.MapWeaponType.CustomLaserTurret)
+                const customLaserTurretArray = allTileArray.filter(v => v.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomLaserTurret)
                     .sort((v1, v2) => {
                         const priority1 = v1.getCustomLaserTurretData()?.priority ?? 0;
                         const priority2 = v2.getCustomLaserTurretData()?.priority ?? 0;
@@ -904,7 +904,7 @@ namespace Twns.BaseWar {
         public getNextAlivePlayerIndex(playerIndex: number, includeNeutral = false): number {
             const data          = this._getNextAliveTurnAndPlayerIndex(null, playerIndex);
             const playerIndex1  = data.playerIndex;
-            if ((playerIndex1 !== CommonConstants.WarNeutralPlayerIndex) || (includeNeutral)) {
+            if ((playerIndex1 !== CommonConstants.PlayerIndex.Neutral) || (includeNeutral)) {
                 return playerIndex1;
             } else {
                 const nextData = this._getNextAliveTurnAndPlayerIndex(data.turnIndex, playerIndex1);
@@ -941,7 +941,7 @@ namespace Twns.BaseWar {
             } else {
                 return {
                     turnIndex   : currTurnIndex + 1,
-                    playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex : CommonConstants.PlayerIndex.Neutral,
                 };
             }
         }

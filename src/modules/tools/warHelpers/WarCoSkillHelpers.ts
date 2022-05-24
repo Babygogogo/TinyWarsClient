@@ -127,7 +127,7 @@ namespace Twns.WarHelpers.WarCoSkillHelpers {
         const modifier      = cfg[0] * selfFund / 10000 + cfg[1];
         for (const p of war.getPlayerManager().getAllPlayers()) {
             const teamIndex = p.getTeamIndex();
-            if ((teamIndex === selfTeamIndex) || (teamIndex === CommonConstants.WarNeutralTeamIndex)) {
+            if ((teamIndex === selfTeamIndex) || (teamIndex === CommonConstants.TeamIndex.Neutral)) {
                 continue;
             }
 
@@ -163,7 +163,7 @@ namespace Twns.WarHelpers.WarCoSkillHelpers {
         }
 
         const selfPlayerIndex = player.getPlayerIndex();
-        if ((selfPlayerIndex == null) || (selfPlayerIndex === CommonConstants.WarNeutralPlayerIndex)) {
+        if ((selfPlayerIndex == null) || (selfPlayerIndex === CommonConstants.PlayerIndex.Neutral)) {
             throw Helpers.newError(`Invalid selfPlayerIndex: ${selfPlayerIndex}.`, ClientErrorCode.WarCoSkillHelpers_ExeSelfAddUnit_00);
         }
 

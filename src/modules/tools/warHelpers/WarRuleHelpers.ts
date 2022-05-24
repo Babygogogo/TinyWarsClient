@@ -24,7 +24,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
     import GameConfig           = Config.GameConfig;
 
     const DEFAULT_PLAYER_RULE: WarRule.IDataForPlayerRule = {
-        playerIndex             : CommonConstants.WarNeutralPlayerIndex,
+        playerIndex             : CommonConstants.PlayerIndex.Neutral,
         teamIndex               : 0,
         attackPowerModifier     : 0,
         bannedCoIdArray         : [],
@@ -47,15 +47,15 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         Helpers.getExisted(baseWarRule.ruleForGlobalParams).hasFogByDefault = hasFog;
     }
 
-    export function getDefaultWeatherType(baseWarRule: BaseWarRule): Types.WeatherType {
-        return baseWarRule.ruleForGlobalParams?.defaultWeatherType ?? Types.WeatherType.Clear;
+    export function getDefaultWeatherType(baseWarRule: BaseWarRule, gameConfig: GameConfig): number {
+        return baseWarRule.ruleForGlobalParams?.defaultWeatherType ?? gameConfig.getDefaultWeatherType();
     }
-    export function setDefaultWeatherType(baseWarRule: BaseWarRule, weatherType: Types.WeatherType): void {
+    export function setDefaultWeatherType(baseWarRule: BaseWarRule, weatherType: number): void {
         Helpers.getExisted(baseWarRule.ruleForGlobalParams, ClientErrorCode.WarRuleHelpers_SetDefaultWeatherType_00).defaultWeatherType = weatherType;
     }
     export function tickDefaultWeatherType(baseWarRule: BaseWarRule, gameConfig: GameConfig): void {
         const typeArray     = gameConfig.getAvailableWeatherTypes();
-        const weatherType   = getDefaultWeatherType(baseWarRule);
+        const weatherType   = getDefaultWeatherType(baseWarRule, gameConfig);
         setDefaultWeatherType(baseWarRule, typeArray[(typeArray.indexOf(weatherType) + 1) % typeArray.length]);
     }
 
@@ -200,8 +200,8 @@ namespace Twns.WarHelpers.WarRuleHelpers {
     }
 
     export function getTeamIndex(baseWarRule: BaseWarRule, playerIndex: number): number {
-        if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
-            return CommonConstants.WarNeutralTeamIndex;
+        if (playerIndex === CommonConstants.PlayerIndex.Neutral) {
+            return CommonConstants.TeamIndex.Neutral;
         }
 
         const playerRule = getPlayerRule(baseWarRule, playerIndex);
@@ -224,7 +224,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
     }
 
     export function getPlayerRule(baseWarRule: BaseWarRule, playerIndex: number): IDataForPlayerRule {
-        if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+        if (playerIndex === CommonConstants.PlayerIndex.Neutral) {
             return DEFAULT_PLAYER_RULE;
         }
 
@@ -289,7 +289,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         }
     }
 
-    export function createDefaultTemplateWarRule(ruleId: number, playersCount: number): ITemplateWarRule {
+    export function createDefaultTemplateWarRule(ruleId: number, playersCount: number, gameConfig: GameConfig): ITemplateWarRule {
         return {
             ruleId,
             ruleNameArray   : [
@@ -305,7 +305,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             },
             ruleForGlobalParams : {
                 hasFogByDefault     : false,
-                defaultWeatherType  : Types.WeatherType.Clear,
+                defaultWeatherType  : gameConfig.getDefaultWeatherType(),
             },
             ruleForPlayers: {
                 playerRuleDataArray: createDefaultPlayerRuleList(playersCount),
@@ -313,7 +313,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             warEventIdArray : null,
         };
     }
-    export function createDefaultInstanceWarRule(playersCount: number): IInstanceWarRule {
+    export function createDefaultInstanceWarRule(playersCount: number, gameConfig: GameConfig): IInstanceWarRule {
         return {
             templateWarRuleId   : null,
             ruleNameArray       : [
@@ -322,7 +322,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             ],
             ruleForGlobalParams : {
                 hasFogByDefault     : false,
-                defaultWeatherType  : Types.WeatherType.Clear,
+                defaultWeatherType  : gameConfig.getDefaultWeatherType(),
             },
             ruleForPlayers: {
                 playerRuleDataArray: createDefaultPlayerRuleList(playersCount),
@@ -524,7 +524,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         for (const data of ruleArray) {
             const playerIndex = data.playerIndex;
             if ((playerIndex == null)                                   ||
-                (playerIndex <  CommonConstants.WarFirstPlayerIndex)    ||
+                (playerIndex <  CommonConstants.PlayerIndex.First)    ||
                 (playerIndex >  playersCountUnneutral)                  ||
                 (allPlayerIndexSet.has(playerIndex))
             ) {
@@ -533,7 +533,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
 
             const teamIndex = data.teamIndex;
             if ((teamIndex == null)                                 ||
-                (teamIndex <  CommonConstants.WarFirstTeamIndex)    ||
+                (teamIndex <  CommonConstants.TeamIndex.First)    ||
                 (teamIndex >  playersCountUnneutral)
             ) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_02;

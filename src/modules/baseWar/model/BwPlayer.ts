@@ -54,8 +54,8 @@ namespace Twns.BaseWar {
 
             const playerIndex = data.playerIndex;
             if ((playerIndex == null)                               ||
-                (playerIndex > CommonConstants.WarMaxPlayerIndex)   ||
-                (playerIndex < CommonConstants.WarNeutralPlayerIndex)
+                (playerIndex > CommonConstants.PlayerIndex.Max)   ||
+                (playerIndex < CommonConstants.PlayerIndex.Neutral)
             ) {
                 throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwPlayer_Init_03);
             }
@@ -64,8 +64,8 @@ namespace Twns.BaseWar {
             const coIsDestroyedInTurn   = Helpers.getExisted(data.coIsDestroyedInTurn, ClientErrorCode.BwPlayer_Init_05);
             const unitAndTileSkinId     = data.unitAndTileSkinId;
             if ((unitAndTileSkinId == null)                                                             ||
-                ((unitAndTileSkinId === 0) && (playerIndex !== CommonConstants.WarNeutralPlayerIndex))  ||
-                ((unitAndTileSkinId !== 0) && (playerIndex === CommonConstants.WarNeutralPlayerIndex))
+                ((unitAndTileSkinId === 0) && (playerIndex !== CommonConstants.PlayerIndex.Neutral))  ||
+                ((unitAndTileSkinId !== 0) && (playerIndex === CommonConstants.PlayerIndex.Neutral))
             ) {
                 throw Helpers.newError(`Invalid unitAndTileSkinId: ${unitAndTileSkinId}`, ClientErrorCode.BwPlayer_Init_06);
             }
@@ -200,7 +200,7 @@ namespace Twns.BaseWar {
             return Helpers.getExisted(this._playerIndex);
         }
         public checkIsNeutral(): boolean {
-            return this.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex;
+            return this.getPlayerIndex() === CommonConstants.PlayerIndex.Neutral;
         }
 
         public getTeamIndex(): number {

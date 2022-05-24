@@ -450,7 +450,7 @@ namespace Twns.Common {
             const playerIndex = unitData.playerIndex;
             if ((playerIndex == null)                               ||
                 (playerIndex > war.getPlayersCountUnneutral())      ||
-                (playerIndex < CommonConstants.WarFirstPlayerIndex)
+                (playerIndex < CommonConstants.PlayerIndex.First)
             ) {
                 return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0521));
             }

@@ -74,8 +74,8 @@ namespace Twns.BaseWar {
         public getSettingsHasFogByDefault(): boolean {
             return WarHelpers.WarRuleHelpers.getHasFogByDefault(this.getInstanceWarRule());
         }
-        public getSettingsDefaultWeatherType(): Types.WeatherType {
-            return WarHelpers.WarRuleHelpers.getDefaultWeatherType(this.getInstanceWarRule());
+        public getSettingsDefaultWeatherType(): number {
+            return WarHelpers.WarRuleHelpers.getDefaultWeatherType(this.getInstanceWarRule(), this._getWar().getGameConfig());
         }
 
         public getSettingsIncomeMultiplier(playerIndex: number): number {

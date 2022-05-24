@@ -234,7 +234,7 @@ namespace Twns.WarEvent {
             const tileData          = Helpers.getExisted(this._getAction().actTileData);
             tileData.objectType     = CommonConstants.TileObjectType.Empty;
             tileData.objectShapeId  = null;
-            tileData.playerIndex    = CommonConstants.WarNeutralPlayerIndex;
+            tileData.playerIndex    = CommonConstants.PlayerIndex.Neutral;
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActIsHighlighted(): void {

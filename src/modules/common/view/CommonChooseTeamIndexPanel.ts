@@ -84,7 +84,7 @@ namespace Twns.Common {
         private _updateListLocation(): void {
             const openData  = this._getOpenData();
             const dataArray : DataForLocationRenderer[] = [];
-            for (let teamIndex = Twns.CommonConstants.WarNeutralTeamIndex; teamIndex <= openData.maxTeamIndex; ++teamIndex) {
+            for (let teamIndex = Twns.CommonConstants.TeamIndex.Neutral; teamIndex <= openData.maxTeamIndex; ++teamIndex) {
                 dataArray.push({ teamIndex });
             }
 
