@@ -11467,6 +11467,17 @@ export const enum ServerErrorCode {
     ExeMrrGetMyRoomPublicInfoList_ExeWithSocket_0008,
     ExeMrrGetMyRoomPublicInfoList_ExeWithSocket_0009,
 
+    ExeMrrDeleteRoomByGm_ExeWithSocket_0000,
+    ExeMrrDeleteRoomByGm_ExeWithSocket_0001,
+    ExeMrrDeleteRoomByGm_ExeWithSocket_0002,
+    ExeMrrDeleteRoomByGm_ExeWithSocket_0003,
+    ExeMrrDeleteRoomByGm_ExeWithSocket_0004,
+    ExeMrrDeleteRoomByGm_ExeWithSocket_0005,
+    ExeMrrDeleteRoomByGm_ExeWithSocket_0006,
+    ExeMrrDeleteRoomByGm_ExeWithSocket_0007,
+    ExeMrrDeleteRoomByGm_ExeWithSocket_0008,
+    ExeMrrDeleteRoomByGm_ExeWithSocket_0009,
+
     ExeMpwWatchGetWatchedWarInfos_ExeWithSocket_0000,
     ExeMpwWatchGetWatchedWarInfos_ExeWithSocket_0001,
     ExeMpwWatchGetWatchedWarInfos_ExeWithSocket_0002,

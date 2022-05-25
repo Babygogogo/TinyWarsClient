@@ -30707,6 +30707,9 @@ declare namespace CommonProto {
             /** MessageContainer MsgMrrSetSelfSettings */
             MsgMrrSetSelfSettings?: (CommonProto.NetMessage.IMsgMrrSetSelfSettings|null);
 
+            /** MessageContainer MsgMrrDeleteRoomByGm */
+            MsgMrrDeleteRoomByGm?: (CommonProto.NetMessage.IMsgMrrDeleteRoomByGm|null);
+
             /** MessageContainer MsgBroadcastGetAllMessageIdArray */
             MsgBroadcastGetAllMessageIdArray?: (CommonProto.NetMessage.IMsgBroadcastGetAllMessageIdArray|null);
 
@@ -31082,6 +31085,9 @@ declare namespace CommonProto {
 
             /** MessageContainer MsgMrrSetSelfSettings. */
             public MsgMrrSetSelfSettings?: (CommonProto.NetMessage.IMsgMrrSetSelfSettings|null);
+
+            /** MessageContainer MsgMrrDeleteRoomByGm. */
+            public MsgMrrDeleteRoomByGm?: (CommonProto.NetMessage.IMsgMrrDeleteRoomByGm|null);
 
             /** MessageContainer MsgBroadcastGetAllMessageIdArray. */
             public MsgBroadcastGetAllMessageIdArray?: (CommonProto.NetMessage.IMsgBroadcastGetAllMessageIdArray|null);
@@ -60476,6 +60482,291 @@ declare namespace CommonProto {
                  * @returns Plain object
                  */
                 public static toObject(message: CommonProto.NetMessage.MsgMrrSetSelfSettings.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this S to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+
+        /** Properties of a MsgMrrDeleteRoomByGm. */
+        interface IMsgMrrDeleteRoomByGm {
+
+            /** MsgMrrDeleteRoomByGm c */
+            c?: (CommonProto.NetMessage.MsgMrrDeleteRoomByGm.IC|null);
+
+            /** MsgMrrDeleteRoomByGm s */
+            s?: (CommonProto.NetMessage.MsgMrrDeleteRoomByGm.IS|null);
+        }
+
+        /** Represents a MsgMrrDeleteRoomByGm. */
+        class MsgMrrDeleteRoomByGm implements IMsgMrrDeleteRoomByGm {
+
+            /**
+             * Constructs a new MsgMrrDeleteRoomByGm.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.NetMessage.IMsgMrrDeleteRoomByGm);
+
+            /** MsgMrrDeleteRoomByGm c. */
+            public c?: (CommonProto.NetMessage.MsgMrrDeleteRoomByGm.IC|null);
+
+            /** MsgMrrDeleteRoomByGm s. */
+            public s?: (CommonProto.NetMessage.MsgMrrDeleteRoomByGm.IS|null);
+
+            /**
+             * Creates a new MsgMrrDeleteRoomByGm instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MsgMrrDeleteRoomByGm instance
+             */
+            public static create(properties?: CommonProto.NetMessage.IMsgMrrDeleteRoomByGm): CommonProto.NetMessage.MsgMrrDeleteRoomByGm;
+
+            /**
+             * Encodes the specified MsgMrrDeleteRoomByGm message. Does not implicitly {@link CommonProto.NetMessage.MsgMrrDeleteRoomByGm.verify|verify} messages.
+             * @param message MsgMrrDeleteRoomByGm message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.NetMessage.IMsgMrrDeleteRoomByGm, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MsgMrrDeleteRoomByGm message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMrrDeleteRoomByGm.verify|verify} messages.
+             * @param message MsgMrrDeleteRoomByGm message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.NetMessage.IMsgMrrDeleteRoomByGm, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MsgMrrDeleteRoomByGm message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MsgMrrDeleteRoomByGm
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMrrDeleteRoomByGm;
+
+            /**
+             * Decodes a MsgMrrDeleteRoomByGm message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MsgMrrDeleteRoomByGm
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMrrDeleteRoomByGm;
+
+            /**
+             * Verifies a MsgMrrDeleteRoomByGm message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MsgMrrDeleteRoomByGm message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MsgMrrDeleteRoomByGm
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMrrDeleteRoomByGm;
+
+            /**
+             * Creates a plain object from a MsgMrrDeleteRoomByGm message. Also converts values to other types if specified.
+             * @param message MsgMrrDeleteRoomByGm
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.NetMessage.MsgMrrDeleteRoomByGm, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MsgMrrDeleteRoomByGm to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace MsgMrrDeleteRoomByGm {
+
+            /** Properties of a C. */
+            interface IC {
+
+                /** C roomId */
+                roomId?: (number|null);
+            }
+
+            /** Represents a C. */
+            class C implements IC {
+
+                /**
+                 * Constructs a new C.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgMrrDeleteRoomByGm.IC);
+
+                /** C roomId. */
+                public roomId: number;
+
+                /**
+                 * Creates a new C instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns C instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgMrrDeleteRoomByGm.IC): CommonProto.NetMessage.MsgMrrDeleteRoomByGm.C;
+
+                /**
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgMrrDeleteRoomByGm.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgMrrDeleteRoomByGm.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMrrDeleteRoomByGm.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMrrDeleteRoomByGm.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMrrDeleteRoomByGm.C;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMrrDeleteRoomByGm.C;
+
+                /**
+                 * Verifies a C message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a C message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns C
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMrrDeleteRoomByGm.C;
+
+                /**
+                 * Creates a plain object from a C message. Also converts values to other types if specified.
+                 * @param message C
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgMrrDeleteRoomByGm.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this C to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a S. */
+            interface IS {
+
+                /** S errorCode */
+                errorCode?: (number|null);
+
+                /** S roomId */
+                roomId?: (number|null);
+            }
+
+            /** Represents a S. */
+            class S implements IS {
+
+                /**
+                 * Constructs a new S.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgMrrDeleteRoomByGm.IS);
+
+                /** S errorCode. */
+                public errorCode: number;
+
+                /** S roomId. */
+                public roomId: number;
+
+                /**
+                 * Creates a new S instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns S instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgMrrDeleteRoomByGm.IS): CommonProto.NetMessage.MsgMrrDeleteRoomByGm.S;
+
+                /**
+                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgMrrDeleteRoomByGm.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgMrrDeleteRoomByGm.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMrrDeleteRoomByGm.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMrrDeleteRoomByGm.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMrrDeleteRoomByGm.S;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMrrDeleteRoomByGm.S;
+
+                /**
+                 * Verifies a S message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a S message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns S
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMrrDeleteRoomByGm.S;
+
+                /**
+                 * Creates a plain object from a S message. Also converts values to other types if specified.
+                 * @param message S
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgMrrDeleteRoomByGm.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this S to JSON.
