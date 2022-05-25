@@ -3036,7 +3036,10 @@ namespace Twns.WarHelpers.WarRobot {
     async function getActionForPhase11(commonParams: CommonParams): Promise<IWarActionContainer | null> {
         await Helpers.checkAndCallLater();
 
-        if (commonParams.war.getDrawVoteManager().getRemainingVotes() == null) {
+        const war = commonParams.war;
+        if ((war.getDrawVoteManager().getRemainingVotes() == null) ||
+            (war.getPlayerInTurn().getHasVotedForDraw())
+        ) {
             return null;
         } else {
             return {
