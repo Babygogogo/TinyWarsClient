@@ -1324,11 +1324,11 @@ namespace Twns.WarHelpers.WarRobot {
         return dropDestinations.length * 100;
     }
 
-    async function getScoreForActionUnitLaunchSilo(commonParams: CommonParams, unitValueMap: number[][], targetGridIndex: GridIndex): Promise<number> {
+    async function getScoreForActionUnitLaunchSilo(commonParams: CommonParams, unitValueMap: number[][], targetGridIndex: GridIndex, siloRadius: number): Promise<number> {
         await Helpers.checkAndCallLater();
 
         let score = 9999;
-        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize: commonParams.mapSize })) {
+        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: siloRadius, mapSize: commonParams.mapSize })) {
             score += unitValueMap[gridIndex.x][gridIndex.y] ?? 0;
         }
 
@@ -1740,24 +1740,26 @@ namespace Twns.WarHelpers.WarRobot {
         const unitValueMap                              = Helpers.createEmptyMap<number>(mapWidth, mapHeight);
         const teamIndex                                 = unit.getTeamIndex();
         const unitMap                                   = war.getUnitMap();
-        for (let x = 0; x < mapWidth; ++x) {
+        const launchSiloParams                          = Helpers.getExisted(war.getGameConfig().getTileObjectCfg(tile.getObjectType())?.launchSiloParams, ClientErrorCode.SpwRobot_GetScoreAndActionUnitLaunchSilo_00);
+        const siloDamage                                = Helpers.getExisted(launchSiloParams[3], ClientErrorCode.SpwRobot_GetScoreAndActionUnitLaunchSilo_01);
+            for (let x = 0; x < mapWidth; ++x) {
             for (let y = 0; y < mapHeight; ++y) {
                 const targetUnit = unitMap.getUnitOnMap({ x, y });
                 if ((!targetUnit) || (targetUnit === unit)) {
                     unitValueMap[x][y] = 0;
                 } else {
-                    const value         = Math.min(CommonConstants.SiloDamage, targetUnit.getCurrentHp() - 1) * targetUnit.getProductionCfgCost();
+                    const value         = Math.min(siloDamage, targetUnit.getCurrentHp() - 1) * targetUnit.getProductionCfgCost();
                     unitValueMap[x][y]  = targetUnit.getTeamIndex() === teamIndex ? -value : value;
                 }
             }
         }
-        unitValueMap[gridIndex.x][gridIndex.y] = -Math.min(CommonConstants.SiloDamage, unit.getCurrentHp() - 1) * unit.getProductionCfgCost();
+        unitValueMap[gridIndex.x][gridIndex.y] = -Math.min(siloDamage, unit.getCurrentHp() - 1) * unit.getProductionCfgCost();
 
         let scoreAndGridIndex: { score: number, gridIndex: GridIndex } | null = null;
         for (let x = 0; x < mapWidth; ++x) {
             for (let y = 0; y < mapHeight; ++y) {
                 const newTargetGridIndex    : GridIndex = { x, y };
-                const newMaxScore           = await getScoreForActionUnitLaunchSilo(commonParams, unitValueMap, newTargetGridIndex);
+                const newMaxScore           = await getScoreForActionUnitLaunchSilo(commonParams, unitValueMap, newTargetGridIndex, launchSiloParams[2]);
                 if (scoreAndGridIndex == null) {
                     scoreAndGridIndex = {
                         score       : newMaxScore,

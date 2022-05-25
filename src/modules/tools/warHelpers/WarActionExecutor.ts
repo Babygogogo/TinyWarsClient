@@ -2495,19 +2495,20 @@ namespace Twns.WarHelpers.WarActionExecutor {
             } else {
                 const targetGridIndex   = action.targetGridIndex as GridIndex;
                 const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
+                const launchSiloParams  = Helpers.getExisted(tile.getGameConfig().getTileObjectCfg(tile.getObjectType())?.launchSiloParams);
                 tile.resetByTypeAndPlayerIndex({
                     baseType        : tile.getBaseType(),
-                    objectType      : Helpers.getExisted((tile.getGameConfig().getTileObjectCfg(tile.getObjectType())?.launchSiloParams ?? [])[1]),
+                    objectType      : Helpers.getExisted(launchSiloParams[1]),
                     playerIndex     : CommonConstants.PlayerIndex.Neutral,
                 });
 
-                const targetGrids   = GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize: unitMap.getMapSize() });
+                const targetGrids   = GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: launchSiloParams[2], mapSize: unitMap.getMapSize() });
                 const targetUnits   : BwUnit[] = [];
                 for (const grid of targetGrids) {
                     const unit = unitMap.getUnitOnMap(grid);
                     if (unit) {
                         targetUnits.push(unit);
-                        unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - CommonConstants.SiloDamage));
+                        unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - launchSiloParams[3]));
                     }
                 }
             }
@@ -2531,9 +2532,10 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 deleteViewAfterMoving   : true,
             });
 
-            const targetGridIndex = GridIndexHelpers.convertGridIndex(actionExtraData.targetGridIndex);
+            const launchSiloParams  = Helpers.getExisted(war.getGameConfig().getAllTileObjectCfgArray().find(v => v.launchSiloParams != null)?.launchSiloParams);
+            const targetGridIndex   = GridIndexHelpers.convertGridIndex(actionExtraData.targetGridIndex);
             if (targetGridIndex) {
-                for (const grid of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize })) {
+                for (const grid of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: launchSiloParams[2], mapSize })) {
                     gridVisualEffect.showEffectSiloExplosion(grid);
                 }
             }
@@ -2563,21 +2565,22 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 focusUnit.updateView();
 
             } else {
-                const tile = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
+                const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
+                const launchSiloParams  = Helpers.getExisted(tile.getGameConfig().getTileObjectCfg(tile.getObjectType())?.launchSiloParams);
                 tile.resetByTypeAndPlayerIndex({
                     baseType    : tile.getBaseType(),
-                    objectType  : Helpers.getExisted((tile.getGameConfig().getTileObjectCfg(tile.getObjectType())?.launchSiloParams ?? [])[1]),
+                    objectType  : Helpers.getExisted(launchSiloParams[1]),
                     playerIndex : CommonConstants.PlayerIndex.Neutral,
                 });
 
                 const targetGridIndex   = GridIndexHelpers.convertGridIndex(action.targetGridIndex);
-                const targetGrids       = GridIndexHelpers.getGridsWithinDistance({ origin: Helpers.getExisted(targetGridIndex, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchSilo_01), minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize });
+                const targetGrids       = GridIndexHelpers.getGridsWithinDistance({ origin: Helpers.getExisted(targetGridIndex, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchSilo_01), minDistance: 0, maxDistance: launchSiloParams[2], mapSize });
                 const targetUnits       : BwUnit[] = [];
                 for (const grid of targetGrids) {
                     const unit = unitMap.getUnitOnMap(grid);
                     if (unit) {
                         targetUnits.push(unit);
-                        unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - CommonConstants.SiloDamage));
+                        unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - launchSiloParams[3]));
                     }
                 }
 

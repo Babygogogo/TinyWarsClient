@@ -80,9 +80,6 @@ namespace Twns.CommonConstants {
     export const ChatErrorMaxLength                     = 2000;
     export const ChatTeamDivider                        = 100;
 
-    export const SiloRadius                             = 2;
-    export const SiloDamage                             = 30;
-
     export const UnitHpNormalizer                       = 10;
     export const UnitMaxHp                              = 100;
     export const UnitAndTileMinSkinId                   = 1;
