@@ -5524,6 +5524,114 @@ namespace Twns.Lang {
             `Mr. Bear (Penny)`,
             `Mr. Bear (Penny)`,
         ],
+        [LangTextType.Bgm0026]: [
+            `Adder's Theme (Adder)`,
+            `Adder's Theme (Adder)`,
+        ],
+        [LangTextType.Bgm0027]: [
+            `Flak's Theme (Flak)`,
+            `Flak's Theme (Flak)`,
+        ],
+        [LangTextType.Bgm0028]: [
+            `Kindle's Theme (Kindle)`,
+            `Kindle's Theme (Kindle)`,
+        ],
+        [LangTextType.Bgm0029]: [
+            `Koal's Theme (Koal)`,
+            `Koal's Theme (Koal)`,
+        ],
+        [LangTextType.Bgm0030]: [
+            `Lash's Theme (Lash)`,
+            `Lash's Theme (Lash)`,
+        ],
+        [LangTextType.Bgm0031]: [
+            `Von Bolt's Theme (Von Bolt)`,
+            `Von Bolt's Theme (Von Bolt)`,
+        ],
+        [LangTextType.Bgm0032]: [
+            `Colin's Theme (Colin)`,
+            `Colin's Theme (Colin)`,
+        ],
+        [LangTextType.Bgm0033]: [
+            `Grit's Theme (Grit)`,
+            `Grit's Theme (Grit)`,
+        ],
+        [LangTextType.Bgm0034]: [
+            `Olaf's Theme (Olaf)`,
+            `Olaf's Theme (Olaf)`,
+        ],
+        [LangTextType.Bgm0035]: [
+            `Sasha's Theme (Sasha)`,
+            `Sasha's Theme (Sasha)`,
+        ],
+        [LangTextType.Bgm0036]: [
+            `Drake's Theme (Drake)`,
+            `Drake's Theme (Drake)`,
+        ],
+        [LangTextType.Bgm0037]: [
+            `Eagle's Theme (Eagle)`,
+            `Eagle's Theme (Eagle)`,
+        ],
+        [LangTextType.Bgm0038]: [
+            `Javier's Theme (Javier)`,
+            `Javier's Theme (Javier)`,
+        ],
+        [LangTextType.Bgm0039]: [
+            `Jess's Theme (Jess)`,
+            `Jess's Theme (Jess)`,
+        ],
+        [LangTextType.Bgm0040]: [
+            `Andy's Theme (Andy)`,
+            `Andy's Theme (Andy)`,
+        ],
+        [LangTextType.Bgm0041]: [
+            `Hachi's Theme (Hachi)`,
+            `Hachi's Theme (Hachi)`,
+        ],
+        [LangTextType.Bgm0042]: [
+            `Jake's Theme (Jake)`,
+            `Jake's Theme (Jake)`,
+        ],
+        [LangTextType.Bgm0043]: [
+            `Max's Theme (Max)`,
+            `Max's Theme (Max)`,
+        ],
+        [LangTextType.Bgm0044]: [
+            `Nell's Theme (Nell)`,
+            `Nell's Theme (Nell)`,
+        ],
+        [LangTextType.Bgm0045]: [
+            `Rachel's Theme (Rachel)`,
+            `Rachel's Theme (Rachel)`,
+        ],
+        [LangTextType.Bgm0046]: [
+            `Sami's Theme (Sami)`,
+            `Sami's Theme (Sami)`,
+        ],
+        [LangTextType.Bgm0047]: [
+            `Sonja's Theme (Sonja)`,
+            `Sonja's Theme (Sonja)`,
+        ],
+        [LangTextType.Bgm0048]: [
+            `Grimm's Theme (Grimm)`,
+            `Grimm's Theme (Grimm)`,
+        ],
+        [LangTextType.Bgm0049]: [
+            `Kanbei's Theme (Kanbei)`,
+            `Kanbei's Theme (Kanbei)`,
+        ],
+        [LangTextType.Bgm0050]: [
+            `Sensei's Theme (Sensei)`,
+            `Sensei's Theme (Sensei)`,
+        ],
+        [LangTextType.Bgm0051]: [
+            `Jugger's Theme (Jugger)`,
+            `Jugger's Theme (Jugger)`,
+        ],
+        [LangTextType.Bgm0052]: [
+            `Sturm's Theme (Sturm)`,
+            `Sturm's Theme (Sturm)`,
+        ],
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.MoveType0000]: [
             `步兵`,
