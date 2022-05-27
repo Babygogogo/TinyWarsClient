@@ -137,7 +137,7 @@ namespace Twns.SoundManager {
         }
     }
     export function playCoBgm(coId: number, gameConfig: Config.GameConfig): void {
-        playBgm(gameConfig.getCoBasicCfg(coId)?.bgmCode ?? CommonConstants.BgmSfxCode.CoEmpty);
+        playBgm((gameConfig.getCoBasicCfg(coId)?.bgmCode ?? [])[0] ?? CommonConstants.BgmSfxCode.CoEmpty);
     }
     export function playCoBgmWithWar(war: BaseWar.BwWar, force: boolean): void {
         const player = war.getPlayerInTurn();
@@ -145,10 +145,12 @@ namespace Twns.SoundManager {
             return;
         }
 
-        if (player.checkCoIsUsingActiveSkill()) {
-            playBgm(CommonConstants.BgmSfxCode.CoPower);
-        } else {
-            playCoBgm(player.getCoId(), war.getGameConfig());
+        const gameConfig    = war.getGameConfig();
+        const bgmCodeArray  = gameConfig.getCoBasicCfg(player.getCoId())?.bgmCode ?? [];
+        switch (player.getCoUsingSkillType()) {
+            case Types.CoSkillType.Power        : playBgm(bgmCodeArray[1] ?? CommonConstants.BgmSfxCode.CoPower);   return;
+            case Types.CoSkillType.SuperPower   : playBgm(bgmCodeArray[2] ?? CommonConstants.BgmSfxCode.CoPower);   return;
+            default                             : playCoBgm(player.getCoId(), gameConfig);                          return;
         }
     }
 

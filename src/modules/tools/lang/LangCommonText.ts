@@ -5632,6 +5632,22 @@ namespace Twns.Lang {
             `Sturm's Theme (Sturm)`,
             `Sturm's Theme (Sturm)`,
         ],
+        [LangTextType.Bgm0053]: [
+            `Power! (DS Power)`,
+            `Power! (DS Power)`,
+        ],
+        [LangTextType.Bgm0054]: [
+            `Super CO Power! (DS Power)`,
+            `Super CO Power! (DS Power)`,
+        ],
+        [LangTextType.Bgm0055]: [
+            `Black Hole Power! (DS Power)`,
+            `Black Hole Power! (DS Power)`,
+        ],
+        [LangTextType.Bgm0056]: [
+            `Black Hole Super CO Power! (DS Power)`,
+            `Black Hole Super CO Power! (DS Power)`,
+        ],
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.MoveType0000]: [
             `步兵`,

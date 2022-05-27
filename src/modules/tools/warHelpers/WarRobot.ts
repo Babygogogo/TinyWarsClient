@@ -57,7 +57,7 @@ namespace Twns.WarHelpers.WarRobot {
         globalOffenseBonuses    : Map<number, number>;
         globalDefenseBonuses    : Map<number, number>;
         luckValues              : Map<number, number>;
-        bestActionDict          : Map<BwUnit, IWarActionContainer>;
+        bestScoreAndActionDict  : Map<BwUnit, ScoreAndAction>;
         getCachedMoveCost       : (unit: BwUnit, tile: BwTile) => number | null;
         // getAndTickRandomInteger : () => number;
     };
@@ -100,7 +100,7 @@ namespace Twns.WarHelpers.WarRobot {
             globalOffenseBonuses    : await getGlobalOffenseBonuses(war),
             globalDefenseBonuses    : await getGlobalDefenseBonuses(war),
             luckValues              : await getLuckValues(war),
-            bestActionDict          : new Map(),
+            bestScoreAndActionDict  : new Map(),
             // getAndTickRandomInteger : () => {
             //     if (!isNeedSeedRandom) {
             //         return Math.floor(Math.random() * 256);
@@ -1373,7 +1373,27 @@ namespace Twns.WarHelpers.WarRobot {
     async function getScoreForActionUnitLoadCo(unit: BwUnit): Promise<number> {
         await Helpers.checkAndCallLater();
 
-        return (unit.getTemplateCfg().aiLoadCoScore ?? 0) + unit.getCurrentHp() * 100;
+        let totalScore      = unit.getCurrentHp() * 100;
+        const scoreArray    = unit.getGameConfig().getCoBasicCfg(unit.getPlayer().getCoId())?.aiBoardUnitTypeAndScore;
+        if (scoreArray == null) {
+            totalScore += -20000;
+        } else {
+            const unitType  = unit.getUnitType();
+            let hasFound    = false;
+            for (let i = 0; i < scoreArray.length; i += 2) {
+                if (scoreArray[i] === unitType) {
+                    hasFound    = true;
+                    totalScore  += scoreArray[i + 1] ?? -20000;
+                    break;
+                }
+            }
+
+            if (!hasFound) {
+                totalScore += -20000;
+            }
+        }
+
+        return totalScore;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -2055,11 +2075,20 @@ namespace Twns.WarHelpers.WarRobot {
             return null;
         }
 
+        const bestScoreAndActionDict = commonParams.bestScoreAndActionDict;
+        {
+            const bestScoreAndAction = bestScoreAndActionDict.get(candidateUnit);
+            if (bestScoreAndAction) {
+                return bestScoreAndAction;
+            }
+        }
+
         const reachableArea             = await getReachableArea({ commonParams, unit: candidateUnit, passableGridIndex: null, blockedGridIndex: null });
         const damageMapForSurface       = await createDamageMap(commonParams, candidateUnit, false);
         const damageMapForDive          = candidateUnit.checkIsDiver() ? await createDamageMap(commonParams, candidateUnit, true) : null;
         const originGridIndex           = candidateUnit.getGridIndex();
         const scoreDictForThreatEnemy   = new Map<BwUnit, number>();
+        const canLaunchUnit             = (candidateUnit.checkCanLaunchLoadedUnit()) && (candidateUnit.getLoadedUnits().some(v => ((v.getActionState() === UnitActionState.Idle) && (v.checkCanAiDoAction()) && (v.getFinalMoveRange() > 0))));
         // const scoreMapForDistance       = await _createScoreMapForDistance(candidateUnit);
         const { width: mapWidth, height: mapHeight }    = commonParams.mapSize;
         const promiseArray                              : Promise<ScoreAndAction | null>[] = [];
@@ -2092,9 +2121,10 @@ namespace Twns.WarHelpers.WarRobot {
                         return null;
                     }
 
-                    const action            = scoreAndAction.action;
-                    const scoreForMovePath  = await getScoreForMovePath(commonParams, candidateUnit, pathNodes);
-                    const scoreForPosition  = await getScoreForPosition({
+                    const action                = scoreAndAction.action;
+                    const scoreForLaunchUnit    = ((pathNodes.length === 1) && (canLaunchUnit)) ? -999 : 1;
+                    const scoreForMovePath      = await getScoreForMovePath(commonParams, candidateUnit, pathNodes);
+                    const scoreForPosition      = await getScoreForPosition({
                         commonParams,
                         unit                    : candidateUnit,
                         gridIndex,
@@ -2102,14 +2132,18 @@ namespace Twns.WarHelpers.WarRobot {
                         scoreDictForThreatEnemy,
                     });
                     return {
-                        score   : scoreAndAction.score + scoreForMovePath + scoreForPosition,
+                        score   : scoreAndAction.score + scoreForLaunchUnit + scoreForMovePath + scoreForPosition,
                         action,
                     };
                 })());
             }
         }
 
-        return getBestScoreAndAction(await Promise.all(promiseArray), commonParams);
+        const bestScoreAndAction = getBestScoreAndAction(await Promise.all(promiseArray), commonParams);
+        if (bestScoreAndAction) {
+            bestScoreAndActionDict.set(candidateUnit, bestScoreAndAction);
+        }
+        return bestScoreAndAction;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2379,22 +2413,11 @@ namespace Twns.WarHelpers.WarRobot {
         }
 
         if (coType === Types.CoType.Zoned) {
-            const bestActionDict = commonParams.bestActionDict;
             for (const unit of await getCandidateUnitsForPhase1(commonParams)) {
-                {
-                    const existingBestAction = bestActionDict.get(unit);
-                    if (existingBestAction) {
-                        return existingBestAction;
-                    }
-                }
-
                 const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
-                if (action == null) {
-                    continue;
+                if (action) {
+                    return action;
                 }
-
-                bestActionDict.set(unit, action);
-                return action;
             }
 
             return null;

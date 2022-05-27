@@ -1682,9 +1682,6 @@ declare namespace CommonProto {
             /** UnitTemplateCfg aiProductionScore */
             aiProductionScore?: (number[]|null);
 
-            /** UnitTemplateCfg aiLoadCoScore */
-            aiLoadCoScore?: (number|null);
-
             /** UnitTemplateCfg animParams */
             animParams?: (number[]|null);
         }
@@ -1805,9 +1802,6 @@ declare namespace CommonProto {
 
             /** UnitTemplateCfg aiProductionScore. */
             public aiProductionScore: number[];
-
-            /** UnitTemplateCfg aiLoadCoScore. */
-            public aiLoadCoScore: number;
 
             /** UnitTemplateCfg animParams. */
             public animParams: number[];
@@ -2649,7 +2643,7 @@ declare namespace CommonProto {
             image?: (number|null);
 
             /** CoBasicCfg bgmCode */
-            bgmCode?: (number|null);
+            bgmCode?: (number[]|null);
 
             /** CoBasicCfg tier */
             tier?: (number|null);
@@ -2665,6 +2659,9 @@ declare namespace CommonProto {
 
             /** CoBasicCfg canGetEnergyWithBattleOnPowerSkills */
             canGetEnergyWithBattleOnPowerSkills?: (number|null);
+
+            /** CoBasicCfg aiBoardUnitTypeAndScore */
+            aiBoardUnitTypeAndScore?: (number[]|null);
 
             /** CoBasicCfg passiveSkills */
             passiveSkills?: (number[]|null);
@@ -2731,7 +2728,7 @@ declare namespace CommonProto {
             public image: number;
 
             /** CoBasicCfg bgmCode. */
-            public bgmCode: number;
+            public bgmCode: number[];
 
             /** CoBasicCfg tier. */
             public tier: number;
@@ -2747,6 +2744,9 @@ declare namespace CommonProto {
 
             /** CoBasicCfg canGetEnergyWithBattleOnPowerSkills. */
             public canGetEnergyWithBattleOnPowerSkills: number;
+
+            /** CoBasicCfg aiBoardUnitTypeAndScore. */
+            public aiBoardUnitTypeAndScore: number[];
 
             /** CoBasicCfg passiveSkills. */
             public passiveSkills: number[];
