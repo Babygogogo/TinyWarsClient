@@ -659,17 +659,10 @@ namespace Twns.MapEditor {
         private readonly _listInfo! : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
-            this._setNotifyListenerArray([
-                { type: NotifyType.MeBannedCoIdArrayChanged, callback: this._onNotifyMeBannedCoIdArrayChanged },
-            ]);
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
         protected _onDataChanged(): void {
-            this._updateView();
-        }
-
-        private _onNotifyMeBannedCoIdArrayChanged(): void {
             this._updateView();
         }
 
@@ -686,7 +679,7 @@ namespace Twns.MapEditor {
             return [
                 this._createDataPlayerIndex(templateWarRule, playerRule),
                 this._createDataTeamIndex(templateWarRule, playerRule, isReviewing),
-                this._createDataBannedCoIdArray(templateWarRule, playerRule, isReviewing, gameConfig),
+                this._createDataBannedCoCategoryIdArray(templateWarRule, playerRule, isReviewing, gameConfig),
                 this._createDataBannedUnitTypeArray(templateWarRule, playerRule, isReviewing, gameConfig),
                 this._createDataCanActivateCoSkill(templateWarRule, playerRule, isReviewing),
                 this._createDataInitialFund(templateWarRule, playerRule, isReviewing),
@@ -725,21 +718,21 @@ namespace Twns.MapEditor {
                     },
             };
         }
-        private _createDataBannedCoIdArray(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean, gameConfig: Config.GameConfig): DataForInfoRenderer {
-            const currentBannedCoIdArray    = playerRule.bannedCoIdArray ?? [];
-            const bannedCoIdsCount          = currentBannedCoIdArray.length;
+        private _createDataBannedCoCategoryIdArray(templateWarRule: ITemplateWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean, gameConfig: Config.GameConfig): DataForInfoRenderer {
+            const currentBannedCoCategoryIdArray    = playerRule.bannedCoCategoryIdArray ?? [];
+            const bannedCoCategoryIdsCount          = currentBannedCoCategoryIdArray.length;
             return {
                 titleText               : Lang.getText(LangTextType.B0403),
-                infoText                : `${bannedCoIdsCount}`,
-                infoColor               : bannedCoIdsCount <= 0 ? 0xFFFFFF : 0xFF0000,
-                callbackOnTouchedTitle  : () => PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseCoPanel, {
+                infoText                : `${bannedCoCategoryIdsCount}`,
+                infoColor               : bannedCoCategoryIdsCount <= 0 ? 0xFFFFFF : 0xFF0000,
+                callbackOnTouchedTitle  : () => PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseCoCategoryIdPanel, {
                     gameConfig,
-                    currentCoIdArray        : currentBannedCoIdArray,
-                    forceUnchosenCoIdArray  : [CommonConstants.CoIdEmpty],
-                    callbackOnConfirm       : isReviewing
+                    currentCoCategoryIdArray        : currentBannedCoCategoryIdArray,
+                    forceUnchosenCoCategoryIdArray  : [CommonConstants.CoCategoryId.Empty],
+                    callbackOnConfirm               : isReviewing
                         ? null
-                        : (bannedCoIdArray => {
-                            WarHelpers.WarRuleHelpers.setBannedCoIdArray(templateWarRule, Helpers.getExisted(playerRule.playerIndex), new Set(bannedCoIdArray));
+                        : (bannedCoCategoryIdArray => {
+                            WarHelpers.WarRuleHelpers.setBannedCoCategoryIdArray(templateWarRule, Helpers.getExisted(playerRule.playerIndex), new Set(bannedCoCategoryIdArray));
                             this._updateView();
                         }),
                 }),
@@ -1038,7 +1031,7 @@ namespace Twns.MapEditor {
                         if (isControlledByAi) {
                             WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, playerIndex, null);
                         } else {
-                            WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, playerIndex, CommonConstants.CoIdEmpty);
+                            WarHelpers.WarRuleHelpers.setFixedCoIdInCcw(templateWarRule, playerIndex, CommonConstants.CoId.Empty);
                         }
                         this._updateView();
                     },
@@ -1093,7 +1086,7 @@ namespace Twns.MapEditor {
                         if (isControlledByAi) {
                             WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, playerIndex, null);
                         } else {
-                            WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, playerIndex, CommonConstants.CoIdEmpty);
+                            WarHelpers.WarRuleHelpers.setFixedCoIdInSrw(templateWarRule, playerIndex, CommonConstants.CoId.Empty);
                         }
                         this._updateView();
                     },

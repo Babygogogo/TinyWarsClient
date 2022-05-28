@@ -716,7 +716,7 @@ namespace Twns.Common {
     }
     function createDefaultPlayerData(gameConfig: GameConfig): PlayerData {
         return {
-            coId            : CommonConstants.CoIdEmpty,
+            coId            : CommonConstants.CoId.Empty,
             coSkillType     : CoSkillType.Passive,
             unitType        : gameConfig.getFirstUnitType(),
             unitHp          : CommonConstants.UnitMaxHp,
@@ -732,7 +732,7 @@ namespace Twns.Common {
         };
     }
     function getNextCoSkillType(gameConfig: GameConfig, coId: number, skillType: CoSkillType | null): CoSkillType | null {
-        if (coId === CommonConstants.CoIdEmpty) {
+        if (coId === CommonConstants.CoId.Empty) {
             return null;
         }
 
@@ -942,7 +942,7 @@ namespace Twns.Common {
         const attackerData          = calculatorData.attackerData;
         const attackerCoId          = attackerData.coId;
         const attackerCoSkillType   = attackerData.coSkillType;
-        if ((attackerCoId === CommonConstants.CoIdEmpty) || (attackerCoSkillType == null)) {
+        if ((attackerCoId === CommonConstants.CoId.Empty) || (attackerCoSkillType == null)) {
             return 0;
         }
 
@@ -1082,7 +1082,7 @@ namespace Twns.Common {
         const defenderData          = calculatorData.defenderData;
         const defenderCoId          = defenderData.coId;
         const defenderCoSkillType   = defenderData.coSkillType;
-        if ((defenderCoId === CommonConstants.CoIdEmpty) || (defenderCoSkillType == null)) {
+        if ((defenderCoId === CommonConstants.CoId.Empty) || (defenderCoSkillType == null)) {
             return 0;
         }
 

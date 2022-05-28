@@ -35,7 +35,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
         },
         settingsForMcw          : {},
 
-        selfCoId                : CommonConstants.CoIdEmpty,
+        selfCoId                : CommonConstants.CoId.Empty,
         selfPlayerIndex         : CommonConstants.PlayerIndex.First,
         selfUnitAndTileSkinId   : CommonConstants.UnitAndTileMinSkinId,
     };
@@ -101,7 +101,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
             setInstanceWarRule(WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRule, mapRawData.warEventFullData));
         }
 
-        const availableCoIdArray = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+        const availableCoIdArray = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({
             baseWarRule     : getInstanceWarRule(),
             playerIndex     : getSelfPlayerIndex(),
             gameConfig      : getGameConfig(),
@@ -285,11 +285,11 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
         return WarHelpers.WarRuleHelpers.getEnergyGrowthMultiplier(getInstanceWarRule(), playerIndex);
     }
 
-    export function getBannedCoIdArray(playerIndex: number): number[] | null {
-        return WarHelpers.WarRuleHelpers.getBannedCoIdArray(getInstanceWarRule(), playerIndex);
+    export function getBannedCoCategoryIdArray(playerIndex: number): number[] | null {
+        return WarHelpers.WarRuleHelpers.getBannedCoCategoryIdArray(getInstanceWarRule(), playerIndex);
     }
-    export function setBannedCoIdArray(playerIndex: number, coIdSet: Set<number>): void {
-        WarHelpers.WarRuleHelpers.setBannedCoIdArray(getInstanceWarRule(), playerIndex, coIdSet);
+    export function setBannedCoCategoryIdArray(playerIndex: number, coIdSet: Set<number>): void {
+        WarHelpers.WarRuleHelpers.setBannedCoCategoryIdArray(getInstanceWarRule(), playerIndex, coIdSet);
     }
 
     export function getBannedUnitTypeArray(playerIndex: number): number[] | null {

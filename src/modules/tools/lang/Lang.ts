@@ -351,7 +351,7 @@ namespace Twns.Lang {
     export function getPlayerRuleName(type: PlayerRuleType): string | null {
         switch (type) {
             case PlayerRuleType.TeamIndex               : return getText(LangTextType.B0019);
-            case PlayerRuleType.BannedCoIdArray         : return getText(LangTextType.B0403);
+            case PlayerRuleType.BannedCoCategoryIdArray : return getText(LangTextType.B0403);
             case PlayerRuleType.BannedUnitTypeArray     : return getText(LangTextType.B0895);
             case PlayerRuleType.CanActivateCoSkill      : return getText(LangTextType.B0897);
             case PlayerRuleType.InitialFund             : return getText(LangTextType.B0178);

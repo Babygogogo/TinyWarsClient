@@ -52,7 +52,7 @@ namespace Twns.PanelHelpers {
 
         CommonAddLoadedUnitPanel            : PanelConfig<Common.OpenDataForCommonAddLoadedUnitPanel>;
         CommonAlertPanel                    : PanelConfig<Common.OpenDataForCommonAlertPanel>;
-        CommonBanCoPanel                    : PanelConfig<Common.OpenDataForCommonBanCoPanel>;
+        CommonBanCoCategoryIdPanel          : PanelConfig<Common.OpenDataForCommonBanCoCategoryIdPanel>;
         CommonBlockPanel                    : PanelConfig<Common.OpenDataForCommonBlockPanel>;
         CommonChangeVersionPanel            : PanelConfig<Common.OpenDataForCommonChangeVersionPanel>;
         CommonChooseCoCategoryIdPanel       : PanelConfig<Common.OpenDataForCommonChooseCoCategoryIdPanel>;
@@ -116,7 +116,6 @@ namespace Twns.PanelHelpers {
         McwMyWarListPanel                   : PanelConfig<MultiCustomWar.OpenDataForMcwMyWarListPanel>;
 
         MeAddWarEventToRulePanel            : PanelConfig<MapEditor.OpenDataForMeAddWarEventToRulePanel>;
-        MeAvailableCoPanel                  : PanelConfig<MapEditor.OpenDataForMeAvailableCoPanel>;
         MeChooseTileBasePanel               : PanelConfig<MapEditor.OpenDataForMeChooseTileBasePanel>;
         MeChooseTileDecorationPanel         : PanelConfig<MapEditor.OpenDataForMeChooseTileDecorationPanel>;
         MeChooseTileObjectPanel             : PanelConfig<MapEditor.OpenDataForMeChooseTileObjectPanel>;
@@ -159,7 +158,6 @@ namespace Twns.PanelHelpers {
         MmTagChangePanel                    : PanelConfig<MapManagement.OpenDataForMmTagChangePanel>;
         MmTagListPanel                      : PanelConfig<MapManagement.OpenDataForMmTagListPanel>;
         MmTagSearchPanel                    : PanelConfig<MapManagement.OpenDataForMmTagSearchPanel>;
-        MmWarRuleAvailableCoPanel           : PanelConfig<MapManagement.OpenDataForMmWarRuleAvailableCoPanel>;
         MmWarRulePanel                      : PanelConfig<MapManagement.OpenDataForMmWarRulePanel>;
 
         MpwSpectatePanel                    : PanelConfig<MultiPlayerWar.OpenDataForMpwSpectatePanel>;
@@ -518,9 +516,9 @@ namespace Twns.PanelHelpers {
                 layer       : LayerType.Notify0,
             },
 
-            CommonBanCoPanel: {
-                cls         : Common?.CommonBanCoPanel,
-                skinName    : `resource/skins/common/CommonBanCoPanel.exml`,
+            CommonBanCoCategoryIdPanel: {
+                cls         : Common?.CommonBanCoCategoryIdPanel,
+                skinName    : `resource/skins/common/CommonBanCoCategoryIdPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
@@ -893,12 +891,6 @@ namespace Twns.PanelHelpers {
                 layer       : LayerType.Hud0,
             },
 
-            MeAvailableCoPanel: {
-                cls         : MapEditor?.MeAvailableCoPanel,
-                skinName    : `resource/skins/mapEditor/MeAvailableCoPanel.exml`,
-                layer       : LayerType.Hud0,
-            },
-
             MeChooseTileBasePanel: {
                 cls         : MapEditor?.MeChooseTileBasePanel,
                 skinName    : `resource/skins/mapEditor/MeChooseTileBasePanel.exml`,
@@ -1148,12 +1140,6 @@ namespace Twns.PanelHelpers {
             MmTagSearchPanel: {
                 cls         : MapManagement?.MmTagSearchPanel,
                 skinName    : `resource/skins/mapManagement/MmTagSearchPanel.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            MmWarRuleAvailableCoPanel: {
-                cls         : MapManagement?.MmWarRuleAvailableCoPanel,
-                skinName    : `resource/skins/mapManagement/MmWarRuleAvailableCoPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 

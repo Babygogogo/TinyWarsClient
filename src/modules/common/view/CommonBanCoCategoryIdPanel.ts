@@ -21,16 +21,15 @@ namespace Twns.Common {
     import NotifyType       = Notify.NotifyType;
     import GameConfig       = Config.GameConfig;
 
-    export type OpenDataForCommonBanCoPanel = {
-        playerIndex         : number;
-        gameConfig          : GameConfig;
-        bannedCoIdArray     : number[];
-        fullCoIdArray       : number[];
-        maxBanCount         : number | null;
-        selfCoId            : number | null;
-        callbackOnConfirm   : ((bannedCoIdSet: Set<number>) => void) | null;
+    export type OpenDataForCommonBanCoCategoryIdPanel = {
+        playerIndex             : number;
+        gameConfig              : GameConfig;
+        bannedCoCategoryIdArray : number[];
+        maxBanCount             : number | null;
+        selfCoId                : number | null;
+        callbackOnConfirm       : ((bannedCoCategoryIdSet: Set<number>) => void) | null;
     };
-    export class CommonBanCoPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonBanCoPanel> {
+    export class CommonBanCoCategoryIdPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonBanCoCategoryIdPanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _group!                    : eui.Group;
         private readonly _labelAvailableCoTitle!    : TwnsUiLabel.UiLabel;
@@ -45,8 +44,8 @@ namespace Twns.Common {
         // private _renderersForCoTiers    : RendererForCoTier[] = [];
         private _renderersForCoNames    : RendererForCoName[] = [];
 
-        private _bannedCoIdSet          = new Set<number>();
-        private _previewCoId            : number | null = null;
+        private _bannedCoCategoryIdSet  = new Set<number>();
+        private _previewCoCategoryId    : number | null = null;
 
         protected _onOpening(): void {
             this._setUiListenerArray([
@@ -61,11 +60,11 @@ namespace Twns.Common {
             this._setIsCloseOnTouchedMask();
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            const openData      = this._getOpenData();
-            const bannedCoIdSet = this._bannedCoIdSet;
-            bannedCoIdSet.clear();
-            for (const coId of openData.bannedCoIdArray) {
-                bannedCoIdSet.add(coId);
+            const openData              = this._getOpenData();
+            const bannedCoCategoryIdSet = this._bannedCoCategoryIdSet;
+            bannedCoCategoryIdSet.clear();
+            for (const coCategoryId of openData.bannedCoCategoryIdArray) {
+                bannedCoCategoryIdSet.add(coCategoryId);
             }
 
             this._updateComponentsForLanguage();
@@ -79,14 +78,14 @@ namespace Twns.Common {
             this._clearGroupCoNames();
         }
 
-        private _setPreviewCoId(coId: number): void {
-            if (this._getPreviewCoId() !== coId) {
-                this._previewCoId = coId;
-                this._updateComponentsForPreviewCoId();
+        private _setPreviewCoCategoryId(coCategoryId: number): void {
+            if (this._getPreviewCoCategoryId() !== coCategoryId) {
+                this._previewCoCategoryId = coCategoryId;
+                this._updateComponentsForPreviewCoCategoryId();
             }
         }
-        private _getPreviewCoId(): number | null {
-            return this._previewCoId;
+        private _getPreviewCoCategoryId(): number | null {
+            return this._previewCoCategoryId;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -102,8 +101,8 @@ namespace Twns.Common {
             if (callback == null) {
                 throw Helpers.newError(`CommonBanCoPanel._onTouchedBtnConfirm() empty callback.`);
             } else {
-                const bannedCoIdSet = this._bannedCoIdSet;
-                if (bannedCoIdSet.has(Twns.CommonConstants.CoIdEmpty)) {
+                const bannedCoCategoryIdSet = this._bannedCoCategoryIdSet;
+                if (bannedCoCategoryIdSet.has(CommonConstants.CoCategoryId.Empty)) {
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0130),
@@ -112,7 +111,7 @@ namespace Twns.Common {
                 }
 
                 const maxBanCount = openData.maxBanCount;
-                if ((maxBanCount != null) && (bannedCoIdSet.size > maxBanCount)) {
+                if ((maxBanCount != null) && (bannedCoCategoryIdSet.size > maxBanCount)) {
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getFormattedText(LangTextType.F0031, maxBanCount),
@@ -120,65 +119,29 @@ namespace Twns.Common {
                     return;
                 }
 
-                callback(new Set(bannedCoIdSet));
+                callback(new Set(bannedCoCategoryIdSet));
             }
         }
 
-        // private _onTouchedCoTierRenderer(e: egret.TouchEvent): void {
-        //     const renderer          = e.currentTarget as RendererForCoTier;
-        //     const availableCoIdSet  = this._availableCoIdSet;
-        //     const coIdList          = renderer.getIsCustomSwitch()
-        //         ? ConfigManager.getAvailableCustomCoIdList(ConfigManager.getLatestFormalVersion())
-        //         : ConfigManager.getAvailableCoIdListInTier(ConfigManager.getLatestFormalVersion(), renderer.getCoTier());
-
-        //     if (renderer.getState() === CoTierState.Unavailable) {
-        //         for (const coId of coIdList) {
-        //             availableCoIdSet.add(coId);
-        //         }
-        //         this._updateGroupCoTiers();
-        //         this._updateGroupCoNames();
-
-        //     } else {
-        //         const callback = () => {
-        //             for (const coId of coIdList) {
-        //                 availableCoIdSet.delete(coId);
-        //             }
-        //             this._updateGroupCoTiers();
-        //             this._updateGroupCoNames();
-        //         }
-
-        //         if ((this._playerIndex !== McrModel.Create.getSelfPlayerIndex()) ||
-        //             (coIdList.indexOf(McrModel.Create.getSelfCoId()) < 0)
-        //         ) {
-        //             callback();
-        //         } else {
-        //             ConfirmPanel.show({
-        //                 content : Lang.getText(Lang.Type.A0057),
-        //                 callback,
-        //             });
-        //         }
-        //     }
-        // }
-
         private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
-            const renderer  = e.currentTarget as RendererForCoName;
-            const coId      = Helpers.getExisted(renderer.getCoId());
-            this._setPreviewCoId(coId);
+            const renderer      = e.currentTarget as RendererForCoName;
+            const coCategoryId  = Helpers.getExisted(renderer.getCoCategoryId());
+            this._setPreviewCoCategoryId(coCategoryId);
 
             const openData = this._getOpenData();
             if (openData.callbackOnConfirm == null) {
                 return;
             }
 
-            const bannedCoIdSet = this._bannedCoIdSet;
+            const bannedCoCategoryIdSet = this._bannedCoCategoryIdSet;
             if (!renderer.getIsAvailable()) {
-                bannedCoIdSet.delete(coId);
+                bannedCoCategoryIdSet.delete(coCategoryId);
                 // this._updateGroupCoTiers();
                 this._updateGroupCoNames();
                 return;
             }
 
-            if (coId === Twns.CommonConstants.CoIdEmpty) {
+            if (coCategoryId === CommonConstants.CoCategoryId.Empty) {
                 PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0130),
@@ -187,7 +150,7 @@ namespace Twns.Common {
             }
 
             const maxBanCount = openData.maxBanCount;
-            if ((maxBanCount != null) && (bannedCoIdSet.size >= maxBanCount)) {
+            if ((maxBanCount != null) && (bannedCoCategoryIdSet.size >= maxBanCount)) {
                 PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getFormattedText(LangTextType.F0031, maxBanCount),
@@ -196,11 +159,12 @@ namespace Twns.Common {
             }
 
             const callback = () => {
-                bannedCoIdSet.add(coId);
+                bannedCoCategoryIdSet.add(coCategoryId);
                 // this._updateGroupCoTiers();
                 this._updateGroupCoNames();
             };
-            if (openData.selfCoId !== coId) {
+            const selfCoId = openData.selfCoId;
+            if ((selfCoId == null) || (openData.gameConfig.getCoBasicCfg(selfCoId)?.categoryId !== coCategoryId)) {
                 callback();
             } else {
                 PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
@@ -219,51 +183,8 @@ namespace Twns.Common {
             this._btnClose.label                = Lang.getText(LangTextType.B0204);
             this._labelAvailableCoTitle.text    = `${Lang.getText(LangTextType.B0238)} (P${this._getOpenData().playerIndex})`;
 
-            this._updateComponentsForPreviewCoId();
+            this._updateComponentsForPreviewCoCategoryId();
         }
-
-        // private _initGroupCoTiers(): void {
-        //     for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestFormalVersion())) {
-        //         const renderer = new RendererForCoTier();
-        //         renderer.setCoTier(tier);
-        //         renderer.setState(CoTierState.AllAvailable);
-        //         renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoTierRenderer, this);
-        //         this._renderersForCoTiers.push(renderer);
-        //         this._groupCoTiers.addChild(renderer);
-        //     }
-
-        //     const rendererForCustomCo = new RendererForCoTier();
-        //     rendererForCustomCo.setIsCustomSwitch(true);
-        //     rendererForCustomCo.setState(CoTierState.AllAvailable);
-        //     rendererForCustomCo.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoTierRenderer, this);
-        //     this._renderersForCoTiers.push(rendererForCustomCo);
-        //     this._groupCoTiers.addChild(rendererForCustomCo);
-
-        //     this._updateGroupCoTiers();
-        // }
-
-        // private _clearGroupCoTiers(): void {
-        //     this._groupCoTiers.removeChildren();
-        //     this._renderersForCoTiers.length = 0;
-        // }
-
-        // private _updateGroupCoTiers(): void {
-        //     const availableCoIdSet  = this._availableCoIdSet;
-        //     const configVersion     = McrModel.Create.getData().settingsForCommon.configVersion;
-        //     for (const renderer of this._renderersForCoTiers) {
-        //         const includedCoIdList = renderer.getIsCustomSwitch()
-        //             ? ConfigManager.getAvailableCustomCoIdList(configVersion)
-        //             : ConfigManager.getAvailableCoIdListInTier(configVersion, renderer.getCoTier());
-
-        //         if (includedCoIdList.every(coId => availableCoIdSet.has(coId))) {
-        //             renderer.setState(CoTierState.AllAvailable);
-        //         } else if (includedCoIdList.every(coId => !availableCoIdSet.has(coId))) {
-        //             renderer.setState(CoTierState.Unavailable);
-        //         } else {
-        //             renderer.setState(CoTierState.PartialAvailable);
-        //         }
-        //     }
-        // }
 
         private _initButtons(): void {
             const canModify             = this._getOpenData().callbackOnConfirm != null;
@@ -273,26 +194,20 @@ namespace Twns.Common {
         }
 
         private _initGroupCoNames(): void {
-            const openData      = this._getOpenData();
-            const gameConfig    = openData.gameConfig;
-            const fullCoIdArray = [...new Set(openData.fullCoIdArray)].sort((v1, v2) => {
-                const name1 = gameConfig.getCoNameAndTierText(v1);
-                const name2 = gameConfig.getCoNameAndTierText(v2);
-                return (name1 || "").localeCompare(name2 || "", "zh");
-            });
-
-            const groupOriginCoNames = this._groupOriginCoNames;
-            const groupCustomCoNames = this._groupCustomCoNames;
-            for (const coId of fullCoIdArray) {
+            const openData              = this._getOpenData();
+            const gameConfig            = openData.gameConfig;
+            const groupOriginCoNames    = this._groupOriginCoNames;
+            const groupCustomCoNames    = this._groupCustomCoNames;
+            for (const coCategoryId of gameConfig.getEnabledCoCategoryIdArray()) {
                 const renderer = new RendererForCoName();
                 renderer.setGameConfig(gameConfig);
-                renderer.setCoId(coId);
+                renderer.setCoCategoryId(coCategoryId);
                 renderer.setIsAvailable(true);
 
                 renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoNameRenderer, this);
                 this._renderersForCoNames.push(renderer);
 
-                if (gameConfig.checkIsOriginCo(coId)) {
+                if (gameConfig.checkIsOriginCo(coCategoryId)) {
                     groupOriginCoNames.addChild(renderer);
                 } else {
                     groupCustomCoNames.addChild(renderer);
@@ -309,25 +224,26 @@ namespace Twns.Common {
         }
 
         private _updateGroupCoNames(): void {
-            const bannedCoIdSet = this._bannedCoIdSet;
+            const bannedCoCategoryIdSet = this._bannedCoCategoryIdSet;
             for (const renderer of this._renderersForCoNames) {
-                renderer.setIsAvailable(!bannedCoIdSet.has(Helpers.getExisted(renderer.getCoId())));
+                renderer.setIsAvailable(!bannedCoCategoryIdSet.has(Helpers.getExisted(renderer.getCoCategoryId())));
             }
         }
 
         private _initComponentsForPreviewCo(): void {
-            this._setPreviewCoId(Twns.CommonConstants.CoIdEmpty);
+            this._setPreviewCoCategoryId(CommonConstants.CoCategoryId.Empty);
         }
 
-        private _updateComponentsForPreviewCoId(): void {
-            const coId = this._previewCoId;
-            if (coId == null) {
+        private _updateComponentsForPreviewCoCategoryId(): void {
+            const coCategoryId = this._previewCoCategoryId;
+            if (coCategoryId == null) {
                 return;
             }
 
+            const gameConfig = this._getOpenData().gameConfig;
             this._uiCoInfo.setCoData({
-                gameConfig   : this._getOpenData().gameConfig,
-                coId,
+                gameConfig,
+                coId        : gameConfig.getEnabledCoIdByCategoryId(coCategoryId) ?? gameConfig.getCoIdByCategoryId(coCategoryId),
             });
         }
 
@@ -343,7 +259,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Helpers.resetTween({
@@ -358,60 +274,9 @@ namespace Twns.Common {
                 endProps    : { alpha: 0, verticalCenter: -40 },
             });
 
-            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
-
-    // const enum CoTierState {
-    //     AllAvailable,
-    //     PartialAvailable,
-    //     Unavailable,
-    // }
-    // class RendererForCoTier extends TwnsUiComponent.UiComponent {
-    //     private _imgSelected: TwnsUiImage.UiImage;
-    //     private _labelName  : TwnsUiLabel.UiLabel;
-
-    //     private _tier           : number;
-    //     private _isCustomSwitch = false;
-    //     private _state          : CoTierState;
-
-    //     public constructor() {
-    //         super();
-
-    //         this.skinName = "resource/skins/component/checkBox/CheckBox1.exml";
-    //     }
-
-    //     public setCoTier(tier: number): void {
-    //         this._tier              = tier;
-    //         this._labelName.text    = `Tier ${tier}`;
-    //     }
-    //     public getCoTier(): number {
-    //         return this._tier;
-    //     }
-
-    //     public setIsCustomSwitch(isCustomSwitch: boolean): void {
-    //         this._isCustomSwitch    = isCustomSwitch;
-    //         this._labelName.text    = "Custom";
-    //     }
-    //     public getIsCustomSwitch(): boolean {
-    //         return this._isCustomSwitch;
-    //     }
-
-    //     public setState(state: CoTierState): void {
-    //         this._state = state;
-    //         if (state === CoTierState.AllAvailable) {
-    //             this._labelName.textColor = 0x00FF00;
-    //         } else if (state === CoTierState.PartialAvailable) {
-    //             this._labelName.textColor = 0xFFFF00;
-    //         } else {
-    //             this._labelName.textColor = 0xFF0000;
-    //         }
-    //         Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Types.ColorType.Origin : Types.ColorType.Gray);
-    //     }
-    //     public getState(): CoTierState {
-    //         return this._state;
-    //     }
-    // }
 
     class RendererForCoName extends TwnsUiComponent.UiComponent {
         private readonly _imgUnselected!    : TwnsUiImage.UiImage;
@@ -419,7 +284,7 @@ namespace Twns.Common {
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
 
         private _gameConfig     : GameConfig | null = null;
-        private _coId           : number | null = null;
+        private _coCategoryId   : number | null = null;
         private _isAvailable    : boolean | null = null;
 
         public constructor() {
@@ -436,12 +301,12 @@ namespace Twns.Common {
             this._gameConfig = config;
         }
 
-        public setCoId(coId: number): void {
-            this._coId = coId;
+        public setCoCategoryId(coCategoryId: number): void {
+            this._coCategoryId = coCategoryId;
             this._updateView();
         }
-        public getCoId(): number | null {
-            return this._coId;
+        public getCoCategoryId(): number | null {
+            return this._coCategoryId;
         }
 
         public setIsAvailable(isAvailable: boolean): void {
@@ -460,7 +325,7 @@ namespace Twns.Common {
             const isAvailable           = !!this._isAvailable;
             this._imgSelected.visible   = isAvailable;
             this._imgUnselected.visible = !isAvailable;
-            this._labelName.text        = this._gameConfig?.getCoBasicCfg(Helpers.getExisted(this._coId))?.name || Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = this._gameConfig?.getCoCategoryCfg(Helpers.getExisted(this._coCategoryId))?.name ?? CommonConstants.ErrorTextForUndefined;
         }
     }
 }

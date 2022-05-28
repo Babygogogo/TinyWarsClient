@@ -128,7 +128,7 @@ namespace Twns.MapEditor {
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
                         Twns.MapEditor.MeMfwModel.setIsControlledByPlayer(playerIndex, !isControlledByPlayer);
-                        Twns.MapEditor.MeMfwModel.setCoId(playerIndex, Twns.CommonConstants.CoIdEmpty);
+                        Twns.MapEditor.MeMfwModel.setCoId(playerIndex, Twns.CommonConstants.CoId.Empty);
                         this._updateView();
                     });
                 },
@@ -159,7 +159,7 @@ namespace Twns.MapEditor {
                         gameConfig,
                         currentCoId         : coId,
                         availableCoIdArray  : Twns.MapEditor.MeMfwModel.getIsControlledByHuman(playerIndex)
-                            ? Twns.WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({ baseWarRule: Twns.MapEditor.MeMfwModel.getInstanceWarRule(), playerIndex, gameConfig })
+                            ? Twns.WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({ baseWarRule: Twns.MapEditor.MeMfwModel.getInstanceWarRule(), playerIndex, gameConfig })
                             : gameConfig.getEnabledCoArray().map(v => v.coId),
                         callbackOnConfirm   : newCoId => {
                             if (newCoId !== coId) {

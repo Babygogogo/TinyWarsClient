@@ -135,7 +135,7 @@ namespace Twns.MultiCustomRoom {
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                 gameConfig,
                 currentCoId,
-                availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({
                     baseWarRule         : MultiCustomRoom.McrCreateModel.getInstanceWarRule(),
                     playerIndex     : MultiCustomRoom.McrCreateModel.getSelfPlayerIndex(),
                     gameConfig,
@@ -512,7 +512,7 @@ namespace Twns.MultiCustomRoom {
                 const playerIndex   = data.playerIndex;
                 creator.setSelfPlayerIndex(playerIndex);
 
-                const availableCoIdArray = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                const availableCoIdArray = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({
                     baseWarRule         : creator.getInstanceWarRule(),
                     playerIndex,
                     gameConfig      : MultiCustomRoom.McrCreateModel.getGameConfig(),

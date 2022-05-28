@@ -488,7 +488,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
     function checkIsValidDataForCoDialogue(data: CommonProto.WarEvent.WeaDialogue.IDataForCoDialogue, gameConfig: GameConfig): boolean {
         const coId = data.coId;
         if ((coId == null)                          ||
-            (coId === CommonConstants.CoIdEmpty)    ||
+            (coId === CommonConstants.CoId.Empty)    ||
             (gameConfig.getCoBasicCfg(coId) == null)
         ) {
             return false;
@@ -3469,7 +3469,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             if (dataForCoDialogue) {
                 const { coId, side, textArray, nameArray } = dataForCoDialogue;
                 if ((coId == null)                                                                                          ||
-                    (coId === CommonConstants.CoIdEmpty)                                                                    ||
+                    (coId === CommonConstants.CoId.Empty)                                                                    ||
                     (gameConfig.getCoNameAndTierText(coId) == null)                                                         ||
                     ((side !== Types.WarEventActionDialogueSide.Left) && (side !== Types.WarEventActionDialogueSide.Right)) ||
                     (!Helpers.checkIsValidLanguageTextArray({
@@ -3955,7 +3955,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             if (dataForCoDialogue) {
                 const { coId, side, textArray, nameArray } = dataForCoDialogue;
                 if ((coId == null)                                                                                          ||
-                    (coId === CommonConstants.CoIdEmpty)                                                                    ||
+                    (coId === CommonConstants.CoId.Empty)                                                                    ||
                     (gameConfig.getCoNameAndTierText(coId) == null)                                                         ||
                     ((side !== Types.WarEventActionDialogueSide.Left) && (side !== Types.WarEventActionDialogueSide.Right)) ||
                     (!Helpers.checkIsValidLanguageTextArray({

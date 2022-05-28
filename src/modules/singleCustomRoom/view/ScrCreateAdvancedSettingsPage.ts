@@ -106,7 +106,7 @@ namespace Twns.SingleCustomRoom {
         private _initListSetting(): void {
             this._listSetting.bindData([
                 { playerRuleType: PlayerRuleType.TeamIndex },
-                { playerRuleType: PlayerRuleType.BannedCoIdArray },
+                { playerRuleType: PlayerRuleType.BannedCoCategoryIdArray },
                 { playerRuleType: PlayerRuleType.BannedUnitTypeArray },
                 { playerRuleType: PlayerRuleType.InitialFund },
                 { playerRuleType: PlayerRuleType.IncomeMultiplier },
@@ -151,15 +151,15 @@ namespace Twns.SingleCustomRoom {
             const data = this.data;
             if (data) {
                 const playerRuleType    = data.playerRuleType;
-                this._labelName.text    = Lang.getPlayerRuleName(playerRuleType) || Twns.CommonConstants.ErrorTextForUndefined;
-                this._btnHelp.visible   = playerRuleType === PlayerRuleType.BannedCoIdArray;
+                this._labelName.text    = Lang.getPlayerRuleName(playerRuleType) || CommonConstants.ErrorTextForUndefined;
+                this._btnHelp.visible   = playerRuleType === PlayerRuleType.BannedCoCategoryIdArray;
             }
         }
 
         private _onTouchedBtnHelp(): void {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
-            if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
+            if (playerRuleType === PlayerRuleType.BannedCoCategoryIdArray) {
                 PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
                     title   : `CO`,
                     content : Lang.getText(LangTextType.R0004),
@@ -196,7 +196,7 @@ namespace Twns.SingleCustomRoom {
             const playerIndex = this._getData().playerIndex;
             return [
                 { playerIndex, playerRuleType: PlayerRuleType.TeamIndex },
-                { playerIndex, playerRuleType: PlayerRuleType.BannedCoIdArray },
+                { playerIndex, playerRuleType: PlayerRuleType.BannedCoCategoryIdArray },
                 { playerIndex, playerRuleType: PlayerRuleType.BannedUnitTypeArray },
                 { playerIndex, playerRuleType: PlayerRuleType.InitialFund },
                 { playerIndex, playerRuleType: PlayerRuleType.IncomeMultiplier },
@@ -237,8 +237,8 @@ namespace Twns.SingleCustomRoom {
                 { ui: this._inputValue, callback: this._onFocusOutInputValue, eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.ScrCreateTemplateWarRuleIdChanged,   callback: this._onNotifyScrCreateTemplateWarRuleIdChanged },
-                { type: NotifyType.ScrCreateBannedCoIdArrayChanged,     callback: this._onNotifyScrCreateBannedCoIdArrayChanged },
+                { type: NotifyType.ScrCreateTemplateWarRuleIdChanged,       callback: this._onNotifyScrCreateTemplateWarRuleIdChanged },
+                { type: NotifyType.ScrCreateBannedCoCategoryIdArrayChanged, callback: this._onNotifyScrCreateBannedCoCategoryIdArrayChanged },
             ]);
             this._labelValue.touchEnabled = true;
         }
@@ -278,7 +278,7 @@ namespace Twns.SingleCustomRoom {
             this._updateBtnCustom();
             this._updateComponentsForValue();
         }
-        private _onNotifyScrCreateBannedCoIdArrayChanged(): void {
+        private _onNotifyScrCreateBannedCoCategoryIdArrayChanged(): void {
             this._updateComponentsForValue();
         }
 
@@ -291,7 +291,7 @@ namespace Twns.SingleCustomRoom {
                 const playerIndex = data.playerIndex;
                 switch (data.playerRuleType) {
                     case PlayerRuleType.TeamIndex               : this._updateComponentsForValueAsTeamIndex(playerIndex);               return;
-                    case PlayerRuleType.BannedCoIdArray         : this._updateComponentsForValueAsBannedCoIdArray(playerIndex);         return;
+                    case PlayerRuleType.BannedCoCategoryIdArray : this._updateComponentsForValueAsBannedCoCategoryIdArray(playerIndex); return;
                     case PlayerRuleType.BannedUnitTypeArray     : this._updateComponentsForValueAsBannedUnitTypeArray(playerIndex);     return;
                     case PlayerRuleType.InitialFund             : this._updateComponentsForValueAsInitialFund(playerIndex);             return;
                     case PlayerRuleType.IncomeMultiplier        : this._updateComponentsForValueAsIncomeMultiplier(playerIndex);        return;
@@ -313,42 +313,42 @@ namespace Twns.SingleCustomRoom {
 
             const labelValue                    = this._labelValue;
             labelValue.visible                  = true;
-            labelValue.text                     = Lang.getPlayerTeamName(SingleCustomRoom.ScrCreateModel.getTeamIndex(playerIndex)) || Twns.CommonConstants.ErrorTextForUndefined;
+            labelValue.text                     = Lang.getPlayerTeamName(SingleCustomRoom.ScrCreateModel.getTeamIndex(playerIndex)) || CommonConstants.ErrorTextForUndefined;
             labelValue.textColor                = 0xFFFFFF;
             this._callbackForTouchLabelValue    = () => SingleCustomRoom.ScrCreateModel.tickTeamIndex(playerIndex);
         }
-        private _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): void {
+        private _updateComponentsForValueAsBannedCoCategoryIdArray(playerIndex: number): void {
             this._inputValue.visible            = false;
             this._callbackForFocusOutInputValue = null;
 
-            const labelValue                    = this._labelValue;
-            const currValue                     = (SingleCustomRoom.ScrCreateModel.getBannedCoIdArray(playerIndex) || []).length;
-            labelValue.visible                  = true;
-            labelValue.text                     = `${currValue}`;
-            labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
-            this._callbackForTouchLabelValue    = () => {
+            const labelValue                        = this._labelValue;
+            const currentBannedCoCategoryIdArray    = SingleCustomRoom.ScrCreateModel.getBannedCoCategoryIdArray(playerIndex) ?? [];
+            const currValue                         = currentBannedCoCategoryIdArray.length;
+            labelValue.visible                      = true;
+            labelValue.text                         = `${currValue}`;
+            labelValue.textColor                    = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
+            this._callbackForTouchLabelValue        = () => {
                 const gameConfig    = SingleCustomRoom.ScrCreateModel.getGameConfig();
                 const selfCoId      = SingleCustomRoom.ScrCreateModel.getCoId(playerIndex);
-                PanelHelpers.open(PanelHelpers.PanelDict.CommonBanCoPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonBanCoCategoryIdPanel, {
                     playerIndex,
                     gameConfig,
-                    bannedCoIdArray     : SingleCustomRoom.ScrCreateModel.getBannedCoIdArray(playerIndex) || [],
-                    fullCoIdArray       : gameConfig.getEnabledCoArray().map(v => v.coId),
-                    maxBanCount         : null,
+                    bannedCoCategoryIdArray : currentBannedCoCategoryIdArray,
+                    maxBanCount             : null,
                     selfCoId,
-                    callbackOnConfirm   : (bannedCoIdSet) => {
+                    callbackOnConfirm       : bannedCoCategoryIdSet => {
                         const callback = () => {
-                            SingleCustomRoom.ScrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
-                            Notify.dispatch(NotifyType.ScrCreateBannedCoIdArrayChanged);
-                            PanelHelpers.close(PanelHelpers.PanelDict.CommonBanCoPanel);
+                            SingleCustomRoom.ScrCreateModel.setBannedCoCategoryIdArray(playerIndex, bannedCoCategoryIdSet);
+                            Notify.dispatch(NotifyType.ScrCreateBannedCoCategoryIdArrayChanged);
+                            PanelHelpers.close(PanelHelpers.PanelDict.CommonBanCoCategoryIdPanel);
                         };
-                        if (!bannedCoIdSet.has(selfCoId)) {
+                        if (!bannedCoCategoryIdSet.has(Helpers.getExisted(gameConfig.getCoBasicCfg(selfCoId)?.categoryId))) {
                             callback();
                         } else {
                             PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0057),
                                 callback: () => {
-                                    SingleCustomRoom.ScrCreateModel.setCoId(playerIndex, Twns.CommonConstants.CoIdEmpty);
+                                    SingleCustomRoom.ScrCreateModel.setCoId(playerIndex, CommonConstants.CoId.Empty);
                                     callback();
                                 },
                             });
@@ -386,17 +386,17 @@ namespace Twns.SingleCustomRoom {
             const currValue                     = SingleCustomRoom.ScrCreateModel.getInitialFund(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleInitialFundDefault);
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
             inputValue.restrict                 = `0-9\\-`;
             inputValue.maxChars                 = 7;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                          ||
-                    (value > Twns.CommonConstants.WarRuleInitialFundMaxLimit)    ||
-                    (value < Twns.CommonConstants.WarRuleInitialFundMinLimit)
+                    (value > CommonConstants.WarRuleInitialFundMaxLimit)    ||
+                    (value < CommonConstants.WarRuleInitialFundMinLimit)
                 ) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setInitialFund(playerIndex, value);
                 }
@@ -410,17 +410,17 @@ namespace Twns.SingleCustomRoom {
             const currValue                     = SingleCustomRoom.ScrCreateModel.getIncomeMultiplier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleIncomeMultiplierDefault);
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
             inputValue.restrict                 = `0-9`;
             inputValue.maxChars                 = 5;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                              ||
-                    (value > Twns.CommonConstants.WarRuleIncomeMultiplierMaxLimit)   ||
-                    (value < Twns.CommonConstants.WarRuleIncomeMultiplierMinLimit)
+                    (value > CommonConstants.WarRuleIncomeMultiplierMaxLimit)   ||
+                    (value < CommonConstants.WarRuleIncomeMultiplierMinLimit)
                 ) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setIncomeMultiplier(playerIndex, value);
                 }
@@ -434,17 +434,17 @@ namespace Twns.SingleCustomRoom {
             const currValue                     = SingleCustomRoom.ScrCreateModel.getEnergyAddPctOnLoadCo(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
             inputValue.restrict                 = `0-9`;
             inputValue.maxChars                 = 3;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                                      ||
-                    (value > Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
-                    (value < Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
+                    (value > CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
+                    (value < CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
                 ) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setEnergyAddPctOnLoadCo(playerIndex, value);
                 }
@@ -458,17 +458,17 @@ namespace Twns.SingleCustomRoom {
             const currValue                     = SingleCustomRoom.ScrCreateModel.getEnergyGrowthMultiplier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
             inputValue.restrict                 = `0-9`;
             inputValue.maxChars                 = 5;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                                  ||
-                    (value > Twns.CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit) ||
-                    (value < Twns.CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)
+                    (value > CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit) ||
+                    (value < CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)
                 ) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setEnergyGrowthMultiplier(playerIndex, value);
                 }
@@ -497,17 +497,17 @@ namespace Twns.SingleCustomRoom {
             const currValue                     = SingleCustomRoom.ScrCreateModel.getMoveRangeModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleMoveRangeModifierDefault);
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
             inputValue.restrict                 = `0-9\\-`;
             inputValue.maxChars                 = 3;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                              ||
-                    (value > Twns.CommonConstants.WarRuleMoveRangeModifierMaxLimit)  ||
-                    (value < Twns.CommonConstants.WarRuleMoveRangeModifierMinLimit)
+                    (value > CommonConstants.WarRuleMoveRangeModifierMaxLimit)  ||
+                    (value < CommonConstants.WarRuleMoveRangeModifierMinLimit)
                 ) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setMoveRangeModifier(playerIndex, value);
                 }
@@ -521,17 +521,17 @@ namespace Twns.SingleCustomRoom {
             const currValue                     = SingleCustomRoom.ScrCreateModel.getAttackPowerModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleOffenseBonusDefault);
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
             inputValue.restrict                 = `0-9\\-`;
             inputValue.maxChars                 = 5;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                          ||
-                    (value > Twns.CommonConstants.WarRuleOffenseBonusMaxLimit)   ||
-                    (value < Twns.CommonConstants.WarRuleOffenseBonusMinLimit)
+                    (value > CommonConstants.WarRuleOffenseBonusMaxLimit)   ||
+                    (value < CommonConstants.WarRuleOffenseBonusMinLimit)
                 ) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setAttackPowerModifier(playerIndex, value);
                 }
@@ -545,17 +545,17 @@ namespace Twns.SingleCustomRoom {
             const currValue                     = SingleCustomRoom.ScrCreateModel.getVisionRangeModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleVisionRangeModifierDefault);
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
             inputValue.restrict                 = `0-9\\-`;
             inputValue.maxChars                 = 3;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                                  ||
-                    (value > Twns.CommonConstants.WarRuleVisionRangeModifierMaxLimit)    ||
-                    (value < Twns.CommonConstants.WarRuleVisionRangeModifierMinLimit)
+                    (value > CommonConstants.WarRuleVisionRangeModifierMaxLimit)    ||
+                    (value < CommonConstants.WarRuleVisionRangeModifierMinLimit)
                 ) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setVisionRangeModifier(playerIndex, value);
                 }
@@ -569,18 +569,18 @@ namespace Twns.SingleCustomRoom {
             const currValue                     = SingleCustomRoom.ScrCreateModel.getLuckLowerLimit(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultLowerLimit);
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
             inputValue.restrict                 = `0-9\\-`;
             inputValue.maxChars                 = 4;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                          ||
-                    (value > Twns.CommonConstants.WarRuleLuckMaxLimit)           ||
-                    (value < Twns.CommonConstants.WarRuleLuckMinLimit)           ||
+                    (value > CommonConstants.WarRuleLuckMaxLimit)           ||
+                    (value < CommonConstants.WarRuleLuckMinLimit)           ||
                     (value > SingleCustomRoom.ScrCreateModel.getLuckUpperLimit(playerIndex))
                 ) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setLuckLowerLimit(playerIndex, value);
                 }
@@ -594,18 +594,18 @@ namespace Twns.SingleCustomRoom {
             const currValue                     = SingleCustomRoom.ScrCreateModel.getLuckUpperLimit(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultUpperLimit);
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
             inputValue.restrict                 = `0-9\\-`;
             inputValue.maxChars                 = 4;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                          ||
-                    (value > Twns.CommonConstants.WarRuleLuckMaxLimit)           ||
-                    (value < Twns.CommonConstants.WarRuleLuckMinLimit)           ||
+                    (value > CommonConstants.WarRuleLuckMaxLimit)           ||
+                    (value < CommonConstants.WarRuleLuckMinLimit)           ||
                     (value < SingleCustomRoom.ScrCreateModel.getLuckLowerLimit(playerIndex))
                 ) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0098));
+                    FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
                     SingleCustomRoom.ScrCreateModel.setLuckUpperLimit(playerIndex, value);
                 }

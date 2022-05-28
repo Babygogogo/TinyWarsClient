@@ -195,7 +195,7 @@ namespace Twns.Common {
         }
 
         private _initComponentsForPreviewCo(): void {
-            this._setPreviewCoId(Twns.CommonConstants.CoIdEmpty);
+            this._setPreviewCoId(CommonConstants.CoId.Empty);
         }
 
         private _updateComponentsForPreviewCoId(): void {
@@ -222,7 +222,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Helpers.resetTween({
@@ -237,7 +237,7 @@ namespace Twns.Common {
                 endProps    : { alpha: 0, verticalCenter: -40 },
             });
 
-            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -288,7 +288,7 @@ namespace Twns.Common {
             const isChosen              = !!this._isChosen;
             this._imgSelected.visible   = isChosen;
             this._imgUnselected.visible = !isChosen;
-            this._labelName.text        = this._gameConfig?.getCoBasicCfg(Helpers.getExisted(this._coId))?.name || Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = this._gameConfig?.getCoBasicCfg(Helpers.getExisted(this._coId))?.name || CommonConstants.ErrorTextForUndefined;
         }
     }
 }

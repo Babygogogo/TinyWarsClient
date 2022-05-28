@@ -123,7 +123,6 @@
 		"resource/skins/lobby/LobbyTopPanel.exml",
 		"resource/skins/lobby/LobbyTopRightPanel.exml",
 		"resource/skins/mapEditor/MeAddWarEventToRulePanel.exml",
-		"resource/skins/mapEditor/MeAvailableCoPanel.exml",
 		"resource/skins/mapEditor/MeChooseLocationPanel.exml",
 		"resource/skins/mapEditor/MeChooseTileBasePanel.exml",
 		"resource/skins/mapEditor/MeChooseTileDecorationPanel.exml",

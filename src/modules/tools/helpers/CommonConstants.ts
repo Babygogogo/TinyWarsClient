@@ -86,12 +86,17 @@ namespace Twns.CommonConstants {
     export const UnitAndTileMaxSkinId                   = 5;
     export const UnitAndTileNeutralSkinId               = 0;
 
-    export const CoIdEmpty                              = 0;
-    export const TileBaseType                           = {
+    export const CoId = {
+        Empty   : 0,
+    };
+    export const CoCategoryId = {
+        Empty   : 0,
+    };
+    export const TileBaseType = {
         Sea             : 3,
         Beach           : 4,
     };
-    export const TileObjectType                         = {
+    export const TileObjectType = {
         Empty           : 0,
         Road            : 1,
         Bridge          : 2,
@@ -100,10 +105,10 @@ namespace Twns.CommonConstants {
         Pipe            : 24,
         PipeJoint       : 34,
     };
-    export const TileDecorationType                     = {
+    export const TileDecorationType = {
         Shore           : 1,
     };
-    export const TileType                               = {
+    export const TileType = {
         City            : 23,
         CommandTower    : 24,
     };

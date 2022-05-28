@@ -3416,7 +3416,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
         targetLostNormalizedHp      : number;
         isAttackerInAttackerCoZone  : boolean;
     }): void {
-        if ((targetLostNormalizedHp == 0) || (attackerPlayer.getCoId() === CommonConstants.CoIdEmpty)) {
+        if ((targetLostNormalizedHp == 0) || (attackerPlayer.getCoId() === CommonConstants.CoId.Empty)) {
             return;
         }
 

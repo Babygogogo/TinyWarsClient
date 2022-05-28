@@ -91,7 +91,7 @@ namespace Twns.Common {
             const gameConfig = await Config.ConfigManager.getLatestGameConfig();
             PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                 gameConfig,
-                availableCoIdArray  : gameConfig.getEnabledCoArray().map(v => v.coId).filter(v => v !== CommonConstants.CoIdEmpty),
+                availableCoIdArray  : gameConfig.getEnabledCoArray().map(v => v.coId).filter(v => v !== CommonConstants.CoId.Empty),
                 currentCoId         : null,
                 callbackOnConfirm   : null,
             });

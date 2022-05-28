@@ -118,7 +118,7 @@ namespace Twns.SingleCustomRoom {
         private _onTouchedGroupCo(): void {
             const playerData    = this._getPlayerData();
             const coId          = playerData ? playerData.coId : null;
-            if ((coId != null) && (coId !== Twns.CommonConstants.CoIdEmpty)) {
+            if ((coId != null) && (coId !== Twns.CommonConstants.CoId.Empty)) {
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoInfoPanel, {
                     gameConfig  : Twns.SingleCustomRoom.ScrCreateModel.getGameConfig(),
                     coId,
@@ -146,7 +146,7 @@ namespace Twns.SingleCustomRoom {
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                 gameConfig          : data.gameConfig,
                 currentCoId,
-                availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({
                     baseWarRule         : Twns.SingleCustomRoom.ScrCreateModel.getInstanceWarRule(),
                     playerIndex,
                     gameConfig      : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomInfo.settingsForCommon?.configVersion)),
@@ -202,7 +202,7 @@ namespace Twns.SingleCustomRoom {
             const coCfg                 = gameConfig.getCoBasicCfg(coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? Twns.CommonConstants.ErrorTextForUndefined;
-            this._imgCoInfo.visible     = (coId !== Twns.CommonConstants.CoIdEmpty) && (!!coCfg);
+            this._imgCoInfo.visible     = (coId !== Twns.CommonConstants.CoId.Empty) && (!!coCfg);
         }
 
         private _getPlayerData(): CommonProto.Structure.IDataForPlayerInRoom {

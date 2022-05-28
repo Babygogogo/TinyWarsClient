@@ -711,7 +711,7 @@ namespace Twns.Types {
     // eslint-disable-next-line no-shadow
     export enum PlayerRuleType {
         TeamIndex,
-        BannedCoIdArray,
+        BannedCoCategoryIdArray,
         BannedUnitTypeArray,
         CanActivateCoSkill,
         InitialFund,

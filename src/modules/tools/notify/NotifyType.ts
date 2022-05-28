@@ -27,7 +27,7 @@ namespace Twns.Notify {
         ChatPanelOpened,
         ChatPanelClosed,
 
-        McrCreateBannedCoIdArrayChanged,
+        McrCreateBannedCoCategoryIdArrayChanged,
         McrCreateTeamIndexChanged,
         McrCreateSelfCoIdChanged,
         McrCreateSelfSkinIdChanged,
@@ -39,7 +39,7 @@ namespace Twns.Notify {
         MfrCreateSelfPlayerIndexChanged,
         MfrCreateSelfSkinIdChanged,
 
-        CcrCreateBannedCoIdArrayChanged,
+        CcrCreateBannedCoCategoryIdArrayChanged,
         CcrCreateTeamIndexChanged,
         CcrCreateAiCoIdChanged,
         CcrCreateSelfCoIdChanged,
@@ -54,12 +54,11 @@ namespace Twns.Notify {
         MrrSelfSettingsSkinIdChanged,
 
         ScrCreateTemplateWarRuleIdChanged,
-        ScrCreateBannedCoIdArrayChanged,
+        ScrCreateBannedCoCategoryIdArrayChanged,
         ScrCreateWarSaveSlotChanged,
         ScrCreatePlayerInfoChanged,
 
         SrrCreateModelTemplateWarRuleIdChanged,
-        SrrCreateBannedCoIdArrayChanged,
         SrrCreateWarSaveSlotChanged,
         SrrCreatePlayerInfoChanged,
 
@@ -120,7 +119,6 @@ namespace Twns.Notify {
         MeMapNameChanged,
         MeMapDescChanged,
         MeWarEventIdArrayChanged,
-        MeBannedCoIdArrayChanged,
 
         WarEventFullDataChanged,
 
@@ -231,7 +229,7 @@ namespace Twns.Notify {
         MsgMrrGetRoomPublicInfo,
         MsgMrrGetRoomPublicInfoFailed,
         MsgMrrGetJoinedRoomIdArray,
-        MsgMrrSetBannedCoIdList,
+        MsgMrrSetBannedCoCategoryIdArray,
         MsgMrrSetSelfSettings,
         MsgMrrDeleteRoomByServer,
 

@@ -2955,8 +2955,8 @@ namespace Twns.Lang {
             `Ready`,
         ],
         [LangTextType.B0403]: [
-            `禁用CO数量`,
-            `Banned COs Number`,
+            `已禁用CO`,
+            `Banned COs`,
         ],
         [LangTextType.B0404]: [
             `排位赛`,

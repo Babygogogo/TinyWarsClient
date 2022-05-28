@@ -156,7 +156,7 @@ namespace Twns.Common {
         private _onTouchedGroupCo(): void {
             const data  = this._getData();
             const coId  = data.playerInfo.coId;
-            if ((coId != null) && (coId !== Twns.CommonConstants.CoIdEmpty)) {
+            if ((coId != null) && (coId !== Twns.CommonConstants.CoId.Empty)) {
                 Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonCoInfoPanel, {
                     gameConfig  : data.gameConfig,
                     coId,
@@ -250,7 +250,7 @@ namespace Twns.Common {
                 const coCfg         = gameConfig.getCoBasicCfg(coId);
                 labelCo.text        = coCfg?.name ?? Twns.CommonConstants.ErrorTextForUndefined;
                 imgCoHead.source    = gameConfig.getCoHeadImageSource(coId) ?? Twns.CommonConstants.ErrorTextForUndefined;
-                imgCoInfo.visible   = (coId !== Twns.CommonConstants.CoIdEmpty);
+                imgCoInfo.visible   = (coId !== Twns.CommonConstants.CoId.Empty);
             }
 
             const userId        = playerInfo.userId;

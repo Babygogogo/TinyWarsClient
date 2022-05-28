@@ -542,6 +542,31 @@ namespace Twns.Config {
         public getCoBasicCfg(coId: number): CoBasicCfg | null {
             return this._coBasicCfgDict.get(coId) ?? null;
         }
+        public getCoIdArrayByCategoryIdSet(coCategoryIdSet: Set<number>): number[] {
+            const coIdArray: number[] = [];
+            for (const [coId, { categoryId }] of this._coBasicCfgDict) {
+                if ((categoryId != null) && (coCategoryIdSet.has(categoryId))) {
+                    coIdArray.push(coId);
+                }
+            }
+            return coIdArray;
+        }
+        public getEnabledCoIdByCategoryId(coCategoryId: number): number | null {
+            for (const [coId, { isEnabled, categoryId }] of this._coBasicCfgDict) {
+                if ((categoryId == coCategoryId) && (isEnabled)) {
+                    return coId;
+                }
+            }
+            return null;
+        }
+        public getCoIdByCategoryId(coCategoryId: number): number {
+            for (const [coId, { categoryId }] of this._coBasicCfgDict) {
+                if (categoryId == coCategoryId) {
+                    return coId;
+                }
+            }
+            throw Helpers.newError(`No available CO ID for coCategoryId: ${coCategoryId}.`);
+        }
         public getCoNameAndTierText(coId: number): string | null {
             return this.getCoBasicCfg(coId)?.name ?? null;
         }

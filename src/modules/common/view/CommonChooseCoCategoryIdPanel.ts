@@ -4,7 +4,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
@@ -12,103 +12,273 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common {
-    import LangTextType = Twns.Lang.LangTextType;
-    import NotifyType   = Twns.Notify.NotifyType;
+    import LangTextType = Lang.LangTextType;
+    import NotifyType   = Notify.NotifyType;
 
     export type OpenDataForCommonChooseCoCategoryIdPanel = {
-        currentCoCategoryIdArray    : number[];
-        gameConfig                  : Twns.Config.GameConfig;
-        callbackOnConfirm           : (coCategoryIdArray: number[]) => void;
+        currentCoCategoryIdArray        : number[];
+        gameConfig                      : Config.GameConfig;
+        forceUnchosenCoCategoryIdArray  : number[] | null;
+        callbackOnConfirm               : ((coCategoryIdArray: number[]) => void) | null;
     };
     export class CommonChooseCoCategoryIdPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseCoCategoryIdPanel> {
-        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
-        private readonly _btnSelectAll!     : TwnsUiButton.UiButton;
-        private readonly _btnUnselectAll!   : TwnsUiButton.UiButton;
-        private readonly _listLocation!     : TwnsUiScrollList.UiScrollList<DataForCounterIdRenderer>;
-        private readonly _btnConfirm!       : TwnsUiButton.UiButton;
-        private readonly _btnCancel!        : TwnsUiButton.UiButton;
+        private readonly _imgMask!                  : TwnsUiImage.UiImage;
+        private readonly _group!                    : eui.Group;
+        private readonly _labelAvailableCoTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _groupOriginCoNames!       : eui.Group;
+        private readonly _groupCustomCoNames!       : eui.Group;
+        private readonly _btnCancel!                : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!               : TwnsUiButton.UiButton;
+        private readonly _btnClose!                 : TwnsUiButton.UiButton;
+        private readonly _uiCoInfo!                 : TwnsUiCoInfo.UiCoInfo;
+
+        private _renderersForCoNames    : RendererForCoName[] = [];
+
+        private _chosenCoCategoryIdSet  = new Set<number>();
+        private _previewCoCategoryId    : number | null = null;
 
         protected _onOpening(): void {
+            this._setUiListenerArray([
+                { ui: this._btnCancel,  callback: this.close },
+                { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
+                { ui: this._btnClose,   callback: this.close },
+            ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
-            this._setUiListenerArray([
-                { ui: this._btnSelectAll,       callback: this._onTouchedBtnSelectAll },
-                { ui: this._btnUnselectAll,     callback: this._onTouchedBtnUnselectAll },
-                { ui: this._btnConfirm,         callback: this._onTouchedBtnConfirm },
-                { ui: this._btnCancel,          callback: this.close },
-            ]);
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
-
-            this._listLocation.setItemRenderer(CounterIdRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this._updateListLocation();
+            this._initButtons();
+            this._initGroupCoNames();
+            this._initComponentsForPreviewCo();
         }
         protected _onClosing(): void {
-            // nothing to do
+            this._clearGroupCoNames();
         }
 
-        private _onTouchedBtnSelectAll(): void {
-            const indexArray        : number[] = [];
-            const list              = this._listLocation;
-            const dataArrayLength   = list.getBoundDataArrayLength() ?? 0;
-            for (let i = 0; i < dataArrayLength; ++i) {
-                indexArray.push(i);
+        private _setPreviewCoCategoryId(coCategoryId: number): void {
+            if (this._getPreviewCoCategoryId() !== coCategoryId) {
+                this._previewCoCategoryId = coCategoryId;
+                this._updateComponentsForPreviewCoCategoryId();
             }
-            list.setSelectedIndexArray(indexArray);
         }
-        private _onTouchedBtnUnselectAll(): void {
-            this._listLocation.setSelectedIndexArray([]);
-        }
-        private _onTouchedBtnConfirm(): void {
-            this._getOpenData().callbackOnConfirm(this._listLocation.getSelectedDataArray()?.map(v => v.coCategoryId).sort((v1, v2) => v1 - v2) ?? []);
-            this.close();
+        private _getPreviewCoCategoryId(): number | null {
+            return this._previewCoCategoryId;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////
+        // Event callbacks.
+        ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = Lang.getFormattedText(LangTextType.F0092, Lang.getText(LangTextType.B0425));
-            this._btnSelectAll.label    = Lang.getText(LangTextType.B0761);
-            this._btnUnselectAll.label  = Lang.getText(LangTextType.B0762);
-            this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
-            this._btnCancel.label       = Lang.getText(LangTextType.B0154);
-        }
-
-        private _updateListLocation(): void {
-            const gameConfig    = this._getOpenData().gameConfig;
-            const dataArray     : DataForCounterIdRenderer[] = [];
-            for (const coCategoryId of gameConfig.getEnabledCoCategoryIdArray()) {
-                dataArray.push({
-                    coCategoryId,
-                    gameConfig,
-                });
+        private _onTouchedBtnConfirm(): void {
+            const openData              = this._getOpenData();
+            const chosenCoCategoryIdSet = this._chosenCoCategoryIdSet;
+            for (const coCategoryId of openData.forceUnchosenCoCategoryIdArray ?? []) {
+                if (chosenCoCategoryIdSet.has(coCategoryId)) {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
+                        title   : Lang.getText(LangTextType.B0088),
+                        content : Lang.getFormattedText(LangTextType.F0133, openData.gameConfig.getCoNameAndTierText(coCategoryId)),
+                    });
+                    return;
+                }
             }
 
-            const counterIdArray    = this._getOpenData().currentCoCategoryIdArray;
-            const list              = this._listLocation;
-            list.bindData(dataArray);
-            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => counterIdArray.indexOf(v.coCategoryId) >= 0 ? i : null)));
+            const callback = openData.callbackOnConfirm;
+            if (callback) {
+                callback([...chosenCoCategoryIdSet]);
+            }
+
+            this.close();
+        }
+
+        private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
+            const renderer      = e.currentTarget as RendererForCoName;
+            const coCategoryId  = Helpers.getExisted(renderer.getCoCategoryId());
+            this._setPreviewCoCategoryId(coCategoryId);
+
+            const openData = this._getOpenData();
+            if (openData.callbackOnConfirm == null) {
+                return;
+            }
+
+            const chosenCoCategoryIdSet = this._chosenCoCategoryIdSet;
+            if (!renderer.getIsChosen()) {
+                chosenCoCategoryIdSet.add(coCategoryId);
+                this._updateGroupCoNames();
+                return;
+            }
+
+            chosenCoCategoryIdSet.delete(coCategoryId);
+            this._updateGroupCoNames();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // View functions.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _updateComponentsForLanguage(): void {
+            this._btnCancel.label               = Lang.getText(LangTextType.B0154);
+            this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+            this._btnClose.label                = Lang.getText(LangTextType.B0204);
+            this._labelAvailableCoTitle.text    = Lang.getText(LangTextType.B0898);
+
+            this._updateComponentsForPreviewCoCategoryId();
+        }
+
+        private _initButtons(): void {
+            const canModify             = this._getOpenData().callbackOnConfirm != null;
+            this._btnConfirm.visible    = canModify;
+            this._btnCancel.visible     = canModify;
+            this._btnClose.visible      = !canModify;
+        }
+
+        private _initGroupCoNames(): void {
+            const openData              = this._getOpenData();
+            const chosenCoCategoryIdSet = this._chosenCoCategoryIdSet;
+            const gameConfig            = openData.gameConfig;
+            const fullCoCategoryIdArray = gameConfig.getEnabledCoCategoryIdArray();
+            for (const coCategoryId of openData.currentCoCategoryIdArray) {
+                if (fullCoCategoryIdArray.indexOf(coCategoryId) >= 0) {
+                    chosenCoCategoryIdSet.add(coCategoryId);
+                }
+            }
+
+            const groupOriginCoNames = this._groupOriginCoNames;
+            const groupCustomCoNames = this._groupCustomCoNames;
+            for (const coCategoryId of fullCoCategoryIdArray) {
+                const renderer = new RendererForCoName();
+                renderer.setGameConfig(gameConfig);
+                renderer.setCoCategoryId(coCategoryId);
+                renderer.setIsChosen(false);
+
+                renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoNameRenderer, this);
+                this._renderersForCoNames.push(renderer);
+
+                if (gameConfig.checkIsOriginCo(coCategoryId)) {
+                    groupOriginCoNames.addChild(renderer);
+                } else {
+                    groupCustomCoNames.addChild(renderer);
+                }
+            }
+
+            this._updateGroupCoNames();
+        }
+
+        private _clearGroupCoNames(): void {
+            this._groupOriginCoNames.removeChildren();
+            this._groupCustomCoNames.removeChildren();
+            this._renderersForCoNames.length = 0;
+        }
+
+        private _updateGroupCoNames(): void {
+            const chosenCoCategoryIdSet = this._chosenCoCategoryIdSet;
+            for (const renderer of this._renderersForCoNames) {
+                renderer.setIsChosen(chosenCoCategoryIdSet.has(Helpers.getExisted(renderer.getCoCategoryId())));
+            }
+        }
+
+        private _initComponentsForPreviewCo(): void {
+            this._setPreviewCoCategoryId(CommonConstants.CoCategoryId.Empty);
+        }
+
+        private _updateComponentsForPreviewCoCategoryId(): void {
+            const coCategoryId = this._previewCoCategoryId;
+            if (coCategoryId == null) {
+                return;
+            }
+
+            const gameConfig = this._getOpenData().gameConfig;
+            this._uiCoInfo.setCoData({
+                gameConfig,
+                coId        : gameConfig.getEnabledCoIdByCategoryId(coCategoryId) ?? gameConfig.getCoIdByCategoryId(coCategoryId),
+            });
+        }
+
+        protected async _showOpenAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, verticalCenter: -40 },
+                endProps    : { alpha: 1, verticalCenter: 0 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
+            });
+
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: -40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
-    type DataForCounterIdRenderer = {
-        coCategoryId    : number;
-        gameConfig      : Twns.Config.GameConfig;
-    };
-    class CounterIdRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCounterIdRenderer> {
-        private readonly _groupShow!        : eui.Group;
-        private readonly _labelCoCategory!  : TwnsUiLabel.UiLabel;
+    class RendererForCoName extends TwnsUiComponent.UiComponent {
+        private readonly _imgUnselected!    : TwnsUiImage.UiImage;
+        private readonly _imgSelected!      : TwnsUiImage.UiImage;
+        private readonly _labelName!        : TwnsUiLabel.UiLabel;
 
-        protected _onDataChanged(): void {
-            const data = this._getData();
-            this._labelCoCategory.text = data.gameConfig.getCoCategoryCfg(data.coCategoryId)?.name ?? Twns.CommonConstants.ErrorTextForUndefined;
+        private _gameConfig     : Config.GameConfig | null = null;
+        private _coCategoryId   : number | null = null;
+        private _isChosen       : boolean | null = null;
+
+        public constructor() {
+            super();
+
+            this.skinName = "resource/skins/component/checkBox/CheckBox001.exml";
+        }
+
+        protected _onOpened(): void {
+            this._updateView();
+        }
+
+        public setGameConfig(config: Config.GameConfig): void {
+            this._gameConfig = config;
+        }
+
+        public setCoCategoryId(coCategoryId: number): void {
+            this._coCategoryId = coCategoryId;
+            this._updateView();
+        }
+        public getCoCategoryId(): number | null {
+            return this._coCategoryId;
+        }
+
+        public setIsChosen(isChosen: boolean): void {
+            this._isChosen = isChosen;
+            this._updateView();
+        }
+        public getIsChosen(): boolean | null {
+            return this._isChosen;
+        }
+
+        private _updateView(): void {
+            if (!this.getIsOpening()) {
+                return;
+            }
+
+            const isChosen              = !!this._isChosen;
+            this._imgSelected.visible   = isChosen;
+            this._imgUnselected.visible = !isChosen;
+            this._labelName.text        = this._gameConfig?.getCoCategoryCfg(Helpers.getExisted(this._coCategoryId))?.name ?? CommonConstants.ErrorTextForUndefined;
         }
     }
 }

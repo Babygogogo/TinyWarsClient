@@ -469,7 +469,7 @@ namespace Twns.BaseWar {
         }
 
         public getUnitCostModifier(gridIndex: GridIndex, hasLoadedCo: boolean, unitType: number): number {
-            if (this.getCoId() === CommonConstants.CoIdEmpty) {
+            if (this.getCoId() === CommonConstants.CoId.Empty) {
                 return 1;
             }
 

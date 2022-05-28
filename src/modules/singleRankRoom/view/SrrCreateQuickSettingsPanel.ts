@@ -227,7 +227,7 @@ namespace Twns.SingleRankRoom {
         private async _onTouchedGroupCo(): Promise<void> {
             const playerData    = this._getPlayerData();
             const coId          = playerData ? playerData.coId : null;
-            if ((coId != null) && (coId !== CommonConstants.CoIdEmpty)) {
+            if ((coId != null) && (coId !== CommonConstants.CoId.Empty)) {
                 PanelHelpers.open(PanelHelpers.PanelDict.CommonCoInfoPanel, {
                     gameConfig      : SingleRankRoom.SrrCreateModel.getGameConfig(),
                     coId,
@@ -250,7 +250,7 @@ namespace Twns.SingleRankRoom {
             PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                 gameConfig          : SingleRankRoom.SrrCreateModel.getGameConfig(),
                 currentCoId,
-                availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({
                     baseWarRule         : SingleRankRoom.SrrCreateModel.getInstanceWarRule(),
                     playerIndex,
                     gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion)),
@@ -301,7 +301,7 @@ namespace Twns.SingleRankRoom {
             const coCfg                 = gameConfig.getCoBasicCfg(coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
-            this._imgCoInfo.visible     = (coId !== CommonConstants.CoIdEmpty) && (!!coCfg);
+            this._imgCoInfo.visible     = (coId !== CommonConstants.CoId.Empty) && (!!coCfg);
         }
 
         private _getPlayerData(): CommonProto.Structure.IDataForPlayerInRoom {

@@ -82,7 +82,7 @@ namespace Twns.Common {
             const gameConfig        = openData.gameConfig;
             const playerRuleArray   = Helpers.getExisted(openData.instanceWarRule?.ruleForPlayers?.playerRuleDataArray);
             const dataArray         : DataForPlayerRenderer[] = [];
-            for (let playerIndex = Twns.CommonConstants.PlayerIndex.First; playerIndex <= playerRuleArray.length; ++playerIndex) {
+            for (let playerIndex = CommonConstants.PlayerIndex.First; playerIndex <= playerRuleArray.length; ++playerIndex) {
                 dataArray.push({
                     gameConfig,
                     playerRule          : Helpers.getExisted(playerRuleArray.find(v => v.playerIndex === playerIndex)),
@@ -119,7 +119,7 @@ namespace Twns.Common {
         private _onTouchedBtnHelp(): void {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
-            if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
+            if (playerRuleType === PlayerRuleType.BannedCoCategoryIdArray) {
                 PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
                     title   : `CO`,
                     content : Lang.getText(LangTextType.R0004),
@@ -135,8 +135,8 @@ namespace Twns.Common {
             const data = this.data;
             if (data) {
                 const playerRuleType    = data.playerRuleType;
-                this._labelName.text    = Lang.getPlayerRuleName(playerRuleType) || Twns.CommonConstants.ErrorTextForUndefined;
-                this._btnHelp.visible   = playerRuleType === PlayerRuleType.BannedCoIdArray;
+                this._labelName.text    = Lang.getPlayerRuleName(playerRuleType) || CommonConstants.ErrorTextForUndefined;
+                this._btnHelp.visible   = playerRuleType === PlayerRuleType.BannedCoCategoryIdArray;
             }
         }
     }
@@ -209,8 +209,8 @@ namespace Twns.Common {
             const playerRuleType = data.playerRuleType;
             if (playerRuleType === PlayerRuleType.TeamIndex) {
                 this._updateViewAsTeamIndex();
-            } else if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
-                this._updateViewAsBannedCoIdArray();
+            } else if (playerRuleType === PlayerRuleType.BannedCoCategoryIdArray) {
+                this._updateViewAsBannedCoCategoryIdArray();
             } else if (playerRuleType === PlayerRuleType.BannedUnitTypeArray) {
                 this._updateViewAsBannedUnitTypeArray();
             } else if (playerRuleType === PlayerRuleType.CanActivateCoSkill) {
@@ -244,11 +244,11 @@ namespace Twns.Common {
         private _updateViewAsTeamIndex(): void {
             const teamIndex         = Helpers.getExisted(this._getData().playerRule.teamIndex);
             const labelValue        = this._labelValue;
-            labelValue.text         = Lang.getPlayerTeamName(teamIndex) || Twns.CommonConstants.ErrorTextForUndefined;
+            labelValue.text         = Lang.getPlayerTeamName(teamIndex) || CommonConstants.ErrorTextForUndefined;
             labelValue.textColor    = 0xFFFFFF;
         }
-        private _updateViewAsBannedCoIdArray(): void {
-            const currValue         = (this._getData().playerRule.bannedCoIdArray || []).length;
+        private _updateViewAsBannedCoCategoryIdArray(): void {
+            const currValue         = (this._getData().playerRule.bannedCoCategoryIdArray || []).length;
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
@@ -269,55 +269,55 @@ namespace Twns.Common {
             const currValue         = Helpers.getExisted(this._getData().playerRule.initialFund);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleInitialFundDefault);
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
         }
         private _updateViewAsIncomeMultiplier(): void {
             const currValue         = Helpers.getExisted(this._getData().playerRule.incomeMultiplier);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleIncomeMultiplierDefault);
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
         }
         private _updateViewAsEnergyAddPctOnLoadCo(): void {
             const currValue         = Helpers.getExisted(this._getData().playerRule.energyAddPctOnLoadCo);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
         }
         private _updateViewAsEnergyGrowthMultiplier(): void {
             const currValue         = Helpers.getExisted(this._getData().playerRule.energyGrowthMultiplier);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
         }
         private _updateViewAsMoveRangeModifier(): void {
             const currValue         = Helpers.getExisted(this._getData().playerRule.moveRangeModifier);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleMoveRangeModifierDefault);
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
         }
         private _updateViewAsAttackPowerModifier(): void {
             const currValue         = Helpers.getExisted(this._getData().playerRule.attackPowerModifier);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleOffenseBonusDefault);
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
         }
         private _updateViewAsVisionRangeModifier(): void {
             const currValue         = Helpers.getExisted(this._getData().playerRule.visionRangeModifier);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleVisionRangeModifierDefault);
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
         }
         private _updateViewAsLuckLowerLimit(): void {
             const currValue         = Helpers.getExisted(this._getData().playerRule.luckLowerLimit);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultLowerLimit);
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
         }
         private _updateViewAsLuckUpperLimit(): void {
             const currValue         = Helpers.getExisted(this._getData().playerRule.luckUpperLimit);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultUpperLimit);
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
         }
         private _updateViewAsAiControlInCcw(): void {
             const isAi              = this._getData().playerRule.fixedCoIdInCcw != null;
@@ -329,7 +329,7 @@ namespace Twns.Common {
             const data              = this._getData();
             const coId              = data.playerRule.fixedCoIdInCcw;
             const labelValue        = this._labelValue;
-            labelValue.text         = coId == null ? `--` : data.gameConfig.getCoNameAndTierText(coId) ?? Twns.CommonConstants.ErrorTextForUndefined;
+            labelValue.text         = coId == null ? `--` : data.gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined;
             labelValue.textColor    = 0xFFFFFF;
         }
     }
@@ -347,7 +347,7 @@ namespace Twns.Common {
     function getPlayerRuleTypeArray(warType: WarType): PlayerRuleType[] {
         const typeArray: PlayerRuleType[] = [
             PlayerRuleType.TeamIndex,
-            PlayerRuleType.BannedCoIdArray,
+            PlayerRuleType.BannedCoCategoryIdArray,
             PlayerRuleType.BannedUnitTypeArray,
             PlayerRuleType.InitialFund,
             PlayerRuleType.IncomeMultiplier,

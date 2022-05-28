@@ -170,7 +170,6 @@
 		"bin-debug/modules/mapEditor/model/MeSimModel.js",
 		"bin-debug/modules/baseWar/view/BwBuildingListPanel.js",
 		"bin-debug/modules/mapEditor/view/MeAddWarEventToRulePanel.js",
-		"bin-debug/modules/mapEditor/view/MeAvailableCoPanel.js",
 		"bin-debug/modules/mapEditor/view/MeChooseLocationPanel.js",
 		"bin-debug/modules/mapEditor/view/MeChooseTileBasePanel.js",
 		"bin-debug/modules/mapEditor/view/MeChooseTileDecorationPanel.js",
@@ -234,8 +233,8 @@
 		"bin-debug/modules/multiFreeRoom/view/MfrCreatePlayerInfoPage.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrCreateSettingsPanel.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrJoinRoomListPanel.js",
+		"bin-debug/modules/multiFreeRoom/view/MfrMainMenuPanel.js",
 		"bin-debug/modules/baseWar/view/BwTileBriefPanel.js",
-		"bin-debug/modules/multiFreeRoom/view/MfrMyRoomListPanel.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrRoomInfoPanel.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrSearchRoomPanel.js",
 		"bin-debug/modules/baseWar/view/BwTileDetailPanel.js",
@@ -455,6 +454,6 @@
 		"bin-debug/modules/watchWar/view/WwMakeRequestDetailPanel.js",
 		"bin-debug/modules/watchWar/view/WwMakeRequestWarsPanel.js",
 		"bin-debug/modules/watchWar/view/WwOngoingWarsPanel.js",
-		"bin-debug/modules/multiFreeRoom/view/MfrMainMenuPanel.js"
+		"bin-debug/modules/multiFreeRoom/view/MfrMyRoomListPanel.js"
 	]
 }

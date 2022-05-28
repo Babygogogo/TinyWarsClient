@@ -14,7 +14,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import Twns.Notify                       from "../../tools/notify/NotifyType";
+// import Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiImage                          from "../../tools/ui/UiImage";
@@ -36,11 +36,11 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiRankRoom {
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
-    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarMapInfoPage          = Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Common.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
-    import LangTextType                             = Twns.Lang.LangTextType;
-    import NotifyType                               = Twns.Notify.NotifyType;
+    import LangTextType                             = Lang.LangTextType;
+    import NotifyType                               = Notify.NotifyType;
     import NetMessage                               = CommonProto.NetMessage;
 
     export type OpenDataForMrrRoomInfoPanel = {
@@ -93,13 +93,13 @@ namespace Twns.MultiRankRoom {
                 { ui: this._btnChooseCo,    callback: this._onTouchedBtnChooseCo },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.TimeTick,                   callback: this._onNotifyTimeTick },
-                { type: NotifyType.MrrSelfSettingsCoIdChanged, callback: this._onNotifyMrrSelfSettingsCoIdChanged },
-                { type: NotifyType.MsgMrrGetRoomPublicInfo,    callback: this._onNotifyMsgMrrGetRoomPublicInfo },
-                { type: NotifyType.MsgMrrSetSelfSettings,      callback: this._onNotifyMsgMrrSetSelfSettings },
-                { type: NotifyType.MsgMrrSetBannedCoIdList,    callback: this._onNotifyMsgMrrSetBannedCoIdList },
-                { type: NotifyType.MsgMrrDeleteRoomByServer,   callback: this._onNotifyMsgMrrDeleteRoomByServer },
+                { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.TimeTick,                            callback: this._onNotifyTimeTick },
+                { type: NotifyType.MrrSelfSettingsCoIdChanged,          callback: this._onNotifyMrrSelfSettingsCoIdChanged },
+                { type: NotifyType.MsgMrrGetRoomPublicInfo,             callback: this._onNotifyMsgMrrGetRoomPublicInfo },
+                { type: NotifyType.MsgMrrSetSelfSettings,               callback: this._onNotifyMsgMrrSetSelfSettings },
+                { type: NotifyType.MsgMrrSetBannedCoCategoryIdArray,    callback: this._onNotifyMsgMrrSetBannedCoCategoryIdArray },
+                { type: NotifyType.MsgMrrDeleteRoomByServer,            callback: this._onNotifyMsgMrrDeleteRoomByServer },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._sclPlayerIndex.setItemRenderer(PlayerIndexRenderer);
@@ -114,12 +114,12 @@ namespace Twns.MultiRankRoom {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : Twns.Common.CommonWarMapInfoPage,
+                    pageClass   : Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : Twns.Common.CommonWarPlayerInfoPage,
+                    pageClass   : Common.CommonWarPlayerInfoPage,
                     pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
@@ -152,29 +152,28 @@ namespace Twns.MultiRankRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MrrMyRoomListPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MrrMyRoomListPanel, void 0);
         }
 
         private async _onTouchedBtnBanCo(): Promise<void> {
             const roomId            = this._getOpenData().roomId;
             const roomInfo          = await MultiRankRoom.MrrModel.getRoomInfo(roomId);
-            const userId            = Twns.User.UserModel.getSelfUserId();
+            const userId            = User.UserModel.getSelfUserId();
             const selfPlayerData    = roomInfo ? roomInfo.playerDataList?.find(v => v.userId === userId) : null;
             if (selfPlayerData) {
-                const gameConfig = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion));
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonBanCoPanel, {
+                const gameConfig = await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion));
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonBanCoCategoryIdPanel, {
                     gameConfig,
-                    playerIndex         : Twns.Helpers.getExisted(selfPlayerData.playerIndex),
-                    maxBanCount         : gameConfig.getSystemCfg().maxBanCount,
-                    fullCoIdArray       : gameConfig.getEnabledCoArray().map(v => v.coId),
-                    bannedCoIdArray     : [],
-                    selfCoId            : null,
-                    callbackOnConfirm   : (bannedCoIdSet) => {
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
-                            content : Lang.getText(bannedCoIdSet.size > 0 ? LangTextType.A0138 : LangTextType.A0139),
+                    playerIndex             : Helpers.getExisted(selfPlayerData.playerIndex),
+                    maxBanCount             : gameConfig.getSystemCfg().maxBanCount,
+                    bannedCoCategoryIdArray : [],
+                    selfCoId                : null,
+                    callbackOnConfirm       : bannedCoCategoryIdSet => {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
+                            content : Lang.getText(bannedCoCategoryIdSet.size > 0 ? LangTextType.A0138 : LangTextType.A0139),
                             callback: () => {
-                                MultiRankRoom.MrrProxy.reqMrrSetBannedCoIdList(roomId, [...bannedCoIdSet]);
-                                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonBanCoPanel);
+                                MultiRankRoom.MrrProxy.reqMrrSetBannedCoCategoryIdArray(roomId, [...bannedCoCategoryIdSet]);
+                                PanelHelpers.close(PanelHelpers.PanelDict.CommonBanCoCategoryIdPanel);
                             },
                         });
                     },
@@ -185,17 +184,17 @@ namespace Twns.MultiRankRoom {
         private async _onTouchedBtnChooseCo(): Promise<void> {
             const roomId            = this._getOpenData().roomId;
             const roomInfo          = await MultiRankRoom.MrrModel.getRoomInfo(roomId);
-            const selfUserId        = Twns.User.UserModel.getSelfUserId();
+            const selfUserId        = User.UserModel.getSelfUserId();
             const selfPlayerData    = roomInfo ? roomInfo.playerDataList?.find(v => v.userId === selfUserId) : null;
             if (selfPlayerData != null) {
                 if (selfPlayerData.isReady) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0207));
+                    FloatText.show(Lang.getText(LangTextType.A0207));
                 } else {
                     const currentCoId = MultiRankRoom.MrrSelfSettingsModel.getCoId();
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
-                        gameConfig          : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
+                        gameConfig          : await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
                         currentCoId,
-                        availableCoIdArray  : Twns.Helpers.getExisted(MultiRankRoom.MrrSelfSettingsModel.getAvailableCoIdArray()),
+                        availableCoIdArray  : Helpers.getExisted(MultiRankRoom.MrrSelfSettingsModel.getAvailableCoIdArray()),
                         callbackOnConfirm   : (newCoId) => {
                             if (newCoId !== currentCoId) {
                                 MultiRankRoom.MrrSelfSettingsModel.setCoId(newCoId);
@@ -240,8 +239,8 @@ namespace Twns.MultiRankRoom {
             }
         }
 
-        private _onNotifyMsgMrrSetBannedCoIdList(e: egret.Event): void {
-            const data = e.data as NetMessage.MsgMrrSetBannedCoIdList.IS;
+        private _onNotifyMsgMrrSetBannedCoCategoryIdArray(e: egret.Event): void {
+            const data = e.data as NetMessage.MsgMrrSetBannedCoCategoryIdArray.IS;
             if (data.roomId === this._getOpenData().roomId) {
                 this._updateGroupBanCo();
                 this._updateGroupSettings();
@@ -253,9 +252,9 @@ namespace Twns.MultiRankRoom {
         private _onNotifyMsgMrrDeleteRoomByServer(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMrrDeleteRoomByServer.IS;
             if (data.roomId === this._getOpenData().roomId) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0019));
+                FloatText.show(Lang.getText(LangTextType.A0019));
                 this.close();
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MrrMyRoomListPanel, void 0);
+                PanelHelpers.open(PanelHelpers.PanelDict.MrrMyRoomListPanel, void 0);
             }
         }
 
@@ -264,10 +263,10 @@ namespace Twns.MultiRankRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private async _initSclPlayerIndex(): Promise<void> {
             const roomId                = this._getOpenData().roomId;
-            const roomInfo              = Twns.Helpers.getExisted(await MultiRankRoom.MrrModel.getRoomInfo(roomId));
-            const playersCountUnneutral = Twns.Helpers.getExisted((await WarMap.WarMapModel.getRawData(Twns.Helpers.getExisted(roomInfo.settingsForMrw?.mapId)))?.playersCountUnneutral);
+            const roomInfo              = Helpers.getExisted(await MultiRankRoom.MrrModel.getRoomInfo(roomId));
+            const playersCountUnneutral = Helpers.getExisted((await WarMap.WarMapModel.getRawData(Helpers.getExisted(roomInfo.settingsForMrw?.mapId)))?.playersCountUnneutral);
             const dataArray             : DataForPlayerIndexRenderer[] = [];
-            for (let playerIndex = Twns.CommonConstants.PlayerIndex.First; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            for (let playerIndex = CommonConstants.PlayerIndex.First; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
                     roomId,
                     playerIndex,
@@ -279,7 +278,7 @@ namespace Twns.MultiRankRoom {
         private _initSclSkinId(): void {
             const roomId    = this._getOpenData().roomId;
             const dataArray : DataForSkinIdRenderer[] = [];
-            for (let skinId = Twns.CommonConstants.UnitAndTileMinSkinId; skinId <= Twns.CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
+            for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
                 dataArray.push({
                     roomId,
                     skinId,
@@ -323,8 +322,8 @@ namespace Twns.MultiRankRoom {
             } else {
                 group.visible = true;
 
-                const userId        = Twns.User.UserModel.getSelfUserId();
-                const playerData    = Twns.Helpers.getExisted(roomInfo.playerDataList?.find(v => v.userId === userId));
+                const userId        = User.UserModel.getSelfUserId();
+                const playerData    = Helpers.getExisted(roomInfo.playerDataList?.find(v => v.userId === userId));
                 const playerIndex   = playerData.playerIndex;
                 const banCoData     = roomInfo.settingsForMrw?.dataArrayForBanCo?.find(v => v.srcPlayerIndex === playerIndex);
                 const btnBanCo      = this._btnBanCo;
@@ -335,12 +334,12 @@ namespace Twns.MultiRankRoom {
                     btnBannedCo.visible = false;
                     labelBanCo.text     = ``;
                 } else {
-                    const coIdArray     = banCoData.bannedCoIdList || [];
-                    const gameConfig    = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomInfo.settingsForCommon?.configVersion));
-                    btnBanCo.visible    = false;
-                    btnBannedCo.visible = true;
-                    labelBanCo.text     = coIdArray.length
-                        ? coIdArray.map(v => gameConfig.getCoBasicCfg(v)?.name).join(`\n`)
+                    const coCategoryIdArray = banCoData.bannedCoCategoryIdArray || [];
+                    const gameConfig        = await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion));
+                    btnBanCo.visible        = false;
+                    btnBannedCo.visible     = true;
+                    labelBanCo.text         = coCategoryIdArray.length
+                        ? coCategoryIdArray.map(v => gameConfig.getCoCategoryCfg(v)?.name).join(`\n`)
                         : Lang.getText(LangTextType.B0001);
                 }
             }
@@ -361,7 +360,7 @@ namespace Twns.MultiRankRoom {
         private async _updateBtnChooseCo(): Promise<void> {
             const roomInfo          = await MultiRankRoom.MrrModel.getRoomInfo(this._getOpenData().roomId);
             this._btnChooseCo.label = roomInfo
-                ? (await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomInfo.settingsForCommon?.configVersion))).getCoBasicCfg(Twns.Helpers.getExisted(MultiRankRoom.MrrSelfSettingsModel.getCoId()))?.name ?? Twns.CommonConstants.ErrorTextForUndefined
+                ? (await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion))).getCoBasicCfg(Helpers.getExisted(MultiRankRoom.MrrSelfSettingsModel.getCoId()))?.name ?? CommonConstants.ErrorTextForUndefined
                 : ``;
         }
 
@@ -380,13 +379,13 @@ namespace Twns.MultiRankRoom {
             }
 
             const timeForStartSetSelfSettings   = roomInfo.timeForStartSetSelfSettings;
-            const currentTime                   = Twns.Timer.getServerTimestamp();
+            const currentTime                   = Timer.getServerTimestamp();
             if (timeForStartSetSelfSettings != null) {
                 labelCountdownTitle.text    = Lang.getText(LangTextType.B0593);
-                labelCountdown.text         = Twns.Helpers.getTimeDurationText2(Math.max(0, timeForStartSetSelfSettings + Twns.CommonConstants.RankRoomPhaseTime - currentTime));
+                labelCountdown.text         = Helpers.getTimeDurationText2(Math.max(0, timeForStartSetSelfSettings + CommonConstants.RankRoomPhaseTime - currentTime));
             } else {
                 labelCountdownTitle.text    = Lang.getText(LangTextType.B0592);
-                labelCountdown.text         = Twns.Helpers.getTimeDurationText2(Math.max(0, Twns.Helpers.getExisted(roomInfo.timeForCreateRoom) + Twns.CommonConstants.RankRoomPhaseTime - currentTime));
+                labelCountdown.text         = Helpers.getTimeDurationText2(Math.max(0, Helpers.getExisted(roomInfo.timeForCreateRoom) + CommonConstants.RankRoomPhaseTime - currentTime));
             }
         }
         private async _updateLabelState(): Promise<void> {
@@ -397,8 +396,8 @@ namespace Twns.MultiRankRoom {
                 return;
             }
 
-            const userId        = Twns.User.UserModel.getSelfUserId();
-            const playerData    = Twns.Helpers.getExisted(roomInfo.playerDataList?.find(v => v.userId === userId));
+            const userId        = User.UserModel.getSelfUserId();
+            const playerData    = Helpers.getExisted(roomInfo.playerDataList?.find(v => v.userId === userId));
             const playerIndex   = playerData.playerIndex;
             if (roomInfo.timeForStartSetSelfSettings == null) {
                 labelState.text = roomInfo.settingsForMrw?.dataArrayForBanCo?.some(v => v.srcPlayerIndex === playerIndex)
@@ -441,7 +440,7 @@ namespace Twns.MultiRankRoom {
             return mapId == null
                 ? null
                 : {
-                    gameConfig  : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
                     mapInfo     : { mapId },
                 };
         }
@@ -462,72 +461,72 @@ namespace Twns.MultiRankRoom {
         // Opening/closing animations.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupBanCo,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupSettings,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupState,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupBanCo,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupSettings,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupState,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -563,7 +562,7 @@ namespace Twns.MultiRankRoom {
         }
 
         public async onItemTapEvent(): Promise<void> {
-            Twns.FloatText.show(Lang.getText(LangTextType.A0209));
+            FloatText.show(Lang.getText(LangTextType.A0209));
         }
         private _onNotifyLanguageChanged(): void {
             this._updateLabelName();
@@ -587,13 +586,13 @@ namespace Twns.MultiRankRoom {
             const data = this.data;
             if (data) {
                 const playerIndex       = data.playerIndex;
-                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(Twns.Helpers.getExisted((await MultiRankRoom.MrrModel.getRoomInfo(data.roomId))?.settingsForCommon?.instanceWarRule), playerIndex))})`;
+                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(Helpers.getExisted((await MultiRankRoom.MrrModel.getRoomInfo(data.roomId))?.settingsForCommon?.instanceWarRule), playerIndex))})`;
             }
         }
         private async _updateState(): Promise<void> {
             const data              = this._getData();
             const roomInfo          = data ? await MultiRankRoom.MrrModel.getRoomInfo(data.roomId) : null;
-            const selfUserId        = Twns.User.UserModel.getSelfUserId();
+            const selfUserId        = User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             this.currentState       = ((selfPlayerData) && (data.playerIndex === selfPlayerData.playerIndex)) ? `down` : `up`;
@@ -620,21 +619,21 @@ namespace Twns.MultiRankRoom {
         public async onItemTapEvent(): Promise<void> {
             const data              = this._getData();
             const roomInfo          = data ? await MultiRankRoom.MrrModel.getRoomInfo(data.roomId) : null;
-            const selfUserId        = Twns.User.UserModel.getSelfUserId();
+            const selfUserId        = User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             if (selfPlayerData == null) {
                 return;
             }
             if (selfPlayerData.isReady) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0207));
+                FloatText.show(Lang.getText(LangTextType.A0207));
                 return;
             }
 
             const newSkinId         = data.skinId;
             const currPlayerData    = playerDataList?.some(v => (v.isReady) && (v.unitAndTileSkinId === newSkinId));
             if ((currPlayerData) && (currPlayerData !== selfPlayerData)) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0203));
+                FloatText.show(Lang.getText(LangTextType.A0203));
             } else {
                 MultiRankRoom.MrrSelfSettingsModel.setUnitAndTileSkinId(newSkinId);
             }
@@ -678,26 +677,26 @@ namespace Twns.MultiRankRoom {
             const isReady           = data.isReady;
             const roomId            = data.roomId;
             const roomInfo          = await MultiRankRoom.MrrModel.getRoomInfo(roomId);
-            const selfUserId        = Twns.User.UserModel.getSelfUserId();
+            const selfUserId        = User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             if ((selfPlayerData) && (selfPlayerData.isReady !== isReady)) {
                 if (!isReady) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0205));
+                    FloatText.show(Lang.getText(LangTextType.A0205));
                 } else {
-                    const coId      = Twns.Helpers.getExisted(MultiRankRoom.MrrSelfSettingsModel.getCoId());
+                    const coId      = Helpers.getExisted(MultiRankRoom.MrrSelfSettingsModel.getCoId());
                     const callback  = () => {
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0206),
                             callback: () => {
-                                MultiRankRoom.MrrProxy.reqMrrSetSelfSettings(roomId, coId, Twns.Helpers.getExisted(MultiRankRoom.MrrSelfSettingsModel.getUnitAndTileSkinId()));
+                                MultiRankRoom.MrrProxy.reqMrrSetSelfSettings(roomId, coId, Helpers.getExisted(MultiRankRoom.MrrSelfSettingsModel.getUnitAndTileSkinId()));
                             },
                         });
                     };
-                    if ((coId == Twns.CommonConstants.CoIdEmpty)                                                             &&
-                        ((MultiRankRoom.MrrSelfSettingsModel.getAvailableCoIdArray() || []).some(v => v !== Twns.CommonConstants.CoIdEmpty))
+                    if ((coId == CommonConstants.CoId.Empty)                                                             &&
+                        ((MultiRankRoom.MrrSelfSettingsModel.getAvailableCoIdArray() || []).some(v => v !== CommonConstants.CoId.Empty))
                     ) {
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0208),
                             callback,
                         });
@@ -733,7 +732,7 @@ namespace Twns.MultiRankRoom {
             const data              = this._getData();
             const roomInfo          = await MultiRankRoom.MrrModel.getRoomInfo(data.roomId);
             const isReady           = data.isReady;
-            const selfUserId        = Twns.User.UserModel.getSelfUserId();
+            const selfUserId        = User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             const isSelected        = (!!selfPlayerData) && (isReady === selfPlayerData.isReady);

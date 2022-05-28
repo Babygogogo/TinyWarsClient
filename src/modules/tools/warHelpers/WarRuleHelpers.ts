@@ -28,6 +28,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         teamIndex               : 0,
         attackPowerModifier     : 0,
         bannedCoIdArray         : [],
+        bannedCoCategoryIdArray : [],
         bannedUnitTypeArray     : [],
         canActivateCoSkill      : true,
         energyGrowthMultiplier  : 100,
@@ -156,32 +157,55 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         }
     }
 
-    export function getBannedCoIdArray(baseWarRule: BaseWarRule, playerIndex: number): number[] | null {
-        return getPlayerRule(baseWarRule, playerIndex).bannedCoIdArray ?? null;
+    // export function getBannedCoIdArray(baseWarRule: BaseWarRule, playerIndex: number): number[] | null {
+    //     return getPlayerRule(baseWarRule, playerIndex).bannedCoIdArray ?? null;
+    // }
+    // export function setBannedCoIdArray(baseWarRule: BaseWarRule, playerIndex: number, coIdSet: Set<number>): void {
+    //     const playerRule = getPlayerRule(baseWarRule, playerIndex);
+    //     if (playerRule.bannedCoIdArray == null) {
+    //         playerRule.bannedCoIdArray = [...coIdSet];
+    //     } else {
+    //         const bannedCoIdArray   = playerRule.bannedCoIdArray;
+    //         bannedCoIdArray.length  = 0;
+    //         for (const coId of coIdSet) {
+    //             bannedCoIdArray.push(coId);
+    //         }
+    //     }
+    // }
+
+    export function getBannedCoCategoryIdArray(baseWarRule: BaseWarRule, playerIndex: number): number[] | null {
+        return getPlayerRule(baseWarRule, playerIndex).bannedCoCategoryIdArray ?? null;
     }
-    export function getAvailableCoIdArrayForPlayer({ baseWarRule, playerIndex, gameConfig }: {
+    export function setBannedCoCategoryIdArray(baseWarRule: BaseWarRule, playerIndex: number, coCategoryIdSet: Set<number>): void {
+        const playerRule = getPlayerRule(baseWarRule, playerIndex);
+        if (playerRule.bannedCoCategoryIdArray == null) {
+            playerRule.bannedCoCategoryIdArray = [...coCategoryIdSet];
+        } else {
+            const bannedCoCategoryIdArray   = playerRule.bannedCoCategoryIdArray;
+            bannedCoCategoryIdArray.length  = 0;
+            for (const coId of coCategoryIdSet) {
+                bannedCoCategoryIdArray.push(coId);
+            }
+        }
+    }
+
+    export function getAvailableCoIdArrayWithBaseWarRule({ baseWarRule, playerIndex, gameConfig }: {
         baseWarRule     : BaseWarRule;
         playerIndex     : number;
         gameConfig      : GameConfig;
     }): number[] {
-        return getAvailableCoIdArray(gameConfig, new Set<number>(getPlayerRule(baseWarRule, playerIndex).bannedCoIdArray));
+        const playerRule    = getPlayerRule(baseWarRule, playerIndex);
+        const bannedCoIdSet = new Set(playerRule.bannedCoIdArray);
+        for (const coId of gameConfig.getCoIdArrayByCategoryIdSet(new Set(playerRule.bannedCoCategoryIdArray))) {
+            bannedCoIdSet.add(coId);
+        }
+
+        return getAvailableCoIdArray(gameConfig, bannedCoIdSet);
     }
     export function getAvailableCoIdArray(gameConfig: GameConfig, bannedCoIdSet: Set<number>): number[] {
         return gameConfig.getEnabledCoArray()
             .map(v => v.coId)
             .filter(v => !bannedCoIdSet.has(v));
-    }
-    export function setBannedCoIdArray(baseWarRule: BaseWarRule, playerIndex: number, coIdSet: Set<number>): void {
-        const playerRule = getPlayerRule(baseWarRule, playerIndex);
-        if (playerRule.bannedCoIdArray == null) {
-            playerRule.bannedCoIdArray = [...coIdSet];
-        } else {
-            const bannedCoIdArray   = playerRule.bannedCoIdArray;
-            bannedCoIdArray.length  = 0;
-            for (const coId of coIdSet) {
-                bannedCoIdArray.push(coId);
-            }
-        }
     }
 
     export function setFixedCoIdInCcw(baseWarRule: BaseWarRule, playerIndex: number, coId: number | null): void {
@@ -271,7 +295,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
     }
 
     export function getRandomCoIdWithSettingsForCommon(baseWarRule: BaseWarRule, playerIndex: number, gameConfig: GameConfig): number {
-        return getRandomCoIdWithCoIdList(getAvailableCoIdArrayForPlayer({
+        return getRandomCoIdWithCoIdList(getAvailableCoIdArrayWithBaseWarRule({
             baseWarRule: baseWarRule,
             playerIndex,
             gameConfig,
@@ -284,7 +308,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             if (coIdList.length <= 1) {
                 return coIdList[0];
             } else {
-                return Helpers.pickRandomElement(coIdList.filter(v => v !== CommonConstants.CoIdEmpty));
+                return Helpers.pickRandomElement(coIdList.filter(v => v !== CommonConstants.CoId.Empty));
             }
         }
     }
@@ -356,6 +380,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             luckLowerLimit          : CommonConstants.WarRuleLuckDefaultLowerLimit,
             luckUpperLimit          : CommonConstants.WarRuleLuckDefaultUpperLimit,
             bannedCoIdArray         : [],
+            bannedCoCategoryIdArray : [],
             bannedUnitTypeArray     : [],
             canActivateCoSkill      : true,
         };
@@ -616,14 +641,22 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             }
 
             const bannedCoIdArray = data.bannedCoIdArray || [];
-            if (bannedCoIdArray.indexOf(CommonConstants.CoIdEmpty) >= 0) {
+            if (bannedCoIdArray.indexOf(CommonConstants.CoId.Empty) >= 0) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_12;
             }
-            if (bannedCoIdArray.some(coId => !gameConfig.checkHasCo(coId))) {
+            if ((bannedCoIdArray.some(coId => !gameConfig.checkHasCo(coId)))    ||
+                (bannedCoIdArray.length !== new Set(bannedCoIdArray).size)
+            ) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_13;
             }
-            if (bannedCoIdArray.length !== new Set(bannedCoIdArray).size) {
-                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_14;
+
+            {
+                const bannedCoCategoryIdArray = data.bannedCoCategoryIdArray ?? [];
+                if ((bannedCoCategoryIdArray.indexOf(CommonConstants.CoCategoryId.Empty) >= 0)  ||
+                    (!gameConfig.checkIsValidCoCategoryIdSubset(bannedCoCategoryIdArray))
+                ) {
+                    return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_14;
+                }
             }
 
             const bannedUnitTypeArray = data.bannedUnitTypeArray ?? [];

@@ -28,7 +28,7 @@ namespace Twns.MultiFreeRoom.MfrCreateModel {
         settingsForMfw          : {},
 
         selfPlayerIndex         : Twns.CommonConstants.PlayerIndex.First,
-        selfCoId                : Twns.CommonConstants.CoIdEmpty,
+        selfCoId                : Twns.CommonConstants.CoId.Empty,
     };
 
     export async function resetDataByInitialWarData(warData: ISerialWar): Promise<void> {

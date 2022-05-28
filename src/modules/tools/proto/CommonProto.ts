@@ -11971,6 +11971,9 @@ declare namespace CommonProto {
 
             /** DataForPlayerRule canActivateCoSkill */
             canActivateCoSkill?: (boolean|null);
+
+            /** DataForPlayerRule bannedCoCategoryIdArray */
+            bannedCoCategoryIdArray?: (number[]|null);
         }
 
         /** Represents a DataForPlayerRule. */
@@ -12029,6 +12032,9 @@ declare namespace CommonProto {
 
             /** DataForPlayerRule canActivateCoSkill. */
             public canActivateCoSkill: boolean;
+
+            /** DataForPlayerRule bannedCoCategoryIdArray. */
+            public bannedCoCategoryIdArray: number[];
 
             /**
              * Creates a new DataForPlayerRule instance using the specified properties.
@@ -24014,8 +24020,8 @@ declare namespace CommonProto {
             /** DataForPlayerBanCo srcPlayerIndex */
             srcPlayerIndex?: (number|null);
 
-            /** DataForPlayerBanCo bannedCoIdList */
-            bannedCoIdList?: (number[]|null);
+            /** DataForPlayerBanCo bannedCoCategoryIdArray */
+            bannedCoCategoryIdArray?: (number[]|null);
         }
 
         /** Represents a DataForPlayerBanCo. */
@@ -24030,8 +24036,8 @@ declare namespace CommonProto {
             /** DataForPlayerBanCo srcPlayerIndex. */
             public srcPlayerIndex: number;
 
-            /** DataForPlayerBanCo bannedCoIdList. */
-            public bannedCoIdList: number[];
+            /** DataForPlayerBanCo bannedCoCategoryIdArray. */
+            public bannedCoCategoryIdArray: number[];
 
             /**
              * Creates a new DataForPlayerBanCo instance using the specified properties.
@@ -30701,8 +30707,8 @@ declare namespace CommonProto {
             /** MessageContainer MsgMrrDeleteRoomByServer */
             MsgMrrDeleteRoomByServer?: (CommonProto.NetMessage.IMsgMrrDeleteRoomByServer|null);
 
-            /** MessageContainer MsgMrrSetBannedCoIdList */
-            MsgMrrSetBannedCoIdList?: (CommonProto.NetMessage.IMsgMrrSetBannedCoIdList|null);
+            /** MessageContainer MsgMrrSetBannedCoCategoryIdArray */
+            MsgMrrSetBannedCoCategoryIdArray?: (CommonProto.NetMessage.IMsgMrrSetBannedCoCategoryIdArray|null);
 
             /** MessageContainer MsgMrrSetSelfSettings */
             MsgMrrSetSelfSettings?: (CommonProto.NetMessage.IMsgMrrSetSelfSettings|null);
@@ -31080,8 +31086,8 @@ declare namespace CommonProto {
             /** MessageContainer MsgMrrDeleteRoomByServer. */
             public MsgMrrDeleteRoomByServer?: (CommonProto.NetMessage.IMsgMrrDeleteRoomByServer|null);
 
-            /** MessageContainer MsgMrrSetBannedCoIdList. */
-            public MsgMrrSetBannedCoIdList?: (CommonProto.NetMessage.IMsgMrrSetBannedCoIdList|null);
+            /** MessageContainer MsgMrrSetBannedCoCategoryIdArray. */
+            public MsgMrrSetBannedCoCategoryIdArray?: (CommonProto.NetMessage.IMsgMrrSetBannedCoCategoryIdArray|null);
 
             /** MessageContainer MsgMrrSetSelfSettings. */
             public MsgMrrSetSelfSettings?: (CommonProto.NetMessage.IMsgMrrSetSelfSettings|null);
@@ -59873,103 +59879,103 @@ declare namespace CommonProto {
             }
         }
 
-        /** Properties of a MsgMrrSetBannedCoIdList. */
-        interface IMsgMrrSetBannedCoIdList {
+        /** Properties of a MsgMrrSetBannedCoCategoryIdArray. */
+        interface IMsgMrrSetBannedCoCategoryIdArray {
 
-            /** MsgMrrSetBannedCoIdList c */
-            c?: (CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IC|null);
+            /** MsgMrrSetBannedCoCategoryIdArray c */
+            c?: (CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.IC|null);
 
-            /** MsgMrrSetBannedCoIdList s */
-            s?: (CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IS|null);
+            /** MsgMrrSetBannedCoCategoryIdArray s */
+            s?: (CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.IS|null);
         }
 
-        /** Represents a MsgMrrSetBannedCoIdList. */
-        class MsgMrrSetBannedCoIdList implements IMsgMrrSetBannedCoIdList {
+        /** Represents a MsgMrrSetBannedCoCategoryIdArray. */
+        class MsgMrrSetBannedCoCategoryIdArray implements IMsgMrrSetBannedCoCategoryIdArray {
 
             /**
-             * Constructs a new MsgMrrSetBannedCoIdList.
+             * Constructs a new MsgMrrSetBannedCoCategoryIdArray.
              * @param [properties] Properties to set
              */
-            constructor(properties?: CommonProto.NetMessage.IMsgMrrSetBannedCoIdList);
+            constructor(properties?: CommonProto.NetMessage.IMsgMrrSetBannedCoCategoryIdArray);
 
-            /** MsgMrrSetBannedCoIdList c. */
-            public c?: (CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IC|null);
+            /** MsgMrrSetBannedCoCategoryIdArray c. */
+            public c?: (CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.IC|null);
 
-            /** MsgMrrSetBannedCoIdList s. */
-            public s?: (CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IS|null);
+            /** MsgMrrSetBannedCoCategoryIdArray s. */
+            public s?: (CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.IS|null);
 
             /**
-             * Creates a new MsgMrrSetBannedCoIdList instance using the specified properties.
+             * Creates a new MsgMrrSetBannedCoCategoryIdArray instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns MsgMrrSetBannedCoIdList instance
+             * @returns MsgMrrSetBannedCoCategoryIdArray instance
              */
-            public static create(properties?: CommonProto.NetMessage.IMsgMrrSetBannedCoIdList): CommonProto.NetMessage.MsgMrrSetBannedCoIdList;
+            public static create(properties?: CommonProto.NetMessage.IMsgMrrSetBannedCoCategoryIdArray): CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray;
 
             /**
-             * Encodes the specified MsgMrrSetBannedCoIdList message. Does not implicitly {@link CommonProto.NetMessage.MsgMrrSetBannedCoIdList.verify|verify} messages.
-             * @param message MsgMrrSetBannedCoIdList message or plain object to encode
+             * Encodes the specified MsgMrrSetBannedCoCategoryIdArray message. Does not implicitly {@link CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.verify|verify} messages.
+             * @param message MsgMrrSetBannedCoCategoryIdArray message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: CommonProto.NetMessage.IMsgMrrSetBannedCoIdList, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: CommonProto.NetMessage.IMsgMrrSetBannedCoCategoryIdArray, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified MsgMrrSetBannedCoIdList message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMrrSetBannedCoIdList.verify|verify} messages.
-             * @param message MsgMrrSetBannedCoIdList message or plain object to encode
+             * Encodes the specified MsgMrrSetBannedCoCategoryIdArray message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.verify|verify} messages.
+             * @param message MsgMrrSetBannedCoCategoryIdArray message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: CommonProto.NetMessage.IMsgMrrSetBannedCoIdList, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: CommonProto.NetMessage.IMsgMrrSetBannedCoCategoryIdArray, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a MsgMrrSetBannedCoIdList message from the specified reader or buffer.
+             * Decodes a MsgMrrSetBannedCoCategoryIdArray message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns MsgMrrSetBannedCoIdList
+             * @returns MsgMrrSetBannedCoCategoryIdArray
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMrrSetBannedCoIdList;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray;
 
             /**
-             * Decodes a MsgMrrSetBannedCoIdList message from the specified reader or buffer, length delimited.
+             * Decodes a MsgMrrSetBannedCoCategoryIdArray message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns MsgMrrSetBannedCoIdList
+             * @returns MsgMrrSetBannedCoCategoryIdArray
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMrrSetBannedCoIdList;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray;
 
             /**
-             * Verifies a MsgMrrSetBannedCoIdList message.
+             * Verifies a MsgMrrSetBannedCoCategoryIdArray message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a MsgMrrSetBannedCoIdList message from a plain object. Also converts values to their respective internal types.
+             * Creates a MsgMrrSetBannedCoCategoryIdArray message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns MsgMrrSetBannedCoIdList
+             * @returns MsgMrrSetBannedCoCategoryIdArray
              */
-            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMrrSetBannedCoIdList;
+            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray;
 
             /**
-             * Creates a plain object from a MsgMrrSetBannedCoIdList message. Also converts values to other types if specified.
-             * @param message MsgMrrSetBannedCoIdList
+             * Creates a plain object from a MsgMrrSetBannedCoCategoryIdArray message. Also converts values to other types if specified.
+             * @param message MsgMrrSetBannedCoCategoryIdArray
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: CommonProto.NetMessage.MsgMrrSetBannedCoIdList, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this MsgMrrSetBannedCoIdList to JSON.
+             * Converts this MsgMrrSetBannedCoCategoryIdArray to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        namespace MsgMrrSetBannedCoIdList {
+        namespace MsgMrrSetBannedCoCategoryIdArray {
 
             /** Properties of a C. */
             interface IC {
@@ -59977,8 +59983,8 @@ declare namespace CommonProto {
                 /** C roomId */
                 roomId?: (number|null);
 
-                /** C bannedCoIdList */
-                bannedCoIdList?: (number[]|null);
+                /** C bannedCoCategoryIdArray */
+                bannedCoCategoryIdArray?: (number[]|null);
             }
 
             /** Represents a C. */
@@ -59988,36 +59994,36 @@ declare namespace CommonProto {
                  * Constructs a new C.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IC);
+                constructor(properties?: CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.IC);
 
                 /** C roomId. */
                 public roomId: number;
 
-                /** C bannedCoIdList. */
-                public bannedCoIdList: number[];
+                /** C bannedCoCategoryIdArray. */
+                public bannedCoCategoryIdArray: number[];
 
                 /**
                  * Creates a new C instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns C instance
                  */
-                public static create(properties?: CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IC): CommonProto.NetMessage.MsgMrrSetBannedCoIdList.C;
+                public static create(properties?: CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.IC): CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.C;
 
                 /**
-                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgMrrSetBannedCoIdList.C.verify|verify} messages.
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.C.verify|verify} messages.
                  * @param message C message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IC, writer?: protobuf.Writer): protobuf.Writer;
+                public static encode(message: CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
-                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMrrSetBannedCoIdList.C.verify|verify} messages.
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.C.verify|verify} messages.
                  * @param message C message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IC, writer?: protobuf.Writer): protobuf.Writer;
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
                  * Decodes a C message from the specified reader or buffer.
@@ -60027,7 +60033,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMrrSetBannedCoIdList.C;
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.C;
 
                 /**
                  * Decodes a C message from the specified reader or buffer, length delimited.
@@ -60036,7 +60042,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMrrSetBannedCoIdList.C;
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.C;
 
                 /**
                  * Verifies a C message.
@@ -60050,7 +60056,7 @@ declare namespace CommonProto {
                  * @param object Plain object
                  * @returns C
                  */
-                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMrrSetBannedCoIdList.C;
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.C;
 
                 /**
                  * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -60058,7 +60064,7 @@ declare namespace CommonProto {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: CommonProto.NetMessage.MsgMrrSetBannedCoIdList.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this C to JSON.
@@ -60079,8 +60085,8 @@ declare namespace CommonProto {
                 /** S playerIndex */
                 playerIndex?: (number|null);
 
-                /** S bannedCoIdList */
-                bannedCoIdList?: (number[]|null);
+                /** S bannedCoCategoryIdArray */
+                bannedCoCategoryIdArray?: (number[]|null);
             }
 
             /** Represents a S. */
@@ -60090,7 +60096,7 @@ declare namespace CommonProto {
                  * Constructs a new S.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IS);
+                constructor(properties?: CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.IS);
 
                 /** S errorCode. */
                 public errorCode: number;
@@ -60101,31 +60107,31 @@ declare namespace CommonProto {
                 /** S playerIndex. */
                 public playerIndex: number;
 
-                /** S bannedCoIdList. */
-                public bannedCoIdList: number[];
+                /** S bannedCoCategoryIdArray. */
+                public bannedCoCategoryIdArray: number[];
 
                 /**
                  * Creates a new S instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns S instance
                  */
-                public static create(properties?: CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IS): CommonProto.NetMessage.MsgMrrSetBannedCoIdList.S;
+                public static create(properties?: CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.IS): CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.S;
 
                 /**
-                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgMrrSetBannedCoIdList.S.verify|verify} messages.
+                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.S.verify|verify} messages.
                  * @param message S message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IS, writer?: protobuf.Writer): protobuf.Writer;
+                public static encode(message: CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
-                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMrrSetBannedCoIdList.S.verify|verify} messages.
+                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.S.verify|verify} messages.
                  * @param message S message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IS, writer?: protobuf.Writer): protobuf.Writer;
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
                  * Decodes a S message from the specified reader or buffer.
@@ -60135,7 +60141,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMrrSetBannedCoIdList.S;
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.S;
 
                 /**
                  * Decodes a S message from the specified reader or buffer, length delimited.
@@ -60144,7 +60150,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMrrSetBannedCoIdList.S;
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.S;
 
                 /**
                  * Verifies a S message.
@@ -60158,7 +60164,7 @@ declare namespace CommonProto {
                  * @param object Plain object
                  * @returns S
                  */
-                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMrrSetBannedCoIdList.S;
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.S;
 
                 /**
                  * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -60166,7 +60172,7 @@ declare namespace CommonProto {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: CommonProto.NetMessage.MsgMrrSetBannedCoIdList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this S to JSON.

@@ -141,7 +141,7 @@ namespace Twns.MultiFreeRoom {
             Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                 gameConfig,
                 currentCoId,
-                availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({
                     baseWarRule         : MultiFreeRoom.MfrCreateModel.getInstanceWarRule(),
                     playerIndex     : MultiFreeRoom.MfrCreateModel.getSelfPlayerIndex(),
                     gameConfig,
@@ -503,7 +503,7 @@ namespace Twns.MultiFreeRoom {
                 } else {
                     creator.setSelfPlayerIndex(playerIndex);
 
-                    const availableCoIdArray = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                    const availableCoIdArray = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({
                         baseWarRule         : creator.getInstanceWarRule(),
                         playerIndex,
                         gameConfig      : await Config.ConfigManager.getGameConfig(MultiFreeRoom.MfrCreateModel.getConfigVersion()),

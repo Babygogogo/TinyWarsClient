@@ -139,7 +139,7 @@ namespace Twns.SingleRankRoom.SrrCreateModel {
         for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
             const coIdForAi             = playerRuleDataArray.find(v => v.playerIndex === playerIndex)?.fixedCoIdInSrw;
             const oldInfo               = oldPlayerInfoList.find(v => v.playerIndex === playerIndex);
-            const availableCoIdArray    = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({ baseWarRule: instanceWarRule, playerIndex, gameConfig });
+            const availableCoIdArray    = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({ baseWarRule: instanceWarRule, playerIndex, gameConfig });
             const newCoId               = WarHelpers.WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray);
             if (oldInfo) {
                 const coId = Helpers.getExisted(oldInfo.coId);

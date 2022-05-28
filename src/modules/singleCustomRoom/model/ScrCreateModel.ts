@@ -144,7 +144,7 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
 
         for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
             const oldInfo               = oldPlayerInfoList.find(v => v.playerIndex === playerIndex);
-            const availableCoIdArray    = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayForPlayer({ baseWarRule: instanceWarRule, playerIndex, gameConfig });
+            const availableCoIdArray    = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({ baseWarRule: instanceWarRule, playerIndex, gameConfig });
             const newCoId               = WarHelpers.WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray);
             if (oldInfo) {
                 const coId = Helpers.getExisted(oldInfo.coId);
@@ -228,11 +228,11 @@ namespace Twns.SingleCustomRoom.ScrCreateModel {
         Notify.dispatch(NotifyType.ScrCreatePlayerInfoChanged, { playerIndex } as Notify.NotifyData.ScrCreatePlayerInfoChanged);
     }
 
-    export function getBannedCoIdArray(playerIndex: number): number[] | null {
-        return WarHelpers.WarRuleHelpers.getBannedCoIdArray(getInstanceWarRule(), playerIndex);
+    export function getBannedCoCategoryIdArray(playerIndex: number): number[] | null {
+        return WarHelpers.WarRuleHelpers.getBannedCoCategoryIdArray(getInstanceWarRule(), playerIndex);
     }
-    export function setBannedCoIdArray(playerIndex: number, coIdSet: Set<number>): void {
-        WarHelpers.WarRuleHelpers.setBannedCoIdArray(getInstanceWarRule(), playerIndex, coIdSet);
+    export function setBannedCoCategoryIdArray(playerIndex: number, coIdSet: Set<number>): void {
+        WarHelpers.WarRuleHelpers.setBannedCoCategoryIdArray(getInstanceWarRule(), playerIndex, coIdSet);
     }
 
     export function getBannedUnitTypeArray(playerIndex: number): number[] | null {
