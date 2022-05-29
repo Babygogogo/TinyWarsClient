@@ -11957,8 +11957,8 @@ declare namespace CommonProto {
             /** DataForPlayerRule luckUpperLimit */
             luckUpperLimit?: (number|null);
 
-            /** DataForPlayerRule bannedCoIdArray */
-            bannedCoIdArray?: (number[]|null);
+            /** DataForPlayerRule bannedCoCategoryIdArray */
+            bannedCoCategoryIdArray?: (number[]|null);
 
             /** DataForPlayerRule fixedCoIdInSrw */
             fixedCoIdInSrw?: (number|null);
@@ -11971,9 +11971,6 @@ declare namespace CommonProto {
 
             /** DataForPlayerRule canActivateCoSkill */
             canActivateCoSkill?: (boolean|null);
-
-            /** DataForPlayerRule bannedCoCategoryIdArray */
-            bannedCoCategoryIdArray?: (number[]|null);
         }
 
         /** Represents a DataForPlayerRule. */
@@ -12018,8 +12015,8 @@ declare namespace CommonProto {
             /** DataForPlayerRule luckUpperLimit. */
             public luckUpperLimit: number;
 
-            /** DataForPlayerRule bannedCoIdArray. */
-            public bannedCoIdArray: number[];
+            /** DataForPlayerRule bannedCoCategoryIdArray. */
+            public bannedCoCategoryIdArray: number[];
 
             /** DataForPlayerRule fixedCoIdInSrw. */
             public fixedCoIdInSrw: number;
@@ -12032,9 +12029,6 @@ declare namespace CommonProto {
 
             /** DataForPlayerRule canActivateCoSkill. */
             public canActivateCoSkill: boolean;
-
-            /** DataForPlayerRule bannedCoCategoryIdArray. */
-            public bannedCoCategoryIdArray: number[];
 
             /**
              * Creates a new DataForPlayerRule instance using the specified properties.

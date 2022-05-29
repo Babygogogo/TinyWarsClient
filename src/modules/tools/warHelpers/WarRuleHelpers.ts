@@ -27,7 +27,6 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         playerIndex             : CommonConstants.PlayerIndex.Neutral,
         teamIndex               : 0,
         attackPowerModifier     : 0,
-        bannedCoIdArray         : [],
         bannedCoCategoryIdArray : [],
         bannedUnitTypeArray     : [],
         canActivateCoSkill      : true,
@@ -195,11 +194,7 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         gameConfig      : GameConfig;
     }): number[] {
         const playerRule    = getPlayerRule(baseWarRule, playerIndex);
-        const bannedCoIdSet = new Set(playerRule.bannedCoIdArray);
-        for (const coId of gameConfig.getCoIdArrayByCategoryIdSet(new Set(playerRule.bannedCoCategoryIdArray))) {
-            bannedCoIdSet.add(coId);
-        }
-
+        const bannedCoIdSet = new Set(gameConfig.getCoIdArrayByCategoryIdSet(new Set(playerRule.bannedCoCategoryIdArray)));
         return getAvailableCoIdArray(gameConfig, bannedCoIdSet);
     }
     export function getAvailableCoIdArray(gameConfig: GameConfig, bannedCoIdSet: Set<number>): number[] {
@@ -379,7 +374,6 @@ namespace Twns.WarHelpers.WarRuleHelpers {
             visionRangeModifier     : CommonConstants.WarRuleVisionRangeModifierDefault,
             luckLowerLimit          : CommonConstants.WarRuleLuckDefaultLowerLimit,
             luckUpperLimit          : CommonConstants.WarRuleLuckDefaultUpperLimit,
-            bannedCoIdArray         : [],
             bannedCoCategoryIdArray : [],
             bannedUnitTypeArray     : [],
             canActivateCoSkill      : true,
@@ -638,16 +632,6 @@ namespace Twns.WarHelpers.WarRuleHelpers {
                 (luckUpperLimit < luckLowerLimit)
             ) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_11;
-            }
-
-            const bannedCoIdArray = data.bannedCoIdArray || [];
-            if (bannedCoIdArray.indexOf(CommonConstants.CoId.Empty) >= 0) {
-                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_12;
-            }
-            if ((bannedCoIdArray.some(coId => !gameConfig.checkHasCo(coId)))    ||
-                (bannedCoIdArray.length !== new Set(bannedCoIdArray).size)
-            ) {
-                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_13;
             }
 
             {
