@@ -6,7 +6,7 @@
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
 // import Notify               from "../../tools/notify/Notify";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -16,8 +16,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common {
-    import LangTextType     = Twns.Lang.LangTextType;
-    import NotifyType       = Twns.Notify.NotifyType;
+    import LangTextType     = Lang.LangTextType;
+    import NotifyType       = Notify.NotifyType;
     import ILanguageText    = CommonProto.Structure.ILanguageText;
 
     export type OpenDataForCommonModifyWarRuleNamePanel = {
@@ -57,16 +57,16 @@ namespace Twns.Common {
         }
 
         private _onTouchedBtnModify(): void {
-            const chineseText   = this._inputChinese.text || ``;
-            const englishText   = this._inputEnglish.text || ``;
+            const chineseText   = this._inputChinese.text.trim() ?? ``;
+            const englishText   = this._inputEnglish.text.trim() ?? ``;
             const textList      : ILanguageText[] = [
-                { languageType: Twns.Types.LanguageType.Chinese, text: chineseText || englishText },
-                { languageType: Twns.Types.LanguageType.English, text: englishText || chineseText },
+                { languageType: Types.LanguageType.Chinese, text: chineseText || englishText },
+                { languageType: Types.LanguageType.English, text: englishText || chineseText },
             ];
-            if (textList.every(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0155));
-            } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > Twns.CommonConstants.WarRuleNameMaxLength)) {
-                Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.WarRuleNameMaxLength));
+            if (textList.every(v => Helpers.getExisted(v.text).length <= 0)) {
+                FloatText.show(Lang.getText(LangTextType.A0155));
+            } else if (textList.some(v => Helpers.getExisted(v.text).length > CommonConstants.WarRuleNameMaxLength)) {
+                FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.WarRuleNameMaxLength));
             } else {
                 const openData              = this._getOpenData();
                 openData.templateWarRule.ruleNameArray = textList;
@@ -79,8 +79,8 @@ namespace Twns.Common {
             this._updateComponentsForLanguage();
 
             const textList          = this._getOpenData().templateWarRule.ruleNameArray;
-            this._inputChinese.text = Lang.getLanguageText({ textArray: textList, languageType: Twns.Types.LanguageType.Chinese }) ?? ``;
-            this._inputEnglish.text = Lang.getLanguageText({ textArray: textList, languageType: Twns.Types.LanguageType.English }) ?? ``;
+            this._inputChinese.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.Chinese }) ?? ``;
+            this._inputEnglish.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.English }) ?? ``;
         }
 
         private _updateComponentsForLanguage(): void {
@@ -89,7 +89,7 @@ namespace Twns.Common {
             this._labelChinese.text = Lang.getText(LangTextType.B0455);
             this._labelEnglish.text = Lang.getText(LangTextType.B0456);
             this._labelTip.text     = Lang.getText(LangTextType.A0156);
-            this._labelTitle.text   = `${Lang.getText(LangTextType.B0459)} #${this._getOpenData().templateWarRule}`;
+            this._labelTitle.text   = `${Lang.getText(LangTextType.B0459)} #${this._getOpenData().templateWarRule.ruleId}`;
         }
     }
 }

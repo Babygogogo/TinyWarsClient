@@ -4,7 +4,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -15,8 +15,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapManagement {
-    import LangTextType         = Twns.Lang.LangTextType;
-    import NotifyType           = Twns.Notify.NotifyType;
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
 
     export type OpenDataForMmCommandPanel = {
         mapId   : number;
@@ -26,16 +26,19 @@ namespace Twns.MapManagement {
         private readonly _btnDelete!    : TwnsUiButton.UiButton;
         private readonly _btnWarRule!   : TwnsUiButton.UiButton;
         private readonly _btnRename!    : TwnsUiButton.UiButton;
+        private readonly _btnMapTag!    : TwnsUiButton.UiButton;
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMmSetMapTag,  callback: this._onNotifyMsgMmSetMapTag },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnDelete,      callback: this._onTouchedBtnDelete },
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel },
                 { ui: this._btnWarRule,     callback: this._onTouchedBtnWarRule },
+                { ui: this._btnMapTag,      callback: this._onTouchedBtnMapTag },
                 { ui: this._btnRename,      callback: this._onTouchedBtnRename },
             ]);
             this._setIsTouchMaskEnabled();
@@ -53,31 +56,38 @@ namespace Twns.MapManagement {
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
+        private _onNotifyMsgMmSetMapTag(): void {
+            FloatText.show(Lang.getText(LangTextType.A0151));
+        }
 
         private _onTouchedBtnDelete(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0080),
                 callback: () => {
-                    Twns.WarMap.WarMapProxy.reqMmSetMapEnabled(this._getOpenData().mapId, false);
+                    WarMap.WarMapProxy.reqMmSetMapEnabled(this._getOpenData().mapId, false);
                     this.close();
                 },
             });
         }
 
         private async _onTouchedBtnWarRule(): Promise<void> {
-            const mapRawData = await Twns.WarMap.WarMapModel.getRawData(this._getOpenData().mapId);
+            const mapRawData = await WarMap.WarMapModel.getRawData(this._getOpenData().mapId);
             if (mapRawData == null) {
-                throw Twns.Helpers.newError(`MmCommandPanel._onTouchedBtnWarRule() empty mapRawData.`);
+                throw Helpers.newError(`MmCommandPanel._onTouchedBtnWarRule() empty mapRawData.`);
             }
 
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmWarRulePanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.MmWarRulePanel, {
                 mapRawData,
             });
             this.close();
         }
 
+        private _onTouchedBtnMapTag(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.MmTagChangePanel, { mapId: this._getOpenData().mapId });
+        }
+
         private _onTouchedBtnRename(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmMapRenamePanel, { mapId: this._getOpenData().mapId });
+            PanelHelpers.open(PanelHelpers.PanelDict.MmMapRenamePanel, { mapId: this._getOpenData().mapId });
         }
 
         private _onTouchedBtnCancel(): void {
@@ -86,10 +96,11 @@ namespace Twns.MapManagement {
 
         private async _updateComponentsForLanguage(): Promise<void> {
             const mapId             = this._getOpenData().mapId;
-            this._labelTitle.text   = `#${mapId} ${await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId)}`;
+            this._labelTitle.text   = `#${mapId} ${await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId)}`;
             this._btnDelete.label   = Lang.getText(LangTextType.B0270);
             this._btnWarRule.label  = Lang.getText(LangTextType.B0314);
             this._btnRename.label   = Lang.getText(LangTextType.B0708);
+            this._btnMapTag.label   = Lang.getText(LangTextType.B0445);
         }
     }
 }

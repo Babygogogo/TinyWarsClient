@@ -7,7 +7,7 @@
                              alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <TwnsUiLabel:UiLabel id="_labelMenuTitle" text="预设规则" y="10" bold="true" size="20" textColor="0xffffff"
                              horizontalCenter="0" />
-        <TwnsUiScrollList:UiScrollList id="_listWarRule" left="0" right="0" bottom="130" top="35">
+        <TwnsUiScrollList:UiScrollList id="_listWarRule" left="0" right="0" bottom="170" top="35">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="160" height="40" currentState="up" states="up,down">
@@ -35,6 +35,8 @@
                                    skinName="Skins.Component.Button.ButtonSelfAdaption001" y="10" right="0" x="10" />
             <TwnsUiButton:UiButton id="_btnSetAvailability" label="Modify Availability" y="0" right="0"
                                    skinName="Skins.Component.Button.ButtonSelfAdaption001" width="160" />
+            <TwnsUiButton:UiButton id="_btnSetRuleName" label="Modify Name" y="10" right="0"
+                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" width="160" x="10" />
             <TwnsUiButton:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001"
                                    width="160" x="0" y="40" />
             <e:layout>

@@ -57,12 +57,12 @@ namespace Twns.MapManagement {
         }
 
         private _onTouchedBtnReset(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmAvailabilityListPanel, {});
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmModifyMapListPanel, {});
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmAvailabilityListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmModifyMapListPanel, {
                 mapName     : this._inputMapName.text || null,
                 mapDesigner : this._inputDesigner.text || null,
                 playersCount: Number(this._inputPlayersCount.text) || null,

@@ -1354,6 +1354,10 @@ namespace Twns.Lang {
             `禁止使用CO主动技。`,
             `Cannot Use CO Power.`,
         ],
+        [LangTextType.A0310]: [
+            `已成功修改规则名称`,
+            `The rule name has been updated successfully.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

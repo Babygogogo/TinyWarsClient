@@ -4,7 +4,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -15,14 +15,16 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapManagement {
-    import LangTextType         = Twns.Lang.LangTextType;
-    import NotifyType           = Twns.Notify.NotifyType;
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
 
     export type OpenDataForMmSetWarRuleAvailabilityPanel = {
         mapId   : number;
         ruleId  : number;
     };
     export class MmSetWarRuleAvailabilityPanel extends TwnsUiPanel.UiPanel<OpenDataForMmSetWarRuleAvailabilityPanel> {
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+
         private readonly _groupMcw!     : eui.Group;
         private readonly _labelMcw!     : TwnsUiLabel.UiLabel;
         private readonly _imgMcw!       : TwnsUiImage.UiImage;
@@ -78,8 +80,8 @@ namespace Twns.MapManagement {
             const openData          = this._getOpenData();
             const mapId             = openData.mapId;
             const ruleId            = openData.ruleId;
-            const mapRawData        = Twns.Helpers.getExisted(await WarMap.WarMapModel.getRawData(mapId));
-            const templateWarRule   = Twns.Helpers.getExisted(Twns.Helpers.deepClone(mapRawData.templateWarRuleArray?.find(v => v.ruleId === ruleId)));
+            const mapRawData        = Helpers.getExisted(await WarMap.WarMapModel.getRawData(mapId));
+            const templateWarRule   = Helpers.getExisted(Helpers.deepClone(mapRawData.templateWarRuleArray?.find(v => v.ruleId === ruleId)));
             const availability      : CommonProto.WarRule.IRuleAvailability = {
                 canMcw  : this._imgMcw.visible,
                 canCcw  : this._imgCcw.visible,
@@ -90,16 +92,16 @@ namespace Twns.MapManagement {
             templateWarRule.ruleAvailability    = availability;
             const errorCode                     = WarHelpers.WarRuleHelpers.getErrorCodeForTemplateWarRule({
                 templateWarRule,
-                playersCountUnneutral   : Twns.Helpers.getExisted(mapRawData.playersCountUnneutral),
+                playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),
                 gameConfig              : await Config.ConfigManager.getLatestGameConfig(),
-                allWarEventIdArray      : Twns.Helpers.getNonNullElements(mapRawData.warEventFullData?.eventArray?.map(v => v.eventId) ?? []),
+                allWarEventIdArray      : Helpers.getNonNullElements(mapRawData.warEventFullData?.eventArray?.map(v => v.eventId) ?? []),
             });
             if (errorCode) {
-                Twns.FloatText.show(Lang.getErrorText(errorCode));
+                FloatText.show(Lang.getErrorText(errorCode));
                 return;
             }
 
-            Twns.WarMap.WarMapProxy.reqMmSetWarRuleAvailability({
+            WarMap.WarMapProxy.reqMmSetWarRuleAvailability({
                 mapId,
                 ruleId,
                 availability,
@@ -138,6 +140,7 @@ namespace Twns.MapManagement {
         }
 
         private _updateComponentsForLanguage(): void {
+            this._labelTitle.text   = Lang.getText(LangTextType.B0406);
             this._btnCancel.label   = Lang.getText(LangTextType.B0154);
             this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
             this._labelMcw.text     = Lang.getText(LangTextType.B0200);

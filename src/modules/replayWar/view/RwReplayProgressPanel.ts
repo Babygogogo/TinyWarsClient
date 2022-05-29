@@ -7,7 +7,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -15,12 +15,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.ReplayWar {
-    import NotifyType       = Twns.Notify.NotifyType;
-    import ClientErrorCode  = Twns.ClientErrorCode;
-    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Notify.NotifyType;
+    import LangTextType     = Lang.LangTextType;
 
     export type OpenDataForRwReplayProgressPanel = {
-        war: Twns.ReplayWar.RwWar;
+        war: ReplayWar.RwWar;
     };
     export class RwReplayProgressPanel extends TwnsUiPanel.UiPanel<OpenDataForRwReplayProgressPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
@@ -38,7 +37,7 @@ namespace Twns.ReplayWar {
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
         private readonly _btnConfirm!       : TwnsUiButton.UiButton;
 
-        private _allCheckpointInfoArray?    : Twns.Types.ReplayCheckpointInfo[];
+        private _allCheckpointInfoArray?    : Types.ReplayCheckpointInfo[];
         private _selectedCheckpointId?      : number;
 
         protected _onOpening(): void {
@@ -117,16 +116,16 @@ namespace Twns.ReplayWar {
             this._updateLabelTarget();
         }
         private async _onTouchedBtnConfirm(): Promise<void> {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonBlockPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonBlockPanel, {
                 title   : Lang.getText(LangTextType.B0088),
                 content : Lang.getText(LangTextType.A0040),
             });
             await this._getOpenData().war.loadCheckpoint(this._getSelectedCheckpointId());
-            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonBlockPanel);
+            PanelHelpers.close(PanelHelpers.PanelDict.CommonBlockPanel);
             this.close();
         }
         private _onTouchedPanelMask(): void {
-            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonCancel01);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonCancel01);
 
             this.close();
         }
@@ -155,12 +154,12 @@ namespace Twns.ReplayWar {
             this._imgProgressBar.width  = pos;
         }
         private _updateLabelTarget(): void {
-            const checkpointInfo        = Twns.Helpers.getExisted(this._allCheckpointInfoArray, ClientErrorCode.RwReplayProgressPanel_UpdateGroupProgress_00)[this._getSelectedCheckpointId()];
+            const checkpointInfo        = Helpers.getExisted(this._allCheckpointInfoArray, ClientErrorCode.RwReplayProgressPanel_UpdateGroupProgress_00)[this._getSelectedCheckpointId()];
             this._labelTarget.text      = `${Lang.getText(LangTextType.B0191)}${checkpointInfo.turnIndex}  P${checkpointInfo.playerIndex}  ${Lang.getText(LangTextType.B0616)}${checkpointInfo.nextActionId}`;
         }
 
         private _getSelectedCheckpointId(): number {
-            return Twns.Helpers.getExisted(this._selectedCheckpointId, ClientErrorCode.RwReplayProgressPanel_GetSelectedCheckpointId_00);
+            return Helpers.getExisted(this._selectedCheckpointId, ClientErrorCode.RwReplayProgressPanel_GetSelectedCheckpointId_00);
         }
         private _setSelectedCheckpointId(checkpointId: number): void {
             this._selectedCheckpointId = checkpointId;
@@ -169,36 +168,36 @@ namespace Twns.ReplayWar {
             return 0;
         }
         private _getMaxCheckpointId(): number {
-            return Twns.Helpers.getExisted(this._allCheckpointInfoArray?.length, ClientErrorCode.RwReplayProgressPanel_GetMaxCheckpointId_00) - 1;
+            return Helpers.getExisted(this._allCheckpointInfoArray?.length, ClientErrorCode.RwReplayProgressPanel_GetMaxCheckpointId_00) - 1;
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

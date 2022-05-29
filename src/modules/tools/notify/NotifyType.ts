@@ -178,6 +178,7 @@ namespace Twns.Notify {
         MsgMeSubmitMap,
         MsgMmAddWarRule,
         MsgMmDeleteWarRule,
+        MsgMmSetWarRuleName,
 
         MsgMmSetWarRuleAvailability,
         MsgMmReloadAllMaps,

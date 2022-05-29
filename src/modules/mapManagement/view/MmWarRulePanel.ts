@@ -30,6 +30,7 @@ namespace Twns.MapManagement {
         private readonly _listWarRule!          : TwnsUiScrollList.UiScrollList<DataForWarRuleNameRenderer>;
         private readonly _btnBack!              : TwnsUiButton.UiButton;
 
+        private readonly _btnSetRuleName!       : TwnsUiButton.UiButton;
         private readonly _btnSetAvailability!   : TwnsUiButton.UiButton;
         private readonly _btnSubmitRule!        : TwnsUiButton.UiButton;
         private readonly _btnDeleteRule!        : TwnsUiButton.UiButton;
@@ -72,11 +73,13 @@ namespace Twns.MapManagement {
                 { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgMmAddWarRule,             callback: this._onNotifyMsgMmAddWarRule },
                 { type: NotifyType.MsgMmDeleteWarRule,          callback: this._onNotifyMsgMmDeleteWarRule },
+                { type: NotifyType.MsgMmSetWarRuleName,         callback: this._onNotifyMsgMmSetWarRuleName },
                 { type: NotifyType.MsgMmSetWarRuleAvailability, callback: this._onNotifyMsgMmSetWarRuleAvailability },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
                 { ui: this._btnSetAvailability,     callback: this._onTouchedBtnSetAvailability },
+                { ui: this._btnSetRuleName,         callback: this._onTouchedBtnSetRuleName },
                 { ui: this._btnSubmitRule,          callback: this._onTouchedBtnSubmitRule },
                 { ui: this._btnDeleteRule,          callback: this._onTouchedBtnDeleteRule },
                 { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog },
@@ -145,6 +148,11 @@ namespace Twns.MapManagement {
             this._resetView();
         }
 
+        private _onNotifyMsgMmSetWarRuleName(): void {
+            FloatText.show(Lang.getText(LangTextType.A0310));
+            this._resetView();
+        }
+
         private _onNotifyMsgMmSetWarRuleAvailability(): void {
             FloatText.show(Lang.getText(LangTextType.A0287));
             this._resetView();
@@ -160,6 +168,19 @@ namespace Twns.MapManagement {
                 PanelHelpers.open(PanelHelpers.PanelDict.MmSetWarRuleAvailabilityPanel, {
                     mapId   : Helpers.getExisted(this._getOpenData().mapRawData.mapId),
                     ruleId,
+                });
+            }
+        }
+
+        private _onTouchedBtnSetRuleName(): void {
+            const templateWarRule   = this._selectedRule;
+            const ruleId            = templateWarRule?.ruleId;
+            if ((templateWarRule != null) && (ruleId != null)) {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonModifyWarRuleNamePanel, {
+                    templateWarRule,
+                    callback        : () => {
+                        WarMap.WarMapProxy.reqMmSetWarRuleName(Helpers.getExisted(this._getOpenData().mapRawData.mapId), ruleId, Helpers.getExisted(templateWarRule.ruleNameArray));
+                    },
                 });
             }
         }
@@ -303,6 +324,7 @@ namespace Twns.MapManagement {
 
         private _updateComponentsForLanguage(): void {
             this._btnSetAvailability.label      = Lang.getText(LangTextType.B0843);
+            this._btnSetRuleName.label          = Lang.getText(LangTextType.B0495);
             this._btnSubmitRule.label           = Lang.getText(LangTextType.B0824);
             this._btnDeleteRule.label           = Lang.getText(LangTextType.B0220);
             this._labelMenuTitle.text           = Lang.getText(LangTextType.B0314);

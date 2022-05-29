@@ -4,7 +4,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import Twns.Notify               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
@@ -16,8 +16,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapManagement {
-    import LangTextType             = Twns.Lang.LangTextType;
-    import NotifyType               = Twns.Notify.NotifyType;
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
 
     export type OpenDataForMmMainMenuPanel = void;
     export class MmMainMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForMmMainMenuPanel> {
@@ -49,13 +49,13 @@ namespace Twns.MapManagement {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            Twns.FlowManager.gotoLobby();
+            FlowManager.gotoLobby();
         }
         private _onMsgUserLogout(): void {
             this.close();
         }
         private _onMsgMmReloadAllMaps(): void {
-            Twns.FloatText.show(Lang.getText(LangTextType.A0075));
+            FloatText.show(Lang.getText(LangTextType.A0075));
         }
         private _onNotifyLanguageChanged(): void {
             this._updateView();
@@ -76,21 +76,14 @@ namespace Twns.MapManagement {
                     name    : Lang.getText(LangTextType.B0295),
                     callback: (): void => {
                         this.close();
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmReviewListPanel, void 0);
+                        PanelHelpers.open(PanelHelpers.PanelDict.MmReviewListPanel, void 0);
                     },
                 },
                 {
-                    name    : Lang.getText(LangTextType.B0193),
+                    name    : Lang.getText(LangTextType.B0317),
                     callback: (): void => {
                         this.close();
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmAvailabilityListPanel, {});
-                    },
-                },
-                {
-                    name    : Lang.getText(LangTextType.B0444),
-                    callback: (): void => {
-                        this.close();
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmTagListPanel, null);
+                        PanelHelpers.open(PanelHelpers.PanelDict.MmModifyMapListPanel, {});
                     },
                 },
             ];

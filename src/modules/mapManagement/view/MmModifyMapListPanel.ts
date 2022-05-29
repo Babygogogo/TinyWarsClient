@@ -1,31 +1,36 @@
 
-// import CommonConstants              from "../../tools/helpers/CommonConstants";
-// import FloatText                    from "../../tools/helpers/FloatText";
-// import Helpers                      from "../../tools/helpers/Helpers";
-// import Types                        from "../../tools/helpers/Types";
-// import Lang                         from "../../tools/lang/Lang";
-// import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import Twns.Notify               from "../../tools/notify/NotifyType";
-// import TwnsUiButton                 from "../../tools/ui/UiButton";
-// import TwnsUiLabel                  from "../../tools/ui/UiLabel";
-// import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
-// import TwnsUiPanel                  from "../../tools/ui/UiPanel";
-// import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
-// import TwnsUiZoomableMap            from "../../tools/ui/UiZoomableMap";
-// import WarMapModel                  from "../../warMap/model/WarMapModel";
-// import TwnsMmAvailabilityListPanel  from "./MmAvailabilityListPanel";
-// import TwnsMmMainMenuPanel          from "./MmMainMenuPanel";
-// import TwnsMmTagChangePanel         from "./MmTagChangePanel";
-// import TwnsMmTagSearchPanel         from "./MmTagSearchPanel";
+// import CommonConstants                  from "../../tools/helpers/CommonConstants";
+// import FloatText                        from "../../tools/helpers/FloatText";
+// import Helpers                          from "../../tools/helpers/Helpers";
+// import Types                            from "../../tools/helpers/Types";
+// import Lang                             from "../../tools/lang/Lang";
+// import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+// import Notify                   from "../../tools/notify/NotifyType";
+// import TwnsUiButton                     from "../../tools/ui/UiButton";
+// import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
+// import TwnsUiZoomableMap                from "../../tools/ui/UiZoomableMap";
+// import WarMapModel                      from "../../warMap/model/WarMapModel";
+// import TwnsMmAvailabilityChangePanel    from "./MmAvailabilityChangePanel";
+// import TwnsMmAvailabilitySearchPanel    from "./MmAvailabilitySearchPanel";
+// import TwnsMmMainMenuPanel              from "./MmMainMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapManagement {
-    import FiltersForMapList    = Twns.MapManagement.FiltersForMapList;
-    import LangTextType         = Twns.Lang.LangTextType;
-    import NotifyType           = Twns.Notify.NotifyType;
+    import LangTextType     = Lang.LangTextType;
+    import NotifyType       = Notify.NotifyType;
 
-    export type OpenDataForMmTagListPanel = FiltersForMapList | null;
-    export class MmTagListPanel extends TwnsUiPanel.UiPanel<OpenDataForMmTagListPanel> {
+    export type FiltersForMapList = {
+        mapName?        : string | null;
+        mapDesigner?    : string | null;
+        playersCount?   : number | null;
+        playedTimes?    : number | null;
+        minRating?      : number | null;
+    };
+    export type OpenDataForMmModifyMapListPanel = FiltersForMapList | null;
+    export class MmModifyMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForMmModifyMapListPanel> {
         private readonly _listMap!              : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
         private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelMenuTitle!       : TwnsUiLabel.UiLabel;
@@ -46,8 +51,8 @@ namespace Twns.MapManagement {
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgMmSetMapTag,     callback: this._onMsgMmSetMapTag },
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMmSetMapEnabled,          callback: this._onNotifyMsgMmSetMapEnabled },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
@@ -72,7 +77,8 @@ namespace Twns.MapManagement {
             } else {
                 const index         = dataList.findIndex(data => data.mapId === newMapId);
                 const newIndex      = index >= 0 ? index : Math.floor(Math.random() * dataList.length);
-                const oldIndex      = dataList.findIndex(data => data.mapId === this._selectedMapId);
+                const oldMapId      = this.getSelectedMapId();
+                const oldIndex      = dataList.findIndex(data => data.mapId === oldMapId);
                 this._selectedMapId = dataList[newIndex].mapId;
                 (dataList[oldIndex])    && (this._listMap.updateSingleData(oldIndex, dataList[oldIndex]));
                 (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, dataList[newIndex]));
@@ -87,30 +93,37 @@ namespace Twns.MapManagement {
 
         public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
             this._mapFilters            = mapFilters;
-            this._dataForList           = await this._createDataForListMap();
+            const dataArray             = await this._createDataForListMap();
+            this._dataForList           = dataArray;
 
-            const length                = this._dataForList.length;
+            const length                = dataArray.length;
+            const listMap               = this._listMap;
             this._labelNoMap.visible    = length <= 0;
-            this._listMap.bindData(this._dataForList);
-            this.setAndReviseSelectedMapId(this._selectedMapId);
-            (length) && (this._listMap.scrollVerticalTo((this._dataForList.findIndex(data => data.mapId === this._selectedMapId) + 1) / length * 100));
+            this._listMap.bindData(dataArray);
+            this.setAndReviseSelectedMapId(this.getSelectedMapId());
+
+            if (length > 1) {
+                const selectedMapId = this.getSelectedMapId();
+                const index         = dataArray.findIndex(v => v.mapId === selectedMapId);
+                (index >= 0) && (listMap.scrollVerticalTo(index / (length - 1) * 100));
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onMsgMmSetMapTag(): void {
-            Twns.FloatText.show(Lang.getText(LangTextType.A0151));
+        private _onNotifyMsgMmSetMapEnabled(): void {
+            FloatText.show(Lang.getText(LangTextType.A0081));
             this.setMapFilters(this._mapFilters);
         }
 
         private _onTouchTapBtnSearch(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmTagSearchPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MmAvailabilitySearchPanel, void 0);
         }
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MmMainMenuPanel, void 0);
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -127,7 +140,7 @@ namespace Twns.MapManagement {
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
-            const data                                      : DataForMapNameRenderer[] = [];
+            const dataArray                                 : DataForMapNameRenderer[] = [];
             const mapFilters                                = this._mapFilters;
             const { playersCount, playedTimes, minRating }  = mapFilters;
             let { mapName: mapNameForFilter, mapDesigner }  = mapFilters;
@@ -135,18 +148,18 @@ namespace Twns.MapManagement {
             (mapDesigner)       && (mapDesigner = mapDesigner.toLowerCase());
 
             const promiseArray: Promise<void>[] = [];
-            for (const mapId of Twns.WarMap.WarMapModel.getEnabledMapIdArray()) {
+            for (const mapId of WarMap.WarMapModel.getEnabledMapIdArray()) {
                 promiseArray.push((async () => {
-                    const mapBriefData = await Twns.WarMap.WarMapModel.getBriefData(mapId);
+                    const mapBriefData = await WarMap.WarMapModel.getBriefData(mapId);
                     if (mapBriefData == null) {
                         return;
                     }
 
-                    const mapName           = Twns.Helpers.getExisted(Lang.getLanguageText({ textArray: mapBriefData.mapNameArray }));
-                    const averageRating     = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
-                    const actualPlayedTimes = await Twns.WarMap.WarMapModel.getTotalPlayedTimes(mapId);
+                    const mapName           = Helpers.getExisted(Lang.getLanguageText({ textArray: mapBriefData.mapNameArray }));
+                    const averageRating     = await WarMap.WarMapModel.getAverageRating(mapId);
+                    const actualPlayedTimes = await WarMap.WarMapModel.getTotalPlayedTimes(mapId);
                     if ((!mapBriefData.mapExtraData?.isEnabled)                                                                 ||
-                        ((mapNameForFilter) && (mapName.toLowerCase().indexOf(mapNameForFilter) < 0))                           ||
+                        ((mapNameForFilter) && (!mapName.toLowerCase().includes(mapNameForFilter)))                             ||
                         ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))                    ||
                         ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                               ||
                         ((playedTimes != null) && (actualPlayedTimes < playedTimes))                                            ||
@@ -154,7 +167,7 @@ namespace Twns.MapManagement {
                     ) {
                         return;
                     } else {
-                        data.push({
+                        dataArray.push({
                             mapId,
                             mapName,
                             panel   : this,
@@ -164,30 +177,31 @@ namespace Twns.MapManagement {
             }
 
             await Promise.all(promiseArray);
-            return data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
+            return dataArray.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 
         private async _showMap(mapId: number): Promise<void> {
-            const mapRawData                = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId));
-            const rating                    = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
-            this._labelMapName.text         = Lang.getFormattedText(LangTextType.F0000, await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
+            const mapRawData                = Helpers.getExisted(await WarMap.WarMapModel.getRawData(mapId));
+            const rating                    = await WarMap.WarMapModel.getAverageRating(mapId);
+            this._labelMapName.text         = Lang.getFormattedText(LangTextType.F0000, await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text        = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
             this._labelPlayersCount.text    = Lang.getFormattedText(LangTextType.F0002, mapRawData.playersCountUnneutral);
             this._labelRating.text          = Lang.getFormattedText(LangTextType.F0003, rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001));
-            this._labelPlayedTimes.text     = Lang.getFormattedText(LangTextType.F0004, await Twns.WarMap.WarMapModel.getTotalPlayedTimes(mapId));
+            this._labelPlayedTimes.text     = Lang.getFormattedText(LangTextType.F0004, await WarMap.WarMapModel.getTotalPlayedTimes(mapId));
             this._groupInfo.visible         = true;
             this._groupInfo.alpha           = 1;
             egret.Tween.removeTweens(this._groupInfo);
             egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1;});
-            this._zoomMap.showMapByMapData(mapRawData, await Twns.Config.ConfigManager.getLatestGameConfig());
+            this._zoomMap.showMapByMapData(mapRawData, await Config.ConfigManager.getLatestGameConfig());
         }
     }
 
     type DataForMapNameRenderer = {
         mapId   : number;
         mapName : string;
-        panel   : MmTagListPanel;
+        panel   : MmModifyMapListPanel;
     };
+
     class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
         private readonly _btnNext!      : TwnsUiButton.UiButton;
@@ -199,16 +213,13 @@ namespace Twns.MapManagement {
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
                 { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
+            this._setNotifyListenerArray([
+                { type: NotifyType.MsgMmSetMapName, callback: this._onNotifyMsgMmSetMapName },
+            ]);
         }
 
         protected _onDataChanged(): void {
-            const data          = this._getData();
-            const mapId         = data.mapId;
-            const labelName     = this._labelName;
-            this.currentState   = mapId === data.panel.getSelectedMapId() ? Twns.Types.UiState.Down : Twns.Types.UiState.Up;
-            this._labelId.text  = `ID: ${mapId}`;
-            labelName.text      = ``;
-            Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v ?? Twns.CommonConstants.ErrorTextForUndefined);
+            this._updateView();
         }
 
         private _onTouchTapBtnChoose(): void {
@@ -217,9 +228,26 @@ namespace Twns.MapManagement {
         }
 
         private _onTouchTapBtnNext(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmTagChangePanel, { mapId: this._getData().mapId });
+            PanelHelpers.open(PanelHelpers.PanelDict.MmCommandPanel, { mapId: this._getData().mapId });
+        }
+
+        private _onNotifyMsgMmSetMapName(e: egret.Event): void {
+            const data = e.data as CommonProto.NetMessage.MsgMmSetMapName.IS;
+            if (data.mapId === this._getData().mapId) {
+                this._updateView();
+            }
+        }
+
+        private _updateView(): void {
+            const data          = this._getData();
+            const mapId         = data.mapId;
+            const labelName     = this._labelName;
+            this.currentState   = mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
+            this._labelId.text  = `ID: ${mapId}`;
+            labelName.text      = ``;
+            WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v ?? CommonConstants.ErrorTextForUndefined);
         }
     }
 }
 
-// export default TwnsMmTagListPanel;
+// export default TwnsMmAvailabilityListPanel;

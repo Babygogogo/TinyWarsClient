@@ -30551,6 +30551,9 @@ declare namespace CommonProto {
             /** MessageContainer MsgMmDeleteWarRule */
             MsgMmDeleteWarRule?: (CommonProto.NetMessage.IMsgMmDeleteWarRule|null);
 
+            /** MessageContainer MsgMmSetWarRuleName */
+            MsgMmSetWarRuleName?: (CommonProto.NetMessage.IMsgMmSetWarRuleName|null);
+
             /** MessageContainer MsgReplaySetSelfRating */
             MsgReplaySetSelfRating?: (CommonProto.NetMessage.IMsgReplaySetSelfRating|null);
 
@@ -30929,6 +30932,9 @@ declare namespace CommonProto {
 
             /** MessageContainer MsgMmDeleteWarRule. */
             public MsgMmDeleteWarRule?: (CommonProto.NetMessage.IMsgMmDeleteWarRule|null);
+
+            /** MessageContainer MsgMmSetWarRuleName. */
+            public MsgMmSetWarRuleName?: (CommonProto.NetMessage.IMsgMmSetWarRuleName|null);
 
             /** MessageContainer MsgReplaySetSelfRating. */
             public MsgReplaySetSelfRating?: (CommonProto.NetMessage.IMsgReplaySetSelfRating|null);
@@ -45086,6 +45092,315 @@ declare namespace CommonProto {
                  * @returns Plain object
                  */
                 public static toObject(message: CommonProto.NetMessage.MsgMmDeleteWarRule.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this S to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+
+        /** Properties of a MsgMmSetWarRuleName. */
+        interface IMsgMmSetWarRuleName {
+
+            /** MsgMmSetWarRuleName c */
+            c?: (CommonProto.NetMessage.MsgMmSetWarRuleName.IC|null);
+
+            /** MsgMmSetWarRuleName s */
+            s?: (CommonProto.NetMessage.MsgMmSetWarRuleName.IS|null);
+        }
+
+        /** Represents a MsgMmSetWarRuleName. */
+        class MsgMmSetWarRuleName implements IMsgMmSetWarRuleName {
+
+            /**
+             * Constructs a new MsgMmSetWarRuleName.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.NetMessage.IMsgMmSetWarRuleName);
+
+            /** MsgMmSetWarRuleName c. */
+            public c?: (CommonProto.NetMessage.MsgMmSetWarRuleName.IC|null);
+
+            /** MsgMmSetWarRuleName s. */
+            public s?: (CommonProto.NetMessage.MsgMmSetWarRuleName.IS|null);
+
+            /**
+             * Creates a new MsgMmSetWarRuleName instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MsgMmSetWarRuleName instance
+             */
+            public static create(properties?: CommonProto.NetMessage.IMsgMmSetWarRuleName): CommonProto.NetMessage.MsgMmSetWarRuleName;
+
+            /**
+             * Encodes the specified MsgMmSetWarRuleName message. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetWarRuleName.verify|verify} messages.
+             * @param message MsgMmSetWarRuleName message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.NetMessage.IMsgMmSetWarRuleName, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MsgMmSetWarRuleName message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetWarRuleName.verify|verify} messages.
+             * @param message MsgMmSetWarRuleName message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.NetMessage.IMsgMmSetWarRuleName, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MsgMmSetWarRuleName message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MsgMmSetWarRuleName
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMmSetWarRuleName;
+
+            /**
+             * Decodes a MsgMmSetWarRuleName message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MsgMmSetWarRuleName
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMmSetWarRuleName;
+
+            /**
+             * Verifies a MsgMmSetWarRuleName message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MsgMmSetWarRuleName message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MsgMmSetWarRuleName
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMmSetWarRuleName;
+
+            /**
+             * Creates a plain object from a MsgMmSetWarRuleName message. Also converts values to other types if specified.
+             * @param message MsgMmSetWarRuleName
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.NetMessage.MsgMmSetWarRuleName, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MsgMmSetWarRuleName to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace MsgMmSetWarRuleName {
+
+            /** Properties of a C. */
+            interface IC {
+
+                /** C mapId */
+                mapId?: (number|null);
+
+                /** C ruleId */
+                ruleId?: (number|null);
+
+                /** C ruleNameArray */
+                ruleNameArray?: (CommonProto.Structure.ILanguageText[]|null);
+            }
+
+            /** Represents a C. */
+            class C implements IC {
+
+                /**
+                 * Constructs a new C.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgMmSetWarRuleName.IC);
+
+                /** C mapId. */
+                public mapId: number;
+
+                /** C ruleId. */
+                public ruleId: number;
+
+                /** C ruleNameArray. */
+                public ruleNameArray: CommonProto.Structure.ILanguageText[];
+
+                /**
+                 * Creates a new C instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns C instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgMmSetWarRuleName.IC): CommonProto.NetMessage.MsgMmSetWarRuleName.C;
+
+                /**
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetWarRuleName.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgMmSetWarRuleName.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetWarRuleName.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMmSetWarRuleName.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMmSetWarRuleName.C;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMmSetWarRuleName.C;
+
+                /**
+                 * Verifies a C message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a C message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns C
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMmSetWarRuleName.C;
+
+                /**
+                 * Creates a plain object from a C message. Also converts values to other types if specified.
+                 * @param message C
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgMmSetWarRuleName.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this C to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a S. */
+            interface IS {
+
+                /** S errorCode */
+                errorCode?: (number|null);
+
+                /** S mapId */
+                mapId?: (number|null);
+
+                /** S ruleId */
+                ruleId?: (number|null);
+
+                /** S ruleNameArray */
+                ruleNameArray?: (CommonProto.Structure.ILanguageText[]|null);
+            }
+
+            /** Represents a S. */
+            class S implements IS {
+
+                /**
+                 * Constructs a new S.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgMmSetWarRuleName.IS);
+
+                /** S errorCode. */
+                public errorCode: number;
+
+                /** S mapId. */
+                public mapId: number;
+
+                /** S ruleId. */
+                public ruleId: number;
+
+                /** S ruleNameArray. */
+                public ruleNameArray: CommonProto.Structure.ILanguageText[];
+
+                /**
+                 * Creates a new S instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns S instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgMmSetWarRuleName.IS): CommonProto.NetMessage.MsgMmSetWarRuleName.S;
+
+                /**
+                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetWarRuleName.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgMmSetWarRuleName.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetWarRuleName.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMmSetWarRuleName.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMmSetWarRuleName.S;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMmSetWarRuleName.S;
+
+                /**
+                 * Verifies a S message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a S message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns S
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMmSetWarRuleName.S;
+
+                /**
+                 * Creates a plain object from a S message. Also converts values to other types if specified.
+                 * @param message S
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgMmSetWarRuleName.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this S to JSON.

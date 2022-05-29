@@ -147,17 +147,15 @@ namespace Twns.PanelHelpers {
         MfwMyWarListPanel                   : PanelConfig<MultiFreeWar.OpenDataForMfwMyWarListPanel>;
 
         MmAcceptMapPanel                    : PanelConfig<MapManagement.OpenDataForMmAcceptMapPanel>;
-        MmAvailabilityListPanel             : PanelConfig<MapManagement.OpenDataForMmAvailabilityListPanel>;
         MmAvailabilitySearchPanel           : PanelConfig<MapManagement.OpenDataForMmAvailabilitySearchPanel>;
         MmCommandPanel                      : PanelConfig<MapManagement.OpenDataForMmCommandPanel>;
         MmMainMenuPanel                     : PanelConfig<MapManagement.OpenDataForMmMainMenuPanel>;
         MmMapRenamePanel                    : PanelConfig<MapManagement.OpenDataForMmMapRenamePanel>;
+        MmModifyMapListPanel                : PanelConfig<MapManagement.OpenDataForMmModifyMapListPanel>;
         MmRejectMapPanel                    : PanelConfig<MapManagement.OpenDataForMmRejectMapPanel>;
         MmReviewListPanel                   : PanelConfig<MapManagement.OpenDataForMmReviewListPanel>;
         MmSetWarRuleAvailabilityPanel       : PanelConfig<MapManagement.OpenDataForMmSetWarRuleAvailabilityPanel>;
         MmTagChangePanel                    : PanelConfig<MapManagement.OpenDataForMmTagChangePanel>;
-        MmTagListPanel                      : PanelConfig<MapManagement.OpenDataForMmTagListPanel>;
-        MmTagSearchPanel                    : PanelConfig<MapManagement.OpenDataForMmTagSearchPanel>;
         MmWarRulePanel                      : PanelConfig<MapManagement.OpenDataForMmWarRulePanel>;
 
         MpwSpectatePanel                    : PanelConfig<MultiPlayerWar.OpenDataForMpwSpectatePanel>;
@@ -1073,13 +1071,6 @@ namespace Twns.PanelHelpers {
                 layer       : LayerType.Hud0,
             },
 
-            MmAvailabilityListPanel: {
-                cls         : MapManagement?.MmAvailabilityListPanel,
-                skinName    : `resource/skins/mapManagement/MmAvailabilityListPanel.exml`,
-                layer       : LayerType.Scene,
-                isExclusive : true,
-            },
-
             MmAvailabilitySearchPanel: {
                 cls         : MapManagement?.MmAvailabilitySearchPanel,
                 skinName    : `resource/skins/mapManagement/MmAvailabilitySearchPanel.exml`,
@@ -1105,6 +1096,13 @@ namespace Twns.PanelHelpers {
                 layer       : LayerType.Hud0,
             },
 
+            MmModifyMapListPanel: {
+                cls         : MapManagement?.MmModifyMapListPanel,
+                skinName    : `resource/skins/mapManagement/MmModifyMapListPanel.exml`,
+                layer       : LayerType.Scene,
+                isExclusive : true,
+            },
+
             MmRejectMapPanel: {
                 cls         : MapManagement?.MmRejectMapPanel,
                 skinName    : `resource/skins/mapManagement/MmRejectMapPanel.exml`,
@@ -1127,19 +1125,6 @@ namespace Twns.PanelHelpers {
             MmTagChangePanel: {
                 cls         : MapManagement?.MmTagChangePanel,
                 skinName    : `resource/skins/mapManagement/MmTagChangePanel.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            MmTagListPanel: {
-                cls         : MapManagement?.MmTagListPanel,
-                skinName    : `resource/skins/mapManagement/MmTagListPanel.exml`,
-                layer       : LayerType.Scene,
-                isExclusive : true,
-            },
-
-            MmTagSearchPanel: {
-                cls         : MapManagement?.MmTagSearchPanel,
-                skinName    : `resource/skins/mapManagement/MmTagSearchPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
