@@ -28,7 +28,7 @@ namespace Twns.HalfwayReplayWar {
     import GameConfig               = Config.GameConfig;
 
     type CheckpointData = {
-        warData     : ISerialWar;
+        warData     : Uint8Array;
         nextActionId: number;
     };
 
@@ -61,7 +61,7 @@ namespace Twns.HalfwayReplayWar {
             this._setCheckpointId(0, 0);
             this._setCheckpointData(0, {
                 nextActionId    : 0,
-                warData         : Helpers.deepClone(warData),
+                warData         : ProtoManager.encodeAsSerialWar(warData),
             });
 
             // await Helpers.checkAndCallLater();
@@ -243,7 +243,7 @@ namespace Twns.HalfwayReplayWar {
         public serializeForCheckpoint(): CheckpointData {
             return {
                 nextActionId    : this.getNextActionId(),
-                warData         : {
+                warData         : ProtoManager.encodeAsSerialWar({
                     settingsForCommon           : null,
                     settingsForMcw              : null,
                     settingsForScw              : null,
@@ -255,11 +255,11 @@ namespace Twns.HalfwayReplayWar {
                     executedActionManager       : null,
                     remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                     weatherManager              : this.getWeatherManager().serialize(),
-                    warEventManager             : Helpers.deepClone(this.getWarEventManager().serialize()),
+                    warEventManager             : this.getWarEventManager().serialize(),
                     playerManager               : this.getPlayerManager().serialize(),
                     turnManager                 : this.getTurnManager().serialize(),
                     field                       : this.getField().serialize(),
-                },
+                }),
             };
         }
 
@@ -390,7 +390,7 @@ namespace Twns.HalfwayReplayWar {
         }
 
         public getAllCheckpointInfoArray(): Types.ReplayCheckpointInfo[] {
-            const turnManager   = Helpers.getExisted(this._getCheckpointData(0)?.warData.turnManager, ClientErrorCode.HrwWar_GetAllCheckpointInfoArray_00);
+            const turnManager   = Helpers.getExisted(ProtoManager.decodeAsSerialWar(Helpers.getExisted(this._getCheckpointData(0)?.warData)).turnManager, ClientErrorCode.HrwWar_GetAllCheckpointInfoArray_00);
             let checkpointId    = 0;
             let turnIndex       = Helpers.getExisted(turnManager.turnIndex, ClientErrorCode.HrwWar_GetAllCheckpointInfoArray_01);
             let playerIndex     = Helpers.getExisted(turnManager.playerIndex, ClientErrorCode.HrwWar_GetAllCheckpointInfoArray_02);
@@ -439,16 +439,46 @@ namespace Twns.HalfwayReplayWar {
 
             await this.loadCheckpoint(Helpers.getExisted(this._getCheckpointId(this.getNextActionId())) + 1);
         }
-        public async loadPreviousCheckpoint(): Promise<void> {
+        public async loadNextAction(): Promise<void> {
+            if ((this.checkIsInEnd()) || (this.getIsExecutingAction()) || (!this.getIsRunning())) {
+                return;
+            }
+
+            await this._executeNextAction(true);
+
+            this._fastInitView();
+            this.startRunning().startRunningView();
+            this.updateTilesAndUnitsOnVisibilityChanged(false);
+            this.getView().updatePersistentText();
+            SoundManager.playCoBgmWithWar(this, false);
+        }
+        public async loadPreviousCheckpoint(floatText = true): Promise<void> {
             if ((this.checkIsInBeginning()) || (this.getIsExecutingAction()) || (!this.getIsRunning())) {
                 return;
             }
 
             const nextActionId = this.getNextActionId();
             const checkpointId = Math.min(Helpers.getExisted(this._getCheckpointId(nextActionId)), Helpers.getExisted(this._getCheckpointId(nextActionId - 1)));
-            await this.loadCheckpoint(checkpointId);
+            await this.loadCheckpoint(checkpointId, floatText);
         }
-        public async loadCheckpoint(checkpointId: number): Promise<void> {
+        public async loadPreviousAction(): Promise<void> {
+            if ((this.checkIsInBeginning()) || (this.getIsExecutingAction()) || (!this.getIsRunning())) {
+                return;
+            }
+
+            const nextActionId = this.getNextActionId() - 1;
+            await this.loadPreviousCheckpoint(false);
+            while (this.getNextActionId() < nextActionId) {
+                await this._executeNextAction(true);
+            }
+
+            this._fastInitView();
+            this.startRunning().startRunningView();
+            this.updateTilesAndUnitsOnVisibilityChanged(false);
+            this.getView().updatePersistentText();
+            SoundManager.playCoBgmWithWar(this, false);
+        }
+        public async loadCheckpoint(checkpointId: number, floatText = true): Promise<void> {
             if ((this.getIsExecutingAction()) || (!this.getIsRunning())) {
                 return;
             }
@@ -459,9 +489,9 @@ namespace Twns.HalfwayReplayWar {
                 await this._executeNextAction(true);
             }
 
-            await this._loadExistingCheckpoint(checkpointId);
+            await this._loadExistingCheckpoint(checkpointId, floatText);
         }
-        private async _loadExistingCheckpoint(checkpointId: number): Promise<void> {
+        private async _loadExistingCheckpoint(checkpointId: number, floatText = true): Promise<void> {
             if ((this.getIsExecutingAction()) || (!this.getIsRunning())) {
                 throw Helpers.newError(`HrwWar._loadExistingCheckpoint() can't load!`);
             }
@@ -470,7 +500,7 @@ namespace Twns.HalfwayReplayWar {
             this.stopRunning();
 
             const checkpointData        = Helpers.getExisted(this._getCheckpointData(checkpointId));
-            const warData               = checkpointData.warData;
+            const warData               = ProtoManager.decodeAsSerialWar(checkpointData.warData);
             const gameConfig            = this.getGameConfig();
             const playersCountUnneutral = this.getPlayerManager().getTotalPlayersCount(false);
             this.setNextActionId(checkpointData.nextActionId);
@@ -498,7 +528,9 @@ namespace Twns.HalfwayReplayWar {
             this.getView().updatePersistentText();
             SoundManager.playCoBgmWithWar(this, false);
 
-            FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+            if (floatText) {
+                FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+            }
         }
 
         public getTotalActionsCount(): number {
@@ -532,7 +564,7 @@ namespace Twns.HalfwayReplayWar {
             const actionId          = this.getNextActionId();
             const turnManager       = this.getTurnManager();
             const prevCheckpointId  = Helpers.getExisted(this._getCheckpointId(actionId - 1));
-            const prevTurnData      = Helpers.getExisted(Helpers.getExisted(this._getCheckpointData(prevCheckpointId)).warData.turnManager);
+            const prevTurnData      = Helpers.getExisted(ProtoManager.decodeAsSerialWar(Helpers.getExisted(this._getCheckpointData(prevCheckpointId)).warData).turnManager);
             const isNewCheckpoint   = (isInEnd) || (turnManager.getTurnIndex() !== prevTurnData.turnIndex) || (turnManager.getPlayerIndexInTurn() !== prevTurnData.playerIndex);
             const checkpointId      = isNewCheckpoint ? prevCheckpointId + 1 : prevCheckpointId;
             if (this._getCheckpointId(actionId) == null) {

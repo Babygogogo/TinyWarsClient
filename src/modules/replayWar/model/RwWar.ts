@@ -10,7 +10,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import Twns.Notify               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import WarActionExecutor            from "../../tools/warHelpers/WarActionExecutor";
 // import WarVisibilityHelpers         from "../../tools/warHelpers/WarVisibilityHelpers";
@@ -20,22 +20,21 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.ReplayWar {
-    import LangTextType             = Twns.Lang.LangTextType;
-    import NotifyType               = Twns.Notify.NotifyType;
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
     import WarAction                = CommonProto.WarAction;
     import IWarActionContainer      = WarAction.IWarActionContainer;
     import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
-    import ClientErrorCode          = Twns.ClientErrorCode;
     import GameConfig               = Config.GameConfig;
 
     type CheckpointData = {
-        warData     : ISerialWar;
+        warData     : Uint8Array;
         nextActionId: number;
     };
 
     export class RwWar extends BaseWar.BwWar {
-        private readonly _playerManager         = new Twns.ReplayWar.RwPlayerManager();
-        private readonly _field                 = new Twns.ReplayWar.RwField();
+        private readonly _playerManager         = new ReplayWar.RwPlayerManager();
+        private readonly _field                 = new ReplayWar.RwField();
         private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
 
@@ -65,7 +64,7 @@ namespace Twns.ReplayWar {
             this._setCheckpointId(0, 0);
             this._setCheckpointData(0, {
                 nextActionId    : 0,
-                warData         : Twns.Helpers.deepClone(warData),
+                warData         : ProtoManager.encodeAsSerialWar(warData),
             });
 
             // await Helpers.checkAndCallLater();
@@ -76,10 +75,10 @@ namespace Twns.ReplayWar {
         public getCanCheat(): boolean {
             return false;
         }
-        public getField(): Twns.ReplayWar.RwField {
+        public getField(): ReplayWar.RwField {
             return this._field;
         }
-        public getPlayerManager(): Twns.ReplayWar.RwPlayerManager {
+        public getPlayerManager(): ReplayWar.RwPlayerManager {
             return this._playerManager;
         }
         public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
@@ -93,7 +92,7 @@ namespace Twns.ReplayWar {
             // No need to update units.
 
             const tileMap       = this.getTileMap();
-            const visibleTiles  = Twns.WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeam(this, this.getVisionTeamIndex() ?? this.getPlayerInTurn().getTeamIndex());
+            const visibleTiles  = WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeam(this, this.getVisionTeamIndex() ?? this.getPlayerInTurn().getTeamIndex());
             for (const tile of tileMap.getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
 
@@ -114,7 +113,7 @@ namespace Twns.ReplayWar {
             return `${Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn())} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit, gameConfig: GameConfig): Promise<string | null> {
-            return `${Lang.getText(LangTextType.B0095)} ${Lang.getUnitName(Twns.Helpers.getExisted(action.unitType), gameConfig)} ${this._getDescSuffix()}`;
+            return `${Lang.getText(LangTextType.B0095)} ${Lang.getUnitName(Helpers.getExisted(action.unitType), gameConfig)} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | null> {
             return `${await this.getPlayerInTurn().getNickname()} ${Lang.getText(action.deprecatedIsBoot ? LangTextType.B0396: LangTextType.B0055)} ${this._getDescSuffix()}`;
@@ -141,7 +140,7 @@ namespace Twns.ReplayWar {
             return `${Lang.getText(LangTextType.B0451)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | null> {
-            const playerIndex = Twns.Helpers.getExisted(action.targetPlayerIndex);
+            const playerIndex = Helpers.getExisted(action.targetPlayerIndex);
             return `P${playerIndex} ${await this.getPlayer(playerIndex).getNickname()}${Lang.getText(LangTextType.B0450)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | null> {
@@ -209,23 +208,23 @@ namespace Twns.ReplayWar {
             const randomNumberManager = this.getRandomNumberManager();
             return {
                 nextActionId    : this.getNextActionId(),
-                warData         : {
+                warData         : ProtoManager.encodeAsSerialWar({
                     settingsForCommon           : null,
                     settingsForMcw              : null,
                     settingsForScw              : null,
 
                     warId                       : null,
                     isEnded                     : this.getIsEnded(),
-                    seedRandomInitialState      : Twns.Helpers.getExisted(randomNumberManager.getSeedRandomInitialState()),
+                    seedRandomInitialState      : Helpers.getExisted(randomNumberManager.getSeedRandomInitialState()),
                     seedRandomCurrentState      : randomNumberManager.getSeedRandomCurrentState(),
                     remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                     weatherManager              : this.getWeatherManager().serialize(),
-                    warEventManager             : Twns.Helpers.deepClone(this.getWarEventManager().serialize()),
+                    warEventManager             : this.getWarEventManager().serialize(),
                     playerManager               : this.getPlayerManager().serialize(),
                     turnManager                 : this.getTurnManager().serialize(),
                     field                       : this.getField().serialize(),
                     executedActionManager       : null,
-                },
+                }),
             };
         }
 
@@ -238,22 +237,22 @@ namespace Twns.ReplayWar {
         public getMapId(): number | null {
             const settingsForMcw = this._getSettingsForMcw();
             if (settingsForMcw) {
-                return Twns.Helpers.getExisted(settingsForMcw.mapId);
+                return Helpers.getExisted(settingsForMcw.mapId);
             }
 
             const settingsForMrw = this._getSettingsForMrw();
             if (settingsForMrw) {
-                return Twns.Helpers.getExisted(settingsForMrw.mapId);
+                return Helpers.getExisted(settingsForMrw.mapId);
             }
 
             const settingsForScw = this._getSettingsForScw();
             if (settingsForScw) {
-                return Twns.Helpers.getExisted(settingsForScw.mapId);
+                return Helpers.getExisted(settingsForScw.mapId);
             }
 
             const settingsForCcw = this._getSettingsForCcw();
             if (settingsForCcw) {
-                return Twns.Helpers.getExisted(settingsForCcw.mapId);
+                return Helpers.getExisted(settingsForCcw.mapId);
             }
 
             return null;
@@ -263,7 +262,7 @@ namespace Twns.ReplayWar {
             return null;
         }
         public getSettingsBootTimerParams(): number[] {
-            return [Twns.Types.BootTimerType.NoBoot];
+            return [Types.BootTimerType.NoBoot];
         }
 
         public getIsExecuteActionsWithExtraData(): boolean {
@@ -271,31 +270,31 @@ namespace Twns.ReplayWar {
         }
 
         private _getSettingsForMcw(): CommonProto.WarSettings.ISettingsForMcw | null {
-            return Twns.Helpers.getDefined(this._settingsForMcw, ClientErrorCode.RwWar_GetSettingsForMcw_00);
+            return Helpers.getDefined(this._settingsForMcw, ClientErrorCode.RwWar_GetSettingsForMcw_00);
         }
         private _setSettingsForMcw(value: CommonProto.WarSettings.ISettingsForMcw | null): void {
             this._settingsForMcw = value;
         }
         private _getSettingsForScw(): CommonProto.WarSettings.ISettingsForScw | null {
-            return Twns.Helpers.getDefined(this._settingsForScw, ClientErrorCode.RwWar_GetSettingsForScw_00);
+            return Helpers.getDefined(this._settingsForScw, ClientErrorCode.RwWar_GetSettingsForScw_00);
         }
         private _setSettingsForScw(value: CommonProto.WarSettings.ISettingsForScw | null): void {
             this._settingsForScw = value;
         }
         private _getSettingsForMrw(): CommonProto.WarSettings.ISettingsForMrw | null {
-            return Twns.Helpers.getDefined(this._settingsForMrw, ClientErrorCode.RwWar_GetSettingsForMrw_00);
+            return Helpers.getDefined(this._settingsForMrw, ClientErrorCode.RwWar_GetSettingsForMrw_00);
         }
         private _setSettingsForMrw(value: CommonProto.WarSettings.ISettingsForMrw | null): void {
             this._settingsForMrw = value;
         }
         private _getSettingsForCcw(): CommonProto.WarSettings.ISettingsForCcw | null {
-            return Twns.Helpers.getDefined(this._settingsForCcw, ClientErrorCode.RwWar_GetSettingsForCcw_00);
+            return Helpers.getDefined(this._settingsForCcw, ClientErrorCode.RwWar_GetSettingsForCcw_00);
         }
         private _setSettingsForCcw(value: CommonProto.WarSettings.ISettingsForCcw | null): void {
             this._settingsForCcw = value;
         }
         private _getSettingsForMfw(): CommonProto.WarSettings.ISettingsForMfw | null {
-            return Twns.Helpers.getDefined(this._settingsForMfw, ClientErrorCode.RwWar_GetSettingsForMfw_00);
+            return Helpers.getDefined(this._settingsForMfw, ClientErrorCode.RwWar_GetSettingsForMfw_00);
         }
         private _setSettingsForMfw(value: CommonProto.WarSettings.ISettingsForMfw | null): void {
             this._settingsForMfw = value;
@@ -305,7 +304,7 @@ namespace Twns.ReplayWar {
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getReplayId(): number {
-            return Twns.Helpers.getExisted(this._replayId);
+            return Helpers.getExisted(this._replayId);
         }
         public setReplayId(replayId: number): void {
             this._replayId = replayId;
@@ -319,7 +318,7 @@ namespace Twns.ReplayWar {
         }
         public tickVisionTeamIndex(): number | null {
             const teamIndexArray = [...new Set(this.getPlayerManager().getAllPlayers().map(v => v.getTeamIndex()))].sort((v1, v2) => v1 - v2);
-            Twns.Helpers.deleteElementFromArray(teamIndexArray, Twns.CommonConstants.TeamIndex.Neutral);
+            Helpers.deleteElementFromArray(teamIndexArray, CommonConstants.TeamIndex.Neutral);
 
             const currentVisionTeamIndex    = this.getVisionTeamIndex();
             const newVisionTeamIndex        = currentVisionTeamIndex == null
@@ -342,7 +341,7 @@ namespace Twns.ReplayWar {
         }
         public setNextActionId(nextActionId: number): void {
             this._nextActionId = nextActionId;
-            Twns.Notify.dispatch(NotifyType.RwNextActionIdChanged);
+            Notify.dispatch(NotifyType.RwNextActionIdChanged);
         }
 
         public getIsAutoReplay(): boolean {
@@ -351,7 +350,7 @@ namespace Twns.ReplayWar {
         public setIsAutoReplay(isAuto: boolean): void {
             if (this.getIsAutoReplay() !== isAuto) {
                 this._isAutoReplay = isAuto;
-                Twns.Notify.dispatch(NotifyType.ReplayAutoReplayChanged);
+                Notify.dispatch(NotifyType.ReplayAutoReplayChanged);
 
                 if ((isAuto) && (!this.getIsExecutingAction()) && (!this.checkIsInEnd())) {
                     this._executeNextAction(false);
@@ -373,12 +372,12 @@ namespace Twns.ReplayWar {
             this._checkpointDataListForCheckpointId.set(checkpointId, data);
         }
 
-        public getAllCheckpointInfoArray(): Twns.Types.ReplayCheckpointInfo[] {
-            const turnManager   = Twns.Helpers.getExisted(this._getCheckpointData(0)?.warData.turnManager, ClientErrorCode.HrwWar_GetAllCheckpointInfoArray_00);
+        public getAllCheckpointInfoArray(): Types.ReplayCheckpointInfo[] {
+            const turnManager   = Helpers.getExisted(ProtoManager.decodeAsSerialWar(Helpers.getExisted(this._getCheckpointData(0)?.warData)).turnManager, ClientErrorCode.HrwWar_GetAllCheckpointInfoArray_00);
             let checkpointId    = 0;
-            let turnIndex       = Twns.Helpers.getExisted(turnManager.turnIndex, ClientErrorCode.HrwWar_GetAllCheckpointInfoArray_01);
-            let playerIndex     = Twns.Helpers.getExisted(turnManager.playerIndex, ClientErrorCode.HrwWar_GetAllCheckpointInfoArray_02);
-            const infoArray     : Twns.Types.ReplayCheckpointInfo[] = [{
+            let turnIndex       = Helpers.getExisted(turnManager.turnIndex, ClientErrorCode.HrwWar_GetAllCheckpointInfoArray_01);
+            let playerIndex     = Helpers.getExisted(turnManager.playerIndex, ClientErrorCode.HrwWar_GetAllCheckpointInfoArray_02);
+            const infoArray     : Types.ReplayCheckpointInfo[] = [{
                 checkpointId,
                 nextActionId    : 0,
                 turnIndex,
@@ -421,49 +420,79 @@ namespace Twns.ReplayWar {
                 return;
             }
 
-            await this.loadCheckpoint(Twns.Helpers.getExisted(this._getCheckpointId(this.getNextActionId())) + 1);
+            await this.loadCheckpoint(Helpers.getExisted(this._getCheckpointId(this.getNextActionId())) + 1);
         }
-        public async loadPreviousCheckpoint(): Promise<void> {
+        public async loadNextAction(): Promise<void> {
+            if ((this.checkIsInEnd()) || (this.getIsExecutingAction()) || (!this.getIsRunning())) {
+                return;
+            }
+
+            await this._executeNextAction(true);
+
+            this._fastInitView();
+            this.startRunning().startRunningView();
+            this.updateTilesAndUnitsOnVisibilityChanged(false);
+            this.getView().updatePersistentText();
+            SoundManager.playCoBgmWithWar(this, false);
+        }
+        public async loadPreviousCheckpoint(floatText = true): Promise<void> {
             if ((this.checkIsInBeginning()) || (this.getIsExecutingAction()) || (!this.getIsRunning())) {
                 return;
             }
 
             const nextActionId = this.getNextActionId();
-            const checkpointId = Math.min(Twns.Helpers.getExisted(this._getCheckpointId(nextActionId)), Twns.Helpers.getExisted(this._getCheckpointId(nextActionId - 1)));
-            await this.loadCheckpoint(checkpointId);
+            const checkpointId = Math.min(Helpers.getExisted(this._getCheckpointId(nextActionId)), Helpers.getExisted(this._getCheckpointId(nextActionId - 1)));
+            await this.loadCheckpoint(checkpointId, floatText);
         }
-        public async loadCheckpoint(checkpointId: number): Promise<void> {
+        public async loadPreviousAction(): Promise<void> {
+            if ((this.checkIsInBeginning()) || (this.getIsExecutingAction()) || (!this.getIsRunning())) {
+                return;
+            }
+
+            const nextActionId = this.getNextActionId() - 1;
+            await this.loadPreviousCheckpoint(false);
+            while (this.getNextActionId() < nextActionId) {
+                await this._executeNextAction(true);
+            }
+
+            this._fastInitView();
+            this.startRunning().startRunningView();
+            this.updateTilesAndUnitsOnVisibilityChanged(false);
+            this.getView().updatePersistentText();
+            SoundManager.playCoBgmWithWar(this, false);
+        }
+        public async loadCheckpoint(checkpointId: number, floatText = true): Promise<void> {
             if ((this.getIsExecutingAction()) || (!this.getIsRunning())) {
                 return;
             }
 
             this.setIsAutoReplay(false);
             while (!this._getCheckpointData(checkpointId)) {
-                await Twns.Helpers.checkAndCallLater();
+                await Helpers.checkAndCallLater();
                 await this._executeNextAction(true);
             }
 
-            await this._loadExistingCheckpoint(checkpointId);
+            await this._loadExistingCheckpoint(checkpointId, floatText);
         }
-        private async _loadExistingCheckpoint(checkpointId: number): Promise<void> {
+        private async _loadExistingCheckpoint(checkpointId: number, floatText = true): Promise<void> {
             if ((this.getIsExecutingAction()) || (!this.getIsRunning())) {
-                throw Twns.Helpers.newError(`RwWar._loadExistingCheckpoint() can't load!`);
+                throw Helpers.newError(`RwWar._loadExistingCheckpoint() can't load!`);
             }
 
             this.setIsAutoReplay(false);
             this.stopRunning();
 
-            const checkpointData        = Twns.Helpers.getExisted(this._getCheckpointData(checkpointId));
-            const warData               = checkpointData.warData;
+            const checkpointData        = Helpers.getExisted(this._getCheckpointData(checkpointId));
+            const warData               = ProtoManager.decodeAsSerialWar(checkpointData.warData);
             const gameConfig            = this.getGameConfig();
             const playersCountUnneutral = this.getPlayerManager().getTotalPlayersCount(false);
             this.setNextActionId(checkpointData.nextActionId);
             this.getWeatherManager().fastInit(warData.weatherManager);
-            this.getPlayerManager().fastInit(Twns.Helpers.getExisted(warData.playerManager), gameConfig);
-            this.getTurnManager().fastInit(Twns.Helpers.getExisted(warData.turnManager), playersCountUnneutral);
-            this.getWarEventManager().fastInit(Twns.Helpers.getExisted(warData.warEventManager));
+            this.getPlayerManager().fastInit(Helpers.getExisted(warData.playerManager), gameConfig);
+            this.getTurnManager().fastInit(Helpers.getExisted(warData.turnManager), playersCountUnneutral);
+            this.getWarEventManager().fastInit(Helpers.getExisted(warData.warEventManager));
             this.getField().fastInit({
-                data                    : Twns.Helpers.getExisted(warData.field),
+                data                    : Helpers.getExisted(warData.field),
                 gameConfig,
                 playersCountUnneutral,
             });
@@ -475,14 +504,16 @@ namespace Twns.ReplayWar {
             });
             this.setIsEnded(this.checkIsInEnd());
 
-            await Twns.Helpers.checkAndCallLater();
+            await Helpers.checkAndCallLater();
             this._fastInitView();
             this.startRunning().startRunningView();
             this.updateTilesAndUnitsOnVisibilityChanged(false);
             this.getView().updatePersistentText();
-            Twns.SoundManager.playCoBgmWithWar(this, false);
+            SoundManager.playCoBgmWithWar(this, false);
 
-            Twns.FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+            if (floatText) {
+                FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+            }
         }
 
         public getTotalActionsCount(): number {
@@ -499,14 +530,14 @@ namespace Twns.ReplayWar {
                 (this.checkIsInEnd())        ||
                 (this.getIsExecutingAction())
             ) {
-                Twns.FloatText.show(Lang.getText(LangTextType.B0110));
+                FloatText.show(Lang.getText(LangTextType.B0110));
             } else {
                 await this._doExecuteAction(action, isFastExecute);
             }
         }
         private async _doExecuteAction(action: IWarActionContainer, isFastExecute: boolean): Promise<void> {
             this.setNextActionId(this.getNextActionId() + 1);
-            await Twns.WarHelpers.WarActionExecutor.checkAndExecute(this, action, isFastExecute);
+            await WarHelpers.WarActionExecutor.checkAndExecute(this, action, isFastExecute);
 
             const isInEnd = this.checkIsInEnd();
             if (isInEnd) {
@@ -515,8 +546,8 @@ namespace Twns.ReplayWar {
 
             const actionId          = this.getNextActionId();
             const turnManager       = this.getTurnManager();
-            const prevCheckpointId  = Twns.Helpers.getExisted(this._getCheckpointId(actionId - 1));
-            const prevTurnData      = Twns.Helpers.getExisted(Twns.Helpers.getExisted(this._getCheckpointData(prevCheckpointId)).warData.turnManager);
+            const prevCheckpointId  = Helpers.getExisted(this._getCheckpointId(actionId - 1));
+            const prevTurnData      = Helpers.getExisted(ProtoManager.decodeAsSerialWar(Helpers.getExisted(this._getCheckpointData(prevCheckpointId)).warData).turnManager);
             const isNewCheckpoint   = (isInEnd) || (turnManager.getTurnIndex() !== prevTurnData.turnIndex) || (turnManager.getPlayerIndexInTurn() !== prevTurnData.playerIndex);
             const checkpointId      = isNewCheckpoint ? prevCheckpointId + 1 : prevCheckpointId;
             if (this._getCheckpointId(actionId) == null) {

@@ -240,7 +240,7 @@ namespace Twns.FlowManager {
             PanelHelpers.PanelDict.BroadcastPanel,
         ]);
         PanelHelpers.open(PanelHelpers.PanelDict.BwBackgroundPanel, void 0);
-        PanelHelpers.open(PanelHelpers.PanelDict.HrwTopPanel, { war });
+        PanelHelpers.open(PanelHelpers.PanelDict.RwTopPanel, { war });
         PanelHelpers.open(PanelHelpers.PanelDict.BwWarPanel, { war });
         PanelHelpers.open(PanelHelpers.PanelDict.BwTileBriefPanel, { war });
         PanelHelpers.open(PanelHelpers.PanelDict.BwUnitBriefPanel, { war });

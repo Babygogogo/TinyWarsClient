@@ -6,7 +6,7 @@
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
 // import Notify               from "../../tools/notify/Notify";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -16,8 +16,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import LangTextType     = Twns.Lang.LangTextType;
-    import NotifyType       = Twns.Notify.NotifyType;
+    import LangTextType     = Lang.LangTextType;
+    import NotifyType       = Notify.NotifyType;
     import ILanguageText    = CommonProto.Structure.ILanguageText;
 
     export type OpenDataForMeModifyMapNamePanel = void;
@@ -42,8 +42,8 @@ namespace Twns.MapEditor {
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
 
-            this._inputChinese.maxChars = Twns.CommonConstants.MapMaxNameLength;
-            this._inputEnglish.maxChars = Twns.CommonConstants.MapMaxNameLength;
+            this._inputChinese.maxChars = CommonConstants.MapMaxNameLength;
+            this._inputEnglish.maxChars = CommonConstants.MapMaxNameLength;
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -57,19 +57,19 @@ namespace Twns.MapEditor {
         }
 
         private _onTouchedBtnModify(): void {
-            const chineseText   = this._inputChinese.text || ``;
-            const englishText   = this._inputEnglish.text || ``;
+            const chineseText   = this._inputChinese.text.trim() ?? ``;
+            const englishText   = this._inputEnglish.text.trim() ?? ``;
             const textList      : ILanguageText[] = [
-                { languageType: Twns.Types.LanguageType.Chinese, text: chineseText || englishText },
-                { languageType: Twns.Types.LanguageType.English, text: englishText || chineseText },
+                { languageType: Types.LanguageType.Chinese, text: chineseText || englishText },
+                { languageType: Types.LanguageType.English, text: englishText || chineseText },
             ];
-            if (textList.every(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0155));
-            } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > Twns.CommonConstants.MapMaxNameLength)) {
-                Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.MapMaxNameLength));
+            if (textList.every(v => Helpers.getExisted(v.text).length <= 0)) {
+                FloatText.show(Lang.getText(LangTextType.A0155));
+            } else if (textList.some(v => Helpers.getExisted(v.text).length > CommonConstants.MapMaxNameLength)) {
+                FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.MapMaxNameLength));
             } else {
-                Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).setMapNameArray(textList);
-                Twns.Notify.dispatch(NotifyType.MeMapNameChanged);
+                Helpers.getExisted(MapEditor.MeModel.getWar()).setMapNameArray(textList);
+                Notify.dispatch(NotifyType.MeMapNameChanged);
                 this.close();
             }
         }
@@ -77,9 +77,9 @@ namespace Twns.MapEditor {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const textList          = Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar()).getMapNameArray() || [];
-            this._inputChinese.text = Lang.getLanguageText({ textArray: textList, languageType: Twns.Types.LanguageType.Chinese }) ?? ``;
-            this._inputEnglish.text = Lang.getLanguageText({ textArray: textList, languageType: Twns.Types.LanguageType.English }) ?? ``;
+            const textList          = Helpers.getExisted(MapEditor.MeModel.getWar()).getMapNameArray() || [];
+            this._inputChinese.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.Chinese }) ?? ``;
+            this._inputEnglish.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.English }) ?? ``;
         }
 
         private _updateComponentsForLanguage(): void {

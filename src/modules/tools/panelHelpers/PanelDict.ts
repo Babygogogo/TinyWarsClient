@@ -94,10 +94,6 @@ namespace Twns.PanelHelpers {
         CommonTileChartPanel                : PanelConfig<Common.OpenDataForCommonTileChartPanel>;
         CommonWarEventListPanel             : PanelConfig<Common.OpenDataForCommonWarEventListPanel>;
 
-        HrwReplayProgressPanel              : PanelConfig<HalfwayReplayWar.OpenDataForHrwReplayProgressPanel>;
-        HrwTopPanel                         : PanelConfig<HalfwayReplayWar.OpenDataForHrwTopPanel>;
-        HrwWarMenuPanel                     : PanelConfig<HalfwayReplayWar.OpenDataForHrwWarMenuPanel>;
-
         LobbyBackgroundPanel                : PanelConfig<Lobby.OpenDataForLobbyBackgroundPanel>;
         LobbyBottomPanel                    : PanelConfig<Lobby.OpenDataForLobbyBottomPanel>;
         LobbyPanel                          : PanelConfig<Lobby.OpenDataForLobbyPanel>;
@@ -761,25 +757,6 @@ namespace Twns.PanelHelpers {
                 cls         : Common?.CommonWarEventListPanel,
                 skinName    : `resource/skins/common/CommonWarEventListPanel.exml`,
                 layer       : LayerType.Hud1,
-            },
-
-            ////////////////////////////////////////////////////////////////////////////////////////////////////
-            HrwReplayProgressPanel: {
-                cls         : HalfwayReplayWar?.HrwReplayProgressPanel,
-                skinName    : `resource/skins/halfwayReplayWar/HrwReplayProgressPanel.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            HrwTopPanel: {
-                cls         : HalfwayReplayWar?.HrwTopPanel,
-                skinName    : `resource/skins/halfwayReplayWar/HrwTopPanel.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            HrwWarMenuPanel: {
-                cls         : HalfwayReplayWar?.HrwWarMenuPanel,
-                skinName    : `resource/skins/halfwayReplayWar/HrwWarMenuPanel.exml`,
-                layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////

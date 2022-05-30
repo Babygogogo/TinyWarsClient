@@ -4,7 +4,7 @@
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgMask" anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
                          source="uncompressedColorTransparent0001" scale9Grid="1,1,2,2" locked="true" />
-    <e:Group id="_group" width="480" height="430" horizontalCenter="0" verticalCenter="0">
+    <e:Group id="_group" width="540" height="430" horizontalCenter="0" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0" locked="true">
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
                                  scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
@@ -24,17 +24,19 @@
                                      textColor="0xFFFFFF" />
                 <TwnsUiLabel:UiLabel id="_labelRuleName" text="明战" textColor="0xFFFFFF" size="14" bold="true" x="170"
                                      verticalCenter="0" />
-                <TwnsUiLabel:UiLabel id="_labelMyScore" text="明战" textColor="0xFFFFFF" size="14" bold="true" x="320"
+                <TwnsUiLabel:UiLabel id="_labelMyScore" text="Score" textColor="0xFFFFFF" size="14" bold="true" x="320"
                                      verticalCenter="0" y="16" />
-                <TwnsUiLabel:UiLabel id="_labelMyRank" text="明战" textColor="0xFFFFFF" size="14" bold="true" x="380"
-                                     verticalCenter="0" y="26" />
+                <TwnsUiLabel:UiLabel id="_labelMyTurnIndex" text="Turns" textColor="0xFFFFFF" size="14" bold="true"
+                                     x="380" verticalCenter="0" y="26" />
+                <TwnsUiLabel:UiLabel id="_labelMyRank" text="Rank" textColor="0xFFFFFF" size="14" bold="true" x="440"
+                                     verticalCenter="0" y="36" />
             </e:Group>
             <e:Scroller height="320" y="26" left="0" right="0">
                 <e:Group>
                     <TwnsUiScrollList:UiScrollList id="_listHighScore" y="0" x="0">
                         <e:List>
                             <e:itemRendererSkinName>
-                                <e:Skin width="440" height="26">
+                                <e:Skin width="500" height="26">
                                     <e:Group left="0" right="0" top="0" bottom="0">
                                         <TwnsUiImage:UiImage id="_imgBg" source="uncompressedColorBlack0000" left="0"
                                                              right="0" top="0" bottom="0" scale9Grid="1,1,2,2" />
@@ -47,14 +49,17 @@
                                                              size="14" maxTextWidth="50" verticalCenter="0" x="320"
                                                              y="26" />
                                         <TwnsUiLabel:UiLabel id="_labelMyRank" text="100th" textColor="0xFFFFFF"
-                                                             size="14" maxTextWidth="50" verticalCenter="0" x="380"
+                                                             size="14" maxTextWidth="50" verticalCenter="0" x="440"
                                                              y="36" />
+                                        <TwnsUiLabel:UiLabel id="_labelMyTurnIndex" text="123" textColor="0xFFFFFF"
+                                                             size="14" maxTextWidth="50" verticalCenter="0" x="380"
+                                                             y="46" />
                                     </e:Group>
                                 </e:Skin>
                             </e:itemRendererSkinName>
                         </e:List>
                     </TwnsUiScrollList:UiScrollList>
-                    <TwnsUiImage:UiImage height="1" y="259" source="uncompressedColorBlue0000" width="440" x="0"
+                    <TwnsUiImage:UiImage height="1" y="259" source="uncompressedColorBlue0000" width="500" x="0"
                                          smoothing="false" />
                     <e:layout>
                         <e:VerticalLayout gap="0" />

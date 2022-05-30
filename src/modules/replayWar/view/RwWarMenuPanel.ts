@@ -31,17 +31,19 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.ReplayWar {
-    import NotifyType           = Twns.Notify.NotifyType;
-    import LangTextType         = Twns.Lang.LangTextType;
-    import ClientErrorCode      = Twns.ClientErrorCode;
+    import NotifyType           = Notify.NotifyType;
+    import LangTextType         = Lang.LangTextType;
 
     // eslint-disable-next-line no-shadow
     enum MenuType {
         Main,
         Advanced,
     }
+    type BaseReplayWar = HalfwayReplayWar.HrwWar | ReplayWar.RwWar;
 
-    export type OpenDataForRwWarMenuPanel = void;
+    export type OpenDataForRwWarMenuPanel = {
+        war     : BaseReplayWar;
+    };
     export class RwWarMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForRwWarMenuPanel> {
         private readonly _group!                : eui.Group;
         private readonly _listCommand!          : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
@@ -72,7 +74,8 @@ namespace Twns.ReplayWar {
                 { type: NotifyType.BwActionPlannerStateSet,             callback: this._onNotifyMcwPlannerStateChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: NotifyType.MsgSpmCreateSfw,                     callback: this._onNotifyMsgSpmCreateSfw },
-                { type: NotifyType.MsgReplaySetSelfRating,              callback: this._onMsgReplaySetRating },
+                { type: NotifyType.MsgMpwCommonContinueWarFailed,       callback: this._onNotifyMsgMpwCommonContinueWarFailed },
+                { type: NotifyType.MsgReplaySetSelfRating,              callback: this._onNotifyMsgReplaySetRating },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -91,8 +94,8 @@ namespace Twns.ReplayWar {
             // nothing to do
         }
 
-        private _getWar(): ReplayWar.RwWar {
-            return Twns.Helpers.getExisted(Twns.ReplayWar.RwModel.getWar());
+        private _getWar(): BaseReplayWar {
+            return this._getOpenData().war;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,20 +115,22 @@ namespace Twns.ReplayWar {
 
         private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgSpmCreateSfw.IS;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
-                    Twns.FlowManager.gotoSinglePlayerWar({
-                        slotIndex       : Twns.Helpers.getExisted(data.slotIndex),
-                        slotExtraData   : Twns.Helpers.getExisted(data.extraData),
-                        warData         : Twns.Helpers.getExisted(data.warData),
+                    FlowManager.gotoSinglePlayerWar({
+                        slotIndex       : Helpers.getExisted(data.slotIndex),
+                        slotExtraData   : Helpers.getExisted(data.extraData),
+                        warData         : Helpers.getExisted(data.warData),
                     });
                 },
             });
         }
-
-        private _onMsgReplaySetRating(): void {
-            Twns.FloatText.show(Lang.getText(LangTextType.A0106));
+        private _onNotifyMsgMpwCommonContinueWarFailed(): void {
+            PanelHelpers.close(PanelHelpers.PanelDict.CommonBlockPanel);
+        }
+        private _onNotifyMsgReplaySetRating(): void {
+            FloatText.show(Lang.getText(LangTextType.A0106));
         }
 
         private _onTouchedBtnBack(): void {
@@ -136,7 +141,7 @@ namespace Twns.ReplayWar {
                 this._menuType = MenuType.Main;
                 this._updateListCommand();
             } else {
-                throw Twns.Helpers.newError(`Invalid menuType: ${type}`, ClientErrorCode.RwWarMenuPanel_OnTouchedBtnBack_00);
+                throw Helpers.newError(`Invalid menuType: ${type}`, ClientErrorCode.RwWarMenuPanel_OnTouchedBtnBack_00);
             }
         }
 
@@ -178,7 +183,7 @@ namespace Twns.ReplayWar {
             const mapId                 = war.getMapId();
             this._labelMapName.text     = mapId == null ? `----` : (await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || "----");
             this._labelMapDesigner.text = mapId == null ? `----` : (await WarMap.WarMapModel.getDesignerName(mapId) || "----");
-            this._labelWarId.text       = `${war.getReplayId()}`;
+            this._labelWarId.text       = `${war instanceof ReplayWar.RwWar ? war.getReplayId() : war.getWarId()}`;
             this._labelTurnIndex.text   = `${war.getTurnManager().getTurnIndex()}`;
             this._labelActionId.text    = `${war.getNextActionId()} / ${war.getExecutedActionManager().getExecutedActionsCount()}`;
         }
@@ -205,22 +210,23 @@ namespace Twns.ReplayWar {
             } else if (type === MenuType.Advanced) {
                 return this._createDataForAdvancedMenu();
             } else {
-                throw Twns.Helpers.newError(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`, ClientErrorCode.RwWarMenuPanel_CreateDataForList_00);
+                throw Helpers.newError(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`, ClientErrorCode.RwWarMenuPanel_CreateDataForList_00);
             }
         }
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
-            return Twns.Helpers.getNonNullElements([
+            return Helpers.getNonNullElements([
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandRate(),
                 this._createCommandChat(),
+                this._createCommandGotoOngoingWar(),
                 this._createCommandGotoRwReplayListPanel(),
                 this._createCommandGotoLobby(),
             ]);
         }
 
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
-            return Twns.Helpers.getNonNullElements([
+            return Helpers.getNonNullElements([
                 this._createCommandSimulation(),
                 this._createCommandCreateMfr(),
                 this._createCommandUserSettings(),
@@ -239,19 +245,24 @@ namespace Twns.ReplayWar {
         }
 
         private _createCommandRate(): DataForCommandRenderer | null {
+            const war = this._getWar();
+            if (!(war instanceof ReplayWar.RwWar)) {
+                return null;
+            }
+
             return {
                 name    : Lang.getText(LangTextType.B0365),
                 callback: () => {
-                    const minValue = Twns.CommonConstants.ReplayMinRating;
-                    const maxValue = Twns.CommonConstants.ReplayMaxRating;
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                    const minValue = CommonConstants.ReplayMinRating;
+                    const maxValue = CommonConstants.ReplayMaxRating;
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                         title           : `${Lang.getText(LangTextType.B0365)}`,
                         currentValue    : 5,
                         minValue,
                         maxValue,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
-                            Twns.ReplayWar.RwProxy.reqReplaySetSelfRating(this._getWar().getReplayId(), panel.getInputValue());
+                            ReplayWar.RwProxy.reqReplaySetSelfRating(war.getReplayId(), panel.getInputValue());
                         },
                     });
                 },
@@ -263,32 +274,56 @@ namespace Twns.ReplayWar {
                 name    : Lang.getText(LangTextType.B0383),
                 callback: () => {
                     this.close();
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChatPanel, {});
+                    PanelHelpers.open(PanelHelpers.PanelDict.ChatPanel, {});
                 },
             };
         }
 
+        private _createCommandGotoOngoingWar(): DataForCommandRenderer | null {
+            const war = this._getWar();
+            return (war instanceof ReplayWar.RwWar)
+                ? null
+                : {
+                    name    : Lang.getText(LangTextType.B0711),
+                    callback: () => {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
+                            title   : Lang.getText(LangTextType.B0711),
+                            content : Lang.getText(LangTextType.A0225),
+                            callback: () => {
+                                MultiPlayerWar.MpwProxy.reqMpwCommonContinueWar(Helpers.getExisted(war.getWarId()));
+                                PanelHelpers.open(PanelHelpers.PanelDict.CommonBlockPanel, {
+                                    title   : Lang.getText(LangTextType.B0088),
+                                    content : Lang.getText(LangTextType.A0040),
+                                });
+                            }
+                        });
+                    },
+                };
+        }
+
         private _createCommandGotoRwReplayListPanel(): DataForCommandRenderer | null {
-            return {
-                name    : Lang.getText(LangTextType.B0651),
-                callback: () => {
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
-                        title   : Lang.getText(LangTextType.B0651),
-                        content : Lang.getText(LangTextType.A0225),
-                        callback: () => Twns.FlowManager.gotoRwReplayListPanel(),
-                    });
-                },
-            };
+            return (this._getWar() instanceof ReplayWar.RwWar)
+                ? {
+                    name    : Lang.getText(LangTextType.B0651),
+                    callback: () => {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
+                            title   : Lang.getText(LangTextType.B0651),
+                            content : Lang.getText(LangTextType.A0225),
+                            callback: () => FlowManager.gotoRwReplayListPanel(),
+                        });
+                    },
+                }
+                : null;
         }
 
         private _createCommandGotoLobby(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0054),
                 callback: () => {
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                         title   : Lang.getText(LangTextType.B0054),
                         content : Lang.getText(LangTextType.A0025),
-                        callback: () => Twns.FlowManager.gotoLobby(),
+                        callback: () => FlowManager.gotoLobby(),
                     });
                 },
             };
@@ -300,9 +335,9 @@ namespace Twns.ReplayWar {
                 name    : Lang.getText(LangTextType.B0325),
                 callback: () => {
                     if (war.getIsExecutingAction()) {
-                        Twns.FloatText.show(Lang.getText(LangTextType.A0103));
+                        FloatText.show(Lang.getText(LangTextType.A0103));
                     } else {
-                        Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmCreateSfwSaveSlotsPanel, war.serializeForCreateSfw());
+                        PanelHelpers.open(PanelHelpers.PanelDict.SpmCreateSfwSaveSlotsPanel, war.serializeForCreateSfw());
                     }
                 },
             };
@@ -314,21 +349,21 @@ namespace Twns.ReplayWar {
                 name    : Lang.getText(LangTextType.B0557),
                 callback: () => {
                     if (war.getPlayerManager().getAliveOrDyingTeamsCount(false) < 2) {
-                        Twns.FloatText.show(Lang.getText(LangTextType.A0199));
+                        FloatText.show(Lang.getText(LangTextType.A0199));
                         return;
                     }
 
                     const warData   = war.serializeForCreateMfr();
                     const errorCode = new TestWar.TwWar().getErrorCodeForInitForMfw(warData, war.getGameConfig());
                     if (errorCode) {
-                        Twns.FloatText.show(Lang.getErrorText(errorCode));
+                        FloatText.show(Lang.getErrorText(errorCode));
                         return;
                     }
 
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                         content : Lang.getText(LangTextType.A0201),
                         callback: () => {
-                            Twns.FlowManager.gotoMfrCreateSettingsPanel(warData);
+                            FlowManager.gotoMfrCreateSettingsPanel(warData);
                         }
                     });
                 }
@@ -338,7 +373,7 @@ namespace Twns.ReplayWar {
             return {
                 name    : Lang.getText(LangTextType.B0560),
                 callback: () => {
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserSettingsPanel, void 0);
+                    PanelHelpers.open(PanelHelpers.PanelDict.UserSettingsPanel, void 0);
                 }
             };
         }
@@ -346,8 +381,8 @@ namespace Twns.ReplayWar {
             return {
                 name    : Lang.getText(LangTextType.B0430),
                 callback: () => {
-                    const isEnabled = Twns.User.UserModel.getSelfSettingsIsSetPathMode();
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                    const isEnabled = User.UserModel.getSelfSettingsIsSetPathMode();
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                         content : Lang.getFormattedText(
                             LangTextType.F0033,
                             Lang.getText(isEnabled ? LangTextType.B0431 : LangTextType.B0432),
@@ -356,14 +391,14 @@ namespace Twns.ReplayWar {
                         textForCancel   : Lang.getText(LangTextType.B0434),
                         callback: () => {
                             if (!isEnabled) {
-                                Twns.User.UserProxy.reqUserSetSettings({
+                                User.UserProxy.reqUserSetSettings({
                                     isSetPathMode   : true,
                                 });
                             }
                         },
                         callbackOnCancel: () => {
                             if (isEnabled) {
-                                Twns.User.UserProxy.reqUserSetSettings({
+                                User.UserProxy.reqUserSetSettings({
                                     isSetPathMode   : false,
                                 });
                             }
@@ -398,7 +433,7 @@ namespace Twns.ReplayWar {
     }
 
     type DataForPlayerRenderer = {
-        war     : ReplayWar.RwWar;
+        war     : BaseWar.BwWar;
         player  : BaseWar.BwPlayer;
     };
 
@@ -435,7 +470,7 @@ namespace Twns.ReplayWar {
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
                 + `  ${player === war.getPlayerInTurn() ? Lang.getText(LangTextType.B0086) : ""}`;
 
-            if (player.getAliveState() !== Twns.Types.PlayerAliveState.Alive) {
+            if (player.getAliveState() !== Types.PlayerAliveState.Alive) {
                 this._labelLost.visible = true;
                 this._listInfo.visible  = false;
             } else {
@@ -469,18 +504,18 @@ namespace Twns.ReplayWar {
             ];
         }
         private _createDataColor(
-            war         : ReplayWar.RwWar,
+            war         : BaseWar.BwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(LangTextType.B0397),
-                infoText    : Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId()) || Twns.CommonConstants.ErrorTextForUndefined,
+                infoText    : Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId()) || CommonConstants.ErrorTextForUndefined,
                 infoColor   : 0xFFFFFF,
             };
         }
         private _createDataFund(
-            war         : ReplayWar.RwWar,
+            war         : BaseWar.BwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
@@ -491,7 +526,7 @@ namespace Twns.ReplayWar {
             };
         }
         private _createDataBuildings(
-            war         : ReplayWar.RwWar,
+            war         : BaseWar.BwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
@@ -503,7 +538,7 @@ namespace Twns.ReplayWar {
             };
         }
         private _createDataCoName(
-            war         : ReplayWar.RwWar,
+            war         : BaseWar.BwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
@@ -517,7 +552,7 @@ namespace Twns.ReplayWar {
             };
         }
         private _createDataEnergy(
-            war         : ReplayWar.RwWar,
+            war         : BaseWar.BwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
@@ -526,9 +561,9 @@ namespace Twns.ReplayWar {
             const superPowerEnergy  = player.getCoSuperPowerEnergy();
             const skillType         = player.getCoUsingSkillType();
             const hasLoadedCo       = war.getUnitMap().checkIsCoLoadedByAnyUnit(playerIndex);
-            const currEnergyText    = skillType === Twns.Types.CoSkillType.Passive
+            const currEnergyText    = skillType === Types.CoSkillType.Passive
                 ? "" + currValue
-                : skillType === Twns.Types.CoSkillType.Power ? "COP" : "SCOP";
+                : skillType === Types.CoSkillType.Power ? "COP" : "SCOP";
 
             return {
                 titleText               : Lang.getText(LangTextType.B0159),
@@ -537,7 +572,7 @@ namespace Twns.ReplayWar {
             };
         }
         private _createDataUnitAndValue(
-            war         : ReplayWar.RwWar,
+            war         : BaseWar.BwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
@@ -549,7 +584,7 @@ namespace Twns.ReplayWar {
             };
         }
         private _createDataInitialFund(
-            war         : ReplayWar.RwWar,
+            war         : BaseWar.BwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
@@ -557,11 +592,11 @@ namespace Twns.ReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0178),
                 infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleInitialFundDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
             };
         }
         private _createDataIncomeMultiplier(
-            war         : ReplayWar.RwWar,
+            war         : BaseWar.BwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
@@ -569,11 +604,11 @@ namespace Twns.ReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0179),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleIncomeMultiplierDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
             };
         }
         private _createDataEnergyAddPctOnLoadCo(
-            war         : ReplayWar.RwWar,
+            war         : BaseWar.BwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
@@ -581,11 +616,11 @@ namespace Twns.ReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
             };
         }
         private _createDataEnergyGrowthMultiplier(
-            war         : ReplayWar.RwWar,
+            war         : BaseWar.BwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
@@ -593,11 +628,11 @@ namespace Twns.ReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0181),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
             };
         }
         private _createDataMoveRangeModifier(
-            war         : ReplayWar.RwWar,
+            war         : BaseWar.BwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
@@ -605,11 +640,11 @@ namespace Twns.ReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0182),
                 infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleMoveRangeModifierDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
             };
         }
         private _createDataAttackPowerModifier(
-            war         : ReplayWar.RwWar,
+            war         : BaseWar.BwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
@@ -617,11 +652,11 @@ namespace Twns.ReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0183),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleOffenseBonusDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
             };
         }
         private _createDataVisionRangeModifier(
-            war         : ReplayWar.RwWar,
+            war         : BaseWar.BwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
@@ -629,11 +664,11 @@ namespace Twns.ReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0184),
                 infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleVisionRangeModifierDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
             };
         }
         private _createDataLuckLowerLimit(
-            war         : ReplayWar.RwWar,
+            war         : BaseWar.BwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
@@ -641,11 +676,11 @@ namespace Twns.ReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0189),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultLowerLimit),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
             };
         }
         private _createDataLuckUpperLimit(
-            war         : ReplayWar.RwWar,
+            war         : BaseWar.BwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
@@ -653,11 +688,11 @@ namespace Twns.ReplayWar {
             return {
                 titleText               : Lang.getText(LangTextType.B0190),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, Twns.CommonConstants.WarRuleLuckDefaultUpperLimit),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
             };
         }
 
-        private _getTilesCountAndIncome(war: ReplayWar.RwWar, playerIndex: number): { count: number, income: number } {
+        private _getTilesCountAndIncome(war: BaseWar.BwWar, playerIndex: number): { count: number, income: number } {
             let count   = 0;
             let income  = 0;
             for (const tile of war.getTileMap().getAllTiles()) {
@@ -669,7 +704,7 @@ namespace Twns.ReplayWar {
             return { count, income };
         }
 
-        private _getUnitsCountAndValue(war: ReplayWar.RwWar, playerIndex: number): { count: number, value: number } {
+        private _getUnitsCountAndValue(war: BaseWar.BwWar, playerIndex: number): { count: number, value: number } {
             const unitMap   = war.getUnitMap();
             let count       = 0;
             let value       = 0;

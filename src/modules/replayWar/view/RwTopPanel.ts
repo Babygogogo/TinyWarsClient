@@ -24,7 +24,7 @@ namespace Twns.ReplayWar {
     import LangTextType         = Lang.LangTextType;
 
     export type OpenDataForRwTopPanel = {
-        war : ReplayWar.RwWar;
+        war : ReplayWar.RwWar | HalfwayReplayWar.HrwWar;
     };
     export class RwTopPanel extends TwnsUiPanel.UiPanel<OpenDataForRwTopPanel> {
         private readonly _groupPlayer!          : eui.Group;
@@ -52,8 +52,10 @@ namespace Twns.ReplayWar {
         private readonly _labelPowerEnergy!     : TwnsUiLabel.UiLabel;
         private readonly _labelZoneEnergy!      : TwnsUiLabel.UiLabel;
         private readonly _btnRewindBegin!       : TwnsUiButton.UiButton;
-        private readonly _btnFastRewind!        : TwnsUiButton.UiButton;
-        private readonly _btnFastForward!       : TwnsUiButton.UiButton;
+        private readonly _btnRewindTurn!        : TwnsUiButton.UiButton;
+        private readonly _btnRewindAction!      : TwnsUiButton.UiButton;
+        private readonly _btnForwardAction!     : TwnsUiButton.UiButton;
+        private readonly _btnForwardTurn!       : TwnsUiButton.UiButton;
         private readonly _btnForwardEnd!        : TwnsUiButton.UiButton;
         private readonly _btnPlay!              : TwnsUiButton.UiButton;
         private readonly _btnPause!             : TwnsUiButton.UiButton;
@@ -75,9 +77,11 @@ namespace Twns.ReplayWar {
                 { ui: this._groupPauseTime,     callback: this._onTouchedGroupPauseTime },
                 { ui: this._groupVisionTeam,    callback: this._onTouchedGroupVisionTeam },
                 { ui: this._groupProgress,      callback: this._onTouchedGroupProgress },
-                { ui: this._btnFastRewind,      callback: this._onTouchedBtnFastRewind },
+                { ui: this._btnRewindAction,    callback: this._onTouchedBtnRewindAction },
+                { ui: this._btnRewindTurn,      callback: this._onTouchedBtnRewindTurn },
                 { ui: this._btnRewindBegin,     callback: this._onTouchedBtnRewindBegin },
-                { ui: this._btnFastForward,     callback: this._onTouchedBtnFastForward, },
+                { ui: this._btnForwardAction,   callback: this._onTouchedBtnForwardAction, },
+                { ui: this._btnForwardTurn,     callback: this._onTouchedBtnForwardTurn, },
                 { ui: this._btnForwardEnd,      callback: this._onTouchedBtnForwardEnd, },
                 { ui: this._btnPlay,            callback: this._onTouchedBtnPlay, },
                 { ui: this._btnPause,           callback: this._onTouchedBtnPause, },
@@ -91,7 +95,7 @@ namespace Twns.ReplayWar {
             // nothing to do
         }
 
-        private _getWar(): ReplayWar.RwWar {
+        private _getWar(): ReplayWar.RwWar | HalfwayReplayWar.HrwWar {
             return this._getOpenData().war;
         }
 
@@ -174,7 +178,24 @@ namespace Twns.ReplayWar {
 
             this._updateLabelVisionTeam();
         }
-        private async _onTouchedBtnFastRewind(): Promise<void> {
+        private async _onTouchedBtnRewindAction(): Promise<void> {
+            const war = this._getWar();
+            war.setIsAutoReplay(false);
+
+            if (!war.getIsRunning()) {
+                FloatText.show(Lang.getText(LangTextType.A0040));
+            } else if (war.getIsExecutingAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0044));
+            } else if (war.checkIsInBeginning()) {
+                FloatText.show(Lang.getText(LangTextType.A0042));
+            } else {
+                await Helpers.checkAndCallLater();
+                await war.loadPreviousAction();
+                await Helpers.checkAndCallLater();
+                this._updateView();
+            }
+        }
+        private async _onTouchedBtnRewindTurn(): Promise<void> {
             const war = this._getWar();
             war.setIsAutoReplay(false);
 
@@ -208,7 +229,24 @@ namespace Twns.ReplayWar {
                 this._updateView();
             }
         }
-        private async _onTouchedBtnFastForward(): Promise<void> {
+        private async _onTouchedBtnForwardAction(): Promise<void> {
+            const war = this._getWar();
+            war.setIsAutoReplay(false);
+
+            if (!war.getIsRunning()) {
+                FloatText.show(Lang.getText(LangTextType.A0040));
+            } else if (war.getIsExecutingAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0044));
+            } else if (war.checkIsInEnd()) {
+                FloatText.show(Lang.getText(LangTextType.A0043));
+            } else {
+                await Helpers.checkAndCallLater();
+                await war.loadNextAction();
+                await Helpers.checkAndCallLater();
+                this._updateView();
+            }
+        }
+        private async _onTouchedBtnForwardTurn(): Promise<void> {
             const war = this._getWar();
             war.setIsAutoReplay(false);
 
@@ -261,11 +299,13 @@ namespace Twns.ReplayWar {
             this._getWar().setIsAutoReplay(false);
         }
         private _onTouchedBtnMenu(): void {
-            const actionPlanner = this._getWar().getActionPlanner();
+            const war           = this._getWar();
+            const actionPlanner = war.getActionPlanner();
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            PanelHelpers.open(PanelHelpers.PanelDict.RwWarMenuPanel, void 0);
+
+            PanelHelpers.open(PanelHelpers.PanelDict.RwWarMenuPanel, { war });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -290,6 +330,10 @@ namespace Twns.ReplayWar {
             this._labelPauseTimeTitle.text  = Lang.getText(LangTextType.B0846);
             this._labelVisionTeamTitle.text = Lang.getText(LangTextType.B0891);
             this._labelFundTitle.text       = `${Lang.getText(LangTextType.B0032)}: `;
+            this._btnRewindAction.label     = Lang.getText(LangTextType.B0616);
+            this._btnRewindTurn.label       = Lang.getText(LangTextType.B0687);
+            this._btnForwardTurn.label      = Lang.getText(LangTextType.B0687);
+            this._btnForwardAction.label    = Lang.getText(LangTextType.B0616);
         }
 
         private _updateLabelPauseTime(): void {

@@ -31,6 +31,7 @@ namespace Twns.SinglePlayerMode {
         private readonly _labelMapName!     : TwnsUiLabel.UiLabel;
         private readonly _labelRuleName!    : TwnsUiLabel.UiLabel;
         private readonly _labelMyScore!     : TwnsUiLabel.UiLabel;
+        private readonly _labelMyTurnIndex! : TwnsUiLabel.UiLabel;
         private readonly _labelMyRank!      : TwnsUiLabel.UiLabel;
         private readonly _listHighScore!    : TwnsUiScrollList.UiScrollList<DataForHighScoreRenderer>;
         private readonly _labelNoData!      : TwnsUiLabel.UiLabel;
@@ -75,6 +76,7 @@ namespace Twns.SinglePlayerMode {
             this._labelMapName.text     = Lang.getText(LangTextType.B0225);
             this._labelRuleName.text    = Lang.getText(LangTextType.B0318);
             this._labelMyScore.text     = Lang.getText(LangTextType.B0579);
+            this._labelMyTurnIndex.text = Lang.getText(LangTextType.B0091);
             this._labelMyRank.text      = Lang.getText(LangTextType.B0904);
             this._labelNoData.text      = Lang.getText(LangTextType.B0278);
         }
@@ -161,6 +163,7 @@ namespace Twns.SinglePlayerMode {
         private readonly _labelMapName!     : TwnsUiLabel.UiLabel;
         private readonly _labelRuleName!    : TwnsUiLabel.UiLabel;
         private readonly _labelMyScore!     : TwnsUiLabel.UiLabel;
+        private readonly _labelMyTurnIndex! : TwnsUiLabel.UiLabel;
         private readonly _labelMyRank!      : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
@@ -173,6 +176,7 @@ namespace Twns.SinglePlayerMode {
         private _updateView(): void {
             this._updateLabelMapNameAndRuleName();
             this._updateLabelMyRank();
+            this._updateLabelMyTurnIndex();
 
             const data              = this._getData();
             this._labelMyScore.text = `${data.score}`;
@@ -191,6 +195,21 @@ namespace Twns.SinglePlayerMode {
 
                 const ruleId        = this._getData().ruleId;
                 labelRuleName.text  = `#${ruleId}(${Lang.getLanguageText({ textArray: mapRawData.templateWarRuleArray?.find(v => v.ruleId === ruleId)?.ruleNameArray }) ?? CommonConstants.ErrorTextForUndefined})`;
+            }
+        }
+
+        private async _updateLabelMyTurnIndex(): Promise<void> {
+            const label = this._labelMyTurnIndex;
+            label.text  = ``;
+
+            const data      = this._getData();
+            const userId    = Helpers.getExisted(User.UserModel.getSelfUserId());
+            const ruleId    = data.ruleId;
+            const rankData  = (await SinglePlayerMode.SpmModel.getRankData(data.mapId))?.find(v => v.ruleId === ruleId)?.infoArray?.find(v => v.userId === userId);
+            if (data === this._getData()) {
+                label.text = (rankData?.score !== data.score)
+                    ? `--`
+                    : `${rankData.turnIndex ?? `--`}`;
             }
         }
 
