@@ -6331,6 +6331,10 @@ namespace Twns.Lang {
             `禁止生产部队: %s。`,
             `Prohibit the units production: %s.`,
         ],
+        [LangTextType.F0138]: [
+            `剩余%s`,
+            `Remaining %s`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Rich strings.

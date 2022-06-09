@@ -36,12 +36,14 @@ namespace Twns.BaseWar {
         war         : BwWar;
     };
     export class BwProduceUnitPanel extends TwnsUiPanel.UiPanel<OpenDataForBwProduceUnitPanel> {
-        private readonly _imgMask!      : TwnsUiImage.UiImage;
-        private readonly _group!        : eui.Group;
-        private readonly _listUnit!     : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
-        private readonly _labelNoUnit!  : TwnsUiLabel.UiLabel;
-        private readonly _btnCancel!    : TwnsUiButton.UiButton;
-        private readonly _btnDetail!    : TwnsUiButton.UiButton;
+        private readonly _imgMask!          : TwnsUiImage.UiImage;
+        private readonly _group!            : eui.Group;
+        private readonly _listUnit!         : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+        private readonly _labelNoUnit!      : TwnsUiLabel.UiLabel;
+        private readonly _labelFundTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelFund!        : TwnsUiLabel.UiLabel;
+        private readonly _btnCancel!        : TwnsUiButton.UiButton;
+        private readonly _btnDetail!        : TwnsUiButton.UiButton;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -63,10 +65,43 @@ namespace Twns.BaseWar {
             Notify.dispatch(NotifyType.BwProduceUnitPanelOpened);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            this._updateView();
+            this._updateComponentsForLanguage();
+
+            const dataArray     = this._createDataForList();
+            const labelNoUnit   = this._labelNoUnit;
+            const listUnit      = this._listUnit;
+            if (dataArray.length) {
+                labelNoUnit.visible = false;
+                listUnit.bindData(dataArray);
+                this.setAndReviseSelectedUnitType(dataArray[0].unitType, true);
+            } else {
+                labelNoUnit.visible = true;
+                listUnit.clear();
+                this.setAndReviseSelectedUnitType(null, true);
+            }
+            this._labelNoUnit.visible   = !dataArray.length;
+            this._listUnit.bindData(dataArray);
+            this.setAndReviseSelectedUnitType(dataArray[0].unitType ?? null, true);
         }
         protected _onClosing(): void {
             Notify.dispatch(NotifyType.BwProduceUnitPanelClosed);
+        }
+
+        public async setAndReviseSelectedUnitType(newUnitType: number | null, needScroll: boolean): Promise<void> {
+            const listUnit  = this._listUnit;
+            const index     = listUnit.getRandomIndex(v => v.unitType === newUnitType);
+            if (index != null) {
+                listUnit.setSelectedIndex(index);
+
+                if (needScroll) {
+                    listUnit.scrollVerticalToIndex(index);
+                }
+            }
+
+            this._updateLabelFund();
+        }
+        public getSelectedUnitType(): number | null {
+            return this._listUnit.getSelectedData()?.unitType ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,18 +131,22 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _updateView(): void {
-            this._updateComponentsForLanguage();
-
-            const dataArray             = this._createDataForList();
-            this._labelNoUnit.visible   = !dataArray.length;
-            this._listUnit.bindData(dataArray);
+        private _updateComponentsForLanguage(): void {
+            this._labelNoUnit.text      = Lang.getText(LangTextType.B0896);
+            this._labelFundTitle.text   = `${Lang.getFormattedText(LangTextType.F0138, Lang.getText(LangTextType.B0032))}:`;
+            this._btnCancel.label       = Lang.getText(LangTextType.B0154);
+            this._btnDetail.label       = Lang.getText(LangTextType.B0267);
         }
 
-        private _updateComponentsForLanguage(): void {
-            this._labelNoUnit.text  = Lang.getText(LangTextType.B0896);
-            this._btnCancel.label   = Lang.getText(LangTextType.B0154);
-            this._btnDetail.label   = Lang.getText(LangTextType.B0267);
+        private _updateLabelFund(): void {
+            const minCost   = this._listUnit.getSelectedData()?.minCost;
+            const labelFund = this._labelFund;
+            if (minCost == null) {
+                labelFund.text = `--`;
+            } else {
+                const fund = this._getOpenData().war.getPlayerInTurn().getFund();
+                labelFund.text = `${fund} - ${minCost} = ${fund - minCost}`;
+            }
         }
 
         private _createDataForList(): DataForUnitRenderer[] {
@@ -157,6 +196,7 @@ namespace Twns.BaseWar {
                     minCost                 : skillCfg
                         ? Math.floor(cfgCost * costModifier * minNormalizedHp * skillCfg[5] / CommonConstants.UnitHpNormalizer / 100)
                         : Math.floor(cfgCost * costModifier),
+                    panel   : this,
                 });
             }
 
@@ -208,6 +248,7 @@ namespace Twns.BaseWar {
         actionPlanner           : BaseWar.BwActionPlanner;
         gridIndex               : GridIndex;
         unitProductionSkillCfg  : number[] | null;
+        panel                   : BwProduceUnitPanel;
     };
     class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
         private readonly _group!        : eui.Group;
@@ -229,8 +270,8 @@ namespace Twns.BaseWar {
                 { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
             this._setUiListenerArray([
-                { ui: this._imgBg,                          callback: this._onTouchedImgBg,         eventType: egret.TouchEvent.TOUCH_BEGIN },
-                { ui: this._groupProduce,                   callback: this._onTouchedGroupProduce },
+                { ui: this._imgBg,                          callback: this._onTouchedImgBg,         eventType: egret.TouchEvent.TOUCH_END },
+                { ui: this._groupProduce,                   callback: this._onTouchedGroupProduce,  eventType: egret.TouchEvent.TOUCH_END },
             ]);
 
             this._imgBg.touchEnabled = true;
@@ -260,10 +301,20 @@ namespace Twns.BaseWar {
 
         private _onTouchedImgBg(): void {
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+
+            const data = this._getData();
+            data.panel.setAndReviseSelectedUnitType(data.unitType, false);
         }
 
         private _onTouchedGroupProduce(): void {
             const data = this._getData();
+            if (data.unitType !== data.panel.getSelectedUnitType()) {
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                data.panel.setAndReviseSelectedUnitType(data.unitType, false);
+
+                return;
+            }
+
             if (data.currentFund < data.minCost) {
                 FloatText.show(Lang.getText(LangTextType.B0053));
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
