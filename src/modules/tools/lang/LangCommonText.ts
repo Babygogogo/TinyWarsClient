@@ -2359,8 +2359,8 @@ namespace Twns.Lang {
             `Next Turn`,
         ],
         [LangTextType.B0249]: [
-            `开始回放`,
-            `Start Replays`,
+            `开始`,
+            `Start`,
         ],
         [LangTextType.B0250]: [
             `暂停回放`,
