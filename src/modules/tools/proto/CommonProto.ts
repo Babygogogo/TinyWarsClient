@@ -12284,12 +12284,6 @@ declare namespace CommonProto {
             /** SettingsForCommon configVersion */
             configVersion?: (string|null);
 
-            /** SettingsForCommon deprecatedTemplateWarRuleId */
-            deprecatedTemplateWarRuleId?: (number|null);
-
-            /** SettingsForCommon deprecatedTemplateWarRule */
-            deprecatedTemplateWarRule?: (CommonProto.WarRule.ITemplateWarRule|null);
-
             /** SettingsForCommon turnsLimit */
             turnsLimit?: (number|null);
 
@@ -12308,12 +12302,6 @@ declare namespace CommonProto {
 
             /** SettingsForCommon configVersion. */
             public configVersion: string;
-
-            /** SettingsForCommon deprecatedTemplateWarRuleId. */
-            public deprecatedTemplateWarRuleId: number;
-
-            /** SettingsForCommon deprecatedTemplateWarRule. */
-            public deprecatedTemplateWarRule?: (CommonProto.WarRule.ITemplateWarRule|null);
 
             /** SettingsForCommon turnsLimit. */
             public turnsLimit: number;
