@@ -14420,9 +14420,6 @@ declare namespace CommonProto {
             /** SerialPlayer playerIndex */
             playerIndex?: (number|null);
 
-            /** SerialPlayer deprecatedTeamIndex */
-            deprecatedTeamIndex?: (number|null);
-
             /** SerialPlayer userId */
             userId?: (number|null);
 
@@ -14477,9 +14474,6 @@ declare namespace CommonProto {
 
             /** SerialPlayer playerIndex. */
             public playerIndex: number;
-
-            /** SerialPlayer deprecatedTeamIndex. */
-            public deprecatedTeamIndex: number;
 
             /** SerialPlayer userId. */
             public userId: number;

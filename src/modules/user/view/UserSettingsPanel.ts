@@ -43,6 +43,7 @@ namespace Twns.User {
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
         private readonly _btnDamageCalculator!      : TwnsUiButton.UiButton;
+        private readonly _btnSetSound!              : TwnsUiButton.UiButton;
         private readonly _group!                    : eui.Group;
         private readonly _scroller!                 : eui.Scroller;
 
@@ -60,7 +61,6 @@ namespace Twns.User {
         private readonly _btnChangeGameVersion!     : TwnsUiButton.UiButton;
         private readonly _btnRankList!              : TwnsUiButton.UiButton;
         private readonly _btnShowOnlineUsers!       : TwnsUiButton.UiButton;
-        private readonly _btnSetSound!              : TwnsUiButton.UiButton;
         private readonly _btnSetOpacity!            : TwnsUiButton.UiButton;
         private readonly _btnSetStageScaler!        : TwnsUiButton.UiButton;
         private readonly _btnServerStatus!          : TwnsUiButton.UiButton;
@@ -111,14 +111,14 @@ namespace Twns.User {
                 callbackOnLeft  : () => {
                     const languageType = Types.LanguageType.Chinese;
                     Lang.setLanguageType(languageType);
-                    Twns.LocalStorage.setLanguageType(languageType);
+                    LocalStorage.setLanguageType(languageType);
 
                     Notify.dispatch(NotifyType.LanguageChanged);
                 },
                 callbackOnRight : () => {
                     const languageType = Types.LanguageType.English;
                     Lang.setLanguageType(languageType);
-                    Twns.LocalStorage.setLanguageType(languageType);
+                    LocalStorage.setLanguageType(languageType);
 
                     Notify.dispatch(NotifyType.LanguageChanged);
                 },
@@ -150,11 +150,11 @@ namespace Twns.User {
                 rightTextType   : LangTextType.B0562,
                 callbackOnLeft  : () => {
                     Timer.startUnitAnimationTick();
-                    Twns.LocalStorage.setShowUnitAnimation(true);
+                    LocalStorage.setShowUnitAnimation(true);
                 },
                 callbackOnRight : () => {
                     Timer.stopUnitAnimationTick();
-                    Twns.LocalStorage.setShowUnitAnimation(false);
+                    LocalStorage.setShowUnitAnimation(false);
                 },
                 checkerForLeftOn: () => {
                     return Timer.checkIsUnitAnimationTicking();
@@ -166,11 +166,11 @@ namespace Twns.User {
                 rightTextType   : LangTextType.B0562,
                 callbackOnLeft  : () => {
                     Timer.startTileAnimationTick();
-                    Twns.LocalStorage.setShowTileAnimation(true);
+                    LocalStorage.setShowTileAnimation(true);
                 },
                 callbackOnRight : () => {
                     Timer.stopTileAnimationTick();
-                    Twns.LocalStorage.setShowTileAnimation(false);
+                    LocalStorage.setShowTileAnimation(false);
                 },
                 checkerForLeftOn: () => {
                     return Timer.checkIsTileAnimationTicking();
@@ -286,7 +286,7 @@ namespace Twns.User {
         }
         private _onTouchedBtnComplaint(): void {
             this.close();
-            PanelHelpers.open(PanelHelpers.PanelDict.ChatPanel, { toUserId: Twns.CommonConstants.AdminUserId });
+            PanelHelpers.open(PanelHelpers.PanelDict.ChatPanel, { toUserId: CommonConstants.AdminUserId });
         }
         private async _onTouchedBtnGameChart(): Promise<void> {
             PanelHelpers.open(PanelHelpers.PanelDict.CommonGameChartPanel, void 0);
@@ -317,7 +317,7 @@ namespace Twns.User {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Helpers.resetTween({
@@ -331,7 +331,7 @@ namespace Twns.User {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {
@@ -345,7 +345,6 @@ namespace Twns.User {
             group.addChild(this._btnChangePassword);
             group.addChild(this._btnChangeNickname);
             group.addChild(this._btnChangeDiscordId);
-            group.addChild(this._btnSetSound);
             group.addChild(this._btnSetOpacity);
             group.addChild(this._btnSetStageScaler);
             group.addChild(this._btnRankList);
@@ -371,7 +370,6 @@ namespace Twns.User {
             this._updateBtnChangeGameVersion();
             this._updateBtnRankList();
             this._updateBtnShowOnlineUsers();
-            this._updateBtnSetSound();
             this._updateBtnSetOpacity();
             this._updateBtnSetStageScaler();
             this._updateBtnGameChart();
@@ -399,9 +397,6 @@ namespace Twns.User {
         }
         private _updateBtnShowOnlineUsers(): void {
             this._btnShowOnlineUsers.label = Lang.getText(LangTextType.B0151);
-        }
-        private _updateBtnSetSound(): void {
-            this._btnSetSound.label = Lang.getText(LangTextType.B0540);
         }
         private _updateBtnSetOpacity(): void {
             this._btnSetOpacity.label = Lang.getText(LangTextType.B0827);
