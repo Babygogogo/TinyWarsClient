@@ -15176,9 +15176,6 @@ declare namespace CommonProto {
         /** Properties of a SerialWarEventManager. */
         interface ISerialWarEventManager {
 
-            /** SerialWarEventManager deprecatedWarEventFullData */
-            deprecatedWarEventFullData?: (CommonProto.Map.IWarEventFullData|null);
-
             /** SerialWarEventManager calledCountList */
             calledCountList?: (CommonProto.WarSerialization.IDataForWarEventCalledCount[]|null);
 
@@ -15197,9 +15194,6 @@ declare namespace CommonProto {
              * @param [properties] Properties to set
              */
             constructor(properties?: CommonProto.WarSerialization.ISerialWarEventManager);
-
-            /** SerialWarEventManager deprecatedWarEventFullData. */
-            public deprecatedWarEventFullData?: (CommonProto.Map.IWarEventFullData|null);
 
             /** SerialWarEventManager calledCountList. */
             public calledCountList: CommonProto.WarSerialization.IDataForWarEventCalledCount[];
@@ -15392,9 +15386,6 @@ declare namespace CommonProto {
             /** SerialExecutedActionManager executedActionArray */
             executedActionArray?: (CommonProto.WarAction.IWarActionContainer[]|null);
 
-            /** SerialExecutedActionManager deprecatedHalfwayReplayActionsCount */
-            deprecatedHalfwayReplayActionsCount?: (number|null);
-
             /** SerialExecutedActionManager halfwayReplayActionArray */
             halfwayReplayActionArray?: (CommonProto.WarSerialization.IHalfwayReplayAction[]|null);
         }
@@ -15413,9 +15404,6 @@ declare namespace CommonProto {
 
             /** SerialExecutedActionManager executedActionArray. */
             public executedActionArray: CommonProto.WarAction.IWarActionContainer[];
-
-            /** SerialExecutedActionManager deprecatedHalfwayReplayActionsCount. */
-            public deprecatedHalfwayReplayActionsCount: number;
 
             /** SerialExecutedActionManager halfwayReplayActionArray. */
             public halfwayReplayActionArray: CommonProto.WarSerialization.IHalfwayReplayAction[];
@@ -15527,9 +15515,6 @@ declare namespace CommonProto {
             /** SerialWar seedRandomCurrentState */
             seedRandomCurrentState?: (CommonProto.Structure.ISeedRandomState|null);
 
-            /** SerialWar deprecatedExecutedActions */
-            deprecatedExecutedActions?: (CommonProto.WarAction.IWarActionContainer[]|null);
-
             /** SerialWar remainingVotesForDraw */
             remainingVotesForDraw?: (number|null);
 
@@ -15547,9 +15532,6 @@ declare namespace CommonProto {
 
             /** SerialWar weatherManager */
             weatherManager?: (CommonProto.WarSerialization.ISerialWeatherManager|null);
-
-            /** SerialWar deprecatedHalfwayReplayActionArray */
-            deprecatedHalfwayReplayActionArray?: (CommonProto.WarSerialization.IHalfwayReplayAction[]|null);
 
             /** SerialWar isEnded */
             isEnded?: (boolean|null);
@@ -15600,9 +15582,6 @@ declare namespace CommonProto {
             /** SerialWar seedRandomCurrentState. */
             public seedRandomCurrentState?: (CommonProto.Structure.ISeedRandomState|null);
 
-            /** SerialWar deprecatedExecutedActions. */
-            public deprecatedExecutedActions: CommonProto.WarAction.IWarActionContainer[];
-
             /** SerialWar remainingVotesForDraw. */
             public remainingVotesForDraw: number;
 
@@ -15620,9 +15599,6 @@ declare namespace CommonProto {
 
             /** SerialWar weatherManager. */
             public weatherManager?: (CommonProto.WarSerialization.ISerialWeatherManager|null);
-
-            /** SerialWar deprecatedHalfwayReplayActionArray. */
-            public deprecatedHalfwayReplayActionArray: CommonProto.WarSerialization.IHalfwayReplayAction[];
 
             /** SerialWar isEnded. */
             public isEnded: boolean;
