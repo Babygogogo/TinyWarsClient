@@ -111,8 +111,10 @@ namespace Twns.WarHelpers.WarDestructionHelpers {
         }
     }
     export function removeInvisibleLoadedUnits(war: BwWar, watcherTeamIndexes: Set<number>): void {
-        const unitMap = war.getUnitMap();
-        if (war.getFogMap().checkHasFogCurrently()) {
+        if ((war.getFogMap().checkHasFogCurrently())                &&
+            (!war.getGameConfig().checkIsLoadedUnitVisibleInFog())
+        ) {
+            const unitMap = war.getUnitMap();
             for (const [unitId, unit] of unitMap.getLoadedUnits()) {
                 const teamIndex = unit.getTeamIndex();
                 if (!watcherTeamIndexes.has(teamIndex)) {

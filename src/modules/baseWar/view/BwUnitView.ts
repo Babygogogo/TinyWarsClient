@@ -415,7 +415,9 @@ namespace Twns.BaseWar {
             const war   = unit.getWar();
             if ((war) && (unit.getMaxLoadUnitsCount())) {
                 const strForSkinId = Helpers.getNumText(unit.getSkinId());
-                if (!war.getFogMap().checkHasFogCurrently()) {
+                if ((!war.getFogMap().checkHasFogCurrently())           ||
+                    (war.getGameConfig().checkIsLoadedUnitVisibleInFog())
+                ) {
                     if (unit.getLoadedUnitsCount() > 0) {
                         this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${strForSkinId}`);
                     }

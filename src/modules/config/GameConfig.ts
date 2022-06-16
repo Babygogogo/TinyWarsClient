@@ -117,6 +117,9 @@ namespace Twns.Config {
         public getSystemEnergyGrowthMultiplierForDefender(): number {
             return this.getSystemCfg().energyGrowthMultiplierArray[1];
         }
+        public checkIsLoadedUnitVisibleInFog(): boolean {
+            return this.getSystemCfg().isLoadedUnitVisibleInFog > 0;
+        }
 
         public getTileTemplateCfg(tileType: number): TileTemplateCfg | null {
             return this._tileTemplateCfgDict.get(tileType) ?? null;

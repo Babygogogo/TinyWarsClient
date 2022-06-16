@@ -103,6 +103,9 @@ declare namespace CommonProto {
 
             /** SystemCfg isUnitHpRoundedUpWhenHealed */
             isUnitHpRoundedUpWhenHealed?: (number|null);
+
+            /** SystemCfg isLoadedUnitVisibleInFog */
+            isLoadedUnitVisibleInFog?: (number|null);
         }
 
         /** Represents a SystemCfg. */
@@ -125,6 +128,9 @@ declare namespace CommonProto {
 
             /** SystemCfg isUnitHpRoundedUpWhenHealed. */
             public isUnitHpRoundedUpWhenHealed: number;
+
+            /** SystemCfg isLoadedUnitVisibleInFog. */
+            public isLoadedUnitVisibleInFog: number;
 
             /**
              * Creates a new SystemCfg instance using the specified properties.

@@ -172,7 +172,8 @@ namespace Twns.BaseWar {
             ) {
                 unitList.push(unitOnMap);
 
-                if ((!war.getFogMap().checkHasFogCurrently())   ||
+                if ((!war.getFogMap().checkHasFogCurrently())               ||
+                    (war.getGameConfig().checkIsLoadedUnitVisibleInFog())   ||
                     (teamIndexes.has(unitOnMap.getTeamIndex()))
                 ) {
                     for (const loadedUnit of unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {

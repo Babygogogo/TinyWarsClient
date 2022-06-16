@@ -11,6 +11,7 @@ namespace Twns.Types {
         energyGrowthMultiplierArray : number[];
         dialogueBackgroundMaxId     : number;
         maxBanCount                 : number;
+        isLoadedUnitVisibleInFog    : number;
     }
     export interface TileCategoryCfg extends CommonProto.Config.ITileCategoryCfg {
         category    : number;
