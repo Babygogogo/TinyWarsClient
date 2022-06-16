@@ -1977,8 +1977,9 @@ namespace Twns.WarHelpers.WarActionExecutor {
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
-            const shouldUpdateFogMap    = war.getPlayerManager().getWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
-            const unitsForDrop          : BwUnit[] = [];
+            const shouldUpdateFogMap                = war.getPlayerManager().getWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
+            const canDroppedUnitGetVisionOnStart    = war.getGameConfig().checkCanDroppedUnitGetVisionOnStart();
+            const unitsForDrop                      : BwUnit[] = [];
             for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
                 const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
                 unitMap.setUnitUnloaded(unitId, gridIndex);
@@ -1992,7 +1993,11 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 unitsForDrop.push(unitForDrop);
 
                 if (shouldUpdateFogMap) {
-                    fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+                    if (canDroppedUnitGetVisionOnStart) {
+                        fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+                    } else {
+                        fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [gridIndex]);
+                    }
                 }
             }
         }
@@ -2052,9 +2057,10 @@ namespace Twns.WarHelpers.WarActionExecutor {
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
-            const shouldUpdateFogMap    = war.getPlayerManager().getWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
-            const fogMap                = war.getFogMap();
-            const unitsForDrop          : BwUnit[] = [];
+            const shouldUpdateFogMap                = war.getPlayerManager().getWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
+            const canDroppedUnitGetVisionOnStart    = war.getGameConfig().checkCanDroppedUnitGetVisionOnStart();
+            const fogMap                            = war.getFogMap();
+            const unitsForDrop                      : BwUnit[] = [];
             for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
                 const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
                 unitMap.setUnitUnloaded(unitId, gridIndex);
@@ -2068,7 +2074,11 @@ namespace Twns.WarHelpers.WarActionExecutor {
                 unitsForDrop.push(unitForDrop);
 
                 if (shouldUpdateFogMap) {
-                    fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+                    if (canDroppedUnitGetVisionOnStart) {
+                        fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+                    } else {
+                        fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [gridIndex]);
+                    }
                 }
             }
 

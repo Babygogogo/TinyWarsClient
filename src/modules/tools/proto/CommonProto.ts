@@ -106,6 +106,9 @@ declare namespace CommonProto {
 
             /** SystemCfg isLoadedUnitVisibleInFog */
             isLoadedUnitVisibleInFog?: (number|null);
+
+            /** SystemCfg canDroppedUnitGetVisionOnStart */
+            canDroppedUnitGetVisionOnStart?: (number|null);
         }
 
         /** Represents a SystemCfg. */
@@ -131,6 +134,9 @@ declare namespace CommonProto {
 
             /** SystemCfg isLoadedUnitVisibleInFog. */
             public isLoadedUnitVisibleInFog: number;
+
+            /** SystemCfg canDroppedUnitGetVisionOnStart. */
+            public canDroppedUnitGetVisionOnStart: number;
 
             /**
              * Creates a new SystemCfg instance using the specified properties.

@@ -8,10 +8,11 @@ namespace Twns.Types {
     // Config types.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export interface SystemCfg extends CommonProto.Config.ISystemCfg {
-        energyGrowthMultiplierArray : number[];
-        dialogueBackgroundMaxId     : number;
-        maxBanCount                 : number;
-        isLoadedUnitVisibleInFog    : number;
+        energyGrowthMultiplierArray     : number[];
+        dialogueBackgroundMaxId         : number;
+        maxBanCount                     : number;
+        isLoadedUnitVisibleInFog        : number;
+        canDroppedUnitGetVisionOnStart  : number;
     }
     export interface TileCategoryCfg extends CommonProto.Config.ITileCategoryCfg {
         category    : number;

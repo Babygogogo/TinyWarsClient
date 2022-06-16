@@ -11,14 +11,13 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import ForceFogCode             = Twns.Types.ForceFogCode;
-    import GridIndex                = Twns.Types.GridIndex;
-    import MapSize                  = Twns.Types.MapSize;
-    import Visibility               = Twns.Types.Visibility;
+    import ForceFogCode             = Types.ForceFogCode;
+    import GridIndex                = Types.GridIndex;
+    import MapSize                  = Types.MapSize;
+    import Visibility               = Types.Visibility;
     import WarSerialization         = CommonProto.WarSerialization;
     import ISerialFogMap            = WarSerialization.ISerialFogMap;
     import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
-    import ClientErrorCode          = Twns.ClientErrorCode;
     import BwWar                    = BaseWar.BwWar;
 
     export abstract class BwFogMap {
@@ -32,12 +31,12 @@ namespace Twns.BaseWar {
         public abstract startRunning(war: BwWar): void;
 
         public init({ data, mapSize, playersCountUnneutral }: {
-            data                    : Twns.Types.Undefinable<ISerialFogMap>;
+            data                    : Types.Undefinable<ISerialFogMap>;
             mapSize                 : MapSize;
             playersCountUnneutral   : number;
         }): void {
             if (data == null) {
-                throw Twns.Helpers.newError(`Empty data.`, ClientErrorCode.BwFogMap_Init_00);
+                throw Helpers.newError(`Empty data.`, ClientErrorCode.BwFogMap_Init_00);
             }
 
             const forceFogCode = data.forceFogCode as ForceFogCode;
@@ -45,49 +44,49 @@ namespace Twns.BaseWar {
                 (forceFogCode !== ForceFogCode.Fog)     &&
                 (forceFogCode !== ForceFogCode.None)
             ) {
-                throw Twns.Helpers.newError(`Invalid forceFogCode: ${forceFogCode}`, ClientErrorCode.BwFogMap_Init_01);
+                throw Helpers.newError(`Invalid forceFogCode: ${forceFogCode}`, ClientErrorCode.BwFogMap_Init_01);
             }
 
             const forceExpirePlayerIndex = data.forceExpirePlayerIndex;
             if ((forceExpirePlayerIndex != null)                                                                                    &&
-                ((forceExpirePlayerIndex < Twns.CommonConstants.PlayerIndex.Neutral) || (forceExpirePlayerIndex > playersCountUnneutral))
+                ((forceExpirePlayerIndex < CommonConstants.PlayerIndex.Neutral) || (forceExpirePlayerIndex > playersCountUnneutral))
             ) {
-                throw Twns.Helpers.newError(`Invalid forceExpirePlayerIndex: ${forceExpirePlayerIndex}`, ClientErrorCode.BwFogMap_Init_02);
+                throw Helpers.newError(`Invalid forceExpirePlayerIndex: ${forceExpirePlayerIndex}`, ClientErrorCode.BwFogMap_Init_02);
             }
 
             const forceExpireTurnIndex = data.forceExpireTurnIndex;
             if (((forceExpirePlayerIndex == null) && (forceExpireTurnIndex != null)) ||
                 ((forceExpirePlayerIndex != null) && (forceExpireTurnIndex == null))
             ) {
-                throw Twns.Helpers.newError(`Invalid forceExpireTurnIndex: ${forceExpireTurnIndex}`, ClientErrorCode.BwFogMap_Init_03);
+                throw Helpers.newError(`Invalid forceExpireTurnIndex: ${forceExpireTurnIndex}`, ClientErrorCode.BwFogMap_Init_03);
             }
 
             if (!WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
-                throw Twns.Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwFogMap_Init_04);
+                throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwFogMap_Init_04);
             }
 
             const allMapsFromPath   = createEmptyMaps<Visibility>(mapSize, playersCountUnneutral);
             const playerIndexSet    = new Set<number>();
             for (const d of data.mapsFromPath || []) {
-                const playerIndex = Twns.Helpers.getExisted(d.playerIndex, ClientErrorCode.BwFogMap_Init_05);
+                const playerIndex = Helpers.getExisted(d.playerIndex, ClientErrorCode.BwFogMap_Init_05);
                 if (playerIndexSet.has(playerIndex)) {
-                    throw Twns.Helpers.newError(`Duplicated playerIndex: ${playerIndex}`, ClientErrorCode.BwFogMap_Init_06);
+                    throw Helpers.newError(`Duplicated playerIndex: ${playerIndex}`, ClientErrorCode.BwFogMap_Init_06);
                 }
                 playerIndexSet.add(playerIndex);
 
-                const mapFromPath = Twns.Helpers.getExisted(allMapsFromPath.get(playerIndex), ClientErrorCode.BwFogMap_Init_07);
+                const mapFromPath = Helpers.getExisted(allMapsFromPath.get(playerIndex), ClientErrorCode.BwFogMap_Init_07);
                 resetMapFromPath(mapFromPath, mapSize, d.visibilityArray ?? null);
             }
 
-            this._setMapSize(Twns.Helpers.deepClone(mapSize));
+            this._setMapSize(Helpers.deepClone(mapSize));
             this._setAllMapsFromPath(allMapsFromPath);
             this.setForceFogCode(forceFogCode);
             this.setForceExpirePlayerIndex(forceExpirePlayerIndex ?? null);
             this.setForceExpireTurnIndex(forceExpireTurnIndex ?? null);
         }
         public fastInit({ data, mapSize, playersCountUnneutral }: {
-            data                    : Twns.Types.Undefinable<ISerialFogMap>;
-            mapSize                 : Twns.Types.MapSize;
+            data                    : Types.Undefinable<ISerialFogMap>;
+            mapSize                 : Types.MapSize;
             playersCountUnneutral   : number;
         }): void {
             this.init({
@@ -126,7 +125,7 @@ namespace Twns.BaseWar {
             for (const [playerIndex, map] of this._getAllMapsFromPath()) {
                 const player = war.getPlayer(playerIndex);
                 if ((player)                                                    &&
-                    (player.getAliveState() === Twns.Types.PlayerAliveState.Alive)   &&
+                    (player.getAliveState() === Types.PlayerAliveState.Alive)   &&
                     (targetTeamIndexes.has(player.getTeamIndex()))
                 ) {
                     const visibilityArray = WarHelpers.WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
@@ -153,17 +152,17 @@ namespace Twns.BaseWar {
             this._war = war;
         }
         protected _getWar(): BwWar {
-            return Twns.Helpers.getExisted(this._war);
+            return Helpers.getExisted(this._war);
         }
 
         private _setAllMapsFromPath(mapsFromPath: Map<number, Visibility[][]>): void {
             this._allMapsFromPath = mapsFromPath;
         }
         protected _getAllMapsFromPath(): Map<number, Visibility[][]> {
-            return Twns.Helpers.getExisted(this._allMapsFromPath);
+            return Helpers.getExisted(this._allMapsFromPath);
         }
         private _getMapFromPath(playerIndex: number): Visibility[][] {
-            return Twns.Helpers.getExisted(this._getAllMapsFromPath().get(playerIndex));
+            return Helpers.getExisted(this._getAllMapsFromPath().get(playerIndex));
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,14 +172,14 @@ namespace Twns.BaseWar {
             this._mapSize = mapSize;
         }
         public getMapSize(): MapSize {
-            return Twns.Helpers.getExisted(this._mapSize);
+            return Helpers.getExisted(this._mapSize);
         }
 
         public setForceFogCode(code: ForceFogCode): void {
             this._forceFogCode = code;
         }
         public getForceFogCode(): ForceFogCode {
-            return Twns.Helpers.getExisted(this._forceFogCode);
+            return Helpers.getExisted(this._forceFogCode);
         }
 
         public checkHasFogByDefault(): boolean {
@@ -195,9 +194,9 @@ namespace Twns.BaseWar {
             } else {
                 const war               = this._getWar();
                 const weatherFogType    = war.getGameConfig().getWeatherCfg(war.getWeatherManager().getCurrentWeatherType())?.fog;
-                if (weatherFogType === Twns.Types.WeatherFogType.Fog) {
+                if (weatherFogType === Types.WeatherFogType.Fog) {
                     return true;
-                } else if (weatherFogType === Twns.Types.WeatherFogType.NoFog) {
+                } else if (weatherFogType === Types.WeatherFogType.NoFog) {
                     return false;
                 } else {
                     return this.checkHasFogByDefault();
@@ -209,14 +208,14 @@ namespace Twns.BaseWar {
             this._forceExpireTurnIndex = index;
         }
         public getForceExpireTurnIndex(): number | null {
-            return Twns.Helpers.getDefined(this._forceExpireTurnIndex, ClientErrorCode.BwFogMap_GetForceExpireTurnIndex_00);
+            return Helpers.getDefined(this._forceExpireTurnIndex, ClientErrorCode.BwFogMap_GetForceExpireTurnIndex_00);
         }
 
         public setForceExpirePlayerIndex(index: number | null): void {
             this._forceExpirePlayerIndex = index;
         }
         public getForceExpirePlayerIndex(): number | null {
-            return Twns.Helpers.getDefined(this._forceExpirePlayerIndex, ClientErrorCode.BwFogMap_GetForceExpirePlayerIndex_00);
+            return Helpers.getDefined(this._forceExpirePlayerIndex, ClientErrorCode.BwFogMap_GetForceExpirePlayerIndex_00);
         }
 
         public updateOnPlayerTurnSwitched(): void {
@@ -231,7 +230,7 @@ namespace Twns.BaseWar {
             if ((expireTurnIndex < currentTurnIndex)                                                                ||
                 (expireTurnIndex === currentTurnIndex) && (expirePlayerIndex <= turnManager.getPlayerIndexInTurn())
             ) {
-                this.setForceFogCode(Twns.Types.ForceFogCode.None);
+                this.setForceFogCode(Types.ForceFogCode.None);
                 this.setForceExpireTurnIndex(null);
                 this.setForceExpirePlayerIndex(null);
             }
@@ -241,11 +240,11 @@ namespace Twns.BaseWar {
             this.resetMapFromPathsForPlayerWithEncodedData(playerIndex);
         }
 
-        public resetMapFromPathsForPlayer(playerIndex: number, visibilityList: Twns.Types.Visibility[] | null): void {
+        public resetMapFromPathsForPlayer(playerIndex: number, visibilityList: Types.Visibility[] | null): void {
             resetMapFromPath(this._getMapFromPath(playerIndex), this.getMapSize(), visibilityList);
         }
         public resetMapFromPathsForPlayerWithEncodedData(playerIndex: number, encodedData?: string): void {
-            const map = Twns.Helpers.getExisted(this._getAllMapsFromPath().get(playerIndex));
+            const map = Helpers.getExisted(this._getAllMapsFromPath().get(playerIndex));
             if (encodedData == null) {
                 fillMap(map, 0);
             } else {
@@ -264,10 +263,10 @@ namespace Twns.BaseWar {
             for (const pathNode of path) {
                 const visionRange = unit.getVisionRangeForPlayer(playerIndex, pathNode);
                 if (visionRange) {
-                    for (const gridIndex of Twns.GridIndexHelpers.getGridsWithinDistance({ origin: pathNode, minDistance: 0, maxDistance: 1, mapSize })) {
+                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: pathNode, minDistance: 0, maxDistance: 1, mapSize })) {
                         mapFromPath[gridIndex.x][gridIndex.y] = Visibility.TrueVision;
                     }
-                    for (const gridIndex of Twns.GridIndexHelpers.getGridsWithinDistance({ origin: pathNode, minDistance: 2, maxDistance: visionRange, mapSize })) {
+                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: pathNode, minDistance: 2, maxDistance: visionRange, mapSize })) {
                         if (unit.checkIsTrueVision(gridIndex)) {
                             mapFromPath[gridIndex.x][gridIndex.y] = Visibility.TrueVision;
                         } else {
@@ -279,7 +278,7 @@ namespace Twns.BaseWar {
                 }
             }
         }
-        public updateMapFromPathsByVisibilityArray(playerIndex: number, visibilityArray: Twns.Types.Undefinable<number[]>): void {
+        public updateMapFromPathsByVisibilityArray(playerIndex: number, visibilityArray: Types.Undefinable<number[]>): void {
             if (visibilityArray == null) {
                 return;
             }
@@ -287,13 +286,13 @@ namespace Twns.BaseWar {
             const map       = this._getMapFromPath(playerIndex);
             const mapSize   = this.getMapSize();
             for (const value of visibilityArray) {
-                const gridIndex                 = Twns.GridIndexHelpers.getGridIndexByGridId(Math.floor(value / 10), mapSize);
+                const gridIndex                 = GridIndexHelpers.getGridIndexByGridId(Math.floor(value / 10), mapSize);
                 map[gridIndex.x][gridIndex.y]   = value % 10;
             }
         }
         public updateMapFromPathsByFlare(playerIndex: number, flareGridIndex: GridIndex, flareRadius: number): void {
             const map = this._getMapFromPath(playerIndex);
-            for (const gridIndex of Twns.GridIndexHelpers.getGridsWithinDistance({ origin: flareGridIndex, minDistance: 0, maxDistance: flareRadius, mapSize: this.getMapSize() })) {
+            for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: flareGridIndex, minDistance: 0, maxDistance: flareRadius, mapSize: this.getMapSize() })) {
                 map[gridIndex.x][gridIndex.y] = 2;
             }
         }
@@ -310,7 +309,7 @@ namespace Twns.BaseWar {
         }
         public getVisibilityMapFromPathsForTeams(teamIndexes: Set<number>): Visibility[][] {
             const { width, height } = this.getMapSize();
-            const resultMap         = Twns.Helpers.createEmptyMap<Visibility>(width, height, Visibility.OutsideVision);
+            const resultMap         = Helpers.createEmptyMap<Visibility>(width, height, Visibility.OutsideVision);
             if (!this.checkHasFogCurrently()) {
                 resultMap.forEach(column => column.fill(Visibility.TrueVision));
             } else {
@@ -321,7 +320,7 @@ namespace Twns.BaseWar {
                         for (const playerIndex of playerIndexes) {
                             resultMap[x][y] = Math.max(
                                 resultMap[x][y],
-                                Twns.Helpers.getExisted(mapFromPaths.get(playerIndex))[x][y] || Visibility.OutsideVision
+                                Helpers.getExisted(mapFromPaths.get(playerIndex))[x][y] || Visibility.OutsideVision
                             );
                         }
                     }
@@ -346,7 +345,7 @@ namespace Twns.BaseWar {
                         for (let y = 0; y < height; ++y) {
                             const tileGridIndex = { x, y };
                             const visionRange   = tileMap.getTile(tileGridIndex).getVisionRangeForPlayer(playerIndex);
-                            if ((visionRange != null) && (Twns.GridIndexHelpers.getDistance(gridIndex, tileGridIndex) <= visionRange)) {
+                            if ((visionRange != null) && (GridIndexHelpers.getDistance(gridIndex, tileGridIndex) <= visionRange)) {
                                 return Visibility.InsideVision;
                             }
                         }
@@ -361,7 +360,7 @@ namespace Twns.BaseWar {
         public getVisibilityMapFromTilesForTeams(teamIndexes: Set<number>): Visibility[][] {
             const mapSize           = this.getMapSize();
             const { width, height } = mapSize;
-            const resultMap         = Twns.Helpers.createEmptyMap<Visibility>(width, height, Visibility.OutsideVision);
+            const resultMap         = Helpers.createEmptyMap<Visibility>(width, height, Visibility.OutsideVision);
             if (!this.checkHasFogCurrently()) {
                 resultMap.forEach(column => column.fill(Visibility.TrueVision));
             } else {
@@ -376,7 +375,7 @@ namespace Twns.BaseWar {
 
                         const visionRange = tile.getVisionRangeForTeamIndexes(teamIndexes);
                         if (visionRange != null) {
-                            for (const g of Twns.GridIndexHelpers.getGridsWithinDistance({ origin: tileGridIndex, minDistance: 0, maxDistance: visionRange, mapSize })) {
+                            for (const g of GridIndexHelpers.getGridsWithinDistance({ origin: tileGridIndex, minDistance: 0, maxDistance: visionRange, mapSize })) {
                                 if (resultMap[g.x][g.y] === Visibility.OutsideVision) {
                                     resultMap[g.x][g.y] = Visibility.InsideVision;
                                 }
@@ -405,7 +404,7 @@ namespace Twns.BaseWar {
                         if (unit) {
                             const visionRange = unit.getVisionRangeForPlayer(playerIndex, unitGridIndex);
                             if (visionRange != null) {
-                                const distance = Twns.GridIndexHelpers.getDistance(gridIndex, unitGridIndex);
+                                const distance = GridIndexHelpers.getDistance(gridIndex, unitGridIndex);
                                 if (distance <= 1) {
                                     return Visibility.TrueVision;
                                 }
@@ -428,7 +427,7 @@ namespace Twns.BaseWar {
         public getVisibilityMapFromUnitsForTeams(teamIndexes: Set<number>): Visibility[][] {
             const mapSize           = this.getMapSize();
             const { width, height } = mapSize;
-            const resultMap         = Twns.Helpers.createEmptyMap<Visibility>(width, height, Visibility.OutsideVision);
+            const resultMap         = Helpers.createEmptyMap<Visibility>(width, height, Visibility.OutsideVision);
             if (!this.checkHasFogCurrently()) {
                 resultMap.forEach(column => column.fill(Visibility.TrueVision));
             } else {
@@ -440,12 +439,12 @@ namespace Twns.BaseWar {
                         if (unit) {
                             const visionRange = unit.getVisionRangeForTeamIndexes(teamIndexes, unitGridIndex);
                             if (visionRange != null) {
-                                for (const g of Twns.GridIndexHelpers.getGridsWithinDistance({ origin: unitGridIndex, minDistance: 0, maxDistance: 1, mapSize })) {
+                                for (const g of GridIndexHelpers.getGridsWithinDistance({ origin: unitGridIndex, minDistance: 0, maxDistance: 1, mapSize })) {
                                     resultMap[g.x][g.y] = Visibility.TrueVision;
                                 }
 
                                 const isTrueVision = unit.checkIsTrueVision(unitGridIndex);
-                                for (const g of Twns.GridIndexHelpers.getGridsWithinDistance({ origin: unitGridIndex, minDistance: 2, maxDistance: visionRange, mapSize })) {
+                                for (const g of GridIndexHelpers.getGridsWithinDistance({ origin: unitGridIndex, minDistance: 2, maxDistance: visionRange, mapSize })) {
                                     if (isTrueVision) {
                                         resultMap[g.x][g.y] = Visibility.TrueVision;
                                     } else {
@@ -469,7 +468,7 @@ namespace Twns.BaseWar {
     function createEmptyMaps<T extends (number | Visibility)>(mapSize: MapSize, maxPlayerIndex: number): Map<number, T[][]> {
         const map = new Map<number, T[][]>();
         for (let i = 0; i <= maxPlayerIndex; ++i) {
-            map.set(i, Twns.Helpers.createEmptyMap<T>(mapSize.width, mapSize.height, 0 as T));
+            map.set(i, Helpers.createEmptyMap<T>(mapSize.width, mapSize.height, 0 as T));
         }
         return map;
     }
@@ -483,13 +482,13 @@ namespace Twns.BaseWar {
     function resetMapFromPath(mapFromPath: Visibility[][], mapSize: MapSize, visibilityList: Visibility[] | null): void {
         const { width, height } = mapSize;
         if (mapFromPath.length !== width) {
-            throw Twns.Helpers.newError(`Invalid width: ${width}`, ClientErrorCode.BwFogMap_ResetMapFromPath_00);
+            throw Helpers.newError(`Invalid width: ${width}`, ClientErrorCode.BwFogMap_ResetMapFromPath_00);
         }
 
         for (let x = 0; x < width; ++x) {
             const column = mapFromPath[x];
             if ((column == null) || (column.length !== height)) {
-                throw Twns.Helpers.newError(`Invalid height: ${height}`, ClientErrorCode.BwFogMap_ResetMapFromPath_01);
+                throw Helpers.newError(`Invalid height: ${height}`, ClientErrorCode.BwFogMap_ResetMapFromPath_01);
             }
         }
 
@@ -499,7 +498,7 @@ namespace Twns.BaseWar {
         }
 
         if (visibilityList.length !== width * height) {
-            throw Twns.Helpers.newError(`Invalid visibilityList.length: ${visibilityList.length}`, ClientErrorCode.BwFogMap_ResetMapFromPath_02);
+            throw Helpers.newError(`Invalid visibilityList.length: ${visibilityList.length}`, ClientErrorCode.BwFogMap_ResetMapFromPath_02);
         }
 
         for (let x = 0; x < width; ++x) {
@@ -510,7 +509,7 @@ namespace Twns.BaseWar {
                     (visibility !== Visibility.OutsideVision)   &&
                     (visibility !== Visibility.TrueVision)
                 ) {
-                    throw Twns.Helpers.newError(`Invalid visibility: ${visibility}`, ClientErrorCode.BwFogMap_ResetMapFromPath_03);
+                    throw Helpers.newError(`Invalid visibility: ${visibility}`, ClientErrorCode.BwFogMap_ResetMapFromPath_03);
                 }
 
                 column[y] = visibility;

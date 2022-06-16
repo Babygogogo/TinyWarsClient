@@ -120,6 +120,9 @@ namespace Twns.Config {
         public checkIsLoadedUnitVisibleInFog(): boolean {
             return this.getSystemCfg().isLoadedUnitVisibleInFog > 0;
         }
+        public checkCanDroppedUnitGetVisionOnStart(): boolean {
+            return this.getSystemCfg().canDroppedUnitGetVisionOnStart > 0;
+        }
 
         public getTileTemplateCfg(tileType: number): TileTemplateCfg | null {
             return this._tileTemplateCfgDict.get(tileType) ?? null;
