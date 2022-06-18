@@ -218,12 +218,7 @@ namespace Twns.PanelHelpers {
         WeActionModifyPanel7                : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel7>;
         WeActionModifyPanel10               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel10>;
         WeActionModifyPanel11               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel11>;
-        WeActionModifyPanel20               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel20>;
-        WeActionModifyPanel21               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel21>;
-        WeActionModifyPanel22               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel22>;
-        WeActionModifyPanel23               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel23>;
         WeActionModifyPanel24               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel24>;
-        WeActionModifyPanel25               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel25>;
         WeActionModifyPanel30               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel30>;
         WeActionModifyPanel40               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel40>;
         WeActionModifyPanel41               : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel41>;
@@ -1467,41 +1462,12 @@ namespace Twns.PanelHelpers {
                 layer       : LayerType.Hud0,
             },
 
-            WeActionModifyPanel20: {
-                cls         : WarEvent?.WeActionModifyPanel20,
-                skinName    : `resource/skins/warEvent/WeActionModifyPanel20.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            WeActionModifyPanel21: {
-                cls         : WarEvent?.WeActionModifyPanel21,
-                skinName    : `resource/skins/warEvent/WeActionModifyPanel21.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            WeActionModifyPanel22: {
-                cls         : WarEvent?.WeActionModifyPanel22,
-                skinName    : `resource/skins/warEvent/WeActionModifyPanel22.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            WeActionModifyPanel23: {
-                cls         : WarEvent?.WeActionModifyPanel23,
-                skinName    : `resource/skins/warEvent/WeActionModifyPanel23.exml`,
-                layer       : LayerType.Hud0,
-            },
-
             WeActionModifyPanel24: {
                 cls         : WarEvent?.WeActionModifyPanel24,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel24.exml`,
                 layer       : LayerType.Hud0,
             },
 
-            WeActionModifyPanel25: {
-                cls         : WarEvent?.WeActionModifyPanel25,
-                skinName    : `resource/skins/warEvent/WeActionModifyPanel25.exml`,
-                layer       : LayerType.Hud0,
-            },
 
             WeActionModifyPanel30: {
                 cls         : WarEvent?.WeActionModifyPanel30,

@@ -9698,402 +9698,6 @@ declare namespace CommonProto {
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a WeaDeprecatedSetPlayerAliveState. */
-        interface IWeaDeprecatedSetPlayerAliveState {
-
-            /** WeaDeprecatedSetPlayerAliveState playerIndex */
-            playerIndex?: (number|null);
-
-            /** WeaDeprecatedSetPlayerAliveState playerAliveState */
-            playerAliveState?: (number|null);
-        }
-
-        /** Represents a WeaDeprecatedSetPlayerAliveState. */
-        class WeaDeprecatedSetPlayerAliveState implements IWeaDeprecatedSetPlayerAliveState {
-
-            /**
-             * Constructs a new WeaDeprecatedSetPlayerAliveState.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: CommonProto.WarEvent.IWeaDeprecatedSetPlayerAliveState);
-
-            /** WeaDeprecatedSetPlayerAliveState playerIndex. */
-            public playerIndex: number;
-
-            /** WeaDeprecatedSetPlayerAliveState playerAliveState. */
-            public playerAliveState: number;
-
-            /**
-             * Creates a new WeaDeprecatedSetPlayerAliveState instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns WeaDeprecatedSetPlayerAliveState instance
-             */
-            public static create(properties?: CommonProto.WarEvent.IWeaDeprecatedSetPlayerAliveState): CommonProto.WarEvent.WeaDeprecatedSetPlayerAliveState;
-
-            /**
-             * Encodes the specified WeaDeprecatedSetPlayerAliveState message. Does not implicitly {@link CommonProto.WarEvent.WeaDeprecatedSetPlayerAliveState.verify|verify} messages.
-             * @param message WeaDeprecatedSetPlayerAliveState message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: CommonProto.WarEvent.IWeaDeprecatedSetPlayerAliveState, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified WeaDeprecatedSetPlayerAliveState message, length delimited. Does not implicitly {@link CommonProto.WarEvent.WeaDeprecatedSetPlayerAliveState.verify|verify} messages.
-             * @param message WeaDeprecatedSetPlayerAliveState message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: CommonProto.WarEvent.IWeaDeprecatedSetPlayerAliveState, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a WeaDeprecatedSetPlayerAliveState message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns WeaDeprecatedSetPlayerAliveState
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarEvent.WeaDeprecatedSetPlayerAliveState;
-
-            /**
-             * Decodes a WeaDeprecatedSetPlayerAliveState message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns WeaDeprecatedSetPlayerAliveState
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarEvent.WeaDeprecatedSetPlayerAliveState;
-
-            /**
-             * Verifies a WeaDeprecatedSetPlayerAliveState message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a WeaDeprecatedSetPlayerAliveState message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns WeaDeprecatedSetPlayerAliveState
-             */
-            public static fromObject(object: { [k: string]: any }): CommonProto.WarEvent.WeaDeprecatedSetPlayerAliveState;
-
-            /**
-             * Creates a plain object from a WeaDeprecatedSetPlayerAliveState message. Also converts values to other types if specified.
-             * @param message WeaDeprecatedSetPlayerAliveState
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: CommonProto.WarEvent.WeaDeprecatedSetPlayerAliveState, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this WeaDeprecatedSetPlayerAliveState to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a WeaDeprecatedSetPlayerFund. */
-        interface IWeaDeprecatedSetPlayerFund {
-
-            /** WeaDeprecatedSetPlayerFund playerIndex */
-            playerIndex?: (number|null);
-
-            /** WeaDeprecatedSetPlayerFund multiplierPercentage */
-            multiplierPercentage?: (number|null);
-
-            /** WeaDeprecatedSetPlayerFund deltaValue */
-            deltaValue?: (number|null);
-        }
-
-        /** Represents a WeaDeprecatedSetPlayerFund. */
-        class WeaDeprecatedSetPlayerFund implements IWeaDeprecatedSetPlayerFund {
-
-            /**
-             * Constructs a new WeaDeprecatedSetPlayerFund.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: CommonProto.WarEvent.IWeaDeprecatedSetPlayerFund);
-
-            /** WeaDeprecatedSetPlayerFund playerIndex. */
-            public playerIndex: number;
-
-            /** WeaDeprecatedSetPlayerFund multiplierPercentage. */
-            public multiplierPercentage: number;
-
-            /** WeaDeprecatedSetPlayerFund deltaValue. */
-            public deltaValue: number;
-
-            /**
-             * Creates a new WeaDeprecatedSetPlayerFund instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns WeaDeprecatedSetPlayerFund instance
-             */
-            public static create(properties?: CommonProto.WarEvent.IWeaDeprecatedSetPlayerFund): CommonProto.WarEvent.WeaDeprecatedSetPlayerFund;
-
-            /**
-             * Encodes the specified WeaDeprecatedSetPlayerFund message. Does not implicitly {@link CommonProto.WarEvent.WeaDeprecatedSetPlayerFund.verify|verify} messages.
-             * @param message WeaDeprecatedSetPlayerFund message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: CommonProto.WarEvent.IWeaDeprecatedSetPlayerFund, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified WeaDeprecatedSetPlayerFund message, length delimited. Does not implicitly {@link CommonProto.WarEvent.WeaDeprecatedSetPlayerFund.verify|verify} messages.
-             * @param message WeaDeprecatedSetPlayerFund message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: CommonProto.WarEvent.IWeaDeprecatedSetPlayerFund, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a WeaDeprecatedSetPlayerFund message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns WeaDeprecatedSetPlayerFund
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarEvent.WeaDeprecatedSetPlayerFund;
-
-            /**
-             * Decodes a WeaDeprecatedSetPlayerFund message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns WeaDeprecatedSetPlayerFund
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarEvent.WeaDeprecatedSetPlayerFund;
-
-            /**
-             * Verifies a WeaDeprecatedSetPlayerFund message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a WeaDeprecatedSetPlayerFund message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns WeaDeprecatedSetPlayerFund
-             */
-            public static fromObject(object: { [k: string]: any }): CommonProto.WarEvent.WeaDeprecatedSetPlayerFund;
-
-            /**
-             * Creates a plain object from a WeaDeprecatedSetPlayerFund message. Also converts values to other types if specified.
-             * @param message WeaDeprecatedSetPlayerFund
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: CommonProto.WarEvent.WeaDeprecatedSetPlayerFund, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this WeaDeprecatedSetPlayerFund to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a WeaDeprecatedSetPlayerCoEnergy. */
-        interface IWeaDeprecatedSetPlayerCoEnergy {
-
-            /** WeaDeprecatedSetPlayerCoEnergy playerIndex */
-            playerIndex?: (number|null);
-
-            /** WeaDeprecatedSetPlayerCoEnergy multiplierPercentage */
-            multiplierPercentage?: (number|null);
-
-            /** WeaDeprecatedSetPlayerCoEnergy deltaPercentage */
-            deltaPercentage?: (number|null);
-        }
-
-        /** Represents a WeaDeprecatedSetPlayerCoEnergy. */
-        class WeaDeprecatedSetPlayerCoEnergy implements IWeaDeprecatedSetPlayerCoEnergy {
-
-            /**
-             * Constructs a new WeaDeprecatedSetPlayerCoEnergy.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: CommonProto.WarEvent.IWeaDeprecatedSetPlayerCoEnergy);
-
-            /** WeaDeprecatedSetPlayerCoEnergy playerIndex. */
-            public playerIndex: number;
-
-            /** WeaDeprecatedSetPlayerCoEnergy multiplierPercentage. */
-            public multiplierPercentage: number;
-
-            /** WeaDeprecatedSetPlayerCoEnergy deltaPercentage. */
-            public deltaPercentage: number;
-
-            /**
-             * Creates a new WeaDeprecatedSetPlayerCoEnergy instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns WeaDeprecatedSetPlayerCoEnergy instance
-             */
-            public static create(properties?: CommonProto.WarEvent.IWeaDeprecatedSetPlayerCoEnergy): CommonProto.WarEvent.WeaDeprecatedSetPlayerCoEnergy;
-
-            /**
-             * Encodes the specified WeaDeprecatedSetPlayerCoEnergy message. Does not implicitly {@link CommonProto.WarEvent.WeaDeprecatedSetPlayerCoEnergy.verify|verify} messages.
-             * @param message WeaDeprecatedSetPlayerCoEnergy message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: CommonProto.WarEvent.IWeaDeprecatedSetPlayerCoEnergy, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified WeaDeprecatedSetPlayerCoEnergy message, length delimited. Does not implicitly {@link CommonProto.WarEvent.WeaDeprecatedSetPlayerCoEnergy.verify|verify} messages.
-             * @param message WeaDeprecatedSetPlayerCoEnergy message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: CommonProto.WarEvent.IWeaDeprecatedSetPlayerCoEnergy, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a WeaDeprecatedSetPlayerCoEnergy message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns WeaDeprecatedSetPlayerCoEnergy
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarEvent.WeaDeprecatedSetPlayerCoEnergy;
-
-            /**
-             * Decodes a WeaDeprecatedSetPlayerCoEnergy message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns WeaDeprecatedSetPlayerCoEnergy
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarEvent.WeaDeprecatedSetPlayerCoEnergy;
-
-            /**
-             * Verifies a WeaDeprecatedSetPlayerCoEnergy message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a WeaDeprecatedSetPlayerCoEnergy message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns WeaDeprecatedSetPlayerCoEnergy
-             */
-            public static fromObject(object: { [k: string]: any }): CommonProto.WarEvent.WeaDeprecatedSetPlayerCoEnergy;
-
-            /**
-             * Creates a plain object from a WeaDeprecatedSetPlayerCoEnergy message. Also converts values to other types if specified.
-             * @param message WeaDeprecatedSetPlayerCoEnergy
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: CommonProto.WarEvent.WeaDeprecatedSetPlayerCoEnergy, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this WeaDeprecatedSetPlayerCoEnergy to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a WeaSetPlayerAliveState. */
-        interface IWeaSetPlayerAliveState {
-
-            /** WeaSetPlayerAliveState playerIndexArray */
-            playerIndexArray?: (number[]|null);
-
-            /** WeaSetPlayerAliveState playerAliveState */
-            playerAliveState?: (number|null);
-        }
-
-        /** Represents a WeaSetPlayerAliveState. */
-        class WeaSetPlayerAliveState implements IWeaSetPlayerAliveState {
-
-            /**
-             * Constructs a new WeaSetPlayerAliveState.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: CommonProto.WarEvent.IWeaSetPlayerAliveState);
-
-            /** WeaSetPlayerAliveState playerIndexArray. */
-            public playerIndexArray: number[];
-
-            /** WeaSetPlayerAliveState playerAliveState. */
-            public playerAliveState: number;
-
-            /**
-             * Creates a new WeaSetPlayerAliveState instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns WeaSetPlayerAliveState instance
-             */
-            public static create(properties?: CommonProto.WarEvent.IWeaSetPlayerAliveState): CommonProto.WarEvent.WeaSetPlayerAliveState;
-
-            /**
-             * Encodes the specified WeaSetPlayerAliveState message. Does not implicitly {@link CommonProto.WarEvent.WeaSetPlayerAliveState.verify|verify} messages.
-             * @param message WeaSetPlayerAliveState message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: CommonProto.WarEvent.IWeaSetPlayerAliveState, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified WeaSetPlayerAliveState message, length delimited. Does not implicitly {@link CommonProto.WarEvent.WeaSetPlayerAliveState.verify|verify} messages.
-             * @param message WeaSetPlayerAliveState message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: CommonProto.WarEvent.IWeaSetPlayerAliveState, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a WeaSetPlayerAliveState message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns WeaSetPlayerAliveState
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarEvent.WeaSetPlayerAliveState;
-
-            /**
-             * Decodes a WeaSetPlayerAliveState message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns WeaSetPlayerAliveState
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarEvent.WeaSetPlayerAliveState;
-
-            /**
-             * Verifies a WeaSetPlayerAliveState message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a WeaSetPlayerAliveState message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns WeaSetPlayerAliveState
-             */
-            public static fromObject(object: { [k: string]: any }): CommonProto.WarEvent.WeaSetPlayerAliveState;
-
-            /**
-             * Creates a plain object from a WeaSetPlayerAliveState message. Also converts values to other types if specified.
-             * @param message WeaSetPlayerAliveState
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: CommonProto.WarEvent.WeaSetPlayerAliveState, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this WeaSetPlayerAliveState to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
         /** Properties of a WeaSetPlayerState. */
         interface IWeaSetPlayerState {
 
@@ -10245,108 +9849,6 @@ declare namespace CommonProto {
 
             /**
              * Converts this WeaSetPlayerState to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a WeaSetPlayerCoEnergy. */
-        interface IWeaSetPlayerCoEnergy {
-
-            /** WeaSetPlayerCoEnergy playerIndexArray */
-            playerIndexArray?: (number[]|null);
-
-            /** WeaSetPlayerCoEnergy actCoEnergyMultiplierPct */
-            actCoEnergyMultiplierPct?: (number|null);
-
-            /** WeaSetPlayerCoEnergy actCoEnergyDeltaPct */
-            actCoEnergyDeltaPct?: (number|null);
-        }
-
-        /** Represents a WeaSetPlayerCoEnergy. */
-        class WeaSetPlayerCoEnergy implements IWeaSetPlayerCoEnergy {
-
-            /**
-             * Constructs a new WeaSetPlayerCoEnergy.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: CommonProto.WarEvent.IWeaSetPlayerCoEnergy);
-
-            /** WeaSetPlayerCoEnergy playerIndexArray. */
-            public playerIndexArray: number[];
-
-            /** WeaSetPlayerCoEnergy actCoEnergyMultiplierPct. */
-            public actCoEnergyMultiplierPct: number;
-
-            /** WeaSetPlayerCoEnergy actCoEnergyDeltaPct. */
-            public actCoEnergyDeltaPct: number;
-
-            /**
-             * Creates a new WeaSetPlayerCoEnergy instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns WeaSetPlayerCoEnergy instance
-             */
-            public static create(properties?: CommonProto.WarEvent.IWeaSetPlayerCoEnergy): CommonProto.WarEvent.WeaSetPlayerCoEnergy;
-
-            /**
-             * Encodes the specified WeaSetPlayerCoEnergy message. Does not implicitly {@link CommonProto.WarEvent.WeaSetPlayerCoEnergy.verify|verify} messages.
-             * @param message WeaSetPlayerCoEnergy message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: CommonProto.WarEvent.IWeaSetPlayerCoEnergy, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified WeaSetPlayerCoEnergy message, length delimited. Does not implicitly {@link CommonProto.WarEvent.WeaSetPlayerCoEnergy.verify|verify} messages.
-             * @param message WeaSetPlayerCoEnergy message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: CommonProto.WarEvent.IWeaSetPlayerCoEnergy, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a WeaSetPlayerCoEnergy message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns WeaSetPlayerCoEnergy
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarEvent.WeaSetPlayerCoEnergy;
-
-            /**
-             * Decodes a WeaSetPlayerCoEnergy message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns WeaSetPlayerCoEnergy
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarEvent.WeaSetPlayerCoEnergy;
-
-            /**
-             * Verifies a WeaSetPlayerCoEnergy message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a WeaSetPlayerCoEnergy message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns WeaSetPlayerCoEnergy
-             */
-            public static fromObject(object: { [k: string]: any }): CommonProto.WarEvent.WeaSetPlayerCoEnergy;
-
-            /**
-             * Creates a plain object from a WeaSetPlayerCoEnergy message. Also converts values to other types if specified.
-             * @param message WeaSetPlayerCoEnergy
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: CommonProto.WarEvent.WeaSetPlayerCoEnergy, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this WeaSetPlayerCoEnergy to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -11081,9 +10583,6 @@ declare namespace CommonProto {
             /** WarEventAction WeaAddUnit */
             WeaAddUnit?: (CommonProto.WarEvent.IWeaAddUnit|null);
 
-            /** WarEventAction WeaDeprecatedSetPlayerAliveState */
-            WeaDeprecatedSetPlayerAliveState?: (CommonProto.WarEvent.IWeaDeprecatedSetPlayerAliveState|null);
-
             /** WarEventAction WeaDialogue */
             WeaDialogue?: (CommonProto.WarEvent.IWeaDialogue|null);
 
@@ -11099,12 +10598,6 @@ declare namespace CommonProto {
             /** WarEventAction WeaSimpleDialogue */
             WeaSimpleDialogue?: (CommonProto.WarEvent.IWeaSimpleDialogue|null);
 
-            /** WarEventAction WeaDeprecatedSetPlayerFund */
-            WeaDeprecatedSetPlayerFund?: (CommonProto.WarEvent.IWeaDeprecatedSetPlayerFund|null);
-
-            /** WarEventAction WeaDeprecatedSetPlayerCoEnergy */
-            WeaDeprecatedSetPlayerCoEnergy?: (CommonProto.WarEvent.IWeaDeprecatedSetPlayerCoEnergy|null);
-
             /** WarEventAction WeaSetForceFogCode */
             WeaSetForceFogCode?: (CommonProto.WarEvent.IWeaSetForceFogCode|null);
 
@@ -11114,14 +10607,8 @@ declare namespace CommonProto {
             /** WarEventAction WeaStopPersistentAction */
             WeaStopPersistentAction?: (CommonProto.WarEvent.IWeaStopPersistentAction|null);
 
-            /** WarEventAction WeaSetPlayerAliveState */
-            WeaSetPlayerAliveState?: (CommonProto.WarEvent.IWeaSetPlayerAliveState|null);
-
             /** WarEventAction WeaSetPlayerState */
             WeaSetPlayerState?: (CommonProto.WarEvent.IWeaSetPlayerState|null);
-
-            /** WarEventAction WeaSetPlayerCoEnergy */
-            WeaSetPlayerCoEnergy?: (CommonProto.WarEvent.IWeaSetPlayerCoEnergy|null);
 
             /** WarEventAction WeaSetUnitState */
             WeaSetUnitState?: (CommonProto.WarEvent.IWeaSetUnitState|null);
@@ -11154,9 +10641,6 @@ declare namespace CommonProto {
             /** WarEventAction WeaAddUnit. */
             public WeaAddUnit?: (CommonProto.WarEvent.IWeaAddUnit|null);
 
-            /** WarEventAction WeaDeprecatedSetPlayerAliveState. */
-            public WeaDeprecatedSetPlayerAliveState?: (CommonProto.WarEvent.IWeaDeprecatedSetPlayerAliveState|null);
-
             /** WarEventAction WeaDialogue. */
             public WeaDialogue?: (CommonProto.WarEvent.IWeaDialogue|null);
 
@@ -11172,12 +10656,6 @@ declare namespace CommonProto {
             /** WarEventAction WeaSimpleDialogue. */
             public WeaSimpleDialogue?: (CommonProto.WarEvent.IWeaSimpleDialogue|null);
 
-            /** WarEventAction WeaDeprecatedSetPlayerFund. */
-            public WeaDeprecatedSetPlayerFund?: (CommonProto.WarEvent.IWeaDeprecatedSetPlayerFund|null);
-
-            /** WarEventAction WeaDeprecatedSetPlayerCoEnergy. */
-            public WeaDeprecatedSetPlayerCoEnergy?: (CommonProto.WarEvent.IWeaDeprecatedSetPlayerCoEnergy|null);
-
             /** WarEventAction WeaSetForceFogCode. */
             public WeaSetForceFogCode?: (CommonProto.WarEvent.IWeaSetForceFogCode|null);
 
@@ -11187,14 +10665,8 @@ declare namespace CommonProto {
             /** WarEventAction WeaStopPersistentAction. */
             public WeaStopPersistentAction?: (CommonProto.WarEvent.IWeaStopPersistentAction|null);
 
-            /** WarEventAction WeaSetPlayerAliveState. */
-            public WeaSetPlayerAliveState?: (CommonProto.WarEvent.IWeaSetPlayerAliveState|null);
-
             /** WarEventAction WeaSetPlayerState. */
             public WeaSetPlayerState?: (CommonProto.WarEvent.IWeaSetPlayerState|null);
-
-            /** WarEventAction WeaSetPlayerCoEnergy. */
-            public WeaSetPlayerCoEnergy?: (CommonProto.WarEvent.IWeaSetPlayerCoEnergy|null);
 
             /** WarEventAction WeaSetUnitState. */
             public WeaSetUnitState?: (CommonProto.WarEvent.IWeaSetUnitState|null);
@@ -28326,9 +27798,6 @@ declare namespace CommonProto {
 
                 /** UserSpmOverallRankInfo rankScore */
                 rankScore?: (number|null);
-
-                /** UserSpmOverallRankInfo deprecatedCurrentRankIndex */
-                deprecatedCurrentRankIndex?: (number|null);
             }
 
             /** Represents a UserSpmOverallRankInfo. */
@@ -28342,9 +27811,6 @@ declare namespace CommonProto {
 
                 /** UserSpmOverallRankInfo rankScore. */
                 public rankScore: number;
-
-                /** UserSpmOverallRankInfo deprecatedCurrentRankIndex. */
-                public deprecatedCurrentRankIndex: number;
 
                 /**
                  * Creates a new UserSpmOverallRankInfo instance using the specified properties.
@@ -28859,9 +28325,6 @@ declare namespace CommonProto {
             /** UserSettings isShowGridBorder */
             isShowGridBorder?: (boolean|null);
 
-            /** UserSettings deprecatedUnitOpacity */
-            deprecatedUnitOpacity?: (number|null);
-
             /** UserSettings isAutoScrollMap */
             isAutoScrollMap?: (boolean|null);
 
@@ -28886,9 +28349,6 @@ declare namespace CommonProto {
 
             /** UserSettings isShowGridBorder. */
             public isShowGridBorder: boolean;
-
-            /** UserSettings deprecatedUnitOpacity. */
-            public deprecatedUnitOpacity: number;
 
             /** UserSettings isAutoScrollMap. */
             public isAutoScrollMap: boolean;

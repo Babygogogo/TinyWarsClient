@@ -282,13 +282,8 @@ namespace Twns.BaseWar {
             else if (action.WeaPlayBgm)                         { await this._callActionPlayBgmWithExtraData(action.WeaPlayBgm, isFastExecute); }
             else if (action.WeaSetForceFogCode)                 { await this._callActionSetForceFogCodeWithExtraData(action.WeaSetForceFogCode, isFastExecute); }
             else if (action.WeaSetCustomCounter)                { await this._callActionSetCustomCounterWithExtraData(action.WeaSetCustomCounter, isFastExecute); }
-            else if (action.WeaDeprecatedSetPlayerAliveState)   { await this._callActionDeprecatedSetPlayerAliveStateWithExtraData(action.WeaDeprecatedSetPlayerAliveState, isFastExecute); }
-            else if (action.WeaDeprecatedSetPlayerFund)         { await this._callActionDeprecatedSetPlayerFundWithExtraData(action.WeaDeprecatedSetPlayerFund, isFastExecute); }
-            else if (action.WeaDeprecatedSetPlayerCoEnergy)     { await this._callActionDeprecatedSetPlayerCoEnergyWithExtraData(action.WeaDeprecatedSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaStopPersistentAction)            { await this._callActionStopPersistentActionWithExtraData(action.WeaStopPersistentAction, isFastExecute); }
-            else if (action.WeaSetPlayerAliveState)             { await this._callActionSetPlayerAliveStateWithExtraData(action.WeaSetPlayerAliveState, isFastExecute); }
             else if (action.WeaSetPlayerState)                  { await this._callActionSetPlayerStateWithExtraData(action.WeaSetPlayerState, isFastExecute); }
-            else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithExtraData(action.WeaSetUnitState, isFastExecute); }
             else if (action.WeaSetTileType)                     { await this._callActionSetTileTypeWithExtraData(action.WeaSetTileType, isFastExecute); }
             else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithExtraData(action.WeaSetTileState, isFastExecute); }
@@ -310,13 +305,8 @@ namespace Twns.BaseWar {
             else if (action.WeaPlayBgm)                         { await this._callActionPlayBgmWithoutExtraData(action.WeaPlayBgm, isFastExecute); }
             else if (action.WeaSetForceFogCode)                 { await this._callActionSetForceFogCodeWithoutExtraData(action.WeaSetForceFogCode, isFastExecute); }
             else if (action.WeaSetCustomCounter)                { await this._callActionSetCustomCounterWithoutExtraData(action.WeaSetCustomCounter, isFastExecute); }
-            else if (action.WeaDeprecatedSetPlayerAliveState)   { await this._callActionDeprecatedSetPlayerAliveStateWithoutExtraData(action.WeaDeprecatedSetPlayerAliveState, isFastExecute); }
-            else if (action.WeaDeprecatedSetPlayerFund)         { await this._callActionDeprecatedSetPlayerFundWithoutExtraData(action.WeaDeprecatedSetPlayerFund, isFastExecute); }
-            else if (action.WeaDeprecatedSetPlayerCoEnergy)     { await this._callActionDeprecatedSetPlayerCoEnergyWithoutExtraData(action.WeaDeprecatedSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaStopPersistentAction)            { await this._callActionStopPersistentActionWithoutExtraData(action.WeaStopPersistentAction, isFastExecute); }
-            else if (action.WeaSetPlayerAliveState)             { await this._callActionSetPlayerAliveStateWithoutExtraData(action.WeaSetPlayerAliveState, isFastExecute); }
             else if (action.WeaSetPlayerState)                  { await this._callActionSetPlayerStateWithoutExtraData(action.WeaSetPlayerState, isFastExecute); }
-            else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithoutExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithoutExtraData(action.WeaSetUnitState, isFastExecute); }
             else if (action.WeaSetTileType)                     { await this._callActionSetTileTypeWithoutExtraData(action.WeaSetTileType, isFastExecute); }
             else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithoutExtraData(action.WeaSetTileState, isFastExecute); }
@@ -619,63 +609,6 @@ namespace Twns.BaseWar {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionDeprecatedSetPlayerAliveStateWithExtraData(action: WarEvent.IWeaDeprecatedSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
-            // nothing to do
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionDeprecatedSetPlayerAliveStateWithoutExtraData(action: WarEvent.IWeaDeprecatedSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
-            const war = this._getWar();
-            const playerIndex = action.playerIndex;
-            if ((playerIndex == null) || (playerIndex === CommonConstants.PlayerIndex.Neutral)) {
-                throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`);
-            }
-
-            const playerAliveState = Helpers.getExisted(action.playerAliveState);
-            if (!Config.ConfigManager.checkIsValidPlayerAliveState(playerAliveState)) {
-                throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`);
-            }
-
-            const player = war.getPlayer(playerIndex);
-            if (player) {
-                player.setAliveState(playerAliveState);
-            }
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionDeprecatedSetPlayerFundWithExtraData(action: WarEvent.IWeaDeprecatedSetPlayerFund, isFastExecute: boolean): Promise<void> {
-            // nothing to do
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionDeprecatedSetPlayerFundWithoutExtraData(action: WarEvent.IWeaDeprecatedSetPlayerFund, isFastExecute: boolean): Promise<void> {
-            const player                = this._getWar().getPlayer(Helpers.getExisted(action.playerIndex));
-            const multiplierPercentage  = action.multiplierPercentage ?? 100;
-            const deltaValue            = action.deltaValue ?? 0;
-            const maxValue              = CommonConstants.WarPlayerMaxFund;
-            player.setFund(Math.min(
-                maxValue,
-                Math.max(-maxValue, Math.floor(player.getFund() * multiplierPercentage / 100 + deltaValue)))
-            );
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionDeprecatedSetPlayerCoEnergyWithExtraData(action: WarEvent.IWeaDeprecatedSetPlayerCoEnergy, isFastExecute: boolean): Promise<void> {
-            // nothing to do
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionDeprecatedSetPlayerCoEnergyWithoutExtraData(action: WarEvent.IWeaDeprecatedSetPlayerCoEnergy, isFastExecute: boolean): Promise<void> {
-            const player                = this._getWar().getPlayer(Helpers.getExisted(action.playerIndex));
-            const multiplierPercentage  = action.multiplierPercentage ?? 100;
-            const deltaPercentage       = action.deltaPercentage ?? 0;
-            const maxEnergy             = player.getCoMaxEnergy();
-            if (maxEnergy > 0) {
-                player.setCoCurrentEnergy(Math.max(
-                    0,
-                    Math.min(maxEnergy, Math.floor(player.getCoCurrentEnergy() * multiplierPercentage / 100 + maxEnergy * deltaPercentage / 100))
-                ));
-            }
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private async _callActionStopPersistentActionWithExtraData(action: WarEvent.IWeaStopPersistentAction, isFastExecute: boolean): Promise<void> {
             const actionIdSet = this.getOngoingPersistentActionIdSet();
             for (const actionId of action.actionIdArray ?? []) {
@@ -687,27 +620,6 @@ namespace Twns.BaseWar {
             const actionIdSet = this.getOngoingPersistentActionIdSet();
             for (const actionId of action.actionIdArray ?? []) {
                 actionIdSet.delete(actionId);
-            }
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionSetPlayerAliveStateWithExtraData(action: WarEvent.IWeaSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
-            // nothing to do
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionSetPlayerAliveStateWithoutExtraData(action: WarEvent.IWeaSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
-            const playerAliveState = Helpers.getExisted(action.playerAliveState);
-            if (!Config.ConfigManager.checkIsValidPlayerAliveState(playerAliveState)) {
-                throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`);
-            }
-
-            const playerIndexArray = action.playerIndexArray;
-            for (const [playerIndex, player] of this._getWar().getPlayerManager().getAllPlayersDict()) {
-                if ((playerIndexArray?.length) && (playerIndexArray.indexOf(playerIndex) < 0)) {
-                    continue;
-                }
-
-                player.setAliveState(playerAliveState);
             }
         }
 
@@ -777,30 +689,6 @@ namespace Twns.BaseWar {
 
                 if (actAliveState != null) {
                     player.setAliveState(actAliveState);
-                }
-            }
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionSetPlayerCoEnergyWithExtraData(action: WarEvent.IWeaSetPlayerCoEnergy, isFastExecute: boolean): Promise<void> {
-            // nothing to do
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionSetPlayerCoEnergyWithoutExtraData(action: WarEvent.IWeaSetPlayerCoEnergy, isFastExecute: boolean): Promise<void> {
-            const multiplierPercentage  = action.actCoEnergyMultiplierPct ?? 100;
-            const deltaPercentage       = action.actCoEnergyDeltaPct ?? 0;
-            const playerIndexArray      = action.playerIndexArray;
-            for (const [playerIndex, player] of this._getWar().getPlayerManager().getAllPlayersDict()) {
-                if ((playerIndexArray?.length) && (playerIndexArray.indexOf(playerIndex) < 0)) {
-                    continue;
-                }
-
-                const maxEnergy = player.getCoMaxEnergy();
-                if (maxEnergy > 0) {
-                    player.setCoCurrentEnergy(Math.max(
-                        0,
-                        Math.min(maxEnergy, Math.floor(player.getCoCurrentEnergy() * multiplierPercentage / 100 + maxEnergy * deltaPercentage / 100))
-                    ));
                 }
             }
         }

@@ -786,12 +786,7 @@ namespace Twns.Types {
         SetCustomCounter,
         StopPersistentAction,
 
-        DeprecatedSetPlayerAliveState,
-        DeprecatedSetPlayerFund,
-        DeprecatedSetPlayerCoEnergy,
-        SetPlayerAliveState,
         SetPlayerState,
-        SetPlayerCoEnergy,
 
         SetUnitState,
 
