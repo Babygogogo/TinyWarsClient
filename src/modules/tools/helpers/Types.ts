@@ -741,30 +741,14 @@ namespace Twns.Types {
 
     // eslint-disable-next-line no-shadow
     export enum WarEventConditionType {
-        WecTurnIndexEqualTo,
-        WecTurnIndexGreaterThan,
-        WecTurnIndexLessThan,
-        WecTurnIndexRemainderEqualTo,
         WecTurnAndPlayer,
-
-        WecTurnPhaseEqualTo,
-
-        WecPlayerIndexInTurnEqualTo,
-        WecPlayerIndexInTurnGreaterThan,
-        WecPlayerIndexInTurnLessThan,
 
         WecWeatherAndFog,
 
-        WecEventCalledCountTotalEqualTo,
-        WecEventCalledCountTotalGreaterThan,
-        WecEventCalledCountTotalLessThan,
         WecEventCalledCount,
 
-        WecPlayerAliveStateEqualTo,
         WecPlayerPresence,
 
-        WecTilePlayerIndexEqualTo,
-        WecTileTypeEqualTo,
         WecTilePresence,
 
         WecUnitPresence,

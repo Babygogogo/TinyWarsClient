@@ -1084,24 +1084,10 @@ namespace Twns.BaseWar {
         private _checkIsMeetCondition(conditionId: number): boolean {
             const condition = this._getCondition(conditionId);
 
-            if      (condition.WecEventCalledCountTotalEqualTo)     { return this._checkIsMeetConEventCalledCountTotalEqualTo(condition.WecEventCalledCountTotalEqualTo); }
-            else if (condition.WecEventCalledCountTotalGreaterThan) { return this._checkIsMeetConEventCalledCountTotalGreaterThan(condition.WecEventCalledCountTotalGreaterThan); }
-            else if (condition.WecEventCalledCountTotalLessThan)    { return this._checkIsMeetConEventCalledCountTotalLessThan(condition.WecEventCalledCountTotalLessThan); }
-            else if (condition.WecEventCalledCount)                 { return this._checkIsMeetConEventCalledCount(condition.WecEventCalledCount); }
-            else if (condition.WecPlayerAliveStateEqualTo)          { return this._checkIsMeetConPlayerAliveStateEqualTo(condition.WecPlayerAliveStateEqualTo); }
+            if (condition.WecEventCalledCount)                      { return this._checkIsMeetConEventCalledCount(condition.WecEventCalledCount); }
             else if (condition.WecPlayerPresence)                   { return this._checkIsMeetConPlayerPresence(condition.WecPlayerPresence); }
-            else if (condition.WecPlayerIndexInTurnEqualTo)         { return this._checkIsMeetConPlayerIndexInTurnEqualTo(condition.WecPlayerIndexInTurnEqualTo); }
-            else if (condition.WecPlayerIndexInTurnGreaterThan)     { return this._checkIsMeetConPlayerIndexInTurnGreaterThan(condition.WecPlayerIndexInTurnGreaterThan); }
-            else if (condition.WecPlayerIndexInTurnLessThan)        { return this._checkIsMeetConPlayerIndexInTurnLessThan(condition.WecPlayerIndexInTurnLessThan); }
-            else if (condition.WecTurnIndexEqualTo)                 { return this._checkIsMeetConTurnIndexEqualTo(condition.WecTurnIndexEqualTo); }
-            else if (condition.WecTurnIndexGreaterThan)             { return this._checkIsMeetConTurnIndexGreaterThan(condition.WecTurnIndexGreaterThan); }
-            else if (condition.WecTurnIndexLessThan)                { return this._checkIsMeetConTurnIndexLessThan(condition.WecTurnIndexLessThan); }
-            else if (condition.WecTurnIndexRemainderEqualTo)        { return this._checkIsMeetConTurnIndexRemainderEqualTo(condition.WecTurnIndexRemainderEqualTo); }
             else if (condition.WecTurnAndPlayer)                    { return this._checkIsMeetConTurnAndPlayer(condition.WecTurnAndPlayer); }
-            else if (condition.WecTurnPhaseEqualTo)                 { return this._checkIsMeetConTurnPhaseEqualTo(condition.WecTurnPhaseEqualTo); }
             else if (condition.WecWeatherAndFog)                    { return this._checkIsMeetConWeatherAndFog(condition.WecWeatherAndFog); }
-            else if (condition.WecTilePlayerIndexEqualTo)           { return this._checkIsMeetConTilePlayerIndexEqualTo(condition.WecTilePlayerIndexEqualTo); }
-            else if (condition.WecTileTypeEqualTo)                  { return this._checkIsMeetConTileTypeEqualTo(condition.WecTileTypeEqualTo); }
             else if (condition.WecTilePresence)                     { return this._checkIsMeetConTilePresence(condition.WecTilePresence); }
             else if (condition.WecUnitPresence)                     { return this._checkIsMeetConUnitPresence(condition.WecUnitPresence); }
             else if (condition.WecCustomCounter)                    { return this._checkIsMeetConCustomCounter(condition.WecCustomCounter); }
@@ -1110,30 +1096,6 @@ namespace Twns.BaseWar {
             throw Helpers.newError(`Invalid condition!`);
         }
 
-        private _checkIsMeetConEventCalledCountTotalEqualTo(condition: WarEvent.IWecEventCalledCountTotalEqualTo): boolean {
-            const eventIdEqualTo    = Helpers.getExisted(condition.eventIdEqualTo);
-            const countEqualTo      = Helpers.getExisted(condition.countEqualTo);
-            const isNot             = Helpers.getExisted(condition.isNot);
-            return (this.getWarEventCalledCountTotal(eventIdEqualTo) === countEqualTo)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConEventCalledCountTotalGreaterThan(condition: WarEvent.IWecEventCalledCountTotalGreaterThan): boolean {
-            const eventIdEqualTo    = Helpers.getExisted(condition.eventIdEqualTo);
-            const countGreaterThan  = Helpers.getExisted(condition.countGreaterThan);
-            const isNot             = Helpers.getExisted(condition.isNot);
-            return (this.getWarEventCalledCountTotal(eventIdEqualTo) > countGreaterThan)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConEventCalledCountTotalLessThan(condition: WarEvent.IWecEventCalledCountTotalLessThan): boolean {
-            const eventIdEqualTo    = Helpers.getExisted(condition.eventIdEqualTo);
-            const countLessThan     = Helpers.getExisted(condition.countLessThan);
-            const isNot             = Helpers.getExisted(condition.isNot);
-            return (this.getWarEventCalledCountTotal(eventIdEqualTo) < countLessThan)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
         private _checkIsMeetConEventCalledCount(condition: WarEvent.IWecEventCalledCount): boolean {
             const eventIdArray          = condition.eventIdArray ?? [];
             const timesInTurn           = condition.timesInTurn;
@@ -1178,15 +1140,6 @@ namespace Twns.BaseWar {
             });
         }
 
-        private _checkIsMeetConPlayerAliveStateEqualTo(condition: WarEvent.IWecPlayerAliveStateEqualTo): boolean {
-            const playerIndexEqualTo    = Helpers.getExisted(condition.playerIndexEqualTo);
-            const aliveStateEqualTo     = Helpers.getExisted(condition.aliveStateEqualTo);
-            const isNot                 = Helpers.getExisted(condition.isNot);
-            const player                = this._getWar().getPlayer(playerIndexEqualTo);
-            return (player.getAliveState() === aliveStateEqualTo)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
         private _checkIsMeetConPlayerPresence(condition: WarEvent.IWecPlayerPresence): boolean {
             const playerIndexArray              = condition.playerIndexArray ?? [];
             const aliveStateArray               = condition.aliveStateArray ?? [];
@@ -1243,64 +1196,6 @@ namespace Twns.BaseWar {
             });
         }
 
-        private _checkIsMeetConPlayerIndexInTurnEqualTo(condition: WarEvent.IWecPlayerIndexInTurnEqualTo): boolean {
-            const valueEqualTo  = Helpers.getExisted(condition.valueEqualTo);
-            const isNot         = Helpers.getExisted(condition.isNot);
-            const playerIndex   = this._getWar().getPlayerIndexInTurn();
-            return (playerIndex === valueEqualTo)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConPlayerIndexInTurnGreaterThan(condition: WarEvent.IWecPlayerIndexInTurnGreaterThan): boolean {
-            const valueGreaterThan  = Helpers.getExisted(condition.valueGreaterThan);
-            const isNot             = Helpers.getExisted(condition.isNot);
-            const playerIndex       = this._getWar().getPlayerIndexInTurn();
-            return (playerIndex > valueGreaterThan)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConPlayerIndexInTurnLessThan(condition: WarEvent.IWecPlayerIndexInTurnLessThan): boolean {
-            const valueLessThan = Helpers.getExisted(condition.valueLessThan);
-            const isNot         = Helpers.getExisted(condition.isNot);
-            const playerIndex   = this._getWar().getPlayerIndexInTurn();
-            return (playerIndex < valueLessThan)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-
-        private _checkIsMeetConTurnIndexEqualTo(condition: WarEvent.IWecTurnIndexEqualTo): boolean {
-            const valueEqualTo  = Helpers.getExisted(condition.valueEqualTo);
-            const isNot         = Helpers.getExisted(condition.isNot);
-            const turnIndex     = this._getWar().getTurnManager().getTurnIndex();
-            return (turnIndex === valueEqualTo)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConTurnIndexGreaterThan(condition: WarEvent.IWecTurnIndexGreaterThan): boolean {
-            const valueGreaterThan  = Helpers.getExisted(condition.valueGreaterThan);
-            const isNot             = Helpers.getExisted(condition.isNot);
-            const turnIndex         = this._getWar().getTurnManager().getTurnIndex();
-            return (turnIndex > valueGreaterThan)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConTurnIndexLessThan(condition: WarEvent.IWecTurnIndexLessThan): boolean {
-            const valueLessThan     = Helpers.getExisted(condition.valueLessThan);
-            const isNot             = Helpers.getExisted(condition.isNot);
-            const turnIndex         = this._getWar().getTurnManager().getTurnIndex();
-            return (turnIndex < valueLessThan)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConTurnIndexRemainderEqualTo(condition: WarEvent.IWecTurnIndexRemainderEqualTo): boolean {
-            const divider           = Helpers.getExisted(condition.divider);
-            const remainderEqualTo  = Helpers.getExisted(condition.remainderEqualTo);
-            const isNot             = Helpers.getExisted(condition.isNot);
-            const turnIndex         = this._getWar().getTurnManager().getTurnIndex();
-            return (turnIndex % divider === remainderEqualTo)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
         private _checkIsMeetConTurnAndPlayer(condition: WarEvent.IWecTurnAndPlayer): boolean {
             const turnManager   = this._getWar().getTurnManager();
             const turnIndex     = turnManager.getTurnIndex();
@@ -1347,15 +1242,6 @@ namespace Twns.BaseWar {
             return true;
         }
 
-        private _checkIsMeetConTurnPhaseEqualTo(condition: WarEvent.IWecTurnPhaseEqualTo): boolean {
-            const valueEqualTo  = Helpers.getExisted(condition.valueEqualTo);
-            const isNot         = Helpers.getExisted(condition.isNot);
-            const phaseCode     = this._getWar().getTurnManager().getPhaseCode();
-            return (phaseCode === valueEqualTo)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-
         private _checkIsMeetConWeatherAndFog(condition: WarEvent.IWecWeatherAndFog): boolean {
             const war               = this._getWar();
             const weatherTypeArray  = condition.weatherTypeArray;
@@ -1371,20 +1257,6 @@ namespace Twns.BaseWar {
             return true;
         }
 
-        private _checkIsMeetConTilePlayerIndexEqualTo(condition: WarEvent.IWecTilePlayerIndexEqualTo): boolean {
-            const tile  = this._getWar().getTileMap().getTile(Helpers.getExisted(GridIndexHelpers.convertGridIndex(condition.gridIndex), ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePlayerIndexEqualTo_00));
-            const isNot = condition.isNot;
-            return (tile.getPlayerIndex() === Helpers.getExisted(condition.playerIndex, ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePlayerIndexEqualTo_01))
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConTileTypeEqualTo(condition: WarEvent.IWecTileTypeEqualTo): boolean {
-            const tile  = this._getWar().getTileMap().getTile(Helpers.getExisted(GridIndexHelpers.convertGridIndex(condition.gridIndex), ClientErrorCode.BwWarEventManager_CheckIsMeetConTileTypeEqualTo_00));
-            const isNot = condition.isNot;
-            return (tile.getType() === Helpers.getExisted(condition.tileType, ClientErrorCode.BwWarEventManager_CheckIsMeetConTileTypeEqualTo_01))
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
         private _checkIsMeetConTilePresence(condition: WarEvent.IWecTilePresence): boolean {
             const playerIndexArray      = condition.playerIndexArray ?? [];
             const teamIndexArray        = condition.teamIndexArray ?? [];

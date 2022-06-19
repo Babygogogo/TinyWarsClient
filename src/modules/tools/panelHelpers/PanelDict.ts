@@ -227,23 +227,9 @@ namespace Twns.PanelHelpers {
         WeActionReplacePanel                : PanelConfig<WarEvent.OpenDataForWeActionReplacePanel>;
         WeActionTypeListPanel               : PanelConfig<WarEvent.OpenDataForWeActionTypeListPanel>;
         WeCommandPanel                      : PanelConfig<WarEvent.OpenDataForWeCommandPanel>;
-        WeConditionModifyPanel1             : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel1>;
-        WeConditionModifyPanel2             : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel2>;
-        WeConditionModifyPanel3             : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel3>;
-        WeConditionModifyPanel4             : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel4>;
-        WeConditionModifyPanel5             : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel5>;
         WeConditionModifyPanel6             : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel6>;
-        WeConditionModifyPanel10            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel10>;
-        WeConditionModifyPanel11            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel11>;
-        WeConditionModifyPanel12            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel12>;
-        WeConditionModifyPanel13            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel13>;
         WeConditionModifyPanel14            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel14>;
-        WeConditionModifyPanel20            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel20>;
-        WeConditionModifyPanel21            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel21>;
-        WeConditionModifyPanel22            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel22>;
         WeConditionModifyPanel23            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel23>;
-        WeConditionModifyPanel30            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel30>;
-        WeConditionModifyPanel31            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel31>;
         WeConditionModifyPanel32            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel32>;
         WeConditionModifyPanel40            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel40>;
         WeConditionModifyPanel50            : PanelConfig<WarEvent.OpenDataForWeConditionModifyPanel50>;
@@ -1517,63 +1503,9 @@ namespace Twns.PanelHelpers {
                 layer       : LayerType.Hud0,
             },
 
-            WeConditionModifyPanel1: {
-                cls         : WarEvent?.WeConditionModifyPanel1,
-                skinName    : `resource/skins/warEvent/WeConditionModifyPanel1.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            WeConditionModifyPanel2: {
-                cls         : WarEvent?.WeConditionModifyPanel2,
-                skinName    : `resource/skins/warEvent/WeConditionModifyPanel2.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            WeConditionModifyPanel3: {
-                cls         : WarEvent?.WeConditionModifyPanel3,
-                skinName    : `resource/skins/warEvent/WeConditionModifyPanel3.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            WeConditionModifyPanel4: {
-                cls         : WarEvent?.WeConditionModifyPanel4,
-                skinName    : `resource/skins/warEvent/WeConditionModifyPanel4.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            WeConditionModifyPanel5: {
-                cls         : WarEvent?.WeConditionModifyPanel5,
-                skinName    : `resource/skins/warEvent/WeConditionModifyPanel5.exml`,
-                layer       : LayerType.Hud0,
-            },
-
             WeConditionModifyPanel6: {
                 cls         : WarEvent?.WeConditionModifyPanel6,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel6.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            WeConditionModifyPanel10: {
-                cls         : WarEvent?.WeConditionModifyPanel10,
-                skinName    : `resource/skins/warEvent/WeConditionModifyPanel10.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            WeConditionModifyPanel11: {
-                cls         : WarEvent?.WeConditionModifyPanel11,
-                skinName    : `resource/skins/warEvent/WeConditionModifyPanel11.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            WeConditionModifyPanel12: {
-                cls         : WarEvent?.WeConditionModifyPanel12,
-                skinName    : `resource/skins/warEvent/WeConditionModifyPanel12.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            WeConditionModifyPanel13: {
-                cls         : WarEvent?.WeConditionModifyPanel13,
-                skinName    : `resource/skins/warEvent/WeConditionModifyPanel13.exml`,
                 layer       : LayerType.Hud0,
             },
 
@@ -1583,39 +1515,9 @@ namespace Twns.PanelHelpers {
                 layer       : LayerType.Hud0,
             },
 
-            WeConditionModifyPanel20: {
-                cls         : WarEvent?.WeConditionModifyPanel20,
-                skinName    : `resource/skins/warEvent/WeConditionModifyPanel20.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            WeConditionModifyPanel21: {
-                cls         : WarEvent?.WeConditionModifyPanel21,
-                skinName    : `resource/skins/warEvent/WeConditionModifyPanel21.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            WeConditionModifyPanel22: {
-                cls         : WarEvent?.WeConditionModifyPanel22,
-                skinName    : `resource/skins/warEvent/WeConditionModifyPanel22.exml`,
-                layer       : LayerType.Hud0,
-            },
-
             WeConditionModifyPanel23: {
                 cls         : WarEvent?.WeConditionModifyPanel23,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel23.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            WeConditionModifyPanel30: {
-                cls         : WarEvent?.WeConditionModifyPanel30,
-                skinName    : `resource/skins/warEvent/WeConditionModifyPanel30.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            WeConditionModifyPanel31: {
-                cls         : WarEvent?.WeConditionModifyPanel31,
-                skinName    : `resource/skins/warEvent/WeConditionModifyPanel31.exml`,
                 layer       : LayerType.Hud0,
             },
 

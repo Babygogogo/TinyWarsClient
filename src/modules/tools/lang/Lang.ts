@@ -296,24 +296,10 @@ namespace Twns.Lang {
 
     export function getWarEventConditionTypeName(type: WarEventConditionType): string | null {
         switch (type) {
-            case WarEventConditionType.WecTurnIndexEqualTo                  : return getText(LangTextType.B0504);
-            case WarEventConditionType.WecTurnIndexGreaterThan              : return getText(LangTextType.B0505);
-            case WarEventConditionType.WecTurnIndexLessThan                 : return getText(LangTextType.B0506);
-            case WarEventConditionType.WecTurnIndexRemainderEqualTo         : return getText(LangTextType.B0507);
-            case WarEventConditionType.WecTurnPhaseEqualTo                  : return getText(LangTextType.B0508);
             case WarEventConditionType.WecTurnAndPlayer                     : return getText(LangTextType.B0781);
-            case WarEventConditionType.WecPlayerIndexInTurnEqualTo          : return getText(LangTextType.B0509);
-            case WarEventConditionType.WecPlayerIndexInTurnGreaterThan      : return getText(LangTextType.B0510);
-            case WarEventConditionType.WecPlayerIndexInTurnLessThan         : return getText(LangTextType.B0511);
-            case WarEventConditionType.WecEventCalledCountTotalEqualTo      : return getText(LangTextType.B0512);
-            case WarEventConditionType.WecEventCalledCountTotalGreaterThan  : return getText(LangTextType.B0513);
-            case WarEventConditionType.WecEventCalledCountTotalLessThan     : return getText(LangTextType.B0514);
             case WarEventConditionType.WecEventCalledCount                  : return getText(LangTextType.B0789);
             case WarEventConditionType.WecWeatherAndFog                     : return getText(LangTextType.B0794);
-            case WarEventConditionType.WecPlayerAliveStateEqualTo           : return getText(LangTextType.B0515);
             case WarEventConditionType.WecPlayerPresence                    : return getText(LangTextType.B0786);
-            case WarEventConditionType.WecTilePlayerIndexEqualTo            : return getText(LangTextType.B0716);
-            case WarEventConditionType.WecTileTypeEqualTo                   : return getText(LangTextType.B0717);
             case WarEventConditionType.WecTilePresence                      : return getText(LangTextType.B0779);
             case WarEventConditionType.WecUnitPresence                      : return getText(LangTextType.B0775);
             case WarEventConditionType.WecCustomCounter                     : return getText(LangTextType.B0802);
