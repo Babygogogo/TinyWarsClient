@@ -55,9 +55,6 @@ namespace Twns.User {
         private readonly _uiRadioAutoScrollMap!     : TwnsUiRadioButton.UiRadioButton;
 
         private readonly _groupButtons!             : eui.Group;
-        private readonly _btnChangeNickname!        : TwnsUiButton.UiButton;
-        private readonly _btnChangePassword!        : TwnsUiButton.UiButton;
-        private readonly _btnChangeDiscordId!       : TwnsUiButton.UiButton;
         private readonly _btnChangeGameVersion!     : TwnsUiButton.UiButton;
         private readonly _btnRankList!              : TwnsUiButton.UiButton;
         private readonly _btnShowOnlineUsers!       : TwnsUiButton.UiButton;
@@ -83,9 +80,6 @@ namespace Twns.User {
             this._setUiListenerArray([
                 { ui: this._btnClose,               callback: this.close },
                 { ui: this._btnDamageCalculator,    callback: this._onTouchedBtnDamageCalculator },
-                { ui: this._btnChangeNickname,      callback: this._onTouchedBtnChangeNickname },
-                { ui: this._btnChangePassword,      callback: this._onTouchedBtnChangePassword },
-                { ui: this._btnChangeDiscordId,     callback: this._onTouchedBtnChangeDiscordId },
                 { ui: this._btnChangeGameVersion,   callback: this._onTouchedBtnChangeGameVersion },
                 { ui: this._btnRankList,            callback: this._onTouchedBtnRankList },
                 { ui: this._btnShowOnlineUsers,     callback: this._onTouchedBtnShowOnlineUsers },
@@ -254,15 +248,6 @@ namespace Twns.User {
                 data    : null,
             });
         }
-        private _onTouchedBtnChangeNickname(): void {
-            PanelHelpers.open(PanelHelpers.PanelDict.UserChangeNicknamePanel, void 0);
-        }
-        private _onTouchedBtnChangePassword(): void {
-            PanelHelpers.open(PanelHelpers.PanelDict.UserSetPasswordPanel, void 0);
-        }
-        private _onTouchedBtnChangeDiscordId(): void {
-            PanelHelpers.open(PanelHelpers.PanelDict.UserChangeDiscordIdPanel, void 0);
-        }
         private _onTouchedBtnChangeGameVersion(): void {
             PanelHelpers.open(PanelHelpers.PanelDict.CommonChangeVersionPanel, void 0);
         }
@@ -342,9 +327,6 @@ namespace Twns.User {
         private async _updateGroupButtons(): Promise<void> {
             const group = this._groupButtons;
             group.removeChildren();
-            group.addChild(this._btnChangePassword);
-            group.addChild(this._btnChangeNickname);
-            group.addChild(this._btnChangeDiscordId);
             group.addChild(this._btnSetOpacity);
             group.addChild(this._btnSetStageScaler);
             group.addChild(this._btnRankList);
@@ -364,9 +346,6 @@ namespace Twns.User {
 
         private _updateComponentsForLanguage(): void {
             this._labelTitle.text = Lang.getText(LangTextType.B0560);
-            this._updateBtnChangeNickname();
-            this._updateBtnChangePassword();
-            this._updateBtnChangeDiscordId();
             this._updateBtnChangeGameVersion();
             this._updateBtnRankList();
             this._updateBtnShowOnlineUsers();
@@ -380,15 +359,6 @@ namespace Twns.User {
             this._updateBtnMapManagement();
         }
 
-        private _updateBtnChangeNickname(): void {
-            this._btnChangeNickname.label = Lang.getText(LangTextType.B0149);
-        }
-        private _updateBtnChangePassword(): void {
-            this._btnChangePassword.label = Lang.getText(LangTextType.B0426);
-        }
-        private _updateBtnChangeDiscordId(): void {
-            this._btnChangeDiscordId.label = Lang.getText(LangTextType.B0150);
-        }
         private _updateBtnChangeGameVersion(): void {
             this._btnChangeGameVersion.label = Lang.getText(LangTextType.B0620);
         }

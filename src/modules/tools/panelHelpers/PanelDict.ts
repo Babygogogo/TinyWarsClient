@@ -199,6 +199,7 @@ namespace Twns.PanelHelpers {
         UserLoginPanel                      : PanelConfig<User.OpenDataForUserLoginPanel>;
         UserOnlineUsersPanel                : PanelConfig<User.OpenDataForUserOnlineUsersPanel>;
         UserPanel                           : PanelConfig<User.OpenDataForUserPanel>;
+        UserProfileSettingsPanel            : PanelConfig<User.OpenDataForUserProfileSettingsPanel>;
         UserRegisterPanel                   : PanelConfig<User.OpenDataForUserRegisterPanel>;
         UserSetAvatarPanel                  : PanelConfig<User.OpenDataForUserSetAvatarPanel>;
         UserSetOpacityPanel                 : PanelConfig<User.OpenDataForUserSetOpacityPanel>;
@@ -207,6 +208,7 @@ namespace Twns.PanelHelpers {
         UserSetSoundPanel                   : PanelConfig<User.OpenDataForUserSetSoundPanel>;
         UserSetStageScalePanel              : PanelConfig<User.OpenDataForUserSetStageScalePanel>;
         UserSettingsPanel                   : PanelConfig<User.OpenDataForUserSettingsPanel>;
+        UserWarHistoryPanel                 : PanelConfig<User.OpenDataForUserWarHistoryPanel>;
 
         WeActionAddUnitListPanel            : PanelConfig<WarEvent.OpenDataForWeActionAddUnitListPanel>;
         WeActionModifyPanel1                : PanelConfig<WarEvent.OpenDataForWeActionModifyPanel1>;
@@ -1338,6 +1340,12 @@ namespace Twns.PanelHelpers {
                 needCache   : true,
             },
 
+            UserProfileSettingsPanel: {
+                cls         : User?.UserProfileSettingsPanel,
+                skinName    : `resource/skins/user/UserProfileSettingsPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
             UserRegisterPanel: {
                 cls         : User?.UserRegisterPanel,
                 skinName    : `resource/skins/user/UserRegisterPanel.exml`,
@@ -1385,6 +1393,12 @@ namespace Twns.PanelHelpers {
                 skinName    : `resource/skins/user/UserSettingsPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
+            },
+
+            UserWarHistoryPanel: {
+                cls         : User?.UserWarHistoryPanel,
+                skinName    : `resource/skins/user/UserWarHistoryPanel.exml`,
+                layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -27053,6 +27053,333 @@ declare namespace CommonProto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a UserWarHistory. */
+        interface IUserWarHistory {
+
+            /** UserWarHistory mpwRankedStdHistoryArray */
+            mpwRankedStdHistoryArray?: (CommonProto.User.UserWarHistory.IUserMpwRankedHistory[]|null);
+
+            /** UserWarHistory mpwRankedFowHistoryArray */
+            mpwRankedFowHistoryArray?: (CommonProto.User.UserWarHistory.IUserMpwRankedHistory[]|null);
+
+            /** UserWarHistory mpwUnrankedHistoryArray */
+            mpwUnrankedHistoryArray?: (CommonProto.User.UserWarHistory.IUserMpwUnrankedHistory[]|null);
+        }
+
+        /** Represents a UserWarHistory. */
+        class UserWarHistory implements IUserWarHistory {
+
+            /**
+             * Constructs a new UserWarHistory.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.User.IUserWarHistory);
+
+            /** UserWarHistory mpwRankedStdHistoryArray. */
+            public mpwRankedStdHistoryArray: CommonProto.User.UserWarHistory.IUserMpwRankedHistory[];
+
+            /** UserWarHistory mpwRankedFowHistoryArray. */
+            public mpwRankedFowHistoryArray: CommonProto.User.UserWarHistory.IUserMpwRankedHistory[];
+
+            /** UserWarHistory mpwUnrankedHistoryArray. */
+            public mpwUnrankedHistoryArray: CommonProto.User.UserWarHistory.IUserMpwUnrankedHistory[];
+
+            /**
+             * Creates a new UserWarHistory instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns UserWarHistory instance
+             */
+            public static create(properties?: CommonProto.User.IUserWarHistory): CommonProto.User.UserWarHistory;
+
+            /**
+             * Encodes the specified UserWarHistory message. Does not implicitly {@link CommonProto.User.UserWarHistory.verify|verify} messages.
+             * @param message UserWarHistory message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.User.IUserWarHistory, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified UserWarHistory message, length delimited. Does not implicitly {@link CommonProto.User.UserWarHistory.verify|verify} messages.
+             * @param message UserWarHistory message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.User.IUserWarHistory, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a UserWarHistory message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns UserWarHistory
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.User.UserWarHistory;
+
+            /**
+             * Decodes a UserWarHistory message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns UserWarHistory
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.User.UserWarHistory;
+
+            /**
+             * Verifies a UserWarHistory message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a UserWarHistory message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns UserWarHistory
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.User.UserWarHistory;
+
+            /**
+             * Creates a plain object from a UserWarHistory message. Also converts values to other types if specified.
+             * @param message UserWarHistory
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.User.UserWarHistory, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this UserWarHistory to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace UserWarHistory {
+
+            /** Properties of a UserMpwRankedHistory. */
+            interface IUserMpwRankedHistory {
+
+                /** UserMpwRankedHistory replayId */
+                replayId?: (number|null);
+
+                /** UserMpwRankedHistory endTimestamp */
+                endTimestamp?: (number|null);
+
+                /** UserMpwRankedHistory mapId */
+                mapId?: (number|null);
+
+                /** UserMpwRankedHistory deltaScore */
+                deltaScore?: (number|null);
+
+                /** UserMpwRankedHistory newScore */
+                newScore?: (number|null);
+            }
+
+            /** Represents a UserMpwRankedHistory. */
+            class UserMpwRankedHistory implements IUserMpwRankedHistory {
+
+                /**
+                 * Constructs a new UserMpwRankedHistory.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.User.UserWarHistory.IUserMpwRankedHistory);
+
+                /** UserMpwRankedHistory replayId. */
+                public replayId: number;
+
+                /** UserMpwRankedHistory endTimestamp. */
+                public endTimestamp: number;
+
+                /** UserMpwRankedHistory mapId. */
+                public mapId: number;
+
+                /** UserMpwRankedHistory deltaScore. */
+                public deltaScore: number;
+
+                /** UserMpwRankedHistory newScore. */
+                public newScore: number;
+
+                /**
+                 * Creates a new UserMpwRankedHistory instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns UserMpwRankedHistory instance
+                 */
+                public static create(properties?: CommonProto.User.UserWarHistory.IUserMpwRankedHistory): CommonProto.User.UserWarHistory.UserMpwRankedHistory;
+
+                /**
+                 * Encodes the specified UserMpwRankedHistory message. Does not implicitly {@link CommonProto.User.UserWarHistory.UserMpwRankedHistory.verify|verify} messages.
+                 * @param message UserMpwRankedHistory message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.User.UserWarHistory.IUserMpwRankedHistory, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified UserMpwRankedHistory message, length delimited. Does not implicitly {@link CommonProto.User.UserWarHistory.UserMpwRankedHistory.verify|verify} messages.
+                 * @param message UserMpwRankedHistory message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.User.UserWarHistory.IUserMpwRankedHistory, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a UserMpwRankedHistory message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns UserMpwRankedHistory
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.User.UserWarHistory.UserMpwRankedHistory;
+
+                /**
+                 * Decodes a UserMpwRankedHistory message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns UserMpwRankedHistory
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.User.UserWarHistory.UserMpwRankedHistory;
+
+                /**
+                 * Verifies a UserMpwRankedHistory message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a UserMpwRankedHistory message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns UserMpwRankedHistory
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.User.UserWarHistory.UserMpwRankedHistory;
+
+                /**
+                 * Creates a plain object from a UserMpwRankedHistory message. Also converts values to other types if specified.
+                 * @param message UserMpwRankedHistory
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.User.UserWarHistory.UserMpwRankedHistory, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this UserMpwRankedHistory to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a UserMpwUnrankedHistory. */
+            interface IUserMpwUnrankedHistory {
+
+                /** UserMpwUnrankedHistory replayId */
+                replayId?: (number|null);
+
+                /** UserMpwUnrankedHistory endTimestamp */
+                endTimestamp?: (number|null);
+
+                /** UserMpwUnrankedHistory mapId */
+                mapId?: (number|null);
+
+                /** UserMpwUnrankedHistory warType */
+                warType?: (number|null);
+            }
+
+            /** Represents a UserMpwUnrankedHistory. */
+            class UserMpwUnrankedHistory implements IUserMpwUnrankedHistory {
+
+                /**
+                 * Constructs a new UserMpwUnrankedHistory.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.User.UserWarHistory.IUserMpwUnrankedHistory);
+
+                /** UserMpwUnrankedHistory replayId. */
+                public replayId: number;
+
+                /** UserMpwUnrankedHistory endTimestamp. */
+                public endTimestamp: number;
+
+                /** UserMpwUnrankedHistory mapId. */
+                public mapId: number;
+
+                /** UserMpwUnrankedHistory warType. */
+                public warType: number;
+
+                /**
+                 * Creates a new UserMpwUnrankedHistory instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns UserMpwUnrankedHistory instance
+                 */
+                public static create(properties?: CommonProto.User.UserWarHistory.IUserMpwUnrankedHistory): CommonProto.User.UserWarHistory.UserMpwUnrankedHistory;
+
+                /**
+                 * Encodes the specified UserMpwUnrankedHistory message. Does not implicitly {@link CommonProto.User.UserWarHistory.UserMpwUnrankedHistory.verify|verify} messages.
+                 * @param message UserMpwUnrankedHistory message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.User.UserWarHistory.IUserMpwUnrankedHistory, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified UserMpwUnrankedHistory message, length delimited. Does not implicitly {@link CommonProto.User.UserWarHistory.UserMpwUnrankedHistory.verify|verify} messages.
+                 * @param message UserMpwUnrankedHistory message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.User.UserWarHistory.IUserMpwUnrankedHistory, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a UserMpwUnrankedHistory message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns UserMpwUnrankedHistory
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.User.UserWarHistory.UserMpwUnrankedHistory;
+
+                /**
+                 * Decodes a UserMpwUnrankedHistory message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns UserMpwUnrankedHistory
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.User.UserWarHistory.UserMpwUnrankedHistory;
+
+                /**
+                 * Verifies a UserMpwUnrankedHistory message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a UserMpwUnrankedHistory message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns UserMpwUnrankedHistory
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.User.UserWarHistory.UserMpwUnrankedHistory;
+
+                /**
+                 * Creates a plain object from a UserMpwUnrankedHistory message. Also converts values to other types if specified.
+                 * @param message UserMpwUnrankedHistory
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.User.UserWarHistory.UserMpwUnrankedHistory, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this UserMpwUnrankedHistory to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+
         /** Properties of a UserComplexInfo. */
         interface IUserComplexInfo {
 
@@ -27079,6 +27406,9 @@ declare namespace CommonProto {
 
             /** UserComplexInfo mapEditorAutoSaveTime */
             mapEditorAutoSaveTime?: (number|null);
+
+            /** UserComplexInfo userWarHistory */
+            userWarHistory?: (CommonProto.User.IUserWarHistory|null);
         }
 
         /** Represents a UserComplexInfo. */
@@ -27113,6 +27443,9 @@ declare namespace CommonProto {
 
             /** UserComplexInfo mapEditorAutoSaveTime. */
             public mapEditorAutoSaveTime: number;
+
+            /** UserComplexInfo userWarHistory. */
+            public userWarHistory?: (CommonProto.User.IUserWarHistory|null);
 
             /**
              * Creates a new UserComplexInfo instance using the specified properties.
@@ -27323,6 +27656,9 @@ declare namespace CommonProto {
             /** UserPublicInfo userMpwStatisticsArray */
             userMpwStatisticsArray?: (CommonProto.User.UserWarStatistics.IUserMpwStatistics[]|null);
 
+            /** UserPublicInfo userWarHistory */
+            userWarHistory?: (CommonProto.User.IUserWarHistory|null);
+
             /** UserPublicInfo spmOverallRankScore */
             spmOverallRankScore?: (number|null);
         }
@@ -27374,6 +27710,9 @@ declare namespace CommonProto {
 
             /** UserPublicInfo userMpwStatisticsArray. */
             public userMpwStatisticsArray: CommonProto.User.UserWarStatistics.IUserMpwStatistics[];
+
+            /** UserPublicInfo userWarHistory. */
+            public userWarHistory?: (CommonProto.User.IUserWarHistory|null);
 
             /** UserPublicInfo spmOverallRankScore. */
             public spmOverallRankScore: number;

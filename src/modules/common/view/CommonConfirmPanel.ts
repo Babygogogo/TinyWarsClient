@@ -10,7 +10,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Common {
-    import LangTextType = Twns.Lang.LangTextType;
+    import LangTextType = Lang.LangTextType;
 
     export type OpenDataForCommonConfirmPanel = {
         title?              : string;
@@ -54,44 +54,44 @@ namespace Twns.Common {
         }
 
         private _onTouchedBtnCancel(): void {
-            const openData = this._getOpenData();
-            (openData.callbackOnCancel) && (openData.callbackOnCancel());
-
+            const callback = this._getOpenData().callbackOnCancel;
             this.close();
+            (callback) && (callback());
         }
 
         private _onTouchedBtnConfirm(): void {
-            this._getOpenData().callback();
+            const callback = this._getOpenData().callback;
             this.close();
+            callback();
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: -40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: -40 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

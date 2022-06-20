@@ -31,7 +31,10 @@ namespace Twns.User {
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
 
+        private readonly _groupTopButtons!          : eui.Group;
         private readonly _btnChat!                  : TwnsUiButton.UiButton;
+        private readonly _btnSetProfile!            : TwnsUiButton.UiButton;
+
         private readonly _imgAvatar!                : TwnsUiImage.UiImage;
         private readonly _btnSetAvatar!             : TwnsUiButton.UiButton;
         private readonly _imgLogo!                  : TwnsUiImage.UiImage;
@@ -41,11 +44,13 @@ namespace Twns.User {
         private readonly _labelStdRankRankTitle!    : TwnsUiLabel.UiLabel;
         private readonly _labelStdRankRank!         : TwnsUiLabel.UiLabel;
         private readonly _labelStdRankRankSuffix!   : TwnsUiLabel.UiLabel;
+        private readonly _btnRankStdHistory!        : TwnsUiButton.UiButton;
         private readonly _labelFogRankScoreTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelFogRankScore!        : TwnsUiLabel.UiLabel;
         private readonly _labelFogRankRankTitle!    : TwnsUiLabel.UiLabel;
         private readonly _labelFogRankRank!         : TwnsUiLabel.UiLabel;
         private readonly _labelFogRankRankSuffix!   : TwnsUiLabel.UiLabel;
+        private readonly _btnRankFowHistory!        : TwnsUiButton.UiButton;
         private readonly _labelSpmRankScoreTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelSpmRankScore!        : TwnsUiLabel.UiLabel;
         private readonly _labelSpmRankRankTitle!    : TwnsUiLabel.UiLabel;
@@ -90,10 +95,13 @@ namespace Twns.User {
                 { type: NotifyType.MsgUserSetAvatarId,      callback: this._onNotifyMsgUserSetAvatarId },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnChat,            callback: this._onTouchedBtnChat },
-                { ui: this._btnSetAvatar,       callback: this._onTouchedBtnSetAvatar },
-                { ui: this._btnMyWarRoomRecord, callback: this._onTouchedBtnMyWarRoomRecord },
-                { ui: this._btnClose,           callback: this.close },
+                { ui: this._btnChat,                callback: this._onTouchedBtnChat },
+                { ui: this._btnSetProfile,          callback: this._onTouchedBtnSetProfile },
+                { ui: this._btnSetAvatar,           callback: this._onTouchedBtnSetAvatar },
+                { ui: this._btnRankStdHistory,      callback: this._onTouchedBtnRankStdHistory },
+                { ui: this._btnRankFowHistory,      callback: this._onTouchedBtnRankFowHistory },
+                { ui: this._btnMyWarRoomRecord,     callback: this._onTouchedBtnMyWarRoomRecord },
+                { ui: this._btnClose,               callback: this.close },
             ]);
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
@@ -139,8 +147,23 @@ namespace Twns.User {
             this.close();
             PanelHelpers.open(PanelHelpers.PanelDict.ChatPanel, { toUserId: userId });
         }
+        private _onTouchedBtnSetProfile(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.UserProfileSettingsPanel, void 0);
+        }
         private _onTouchedBtnSetAvatar(): void {
             PanelHelpers.open(PanelHelpers.PanelDict.UserSetAvatarPanel, void 0);
+        }
+        private _onTouchedBtnRankStdHistory(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.UserWarHistoryPanel, {
+                userId      : this._getOpenData().userId,
+                historyType : User.UserWarHistoryType.RankStd,
+            });
+        }
+        private _onTouchedBtnRankFowHistory(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.UserWarHistoryPanel, {
+                userId      : this._getOpenData().userId,
+                historyType : User.UserWarHistoryType.RankFow,
+            });
         }
         private _onTouchedBtnMyWarRoomRecord(): void {
             PanelHelpers.open(PanelHelpers.PanelDict.SpmMyWarRoomRecordPanel, void 0);
@@ -208,13 +231,20 @@ namespace Twns.User {
 
             this._updateComponentsForLanguage();
             this._updateLabelOnlineTime();
-            this._updateBtnChat();
+            this._updateGroupTopButtons();
             this._updateBtnSetAvatar();
             this._updateImgAvatar();
         }
 
-        private _updateBtnChat(): void {
-            this._btnChat.visible = this._getOpenData().userId !== User.UserModel.getSelfUserId();
+        private _updateGroupTopButtons(): void {
+            const group = this._groupTopButtons;
+            group.removeChildren();
+
+            if (this._getOpenData().userId === User.UserModel.getSelfUserId()) {
+                group.addChild(this._btnSetProfile);
+            } else {
+                group.addChild(this._btnChat);
+            }
         }
 
         private _updateBtnSetAvatar(): void {
@@ -248,9 +278,9 @@ namespace Twns.User {
             this._labelHistoryFogLose.text      = Lang.getText(LangTextType.B0551);
             this._labelHistoryFogDraw.text      = Lang.getText(LangTextType.B0552);
             this._labelHistoryFogRatio.text     = Lang.getText(LangTextType.B0553);
-            this._btnChat.label                 = Lang.getText(LangTextType.B0383);
-            this._btnSetAvatar.label            = Lang.getText(LangTextType.B0707);
             this._btnMyWarRoomRecord.label      = Lang.getText(LangTextType.B0905);
+            this._btnRankStdHistory.label       = Lang.getText(LangTextType.B0201);
+            this._btnRankFowHistory.label       = Lang.getText(LangTextType.B0201);
 
             this._updateLabelTitle();
             this._updateComponentsForStdRank();

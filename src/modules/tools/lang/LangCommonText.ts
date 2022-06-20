@@ -5662,16 +5662,16 @@ namespace Twns.Lang {
             `Mech`,
         ],
         [LangTextType.MoveType0002]: [
-            `履带`,
-            `Tank`,
-        ],
-        [LangTextType.MoveType0003]: [
             `轮胎A`,
             `TireA`,
         ],
-        [LangTextType.MoveType0004]: [
+        [LangTextType.MoveType0003]: [
             `轮胎B`,
             `TireB`,
+        ],
+        [LangTextType.MoveType0004]: [
+            `履带`,
+            `Tank`,
         ],
         [LangTextType.MoveType0005]: [
             `飞行`,
