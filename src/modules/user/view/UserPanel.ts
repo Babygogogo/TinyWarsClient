@@ -278,9 +278,6 @@ namespace Twns.User {
             this._labelHistoryFogLose.text      = Lang.getText(LangTextType.B0551);
             this._labelHistoryFogDraw.text      = Lang.getText(LangTextType.B0552);
             this._labelHistoryFogRatio.text     = Lang.getText(LangTextType.B0553);
-            this._btnMyWarRoomRecord.label      = Lang.getText(LangTextType.B0905);
-            this._btnRankStdHistory.label       = Lang.getText(LangTextType.B0201);
-            this._btnRankFowHistory.label       = Lang.getText(LangTextType.B0201);
 
             this._updateLabelTitle();
             this._updateComponentsForStdRank();

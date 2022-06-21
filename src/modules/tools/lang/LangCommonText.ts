@@ -4990,6 +4990,14 @@ namespace Twns.Lang {
             `地形属性表`,
             `Tiles Info`,
         ],
+        [LangTextType.B0911]: [
+            `历史`,
+            `History`,
+        ],
+        [LangTextType.B0912]: [
+            `非排位赛`,
+            `Unranked`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.Tile0000]: [

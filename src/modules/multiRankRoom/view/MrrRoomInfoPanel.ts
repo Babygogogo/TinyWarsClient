@@ -164,7 +164,7 @@ namespace Twns.MultiRankRoom {
                 const gameConfig = await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion));
                 PanelHelpers.open(PanelHelpers.PanelDict.CommonBanCoCategoryIdPanel, {
                     gameConfig,
-                    playerIndex             : Helpers.getExisted(selfPlayerData.playerIndex),
+                    playerIndex             : null,
                     maxBanCount             : gameConfig.getSystemCfg().maxBanCount,
                     bannedCoCategoryIdArray : [],
                     selfCoId                : null,

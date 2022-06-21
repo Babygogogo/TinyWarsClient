@@ -22,7 +22,7 @@ namespace Twns.Common {
     import GameConfig       = Config.GameConfig;
 
     export type OpenDataForCommonBanCoCategoryIdPanel = {
-        playerIndex             : number;
+        playerIndex             : number | null;
         gameConfig              : GameConfig;
         bannedCoCategoryIdArray : number[];
         maxBanCount             : number | null;
@@ -178,10 +178,17 @@ namespace Twns.Common {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._btnCancel.label               = Lang.getText(LangTextType.B0154);
-            this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
-            this._btnClose.label                = Lang.getText(LangTextType.B0204);
-            this._labelAvailableCoTitle.text    = `${Lang.getText(LangTextType.B0238)} (P${this._getOpenData().playerIndex})`;
+            this._btnCancel.label   = Lang.getText(LangTextType.B0154);
+            this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
+            this._btnClose.label    = Lang.getText(LangTextType.B0204);
+
+            const playerIndex           = this._getOpenData().playerIndex;
+            const labelAvailableCoTitle = this._labelAvailableCoTitle;
+            if (playerIndex == null) {
+                labelAvailableCoTitle.text = Lang.getText(LangTextType.B0590);
+            } else {
+                labelAvailableCoTitle.text = `${Lang.getText(LangTextType.B0590)} (P${playerIndex})`;
+            }
 
             this._updateComponentsForPreviewCoCategoryId();
         }
@@ -207,7 +214,7 @@ namespace Twns.Common {
                 renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoNameRenderer, this);
                 this._renderersForCoNames.push(renderer);
 
-                if (gameConfig.checkIsOriginCo(coCategoryId)) {
+                if (gameConfig.checkIsOriginCoByCategoryId(coCategoryId)) {
                     groupOriginCoNames.addChild(renderer);
                 } else {
                     groupCustomCoNames.addChild(renderer);

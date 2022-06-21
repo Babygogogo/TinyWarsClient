@@ -38,9 +38,12 @@ namespace Twns.User {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
 
-        private readonly _btnRankStd!       :TwnsUiButton.UiButton;
-        private readonly _btnRankFow!       :TwnsUiButton.UiButton;
-        private readonly _btnUnranked!      :TwnsUiButton.UiButton;
+        private readonly _btnRankStd!       : TwnsUiButton.UiButton;
+        private readonly _imgRankStd!       : TwnsUiImage.UiImage;
+        private readonly _btnRankFow!       : TwnsUiButton.UiButton;
+        private readonly _imgRankFow!       : TwnsUiImage.UiImage;
+        private readonly _btnUnranked!      : TwnsUiButton.UiButton;
+        private readonly _imgUnranked!      : TwnsUiImage.UiImage;
 
         private readonly _labelMapName!     : TwnsUiLabel.UiLabel;
         private readonly _labelTimestamp!   : TwnsUiLabel.UiLabel;
@@ -122,6 +125,9 @@ namespace Twns.User {
             this._labelRankScore.text   = Lang.getText(LangTextType.B0060);
             this._labelWarType.text     = Lang.getText(LangTextType.B0599);
             this._labelNoData.text      = Lang.getText(LangTextType.B0278);
+            this._btnRankFow.label      = Lang.getText(LangTextType.B0416);
+            this._btnRankStd.label      = Lang.getText(LangTextType.B0415);
+            this._btnUnranked.label     = Lang.getText(LangTextType.B0912);
         }
 
         private async _updateComponentsForHistory(): Promise<void> {
@@ -133,12 +139,21 @@ namespace Twns.User {
             const labelNoData       = this._labelNoData;
             const labelWarType      = this._labelWarType;
             const labelRankScore    = this._labelRankScore;
+            const imgRankStd        = this._imgRankStd;
+            const imgRankFow        = this._imgRankFow;
+            const imgUnranked       = this._imgUnranked;
+            scrRanked.visible       = false;
+            scrUnranked.visible     = false;
+            imgRankStd.visible      = false;
+            imgRankFow.visible      = false;
+            imgUnranked.visible     = false;
+            labelWarType.visible    = false;
+            labelRankScore.visible  = false;
 
             if (historyType === UserWarHistoryType.RankFow) {
                 scrRanked.visible       = true;
-                scrUnranked.visible     = false;
-                labelWarType.visible    = false;
                 labelRankScore.visible  = true;
+                imgRankFow.visible      = true;
                 listUnranked.clear();
 
                 const dataArray     = await this._createDataForHistoryRankedFow();
@@ -147,9 +162,8 @@ namespace Twns.User {
 
             } else if (historyType === UserWarHistoryType.RankStd) {
                 scrRanked.visible       = true;
-                scrUnranked.visible     = false;
-                labelWarType.visible    = false;
                 labelRankScore.visible  = true;
+                imgRankStd.visible      = true;
                 listUnranked.clear();
 
                 const dataArray     = await this._createDataForHistoryRankedStd();
@@ -157,10 +171,9 @@ namespace Twns.User {
                 listRanked.bindData(dataArray);
 
             } else {
-                scrRanked.visible       = false;
                 scrUnranked.visible     = true;
                 labelWarType.visible    = true;
-                labelRankScore.visible  = false;
+                imgUnranked.visible     = true;
                 listRanked.clear();
 
                 const dataArray     = await this._createDataForHistoryUnranked();
@@ -171,7 +184,7 @@ namespace Twns.User {
 
         private async _createDataForHistoryRankedStd(): Promise<DataForRankedRenderer[]> {
             const dataArray: DataForRankedRenderer[] = [];
-            for (const data of (await User.UserModel.getUserPublicInfo(this._getOpenData().userId))?.userWarHistory?.mpwRankedStdHistoryArray ?? []) {
+            for (const data of ((await User.UserModel.getUserPublicInfo(this._getOpenData().userId))?.userWarHistory?.mpwRankedStdHistoryArray ?? []).concat().reverse()) {
                 dataArray.push({
                     index       : dataArray.length + 1,
                     mapId       : data.mapId ?? null,
@@ -185,7 +198,7 @@ namespace Twns.User {
         }
         private async _createDataForHistoryRankedFow(): Promise<DataForRankedRenderer[]> {
             const dataArray: DataForRankedRenderer[] = [];
-            for (const data of (await User.UserModel.getUserPublicInfo(this._getOpenData().userId))?.userWarHistory?.mpwRankedFowHistoryArray ?? []) {
+            for (const data of ((await User.UserModel.getUserPublicInfo(this._getOpenData().userId))?.userWarHistory?.mpwRankedFowHistoryArray ?? []).concat().reverse()) {
                 dataArray.push({
                     index       : dataArray.length + 1,
                     mapId       : data.mapId ?? null,
@@ -199,7 +212,7 @@ namespace Twns.User {
         }
         private async _createDataForHistoryUnranked(): Promise<DataForUnrankedRenderer[]> {
             const dataArray: DataForUnrankedRenderer[] = [];
-            for (const data of (await User.UserModel.getUserPublicInfo(this._getOpenData().userId))?.userWarHistory?.mpwUnrankedHistoryArray ?? []) {
+            for (const data of ((await User.UserModel.getUserPublicInfo(this._getOpenData().userId))?.userWarHistory?.mpwUnrankedHistoryArray ?? []).concat().reverse()) {
                 dataArray.push({
                     index       : dataArray.length + 1,
                     mapId       : data.mapId ?? null,

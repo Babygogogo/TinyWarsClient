@@ -588,6 +588,9 @@ namespace Twns.Config {
         public checkIsOriginCo(coId: number): boolean {
             return this.getCoBasicCfg(coId)?.dataDesigner === `Intelligent Systems`;
         }
+        public checkIsOriginCoByCategoryId(coCategoryId: number): boolean {
+            return this.checkIsOriginCo(this.getEnabledCoIdByCategoryId(coCategoryId) ?? this.getCoIdByCategoryId(coCategoryId));
+        }
         public getCoBustImageSource(coId: number): string | null {
             const imgNumber = this.getCoBasicCfg(coId)?.image;
             return (imgNumber != null) ? `coBust${Helpers.getNumText(imgNumber, 4)}` : null;

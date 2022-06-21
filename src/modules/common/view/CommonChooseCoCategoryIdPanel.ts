@@ -160,7 +160,7 @@ namespace Twns.Common {
                 renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoNameRenderer, this);
                 this._renderersForCoNames.push(renderer);
 
-                if (gameConfig.checkIsOriginCo(coCategoryId)) {
+                if (gameConfig.checkIsOriginCoByCategoryId(coCategoryId)) {
                     groupOriginCoNames.addChild(renderer);
                 } else {
                     groupCustomCoNames.addChild(renderer);

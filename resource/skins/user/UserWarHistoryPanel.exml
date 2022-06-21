@@ -17,12 +17,24 @@
             </e:Group>
         </e:Group>
         <e:Group y="52" horizontalCenter="0">
-            <TwnsUiButton:UiButton id="_btnRankStd" label="Ranked Std" x="0" y="0"
-                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" width="100" />
-            <TwnsUiButton:UiButton id="_btnRankFow" label="Ranked Fog" x="10" y="10"
-                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" width="100" />
-            <TwnsUiButton:UiButton id="_btnUnranked" label="Unranked" x="20" y="20"
-                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" width="100" />
+            <e:Group x="0" y="0" height="30">
+                <TwnsUiButton:UiButton id="_btnRankStd" label="Ranked Std" y="0"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="100" left="0" />
+                <TwnsUiImage:UiImage id="_imgRankStd" height="1" source="uncompressedColorYellow0001" left="0" right="0"
+                                     bottom="0" />
+            </e:Group>
+            <e:Group x="150" y="0" height="30">
+                <TwnsUiButton:UiButton id="_btnRankFow" label="Ranked Fog" y="0"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="100" left="0" />
+                <TwnsUiImage:UiImage height="1" source="uncompressedColorYellow0001" id="_imgRankFow" left="0" right="0"
+                                     bottom="0" />
+            </e:Group>
+            <e:Group x="200" y="0" height="30">
+                <TwnsUiButton:UiButton id="_btnUnranked" label="Unranked" y="0"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="100" left="0" />
+                <TwnsUiImage:UiImage height="1" source="uncompressedColorYellow0001" id="_imgUnranked" left="0"
+                                     right="0" bottom="0" />
+            </e:Group>
             <e:layout>
                 <e:HorizontalLayout gap="50" />
             </e:layout>
