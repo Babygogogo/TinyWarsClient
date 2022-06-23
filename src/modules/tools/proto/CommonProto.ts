@@ -4124,94 +4124,289 @@ declare namespace CommonProto {
 
     namespace Map {
 
-        /** Properties of a DataForMapTag. */
-        interface IDataForMapTag {
+        /** Properties of a DeprecatedDataForMapTag. */
+        interface IDeprecatedDataForMapTag {
 
-            /** DataForMapTag fog */
+            /** DeprecatedDataForMapTag fog */
             fog?: (boolean|null);
         }
 
-        /** Represents a DataForMapTag. */
-        class DataForMapTag implements IDataForMapTag {
+        /** Represents a DeprecatedDataForMapTag. */
+        class DeprecatedDataForMapTag implements IDeprecatedDataForMapTag {
 
             /**
-             * Constructs a new DataForMapTag.
+             * Constructs a new DeprecatedDataForMapTag.
              * @param [properties] Properties to set
              */
-            constructor(properties?: CommonProto.Map.IDataForMapTag);
+            constructor(properties?: CommonProto.Map.IDeprecatedDataForMapTag);
 
-            /** DataForMapTag fog. */
+            /** DeprecatedDataForMapTag fog. */
             public fog: boolean;
 
             /**
-             * Creates a new DataForMapTag instance using the specified properties.
+             * Creates a new DeprecatedDataForMapTag instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns DataForMapTag instance
+             * @returns DeprecatedDataForMapTag instance
              */
-            public static create(properties?: CommonProto.Map.IDataForMapTag): CommonProto.Map.DataForMapTag;
+            public static create(properties?: CommonProto.Map.IDeprecatedDataForMapTag): CommonProto.Map.DeprecatedDataForMapTag;
 
             /**
-             * Encodes the specified DataForMapTag message. Does not implicitly {@link CommonProto.Map.DataForMapTag.verify|verify} messages.
-             * @param message DataForMapTag message or plain object to encode
+             * Encodes the specified DeprecatedDataForMapTag message. Does not implicitly {@link CommonProto.Map.DeprecatedDataForMapTag.verify|verify} messages.
+             * @param message DeprecatedDataForMapTag message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: CommonProto.Map.IDataForMapTag, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: CommonProto.Map.IDeprecatedDataForMapTag, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified DataForMapTag message, length delimited. Does not implicitly {@link CommonProto.Map.DataForMapTag.verify|verify} messages.
-             * @param message DataForMapTag message or plain object to encode
+             * Encodes the specified DeprecatedDataForMapTag message, length delimited. Does not implicitly {@link CommonProto.Map.DeprecatedDataForMapTag.verify|verify} messages.
+             * @param message DeprecatedDataForMapTag message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: CommonProto.Map.IDataForMapTag, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: CommonProto.Map.IDeprecatedDataForMapTag, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a DataForMapTag message from the specified reader or buffer.
+             * Decodes a DeprecatedDataForMapTag message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns DataForMapTag
+             * @returns DeprecatedDataForMapTag
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.Map.DataForMapTag;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.Map.DeprecatedDataForMapTag;
 
             /**
-             * Decodes a DataForMapTag message from the specified reader or buffer, length delimited.
+             * Decodes a DeprecatedDataForMapTag message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns DataForMapTag
+             * @returns DeprecatedDataForMapTag
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.Map.DataForMapTag;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.Map.DeprecatedDataForMapTag;
 
             /**
-             * Verifies a DataForMapTag message.
+             * Verifies a DeprecatedDataForMapTag message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a DataForMapTag message from a plain object. Also converts values to their respective internal types.
+             * Creates a DeprecatedDataForMapTag message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns DataForMapTag
+             * @returns DeprecatedDataForMapTag
              */
-            public static fromObject(object: { [k: string]: any }): CommonProto.Map.DataForMapTag;
+            public static fromObject(object: { [k: string]: any }): CommonProto.Map.DeprecatedDataForMapTag;
 
             /**
-             * Creates a plain object from a DataForMapTag message. Also converts values to other types if specified.
-             * @param message DataForMapTag
+             * Creates a plain object from a DeprecatedDataForMapTag message. Also converts values to other types if specified.
+             * @param message DeprecatedDataForMapTag
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: CommonProto.Map.DataForMapTag, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: CommonProto.Map.DeprecatedDataForMapTag, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this DataForMapTag to JSON.
+             * Converts this DeprecatedDataForMapTag to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a MapTag. */
+        interface IMapTag {
+
+            /** MapTag mapTagDataArray */
+            mapTagDataArray?: (CommonProto.Map.MapTag.IMapTagSingleData[]|null);
+        }
+
+        /** Represents a MapTag. */
+        class MapTag implements IMapTag {
+
+            /**
+             * Constructs a new MapTag.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.Map.IMapTag);
+
+            /** MapTag mapTagDataArray. */
+            public mapTagDataArray: CommonProto.Map.MapTag.IMapTagSingleData[];
+
+            /**
+             * Creates a new MapTag instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MapTag instance
+             */
+            public static create(properties?: CommonProto.Map.IMapTag): CommonProto.Map.MapTag;
+
+            /**
+             * Encodes the specified MapTag message. Does not implicitly {@link CommonProto.Map.MapTag.verify|verify} messages.
+             * @param message MapTag message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.Map.IMapTag, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MapTag message, length delimited. Does not implicitly {@link CommonProto.Map.MapTag.verify|verify} messages.
+             * @param message MapTag message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.Map.IMapTag, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MapTag message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MapTag
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.Map.MapTag;
+
+            /**
+             * Decodes a MapTag message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MapTag
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.Map.MapTag;
+
+            /**
+             * Verifies a MapTag message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MapTag message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MapTag
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.Map.MapTag;
+
+            /**
+             * Creates a plain object from a MapTag message. Also converts values to other types if specified.
+             * @param message MapTag
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.Map.MapTag, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MapTag to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace MapTag {
+
+            /** Properties of a MapTagSingleData. */
+            interface IMapTagSingleData {
+
+                /** MapTagSingleData mapTagId */
+                mapTagId?: (number|null);
+
+                /** MapTagSingleData isEnabled */
+                isEnabled?: (boolean|null);
+
+                /** MapTagSingleData nameArray */
+                nameArray?: (CommonProto.Structure.ILanguageText[]|null);
+            }
+
+            /** Represents a MapTagSingleData. */
+            class MapTagSingleData implements IMapTagSingleData {
+
+                /**
+                 * Constructs a new MapTagSingleData.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.Map.MapTag.IMapTagSingleData);
+
+                /** MapTagSingleData mapTagId. */
+                public mapTagId: number;
+
+                /** MapTagSingleData isEnabled. */
+                public isEnabled: boolean;
+
+                /** MapTagSingleData nameArray. */
+                public nameArray: CommonProto.Structure.ILanguageText[];
+
+                /**
+                 * Creates a new MapTagSingleData instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns MapTagSingleData instance
+                 */
+                public static create(properties?: CommonProto.Map.MapTag.IMapTagSingleData): CommonProto.Map.MapTag.MapTagSingleData;
+
+                /**
+                 * Encodes the specified MapTagSingleData message. Does not implicitly {@link CommonProto.Map.MapTag.MapTagSingleData.verify|verify} messages.
+                 * @param message MapTagSingleData message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.Map.MapTag.IMapTagSingleData, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified MapTagSingleData message, length delimited. Does not implicitly {@link CommonProto.Map.MapTag.MapTagSingleData.verify|verify} messages.
+                 * @param message MapTagSingleData message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.Map.MapTag.IMapTagSingleData, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a MapTagSingleData message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns MapTagSingleData
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.Map.MapTag.MapTagSingleData;
+
+                /**
+                 * Decodes a MapTagSingleData message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns MapTagSingleData
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.Map.MapTag.MapTagSingleData;
+
+                /**
+                 * Verifies a MapTagSingleData message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a MapTagSingleData message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns MapTagSingleData
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.Map.MapTag.MapTagSingleData;
+
+                /**
+                 * Creates a plain object from a MapTagSingleData message. Also converts values to other types if specified.
+                 * @param message MapTagSingleData
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.Map.MapTag.MapTagSingleData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this MapTagSingleData to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
         }
 
         /** Properties of a MapExtraText. */
@@ -4745,14 +4940,17 @@ declare namespace CommonProto {
             /** MapRawData warEventFullData */
             warEventFullData?: (CommonProto.Map.IWarEventFullData|null);
 
-            /** MapRawData mapTag */
-            mapTag?: (CommonProto.Map.IDataForMapTag|null);
+            /** MapRawData deprecatedMapTag */
+            deprecatedMapTag?: (CommonProto.Map.IDeprecatedDataForMapTag|null);
 
             /** MapRawData mapExtraText */
             mapExtraText?: (CommonProto.Map.IMapExtraText|null);
 
             /** MapRawData nextTemplateWarRuleId */
             nextTemplateWarRuleId?: (number|null);
+
+            /** MapRawData mapTagIdFlags */
+            mapTagIdFlags?: (number|null);
         }
 
         /** Represents a MapRawData. */
@@ -4800,14 +4998,17 @@ declare namespace CommonProto {
             /** MapRawData warEventFullData. */
             public warEventFullData?: (CommonProto.Map.IWarEventFullData|null);
 
-            /** MapRawData mapTag. */
-            public mapTag?: (CommonProto.Map.IDataForMapTag|null);
+            /** MapRawData deprecatedMapTag. */
+            public deprecatedMapTag?: (CommonProto.Map.IDeprecatedDataForMapTag|null);
 
             /** MapRawData mapExtraText. */
             public mapExtraText?: (CommonProto.Map.IMapExtraText|null);
 
             /** MapRawData nextTemplateWarRuleId. */
             public nextTemplateWarRuleId: number;
+
+            /** MapRawData mapTagIdFlags. */
+            public mapTagIdFlags: number;
 
             /**
              * Creates a new MapRawData instance using the specified properties.
@@ -5009,8 +5210,8 @@ declare namespace CommonProto {
             /** MapBriefData mapNameArray */
             mapNameArray?: (CommonProto.Structure.ILanguageText[]|null);
 
-            /** MapBriefData mapTag */
-            mapTag?: (CommonProto.Map.IDataForMapTag|null);
+            /** MapBriefData mapTagIdFlags */
+            mapTagIdFlags?: (number|null);
 
             /** MapBriefData ruleAvailability */
             ruleAvailability?: (CommonProto.WarRule.IRuleAvailability|null);
@@ -5037,8 +5238,8 @@ declare namespace CommonProto {
             /** MapBriefData mapNameArray. */
             public mapNameArray: CommonProto.Structure.ILanguageText[];
 
-            /** MapBriefData mapTag. */
-            public mapTag?: (CommonProto.Map.IDataForMapTag|null);
+            /** MapBriefData mapTagIdFlags. */
+            public mapTagIdFlags: number;
 
             /** MapBriefData ruleAvailability. */
             public ruleAvailability?: (CommonProto.WarRule.IRuleAvailability|null);
@@ -28358,6 +28559,9 @@ declare namespace CommonProto {
             /** MessageContainer MsgMapGetRawData */
             MsgMapGetRawData?: (CommonProto.NetMessage.IMsgMapGetRawData|null);
 
+            /** MessageContainer MsgMapGetMapTag */
+            MsgMapGetMapTag?: (CommonProto.NetMessage.IMsgMapGetMapTag|null);
+
             /** MessageContainer MsgMeGetMapDataList */
             MsgMeGetMapDataList?: (CommonProto.NetMessage.IMsgMeGetMapDataList|null);
 
@@ -28394,8 +28598,8 @@ declare namespace CommonProto {
             /** MessageContainer MsgMmReviewMap */
             MsgMmReviewMap?: (CommonProto.NetMessage.IMsgMmReviewMap|null);
 
-            /** MessageContainer MsgMmSetMapTag */
-            MsgMmSetMapTag?: (CommonProto.NetMessage.IMsgMmSetMapTag|null);
+            /** MessageContainer MsgMmSetMapTagIdFlags */
+            MsgMmSetMapTagIdFlags?: (CommonProto.NetMessage.IMsgMmSetMapTagIdFlags|null);
 
             /** MessageContainer MsgMmSetMapName */
             MsgMmSetMapName?: (CommonProto.NetMessage.IMsgMmSetMapName|null);
@@ -28408,6 +28612,9 @@ declare namespace CommonProto {
 
             /** MessageContainer MsgMmSetWarRuleName */
             MsgMmSetWarRuleName?: (CommonProto.NetMessage.IMsgMmSetWarRuleName|null);
+
+            /** MessageContainer MsgMmSetMapTagSingleData */
+            MsgMmSetMapTagSingleData?: (CommonProto.NetMessage.IMsgMmSetMapTagSingleData|null);
 
             /** MessageContainer MsgReplaySetSelfRating */
             MsgReplaySetSelfRating?: (CommonProto.NetMessage.IMsgReplaySetSelfRating|null);
@@ -28740,6 +28947,9 @@ declare namespace CommonProto {
             /** MessageContainer MsgMapGetRawData. */
             public MsgMapGetRawData?: (CommonProto.NetMessage.IMsgMapGetRawData|null);
 
+            /** MessageContainer MsgMapGetMapTag. */
+            public MsgMapGetMapTag?: (CommonProto.NetMessage.IMsgMapGetMapTag|null);
+
             /** MessageContainer MsgMeGetMapDataList. */
             public MsgMeGetMapDataList?: (CommonProto.NetMessage.IMsgMeGetMapDataList|null);
 
@@ -28776,8 +28986,8 @@ declare namespace CommonProto {
             /** MessageContainer MsgMmReviewMap. */
             public MsgMmReviewMap?: (CommonProto.NetMessage.IMsgMmReviewMap|null);
 
-            /** MessageContainer MsgMmSetMapTag. */
-            public MsgMmSetMapTag?: (CommonProto.NetMessage.IMsgMmSetMapTag|null);
+            /** MessageContainer MsgMmSetMapTagIdFlags. */
+            public MsgMmSetMapTagIdFlags?: (CommonProto.NetMessage.IMsgMmSetMapTagIdFlags|null);
 
             /** MessageContainer MsgMmSetMapName. */
             public MsgMmSetMapName?: (CommonProto.NetMessage.IMsgMmSetMapName|null);
@@ -28790,6 +29000,9 @@ declare namespace CommonProto {
 
             /** MessageContainer MsgMmSetWarRuleName. */
             public MsgMmSetWarRuleName?: (CommonProto.NetMessage.IMsgMmSetWarRuleName|null);
+
+            /** MessageContainer MsgMmSetMapTagSingleData. */
+            public MsgMmSetMapTagSingleData?: (CommonProto.NetMessage.IMsgMmSetMapTagSingleData|null);
 
             /** MessageContainer MsgReplaySetSelfRating. */
             public MsgReplaySetSelfRating?: (CommonProto.NetMessage.IMsgReplaySetSelfRating|null);
@@ -38015,6 +38228,285 @@ declare namespace CommonProto {
             }
         }
 
+        /** Properties of a MsgMapGetMapTag. */
+        interface IMsgMapGetMapTag {
+
+            /** MsgMapGetMapTag c */
+            c?: (CommonProto.NetMessage.MsgMapGetMapTag.IC|null);
+
+            /** MsgMapGetMapTag s */
+            s?: (CommonProto.NetMessage.MsgMapGetMapTag.IS|null);
+        }
+
+        /** Represents a MsgMapGetMapTag. */
+        class MsgMapGetMapTag implements IMsgMapGetMapTag {
+
+            /**
+             * Constructs a new MsgMapGetMapTag.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.NetMessage.IMsgMapGetMapTag);
+
+            /** MsgMapGetMapTag c. */
+            public c?: (CommonProto.NetMessage.MsgMapGetMapTag.IC|null);
+
+            /** MsgMapGetMapTag s. */
+            public s?: (CommonProto.NetMessage.MsgMapGetMapTag.IS|null);
+
+            /**
+             * Creates a new MsgMapGetMapTag instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MsgMapGetMapTag instance
+             */
+            public static create(properties?: CommonProto.NetMessage.IMsgMapGetMapTag): CommonProto.NetMessage.MsgMapGetMapTag;
+
+            /**
+             * Encodes the specified MsgMapGetMapTag message. Does not implicitly {@link CommonProto.NetMessage.MsgMapGetMapTag.verify|verify} messages.
+             * @param message MsgMapGetMapTag message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.NetMessage.IMsgMapGetMapTag, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MsgMapGetMapTag message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMapGetMapTag.verify|verify} messages.
+             * @param message MsgMapGetMapTag message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.NetMessage.IMsgMapGetMapTag, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MsgMapGetMapTag message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MsgMapGetMapTag
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMapGetMapTag;
+
+            /**
+             * Decodes a MsgMapGetMapTag message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MsgMapGetMapTag
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMapGetMapTag;
+
+            /**
+             * Verifies a MsgMapGetMapTag message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MsgMapGetMapTag message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MsgMapGetMapTag
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMapGetMapTag;
+
+            /**
+             * Creates a plain object from a MsgMapGetMapTag message. Also converts values to other types if specified.
+             * @param message MsgMapGetMapTag
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.NetMessage.MsgMapGetMapTag, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MsgMapGetMapTag to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace MsgMapGetMapTag {
+
+            /** Properties of a C. */
+            interface IC {
+            }
+
+            /** Represents a C. */
+            class C implements IC {
+
+                /**
+                 * Constructs a new C.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgMapGetMapTag.IC);
+
+                /**
+                 * Creates a new C instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns C instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgMapGetMapTag.IC): CommonProto.NetMessage.MsgMapGetMapTag.C;
+
+                /**
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgMapGetMapTag.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgMapGetMapTag.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMapGetMapTag.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMapGetMapTag.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMapGetMapTag.C;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMapGetMapTag.C;
+
+                /**
+                 * Verifies a C message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a C message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns C
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMapGetMapTag.C;
+
+                /**
+                 * Creates a plain object from a C message. Also converts values to other types if specified.
+                 * @param message C
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgMapGetMapTag.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this C to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a S. */
+            interface IS {
+
+                /** S errorCode */
+                errorCode?: (number|null);
+
+                /** S mapTag */
+                mapTag?: (CommonProto.Map.IMapTag|null);
+            }
+
+            /** Represents a S. */
+            class S implements IS {
+
+                /**
+                 * Constructs a new S.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgMapGetMapTag.IS);
+
+                /** S errorCode. */
+                public errorCode: number;
+
+                /** S mapTag. */
+                public mapTag?: (CommonProto.Map.IMapTag|null);
+
+                /**
+                 * Creates a new S instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns S instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgMapGetMapTag.IS): CommonProto.NetMessage.MsgMapGetMapTag.S;
+
+                /**
+                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgMapGetMapTag.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgMapGetMapTag.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMapGetMapTag.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMapGetMapTag.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMapGetMapTag.S;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMapGetMapTag.S;
+
+                /**
+                 * Verifies a S message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a S message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns S
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMapGetMapTag.S;
+
+                /**
+                 * Creates a plain object from a S message. Also converts values to other types if specified.
+                 * @param message S
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgMapGetMapTag.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this S to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+
         /** Properties of a MsgMeGetMapDataList. */
         interface IMsgMeGetMapDataList {
 
@@ -41780,103 +42272,103 @@ declare namespace CommonProto {
             }
         }
 
-        /** Properties of a MsgMmSetMapTag. */
-        interface IMsgMmSetMapTag {
+        /** Properties of a MsgMmSetMapTagIdFlags. */
+        interface IMsgMmSetMapTagIdFlags {
 
-            /** MsgMmSetMapTag c */
-            c?: (CommonProto.NetMessage.MsgMmSetMapTag.IC|null);
+            /** MsgMmSetMapTagIdFlags c */
+            c?: (CommonProto.NetMessage.MsgMmSetMapTagIdFlags.IC|null);
 
-            /** MsgMmSetMapTag s */
-            s?: (CommonProto.NetMessage.MsgMmSetMapTag.IS|null);
+            /** MsgMmSetMapTagIdFlags s */
+            s?: (CommonProto.NetMessage.MsgMmSetMapTagIdFlags.IS|null);
         }
 
-        /** Represents a MsgMmSetMapTag. */
-        class MsgMmSetMapTag implements IMsgMmSetMapTag {
+        /** Represents a MsgMmSetMapTagIdFlags. */
+        class MsgMmSetMapTagIdFlags implements IMsgMmSetMapTagIdFlags {
 
             /**
-             * Constructs a new MsgMmSetMapTag.
+             * Constructs a new MsgMmSetMapTagIdFlags.
              * @param [properties] Properties to set
              */
-            constructor(properties?: CommonProto.NetMessage.IMsgMmSetMapTag);
+            constructor(properties?: CommonProto.NetMessage.IMsgMmSetMapTagIdFlags);
 
-            /** MsgMmSetMapTag c. */
-            public c?: (CommonProto.NetMessage.MsgMmSetMapTag.IC|null);
+            /** MsgMmSetMapTagIdFlags c. */
+            public c?: (CommonProto.NetMessage.MsgMmSetMapTagIdFlags.IC|null);
 
-            /** MsgMmSetMapTag s. */
-            public s?: (CommonProto.NetMessage.MsgMmSetMapTag.IS|null);
+            /** MsgMmSetMapTagIdFlags s. */
+            public s?: (CommonProto.NetMessage.MsgMmSetMapTagIdFlags.IS|null);
 
             /**
-             * Creates a new MsgMmSetMapTag instance using the specified properties.
+             * Creates a new MsgMmSetMapTagIdFlags instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns MsgMmSetMapTag instance
+             * @returns MsgMmSetMapTagIdFlags instance
              */
-            public static create(properties?: CommonProto.NetMessage.IMsgMmSetMapTag): CommonProto.NetMessage.MsgMmSetMapTag;
+            public static create(properties?: CommonProto.NetMessage.IMsgMmSetMapTagIdFlags): CommonProto.NetMessage.MsgMmSetMapTagIdFlags;
 
             /**
-             * Encodes the specified MsgMmSetMapTag message. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTag.verify|verify} messages.
-             * @param message MsgMmSetMapTag message or plain object to encode
+             * Encodes the specified MsgMmSetMapTagIdFlags message. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTagIdFlags.verify|verify} messages.
+             * @param message MsgMmSetMapTagIdFlags message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: CommonProto.NetMessage.IMsgMmSetMapTag, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: CommonProto.NetMessage.IMsgMmSetMapTagIdFlags, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified MsgMmSetMapTag message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTag.verify|verify} messages.
-             * @param message MsgMmSetMapTag message or plain object to encode
+             * Encodes the specified MsgMmSetMapTagIdFlags message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTagIdFlags.verify|verify} messages.
+             * @param message MsgMmSetMapTagIdFlags message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: CommonProto.NetMessage.IMsgMmSetMapTag, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: CommonProto.NetMessage.IMsgMmSetMapTagIdFlags, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a MsgMmSetMapTag message from the specified reader or buffer.
+             * Decodes a MsgMmSetMapTagIdFlags message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns MsgMmSetMapTag
+             * @returns MsgMmSetMapTagIdFlags
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMmSetMapTag;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMmSetMapTagIdFlags;
 
             /**
-             * Decodes a MsgMmSetMapTag message from the specified reader or buffer, length delimited.
+             * Decodes a MsgMmSetMapTagIdFlags message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns MsgMmSetMapTag
+             * @returns MsgMmSetMapTagIdFlags
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMmSetMapTag;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMmSetMapTagIdFlags;
 
             /**
-             * Verifies a MsgMmSetMapTag message.
+             * Verifies a MsgMmSetMapTagIdFlags message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a MsgMmSetMapTag message from a plain object. Also converts values to their respective internal types.
+             * Creates a MsgMmSetMapTagIdFlags message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns MsgMmSetMapTag
+             * @returns MsgMmSetMapTagIdFlags
              */
-            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMmSetMapTag;
+            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMmSetMapTagIdFlags;
 
             /**
-             * Creates a plain object from a MsgMmSetMapTag message. Also converts values to other types if specified.
-             * @param message MsgMmSetMapTag
+             * Creates a plain object from a MsgMmSetMapTagIdFlags message. Also converts values to other types if specified.
+             * @param message MsgMmSetMapTagIdFlags
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: CommonProto.NetMessage.MsgMmSetMapTag, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: CommonProto.NetMessage.MsgMmSetMapTagIdFlags, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this MsgMmSetMapTag to JSON.
+             * Converts this MsgMmSetMapTagIdFlags to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        namespace MsgMmSetMapTag {
+        namespace MsgMmSetMapTagIdFlags {
 
             /** Properties of a C. */
             interface IC {
@@ -41884,8 +42376,8 @@ declare namespace CommonProto {
                 /** C mapId */
                 mapId?: (number|null);
 
-                /** C mapTag */
-                mapTag?: (CommonProto.Map.IDataForMapTag|null);
+                /** C mapTagIdFlags */
+                mapTagIdFlags?: (number|null);
             }
 
             /** Represents a C. */
@@ -41895,36 +42387,36 @@ declare namespace CommonProto {
                  * Constructs a new C.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: CommonProto.NetMessage.MsgMmSetMapTag.IC);
+                constructor(properties?: CommonProto.NetMessage.MsgMmSetMapTagIdFlags.IC);
 
                 /** C mapId. */
                 public mapId: number;
 
-                /** C mapTag. */
-                public mapTag?: (CommonProto.Map.IDataForMapTag|null);
+                /** C mapTagIdFlags. */
+                public mapTagIdFlags: number;
 
                 /**
                  * Creates a new C instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns C instance
                  */
-                public static create(properties?: CommonProto.NetMessage.MsgMmSetMapTag.IC): CommonProto.NetMessage.MsgMmSetMapTag.C;
+                public static create(properties?: CommonProto.NetMessage.MsgMmSetMapTagIdFlags.IC): CommonProto.NetMessage.MsgMmSetMapTagIdFlags.C;
 
                 /**
-                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTag.C.verify|verify} messages.
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTagIdFlags.C.verify|verify} messages.
                  * @param message C message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: CommonProto.NetMessage.MsgMmSetMapTag.IC, writer?: protobuf.Writer): protobuf.Writer;
+                public static encode(message: CommonProto.NetMessage.MsgMmSetMapTagIdFlags.IC, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
-                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTag.C.verify|verify} messages.
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTagIdFlags.C.verify|verify} messages.
                  * @param message C message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: CommonProto.NetMessage.MsgMmSetMapTag.IC, writer?: protobuf.Writer): protobuf.Writer;
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMmSetMapTagIdFlags.IC, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
                  * Decodes a C message from the specified reader or buffer.
@@ -41934,7 +42426,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMmSetMapTag.C;
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMmSetMapTagIdFlags.C;
 
                 /**
                  * Decodes a C message from the specified reader or buffer, length delimited.
@@ -41943,7 +42435,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMmSetMapTag.C;
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMmSetMapTagIdFlags.C;
 
                 /**
                  * Verifies a C message.
@@ -41957,7 +42449,7 @@ declare namespace CommonProto {
                  * @param object Plain object
                  * @returns C
                  */
-                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMmSetMapTag.C;
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMmSetMapTagIdFlags.C;
 
                 /**
                  * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -41965,7 +42457,7 @@ declare namespace CommonProto {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: CommonProto.NetMessage.MsgMmSetMapTag.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: CommonProto.NetMessage.MsgMmSetMapTagIdFlags.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this C to JSON.
@@ -41979,6 +42471,12 @@ declare namespace CommonProto {
 
                 /** S errorCode */
                 errorCode?: (number|null);
+
+                /** S mapId */
+                mapId?: (number|null);
+
+                /** S mapTagIdFlags */
+                mapTagIdFlags?: (number|null);
             }
 
             /** Represents a S. */
@@ -41988,33 +42486,39 @@ declare namespace CommonProto {
                  * Constructs a new S.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: CommonProto.NetMessage.MsgMmSetMapTag.IS);
+                constructor(properties?: CommonProto.NetMessage.MsgMmSetMapTagIdFlags.IS);
 
                 /** S errorCode. */
                 public errorCode: number;
+
+                /** S mapId. */
+                public mapId: number;
+
+                /** S mapTagIdFlags. */
+                public mapTagIdFlags: number;
 
                 /**
                  * Creates a new S instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns S instance
                  */
-                public static create(properties?: CommonProto.NetMessage.MsgMmSetMapTag.IS): CommonProto.NetMessage.MsgMmSetMapTag.S;
+                public static create(properties?: CommonProto.NetMessage.MsgMmSetMapTagIdFlags.IS): CommonProto.NetMessage.MsgMmSetMapTagIdFlags.S;
 
                 /**
-                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTag.S.verify|verify} messages.
+                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTagIdFlags.S.verify|verify} messages.
                  * @param message S message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: CommonProto.NetMessage.MsgMmSetMapTag.IS, writer?: protobuf.Writer): protobuf.Writer;
+                public static encode(message: CommonProto.NetMessage.MsgMmSetMapTagIdFlags.IS, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
-                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTag.S.verify|verify} messages.
+                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTagIdFlags.S.verify|verify} messages.
                  * @param message S message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: CommonProto.NetMessage.MsgMmSetMapTag.IS, writer?: protobuf.Writer): protobuf.Writer;
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMmSetMapTagIdFlags.IS, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
                  * Decodes a S message from the specified reader or buffer.
@@ -42024,7 +42528,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMmSetMapTag.S;
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMmSetMapTagIdFlags.S;
 
                 /**
                  * Decodes a S message from the specified reader or buffer, length delimited.
@@ -42033,7 +42537,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMmSetMapTag.S;
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMmSetMapTagIdFlags.S;
 
                 /**
                  * Verifies a S message.
@@ -42047,7 +42551,7 @@ declare namespace CommonProto {
                  * @param object Plain object
                  * @returns S
                  */
-                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMmSetMapTag.S;
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMmSetMapTagIdFlags.S;
 
                 /**
                  * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -42055,7 +42559,7 @@ declare namespace CommonProto {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: CommonProto.NetMessage.MsgMmSetMapTag.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: CommonProto.NetMessage.MsgMmSetMapTagIdFlags.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this S to JSON.
@@ -43256,6 +43760,291 @@ declare namespace CommonProto {
                  * @returns Plain object
                  */
                 public static toObject(message: CommonProto.NetMessage.MsgMmSetWarRuleName.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this S to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+
+        /** Properties of a MsgMmSetMapTagSingleData. */
+        interface IMsgMmSetMapTagSingleData {
+
+            /** MsgMmSetMapTagSingleData c */
+            c?: (CommonProto.NetMessage.MsgMmSetMapTagSingleData.IC|null);
+
+            /** MsgMmSetMapTagSingleData s */
+            s?: (CommonProto.NetMessage.MsgMmSetMapTagSingleData.IS|null);
+        }
+
+        /** Represents a MsgMmSetMapTagSingleData. */
+        class MsgMmSetMapTagSingleData implements IMsgMmSetMapTagSingleData {
+
+            /**
+             * Constructs a new MsgMmSetMapTagSingleData.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.NetMessage.IMsgMmSetMapTagSingleData);
+
+            /** MsgMmSetMapTagSingleData c. */
+            public c?: (CommonProto.NetMessage.MsgMmSetMapTagSingleData.IC|null);
+
+            /** MsgMmSetMapTagSingleData s. */
+            public s?: (CommonProto.NetMessage.MsgMmSetMapTagSingleData.IS|null);
+
+            /**
+             * Creates a new MsgMmSetMapTagSingleData instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MsgMmSetMapTagSingleData instance
+             */
+            public static create(properties?: CommonProto.NetMessage.IMsgMmSetMapTagSingleData): CommonProto.NetMessage.MsgMmSetMapTagSingleData;
+
+            /**
+             * Encodes the specified MsgMmSetMapTagSingleData message. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTagSingleData.verify|verify} messages.
+             * @param message MsgMmSetMapTagSingleData message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.NetMessage.IMsgMmSetMapTagSingleData, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MsgMmSetMapTagSingleData message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTagSingleData.verify|verify} messages.
+             * @param message MsgMmSetMapTagSingleData message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.NetMessage.IMsgMmSetMapTagSingleData, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MsgMmSetMapTagSingleData message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MsgMmSetMapTagSingleData
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMmSetMapTagSingleData;
+
+            /**
+             * Decodes a MsgMmSetMapTagSingleData message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MsgMmSetMapTagSingleData
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMmSetMapTagSingleData;
+
+            /**
+             * Verifies a MsgMmSetMapTagSingleData message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MsgMmSetMapTagSingleData message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MsgMmSetMapTagSingleData
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMmSetMapTagSingleData;
+
+            /**
+             * Creates a plain object from a MsgMmSetMapTagSingleData message. Also converts values to other types if specified.
+             * @param message MsgMmSetMapTagSingleData
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.NetMessage.MsgMmSetMapTagSingleData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MsgMmSetMapTagSingleData to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace MsgMmSetMapTagSingleData {
+
+            /** Properties of a C. */
+            interface IC {
+
+                /** C data */
+                data?: (CommonProto.Map.MapTag.IMapTagSingleData|null);
+            }
+
+            /** Represents a C. */
+            class C implements IC {
+
+                /**
+                 * Constructs a new C.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgMmSetMapTagSingleData.IC);
+
+                /** C data. */
+                public data?: (CommonProto.Map.MapTag.IMapTagSingleData|null);
+
+                /**
+                 * Creates a new C instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns C instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgMmSetMapTagSingleData.IC): CommonProto.NetMessage.MsgMmSetMapTagSingleData.C;
+
+                /**
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTagSingleData.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgMmSetMapTagSingleData.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTagSingleData.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMmSetMapTagSingleData.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMmSetMapTagSingleData.C;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMmSetMapTagSingleData.C;
+
+                /**
+                 * Verifies a C message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a C message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns C
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMmSetMapTagSingleData.C;
+
+                /**
+                 * Creates a plain object from a C message. Also converts values to other types if specified.
+                 * @param message C
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgMmSetMapTagSingleData.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this C to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a S. */
+            interface IS {
+
+                /** S errorCode */
+                errorCode?: (number|null);
+
+                /** S data */
+                data?: (CommonProto.Map.MapTag.IMapTagSingleData|null);
+            }
+
+            /** Represents a S. */
+            class S implements IS {
+
+                /**
+                 * Constructs a new S.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgMmSetMapTagSingleData.IS);
+
+                /** S errorCode. */
+                public errorCode: number;
+
+                /** S data. */
+                public data?: (CommonProto.Map.MapTag.IMapTagSingleData|null);
+
+                /**
+                 * Creates a new S instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns S instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgMmSetMapTagSingleData.IS): CommonProto.NetMessage.MsgMmSetMapTagSingleData.S;
+
+                /**
+                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTagSingleData.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgMmSetMapTagSingleData.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMmSetMapTagSingleData.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMmSetMapTagSingleData.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMmSetMapTagSingleData.S;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMmSetMapTagSingleData.S;
+
+                /**
+                 * Verifies a S message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a S message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns S
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMmSetMapTagSingleData.S;
+
+                /**
+                 * Creates a plain object from a S message. Also converts values to other types if specified.
+                 * @param message S
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgMmSetMapTagSingleData.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this S to JSON.

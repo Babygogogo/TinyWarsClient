@@ -3,7 +3,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import Twns.Notify               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -13,12 +13,25 @@
 // import TwnsMcrCreateMapListPanel    from "./McrCreateMapListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace Twns.MultiCustomRoom {
-    import LangTextType             = Twns.Lang.LangTextType;
-    import NotifyType               = Twns.Notify.NotifyType;
+namespace Twns.Common {
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
 
-    export type OpenDataForMcrCreateSearchMapPanel = void;
-    export class McrCreateSearchMapPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrCreateSearchMapPanel> {
+    export type MapFilter = {
+        mapName?        : string | null;
+        mapDesigner?    : string | null;
+        playersCount?   : number | null;
+        playedTimes?    : number | null;
+        minRating?      : number | null;
+        mapTagIdFlags?  : number | null;
+    };
+
+    export type OpenDataForCommonMapFilterPanel = {
+        mapFilter           : MapFilter | null;
+        callbackOnConfirm   : (mapFilter: MapFilter) => void;
+        callbackOnReset     : () => void;
+    };
+    export class CommonMapFilterPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonMapFilterPanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
 
         private readonly _group!                    : eui.Group;
@@ -42,7 +55,7 @@ namespace Twns.MultiCustomRoom {
         private readonly _labelTagFog!              : TwnsUiLabel.UiLabel;
         private readonly _btnTagFog!                : TwnsUiButton.UiButton;
 
-        private _mapTag         : CommonProto.Map.IDataForMapTag = {};
+        private _mapTagIdFlags                      = 0;
 
         protected _onOpening(): void {
             this._setUiListenerArray([
@@ -59,46 +72,54 @@ namespace Twns.MultiCustomRoom {
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
+
+            this._mapTagIdFlags = this._getOpenData().mapFilter?.mapTagIdFlags ?? 0;
+            this._resetComponentsForFilter();
         }
         protected _onClosing(): void {
             // nothing to do
         }
 
         private _onTouchedBtnReset(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrCreateMapListPanel, {});
+            this._getOpenData().callbackOnReset();
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
-            const minRatingText = this._inputMinRating.text;
-            const minRating     = minRatingText ? Number(minRatingText) : null;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrCreateMapListPanel, {
-                mapName     : this._inputMapName.text || null,
-                mapDesigner : this._inputDesigner.text || null,
-                playersCount: Number(this._inputPlayersCount.text) || null,
-                playedTimes : Number(this._inputPlayedTimes.text) || null,
-                minRating   : (minRating == null || isNaN(minRating)) ? null : minRating,
-                mapTag      : this._mapTag,
+            this._getOpenData().callbackOnConfirm({
+                mapName         : this._inputMapName.text.trim() || null,
+                mapDesigner     : this._inputDesigner.text.trim() || null,
+                playersCount    : getNumber(this._inputPlayersCount.text),
+                playedTimes     : getNumber(this._inputPlayedTimes.text),
+                minRating       : getNumber(this._inputMinRating.text),
+                mapTagIdFlags   : this._mapTagIdFlags,
             });
 
             this.close();
         }
 
         private _onTouchedBtnTagFog(): void {
-            const mapTag = this._mapTag;
-            const hasFog = mapTag.fog;
-            if (hasFog == true) {
-                mapTag.fog = false;
-            } else if (hasFog == false) {
-                mapTag.fog = null;
-            } else {
-                mapTag.fog = true;
-            }
-            this._updateLabelTagFog();
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseMapTagIdPanel, {
+                currentMapTagIdFlags    : this._mapTagIdFlags,
+                callbackOnConfirm       : mapTagIdFlags => {
+                    this._mapTagIdFlags = mapTagIdFlags;
+                    this._updateLabelTagFog();
+                },
+            });
         }
 
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
+        }
+
+        private _resetComponentsForFilter(): void {
+            const mapFilter                 = this._getOpenData().mapFilter;
+            this._inputMapName.text         = mapFilter?.mapName ?? ``;
+            this._inputDesigner.text        = mapFilter?.mapDesigner ?? ``;
+            this._inputPlayersCount.text    = `${mapFilter?.playersCount ?? ``}`;
+            this._inputPlayedTimes.text     = `${mapFilter?.playedTimes ?? ``}`;
+            this._inputMinRating.text       = `${mapFilter?.minRating ?? ``}`;
+            this._updateLabelTagFog();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -108,54 +129,64 @@ namespace Twns.MultiCustomRoom {
             this._labelPlayersCountTitle.text   = Lang.getText(LangTextType.B0229);
             this._labelPlayedTimesTitle.text    = Lang.getText(LangTextType.B0568);
             this._labelMinRatingTitle.text      = Lang.getText(LangTextType.B0569);
-            this._labelTagFogTitle.text         = Lang.getText(LangTextType.B0570);
+            this._labelTagFogTitle.text         = Lang.getText(LangTextType.B0445);
             this._labelDesc.text                = Lang.getText(LangTextType.A0063);
             this._btnReset.label                = Lang.getText(LangTextType.B0567);
             this._btnSearch.label               = Lang.getText(LangTextType.B0228);
             this._updateLabelTagFog();
         }
 
-        private _updateLabelTagFog(): void {
-            const hasFog    = this._mapTag.fog;
-            const label     = this._labelTagFog;
-            if (hasFog == true) {
-                label.text = Lang.getText(LangTextType.B0012);
-            } else if (hasFog == false) {
-                label.text = Lang.getText(LangTextType.B0013);
-            } else {
+        private async _updateLabelTagFog(): Promise<void> {
+            const mapTagIdArray = Helpers.getIdArrayByIdFlags(this._mapTagIdFlags);
+            const length        = mapTagIdArray.length;
+            const label         = this._labelTagFog;
+            if (length == 0) {
                 label.text = ``;
+            } else if (length === 1) {
+                label.text = Lang.getLanguageText({ textArray: (await WarMap.WarMapModel.getMapTag())?.mapTagDataArray?.find(v => v.mapTagId === mapTagIdArray[0])?.nameArray }) ?? CommonConstants.ErrorTextForUndefined;
+            } else {
+                label.text = `${length}`;
             }
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
+    }
+
+    function getNumber(text: Types.Undefinable<string>): number | null {
+        if (!text) {
+            return null;
+        }
+
+        const num = parseInt(text);
+        return isNaN(num) ? null : num;
     }
 }
 
-// export default TwnsMcrCreateSearchMapPanel;
+// export default TwnsCommonMapFilterPanel;

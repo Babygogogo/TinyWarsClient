@@ -37,7 +37,6 @@ namespace Twns.PanelHelpers {
         ChangeLogPanel                      : PanelConfig<ChangeLog.OpenDataForChangeLogPanel>;
 
         CcrCreateMapListPanel               : PanelConfig<CoopCustomRoom.OpenDataForCcrCreateMapListPanel>;
-        CcrCreateSearchMapPanel             : PanelConfig<CoopCustomRoom.OpenDataForCcrCreateSearchMapPanel>;
         CcrCreateSettingsPanel              : PanelConfig<CoopCustomRoom.OpenDataForCcrCreateSettingsPanel>;
         CcrJoinRoomListPanel                : PanelConfig<CoopCustomRoom.OpenDataForCcrJoinRoomListPanel>;
         CcrMainMenuPanel                    : PanelConfig<CoopCustomRoom.OpenDataForCcrMainMenuPanel>;
@@ -61,6 +60,7 @@ namespace Twns.PanelHelpers {
         CommonChooseCustomCounterIdPanel    : PanelConfig<Common.OpenDataForCommonChooseCustomCounterIdPanel>;
         CommonChooseGridIndexPanel          : PanelConfig<Common.OpenDataForCommonChooseGridIndexPanel>;
         CommonChooseLocationPanel           : PanelConfig<Common.OpenDataForCommonChooseLocationPanel>;
+        CommonChooseMapTagIdPanel           : PanelConfig<Common.OpenDataForCommonChooseMapTagIdPanel>;
         CommonChoosePlayerAliveStatePanel   : PanelConfig<Common.OpenDataForCommonChoosePlayerAliveStatePanel>;
         CommonChoosePlayerIndexPanel        : PanelConfig<Common.OpenDataForCommonChoosePlayerIndexPanel>;
         CommonChooseSingleCoPanel           : PanelConfig<Common.OpenDataForCommonChooseSingleCoPanel>;
@@ -86,7 +86,9 @@ namespace Twns.PanelHelpers {
         CommonHelpPanel                     : PanelConfig<Common.OpenDataForCommonHelpPanel>;
         CommonInputPanel                    : PanelConfig<Common.OpenDataForCommonInputPanel>;
         CommonInputIntegerPanel             : PanelConfig<Common.OpenDataForCommonInputIntegerPanel>;
+        CommonInputLanguageTextPanel        : PanelConfig<Common.OpenDataForCommonInputLanguageTextPanel>;
         CommonJoinRoomPasswordPanel         : PanelConfig<Common.OpenDataForCommonJoinRoomPasswordPanel>;
+        CommonMapFilterPanel                : PanelConfig<Common.OpenDataForCommonMapFilterPanel>;
         CommonMapWarStatisticsPanel         : PanelConfig<Common.OpenDataForCommonMapWarStatisticsPanel>;
         CommonModifyWarRuleNamePanel        : PanelConfig<Common.OpenDataForCommonModifyWarRuleNamePanel>;
         CommonRankListPanel                 : PanelConfig<Common.OpenDataForCommonRankListPanel>;
@@ -101,7 +103,6 @@ namespace Twns.PanelHelpers {
         LobbyTopRightPanel                  : PanelConfig<Lobby.OpenDataForLobbyTopRightPanel>;
 
         McrCreateMapListPanel               : PanelConfig<MultiCustomRoom.OpenDataForMcrCreateMapListPanel>;
-        McrCreateSearchMapPanel             : PanelConfig<MultiCustomRoom.OpenDataForMcrCreateSearchMapPanel>;
         McrCreateSettingsPanel              : PanelConfig<MultiCustomRoom.OpenDataForMcrCreateSettingsPanel>;
         McrJoinRoomListPanel                : PanelConfig<MultiCustomRoom.OpenDataForMcrJoinRoomListPanel>;
         McrMainMenuPanel                    : PanelConfig<MultiCustomRoom.OpenDataForMcrMainMenuPanel>;
@@ -120,10 +121,8 @@ namespace Twns.PanelHelpers {
         MeConfirmSaveMapPanel               : PanelConfig<MapEditor.OpenDataForMeConfirmSaveMapPanel>;
         MeImportPanel                       : PanelConfig<MapEditor.OpenDataForMeImportPanel>;
         MeMapListPanel                      : PanelConfig<MapEditor.OpenDataForMeMapListPanel>;
-        MeMapTagPanel                       : PanelConfig<MapEditor.OpenDataForMeMapTagPanel>;
         MeMfwSettingsPanel                  : PanelConfig<MapEditor.OpenDataForMeMfwSettingsPanel>;
         MeModifyMapDescPanel                : PanelConfig<MapEditor.OpenDataForMeModifyMapDescPanel>;
-        MeModifyMapNamePanel                : PanelConfig<MapEditor.OpenDataForMeModifyMapNamePanel>;
         MeResizePanel                       : PanelConfig<MapEditor.OpenDataForMeResizePanel>;
         MeSimSettingsPanel                  : PanelConfig<MapEditor.OpenDataForMeSimSettingsPanel>;
         MeSymmetryPanel                     : PanelConfig<MapEditor.OpenDataForMeSymmetryPanel>;
@@ -147,11 +146,11 @@ namespace Twns.PanelHelpers {
         MmCommandPanel                      : PanelConfig<MapManagement.OpenDataForMmCommandPanel>;
         MmMainMenuPanel                     : PanelConfig<MapManagement.OpenDataForMmMainMenuPanel>;
         MmMapRenamePanel                    : PanelConfig<MapManagement.OpenDataForMmMapRenamePanel>;
+        MmMapTagListPanel                   : PanelConfig<MapManagement.OpenDataForMmMapTagListPanel>;
         MmModifyMapListPanel                : PanelConfig<MapManagement.OpenDataForMmModifyMapListPanel>;
         MmRejectMapPanel                    : PanelConfig<MapManagement.OpenDataForMmRejectMapPanel>;
         MmReviewListPanel                   : PanelConfig<MapManagement.OpenDataForMmReviewListPanel>;
         MmSetWarRuleAvailabilityPanel       : PanelConfig<MapManagement.OpenDataForMmSetWarRuleAvailabilityPanel>;
-        MmTagChangePanel                    : PanelConfig<MapManagement.OpenDataForMmTagChangePanel>;
         MmWarRulePanel                      : PanelConfig<MapManagement.OpenDataForMmWarRulePanel>;
 
         MpwSpectatePanel                    : PanelConfig<MultiPlayerWar.OpenDataForMpwSpectatePanel>;
@@ -174,7 +173,6 @@ namespace Twns.PanelHelpers {
         RwWarMenuPanel                      : PanelConfig<ReplayWar.OpenDataForRwWarMenuPanel>;
 
         ScrCreateMapListPanel               : PanelConfig<SingleCustomRoom.OpenDataForScrCreateMapListPanel>;
-        ScrCreateSearchMapPanel             : PanelConfig<SingleCustomRoom.OpenDataForScrCreateSearchMapPanel>;
         ScrCreateSettingsPanel              : PanelConfig<SingleCustomRoom.OpenDataForScrCreateSettingsPanel>;
 
         SpmCreateSaveSlotsPanel             : PanelConfig<SinglePlayerMode.OpenDataForSpmCreateSaveSlotsPanel>;
@@ -411,12 +409,6 @@ namespace Twns.PanelHelpers {
                 isExclusive : true,
             },
 
-            CcrCreateSearchMapPanel: {
-                cls         : CoopCustomRoom?.CcrCreateSearchMapPanel,
-                skinName    : `resource/skins/coopCustomRoom/CcrCreateSearchMapPanel.exml`,
-                layer       : LayerType.Hud0,
-            },
-
             CcrCreateSettingsPanel: {
                 cls         : CoopCustomRoom?.CcrCreateSettingsPanel,
                 skinName    : `resource/skins/coopCustomRoom/CcrCreateSettingsPanel.exml`,
@@ -544,6 +536,12 @@ namespace Twns.PanelHelpers {
             CommonChooseLocationPanel: {
                 cls         : Common?.CommonChooseLocationPanel,
                 skinName    : `resource/skins/common/CommonChooseLocationPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonChooseMapTagIdPanel: {
+                cls         : Common?.CommonChooseMapTagIdPanel,
+                skinName    : `resource/skins/common/CommonChooseMapTagIdPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
@@ -690,18 +688,30 @@ namespace Twns.PanelHelpers {
             CommonInputPanel: {
                 cls         : Common?.CommonInputPanel,
                 skinName    : `resource/skins/common/CommonInputPanel.exml`,
-                layer       : LayerType.Notify0,
+                layer       : LayerType.Hud1,
             },
 
             CommonInputIntegerPanel: {
                 cls         : Common?.CommonInputIntegerPanel,
                 skinName    : `resource/skins/common/CommonInputIntegerPanel.exml`,
-                layer       : LayerType.Notify0,
+                layer       : LayerType.Hud1,
+            },
+
+            CommonInputLanguageTextPanel: {
+                cls         : Common?.CommonInputLanguageTextPanel,
+                skinName    : `resource/skins/common/CommonInputLanguageTextPanel.exml`,
+                layer       : LayerType.Hud1,
             },
 
             CommonJoinRoomPasswordPanel: {
                 cls         : Common?.CommonJoinRoomPasswordPanel,
                 skinName    : `resource/skins/common/CommonJoinRoomPasswordPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonMapFilterPanel: {
+                cls         : Common?.CommonMapFilterPanel,
+                skinName    : `resource/skins/common/CommonMapFilterPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
@@ -785,12 +795,6 @@ namespace Twns.PanelHelpers {
                 skinName    : `resource/skins/multiCustomRoom/McrCreateMapListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
-            },
-
-            McrCreateSearchMapPanel: {
-                cls         : MultiCustomRoom?.McrCreateSearchMapPanel,
-                skinName    : `resource/skins/multiCustomRoom/McrCreateSearchMapPanel.exml`,
-                layer       : LayerType.Hud0,
             },
 
             McrCreateSettingsPanel: {
@@ -902,12 +906,6 @@ namespace Twns.PanelHelpers {
                 isExclusive : true,
             },
 
-            MeMapTagPanel: {
-                cls         : MapEditor?.MeMapTagPanel,
-                skinName    : `resource/skins/mapEditor/MeMapTagPanel.exml`,
-                layer       : LayerType.Hud0,
-            },
-
             MeMfwSettingsPanel: {
                 cls         : MapEditor?.MeMfwSettingsPanel,
                 skinName    : `resource/skins/mapEditor/MeMfwSettingsPanel.exml`,
@@ -917,12 +915,6 @@ namespace Twns.PanelHelpers {
             MeModifyMapDescPanel: {
                 cls         : MapEditor?.MeModifyMapDescPanel,
                 skinName    : `resource/skins/mapEditor/MeModifyMapDescPanel.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            MeModifyMapNamePanel: {
-                cls         : MapEditor?.MeModifyMapNamePanel,
-                skinName    : `resource/skins/mapEditor/MeModifyMapNamePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
@@ -1056,6 +1048,12 @@ namespace Twns.PanelHelpers {
                 layer       : LayerType.Hud0,
             },
 
+            MmMapTagListPanel: {
+                cls         : MapManagement?.MmMapTagListPanel,
+                skinName    : `resource/skins/mapManagement/MmMapTagListPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
             MmModifyMapListPanel: {
                 cls         : MapManagement?.MmModifyMapListPanel,
                 skinName    : `resource/skins/mapManagement/MmModifyMapListPanel.exml`,
@@ -1079,12 +1077,6 @@ namespace Twns.PanelHelpers {
             MmSetWarRuleAvailabilityPanel: {
                 cls         : MapManagement?.MmSetWarRuleAvailabilityPanel,
                 skinName    : `resource/skins/mapManagement/MmSetWarRuleAvailabilityPanel.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            MmTagChangePanel: {
-                cls         : MapManagement?.MmTagChangePanel,
-                skinName    : `resource/skins/mapManagement/MmTagChangePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
@@ -1200,12 +1192,6 @@ namespace Twns.PanelHelpers {
                 skinName    : `resource/skins/singleCustomRoom/ScrCreateMapListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
-            },
-
-            ScrCreateSearchMapPanel: {
-                cls         : SingleCustomRoom?.ScrCreateSearchMapPanel,
-                skinName    : `resource/skins/singleCustomRoom/ScrCreateSearchMapPanel.exml`,
-                layer       : LayerType.Hud0,
             },
 
             ScrCreateSettingsPanel: {

@@ -145,6 +145,7 @@ namespace Twns.Notify {
         MsgMapGetRawData,
         MsgMapGetRawDataFailed,
         MsgMapGetEnabledMapIdArray,
+        MsgMapGetMapTag,
         MsgMapGetEnabledRawDataList,
         MsgMapGetBriefData,
         MsgMapGetBriefDataFailed,
@@ -179,13 +180,14 @@ namespace Twns.Notify {
         MsgMmAddWarRule,
         MsgMmDeleteWarRule,
         MsgMmSetWarRuleName,
+        MsgMmSetMapTagSingleData,
 
         MsgMmSetWarRuleAvailability,
         MsgMmReloadAllMaps,
         MsgMmSetMapEnabled,
         MsgMmGetReviewingMaps,
         MsgMmReviewMap,
-        MsgMmSetMapTag,
+        MsgMmSetMapTagIdFlags,
         MsgMmSetMapName,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

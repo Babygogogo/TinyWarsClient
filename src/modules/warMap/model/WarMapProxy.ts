@@ -16,17 +16,19 @@ namespace Twns.WarMap.WarMapProxy {
     export function init(): void {
         Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgMapGetEnabledMapIdArray,      callback: _onMsgMapGetEnabledMapIdArray },
+            { msgCode: NetMessageCodes.MsgMapGetMapTag,                 callback: _onMsgMapGetMapTag },
             { msgCode: NetMessageCodes.MsgMapGetBriefData,              callback: _onMsgMapGetBriefData },
             { msgCode: NetMessageCodes.MsgMapGetRawData,                callback: _onMsgMapGetRawData },
             { msgCode: NetMessageCodes.MsgMmSetWarRuleAvailability,     callback: _onMsgMmSetWarRuleAvailability },
             { msgCode: NetMessageCodes.MsgMmSetMapEnabled,              callback: _onMsgMmSetMapEnabled },
             { msgCode: NetMessageCodes.MsgMmGetReviewingMaps,           callback: _onMsgMmGetReviewingMaps },
             { msgCode: NetMessageCodes.MsgMmReviewMap,                  callback: _onMsgMmReviewMap },
-            { msgCode: NetMessageCodes.MsgMmSetMapTag,                  callback: _onMsgMmSetMapTag },
+            { msgCode: NetMessageCodes.MsgMmSetMapTagIdFlags,           callback: _onMsgMmSetMapTagIdFlags },
             { msgCode: NetMessageCodes.MsgMmSetMapName,                 callback: _onMsgMmSetMapName },
             { msgCode: NetMessageCodes.MsgMmAddWarRule,                 callback: _onMsgMmAddWarRule },
             { msgCode: NetMessageCodes.MsgMmDeleteWarRule,              callback: _onMsgMmDeleteWarRule },
             { msgCode: NetMessageCodes.MsgMmSetWarRuleName,             callback: _onMsgMmSetWarRuleName },
+            { msgCode: NetMessageCodes.MsgMmSetMapTagSingleData,        callback: _onMsgMmSetMapTagSingleData },
         ], null);
     }
 
@@ -35,6 +37,20 @@ namespace Twns.WarMap.WarMapProxy {
         if (!data.errorCode) {
             WarMap.WarMapModel.resetEnabledMapIdArray(data.mapIdArray || []);
             Notify.dispatch(NotifyType.MsgMapGetEnabledMapIdArray, data);
+        }
+    }
+
+    export function reqMapGetMapTag(): void {
+        Net.NetManager.send({
+            MsgMapGetMapTag: { c: {
+            } }
+        });
+    }
+    function _onMsgMapGetMapTag(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMapGetMapTag.IS;
+        if (!data.errorCode) {
+            WarMapModel.setMapTag(Helpers.getExisted(data.mapTag));
+            Notify.dispatch(NotifyType.MsgMapGetMapTag, data);
         }
     }
 
@@ -137,16 +153,17 @@ namespace Twns.WarMap.WarMapProxy {
         }
     }
 
-    export function reqMmSetMapTag(mapId: number, mapTag: CommonProto.Map.IDataForMapTag | null): void {
-        Net.NetManager.send({ MsgMmSetMapTag: { c: {
+    export function reqMmSetMapTagIdFlags(mapId: number, mapTagIdFlags: number): void {
+        Net.NetManager.send({ MsgMmSetMapTagIdFlags: { c: {
             mapId,
-            mapTag,
+            mapTagIdFlags,
         } } });
     }
-    function _onMsgMmSetMapTag(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMmSetMapTag.IS;
+    async function _onMsgMmSetMapTagIdFlags(e: egret.Event): Promise<void> {
+        const data = e.data as NetMessage.MsgMmSetMapTagIdFlags.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMmSetMapTag, data);
+            await WarMapModel.updateOnMsgMmSetMapTagIdFlags(data);
+            Notify.dispatch(NotifyType.MsgMmSetMapTagIdFlags, data);
         }
     }
 
@@ -210,6 +227,20 @@ namespace Twns.WarMap.WarMapProxy {
         if (!data.errorCode) {
             await WarMap.WarMapModel.updateOnMsgMmSetWarRuleName(data);
             Notify.dispatch(NotifyType.MsgMmSetWarRuleName, data);
+        }
+    }
+
+    export function reqMmSetMapTagSingleData(data: CommonProto.Map.MapTag.IMapTagSingleData): void {
+        Net.NetManager.send({
+            MsgMmSetMapTagSingleData: { c: {
+                data,
+            } },
+        });
+    }
+    function _onMsgMmSetMapTagSingleData(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMmSetMapTagSingleData.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(NotifyType.MsgMmSetMapTagSingleData, data);
         }
     }
 }

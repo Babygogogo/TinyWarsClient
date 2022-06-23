@@ -25,18 +25,12 @@
 namespace Twns.SingleRankRoom {
     import LangTextType                     = Lang.LangTextType;
     import NotifyType                       = Notify.NotifyType;
-    import IDataForMapTag                   = CommonProto.Map.IDataForMapTag;
     import OpenDataForCommonWarMapInfoPage  = Common.OpenDataForCommonMapInfoPage;
     import OpenDataForSpmRankPage           = SinglePlayerMode.OpenDataForSpmRankPage;
 
-    type FiltersForMapList = {
-        mapName?        : string | null;
-        mapDesigner?    : string | null;
-        playersCount?   : number | null;
-        minRating?      : number | null;
-        mapTag?         : IDataForMapTag | null;
+    export type OpenDataForSrrCreateMapListPanel = {
+        mapFilter: Common.MapFilter | null;
     };
-    export type OpenDataForSrrCreateMapListPanel = FiltersForMapList | null;
     export class SrrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForSrrCreateMapListPanel> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForSpmRankPage>;
@@ -57,7 +51,6 @@ namespace Twns.SingleRankRoom {
         private readonly _labelNoMap!           : TwnsUiLabel.UiLabel;
 
         private _isTabInitialized   = false;
-        private _mapFilters         : FiltersForMapList = {};
         private _dataForList        : DataForMapNameRenderer[] = [];
         private _selectedMapId      : number | null = null;
 
@@ -79,7 +72,7 @@ namespace Twns.SingleRankRoom {
             await this._initTabSettings();
             this._updateComponentsForLanguage();
 
-            this.setMapFilters(this._getOpenData() || this._mapFilters);
+            this._updateView();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -105,28 +98,23 @@ namespace Twns.SingleRankRoom {
             return this._selectedMapId;
         }
 
-        public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
-            this._mapFilters            = mapFilters;
-            const dataArray             = await this._createDataForListMap();
-            this._dataForList           = dataArray;
-
-            const length                = dataArray.length;
-            const listMap               = this._listMap;
-            this._labelNoMap.visible    = length <= 0;
-            listMap.bindData(dataArray);
-            this.setAndReviseSelectedMapId(this._selectedMapId);
-
-            if (length > 1) {
-                const index = dataArray.findIndex(v => v.mapId === this._selectedMapId);
-                (index >= 0) && (listMap.scrollVerticalTo(index / (length - 1) * 100));
-            }
-        }
-
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchTapBtnSearch(): void {
-            // TwnsPanelManager.open(TwnsPanelConfig.Dict.SrrCreateSearchMapPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonMapFilterPanel, {
+                mapFilter           : this._getOpenData().mapFilter,
+                callbackOnConfirm   : mapFilter => {
+                    PanelHelpers.open(PanelHelpers.PanelDict.SrrCreateMapListPanel, {
+                        mapFilter,
+                    });
+                },
+                callbackOnReset     : () => {
+                    PanelHelpers.open(PanelHelpers.PanelDict.SrrCreateMapListPanel, {
+                        mapFilter   : null,
+                    });
+                }
+            });
         }
 
         private _onTouchTapBtnBack(): void {
@@ -160,6 +148,22 @@ namespace Twns.SingleRankRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private async _updateView(): Promise<void> {
+            const dataArray             = await this._createDataArrayForListMap();
+            this._dataForList           = dataArray;
+
+            const length                = dataArray.length;
+            const listMap               = this._listMap;
+            this._labelNoMap.visible    = length <= 0;
+            listMap.bindData(dataArray);
+            this.setAndReviseSelectedMapId(this._selectedMapId);
+
+            if (length > 1) {
+                const index = dataArray.findIndex(v => v.mapId === this._selectedMapId);
+                (index >= 0) && (listMap.scrollVerticalTo(index / (length - 1) * 100));
+            }
+        }
+
         private _updateComponentsForLanguage(): void {
             this._labelWarRoomMode.text         = Lang.getText(LangTextType.B0614);
             this._labelSinglePlayer.text        = Lang.getText(LangTextType.B0138);
@@ -186,48 +190,65 @@ namespace Twns.SingleRankRoom {
             this._isTabInitialized = true;
         }
 
-        private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
-            const data                          : DataForMapNameRenderer[] = [];
-            const mapFilters                    = this._mapFilters;
-            const { playersCount, minRating }   = mapFilters;
-            const filterTag                     = mapFilters.mapTag || {};
-            let { mapName, mapDesigner }        = mapFilters;
-            (mapName)       && (mapName     = mapName.toLowerCase());
-            (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
+        private async _createDataArrayForListMap(): Promise<DataForMapNameRenderer[]> {
+            const mapFilter             = this._getOpenData().mapFilter;
+            const filterMapTagIdFlags   = mapFilter?.mapTagIdFlags;
+            const filterMapName         = mapFilter?.mapName?.trim().toLowerCase();
+            const filterMapDesigner     = mapFilter?.mapDesigner?.trim().toLowerCase();
+            const filterPlayersCount    = mapFilter?.playersCount;
+            const filterMinRating       = mapFilter?.minRating;
+            const filterPlayedTimes     = mapFilter?.playedTimes;
+            const dataArray             : DataForMapNameRenderer[] = [];
 
             const promiseArray: Promise<void>[] = [];
             for (const mapId of WarMap.WarMapModel.getEnabledMapIdArray()) {
                 promiseArray.push((async () => {
                     const mapBriefData = await WarMap.WarMapModel.getBriefData(mapId);
-                    if (mapBriefData == null) {
+                    if ((mapBriefData == null) || (!mapBriefData.ruleAvailability?.canSrw)) {
+                        return;
+                    }
+                    if (!mapBriefData.mapExtraData?.isEnabled) {
+                        return;
+                    }
+                    if ((filterMapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(filterMapDesigner))) {
+                        return;
+                    }
+                    if ((filterPlayersCount) && (mapBriefData.playersCountUnneutral !== filterPlayersCount)) {
+                        return;
+                    }
+                    if ((filterPlayedTimes != null) && (await WarMap.WarMapModel.getTotalPlayedTimes(mapId) < filterPlayedTimes)) {
                         return;
                     }
 
-                    const mapExtraData  = Helpers.getExisted(mapBriefData.mapExtraData);
-                    const mapTag        = mapBriefData.mapTag || {};
-                    const realMapName   = Helpers.getExisted(await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
-                    const rating        = await WarMap.WarMapModel.getAverageRating(mapId);
-                    if ((!mapBriefData.ruleAvailability?.canSrw)                                                ||
-                        (!mapExtraData.isEnabled)                                                               ||
-                        ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                         ||
-                        ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))    ||
-                        ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))               ||
-                        ((minRating != null) && ((rating == null) || (rating < minRating)))                     ||
-                        ((filterTag.fog != null) && ((!!mapTag.fog) !== filterTag.fog))
+                    const realMapName = Helpers.getExisted(await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
+                    if ((filterMapName) && (realMapName.toLowerCase().indexOf(filterMapName) < 0)) {
+                        return;
+                    }
+
+                    const rating = await WarMap.WarMapModel.getAverageRating(mapId);
+                    if ((filterMinRating != null)                       &&
+                        ((rating == null) || (rating < filterMinRating))
                     ) {
                         return;
-                    } else {
-                        data.push({
-                            mapId,
-                            mapName : realMapName,
-                            panel   : this,
-                        });
                     }
+
+                    const mapTagIdFlags = mapBriefData.mapTagIdFlags;
+                    if ((filterMapTagIdFlags)                                                                       &&
+                        ((mapTagIdFlags == null) || ((filterMapTagIdFlags & mapTagIdFlags) !== filterMapTagIdFlags))
+                    ) {
+                        return;
+                    }
+
+                    dataArray.push({
+                        mapId,
+                        mapName : realMapName,
+                        panel   : this,
+                    });
                 })());
             }
 
             await Promise.all(promiseArray);
-            return data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
+            return dataArray.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 
         private async _updateComponentsForPreviewingMapInfo(): Promise<void> {

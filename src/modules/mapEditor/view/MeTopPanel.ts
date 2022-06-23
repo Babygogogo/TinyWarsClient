@@ -318,7 +318,13 @@ namespace Twns.MapEditor {
             });
         }
         private _onTouchedBtnMapTag(): void {
-            PanelHelpers.open(PanelHelpers.PanelDict.MeMapTagPanel, void 0);
+            const war = this._getWar();
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseMapTagIdPanel, {
+                currentMapTagIdFlags    : war.getMapTagIdFlags() ?? 0,
+                callbackOnConfirm       : mapTagIdFlags => {
+                    war.setMapTagIdFlags(mapTagIdFlags);
+                },
+            });
         }
         private _onTouchedGroupModeDeleteTileDecorator(): void {
             this._getDrawer().setModeDeleteTileDecorator();

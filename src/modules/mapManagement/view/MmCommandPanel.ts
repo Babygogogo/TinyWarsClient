@@ -31,8 +31,8 @@ namespace Twns.MapManagement {
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgMmSetMapTag,  callback: this._onNotifyMsgMmSetMapTag },
+                { type: NotifyType.LanguageChanged,         callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMmSetMapTagIdFlags,   callback: this._onNotifyMsgMmSetMapTagIdFlags },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnDelete,      callback: this._onTouchedBtnDelete },
@@ -56,7 +56,7 @@ namespace Twns.MapManagement {
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyMsgMmSetMapTag(): void {
+        private _onNotifyMsgMmSetMapTagIdFlags(): void {
             FloatText.show(Lang.getText(LangTextType.A0151));
         }
 
@@ -82,8 +82,22 @@ namespace Twns.MapManagement {
             this.close();
         }
 
-        private _onTouchedBtnMapTag(): void {
-            PanelHelpers.open(PanelHelpers.PanelDict.MmTagChangePanel, { mapId: this._getOpenData().mapId });
+        private async _onTouchedBtnMapTag(): Promise<void> {
+            const mapId         = this._getOpenData().mapId;
+            const mapRawData    = await WarMap.WarMapModel.getRawData(mapId);
+            if (mapRawData == null) {
+                return;
+            }
+
+            const currentMapTagIdFlags = mapRawData.mapTagIdFlags ?? 0;
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseMapTagIdPanel, {
+                currentMapTagIdFlags,
+                callbackOnConfirm       : mapTagIdFlags => {
+                    if (mapTagIdFlags !== currentMapTagIdFlags) {
+                        WarMap.WarMapProxy.reqMmSetMapTagIdFlags(mapId, mapTagIdFlags);
+                    }
+                },
+            });
         }
 
         private _onTouchedBtnRename(): void {

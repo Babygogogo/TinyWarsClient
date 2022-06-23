@@ -168,7 +168,14 @@ namespace Twns.MapEditor {
         private _onTouchedBtnModifyMapName(): void {
             const war = this._getWar();
             if (!war.getIsReviewingMap()) {
-                PanelHelpers.open(PanelHelpers.PanelDict.MeModifyMapNamePanel, void 0);
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonInputLanguageTextPanel, {
+                    currentTextArray    : war.getMapNameArray(),
+                    maxLength           : CommonConstants.MapMaxNameLength,
+                    callback            : mapNameArray => {
+                        war.setMapNameArray(mapNameArray);
+                        Notify.dispatch(NotifyType.MeMapNameChanged);
+                    },
+                });
             }
         }
 

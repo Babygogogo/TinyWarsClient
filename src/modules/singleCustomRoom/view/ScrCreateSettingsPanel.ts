@@ -102,7 +102,7 @@ namespace Twns.SingleCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            PanelHelpers.open(PanelHelpers.PanelDict.ScrCreateMapListPanel, null);
+            PanelHelpers.open(PanelHelpers.PanelDict.ScrCreateMapListPanel, { mapFilter: null });
         }
         private async _onTouchedBtnConfirm(): Promise<void> {
             const data      = SingleCustomRoom.ScrCreateModel.getData();

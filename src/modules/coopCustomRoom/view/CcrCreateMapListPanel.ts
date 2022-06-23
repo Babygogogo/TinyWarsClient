@@ -6,7 +6,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import Twns.Notify               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -23,19 +23,12 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.CoopCustomRoom {
-    import LangTextType             = Twns.Lang.LangTextType;
-    import NotifyType               = Twns.Notify.NotifyType;
-    import IDataForMapTag           = CommonProto.Map.IDataForMapTag;
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
 
-    type FiltersForMapList = {
-        mapName?        : string | null;
-        mapDesigner?    : string | null;
-        playersCount?   : number | null;
-        playedTimes?    : number | null;
-        minRating?      : number | null;
-        mapTag?         : IDataForMapTag | null;
+    export type OpenDataForCcrCreateMapListPanel = {
+        mapFilter   : Common.MapFilter | null;
     };
-    export type OpenDataForCcrCreateMapListPanel = FiltersForMapList | null;
     export class CcrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForCcrCreateMapListPanel> {
         private readonly _groupMapView!         : eui.Group;
         private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
@@ -57,7 +50,6 @@ namespace Twns.CoopCustomRoom {
 
         private readonly _uiMapInfo!            : TwnsUiMapInfo.UiMapInfo;
 
-        private _mapFilters         : FiltersForMapList = {};
         private _dataForList        : DataForMapNameRenderer[] = [];
         private _selectedMapId      : number | null = null;
 
@@ -75,7 +67,7 @@ namespace Twns.CoopCustomRoom {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this.setMapFilters(this._getOpenData() || this._mapFilters);
+            this._updateView();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -100,8 +92,49 @@ namespace Twns.CoopCustomRoom {
             return this._selectedMapId;
         }
 
-        public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
-            this._mapFilters            = mapFilters;
+        ////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _onTouchTapBtnSearch(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonMapFilterPanel, {
+                mapFilter           : this._getOpenData().mapFilter,
+                callbackOnConfirm   : mapFilter => {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CcrCreateMapListPanel, {
+                        mapFilter,
+                    });
+                },
+                callbackOnReset     : () => {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CcrCreateMapListPanel, {
+                        mapFilter   : null,
+                    });
+                }
+            });
+        }
+
+        private _onTouchTapBtnBack(): void {
+            this.close();
+            PanelHelpers.open(PanelHelpers.PanelDict.CcrMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
+        }
+
+        private async _onTouchedBtnNextStep(): Promise<void> {
+            const selectedMapId = this.getSelectedMapId();
+            if (selectedMapId != null) {
+                this.close();
+                await CoopCustomRoom.CcrCreateModel.resetDataByMapId(selectedMapId);
+                PanelHelpers.open(PanelHelpers.PanelDict.CcrCreateSettingsPanel, void 0);
+            }
+        }
+
+        private _onNotifyLanguageChanged(): void {
+            this._updateComponentsForLanguage();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Private functions.
+        ////////////////////////////////////////////////////////////////////////////////
+        public async _updateView(): Promise<void> {
             const dataArray             = await this._createDataForListMap();
             this._dataForList           = dataArray;
 
@@ -117,36 +150,6 @@ namespace Twns.CoopCustomRoom {
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
-        // Callbacks.
-        ////////////////////////////////////////////////////////////////////////////////
-        private _onTouchTapBtnSearch(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrCreateSearchMapPanel, void 0);
-        }
-
-        private _onTouchTapBtnBack(): void {
-            this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrMainMenuPanel, void 0);
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyTopPanel, void 0);
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
-        }
-
-        private async _onTouchedBtnNextStep(): Promise<void> {
-            const selectedMapId = this.getSelectedMapId();
-            if (selectedMapId != null) {
-                this.close();
-                await Twns.CoopCustomRoom.CcrCreateModel.resetDataByMapId(selectedMapId);
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrCreateSettingsPanel, void 0);
-            }
-        }
-
-        private _onNotifyLanguageChanged(): void {
-            this._updateComponentsForLanguage();
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////
-        // Private functions.
-        ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
             this._labelCreateRoom.text          = Lang.getText(LangTextType.B0000);
             this._labelMultiPlayer.text         = Lang.getText(LangTextType.B0646);
@@ -160,42 +163,59 @@ namespace Twns.CoopCustomRoom {
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
-            const dataArray                                 : DataForMapNameRenderer[] = [];
-            const mapFilters                                = this._mapFilters;
-            const filterTag                                 = mapFilters.mapTag || {};
-            const mapName                                   = (mapFilters.mapName || "").toLowerCase();
-            const mapDesigner                               = (mapFilters.mapDesigner || "").toLowerCase();
-            const { playersCount, playedTimes, minRating }  = mapFilters;
-            const promiseArray                              : Promise<void>[] = [];
-            for (const mapId of Twns.WarMap.WarMapModel.getEnabledMapIdArray()) {
+            const mapFilter             = this._getOpenData().mapFilter;
+            const filterMapTagIdFlags   = mapFilter?.mapTagIdFlags;
+            const filterMapName         = mapFilter?.mapName?.trim().toLowerCase();
+            const filterMapDesigner     = mapFilter?.mapDesigner?.trim().toLowerCase();
+            const filterPlayersCount    = mapFilter?.playersCount;
+            const filterMinRating       = mapFilter?.minRating;
+            const filterPlayedTimes     = mapFilter?.playedTimes;
+            const dataArray             : DataForMapNameRenderer[] = [];
+
+            const promiseArray: Promise<void>[] = [];
+            for (const mapId of WarMap.WarMapModel.getEnabledMapIdArray()) {
                 promiseArray.push((async () => {
-                    const mapBriefData = await Twns.WarMap.WarMapModel.getBriefData(mapId);
-                    if (mapBriefData == null) {
+                    const mapBriefData = await WarMap.WarMapModel.getBriefData(mapId);
+                    if ((mapBriefData == null) || (!mapBriefData.ruleAvailability?.canCcw)) {
+                        return;
+                    }
+                    if (!mapBriefData.mapExtraData?.isEnabled) {
+                        return;
+                    }
+                    if ((filterMapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(filterMapDesigner))) {
+                        return;
+                    }
+                    if ((filterPlayersCount) && (mapBriefData.playersCountUnneutral !== filterPlayersCount)) {
+                        return;
+                    }
+                    if ((filterPlayedTimes != null) && (await WarMap.WarMapModel.getTotalPlayedTimes(mapId) < filterPlayedTimes)) {
                         return;
                     }
 
-                    const mapExtraData      = Twns.Helpers.getExisted(mapBriefData.mapExtraData);
-                    const mapTag            = mapBriefData.mapTag || {};
-                    const realMapName       = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
-                    const rating            = await Twns.WarMap.WarMapModel.getAverageRating(mapId);
-                    const actualPlayedTimes = await Twns.WarMap.WarMapModel.getTotalPlayedTimes(mapId);
-                    if ((!mapBriefData.ruleAvailability?.canCcw)                                                ||
-                        (!mapExtraData.isEnabled)                                                               ||
-                        ((mapName) && (!realMapName.toLowerCase().includes(mapName)))                           ||
-                        ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))    ||
-                        ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))               ||
-                        ((playedTimes != null) && (actualPlayedTimes < playedTimes))                            ||
-                        ((minRating != null) && ((rating == null) || (rating < minRating)))                     ||
-                        ((filterTag.fog != null) && ((!!mapTag.fog) !== filterTag.fog))
+                    const realMapName = Helpers.getExisted(await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
+                    if ((filterMapName) && (realMapName.toLowerCase().indexOf(filterMapName) < 0)) {
+                        return;
+                    }
+
+                    const rating = await WarMap.WarMapModel.getAverageRating(mapId);
+                    if ((filterMinRating != null)                       &&
+                        ((rating == null) || (rating < filterMinRating))
                     ) {
                         return;
-                    } else {
-                        dataArray.push({
-                            mapId,
-                            mapName : realMapName,
-                            panel   : this,
-                        });
                     }
+
+                    const mapTagIdFlags = mapBriefData.mapTagIdFlags;
+                    if ((filterMapTagIdFlags)                                                                       &&
+                        ((mapTagIdFlags == null) || ((filterMapTagIdFlags & mapTagIdFlags) !== filterMapTagIdFlags))
+                    ) {
+                        return;
+                    }
+
+                    dataArray.push({
+                        mapId,
+                        mapName : realMapName,
+                        panel   : this,
+                    });
                 })());
             }
 
@@ -204,7 +224,7 @@ namespace Twns.CoopCustomRoom {
         }
 
         private async _showMap(mapId: number): Promise<void> {
-            this._zoomMap.showMapByMapData(Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId)), await Twns.Config.ConfigManager.getLatestGameConfig());
+            this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMap.WarMapModel.getRawData(mapId)), await Config.ConfigManager.getLatestGameConfig());
             this._uiMapInfo.setData({
                 mapInfo: {
                     mapId,
@@ -213,92 +233,92 @@ namespace Twns.CoopCustomRoom {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupMapView,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnSearch,
                 beginProps  : { alpha: 0, y: 40 },
                 endProps    : { alpha: 1, y: 80 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnMapInfo,
                 beginProps  : { alpha: 0, y: 40 },
                 endProps    : { alpha: 1, y: 80 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupMapList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._uiMapInfo,
                 beginProps  : { alpha: 0, right: -40 },
                 endProps    : { alpha: 1, right: 0 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupMapView,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnSearch,
                 beginProps  : { alpha: 1, y: 80 },
                 endProps    : { alpha: 0, y: 40 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnMapInfo,
                 beginProps  : { alpha: 1, y: 80 },
                 endProps    : { alpha: 0, y: 40 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupMapList,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._uiMapInfo,
                 beginProps  : { alpha: 1, right: 0 },
                 endProps    : { alpha: 0, right: -40 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -319,8 +339,8 @@ namespace Twns.CoopCustomRoom {
 
         protected _onDataChanged(): void {
             const data          = this._getData();
-            this.currentState   = data.mapId === data.panel.getSelectedMapId() ? Twns.Types.UiState.Down : Twns.Types.UiState.Up;
-            Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v ?? Twns.CommonConstants.ErrorTextForUndefined);
+            this.currentState   = data.mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
+            WarMap.WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v ?? CommonConstants.ErrorTextForUndefined);
         }
 
         private _onTouchTapBtnChoose(): void {

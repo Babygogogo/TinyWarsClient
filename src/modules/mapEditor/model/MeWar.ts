@@ -20,7 +20,6 @@ namespace Twns.MapEditor {
     import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
     import ITemplateWarRule         = CommonProto.WarRule.ITemplateWarRule;
     import IMapRawData              = CommonProto.Map.IMapRawData;
-    import IDataForMapTag           = CommonProto.Map.IDataForMapTag;
     import ILanguageText            = CommonProto.Structure.ILanguageText;
     import GameConfig               = Config.GameConfig;
 
@@ -40,7 +39,7 @@ namespace Twns.MapEditor {
         private _isReviewingMap         = false;
         private _templateWarRuleArray   : ITemplateWarRule[] = [];
         private _isMapModified          = false;
-        private _mapTag?                : IDataForMapTag;
+        private _mapTagIdFlags          : number | null = null;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig, Types.WarType.Me);
@@ -59,7 +58,7 @@ namespace Twns.MapEditor {
             this.setMapNameArray(Helpers.getExisted(mapRawData.mapNameArray));
             this.setMapDescArray(mapRawData.mapExtraText?.mapDescription ?? []);
             this._setTemplateWarRuleArray(MapEditor.MeHelpers.createRevisedTemplateWarRuleArrayForMeWar(mapRawData.templateWarRuleArray, gameConfig));
-            this.setMapTag(mapRawData.mapTag || {});
+            this.setMapTagIdFlags(mapRawData.mapTagIdFlags ?? null);
         }
 
         public startRunning(): BaseWar.BwWar {
@@ -94,7 +93,7 @@ namespace Twns.MapEditor {
                 tileDataArray           : this.getTileMap().serialize().tiles,
                 unitDataArray           : unitMap.serialize().units,
                 templateWarRuleArray    : this.getRevisedTemplateWarRuleArray(playersCountUnneutral),
-                mapTag                  : this.getMapTag(),
+                mapTagIdFlags           : this.getMapTagIdFlags(),
                 warEventFullData        : this.getWarEventManager().getWarEventFullData(),
                 mapExtraText            : {
                     mapDescription      : this.getMapDescArray(),
@@ -331,11 +330,11 @@ namespace Twns.MapEditor {
             }
         }
 
-        public getMapTag(): IDataForMapTag {
-            return Helpers.getExisted(this._mapTag);
+        public getMapTagIdFlags(): number | null {
+            return this._mapTagIdFlags ?? null;
         }
-        public setMapTag(mapTag: IDataForMapTag): void {
-            this._mapTag = mapTag;
+        public setMapTagIdFlags(mapTagIdFlags: number | null): void {
+            this._mapTagIdFlags = mapTagIdFlags;
         }
 
         public getPlayersCountUnneutral(): number {

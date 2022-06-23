@@ -66,12 +66,12 @@ namespace Twns.CoopCustomRoom {
         }
 
         private _onTouchedBtnReset(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrJoinRoomListPanel, { filter: null });
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrJoinRoomListPanel, { mapFilter: null });
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrJoinRoomListPanel, { filter: {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrJoinRoomListPanel, { mapFilter: {
                 roomId          : getNumber(this._inputReplayId.text),
                 mapName         : this._inputMapName.text || null,
                 userNickname    : this._inputUserNickname.text || null,

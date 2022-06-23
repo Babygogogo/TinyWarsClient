@@ -9,12 +9,16 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarMap.WarMapModel {
+    import IMapTag              = CommonProto.Map.IMapTag;
     import IMapRawData          = CommonProto.Map.IMapRawData;
     import IMapBriefData        = CommonProto.Map.IMapBriefData;
     import IMapEditorData       = CommonProto.Map.IMapEditorData;
 
     let _reviewingMaps          : IMapEditorData[];
     const _enabledMapIdArray    : number[] = [];
+    const _mapTagAccessor       = Helpers.createCachedDataAccessor<null, IMapTag>({
+        reqData                 : () => WarMapProxy.reqMapGetMapTag(),
+    });
     const _rawDataAccessor      = Helpers.createCachedDataAccessor<number, IMapRawData>({
         reqData                 : (mapId: number) => WarMap.WarMapProxy.reqGetMapRawData(mapId),
     });
@@ -32,6 +36,13 @@ namespace Twns.WarMap.WarMapModel {
     }
     export function getEnabledMapIdArray(): number[] {
         return _enabledMapIdArray;
+    }
+
+    export function setMapTag(mapTag: IMapTag): void {
+        _mapTagAccessor.setData(null, mapTag);
+    }
+    export function getMapTag(): Promise<IMapTag | null> {
+        return _mapTagAccessor.getData(null);
     }
 
     export function setBriefData(mapId: number, data: IMapBriefData | null): void {
@@ -70,6 +81,9 @@ namespace Twns.WarMap.WarMapModel {
     export async function updateOnSetWarRuleAvailability(data: CommonProto.NetMessage.MsgMmSetWarRuleAvailability.IS): Promise<void> {
         const templateWarRule               = Helpers.getExisted((await getRawData(Helpers.getExisted(data.mapId)))?.templateWarRuleArray?.find(v => v.ruleId === data.ruleId));
         templateWarRule.ruleAvailability    = data.availability;
+    }
+    export async function updateOnMsgMmSetMapTagIdFlags(data: CommonProto.NetMessage.MsgMmSetMapTagIdFlags.IS): Promise<void> {
+        Helpers.getExisted(await getRawData(Helpers.getExisted(data.mapId))).mapTagIdFlags = data.mapTagIdFlags;
     }
 
     export async function getMapNameInCurrentLanguage(mapId: number): Promise<string | null> {

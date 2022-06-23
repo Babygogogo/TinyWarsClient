@@ -43,8 +43,17 @@ namespace Twns.CommonConstants {
     export const MapMaxLocationId                       = 30;
     export const MapDescriptionMaxLength                = 1000;
 
+    export const Map = {
+        MapTag      : {
+            MinId           : 1,
+            MaxId           : 30,
+            NameMinLength   : 1,
+            NameMaxLength   : 10,
+        },
+    };
+
     export const WarEventNameMaxLength                                  = 150;
-    export const WarEventMaxEventsPerMap                                = 30;
+    export const WarEventMaxEventsPerMap                                = 100;
     export const WarEventMaxConditionNodesPerMap                        = 50;
     export const WarEventMaxConditionsPerMap                            = 100;
     export const WarEventMaxActionsPerMap                               = 100;

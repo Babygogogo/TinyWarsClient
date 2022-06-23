@@ -86,6 +86,12 @@ namespace Twns.MapManagement {
                         PanelHelpers.open(PanelHelpers.PanelDict.MmModifyMapListPanel, {});
                     },
                 },
+                {
+                    name    : Lang.getText(LangTextType.B0445),
+                    callback: () => {
+                        PanelHelpers.open(PanelHelpers.PanelDict.MmMapTagListPanel, void 0);
+                    },
+                },
             ];
 
             return dataList;

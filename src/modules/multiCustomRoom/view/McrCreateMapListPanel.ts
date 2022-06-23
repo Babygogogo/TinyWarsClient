@@ -25,17 +25,10 @@
 namespace Twns.MultiCustomRoom {
     import LangTextType             = Lang.LangTextType;
     import NotifyType               = Notify.NotifyType;
-    import IDataForMapTag           = CommonProto.Map.IDataForMapTag;
 
-    type FiltersForMapList = {
-        mapName?        : string | null;
-        mapDesigner?    : string | null;
-        playersCount?   : number | null;
-        playedTimes?    : number | null;
-        minRating?      : number | null;
-        mapTag?         : IDataForMapTag | null;
+    export type OpenDataForMcrCreateMapListPanel = {
+        mapFilter   : Common.MapFilter | null;
     };
-    export type OpenDataForMcrCreateMapListPanel = FiltersForMapList | null;
     export class McrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrCreateMapListPanel> {
         private readonly _groupMapView!         : eui.Group;
         private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
@@ -56,8 +49,6 @@ namespace Twns.MultiCustomRoom {
 
         private readonly _uiMapInfo!            : TwnsUiMapInfo.UiMapInfo;
 
-        private _mapFilters                     : FiltersForMapList = {};
-
         protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnSearch,      callback: this._onTouchTapBtnSearch },
@@ -72,7 +63,7 @@ namespace Twns.MultiCustomRoom {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this.setMapFilters(this._getOpenData() || this._mapFilters);
+            this._updateView();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -92,21 +83,23 @@ namespace Twns.MultiCustomRoom {
             return this._listMap.getSelectedData()?.mapId ?? null;
         }
 
-        public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
-            this._mapFilters = mapFilters;
-
-            const oldSelectedMapId      = this._getSelectedMapId();
-            const dataArray             = await this._createDataForListMap();
-            this._labelNoMap.visible    = dataArray.length <= 0;
-            this._listMap.bindData(dataArray);
-            await this.setAndReviseSelectedMapId(oldSelectedMapId ?? -1, true);
-        }
-
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchTapBtnSearch(): void {
-            PanelHelpers.open(PanelHelpers.PanelDict.McrCreateSearchMapPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonMapFilterPanel, {
+                mapFilter           : this._getOpenData().mapFilter,
+                callbackOnConfirm   : mapFilter => {
+                    PanelHelpers.open(PanelHelpers.PanelDict.McrCreateMapListPanel, {
+                        mapFilter,
+                    });
+                },
+                callbackOnReset     : () => {
+                    PanelHelpers.open(PanelHelpers.PanelDict.McrCreateMapListPanel, {
+                        mapFilter   : null,
+                    });
+                }
+            });
         }
 
         private _onTouchTapBtnBack(): void {
@@ -132,6 +125,14 @@ namespace Twns.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        public async _updateView(): Promise<void> {
+            const oldSelectedMapId      = this._getSelectedMapId();
+            const dataArray             = await this._createDataForListMap();
+            this._labelNoMap.visible    = dataArray.length <= 0;
+            this._listMap.bindData(dataArray);
+            await this.setAndReviseSelectedMapId(oldSelectedMapId ?? -1, true);
+        }
+
         private _updateComponentsForLanguage(): void {
             this._labelCreateRoom.text          = Lang.getText(LangTextType.B0000);
             this._labelMultiPlayer.text         = Lang.getText(LangTextType.B0137);
@@ -144,43 +145,59 @@ namespace Twns.MultiCustomRoom {
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
-            const dataArray                                 : DataForMapNameRenderer[] = [];
-            const mapFilters                                = this._mapFilters;
-            const filterTag                                 = mapFilters.mapTag || {};
-            const mapName                                   = (mapFilters.mapName || "").toLowerCase();
-            const mapDesigner                               = (mapFilters.mapDesigner || "").toLowerCase();
-            const { playersCount, playedTimes, minRating }  = mapFilters;
-            const promiseArray                              : Promise<void>[] = [];
+            const mapFilter             = this._getOpenData().mapFilter;
+            const filterMapTagIdFlags   = mapFilter?.mapTagIdFlags;
+            const filterMapName         = mapFilter?.mapName?.trim().toLowerCase();
+            const filterMapDesigner     = mapFilter?.mapDesigner?.trim().toLowerCase();
+            const filterPlayersCount    = mapFilter?.playersCount;
+            const filterMinRating       = mapFilter?.minRating;
+            const filterPlayedTimes     = mapFilter?.playedTimes;
+            const dataArray             : DataForMapNameRenderer[] = [];
 
+            const promiseArray: Promise<void>[] = [];
             for (const mapId of WarMap.WarMapModel.getEnabledMapIdArray()) {
                 promiseArray.push((async () => {
                     const mapBriefData = await WarMap.WarMapModel.getBriefData(mapId);
-                    if (mapBriefData == null) {
+                    if ((mapBriefData == null) || (!mapBriefData.ruleAvailability?.canMcw)) {
+                        return;
+                    }
+                    if (!mapBriefData.mapExtraData?.isEnabled) {
+                        return;
+                    }
+                    if ((filterMapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(filterMapDesigner))) {
+                        return;
+                    }
+                    if ((filterPlayersCount) && (mapBriefData.playersCountUnneutral !== filterPlayersCount)) {
+                        return;
+                    }
+                    if ((filterPlayedTimes != null) && (await WarMap.WarMapModel.getTotalPlayedTimes(mapId) < filterPlayedTimes)) {
                         return;
                     }
 
-                    const mapExtraData      = Helpers.getExisted(mapBriefData.mapExtraData);
-                    const mapTag            = mapBriefData.mapTag || {};
-                    const realMapName       = Helpers.getExisted(await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
-                    const rating            = await WarMap.WarMapModel.getAverageRating(mapId);
-                    const actualPlayedTimes = await WarMap.WarMapModel.getTotalPlayedTimes(mapId);
-                    if ((!mapBriefData.ruleAvailability?.canMcw)                                                            ||
-                        (!mapExtraData.isEnabled)                                                                           ||
-                        ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                                     ||
-                        ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))                ||
-                        ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                           ||
-                        ((playedTimes != null) && (actualPlayedTimes < playedTimes))                                        ||
-                        ((minRating != null) && ((rating == null) || (rating < minRating)))                                 ||
-                        ((filterTag.fog != null) && ((!!mapTag.fog) !== filterTag.fog))
+                    const realMapName = Helpers.getExisted(await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
+                    if ((filterMapName) && (realMapName.toLowerCase().indexOf(filterMapName) < 0)) {
+                        return;
+                    }
+
+                    const rating = await WarMap.WarMapModel.getAverageRating(mapId);
+                    if ((filterMinRating != null)                       &&
+                        ((rating == null) || (rating < filterMinRating))
                     ) {
                         return;
-                    } else {
-                        dataArray.push({
-                            mapId,
-                            mapName : realMapName,
-                            panel   : this,
-                        });
                     }
+
+                    const mapTagIdFlags = mapBriefData.mapTagIdFlags;
+                    if ((filterMapTagIdFlags)                                                                       &&
+                        ((mapTagIdFlags == null) || ((filterMapTagIdFlags & mapTagIdFlags) !== filterMapTagIdFlags))
+                    ) {
+                        return;
+                    }
+
+                    dataArray.push({
+                        mapId,
+                        mapName : realMapName,
+                        panel   : this,
+                    });
                 })());
             }
 

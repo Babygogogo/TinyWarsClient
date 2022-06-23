@@ -1358,6 +1358,18 @@ namespace Twns.Lang {
             `已成功修改规则名称`,
             `The rule name has been updated successfully.`,
         ],
+        [LangTextType.A0311]: [
+            `请先命名此地图标签`,
+            `Please name the map tag first.`,
+        ],
+        [LangTextType.A0312]: [
+            `已成功修改地图标签`,
+            `The map tag has been updated successfully.`,
+        ],
+        [LangTextType.A0313]: [
+            `请小心修改标签设定，因为所有带有该标签的地图都会受到影响。`,
+            `Please modify the settings carefully. All the tagged maps will be affected.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2011,7 +2023,7 @@ namespace Twns.Lang {
             `Units Value`,
         ],
         [LangTextType.B0162]: [
-            `姓名`,
+            `名称`,
             `Name`,
         ],
         [LangTextType.B0163]: [

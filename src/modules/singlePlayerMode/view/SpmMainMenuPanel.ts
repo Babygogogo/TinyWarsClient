@@ -82,13 +82,13 @@ namespace Twns.SinglePlayerMode {
             this.close();
             Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyTopPanel);
             Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyBottomPanel);
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SrrCreateMapListPanel, null);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SrrCreateMapListPanel, { mapFilter: null });
         }
         private _onTouchedBtnCreateCustomWar(): void {
             this.close();
             Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyTopPanel);
             Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyBottomPanel);
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ScrCreateMapListPanel, null);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ScrCreateMapListPanel, { mapFilter: null });
         }
         private _onTouchedBtnContinueWar(): void {
             this.close();

@@ -110,7 +110,7 @@ namespace Twns.SingleRankRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            PanelHelpers.open(PanelHelpers.PanelDict.SrrCreateMapListPanel, null);
+            PanelHelpers.open(PanelHelpers.PanelDict.SrrCreateMapListPanel, { mapFilter: null });
         }
         private _onTouchedBtnQuickSettings(): void {
             PanelHelpers.open(PanelHelpers.PanelDict.SrrCreateQuickSettingsPanel, void 0);

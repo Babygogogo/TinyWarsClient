@@ -689,6 +689,25 @@ namespace Twns.Helpers {
         }
     }
 
+    /** 1 <= id <= 30 */
+    export function getIdFlagsByIdArray(idArray: number[]): number {
+        let idFlags = 0;
+        for (const id of idArray) {
+            idFlags |= 1 << (id - 1);
+        }
+        return idFlags;
+    }
+    /** 1 <= id <= 30 */
+    export function getIdArrayByIdFlags(idFlags: number): number[] {
+        const idArray: number[] = [];
+        for (let id = 1; id <= 30; ++id) {
+            if (idFlags & (1 << (id - 1))) {
+                idArray.push(id);
+            }
+        }
+        return idArray;
+    }
+
     export function assert(condition: boolean, errorCode: ClientErrorCode): asserts condition {
         if (!condition) {
             throw newError(`Assertion failed!`, errorCode);

@@ -98,7 +98,7 @@ namespace Twns.CoopCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrCreateMapListPanel, null);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrCreateMapListPanel, { mapFilter: null });
         }
         private _onTouchedBtnConfirm(): void {
             const data = CoopCustomRoom.CcrCreateModel.getData();
