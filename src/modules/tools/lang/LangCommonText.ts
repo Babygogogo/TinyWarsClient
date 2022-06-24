@@ -2019,8 +2019,8 @@ namespace Twns.Lang {
             `Units`,
         ],
         [LangTextType.B0161]: [
-            `部队价值`,
-            `Units Value`,
+            `价值`,
+            `Value`,
         ],
         [LangTextType.B0162]: [
             `名称`,
@@ -5009,6 +5009,18 @@ namespace Twns.Lang {
         [LangTextType.B0912]: [
             `非排位赛`,
             `Unranked`,
+        ],
+        [LangTextType.B0913]: [
+            `选择`,
+            `Selection`,
+        ],
+        [LangTextType.B0914]: [
+            `标记`,
+            `Mark`,
+        ],
+        [LangTextType.B0915]: [
+            `取消标记`,
+            `Unmark`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

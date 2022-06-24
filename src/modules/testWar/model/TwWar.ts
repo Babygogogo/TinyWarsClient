@@ -311,6 +311,7 @@ namespace Twns.TestWar {
             coIsDestroyedInTurn         : false,
             watchOngoingSrcUserIdArray  : null,
             watchRequestSrcUserIdArray  : null,
+            markedGridIdArray           : null,
         };
     }
 }

@@ -166,6 +166,23 @@ namespace Twns.MultiPlayerWar.MpwModel {
         _warProgressInfoAccessor.setData(Helpers.getExisted(data.warId), data.warProgressInfo ?? null);
     }
 
+    export function updateOnMsgMpwCommonMarkTile(data: CommonProto.NetMessage.MsgMpwCommonMarkTile.IS): void {
+        const war = getWar();
+        if ((war) && (war.getWarId() === data.warId)) {
+            const player = war.getPlayerLoggedIn();
+            if (player == null) {
+                return;
+            }
+
+            const gridId = Helpers.getExisted(data.gridId);
+            if (data.isMark) {
+                player.addMarkedGridId(gridId);
+            } else {
+                player.deleteMarkedGridId(gridId);
+            }
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function createDataForCommonWarBasicSettingsPage(warId: number | null): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const warInfo = warId == null ? null : await getWarSettings(warId);

@@ -38,6 +38,7 @@ namespace Twns.BaseWar {
         private _hasTakenManualAction?      : boolean;
         private _watchOngoingSrcUserIds?    : Set<number>;
         private _watchRequestSrcUserIds?    : Set<number>;
+        private _markedGridIdArray          : number[] = [];
 
         private _war?                       : BwWar;
 
@@ -111,6 +112,7 @@ namespace Twns.BaseWar {
             this.setHasTakenManualAction(data.hasTakenManualAction ?? false);
             this.setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdArray || []);
             this.setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
+            this._setMarkedGridIdArray(data.markedGridIdArray ?? []);
         }
 
         public startRunning(war: BwWar): void {
@@ -134,12 +136,14 @@ namespace Twns.BaseWar {
                 hasTakenManualAction        : this.getHasTakenManualAction(),
                 watchRequestSrcUserIdArray  : [...(this.getWatchRequestSrcUserIds() || [])],
                 watchOngoingSrcUserIdArray  : [...(this.getWatchOngoingSrcUserIds() || [])],
+                markedGridIdArray           : [...this.getMarkedGridIdArray()],
             };
         }
         public serializeForCreateSfw(): ISerialPlayer {
             const war                   = this._getWar();
             const playerIndex           = this.getPlayerIndex();
-            const shouldShowFund        = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getWatcherTeamIndexesForSelf().has(this.getTeamIndex()));
+            const teamIndexes           = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+            const shouldShowFund        = (!war.getFogMap().checkHasFogCurrently()) || (teamIndexes.has(this.getTeamIndex()));
             return {
                 playerIndex,
                 fund                        : shouldShowFund ? this.getFund() : 0,
@@ -155,7 +159,8 @@ namespace Twns.BaseWar {
                 coPowerActivatedCount       : this.getCoPowerActivatedCount(),
                 hasTakenManualAction        : this.getHasTakenManualAction(),
                 watchRequestSrcUserIdArray  : [],
-                watchOngoingSrcUserIdArray  : []
+                watchOngoingSrcUserIdArray  : [],
+                markedGridIdArray           : this.getMarkedGridIdArrayForTeamIndexes(teamIndexes),
             };
         }
         public serializeForCreateMfr(): ISerialPlayer {
@@ -238,6 +243,48 @@ namespace Twns.BaseWar {
         }
         public removeWatchRequestSrcUserId(userId: number): void {
             this.getWatchRequestSrcUserIds().delete(userId);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for marker.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _setMarkedGridIdArray(gridIdArray: number[] | null): void {
+            this._markedGridIdArray = gridIdArray?.concat() ?? [];
+        }
+        public getMarkedGridIdArray(): number[] {
+            return this._markedGridIdArray;
+        }
+        public getMarkedGridIdArrayForTeamIndexes(teamIndexes: Set<number>): number[] {
+            return teamIndexes.has(this.getTeamIndex())
+                ? this._markedGridIdArray
+                : [];
+        }
+        public checkHasMarkedGridId(gridId: number): boolean {
+            return this._markedGridIdArray.indexOf(gridId) >= 0;
+        }
+        public addMarkedGridId(gridId: number): boolean {
+            const array = this._markedGridIdArray;
+            if (array.indexOf(gridId) >= 0) {
+                return false;
+            } else {
+                array.push(gridId);
+                Notify.dispatch(NotifyType.BwPlayerMarkedGridIdAdded, {
+                    player: this,
+                    gridId,
+                } as Notify.NotifyData.BwPlayerMarkedGridIdAdded);
+
+                return true;
+            }
+        }
+        public deleteMarkedGridId(gridId: number): boolean {
+            const hasDeleted = Helpers.deleteElementFromArray(this._markedGridIdArray, gridId) > 0;
+            if (hasDeleted) {
+                Notify.dispatch(NotifyType.BwPlayerMarkedGridIdDeleted, {
+                    player: this,
+                    gridId,
+                } as Notify.NotifyData.BwPlayerMarkedGridIdDeleted);
+            }
+            return hasDeleted;
         }
 
         public setUserId(id: number | null): void {

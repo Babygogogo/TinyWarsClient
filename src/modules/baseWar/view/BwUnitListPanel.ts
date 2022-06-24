@@ -37,6 +37,7 @@ namespace Twns.BaseWar {
         private readonly _labelCount!       : TwnsUiLabel.UiLabel;
         private readonly _labelValue!       : TwnsUiLabel.UiLabel;
         private readonly _btnSwitch!        : TwnsUiButton.UiButton;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
 
         private _playerIndex    : number | null = null;
 
@@ -46,7 +47,8 @@ namespace Twns.BaseWar {
                 { type: NotifyType.BwActionPlannerStateChanged, callback: this._onNotifyBwPlannerStateChanged },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnSwitch, callback: this._onTouchedBtnSwitch },
+                { ui: this._btnSwitch,  callback: this._onTouchedBtnSwitch },
+                { ui: this._btnClose,   callback: this.close },
             ]);
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();

@@ -108,9 +108,67 @@ namespace Twns.BaseWar {
         }
 
         private _onTouchedThis(): void {
-            const war   = this._getOpenData().war;
-            const tile  = war.getTileMap().getTile(war.getCursor().getGridIndex());
-            PanelHelpers.open(PanelHelpers.PanelDict.BwTileDetailPanel, { tile });
+            const war                   = this._getOpenData().war;
+            const gridIndex             = war.getCursor().getGridIndex();
+            const tileMap               = war.getTileMap();
+            const tile                  = tileMap.getTile(gridIndex);
+            const warType               = war.getWarType();
+            const gridId                = GridIndexHelpers.getGridId(gridIndex, tileMap.getMapSize());
+            const callbackForMarkTile   = getCallbackForMarkTile(war, gridId);
+            const callbackForUnmarkTile = getCallbackForUnmarkTile(war, gridId);
+
+            if ((warType === Types.WarType.Me)                              ||
+                (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(warType))  ||
+                (tile.getMaxHp() != null)
+            ) {
+                PanelHelpers.open(PanelHelpers.PanelDict.BwTileDetailPanel, {
+                    tile,
+                    callbackForAddUnit  : null,
+                    callbackForMarkTile,
+                    callbackForUnmarkTile,
+                });
+            } else {
+                const playerIndexAndSkinIdArray = war.getPlayerManager().getAllPlayers()
+                    .filter(v => v.getPlayerIndex() !== CommonConstants.PlayerIndex.Neutral)
+                    .map(v => ({ playerIndex: v.getPlayerIndex(), skinId: v.getUnitAndTileSkinId()}))
+                    .sort((v1, v2) => v1.playerIndex - v2.playerIndex);
+                const skinIdArray               = playerIndexAndSkinIdArray.map(v => v.skinId);
+
+                PanelHelpers.open(PanelHelpers.PanelDict.BwTileDetailPanel, {
+                    tile,
+                    callbackForAddUnit: () => {
+                        const gameConfig = war.getGameConfig();
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseUnitAndSkinPanel, {
+                            gameConfig,
+                            unitTypeArray   : gameConfig.getAllUnitTypeArray(),
+                            skinIdArray,
+                            callback        : (unitType, skinId) => {
+                                const unitMap = war.getUnitMap();
+                                if (unitMap.getUnitOnMap(gridIndex)) {
+                                    WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, false);
+                                }
+
+                                const unitId    = unitMap.getNextUnitId();
+                                const unit      = new BwUnit();
+                                unit.init({
+                                    gridIndex,
+                                    playerIndex     : playerIndexAndSkinIdArray.find(v => v.skinId === skinId)?.playerIndex,
+                                    unitType,
+                                    unitId          : unitId,
+                                }, gameConfig);
+                                unit.startRunning(war);
+                                unit.startRunningView();
+                                unitMap.setUnitOnMap(unit);
+                                unitMap.setNextUnitId(unitId + 1);
+                                Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as Notify.NotifyData.BwUnitChanged);
+                            },
+                        });
+                    },
+                    callbackForMarkTile,
+                    callbackForUnmarkTile,
+                });
+            }
+
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
@@ -206,6 +264,57 @@ namespace Twns.BaseWar {
             });
 
             await Helpers.wait(50);
+        }
+    }
+
+    function getCallbackForMarkTile(war: BwWar, gridId: number): (() => void) | null {
+        if (war instanceof MultiPlayerWar.MpwWar) {
+            const player = war.getPlayerLoggedIn();
+            if (player == null) {
+                return null;
+            }
+            if (player.checkHasMarkedGridId(gridId)) {
+                return null;
+            }
+
+            return () => {
+                MultiPlayerWar.MpwProxy.reqMpwCommonMarkTile(Helpers.getExisted(war.getWarId()), gridId, true);
+            };
+
+        } else {
+            const player = war.getPlayer(CommonConstants.PlayerIndex.Neutral);
+            if (player.checkHasMarkedGridId(gridId)) {
+                return null;
+            }
+
+            return () => {
+                player.addMarkedGridId(gridId);
+            };
+        }
+    }
+    function getCallbackForUnmarkTile(war: BwWar, gridId: number): (() => void) | null {
+        if (war instanceof MultiPlayerWar.MpwWar) {
+            const player = war.getPlayerLoggedIn();
+            if (player == null) {
+                return null;
+            }
+            if (!player.checkHasMarkedGridId(gridId)) {
+                return null;
+            }
+
+            return () => {
+                MultiPlayerWar.MpwProxy.reqMpwCommonMarkTile(Helpers.getExisted(war.getWarId()), gridId, false);
+            };
+
+        } else {
+            const player = war.getPlayer(CommonConstants.PlayerIndex.Neutral);
+            if (!player.checkHasMarkedGridId(gridId)) {
+                return null;
+            }
+
+            return () => {
+                player.deleteMarkedGridId(gridId);
+            };
         }
     }
 }

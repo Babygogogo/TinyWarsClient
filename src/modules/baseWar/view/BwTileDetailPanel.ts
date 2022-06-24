@@ -32,7 +32,10 @@ namespace Twns.BaseWar {
     import TileInfoType     = Types.TileInfoType;
 
     export type OpenDataForBwTileDetailPanel = {
-        tile    : BwTile;
+        tile                    : BwTile;
+        callbackForMarkTile     : (() => void) | null;
+        callbackForUnmarkTile   : (() => void) | null;
+        callbackForAddUnit      : (() => void) | null;
     };
     export class BwTileDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForBwTileDetailPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
@@ -54,6 +57,11 @@ namespace Twns.BaseWar {
         private readonly _labelSub2!        : TwnsUiLabel.UiLabel;
         private readonly _listDamageChart!  : TwnsUiScrollList.UiScrollList<DataForDamageRenderer>;
 
+        private readonly _groupButtons!     : eui.Group;
+        private readonly _btnMark!          : TwnsUiButton.UiButton;
+        private readonly _btnUnmark!        : TwnsUiButton.UiButton;
+        private readonly _btnAddUnit!       : TwnsUiButton.UiButton;
+
         private readonly _btnTilesInfo!     : TwnsUiButton.UiButton;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
 
@@ -67,6 +75,9 @@ namespace Twns.BaseWar {
                 { type: NotifyType.BwTileIsHighlightedChanged,      callback: this._onNotifyTileIsHighlightedChanged },
             ]);
             this._setUiListenerArray([
+                { ui: this._btnMark,                                callback: this._onTouchedBtnMark },
+                { ui: this._btnUnmark,                              callback: this._onTouchedBtnUnmark },
+                { ui: this._btnAddUnit,                             callback: this._onTouchedBtnAddUnit },
                 { ui: this._btnTilesInfo,                           callback: this._onTouchedBtnTilesInfo },
                 { ui: this._btnClose,                               callback: this.close },
             ]);
@@ -107,6 +118,18 @@ namespace Twns.BaseWar {
             this._updateTileView();
         }
 
+        private _onTouchedBtnMark(): void {
+            Helpers.getExisted(this._getOpenData().callbackForMarkTile)();
+            this.close();
+        }
+        private _onTouchedBtnUnmark(): void {
+            Helpers.getExisted(this._getOpenData().callbackForUnmarkTile)();
+            this.close();
+        }
+        private _onTouchedBtnAddUnit(): void {
+            Helpers.getExisted(this._getOpenData().callbackForAddUnit)();
+            this.close();
+        }
         private _onTouchedBtnTilesInfo(): void {
             PanelHelpers.open(PanelHelpers.PanelDict.CommonTileChartPanel, {
                 gameConfig  : this._getOpenData().tile.getGameConfig(),
@@ -119,6 +142,8 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateComponentsForLanguage();
+
+            this._updateGroupButtons();
             this._updateLabelName();
             this._updateTileView();
             this._updateListInfo();
@@ -133,8 +158,20 @@ namespace Twns.BaseWar {
             this._labelSub1.text            = Lang.getText(LangTextType.B0693);
             this._labelMain2.text           = Lang.getText(LangTextType.B0692);
             this._labelSub2.text            = Lang.getText(LangTextType.B0693);
+            this._btnMark.label             = Lang.getText(LangTextType.B0914);
+            this._btnUnmark.label           = Lang.getText(LangTextType.B0915);
+            this._btnAddUnit.label          = Lang.getText(LangTextType.B0535);
             this._btnTilesInfo.label        = Lang.getText(LangTextType.B0910);
             this._btnClose.label            = Lang.getText(LangTextType.B0204);
+        }
+
+        private _updateGroupButtons(): void {
+            const openData  = this._getOpenData();
+            const group     = this._groupButtons;
+            group.removeChildren();
+            (openData.callbackForMarkTile) && (group.addChild(this._btnMark));
+            (openData.callbackForUnmarkTile) && (group.addChild(this._btnUnmark));
+            (openData.callbackForAddUnit) && (group.addChild(this._btnAddUnit));
         }
 
         private _updateLabelName(): void {

@@ -5,8 +5,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Notify.NotifyData {
-    import GridIndex        = Twns.Types.GridIndex;
-    import TouchPoints      = Twns.Types.TouchPoints;
+    import GridIndex        = Types.GridIndex;
+    import TouchPoints      = Types.TouchPoints;
 
     export type McwPlayerIndexInTurnChanged = number;
     export type BwPlayerFundChanged         = BaseWar.BwPlayer;
@@ -18,11 +18,13 @@ namespace Twns.Notify.NotifyData {
     export type BwCursorTapped              = { current: GridIndex, tappedOn: GridIndex };
     export type BwCursorDragged             = { current: GridIndex, draggedTo: GridIndex };
     export type BwFieldZoomed               = { previous: TouchPoints, current: TouchPoints };
-    export type BwFieldDragged              = { previous: Twns.Types.Point, current: Twns.Types.Point };
+    export type BwFieldDragged              = { previous: Types.Point, current: Types.Point };
     export type BwUnitChanged               = { gridIndex: GridIndex };
     export type MeTileChanged               = { gridIndex: GridIndex };
     export type ScrCreatePlayerInfoChanged  = { playerIndex: number };
     export type SrrCreatePlayerInfoChanged  = { playerIndex: number };
+    export type BwPlayerMarkedGridIdAdded   = { player: BaseWar.BwPlayer, gridId: number };
+    export type BwPlayerMarkedGridIdDeleted = { player: BaseWar.BwPlayer, gridId: number };
 }
 
 // export default NotifyData;

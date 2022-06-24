@@ -92,8 +92,8 @@ namespace Twns.Common {
             this._updateComponentsForLanguage();
 
             const textArray         = this._getOpenData().currentTextArray ?? [];
-            this._inputChinese.text = Lang.getLanguageText({ textArray, languageType: Types.LanguageType.Chinese }) ?? ``;
-            this._inputEnglish.text = Lang.getLanguageText({ textArray, languageType: Types.LanguageType.English }) ?? ``;
+            this._inputChinese.text = Lang.getLanguageText({ textArray, languageType: Types.LanguageType.Chinese, useAlternate: false }) ?? ``;
+            this._inputEnglish.text = Lang.getLanguageText({ textArray, languageType: Types.LanguageType.English, useAlternate: false }) ?? ``;
         }
 
         private _updateComponentsForLanguage(): void {

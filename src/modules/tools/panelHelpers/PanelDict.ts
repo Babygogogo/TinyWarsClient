@@ -72,6 +72,7 @@ namespace Twns.PanelHelpers {
         CommonChooseTileObjectPanel         : PanelConfig<Common.OpenDataForCommonChooseTileObjectPanel>;
         CommonChooseTileTypePanel           : PanelConfig<Common.OpenDataForCommonChooseTileTypePanel>;
         CommonChooseUnitActionStatePanel    : PanelConfig<Common.OpenDataForCommonChooseUnitActionStatePanel>;
+        CommonChooseUnitAndSkinPanel        : PanelConfig<Common.OpenDataForCommonChooseUnitAndSkinPanel>;
         CommonChooseUnitTypePanel           : PanelConfig<Common.OpenDataForCommonChooseUnitTypePanel>;
         CommonChooseWarEventActionIdPanel   : PanelConfig<Common.OpenDataForCommonChooseWarEventActionIdPanel>;
         CommonChooseWarEventIdPanel         : PanelConfig<Common.OpenDataForCommonChooseWarEventIdPanel>;
@@ -608,6 +609,12 @@ namespace Twns.PanelHelpers {
             CommonChooseUnitActionStatePanel: {
                 cls         : Common?.CommonChooseUnitActionStatePanel,
                 skinName    : `resource/skins/common/CommonChooseUnitActionStatePanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonChooseUnitAndSkinPanel: {
+                cls         : Common?.CommonChooseUnitAndSkinPanel,
+                skinName    : `resource/skins/common/CommonChooseUnitAndSkinPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 

@@ -98,6 +98,7 @@
 		"bin-debug/modules/common/view/CommonChooseTileObjectPanel.js",
 		"bin-debug/modules/common/view/CommonChooseTileTypePanel.js",
 		"bin-debug/modules/common/view/CommonChooseUnitActionStatePanel.js",
+		"bin-debug/modules/common/view/CommonChooseUnitAndSkinPanel.js",
 		"bin-debug/modules/common/view/CommonChooseUnitTypePanel.js",
 		"bin-debug/modules/common/view/CommonChooseWarEventActionIdPanel.js",
 		"bin-debug/modules/common/view/CommonChooseWarEventIdPanel.js",

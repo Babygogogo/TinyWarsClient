@@ -74,6 +74,8 @@ namespace Twns.Notify {
         BwPlayerIndexInTurnChanged,
 
         BwPlayerFundChanged,
+        BwPlayerMarkedGridIdAdded,
+        BwPlayerMarkedGridIdDeleted,
         BwCoEnergyChanged,
         BwCoUsingSkillTypeChanged,
         BwCoIdChanged,
@@ -251,6 +253,7 @@ namespace Twns.Notify {
         MsgMpwCommonGetWarSettings,
         MsgMpwCommonGetWarSettingsFailed,
         MsgMpwCommonGetWarProgressInfo,
+        MsgMpwCommonMarkTile,
         MsgMpwWatchGetIncomingInfo,
         MsgMpwWatchGetIncomingInfoFailed,
         MsgMpwWatchGetOutgoingInfo,

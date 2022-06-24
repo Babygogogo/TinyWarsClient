@@ -249,6 +249,7 @@ namespace Twns.MapEditor.MeHelpers {
             coIsDestroyedInTurn         : false,
             watchRequestSrcUserIdArray  : [],
             watchOngoingSrcUserIdArray  : [],
+            markedGridIdArray           : [],
             restTimeToBoot              : 0,
             unitAndTileSkinId           : playerIndex,
         };

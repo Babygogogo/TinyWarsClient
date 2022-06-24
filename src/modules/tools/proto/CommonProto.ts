@@ -4124,96 +4124,6 @@ declare namespace CommonProto {
 
     namespace Map {
 
-        /** Properties of a DeprecatedDataForMapTag. */
-        interface IDeprecatedDataForMapTag {
-
-            /** DeprecatedDataForMapTag fog */
-            fog?: (boolean|null);
-        }
-
-        /** Represents a DeprecatedDataForMapTag. */
-        class DeprecatedDataForMapTag implements IDeprecatedDataForMapTag {
-
-            /**
-             * Constructs a new DeprecatedDataForMapTag.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: CommonProto.Map.IDeprecatedDataForMapTag);
-
-            /** DeprecatedDataForMapTag fog. */
-            public fog: boolean;
-
-            /**
-             * Creates a new DeprecatedDataForMapTag instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns DeprecatedDataForMapTag instance
-             */
-            public static create(properties?: CommonProto.Map.IDeprecatedDataForMapTag): CommonProto.Map.DeprecatedDataForMapTag;
-
-            /**
-             * Encodes the specified DeprecatedDataForMapTag message. Does not implicitly {@link CommonProto.Map.DeprecatedDataForMapTag.verify|verify} messages.
-             * @param message DeprecatedDataForMapTag message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: CommonProto.Map.IDeprecatedDataForMapTag, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified DeprecatedDataForMapTag message, length delimited. Does not implicitly {@link CommonProto.Map.DeprecatedDataForMapTag.verify|verify} messages.
-             * @param message DeprecatedDataForMapTag message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: CommonProto.Map.IDeprecatedDataForMapTag, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a DeprecatedDataForMapTag message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns DeprecatedDataForMapTag
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.Map.DeprecatedDataForMapTag;
-
-            /**
-             * Decodes a DeprecatedDataForMapTag message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns DeprecatedDataForMapTag
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.Map.DeprecatedDataForMapTag;
-
-            /**
-             * Verifies a DeprecatedDataForMapTag message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a DeprecatedDataForMapTag message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns DeprecatedDataForMapTag
-             */
-            public static fromObject(object: { [k: string]: any }): CommonProto.Map.DeprecatedDataForMapTag;
-
-            /**
-             * Creates a plain object from a DeprecatedDataForMapTag message. Also converts values to other types if specified.
-             * @param message DeprecatedDataForMapTag
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: CommonProto.Map.DeprecatedDataForMapTag, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this DeprecatedDataForMapTag to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
         /** Properties of a MapTag. */
         interface IMapTag {
 
@@ -4940,9 +4850,6 @@ declare namespace CommonProto {
             /** MapRawData warEventFullData */
             warEventFullData?: (CommonProto.Map.IWarEventFullData|null);
 
-            /** MapRawData deprecatedMapTag */
-            deprecatedMapTag?: (CommonProto.Map.IDeprecatedDataForMapTag|null);
-
             /** MapRawData mapExtraText */
             mapExtraText?: (CommonProto.Map.IMapExtraText|null);
 
@@ -4997,9 +4904,6 @@ declare namespace CommonProto {
 
             /** MapRawData warEventFullData. */
             public warEventFullData?: (CommonProto.Map.IWarEventFullData|null);
-
-            /** MapRawData deprecatedMapTag. */
-            public deprecatedMapTag?: (CommonProto.Map.IDeprecatedDataForMapTag|null);
 
             /** MapRawData mapExtraText. */
             public mapExtraText?: (CommonProto.Map.IMapExtraText|null);
@@ -12667,6 +12571,9 @@ declare namespace CommonProto {
 
             /** SerialPlayer hasTakenManualAction */
             hasTakenManualAction?: (boolean|null);
+
+            /** SerialPlayer markedGridIdArray */
+            markedGridIdArray?: (number[]|null);
         }
 
         /** Represents a SerialPlayer. */
@@ -12722,6 +12629,9 @@ declare namespace CommonProto {
 
             /** SerialPlayer hasTakenManualAction. */
             public hasTakenManualAction: boolean;
+
+            /** SerialPlayer markedGridIdArray. */
+            public markedGridIdArray: number[];
 
             /**
              * Creates a new SerialPlayer instance using the specified properties.
@@ -28679,6 +28589,9 @@ declare namespace CommonProto {
             /** MessageContainer MsgMpwCommonGetWarProgressInfo */
             MsgMpwCommonGetWarProgressInfo?: (CommonProto.NetMessage.IMsgMpwCommonGetWarProgressInfo|null);
 
+            /** MessageContainer MsgMpwCommonMarkTile */
+            MsgMpwCommonMarkTile?: (CommonProto.NetMessage.IMsgMpwCommonMarkTile|null);
+
             /** MessageContainer MsgMpwWatchMakeRequest */
             MsgMpwWatchMakeRequest?: (CommonProto.NetMessage.IMsgMpwWatchMakeRequest|null);
 
@@ -29066,6 +28979,9 @@ declare namespace CommonProto {
 
             /** MessageContainer MsgMpwCommonGetWarProgressInfo. */
             public MsgMpwCommonGetWarProgressInfo?: (CommonProto.NetMessage.IMsgMpwCommonGetWarProgressInfo|null);
+
+            /** MessageContainer MsgMpwCommonMarkTile. */
+            public MsgMpwCommonMarkTile?: (CommonProto.NetMessage.IMsgMpwCommonMarkTile|null);
 
             /** MessageContainer MsgMpwWatchMakeRequest. */
             public MsgMpwWatchMakeRequest?: (CommonProto.NetMessage.IMsgMpwWatchMakeRequest|null);
@@ -49877,6 +49793,315 @@ declare namespace CommonProto {
                  * @returns Plain object
                  */
                 public static toObject(message: CommonProto.NetMessage.MsgMpwCommonGetWarProgressInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this S to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+
+        /** Properties of a MsgMpwCommonMarkTile. */
+        interface IMsgMpwCommonMarkTile {
+
+            /** MsgMpwCommonMarkTile c */
+            c?: (CommonProto.NetMessage.MsgMpwCommonMarkTile.IC|null);
+
+            /** MsgMpwCommonMarkTile s */
+            s?: (CommonProto.NetMessage.MsgMpwCommonMarkTile.IS|null);
+        }
+
+        /** Represents a MsgMpwCommonMarkTile. */
+        class MsgMpwCommonMarkTile implements IMsgMpwCommonMarkTile {
+
+            /**
+             * Constructs a new MsgMpwCommonMarkTile.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.NetMessage.IMsgMpwCommonMarkTile);
+
+            /** MsgMpwCommonMarkTile c. */
+            public c?: (CommonProto.NetMessage.MsgMpwCommonMarkTile.IC|null);
+
+            /** MsgMpwCommonMarkTile s. */
+            public s?: (CommonProto.NetMessage.MsgMpwCommonMarkTile.IS|null);
+
+            /**
+             * Creates a new MsgMpwCommonMarkTile instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MsgMpwCommonMarkTile instance
+             */
+            public static create(properties?: CommonProto.NetMessage.IMsgMpwCommonMarkTile): CommonProto.NetMessage.MsgMpwCommonMarkTile;
+
+            /**
+             * Encodes the specified MsgMpwCommonMarkTile message. Does not implicitly {@link CommonProto.NetMessage.MsgMpwCommonMarkTile.verify|verify} messages.
+             * @param message MsgMpwCommonMarkTile message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.NetMessage.IMsgMpwCommonMarkTile, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MsgMpwCommonMarkTile message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMpwCommonMarkTile.verify|verify} messages.
+             * @param message MsgMpwCommonMarkTile message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.NetMessage.IMsgMpwCommonMarkTile, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MsgMpwCommonMarkTile message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MsgMpwCommonMarkTile
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMpwCommonMarkTile;
+
+            /**
+             * Decodes a MsgMpwCommonMarkTile message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MsgMpwCommonMarkTile
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMpwCommonMarkTile;
+
+            /**
+             * Verifies a MsgMpwCommonMarkTile message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MsgMpwCommonMarkTile message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MsgMpwCommonMarkTile
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMpwCommonMarkTile;
+
+            /**
+             * Creates a plain object from a MsgMpwCommonMarkTile message. Also converts values to other types if specified.
+             * @param message MsgMpwCommonMarkTile
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.NetMessage.MsgMpwCommonMarkTile, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MsgMpwCommonMarkTile to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace MsgMpwCommonMarkTile {
+
+            /** Properties of a C. */
+            interface IC {
+
+                /** C warId */
+                warId?: (number|null);
+
+                /** C gridId */
+                gridId?: (number|null);
+
+                /** C isMark */
+                isMark?: (boolean|null);
+            }
+
+            /** Represents a C. */
+            class C implements IC {
+
+                /**
+                 * Constructs a new C.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgMpwCommonMarkTile.IC);
+
+                /** C warId. */
+                public warId: number;
+
+                /** C gridId. */
+                public gridId: number;
+
+                /** C isMark. */
+                public isMark: boolean;
+
+                /**
+                 * Creates a new C instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns C instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgMpwCommonMarkTile.IC): CommonProto.NetMessage.MsgMpwCommonMarkTile.C;
+
+                /**
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgMpwCommonMarkTile.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgMpwCommonMarkTile.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMpwCommonMarkTile.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMpwCommonMarkTile.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMpwCommonMarkTile.C;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMpwCommonMarkTile.C;
+
+                /**
+                 * Verifies a C message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a C message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns C
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMpwCommonMarkTile.C;
+
+                /**
+                 * Creates a plain object from a C message. Also converts values to other types if specified.
+                 * @param message C
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgMpwCommonMarkTile.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this C to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a S. */
+            interface IS {
+
+                /** S errorCode */
+                errorCode?: (number|null);
+
+                /** S warId */
+                warId?: (number|null);
+
+                /** S gridId */
+                gridId?: (number|null);
+
+                /** S isMark */
+                isMark?: (boolean|null);
+            }
+
+            /** Represents a S. */
+            class S implements IS {
+
+                /**
+                 * Constructs a new S.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgMpwCommonMarkTile.IS);
+
+                /** S errorCode. */
+                public errorCode: number;
+
+                /** S warId. */
+                public warId: number;
+
+                /** S gridId. */
+                public gridId: number;
+
+                /** S isMark. */
+                public isMark: boolean;
+
+                /**
+                 * Creates a new S instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns S instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgMpwCommonMarkTile.IS): CommonProto.NetMessage.MsgMpwCommonMarkTile.S;
+
+                /**
+                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgMpwCommonMarkTile.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgMpwCommonMarkTile.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMpwCommonMarkTile.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMpwCommonMarkTile.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMpwCommonMarkTile.S;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMpwCommonMarkTile.S;
+
+                /**
+                 * Verifies a S message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a S message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns S
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMpwCommonMarkTile.S;
+
+                /**
+                 * Creates a plain object from a S message. Also converts values to other types if specified.
+                 * @param message S
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgMpwCommonMarkTile.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this S to JSON.

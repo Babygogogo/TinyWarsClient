@@ -2,20 +2,21 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
-    <e:Group id="_group" top="40" bottom="120" width="160" x="0">
+    <e:Group id="_group" width="520" horizontalCenter="0" height="380" verticalCenter="0">
         <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="0" right="0" top="0" bottom="0" />
-        <TwnsUiLabel:UiLabel id="_labelName" text="部队列表" y="12" bold="true" size="16" textColor="0xffffff" left="10" />
-        <TwnsUiButton:UiButton id="_btnSwitch" label="切换玩家" right="10" y="12">
+        <TwnsUiLabel:UiLabel id="_labelName" text="部队列表" y="10" bold="true" size="20" textColor="0xffffff"
+                             horizontalCenter="0" />
+        <TwnsUiButton:UiButton id="_btnSwitch" label="切换玩家" y="12" left="10">
             <TwnsUiButton:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image width="100%" height="100%" />
-                    <TwnsUiLabel:UiLabel id="labelDisplay" size="14" bold="true" top="0" bottom="0" textColor="0x00ff00"
-                                         maxTextWidth="60" />
+                    <TwnsUiLabel:UiLabel id="labelDisplay" size="14" bold="true" top="0" bottom="0" textColor="0x00ff00" />
                 </e:Skin>
             </TwnsUiButton:skinName>
         </TwnsUiButton:UiButton>
-        <TwnsUiScrollList:UiScrollList id="_listUnit" left="0" right="0" bottom="50" top="40">
+        <TwnsUiButton:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose002" right="0" top="0" width="60"></TwnsUiButton:UiButton>
+        <TwnsUiScrollList:UiScrollList id="_listUnit" left="0" right="0" bottom="40" top="40">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="160" height="65" currentState="up" states="down,up">
@@ -46,15 +47,31 @@
                         </e:Group>
                     </e:Skin>
                 </e:itemRendererSkinName>
+                <e:layout>
+                    <e:TileLayout orientation="rows" requestedColumnCount="3" columnAlign="justifyUsingGap" />
+                </e:layout>
             </e:List>
         </TwnsUiScrollList:UiScrollList>
-        <TwnsUiLabel:UiLabel id="_labelCountName" text="总数量:" bold="true" size="16" textColor="0xFFFFFF" x="15"
-                             bottom="28" maxTextWidth="55" />
-        <TwnsUiLabel:UiLabel id="_labelCount" text="999999" bold="true" size="16" textColor="0xFFFFFF" x="76"
-                             bottom="28" maxTextWidth="54" />
-        <TwnsUiLabel:UiLabel id="_labelValueName" text="总价值:" bold="true" size="16" textColor="0xFFFFFF" x="15"
-                             bottom="8" maxTextWidth="55" />
-        <TwnsUiLabel:UiLabel id="_labelValue" text="999999" bold="true" size="16" textColor="0xFFFFFF" x="76" bottom="8"
-                             maxTextWidth="54" />
+        <e:Group horizontalCenter="0" bottom="10" locked="true">
+            <e:Group x="0" y="0">
+                <TwnsUiLabel:UiLabel id="_labelCountName" text="总数量:" size="16" textColor="0xFFFFFF" x="0" y="0" />
+                <TwnsUiLabel:UiLabel id="_labelCount" text="999999" bold="true" size="16" textColor="0xFFFFFF" x="61"
+                                     y="0" />
+                <e:layout>
+                    <e:HorizontalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:Group x="0" y="20">
+                <TwnsUiLabel:UiLabel id="_labelValueName" text="总价值:" size="16" textColor="0xFFFFFF" x="0" y="0" />
+                <TwnsUiLabel:UiLabel id="_labelValue" text="999999" bold="true" size="16" textColor="0xFFFFFF" x="61"
+                                     y="0" />
+                <e:layout>
+                    <e:HorizontalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:HorizontalLayout gap="30" />
+            </e:layout>
+        </e:Group>
     </e:Group>
 </e:Skin>
