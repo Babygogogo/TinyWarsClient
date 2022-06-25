@@ -65,6 +65,7 @@ namespace Twns.Config {
         private readonly _mapWeaponCfgDict              : Map<number, MapWeaponCfg>;
 
         private _availableCoArray   : CoBasicCfg[] | null = null;
+        private _allUnitTypeArray   : number[] | null = null;
         private _coTierArray        : number[] | null = null;
         private _allBgmCodeArray    : number[] | null = null;
 
@@ -381,10 +382,13 @@ namespace Twns.Config {
             return this._unitTemplateCfgDict.has(unitType);
         }
         public getFirstUnitType(): number {
-            return this._unitTemplateCfgDict.keys().next().value;
+            return this.getAllUnitTypeArray()[0];
         }
         public getAllUnitTypeArray(): number[] {
-            return [...this._unitTemplateCfgDict].map(v => v[0]).sort((v1, v2) => v1 - v2);
+            if (this._allUnitTypeArray == null) {
+                this._allUnitTypeArray = [...this._unitTemplateCfgDict].map(v => v[0]).sort((v1, v2) => v1 - v2);
+            }
+            return this._allUnitTypeArray;
         }
         public getUnitImageSource({ version, skinId, unitType, isDark, isMoving, tickCount }: {
             version     : Types.UnitAndTileTextureVersion;

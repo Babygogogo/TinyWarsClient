@@ -276,9 +276,9 @@ namespace Twns.WarEvent {
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedGroupIsDiving(): void {
-            const data          = this._getData();
-            const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
-            unitData.isDiving   = unitData.isDiving ? null : true;
+            const data              = this._getData();
+            const unitData          = Helpers.getExisted(data.dataForAddUnit.unitData);
+            unitData.isDiving       = !unitData.isDiving;
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedGroupHasLoadedCo(): void {

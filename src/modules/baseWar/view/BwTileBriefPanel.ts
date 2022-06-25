@@ -160,6 +160,7 @@ namespace Twns.BaseWar {
                                 unit.startRunningView();
                                 unitMap.setUnitOnMap(unit);
                                 unitMap.setNextUnitId(unitId + 1);
+                                war.updateTilesAndUnitsOnVisibilityChanged(false);
                                 Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as Notify.NotifyData.BwUnitChanged);
                             },
                         });

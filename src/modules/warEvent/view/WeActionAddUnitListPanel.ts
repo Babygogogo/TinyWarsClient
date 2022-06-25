@@ -104,7 +104,7 @@ namespace Twns.WarEvent {
 
         private _onTouchedSelf(): void {
             const data = this._getData();
-            resetUnitType(data.dataForAddUnit, data.newUnitType);
+            resetUnitType(data.dataForAddUnit, data.newUnitType, data.gameConfig);
             PanelHelpers.close(PanelHelpers.PanelDict.WeActionAddUnitListPanel);
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
@@ -122,18 +122,24 @@ namespace Twns.WarEvent {
         }
     }
 
-    function resetUnitType(data: IDataForAddUnit, unitType: number): void {
+    function resetUnitType(data: IDataForAddUnit, unitType: number, gameConfig: Config.GameConfig): void {
         const unitData = Helpers.getExisted(data.unitData);
         if (unitData.unitType !== unitType) {
             unitData.unitType                   = unitType;
             unitData.primaryWeaponCurrentAmmo   = null;
             unitData.isCapturingTile            = null;
-            unitData.isDiving                   = null;
             unitData.flareCurrentAmmo           = null;
             unitData.currentFuel                = null;
             unitData.currentBuildMaterial       = null;
             unitData.currentProduceMaterial     = null;
             unitData.isBuildingTile             = null;
+
+            const unitTemplateCfg = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType));
+            if (unitTemplateCfg.diveCfgs == null) {
+                unitData.isDiving = null;
+            } else {
+                unitData.isDiving = Config.ConfigManager.checkIsUnitDivingByDefaultWithTemplateCfg(unitTemplateCfg);
+            }
         }
     }
 }
