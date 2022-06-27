@@ -179,7 +179,7 @@ namespace Twns.MultiRankRoom {
             this._labelMyRoom.text          = Lang.getText(LangTextType.B0410);
             this._btnBack.label             = Lang.getText(LangTextType.B0146);
             this._labelNoRoom.text          = Lang.getText(LangTextType.B0582);
-            this._btnNextStep.label         = Lang.getText(LangTextType.B0398);
+            this._btnNextStep.label         = Lang.getText(LangTextType.B0222);
         }
 
         private async _updateGroupRoomList(): Promise<void> {

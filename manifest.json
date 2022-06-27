@@ -307,6 +307,7 @@
 		"bin-debug/modules/changeLog/view/ChangeLogModifyPanel.js",
 		"bin-debug/modules/changeLog/view/ChangeLogPanel.js",
 		"bin-debug/modules/tools/helpers/CompatibilityHelpers.js",
+		"bin-debug/modules/tools/helpers/Cookies.js",
 		"bin-debug/modules/tools/helpers/FloatText.js",
 		"bin-debug/modules/tools/helpers/FlowManager.js",
 		"bin-debug/modules/tools/helpers/GridIndexHelpers.js",

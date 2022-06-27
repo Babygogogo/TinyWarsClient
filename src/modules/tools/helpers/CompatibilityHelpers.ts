@@ -10,7 +10,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.CompatibilityHelpers {
-    import LangTextType     = Twns.Lang.LangTextType;
+    import LangTextType     = Lang.LangTextType;
 
     export function init(): void {
         initListenerForWindowOnError();
@@ -118,13 +118,14 @@ namespace Twns.CompatibilityHelpers {
     }
 
     function showErrorText(text: string): void {
+        console.warn(text);
         PanelHelpers.open(PanelHelpers.PanelDict.CommonErrorPanel, {
             content: text,
         });
         Chat.ChatProxy.reqChatAddMessage(
-            text.substr(0, Twns.CommonConstants.ChatErrorMaxLength),
+            text.substr(0, CommonConstants.ChatErrorMaxLength),
             Types.ChatMessageToCategory.Private,
-            Twns.CommonConstants.AdminUserId,
+            CommonConstants.AdminUserId,
         );
     }
 
@@ -138,7 +139,7 @@ namespace Twns.CompatibilityHelpers {
 
         if (window.addEventListener) {
             window.addEventListener("popstate", () => {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0194));
+                FloatText.show(Lang.getText(LangTextType.A0194));
             }, false);
         }
     }

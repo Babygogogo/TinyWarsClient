@@ -2263,7 +2263,7 @@ namespace Twns.Lang {
             `Keep`,
         ],
         [LangTextType.B0222]: [
-            `继续观战`,
+            `继续`,
             `Continue`,
         ],
         [LangTextType.B0223]: [
