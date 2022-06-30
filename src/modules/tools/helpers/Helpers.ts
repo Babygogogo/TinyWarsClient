@@ -121,7 +121,7 @@ namespace Twns.Helpers {
         return (new Array(Math.max(times, 0) + 1)).join(str);
     }
 
-    export function getSuffixForRank(rank: Types.Undefinable<number>): string | null {
+    export function getSuffixForRankIndex(rank: Types.Undefinable<number>): string | null {
         if (rank == null) {
             return null;
         } else {

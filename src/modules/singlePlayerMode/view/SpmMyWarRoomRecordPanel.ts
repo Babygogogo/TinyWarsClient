@@ -222,7 +222,7 @@ namespace Twns.SinglePlayerMode {
             if (data === this._getData()) { // 由于异步逻辑，所以需要再次比较
                 labelMyRank.text = (index == null) || (index <= 0)
                     ? `--`
-                    : `${index}${Helpers.getSuffixForRank(index)}`;
+                    : `${index}${Helpers.getSuffixForRankIndex(index)}`;
             }
         }
     }

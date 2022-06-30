@@ -249,7 +249,7 @@ namespace Twns.Common {
             const labelScore        = this._labelScore;
             labelNickname.text      = Lang.getText(LangTextType.B0029);
             labelScore.text         = ``;
-            this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
+            this._labelIndex.text   = `${rank}${Helpers.getSuffixForRankIndex(rank)}`;
             this._imgBg.alpha       = rank % 2 == 1 ? 0.2 : 0.5;
 
             const userInfo = await User.UserModel.getUserPublicInfo(data.userId);
@@ -310,7 +310,7 @@ namespace Twns.Common {
             const labelScore        = this._labelScore;
             labelNickname.text      = Lang.getText(LangTextType.B0029);
             labelScore.text         = `${Helpers.formatString(`%.2f`, data.score)}`;
-            this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
+            this._labelIndex.text   = `${rank}${Helpers.getSuffixForRankIndex(rank)}`;
             this._imgBg.alpha       = data.index % 2 == 1 ? 0.2 : 0.5;
 
             const userInfo          = await User.UserModel.getUserPublicInfo(data.userId);

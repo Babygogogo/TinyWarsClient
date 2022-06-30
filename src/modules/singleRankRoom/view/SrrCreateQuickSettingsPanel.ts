@@ -129,7 +129,7 @@ namespace Twns.SingleRankRoom {
             } else {
                 const rankIndex = await SinglePlayerMode.SpmModel.getRankIndex(mapId, ruleId, score);
                 label.text      = ((rankIndex != null) && (rankIndex > 0))
-                    ? `${score} (${rankIndex}${Helpers.getSuffixForRank(rankIndex)})`
+                    ? `${score} (${rankIndex}${Helpers.getSuffixForRankIndex(rankIndex)})`
                     : `${score} (--)`;
             }
         }

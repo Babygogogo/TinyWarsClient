@@ -26332,8 +26332,8 @@ declare namespace CommonProto {
                 /** UserMrwRankInfo currentScore */
                 currentScore?: (number|null);
 
-                /** UserMrwRankInfo currentRank */
-                currentRank?: (number|null);
+                /** UserMrwRankInfo deprecatedCurrentRankIndex */
+                deprecatedCurrentRankIndex?: (number|null);
 
                 /** UserMrwRankInfo lastWarEndTime */
                 lastWarEndTime?: (number|null);
@@ -26357,8 +26357,8 @@ declare namespace CommonProto {
                 /** UserMrwRankInfo currentScore. */
                 public currentScore: number;
 
-                /** UserMrwRankInfo currentRank. */
-                public currentRank: number;
+                /** UserMrwRankInfo deprecatedCurrentRankIndex. */
+                public deprecatedCurrentRankIndex: number;
 
                 /** UserMrwRankInfo lastWarEndTime. */
                 public lastWarEndTime: number;
@@ -28777,6 +28777,9 @@ declare namespace CommonProto {
 
             /** MessageContainer MsgLbSpmOverallGetRankIndex */
             MsgLbSpmOverallGetRankIndex?: (CommonProto.NetMessage.IMsgLbSpmOverallGetRankIndex|null);
+
+            /** MessageContainer MsgLbMrwGetRankIndex */
+            MsgLbMrwGetRankIndex?: (CommonProto.NetMessage.IMsgLbMrwGetRankIndex|null);
         }
 
         /** Represents a MessageContainer. */
@@ -29168,6 +29171,9 @@ declare namespace CommonProto {
 
             /** MessageContainer MsgLbSpmOverallGetRankIndex. */
             public MsgLbSpmOverallGetRankIndex?: (CommonProto.NetMessage.IMsgLbSpmOverallGetRankIndex|null);
+
+            /** MessageContainer MsgLbMrwGetRankIndex. */
+            public MsgLbMrwGetRankIndex?: (CommonProto.NetMessage.IMsgLbMrwGetRankIndex|null);
 
             /**
              * Creates a new MessageContainer instance using the specified properties.
@@ -66581,6 +66587,321 @@ declare namespace CommonProto {
                  * @returns Plain object
                  */
                 public static toObject(message: CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this S to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+
+        /** Properties of a MsgLbMrwGetRankIndex. */
+        interface IMsgLbMrwGetRankIndex {
+
+            /** MsgLbMrwGetRankIndex c */
+            c?: (CommonProto.NetMessage.MsgLbMrwGetRankIndex.IC|null);
+
+            /** MsgLbMrwGetRankIndex s */
+            s?: (CommonProto.NetMessage.MsgLbMrwGetRankIndex.IS|null);
+        }
+
+        /** Represents a MsgLbMrwGetRankIndex. */
+        class MsgLbMrwGetRankIndex implements IMsgLbMrwGetRankIndex {
+
+            /**
+             * Constructs a new MsgLbMrwGetRankIndex.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.NetMessage.IMsgLbMrwGetRankIndex);
+
+            /** MsgLbMrwGetRankIndex c. */
+            public c?: (CommonProto.NetMessage.MsgLbMrwGetRankIndex.IC|null);
+
+            /** MsgLbMrwGetRankIndex s. */
+            public s?: (CommonProto.NetMessage.MsgLbMrwGetRankIndex.IS|null);
+
+            /**
+             * Creates a new MsgLbMrwGetRankIndex instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MsgLbMrwGetRankIndex instance
+             */
+            public static create(properties?: CommonProto.NetMessage.IMsgLbMrwGetRankIndex): CommonProto.NetMessage.MsgLbMrwGetRankIndex;
+
+            /**
+             * Encodes the specified MsgLbMrwGetRankIndex message. Does not implicitly {@link CommonProto.NetMessage.MsgLbMrwGetRankIndex.verify|verify} messages.
+             * @param message MsgLbMrwGetRankIndex message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.NetMessage.IMsgLbMrwGetRankIndex, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MsgLbMrwGetRankIndex message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgLbMrwGetRankIndex.verify|verify} messages.
+             * @param message MsgLbMrwGetRankIndex message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.NetMessage.IMsgLbMrwGetRankIndex, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MsgLbMrwGetRankIndex message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MsgLbMrwGetRankIndex
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgLbMrwGetRankIndex;
+
+            /**
+             * Decodes a MsgLbMrwGetRankIndex message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MsgLbMrwGetRankIndex
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgLbMrwGetRankIndex;
+
+            /**
+             * Verifies a MsgLbMrwGetRankIndex message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MsgLbMrwGetRankIndex message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MsgLbMrwGetRankIndex
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgLbMrwGetRankIndex;
+
+            /**
+             * Creates a plain object from a MsgLbMrwGetRankIndex message. Also converts values to other types if specified.
+             * @param message MsgLbMrwGetRankIndex
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.NetMessage.MsgLbMrwGetRankIndex, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MsgLbMrwGetRankIndex to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace MsgLbMrwGetRankIndex {
+
+            /** Properties of a C. */
+            interface IC {
+
+                /** C userId */
+                userId?: (number|null);
+
+                /** C warType */
+                warType?: (number|null);
+
+                /** C playersCountUnneutral */
+                playersCountUnneutral?: (number|null);
+            }
+
+            /** Represents a C. */
+            class C implements IC {
+
+                /**
+                 * Constructs a new C.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgLbMrwGetRankIndex.IC);
+
+                /** C userId. */
+                public userId: number;
+
+                /** C warType. */
+                public warType: number;
+
+                /** C playersCountUnneutral. */
+                public playersCountUnneutral: number;
+
+                /**
+                 * Creates a new C instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns C instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgLbMrwGetRankIndex.IC): CommonProto.NetMessage.MsgLbMrwGetRankIndex.C;
+
+                /**
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgLbMrwGetRankIndex.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgLbMrwGetRankIndex.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgLbMrwGetRankIndex.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgLbMrwGetRankIndex.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgLbMrwGetRankIndex.C;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgLbMrwGetRankIndex.C;
+
+                /**
+                 * Verifies a C message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a C message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns C
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgLbMrwGetRankIndex.C;
+
+                /**
+                 * Creates a plain object from a C message. Also converts values to other types if specified.
+                 * @param message C
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgLbMrwGetRankIndex.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this C to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a S. */
+            interface IS {
+
+                /** S errorCode */
+                errorCode?: (number|null);
+
+                /** S userId */
+                userId?: (number|null);
+
+                /** S warType */
+                warType?: (number|null);
+
+                /** S playersCountUnneutral */
+                playersCountUnneutral?: (number|null);
+
+                /** S rankIndex */
+                rankIndex?: (number|null);
+            }
+
+            /** Represents a S. */
+            class S implements IS {
+
+                /**
+                 * Constructs a new S.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgLbMrwGetRankIndex.IS);
+
+                /** S errorCode. */
+                public errorCode: number;
+
+                /** S userId. */
+                public userId: number;
+
+                /** S warType. */
+                public warType: number;
+
+                /** S playersCountUnneutral. */
+                public playersCountUnneutral: number;
+
+                /** S rankIndex. */
+                public rankIndex: number;
+
+                /**
+                 * Creates a new S instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns S instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgLbMrwGetRankIndex.IS): CommonProto.NetMessage.MsgLbMrwGetRankIndex.S;
+
+                /**
+                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgLbMrwGetRankIndex.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgLbMrwGetRankIndex.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgLbMrwGetRankIndex.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgLbMrwGetRankIndex.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgLbMrwGetRankIndex.S;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgLbMrwGetRankIndex.S;
+
+                /**
+                 * Verifies a S message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a S message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns S
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgLbMrwGetRankIndex.S;
+
+                /**
+                 * Creates a plain object from a S message. Also converts values to other types if specified.
+                 * @param message S
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgLbMrwGetRankIndex.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this S to JSON.

@@ -292,26 +292,28 @@ namespace Twns.User {
             this._labelTitle.text   = Lang.getFormattedText(LangTextType.F0009, nickname);
         }
         private async _updateComponentsForStdRank(): Promise<void> {
-            const data                      = await User.UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwStd, 2);
+            const userId                    = this._getOpenData().userId;
+            const data                      = await User.UserModel.getUserMrwRankScoreInfo(userId, WarType.MrwStd, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
             const rankName                  = `(${(await Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? CommonConstants.ErrorTextForUndefined})`;
             this._labelStdRankScore.text    = `${score} ${rankName}`;
 
-            const rank                          = data ? data.currentRank : null;
-            this._labelStdRankRank.text         = rank == null ? `--` : `${rank}`;
-            this._labelStdRankRankSuffix.text   = Helpers.getSuffixForRank(rank) || ``;
+            const rankIndex                     = await Leaderboard.LeaderboardModel.getMrwRankIndex(WarType.MrwStd, userId);
+            this._labelStdRankRank.text         = rankIndex == null ? `--` : `${rankIndex}`;
+            this._labelStdRankRankSuffix.text   = Helpers.getSuffixForRankIndex(rankIndex) || ``;
         }
         private async _updateComponentsForFogRank(): Promise<void> {
-            const data                      = await User.UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwFog, 2);
+            const userId                    = this._getOpenData().userId;
+            const data                      = await User.UserModel.getUserMrwRankScoreInfo(userId, WarType.MrwFog, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
             const rankName                  = `(${(await Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? CommonConstants.ErrorTextForUndefined})`;
             this._labelFogRankScore.text    = `${score} ${rankName}`;
 
-            const rank                          = data ? data.currentRank : null;
-            this._labelFogRankRank.text         = rank == null ? `--` : `${rank}`;
-            this._labelFogRankRankSuffix.text   = Helpers.getSuffixForRank(rank) || ``;
+            const rankIndex                     = await Leaderboard.LeaderboardModel.getMrwRankIndex(WarType.MrwFog, userId);
+            this._labelFogRankRank.text         = rankIndex == null ? `--` : `${rankIndex}`;
+            this._labelFogRankRankSuffix.text   = Helpers.getSuffixForRankIndex(rankIndex) || ``;
         }
         private async _updateComponentsForSpmRank(): Promise<void> {
             const userId                        = this._getOpenData().userId;
@@ -323,7 +325,7 @@ namespace Twns.User {
 
             const isRankValid                   = (rankIndex > 0) && (rankScore > 0);
             this._labelSpmRankRank.text         = isRankValid ? `${rankIndex}` : `--`;
-            this._labelSpmRankRankSuffix.text   = isRankValid ? Helpers.getSuffixForRank(rankIndex) || `` : ``;
+            this._labelSpmRankRankSuffix.text   = isRankValid ? Helpers.getSuffixForRankIndex(rankIndex) || `` : ``;
         }
         private _updateSclHistoryStd(): void {
             const userId    = this._getOpenData().userId;

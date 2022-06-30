@@ -129,4 +129,5 @@ MsgCcrGetRoomStaticInfo = 350,
 MsgCcrGetRoomPlayerInfo = 351,
 MsgLbSpmOverallGetTopDataArray = 360,
 MsgLbSpmOverallGetRankIndex = 361,
+MsgLbMrwGetRankIndex = 362,
 }}

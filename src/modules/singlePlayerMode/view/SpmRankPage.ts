@@ -172,7 +172,7 @@ namespace Twns.SinglePlayerMode {
                 labelMyScore.text = `--`;
             } else {
                 const rank          = dataArray.find(v => v.score === myScore)?.rank;
-                labelMyScore.text   = rank == null ? `${myScore} (--)` : `${myScore} (${rank}${Helpers.getSuffixForRank(rank)})`;
+                labelMyScore.text   = rank == null ? `${myScore} (--)` : `${myScore} (${rank}${Helpers.getSuffixForRankIndex(rank)})`;
             }
         }
     }
@@ -235,7 +235,7 @@ namespace Twns.SinglePlayerMode {
             const rank                  = data.rank;
             const labelNickname         = this._labelNickname;
             labelNickname.text          = Lang.getText(LangTextType.B0029);
-            this._labelIndex.text       = `${rank}${Helpers.getSuffixForRank(rank)}`;
+            this._labelIndex.text       = `${rank}${Helpers.getSuffixForRankIndex(rank)}`;
             this._labelScore.text       = `${data.score}`;
             this._labelTurnIndex.text   = `${data.turnIndex}`;
             this._imgBg.alpha           = data.index % 2 == 1 ? 0.2 : 0.5;
