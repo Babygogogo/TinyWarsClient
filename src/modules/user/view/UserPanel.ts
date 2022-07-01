@@ -26,72 +26,73 @@ namespace Twns.User {
         userId  : number;
     };
     export class UserPanel extends TwnsUiPanel.UiPanel<OpenDataForUserPanel> {
-        private readonly _imgMask!                  : TwnsUiImage.UiImage;
-        private readonly _group!                    : eui.Group;
-        private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
-        private readonly _btnClose!                 : TwnsUiButton.UiButton;
+        private readonly _imgMask!                      : TwnsUiImage.UiImage;
+        private readonly _group!                        : eui.Group;
+        private readonly _labelTitle!                   : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!                     : TwnsUiButton.UiButton;
 
-        private readonly _groupTopButtons!          : eui.Group;
-        private readonly _btnChat!                  : TwnsUiButton.UiButton;
-        private readonly _btnSetProfile!            : TwnsUiButton.UiButton;
+        private readonly _groupTopButtons!              : eui.Group;
+        private readonly _btnChat!                      : TwnsUiButton.UiButton;
+        private readonly _btnSetProfile!                : TwnsUiButton.UiButton;
 
-        private readonly _imgAvatar!                : TwnsUiImage.UiImage;
-        private readonly _btnSetAvatar!             : TwnsUiButton.UiButton;
-        private readonly _imgLogo!                  : TwnsUiImage.UiImage;
+        private readonly _imgAvatar!                    : TwnsUiImage.UiImage;
+        private readonly _btnSetAvatar!                 : TwnsUiButton.UiButton;
+        private readonly _imgLogo!                      : TwnsUiImage.UiImage;
 
-        private readonly _labelStdRankScoreTitle!   : TwnsUiLabel.UiLabel;
-        private readonly _labelStdRankScore!        : TwnsUiLabel.UiLabel;
-        private readonly _labelStdRankRankTitle!    : TwnsUiLabel.UiLabel;
-        private readonly _labelStdRankRank!         : TwnsUiLabel.UiLabel;
-        private readonly _labelStdRankRankSuffix!   : TwnsUiLabel.UiLabel;
-        private readonly _btnRankStdHistory!        : TwnsUiButton.UiButton;
-        private readonly _labelFogRankScoreTitle!   : TwnsUiLabel.UiLabel;
-        private readonly _labelFogRankScore!        : TwnsUiLabel.UiLabel;
-        private readonly _labelFogRankRankTitle!    : TwnsUiLabel.UiLabel;
-        private readonly _labelFogRankRank!         : TwnsUiLabel.UiLabel;
-        private readonly _labelFogRankRankSuffix!   : TwnsUiLabel.UiLabel;
-        private readonly _btnRankFowHistory!        : TwnsUiButton.UiButton;
-        private readonly _labelSpmRankScoreTitle!   : TwnsUiLabel.UiLabel;
-        private readonly _labelSpmRankScore!        : TwnsUiLabel.UiLabel;
-        private readonly _labelSpmRankRankTitle!    : TwnsUiLabel.UiLabel;
-        private readonly _labelSpmRankRank!         : TwnsUiLabel.UiLabel;
-        private readonly _labelSpmRankRankSuffix!   : TwnsUiLabel.UiLabel;
-        private readonly _btnMyWarRoomRecord!       : TwnsUiButton.UiButton;
+        private readonly _labelStdRankScoreTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelStdRankScore!            : TwnsUiLabel.UiLabel;
+        private readonly _labelStdRankRankTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _labelStdRankRank!             : TwnsUiLabel.UiLabel;
+        private readonly _labelStdRankRankSuffix!       : TwnsUiLabel.UiLabel;
+        private readonly _btnRankStdHistory!            : TwnsUiButton.UiButton;
+        private readonly _labelFogRankScoreTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelFogRankScore!            : TwnsUiLabel.UiLabel;
+        private readonly _labelFogRankRankTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _labelFogRankRank!             : TwnsUiLabel.UiLabel;
+        private readonly _labelFogRankRankSuffix!       : TwnsUiLabel.UiLabel;
+        private readonly _btnRankFowHistory!            : TwnsUiButton.UiButton;
+        private readonly _labelSpmRankScoreTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmRankScore!            : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmRankRankTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmRankRank!             : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmRankRankSuffix!       : TwnsUiLabel.UiLabel;
+        private readonly _btnMyWarRoomRecord!           : TwnsUiButton.UiButton;
 
-        private readonly _labelRegisterTimeTitle!   : TwnsUiLabel.UiLabel;
-        private readonly _labelRegisterTime1!       : TwnsUiLabel.UiLabel;
-        private readonly _labelRegisterTime2!       : TwnsUiLabel.UiLabel;
-        private readonly _labelLastLoginTimeTitle!  : TwnsUiLabel.UiLabel;
-        private readonly _labelLastLoginTime1!      : TwnsUiLabel.UiLabel;
-        private readonly _labelLastLoginTime2!      : TwnsUiLabel.UiLabel;
-        private readonly _labelOnlineTimeTitle!     : TwnsUiLabel.UiLabel;
-        private readonly _labelOnlineTime!          : TwnsUiLabel.UiLabel;
-        private readonly _labelLoginCountTitle!     : TwnsUiLabel.UiLabel;
-        private readonly _labelLoginCount!          : TwnsUiLabel.UiLabel;
-        private readonly _labelUserId!              : TwnsUiLabel.UiLabel;
-        private readonly _labelUserIdTitle!         : TwnsUiLabel.UiLabel;
-        private readonly _labelDiscordId!           : TwnsUiLabel.UiLabel;
+        private readonly _labelRegisterTimeTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelRegisterTime1!           : TwnsUiLabel.UiLabel;
+        private readonly _labelRegisterTime2!           : TwnsUiLabel.UiLabel;
+        private readonly _labelLastLoginTimeTitle!      : TwnsUiLabel.UiLabel;
+        private readonly _labelLastLoginTime1!          : TwnsUiLabel.UiLabel;
+        private readonly _labelLastLoginTime2!          : TwnsUiLabel.UiLabel;
+        private readonly _labelOnlineTimeTitle!         : TwnsUiLabel.UiLabel;
+        private readonly _labelOnlineTime!              : TwnsUiLabel.UiLabel;
+        private readonly _labelLoginCountTitle!         : TwnsUiLabel.UiLabel;
+        private readonly _labelLoginCount!              : TwnsUiLabel.UiLabel;
+        private readonly _labelUserId!                  : TwnsUiLabel.UiLabel;
+        private readonly _labelUserIdTitle!             : TwnsUiLabel.UiLabel;
+        private readonly _labelLastActivityTimeTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelLastActivityTime1!       : TwnsUiLabel.UiLabel;
+        private readonly _labelLastActivityTime2!       : TwnsUiLabel.UiLabel;
 
-        private readonly _labelHistoryStd!          : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryStdWin!       : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryStdLose!      : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryStdDraw!      : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryStdRatio!     : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryFog!          : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryFogWin!       : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryFogLose!      : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryFogDraw!      : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryFogRatio!     : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryStd!              : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryStdWin!           : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryStdLose!          : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryStdDraw!          : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryStdRatio!         : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryFog!              : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryFogWin!           : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryFogLose!          : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryFogDraw!          : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryFogRatio!         : TwnsUiLabel.UiLabel;
 
-        private readonly _sclHistoryStd!            : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
-        private readonly _sclHistoryFog!            : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
+        private readonly _sclHistoryStd!                : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
+        private readonly _sclHistoryFog!                : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,         callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserGetPublicInfo,    callback: this._onNotifyMsgUserGetPublicInfo },
                 { type: NotifyType.MsgUserSetNickname,      callback: this._onNotifyMsgUserSetNickname },
-                { type: NotifyType.MsgUserSetDiscordId,     callback: this._onNotifyMsgUserSetDiscordId },
                 { type: NotifyType.MsgUserSetAvatarId,      callback: this._onNotifyMsgUserSetAvatarId },
             ]);
             this._setUiListenerArray([
@@ -125,12 +126,6 @@ namespace Twns.User {
             this._updateView();
         }
         private _onNotifyMsgUserSetNickname(): void {
-            const userId = this._getOpenData().userId;
-            if (userId === User.UserModel.getSelfUserId()) {
-                User.UserProxy.reqUserGetPublicInfo(userId);
-            }
-        }
-        private _onNotifyMsgUserSetDiscordId(): void {
             const userId = this._getOpenData().userId;
             if (userId === User.UserModel.getSelfUserId()) {
                 User.UserProxy.reqUserGetPublicInfo(userId);
@@ -202,31 +197,12 @@ namespace Twns.User {
             const userId    = this._getOpenData().userId;
             const info      = await User.UserModel.getUserPublicInfo(userId);
             if (info) {
-                const registerTime          = info.registerTime;
-                const labelRegisterTime1    = this._labelRegisterTime1;
-                const labelRegisterTime2    = this._labelRegisterTime2;
-                if (registerTime == null) {
-                    labelRegisterTime1.text     = CommonConstants.ErrorTextForUndefined;
-                    labelRegisterTime2.text     = CommonConstants.ErrorTextForUndefined;
-                } else {
-                    labelRegisterTime1.text     = Helpers.getTimestampShortText(registerTime, { hour: false, minute: false, second: false });
-                    labelRegisterTime2.text     = Helpers.getTimestampShortText(registerTime, { year: false, month: false, date: false });
-                }
+                updateLabelsForTime(info.registerTime, this._labelRegisterTime1, this._labelRegisterTime2);
+                updateLabelsForTime(info.lastLoginTime, this._labelLastLoginTime1, this._labelLastLoginTime2);
+                updateLabelsForTime(info.lastActivityTime, this._labelLastActivityTime1, this._labelLastActivityTime2);
 
-                const loginTime             = info.lastLoginTime;
-                const labelLastLoginTime1   = this._labelLastLoginTime1;
-                const labelLastLoginTime2   = this._labelLastLoginTime2;
-                if (loginTime == null) {
-                    labelLastLoginTime1.text    = CommonConstants.ErrorTextForUndefined;
-                    labelLastLoginTime2.text    = CommonConstants.ErrorTextForUndefined;
-                } else {
-                    labelLastLoginTime1.text    = Helpers.getTimestampShortText(loginTime, { hour: false, minute: false, second: false });
-                    labelLastLoginTime2.text    = Helpers.getTimestampShortText(loginTime, { year: false, month: false, date: false });
-                }
-
-                this._labelLoginCount.text      = `${info.loginCount}`;
-                this._labelUserId.text          = `${userId}`;
-                this._labelDiscordId.text       = info.discordId || "--";
+                this._labelLoginCount.text  = `${info.loginCount}`;
+                this._labelUserId.text      = `${userId}`;
             }
 
             this._updateComponentsForLanguage();
@@ -257,27 +233,28 @@ namespace Twns.User {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelStdRankScoreTitle.text   = Lang.getText(LangTextType.B0198);
-            this._labelStdRankRankTitle.text    = Lang.getText(LangTextType.B0546);
-            this._labelFogRankScoreTitle.text   = Lang.getText(LangTextType.B0199);
-            this._labelFogRankRankTitle.text    = Lang.getText(LangTextType.B0547);
-            this._labelSpmRankScoreTitle.text   = Lang.getText(LangTextType.B0819);
-            this._labelSpmRankRankTitle.text    = Lang.getText(LangTextType.B0820);
-            this._labelUserIdTitle.text         = Lang.getText(LangTextType.B0640);
-            this._labelRegisterTimeTitle.text   = Lang.getText(LangTextType.B0194);
-            this._labelLastLoginTimeTitle.text  = Lang.getText(LangTextType.B0195);
-            this._labelOnlineTimeTitle.text     = Lang.getText(LangTextType.B0196);
-            this._labelLoginCountTitle.text     = Lang.getText(LangTextType.B0197);
-            this._labelHistoryStd.text          = Lang.getText(LangTextType.B0548);
-            this._labelHistoryStdWin.text       = Lang.getText(LangTextType.B0550);
-            this._labelHistoryStdLose.text      = Lang.getText(LangTextType.B0551);
-            this._labelHistoryStdDraw.text      = Lang.getText(LangTextType.B0552);
-            this._labelHistoryStdRatio.text     = Lang.getText(LangTextType.B0553);
-            this._labelHistoryFog.text          = Lang.getText(LangTextType.B0549);
-            this._labelHistoryFogWin.text       = Lang.getText(LangTextType.B0550);
-            this._labelHistoryFogLose.text      = Lang.getText(LangTextType.B0551);
-            this._labelHistoryFogDraw.text      = Lang.getText(LangTextType.B0552);
-            this._labelHistoryFogRatio.text     = Lang.getText(LangTextType.B0553);
+            this._labelStdRankScoreTitle.text       = Lang.getText(LangTextType.B0198);
+            this._labelStdRankRankTitle.text        = Lang.getText(LangTextType.B0546);
+            this._labelFogRankScoreTitle.text       = Lang.getText(LangTextType.B0199);
+            this._labelFogRankRankTitle.text        = Lang.getText(LangTextType.B0547);
+            this._labelSpmRankScoreTitle.text       = Lang.getText(LangTextType.B0819);
+            this._labelSpmRankRankTitle.text        = Lang.getText(LangTextType.B0820);
+            this._labelUserIdTitle.text             = Lang.getText(LangTextType.B0640);
+            this._labelRegisterTimeTitle.text       = Lang.getText(LangTextType.B0194);
+            this._labelLastLoginTimeTitle.text      = Lang.getText(LangTextType.B0195);
+            this._labelOnlineTimeTitle.text         = Lang.getText(LangTextType.B0196);
+            this._labelLoginCountTitle.text         = Lang.getText(LangTextType.B0197);
+            this._labelHistoryStd.text              = Lang.getText(LangTextType.B0548);
+            this._labelHistoryStdWin.text           = Lang.getText(LangTextType.B0550);
+            this._labelHistoryStdLose.text          = Lang.getText(LangTextType.B0551);
+            this._labelHistoryStdDraw.text          = Lang.getText(LangTextType.B0552);
+            this._labelHistoryStdRatio.text         = Lang.getText(LangTextType.B0553);
+            this._labelHistoryFog.text              = Lang.getText(LangTextType.B0549);
+            this._labelHistoryFogWin.text           = Lang.getText(LangTextType.B0550);
+            this._labelHistoryFogLose.text          = Lang.getText(LangTextType.B0551);
+            this._labelHistoryFogDraw.text          = Lang.getText(LangTextType.B0552);
+            this._labelHistoryFogRatio.text         = Lang.getText(LangTextType.B0553);
+            this._labelLastActivityTimeTitle.text   = Lang.getText(LangTextType.B0917);
 
             this._updateLabelTitle();
             this._updateComponentsForStdRank();
@@ -413,6 +390,16 @@ namespace Twns.User {
             this._labelLose.text    = `${loseCount}`;
             this._labelDraw.text    = `${drawCount}`;
             this._labelRatio.text   = totalCount ? Helpers.formatString(`%.2f`, winCount / totalCount * 100) : `--`;
+        }
+    }
+
+    function updateLabelsForTime(time: Types.Undefinable<number>, label1: TwnsUiLabel.UiLabel, label2: TwnsUiLabel.UiLabel): void {
+        if (time == null) {
+            label1.text    = CommonConstants.ErrorTextForUndefined;
+            label2.text    = CommonConstants.ErrorTextForUndefined;
+        } else {
+            label1.text    = Helpers.getTimestampShortText(time, { hour: false, minute: false, second: false });
+            label2.text    = Helpers.getTimestampShortText(time, { year: false, month: false, date: false });
         }
     }
 }

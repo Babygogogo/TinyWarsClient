@@ -22319,6 +22319,9 @@ declare namespace CommonProto {
             /** McrRoomInfo ownerPlayerIndex */
             ownerPlayerIndex?: (number|null);
 
+            /** McrRoomInfo forbiddenUserIdArray */
+            forbiddenUserIdArray?: (number[]|null);
+
             /** McrRoomInfo settingsForCommon */
             settingsForCommon?: (CommonProto.WarSettings.ISettingsForCommon|null);
 
@@ -22349,6 +22352,9 @@ declare namespace CommonProto {
 
             /** McrRoomInfo ownerPlayerIndex. */
             public ownerPlayerIndex: number;
+
+            /** McrRoomInfo forbiddenUserIdArray. */
+            public forbiddenUserIdArray: number[];
 
             /** McrRoomInfo settingsForCommon. */
             public settingsForCommon?: (CommonProto.WarSettings.ISettingsForCommon|null);
@@ -22880,6 +22886,9 @@ declare namespace CommonProto {
             /** MfrRoomInfo ownerPlayerIndex */
             ownerPlayerIndex?: (number|null);
 
+            /** MfrRoomInfo forbiddenUserIdArray */
+            forbiddenUserIdArray?: (number[]|null);
+
             /** MfrRoomInfo settingsForMfw */
             settingsForMfw?: (CommonProto.WarSettings.ISettingsForMfw|null);
 
@@ -22907,6 +22916,9 @@ declare namespace CommonProto {
 
             /** MfrRoomInfo ownerPlayerIndex. */
             public ownerPlayerIndex: number;
+
+            /** MfrRoomInfo forbiddenUserIdArray. */
+            public forbiddenUserIdArray: number[];
 
             /** MfrRoomInfo settingsForMfw. */
             public settingsForMfw?: (CommonProto.WarSettings.ISettingsForMfw|null);
@@ -23435,6 +23447,9 @@ declare namespace CommonProto {
             /** CcrRoomInfo ownerPlayerIndex */
             ownerPlayerIndex?: (number|null);
 
+            /** CcrRoomInfo forbiddenUserIdArray */
+            forbiddenUserIdArray?: (number[]|null);
+
             /** CcrRoomInfo settingsForCommon */
             settingsForCommon?: (CommonProto.WarSettings.ISettingsForCommon|null);
 
@@ -23465,6 +23480,9 @@ declare namespace CommonProto {
 
             /** CcrRoomInfo ownerPlayerIndex. */
             public ownerPlayerIndex: number;
+
+            /** CcrRoomInfo forbiddenUserIdArray. */
+            public forbiddenUserIdArray: number[];
 
             /** CcrRoomInfo settingsForCommon. */
             public settingsForCommon?: (CommonProto.WarSettings.ISettingsForCommon|null);
@@ -27491,6 +27509,114 @@ declare namespace CommonProto {
             }
         }
 
+        /** Properties of a UserDiscordInfo. */
+        interface IUserDiscordInfo {
+
+            /** UserDiscordInfo discordId */
+            discordId?: (string|null);
+
+            /** UserDiscordInfo ignoreRankPhaseNotification */
+            ignoreRankPhaseNotification?: (boolean|null);
+
+            /** UserDiscordInfo ignoreTurnNotification */
+            ignoreTurnNotification?: (boolean|null);
+
+            /** UserDiscordInfo ignoreRoomNotification */
+            ignoreRoomNotification?: (boolean|null);
+        }
+
+        /** Represents a UserDiscordInfo. */
+        class UserDiscordInfo implements IUserDiscordInfo {
+
+            /**
+             * Constructs a new UserDiscordInfo.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.User.IUserDiscordInfo);
+
+            /** UserDiscordInfo discordId. */
+            public discordId: string;
+
+            /** UserDiscordInfo ignoreRankPhaseNotification. */
+            public ignoreRankPhaseNotification: boolean;
+
+            /** UserDiscordInfo ignoreTurnNotification. */
+            public ignoreTurnNotification: boolean;
+
+            /** UserDiscordInfo ignoreRoomNotification. */
+            public ignoreRoomNotification: boolean;
+
+            /**
+             * Creates a new UserDiscordInfo instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns UserDiscordInfo instance
+             */
+            public static create(properties?: CommonProto.User.IUserDiscordInfo): CommonProto.User.UserDiscordInfo;
+
+            /**
+             * Encodes the specified UserDiscordInfo message. Does not implicitly {@link CommonProto.User.UserDiscordInfo.verify|verify} messages.
+             * @param message UserDiscordInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.User.IUserDiscordInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified UserDiscordInfo message, length delimited. Does not implicitly {@link CommonProto.User.UserDiscordInfo.verify|verify} messages.
+             * @param message UserDiscordInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.User.IUserDiscordInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a UserDiscordInfo message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns UserDiscordInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.User.UserDiscordInfo;
+
+            /**
+             * Decodes a UserDiscordInfo message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns UserDiscordInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.User.UserDiscordInfo;
+
+            /**
+             * Verifies a UserDiscordInfo message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a UserDiscordInfo message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns UserDiscordInfo
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.User.UserDiscordInfo;
+
+            /**
+             * Creates a plain object from a UserDiscordInfo message. Also converts values to other types if specified.
+             * @param message UserDiscordInfo
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.User.UserDiscordInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this UserDiscordInfo to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a UserComplexInfo. */
         interface IUserComplexInfo {
 
@@ -27520,6 +27646,9 @@ declare namespace CommonProto {
 
             /** UserComplexInfo userWarHistory */
             userWarHistory?: (CommonProto.User.IUserWarHistory|null);
+
+            /** UserComplexInfo userDiscordInfo */
+            userDiscordInfo?: (CommonProto.User.IUserDiscordInfo|null);
         }
 
         /** Represents a UserComplexInfo. */
@@ -27557,6 +27686,9 @@ declare namespace CommonProto {
 
             /** UserComplexInfo userWarHistory. */
             public userWarHistory?: (CommonProto.User.IUserWarHistory|null);
+
+            /** UserComplexInfo userDiscordInfo. */
+            public userDiscordInfo?: (CommonProto.User.IUserDiscordInfo|null);
 
             /**
              * Creates a new UserComplexInfo instance using the specified properties.
@@ -27920,9 +28052,6 @@ declare namespace CommonProto {
             /** UserSelfInfo onlineTime */
             onlineTime?: (number|null);
 
-            /** UserSelfInfo discordId */
-            discordId?: (string|null);
-
             /** UserSelfInfo userComplexInfo */
             userComplexInfo?: (CommonProto.User.IUserComplexInfo|null);
         }
@@ -27953,9 +28082,6 @@ declare namespace CommonProto {
 
             /** UserSelfInfo onlineTime. */
             public onlineTime: number;
-
-            /** UserSelfInfo discordId. */
-            public discordId: string;
 
             /** UserSelfInfo userComplexInfo. */
             public userComplexInfo?: (CommonProto.User.IUserComplexInfo|null);
@@ -28439,8 +28565,8 @@ declare namespace CommonProto {
             /** MessageContainer MsgUserSetNickname */
             MsgUserSetNickname?: (CommonProto.NetMessage.IMsgUserSetNickname|null);
 
-            /** MessageContainer MsgUserSetDiscordId */
-            MsgUserSetDiscordId?: (CommonProto.NetMessage.IMsgUserSetDiscordId|null);
+            /** MessageContainer MsgUserSetDiscordInfo */
+            MsgUserSetDiscordInfo?: (CommonProto.NetMessage.IMsgUserSetDiscordInfo|null);
 
             /** MessageContainer MsgUserSetPrivilege */
             MsgUserSetPrivilege?: (CommonProto.NetMessage.IMsgUserSetPrivilege|null);
@@ -28833,8 +28959,8 @@ declare namespace CommonProto {
             /** MessageContainer MsgUserSetNickname. */
             public MsgUserSetNickname?: (CommonProto.NetMessage.IMsgUserSetNickname|null);
 
-            /** MessageContainer MsgUserSetDiscordId. */
-            public MsgUserSetDiscordId?: (CommonProto.NetMessage.IMsgUserSetDiscordId|null);
+            /** MessageContainer MsgUserSetDiscordInfo. */
+            public MsgUserSetDiscordInfo?: (CommonProto.NetMessage.IMsgUserSetDiscordInfo|null);
 
             /** MessageContainer MsgUserSetPrivilege. */
             public MsgUserSetPrivilege?: (CommonProto.NetMessage.IMsgUserSetPrivilege|null);
@@ -35075,109 +35201,109 @@ declare namespace CommonProto {
             }
         }
 
-        /** Properties of a MsgUserSetDiscordId. */
-        interface IMsgUserSetDiscordId {
+        /** Properties of a MsgUserSetDiscordInfo. */
+        interface IMsgUserSetDiscordInfo {
 
-            /** MsgUserSetDiscordId c */
-            c?: (CommonProto.NetMessage.MsgUserSetDiscordId.IC|null);
+            /** MsgUserSetDiscordInfo c */
+            c?: (CommonProto.NetMessage.MsgUserSetDiscordInfo.IC|null);
 
-            /** MsgUserSetDiscordId s */
-            s?: (CommonProto.NetMessage.MsgUserSetDiscordId.IS|null);
+            /** MsgUserSetDiscordInfo s */
+            s?: (CommonProto.NetMessage.MsgUserSetDiscordInfo.IS|null);
         }
 
-        /** Represents a MsgUserSetDiscordId. */
-        class MsgUserSetDiscordId implements IMsgUserSetDiscordId {
+        /** Represents a MsgUserSetDiscordInfo. */
+        class MsgUserSetDiscordInfo implements IMsgUserSetDiscordInfo {
 
             /**
-             * Constructs a new MsgUserSetDiscordId.
+             * Constructs a new MsgUserSetDiscordInfo.
              * @param [properties] Properties to set
              */
-            constructor(properties?: CommonProto.NetMessage.IMsgUserSetDiscordId);
+            constructor(properties?: CommonProto.NetMessage.IMsgUserSetDiscordInfo);
 
-            /** MsgUserSetDiscordId c. */
-            public c?: (CommonProto.NetMessage.MsgUserSetDiscordId.IC|null);
+            /** MsgUserSetDiscordInfo c. */
+            public c?: (CommonProto.NetMessage.MsgUserSetDiscordInfo.IC|null);
 
-            /** MsgUserSetDiscordId s. */
-            public s?: (CommonProto.NetMessage.MsgUserSetDiscordId.IS|null);
+            /** MsgUserSetDiscordInfo s. */
+            public s?: (CommonProto.NetMessage.MsgUserSetDiscordInfo.IS|null);
 
             /**
-             * Creates a new MsgUserSetDiscordId instance using the specified properties.
+             * Creates a new MsgUserSetDiscordInfo instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns MsgUserSetDiscordId instance
+             * @returns MsgUserSetDiscordInfo instance
              */
-            public static create(properties?: CommonProto.NetMessage.IMsgUserSetDiscordId): CommonProto.NetMessage.MsgUserSetDiscordId;
+            public static create(properties?: CommonProto.NetMessage.IMsgUserSetDiscordInfo): CommonProto.NetMessage.MsgUserSetDiscordInfo;
 
             /**
-             * Encodes the specified MsgUserSetDiscordId message. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetDiscordId.verify|verify} messages.
-             * @param message MsgUserSetDiscordId message or plain object to encode
+             * Encodes the specified MsgUserSetDiscordInfo message. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetDiscordInfo.verify|verify} messages.
+             * @param message MsgUserSetDiscordInfo message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: CommonProto.NetMessage.IMsgUserSetDiscordId, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: CommonProto.NetMessage.IMsgUserSetDiscordInfo, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified MsgUserSetDiscordId message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetDiscordId.verify|verify} messages.
-             * @param message MsgUserSetDiscordId message or plain object to encode
+             * Encodes the specified MsgUserSetDiscordInfo message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetDiscordInfo.verify|verify} messages.
+             * @param message MsgUserSetDiscordInfo message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: CommonProto.NetMessage.IMsgUserSetDiscordId, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: CommonProto.NetMessage.IMsgUserSetDiscordInfo, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a MsgUserSetDiscordId message from the specified reader or buffer.
+             * Decodes a MsgUserSetDiscordInfo message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns MsgUserSetDiscordId
+             * @returns MsgUserSetDiscordInfo
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgUserSetDiscordId;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgUserSetDiscordInfo;
 
             /**
-             * Decodes a MsgUserSetDiscordId message from the specified reader or buffer, length delimited.
+             * Decodes a MsgUserSetDiscordInfo message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns MsgUserSetDiscordId
+             * @returns MsgUserSetDiscordInfo
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgUserSetDiscordId;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgUserSetDiscordInfo;
 
             /**
-             * Verifies a MsgUserSetDiscordId message.
+             * Verifies a MsgUserSetDiscordInfo message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a MsgUserSetDiscordId message from a plain object. Also converts values to their respective internal types.
+             * Creates a MsgUserSetDiscordInfo message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns MsgUserSetDiscordId
+             * @returns MsgUserSetDiscordInfo
              */
-            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgUserSetDiscordId;
+            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgUserSetDiscordInfo;
 
             /**
-             * Creates a plain object from a MsgUserSetDiscordId message. Also converts values to other types if specified.
-             * @param message MsgUserSetDiscordId
+             * Creates a plain object from a MsgUserSetDiscordInfo message. Also converts values to other types if specified.
+             * @param message MsgUserSetDiscordInfo
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: CommonProto.NetMessage.MsgUserSetDiscordId, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: CommonProto.NetMessage.MsgUserSetDiscordInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this MsgUserSetDiscordId to JSON.
+             * Converts this MsgUserSetDiscordInfo to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        namespace MsgUserSetDiscordId {
+        namespace MsgUserSetDiscordInfo {
 
             /** Properties of a C. */
             interface IC {
 
-                /** C discordId */
-                discordId?: (string|null);
+                /** C discordInfo */
+                discordInfo?: (CommonProto.User.IUserDiscordInfo|null);
             }
 
             /** Represents a C. */
@@ -35187,33 +35313,33 @@ declare namespace CommonProto {
                  * Constructs a new C.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: CommonProto.NetMessage.MsgUserSetDiscordId.IC);
+                constructor(properties?: CommonProto.NetMessage.MsgUserSetDiscordInfo.IC);
 
-                /** C discordId. */
-                public discordId: string;
+                /** C discordInfo. */
+                public discordInfo?: (CommonProto.User.IUserDiscordInfo|null);
 
                 /**
                  * Creates a new C instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns C instance
                  */
-                public static create(properties?: CommonProto.NetMessage.MsgUserSetDiscordId.IC): CommonProto.NetMessage.MsgUserSetDiscordId.C;
+                public static create(properties?: CommonProto.NetMessage.MsgUserSetDiscordInfo.IC): CommonProto.NetMessage.MsgUserSetDiscordInfo.C;
 
                 /**
-                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetDiscordId.C.verify|verify} messages.
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetDiscordInfo.C.verify|verify} messages.
                  * @param message C message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: CommonProto.NetMessage.MsgUserSetDiscordId.IC, writer?: protobuf.Writer): protobuf.Writer;
+                public static encode(message: CommonProto.NetMessage.MsgUserSetDiscordInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
-                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetDiscordId.C.verify|verify} messages.
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetDiscordInfo.C.verify|verify} messages.
                  * @param message C message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: CommonProto.NetMessage.MsgUserSetDiscordId.IC, writer?: protobuf.Writer): protobuf.Writer;
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgUserSetDiscordInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
                  * Decodes a C message from the specified reader or buffer.
@@ -35223,7 +35349,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgUserSetDiscordId.C;
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgUserSetDiscordInfo.C;
 
                 /**
                  * Decodes a C message from the specified reader or buffer, length delimited.
@@ -35232,7 +35358,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgUserSetDiscordId.C;
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgUserSetDiscordInfo.C;
 
                 /**
                  * Verifies a C message.
@@ -35246,7 +35372,7 @@ declare namespace CommonProto {
                  * @param object Plain object
                  * @returns C
                  */
-                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgUserSetDiscordId.C;
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgUserSetDiscordInfo.C;
 
                 /**
                  * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -35254,7 +35380,7 @@ declare namespace CommonProto {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: CommonProto.NetMessage.MsgUserSetDiscordId.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: CommonProto.NetMessage.MsgUserSetDiscordInfo.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this C to JSON.
@@ -35269,8 +35395,8 @@ declare namespace CommonProto {
                 /** S errorCode */
                 errorCode?: (number|null);
 
-                /** S discordId */
-                discordId?: (string|null);
+                /** S discordInfo */
+                discordInfo?: (CommonProto.User.IUserDiscordInfo|null);
             }
 
             /** Represents a S. */
@@ -35280,36 +35406,36 @@ declare namespace CommonProto {
                  * Constructs a new S.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: CommonProto.NetMessage.MsgUserSetDiscordId.IS);
+                constructor(properties?: CommonProto.NetMessage.MsgUserSetDiscordInfo.IS);
 
                 /** S errorCode. */
                 public errorCode: number;
 
-                /** S discordId. */
-                public discordId: string;
+                /** S discordInfo. */
+                public discordInfo?: (CommonProto.User.IUserDiscordInfo|null);
 
                 /**
                  * Creates a new S instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns S instance
                  */
-                public static create(properties?: CommonProto.NetMessage.MsgUserSetDiscordId.IS): CommonProto.NetMessage.MsgUserSetDiscordId.S;
+                public static create(properties?: CommonProto.NetMessage.MsgUserSetDiscordInfo.IS): CommonProto.NetMessage.MsgUserSetDiscordInfo.S;
 
                 /**
-                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetDiscordId.S.verify|verify} messages.
+                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetDiscordInfo.S.verify|verify} messages.
                  * @param message S message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: CommonProto.NetMessage.MsgUserSetDiscordId.IS, writer?: protobuf.Writer): protobuf.Writer;
+                public static encode(message: CommonProto.NetMessage.MsgUserSetDiscordInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
-                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetDiscordId.S.verify|verify} messages.
+                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetDiscordInfo.S.verify|verify} messages.
                  * @param message S message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: CommonProto.NetMessage.MsgUserSetDiscordId.IS, writer?: protobuf.Writer): protobuf.Writer;
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgUserSetDiscordInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
                  * Decodes a S message from the specified reader or buffer.
@@ -35319,7 +35445,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgUserSetDiscordId.S;
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgUserSetDiscordInfo.S;
 
                 /**
                  * Decodes a S message from the specified reader or buffer, length delimited.
@@ -35328,7 +35454,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgUserSetDiscordId.S;
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgUserSetDiscordInfo.S;
 
                 /**
                  * Verifies a S message.
@@ -35342,7 +35468,7 @@ declare namespace CommonProto {
                  * @param object Plain object
                  * @returns S
                  */
-                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgUserSetDiscordId.S;
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgUserSetDiscordInfo.S;
 
                 /**
                  * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -35350,7 +35476,7 @@ declare namespace CommonProto {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: CommonProto.NetMessage.MsgUserSetDiscordId.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: CommonProto.NetMessage.MsgUserSetDiscordInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this S to JSON.
@@ -47628,6 +47754,9 @@ declare namespace CommonProto {
 
                 /** C playerIndex */
                 playerIndex?: (number|null);
+
+                /** C forbidReentrance */
+                forbidReentrance?: (boolean|null);
             }
 
             /** Represents a C. */
@@ -47644,6 +47773,9 @@ declare namespace CommonProto {
 
                 /** C playerIndex. */
                 public playerIndex: number;
+
+                /** C forbidReentrance. */
+                public forbidReentrance: boolean;
 
                 /**
                  * Creates a new C instance using the specified properties.
@@ -47727,6 +47859,9 @@ declare namespace CommonProto {
 
                 /** S playerIndex */
                 playerIndex?: (number|null);
+
+                /** S forbidReentrance */
+                forbidReentrance?: (boolean|null);
             }
 
             /** Represents a S. */
@@ -47746,6 +47881,9 @@ declare namespace CommonProto {
 
                 /** S playerIndex. */
                 public playerIndex: number;
+
+                /** S forbidReentrance. */
+                public forbidReentrance: boolean;
 
                 /**
                  * Creates a new S instance using the specified properties.
@@ -62127,6 +62265,9 @@ declare namespace CommonProto {
 
                 /** C playerIndex */
                 playerIndex?: (number|null);
+
+                /** C forbidReentrance */
+                forbidReentrance?: (boolean|null);
             }
 
             /** Represents a C. */
@@ -62143,6 +62284,9 @@ declare namespace CommonProto {
 
                 /** C playerIndex. */
                 public playerIndex: number;
+
+                /** C forbidReentrance. */
+                public forbidReentrance: boolean;
 
                 /**
                  * Creates a new C instance using the specified properties.
@@ -62226,6 +62370,9 @@ declare namespace CommonProto {
 
                 /** S playerIndex */
                 playerIndex?: (number|null);
+
+                /** S forbidReentrance */
+                forbidReentrance?: (boolean|null);
             }
 
             /** Represents a S. */
@@ -62245,6 +62392,9 @@ declare namespace CommonProto {
 
                 /** S playerIndex. */
                 public playerIndex: number;
+
+                /** S forbidReentrance. */
+                public forbidReentrance: boolean;
 
                 /**
                  * Creates a new S instance using the specified properties.
@@ -65223,6 +65373,9 @@ declare namespace CommonProto {
 
                 /** C playerIndex */
                 playerIndex?: (number|null);
+
+                /** C forbidReentrance */
+                forbidReentrance?: (boolean|null);
             }
 
             /** Represents a C. */
@@ -65239,6 +65392,9 @@ declare namespace CommonProto {
 
                 /** C playerIndex. */
                 public playerIndex: number;
+
+                /** C forbidReentrance. */
+                public forbidReentrance: boolean;
 
                 /**
                  * Creates a new C instance using the specified properties.
@@ -65322,6 +65478,9 @@ declare namespace CommonProto {
 
                 /** S playerIndex */
                 playerIndex?: (number|null);
+
+                /** S forbidReentrance */
+                forbidReentrance?: (boolean|null);
             }
 
             /** Represents a S. */
@@ -65341,6 +65500,9 @@ declare namespace CommonProto {
 
                 /** S playerIndex. */
                 public playerIndex: number;
+
+                /** S forbidReentrance. */
+                public forbidReentrance: boolean;
 
                 /**
                  * Creates a new S instance using the specified properties.

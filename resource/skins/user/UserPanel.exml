@@ -78,15 +78,6 @@
                 <TwnsUiLabel:UiLabel id="_labelUserId" text="99999999" textColor="0xFFFFFF" size="16" x="100"
                                      verticalCenter="1" />
             </e:Group>
-            <e:Group y="90" x="20">
-                <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
-                                     scale9Grid="1,1,2,2" />
-                <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2"
-                                     bottom="2" left="90" />
-                <TwnsUiLabel:UiLabel text="Discord ID" size="12" textColor="0xFFFFFF" x="10" verticalCenter="1" />
-                <TwnsUiLabel:UiLabel id="_labelDiscordId" text="99999999" textColor="0xFFFFFF" size="16" x="100"
-                                     verticalCenter="1" />
-            </e:Group>
             <e:Group y="100" x="30">
                 <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
                                      scale9Grid="1,1,2,2" />
@@ -116,6 +107,23 @@
                                          y="0" />
                     <TwnsUiLabel:UiLabel id="_labelLastLoginTime2" text="99999999" textColor="0xFFFFFF" size="16" x="10"
                                          y="0" />
+                    <e:layout>
+                        <e:HorizontalLayout/>
+                    </e:layout>
+                </e:Group>
+            </e:Group>
+            <e:Group y="90" x="20">
+                <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
+                                     scale9Grid="1,1,2,2" />
+                <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2"
+                                     bottom="2" left="90" />
+                <TwnsUiLabel:UiLabel id="_labelLastActivityTimeTitle" text="Discord ID" size="12" textColor="0xFFFFFF"
+                                     x="10" verticalCenter="1" />
+                <e:Group x="100" verticalCenter="1" y="18">
+                    <TwnsUiLabel:UiLabel id="_labelLastActivityTime1" text="99999999" textColor="0xFFFFFF" size="16"
+                                         x="0" y="0" />
+                    <TwnsUiLabel:UiLabel id="_labelLastActivityTime2" text="99999999" textColor="0xFFFFFF" size="16"
+                                         x="10" y="0" />
                     <e:layout>
                         <e:HorizontalLayout/>
                     </e:layout>

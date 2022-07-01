@@ -11437,6 +11437,17 @@ export const enum ServerErrorCode {
     ExeUserSetMapRating_ExeWithSocket_0008,
     ExeUserSetMapRating_ExeWithSocket_0009,
 
+    ExeUserSetDiscordInfo_ExeWithSocket_0000,
+    ExeUserSetDiscordInfo_ExeWithSocket_0001,
+    ExeUserSetDiscordInfo_ExeWithSocket_0002,
+    ExeUserSetDiscordInfo_ExeWithSocket_0003,
+    ExeUserSetDiscordInfo_ExeWithSocket_0004,
+    ExeUserSetDiscordInfo_ExeWithSocket_0005,
+    ExeUserSetDiscordInfo_ExeWithSocket_0006,
+    ExeUserSetDiscordInfo_ExeWithSocket_0007,
+    ExeUserSetDiscordInfo_ExeWithSocket_0008,
+    ExeUserSetDiscordInfo_ExeWithSocket_0009,
+
     ExeUserLogin_DoExecute_0000,
     ExeUserLogin_DoExecute_0001,
     ExeUserLogin_DoExecute_0002,
@@ -12019,6 +12030,39 @@ export const enum ServerErrorCode {
     ExeLbSpmOverallGetRankIndex_ExeWithSocket_0008,
     ExeLbSpmOverallGetRankIndex_ExeWithSocket_0009,
 
+    WebhookManager_SendMcrRoomReady_0000,
+    WebhookManager_SendMcrRoomReady_0001,
+    WebhookManager_SendMcrRoomReady_0002,
+    WebhookManager_SendMcrRoomReady_0003,
+    WebhookManager_SendMcrRoomReady_0004,
+    WebhookManager_SendMcrRoomReady_0005,
+    WebhookManager_SendMcrRoomReady_0006,
+    WebhookManager_SendMcrRoomReady_0007,
+    WebhookManager_SendMcrRoomReady_0008,
+    WebhookManager_SendMcrRoomReady_0009,
+
+    WebhookManager_SendCcrRoomReady_0000,
+    WebhookManager_SendCcrRoomReady_0001,
+    WebhookManager_SendCcrRoomReady_0002,
+    WebhookManager_SendCcrRoomReady_0003,
+    WebhookManager_SendCcrRoomReady_0004,
+    WebhookManager_SendCcrRoomReady_0005,
+    WebhookManager_SendCcrRoomReady_0006,
+    WebhookManager_SendCcrRoomReady_0007,
+    WebhookManager_SendCcrRoomReady_0008,
+    WebhookManager_SendCcrRoomReady_0009,
+
+    WebhookManager_SendMfrRoomReady_0000,
+    WebhookManager_SendMfrRoomReady_0001,
+    WebhookManager_SendMfrRoomReady_0002,
+    WebhookManager_SendMfrRoomReady_0003,
+    WebhookManager_SendMfrRoomReady_0004,
+    WebhookManager_SendMfrRoomReady_0005,
+    WebhookManager_SendMfrRoomReady_0006,
+    WebhookManager_SendMfrRoomReady_0007,
+    WebhookManager_SendMfrRoomReady_0008,
+    WebhookManager_SendMfrRoomReady_0009,
+
     MsgUserGetSettings0000,
 
     MsgUserLogin0000,                   // socket已有user id
@@ -12037,8 +12081,6 @@ export const enum ServerErrorCode {
     MsgUserRegister0003,                // 密码不合法
     MsgUserRegister0004,                // 昵称不合法
     MsgUserRegister0005,                // 昵称已被使用
-
-    MsgUserSetDiscordId0000,
 
     MsgUserSetNickname0000,             // 昵称不合法
     MsgUserSetNickname0001,             // 昵称已被使用

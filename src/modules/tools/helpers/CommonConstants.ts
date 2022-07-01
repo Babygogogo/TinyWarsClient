@@ -54,9 +54,9 @@ namespace Twns.CommonConstants {
 
     export const WarEventNameMaxLength                                  = 150;
     export const WarEventMaxEventsPerMap                                = 100;
-    export const WarEventMaxConditionNodesPerMap                        = 50;
-    export const WarEventMaxConditionsPerMap                            = 100;
-    export const WarEventMaxActionsPerMap                               = 100;
+    export const WarEventMaxConditionNodesPerMap                        = 100;
+    export const WarEventMaxConditionsPerMap                            = 200;
+    export const WarEventMaxActionsPerMap                               = 200;
     export const WarEventMaxActionsPerEvent                             = 10;
     export const WarEventMaxCallCountTotal                              = 1000;
     export const WarEventMaxCallCountInPlayerTurn                       = 10;

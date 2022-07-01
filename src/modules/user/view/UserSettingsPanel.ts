@@ -75,7 +75,7 @@ namespace Twns.User {
                 { type: NotifyType.UserSettingsIsAutoScrollMapChanged,  callback: this._onNotifyUserSettingsIsAutoScrollMapChanged },
                 { type: NotifyType.MsgUserGetPublicInfo,                callback: this._onMsgUserGetPublicInfo },
                 { type: NotifyType.MsgUserSetNickname,                  callback: this._onMsgUserSetNickname },
-                { type: NotifyType.MsgUserSetDiscordId,                 callback: this._onMsgUserSetDiscordId },
+                { type: NotifyType.MsgUserSetDiscordInfo,                 callback: this._onMsgUserSetDiscordId },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,               callback: this.close },

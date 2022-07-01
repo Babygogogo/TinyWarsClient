@@ -197,6 +197,10 @@ namespace Twns.Lang {
             `您是房间里的最后一位玩家，不能直接退出房间`,
             `You are the last player in the room. You can't exit the room directly.`,
         ],
+        [ServerErrorCode.ActorMcrRoom_McrStartJoinRoom_0017]: [
+            `房主已禁止您再次进入该房间`,
+            `You are disallowed to re-entry the room by the room owner.`,
+        ],
         [ServerErrorCode.ActorMcrRoomCreator_McrStartCheckAndCreateRoom_0000]: [
             `您已加入了许多未开战的房间，请退出部分房间后重试`,
             `You have joined too many rooms, please exit some of them.`,
@@ -209,9 +213,17 @@ namespace Twns.Lang {
             `您的请求过于频繁，请稍后重试`,
             `Your query requests are too frequent. Please retry later.`,
         ],
+        [ServerErrorCode.ActorCcrRoom_CcrStartJoinRoom_0017]: [
+            `房主已禁止您再次进入该房间`,
+            `You are disallowed to re-entry the room by the room owner.`,
+        ],
         [ServerErrorCode.ActorCcrRoomCreator_CcrStartCheckAndCreateRoom_0000]: [
             `您已加入了许多未开战的房间，请退出部分房间后重试`,
             `You have joined too many rooms, please exit some of them.`,
+        ],
+        [ServerErrorCode.ActorMfrRoom_MfrStartJoinRoom_0009]: [
+            `房主已禁止您再次进入该房间`,
+            `You are disallowed to re-entry the room by the room owner.`,
         ],
         [ServerErrorCode.ActorMfrRoomCreator_MfrStartCheckAndCreateRoom_0000]: [
             `您已加入了许多未开战的房间，请退出部分房间后重试`,

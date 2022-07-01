@@ -42,7 +42,7 @@ namespace Twns.Common {
         enterTurnTime           : number | null;
         roomOwnerPlayerIndex    : number | null;
         callbackOnExitRoom      : (() => void) | null;
-        callbackOnDeletePlayer  : ((playerIndex: number) => void) | null;
+        callbackOnDeletePlayer  : ((playerIndex: number, forbidReentrance: boolean) => void) | null;
         playerInfoArray         : PlayerInfo[];
     } | null;
     export class CommonWarPlayerInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForCommonWarPlayerInfoPage> {
@@ -110,7 +110,7 @@ namespace Twns.Common {
         isRoomOwnedBySelf       : boolean;
         enterTurnTime           : number | null;
         callbackOnExitRoom      : (() => void) | null;
-        callbackOnDeletePlayer  : ((playerIndex: number) => void) | null;
+        callbackOnDeletePlayer  : ((playerIndex: number, forbidReentrance: boolean) => void) | null;
         playerInfo              : PlayerInfo;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
@@ -198,10 +198,10 @@ namespace Twns.Common {
             } else {
                 const callback = data.callbackOnDeletePlayer;
                 if ((callback) && (data.isRoomOwnedBySelf)) {
-                    PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonDeletePlayerPanel, {
                         content : Lang.getFormattedText(LangTextType.F0029, await User.UserModel.getUserNickname(userId)),
-                        callback: () => {
-                            callback(playerInfo.playerIndex);
+                        callback: (forbidReentrance: boolean) => {
+                            callback(playerInfo.playerIndex, forbidReentrance);
                         },
                     });
                 }

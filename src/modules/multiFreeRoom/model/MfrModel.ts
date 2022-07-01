@@ -7,7 +7,7 @@
 // import Helpers                              from "../../tools/helpers/Helpers";
 // import Types                                from "../../tools/helpers/Types";
 // import Notify                               from "../../tools/notify/Notify";
-// import Twns.Notify                       from "../../tools/notify/NotifyType";
+// import Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
 // import UserModel                            from "../../user/model/UserModel";
@@ -18,14 +18,14 @@ namespace Twns.MultiFreeRoom.MfrModel {
     import IMfrRoomPlayerInfo                       = CommonProto.MultiFreeRoom.IMfrRoomPlayerInfo;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
-    import WarBasicSettingsType                     = Twns.Types.WarBasicSettingsType;
-    import MfrRoomFilter                            = Twns.Types.MfrRoomFilter;
+    import OpenDataForCommonWarPlayerInfoPage       = Common.OpenDataForCommonWarPlayerInfoPage;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
+    import MfrRoomFilter                            = Types.MfrRoomFilter;
 
-    const _roomStaticInfoAccessor = Twns.Helpers.createCachedDataAccessor<number, IMfrRoomStaticInfo>({
+    const _roomStaticInfoAccessor = Helpers.createCachedDataAccessor<number, IMfrRoomStaticInfo>({
         reqData : (roomId: number) => MfrProxy.reqMfrGetRoomStaticInfo(roomId),
     });
-    const _roomPlayerInfoAccessor = Twns.Helpers.createCachedDataAccessor<number, IMfrRoomPlayerInfo>({
+    const _roomPlayerInfoAccessor = Helpers.createCachedDataAccessor<number, IMfrRoomPlayerInfo>({
         reqData : (roomId: number) => MfrProxy.reqMfrGetRoomPlayerInfo(roomId),
     });
 
@@ -48,19 +48,19 @@ namespace Twns.MultiFreeRoom.MfrModel {
 
     export async function getUnjoinedRoomIdSet(filter: MfrRoomFilter | null): Promise<Set<number>> {
         const unjoinedRoomIdArray   : number[] = [];
-        const selfUserId            = Twns.User.UserModel.getSelfUserId();
+        const selfUserId            = User.UserModel.getSelfUserId();
         if (selfUserId == null) {
             return new Set();
         }
 
         const allRoomIdArray        = _roomPlayerInfoAccessor.getRequestedKeyArray();
-        const roomPlayerInfoArray   = Twns.Helpers.getNonNullElements(await Promise.all(allRoomIdArray.map(v => getRoomPlayerInfo(v))));
+        const roomPlayerInfoArray   = Helpers.getNonNullElements(await Promise.all(allRoomIdArray.map(v => getRoomPlayerInfo(v))));
         for (const roomPlayerInfo of roomPlayerInfoArray) {
             const playerDataList = roomPlayerInfo.playerDataList ?? [];
-            if ((playerDataList.length < Twns.Helpers.getExisted(roomPlayerInfo.playersCountUnneutral))  &&
+            if ((playerDataList.length < Helpers.getExisted(roomPlayerInfo.playersCountUnneutral))  &&
                 (playerDataList.every(v => v.userId !== selfUserId))
             ) {
-                unjoinedRoomIdArray.push(Twns.Helpers.getExisted(roomPlayerInfo.roomId));
+                unjoinedRoomIdArray.push(Helpers.getExisted(roomPlayerInfo.roomId));
             }
         }
 
@@ -70,16 +70,16 @@ namespace Twns.MultiFreeRoom.MfrModel {
     }
     export async function getJoinedRoomIdSet(filter: MfrRoomFilter | null): Promise<Set<number>> {
         const joinedRoomIdArray : number[] = [];
-        const selfUserId        = Twns.User.UserModel.getSelfUserId();
+        const selfUserId        = User.UserModel.getSelfUserId();
         if (selfUserId == null) {
             return new Set();
         }
 
         const allRoomIdArray        = _roomPlayerInfoAccessor.getRequestedKeyArray();
-        const roomPlayerInfoArray   = Twns.Helpers.getNonNullElements(await Promise.all(allRoomIdArray.map(v => getRoomPlayerInfo(v))));
+        const roomPlayerInfoArray   = Helpers.getNonNullElements(await Promise.all(allRoomIdArray.map(v => getRoomPlayerInfo(v))));
         for (const roomPlayerInfo of roomPlayerInfoArray) {
             if (roomPlayerInfo.playerDataList?.some(v => v.userId === selfUserId)) {
-                joinedRoomIdArray.push(Twns.Helpers.getExisted(roomPlayerInfo.roomId));
+                joinedRoomIdArray.push(Helpers.getExisted(roomPlayerInfo.roomId));
             }
         }
 
@@ -122,14 +122,14 @@ namespace Twns.MultiFreeRoom.MfrModel {
             getRoomPlayerInfo(roomId),
         ]);
         if ((roomPlayerInfo) && (roomStaticInfo)) {
-            const selfUserId        = Twns.User.UserModel.getSelfUserId();
+            const selfUserId        = User.UserModel.getSelfUserId();
             const playerDataList    = roomPlayerInfo.playerDataList || [];
             const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
             if ((selfPlayerData) && (!selfPlayerData.isReady)) {
                 return true;
             }
 
-            if ((playerDataList.length === WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(Twns.Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon?.instanceWarRule)))   &&
+            if ((playerDataList.length === WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon?.instanceWarRule)))   &&
                 (playerDataList.every(v => v.isReady))                                                                                                                                                  &&
                 (selfPlayerData)                                                                                                                                                                        &&
                 (roomPlayerInfo.ownerPlayerIndex === selfPlayerData.playerIndex)
@@ -148,12 +148,12 @@ namespace Twns.MultiFreeRoom.MfrModel {
             return false;
         }
 
-        const selfUserId        = Twns.User.UserModel.getSelfUserId();
+        const selfUserId        = User.UserModel.getSelfUserId();
         const playerDataList    = roomPlayerInfo.playerDataList || [];
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
         return (selfPlayerData != null)
             && (selfPlayerData.playerIndex === roomPlayerInfo.ownerPlayerIndex)
-            && (playerDataList.length === WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(Twns.Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon?.instanceWarRule)))
+            && (playerDataList.length === WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon?.instanceWarRule)))
             && (playerDataList.every(v => v.isReady));
     }
 
@@ -171,12 +171,12 @@ namespace Twns.MultiFreeRoom.MfrModel {
             return null;
         }
 
-        const settingsForCommon     = Twns.Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon);
-        const instanceWarRule       = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule);
+        const settingsForCommon     = Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon);
+        const instanceWarRule       = Helpers.getExisted(settingsForCommon.instanceWarRule);
         const playersCountUnneutral = WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(instanceWarRule);
         const playerDataList        = roomPlayerInfo.playerDataList || [];
-        const playerInfoArray       : Twns.Common.PlayerInfo[] = [];
-        for (let playerIndex = Twns.CommonConstants.PlayerIndex.First; playerIndex <= playersCountUnneutral; ++playerIndex) {
+        const playerInfoArray       : Common.PlayerInfo[] = [];
+        for (let playerIndex = CommonConstants.PlayerIndex.First; playerIndex <= playersCountUnneutral; ++playerIndex) {
             const playerData    = playerDataList.find(v => v.playerIndex === playerIndex);
             const userId        = playerData?.userId ?? null;
             const isReady       = playerData?.isReady ?? null;
@@ -195,11 +195,11 @@ namespace Twns.MultiFreeRoom.MfrModel {
         }
 
         return {
-            gameConfig              : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)),
+            gameConfig              : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
             playersCountUnneutral,
-            roomOwnerPlayerIndex    : Twns.Helpers.getExisted(roomPlayerInfo.ownerPlayerIndex),
+            roomOwnerPlayerIndex    : Helpers.getExisted(roomPlayerInfo.ownerPlayerIndex),
             callbackOnExitRoom      : () => MfrProxy.reqMfrExitRoom(roomId),
-            callbackOnDeletePlayer  : (playerIndex) => MfrProxy.reqMfrDeletePlayer(roomId, playerIndex),
+            callbackOnDeletePlayer  : (playerIndex, forbidReentrance) => MfrProxy.reqMfrDeletePlayer(roomId, playerIndex, forbidReentrance),
             playerInfoArray,
             enterTurnTime           : null,
         };
@@ -215,13 +215,13 @@ namespace Twns.MultiFreeRoom.MfrModel {
             return { dataArrayForListSettings: [] };
         }
 
-        const settingsForMfw    = Twns.Helpers.getExisted(roomInfo.settingsForMfw);
-        const settingsForCommon = Twns.Helpers.getExisted(settingsForMfw.initialWarData?.settingsForCommon);
-        const instanceWarRule   = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule);
-        const bootTimerParams   = Twns.Helpers.getExisted(settingsForMfw.bootTimerParams);
-        const gameConfig        = Twns.Helpers.getExisted(await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)));
+        const settingsForMfw    = Helpers.getExisted(roomInfo.settingsForMfw);
+        const settingsForCommon = Helpers.getExisted(settingsForMfw.initialWarData?.settingsForCommon);
+        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
+        const bootTimerParams   = Helpers.getExisted(settingsForMfw.bootTimerParams);
+        const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
         const warPassword       = settingsForMfw.warPassword;
-        const timerType         = bootTimerParams[0] as Twns.Types.BootTimerType;
+        const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const warEventFullData  = instanceWarRule.warEventFullData ?? null;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
@@ -283,7 +283,7 @@ namespace Twns.MultiFreeRoom.MfrModel {
                 },
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? Twns.CommonConstants.WarMaxTurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
                     instanceWarRule: instanceWarRule,
                     gameConfig,
                     warEventFullData,
@@ -299,7 +299,7 @@ namespace Twns.MultiFreeRoom.MfrModel {
                 },
             ],
         };
-        if (timerType === Twns.Types.BootTimerType.Regular) {
+        if (timerType === Types.BootTimerType.Regular) {
             openData.dataArrayForListSettings.push({
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
@@ -308,7 +308,7 @@ namespace Twns.MultiFreeRoom.MfrModel {
                 warEventFullData,
                 callbackOnModify: null,
             });
-        } else if (timerType === Twns.Types.BootTimerType.Incremental) {
+        } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
@@ -328,7 +328,7 @@ namespace Twns.MultiFreeRoom.MfrModel {
                 },
             );
         } else {
-            throw Twns.Helpers.newError(`MfrModel.createDataForCommonWarBasicSettingsPage() invalid timerType: ${timerType}.`);
+            throw Helpers.newError(`MfrModel.createDataForCommonWarBasicSettingsPage() invalid timerType: ${timerType}.`);
         }
 
         return openData;
@@ -344,12 +344,12 @@ namespace Twns.MultiFreeRoom.MfrModel {
             return null;
         }
 
-        const settingsForCommon = Twns.Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.settingsForCommon);
-        const instanceWarRule   = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule);
+        const settingsForCommon = Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.settingsForCommon);
+        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
         return {
-            gameConfig  : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)),
+            gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
             instanceWarRule,
-            warType     : instanceWarRule.ruleForGlobalParams?.hasFogByDefault ? Twns.Types.WarType.MfwFog : Twns.Types.WarType.MfwStd,
+            warType     : instanceWarRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MfwFog : Types.WarType.MfwStd,
         };
     }
 
@@ -428,7 +428,7 @@ namespace Twns.MultiFreeRoom.MfrModel {
                 let hasPlayer       = false;
                 for (const playerInfo of playerDataList) {
                     const userId    = playerInfo.userId;
-                    const nickname  = (userId == null ? null : await Twns.User.UserModel.getUserBriefInfo(userId))?.nickname;
+                    const nickname  = (userId == null ? null : await User.UserModel.getUserBriefInfo(userId))?.nickname;
                     if ((nickname != null) && (nickname.toLowerCase().includes(lowerCaseName))) {
                         hasPlayer = true;
                         break;

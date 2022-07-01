@@ -4,18 +4,18 @@
 // import NetManager           from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import UserModel            from "../../user/model/UserModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.User.UserProxy {
-    import NotifyType       = Twns.Notify.NotifyType;
+    import NotifyType       = Notify.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
-    import NetMessageCodes  = Twns.Net.NetMessageCodes;
+    import NetMessageCodes  = Net.NetMessageCodes;
 
     export function init(): void {
-        Twns.Net.NetManager.addListeners([
+        Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgUserLogin,                    callback: _onMsgUserLogin, },
             { msgCode: NetMessageCodes.MsgUserRegister,                 callback: _onMsgUserRegister, },
             { msgCode: NetMessageCodes.MsgUserLogout,                   callback: _onMsgUserLogout, },
@@ -23,7 +23,7 @@ namespace Twns.User.UserProxy {
             { msgCode: NetMessageCodes.MsgUserGetBriefInfo,             callback: _onMsgUserGetBriefInfo, },
             { msgCode: NetMessageCodes.MsgUserGetOnlineState,           callback: _onMsgUserGetOnlineState },
             { msgCode: NetMessageCodes.MsgUserSetNickname,              callback: _onMsgUserSetNickname, },
-            { msgCode: NetMessageCodes.MsgUserSetDiscordId,             callback: _onMsgUserSetDiscordId, },
+            { msgCode: NetMessageCodes.MsgUserSetDiscordInfo,           callback: _onMsgUserSetDiscordInfo, },
             { msgCode: NetMessageCodes.MsgUserGetOnlineUserIdArray,     callback: _onMsgUserGetOnlineUserIdArray, },
             { msgCode: NetMessageCodes.MsgUserSetPrivilege,             callback: _onMsgUserSetPrivilege, },
             { msgCode: NetMessageCodes.MsgUserSetPassword,              callback: _onMsgUserSetPassword, },
@@ -35,16 +35,16 @@ namespace Twns.User.UserProxy {
     }
 
     export function reqLogin(account: string, rawPassword: string, isAutoRelogin: boolean): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgUserLogin: { c: {
                 account,
-                password    : Twns.Sha1Generator.b64_sha1(rawPassword),
+                password    : Sha1Generator.b64_sha1(rawPassword),
                 isAutoRelogin,
             } },
         });
     }
     export function reqRawLogin(account: string, password: string): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgUserLogin: { c: {
                 account,
                 password,
@@ -55,16 +55,16 @@ namespace Twns.User.UserProxy {
     function _onMsgUserLogin(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserLogin.IS;
         if (!data.errorCode) {
-            Twns.User.UserModel.updateOnMsgUserLogin(data);
-            Twns.Notify.dispatch(NotifyType.MsgUserLogin, data);
+            User.UserModel.updateOnMsgUserLogin(data);
+            Notify.dispatch(NotifyType.MsgUserLogin, data);
         }
     }
 
     export function reqUserRegister(account: string, rawPassword: string, nickname: string): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgUserRegister: { c: {
                 account,
-                password: Twns.Sha1Generator.b64_sha1(rawPassword),
+                password: Sha1Generator.b64_sha1(rawPassword),
                 nickname,
             } },
         });
@@ -72,12 +72,12 @@ namespace Twns.User.UserProxy {
     function _onMsgUserRegister(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserRegister.IS;
         if (!data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgUserRegister, data);
+            Notify.dispatch(NotifyType.MsgUserRegister, data);
         }
     }
 
     export function reqLogout(): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgUserLogout: { c: {
             } },
         });
@@ -85,12 +85,12 @@ namespace Twns.User.UserProxy {
     function _onMsgUserLogout(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserLogout.IS;
         if (!data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgUserLogout, data);
+            Notify.dispatch(NotifyType.MsgUserLogout, data);
         }
     }
 
     export function reqUserGetPublicInfo(userId: number): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgUserGetPublicInfo: { c: {
                 userId,
             } },
@@ -99,13 +99,13 @@ namespace Twns.User.UserProxy {
     function _onMsgUserGetPublicInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
         if (!data.errorCode) {
-            Twns.User.UserModel.setUserPublicInfo(Twns.Helpers.getExisted(data.userId), data.userPublicInfo ?? null);
-            Twns.Notify.dispatch(NotifyType.MsgUserGetPublicInfo, data);
+            User.UserModel.setUserPublicInfo(Helpers.getExisted(data.userId), data.userPublicInfo ?? null);
+            Notify.dispatch(NotifyType.MsgUserGetPublicInfo, data);
         }
     }
 
     export function reqUserGetBriefInfo(userId: number): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgUserGetBriefInfo: { c: {
                 userId,
             } },
@@ -114,13 +114,13 @@ namespace Twns.User.UserProxy {
     function _onMsgUserGetBriefInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserGetBriefInfo.IS;
         if (!data.errorCode) {
-            Twns.User.UserModel.setUserBriefInfo(Twns.Helpers.getExisted(data.userId), data.userBriefInfo ?? null);
-            Twns.Notify.dispatch(NotifyType.MsgUserGetBriefInfo, data);
+            User.UserModel.setUserBriefInfo(Helpers.getExisted(data.userId), data.userBriefInfo ?? null);
+            Notify.dispatch(NotifyType.MsgUserGetBriefInfo, data);
         }
     }
 
     export function reqUserGetOnlineState(userId: number): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgUserGetOnlineState: { c: {
                 userId,
             } },
@@ -129,13 +129,13 @@ namespace Twns.User.UserProxy {
     function _onMsgUserGetOnlineState(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserGetOnlineState.IS;
         if (!data.errorCode) {
-            Twns.User.UserModel.updateOnMsgUserGetOnlineState(data);
-            Twns.Notify.dispatch(NotifyType.MsgUserGetOnlineState, data);
+            User.UserModel.updateOnMsgUserGetOnlineState(data);
+            Notify.dispatch(NotifyType.MsgUserGetOnlineState, data);
         }
     }
 
     export function reqSetNickname(nickname: string): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgUserSetNickname: { c: {
                 nickname,
             }, },
@@ -144,44 +144,44 @@ namespace Twns.User.UserProxy {
     async function _onMsgUserSetNickname(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgUserSetNickname.IS;
         if (data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgUserSetNicknameFailed, data);
+            Notify.dispatch(NotifyType.MsgUserSetNicknameFailed, data);
         } else {
-            Twns.User.UserModel.updateOnMsgUserSetNickname(data);
-            Twns.Notify.dispatch(NotifyType.MsgUserSetNickname, data);
+            User.UserModel.updateOnMsgUserSetNickname(data);
+            Notify.dispatch(NotifyType.MsgUserSetNickname, data);
         }
     }
 
-    export function reqSetDiscordId(discordId: string): void {
-        Twns.Net.NetManager.send({
-            MsgUserSetDiscordId: { c: {
-                discordId,
+    export function reqSetDiscordInfo(discordInfo: CommonProto.User.IUserDiscordInfo): void {
+        Net.NetManager.send({
+            MsgUserSetDiscordInfo: { c: {
+                discordInfo,
             }, },
         });
     }
-    async function _onMsgUserSetDiscordId(e: egret.Event): Promise<void> {
-        const data = e.data as NetMessage.MsgUserSetDiscordId.IS;
+    async function _onMsgUserSetDiscordInfo(e: egret.Event): Promise<void> {
+        const data = e.data as NetMessage.MsgUserSetDiscordInfo.IS;
         if (data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgUserSetDiscordIdFailed, data);
+            Notify.dispatch(NotifyType.MsgUserSetDiscordInfoFailed, data);
         } else {
-            Twns.User.UserModel.updateOnMsgUserSetDiscordId(data);
-            Twns.Notify.dispatch(NotifyType.MsgUserSetDiscordId, data);
+            User.UserModel.updateOnMsgUserSetDiscordInfo(data);
+            Notify.dispatch(NotifyType.MsgUserSetDiscordInfo, data);
         }
     }
 
     export function reqUserGetOnlineUserIdArray(): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgUserGetOnlineUserIdArray: { c: {} },
         });
     }
     function _onMsgUserGetOnlineUserIdArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserGetOnlineUserIdArray.IS;
         if (!data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgUserGetOnlineUserIdArray, data);
+            Notify.dispatch(NotifyType.MsgUserGetOnlineUserIdArray, data);
         }
     }
 
     export function reqUserSetPrivilege(userId: number, userPrivilege: CommonProto.User.IUserPrivilege): void {
-        Twns.Net.NetManager.send({ MsgUserSetPrivilege: { c: {
+        Net.NetManager.send({ MsgUserSetPrivilege: { c: {
             userId,
             userPrivilege,
         } } });
@@ -189,39 +189,39 @@ namespace Twns.User.UserProxy {
     async function _onMsgUserSetPrivilege(e: egret.Event): Promise<void> {
         const data = e.data as CommonProto.NetMessage.MsgUserSetPrivilege.IS;
         if (!data.errorCode) {
-            Twns.User.UserModel.updateOnMsgUserSetPrivilege(data);
-            Twns.Notify.dispatch(NotifyType.MsgUserSetPrivilege, data);
+            User.UserModel.updateOnMsgUserSetPrivilege(data);
+            Notify.dispatch(NotifyType.MsgUserSetPrivilege, data);
         }
     }
 
     export function reqUserSetPassword(oldRawPassword: string, newRawPassword: string): void {
-        Twns.Net.NetManager.send({ MsgUserSetPassword: { c: {
-            oldPassword : Twns.Sha1Generator.b64_sha1(oldRawPassword),
-            newPassword : Twns.Sha1Generator.b64_sha1(newRawPassword),
+        Net.NetManager.send({ MsgUserSetPassword: { c: {
+            oldPassword : Sha1Generator.b64_sha1(oldRawPassword),
+            newPassword : Sha1Generator.b64_sha1(newRawPassword),
         } } });
     }
     function _onMsgUserSetPassword(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgUserSetPassword.IS;
         if (!data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgUserSetPassword, data);
+            Notify.dispatch(NotifyType.MsgUserSetPassword, data);
         }
     }
 
     export function reqUserSetSettings(userSettings: CommonProto.User.IUserSettings): void {
-        Twns.Net.NetManager.send({ MsgUserSetSettings: { c: {
+        Net.NetManager.send({ MsgUserSetSettings: { c: {
             userSettings,
         } } });
     }
     function _onMsgUserSetSettings(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgUserSetSettings.IS;
         if (!data.errorCode) {
-            Twns.User.UserModel.updateOnMsgUserSetSettings(data);
-            Twns.Notify.dispatch(NotifyType.MsgUserSetSettings, data);
+            User.UserModel.updateOnMsgUserSetSettings(data);
+            Notify.dispatch(NotifyType.MsgUserSetSettings, data);
         }
     }
 
     export function reqUserSetMapRating(mapId: number, rating: number): void {
-        Twns.Net.NetManager.send({ MsgUserSetMapRating: { c: {
+        Net.NetManager.send({ MsgUserSetMapRating: { c: {
             mapId,
             rating,
         } } });
@@ -229,13 +229,13 @@ namespace Twns.User.UserProxy {
     function _onMsgUserSetMapRating(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgUserSetMapRating.IS;
         if (!data.errorCode) {
-            Twns.User.UserModel.updateOnMsgUserSetMapRating(data);
-            Twns.Notify.dispatch(NotifyType.MsgUserSetMapRating, data);
+            User.UserModel.updateOnMsgUserSetMapRating(data);
+            Notify.dispatch(NotifyType.MsgUserSetMapRating, data);
         }
     }
 
     export function reqSetAvatarId(avatarId: number): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgUserSetAvatarId: { c: {
                 avatarId,
             }, },
@@ -244,15 +244,15 @@ namespace Twns.User.UserProxy {
     async function _onMsgUserSetAvatarId(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgUserSetAvatarId.IS;
         if (data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgUserSetAvatarIdFailed, data);
+            Notify.dispatch(NotifyType.MsgUserSetAvatarIdFailed, data);
         } else {
-            Twns.User.UserModel.updateOnMsgUserSetAvatarId(data);
-            Twns.Notify.dispatch(NotifyType.MsgUserSetAvatarId, data);
+            User.UserModel.updateOnMsgUserSetAvatarId(data);
+            Notify.dispatch(NotifyType.MsgUserSetAvatarId, data);
         }
     }
 
     export function reqSetMapEditorAutoSaveTime(time: number | null): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgUserSetMapEditorAutoSaveTime: { c: {
                 time,
             }, },
@@ -261,10 +261,10 @@ namespace Twns.User.UserProxy {
     async function _onMsgUserSetMapEditorAutoSaveTime(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgUserSetMapEditorAutoSaveTime.IS;
         if (data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgUserSetMapEditorAutoSaveTimeFailed, data);
+            Notify.dispatch(NotifyType.MsgUserSetMapEditorAutoSaveTimeFailed, data);
         } else {
-            Twns.User.UserModel.updateOnMsgUserSetMapEditorAutoSaveTime(data);
-            Twns.Notify.dispatch(NotifyType.MsgUserSetMapEditorAutoSaveTime, data);
+            User.UserModel.updateOnMsgUserSetMapEditorAutoSaveTime(data);
+            Notify.dispatch(NotifyType.MsgUserSetMapEditorAutoSaveTime, data);
         }
     }
 }

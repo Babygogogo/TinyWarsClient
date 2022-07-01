@@ -82,6 +82,7 @@ namespace Twns.PanelHelpers {
         CommonConfirmPanel                  : PanelConfig<Common.OpenDataForCommonConfirmPanel>;
         CommonDamageCalculatorPanel         : PanelConfig<Common.OpenDataForCommonDamageCalculatorPanel>;
         CommonDamageChartPanel              : PanelConfig<Common.OpenDataForCommonDamageChartPanel>;
+        CommonDeletePlayerPanel             : PanelConfig<Common.OpenDataForCommonDeletePlayerPanel>;
         CommonErrorPanel                    : PanelConfig<Common.OpenDataForCommonErrorPanel>;
         CommonGameChartPanel                : PanelConfig<Common.OpenDataForCommonGameChartPanel>;
         CommonHelpPanel                     : PanelConfig<Common.OpenDataForCommonHelpPanel>;
@@ -191,7 +192,6 @@ namespace Twns.PanelHelpers {
         SrrCreateQuickSettingsPanel         : PanelConfig<SingleRankRoom.OpenDataForSrrCreateQuickSettingsPanel>;
         SrrCreateSettingsPanel              : PanelConfig<SingleRankRoom.OpenDataForSrrCreateSettingsPanel>;
 
-        UserChangeDiscordIdPanel            : PanelConfig<User.OpenDataForUserChangeDiscordIdPanel>;
         UserChangeNicknamePanel             : PanelConfig<User.OpenDataForUserChangeNicknamePanel>;
         UserGameManagementPanel             : PanelConfig<User.OpenDataForUserGameManagementPanel>;
         UserLoginBackgroundPanel            : PanelConfig<User.OpenDataForUserLoginBackgroundPanel>;
@@ -201,6 +201,7 @@ namespace Twns.PanelHelpers {
         UserProfileSettingsPanel            : PanelConfig<User.OpenDataForUserProfileSettingsPanel>;
         UserRegisterPanel                   : PanelConfig<User.OpenDataForUserRegisterPanel>;
         UserSetAvatarPanel                  : PanelConfig<User.OpenDataForUserSetAvatarPanel>;
+        UserSetDiscordInfoPanel             : PanelConfig<User.OpenDataForUserSetDiscordInfoPanel>;
         UserSetOpacityPanel                 : PanelConfig<User.OpenDataForUserSetOpacityPanel>;
         UserSetPasswordPanel                : PanelConfig<User.OpenDataForUserSetPasswordPanel>;
         UserSetPrivilegePanel               : PanelConfig<User.OpenDataForUserSetPrivilegePanel>;
@@ -672,6 +673,12 @@ namespace Twns.PanelHelpers {
                 skinName    : `resource/skins/common/CommonDamageChartPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
+            },
+
+            CommonDeletePlayerPanel: {
+                cls         : Common?.CommonDeletePlayerPanel,
+                skinName    : `resource/skins/common/CommonDeletePlayerPanel.exml`,
+                layer       : LayerType.Notify0,
             },
 
             CommonErrorPanel: {
@@ -1288,12 +1295,6 @@ namespace Twns.PanelHelpers {
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
-            UserChangeDiscordIdPanel: {
-                cls         : User?.UserChangeDiscordIdPanel,
-                skinName    : `resource/skins/user/UserChangeDiscordIdPanel.exml`,
-                layer       : LayerType.Hud1,
-            },
-
             UserChangeNicknamePanel: {
                 cls         : User?.UserChangeNicknamePanel,
                 skinName    : `resource/skins/user/UserChangeNicknamePanel.exml`,
@@ -1349,6 +1350,12 @@ namespace Twns.PanelHelpers {
                 cls         : User?.UserSetAvatarPanel,
                 skinName    : `resource/skins/user/UserSetAvatarPanel.exml`,
                 layer       : LayerType.Hud0,
+            },
+
+            UserSetDiscordInfoPanel: {
+                cls         : User?.UserSetDiscordInfoPanel,
+                skinName    : `resource/skins/user/UserSetDiscordInfoPanel.exml`,
+                layer       : LayerType.Hud1,
             },
 
             UserSetPasswordPanel: {

@@ -6,35 +6,34 @@
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
 // import Notify               from "../../tools/notify/Notify";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import UserProxy            from "./UserProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.User.UserModel {
-    import NotifyType           = Twns.Notify.NotifyType;
-    import LangTextType         = Twns.Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
+    import LangTextType         = Lang.LangTextType;
     import NetMessage           = CommonProto.NetMessage;
     import IUserPublicInfo      = CommonProto.User.IUserPublicInfo;
     import IUserBriefInfo       = CommonProto.User.IUserBriefInfo;
     import IUserSettings        = CommonProto.User.IUserSettings;
     import IUserSelfInfo        = CommonProto.User.IUserSelfInfo;
     import IUserPrivilege       = CommonProto.User.IUserPrivilege;
-    import ClientErrorCode      = Twns.ClientErrorCode;
 
     let _isLoggedIn                 = false;
     let _selfInfo                   : IUserSelfInfo | null = null;
     let _selfAccount                : string;
     let _selfPassword               : string | null = null;
-    const _userPublicInfoAccessor   = Twns.Helpers.createCachedDataAccessor<number, IUserPublicInfo>({
-        reqData                     : (userId: number) => Twns.User.UserProxy.reqUserGetPublicInfo(userId),
+    const _userPublicInfoAccessor   = Helpers.createCachedDataAccessor<number, IUserPublicInfo>({
+        reqData                     : (userId: number) => User.UserProxy.reqUserGetPublicInfo(userId),
     });
-    const _userBriefInfoAccessor    = Twns.Helpers.createCachedDataAccessor<number, IUserBriefInfo>({
-        reqData                     : (userId: number) => Twns.User.UserProxy.reqUserGetBriefInfo(userId),
+    const _userBriefInfoAccessor    = Helpers.createCachedDataAccessor<number, IUserBriefInfo>({
+        reqData                     : (userId: number) => User.UserProxy.reqUserGetBriefInfo(userId),
     });
 
     export function init(): void {
-        Twns.Notify.addEventListeners([
+        Notify.addEventListeners([
             { type: NotifyType.NetworkDisconnected,    callback: _onNotifyNetworkDisconnected, },
             { type: NotifyType.MsgUserLogout,          callback: _onNotifyMsgUserLogout, },
         ], null);
@@ -133,13 +132,12 @@ namespace Twns.User.UserModel {
         (userComplexInfo) && (userComplexInfo.mapEditorAutoSaveTime = time);
     }
 
-    export function getSelfDiscordId(): string | null {
-        const info = getSelfInfo();
-        return info ? info.discordId ?? null : null;
+    export function getSelfDiscordInfo(): CommonProto.User.IUserDiscordInfo | null {
+        return getSelfUserComplexInfo()?.userDiscordInfo ?? null;
     }
-    function setSelfDiscordId(discordId: string | null): void {
-        const info = getSelfInfo();
-        (info) && (info.discordId = discordId);
+    function setSelfDiscordInfo(discordInfo: CommonProto.User.IUserDiscordInfo | null): void {
+        const info = getSelfUserComplexInfo();
+        (info) && (info.userDiscordInfo = discordInfo);
     }
 
     export function getUserPublicInfo(userId: number): Promise<IUserPublicInfo | null> {
@@ -160,10 +158,10 @@ namespace Twns.User.UserModel {
         const info = await getUserPublicInfo(userId);
         return info ? info.nickname ?? null : null;
     }
-    export async function getUserMrwRankScoreInfo(userId: number, warType: Twns.Types.WarType, playersCount: number): Promise<CommonProto.User.UserRankInfo.IUserMrwRankInfo | null> {
+    export async function getUserMrwRankScoreInfo(userId: number, warType: Types.WarType, playersCount: number): Promise<CommonProto.User.UserRankInfo.IUserMrwRankInfo | null> {
         return (await getUserPublicInfo(userId))?.userMrwRankInfoArray?.find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount)) ?? null;
     }
-    export async function getUserMpwStatisticsData(userId: number, warType: Twns.Types.WarType, playersCount: number): Promise<CommonProto.User.UserWarStatistics.IUserMpwStatistics | null> {
+    export async function getUserMpwStatisticsData(userId: number, warType: Types.WarType, playersCount: number): Promise<CommonProto.User.UserWarStatistics.IUserMpwStatistics | null> {
         return (await getUserPublicInfo(userId))?.userMpwStatisticsArray?.find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount)) ?? null;
     }
     export function getMapRating(mapId: number): number | null {
@@ -173,8 +171,8 @@ namespace Twns.User.UserModel {
     function getSelfSettings(): IUserSettings | null {
         return getSelfUserComplexInfo()?.userSettings ?? null;
     }
-    export function getSelfSettingsTextureVersion(): Twns.Types.UnitAndTileTextureVersion {
-        return getSelfSettings()?.unitAndTileTextureVersion ?? Twns.Types.UnitAndTileTextureVersion.V0;
+    export function getSelfSettingsTextureVersion(): Types.UnitAndTileTextureVersion {
+        return getSelfSettings()?.unitAndTileTextureVersion ?? Types.UnitAndTileTextureVersion.V0;
     }
     export function getSelfSettingsIsSetPathMode(): boolean {
         return getSelfSettings()?.isSetPathMode ?? false;
@@ -196,18 +194,18 @@ namespace Twns.User.UserModel {
         }
 
         selfSettings.opacitySettings = opacitySettings;
-        Twns.Notify.dispatch(NotifyType.UserSettingsOpacitySettingsChanged);
+        Notify.dispatch(NotifyType.UserSettingsOpacitySettingsChanged);
     }
     export function reqTickSelfSettingsUnitOpacity(): void {
         const unitOpacity = getSelfSettingsOpacitySettings()?.unitOpacity;
         if ((unitOpacity === 100) || (unitOpacity == null)) {
-            Twns.User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 75 } });
+            User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 75 } });
         } else if (unitOpacity === 75) {
-            Twns.User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 50 } });
+            User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 50 } });
         } else if (unitOpacity === 50) {
-            Twns.User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 0 } });
+            User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 0 } });
         } else {
-            Twns.User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 100 } });
+            User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 100 } });
         }
     }
     function mergeSelfSettingsOpacitySettings(newOpacitySettings: CommonProto.User.IUserOpacitySettings): void {
@@ -218,7 +216,7 @@ namespace Twns.User.UserModel {
 
         const currentOpacitySettings = selfSettings.opacitySettings;
         if (currentOpacitySettings == null) {
-            selfSettings.opacitySettings = Twns.Helpers.deepClone(newOpacitySettings);
+            selfSettings.opacitySettings = Helpers.deepClone(newOpacitySettings);
         } else {
             currentOpacitySettings.tileBaseOpacity      = newOpacitySettings.tileBaseOpacity ?? currentOpacitySettings.tileBaseOpacity;
             currentOpacitySettings.tileDecoratorOpacity = newOpacitySettings.tileDecoratorOpacity ?? currentOpacitySettings.tileDecoratorOpacity;
@@ -226,7 +224,7 @@ namespace Twns.User.UserModel {
             currentOpacitySettings.unitOpacity          = newOpacitySettings.unitOpacity ?? currentOpacitySettings.unitOpacity;
         }
 
-        Twns.Notify.dispatch(NotifyType.UserSettingsOpacitySettingsChanged);
+        Notify.dispatch(NotifyType.UserSettingsOpacitySettingsChanged);
     }
 
     export function updateOnMsgUserLogin(data: NetMessage.MsgUserLogin.IS): void {
@@ -236,21 +234,21 @@ namespace Twns.User.UserModel {
         (userSelfInfo) && (setSelfInfo(userSelfInfo));
     }
     export async function updateOnMsgUserGetOnlineState(data: NetMessage.MsgUserGetOnlineState.IS): Promise<void> {
-        const userPublicInfo = await getUserPublicInfo(Twns.Helpers.getExisted(data.userId));
+        const userPublicInfo = await getUserPublicInfo(Helpers.getExisted(data.userId));
         if (userPublicInfo) {
             userPublicInfo.isOnline         = data.isOnline;
             userPublicInfo.lastActivityTime = data.lastActivityTime;
         }
     }
     export function updateOnMsgUserSetNickname(data: NetMessage.MsgUserSetNickname.IS): void {
-        setSelfNickname(Twns.Helpers.getExisted(data.nickname));
+        setSelfNickname(Helpers.getExisted(data.nickname));
     }
-    export function updateOnMsgUserSetDiscordId(data: NetMessage.MsgUserSetDiscordId.IS): void {
-        setSelfDiscordId(data.discordId ?? null);
+    export function updateOnMsgUserSetDiscordInfo(data: NetMessage.MsgUserSetDiscordInfo.IS): void {
+        setSelfDiscordInfo(data.discordInfo ?? null);
     }
     export function updateOnMsgUserSetPrivilege(data: NetMessage.MsgUserSetPrivilege.IS): void {
         if (data.userId === getSelfUserId()) {
-            setSelfUserPrivilege(Twns.Helpers.getExisted(data.userPrivilege));
+            setSelfUserPrivilege(Helpers.getExisted(data.userPrivilege));
         }
     }
     export function updateOnMsgUserSetSettings(data: NetMessage.MsgUserSetSettings.IS): void {
@@ -270,18 +268,18 @@ namespace Twns.User.UserModel {
         (newSettings.opacitySettings != null)           && (mergeSelfSettingsOpacitySettings(newSettings.opacitySettings));
 
         if (oldVersion !== getSelfSettingsTextureVersion()) {
-            Twns.Common.CommonModel.updateOnUnitAndTileTextureVersionChanged();
-            Twns.Notify.dispatch(NotifyType.UnitAndTileTextureVersionChanged);
+            Common.CommonModel.updateOnUnitAndTileTextureVersionChanged();
+            Notify.dispatch(NotifyType.UnitAndTileTextureVersionChanged);
         }
         if (oldIsShowGridBorder !== getSelfSettingsIsShowGridBorder()) {
-            Twns.Notify.dispatch(NotifyType.UserSettingsIsShowGridBorderChanged);
+            Notify.dispatch(NotifyType.UserSettingsIsShowGridBorderChanged);
         }
         if (oldIsAutoScrollMap !== getSelfSettingsIsAutoScrollMap()) {
-            Twns.Notify.dispatch(NotifyType.UserSettingsIsAutoScrollMapChanged);
+            Notify.dispatch(NotifyType.UserSettingsIsAutoScrollMapChanged);
         }
     }
     export function updateOnMsgUserSetMapRating(data: NetMessage.MsgUserSetMapRating.IS): void {
-        const complexInfo       = Twns.Helpers.getExisted(getSelfUserComplexInfo());
+        const complexInfo       = Helpers.getExisted(getSelfUserComplexInfo());
         const { mapId, rating } = data;
         if (complexInfo.userMapRatingArray == null) {
             complexInfo.userMapRatingArray = [{
@@ -302,7 +300,7 @@ namespace Twns.User.UserModel {
         }
     }
     export function updateOnMsgUserSetAvatarId(data: NetMessage.MsgUserSetAvatarId.IS): void {
-        setSelfAvatarId(Twns.Helpers.getExisted(data.avatarId, ClientErrorCode.UserModel_UpdateOnMsgUserSetAvatarId_00));
+        setSelfAvatarId(Helpers.getExisted(data.avatarId, ClientErrorCode.UserModel_UpdateOnMsgUserSetAvatarId_00));
     }
     export function updateOnMsgUserSetMapEditorAutoSaveTime(data: NetMessage.MsgUserSetMapEditorAutoSaveTime.IS): void {
         setSelfMapEditorAutoSaveTime(data.time ?? null);
@@ -313,12 +311,12 @@ namespace Twns.User.UserModel {
     }
     function _onNotifyMsgUserLogout(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserLogout.IS;
-        if (data.reason === Twns.Types.LogoutType.SelfRequest) {
-            Twns.FloatText.show(Lang.getText(LangTextType.A0005));
-        } else if (data.reason === Twns.Types.LogoutType.LoginCollision) {
-            Twns.FloatText.show(Lang.getText(LangTextType.A0006));
-        } else if (data.reason === Twns.Types.LogoutType.NetworkFailure) {
-            Twns.FloatText.show(Lang.getText(LangTextType.A0013));
+        if (data.reason === Types.LogoutType.SelfRequest) {
+            FloatText.show(Lang.getText(LangTextType.A0005));
+        } else if (data.reason === Types.LogoutType.LoginCollision) {
+            FloatText.show(Lang.getText(LangTextType.A0006));
+        } else if (data.reason === Types.LogoutType.NetworkFailure) {
+            FloatText.show(Lang.getText(LangTextType.A0013));
         }
 
         setIsLoggedIn(false);

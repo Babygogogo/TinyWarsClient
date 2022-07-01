@@ -204,8 +204,8 @@ namespace Twns.Lang {
             `Invalid discord ID.`,
         ],
         [LangTextType.A0049]: [
-            `Discord ID 已更改`,
-            `Your discord ID is changed successfully`,
+            `Discord相关设置已更改`,
+            `Your discord settings are changed successfully.`,
         ],
         [LangTextType.A0050]: [
             `您尚未选择任何CO。`,
@@ -5021,6 +5021,26 @@ namespace Twns.Lang {
         [LangTextType.B0915]: [
             `取消标记`,
             `Unmark`,
+        ],
+        [LangTextType.B0916]: [
+            `禁止再次进入房间`,
+            `No re-entry`,
+        ],
+        [LangTextType.B0917]: [
+            `上次活动时间`,
+            `Last Activity`,
+        ],
+        [LangTextType.B0918]: [
+            `回合轮转提醒`,
+            `Turn Notifications`
+        ],
+        [LangTextType.B0919]: [
+            `Ban/Pick提醒`,
+            `Ban/Pick Notifications`
+        ],
+        [LangTextType.B0920]: [
+            `房间满员提醒`,
+            `Room Notifications`
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

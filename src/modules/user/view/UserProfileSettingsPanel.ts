@@ -55,7 +55,7 @@ namespace Twns.User {
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserGetPublicInfo,                callback: this._onMsgUserGetPublicInfo },
                 { type: NotifyType.MsgUserSetNickname,                  callback: this._onMsgUserSetNickname },
-                { type: NotifyType.MsgUserSetDiscordId,                 callback: this._onMsgUserSetDiscordId },
+                { type: NotifyType.MsgUserSetDiscordInfo,                 callback: this._onMsgUserSetDiscordId },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,               callback: this.close },
@@ -97,7 +97,7 @@ namespace Twns.User {
             PanelHelpers.open(PanelHelpers.PanelDict.UserSetPasswordPanel, void 0);
         }
         private _onTouchedBtnChangeDiscordId(): void {
-            PanelHelpers.open(PanelHelpers.PanelDict.UserChangeDiscordIdPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.UserSetDiscordInfoPanel, void 0);
         }
 
         protected async _showOpenAnimation(): Promise<void> {

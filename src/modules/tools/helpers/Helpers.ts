@@ -53,8 +53,9 @@ namespace Twns.Helpers {
             && (str.length <= 20);
     }
 
-    export function checkIsDiscordIdValid(str: string | null): boolean {
-        return (typeof str == "string") && (str.length >= 17) && (str.length <= 18);
+    export function checkIsDiscordIdValid(str: string): boolean {
+        return (str.length === 0)
+            || ((str.length >= 17) && (str.length <= 18));
     }
 
     export function formatString(...args: (Types.Undefinable<number | string>)[]): string {
