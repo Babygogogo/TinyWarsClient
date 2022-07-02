@@ -832,6 +832,7 @@ namespace Twns.MapEditor.MeHelpers {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /** 此函数允许 WarRuleAvailability 全空 */
     export async function getErrorCodeForMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
         const gameConfig = await Config.ConfigManager.getLatestGameConfig();
         if (gameConfig == null) {

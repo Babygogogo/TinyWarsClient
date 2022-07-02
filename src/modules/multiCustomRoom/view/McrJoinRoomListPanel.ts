@@ -14,7 +14,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import Twns.Notify                       from "../../tools/notify/NotifyType";
+// import Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
@@ -31,15 +31,15 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiCustomRoom {
-    import OpenDataForWarCommonMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
-    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = Twns.Common.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarBasicSettingsPage    = Twns.Common.OpenDataForCommonWarBasicSettingsPage;
-    import LangTextType                             = Twns.Lang.LangTextType;
-    import NotifyType                               = Twns.Notify.NotifyType;
+    import OpenDataForWarCommonMapInfoPage          = Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Common.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
+    import LangTextType                             = Lang.LangTextType;
+    import NotifyType                               = Notify.NotifyType;
 
     export type OpenDataForMcrJoinRoomListPanel = {
-        filter  : Twns.Types.McrRoomFilter | null;
+        filter  : Types.McrRoomFilter | null;
     };
     export class McrJoinRoomListPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrJoinRoomListPanel> {
         private readonly _groupTab!             : eui.Group;
@@ -88,7 +88,7 @@ namespace Twns.MultiCustomRoom {
 
         public setAndReviseSelectedRoomId(newRoomId: number, needScroll: boolean): void {
             const listRoom  = this._listRoom;
-            const index     = Twns.Helpers.getExisted(listRoom.getRandomIndex(v => v.roomId === newRoomId));
+            const index     = Helpers.getExisted(listRoom.getRandomIndex(v => v.roomId === newRoomId));
             listRoom.setSelectedIndex(index);
             this._updateComponentsForTargetRoomInfo();
 
@@ -106,10 +106,10 @@ namespace Twns.MultiCustomRoom {
 
         private _onNotifyMsgMcrJoinRoom(e: egret.Event): void {
             const data      = e.data as CommonProto.NetMessage.MsgMcrJoinRoom.IS;
-            const roomId    = Twns.Helpers.getExisted(data.roomId);
+            const roomId    = Helpers.getExisted(data.roomId);
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrRoomInfoPanel, { roomId });
-            Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0069, roomId));
+            PanelHelpers.open(PanelHelpers.PanelDict.McrRoomInfoPanel, { roomId });
+            FloatText.show(Lang.getFormattedText(LangTextType.F0069, roomId));
         }
 
         private _onNotifyMsgMcrGetRoomPlayerInfo(e: egret.Event): void {
@@ -128,9 +128,9 @@ namespace Twns.MultiCustomRoom {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrMainMenuPanel, void 0);
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyTopPanel, void 0);
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.McrMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
         }
 
         private async _onTouchedBtnNextStep(): Promise<void> {
@@ -142,20 +142,20 @@ namespace Twns.MultiCustomRoom {
             const roomStaticInfo = await McrModel.getRoomStaticInfo(roomId);
             const roomPlayerInfo = await McrModel.getRoomPlayerInfo(roomId);
             if ((roomStaticInfo) && (roomPlayerInfo)) {
-                const settingsForMcw    = Twns.Helpers.getExisted(roomStaticInfo.settingsForMcw);
+                const settingsForMcw    = Helpers.getExisted(roomStaticInfo.settingsForMcw);
                 const callback          = async () => {
                     const joinData = await McrJoinModel.getFastJoinData(roomStaticInfo, roomPlayerInfo);
                     if (joinData) {
                         McrProxy.reqMcrJoinRoom(joinData);
                     } else {
-                        Twns.FloatText.show(Lang.getText(LangTextType.A0145));
+                        FloatText.show(Lang.getText(LangTextType.A0145));
                     }
                 };
                 if (!settingsForMcw.warPassword) {
                     callback();
                 } else {
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonJoinRoomPasswordPanel, {
-                        mapId               : Twns.Helpers.getExisted(settingsForMcw.mapId),
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonJoinRoomPasswordPanel, {
+                        mapId               : Helpers.getExisted(settingsForMcw.mapId),
                         warName             : settingsForMcw.warName ?? null,
                         password            : settingsForMcw.warPassword,
                         callbackOnSucceed   : callback,
@@ -165,7 +165,7 @@ namespace Twns.MultiCustomRoom {
         }
 
         private _onTouchedBtnSearch(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrSearchRoomPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.McrSearchRoomPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -175,22 +175,22 @@ namespace Twns.MultiCustomRoom {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : Twns.Common.CommonWarMapInfoPage,
+                    pageClass   : Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : Twns.Common.CommonWarPlayerInfoPage,
+                    pageClass   : Common.CommonWarPlayerInfoPage,
                     pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : Twns.Common.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : Twns.Common.CommonWarAdvancedSettingsPage,
+                    pageClass   : Common.CommonWarAdvancedSettingsPage,
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
@@ -269,7 +269,8 @@ namespace Twns.MultiCustomRoom {
             return mapId == null
                 ? null
                 : {
-                    gameConfig  : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
+                    hasFog      : roomInfo?.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ?? null,
                     mapInfo     : { mapId, },
                 };
         }
@@ -299,72 +300,72 @@ namespace Twns.MultiCustomRoom {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnSearch,
                 beginProps  : { alpha: 0, y: 40 },
                 endProps    : { alpha: 1, y: 80 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupRoomList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnSearch,
                 beginProps  : { alpha: 1, y: 80 },
                 endProps    : { alpha: 0, y: 40 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupRoomList,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -397,14 +398,14 @@ namespace Twns.MultiCustomRoom {
                 return;
             }
 
-            const settingsForMcw        = Twns.Helpers.getExisted(roomInfo.settingsForMcw);
+            const settingsForMcw        = Helpers.getExisted(roomInfo.settingsForMcw);
             this._imgPassword.visible   = !!settingsForMcw.warPassword;
 
             const warName = settingsForMcw.warName;
             if (warName) {
                 this._labelName.text = warName;
             } else {
-                Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(Twns.Helpers.getExisted(settingsForMcw.mapId)).then(v => this._labelName.text = v || Twns.CommonConstants.ErrorTextForUndefined);
+                WarMap.WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)).then(v => this._labelName.text = v || CommonConstants.ErrorTextForUndefined);
             }
         }
 

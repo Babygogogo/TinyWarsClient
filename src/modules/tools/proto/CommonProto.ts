@@ -22322,6 +22322,9 @@ declare namespace CommonProto {
             /** McrRoomInfo forbiddenUserIdArray */
             forbiddenUserIdArray?: (number[]|null);
 
+            /** McrRoomInfo lastNotificationTimestamp */
+            lastNotificationTimestamp?: (number|null);
+
             /** McrRoomInfo settingsForCommon */
             settingsForCommon?: (CommonProto.WarSettings.ISettingsForCommon|null);
 
@@ -22355,6 +22358,9 @@ declare namespace CommonProto {
 
             /** McrRoomInfo forbiddenUserIdArray. */
             public forbiddenUserIdArray: number[];
+
+            /** McrRoomInfo lastNotificationTimestamp. */
+            public lastNotificationTimestamp: number;
 
             /** McrRoomInfo settingsForCommon. */
             public settingsForCommon?: (CommonProto.WarSettings.ISettingsForCommon|null);
@@ -22889,6 +22895,9 @@ declare namespace CommonProto {
             /** MfrRoomInfo forbiddenUserIdArray */
             forbiddenUserIdArray?: (number[]|null);
 
+            /** MfrRoomInfo lastNotificationTimestamp */
+            lastNotificationTimestamp?: (number|null);
+
             /** MfrRoomInfo settingsForMfw */
             settingsForMfw?: (CommonProto.WarSettings.ISettingsForMfw|null);
 
@@ -22919,6 +22928,9 @@ declare namespace CommonProto {
 
             /** MfrRoomInfo forbiddenUserIdArray. */
             public forbiddenUserIdArray: number[];
+
+            /** MfrRoomInfo lastNotificationTimestamp. */
+            public lastNotificationTimestamp: number;
 
             /** MfrRoomInfo settingsForMfw. */
             public settingsForMfw?: (CommonProto.WarSettings.ISettingsForMfw|null);
@@ -23450,6 +23462,9 @@ declare namespace CommonProto {
             /** CcrRoomInfo forbiddenUserIdArray */
             forbiddenUserIdArray?: (number[]|null);
 
+            /** CcrRoomInfo lastNotificationTimestamp */
+            lastNotificationTimestamp?: (number|null);
+
             /** CcrRoomInfo settingsForCommon */
             settingsForCommon?: (CommonProto.WarSettings.ISettingsForCommon|null);
 
@@ -23483,6 +23498,9 @@ declare namespace CommonProto {
 
             /** CcrRoomInfo forbiddenUserIdArray. */
             public forbiddenUserIdArray: number[];
+
+            /** CcrRoomInfo lastNotificationTimestamp. */
+            public lastNotificationTimestamp: number;
 
             /** CcrRoomInfo settingsForCommon. */
             public settingsForCommon?: (CommonProto.WarSettings.ISettingsForCommon|null);
@@ -28607,6 +28625,9 @@ declare namespace CommonProto {
             /** MessageContainer MsgMeSubmitMap */
             MsgMeSubmitMap?: (CommonProto.NetMessage.IMsgMeSubmitMap|null);
 
+            /** MessageContainer MsgMeDeleteSlot */
+            MsgMeDeleteSlot?: (CommonProto.NetMessage.IMsgMeDeleteSlot|null);
+
             /** MessageContainer MsgChatAddMessage */
             MsgChatAddMessage?: (CommonProto.NetMessage.IMsgChatAddMessage|null);
 
@@ -29000,6 +29021,9 @@ declare namespace CommonProto {
 
             /** MessageContainer MsgMeSubmitMap. */
             public MsgMeSubmitMap?: (CommonProto.NetMessage.IMsgMeSubmitMap|null);
+
+            /** MessageContainer MsgMeDeleteSlot. */
+            public MsgMeDeleteSlot?: (CommonProto.NetMessage.IMsgMeDeleteSlot|null);
 
             /** MessageContainer MsgChatAddMessage. */
             public MsgChatAddMessage?: (CommonProto.NetMessage.IMsgChatAddMessage|null);
@@ -39419,6 +39443,291 @@ declare namespace CommonProto {
                  * @returns Plain object
                  */
                 public static toObject(message: CommonProto.NetMessage.MsgMeSubmitMap.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this S to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+
+        /** Properties of a MsgMeDeleteSlot. */
+        interface IMsgMeDeleteSlot {
+
+            /** MsgMeDeleteSlot c */
+            c?: (CommonProto.NetMessage.MsgMeDeleteSlot.IC|null);
+
+            /** MsgMeDeleteSlot s */
+            s?: (CommonProto.NetMessage.MsgMeDeleteSlot.IS|null);
+        }
+
+        /** Represents a MsgMeDeleteSlot. */
+        class MsgMeDeleteSlot implements IMsgMeDeleteSlot {
+
+            /**
+             * Constructs a new MsgMeDeleteSlot.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.NetMessage.IMsgMeDeleteSlot);
+
+            /** MsgMeDeleteSlot c. */
+            public c?: (CommonProto.NetMessage.MsgMeDeleteSlot.IC|null);
+
+            /** MsgMeDeleteSlot s. */
+            public s?: (CommonProto.NetMessage.MsgMeDeleteSlot.IS|null);
+
+            /**
+             * Creates a new MsgMeDeleteSlot instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MsgMeDeleteSlot instance
+             */
+            public static create(properties?: CommonProto.NetMessage.IMsgMeDeleteSlot): CommonProto.NetMessage.MsgMeDeleteSlot;
+
+            /**
+             * Encodes the specified MsgMeDeleteSlot message. Does not implicitly {@link CommonProto.NetMessage.MsgMeDeleteSlot.verify|verify} messages.
+             * @param message MsgMeDeleteSlot message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.NetMessage.IMsgMeDeleteSlot, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MsgMeDeleteSlot message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMeDeleteSlot.verify|verify} messages.
+             * @param message MsgMeDeleteSlot message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.NetMessage.IMsgMeDeleteSlot, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MsgMeDeleteSlot message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MsgMeDeleteSlot
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMeDeleteSlot;
+
+            /**
+             * Decodes a MsgMeDeleteSlot message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MsgMeDeleteSlot
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMeDeleteSlot;
+
+            /**
+             * Verifies a MsgMeDeleteSlot message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MsgMeDeleteSlot message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MsgMeDeleteSlot
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMeDeleteSlot;
+
+            /**
+             * Creates a plain object from a MsgMeDeleteSlot message. Also converts values to other types if specified.
+             * @param message MsgMeDeleteSlot
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.NetMessage.MsgMeDeleteSlot, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MsgMeDeleteSlot to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace MsgMeDeleteSlot {
+
+            /** Properties of a C. */
+            interface IC {
+
+                /** C slotIndex */
+                slotIndex?: (number|null);
+            }
+
+            /** Represents a C. */
+            class C implements IC {
+
+                /**
+                 * Constructs a new C.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgMeDeleteSlot.IC);
+
+                /** C slotIndex. */
+                public slotIndex: number;
+
+                /**
+                 * Creates a new C instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns C instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgMeDeleteSlot.IC): CommonProto.NetMessage.MsgMeDeleteSlot.C;
+
+                /**
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgMeDeleteSlot.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgMeDeleteSlot.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMeDeleteSlot.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMeDeleteSlot.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMeDeleteSlot.C;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMeDeleteSlot.C;
+
+                /**
+                 * Verifies a C message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a C message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns C
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMeDeleteSlot.C;
+
+                /**
+                 * Creates a plain object from a C message. Also converts values to other types if specified.
+                 * @param message C
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgMeDeleteSlot.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this C to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a S. */
+            interface IS {
+
+                /** S errorCode */
+                errorCode?: (number|null);
+
+                /** S slotIndex */
+                slotIndex?: (number|null);
+            }
+
+            /** Represents a S. */
+            class S implements IS {
+
+                /**
+                 * Constructs a new S.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgMeDeleteSlot.IS);
+
+                /** S errorCode. */
+                public errorCode: number;
+
+                /** S slotIndex. */
+                public slotIndex: number;
+
+                /**
+                 * Creates a new S instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns S instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgMeDeleteSlot.IS): CommonProto.NetMessage.MsgMeDeleteSlot.S;
+
+                /**
+                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgMeDeleteSlot.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgMeDeleteSlot.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMeDeleteSlot.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMeDeleteSlot.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMeDeleteSlot.S;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMeDeleteSlot.S;
+
+                /**
+                 * Verifies a S message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a S message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns S
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMeDeleteSlot.S;
+
+                /**
+                 * Creates a plain object from a S message. Also converts values to other types if specified.
+                 * @param message S
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgMeDeleteSlot.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this S to JSON.

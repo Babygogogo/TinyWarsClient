@@ -7,7 +7,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import Twns.Notify                       from "../../tools/notify/NotifyType";
+// import Notify                       from "../../tools/notify/NotifyType";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel                          from "../../tools/ui/UiPanel";
@@ -23,12 +23,12 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.CoopCustomRoom {
     import CcrCreateAdvancedSettingsPage            = CoopCustomRoom.CcrCreateAdvancedSettingsPage;
-    import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarMapInfoPage          = Common.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import CcrCreatePlayerInfoPage                  = CoopCustomRoom.CcrCreatePlayerInfoPage;
-    import LangTextType                             = Twns.Lang.LangTextType;
-    import NotifyType                               = Twns.Notify.NotifyType;
-    import WarBasicSettingsType                     = Twns.Types.WarBasicSettingsType;
+    import LangTextType                             = Lang.LangTextType;
+    import NotifyType                               = Notify.NotifyType;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -80,7 +80,7 @@ namespace Twns.CoopCustomRoom {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : Twns.Common.CommonWarMapInfoPage,
+                    pageClass   : Common.CommonWarMapInfoPage,
                     pageData    : this._createDataForCommonMapInfoPage(),
                 },
             ]);
@@ -98,7 +98,7 @@ namespace Twns.CoopCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrCreateMapListPanel, { mapFilter: null });
+            PanelHelpers.open(PanelHelpers.PanelDict.CcrCreateMapListPanel, { mapFilter: null });
         }
         private _onTouchedBtnConfirm(): void {
             const data = CoopCustomRoom.CcrCreateModel.getData();
@@ -112,8 +112,8 @@ namespace Twns.CoopCustomRoom {
             this._updateComponentsForLanguage();
         }
         private _onNotifyMsgCcrCreateRoom(): void {
-            Twns.FloatText.show(Lang.getText(LangTextType.A0015));
-            Twns.FlowManager.gotoLobby();
+            FloatText.show(Lang.getText(LangTextType.A0015));
+            FlowManager.gotoLobby();
         }
 
         private _resetTimeoutForBtnConfirm(): void {
@@ -155,7 +155,7 @@ namespace Twns.CoopCustomRoom {
             const bootTimerParams   = CoopCustomRoom.CcrCreateModel.getBootTimerParams();
             const gameConfig        = CoopCustomRoom.CcrCreateModel.getGameConfig();
             const warEventFullData  = (await CoopCustomRoom.CcrCreateModel.getMapRawData()).warEventFullData ?? null;
-            const timerType         = bootTimerParams[0] as Twns.Types.BootTimerType;
+            const timerType         = bootTimerParams[0] as Types.BootTimerType;
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
                     {
@@ -174,7 +174,7 @@ namespace Twns.CoopCustomRoom {
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
-                                throw Twns.Helpers.newError(`Invalid newValue: ${newValue}`);
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
                             CoopCustomRoom.CcrCreateModel.setWarName(newValue);
                             this._updateCommonWarBasicSettingsPage();
@@ -188,7 +188,7 @@ namespace Twns.CoopCustomRoom {
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
-                                throw Twns.Helpers.newError(`Invalid newValue: ${newValue}`);
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
                             CoopCustomRoom.CcrCreateModel.setWarPassword(newValue);
                             this._updateCommonWarBasicSettingsPage();
@@ -202,7 +202,7 @@ namespace Twns.CoopCustomRoom {
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
-                                throw Twns.Helpers.newError(`Invalid newValue: ${newValue}`);
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
                             CoopCustomRoom.CcrCreateModel.setWarComment(newValue);
                             this._updateCommonWarBasicSettingsPage();
@@ -259,7 +259,7 @@ namespace Twns.CoopCustomRoom {
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue !== "number") {
-                                throw Twns.Helpers.newError(`Invalid newValue: ${newValue}`);
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
                             CoopCustomRoom.CcrCreateModel.setTurnsLimit(newValue);
                             this._updateCommonWarBasicSettingsPage();
@@ -278,7 +278,7 @@ namespace Twns.CoopCustomRoom {
                     },
                 ],
             };
-            if (timerType === Twns.Types.BootTimerType.Regular) {
+            if (timerType === Types.BootTimerType.Regular) {
                 openData.dataArrayForListSettings.push({
                     settingsType    : WarBasicSettingsType.TimerRegularParam,
                     currentValue    : bootTimerParams[1],
@@ -290,7 +290,7 @@ namespace Twns.CoopCustomRoom {
                         this._updateCommonWarBasicSettingsPage();
                     },
                 });
-            } else if (timerType === Twns.Types.BootTimerType.Incremental) {
+            } else if (timerType === Types.BootTimerType.Incremental) {
                 openData.dataArrayForListSettings.push(
                     {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
@@ -300,7 +300,7 @@ namespace Twns.CoopCustomRoom {
                         warEventFullData,
                         callbackOnModify: (newValue: number | string | null) => {
                             if (typeof newValue !== "number") {
-                                throw Twns.Helpers.newError(`Invalid newValue: ${newValue}`);
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
                             CoopCustomRoom.CcrCreateModel.setTimerIncrementalInitialTime(newValue);
                             this._updateCommonWarBasicSettingsPage();
@@ -314,7 +314,7 @@ namespace Twns.CoopCustomRoom {
                         warEventFullData,
                         callbackOnModify: (newValue: number | string | null) => {
                             if (typeof newValue !== "number") {
-                                throw Twns.Helpers.newError(`Invalid newValue: ${newValue}`);
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
                             CoopCustomRoom.CcrCreateModel.setTimerIncrementalIncrementalValue(newValue);
                             this._updateCommonWarBasicSettingsPage();
@@ -322,7 +322,7 @@ namespace Twns.CoopCustomRoom {
                     },
                 );
             } else {
-                throw Twns.Helpers.newError(`CcrCreateSettingsPanel._createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+                throw Helpers.newError(`CcrCreateSettingsPanel._createDataForCommonWarBasicSettingsPage() invalid timerType.`);
             }
 
             return openData;
@@ -334,6 +334,7 @@ namespace Twns.CoopCustomRoom {
                 ? null
                 : {
                     gameConfig  : CoopCustomRoom.CcrCreateModel.getGameConfig(),
+                    hasFog      : CoopCustomRoom.CcrCreateModel.getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault ?? null,
                     mapInfo     : { mapId },
                 };
         }
@@ -342,52 +343,52 @@ namespace Twns.CoopCustomRoom {
         // Opening/closing animations.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnConfirm,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnConfirm,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 

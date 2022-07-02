@@ -9683,6 +9683,17 @@ export const enum ServerErrorCode {
     ExeMeSubmitMap_ExeWithSocket_0008,
     ExeMeSubmitMap_ExeWithSocket_0009,
 
+    ExeMeDeleteSlot_ExeWithSocket_0000,
+    ExeMeDeleteSlot_ExeWithSocket_0001,
+    ExeMeDeleteSlot_ExeWithSocket_0002,
+    ExeMeDeleteSlot_ExeWithSocket_0003,
+    ExeMeDeleteSlot_ExeWithSocket_0004,
+    ExeMeDeleteSlot_ExeWithSocket_0005,
+    ExeMeDeleteSlot_ExeWithSocket_0006,
+    ExeMeDeleteSlot_ExeWithSocket_0007,
+    ExeMeDeleteSlot_ExeWithSocket_0008,
+    ExeMeDeleteSlot_ExeWithSocket_0009,
+
     ExeMcrCreateRoom_DoExecute_0000,
     ExeMcrCreateRoom_DoExecute_0001,
     ExeMcrCreateRoom_DoExecute_0002,

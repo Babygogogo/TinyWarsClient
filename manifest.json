@@ -415,6 +415,7 @@
 		"bin-debug/modules/warEvent/view/WeConditionTypeListPanel.js",
 		"bin-debug/modules/warEvent/view/WeDialogueBackgroundPanel.js",
 		"bin-debug/modules/warEvent/view/WeEventListPanel.js",
+		"bin-debug/modules/warEvent/view/WeEventNameListPanel.js",
 		"bin-debug/modules/warEvent/view/WeEventRenamePanel.js",
 		"bin-debug/modules/warEvent/view/WeNodeReplacePanel.js",
 		"bin-debug/modules/warMap/model/WarMapModel.js",

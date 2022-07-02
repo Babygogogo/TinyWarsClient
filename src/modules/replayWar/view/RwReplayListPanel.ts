@@ -246,6 +246,7 @@ namespace Twns.ReplayWar {
             if (mapId != null) {
                 return {
                     gameConfig,
+                    hasFog      : replayInfo.hasFog ?? null,
                     mapInfo     : { mapId },
                 };
             } else {
@@ -254,6 +255,7 @@ namespace Twns.ReplayWar {
                     ? null
                     : {
                         gameConfig,
+                        hasFog      : replayInfo.hasFog ?? null,
                         warInfo     : {
                             warData : replayData,
                             players : replayData.playerManager?.players

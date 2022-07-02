@@ -1370,6 +1370,22 @@ namespace Twns.Lang {
             `请小心修改标签设定，因为所有带有该标签的地图都会受到影响。`,
             `Please modify the settings carefully. All the tagged maps will be affected.`,
         ],
+        [LangTextType.A0314]: [
+            `您确定要删除此槽位的所有数据吗？`,
+            `Are you sure you want to delete the data in this map slot?`,
+        ],
+        [LangTextType.A0315]: [
+            `此地图正在审核中，暂时无法删除`,
+            `The map is being reviewed, therefore you can't delete it right now.`,
+        ],
+        [LangTextType.A0316]: [
+            `由于地图设计存在问题，所以此地图暂时不能提审`,
+            `This map can't be submitted for review because of the listed problem.`,
+        ],
+        [LangTextType.A0317]: [
+            `此地图尚未保存。您确定要跳过保存吗？`,
+            `This map has not been saved. Are you sure you want to skip the save?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -5041,6 +5057,10 @@ namespace Twns.Lang {
         [LangTextType.B0920]: [
             `房间满员提醒`,
             `Room Notifications`
+        ],
+        [LangTextType.B0921]: [
+            `保存并提审`,
+            `Save & Submit for Review`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

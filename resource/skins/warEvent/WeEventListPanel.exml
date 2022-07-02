@@ -37,6 +37,8 @@
                                        skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0" y="0" locked="true" />
                 <TwnsUiButton:UiButton id="_btnClear" label="Delete Redundancy"
                                        skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0" y="0" />
+                <TwnsUiButton:UiButton id="_btnEventList" label="Event List"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" x="10" y="10" />
                 <e:layout>
                     <e:HorizontalLayout gap="0" />
                 </e:layout>

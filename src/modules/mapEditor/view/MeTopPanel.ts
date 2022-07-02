@@ -95,6 +95,7 @@ namespace Twns.MapEditor {
                 { type: NotifyType.BwTileLocationFlagSet,           callback: this._onNotifyBwTileLocationFlatSet },
                 { type: NotifyType.MsgMeSubmitMap,                  callback: this._onMsgMeSubmitMap },
                 { type: NotifyType.MsgMmReviewMap,                  callback: this._onMsgMmReviewMap },
+                { type: NotifyType.MsgMeDeleteSlot,                 callback: this._onNotifyMsgMeDeleteSlot },
             ]);
             this._setUiListenerArray([
                 { ui: this._groupModePreview,               callback: this._onTouchedGroupModePreview },
@@ -237,6 +238,10 @@ namespace Twns.MapEditor {
             }
             FlowManager.gotoLobby();
         }
+        private _onNotifyMsgMeDeleteSlot(): void {
+            FloatText.show(Lang.getText(LangTextType.A0081));
+            FlowManager.gotoMyWarListPanel(Types.WarType.Me);
+        }
 
         private _onTouchedGroupModePreview(): void {
             this._getDrawer().setModePreview();
@@ -271,7 +276,9 @@ namespace Twns.MapEditor {
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedBtnSaveMap(): void {
-            PanelHelpers.open(PanelHelpers.PanelDict.MeConfirmSaveMapPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeConfirmSaveMapPanel, {
+                war     : this._getWar(),
+            });
         }
         private _onTouchedBtnLoadMap(): void {
             const war = this._getWar();

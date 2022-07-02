@@ -86,7 +86,7 @@ namespace Twns.MapEditor {
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: NotifyType.MeMapNameChanged,                    callback: this._onNotifyMeMapNameChanged },
                 { type: NotifyType.MeMapDescChanged,                    callback: this._onNotifyMeMapDescChanged },
-                { type: NotifyType.MsgSpmCreateSfw,                     callback: this._onMsgSpmCreateSfw },
+                { type: NotifyType.MsgSpmCreateSfw,                     callback: this._onNotifyMsgSpmCreateSfw },
                 { type: NotifyType.MsgUserSetMapEditorAutoSaveTime,     callback: this._onNotifyMsgUserSetMapEditorAutoSaveTime },
             ]);
             this._setUiListenerArray([
@@ -118,7 +118,7 @@ namespace Twns.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onMsgSpmCreateSfw(e: egret.Event): void {
+        private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgSpmCreateSfw.IS;
             PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0107),
@@ -403,6 +403,7 @@ namespace Twns.MapEditor {
                 this._createCommandImport(),
                 this._createCommandImportFromClipboard(),
                 this._createCommandExportToClipboard(),
+                this._createCommandDeleteSlot(),
             ]);
         }
 
@@ -527,7 +528,7 @@ namespace Twns.MapEditor {
                         PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content         : Lang.getText(LangTextType.A0142),
                             callback        : () => {
-                                PanelHelpers.open(PanelHelpers.PanelDict.MeConfirmSaveMapPanel, void 0);
+                                PanelHelpers.open(PanelHelpers.PanelDict.MeConfirmSaveMapPanel, { war });
                             },
                             callbackOnCancel: () => {
                                 cb();
@@ -562,7 +563,7 @@ namespace Twns.MapEditor {
                         PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                             content         : Lang.getText(LangTextType.A0142),
                             callback        : () => {
-                                PanelHelpers.open(PanelHelpers.PanelDict.MeConfirmSaveMapPanel, void 0);
+                                PanelHelpers.open(PanelHelpers.PanelDict.MeConfirmSaveMapPanel, { war });
                             },
                             callbackOnCancel: () => {
                                 cb();
@@ -668,6 +669,25 @@ namespace Twns.MapEditor {
                     navigator.clipboard.writeText(JSON.stringify(this._getWar().serializeForMap()));
 
                     FloatText.show(Lang.getText(LangTextType.A0235));
+                },
+            };
+        }
+        private _createCommandDeleteSlot(): DataForCommandRenderer | null {
+            return {
+                name        : Lang.getText(LangTextType.B0220),
+                callback    : () => {
+                    const slotIndex = Helpers.getExisted(MeModel.getWar()).getMapSlotIndex();
+                    if (MeModel.getReviewingMapSlotIndex() === slotIndex) {
+                        FloatText.show(Lang.getText(LangTextType.A0315));
+                        return;
+                    }
+
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
+                        content : Lang.getText(LangTextType.A0314),
+                        callback: () => {
+                            MeProxy.reqMeDeleteSlot(slotIndex);
+                        },
+                    });
                 },
             };
         }

@@ -441,6 +441,7 @@ namespace Twns.MultiRankRoom {
                 ? null
                 : {
                     gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
+                    hasFog      : roomInfo?.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ?? null,
                     mapInfo     : { mapId },
                 };
         }

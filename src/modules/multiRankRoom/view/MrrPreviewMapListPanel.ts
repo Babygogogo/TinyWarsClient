@@ -11,7 +11,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import Twns.Notify                       from "../../tools/notify/NotifyType";
+// import Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
@@ -27,11 +27,10 @@
 namespace Twns.MultiRankRoom {
     import OpenDataForCommonWarAdvancedSettingsPage     = Common.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage        = Common.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarMapInfoPage              = Twns.Common.OpenDataForCommonMapInfoPage;
-    import LangTextType                                 = Twns.Lang.LangTextType;
-    import NotifyType                                   = Twns.Notify.NotifyType;
-    import WarBasicSettingsType                         = Twns.Types.WarBasicSettingsType;
-    import ClientErrorCode                              = Twns.ClientErrorCode;
+    import OpenDataForCommonWarMapInfoPage              = Common.OpenDataForCommonMapInfoPage;
+    import LangTextType                                 = Lang.LangTextType;
+    import NotifyType                                   = Notify.NotifyType;
+    import WarBasicSettingsType                         = Types.WarBasicSettingsType;
 
     export type OpenDataForMrrPreviewMapListPanel = {
         hasFog: boolean;
@@ -79,7 +78,7 @@ namespace Twns.MultiRankRoom {
 
         public async setAndReviseSelectedMapId(mapId: number, needScroll: boolean): Promise<void> {
             const listMap   = this._listMap;
-            const index     = Twns.Helpers.getExisted(listMap.getFirstIndex(v => v.mapId === mapId), ClientErrorCode.MrrPreviewMapListPanel_SetSelectedMapId_00);
+            const index     = Helpers.getExisted(listMap.getFirstIndex(v => v.mapId === mapId), ClientErrorCode.MrrPreviewMapListPanel_SetSelectedMapId_00);
             listMap.setSelectedIndex(index);
 
             if (needScroll) {
@@ -97,15 +96,15 @@ namespace Twns.MultiRankRoom {
 
         private _onTouchedBtnBack(): void {
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MrrMainMenuPanel, void 0);
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyTopPanel, void 0);
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MrrMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
         }
 
         private _onTouchedBtnSwitch(): void {
             const hasFog = this._getOpenData().hasFog;
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MrrPreviewMapListPanel, { hasFog: !hasFog });
+            PanelHelpers.open(PanelHelpers.PanelDict.MrrPreviewMapListPanel, { hasFog: !hasFog });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -115,7 +114,7 @@ namespace Twns.MultiRankRoom {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : Twns.Common.CommonWarMapInfoPage,
+                    pageClass   : Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForCommonMapInfoPage(),
                 },
                 {
@@ -212,8 +211,8 @@ namespace Twns.MultiRankRoom {
                     return (v.ruleAvailability?.canMrw) && (hasFog === v.ruleForGlobalParams?.hasFogByDefault);
                 })) {
                     dataArray.push({
-                        mapId   : Twns.Helpers.getExisted(mapRawData.mapId),
-                        mapName : Lang.getLanguageText({ textArray: mapRawData.mapNameArray }) || Twns.CommonConstants.ErrorTextForUndefined,
+                        mapId   : Helpers.getExisted(mapRawData.mapId),
+                        mapName : Lang.getLanguageText({ textArray: mapRawData.mapNameArray }) || CommonConstants.ErrorTextForUndefined,
                         panel   : this,
                     });
                 }
@@ -228,6 +227,7 @@ namespace Twns.MultiRankRoom {
                 ? null
                 : {
                     gameConfig  : await Config.ConfigManager.getLatestGameConfig(),
+                    hasFog      : this._getOpenData().hasFog,
                     mapInfo     : { mapId },
                 };
         }
@@ -252,8 +252,8 @@ namespace Twns.MultiRankRoom {
             }
 
             const instanceWarRule   = WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRuleArray[0], mapRawData.warEventFullData);
-            const bootTimerParams   = Twns.CommonConstants.WarBootTimerDefaultParams;
-            const timerType         = bootTimerParams[0] as Twns.Types.BootTimerType;
+            const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
+            const timerType         = bootTimerParams[0] as Types.BootTimerType;
             const gameConfig        = await Config.ConfigManager.getLatestGameConfig();
             const warEventFullData  = mapRawData.warEventFullData ?? null;
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
@@ -300,7 +300,7 @@ namespace Twns.MultiRankRoom {
                     },
                     {
                         settingsType    : WarBasicSettingsType.TurnsLimit,
-                        currentValue    : Twns.CommonConstants.WarMaxTurnsLimit,
+                        currentValue    : CommonConstants.WarMaxTurnsLimit,
                         instanceWarRule,
                         gameConfig,
                         warEventFullData,
@@ -316,7 +316,7 @@ namespace Twns.MultiRankRoom {
                     },
                 ],
             };
-            if (timerType === Twns.Types.BootTimerType.Regular) {
+            if (timerType === Types.BootTimerType.Regular) {
                 openData.dataArrayForListSettings.push({
                     settingsType    : WarBasicSettingsType.TimerRegularParam,
                     currentValue    : bootTimerParams[1],
@@ -325,7 +325,7 @@ namespace Twns.MultiRankRoom {
                     warEventFullData,
                     callbackOnModify: null,
                 });
-            } else if (timerType === Twns.Types.BootTimerType.Incremental) {
+            } else if (timerType === Types.BootTimerType.Incremental) {
                 openData.dataArrayForListSettings.push(
                     {
                         settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
@@ -345,7 +345,7 @@ namespace Twns.MultiRankRoom {
                     },
                 );
             } else {
-                throw Twns.Helpers.newError(`Invalid timerType: ${timerType}`, ClientErrorCode.MrrPreviewMapListPanel_CreateDataForCommonWarBasicSettingsPage_00);
+                throw Helpers.newError(`Invalid timerType: ${timerType}`, ClientErrorCode.MrrPreviewMapListPanel_CreateDataForCommonWarBasicSettingsPage_00);
             }
 
             return openData;
@@ -357,7 +357,7 @@ namespace Twns.MultiRankRoom {
                 return null;
             }
 
-            const mapRawData            = Twns.Helpers.getExisted(await WarMap.WarMapModel.getRawData(mapId));
+            const mapRawData            = Helpers.getExisted(await WarMap.WarMapModel.getRawData(mapId));
             const hasFog                = this._getOpenData().hasFog;
             const templateWarRuleArray  = mapRawData.templateWarRuleArray?.filter(v => {
                 return (v.ruleAvailability?.canMrw) && (hasFog === v.ruleForGlobalParams?.hasFogByDefault);
@@ -369,7 +369,7 @@ namespace Twns.MultiRankRoom {
             return {
                 gameConfig      : await Config.ConfigManager.getLatestGameConfig(),
                 instanceWarRule : WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRuleArray[0], mapRawData.warEventFullData),
-                warType         : hasFog ? Twns.Types.WarType.MrwFog : Twns.Types.WarType.MrwStd,
+                warType         : hasFog ? Types.WarType.MrwFog : Types.WarType.MrwStd,
             };
         }
 
@@ -378,62 +378,62 @@ namespace Twns.MultiRankRoom {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupMapList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnSwitch,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupMapList,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnSwitch,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -461,7 +461,7 @@ namespace Twns.MultiRankRoom {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
             ]);
-            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected async _onDataChanged(): Promise<void> {

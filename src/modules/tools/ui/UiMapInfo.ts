@@ -27,6 +27,7 @@ namespace TwnsUiMapInfo {
     import LangTextType     = Twns.Lang.LangTextType;
 
     type DataForUiMapInfo = {
+        hasFog      : boolean | null;
         mapInfo?    : {
             mapId           : number;
         };
@@ -36,6 +37,10 @@ namespace TwnsUiMapInfo {
     export class UiMapInfo extends TwnsUiComponent.UiComponent {
         private readonly _groupTile!                : eui.Group;
         private readonly _listTile!                 : TwnsUiScrollList.UiScrollList<DataForTileRenderer>;
+
+        private readonly _groupFog!                 : eui.Group;
+        private readonly _labelFogTitle!            : TwnsUiLabel.UiLabel;
+        private readonly _labelFog!                 : TwnsUiLabel.UiLabel;
 
         private readonly _groupMapInfo!             : eui.Group;
         private readonly _labelMapName!             : TwnsUiLabel.UiLabel;
@@ -133,7 +138,9 @@ namespace TwnsUiMapInfo {
             this._labelRatingTitle.text         = Twns.Lang.getText(LangTextType.B0364);
             this._labelMapIdTitle.text          = Twns.Lang.getText(LangTextType.B0821);
             this._labelMyRatingTitle.text       = Twns.Lang.getText(LangTextType.B0363);
+            this._labelFogTitle.text            = `${Twns.Lang.getText(LangTextType.B0020)}:`;
             this._updateLabelDesigner();
+            this._updateLabelFog();
         }
 
         private async _updateComponentsForMapInfo(): Promise<void> {
@@ -150,6 +157,7 @@ namespace TwnsUiMapInfo {
             const labelMapSize      = this._labelMapSize;
             const imgSetMyRating    = this._imgSetMyRating;
             const imgWarStatistics  = this._imgWarStatistics;
+            const groupFog          = this._groupFog;
 
             if (data == null) {
                 labelMapName.text           = `--`;
@@ -162,8 +170,19 @@ namespace TwnsUiMapInfo {
                 labelMapSize.text           = `--`;
                 imgSetMyRating.visible      = false;
                 imgWarStatistics.visible    = false;
+                groupFog.visible            = false;
 
                 return;
+            }
+
+            {
+                const hasFog = data.hasFog;
+                if (hasFog == null) {
+                    groupFog.visible = false;
+                } else {
+                    groupFog.visible = true;
+                    this._updateLabelFog();
+                }
             }
 
             const mapInfo = data.mapInfo;
@@ -227,6 +246,13 @@ namespace TwnsUiMapInfo {
                 labelDesigner.text  = `${prefix}--`;
                 return;
             }
+        }
+
+        private _updateLabelFog(): void {
+            const hasFog    = this._data?.hasFog;
+            const label     = this._labelFog;
+            label.text      = Twns.Lang.getText(hasFog ? LangTextType.B0012 : LangTextType.B0013);
+            label.textColor = hasFog ? 0xFFFF00 : 0xFFFFFF;
         }
     }
 

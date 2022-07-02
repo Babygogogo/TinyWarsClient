@@ -7,7 +7,7 @@
 // import Types                            from "../../tools/helpers/Types";
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-// import Twns.Notify                   from "../../tools/notify/NotifyType";
+// import Notify                   from "../../tools/notify/NotifyType";
 // import ProtoTypes                       from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiLabel                      from "../../tools/ui/UiLabel";
@@ -21,10 +21,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import MeMfwAdvancedSettingsPage    = Twns.MapEditor.MeMfwAdvancedSettingsPage;
+    import MeMfwAdvancedSettingsPage    = MapEditor.MeMfwAdvancedSettingsPage;
     import MeMfwBasicSettingsPage       = MapEditor.MeMfwBasicSettingsPage;
-    import NotifyType                   = Twns.Notify.NotifyType;
-    import LangTextType                 = Twns.Lang.LangTextType;
+    import NotifyType                   = Notify.NotifyType;
+    import LangTextType                 = Lang.LangTextType;
 
     export type OpenDataForMeMfwSettingsPanel = void;
     export class MeMfwSettingsPanel extends TwnsUiPanel.UiPanel<OpenDataForMeMfwSettingsPanel> {
@@ -66,20 +66,19 @@ namespace Twns.MapEditor {
 
         private _onTouchedBtnBack(): void {
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MeWarMenuPanel, void 0);
         }
 
         private async _onTouchedBtnConfirm(): Promise<void> {
             MapEditor.MeMfwModel.reviseInstanceWarRuleForAi();
             const warData   = MapEditor.MeMfwModel.getWarData();
-            const errorCode = new TestWar.TwWar().getErrorCodeForInitForMfw(warData, await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(warData.settingsForCommon?.configVersion)));
+            const errorCode = new TestWar.TwWar().getErrorCodeForInitForMfw(warData, await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
             if (errorCode) {
-                Twns.FloatText.show(Lang.getErrorText(errorCode));
+                FloatText.show(Lang.getErrorText(errorCode));
             } else {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0201),
                     callback: () => {
-                        Twns.FlowManager.gotoMfrCreateSettingsPanel(warData);
+                        FlowManager.gotoMfrCreateSettingsPanel(warData);
                     },
                 });
             }
@@ -87,13 +86,13 @@ namespace Twns.MapEditor {
 
         private _onMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgSpmCreateSfw.IS;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
-                    Twns.FlowManager.gotoSinglePlayerWar({
-                        slotIndex       : Twns.Helpers.getExisted(data.slotIndex),
-                        slotExtraData   : Twns.Helpers.getExisted(data.extraData),
-                        warData         : Twns.Helpers.getExisted(data.warData),
+                    FlowManager.gotoSinglePlayerWar({
+                        slotIndex       : Helpers.getExisted(data.slotIndex),
+                        slotExtraData   : Helpers.getExisted(data.extraData),
+                        warData         : Helpers.getExisted(data.warData),
                     });
                 },
             });

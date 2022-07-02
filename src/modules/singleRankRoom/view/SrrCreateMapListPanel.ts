@@ -284,6 +284,7 @@ namespace Twns.SingleRankRoom {
                 ? null
                 : {
                     gameConfig  : await Config.ConfigManager.getLatestGameConfig(),
+                    hasFog      : null,
                     mapInfo     : { mapId },
                 };
         }

@@ -229,7 +229,8 @@ namespace Twns.SingleCustomRoom {
                 await Config.ConfigManager.getLatestGameConfig()
             );
             this._uiMapInfo.setData({
-                mapInfo: {
+                hasFog  : null,
+                mapInfo : {
                     mapId,
                 },
             });

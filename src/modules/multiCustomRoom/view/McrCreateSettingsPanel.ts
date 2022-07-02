@@ -408,6 +408,7 @@ namespace Twns.MultiCustomRoom {
                 ? null
                 : {
                     gameConfig  : MultiCustomRoom.McrCreateModel.getGameConfig(),
+                    hasFog      : McrCreateModel.getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault ?? null,
                     mapInfo     : { mapId },
                 };
         }

@@ -5,7 +5,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -16,8 +16,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
-    import LangTextType         = Twns.Lang.LangTextType;
-    import NotifyType           = Twns.Notify.NotifyType;
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
     import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
 
     export type OpenDataForWeConditionReplacePanel = {
@@ -80,7 +80,7 @@ namespace Twns.WarEvent {
                     gameConfig,
                     parentNodeId,
                     srcConditionId,
-                    candidateConditionId : Twns.Helpers.getExisted(condition.WecCommonData?.conditionId),
+                    candidateConditionId : Helpers.getExisted(condition.WecCommonData?.conditionId),
                     fullData,
                 });
             }
@@ -130,8 +130,8 @@ namespace Twns.WarEvent {
                 conditionIdForDelete    : data.srcConditionId,
                 conditionIdForClone     : data.candidateConditionId,
             }) != null) {
-                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionReplacePanel);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                PanelHelpers.close(PanelHelpers.PanelDict.WeConditionReplacePanel);
             }
         }
         private _onTouchedBtnSelect(): void {        // DONE
@@ -142,8 +142,8 @@ namespace Twns.WarEvent {
                 oldConditionId  : data.srcConditionId,
                 newConditionId  : data.candidateConditionId,
             })) {
-                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeConditionReplacePanel);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                PanelHelpers.close(PanelHelpers.PanelDict.WeConditionReplacePanel);
             }
         }
         private _onNotifyLanguageChanged(): void {        // DONE
@@ -171,7 +171,7 @@ namespace Twns.WarEvent {
             if (condition == null) {
                 label.text = Lang.getText(LangTextType.A0160);
             } else {
-                label.text = WarHelpers.WarEventHelpers.getDescForCondition(condition, data.gameConfig) || Twns.CommonConstants.ErrorTextForUndefined;
+                label.text = WarHelpers.WarEventHelpers.getDescForCondition(condition, data.gameConfig) || CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateBtnSelect(): void {

@@ -8,24 +8,40 @@
         <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <TwnsUiLabel:UiLabel id="_labelTitle" text="标题" textColor="0xffffff" y="12" horizontalCenter="0" size="24" />
-			<TwnsUiLabel:UiLabel id="_labelContent" text="内容" textColor="0xFFFFFF" size="18" left="20" right="20" top="45" wordWrap="true" textAlign="center"/>
+        <TwnsUiButton:UiButton id="_btnDelete" label="Delete" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                               width="100" left="0" top="0" />
+        <TwnsUiButton:UiButton id="_btnClose" width="60" skinName="Skins.Component.Button.ButtonClose002" right="0"
+                               top="0" />
+        <TwnsUiLabel:UiLabel id="_labelContent" text="内容" textColor="0xFFFFFF" size="18" left="20" right="20" top="45"
+                             wordWrap="true" textAlign="center" />
         <e:Group y="80" left="20" right="20">
             <TwnsUiLabel:UiLabel id="_labelReviewDescTitle" text="此地图存在问题，暂时无法提审" textColor="0xFFFFFF" size="14" y="0"
                                  left="0" right="0" />
             <TwnsUiLabel:UiLabel id="_labelReviewDesc" text="此地图存在问题，暂时无法提审" textColor="0xFFFFFF" size="14" y="20"
                                  left="0" right="0" />
         </e:Group>
-        <e:Group id="_groupNeedReview" horizontalCenter="0" bottom="60">
-            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
-                                 source="common0005" />
-            <TwnsUiImage:UiImage id="_imgNeedReview" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                 verticalCenter="0" source="common0006" />
-            <TwnsUiLabel:UiLabel id="_labelNeedReview" text="提审" textColor="0xFFFFFF" size="20" x="32"
-                                 verticalCenter="0" />
+        <e:Group y="220" horizontalCenter="0">
+            <e:Group y="0" x="0">
+                <TwnsUiButton:UiButton id="_btnSave" label="确定" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                       width="200" x="0" y="0" />
+                <TwnsUiButton:UiButton id="_btnSaveAndSubmit" label="确定"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="200" x="0" y="0" />
+                <e:layout>
+                    <e:HorizontalLayout gap="60" />
+                </e:layout>
+            </e:Group>
+            <e:Group y="10" x="0">
+                <TwnsUiButton:UiButton id="_btnSimulation" label="确定"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="200" x="0" y="0" />
+                <TwnsUiButton:UiButton id="_btnFreeMode" label="确定"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="200" x="0" y="0" />
+                <e:layout>
+                    <e:HorizontalLayout gap="60" />
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout gap="10" />
+            </e:layout>
         </e:Group>
-        <TwnsUiButton:UiButton id="_btnCancel" label="取消" horizontalCenter="-80" bottom="15"
-                               skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"></TwnsUiButton:UiButton>
-        <TwnsUiButton:UiButton id="_btnConfirm" label="确定" horizontalCenter="80" bottom="15"
-                               skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"></TwnsUiButton:UiButton>
     </e:Group>
 </e:Skin>

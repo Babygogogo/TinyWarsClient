@@ -18,12 +18,11 @@ namespace Twns.WatchWar.WwModel {
     import IMpwWatchOutgoingInfo                    = CommonProto.MultiPlayerWar.IMpwWatchOutgoingInfo;
     import MsgMpwWatchGetIncomingInfoIs             = CommonProto.NetMessage.MsgMpwWatchGetIncomingInfo.IS;
     import MsgMpwWatchGetOutgoingInfoIs             = CommonProto.NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
-    import OpenDataForWarCommonMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForWarCommonMapInfoPage          = Common.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
-    import ClientErrorCode                          = Twns.ClientErrorCode;
-    import WarBasicSettingsType                     = Twns.Types.WarBasicSettingsType;
+    import OpenDataForCommonWarPlayerInfoPage       = Common.OpenDataForCommonWarPlayerInfoPage;
+    import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     let _requestableWarIdArray  : number[] | null = null;
     let _ongoingWarIdArray      : number[] | null = null;
@@ -66,8 +65,8 @@ namespace Twns.WatchWar.WwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for incoming info.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _watchIncomingInfoAccessor = Twns.Helpers.createCachedDataAccessor<number, IMpwWatchIncomingInfo>({
-        reqData : (warId: number) => Twns.WatchWar.WwProxy.reqMpwWatchGetIncomingInfo(warId),
+    const _watchIncomingInfoAccessor = Helpers.createCachedDataAccessor<number, IMpwWatchIncomingInfo>({
+        reqData : (warId: number) => WatchWar.WwProxy.reqMpwWatchGetIncomingInfo(warId),
     });
 
     export function getWatchIncomingInfo(warId: number): Promise<IMpwWatchIncomingInfo | null> {
@@ -75,14 +74,14 @@ namespace Twns.WatchWar.WwModel {
     }
 
     export async function updateOnMsgMpwWatchGetIncomingInfo(data: MsgMpwWatchGetIncomingInfoIs): Promise<void> {
-        _watchIncomingInfoAccessor.setData(Twns.Helpers.getExisted(data.warId), data.incomingInfo ?? null);
+        _watchIncomingInfoAccessor.setData(Helpers.getExisted(data.warId), data.incomingInfo ?? null);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for outgoing info.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _watchOutgoingInfoAccessor = Twns.Helpers.createCachedDataAccessor<number, IMpwWatchOutgoingInfo>({
-        reqData : (warId: number) => Twns.WatchWar.WwProxy.reqMpwWatchGetOutgoingInfo(warId),
+    const _watchOutgoingInfoAccessor = Helpers.createCachedDataAccessor<number, IMpwWatchOutgoingInfo>({
+        reqData : (warId: number) => WatchWar.WwProxy.reqMpwWatchGetOutgoingInfo(warId),
     });
 
     export function getWatchOutgoingInfo(warId: number): Promise<IMpwWatchOutgoingInfo | null> {
@@ -90,7 +89,7 @@ namespace Twns.WatchWar.WwModel {
     }
 
     export async function updateOnMsgMpwWatchGetOutgoingInfo(data: MsgMpwWatchGetOutgoingInfoIs): Promise<void> {
-        _watchOutgoingInfoAccessor.setData(Twns.Helpers.getExisted(data.warId), data.outgoingInfo ?? null);
+        _watchOutgoingInfoAccessor.setData(Helpers.getExisted(data.warId), data.outgoingInfo ?? null);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,17 +104,19 @@ namespace Twns.WatchWar.WwModel {
         }
 
         const mapId         = warSettings.settingsForCcw?.mapId ?? warSettings.settingsForMcw?.mapId ?? warSettings.settingsForMrw?.mapId;
-        const gameConfig    = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(warSettings.settingsForCommon?.configVersion));
+        const gameConfig    = await Config.ConfigManager.getGameConfig(Helpers.getExisted(warSettings.settingsForCommon?.configVersion));
         if (mapId != null) {
             return {
                 gameConfig,
+                hasFog  : warSettings.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ?? null,
                 mapInfo : { mapId }
             };
         } else {
             return {
                 gameConfig,
+                hasFog  : warSettings.settingsForMfw?.initialWarData?.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ?? null,
                 warInfo : {
-                    warData : Twns.Helpers.getExisted(warSettings.settingsForMfw?.initialWarData, ClientErrorCode.WwModel_CreateDataForCommonWarMapInfoPage_01),
+                    warData : Helpers.getExisted(warSettings.settingsForMfw?.initialWarData, ClientErrorCode.WwModel_CreateDataForCommonWarMapInfoPage_01),
                     players : null,
                 },
             };
@@ -137,13 +138,13 @@ namespace Twns.WatchWar.WwModel {
             return null;
         }
 
-        const settingsForCommon     = Twns.Helpers.getExisted(warSettings.settingsForCommon, ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_01);
-        const instanceWarRule       = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule, ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_02);
-        const playerDataList        = Twns.Helpers.getExisted(warProgressInfo.playerInfoList, ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_03);
+        const settingsForCommon     = Helpers.getExisted(warSettings.settingsForCommon, ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_01);
+        const instanceWarRule       = Helpers.getExisted(settingsForCommon.instanceWarRule, ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_02);
+        const playerDataList        = Helpers.getExisted(warProgressInfo.playerInfoList, ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_03);
         const playersCountUnneutral = WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(instanceWarRule);
-        const playerInfoArray       : Twns.Common.PlayerInfo[] = [];
-        for (let playerIndex = Twns.CommonConstants.PlayerIndex.First; playerIndex <= playersCountUnneutral; ++playerIndex) {
-            const playerData    = Twns.Helpers.getExisted(playerDataList.find(v => v.playerIndex === playerIndex), ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_04);
+        const playerInfoArray       : Common.PlayerInfo[] = [];
+        for (let playerIndex = CommonConstants.PlayerIndex.First; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            const playerData    = Helpers.getExisted(playerDataList.find(v => v.playerIndex === playerIndex), ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_04);
             const userId        = playerData.userId;
             playerInfoArray.push({
                 playerIndex,
@@ -160,7 +161,7 @@ namespace Twns.WatchWar.WwModel {
         }
 
         return {
-            gameConfig              : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)),
+            gameConfig              : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
             playersCountUnneutral,
             roomOwnerPlayerIndex    : null,
             callbackOnExitRoom      : null,
@@ -180,12 +181,12 @@ namespace Twns.WatchWar.WwModel {
             return null;
         }
 
-        const settingsForCommon = Twns.Helpers.getExisted(warSettings.settingsForCommon, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_01);
-        const instanceWarRule   = Twns.Helpers.getExisted(settingsForCommon.instanceWarRule, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_02);
-        const gameConfig        = Twns.Helpers.getExisted(await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)));
+        const settingsForCommon = Helpers.getExisted(warSettings.settingsForCommon, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_01);
+        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_02);
+        const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
         const { settingsForMcw, settingsForCcw, settingsForMfw, settingsForMrw } = warSettings;
-        const bootTimerParams   = settingsForMcw?.bootTimerParams ?? settingsForMfw?.bootTimerParams ?? settingsForCcw?.bootTimerParams ?? Twns.CommonConstants.WarBootTimerDefaultParams;
-        const timerType         = bootTimerParams[0] as Twns.Types.BootTimerType;
+        const bootTimerParams   = settingsForMcw?.bootTimerParams ?? settingsForMfw?.bootTimerParams ?? settingsForCcw?.bootTimerParams ?? CommonConstants.WarBootTimerDefaultParams;
+        const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const mapId             = settingsForMcw?.mapId ?? settingsForMrw?.mapId ?? settingsForCcw?.mapId ?? null;
         const warEventFullData  = instanceWarRule.warEventFullData ?? null;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
@@ -248,7 +249,7 @@ namespace Twns.WatchWar.WwModel {
                 },
                 {
                     settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? Twns.CommonConstants.WarMaxTurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,
@@ -264,7 +265,7 @@ namespace Twns.WatchWar.WwModel {
                 },
             ],
         };
-        if (timerType === Twns.Types.BootTimerType.Regular) {
+        if (timerType === Types.BootTimerType.Regular) {
             openData.dataArrayForListSettings.push({
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
@@ -273,7 +274,7 @@ namespace Twns.WatchWar.WwModel {
                 warEventFullData,
                 callbackOnModify: null,
             });
-        } else if (timerType === Twns.Types.BootTimerType.Incremental) {
+        } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
@@ -293,7 +294,7 @@ namespace Twns.WatchWar.WwModel {
                 },
             );
         } else {
-            throw Twns.Helpers.newError(`Invalid timerType.`, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_04);
+            throw Helpers.newError(`Invalid timerType.`, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_04);
         }
 
         return openData;
@@ -305,10 +306,10 @@ namespace Twns.WatchWar.WwModel {
             return null;
         }
 
-        const settingsForCommon = Twns.Helpers.getExisted(warSettings.settingsForCommon, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_01);
+        const settingsForCommon = Helpers.getExisted(warSettings.settingsForCommon, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_01);
         return {
-            gameConfig      : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_02)),
-            instanceWarRule : Twns.Helpers.getExisted(settingsForCommon.instanceWarRule, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_03),
+            gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_02)),
+            instanceWarRule : Helpers.getExisted(settingsForCommon.instanceWarRule, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_03),
             warType         : WarHelpers.WarCommonHelpers.getWarTypeByMpwWarSettings(warSettings),
         };
     }

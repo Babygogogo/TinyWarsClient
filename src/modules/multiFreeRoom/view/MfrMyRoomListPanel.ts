@@ -233,6 +233,7 @@ namespace Twns.MultiFreeRoom {
                 ? null
                 : {
                     gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)),
+                    hasFog      : warData.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ?? null,
                     warInfo     : { warData, players: null },
                 };
         }

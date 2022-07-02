@@ -241,6 +241,7 @@ namespace Twns.PanelHelpers {
         WeConditionTypeListPanel            : PanelConfig<WarEvent.OpenDataForWeConditionTypeListPanel>;
         WeDialogueBackgroundPanel           : PanelConfig<WarEvent.OpenDataForWeDialogueBackgroundPanel>;
         WeEventListPanel                    : PanelConfig<WarEvent.OpenDataForWeEventListPanel>;
+        WeEventNameListPanel                : PanelConfig<WarEvent.OpenDataForWeEventNameListPanel>;
         WeEventRenamePanel                  : PanelConfig<WarEvent.OpenDataForWeEventRenamePanel>;
         WeNodeReplacePanel                  : PanelConfig<WarEvent.OpenDataForWeNodeReplacePanel>;
 
@@ -1586,6 +1587,12 @@ namespace Twns.PanelHelpers {
             WeEventListPanel: {
                 cls         : WarEvent?.WeEventListPanel,
                 skinName    : `resource/skins/warEvent/WeEventListPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            WeEventNameListPanel: {
+                cls         : WarEvent?.WeEventNameListPanel,
+                skinName    : `resource/skins/warEvent/WeEventNameListPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 

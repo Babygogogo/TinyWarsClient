@@ -195,12 +195,15 @@ namespace Twns.SingleRankRoom {
         private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
             const mapId         = SingleRankRoom.SrrCreateModel.getMapId();
             const gameConfig    = SingleRankRoom.SrrCreateModel.getGameConfig();
+            const hasFog        = SrrCreateModel.getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault ?? null;
             return mapId == null
                 ? {
-                    gameConfig
+                    gameConfig,
+                    hasFog,
                 }
                 : {
                     gameConfig,
+                    hasFog,
                     mapInfo: { mapId },
                 };
         }

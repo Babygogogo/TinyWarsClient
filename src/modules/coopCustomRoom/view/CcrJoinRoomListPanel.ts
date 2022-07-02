@@ -272,6 +272,7 @@ namespace Twns.CoopCustomRoom {
                 ? null
                 : {
                     gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomStaticInfo?.settingsForCommon?.configVersion)),
+                    hasFog      : roomStaticInfo?.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ?? null,
                     mapInfo     : { mapId },
                 };
         }

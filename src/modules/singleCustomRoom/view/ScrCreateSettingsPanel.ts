@@ -176,6 +176,7 @@ namespace Twns.SingleCustomRoom {
                 ? null
                 : {
                     gameConfig  : SingleCustomRoom.ScrCreateModel.getGameConfig(),
+                    hasFog      : ScrCreateModel.getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault ?? null,
                     mapInfo     : { mapId },
                 };
         }

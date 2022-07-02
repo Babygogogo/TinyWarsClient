@@ -66,6 +66,11 @@ namespace Twns.MapEditor.MeModel {
         return null;
     }
 
+    export function updateOnMsgMeDeleteSlot(data: CommonProto.NetMessage.MsgMeDeleteSlot.IS): void {
+        const slotIndex = Helpers.getExisted(data.slotIndex);
+        MAP_DICT.delete(slotIndex);
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////

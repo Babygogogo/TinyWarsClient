@@ -259,6 +259,7 @@
 		"resource/skins/warEvent/WeConditionTypeListPanel.exml",
 		"resource/skins/warEvent/WeDialogueBackgroundPanel.exml",
 		"resource/skins/warEvent/WeEventListPanel.exml",
+		"resource/skins/warEvent/WeEventNameListPanel.exml",
 		"resource/skins/warEvent/WeEventRenamePanel.exml",
 		"resource/skins/warEvent/WeNodeReplacePanel.exml",
 		"resource/skins/warMap/WarMapBuildingListPanel.exml",

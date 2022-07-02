@@ -226,7 +226,8 @@ namespace Twns.CoopCustomRoom {
         private async _showMap(mapId: number): Promise<void> {
             this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMap.WarMapModel.getRawData(mapId)), await Config.ConfigManager.getLatestGameConfig());
             this._uiMapInfo.setData({
-                mapInfo: {
+                hasFog  : null,
+                mapInfo : {
                     mapId,
                 },
             });

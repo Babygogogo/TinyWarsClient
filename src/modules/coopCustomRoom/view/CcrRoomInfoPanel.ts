@@ -14,7 +14,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import Twns.Notify                       from "../../tools/notify/NotifyType";
+// import Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiImage                          from "../../tools/ui/UiImage";
@@ -33,12 +33,12 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.CoopCustomRoom {
-    import OpenDataForCommonWarMapInfoPage          = Twns.Common.OpenDataForCommonMapInfoPage;
-    import OpenDataForCommonWarPlayerInfoPage       = Twns.Common.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarMapInfoPage          = Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Common.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
-    import LangTextType                             = Twns.Lang.LangTextType;
-    import NotifyType                               = Twns.Notify.NotifyType;
+    import LangTextType                             = Lang.LangTextType;
+    import NotifyType                               = Notify.NotifyType;
     import NetMessage                               = CommonProto.NetMessage;
 
     export type OpenDataForCcrRoomInfoPanel = {
@@ -103,12 +103,12 @@ namespace Twns.CoopCustomRoom {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : Twns.Common.CommonWarMapInfoPage,
+                    pageClass   : Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : Twns.Common.CommonWarPlayerInfoPage,
+                    pageClass   : Common.CommonWarPlayerInfoPage,
                     pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
@@ -140,7 +140,7 @@ namespace Twns.CoopCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrMyRoomListPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.CcrMyRoomListPanel, void 0);
         }
 
         private async _onTouchedBtnChooseCo(): Promise<void> {
@@ -153,21 +153,21 @@ namespace Twns.CoopCustomRoom {
                 return;
             }
 
-            const selfUserId        = Twns.User.UserModel.getSelfUserId();
+            const selfUserId        = User.UserModel.getSelfUserId();
             const selfPlayerData    = roomPlayerInfo.playerDataList?.find(v => v.userId === selfUserId);
             if (selfPlayerData != null) {
                 if (selfPlayerData.isReady) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0128));
+                    FloatText.show(Lang.getText(LangTextType.A0128));
                 } else {
-                    const playerIndex       = Twns.Helpers.getExisted(selfPlayerData.playerIndex);
+                    const playerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
                     const currentCoId       = selfPlayerData.coId ?? null;
-                    const settingsForCommon = Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon);
-                    const gameConfig        = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion));
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
+                    const settingsForCommon = Helpers.getExisted(roomStaticInfo.settingsForCommon);
+                    const gameConfig        = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                         gameConfig,
                         currentCoId,
                         availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({
-                            baseWarRule         : Twns.Helpers.getExisted(settingsForCommon.instanceWarRule),
+                            baseWarRule         : Helpers.getExisted(settingsForCommon.instanceWarRule),
                             playerIndex,
                             gameConfig,
                         }),
@@ -196,7 +196,7 @@ namespace Twns.CoopCustomRoom {
         private _onTouchedBtnDeleteRoom(): void {
             const roomId = this._getOpenData().roomId;
             if (roomId != null) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0149),
                     callback: () => {
                         CcrProxy.reqCcrDeleteRoom(roomId);
@@ -206,7 +206,7 @@ namespace Twns.CoopCustomRoom {
         }
 
         private _onTouchedBtnChat(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.ChatPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.ChatPanel, {
                 toCcrRoomId: this._getOpenData().roomId,
             });
         }
@@ -221,10 +221,10 @@ namespace Twns.CoopCustomRoom {
                 return;
             }
 
-            const selfUserId = Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
+            const selfUserId = Helpers.getExisted(User.UserModel.getSelfUserId());
             if (!data.roomPlayerInfo?.playerDataList?.some(v => v.userId === selfUserId)) {
                 this.close();
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrMyRoomListPanel, void 0);
+                PanelHelpers.open(PanelHelpers.PanelDict.CcrMyRoomListPanel, void 0);
             } else {
                 this._updateGroupButton();
                 this._updateBtnChooseCo();
@@ -239,9 +239,9 @@ namespace Twns.CoopCustomRoom {
             }
 
             if (data.roomStaticInfo == null) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0019));
+                FloatText.show(Lang.getText(LangTextType.A0019));
                 this.close();
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrMyRoomListPanel, void 0);
+                PanelHelpers.open(PanelHelpers.PanelDict.CcrMyRoomListPanel, void 0);
             } else {
                 this._updateCommonWarMapInfoPage();
                 this._updateCommonWarBasicSettingsPage();
@@ -254,14 +254,14 @@ namespace Twns.CoopCustomRoom {
             const roomId    = data.roomId;
             if (roomId === this._getOpenData().roomId) {
                 const exitRoomType = data.exitType;
-                if (exitRoomType === Twns.Types.ExitRoomType.DeletedByRoomOwner) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0127));
-                } else if (exitRoomType === Twns.Types.ExitRoomType.SelfExit) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0016));
+                if (exitRoomType === Types.ExitRoomType.DeletedByRoomOwner) {
+                    FloatText.show(Lang.getText(LangTextType.A0127));
+                } else if (exitRoomType === Types.ExitRoomType.SelfExit) {
+                    FloatText.show(Lang.getText(LangTextType.A0016));
                 }
 
                 this.close();
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrMyRoomListPanel, void 0);
+                PanelHelpers.open(PanelHelpers.PanelDict.CcrMyRoomListPanel, void 0);
             }
         }
 
@@ -270,9 +270,9 @@ namespace Twns.CoopCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private async _initSclPlayerIndex(): Promise<void> {
             const roomId                = this._getOpenData().roomId;
-            const playersCountUnneutral = Twns.Helpers.getExisted((await WarMap.WarMapModel.getRawData(Twns.Helpers.getExisted((await CcrModel.getRoomStaticInfo(roomId))?.settingsForCcw?.mapId)))?.playersCountUnneutral);
+            const playersCountUnneutral = Helpers.getExisted((await WarMap.WarMapModel.getRawData(Helpers.getExisted((await CcrModel.getRoomStaticInfo(roomId))?.settingsForCcw?.mapId)))?.playersCountUnneutral);
             const dataArray             : DataForPlayerIndexRenderer[] = [];
-            for (let playerIndex = Twns.CommonConstants.PlayerIndex.First; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            for (let playerIndex = CommonConstants.PlayerIndex.First; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
                     roomId,
                     playerIndex,
@@ -284,7 +284,7 @@ namespace Twns.CoopCustomRoom {
         private _initSclSkinId(): void {
             const roomId    = this._getOpenData().roomId;
             const dataArray : DataForSkinIdRenderer[] = [];
-            for (let skinId = Twns.CommonConstants.UnitAndTileMinSkinId; skinId <= Twns.CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
+            for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
                 dataArray.push({
                     roomId,
                     skinId,
@@ -331,19 +331,19 @@ namespace Twns.CoopCustomRoom {
                 return;
             }
 
-            const userId            = Twns.User.UserModel.getSelfUserId();
+            const userId            = User.UserModel.getSelfUserId();
             const selfPlayerData    = roomPlayerInfo.playerDataList?.find(v => v.userId === userId);
             if (selfPlayerData) {
-                const gameConfig        = await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon?.configVersion));
-                this._btnChooseCo.label = gameConfig.getCoBasicCfg(Twns.Helpers.getExisted(selfPlayerData.coId))?.name ?? Twns.CommonConstants.ErrorTextForUndefined;
+                const gameConfig        = await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomStaticInfo.settingsForCommon?.configVersion));
+                this._btnChooseCo.label = gameConfig.getCoBasicCfg(Helpers.getExisted(selfPlayerData.coId))?.name ?? CommonConstants.ErrorTextForUndefined;
             }
         }
 
         private async _updateGroupButton(): Promise<void> {
             const roomId            = this._getOpenData().roomId;
-            const roomPlayerInfo    = Twns.Helpers.getExisted(await CcrModel.getRoomPlayerInfo(roomId));
+            const roomPlayerInfo    = Helpers.getExisted(await CcrModel.getRoomPlayerInfo(roomId));
             const ownerInfo         = roomPlayerInfo.playerDataList?.find(v => v.playerIndex === roomPlayerInfo.ownerPlayerIndex);
-            const isSelfOwner       = (!!ownerInfo) && (ownerInfo.userId === Twns.User.UserModel.getSelfUserId());
+            const isSelfOwner       = (!!ownerInfo) && (ownerInfo.userId === User.UserModel.getSelfUserId());
             const btnStartGame      = this._btnStartGame;
             btnStartGame.setRedVisible(await CcrModel.checkCanStartGame(roomId));
 
@@ -384,7 +384,8 @@ namespace Twns.CoopCustomRoom {
             return mapId == null
                 ? null
                 : {
-                    gameConfig  : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
+                    hasFog      : roomInfo?.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ?? null,
                     mapInfo     : { mapId },
                 };
         }
@@ -405,62 +406,62 @@ namespace Twns.CoopCustomRoom {
         // Opening/closing animations.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupSettings,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupButton,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupSettings,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupButton,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 1, },
                 endProps    : { alpha: 0, },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -506,15 +507,15 @@ namespace Twns.CoopCustomRoom {
                 return;
             }
 
-            const selfUserId        = Twns.User.UserModel.getSelfUserId();
-            const playerDataList    = Twns.Helpers.getExisted(roomPlayerInfo.playerDataList);
+            const selfUserId        = User.UserModel.getSelfUserId();
+            const playerDataList    = Helpers.getExisted(roomPlayerInfo.playerDataList);
             const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
             if (selfPlayerData == null) {
                 return;
             }
 
             if (selfPlayerData.isReady) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0128));
+                FloatText.show(Lang.getText(LangTextType.A0128));
                 return;
             }
 
@@ -522,15 +523,15 @@ namespace Twns.CoopCustomRoom {
             const currPlayerData    = playerDataList.some(v => v.playerIndex === newPlayerIndex);
             if (currPlayerData) {
                 if (currPlayerData !== selfPlayerData) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0202));
+                    FloatText.show(Lang.getText(LangTextType.A0202));
                 }
             } else {
-                const settingsForCommon     = Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon);
-                const currCoId              = Twns.Helpers.getExisted(selfPlayerData.coId);
+                const settingsForCommon     = Helpers.getExisted(roomStaticInfo.settingsForCommon);
+                const currCoId              = Helpers.getExisted(selfPlayerData.coId);
                 const availableCoIdArray    = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({
-                    baseWarRule     : Twns.Helpers.getExisted(settingsForCommon.instanceWarRule),
+                    baseWarRule     : Helpers.getExisted(settingsForCommon.instanceWarRule),
                     playerIndex     : newPlayerIndex,
-                    gameConfig      : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(settingsForCommon.configVersion)),
+                    gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
                 });
                 CcrProxy.reqCcrSetSelfSettings({
                     roomId,
@@ -564,13 +565,13 @@ namespace Twns.CoopCustomRoom {
             }
 
             const playerIndex       = data.playerIndex;
-            const teamIndex         = WarHelpers.WarRuleHelpers.getTeamIndex(Twns.Helpers.getExisted(roomStaticInfo.settingsForCommon?.instanceWarRule), playerIndex);
-            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(teamIndex) || Twns.CommonConstants.ErrorTextForUndefined})`;
+            const teamIndex         = WarHelpers.WarRuleHelpers.getTeamIndex(Helpers.getExisted(roomStaticInfo.settingsForCommon?.instanceWarRule), playerIndex);
+            this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(teamIndex) || CommonConstants.ErrorTextForUndefined})`;
         }
         private async _updateState(): Promise<void> {
             const data              = this._getData();
             const roomPlayerInfo    = await CcrModel.getRoomPlayerInfo(data.roomId);
-            const selfUserId        = Twns.User.UserModel.getSelfUserId();
+            const selfUserId        = User.UserModel.getSelfUserId();
             const playerDataList    = roomPlayerInfo ? roomPlayerInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             this.currentState       = ((selfPlayerData) && (data.playerIndex === selfPlayerData.playerIndex)) ? `down` : `up`;
@@ -602,15 +603,15 @@ namespace Twns.CoopCustomRoom {
                 return;
             }
 
-            const selfUserId        = Twns.User.UserModel.getSelfUserId();
-            const playerDataList    = Twns.Helpers.getExisted(roomPlayerInfo.playerDataList);
+            const selfUserId        = User.UserModel.getSelfUserId();
+            const playerDataList    = Helpers.getExisted(roomPlayerInfo.playerDataList);
             const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
             if (selfPlayerData == null) {
                 return;
             }
 
             if (selfPlayerData.isReady) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0128));
+                FloatText.show(Lang.getText(LangTextType.A0128));
                 return;
             }
 
@@ -618,7 +619,7 @@ namespace Twns.CoopCustomRoom {
             const currPlayerData    = playerDataList.some(v => v.unitAndTileSkinId === newSkinId);
             if (currPlayerData) {
                 if (currPlayerData !== selfPlayerData) {
-                    Twns.FloatText.show(Lang.getText(LangTextType.A0203));
+                    FloatText.show(Lang.getText(LangTextType.A0203));
                 }
             } else {
                 CcrProxy.reqCcrSetSelfSettings({
@@ -641,7 +642,7 @@ namespace Twns.CoopCustomRoom {
             if (data) {
                 const skinId            = data.skinId;
                 const roomPlayerInfo    = data ? await CcrModel.getRoomPlayerInfo(data.roomId) : null;
-                const selfUserId        = Twns.User.UserModel.getSelfUserId();
+                const selfUserId        = User.UserModel.getSelfUserId();
                 const playerDataList    = roomPlayerInfo ? roomPlayerInfo.playerDataList : null;
                 const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
                 this._imgColor.source   = WarHelpers.WarCommonHelpers.getImageSourceForSkinId(skinId, (!!selfPlayerData) && (selfPlayerData.unitAndTileSkinId === skinId));
@@ -674,7 +675,7 @@ namespace Twns.CoopCustomRoom {
             const isReady           = data.isReady;
             const roomId            = data.roomId;
             const roomInfo          = await CcrModel.getRoomPlayerInfo(roomId);
-            const selfUserId        = Twns.User.UserModel.getSelfUserId();
+            const selfUserId        = User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             if ((selfPlayerData) && (selfPlayerData.isReady !== isReady)) {
@@ -701,7 +702,7 @@ namespace Twns.CoopCustomRoom {
             const data              = this._getData();
             const roomInfo          = await CcrModel.getRoomPlayerInfo(data.roomId);
             const isReady           = data.isReady;
-            const selfUserId        = Twns.User.UserModel.getSelfUserId();
+            const selfUserId        = User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             const isSelected        = (!!selfPlayerData) && (isReady === selfPlayerData.isReady);

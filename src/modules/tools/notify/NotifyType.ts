@@ -179,6 +179,7 @@ namespace Twns.Notify {
         MsgMeGetDataList,
         MsgMeGetData,
         MsgMeSubmitMap,
+        MsgMeDeleteSlot,
         MsgMmAddWarRule,
         MsgMmDeleteWarRule,
         MsgMmSetWarRuleName,

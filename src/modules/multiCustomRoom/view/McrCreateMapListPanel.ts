@@ -216,7 +216,8 @@ namespace Twns.MultiCustomRoom {
                 uiMapInfo.visible   = true;
                 zoomMap.showMapByMapData(Helpers.getExisted(await WarMap.WarMapModel.getRawData(mapId)), await Config.ConfigManager.getLatestGameConfig());
                 uiMapInfo.setData({
-                    mapInfo: {
+                    hasFog  : null,
+                    mapInfo : {
                         mapId,
                     },
                 });
