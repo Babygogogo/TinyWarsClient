@@ -7,6 +7,7 @@ const PublishConfig = require("../../../TinyWarsExternals/utils/Publisher/Publis
 
 const DESTINATION_PATH      = "bin-release/web/twc/";
 const INDEX_PATH            = `${DESTINATION_PATH}index.html`;
+const MANIFEST_PATH         = `${DESTINATION_PATH}manifest.json`;
 const RESOURCE_PATH         = `${DESTINATION_PATH}resource/`;
 const TSCONFIG_PATH         = "tsconfig.json";
 const COMMON_CONSTANTS_PATH = "src/modules/tools/helpers/CommonConstants.ts";
@@ -105,6 +106,10 @@ async function handleVersionForAllResources(clientVersion) {
     }
 
     fs.writeFileSync(`${RESOURCE_PATH}ResHashDict.${clientVersion}.json`, JSON.stringify(allMapping));
+
+    const manifest              = JSON.parse(fs.readFileSync(MANIFEST_PATH));
+    manifest.resHashDictPath    = `resource/ResHashDict.${clientVersion}.json`;
+    fs.writeFileSync(MANIFEST_PATH, JSON.stringify(manifest));
 }
 
 function handleVersionForDirectory(directoryPath) {

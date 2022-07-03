@@ -16,7 +16,7 @@ namespace Twns.ResVersionController {
     export function init(): Promise<void> {
         return new Promise(resolve => {
             const request = new XMLHttpRequest();
-            request.open(`GET`, `resource/ResHashDict.${window.CLIENT_VERSION}.json`);
+            request.open(`GET`, window.RES_HASH_DICT_PATH ?? `resource/ResHashDict.${window.CLIENT_VERSION}.json`);
             request.onload = () => {
                 const hashDict = JSON.parse(request.responseText);
                 for (const rawName in hashDict) {

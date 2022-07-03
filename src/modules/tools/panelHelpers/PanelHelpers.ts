@@ -1,8 +1,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.PanelHelpers {
-    import ClientErrorCode  = Twns.ClientErrorCode;
-
     const _IS_CACHE_ENABLED = true;
     const _runningPanelDict = new Map<PanelConfig<any>, TwnsUiPanel.UiPanel<any>>();
     const _cachedPanelDict  = new Map<PanelConfig<any>, TwnsUiPanel.UiPanel<any>>();
@@ -33,25 +31,25 @@ namespace Twns.PanelHelpers {
             );
     }
     async function openViaRunningPanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel.UiPanel<T>> {
-        const panel = Twns.Helpers.getExisted(getRunningPanel(config), ClientErrorCode.PanelManager_OpenViaRunningPanel_00);
+        const panel = Helpers.getExisted(getRunningPanel(config), ClientErrorCode.PanelManager_OpenViaRunningPanel_00);
         await panel.updateWithOpenData(openData);
 
-        Twns.Logger.warn(`Panel opened via running: ${config.skinName}`);
+        Logger.warn(`Panel opened via running: ${config.skinName}`);
         return panel;
     }
     async function openViaCachedPanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel.UiPanel<T>> {
-        const panel     = Twns.Helpers.getExisted(getCachedPanel(config), ClientErrorCode.PanelManager_OpenViaCachedPanel_00);
+        const panel     = Helpers.getExisted(getCachedPanel(config), ClientErrorCode.PanelManager_OpenViaCachedPanel_00);
         const layerType = config.layer;
         if (config.isExclusive) {
             closeAllPanelsInLayerExcept(layerType, [config]);
         }
-        Twns.StageManager.getLayer(layerType).addChild(panel);
+        StageManager.getLayer(layerType).addChild(panel);
 
         await panel.initOnOpening(openData);
 
         addRunningPanel(config, panel);
 
-        Twns.Logger.warn(`Panel opened via cache: ${config.skinName}`);
+        Logger.warn(`Panel opened via cache: ${config.skinName}`);
         return panel;
     }
     async function openViaCreatePanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel.UiPanel<T>> {
@@ -60,7 +58,7 @@ namespace Twns.PanelHelpers {
         if (config.isExclusive) {
             closeAllPanelsInLayerExcept(layerType, [config]);
         }
-        Twns.StageManager.getLayer(layerType).addChild(panel);
+        StageManager.getLayer(layerType).addChild(panel);
 
         if (!panel.getIsChildrenCreated()) {
             await new Promise<void>(resolve => panel.once(TwnsUiPanel.EVENT_PANEL_CHILDREN_CREATED, resolve, null));
@@ -73,7 +71,7 @@ namespace Twns.PanelHelpers {
             addCachedPanel(config, panel);
         }
 
-        Twns.Logger.warn(`Panel opened via creating: ${config.skinName}`);
+        Logger.warn(`Panel opened via creating: ${config.skinName}`);
         return panel;
     }
 
@@ -90,7 +88,7 @@ namespace Twns.PanelHelpers {
     async function doClose<T>(config: PanelConfig<T>): Promise<void> {
         const panel = getRunningPanel(config);
         if (panel == null) {
-            Twns.Logger.warn(`Panel close ignored because it's not opened: ${config.skinName}`);
+            Logger.warn(`Panel close ignored because it's not opened: ${config.skinName}`);
             return;
         }
 
@@ -100,7 +98,7 @@ namespace Twns.PanelHelpers {
         (parent) && (parent.removeChild(panel));
         deleteRunningPanel(config);
 
-        Twns.Logger.warn(`Panel closed: ${config.skinName}`);
+        Logger.warn(`Panel closed: ${config.skinName}`);
     }
     export async function closeAllPanelsExcept(exceptions: PanelConfig<any>[] = []): Promise<void> {
         const promiseArray: Promise<void>[] = [];
@@ -162,14 +160,14 @@ namespace Twns.PanelHelpers {
             const func = async (): Promise<void> => {
                 const funcList = _queueDict.get(config);
                 if (!funcList) {
-                    throw Twns.Helpers.newError(`PanelManager.addToQueue() exception queueing 1!!`, ClientErrorCode.PanelManager_AddToQueue_00);
+                    throw Helpers.newError(`PanelManager.addToQueue() exception queueing 1!!`, ClientErrorCode.PanelManager_AddToQueue_00);
                 } else {
                     if (funcList[0] !== func) {
-                        throw Twns.Helpers.newError(`PanelManager.addToQueue() exception queueing 2!!`, ClientErrorCode.PanelManager_AddToQueue_01);
+                        throw Helpers.newError(`PanelManager.addToQueue() exception queueing 2!!`, ClientErrorCode.PanelManager_AddToQueue_01);
                     } else {
                         const result = await rawFunc();
                         if (funcList.shift() !== func) {
-                            throw Twns.Helpers.newError(`PanelManager.addToQueue() exception queueing 3!!`, ClientErrorCode.PanelManager_AddToQueue_02);
+                            throw Helpers.newError(`PanelManager.addToQueue() exception queueing 3!!`, ClientErrorCode.PanelManager_AddToQueue_02);
                         }
                         resolve(result);
 

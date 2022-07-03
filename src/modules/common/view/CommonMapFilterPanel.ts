@@ -126,7 +126,7 @@ namespace Twns.Common {
             this._labelName.text                = Lang.getText(LangTextType.B0447);
             this._labelMapNameTitle.text        = Lang.getText(LangTextType.B0225);
             this._labelDesignerTitle.text       = Lang.getText(LangTextType.B0251);
-            this._labelPlayersCountTitle.text   = Lang.getText(LangTextType.B0229);
+            this._labelPlayersCountTitle.text   = Lang.getText(LangTextType.B0922);
             this._labelPlayedTimesTitle.text    = Lang.getText(LangTextType.B0568);
             this._labelMinRatingTitle.text      = Lang.getText(LangTextType.B0569);
             this._labelTagFogTitle.text         = Lang.getText(LangTextType.B0445);

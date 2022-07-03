@@ -5062,6 +5062,10 @@ namespace Twns.Lang {
             `保存并提审`,
             `Save & Submit for Review`,
         ],
+        [LangTextType.B0922]: [
+            `玩家数量`,
+            `Player Count`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.Tile0000]: [

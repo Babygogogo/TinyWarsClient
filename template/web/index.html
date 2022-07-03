@@ -163,11 +163,13 @@
     };
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', './manifest.json?v=' + Math.random(), true);
+    xhr.open('GET', './manifest.json?v=' + Math.random() + Math.random(), true);
     xhr.addEventListener("load", function () {
+        var manifest                = JSON.parse(xhr.response);
+        window.RES_HASH_DICT_PATH   = manifest.resHashDictPath;
+
         document.getElementById("loadingBar").className = "line-scale"
 
-        var manifest = JSON.parse(xhr.response);
         var list = manifest.initial.concat(manifest.game);
         loadScript(list, function () {
             /**
