@@ -1022,6 +1022,11 @@ namespace Twns.BaseWar {
         }
 
         public getCallableWarEventId(): number | null {                                // DONE
+            const war = this._getWar();
+            if (war.getTurnManager().getTurnIndex() > war.getCommonSettingManager().getTurnsLimit()) {
+                return null;
+            }
+
             for (const warEvent of this._getWar().getCommonSettingManager().getInstanceWarRule().warEventFullData?.eventArray || []) {
                 const warEventId = Helpers.getExisted(warEvent.eventId);
                 if (this._checkCanCallWarEvent(warEventId)) {

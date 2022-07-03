@@ -31,37 +31,37 @@
             <e:VerticalLayout gap="10" />
         </e:layout>
     </e:Group>
+    <e:Group right="20" top="50">
+        <TwnsUiButton:UiButton id="_btnUndo" label="S-Power" icon="commonIcon0020" x="0" y="-152">
+            <TwnsUiButton:skinName>
+                <e:Skin width="50" height="66">
+                    <e:Group left="0" right="0" top="0" bottom="0">
+                        <e:Image id="iconDisplay" horizontalCenter="0" />
+                        <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0xffffff" text="S-Power"
+                                             textAlign="center" verticalAlign="middle" wordWrap="true"
+                                             horizontalCenter="0" y="54" maxTextWidth="50" stroke="1" />
+                    </e:Group>
+                </e:Skin>
+            </TwnsUiButton:skinName>
+        </TwnsUiButton:UiButton>
+        <TwnsUiButton:UiButton id="_btnRedo" label="S-Power" icon="commonIcon0020" x="0" y="-76">
+            <TwnsUiButton:skinName>
+                <e:Skin width="50" height="66">
+                    <e:Group left="0" right="0" top="0" bottom="0">
+                        <e:Image id="iconDisplay" horizontalCenter="0" scaleX="-1" />
+                        <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0xffffff" text="S-Power"
+                                             textAlign="center" verticalAlign="middle" wordWrap="true"
+                                             horizontalCenter="0" y="54" maxTextWidth="50" stroke="1" />
+                    </e:Group>
+                </e:Skin>
+            </TwnsUiButton:skinName>
+        </TwnsUiButton:UiButton>
+        <e:layout>
+            <e:HorizontalLayout/>
+        </e:layout>
+    </e:Group>
     <e:Group id="_groupRight" right="20" touchThrough="true" bottom="20">
         <e:Group x="0" y="0" touchThrough="true">
-            <e:Group x="0" y="0">
-                <TwnsUiButton:UiButton id="_btnUndo" label="S-Power" icon="commonIcon0020" x="0" y="-152">
-                    <TwnsUiButton:skinName>
-                        <e:Skin width="50" height="66">
-                            <e:Group left="0" right="0" top="0" bottom="0">
-                                <e:Image id="iconDisplay" horizontalCenter="0" />
-                                <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0xffffff" text="S-Power"
-                                                     textAlign="center" verticalAlign="middle" wordWrap="true"
-                                                     horizontalCenter="0" y="54" maxTextWidth="50" stroke="1" />
-                            </e:Group>
-                        </e:Skin>
-                    </TwnsUiButton:skinName>
-                </TwnsUiButton:UiButton>
-                <TwnsUiButton:UiButton id="_btnRedo" label="S-Power" icon="commonIcon0020" x="0" y="-76">
-                    <TwnsUiButton:skinName>
-                        <e:Skin width="50" height="66">
-                            <e:Group left="0" right="0" top="0" bottom="0">
-                                <e:Image id="iconDisplay" horizontalCenter="0" scaleX="-1" />
-                                <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0xffffff" text="S-Power"
-                                                     textAlign="center" verticalAlign="middle" wordWrap="true"
-                                                     horizontalCenter="0" y="54" maxTextWidth="50" stroke="1" />
-                            </e:Group>
-                        </e:Skin>
-                    </TwnsUiButton:skinName>
-                </TwnsUiButton:UiButton>
-                <e:layout>
-                    <e:HorizontalLayout/>
-                </e:layout>
-            </e:Group>
             <TwnsUiButton:UiButton id="_btnNextUnit" label="Power" x="0" y="0" icon="commonIcon0015">
                 <TwnsUiButton:skinName>
                     <e:Skin width="50" height="66">

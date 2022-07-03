@@ -207,6 +207,35 @@ namespace Twns.SinglePlayerWar.SpwModel {
             return false;
         }
 
+        // Handle turns limit.
+        const playerManager     = war.getPlayerManager();
+        const playerInTurn      = playerManager.getPlayerInTurn();
+        const hasVotedForDraw   = playerInTurn.getHasVotedForDraw();
+        const turnPhaseCode     = war.getTurnPhaseCode();
+        if (war.getTurnManager().getTurnIndex() > war.getCommonSettingManager().getTurnsLimit()) {
+            if (war.checkCanEnd()) {
+                await handleSystemEndWar(war);
+                await checkAndHandleSystemActions(war);
+                return true;
+            }
+
+            if (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn) {
+                await handleSystemBeginTurn(war);
+                await checkAndHandleSystemActions(war);
+                return true;
+            }
+
+            if (!hasVotedForDraw) {
+                await handleSystemVoteForDraw(war, true);
+                await checkAndHandleSystemActions(war);
+                return true;
+            } else {
+                await handleSystemEndTurn(war);
+                await checkAndHandleSystemActions(war);
+                return true;
+            }
+        }
+
         // Handle war events.
         const callableWarEventId = war.getWarEventManager().getCallableWarEventId();
         if (callableWarEventId != null) {
@@ -223,8 +252,6 @@ namespace Twns.SinglePlayerWar.SpwModel {
         }
 
         // Handle the WaitBeginTurn phase.
-        const turnPhaseCode = war.getTurnPhaseCode();
-        const playerManager = war.getPlayerManager();
         if (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn) {
             await handleSystemBeginTurn(war);
             await checkAndHandleSystemActions(war);
@@ -237,21 +264,6 @@ namespace Twns.SinglePlayerWar.SpwModel {
             const player = playerManager.getPlayer(playerIndex);
             if (player.getAliveState() === Types.PlayerAliveState.Dying) {
                 await handleSystemDestroyPlayerForce(war, playerIndex);
-                await checkAndHandleSystemActions(war);
-                return true;
-            }
-        }
-
-        // Handle turns limit.
-        const playerInTurn      = playerManager.getPlayerInTurn();
-        const hasVotedForDraw   = playerInTurn.getHasVotedForDraw();
-        if (war.getTurnManager().getTurnIndex() > war.getCommonSettingManager().getTurnsLimit()) {
-            if (!hasVotedForDraw) {
-                await handleSystemVoteForDraw(war, true);
-                await checkAndHandleSystemActions(war);
-                return true;
-            } else {
-                await handleSystemEndTurn(war);
                 await checkAndHandleSystemActions(war);
                 return true;
             }

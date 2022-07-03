@@ -338,14 +338,12 @@ namespace Twns.WarHelpers.WarActionReviser {
     }
 
     function reviseSystemEndTurn(war: BwWar, rawAction: WarAction.IWarActionSystemEndTurn): IWarActionContainer {
-        const playerInTurn = war.getPlayerInTurn();
         if (war.getTurnPhaseCode() !== Types.TurnPhaseCode.Main) {
             throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseSystemEndTurn_00);
         }
 
-        if ((playerInTurn.getPlayerIndex() !== CommonConstants.PlayerIndex.Neutral)   &&
-            (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
-        ) {
+        const playerInTurn = war.getPlayerInTurn();
+        if ((war.getDrawVoteManager().getRemainingVotes() != null) && (!playerInTurn.getHasVotedForDraw())) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_ReviseSystemEndTurn_01);
         }
 
@@ -372,10 +370,8 @@ namespace Twns.WarHelpers.WarActionReviser {
             throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseSystemVoteForDraw_00);
         }
 
-        if ((playerInTurn.getPlayerIndex() !== CommonConstants.PlayerIndex.Neutral)   &&
-            (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
-        ) {
-            throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_ReviseSystemVoteForDraw_01);
+        if (playerInTurn.getHasVotedForDraw()) {
+            throw Helpers.newError(`playerInTurn getHasVotedForDraw() is true.`, ClientErrorCode.WarActionReviser_ReviseSystemVoteForDraw_01);
         }
 
         return {
