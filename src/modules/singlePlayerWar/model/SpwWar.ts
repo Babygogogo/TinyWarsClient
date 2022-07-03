@@ -24,6 +24,7 @@ namespace Twns.SinglePlayerWar {
         private readonly _field                 = new SinglePlayerWar.SpwField();
         private readonly _commonSettingManager  = new BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
+        private readonly _retractManager        = new SpwRetractManager();
 
         private _saveSlotIndex?     : number;
         private _saveSlotExtraData? : ISpmWarSaveSlotExtraData;
@@ -168,6 +169,9 @@ namespace Twns.SinglePlayerWar {
         }
         public getWarEventManager(): BaseWar.BwWarEventManager {
             return this._warEventManager;
+        }
+        public getRetractManager(): SpwRetractManager {
+            return this._retractManager;
         }
 
         public getIsExecuteActionsWithExtraData(): boolean {

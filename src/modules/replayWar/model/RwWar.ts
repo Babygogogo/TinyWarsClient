@@ -480,36 +480,13 @@ namespace Twns.ReplayWar {
             }
 
             this.setIsAutoReplay(false);
-            this.stopRunning();
 
-            const checkpointData        = Helpers.getExisted(this._getCheckpointData(checkpointId));
-            const warData               = ProtoManager.decodeAsSerialWar(checkpointData.warData);
-            const gameConfig            = this.getGameConfig();
-            const playersCountUnneutral = this.getPlayerManager().getTotalPlayersCount(false);
-            this.setNextActionId(checkpointData.nextActionId);
-            this.getWeatherManager().fastInit(warData.weatherManager);
-            this.getPlayerManager().fastInit(Helpers.getExisted(warData.playerManager), gameConfig);
-            this.getTurnManager().fastInit(Helpers.getExisted(warData.turnManager), playersCountUnneutral);
-            this.getWarEventManager().fastInit(Helpers.getExisted(warData.warEventManager));
-            this.getField().fastInit({
-                data                    : Helpers.getExisted(warData.field),
-                gameConfig,
-                playersCountUnneutral,
-            });
-            this.getDrawVoteManager().setRemainingVotes(warData.remainingVotesForDraw ?? null);
-            this.getRandomNumberManager().init({
-                isNeedSeedRandom    : this.getIsNeedSeedRandom(),
-                initialState        : warData.seedRandomInitialState,
-                currentState        : warData.seedRandomCurrentState,
-            });
-            this.setIsEnded(this.checkIsInEnd());
-
+            const checkpointData = Helpers.getExisted(this._getCheckpointData(checkpointId));
+            this.fastLoadState(ProtoManager.decodeAsSerialWar(checkpointData.warData));
             await Helpers.checkAndCallLater();
-            this._fastInitView();
-            this.startRunning().startRunningView();
-            this.updateTilesAndUnitsOnVisibilityChanged(false);
-            this.getView().updatePersistentText();
-            SoundManager.playCoBgmWithWar(this, false);
+
+            this.setNextActionId(checkpointData.nextActionId);
+            this.setIsEnded(this.checkIsInEnd());
 
             if (floatText) {
                 FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);

@@ -8,18 +8,17 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SingleFreeWar {
-    import SpwWar           = Twns.SinglePlayerWar.SpwWar;
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForSfw  = CommonProto.WarSettings.ISettingsForSfw;
-    import ClientErrorCode  = Twns.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
-    export class SfwWar extends SpwWar {
+    export class SfwWar extends SinglePlayerWar.SpwWar {
         private _settingsForSfw?    : ISettingsForSfw;
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
-            this._setSettingsForSfw(Twns.Helpers.getExisted(data.settingsForSfw, ClientErrorCode.SfwWar_Init_00));
+            this._setSettingsForSfw(Helpers.getExisted(data.settingsForSfw, ClientErrorCode.SfwWar_Init_00));
+            this.getRetractManager().setCanRetract(true);
 
             this._initView();
         }
@@ -62,14 +61,14 @@ namespace Twns.SingleFreeWar {
         }
 
         public getSettingsBootTimerParams(): number[] {
-            return [Twns.Types.BootTimerType.NoBoot];
+            return [Types.BootTimerType.NoBoot];
         }
 
         private _setSettingsForSfw(settings: ISettingsForSfw): void {
             this._settingsForSfw = settings;
         }
         private _getSettingsForSfw(): ISettingsForSfw {
-            return Twns.Helpers.getExisted(this._settingsForSfw);
+            return Helpers.getExisted(this._settingsForSfw);
         }
     }
 }

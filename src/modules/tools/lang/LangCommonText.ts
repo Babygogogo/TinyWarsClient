@@ -1386,6 +1386,14 @@ namespace Twns.Lang {
             `此地图尚未保存。您确定要跳过保存吗？`,
             `This map has not been saved. Are you sure you want to skip the save?`,
         ],
+        [LangTextType.A0318]: [
+            `无法进一步撤销`,
+            `Unable to undo further.`,
+        ],
+        [LangTextType.A0319]: [
+            `无法进一步重做`,
+            `Unable to redo further.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -5065,6 +5073,14 @@ namespace Twns.Lang {
         [LangTextType.B0922]: [
             `玩家数量`,
             `Player Count`,
+        ],
+        [LangTextType.B0923]: [
+            `悔棋`,
+            `Undo`,
+        ],
+        [LangTextType.B0924]: [
+            `重做`,
+            `Redo`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

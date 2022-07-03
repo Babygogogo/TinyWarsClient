@@ -46,7 +46,7 @@ namespace Twns.SinglePlayerWar.SpwModel {
         slotExtraData   : ISpmWarSaveSlotExtraData;
     }): Promise<SpwWar> {
         if (getWar()) {
-            Twns.Logger.warn(`SpwModel.loadWar() another war has been loaded already!`);
+            Logger.warn(`SpwModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
@@ -107,6 +107,14 @@ namespace Twns.SinglePlayerWar.SpwModel {
 
         if (war.checkIsHumanInTurn()) {
             _warsWithRobotRunning.delete(war);
+
+            if (war instanceof SpwWar) {
+                const retractManager = war.getRetractManager();
+                if (retractManager.getCanRetract()) {
+                    retractManager.addRetractState(ProtoManager.encodeAsSerialWar(war.serialize()));
+                }
+            }
+
             return;
         }
 
@@ -225,7 +233,7 @@ namespace Twns.SinglePlayerWar.SpwModel {
 
         // Handle the dying players (destroy force).
         const playersCount = playerManager.getTotalPlayersCount(false);
-        for (let playerIndex = Twns.CommonConstants.PlayerIndex.First; playerIndex <= playersCount; ++playerIndex) {
+        for (let playerIndex = CommonConstants.PlayerIndex.First; playerIndex <= playersCount; ++playerIndex) {
             const player = playerManager.getPlayer(playerIndex);
             if (player.getAliveState() === Types.PlayerAliveState.Dying) {
                 await handleSystemDestroyPlayerForce(war, playerIndex);

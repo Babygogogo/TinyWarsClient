@@ -142,6 +142,38 @@ namespace Twns.BaseWar {
             this.setIsEnded(!!data.isEnded);
         }
 
+        public fastLoadState(warData: ISerialWar): void {
+            this.stopRunning();
+
+            const gameConfig            = this.getGameConfig();
+            const playerManager         = this.getPlayerManager();
+            const playersCountUnneutral = playerManager.getTotalPlayersCount(false);
+            this.getWeatherManager().fastInit(warData.weatherManager);
+            playerManager.fastInit(Helpers.getExisted(warData.playerManager), gameConfig);
+            this.getTurnManager().fastInit(Helpers.getExisted(warData.turnManager), playersCountUnneutral);
+            this.getWarEventManager().fastInit(Helpers.getExisted(warData.warEventManager));
+            this.getField().fastInit({
+                data                    : Helpers.getExisted(warData.field),
+                gameConfig,
+                playersCountUnneutral,
+            });
+            this.getDrawVoteManager().setRemainingVotes(warData.remainingVotesForDraw ?? null);
+            this.getRandomNumberManager().init({
+                isNeedSeedRandom    : this.getIsNeedSeedRandom(),
+                initialState        : warData.seedRandomInitialState,
+                currentState        : warData.seedRandomCurrentState,
+            });
+            this.setIsEnded(!!warData.isEnded);
+
+            const warView = this.getView();
+            warView.fastInit(this);
+            this.startRunning().startRunningView();
+            this.updateTilesAndUnitsOnVisibilityChanged(false);
+            warView.updatePersistentText();
+
+            SoundManager.playCoBgmWithWar(this, false);
+        }
+
         protected _initView(): void {
             this.getView().init(this);
         }
