@@ -154,7 +154,7 @@ namespace Twns.Config.ConfigManager {
             || (mode === Types.UnitAiMode.Normal)
             || (mode === Types.UnitAiMode.WaitUntilCanAttack);
     }
-    export function checkIsValidValueComparator(comparator: Types.ValueComparator): boolean {
+    export function checkIsValidValueComparator(comparator: Types.Undefinable<number>): boolean {
         return (comparator === Types.ValueComparator.EqualTo)
             || (comparator === Types.ValueComparator.NotEqualTo)
             || (comparator === Types.ValueComparator.GreaterThan)

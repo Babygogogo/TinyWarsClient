@@ -8873,6 +8873,15 @@ declare namespace CommonProto {
             /** WeaSetTileState conIsHighlighted */
             conIsHighlighted?: (boolean|null);
 
+            /** WeaSetTileState conHp */
+            conHp?: (CommonProto.Structure.IValueAndComparator|null);
+
+            /** WeaSetTileState conCapturePoint */
+            conCapturePoint?: (CommonProto.Structure.IValueAndComparator|null);
+
+            /** WeaSetTileState conBuildPoint */
+            conBuildPoint?: (CommonProto.Structure.IValueAndComparator|null);
+
             /** WeaSetTileState actHpMultiplierPercentage */
             actHpMultiplierPercentage?: (number|null);
 
@@ -8918,6 +8927,15 @@ declare namespace CommonProto {
 
             /** WeaSetTileState conIsHighlighted. */
             public conIsHighlighted: boolean;
+
+            /** WeaSetTileState conHp. */
+            public conHp?: (CommonProto.Structure.IValueAndComparator|null);
+
+            /** WeaSetTileState conCapturePoint. */
+            public conCapturePoint?: (CommonProto.Structure.IValueAndComparator|null);
+
+            /** WeaSetTileState conBuildPoint. */
+            public conBuildPoint?: (CommonProto.Structure.IValueAndComparator|null);
 
             /** WeaSetTileState actHpMultiplierPercentage. */
             public actHpMultiplierPercentage: number;
@@ -22080,6 +22098,102 @@ declare namespace CommonProto {
 
             /**
              * Converts this CommonExtraDataForWarAction to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a ValueAndComparator. */
+        interface IValueAndComparator {
+
+            /** ValueAndComparator value */
+            value?: (number|null);
+
+            /** ValueAndComparator comparator */
+            comparator?: (number|null);
+        }
+
+        /** Represents a ValueAndComparator. */
+        class ValueAndComparator implements IValueAndComparator {
+
+            /**
+             * Constructs a new ValueAndComparator.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.Structure.IValueAndComparator);
+
+            /** ValueAndComparator value. */
+            public value: number;
+
+            /** ValueAndComparator comparator. */
+            public comparator: number;
+
+            /**
+             * Creates a new ValueAndComparator instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ValueAndComparator instance
+             */
+            public static create(properties?: CommonProto.Structure.IValueAndComparator): CommonProto.Structure.ValueAndComparator;
+
+            /**
+             * Encodes the specified ValueAndComparator message. Does not implicitly {@link CommonProto.Structure.ValueAndComparator.verify|verify} messages.
+             * @param message ValueAndComparator message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.Structure.IValueAndComparator, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ValueAndComparator message, length delimited. Does not implicitly {@link CommonProto.Structure.ValueAndComparator.verify|verify} messages.
+             * @param message ValueAndComparator message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.Structure.IValueAndComparator, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a ValueAndComparator message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ValueAndComparator
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.Structure.ValueAndComparator;
+
+            /**
+             * Decodes a ValueAndComparator message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ValueAndComparator
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.Structure.ValueAndComparator;
+
+            /**
+             * Verifies a ValueAndComparator message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a ValueAndComparator message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ValueAndComparator
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.Structure.ValueAndComparator;
+
+            /**
+             * Creates a plain object from a ValueAndComparator message. Also converts values to other types if specified.
+             * @param message ValueAndComparator
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.Structure.ValueAndComparator, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ValueAndComparator to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

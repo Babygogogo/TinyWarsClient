@@ -315,6 +315,19 @@ namespace Twns.Helpers {
             || ((comparator === Types.ValueComparator.LessThan)         && (actualValue < targetValue))
             || ((comparator === Types.ValueComparator.NotLessThan)      && (actualValue >= targetValue));
     }
+    export function checkIsMeetValueComparator2(actualValue: number, valueAndComparator: CommonProto.Structure.IValueAndComparator): boolean {
+        const targetValue   = getExisted(valueAndComparator.value, ClientErrorCode.Helpers_CheckIsMeetValueComparator2_00);
+        const comparator    = valueAndComparator.comparator;
+        switch (comparator) {
+            case Types.ValueComparator.EqualTo          : return actualValue === targetValue;
+            case Types.ValueComparator.NotEqualTo       : return actualValue !== targetValue;
+            case Types.ValueComparator.GreaterThan      : return actualValue > targetValue;
+            case Types.ValueComparator.NotGreaterThan   : return actualValue <= targetValue;
+            case Types.ValueComparator.LessThan         : return actualValue < targetValue;
+            case Types.ValueComparator.NotLessThan      : return actualValue >= targetValue;
+            default                                     : throw newError(`Invalid comparator: ${comparator}`, ClientErrorCode.Helpers_CheckIsMeetValueComparator2_01);
+        }
+    }
     export function getNextValueComparator(comparator: Types.Undefinable<Types.ValueComparator>): Types.ValueComparator {
         switch (comparator) {
             case Types.ValueComparator.EqualTo          : return Types.ValueComparator.NotEqualTo;

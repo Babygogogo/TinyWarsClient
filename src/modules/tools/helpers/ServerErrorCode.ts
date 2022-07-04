@@ -9216,6 +9216,17 @@ export const enum ServerErrorCode {
     Helpers_GetValueInRange_0008,
     Helpers_GetValueInRange_0009,
 
+    Helpers_CheckIsMeetValueComparator2_0000,
+    Helpers_CheckIsMeetValueComparator2_0001,
+    Helpers_CheckIsMeetValueComparator2_0002,
+    Helpers_CheckIsMeetValueComparator2_0003,
+    Helpers_CheckIsMeetValueComparator2_0004,
+    Helpers_CheckIsMeetValueComparator2_0005,
+    Helpers_CheckIsMeetValueComparator2_0006,
+    Helpers_CheckIsMeetValueComparator2_0007,
+    Helpers_CheckIsMeetValueComparator2_0008,
+    Helpers_CheckIsMeetValueComparator2_0009,
+
     ProtoManager_EncodeAsMessageContainer_0000,
     ProtoManager_EncodeAsMessageContainer_0001,
     ProtoManager_EncodeAsMessageContainer_0002,

@@ -865,6 +865,33 @@ namespace Twns.WarHelpers.WarEventHelpers {
             }
         }
 
+        {
+            const conHp = action.conHp;
+            if (conHp) {
+                if ((conHp.value == null) || (!Config.ConfigManager.checkIsValidValueComparator(conHp.comparator))) {
+                    return false;
+                }
+            }
+        }
+
+        {
+            const conHp = action.conBuildPoint;
+            if (conHp) {
+                if ((conHp.value == null) || (!Config.ConfigManager.checkIsValidValueComparator(conHp.comparator))) {
+                    return false;
+                }
+            }
+        }
+
+        {
+            const conHp = action.conCapturePoint;
+            if (conHp) {
+                if ((conHp.value == null) || (!Config.ConfigManager.checkIsValidValueComparator(conHp.comparator))) {
+                    return false;
+                }
+            }
+        }
+
         const actAddLocationIdArray = action.actAddLocationIdArray ?? [];
         if (!Config.ConfigManager.checkIsValidLocationIdSubset(actAddLocationIdArray)) {
             return false;
@@ -2295,9 +2322,27 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? null
             : Lang.getText(conIsHighlighted ? LangTextType.B0848 : LangTextType.B0849);
 
+        const conHp         = data.conHp;
+        const textForConHp  = conHp == null
+            ? null
+            : Lang.getFormattedText(LangTextType.F0120, conHp.comparator != null ? Lang.getValueComparatorName(conHp.comparator) : CommonConstants.ErrorTextForUndefined, conHp.value);
+
+        const conCapturePoint           = data.conCapturePoint;
+        const textForConCapturePoint    = conCapturePoint == null
+            ? null
+            : Lang.getFormattedText(LangTextType.F0139, conCapturePoint.comparator != null ? Lang.getValueComparatorName(conCapturePoint.comparator) : CommonConstants.ErrorTextForUndefined, conCapturePoint.value);
+
+        const conBuildPoint         = data.conBuildPoint;
+        const textForConBuildPoint  = conBuildPoint == null
+            ? null
+            : Lang.getFormattedText(LangTextType.F0140, conBuildPoint.comparator != null ? Lang.getValueComparatorName(conBuildPoint.comparator) : CommonConstants.ErrorTextForUndefined, conBuildPoint.value);
+
         const textArrayForSubConditions = Helpers.getNonNullElements([
             textForConLocation,
             textForConIsHighlighted,
+            textForConHp,
+            textForConCapturePoint,
+            textForConBuildPoint,
         ]);
 
         const actHpMultiplierPercentage = data.actHpMultiplierPercentage ?? 100;
@@ -3222,6 +3267,42 @@ namespace Twns.WarHelpers.WarEventHelpers {
             const gridIndexArray = data.conGridIndexArray;
             if ((gridIndexArray) && (!Config.ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, war.getTileMap().getMapSize()))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0531));
+            }
+        }
+
+        {
+            const conHp = data.conHp;
+            if (conHp != null) {
+                if (conHp.value == null) {
+                    return Lang.getFormattedText(LangTextType.F0141, Lang.getText(LangTextType.B0807));
+                }
+                if (!Config.ConfigManager.checkIsValidValueComparator(conHp.comparator)) {
+                    return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0774));
+                }
+            }
+        }
+
+        {
+            const conBuildPoint = data.conBuildPoint;
+            if (conBuildPoint != null) {
+                if (conBuildPoint.value == null) {
+                    return Lang.getFormattedText(LangTextType.F0141, Lang.getText(LangTextType.B0362));
+                }
+                if (!Config.ConfigManager.checkIsValidValueComparator(conBuildPoint.comparator)) {
+                    return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0774));
+                }
+            }
+        }
+
+        {
+            const conCapturePoint = data.conCapturePoint;
+            if (conCapturePoint != null) {
+                if (conCapturePoint.value == null) {
+                    return Lang.getFormattedText(LangTextType.F0141, Lang.getText(LangTextType.B0361));
+                }
+                if (!Config.ConfigManager.checkIsValidValueComparator(conCapturePoint.comparator)) {
+                    return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0774));
+                }
             }
         }
 

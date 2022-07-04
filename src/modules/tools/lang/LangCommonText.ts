@@ -6427,6 +6427,18 @@ namespace Twns.Lang {
             `剩余%s`,
             `Remaining %s`,
         ],
+        [LangTextType.F0139]: [
+            `占领点数 %s %s`,
+            `the Capture Point %s %s`,
+        ],
+        [LangTextType.F0140]: [
+            `建筑点数 %s %s`,
+            `the Build Point %s %s`,
+        ],
+        [LangTextType.F0141]: [
+            `尚未指定 %s`,
+            `%s is not specified.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Rich strings.

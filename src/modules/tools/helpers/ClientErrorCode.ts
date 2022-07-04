@@ -1871,6 +1871,17 @@ namespace Twns {
         Helpers_GetValueInRange_08,
         Helpers_GetValueInRange_09,
 
+        Helpers_CheckIsMeetValueComparator2_00,
+        Helpers_CheckIsMeetValueComparator2_01,
+        Helpers_CheckIsMeetValueComparator2_02,
+        Helpers_CheckIsMeetValueComparator2_03,
+        Helpers_CheckIsMeetValueComparator2_04,
+        Helpers_CheckIsMeetValueComparator2_05,
+        Helpers_CheckIsMeetValueComparator2_06,
+        Helpers_CheckIsMeetValueComparator2_07,
+        Helpers_CheckIsMeetValueComparator2_08,
+        Helpers_CheckIsMeetValueComparator2_09,
+
         Lang_GetText_00,
         Lang_GetText_01,
         Lang_GetText_02,

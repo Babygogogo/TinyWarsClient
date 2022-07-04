@@ -921,6 +921,9 @@ namespace Twns.BaseWar {
             const conIsHighlighted                      = action.conIsHighlighted;
             const conLocationIdArray                    = action.conLocationIdArray ?? [];
             const conGridIndexArray                     = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_00)) ?? [];
+            const conHp                                 = action.conHp;
+            const conCapturePoint                       = action.conCapturePoint;
+            const conBuildPoint                         = action.conBuildPoint;
             const actHpMultiplierPercentage             = action.actHpMultiplierPercentage;
             const actHpDeltaValue                       = action.actHpDeltaValue;
             const actBuildPointMultiplierPercentage     = action.actBuildPointMultiplierPercentage;
@@ -941,8 +944,28 @@ namespace Twns.BaseWar {
                         continue;
                     }
 
+                    const currentHp = tile.getCurrentHp();
+                    if (conHp != null) {
+                        if ((currentHp == null) || (!Helpers.checkIsMeetValueComparator2(currentHp, conHp))) {
+                            continue;
+                        }
+                    }
+
+                    const currentBuildPoint = tile.getCurrentBuildPoint();
+                    if (conBuildPoint != null) {
+                        if ((currentBuildPoint == null) || (!Helpers.checkIsMeetValueComparator2(currentBuildPoint, conBuildPoint))) {
+                            continue;
+                        }
+                    }
+
+                    const currentCapturePoint = tile.getCurrentCapturePoint();
+                    if (conCapturePoint != null) {
+                        if ((currentCapturePoint == null) || (!Helpers.checkIsMeetValueComparator2(currentCapturePoint, conCapturePoint))) {
+                            continue;
+                        }
+                    }
+
                     {
-                        const currentHp = tile.getCurrentHp();
                         if ((currentHp != null)                                                 &&
                             ((actHpMultiplierPercentage != null) || (actHpDeltaValue != null))
                         ) {
@@ -955,7 +978,6 @@ namespace Twns.BaseWar {
                     }
 
                     {
-                        const currentBuildPoint = tile.getCurrentBuildPoint();
                         if ((currentBuildPoint != null)                                                         &&
                             ((actBuildPointDeltaValue != null) || (actBuildPointMultiplierPercentage != null))
                         ) {
@@ -968,7 +990,6 @@ namespace Twns.BaseWar {
                     }
 
                     {
-                        const currentCapturePoint = tile.getCurrentCapturePoint();
                         if ((currentCapturePoint != null)                                                           &&
                             ((actCapturePointDeltaValue != null) || (actCapturePointMultiplierPercentage != null))
                         ) {
