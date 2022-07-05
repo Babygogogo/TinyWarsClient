@@ -36,6 +36,7 @@ namespace Twns.BaseWar {
         private readonly _executedActionManager = new BaseWar.BwExecutedActionManager();
         private readonly _randomNumberManager   = new BaseWar.BwRandomNumberManager();
         private readonly _drawVoteManager       = new BaseWar.BwDrawVoteManager();
+        private readonly _warStatisticsManager  = new BaseWar.BwWarStatisticsManager();
         private readonly _view                  = new BaseWar.BwWarView();
 
         private _gameConfig             : GameConfig | null = null;
@@ -130,12 +131,14 @@ namespace Twns.BaseWar {
             playerManager.init(data.playerManager, gameConfig);
 
             const playersCountUnneutral = playerManager.getTotalPlayersCount(false);
-            this.getTurnManager().init(data.turnManager, playersCountUnneutral);
+            const turnManagerData       = Helpers.getExisted(data.turnManager, ClientErrorCode.BwWar_BaseInit_05);
+            this.getTurnManager().init(turnManagerData, playersCountUnneutral);
             this.getField().init({
                 data                : data.field,
                 gameConfig,
                 playersCountUnneutral,
             });
+            this.getWarStatisticsManager().init(data.warStatisticsManager, playersCountUnneutral, Helpers.getExisted(turnManagerData.turnIndex, ClientErrorCode.BwWar_BaseInit_06));
 
             this._setWarId(data.warId ?? null);
             this.setIsEnded(!!data.isEnded);
@@ -162,6 +165,7 @@ namespace Twns.BaseWar {
                 initialState        : warData.seedRandomInitialState,
                 currentState        : warData.seedRandomCurrentState,
             });
+            this.getWarStatisticsManager().fastInit(warData.warStatisticsManager);
             this.setIsEnded(!!warData.isEnded);
 
             const warView = this.getView();
@@ -204,6 +208,7 @@ namespace Twns.BaseWar {
                 playerManager               : this.getPlayerManager().serializeForCreateSfw(),
                 turnManager                 : this.getTurnManager().serializeForCreateSfw(),
                 field                       : this.getField().serializeForCreateSfw(),
+                warStatisticsManager        : this.getWarStatisticsManager().serializeForCreateSfw(),
             };
         }
         public serializeForCreateMfr(): ISerialWar {
@@ -227,6 +232,7 @@ namespace Twns.BaseWar {
                 playerManager               : this.getPlayerManager().serializeForCreateMfr(),
                 turnManager                 : this.getTurnManager().serializeForCreateMfr(),
                 field                       : this.getField().serializeForCreateMfr(),
+                warStatisticsManager        : this.getWarStatisticsManager().serializeForCreateMfr(),
             };
         }
 
@@ -400,6 +406,9 @@ namespace Twns.BaseWar {
         }
         public getExecutedActionManager(): BaseWar.BwExecutedActionManager {
             return this._executedActionManager;
+        }
+        public getWarStatisticsManager(): BwWarStatisticsManager {
+            return this._warStatisticsManager;
         }
     }
 }

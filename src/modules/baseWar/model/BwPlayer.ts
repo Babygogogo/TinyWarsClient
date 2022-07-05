@@ -35,7 +35,6 @@ namespace Twns.BaseWar {
         private _coUsingSkillType?          : Types.CoSkillType;
         private _coIsDestroyedInTurn?       : boolean;
         private _coPowerActivatedCount?     : number;
-        private _hasTakenManualAction?      : boolean;
         private _watchOngoingSrcUserIds?    : Set<number>;
         private _watchRequestSrcUserIds?    : Set<number>;
         private _markedGridIdArray          : number[] = [];
@@ -109,7 +108,6 @@ namespace Twns.BaseWar {
             this.setCoId(coId);
             this.setCoCurrentEnergy(coCurrentEnergy);
             this._setCoPowerActivatedCount(data.coPowerActivatedCount ?? 0);
-            this.setHasTakenManualAction(data.hasTakenManualAction ?? false);
             this.setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdArray || []);
             this.setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
             this._setMarkedGridIdArray(data.markedGridIdArray ?? []);
@@ -133,7 +131,6 @@ namespace Twns.BaseWar {
                 coId                        : this.getCoId(),
                 coCurrentEnergy             : this.getCoCurrentEnergy(),
                 coPowerActivatedCount       : this.getCoPowerActivatedCount(),
-                hasTakenManualAction        : this.getHasTakenManualAction(),
                 watchRequestSrcUserIdArray  : [...(this.getWatchRequestSrcUserIds() || [])],
                 watchOngoingSrcUserIdArray  : [...(this.getWatchOngoingSrcUserIds() || [])],
                 markedGridIdArray           : [...this.getMarkedGridIdArray()],
@@ -157,7 +154,6 @@ namespace Twns.BaseWar {
                 coId                        : this.getCoId(),
                 coCurrentEnergy             : this.getCoCurrentEnergy(),
                 coPowerActivatedCount       : this.getCoPowerActivatedCount(),
-                hasTakenManualAction        : this.getHasTakenManualAction(),
                 watchRequestSrcUserIdArray  : [],
                 watchOngoingSrcUserIdArray  : [],
                 markedGridIdArray           : this.getMarkedGridIdArrayForTeamIndexes(teamIndexes),
@@ -373,13 +369,6 @@ namespace Twns.BaseWar {
         }
         private _setCoPowerActivatedCount(count: number): void {
             this._coPowerActivatedCount = count;
-        }
-
-        public getHasTakenManualAction(): boolean {
-            return Helpers.getExisted(this._hasTakenManualAction);
-        }
-        public setHasTakenManualAction(hasTaken: boolean): void {
-            this._hasTakenManualAction = hasTaken;
         }
 
         public getCoZoneRadius(): number {

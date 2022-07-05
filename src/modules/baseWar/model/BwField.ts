@@ -15,9 +15,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import ClientErrorCode      = Twns.ClientErrorCode;
     import ISerialField         = CommonProto.WarSerialization.ISerialField;
-    import BwGridVisualEffect   = Twns.BaseWar.BwGridVisualEffect;
+    import BwGridVisualEffect   = BaseWar.BwGridVisualEffect;
     import GameConfig           = Config.GameConfig;
 
     export abstract class BwField {
@@ -31,17 +30,17 @@ namespace Twns.BaseWar {
         public abstract getActionPlanner(): BaseWar.BwActionPlanner;
 
         public init({ data, gameConfig, playersCountUnneutral }: {
-            data                    : Twns.Types.Undefinable<ISerialField>;
+            data                    : Types.Undefinable<ISerialField>;
             gameConfig              : GameConfig;
             playersCountUnneutral   : number;
         }): void {
             if (data == null) {
-                throw Twns.Helpers.newError(`Empty data.`, ClientErrorCode.BwField_Init_00);
+                throw Helpers.newError(`Empty data.`, ClientErrorCode.BwField_Init_00);
             }
 
             const mapSize = WarHelpers.WarCommonHelpers.getMapSize(data.tileMap);
             if (!WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
-                throw Twns.Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwField_Init_01);
+                throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwField_Init_01);
             }
 
             this.getFogMap().init({
@@ -72,7 +71,7 @@ namespace Twns.BaseWar {
                     const gridIndex = { x, y };
                     const tile      = tileMap.getTile(gridIndex);
                     if ((tile.getMaxHp() != null) && (unitMap.getUnitOnMap(gridIndex))) {
-                        throw Twns.Helpers.newError(`There is a unit on an attackable tile.`, ClientErrorCode.BwField_Init_02);
+                        throw Helpers.newError(`There is a unit on an attackable tile.`, ClientErrorCode.BwField_Init_02);
                     }
                 }
             }

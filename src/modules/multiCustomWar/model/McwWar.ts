@@ -10,7 +10,6 @@ namespace Twns.MultiCustomWar {
     import MpwWar           = MultiPlayerWar.MpwWar;
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForMcw  = CommonProto.WarSettings.ISettingsForMcw;
-    import ClientErrorCode  = Twns.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
     export class McwWar extends MpwWar {
@@ -18,7 +17,7 @@ namespace Twns.MultiCustomWar {
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
-            this._setSettingsForMcw(Twns.Helpers.getExisted(data.settingsForMcw, ClientErrorCode.McwWar_Init_00));
+            this._setSettingsForMcw(Helpers.getExisted(data.settingsForMcw, ClientErrorCode.McwWar_Init_00));
 
             this._initView();
         }
@@ -33,14 +32,14 @@ namespace Twns.MultiCustomWar {
             return false;
         }
         public getMapId(): number {
-            return Twns.Helpers.getExisted(this.getSettingsForMcw().mapId);
+            return Helpers.getExisted(this.getSettingsForMcw().mapId);
         }
 
         private _setSettingsForMcw(settings: ISettingsForMcw): void {
             this._settingsForMcw = settings;
         }
         public getSettingsForMcw(): ISettingsForMcw {
-            return Twns.Helpers.getExisted(this._settingsForMcw);
+            return Helpers.getExisted(this._settingsForMcw);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +59,7 @@ namespace Twns.MultiCustomWar {
         }
 
         public getSettingsBootTimerParams(): number[] {
-            return Twns.Helpers.getExisted(this.getSettingsForMcw().bootTimerParams);
+            return Helpers.getExisted(this.getSettingsForMcw().bootTimerParams);
         }
     }
 }

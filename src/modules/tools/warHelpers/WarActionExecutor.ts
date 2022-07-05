@@ -129,7 +129,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExePlayerDeleteUnit(war, action)
             : await normalExePlayerDeleteUnit(war, action);
@@ -186,7 +186,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExePlayerEndTurn(war, action)
             : await normalExePlayerEndTurn(war, action);
@@ -205,7 +205,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExePlayerProduceUnit(war, action)
             : await normalExePlayerProduceUnit(war, action);
@@ -293,7 +293,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExePlayerSurrender(war, action)
             : await normalExePlayerSurrender(war, action);
@@ -337,7 +337,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerVoteForDraw(war: BwWar, action: IWarActionPlayerVoteForDraw, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExePlayerVoteForDraw(war, action)
             : await normalExePlayerVoteForDraw(war, action);
@@ -399,7 +399,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExePlayerUseCoSkill(war, action)
             : await normalExePlayerUseCoSkill(war, action);
@@ -782,7 +782,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitAttackTile(war, action)
             : await normalExeUnitAttackTile(war, action);
@@ -1120,7 +1120,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitAttackUnit(war, action)
             : await normalExeUnitAttackUnit(war, action);
@@ -1475,7 +1475,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitBeLoaded(war, action)
             : await normalExeUnitBeLoaded(war, action);
@@ -1578,7 +1578,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitBuildTile(war, action)
             : await normalExeUnitBuildTile(war, action);
@@ -1691,7 +1691,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitCaptureTile(war, action)
             : await normalExeUnitCaptureTile(war, action);
@@ -1858,7 +1858,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitDive(war: BwWar, action: IWarActionUnitDive, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitDive(war, action)
             : await normalExeUnitDive(war, action);
@@ -1952,7 +1952,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitDropUnit(war, action)
             : await normalExeUnitDropUnit(war, action);
@@ -2113,7 +2113,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitJoinUnit(war, action)
             : await normalExeUnitJoinUnit(war, action);
@@ -2361,7 +2361,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitLaunchFlare(war, action)
             : await normalExeUnitLaunchFlare(war, action);
@@ -2477,7 +2477,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitLaunchSilo(war, action)
             : await normalExeUnitLaunchSilo(war, action);
@@ -2617,7 +2617,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitLoadCo(war, action)
             : await normalExeUnitLoadCo(war, action);
@@ -2718,7 +2718,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitProduceUnit(war, action)
             : await normalExeUnitProduceUnit(war, action);
@@ -2871,7 +2871,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitSupplyUnit(war, action)
             : await normalExeUnitSupplyUnit(war, action);
@@ -2995,7 +2995,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitSurface(war: BwWar, action: IWarActionUnitSurface, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitSurface(war, action)
             : await normalExeUnitSurface(war, action);
@@ -3089,7 +3089,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitUseCoSkill(war: BwWar, action: IWarActionUnitUseCoSkill, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitUseCoSkill(war, action)
             : await normalExeUnitUseCoSkill(war, action);
@@ -3258,7 +3258,7 @@ namespace Twns.WarHelpers.WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitWait(war: BwWar, action: IWarActionUnitWait, isFast: boolean): Promise<void> {
-        war.getPlayerInTurn().setHasTakenManualAction(true);
+        war.getWarStatisticsManager().tickPlayerManualActionsCount();
         isFast
             ? await fastExeUnitWait(war, action)
             : await normalExeUnitWait(war, action);

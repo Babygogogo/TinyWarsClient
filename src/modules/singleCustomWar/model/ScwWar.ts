@@ -39,6 +39,7 @@ namespace Twns.SingleCustomWar {
                 turnManager                 : this.getTurnManager().serialize(),
                 field                       : this.getField().serialize(),
                 executedActionManager       : null,
+                warStatisticsManager        : this.getWarStatisticsManager().serialize(),
             };
         }
 

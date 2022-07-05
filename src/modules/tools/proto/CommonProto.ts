@@ -12587,8 +12587,8 @@ declare namespace CommonProto {
             /** SerialPlayer coPowerActivatedCount */
             coPowerActivatedCount?: (number|null);
 
-            /** SerialPlayer hasTakenManualAction */
-            hasTakenManualAction?: (boolean|null);
+            /** SerialPlayer deprecatedHasTakenManualAction */
+            deprecatedHasTakenManualAction?: (boolean|null);
 
             /** SerialPlayer markedGridIdArray */
             markedGridIdArray?: (number[]|null);
@@ -12645,8 +12645,8 @@ declare namespace CommonProto {
             /** SerialPlayer coPowerActivatedCount. */
             public coPowerActivatedCount: number;
 
-            /** SerialPlayer hasTakenManualAction. */
-            public hasTakenManualAction: boolean;
+            /** SerialPlayer deprecatedHasTakenManualAction. */
+            public deprecatedHasTakenManualAction: boolean;
 
             /** SerialPlayer markedGridIdArray. */
             public markedGridIdArray: number[];
@@ -13622,6 +13622,294 @@ declare namespace CommonProto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a SerialWarStatisticsManager. */
+        interface ISerialWarStatisticsManager {
+
+            /** SerialWarStatisticsManager playerStatisticsArray */
+            playerStatisticsArray?: (CommonProto.WarSerialization.SerialWarStatisticsManager.IPlayerStatistics[]|null);
+        }
+
+        /** Represents a SerialWarStatisticsManager. */
+        class SerialWarStatisticsManager implements ISerialWarStatisticsManager {
+
+            /**
+             * Constructs a new SerialWarStatisticsManager.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.WarSerialization.ISerialWarStatisticsManager);
+
+            /** SerialWarStatisticsManager playerStatisticsArray. */
+            public playerStatisticsArray: CommonProto.WarSerialization.SerialWarStatisticsManager.IPlayerStatistics[];
+
+            /**
+             * Creates a new SerialWarStatisticsManager instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns SerialWarStatisticsManager instance
+             */
+            public static create(properties?: CommonProto.WarSerialization.ISerialWarStatisticsManager): CommonProto.WarSerialization.SerialWarStatisticsManager;
+
+            /**
+             * Encodes the specified SerialWarStatisticsManager message. Does not implicitly {@link CommonProto.WarSerialization.SerialWarStatisticsManager.verify|verify} messages.
+             * @param message SerialWarStatisticsManager message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.WarSerialization.ISerialWarStatisticsManager, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified SerialWarStatisticsManager message, length delimited. Does not implicitly {@link CommonProto.WarSerialization.SerialWarStatisticsManager.verify|verify} messages.
+             * @param message SerialWarStatisticsManager message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.WarSerialization.ISerialWarStatisticsManager, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a SerialWarStatisticsManager message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns SerialWarStatisticsManager
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarSerialization.SerialWarStatisticsManager;
+
+            /**
+             * Decodes a SerialWarStatisticsManager message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns SerialWarStatisticsManager
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarSerialization.SerialWarStatisticsManager;
+
+            /**
+             * Verifies a SerialWarStatisticsManager message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a SerialWarStatisticsManager message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns SerialWarStatisticsManager
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.WarSerialization.SerialWarStatisticsManager;
+
+            /**
+             * Creates a plain object from a SerialWarStatisticsManager message. Also converts values to other types if specified.
+             * @param message SerialWarStatisticsManager
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.WarSerialization.SerialWarStatisticsManager, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this SerialWarStatisticsManager to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace SerialWarStatisticsManager {
+
+            /** Properties of a PlayerStatistics. */
+            interface IPlayerStatistics {
+
+                /** PlayerStatistics playerIndex */
+                playerIndex?: (number|null);
+
+                /** PlayerStatistics playerTurnStatisticsArray */
+                playerTurnStatisticsArray?: (CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics.IPlayerTurnStatistics[]|null);
+            }
+
+            /** Represents a PlayerStatistics. */
+            class PlayerStatistics implements IPlayerStatistics {
+
+                /**
+                 * Constructs a new PlayerStatistics.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.WarSerialization.SerialWarStatisticsManager.IPlayerStatistics);
+
+                /** PlayerStatistics playerIndex. */
+                public playerIndex: number;
+
+                /** PlayerStatistics playerTurnStatisticsArray. */
+                public playerTurnStatisticsArray: CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics.IPlayerTurnStatistics[];
+
+                /**
+                 * Creates a new PlayerStatistics instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns PlayerStatistics instance
+                 */
+                public static create(properties?: CommonProto.WarSerialization.SerialWarStatisticsManager.IPlayerStatistics): CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics;
+
+                /**
+                 * Encodes the specified PlayerStatistics message. Does not implicitly {@link CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics.verify|verify} messages.
+                 * @param message PlayerStatistics message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.WarSerialization.SerialWarStatisticsManager.IPlayerStatistics, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified PlayerStatistics message, length delimited. Does not implicitly {@link CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics.verify|verify} messages.
+                 * @param message PlayerStatistics message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.WarSerialization.SerialWarStatisticsManager.IPlayerStatistics, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a PlayerStatistics message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns PlayerStatistics
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics;
+
+                /**
+                 * Decodes a PlayerStatistics message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns PlayerStatistics
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics;
+
+                /**
+                 * Verifies a PlayerStatistics message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a PlayerStatistics message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns PlayerStatistics
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics;
+
+                /**
+                 * Creates a plain object from a PlayerStatistics message. Also converts values to other types if specified.
+                 * @param message PlayerStatistics
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this PlayerStatistics to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace PlayerStatistics {
+
+                /** Properties of a PlayerTurnStatistics. */
+                interface IPlayerTurnStatistics {
+
+                    /** PlayerTurnStatistics turnIndex */
+                    turnIndex?: (number|null);
+
+                    /** PlayerTurnStatistics manualActionsCount */
+                    manualActionsCount?: (number|null);
+                }
+
+                /** Represents a PlayerTurnStatistics. */
+                class PlayerTurnStatistics implements IPlayerTurnStatistics {
+
+                    /**
+                     * Constructs a new PlayerTurnStatistics.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics.IPlayerTurnStatistics);
+
+                    /** PlayerTurnStatistics turnIndex. */
+                    public turnIndex: number;
+
+                    /** PlayerTurnStatistics manualActionsCount. */
+                    public manualActionsCount: number;
+
+                    /**
+                     * Creates a new PlayerTurnStatistics instance using the specified properties.
+                     * @param [properties] Properties to set
+                     * @returns PlayerTurnStatistics instance
+                     */
+                    public static create(properties?: CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics.IPlayerTurnStatistics): CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics.PlayerTurnStatistics;
+
+                    /**
+                     * Encodes the specified PlayerTurnStatistics message. Does not implicitly {@link CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics.PlayerTurnStatistics.verify|verify} messages.
+                     * @param message PlayerTurnStatistics message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encode(message: CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics.IPlayerTurnStatistics, writer?: protobuf.Writer): protobuf.Writer;
+
+                    /**
+                     * Encodes the specified PlayerTurnStatistics message, length delimited. Does not implicitly {@link CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics.PlayerTurnStatistics.verify|verify} messages.
+                     * @param message PlayerTurnStatistics message or plain object to encode
+                     * @param [writer] Writer to encode to
+                     * @returns Writer
+                     */
+                    public static encodeDelimited(message: CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics.IPlayerTurnStatistics, writer?: protobuf.Writer): protobuf.Writer;
+
+                    /**
+                     * Decodes a PlayerTurnStatistics message from the specified reader or buffer.
+                     * @param reader Reader or buffer to decode from
+                     * @param [length] Message length if known beforehand
+                     * @returns PlayerTurnStatistics
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics.PlayerTurnStatistics;
+
+                    /**
+                     * Decodes a PlayerTurnStatistics message from the specified reader or buffer, length delimited.
+                     * @param reader Reader or buffer to decode from
+                     * @returns PlayerTurnStatistics
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics.PlayerTurnStatistics;
+
+                    /**
+                     * Verifies a PlayerTurnStatistics message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a PlayerTurnStatistics message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns PlayerTurnStatistics
+                     */
+                    public static fromObject(object: { [k: string]: any }): CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics.PlayerTurnStatistics;
+
+                    /**
+                     * Creates a plain object from a PlayerTurnStatistics message. Also converts values to other types if specified.
+                     * @param message PlayerTurnStatistics
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: CommonProto.WarSerialization.SerialWarStatisticsManager.PlayerStatistics.PlayerTurnStatistics, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this PlayerTurnStatistics to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+        }
+
         /** Properties of a SerialWar. */
         interface ISerialWar {
 
@@ -13657,6 +13945,9 @@ declare namespace CommonProto {
 
             /** SerialWar seedRandomCurrentState */
             seedRandomCurrentState?: (CommonProto.Structure.ISeedRandomState|null);
+
+            /** SerialWar warStatisticsManager */
+            warStatisticsManager?: (CommonProto.WarSerialization.ISerialWarStatisticsManager|null);
 
             /** SerialWar remainingVotesForDraw */
             remainingVotesForDraw?: (number|null);
@@ -13724,6 +14015,9 @@ declare namespace CommonProto {
 
             /** SerialWar seedRandomCurrentState. */
             public seedRandomCurrentState?: (CommonProto.Structure.ISeedRandomState|null);
+
+            /** SerialWar warStatisticsManager. */
+            public warStatisticsManager?: (CommonProto.WarSerialization.ISerialWarStatisticsManager|null);
 
             /** SerialWar remainingVotesForDraw. */
             public remainingVotesForDraw: number;

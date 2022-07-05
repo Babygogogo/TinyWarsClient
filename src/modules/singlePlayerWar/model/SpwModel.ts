@@ -212,7 +212,8 @@ namespace Twns.SinglePlayerWar.SpwModel {
         const playerInTurn      = playerManager.getPlayerInTurn();
         const hasVotedForDraw   = playerInTurn.getHasVotedForDraw();
         const turnPhaseCode     = war.getTurnPhaseCode();
-        if (war.getTurnManager().getTurnIndex() > war.getCommonSettingManager().getTurnsLimit()) {
+        const turnIndex         = war.getTurnManager().getTurnIndex();
+        if (turnIndex > war.getCommonSettingManager().getTurnsLimit()) {
             if (war.checkCanEnd()) {
                 await handleSystemEndWar(war);
                 await checkAndHandleSystemActions(war);
@@ -276,7 +277,7 @@ namespace Twns.SinglePlayerWar.SpwModel {
                 throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_00);
             }
 
-            if (!playerInTurn.getHasTakenManualAction()) {
+            if (!war.getWarStatisticsManager().getManualActionsCount(turnIndex, playerInTurn.getPlayerIndex())) {
                 await handleSystemHandleBootPlayer(war);
                 await checkAndHandleSystemActions(war);
                 return true;

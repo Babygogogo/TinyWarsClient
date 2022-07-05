@@ -259,6 +259,7 @@ namespace Twns.HalfwayReplayWar {
                     playerManager               : this.getPlayerManager().serialize(),
                     turnManager                 : this.getTurnManager().serialize(),
                     field                       : this.getField().serialize(),
+                    warStatisticsManager        : this.getWarStatisticsManager().serialize(),
                 }),
             };
         }

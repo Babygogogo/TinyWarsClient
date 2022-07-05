@@ -831,7 +831,6 @@ namespace Twns.BaseWar {
             const war       = this.getWar();
             const player    = war.getPlayerInTurn();
             player.setHasVotedForDraw(false);
-            player.setHasTakenManualAction(false);
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

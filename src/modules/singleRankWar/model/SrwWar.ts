@@ -41,6 +41,7 @@ namespace Twns.SingleRankWar {
                 turnManager                 : this.getTurnManager().serialize(),
                 field                       : this.getField().serialize(),
                 executedActionManager       : this.getExecutedActionManager().serialize(),
+                warStatisticsManager        : this.getWarStatisticsManager().serialize(),
             };
         }
         public serializeForValidation(): ISerialWar {
