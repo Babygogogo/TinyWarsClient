@@ -889,6 +889,7 @@ namespace Twns.BaseWar {
             const conGridIndexArray         = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_03)) ?? [];
             const conPlayerIndexArray       = action.conPlayerIndexArray ?? [];
             const conIsOwnerPlayerInTurn    = action.conIsOwnerPlayerInTurn;
+            const conTileTypeArray          = action.conTileTypeArray ?? [];
             const unitMap                   = war.getUnitMap();
             const tileMap                   = war.getTileMap();
             const mapSize                   = tileMap.getMapSize();
@@ -910,6 +911,7 @@ namespace Twns.BaseWar {
 
                     if (((conIsHighlighted != null) && (tile.getIsHighlighted() !== conIsHighlighted))                              ||
                         ((conPlayerIndexArray.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0))                            ||
+                        ((conTileTypeArray.length) && (conTileTypeArray.indexOf(tile.getType()) < 0))                               ||
                         ((conGridIndexArray.length) && (!conGridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
                         ((conLocationIdArray.length) && (!conLocationIdArray.some(v => tile.getHasLocationFlag(v))))
                     ) {
@@ -967,6 +969,7 @@ namespace Twns.BaseWar {
             const conBuildPoint                         = action.conBuildPoint;
             const conPlayerIndexArray                   = action.conPlayerIndexArray ?? [];
             const conIsOwnerPlayerInTurn                = action.conIsOwnerPlayerInTurn;
+            const conTileTypeArray                      = action.conTileTypeArray ?? [];
             const actHpMultiplierPercentage             = action.actHpMultiplierPercentage;
             const actHpDeltaValue                       = action.actHpDeltaValue;
             const actBuildPointMultiplierPercentage     = action.actBuildPointMultiplierPercentage;
@@ -991,6 +994,7 @@ namespace Twns.BaseWar {
 
                     if (((conIsHighlighted != null) && (tile.getIsHighlighted() !== conIsHighlighted))                              ||
                         ((conPlayerIndexArray.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0))                            ||
+                        ((conTileTypeArray.length) && (conTileTypeArray.indexOf(tile.getType()) < 0))                               ||
                         ((conGridIndexArray.length) && (!conGridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
                         ((conLocationIdArray.length) && (!conLocationIdArray.some(v => tile.getHasLocationFlag(v))))
                     ) {

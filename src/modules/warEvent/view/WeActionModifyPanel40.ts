@@ -46,6 +46,9 @@ namespace Twns.WarEvent {
         private readonly _btnConIsPlayerInTurn!             : TwnsUiButton.UiButton;
         private readonly _labelConIsPlayerInTurn!           : TwnsUiLabel.UiLabel;
 
+        private readonly _btnConTileType!                   : TwnsUiButton.UiButton;
+        private readonly _labelConTileType!                 : TwnsUiLabel.UiLabel;
+
         private readonly _btnDestroyUnit!                   : TwnsUiButton.UiButton;
         private readonly _labelDestroyUnit!                 : TwnsUiLabel.UiLabel;
 
@@ -87,6 +90,8 @@ namespace Twns.WarEvent {
 
                 { ui: this._btnPlayerIndex,                     callback: this._onTouchedBtnPlayerIndex },
                 { ui: this._btnConIsPlayerInTurn,               callback: this._onTouchedBtnConIsPlayerInTurn },
+
+                { ui: this._btnConTileType,                     callback: this._onTouchedBtnConTileType },
 
                 { ui: this._btnDestroyUnit,                     callback: this._onTouchedBtnDestroyUnit },
                 { ui: this._btnActIsHighlighted,                callback: this._onTouchedBtnActIsHighlighted },
@@ -199,6 +204,18 @@ namespace Twns.WarEvent {
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
+        private _onTouchedBtnConTileType(): void {
+            const action = this._getAction();
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseTileTypePanel, {
+                gameConfig              : this._getOpenData().war.getGameConfig(),
+                currentTileTypeArray    : action.conTileTypeArray ?? [],
+                callbackOnConfirm       : tileTypeArray => {
+                    action.conTileTypeArray = tileTypeArray;
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
+
         private _onTouchedBtnDestroyUnit(): void {
             const action          = this._getAction();
             action.actDestroyUnit = !action.actDestroyUnit;
@@ -293,6 +310,8 @@ namespace Twns.WarEvent {
             this._updateLabelPlayerIndex();
             this._updateLabelConIsPlayerInTurn();
 
+            this._updateLabelConTileType();
+
             this._updateLabelDestroyUnit();
             this._updateTileView();
             this._updateLabelActIsHighlighted();
@@ -311,6 +330,8 @@ namespace Twns.WarEvent {
 
             this._btnPlayerIndex.label                      = Lang.getText(LangTextType.B0031);
             this._btnConIsPlayerInTurn.label                = Lang.getText(LangTextType.B0086);
+
+            this._btnConTileType.label                      = Lang.getText(LangTextType.B0718);
 
             this._btnDestroyUnit.label                      = Lang.getText(LangTextType.B0826);
             this._btnActIsHighlighted.label                 = Lang.getText(LangTextType.B0847);
@@ -369,6 +390,12 @@ namespace Twns.WarEvent {
             } else {
                 label.text = Lang.getText(conIsOwnerPlayerInTurn ? LangTextType.B0012 : LangTextType.B0013);
             }
+        }
+
+        private _updateLabelConTileType(): void {
+            const conTileTypeArray      = this._getAction().conTileTypeArray;
+            const gameConfig            = this._getOpenData().war.getGameConfig();
+            this._labelConTileType.text = conTileTypeArray?.length ? conTileTypeArray.map(v => Lang.getTileName(v, gameConfig)).join(`, `) : Lang.getText(LangTextType.B0776);
         }
 
         private _updateLabelDestroyUnit(): void {

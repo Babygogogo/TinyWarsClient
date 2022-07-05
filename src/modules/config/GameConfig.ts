@@ -141,6 +141,13 @@ namespace Twns.Config {
         public checkIsValidTileType(tileType: number): boolean {
             return this._tileTemplateCfgDict.has(tileType);
         }
+        public checkIsValidTileTypeSubset(tileTypeArray: number[]): boolean {
+            if ((new Set(tileTypeArray)).size !== tileTypeArray.length) {
+                return false;
+            }
+
+            return tileTypeArray.every(v => this.checkIsValidTileType(v));
+        }
         public getAllTileTypeArray(): number[] {
             return [...this._tileTemplateCfgDict].map(v => v[0]);
         }

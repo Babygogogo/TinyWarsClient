@@ -44,6 +44,9 @@ namespace Twns.WarEvent {
         private readonly _btnConIsPlayerInTurn!                     : TwnsUiButton.UiButton;
         private readonly _labelConIsPlayerInTurn!                   : TwnsUiLabel.UiLabel;
 
+        private readonly _btnConTileType!                           : TwnsUiButton.UiButton;
+        private readonly _labelConTileType!                         : TwnsUiLabel.UiLabel;
+
         private readonly _labelConHp!                               : TwnsUiLabel.UiLabel;
         private readonly _inputConHp!                               : TwnsUiTextInput.UiTextInput;
         private readonly _labelConHpComparator!                     : TwnsUiLabel.UiLabel;
@@ -100,6 +103,8 @@ namespace Twns.WarEvent {
 
                 { ui: this._btnPlayerIndex,                             callback: this._onTouchedBtnPlayerIndex },
                 { ui: this._btnConIsPlayerInTurn,                       callback: this._onTouchedBtnConIsPlayerInTurn },
+
+                { ui: this._btnConTileType,                             callback: this._onTouchedBtnConTileType },
 
                 { ui: this._btnConHpComparator,                         callback: this._onTouchedBtnConHpComparator },
                 { ui: this._inputConHp,                                 callback: this._onFocusInInputConHp,                                    eventType: egret.FocusEvent.FOCUS_IN },
@@ -219,6 +224,18 @@ namespace Twns.WarEvent {
                 action.conIsOwnerPlayerInTurn = null;
             }
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+
+        private _onTouchedBtnConTileType(): void {
+            const action = this._getAction();
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseTileTypePanel, {
+                gameConfig              : this._getOpenData().war.getGameConfig(),
+                currentTileTypeArray    : action.conTileTypeArray ?? [],
+                callbackOnConfirm       : tileTypeArray => {
+                    action.conTileTypeArray = tileTypeArray;
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
         }
 
         private _onTouchedBtnConHpComparator(): void {
@@ -459,6 +476,8 @@ namespace Twns.WarEvent {
             this._updateLabelPlayerIndex();
             this._updateLabelConIsPlayerInTurn();
 
+            this._updateLabelConTileType();
+
             this._updateLabelConHpComparator();
             this._updateInputConHp();
 
@@ -495,6 +514,8 @@ namespace Twns.WarEvent {
 
             this._btnPlayerIndex.label                          = Lang.getText(LangTextType.B0031);
             this._btnConIsPlayerInTurn.label                    = Lang.getText(LangTextType.B0086);
+
+            this._btnConTileType.label                         = Lang.getText(LangTextType.B0718);
 
             this._labelActHp.text                               = Lang.getText(LangTextType.B0807);
             this._labelActHpDeltaValue.text                     = Lang.getText(LangTextType.B0754);
@@ -552,6 +573,12 @@ namespace Twns.WarEvent {
             } else {
                 label.text = Lang.getText(conIsOwnerPlayerInTurn ? LangTextType.B0012 : LangTextType.B0013);
             }
+        }
+
+        private _updateLabelConTileType(): void {
+            const conTileTypeArray      = this._getAction().conTileTypeArray;
+            const gameConfig            = this._getOpenData().war.getGameConfig();
+            this._labelConTileType.text = conTileTypeArray?.length ? conTileTypeArray.map(v => Lang.getTileName(v, gameConfig)).join(`, `) : Lang.getText(LangTextType.B0776);
         }
 
         private _updateLabelConHpComparator(): void {

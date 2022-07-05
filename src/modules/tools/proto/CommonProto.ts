@@ -8783,6 +8783,9 @@ declare namespace CommonProto {
             /** WeaSetTileType conIsOwnerPlayerInTurn */
             conIsOwnerPlayerInTurn?: (boolean|null);
 
+            /** WeaSetTileType conTileTypeArray */
+            conTileTypeArray?: (number[]|null);
+
             /** WeaSetTileType actTileData */
             actTileData?: (CommonProto.WarSerialization.ISerialTile|null);
 
@@ -8822,6 +8825,9 @@ declare namespace CommonProto {
 
             /** WeaSetTileType conIsOwnerPlayerInTurn. */
             public conIsOwnerPlayerInTurn: boolean;
+
+            /** WeaSetTileType conTileTypeArray. */
+            public conTileTypeArray: number[];
 
             /** WeaSetTileType actTileData. */
             public actTileData?: (CommonProto.WarSerialization.ISerialTile|null);
@@ -8936,6 +8942,9 @@ declare namespace CommonProto {
             /** WeaSetTileState conIsOwnerPlayerInTurn */
             conIsOwnerPlayerInTurn?: (boolean|null);
 
+            /** WeaSetTileState conTileTypeArray */
+            conTileTypeArray?: (number[]|null);
+
             /** WeaSetTileState actHpMultiplierPercentage */
             actHpMultiplierPercentage?: (number|null);
 
@@ -8996,6 +9005,9 @@ declare namespace CommonProto {
 
             /** WeaSetTileState conIsOwnerPlayerInTurn. */
             public conIsOwnerPlayerInTurn: boolean;
+
+            /** WeaSetTileState conTileTypeArray. */
+            public conTileTypeArray: number[];
 
             /** WeaSetTileState actHpMultiplierPercentage. */
             public actHpMultiplierPercentage: number;

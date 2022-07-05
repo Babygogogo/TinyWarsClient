@@ -389,7 +389,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             || (checkIsValidWeaSetPlayerState(action.WeaSetPlayerState, playersCountUnneutral))
             || (checkIsValidWeaSetUnitState(action.WeaSetUnitState, mapSize, playersCountUnneutral, gameConfig))
             || (checkIsValidWeaSetTileType(action.WeaSetTileType, mapSize, playersCountUnneutral, gameConfig))
-            || (checkIsValidWeaSetTileState(action.WeaSetTileState, mapSize, playersCountUnneutral))
+            || (checkIsValidWeaSetTileState(action.WeaSetTileState, mapSize, playersCountUnneutral, gameConfig))
             || (checkIsValidWeaPersistentShowText(action.WeaPersistentShowText))
             || (checkIsValidWeaPersistentModifyPlayerAttribute(action.WeaPersistentModifyPlayerAttribute, playersCountUnneutral, gameConfig));
         }
@@ -832,6 +832,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         {
+            const conTileTypeArray = action.conTileTypeArray;
+            if ((conTileTypeArray) && (!gameConfig.checkIsValidTileTypeSubset(conTileTypeArray))) {
+                return false;
+            }
+        }
+
+        {
             const gridIndexArray = action.conGridIndexArray;
             if ((gridIndexArray) && (!Config.ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, mapSize))) {
                 return false;
@@ -853,7 +860,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWeaSetTileState(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetTileState>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaSetTileState(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetTileState>, mapSize: Types.MapSize, playersCountUnneutral: number, gameConfig: GameConfig): boolean {
         if (action == null) {
             return false;
         }
@@ -875,6 +882,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
         {
             const conPlayerIndexArray = action.conPlayerIndexArray;
             if ((conPlayerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+                return false;
+            }
+        }
+
+        {
+            const conTileTypeArray = action.conTileTypeArray;
+            if ((conTileTypeArray) && (!gameConfig.checkIsValidTileTypeSubset(conTileTypeArray))) {
                 return false;
             }
         }
@@ -1259,12 +1273,10 @@ namespace Twns.WarHelpers.WarEventHelpers {
             }
         }
 
-        const tileTypeArray = condition.tileTypeArray;
-        if (tileTypeArray) {
-            for (const tileType of tileTypeArray) {
-                if (!gameConfig.checkIsValidTileType(tileType)) {
-                    return false;
-                }
+        {
+            const tileTypeArray = condition.tileTypeArray;
+            if ((tileTypeArray) && (!gameConfig.checkIsValidTileTypeSubset(tileTypeArray))) {
+                return false;
             }
         }
 
@@ -1956,7 +1968,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             || (getDescForWeaSetPlayerState(action.WeaSetPlayerState))
             || (getDescForWeaSetUnitState(action.WeaSetUnitState, gameConfig))
             || (getDescForWeaSetTileType(action.WeaSetTileType, gameConfig))
-            || (getDescForWeaSetTileState(action.WeaSetTileState))
+            || (getDescForWeaSetTileState(action.WeaSetTileState, gameConfig))
             || (getDescForWeaPersistentShowText(action.WeaPersistentShowText))
             || (getDescForWeaPersistentModifyPlayerAttribute(action.WeaPersistentModifyPlayerAttribute, gameConfig));
     }
@@ -2309,6 +2321,11 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return null;
         }
 
+        const conTileTypeArray          = data.conTileTypeArray ?? [];
+        const textForConTileTypeArray   = conTileTypeArray.length
+            ? Lang.getFormattedText(LangTextType.F0142, conTileTypeArray.map(v => Lang.getTileName(v, gameConfig)).join(`/`))
+            : null;
+
         const conGridIndexArray         = data.conGridIndexArray;
         const textForConGridIndexArray  = conGridIndexArray?.length
             ? conGridIndexArray.map(v => `(${v.x},${v.y})`).join(`/`)
@@ -2335,6 +2352,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             : Lang.getText(conIsOwnerPlayerInTurn ? LangTextType.B0925 : LangTextType.B0926);
 
         const textArrayForSubConditions = Helpers.getNonNullElements([
+            textForConTileTypeArray,
             textForConLocation,
             textForConPlayerIndexArray,
             textForConIsOwnerPlayerInTurn,
@@ -2375,7 +2393,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
         )} ${textArrayForModifiers.join(` `)}`;
     }
-    function getDescForWeaSetTileState(data: Types.Undefinable<WarEvent.IWeaSetTileState>): string | null {
+    function getDescForWeaSetTileState(data: Types.Undefinable<WarEvent.IWeaSetTileState>, gameConfig: GameConfig): string | null {
         if (data == null) {
             return null;
         }
@@ -2388,6 +2406,11 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const conLocationIdArray    = data.conLocationIdArray;
         const textForConLocation    = conLocationIdArray?.length
             ? Lang.getFormattedText(LangTextType.F0116, conLocationIdArray.join(`/`))
+            : null;
+
+        const conTileTypeArray          = data.conTileTypeArray ?? [];
+        const textForConTileTypeArray   = conTileTypeArray.length
+            ? Lang.getFormattedText(LangTextType.F0142, conTileTypeArray.map(v => Lang.getTileName(v, gameConfig)).join(`/`))
             : null;
 
         const conIsHighlighted          = data.conIsHighlighted;
@@ -2422,6 +2445,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const textArrayForSubConditions = Helpers.getNonNullElements([
             textForConLocation,
+            textForConTileTypeArray,
             textForConPlayerIndexArray,
             textForConIsOwnerPlayerInTurn,
             textForConIsHighlighted,
@@ -2764,9 +2788,11 @@ namespace Twns.WarHelpers.WarEventHelpers {
             }
         }
 
-        const gameConfig = war.getGameConfig();
-        if (data.tileTypeArray?.some(v => !gameConfig.checkIsValidTileType(v))) {
-            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0718));
+        {
+            const tileTypeArray = data.tileTypeArray;
+            if ((tileTypeArray) && (!war.getGameConfig().checkIsValidTileTypeSubset(tileTypeArray))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0718));
+            }
         }
 
         const playersCountUnneutral = war.getPlayersCountUnneutral();
@@ -3320,6 +3346,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
             }
         }
 
+        {
+            const conTileTypeArray = data.conTileTypeArray;
+            if ((conTileTypeArray) && (!war.getGameConfig().checkIsValidTileTypeSubset(conTileTypeArray))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0718));
+            }
+        }
+
         const playersCountUnneutral = war.getPlayersCountUnneutral();
         {
             const conPlayerIndexArray = data.conPlayerIndexArray;
@@ -3359,6 +3392,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
             const gridIndexArray = data.conGridIndexArray;
             if ((gridIndexArray) && (!Config.ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, war.getTileMap().getMapSize()))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0531));
+            }
+        }
+
+        {
+            const conTileTypeArray = data.conTileTypeArray;
+            if ((conTileTypeArray) && (!war.getGameConfig().checkIsValidTileTypeSubset(conTileTypeArray))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0718));
             }
         }
 
