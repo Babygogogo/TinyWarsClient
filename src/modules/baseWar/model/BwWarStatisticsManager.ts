@@ -107,5 +107,32 @@ namespace Twns.BaseWar {
             const turnManager = this._getWar().getTurnManager();
             return this.getManualActionsCount(turnManager.getTurnIndex(), turnManager.getPlayerIndexInTurn());
         }
+        public getManualActionsCountForPlayersInRecentTurns(playerIndexSet: Set<number>, recentTurnsCount: Types.Undefinable<number>): number {
+            const currentTurnIndex  = this._getWar().getTurnManager().getTurnIndex();
+            const maxTurnIndex      = currentTurnIndex;
+            const minTurnIndex      = recentTurnsCount == null
+                ? CommonConstants.WarFirstTurnIndex
+                : Math.max(CommonConstants.WarFirstTurnIndex, currentTurnIndex - recentTurnsCount + 1);
+            if (minTurnIndex > maxTurnIndex) {
+                return 0;
+            }
+
+            let manualActionsCount  = 0;
+            for (const playerData of this._getPlayerStatisticsArray()) {
+                const playerIndex = Helpers.getExisted(playerData.playerIndex, ClientErrorCode.BwWarStatisticsManager_GetManualActionsCountForPlayersInRecentTurns_00);
+                if (!playerIndexSet.has(playerIndex)) {
+                    continue;
+                }
+
+                for (const playerTurnData of playerData.playerTurnStatisticsArray ?? []) {
+                    const turnIndex = Helpers.getExisted(playerTurnData.turnIndex, ClientErrorCode.BwWarStatisticsManager_GetManualActionsCountForPlayersInRecentTurns_01);
+                    if ((turnIndex >= minTurnIndex) && (turnIndex <= maxTurnIndex)) {
+                        manualActionsCount += playerTurnData.manualActionsCount ?? 0;
+                    }
+                }
+            }
+
+            return manualActionsCount;
+        }
     }
 }

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*"
+        xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
+        xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group height="340" verticalCenter="0" width="800" horizontalCenter="0">
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                             alpha="0.8" left="0" top="0" bottom="0" right="0" locked="true" />
+        <TwnsUiLabel:UiLabel id="_labelTitle" text="创建战局" bold="true" size="22" top="10" textColor="0xffffff"
+                             horizontalCenter="0" locked="true" />
+        <TwnsUiButton:UiButton id="_btnType" label="切换类型" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                               width="120" top="0" left="0" locked="true" />
+        <TwnsUiButton:UiButton id="_btnClose" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                               width="120" right="0" top="0" locked="true" />
+        <e:Group y="40" left="10" right="10">
+            <TwnsUiLabel:UiLabel id="_labelDesc" text="创建战局" size="18" textColor="0xFFFFFF" y="0" width="780" x="274" />
+            <TwnsUiLabel:UiLabel id="_labelError" text="创建战局" size="18" textColor="0xFFFFFF" y="0" width="780" x="274" />
+            <e:layout>
+                <e:VerticalLayout horizontalAlign="center" />
+            </e:layout>
+        </e:Group>
+        <e:Group left="10" bottom="10">
+            <e:Group x="0" y="0">
+                <e:Group x="0" y="0">
+                    <TwnsUiButton:UiButton id="_btnPlayerIndex" label="切换类型"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
+                                           left="0" x="10" y="10" />
+                    <TwnsUiLabel:UiLabel id="_labelPlayerIndex" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20" />
+                    <e:layout>
+                        <e:HorizontalLayout verticalAlign="middle" />
+                    </e:layout>
+                </e:Group>
+                <e:Group x="390" top="0">
+                    <TwnsUiButton:UiButton id="_btnIsPlayerInTurn" label="存活状态"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
+                                           left="0" x="10" y="10" />
+                    <TwnsUiLabel:UiLabel id="_labelIsPlayerInTurn" text="取反" size="14" textColor="0xFFFFFF" x="20"
+                                         y="20" />
+                    <e:layout>
+                        <e:HorizontalLayout verticalAlign="middle" />
+                    </e:layout>
+                </e:Group>
+            </e:Group>
+            <e:Group x="188" y="43" height="28">
+                <e:Group x="0" y="0">
+                    <TwnsUiLabel:UiLabel id="_labelRecentTurnsCount" text="Players Count" size="18" textColor="0xFFFFFF"
+                                         scaleX="1" scaleY="1" maxTextWidth="120" y="5" x="0" />
+                    <TwnsUiTextInput:UiTextInput id="_inputRecentTurnsCount" width="80" x="126" anchorOffsetX="0" anchorOffsetY="0"
+                                                 maxChars="4" restrict="0-9" y="0"
+                                                 skinName="Skins.Component.TextInput.TextInput003"></TwnsUiTextInput:UiTextInput>
+                </e:Group>
+                <e:layout>
+                    <e:HorizontalLayout gap="50" />
+                </e:layout>
+            </e:Group>
+            <e:Group x="188" y="43" height="28">
+                <e:Group x="0" y="0">
+                    <TwnsUiLabel:UiLabel id="_labelActionsCount" text="Players Count" size="18" textColor="0xFFFFFF"
+                                         scaleX="1" scaleY="1" maxTextWidth="120" y="5" x="0" />
+                    <TwnsUiTextInput:UiTextInput id="_inputActionsCount" width="80" x="126" anchorOffsetX="0" anchorOffsetY="0" maxChars="4"
+                                                 restrict="0-9" y="0" skinName="Skins.Component.TextInput.TextInput003"></TwnsUiTextInput:UiTextInput>
+                </e:Group>
+                <e:Group x="261" y="0">
+                    <TwnsUiButton:UiButton id="_btnActionsCountComparator" label="切换类型"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
+                                           left="0" x="10" y="10" />
+                    <TwnsUiLabel:UiLabel id="_labelActionsCountComparator" text="取反" size="14" textColor="0xFFFFFF"
+                                         x="20" y="20" />
+                    <e:layout>
+                        <e:HorizontalLayout verticalAlign="middle" />
+                    </e:layout>
+                </e:Group>
+                <e:layout>
+                    <e:HorizontalLayout gap="50" />
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout/>
+            </e:layout>
+        </e:Group>
+        <TwnsUiImage:UiImage id="_imgInnerTouchMask" anchorOffsetX="0" anchorOffsetY="0" left="0" top="0" bottom="0"
+                             right="0" x="10" y="10" source="uncompressedColorTransparent0000" visible="false" />
+    </e:Group>
+</e:Skin>

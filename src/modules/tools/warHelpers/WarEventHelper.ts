@@ -71,6 +71,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
         ConditionType.WecCustomCounter,
 
         ConditionType.WecOngoingPersistentActionPresence,
+
+        ConditionType.WecManualActionStatistics,
     ];
 
     const ACTION_TYPE_ARRAY = [
@@ -1009,7 +1011,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
             || (checkIsValidWecTilePresence(condition.WecTilePresence, mapSize, playersCountUnneutral, gameConfig))
             || (checkIsValidWecUnitPresence(condition.WecUnitPresence, mapSize, playersCountUnneutral, gameConfig))
             || (checkIsValidWecCustomCounter(condition.WecCustomCounter))
-            || (checkIsValidWecOngoingPersistentActionPresence(condition.WecOngoingPersistentActionPresence));
+            || (checkIsValidWecOngoingPersistentActionPresence(condition.WecOngoingPersistentActionPresence))
+            || (checkIsValidWecManualActionStatistics(condition.WecManualActionStatistics, playersCountUnneutral));
     }
     function checkIsValidWecEventCalledCount(condition: Types.Undefinable<CommonProto.WarEvent.IWecEventCalledCount>): boolean {
         if (condition == null) {
@@ -1460,6 +1463,30 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
+    function checkIsValidWecManualActionStatistics(condition: Types.Undefinable<CommonProto.WarEvent.IWecManualActionStatistics>, playersCountUnneutral: number): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        {
+            const playerIndexArray = condition.playerIndexArray;
+            if ((playerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+                return false;
+            }
+        }
+
+        {
+            const totalActions = condition.totalActions;
+            if ((totalActions == null)                                                      ||
+                (totalActions.value == null)                                                ||
+                (!Config.ConfigManager.checkIsValidValueComparator(totalActions.comparator))
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     function checkIsValidWarEventConditionNode({ conditionNode, conditionDict, nodeDict }: {    // DONE
         conditionNode   : IWarEventConditionNode;
@@ -1584,7 +1611,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
             || (getDescForWecTilePresence(con.WecTilePresence, gameConfig))
             || (getDescForWecUnitPresence(con.WecUnitPresence, gameConfig))
             || (getDescForWecCustomCounter(con.WecCustomCounter))
-            || (getDescForWecOngoingPersistentActionPresence(con.WecOngoingPersistentActionPresence));
+            || (getDescForWecOngoingPersistentActionPresence(con.WecOngoingPersistentActionPresence))
+            || (getDescForWecManualActionStatistics(con.WecManualActionStatistics));
     }
     function getDescForWecEventCalledCount(data: Types.Undefinable<WarEvent.IWecEventCalledCount>): string | null {
         if (data == null) {
@@ -1951,6 +1979,39 @@ namespace Twns.WarHelpers.WarEventHelpers {
             textForActionIdArray,
             Lang.getValueComparatorName(Helpers.getExisted(data.ongoingActionsCountComparator)),
             data.ongoingActionsCount ?? CommonConstants.ErrorTextForUndefined,
+        );
+    }
+    function getDescForWecManualActionStatistics(data: Types.Undefinable<WarEvent.IWecManualActionStatistics>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const playerIndexArray          = data.playerIndexArray;
+        const textForPlayerIndexArray   = playerIndexArray?.length
+            ? playerIndexArray.map(v => `P${v}`).join(`/`)
+            : Lang.getText(LangTextType.B0766);
+
+        const isPlayerInTurn        = data.isPlayerInTurn;
+        const textForIsPlayerInTurn = isPlayerInTurn == null
+            ? null
+            : Lang.getText(isPlayerInTurn ? LangTextType.B0925 : LangTextType.B0926);
+
+        const textArrayForSubCondition1 = Helpers.getNonNullElements([
+            textForIsPlayerInTurn,
+        ]);
+
+        const recentTurnsCount          = data.recentTurnsCount;
+        const textForRecentTurnsCount   = recentTurnsCount == null
+            ? ``
+            : Lang.getFormattedText(LangTextType.F0144, recentTurnsCount);
+
+        return Lang.getFormattedText(
+            LangTextType.F0143,
+            textForPlayerIndexArray,
+            textArrayForSubCondition1.length ? textArrayForSubCondition1.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
+            textForRecentTurnsCount,
+            Lang.getValueComparatorName(data.totalActions?.comparator) ?? `??`,
+            data.totalActions?.value ?? CommonConstants.ErrorTextForUndefined
         );
     }
 
@@ -2629,6 +2690,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         else if (condition.WecUnitPresence)                     { return getErrorTipForWecUnitPresence(condition.WecUnitPresence, war); }
         else if (condition.WecCustomCounter)                    { return getErrorTipForWecCustomCounter(condition.WecCustomCounter); }
         else if (condition.WecOngoingPersistentActionPresence)  { return getErrorTipForWecOngoingPersistentActionPresence(condition.WecOngoingPersistentActionPresence); }
+        else if (condition.WecManualActionStatistics)           { return getErrorTipForWecManualActionStatistics(condition.WecManualActionStatistics, war); }
         else                                                    { return Lang.getText(LangTextType.A0187); }
     }
     function getErrorTipForWecEventCalledCount(data: WarEvent.IWecEventCalledCount, fullData: IWarEventFullData): string | null {
@@ -2937,6 +2999,26 @@ namespace Twns.WarHelpers.WarEventHelpers {
             const actionIdArray = data.ongoingActionIdArray;
             if ((actionIdArray) && (!Config.ConfigManager.checkIsValidWarEventActionIdSubset(actionIdArray))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0889));
+            }
+        }
+
+        return null;
+    }
+    function getErrorTipForWecManualActionStatistics(data: WarEvent.IWecManualActionStatistics, war: BwWar): string | null {
+        {
+            const playerIndexArray = data.playerIndexArray;
+            if ((playerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, war.getPlayersCountUnneutral()))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
+            }
+        }
+
+        {
+            const totalActions = data.totalActions;
+            if ((totalActions == null) || (totalActions.value == null)) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0902));
+            }
+            if (!Config.ConfigManager.checkIsValidValueComparator(totalActions.comparator)) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
@@ -3811,6 +3893,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         else if (condition.WecUnitPresence)                     { return ConditionType.WecUnitPresence; }
         else if (condition.WecCustomCounter)                    { return ConditionType.WecCustomCounter; }
         else if (condition.WecOngoingPersistentActionPresence)  { return ConditionType.WecOngoingPersistentActionPresence; }
+        else if (condition.WecManualActionStatistics)           { return ConditionType.WecManualActionStatistics; }
         else                                                    { return null; }
     }
     export function resetCondition(condition: IWarEventCondition, conditionType: ConditionType, gameConfig: GameConfig): void {
@@ -3908,6 +3991,16 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 ongoingActionsCount             : 1,
                 ongoingActionsCountComparator   : ValueComparator.EqualTo,
             };
+        } else if (conditionType === ConditionType.WecManualActionStatistics) {
+            condition.WecManualActionStatistics = {
+                playerIndexArray    : null,
+                isPlayerInTurn      : null,
+                recentTurnsCount    : 1,
+                totalActions        : {
+                    value           : 1,
+                    comparator      : ValueComparator.EqualTo,
+                },
+            };
         } else {
             // todo: handle more condition types.
             throw Helpers.newError(`Invalid conditionType: ${conditionType}.`, ClientErrorCode.WarEventHelper_ResetCondition_00);
@@ -3928,6 +4021,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         PanelHelpers.close(PanelHelpers.PanelDict.WeConditionModifyPanel50);
         PanelHelpers.close(PanelHelpers.PanelDict.WeConditionModifyPanel60);
         PanelHelpers.close(PanelHelpers.PanelDict.WeConditionModifyPanel70);
+        PanelHelpers.close(PanelHelpers.PanelDict.WeConditionModifyPanel80);
 
         if (condition.WecTurnAndPlayer)                         { PanelHelpers.open(PanelHelpers.PanelDict.WeConditionModifyPanel6, { fullData, condition, war }); }
 
@@ -3944,6 +4038,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
         else if (condition.WecCustomCounter)                    { PanelHelpers.open(PanelHelpers.PanelDict.WeConditionModifyPanel60, { fullData, condition, war }); }
 
         else if (condition.WecOngoingPersistentActionPresence)  { PanelHelpers.open(PanelHelpers.PanelDict.WeConditionModifyPanel70, { fullData, condition, war }); }
+
+        else if (condition.WecManualActionStatistics)           { PanelHelpers.open(PanelHelpers.PanelDict.WeConditionModifyPanel80, { fullData, condition, war }); }
 
         else                                                    { throw Helpers.newError(`Invalid condition.`, ClientErrorCode.WarEventHelper_OpenConditionModifyPanel_00); }
     }

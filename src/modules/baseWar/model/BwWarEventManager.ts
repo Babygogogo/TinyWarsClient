@@ -1175,6 +1175,7 @@ namespace Twns.BaseWar {
             else if (condition.WecUnitPresence)                     { return this._checkIsMeetConUnitPresence(condition.WecUnitPresence); }
             else if (condition.WecCustomCounter)                    { return this._checkIsMeetConCustomCounter(condition.WecCustomCounter); }
             else if (condition.WecOngoingPersistentActionPresence)  { return this._checkIsMeetConOngoingPersistentActionPresence(condition.WecOngoingPersistentActionPresence); }
+            else if (condition.WecManualActionStatistics)           { return this._checkIsMeetConManualActionStatistics(condition.WecManualActionStatistics); }
 
             throw Helpers.newError(`Invalid condition!`);
         }
@@ -1549,6 +1550,35 @@ namespace Twns.BaseWar {
                 comparator  : Helpers.getExisted(condition.ongoingActionsCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_00),
                 targetValue : Helpers.getExisted(condition.ongoingActionsCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_01),
                 actualValue : counter,
+            });
+        }
+
+        private _checkIsMeetConManualActionStatistics(condition: WarEvent.IWecManualActionStatistics): boolean {
+            const war                       = this._getWar();
+            const conPlayerIndexArray       = condition.playerIndexArray;
+            const revisedConPlayerIndexSet  = conPlayerIndexArray?.length
+                ? new Set(conPlayerIndexArray)
+                : new Set(war.getPlayerManager().getAllPlayers().map(v => v.getPlayerIndex()));
+
+            const conIsPlayerInTurn = condition.isPlayerInTurn;
+            if (conIsPlayerInTurn != null) {
+                const playerIndexInTurn = war.getPlayerIndexInTurn();
+                if (!conIsPlayerInTurn) {
+                    revisedConPlayerIndexSet.delete(playerIndexInTurn);
+                } else {
+                    if (!revisedConPlayerIndexSet.has(playerIndexInTurn)) {
+                        revisedConPlayerIndexSet.clear();
+                    } else {
+                        revisedConPlayerIndexSet.clear();
+                        revisedConPlayerIndexSet.add(playerIndexInTurn);
+                    }
+                }
+            }
+
+            return Helpers.checkIsMeetValueComparator({
+                comparator  : Helpers.getExisted(condition.totalActions?.comparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConManualActionStatistics_00),
+                targetValue : Helpers.getExisted(condition.totalActions?.value, ClientErrorCode.BwWarEventManager_CheckIsMeetConManualActionStatistics_01),
+                actualValue : war.getWarStatisticsManager().getManualActionsCountForPlayersInRecentTurns(revisedConPlayerIndexSet, condition.recentTurnsCount),
             });
         }
 

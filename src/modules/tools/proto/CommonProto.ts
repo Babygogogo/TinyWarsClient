@@ -6560,6 +6560,114 @@ declare namespace CommonProto {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a WecManualActionStatistics. */
+        interface IWecManualActionStatistics {
+
+            /** WecManualActionStatistics playerIndexArray */
+            playerIndexArray?: (number[]|null);
+
+            /** WecManualActionStatistics isPlayerInTurn */
+            isPlayerInTurn?: (boolean|null);
+
+            /** WecManualActionStatistics recentTurnsCount */
+            recentTurnsCount?: (number|null);
+
+            /** WecManualActionStatistics totalActions */
+            totalActions?: (CommonProto.Structure.IValueAndComparator|null);
+        }
+
+        /** Represents a WecManualActionStatistics. */
+        class WecManualActionStatistics implements IWecManualActionStatistics {
+
+            /**
+             * Constructs a new WecManualActionStatistics.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.WarEvent.IWecManualActionStatistics);
+
+            /** WecManualActionStatistics playerIndexArray. */
+            public playerIndexArray: number[];
+
+            /** WecManualActionStatistics isPlayerInTurn. */
+            public isPlayerInTurn: boolean;
+
+            /** WecManualActionStatistics recentTurnsCount. */
+            public recentTurnsCount: number;
+
+            /** WecManualActionStatistics totalActions. */
+            public totalActions?: (CommonProto.Structure.IValueAndComparator|null);
+
+            /**
+             * Creates a new WecManualActionStatistics instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns WecManualActionStatistics instance
+             */
+            public static create(properties?: CommonProto.WarEvent.IWecManualActionStatistics): CommonProto.WarEvent.WecManualActionStatistics;
+
+            /**
+             * Encodes the specified WecManualActionStatistics message. Does not implicitly {@link CommonProto.WarEvent.WecManualActionStatistics.verify|verify} messages.
+             * @param message WecManualActionStatistics message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.WarEvent.IWecManualActionStatistics, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified WecManualActionStatistics message, length delimited. Does not implicitly {@link CommonProto.WarEvent.WecManualActionStatistics.verify|verify} messages.
+             * @param message WecManualActionStatistics message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.WarEvent.IWecManualActionStatistics, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a WecManualActionStatistics message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns WecManualActionStatistics
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.WarEvent.WecManualActionStatistics;
+
+            /**
+             * Decodes a WecManualActionStatistics message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns WecManualActionStatistics
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.WarEvent.WecManualActionStatistics;
+
+            /**
+             * Verifies a WecManualActionStatistics message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a WecManualActionStatistics message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns WecManualActionStatistics
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.WarEvent.WecManualActionStatistics;
+
+            /**
+             * Creates a plain object from a WecManualActionStatistics message. Also converts values to other types if specified.
+             * @param message WecManualActionStatistics
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.WarEvent.WecManualActionStatistics, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this WecManualActionStatistics to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a WarEventCondition. */
         interface IWarEventCondition {
 
@@ -6589,6 +6697,9 @@ declare namespace CommonProto {
 
             /** WarEventCondition WecOngoingPersistentActionPresence */
             WecOngoingPersistentActionPresence?: (CommonProto.WarEvent.IWecOngoingPersistentActionPresence|null);
+
+            /** WarEventCondition WecManualActionStatistics */
+            WecManualActionStatistics?: (CommonProto.WarEvent.IWecManualActionStatistics|null);
         }
 
         /** Represents a WarEventCondition. */
@@ -6626,6 +6737,9 @@ declare namespace CommonProto {
 
             /** WarEventCondition WecOngoingPersistentActionPresence. */
             public WecOngoingPersistentActionPresence?: (CommonProto.WarEvent.IWecOngoingPersistentActionPresence|null);
+
+            /** WarEventCondition WecManualActionStatistics. */
+            public WecManualActionStatistics?: (CommonProto.WarEvent.IWecManualActionStatistics|null);
 
             /**
              * Creates a new WarEventCondition instance using the specified properties.

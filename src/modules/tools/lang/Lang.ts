@@ -304,6 +304,7 @@ namespace Twns.Lang {
             case WarEventConditionType.WecUnitPresence                      : return getText(LangTextType.B0775);
             case WarEventConditionType.WecCustomCounter                     : return getText(LangTextType.B0802);
             case WarEventConditionType.WecOngoingPersistentActionPresence   : return getText(LangTextType.B0901);
+            case WarEventConditionType.WecManualActionStatistics            : return getText(LangTextType.B0929);
             default                                                         : return null;
         }
     }
@@ -351,7 +352,7 @@ namespace Twns.Lang {
     }
 
 
-    export function getValueComparatorName(comparator: Types.ValueComparator): string | null {
+    export function getValueComparatorName(comparator: Types.Undefinable<number>): string | null {
         switch (comparator) {
             case Types.ValueComparator.EqualTo          : return getText(LangTextType.B0767);
             case Types.ValueComparator.NotEqualTo       : return getText(LangTextType.B0768);

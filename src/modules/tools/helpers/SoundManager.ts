@@ -350,6 +350,7 @@ namespace Twns.SoundManager {
             _doPlayShortSfx(cachedBuffer);
         } else {
             const path          = getResourcePath(params.name, SoundType.Sfx);
+            const currentTime   = Date.now();
             const audioBuffer   = await loadAudioBuffer(path).catch(err => {
                 // CompatibilityHelpers.showError(err); throw err;
                 Logger.error(`SoundManager.playShortSfx() loadAudioBuffer error: ${(err as Error).message}`);
@@ -358,6 +359,10 @@ namespace Twns.SoundManager {
             if (!audioBuffer) {
                 // throw Helpers.newError(`SoundManager.playShortSfx() empty audioBuffer.`);
                 Logger.error(`SoundManager.playShortSfx() empty audioBuffer.`);
+                return;
+            }
+            if (Date.now() - currentTime > 200) {
+                Logger.log(`SoundManager.playShortSfx() spent too much time on loading.`);
                 return;
             }
 

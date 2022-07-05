@@ -5098,6 +5098,14 @@ namespace Twns.Lang {
             `未下潜`,
             `is not dived`,
         ],
+        [LangTextType.B0929]: [
+            `玩家主动操作数...`,
+            `Players' Manual Actions Statistics...`,
+        ],
+        [LangTextType.B0930]: [
+            `最近回合数`,
+            `Recent Turns`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.Tile0000]: [
@@ -6458,6 +6466,14 @@ namespace Twns.Lang {
         [LangTextType.F0142]: [
             `类型为 %s`,
             `the type is %s`,
+        ],
+        [LangTextType.F0143]: [
+            `找到玩家序号为 %s%s 的所有玩家。%s他们所进行的的主动操作的总数量 %s %s`,
+            `Get all players that is %s%s. The total number of manual actions they have taken %s%s %s.`,
+        ],
+        [LangTextType.F0144]: [
+            `在最近的%d个回合中，`,
+            `in the recent %d turns `
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

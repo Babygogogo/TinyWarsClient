@@ -244,6 +244,7 @@ namespace Twns.BaseWar {
             this.getTurnManager().startRunning(this);
             this.getPlayerManager().startRunning(this);
             this.getField().startRunning(this);
+            this.getWarStatisticsManager().startRunning(this);
 
             this._setIsRunning(true);
 
