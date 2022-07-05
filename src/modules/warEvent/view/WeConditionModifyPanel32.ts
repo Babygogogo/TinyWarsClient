@@ -37,6 +37,9 @@ namespace Twns.WarEvent {
 
         private readonly _btnPlayerIndex!               : TwnsUiButton.UiButton;
         private readonly _labelPlayerIndex!             : TwnsUiLabel.UiLabel;
+        private readonly _btnConIsPlayerInTurn!         : TwnsUiButton.UiButton;
+        private readonly _labelConIsPlayerInTurn!       : TwnsUiLabel.UiLabel;
+
         private readonly _btnTeamIndex!                 : TwnsUiButton.UiButton;
         private readonly _labelTeamIndex!               : TwnsUiLabel.UiLabel;
         private readonly _btnTileType!                  : TwnsUiButton.UiButton;
@@ -58,7 +61,10 @@ namespace Twns.WarEvent {
             this._setUiListenerArray([
                 { ui: this._btnClose,                   callback: this.close },
                 { ui: this._btnType,                    callback: this._onTouchedBtnType },
+
                 { ui: this._btnPlayerIndex,             callback: this._onTouchedBtnPlayerIndex },
+                { ui: this._btnConIsPlayerInTurn,       callback: this._onTouchedBtnConIsPlayerInTurn },
+
                 { ui: this._btnTeamIndex,               callback: this._onTouchedBtnTeamIndex },
                 { ui: this._btnTileType,                callback: this._onTouchedBtnTileType },
                 { ui: this._btnLocation,                callback: this._onTouchedBtnLocation },
@@ -101,6 +107,19 @@ namespace Twns.WarEvent {
                 },
             });
         }
+        private _onTouchedBtnConIsPlayerInTurn(): void {
+            const condition             = this._getCondition();
+            const isOwnerPlayerInTurn   = condition.isOwnerPlayerInTurn;
+            if (isOwnerPlayerInTurn == null) {
+                condition.isOwnerPlayerInTurn = true;
+            } else if (isOwnerPlayerInTurn) {
+                condition.isOwnerPlayerInTurn = false;
+            } else {
+                condition.isOwnerPlayerInTurn = null;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+
         private _onTouchedBtnTeamIndex(): void {
             const condition = this._getCondition();
             PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseTeamIndexPanel, {
@@ -164,6 +183,7 @@ namespace Twns.WarEvent {
 
             this._updateLabelDescAndLabelError();
             this._updateLabelPlayerIndex();
+            this._updateLabelConIsPlayerInTurn();
             this._updateLabelTeamIndex();
             this._updateLabelTileType();
             this._updateLabelLocation();
@@ -177,6 +197,7 @@ namespace Twns.WarEvent {
             this._btnClose.label                = Lang.getText(LangTextType.B0146);
             this._btnType.label                 = Lang.getText(LangTextType.B0516);
             this._btnPlayerIndex.label          = Lang.getText(LangTextType.B0031);
+            this._btnConIsPlayerInTurn.label    = Lang.getText(LangTextType.B0086);
             this._btnTeamIndex.label            = Lang.getText(LangTextType.B0377);
             this._btnTileType.label             = Lang.getText(LangTextType.B0718);
             this._btnLocation.label             = Lang.getText(LangTextType.B0764);
@@ -201,6 +222,15 @@ namespace Twns.WarEvent {
         private _updateLabelPlayerIndex(): void {
             const playerIndexArray      = this._getCondition().playerIndexArray;
             this._labelPlayerIndex.text = playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`, `) : Lang.getText(LangTextType.B0776);
+        }
+        private _updateLabelConIsPlayerInTurn(): void {
+            const isOwnerPlayerInTurn   = this._getCondition().isOwnerPlayerInTurn;
+            const label                 = this._labelConIsPlayerInTurn;
+            if (isOwnerPlayerInTurn == null) {
+                label.text = `--`;
+            } else {
+                label.text = Lang.getText(isOwnerPlayerInTurn ? LangTextType.B0012 : LangTextType.B0013);
+            }
         }
         private _updateLabelTeamIndex(): void {
             const teamIndexArray        = this._getCondition().teamIndexArray;

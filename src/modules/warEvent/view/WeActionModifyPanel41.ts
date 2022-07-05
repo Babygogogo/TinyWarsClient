@@ -39,6 +39,11 @@ namespace Twns.WarEvent {
         private readonly _btnConIsHighlighted!                      : TwnsUiButton.UiButton;
         private readonly _labelConIsHighlighted!                    : TwnsUiLabel.UiLabel;
 
+        private readonly _btnPlayerIndex!                           : TwnsUiButton.UiButton;
+        private readonly _labelPlayerIndex!                         : TwnsUiLabel.UiLabel;
+        private readonly _btnConIsPlayerInTurn!                     : TwnsUiButton.UiButton;
+        private readonly _labelConIsPlayerInTurn!                   : TwnsUiLabel.UiLabel;
+
         private readonly _labelConHp!                               : TwnsUiLabel.UiLabel;
         private readonly _inputConHp!                               : TwnsUiTextInput.UiTextInput;
         private readonly _labelConHpComparator!                     : TwnsUiLabel.UiLabel;
@@ -92,6 +97,9 @@ namespace Twns.WarEvent {
                 { ui: this._btnLocation,                                callback: this._onTouchedBtnLocation },
                 { ui: this._btnGridIndex,                               callback: this._onTouchedBtnGridIndex },
                 { ui: this._btnConIsHighlighted,                        callback: this._onTouchedBtnConIsHighlighted },
+
+                { ui: this._btnPlayerIndex,                             callback: this._onTouchedBtnPlayerIndex },
+                { ui: this._btnConIsPlayerInTurn,                       callback: this._onTouchedBtnConIsPlayerInTurn },
 
                 { ui: this._btnConHpComparator,                         callback: this._onTouchedBtnConHpComparator },
                 { ui: this._inputConHp,                                 callback: this._onFocusInInputConHp,                                    eventType: egret.FocusEvent.FOCUS_IN },
@@ -185,6 +193,30 @@ namespace Twns.WarEvent {
                 action.conIsHighlighted = null;
             } else {
                 action.conIsHighlighted = true;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+
+        private _onTouchedBtnPlayerIndex(): void {
+            const action = this._getAction();
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChoosePlayerIndexPanel, {
+                currentPlayerIndexArray : action.conPlayerIndexArray ?? [],
+                maxPlayerIndex          : this._getOpenData().war.getPlayersCountUnneutral(),
+                callbackOnConfirm       : playerIndexArray => {
+                    action.conPlayerIndexArray = playerIndexArray;
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
+        private _onTouchedBtnConIsPlayerInTurn(): void {
+            const action                    = this._getAction();
+            const conIsOwnerPlayerInTurn    = action.conIsOwnerPlayerInTurn;
+            if (conIsOwnerPlayerInTurn == null) {
+                action.conIsOwnerPlayerInTurn = true;
+            } else if (conIsOwnerPlayerInTurn) {
+                action.conIsOwnerPlayerInTurn = false;
+            } else {
+                action.conIsOwnerPlayerInTurn = null;
             }
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
@@ -424,6 +456,9 @@ namespace Twns.WarEvent {
             this._updateLabelGridIndex();
             this._updateLabelConIsHighlighted();
 
+            this._updateLabelPlayerIndex();
+            this._updateLabelConIsPlayerInTurn();
+
             this._updateLabelConHpComparator();
             this._updateInputConHp();
 
@@ -457,6 +492,9 @@ namespace Twns.WarEvent {
             this._btnConBuildPointComparator.label              = Lang.getText(LangTextType.B0774);
             this._labelConCapturePoint.text                     = Lang.getText(LangTextType.B0361);
             this._btnConCapturePointComparator.label            = Lang.getText(LangTextType.B0774);
+
+            this._btnPlayerIndex.label                          = Lang.getText(LangTextType.B0031);
+            this._btnConIsPlayerInTurn.label                    = Lang.getText(LangTextType.B0086);
 
             this._labelActHp.text                               = Lang.getText(LangTextType.B0807);
             this._labelActHpDeltaValue.text                     = Lang.getText(LangTextType.B0754);
@@ -499,6 +537,20 @@ namespace Twns.WarEvent {
                 label.text  = `--`;
             } else {
                 label.text = Lang.getText(isHighlighted ? LangTextType.B0012 : LangTextType.B0013);
+            }
+        }
+
+        private _updateLabelPlayerIndex(): void {
+            const playerIndexArray      = this._getAction().conPlayerIndexArray;
+            this._labelPlayerIndex.text = playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`, `) : Lang.getText(LangTextType.B0776);
+        }
+        private _updateLabelConIsPlayerInTurn(): void {
+            const conIsOwnerPlayerInTurn    = this._getAction().conIsOwnerPlayerInTurn;
+            const label                     = this._labelConIsPlayerInTurn;
+            if (conIsOwnerPlayerInTurn == null) {
+                label.text = `--`;
+            } else {
+                label.text = Lang.getText(conIsOwnerPlayerInTurn ? LangTextType.B0012 : LangTextType.B0013);
             }
         }
 

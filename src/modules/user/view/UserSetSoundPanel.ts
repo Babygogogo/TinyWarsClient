@@ -222,7 +222,7 @@ namespace Twns.User {
         }
         private async _updateLabelBgmName(): Promise<void> {
             const langTextType      = (await Config.ConfigManager.getLatestGameConfig()).getBgmSfxCfg(SoundManager.getPlayingBgmCode())?.lang;
-            this._labelBgmName.text = langTextType != null ? Lang.getText(langTextType) : CommonConstants.ErrorTextForUndefined;
+            this._labelBgmName.text = langTextType != null ? Lang.getText(langTextType) : `--`;
         }
 
         protected async _showOpenAnimation(): Promise<void> {

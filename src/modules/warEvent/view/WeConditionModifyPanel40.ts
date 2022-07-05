@@ -38,6 +38,12 @@ namespace Twns.WarEvent {
 
         private readonly _btnPlayerIndex!               : TwnsUiButton.UiButton;
         private readonly _labelPlayerIndex!             : TwnsUiLabel.UiLabel;
+        private readonly _btnConIsOwnerPlayerInTurn!    : TwnsUiButton.UiButton;
+        private readonly _labelConIsOwnerPlayerInTurn!  : TwnsUiLabel.UiLabel;
+
+        private readonly _btnConIsDiving!               : TwnsUiButton.UiButton;
+        private readonly _labelConIsDiving!             : TwnsUiLabel.UiLabel;
+
         private readonly _btnTeamIndex!                 : TwnsUiButton.UiButton;
         private readonly _labelTeamIndex!               : TwnsUiLabel.UiLabel;
         private readonly _btnUnitType!                  : TwnsUiButton.UiButton;
@@ -81,6 +87,8 @@ namespace Twns.WarEvent {
                 { ui: this._btnType,                    callback: this._onTouchedBtnType },
                 { ui: this._imgInnerTouchMask,          callback: this._onTouchedImgInnerTouchMask },
                 { ui: this._btnPlayerIndex,             callback: this._onTouchedBtnPlayerIndex },
+                { ui: this._btnConIsOwnerPlayerInTurn,  callback: this._onTouchedBtnConIsOwnerPlayerInTurn },
+                { ui: this._btnConIsDiving,             callback: this._onTouchedBtnConIsDiving },
                 { ui: this._btnTeamIndex,               callback: this._onTouchedBtnTeamIndex },
                 { ui: this._btnUnitType,                callback: this._onTouchedBtnUnitType },
                 { ui: this._btnLocation,                callback: this._onTouchedBtnLocation },
@@ -143,6 +151,30 @@ namespace Twns.WarEvent {
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
+        }
+        private _onTouchedBtnConIsOwnerPlayerInTurn(): void {
+            const condition             = this._getCondition();
+            const isOwnerPlayerInTurn   = condition.isOwnerPlayerInTurn;
+            if (isOwnerPlayerInTurn == null) {
+                condition.isOwnerPlayerInTurn = true;
+            } else if (isOwnerPlayerInTurn) {
+                condition.isOwnerPlayerInTurn = false;
+            } else {
+                condition.isOwnerPlayerInTurn = null;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onTouchedBtnConIsDiving(): void {
+            const condition     = this._getCondition();
+            const conIsDiving   = condition.isDiving;
+            if (conIsDiving == null) {
+                condition.isDiving = true;
+            } else if (conIsDiving) {
+                condition.isDiving = false;
+            } else {
+                condition.isDiving = null;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnTeamIndex(): void {
             const condition = this._getCondition();
@@ -304,6 +336,8 @@ namespace Twns.WarEvent {
 
             this._updateLabelDescAndLabelError();
             this._updateLabelPlayerIndex();
+            this._updateLabelConIsPlayerInTurn();
+            this._updateLabelConIsDiving();
             this._updateLabelTeamIndex();
             this._updateLabelUnitType();
             this._updateLabelLocation();
@@ -323,26 +357,28 @@ namespace Twns.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text               = `${Lang.getText(LangTextType.B0501)} C${this._getOpenData().condition.WecCommonData?.conditionId}`;
-            this._btnClose.label                = Lang.getText(LangTextType.B0146);
-            this._btnType.label                 = Lang.getText(LangTextType.B0516);
-            this._btnPlayerIndex.label          = Lang.getText(LangTextType.B0031);
-            this._btnTeamIndex.label            = Lang.getText(LangTextType.B0377);
-            this._btnUnitType.label             = Lang.getText(LangTextType.B0525);
-            this._btnLocation.label             = Lang.getText(LangTextType.B0764);
-            this._btnGridIndex.label            = Lang.getText(LangTextType.B0531);
-            this._btnActionState.label          = Lang.getText(LangTextType.B0526);
-            this._btnHasLoadedCo.label          = Lang.getText(LangTextType.B0421);
-            this._btnHpComparator.label         = Lang.getText(LangTextType.B0774);
-            this._labelHp.text                  = Lang.getText(LangTextType.B0807);
-            this._btnFuelPctComparator.label    = Lang.getText(LangTextType.B0774);
-            this._labelFuelPct.text             = `${Lang.getText(LangTextType.B0342)}%`;
-            this._btnPriAmmoPctComparator.label = Lang.getText(LangTextType.B0774);
-            this._labelPriAmmoPct.text          = `${Lang.getText(LangTextType.B0350)}%`;
-            this._btnPromotionComparator.label  = Lang.getText(LangTextType.B0774);
-            this._labelPromotion.text           = Lang.getText(LangTextType.B0370);
-            this._btnUnitsCountComparator.label = Lang.getText(LangTextType.B0774);
-            this._labelUnitsCount.text          = Lang.getText(LangTextType.B0773);
+            this._labelTitle.text                   = `${Lang.getText(LangTextType.B0501)} C${this._getOpenData().condition.WecCommonData?.conditionId}`;
+            this._btnClose.label                    = Lang.getText(LangTextType.B0146);
+            this._btnType.label                     = Lang.getText(LangTextType.B0516);
+            this._btnPlayerIndex.label              = Lang.getText(LangTextType.B0031);
+            this._btnConIsOwnerPlayerInTurn.label   = Lang.getText(LangTextType.B0086);
+            this._btnConIsDiving.label              = Lang.getText(LangTextType.B0371);
+            this._btnTeamIndex.label                = Lang.getText(LangTextType.B0377);
+            this._btnUnitType.label                 = Lang.getText(LangTextType.B0525);
+            this._btnLocation.label                 = Lang.getText(LangTextType.B0764);
+            this._btnGridIndex.label                = Lang.getText(LangTextType.B0531);
+            this._btnActionState.label              = Lang.getText(LangTextType.B0526);
+            this._btnHasLoadedCo.label              = Lang.getText(LangTextType.B0421);
+            this._btnHpComparator.label             = Lang.getText(LangTextType.B0774);
+            this._labelHp.text                      = Lang.getText(LangTextType.B0807);
+            this._btnFuelPctComparator.label        = Lang.getText(LangTextType.B0774);
+            this._labelFuelPct.text                 = `${Lang.getText(LangTextType.B0342)}%`;
+            this._btnPriAmmoPctComparator.label     = Lang.getText(LangTextType.B0774);
+            this._labelPriAmmoPct.text              = `${Lang.getText(LangTextType.B0350)}%`;
+            this._btnPromotionComparator.label      = Lang.getText(LangTextType.B0774);
+            this._labelPromotion.text               = Lang.getText(LangTextType.B0370);
+            this._btnUnitsCountComparator.label     = Lang.getText(LangTextType.B0774);
+            this._labelUnitsCount.text              = Lang.getText(LangTextType.B0773);
             // this._labelGridIndex.text   = Lang.getText(LangTextType.B0531);
 
             this._updateLabelDescAndLabelError();
@@ -361,6 +397,24 @@ namespace Twns.WarEvent {
         private _updateLabelPlayerIndex(): void {
             const playerIndexArray      = this._getCondition().playerIndexArray;
             this._labelPlayerIndex.text = playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`, `) : Lang.getText(LangTextType.B0776);
+        }
+        private _updateLabelConIsPlayerInTurn(): void {
+            const isOwnerPlayerInTurn   = this._getCondition().isOwnerPlayerInTurn;
+            const label                 = this._labelConIsOwnerPlayerInTurn;
+            if (isOwnerPlayerInTurn == null) {
+                label.text = `--`;
+            } else {
+                label.text = Lang.getText(isOwnerPlayerInTurn ? LangTextType.B0012 : LangTextType.B0013);
+            }
+        }
+        private _updateLabelConIsDiving(): void {
+            const isDiving  = this._getCondition().isDiving;
+            const label     = this._labelConIsDiving;
+            if (isDiving == null) {
+                label.text = `--`;
+            } else {
+                label.text = Lang.getText(isDiving ? LangTextType.B0012 : LangTextType.B0013);
+            }
         }
         private _updateLabelTeamIndex(): void {
             const teamIndexArray        = this._getCondition().teamIndexArray;

@@ -95,7 +95,7 @@ namespace Twns.SoundManager {
         _initEffectMute();
         _initEffectVolume();
 
-        playBgm(CommonConstants.BgmSfxCode.Lobby);
+        // playBgm(CommonConstants.BgmSfxCode.Lobby);
     }
 
     export function resume(): void {

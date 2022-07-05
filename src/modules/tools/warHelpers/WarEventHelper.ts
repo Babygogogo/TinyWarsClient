@@ -389,7 +389,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             || (checkIsValidWeaSetPlayerState(action.WeaSetPlayerState, playersCountUnneutral))
             || (checkIsValidWeaSetUnitState(action.WeaSetUnitState, mapSize, playersCountUnneutral, gameConfig))
             || (checkIsValidWeaSetTileType(action.WeaSetTileType, mapSize, playersCountUnneutral, gameConfig))
-            || (checkIsValidWeaSetTileState(action.WeaSetTileState, mapSize))
+            || (checkIsValidWeaSetTileState(action.WeaSetTileState, mapSize, playersCountUnneutral))
             || (checkIsValidWeaPersistentShowText(action.WeaPersistentShowText))
             || (checkIsValidWeaPersistentModifyPlayerAttribute(action.WeaPersistentModifyPlayerAttribute, playersCountUnneutral, gameConfig));
         }
@@ -825,6 +825,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         {
+            const conPlayerIndexArray = action.conPlayerIndexArray;
+            if ((conPlayerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+                return false;
+            }
+        }
+
+        {
             const gridIndexArray = action.conGridIndexArray;
             if ((gridIndexArray) && (!Config.ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, mapSize))) {
                 return false;
@@ -846,7 +853,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         return true;
     }
-    function checkIsValidWeaSetTileState(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetTileState>, mapSize: Types.MapSize): boolean {
+    function checkIsValidWeaSetTileState(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetTileState>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -861,6 +868,13 @@ namespace Twns.WarHelpers.WarEventHelpers {
         {
             const gridIndexArray = action.conGridIndexArray;
             if ((gridIndexArray) && (!Config.ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, mapSize))) {
+                return false;
+            }
+        }
+
+        {
+            const conPlayerIndexArray = action.conPlayerIndexArray;
+            if ((conPlayerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
                 return false;
             }
         }
@@ -1733,31 +1747,48 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return null;
         }
 
-        const gridIndexArray        = data.gridIndexArray ?? [];
-        const locationIdArray       = data.locationIdArray ?? [];
+        const teamIndexArray        = data.teamIndexArray;
+        const textForTeamIndex      = teamIndexArray?.length
+            ? Lang.getFormattedText(LangTextType.F0115, teamIndexArray.map(v => Lang.getPlayerTeamName(v)).join(`/`))
+            : null;
+
+        const playerIndexArray      = data.playerIndexArray;
+        const textForPlayerIndex    = playerIndexArray?.length
+            ? Lang.getFormattedText(LangTextType.F0115, playerIndexArray.map(v => `P${v}`).join(`/`))
+            : null;
+
+        const locationIdArray       = data.locationIdArray;
+        const textForLocation       = locationIdArray?.length
+            ? Lang.getFormattedText(LangTextType.F0116, locationIdArray.join(`/`))
+            : null;
+
+        const gridIndexArray        = data.gridIndexArray;
+        const textForGridIndex      = gridIndexArray?.length
+            ? Lang.getFormattedText(LangTextType.F0117, gridIndexArray.map(v => `(${v.x},${v.y})`).join(`/`))
+            : null;
+
+        const isOwnerPlayerInTurn           = data.isOwnerPlayerInTurn;
+        const textForIsOwnerPlayerInTurn    = isOwnerPlayerInTurn == null
+            ? null
+            : Lang.getText(isOwnerPlayerInTurn ? LangTextType.B0925 : LangTextType.B0926);
+
+        const textArrayForSubConditions = Helpers.getNonNullElements([
+            textForLocation,
+            textForGridIndex,
+            textForTeamIndex,
+            textForPlayerIndex,
+            textForIsOwnerPlayerInTurn,
+        ]);
+
         const tileTypeArray         = data.tileTypeArray ?? [];
-        const playerIndexArray      = data.playerIndexArray ?? [];
-        const teamIndexArray        = data.teamIndexArray ?? [];
         const tilesCount            = data.tilesCount;
         const comparator            = data.tilesCountComparator;
         const textForTileType       = tileTypeArray.length ? tileTypeArray.map(v => Lang.getTileName(v, gameConfig)).join(`/`) : Lang.getText(LangTextType.B0777);
-        const textForLocation       = locationIdArray.length ? `${Lang.getText(LangTextType.B0764)} ${locationIdArray.join(`/`)}` : null;
-        const textForGridIndex      = gridIndexArray.length ? `${Lang.getText(LangTextType.B0531)} ${gridIndexArray.map(v => `(${v.x},${v.y})`).join(`/`)}` : null;
-        const textForPlayerIndex    = playerIndexArray.length ? `${Lang.getText(LangTextType.B0031)} ${playerIndexArray.join(`/`)}` : null;
-        const textForTeamIndex      = teamIndexArray.length ? `${Lang.getText(LangTextType.B0377)} ${teamIndexArray.join(`/`)}` : null;
-        const textForPosition       = textForLocation
-            ? (textForGridIndex ? `${textForLocation} / ${textForGridIndex}` : textForLocation)
-            : (textForGridIndex ?? Lang.getText(LangTextType.B0765));
-        const textForOwner          = textForTeamIndex
-            ? (textForPlayerIndex ? `${textForTeamIndex} / ${textForPlayerIndex}` : textForTeamIndex)
-            : (textForPlayerIndex ?? Lang.getText(LangTextType.B0766));
 
-        // `The number of %tile type% at %location/grid% owned by %team/player% is %comparator% %count%`;
         return Lang.getFormattedText(
             LangTextType.F0093,
             textForTileType,
-            textForPosition,
-            textForOwner,
+            textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
             comparator == null ? CommonConstants.ErrorTextForUndefined : (Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined),
             tilesCount ?? CommonConstants.ErrorTextForUndefined
         );
@@ -1802,6 +1833,16 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? Lang.getText(hasLoadedCo ? LangTextType.A0270 : LangTextType.A0271)
             : null;
 
+        const isOwnerPlayerInTurn           = data.isOwnerPlayerInTurn;
+        const textForIsOwnerPlayerInTurn    = isOwnerPlayerInTurn == null
+            ? null
+            : Lang.getText(isOwnerPlayerInTurn ? LangTextType.B0925 : LangTextType.B0926);
+
+        const isDiving          = data.isDiving;
+        const textForIsDiving   = isDiving == null
+            ? null
+            : Lang.getText(isDiving ? LangTextType.B0927 : LangTextType.B0928);
+
         const hp                    = data.hp;
         const hpComparator          = data.hpComparator;
         const textForHp             = hp != null
@@ -1831,6 +1872,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const textArrayForSubConditions = Helpers.getNonNullElements([
             textForTeamIndex,
             textForPlayerIndex,
+            textForIsOwnerPlayerInTurn,
             textForLocation,
             textForGridIndex,
             textForActionState,
@@ -1839,6 +1881,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             textForFuelPct,
             textForPriAmmoPct,
             textForPromotion,
+            textForIsDiving,
         ]);
         return Lang.getFormattedText(
             LangTextType.F0090,
@@ -2045,6 +2088,11 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? conPlayerIndexArray.map(v => `P${v}`).join(`/`)
             : Lang.getText(LangTextType.B0766);
 
+        const conIsPlayerInTurn         = data.conIsPlayerInTurn;
+        const textForConIsPlayerInTurn  = conIsPlayerInTurn == null
+            ? null
+            : Lang.getText(conIsPlayerInTurn ? LangTextType.B0925 : LangTextType.B0926);
+
         const conAliveStateArray        = data.conAliveStateArray;
         const textForConAliveStateArray = conAliveStateArray?.length
             ? Lang.getFormattedText(LangTextType.F0099, conAliveStateArray.map(v => Lang.getPlayerAliveStateName(v)).join(`/`))
@@ -2076,6 +2124,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             : null;
 
         const textArrayForSubConditions = Helpers.getNonNullElements([
+            textForConIsPlayerInTurn,
             textForConAliveStateArray,
             textForConCoUsingSkillTypeArray,
             textForConFund,
@@ -2131,6 +2180,16 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? Lang.getFormattedText(LangTextType.F0115, playerIndexArray.map(v => `P${v}`).join(`/`))
             : null;
 
+        const conIsOwnerPlayerInTurn        = data.conIsOwnerPlayerInTurn;
+        const textForConIsOwnerPlayerInTurn = conIsOwnerPlayerInTurn == null
+            ? null
+            : Lang.getText(conIsOwnerPlayerInTurn ? LangTextType.B0925 : LangTextType.B0926);
+
+        const conIsDiving           = data.conIsDiving;
+        const textForConIsDiving    = conIsDiving == null
+            ? null
+            : Lang.getText(conIsDiving ? LangTextType.B0927 : LangTextType.B0928);
+
         const locationIdArray       = data.conLocationIdArray;
         const textForLocation       = locationIdArray?.length
             ? Lang.getFormattedText(LangTextType.F0116, locationIdArray.join(`/`))
@@ -2178,6 +2237,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const textArrayForSubConditions = Helpers.getNonNullElements([
             textForTeamIndex,
             textForPlayerIndex,
+            textForConIsOwnerPlayerInTurn,
             textForLocation,
             textForGridIndex,
             textForActionState,
@@ -2186,6 +2246,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             textForConFuelPct,
             textForConPriAmmoPct,
             textForConPromotion,
+            textForConIsDiving,
         ]);
         if (data.actDestroyUnit) {
             return Lang.getFormattedText(
@@ -2263,8 +2324,20 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? null
             : Lang.getText(conIsHighlighted ? LangTextType.B0848 : LangTextType.B0849);
 
+        const conPlayerIndexArray           = data.conPlayerIndexArray;
+        const textForConPlayerIndexArray    = !conPlayerIndexArray?.length
+            ? null
+            : Lang.getFormattedText(LangTextType.F0115, conPlayerIndexArray.map(v => `P${v}`).join(`/`));
+
+        const conIsOwnerPlayerInTurn        = data.conIsOwnerPlayerInTurn;
+        const textForConIsOwnerPlayerInTurn = conIsOwnerPlayerInTurn == null
+            ? null
+            : Lang.getText(conIsOwnerPlayerInTurn ? LangTextType.B0925 : LangTextType.B0926);
+
         const textArrayForSubConditions = Helpers.getNonNullElements([
             textForConLocation,
+            textForConPlayerIndexArray,
+            textForConIsOwnerPlayerInTurn,
             textForConIsHighlighted,
         ]);
 
@@ -2322,6 +2395,16 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? null
             : Lang.getText(conIsHighlighted ? LangTextType.B0848 : LangTextType.B0849);
 
+        const conPlayerIndexArray           = data.conPlayerIndexArray;
+        const textForConPlayerIndexArray    = !conPlayerIndexArray?.length
+            ? null
+            : Lang.getFormattedText(LangTextType.F0115, conPlayerIndexArray.map(v => `P${v}`).join(`/`));
+
+        const conIsOwnerPlayerInTurn        = data.conIsOwnerPlayerInTurn;
+        const textForConIsOwnerPlayerInTurn = conIsOwnerPlayerInTurn == null
+            ? null
+            : Lang.getText(conIsOwnerPlayerInTurn ? LangTextType.B0925 : LangTextType.B0926);
+
         const conHp         = data.conHp;
         const textForConHp  = conHp == null
             ? null
@@ -2339,6 +2422,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const textArrayForSubConditions = Helpers.getNonNullElements([
             textForConLocation,
+            textForConPlayerIndexArray,
+            textForConIsOwnerPlayerInTurn,
             textForConIsHighlighted,
             textForConHp,
             textForConCapturePoint,
@@ -3236,7 +3321,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         const playersCountUnneutral = war.getPlayersCountUnneutral();
-        const actTileData           = data.actTileData;
+        {
+            const conPlayerIndexArray = data.conPlayerIndexArray;
+            if ((conPlayerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
+            }
+        }
+
+        const actTileData = data.actTileData;
         if (actTileData == null) {
             return Lang.getText(LangTextType.A0264);
         }
@@ -3267,6 +3359,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
             const gridIndexArray = data.conGridIndexArray;
             if ((gridIndexArray) && (!Config.ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, war.getTileMap().getMapSize()))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0531));
+            }
+        }
+
+        const playersCountUnneutral = war.getPlayersCountUnneutral();
+        {
+            const conPlayerIndexArray = data.conPlayerIndexArray;
+            if ((conPlayerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
             }
         }
 
@@ -3725,6 +3825,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 locationIdArray     : null,
                 gridIndexArray      : null,
                 tileTypeArray       : null,
+                isOwnerPlayerInTurn : null,
                 tilesCount          : 0,
                 tilesCountComparator: ValueComparator.EqualTo,
             };
@@ -3738,6 +3839,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 actionStateArray        : null,
                 hasLoadedCo             : null,
                 hp                      : null,
+                isOwnerPlayerInTurn     : null,
+                isDiving                : null,
                 hpComparator            : ValueComparator.EqualTo,
                 fuelPct                 : null,
                 fuelPctComparator       : ValueComparator.EqualTo,
@@ -3884,6 +3987,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         } else if (actionType === ActionType.SetPlayerState) {
             action.WeaSetPlayerState = {
                 conPlayerIndexArray             : null,
+                conIsPlayerInTurn               : null,
                 conAliveStateArray              : null,
                 conCoUsingSkillTypeArray        : null,
                 conEnergyPercentage             : null,
@@ -3901,6 +4005,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 conUnitTypeArray                    : null,
                 conTeamIndexArray                   : null,
                 conPlayerIndexArray                 : null,
+                conIsOwnerPlayerInTurn              : null,
                 conLocationIdArray                  : null,
                 conGridIndexArray                   : null,
                 conActionStateArray                 : null,
@@ -3913,6 +4018,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 conPriAmmoPctComparator             : ValueComparator.EqualTo,
                 conPromotion                        : null,
                 conPromotionComparator              : ValueComparator.EqualTo,
+                conIsDiving                         : null,
                 actDestroyUnit                      : null,
                 actActionState                      : null,
                 actHasLoadedCo                      : null,

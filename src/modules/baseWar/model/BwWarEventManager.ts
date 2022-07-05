@@ -636,14 +636,25 @@ namespace Twns.BaseWar {
             const conFundComparator             = action.conFundComparator ?? Types.ValueComparator.EqualTo;
             const conEnergyPercentage           = action.conEnergyPercentage;
             const conEnergyPercentageComparator = action.conEnergyPercentageComparator ?? Types.ValueComparator.EqualTo;
+            const conIsPlayerInTurn             = action.conIsPlayerInTurn;
             const actFundMultiplierPercentage   = action.actFundMultiplierPercentage ?? 100;
             const actFundDeltaValue             = action.actFundDeltaValue ?? 0;
             const actCoEnergyMultiplierPct      = action.actCoEnergyMultiplierPct ?? 100;
             const actCoEnergyDeltaPct           = action.actCoEnergyDeltaPct ?? 0;
             const maxFund                       = CommonConstants.WarPlayerMaxFund;
             const actAliveState                 = action.actAliveState;
+            const war                           = this._getWar();
+            const playerIndexInTurn             = war.getPlayerIndexInTurn();
 
-            for (const [playerIndex, player] of this._getWar().getPlayerManager().getAllPlayersDict()) {
+            for (const [playerIndex, player] of war.getPlayerManager().getAllPlayersDict()) {
+                if (conIsPlayerInTurn != null) {
+                    if (((conIsPlayerInTurn) && (playerIndex !== playerIndexInTurn))    ||
+                        ((!conIsPlayerInTurn) && (playerIndex === playerIndexInTurn))
+                    ) {
+                        continue;
+                    }
+                }
+
                 if (((conPlayerIndexArray?.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0))                           ||
                     ((conAliveStateArray?.length) && (conAliveStateArray.indexOf(player.getAliveState()) < 0))                  ||
                     ((conCoUsingSkillTypeArray?.length) && (conCoUsingSkillTypeArray.indexOf(player.getCoUsingSkillType()) < 0))
@@ -713,6 +724,8 @@ namespace Twns.BaseWar {
             const conPriAmmoPctComparator       = action.conPriAmmoPctComparator ?? Types.ValueComparator.EqualTo;
             const conPromotion                  = action.conPromotion;
             const conPromotionComparator        = action.conPromotionComparator ?? Types.ValueComparator.EqualTo;
+            const conIsOwnerPlayerInTurn        = action.conIsOwnerPlayerInTurn;
+            const conIsDiving                   = action.conIsDiving;
             const destroyUnit                   = action.actDestroyUnit;
             const actActionState                = action.actActionState;
             const actHasLoadedCo                = action.actHasLoadedCo;
@@ -730,6 +743,7 @@ namespace Twns.BaseWar {
             const mapSize                       = tileMap.getMapSize();
             const mapWidth                      = mapSize.width;
             const mapHeight                     = mapSize.height;
+            const playerIndexInTurn             = war.getPlayerIndexInTurn();
             const minHp                         = 1;
             const minFuel                       = 0;
             const minPromotion                  = 0;
@@ -738,10 +752,23 @@ namespace Twns.BaseWar {
                 for (let y = 0; y < mapHeight; ++y) {
                     const gridIndex : Types.GridIndex = { x, y };
                     const unit      = unitMap.getUnitOnMap(gridIndex);
-                    const tile      = tileMap.getTile(gridIndex);
-                    if ((unit == null)                                                                                          ||
+                    if (unit == null) {
+                        continue;
+                    }
+
+                    const playerIndex = unit.getPlayerIndex();
+                    if (conIsOwnerPlayerInTurn != null) {
+                        if (((conIsOwnerPlayerInTurn) && (playerIndex !== playerIndexInTurn))   ||
+                            ((!conIsOwnerPlayerInTurn) && (playerIndex === playerIndexInTurn))
+                        ) {
+                            continue;
+                        }
+                    }
+
+                    const tile = tileMap.getTile(gridIndex);
+                    if (((conIsDiving != null) && (unit.getIsDiving() !== conIsDiving))                                         ||
                         ((unitTypeArray.length) && (unitTypeArray.indexOf(unit.getUnitType()) < 0))                             ||
-                        ((playerIndexArray.length) && (playerIndexArray.indexOf(unit.getPlayerIndex()) < 0))                    ||
+                        ((playerIndexArray.length) && (playerIndexArray.indexOf(playerIndex) < 0))                              ||
                         ((teamIndexArray.length) && (teamIndexArray.indexOf(unit.getTeamIndex()) < 0))                          ||
                         ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
                         ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))                  ||
@@ -860,16 +887,29 @@ namespace Twns.BaseWar {
             const conIsHighlighted          = action.conIsHighlighted;
             const conLocationIdArray        = action.conLocationIdArray ?? [];
             const conGridIndexArray         = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_03)) ?? [];
+            const conPlayerIndexArray       = action.conPlayerIndexArray ?? [];
+            const conIsOwnerPlayerInTurn    = action.conIsOwnerPlayerInTurn;
             const unitMap                   = war.getUnitMap();
             const tileMap                   = war.getTileMap();
             const mapSize                   = tileMap.getMapSize();
             const mapWidth                  = mapSize.width;
             const mapHeight                 = mapSize.height;
+            const playerIndexInTurn         = war.getPlayerIndexInTurn();
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
-                    const gridIndex : Types.GridIndex = { x, y };
-                    const tile      = tileMap.getTile(gridIndex);
+                    const gridIndex     : Types.GridIndex = { x, y };
+                    const tile          = tileMap.getTile(gridIndex);
+                    const playerIndex   = tile.getPlayerIndex();
+                    if (conIsOwnerPlayerInTurn != null) {
+                        if (((conIsOwnerPlayerInTurn) && (playerIndex !== playerIndexInTurn))   ||
+                            ((!conIsOwnerPlayerInTurn) && (playerIndex === playerIndexInTurn))
+                        ) {
+                            continue;
+                        }
+                    }
+
                     if (((conIsHighlighted != null) && (tile.getIsHighlighted() !== conIsHighlighted))                              ||
+                        ((conPlayerIndexArray.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0))                            ||
                         ((conGridIndexArray.length) && (!conGridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
                         ((conLocationIdArray.length) && (!conLocationIdArray.some(v => tile.getHasLocationFlag(v))))
                     ) {
@@ -888,7 +928,7 @@ namespace Twns.BaseWar {
 
                     const tileData: CommonProto.WarSerialization.ISerialTile = {
                         gridIndex,
-                        playerIndex         : actIsModifyTileObject ? actTileData.playerIndex : tile.getPlayerIndex(),
+                        playerIndex         : actIsModifyTileObject ? actTileData.playerIndex : playerIndex,
                         baseType            : actBaseType,
                         baseShapeId         : actIsModifyTileBase ? actTileData.baseShapeId : tile.getBaseShapeId(),
                         decoratorType       : actIsModifyTileDecorator ? actTileData.decoratorType : tile.getDecorationType(),
@@ -918,12 +958,15 @@ namespace Twns.BaseWar {
             const mapSize                               = tileMap.getMapSize();
             const mapWidth                              = mapSize.width;
             const mapHeight                             = mapSize.height;
+            const playerIndexInTurn                     = war.getPlayerIndexInTurn();
             const conIsHighlighted                      = action.conIsHighlighted;
             const conLocationIdArray                    = action.conLocationIdArray ?? [];
             const conGridIndexArray                     = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_00)) ?? [];
             const conHp                                 = action.conHp;
             const conCapturePoint                       = action.conCapturePoint;
             const conBuildPoint                         = action.conBuildPoint;
+            const conPlayerIndexArray                   = action.conPlayerIndexArray ?? [];
+            const conIsOwnerPlayerInTurn                = action.conIsOwnerPlayerInTurn;
             const actHpMultiplierPercentage             = action.actHpMultiplierPercentage;
             const actHpDeltaValue                       = action.actHpDeltaValue;
             const actBuildPointMultiplierPercentage     = action.actBuildPointMultiplierPercentage;
@@ -935,9 +978,19 @@ namespace Twns.BaseWar {
             const actIsHighlighted                      = action.actIsHighlighted;
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
-                    const gridIndex : Types.GridIndex = { x, y };
-                    const tile      = tileMap.getTile(gridIndex);
+                    const gridIndex     : Types.GridIndex = { x, y };
+                    const tile          = tileMap.getTile(gridIndex);
+                    const playerIndex   = tile.getPlayerIndex();
+                    if (conIsOwnerPlayerInTurn != null) {
+                        if (((conIsOwnerPlayerInTurn) && (playerIndex !== playerIndexInTurn))   ||
+                            ((!conIsOwnerPlayerInTurn) && (playerIndex === playerIndexInTurn))
+                        ) {
+                            continue;
+                        }
+                    }
+
                     if (((conIsHighlighted != null) && (tile.getIsHighlighted() !== conIsHighlighted))                              ||
+                        ((conPlayerIndexArray.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0))                            ||
                         ((conGridIndexArray.length) && (!conGridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
                         ((conLocationIdArray.length) && (!conLocationIdArray.some(v => tile.getHasLocationFlag(v))))
                     ) {
@@ -1284,23 +1337,34 @@ namespace Twns.BaseWar {
         }
 
         private _checkIsMeetConTilePresence(condition: WarEvent.IWecTilePresence): boolean {
-            const playerIndexArray      = condition.playerIndexArray ?? [];
-            const teamIndexArray        = condition.teamIndexArray ?? [];
-            const locationIdArray       = condition.locationIdArray ?? [];
-            const gridIndexArray        = condition.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePresence_00)) ?? [];
-            const tileTypeArray         = condition.tileTypeArray ?? [];
-            const war                   = this._getWar();
-            const tileMap               = war.getTileMap();
-            const mapSize               = tileMap.getMapSize();
-            const mapWidth              = mapSize.width;
-            const mapHeight             = mapSize.height;
-            let tilesCount              = 0;
+            const playerIndexArray          = condition.playerIndexArray ?? [];
+            const teamIndexArray            = condition.teamIndexArray ?? [];
+            const locationIdArray           = condition.locationIdArray ?? [];
+            const gridIndexArray            = condition.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePresence_00)) ?? [];
+            const tileTypeArray             = condition.tileTypeArray ?? [];
+            const conIsOwnerPlayerInTurn    = condition.isOwnerPlayerInTurn;
+            const war                       = this._getWar();
+            const tileMap                   = war.getTileMap();
+            const mapSize                   = tileMap.getMapSize();
+            const mapWidth                  = mapSize.width;
+            const mapHeight                 = mapSize.height;
+            const playerIndexInTurn         = war.getPlayerIndexInTurn();
+            let tilesCount                  = 0;
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
-                    const gridIndex : Types.GridIndex = { x, y };
-                    const tile      = tileMap.getTile(gridIndex);
+                    const gridIndex     : Types.GridIndex = { x, y };
+                    const tile          = tileMap.getTile(gridIndex);
+                    const playerIndex   = tile.getPlayerIndex();
+                    if (conIsOwnerPlayerInTurn != null) {
+                        if (((conIsOwnerPlayerInTurn) && (playerIndex !== playerIndexInTurn))   ||
+                            ((!conIsOwnerPlayerInTurn) && (playerIndex === playerIndexInTurn))
+                        ) {
+                            continue;
+                        }
+                    }
+
                     if (((tileTypeArray.length) && (tileTypeArray.indexOf(tile.getType()) < 0))                                 ||
-                        ((playerIndexArray.length) && (playerIndexArray.indexOf(tile.getPlayerIndex()) < 0))                    ||
+                        ((playerIndexArray.length) && (playerIndexArray.indexOf(playerIndex) < 0))                              ||
                         ((teamIndexArray.length) && (teamIndexArray.indexOf(tile.getTeamIndex()) < 0))                          ||
                         ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
                         ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))
@@ -1319,31 +1383,43 @@ namespace Twns.BaseWar {
             });
         }
         private _checkIsMeetConUnitPresence(condition: WarEvent.IWecUnitPresence): boolean {
-            const playerIndexArray      = condition.playerIndexArray ?? [];
-            const teamIndexArray        = condition.teamIndexArray ?? [];
-            const locationIdArray       = condition.locationIdArray ?? [];
-            const gridIndexArray        = condition.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_00)) ?? [];
-            const unitTypeArray         = condition.unitTypeArray ?? [];
-            const actionStateArray      = condition.actionStateArray ?? [];
-            const hasLoadedCo           = condition.hasLoadedCo;
-            const hp                    = condition.hp;
-            const hpComparator          = condition.hpComparator ?? Types.ValueComparator.EqualTo;
-            const fuelPct               = condition.fuelPct;
-            const fuelPctComparator     = condition.fuelPctComparator ?? Types.ValueComparator.EqualTo;
-            const priAmmoPct            = condition.priAmmoPct;
-            const priAmmoPctComparator  = condition.priAmmoPctComparator ?? Types.ValueComparator.EqualTo;
-            const promotion             = condition.promotion;
-            const promotionComparator   = condition.promotionComparator ?? Types.ValueComparator.EqualTo;
-            const war                   = this._getWar();
-            const unitMap               = war.getUnitMap();
-            const tileMap               = war.getTileMap();
-            let unitsCount              = 0;
+            const playerIndexArray          = condition.playerIndexArray ?? [];
+            const teamIndexArray            = condition.teamIndexArray ?? [];
+            const locationIdArray           = condition.locationIdArray ?? [];
+            const gridIndexArray            = condition.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_00)) ?? [];
+            const unitTypeArray             = condition.unitTypeArray ?? [];
+            const actionStateArray          = condition.actionStateArray ?? [];
+            const hasLoadedCo               = condition.hasLoadedCo;
+            const hp                        = condition.hp;
+            const conIsOwnerPlayerInTurn    = condition.isOwnerPlayerInTurn;
+            const conIsDiving               = condition.isDiving;
+            const hpComparator              = condition.hpComparator ?? Types.ValueComparator.EqualTo;
+            const fuelPct                   = condition.fuelPct;
+            const fuelPctComparator         = condition.fuelPctComparator ?? Types.ValueComparator.EqualTo;
+            const priAmmoPct                = condition.priAmmoPct;
+            const priAmmoPctComparator      = condition.priAmmoPctComparator ?? Types.ValueComparator.EqualTo;
+            const promotion                 = condition.promotion;
+            const promotionComparator       = condition.promotionComparator ?? Types.ValueComparator.EqualTo;
+            const war                       = this._getWar();
+            const unitMap                   = war.getUnitMap();
+            const tileMap                   = war.getTileMap();
+            const playerIndexInTurn         = war.getPlayerIndexInTurn();
+            let unitsCount                  = 0;
             for (const unit of unitMap.getAllUnits()) {
+                const playerIndex = unit.getPlayerIndex();
+                if (conIsOwnerPlayerInTurn != null) {
+                    if (((conIsOwnerPlayerInTurn) && (playerIndex !== playerIndexInTurn))   ||
+                        ((!conIsOwnerPlayerInTurn) && (playerIndex === playerIndexInTurn))
+                    ) {
+                        continue;
+                    }
+                }
+
                 const gridIndex = unit.getGridIndex();
                 const tile      = tileMap.getTile(gridIndex);
-                if ((unit == null)                                                                                          ||
+                if (((conIsDiving != null) && (unit.getIsDiving() !== conIsDiving))                                         ||
                     ((unitTypeArray.length) && (unitTypeArray.indexOf(unit.getUnitType()) < 0))                             ||
-                    ((playerIndexArray.length) && (playerIndexArray.indexOf(unit.getPlayerIndex()) < 0))                    ||
+                    ((playerIndexArray.length) && (playerIndexArray.indexOf(playerIndex) < 0))                              ||
                     ((teamIndexArray.length) && (teamIndexArray.indexOf(unit.getTeamIndex()) < 0))                          ||
                     ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
                     ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))                  ||

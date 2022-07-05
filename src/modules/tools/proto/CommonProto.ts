@@ -6019,6 +6019,9 @@ declare namespace CommonProto {
 
             /** WecTilePresence gridIndexArray */
             gridIndexArray?: (CommonProto.Structure.IGridIndex[]|null);
+
+            /** WecTilePresence isOwnerPlayerInTurn */
+            isOwnerPlayerInTurn?: (boolean|null);
         }
 
         /** Represents a WecTilePresence. */
@@ -6050,6 +6053,9 @@ declare namespace CommonProto {
 
             /** WecTilePresence gridIndexArray. */
             public gridIndexArray: CommonProto.Structure.IGridIndex[];
+
+            /** WecTilePresence isOwnerPlayerInTurn. */
+            public isOwnerPlayerInTurn: boolean;
 
             /**
              * Creates a new WecTilePresence instance using the specified properties.
@@ -6175,6 +6181,12 @@ declare namespace CommonProto {
 
             /** WecUnitPresence promotionComparator */
             promotionComparator?: (number|null);
+
+            /** WecUnitPresence isOwnerPlayerInTurn */
+            isOwnerPlayerInTurn?: (boolean|null);
+
+            /** WecUnitPresence isDiving */
+            isDiving?: (boolean|null);
         }
 
         /** Represents a WecUnitPresence. */
@@ -6236,6 +6248,12 @@ declare namespace CommonProto {
 
             /** WecUnitPresence promotionComparator. */
             public promotionComparator: number;
+
+            /** WecUnitPresence isOwnerPlayerInTurn. */
+            public isOwnerPlayerInTurn: boolean;
+
+            /** WecUnitPresence isDiving. */
+            public isDiving: boolean;
 
             /**
              * Creates a new WecUnitPresence instance using the specified properties.
@@ -8371,6 +8389,9 @@ declare namespace CommonProto {
 
             /** WeaSetPlayerState conCoUsingSkillTypeArray */
             conCoUsingSkillTypeArray?: (number[]|null);
+
+            /** WeaSetPlayerState conIsPlayerInTurn */
+            conIsPlayerInTurn?: (boolean|null);
         }
 
         /** Represents a WeaSetPlayerState. */
@@ -8417,6 +8438,9 @@ declare namespace CommonProto {
 
             /** WeaSetPlayerState conCoUsingSkillTypeArray. */
             public conCoUsingSkillTypeArray: number[];
+
+            /** WeaSetPlayerState conIsPlayerInTurn. */
+            public conIsPlayerInTurn: boolean;
 
             /**
              * Creates a new WeaSetPlayerState instance using the specified properties.
@@ -8537,6 +8561,12 @@ declare namespace CommonProto {
             /** WeaSetUnitState conPromotionComparator */
             conPromotionComparator?: (number|null);
 
+            /** WeaSetUnitState conIsOwnerPlayerInTurn */
+            conIsOwnerPlayerInTurn?: (boolean|null);
+
+            /** WeaSetUnitState conIsDiving */
+            conIsDiving?: (boolean|null);
+
             /** WeaSetUnitState actHpMultiplierPercentage */
             actHpMultiplierPercentage?: (number|null);
 
@@ -8624,6 +8654,12 @@ declare namespace CommonProto {
 
             /** WeaSetUnitState conPromotionComparator. */
             public conPromotionComparator: number;
+
+            /** WeaSetUnitState conIsOwnerPlayerInTurn. */
+            public conIsOwnerPlayerInTurn: boolean;
+
+            /** WeaSetUnitState conIsDiving. */
+            public conIsDiving: boolean;
 
             /** WeaSetUnitState actHpMultiplierPercentage. */
             public actHpMultiplierPercentage: number;
@@ -8741,6 +8777,12 @@ declare namespace CommonProto {
             /** WeaSetTileType conIsHighlighted */
             conIsHighlighted?: (boolean|null);
 
+            /** WeaSetTileType conPlayerIndexArray */
+            conPlayerIndexArray?: (number[]|null);
+
+            /** WeaSetTileType conIsOwnerPlayerInTurn */
+            conIsOwnerPlayerInTurn?: (boolean|null);
+
             /** WeaSetTileType actTileData */
             actTileData?: (CommonProto.WarSerialization.ISerialTile|null);
 
@@ -8774,6 +8816,12 @@ declare namespace CommonProto {
 
             /** WeaSetTileType conIsHighlighted. */
             public conIsHighlighted: boolean;
+
+            /** WeaSetTileType conPlayerIndexArray. */
+            public conPlayerIndexArray: number[];
+
+            /** WeaSetTileType conIsOwnerPlayerInTurn. */
+            public conIsOwnerPlayerInTurn: boolean;
 
             /** WeaSetTileType actTileData. */
             public actTileData?: (CommonProto.WarSerialization.ISerialTile|null);
@@ -8882,6 +8930,12 @@ declare namespace CommonProto {
             /** WeaSetTileState conBuildPoint */
             conBuildPoint?: (CommonProto.Structure.IValueAndComparator|null);
 
+            /** WeaSetTileState conPlayerIndexArray */
+            conPlayerIndexArray?: (number[]|null);
+
+            /** WeaSetTileState conIsOwnerPlayerInTurn */
+            conIsOwnerPlayerInTurn?: (boolean|null);
+
             /** WeaSetTileState actHpMultiplierPercentage */
             actHpMultiplierPercentage?: (number|null);
 
@@ -8936,6 +8990,12 @@ declare namespace CommonProto {
 
             /** WeaSetTileState conBuildPoint. */
             public conBuildPoint?: (CommonProto.Structure.IValueAndComparator|null);
+
+            /** WeaSetTileState conPlayerIndexArray. */
+            public conPlayerIndexArray: number[];
+
+            /** WeaSetTileState conIsOwnerPlayerInTurn. */
+            public conIsOwnerPlayerInTurn: boolean;
 
             /** WeaSetTileState actHpMultiplierPercentage. */
             public actHpMultiplierPercentage: number;

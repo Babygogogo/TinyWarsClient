@@ -36,6 +36,9 @@ namespace Twns.WarEvent {
 
         private readonly _btnPlayerIndex!                       : TwnsUiButton.UiButton;
         private readonly _labelPlayerIndex!                     : TwnsUiLabel.UiLabel;
+        private readonly _btnConIsPlayerInTurn!                 : TwnsUiButton.UiButton;
+        private readonly _labelConIsPlayerInTurn!               : TwnsUiLabel.UiLabel;
+
         private readonly _btnTeamIndex!                         : TwnsUiButton.UiButton;
         private readonly _labelTeamIndex!                       : TwnsUiLabel.UiLabel;
         private readonly _btnUnitType!                          : TwnsUiButton.UiButton;
@@ -64,6 +67,9 @@ namespace Twns.WarEvent {
         private readonly _labelConPromotionComparator!          : TwnsUiLabel.UiLabel;
         private readonly _labelConPromotion!                    : TwnsUiLabel.UiLabel;
         private readonly _inputConPromotion!                    : TwnsUiTextInput.UiTextInput;
+
+        private readonly _btnConIsDiving!                       : TwnsUiButton.UiButton;
+        private readonly _labelConIsDiving!                     : TwnsUiLabel.UiLabel;
 
         private readonly _btnDestroyUnit!                       : TwnsUiButton.UiButton;
         private readonly _labelDestroyUnit!                     : TwnsUiLabel.UiLabel;
@@ -102,12 +108,14 @@ namespace Twns.WarEvent {
                 { ui: this._btnType,                            callback: this._onTouchedBtnType },
                 { ui: this._imgInnerTouchMask,                  callback: this._onTouchedImgInnerTouchMask },
                 { ui: this._btnPlayerIndex,                     callback: this._onTouchedBtnPlayerIndex },
+                { ui: this._btnConIsPlayerInTurn,               callback: this._onTouchedBtnConIsPlayerInTurn },
                 { ui: this._btnTeamIndex,                       callback: this._onTouchedBtnTeamIndex },
                 { ui: this._btnUnitType,                        callback: this._onTouchedBtnUnitType },
                 { ui: this._btnLocation,                        callback: this._onTouchedBtnLocation },
                 { ui: this._btnGridIndex,                       callback: this._onTouchedBtnGridIndex },
                 { ui: this._btnActionState,                     callback: this._onTouchedBtnActionState },
                 { ui: this._btnHasLoadedCo,                     callback: this._onTouchedBtnHasLoadedCo },
+                { ui: this._btnConIsDiving,                     callback: this._onTouchedBtnConIsDiving },
                 { ui: this._btnConHpComparator,                 callback: this._onTouchedBtnConHpComparator },
                 { ui: this._inputConHp,                         callback: this._onFocusInInputConHp,                            eventType: egret.FocusEvent.FOCUS_IN },
                 { ui: this._inputConHp,                         callback: this._onFocusOutInputConHp,                           eventType: egret.FocusEvent.FOCUS_OUT },
@@ -182,6 +190,18 @@ namespace Twns.WarEvent {
                 },
             });
         }
+        private _onTouchedBtnConIsPlayerInTurn(): void {
+            const action                    = this._getAction();
+            const conIsOwnerPlayerInTurn    = action.conIsOwnerPlayerInTurn;
+            if (conIsOwnerPlayerInTurn == null) {
+                action.conIsOwnerPlayerInTurn = true;
+            } else if (conIsOwnerPlayerInTurn) {
+                action.conIsOwnerPlayerInTurn = false;
+            } else {
+                action.conIsOwnerPlayerInTurn = null;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
         private _onTouchedBtnTeamIndex(): void {
             const action = this._getAction();
             PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseTeamIndexPanel, {
@@ -244,6 +264,18 @@ namespace Twns.WarEvent {
                 condition.conHasLoadedCo = null;
             } else {
                 condition.conHasLoadedCo = true;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onTouchedBtnConIsDiving(): void {
+            const action        = this._getAction();
+            const conIsDiving   = action.conIsDiving;
+            if (conIsDiving == null) {
+                action.conIsDiving = true;
+            } else if (conIsDiving) {
+                action.conIsDiving = false;
+            } else {
+                action.conIsDiving = null;
             }
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
@@ -510,12 +542,14 @@ namespace Twns.WarEvent {
 
             this._updateLabelDescAndLabelError();
             this._updateLabelPlayerIndex();
+            this._updateLabelConIsPlayerInTurn();
             this._updateLabelTeamIndex();
             this._updateLabelUnitType();
             this._updateLabelLocation();
             this._updateLabelGridIndex();
             this._updateLabelActionState();
             this._updateLabelHasLoadedCo();
+            this._updateLabelConIsDiving();
             this._updateLabelConHpComparator();
             this._updateInputConHp();
             this._updateLabelConFuelPctComparator();
@@ -543,12 +577,14 @@ namespace Twns.WarEvent {
             this._btnClose.label                            = Lang.getText(LangTextType.B0146);
             this._btnType.label                             = Lang.getText(LangTextType.B0516);
             this._btnPlayerIndex.label                      = Lang.getText(LangTextType.B0031);
+            this._btnConIsPlayerInTurn.label                = Lang.getText(LangTextType.B0086);
             this._btnTeamIndex.label                        = Lang.getText(LangTextType.B0377);
             this._btnUnitType.label                         = Lang.getText(LangTextType.B0525);
             this._btnLocation.label                         = Lang.getText(LangTextType.B0764);
             this._btnGridIndex.label                        = Lang.getText(LangTextType.B0531);
             this._btnActionState.label                      = Lang.getText(LangTextType.B0526);
             this._btnHasLoadedCo.label                      = Lang.getText(LangTextType.B0421);
+            this._btnConIsDiving.label                      = Lang.getText(LangTextType.B0371);
             this._btnConHpComparator.label                  = Lang.getText(LangTextType.B0774);
             this._labelConHp.text                           = Lang.getText(LangTextType.B0807);
             this._btnConFuelPctComparator.label             = Lang.getText(LangTextType.B0774);
@@ -592,6 +628,15 @@ namespace Twns.WarEvent {
             const playerIndexArray      = this._getAction().conPlayerIndexArray;
             this._labelPlayerIndex.text = playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`, `) : Lang.getText(LangTextType.B0776);
         }
+        private _updateLabelConIsPlayerInTurn(): void {
+            const conIsOwnerPlayerInTurn    = this._getAction().conIsOwnerPlayerInTurn;
+            const label                     = this._labelConIsPlayerInTurn;
+            if (conIsOwnerPlayerInTurn == null) {
+                label.text = `--`;
+            } else {
+                label.text = Lang.getText(conIsOwnerPlayerInTurn ? LangTextType.B0012 : LangTextType.B0013);
+            }
+        }
         private _updateLabelTeamIndex(): void {
             const teamIndexArray        = this._getAction().conTeamIndexArray;
             this._labelTeamIndex.text   = teamIndexArray?.length ? teamIndexArray.map(v => Lang.getPlayerTeamName(v)).join(`, `) : Lang.getText(LangTextType.B0776);
@@ -616,6 +661,15 @@ namespace Twns.WarEvent {
         private _updateLabelHasLoadedCo(): void {
             const hasLoadedCo           = this._getAction().conHasLoadedCo;
             this._labelHasLoadedCo.text = hasLoadedCo != null ? (Lang.getText(hasLoadedCo ? LangTextType.B0012 : LangTextType.B0013)) : Lang.getText(LangTextType.B0776);
+        }
+        private _updateLabelConIsDiving(): void {
+            const conIsDiving   = this._getAction().conIsDiving;
+            const label         = this._labelConIsDiving;
+            if (conIsDiving == null) {
+                label.text = `--`;
+            } else {
+                label.text = Lang.getText(conIsDiving ? LangTextType.B0012 : LangTextType.B0013);
+            }
         }
         private _updateLabelConHpComparator(): void {
             const comparator                = this._getAction().conHpComparator;

@@ -493,7 +493,7 @@ namespace Twns.Lang {
         ],
         [LangTextType.A0114]: [
             `您确定要切换该部队的下潜状态吗？`,
-            `Are you sure you want to switch the unit's diving state?`,
+            `Are you sure you want to switch the unit's dived state?`,
         ],
         [LangTextType.A0115]: [
             `请联系babygogogo以解决问题`,
@@ -2868,7 +2868,7 @@ namespace Twns.Lang {
         ],
         [LangTextType.B0371]: [
             `下潜中`,
-            `Diving`,
+            `Dived`,
         ],
         [LangTextType.B0372]: [
             `最近`,
@@ -5082,6 +5082,22 @@ namespace Twns.Lang {
             `重做`,
             `Redo`,
         ],
+        [LangTextType.B0925]: [
+            `在回合中`,
+            `is in turn`,
+        ],
+        [LangTextType.B0926]: [
+            `不在回合中`,
+            `is not in turn`,
+        ],
+        [LangTextType.B0927]: [
+            `已下潜`,
+            `is dived`,
+        ],
+        [LangTextType.B0928]: [
+            `未下潜`,
+            `is not dived`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.Tile0000]: [
@@ -6244,8 +6260,8 @@ namespace Twns.Lang {
             `Select %s`,
         ],
         [LangTextType.F0093]: [
-            `类型为 %s、且位于 %s、且归属于 %s 的地形的数量 %s %s`,
-            `The number of %s at %s that owned by %s is %s %s.`,
+            `类型为 %s%s 的地形的数量 %s %s`,
+            `Get all terrains that is %s%s. The number of the terrains %s %s.`,
         ],
         [LangTextType.F0094]: [
             `当前回合数是 %s、且回合阶段为 %s、且是 %s 的回合`,

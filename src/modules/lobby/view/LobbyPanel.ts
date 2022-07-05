@@ -13,15 +13,15 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import Twns.Notify           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.Lobby {
-    import NotifyType           = Twns.Notify.NotifyType;
-    import LangTextType         = Twns.Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
+    import LangTextType         = Lang.LangTextType;
 
     export type OpenDataForLobbyPanel = void;
     export class LobbyPanel extends TwnsUiPanel.UiPanel<OpenDataForLobbyPanel> {
@@ -70,6 +70,8 @@ namespace Twns.Lobby {
             this._updateComponentsForLanguage();
             this._updateBtnMultiPlayer();
             this._updateBtnRanking();
+
+            SoundManager.playBgm(CommonConstants.BgmSfxCode.Lobby);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             // nothing to do
@@ -83,10 +85,10 @@ namespace Twns.Lobby {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedGroupDiscord(): void {
             if ((window) && (window.open)) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, `Discord`),
                     callback: () => {
-                        window.open(Twns.CommonConstants.DiscordUrl);
+                        window.open(CommonConstants.DiscordUrl);
                     },
                 });
             }
@@ -94,10 +96,10 @@ namespace Twns.Lobby {
 
         private _onTouchedGroupGithub(): void {
             if ((window) && (window.open)) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, `GitHub`),
                     callback: () => {
-                        window.open(Twns.CommonConstants.GithubUrl);
+                        window.open(CommonConstants.GithubUrl);
                     },
                 });
             }
@@ -105,11 +107,11 @@ namespace Twns.Lobby {
 
         private _onTouchedGroupSwitchVersion(): void {
             if (window?.open) {
-                const isTest = (Twns.CommonConstants.GameVersion as any) === Twns.Types.GameVersion.Legacy;
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                const isTest = (CommonConstants.GameVersion as any) === Types.GameVersion.Legacy;
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, Lang.getText(isTest ? LangTextType.B0854 : LangTextType.B0854)),
                     callback: () => {
-                        window.open(isTest ? Twns.CommonConstants.TestVersionUrl : Twns.CommonConstants.LegacyVersionUrl);
+                        window.open(isTest ? CommonConstants.TestVersionUrl : CommonConstants.LegacyVersionUrl);
                     },
                 });
             }
@@ -117,17 +119,17 @@ namespace Twns.Lobby {
 
         private _onTouchedBtnMultiPlayer(): void {
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.McrMainMenuPanel, void 0);
         }
 
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.SpmMainMenuPanel, void 0);
         }
 
         private _onTouchedBtnRanking(): void {
             this.close();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MrrMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MrrMainMenuPanel, void 0);
         }
 
         private _onMsgUserLogout(): void {
@@ -176,18 +178,18 @@ namespace Twns.Lobby {
             group.alpha = 1;
             group.right = 60;
 
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnMultiPlayer,
                 beginProps  : { alpha: 0, right: -40 },
                 endProps    : { alpha: 1, right: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnRanking,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 100,
                 endProps    : { alpha: 1, right: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._btnSinglePlayer,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 200,
@@ -203,51 +205,51 @@ namespace Twns.Lobby {
             groupTips.alpha = 1;
             groupTips.left  = 60;
 
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupWelcome,
                 beginProps  : { alpha: 0, left: -40 },
                 endProps    : { alpha: 1, left: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupQq,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 50,
                 endProps    : { alpha: 1, left: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupDiscord,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 100,
                 endProps    : { alpha: 1, left: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupGithub,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 150,
                 endProps    : { alpha: 1, left: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupSwitchVersion,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
             });
 
-            await Twns.Helpers.wait(200 + Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(200 + CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, right: 60 },
                 endProps    : { alpha: 0, right: 20 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._groupTips,
                 beginProps  : { alpha: 1, left: 60 },
                 endProps    : { alpha: 0, left: 20 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateComponentsForLanguage(): Promise<void> {
@@ -257,27 +259,27 @@ namespace Twns.Lobby {
             this._labelTips3.text       = `368142455`;
             this._labelTips4.text       = `${Lang.getText(LangTextType.B0538)}:`;
             this._labelTips5.textFlow   = [{
-                text    : Twns.CommonConstants.DiscordUrl,
+                text    : CommonConstants.DiscordUrl,
                 style   : { underline: true },
             }];
             this._labelTips6.text       = `${Lang.getText(LangTextType.B0539)}:`;
             this._labelTips7.textFlow   = [{
-                text    : Twns.CommonConstants.GithubUrl,
+                text    : CommonConstants.GithubUrl,
                 style   : { underline: true },
             }];
 
             const labelTips8    = this._labelTips8;
             const labelTips9    = this._labelTips9;
-            if ((Twns.CommonConstants.GameVersion as any) === Twns.Types.GameVersion.Legacy) {
+            if ((CommonConstants.GameVersion as any) === Types.GameVersion.Legacy) {
                 labelTips8.text     = `${Lang.getText(LangTextType.B0854)}:`;
                 labelTips9.textFlow = [{
-                    text    : Twns.CommonConstants.TestVersionUrl,
+                    text    : CommonConstants.TestVersionUrl,
                     style   : { underline: true },
                 }];
             } else {
                 labelTips8.text     = `${Lang.getText(LangTextType.B0853)}:`;
                 labelTips9.textFlow = [{
-                    text    : Twns.CommonConstants.LegacyVersionUrl,
+                    text    : CommonConstants.LegacyVersionUrl,
                     style   : { underline: true },
                 }];
             }
@@ -290,7 +292,7 @@ namespace Twns.Lobby {
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
                 (await MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
-                (await Twns.MultiRankRoom.MrrModel.checkIsRed())
+                (await MultiRankRoom.MrrModel.checkIsRed())
             );
         }
     }
