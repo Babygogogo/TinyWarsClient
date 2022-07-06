@@ -306,7 +306,8 @@ namespace Twns.SinglePlayerWar.SpwModel {
 
         // Handle system end turn.
         if ((playerInTurn.checkIsNeutral())                                 ||
-            (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead)
+            (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead)  ||
+            (playerInTurn.getIsSkipTurn())
         ) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
                 throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_01);

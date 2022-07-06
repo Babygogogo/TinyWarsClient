@@ -5884,6 +5884,9 @@ declare namespace CommonProto {
 
             /** WecPlayerPresence coCategoryIdArray */
             coCategoryIdArray?: (number[]|null);
+
+            /** WecPlayerPresence isSkipTurn */
+            isSkipTurn?: (boolean|null);
         }
 
         /** Represents a WecPlayerPresence. */
@@ -5924,6 +5927,9 @@ declare namespace CommonProto {
 
             /** WecPlayerPresence coCategoryIdArray. */
             public coCategoryIdArray: number[];
+
+            /** WecPlayerPresence isSkipTurn. */
+            public isSkipTurn: boolean;
 
             /**
              * Creates a new WecPlayerPresence instance using the specified properties.
@@ -8506,6 +8512,12 @@ declare namespace CommonProto {
 
             /** WeaSetPlayerState conIsPlayerInTurn */
             conIsPlayerInTurn?: (boolean|null);
+
+            /** WeaSetPlayerState conIsSkipTurn */
+            conIsSkipTurn?: (boolean|null);
+
+            /** WeaSetPlayerState actIsSkipTurn */
+            actIsSkipTurn?: (boolean|null);
         }
 
         /** Represents a WeaSetPlayerState. */
@@ -8555,6 +8567,12 @@ declare namespace CommonProto {
 
             /** WeaSetPlayerState conIsPlayerInTurn. */
             public conIsPlayerInTurn: boolean;
+
+            /** WeaSetPlayerState conIsSkipTurn. */
+            public conIsSkipTurn: boolean;
+
+            /** WeaSetPlayerState actIsSkipTurn. */
+            public actIsSkipTurn: boolean;
 
             /**
              * Creates a new WeaSetPlayerState instance using the specified properties.
@@ -12784,6 +12802,9 @@ declare namespace CommonProto {
 
             /** SerialPlayer markedGridIdArray */
             markedGridIdArray?: (number[]|null);
+
+            /** SerialPlayer isSkipTurn */
+            isSkipTurn?: (boolean|null);
         }
 
         /** Represents a SerialPlayer. */
@@ -12842,6 +12863,9 @@ declare namespace CommonProto {
 
             /** SerialPlayer markedGridIdArray. */
             public markedGridIdArray: number[];
+
+            /** SerialPlayer isSkipTurn. */
+            public isSkipTurn: boolean;
 
             /**
              * Creates a new SerialPlayer instance using the specified properties.

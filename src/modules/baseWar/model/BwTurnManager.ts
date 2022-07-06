@@ -799,6 +799,8 @@ namespace Twns.BaseWar {
                 throw Helpers.newError(`Invalid timerType: ${timerType}`, ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_02);
             }
 
+            player.setIsSkipTurn(false);
+
             const info = this._getNextTurnAndPlayerIndex();
             this._setTurnIndex(info.turnIndex);
             this._setPlayerIndexInTurn(info.playerIndex);

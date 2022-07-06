@@ -40,6 +40,8 @@ namespace Twns.WarEvent {
         private readonly _labelPlayerIndex!                 : TwnsUiLabel.UiLabel;
         private readonly _btnAliveState!                    : TwnsUiButton.UiButton;
         private readonly _labelAliveState!                  : TwnsUiLabel.UiLabel;
+        private readonly _btnIsSkipTurn!                    : TwnsUiButton.UiButton;
+        private readonly _labelIsSkipTurn!                  : TwnsUiLabel.UiLabel;
         private readonly _btnCoCategory!                    : TwnsUiButton.UiButton;
         private readonly _labelCoCategory!                  : TwnsUiLabel.UiLabel;
         private readonly _btnUsingSkillType!                : TwnsUiButton.UiButton;
@@ -68,6 +70,7 @@ namespace Twns.WarEvent {
                 { ui: this._imgInnerTouchMask,              callback: this._onTouchedImgInnerTouchMask },
                 { ui: this._btnPlayerIndex,                 callback: this._onTouchedBtnPlayerIndex },
                 { ui: this._btnAliveState,                  callback: this._onTouchedBtnAliveState },
+                { ui: this._btnIsSkipTurn,                  callback: this._onTouchedBtnIsSkipTurn },
                 { ui: this._btnCoCategory,                  callback: this._onTouchedBtnCoCategory },
                 { ui: this._btnUsingSkillType,              callback: this._onTouchedBtnUsingSkillType },
                 { ui: this._inputFund,                      callback: this._onFocusInInputFund,                     eventType: egret.FocusEvent.FOCUS_IN },
@@ -130,6 +133,18 @@ namespace Twns.WarEvent {
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
+        }
+        private _onTouchedBtnIsSkipTurn(): void {
+            const condition     = this._getCondition();
+            const isSkipTurn    = condition.isSkipTurn;
+            if (isSkipTurn == null) {
+                condition.isSkipTurn = true;
+            } else if (isSkipTurn) {
+                condition.isSkipTurn = false;
+            } else {
+                condition.isSkipTurn = null;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnCoCategory(): void {
             const condition = this._getCondition();
@@ -214,6 +229,7 @@ namespace Twns.WarEvent {
             this._updateLabelDescAndLabelError();
             this._updateLabelPlayerIndex();
             this._updateLabelAliveState();
+            this._updateLabelIsSkipTurn();
             this._updateLabelCoCategory();
             this._updateLabelUsingSkillType();
             this._updateInputFund();
@@ -230,6 +246,7 @@ namespace Twns.WarEvent {
             this._btnType.label                         = Lang.getText(LangTextType.B0516);
             this._btnPlayerIndex.label                  = Lang.getText(LangTextType.B0521);
             this._btnAliveState.label                   = Lang.getText(LangTextType.B0784);
+            this._btnIsSkipTurn.label                   = Lang.getText(LangTextType.B0979);
             this._btnCoCategory.label                   = Lang.getText(LangTextType.B0425);
             this._btnUsingSkillType.label               = Lang.getText(LangTextType.B0785);
             this._labelFund.text                        = Lang.getText(LangTextType.B0032);
@@ -259,6 +276,12 @@ namespace Twns.WarEvent {
         private _updateLabelAliveState(): void {
             const aliveStateArray       = this._getCondition().aliveStateArray;
             this._labelAliveState.text  = aliveStateArray?.length ? aliveStateArray.map(v => Lang.getPlayerAliveStateName(v)).join(`, `) : Lang.getText(LangTextType.B0776);
+        }
+        private _updateLabelIsSkipTurn(): void {
+            const isSkipTurn            = this._getCondition().isSkipTurn;
+            this._labelIsSkipTurn.text  = isSkipTurn == null
+                ? `--`
+                : Lang.getText(isSkipTurn ? LangTextType.B0012 : LangTextType.B0013);
         }
         private _updateLabelCoCategory(): void {
             const coCategoryIdArray     = this._getCondition().coCategoryIdArray;

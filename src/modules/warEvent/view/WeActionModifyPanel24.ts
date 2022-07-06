@@ -38,6 +38,8 @@ namespace Twns.WarEvent {
         private readonly _labelPlayerIndex!                     : TwnsUiLabel.UiLabel;
         private readonly _btnConIsPlayerInTurn!                 : TwnsUiButton.UiButton;
         private readonly _labelConIsPlayerInTurn!               : TwnsUiLabel.UiLabel;
+        private readonly _btnConIsSkipTurn!                     : TwnsUiButton.UiButton;
+        private readonly _labelConIsSkipTurn!                   : TwnsUiLabel.UiLabel;
 
         private readonly _btnConCoUsingSkillType!               : TwnsUiButton.UiButton;
         private readonly _labelConCoUsingSkillType!             : TwnsUiLabel.UiLabel;
@@ -55,6 +57,8 @@ namespace Twns.WarEvent {
         private readonly _btnActAliveState!                 : TwnsUiButton.UiButton;
         private readonly _labelActAliveState!               : TwnsUiLabel.UiLabel;
         private readonly _btnActAliveStateHelp!             : TwnsUiButton.UiButton;
+        private readonly _btnActIsSkipTurn!                 : TwnsUiButton.UiButton;
+        private readonly _labelActIsSkipTurn!               : TwnsUiLabel.UiLabel;
         private readonly _labelActFund!                     : TwnsUiLabel.UiLabel;
         private readonly _labelActFundMultiplierPct!        : TwnsUiLabel.UiLabel;
         private readonly _inputActFundMultiplierPct!        : TwnsUiTextInput.UiTextInput;
@@ -74,6 +78,7 @@ namespace Twns.WarEvent {
 
                 { ui: this._btnSwitchPlayerIndex,               callback: this._onTouchedBtnSwitchPlayerIndex },
                 { ui: this._btnConIsPlayerInTurn,               callback: this._onTouchedBtnConIsPlayerInTurn },
+                { ui: this._btnConIsSkipTurn,                   callback: this._onTouchedBtnConIsSkipTurn },
                 { ui: this._btnConCoUsingSkillType,             callback: this._onTouchedBtnConCoUsingSkillType },
                 { ui: this._btnConAliveState,                   callback: this._onTouchedBtnConAliveState },
                 { ui: this._inputConFund,                       callback: this._onFocusInInputConFund,                      eventType: egret.FocusEvent.FOCUS_IN },
@@ -85,6 +90,7 @@ namespace Twns.WarEvent {
 
                 { ui: this._btnActAliveState,                   callback: this._onTouchedBtnActAliveState },
                 { ui: this._btnActAliveStateHelp,               callback: this._onTouchedBtnActAliveStateHelp },
+                { ui: this._btnActIsSkipTurn,                   callback: this._onTouchedBtnActIsSkipTurn },
                 { ui: this._inputActFundDeltaValue,             callback: this._onFocusInInputActFundDeltaValue,            eventType: egret.FocusEvent.FOCUS_IN },
                 { ui: this._inputActFundDeltaValue,             callback: this._onFocusOutInputActFundDeltaValue,           eventType: egret.FocusEvent.FOCUS_OUT },
                 { ui: this._inputActFundMultiplierPct,          callback: this._onFocusInInputActFundMultiplierPct,         eventType: egret.FocusEvent.FOCUS_IN },
@@ -157,6 +163,18 @@ namespace Twns.WarEvent {
                 action.conIsPlayerInTurn = false;
             } else {
                 action.conIsPlayerInTurn = null;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onTouchedBtnConIsSkipTurn(): void {
+            const action        = this._getAction();
+            const conIsSkipTurn = action.conIsSkipTurn;
+            if (conIsSkipTurn == null) {
+                action.conIsSkipTurn = true;
+            } else if (conIsSkipTurn) {
+                action.conIsSkipTurn = false;
+            } else {
+                action.conIsSkipTurn = null;
             }
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
@@ -240,6 +258,19 @@ namespace Twns.WarEvent {
                 title   : Lang.getText(LangTextType.B0784),
                 content : Lang.getText(LangTextType.A0272),
             });
+        }
+
+        private _onTouchedBtnActIsSkipTurn(): void {
+            const action        = this._getAction();
+            const actIsSkipTurn = action.actIsSkipTurn;
+            if (actIsSkipTurn == null) {
+                action.actIsSkipTurn = true;
+            } else if (actIsSkipTurn) {
+                action.actIsSkipTurn = false;
+            } else {
+                action.actIsSkipTurn = null;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onFocusInInputActFundDeltaValue(): void {
@@ -326,6 +357,7 @@ namespace Twns.WarEvent {
 
             this._updateLabelPlayerIndex();
             this._updateLabelConIsPlayerInTurn();
+            this._updateLabelConIsSkipTurn();
             this._updateLabelConCoUsingSkillType();
             this._updateConLabelAliveState();
             this._updateInputConFund();
@@ -334,6 +366,7 @@ namespace Twns.WarEvent {
             this._updateLabelConEnergyPercentageComparator();
 
             this._updateLabelActAliveState();
+            this._updateLabelActIsSkipTurn();
             this._updateInputActFundDeltaValue();
             this._updateInputActFundMultiplierPercentage();
             this._updateInputActCoEnergyDeltaPct();
@@ -345,7 +378,8 @@ namespace Twns.WarEvent {
             this._btnType.label                             = Lang.getText(LangTextType.B0516);
             this._btnBack.label                             = Lang.getText(LangTextType.B0146);
             this._btnSwitchPlayerIndex.label                = Lang.getText(LangTextType.B0521);
-            this._btnConIsPlayerInTurn.label                   = Lang.getText(LangTextType.B0086);
+            this._btnConIsPlayerInTurn.label                = Lang.getText(LangTextType.B0086);
+            this._btnConIsSkipTurn.label                    = Lang.getText(LangTextType.B0979);
             this._btnConCoUsingSkillType.label              = Lang.getText(LangTextType.B0785);
             this._btnConAliveState.label                    = Lang.getText(LangTextType.B0784);
             this._btnActAliveState.label                    = Lang.getText(LangTextType.B0784);
@@ -354,6 +388,7 @@ namespace Twns.WarEvent {
             this._labelConEnergyPercentage.text             = Lang.getText(LangTextType.B0787);
             this._btnConEnergyPercentageComparator.label    = Lang.getText(LangTextType.B0774);
 
+            this._btnActIsSkipTurn.label                    = Lang.getText(LangTextType.B0979);
             this._labelActFund.text                         = Lang.getText(LangTextType.B0032);
             this._labelActFundDeltaValue.text               = Lang.getText(LangTextType.B0754);
             this._labelActFundMultiplierPct.text            = `${Lang.getText(LangTextType.B0755)}%`;
@@ -389,6 +424,12 @@ namespace Twns.WarEvent {
                 label.text = Lang.getText(conIsPlayerInTurn ? LangTextType.B0012 : LangTextType.B0013);
             }
         }
+        private _updateLabelConIsSkipTurn(): void {
+            const conIsSkipTurn             = this._getAction().conIsSkipTurn;
+            this._labelConIsSkipTurn.text   = conIsSkipTurn == null
+                ? `--`
+                : Lang.getText(conIsSkipTurn ? LangTextType.B0012 : LangTextType.B0013);
+        }
 
         private _updateLabelConCoUsingSkillType(): void {
             const usingSkillTypeArray           = this._getAction().conCoUsingSkillTypeArray;
@@ -423,6 +464,12 @@ namespace Twns.WarEvent {
         private _updateLabelActAliveState(): void {
             const aliveState                = this._getAction().actAliveState;
             this._labelActAliveState.text   = aliveState == null ? `--` : (Lang.getPlayerAliveStateName(aliveState) ?? CommonConstants.ErrorTextForUndefined);
+        }
+        private _updateLabelActIsSkipTurn(): void {
+            const actIsSkipTurn             = this._getAction().actIsSkipTurn;
+            this._labelActIsSkipTurn.text   = actIsSkipTurn == null
+                ? `--`
+                : Lang.getText(actIsSkipTurn ? LangTextType.B0012 : LangTextType.B0013);
         }
 
         private _updateInputActFundDeltaValue(): void {

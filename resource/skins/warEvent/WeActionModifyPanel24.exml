@@ -51,12 +51,24 @@
                             </e:layout>
                         </e:Group>
                     </e:Group>
-                    <e:Group y="44" left="0" right="0" x="10">
-                        <TwnsUiButton:UiButton id="_btnConAliveState" label="Switch"
-                                               skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
-                                               verticalCenter="0" left="0" />
-                        <TwnsUiLabel:UiLabel text="P1" id="_labelConAliveState" size="14" left="126" right="10"
-                                             verticalCenter="0" />
+                    <e:Group x="0" y="38">
+                        <e:Group x="0" y="0">
+                            <TwnsUiButton:UiButton id="_btnConAliveState" label="Switch"
+                                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
+                                                   verticalCenter="0" left="0" />
+                            <TwnsUiLabel:UiLabel text="P1" id="_labelConAliveState" size="14" left="126" right="10"
+                                                 verticalCenter="0" />
+                        </e:Group>
+                        <e:Group x="430" y="0">
+                            <TwnsUiButton:UiButton id="_btnConIsSkipTurn" label="存活状态"
+                                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
+                                                   top="0" left="0" x="10" y="10" />
+                            <TwnsUiLabel:UiLabel id="_labelConIsSkipTurn" text="取反" size="14" textColor="0xFFFFFF"
+                                                 x="20" y="20" />
+                            <e:layout>
+                                <e:HorizontalLayout verticalAlign="middle" />
+                            </e:layout>
+                        </e:Group>
                     </e:Group>
                     <e:Group y="34" left="0" right="0">
                         <TwnsUiButton:UiButton id="_btnConCoUsingSkillType" label="Switch"
@@ -123,15 +135,27 @@
                 <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0"
                                      anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0" locked="true" />
                 <e:Group left="0" top="0">
-                    <e:Group width="860" y="-106" x="0">
-                        <TwnsUiButton:UiButton id="_btnActAliveState" label="切换类型"
-                                               skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
-                                               top="0" left="0" x="10" y="10" />
-                        <TwnsUiButton:UiButton id="_btnActAliveStateHelp" label="?"
-                                               skinName="Skins.Component.Button.ButtonSelfAdaption001" width="30"
-                                               top="0" left="126" x="80" y="20" />
-                        <TwnsUiLabel:UiLabel id="_labelActAliveState" text="取反" size="14" textColor="0xFFFFFF"
-                                             left="160" right="10" verticalCenter="0" />
+                    <e:Group x="0" y="6">
+                        <e:Group x="0" y="0">
+                            <TwnsUiButton:UiButton id="_btnActAliveState" label="切换类型"
+                                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
+                                                   top="0" left="0" x="10" y="10" />
+                            <TwnsUiButton:UiButton id="_btnActAliveStateHelp" label="?"
+                                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" width="30"
+                                                   top="0" left="126" x="80" y="20" />
+                            <TwnsUiLabel:UiLabel id="_labelActAliveState" text="取反" size="14" textColor="0xFFFFFF"
+                                                 left="160" verticalCenter="0" />
+                        </e:Group>
+                        <e:Group x="430" top="0">
+                            <TwnsUiButton:UiButton id="_btnActIsSkipTurn" label="存活状态"
+                                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
+                                                   top="0" left="0" x="10" y="10" />
+                            <TwnsUiLabel:UiLabel id="_labelActIsSkipTurn" text="取反" size="14" textColor="0xFFFFFF"
+                                                 x="20" y="20" />
+                            <e:layout>
+                                <e:HorizontalLayout verticalAlign="middle" />
+                            </e:layout>
+                        </e:Group>
                     </e:Group>
                     <e:Group x="0" y="-72">
                         <e:Group verticalCenter="0" left="10">

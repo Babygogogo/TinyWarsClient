@@ -1662,6 +1662,11 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? Lang.getFormattedText(LangTextType.F0099, aliveStateArray.map(v => Lang.getPlayerAliveStateName(v)).join(`/`))
             : null;
 
+        const isSkipTurn        = data.isSkipTurn;
+        const textForIsSkipTurn = isSkipTurn == null
+            ? null
+            : Lang.getText(isSkipTurn ? LangTextType.B0980 : LangTextType.B0981);
+
         const fund          = data.fund;
         const textForFund   = fund != null
             ? Lang.getFormattedText(LangTextType.F0100, Lang.getValueComparatorName(Helpers.getExisted(data.fundComparator)), fund)
@@ -1684,6 +1689,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const textArrayForSubCondition = Helpers.getNonNullElements([
             textForAliveStateArray,
+            textForIsSkipTurn,
             textForFund,
             textForEnergyPercentage,
             textForCoUsingSkillTypeArray,
@@ -2167,6 +2173,11 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? null
             : Lang.getText(conIsPlayerInTurn ? LangTextType.B0925 : LangTextType.B0926);
 
+        const conIsSkipTurn         = data.conIsSkipTurn;
+        const textForConIsSkipTurn  = conIsSkipTurn == null
+            ? null
+            : Lang.getText(conIsSkipTurn ? LangTextType.B0980 : LangTextType.B0981);
+
         const conAliveStateArray        = data.conAliveStateArray;
         const textForConAliveStateArray = conAliveStateArray?.length
             ? Lang.getFormattedText(LangTextType.F0099, conAliveStateArray.map(v => Lang.getPlayerAliveStateName(v)).join(`/`))
@@ -2199,6 +2210,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const textArrayForSubConditions = Helpers.getNonNullElements([
             textForConIsPlayerInTurn,
+            textForConIsSkipTurn,
             textForConAliveStateArray,
             textForConCoUsingSkillTypeArray,
             textForConFund,
@@ -2209,6 +2221,11 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const textForActAliveState  = actAliveState != null
             ? Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0784), Lang.getPlayerAliveStateName(actAliveState))
             : null;
+
+        const actIsSkipTurn         = data.actIsSkipTurn;
+        const textForActIsSkipTurn  = actIsSkipTurn == null
+            ? null
+            : Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0979), Lang.getText(actIsSkipTurn ? LangTextType.B0012 : LangTextType.B0013));
 
         const actFundDeltaValue             = data.actFundDeltaValue ?? 0;
         const actFundMultiplierPercentage   = data.actFundMultiplierPercentage ?? 100;
@@ -2224,6 +2241,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const textArrayForModifiers = Helpers.getNonNullElements([
             textForActAliveState,
+            textForActIsSkipTurn,
             textForActFund,
             textForActCoEnergy,
         ]);
@@ -4135,6 +4153,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 conAliveStateArray              : null,
                 conCoUsingSkillTypeArray        : null,
                 conEnergyPercentage             : null,
+                conIsSkipTurn                   : null,
                 conEnergyPercentageComparator   : ValueComparator.EqualTo,
                 conFund                         : null,
                 conFundComparator               : ValueComparator.EqualTo,
@@ -4143,6 +4162,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 actCoEnergyDeltaPct             : 0,
                 actCoEnergyMultiplierPct        : 100,
                 actAliveState                   : null,
+                actIsSkipTurn                   : null,
             };
         } else if (actionType === ActionType.SetUnitState) {
             action.WeaSetUnitState = {

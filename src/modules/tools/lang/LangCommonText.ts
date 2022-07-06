@@ -5486,6 +5486,18 @@ namespace Twns.Lang {
             `教程`,
             `Tutorial`,
         ],
+        [LangTextType.B0979]: [
+            `跳过回合`,
+            `Skip a Turn`,
+        ],
+        [LangTextType.B0980]: [
+            `将跳过一个回合`,
+            `is skipping a turn`,
+        ],
+        [LangTextType.B0981]: [
+            `将不会跳过一个回合`,
+            `is not skipping a turn`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.Tile0000]: [

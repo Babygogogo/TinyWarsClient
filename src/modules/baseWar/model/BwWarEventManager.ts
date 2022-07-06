@@ -637,10 +637,12 @@ namespace Twns.BaseWar {
             const conEnergyPercentage           = action.conEnergyPercentage;
             const conEnergyPercentageComparator = action.conEnergyPercentageComparator ?? Types.ValueComparator.EqualTo;
             const conIsPlayerInTurn             = action.conIsPlayerInTurn;
+            const conIsSkipTurn                 = action.conIsSkipTurn;
             const actFundMultiplierPercentage   = action.actFundMultiplierPercentage ?? 100;
             const actFundDeltaValue             = action.actFundDeltaValue ?? 0;
             const actCoEnergyMultiplierPct      = action.actCoEnergyMultiplierPct ?? 100;
             const actCoEnergyDeltaPct           = action.actCoEnergyDeltaPct ?? 0;
+            const actIsSkipTurn                 = action.actIsSkipTurn;
             const maxFund                       = CommonConstants.WarPlayerMaxFund;
             const actAliveState                 = action.actAliveState;
             const war                           = this._getWar();
@@ -655,7 +657,8 @@ namespace Twns.BaseWar {
                     }
                 }
 
-                if (((conPlayerIndexArray?.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0))                           ||
+                if (((conIsSkipTurn != null) && (player.getIsSkipTurn() !== conIsSkipTurn))                                     ||
+                    ((conPlayerIndexArray?.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0))                           ||
                     ((conAliveStateArray?.length) && (conAliveStateArray.indexOf(player.getAliveState()) < 0))                  ||
                     ((conCoUsingSkillTypeArray?.length) && (conCoUsingSkillTypeArray.indexOf(player.getCoUsingSkillType()) < 0))
                 ) {
@@ -700,6 +703,9 @@ namespace Twns.BaseWar {
 
                 if (actAliveState != null) {
                     player.setAliveState(actAliveState);
+                }
+                if (actIsSkipTurn != null) {
+                    player.setIsSkipTurn(actIsSkipTurn);
                 }
             }
         }
@@ -1235,6 +1241,7 @@ namespace Twns.BaseWar {
             const coUsingSkillTypeArray         = condition.coUsingSkillTypeArray ?? [];
             const coCategoryIdArray             = condition.coCategoryIdArray ?? [];
             const targetFund                    = condition.fund;
+            const isSkipTurn                    = condition.isSkipTurn;
             const fundComparator                = Helpers.getExisted(condition.fundComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_00);
             const targetEnergyPercentage        = condition.energyPercentage;
             const energyPercentageComparator    = Helpers.getExisted(condition.energyPercentageComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_01);
@@ -1242,7 +1249,8 @@ namespace Twns.BaseWar {
             const gameConfig                    = war.getGameConfig();
             let playersCount                    = 0;
             for (const [playerIndex, player] of war.getPlayerManager().getAllPlayersDict()) {
-                if (((playerIndexArray.length) && (playerIndexArray.indexOf(playerIndex) < 0))                              ||
+                if (((isSkipTurn != null) && (player.getIsSkipTurn() !== isSkipTurn))                                       ||
+                    ((playerIndexArray.length) && (playerIndexArray.indexOf(playerIndex) < 0))                              ||
                     ((aliveStateArray.length) && (aliveStateArray.indexOf(player.getAliveState()) < 0))                     ||
                     ((coUsingSkillTypeArray.length) && (coUsingSkillTypeArray.indexOf(player.getCoUsingSkillType()) < 0))
                 ) {

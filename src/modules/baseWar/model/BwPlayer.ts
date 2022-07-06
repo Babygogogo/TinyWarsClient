@@ -38,6 +38,7 @@ namespace Twns.BaseWar {
         private _watchOngoingSrcUserIds?    : Set<number>;
         private _watchRequestSrcUserIds?    : Set<number>;
         private _markedGridIdArray          : number[] = [];
+        private _isSkipTurn                 = false;
 
         private _war?                       : BwWar;
 
@@ -111,6 +112,7 @@ namespace Twns.BaseWar {
             this.setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdArray || []);
             this.setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
             this._setMarkedGridIdArray(data.markedGridIdArray ?? []);
+            this.setIsSkipTurn(data.isSkipTurn ?? false);
         }
 
         public startRunning(war: BwWar): void {
@@ -134,6 +136,7 @@ namespace Twns.BaseWar {
                 watchRequestSrcUserIdArray  : [...(this.getWatchRequestSrcUserIds() || [])],
                 watchOngoingSrcUserIdArray  : [...(this.getWatchOngoingSrcUserIds() || [])],
                 markedGridIdArray           : [...this.getMarkedGridIdArray()],
+                isSkipTurn                      : this.getIsSkipTurn(),
             };
         }
         public serializeForCreateSfw(): ISerialPlayer {
@@ -157,6 +160,7 @@ namespace Twns.BaseWar {
                 watchRequestSrcUserIdArray  : [],
                 watchOngoingSrcUserIdArray  : [],
                 markedGridIdArray           : this.getMarkedGridIdArrayForTeamIndexes(teamIndexes),
+                isSkipTurn                      : this.getIsSkipTurn(),
             };
         }
         public serializeForCreateMfr(): ISerialPlayer {
@@ -281,6 +285,16 @@ namespace Twns.BaseWar {
                 } as Notify.NotifyData.BwPlayerMarkedGridIdDeleted);
             }
             return hasDeleted;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for skip turn.
+        ////////////////////////////////////////////////////////////////////////////////
+        public setIsSkipTurn(isSkipTurn: boolean): void {
+            this._isSkipTurn = isSkipTurn;
+        }
+        public getIsSkipTurn(): boolean {
+            return this._isSkipTurn;
         }
 
         public setUserId(id: number | null): void {
