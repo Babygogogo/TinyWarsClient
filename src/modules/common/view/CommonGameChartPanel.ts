@@ -50,6 +50,7 @@ namespace Twns.Common {
         private readonly _btnUnit!          : TwnsUiButton.UiButton;
         private readonly _btnTile!          : TwnsUiButton.UiButton;
         private readonly _btnCo!            : TwnsUiButton.UiButton;
+        private readonly _btnTutorial!      : TwnsUiButton.UiButton;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -60,6 +61,7 @@ namespace Twns.Common {
                 { ui: this._btnUnit,        callback: this._onTouchedBtnUnit },
                 { ui: this._btnTile,        callback: this._onTouchedBtnTile },
                 { ui: this._btnCo,          callback: this._onTouchedBtnCo },
+                { ui: this._btnTutorial,    callback: this._onTouchedBtnTutorial },
             ]);
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
@@ -95,6 +97,9 @@ namespace Twns.Common {
                 currentCoId         : null,
                 callbackOnConfirm   : null,
             });
+        }
+        private _onTouchedBtnTutorial(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonTutorialPanel, void 0);
         }
 
         protected async _showOpenAnimation(): Promise<void> {
@@ -135,6 +140,7 @@ namespace Twns.Common {
             this._btnUnit.label     = Lang.getText(LangTextType.B0304);
             this._btnTile.label     = Lang.getText(LangTextType.B0899);
             this._btnCo.label       = Lang.getText(LangTextType.B0425);
+            this._btnTutorial.label = Lang.getText(LangTextType.B0978);
         }
     }
 }

@@ -726,9 +726,10 @@ namespace Twns.BaseWar {
             const conPromotionComparator        = action.conPromotionComparator ?? Types.ValueComparator.EqualTo;
             const conIsOwnerPlayerInTurn        = action.conIsOwnerPlayerInTurn;
             const conIsDiving                   = action.conIsDiving;
-            const destroyUnit                   = action.actDestroyUnit;
+            const actDestroyUnit                = action.actDestroyUnit;
             const actActionState                = action.actActionState;
             const actHasLoadedCo                = action.actHasLoadedCo;
+            const actIsDiving                   = action.actIsDiving;
             const hpDeltaValue                  = action.actHpDeltaValue ?? 0;
             const hpMultiplierPercentage        = action.actHpMultiplierPercentage ?? 100;
             const fuelDeltaValue                = action.actFuelDeltaValue ?? 0;
@@ -821,7 +822,7 @@ namespace Twns.BaseWar {
                         }
                     }
 
-                    if (destroyUnit) {
+                    if (actDestroyUnit) {
                         WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
 
                     } else {
@@ -860,6 +861,10 @@ namespace Twns.BaseWar {
 
                         if (actHasLoadedCo != null) {
                             unit.setHasLoadedCo(actHasLoadedCo);
+                        }
+
+                        if ((actIsDiving != null) && (unit.checkIsDiver())) {
+                            unit.setIsDiving(actIsDiving);
                         }
 
                         if (!isFastExecute) {
@@ -1617,25 +1622,28 @@ namespace Twns.BaseWar {
         );
 
         for (let distance = 0; distance <= maxDistance; ++distance) {
-            const gridIndex = GridIndexHelpers.getGridsWithinDistance(
-                {
-                    origin, minDistance: distance, maxDistance: distance, mapSize, predicate: (g): boolean => {
-                        if (unitMap.getUnitOnMap(g)) {
-                            return false;
-                        }
-
-                        const tile = tileMap.getTile(g);
-                        if (tile.getMaxHp() != null) {
-                            return false;
-                        }
-
-                        if ((needMovableTile) && (tile.getMoveCostByMoveType(moveType) == null)) {
-                            return false;
-                        }
-
-                        return true;
+            const gridIndex = GridIndexHelpers.getGridsWithinDistance({
+                origin,
+                minDistance : distance,
+                maxDistance : distance,
+                mapSize,
+                predicate   : (g): boolean => {
+                    if (unitMap.getUnitOnMap(g)) {
+                        return false;
                     }
-                }            )[0];
+
+                    const tile = tileMap.getTile(g);
+                    if (tile.getMaxHp() != null) {
+                        return false;
+                    }
+
+                    if ((needMovableTile) && (tile.getMoveCostByMoveType(moveType) == null)) {
+                        return false;
+                    }
+
+                    return true;
+                }
+            })[0];
             if (gridIndex) {
                 return gridIndex;
             }
@@ -1643,7 +1651,6 @@ namespace Twns.BaseWar {
 
         return null;
     }
-
 }
 
 // export default TwnsBwWarEventManager;

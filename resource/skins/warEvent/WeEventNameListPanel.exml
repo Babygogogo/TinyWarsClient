@@ -7,21 +7,10 @@
     <e:Group top="60" bottom="60" right="100" left="100">
         <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="0" right="0" top="0" bottom="0" locked="true" />
-        <TwnsUiButton:UiButton id="_btnClose" label="关闭" width="140" right="0" top="0" locked="true">
-            <TwnsUiButton:skinName>
-                <e:Skin>
-                    <e:Group left="0" right="0" top="0" bottom="0">
-                        <e:Image source="uncompressedRectangle0007" scale9Grid="9,9,2,2" left="0" right="0" top="0"
-                                 bottom="0" locked="true" />
-                        <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0xffffff" text="asdf"
-                                             textAlign="center" verticalAlign="middle" left="8" right="8" top="8"
-                                             bottom="8" wordWrap="true" />
-                        <TwnsUiImage:UiImage id="_imgRed" width="14" height="14" source="uncompressedCircle0009"
-                                             right="0" top="0" locked="true" />
-                    </e:Group>
-                </e:Skin>
-            </TwnsUiButton:skinName>
-        </TwnsUiButton:UiButton>
+        <TwnsUiButton:UiButton id="_btnClose" label="关闭" width="140" right="0" top="0"
+                               skinName="Skins.Component.Button.ButtonSelfAdaption001"></TwnsUiButton:UiButton>
+        <TwnsUiButton:UiButton id="_btnDeleteAll" label="Delete All" width="140" top="0" y="10" left="0"
+                               skinName="Skins.Component.Button.ButtonSelfAdaption001"></TwnsUiButton:UiButton>
         <TwnsUiLabel:UiLabel id="_labelTitle" text="更新日志" bold="true" size="20" textColor="0xFFFFFF"
                              horizontalCenter="0" top="10" locked="true" />
         <TwnsUiLabel:UiLabel id="_labelNoEvent" text="无信息" bold="true" size="30" textColor="0xFFFFFF"

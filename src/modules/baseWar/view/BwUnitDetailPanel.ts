@@ -766,7 +766,7 @@ namespace Twns.BaseWar {
             const unit      = data.unit;
             const state     = unit.getActionState();
             PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
-                title       : Lang.getText(LangTextType.B0349),
+                title       : Lang.getText(LangTextType.B0088),
                 content     : Lang.getText(LangTextType.A0113),
                 callback    : () => {
                     unit.setActionState(state === Types.UnitActionState.Acted ? Types.UnitActionState.Idle : Types.UnitActionState.Acted);

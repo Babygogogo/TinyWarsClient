@@ -1394,6 +1394,194 @@ namespace Twns.Lang {
             `无法进一步重做`,
             `Unable to redo further.`,
         ],
+        [LangTextType.A0320]: [
+            `所有事件、条件、条件节点、动作都会被删除。\n您确定要继续吗？`,
+            `All the events / conditions / condition nodes / actions will be deleted.\nAre you sure you want to continue?`,
+        ],
+        [LangTextType.A0321]: [
+            `您可以通过双指缩放或滚动鼠标滚轮来缩放地图。`,
+            `You can zoom the map with "pinch-to-zoom" gesture and/or with mouse wheel.`,
+        ],
+        [LangTextType.A0322]: [
+            `要移动您的部队，请点击该部队，并选择一个目标地点。您可以通过滑动来指定移动路线。之后，您可以在弹出的菜单中选择想要的操作。`,
+            `Select the unit you want to deploy, then where you want it to go. Options sometimes appear after a unit moves.`,
+        ],
+        [LangTextType.A0323]: [
+            `部队的最大HP是10。如果部队的HP小于10，则该数字会显示在部队图标上。如果HP降为0，则该部队会被摧毁。`,
+            `Units have a maximum of 10 normalized HP. If a unit's HP is less than 10, this number is displayed below the unit. If its HP falls to 0, the unit is destroyed.`,
+        ],
+        [LangTextType.A0324]: [
+            `您和您的对手以回合的形式来移动部队。当您的部队完成行动后，可以在菜单中选择结束回合。`,
+            `You and your enemy will take turns moving your units. Select End Turn from the menu to finish your forces' moves for the day.`,
+        ],
+        [LangTextType.A0325]: [
+            `要发起一次近战攻击，请移动您的部队到敌方部队的相邻格子中，并选择攻击。`,
+            `To perform a direct attack, move your unit next to an enemy unit and choose Attack.`,
+        ],
+        [LangTextType.A0326]: [
+            `每当您击败一个敌人部队，您的部队会升级一次，同时提升其攻防属性。每个部队最多可以升级三次。`,
+            `If you defeat an enemy unit, the winning unit's level will rise, increasing its attack and defense. A single unit can rise 3 levels.`,
+        ],
+        [LangTextType.A0327]: [
+            `您可以点击画面左下方的地形小窗来打开该地形的详细属性面板。`,
+            `You can view a terrain's detailed info by touching the brief info box at the left bottom corner.`,
+        ],
+        [LangTextType.A0328]: [
+            `您可以点击画面左下方的部队小窗来打开该部队的详细属性面板。`,
+            `You can view a unit's detailed info by touching the brief info box at the left bottom corner.`,
+        ],
+        [LangTextType.A0329]: [
+            `大多数部队都有主武器，主武器的弹药数量是有限的。弹药耗尽时，将无法以主武器进行攻击。`,
+            `Most units have main weapons that can run out of ammo. Keep an eye on the ammo indicator.`,
+        ],
+        [LangTextType.A0330]: [
+            `所有部队都有燃料，而且有可能会耗尽。部队可以在友方特定的建筑上获得燃料和弹药补给。`,
+            `Though rare, it is possible for a unit to run out of fuel. Units can refuel at any friendly city or bases.`,
+        ],
+        [LangTextType.A0331]: [
+            `远程部队可以在远处对敌方发起攻击，且不受反击。但大多数远程部队无法在同一回合同时移动和攻击。`,
+            `Indirect-attack units can fire over long distances without facing a counter-attack, but they usually cannot move and attack in the same turn.`,
+        ],
+        [LangTextType.A0332]: [
+            `您可以点击一个部队来查看它的攻击/移动/视野范围。`,
+            `To see a waited unit's attack range, simply touch it. You can also view enemy attack ranges.`,
+        ],
+        [LangTextType.A0333]: [
+            `您可以通过地形小窗和详细信息面板来查看地形给部队提供的防御力加成。`,
+            `Use terrain info to see features and defenses offered by different terrain.`,
+        ],
+        [LangTextType.A0334]: [
+            `您可以在菜单中点击部队列表按钮来查看对战各方的部队表。这可能有助于您制定战略战术。`,
+            `Select Units from the menu to display all of units of yours or your enemies'. Use this chart to help plan your strategy.`,
+        ],
+        [LangTextType.A0335]: [
+            `您可以在菜单中点击作战目标按钮来查看当前战局的胜负条件。不同战局的胜负条件有可能不同。`,
+            `Select Terms from the menu to view victory conditions. These conditions vary by map.`,
+        ],
+        [LangTextType.A0336]: [
+            `您可以对两个负伤的同类型部队进行合流操作，从而获得一个HP更多的部队。如果两个部队等级不同，则较高的等级会被保留。`,
+            `By combining 2 damaged units, you can create a single unit with more HP. if 2 units with different levels join, the highest level will be kept.`,
+        ],
+        [LangTextType.A0337]: [
+            `战争迷雾会阻止您看到远方的敌人部队。某些地形可以隐蔽部队，您必须从其邻近的格子来看清这些地形。`,
+            `Thick, black dust makes it impossible to see enemies from a distance. Units hiding in woods or rubble can only be seen from an adjacent square.`,
+        ],
+        [LangTextType.A0338]: [
+            `高山可以给步兵和反坦克兵提供额外3格视野范围。`,
+            `Mountains add 3 to the vision of infantry and mech units.`,
+        ],
+        [LangTextType.A0339]: [
+            `在雾战中，如果您的部队在行动中撞上了隐藏的地方部队，则该部队的行动会被强行打断。`,
+            `During Fog of War, units will be forced to end their turn prematurely if they encounter a hidden enemy.`,
+        ],
+        [LangTextType.A0340]: [
+            `照明车在雾战中特别有用。它们的照明弹可以暂时清除远处的迷雾。`,
+            `Flares are designed for Fog of War conditions. Their rockets clear the fog and helps your forces see.`,
+        ],
+        [LangTextType.A0341]: [
+            `步兵、反坦克兵、摩托兵可以占领建筑。每次执行占领操作，则建筑的占领点数会减去该部队当前的HP值，减到0即可完成占领。如果部队中途离开，则必须重新开始占领。`,
+            `Infantry, mechs, and bikes can capture by subtracting their HP to the property total until it reaches 0. If a unit leaves, the capture must begin anew.`,
+        ],
+        [LangTextType.A0342]: [
+            `您所占有的建筑数量越多，则资金收入也越多。资金可以用于生产和维修部队。`,
+            `Your funds are boosted when you capture cities. Funds can be used to build new units and repair damaged ones.`,
+        ],
+        [LangTextType.A0343]: [
+            `您可以在工厂中生产陆军，在机场中生产空军，在港口中生产海军。`,
+            `You can use funds to build new land, naval, and air units at factories, ports, and airports.`,
+        ],
+        [LangTextType.A0344]: [
+            `您可以选中您的多余的部队，并在菜单中点击删除部队按钮，从而将该部队删除。`,
+            `You can delete surplus units by selecting the target unit and going to the Delete Unit option in the menu.`,
+        ],
+        [LangTextType.A0345]: [
+            `在友方指定建筑上停留的部队可以自动补充弹药、燃料，以及恢复HP（每回合2HP）。恢复HP需要消耗资金。`,
+            `If you station a unit on a friendly base or city, it will recover all ammo and fuel, plus 2 HP per day. HP recovery will drain some of your funds.`,
+        ],
+        [LangTextType.A0346]: [
+            `在雾战中，友方建筑可以提供视野。占领建筑总是多多益善。`,
+            `During Fog of War, visibility increases around your bases. The more bases you capture, the farther you can see.`,
+        ],
+        [LangTextType.A0347]: [
+            `您可以把部队装载到运输部队中。不同类型的运输部队可以装载的部队的类型和数量也不同。`,
+            `You can load units onto transport vehicles. Some carry a single infantry or mech unit, but others transport 2 units of any type.`,
+        ],
+        [LangTextType.A0348]: [
+            `利用运输部队，可以更快地把部队运输到更远的地方。`,
+            `Use transport vehicles to carry slower units over long distances in a short period of time.`,
+        ],
+        [LangTextType.A0349]: [
+            `运输直升机、工程车、炮艇、登陆舰、巡洋舰、航母都可以用来运输部队。这些部队被摧毁时，装载于其上的部队也会自动被摧毁。`,
+            `T copters, rigs, gunboats, landers, cruisers, and carriers all can transport units. If a transport unit is destroyed, the unit it is carrying will also be lost.`,
+        ],
+        [LangTextType.A0350]: [
+            `工程车可以给邻近部队提供弹药和燃料的补给，可以运输部队，可以建造临时机场和临时港口。`,
+            `Rigs can resupply units in adjacent squares, transport troops, and build a single temporary port or airport.`,
+        ],
+        [LangTextType.A0351]: [
+            `工程车可以在平原上建造临时机场，也可以在沙滩上建造临时海港。与占领建筑类似，需要把建造点数降到0才能完成建造。`,
+            `Rigs can build temporary airports on plains and temporary ports on beaches. As with capturing, construction requires 20 HP.`,
+        ],
+        [LangTextType.A0352]: [
+            `工程车最多可以同时补给邻近的4个部队，但无法恢复HP。`,
+            `Rigs can resupply ammo and fuel to a maximum of 4 neighboring units at a time. However, they can't restore HP.`,
+        ],
+        [LangTextType.A0353]: [
+            `一些部队可以建造临时建筑，还有一些部队可以生产新的部队。`,
+            `Certain units can use construction material to build temporary bases on beaches and plains. Some units can even use it to build other units!`,
+        ],
+        [LangTextType.A0354]: [
+            `潜艇可以执行下潜操作。下潜后，潜艇只会被临近的地方部队发现，且只会受到敌方潜艇和巡洋舰的攻击，但会消耗大量燃料。`,
+            `Only subs can dive. Diving conceals subs from the enemy but uses a lot of fuel. Subs can be hit by other subs and cruisers while submerged.`,
+        ],
+        [LangTextType.A0355]: [
+            `航母可以消耗15000资金来生产舰载机。从生产后的第二回合开始，舰载机可以直接从航母中弹射出来。`,
+            `Carriers can build seaplanes at a fund cost of 15000. Seaplanes can be launched the day after they are built.`,
+        ],
+        [LangTextType.A0356]: [
+            `雨天会强制进入雾战，且建筑的视野降为0，部队的视野降为1。`,
+            `Visibility decreases in heavy rain, leading to enforced Fog of War conditions. Unit visibility is 1, while visibility near bases is zero.`,
+        ],
+        [LangTextType.A0357]: [
+            `雪天时，所有部队的移动力减1。`,
+            `During a snowfall, the mobility of all units will drop by 1.`,
+        ],
+        [LangTextType.A0358]: [
+            `沙尘暴时，所有部队的攻击力减30%。`,
+            `Sandstorms reduce the attack power of all units by 30%.`,
+        ],
+        [LangTextType.A0359]: [
+            `CO Zone是指CO部队附近的范围。在这个范围内，部队的攻防获得加成，具体数值由CO决定。`,
+            `The area surrounding a CO's unit is known as a Command Zone. In this area, the attack and defense of nearby units is boosted.`,
+        ],
+        [LangTextType.A0360]: [
+            `我方部队在CO Zone里对敌方部队造成伤害时，CO能量会自动增长。随着能量增长，CO Zone的范围也会变大。`,
+            `Damage enemies in the Command Zone to increase your CO Power Gauge. The CO Zone will expands as the gauge increases.`,
+        ],
+        [LangTextType.A0361]: [
+            `当CO能量达到指定值时，您可以消耗能量来激活CO主动技。`,
+            `When the CO Power Gauge is full, you can use the commander's CO Power. After you use the CO Power, the gauge will decrease.`,
+        ],
+        [LangTextType.A0362]: [
+            `您可以在总部以及生产型建筑上，通过消耗一定资金来把CO装载到部队中。该部队会直接升到三级。`,
+            `Your CO can board a unit at your HQ or any production bases. The unit's level will rise to Vet, but at the cost of half the unit's value.`,
+        ],
+        [LangTextType.A0363]: [
+            `如果您的CO部队被摧毁，则已积累的能量值会消失。您可以在下回合重新装载CO。`,
+            `If the unit carrying your CO is destroyed, the CO Power Gauge will disappear. However, the CO can board a new unit the next day.`,
+        ],
+        [LangTextType.A0364]: [
+            `在单人游戏中，您可以自由地使用存档和读档功能。但在多人游戏中，您的每一步都讲自动存档，无法悔棋。`,
+            `In single player games, if you want to save a game midway through a mission, use the Save option in the menu. To revert to the quick save, use the Load option.\nHowever, you can not save/load the game in multi player games.`,
+        ],
+        [LangTextType.A0365]: [
+            `在单人游戏中，您可以在菜单中选择离开战局。此时的战局数据不会被保存。`,
+            `In single player games, you can choose Quit from the menu and try the fight again from the start. Note that this will cause you to exit without saving.`,
+        ],
+        [LangTextType.A0366]: [
+            `您可以点击菜单中的状态按钮来查看当前对战各方的部队数、建筑数等各种数据。`,
+            `Use the Status option to view the units deployed and bases captured by each army, as well as a range of other statistics.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2923,8 +3111,8 @@ namespace Twns.Lang {
             `Public(CN)`,
         ],
         [LangTextType.B0385]: [
-            `原版`,
-            `Legacy`,
+            `经典版`,
+            `Classic`,
         ],
         [LangTextType.B0386]: [
             `新版`,
@@ -3867,12 +4055,12 @@ namespace Twns.Lang {
             `Switch Game Version`,
         ],
         [LangTextType.B0621]: [
-            `原版`,
-            `Legacy Version`,
+            `经典版`,
+            `Classic Version`,
         ],
         [LangTextType.B0622]: [
-            `测试版`,
-            `Test Version`,
+            `实验版`,
+            `Experimental Version`,
         ],
         [LangTextType.B0623]: [
             `当前版本`,
@@ -4795,12 +4983,12 @@ namespace Twns.Lang {
             `Modify Object`,
         ],
         [LangTextType.B0853]: [
-            `Legacy版(毁灭之日)`,
-            `Legacy Version (AW DoR)`,
+            `经典版(毁灭之日)`,
+            `Classic Version (AW DoR)`,
         ],
         [LangTextType.B0854]: [
-            `Test版(老三代平衡版)`,
-            `Test Version (AW 1/2/DS rebalanced)`,
+            `实验版(老三代平衡版)`,
+            `Experimental Version (AW 1/2/DS rebalanced)`,
         ],
         [LangTextType.B0855]: [
             `当前宽高及格子数`,
@@ -5105,6 +5293,198 @@ namespace Twns.Lang {
         [LangTextType.B0930]: [
             `最近回合数`,
             `Recent Turns`,
+        ],
+        [LangTextType.B0931]: [
+            `全部删除`,
+            `Delete All`,
+        ],
+        [LangTextType.B0932]: [
+            `地图缩放`,
+            `Zooming`,
+        ],
+        [LangTextType.B0933]: [
+            `部队操作`,
+            `Unit Deployment`,
+        ],
+        [LangTextType.B0934]: [
+            `部队HP`,
+            `Unit HP`,
+        ],
+        [LangTextType.B0935]: [
+            `结束回合`,
+            `Ending a Turn`,
+        ],
+        [LangTextType.B0936]: [
+            `近战攻击`,
+            `Direct Attacks`,
+        ],
+        [LangTextType.B0937]: [
+            `部队升级`,
+            `Leveling up Units`,
+        ],
+        [LangTextType.B0938]: [
+            `地形属性`,
+            `About Terrain Info`,
+        ],
+        [LangTextType.B0939]: [
+            `部队属性`,
+            `About Unit Info`,
+        ],
+        [LangTextType.B0940]: [
+            `弹药`,
+            `Ammunition`,
+        ],
+        [LangTextType.B0941]: [
+            `燃料`,
+            `Fuel`,
+        ],
+        [LangTextType.B0942]: [
+            `远程攻击`,
+            `Indirect Attacks`,
+        ],
+        [LangTextType.B0943]: [
+            `攻击范围`,
+            `Attack Range`,
+        ],
+        [LangTextType.B0944]: [
+            `地形效果`,
+            `Terrain Effects`,
+        ],
+        [LangTextType.B0945]: [
+            `部队属性表`,
+            `Unit Chart`,
+        ],
+        [LangTextType.B0946]: [
+            `胜负条件`,
+            `Terms`,
+        ],
+        [LangTextType.B0947]: [
+            `部队合流`,
+            `Joining`,
+        ],
+        [LangTextType.B0948]: [
+            `雾战`,
+            `Fog of War`,
+        ],
+        [LangTextType.B0949]: [
+            `视野加成`,
+            `Mountain Vision`,
+        ],
+        [LangTextType.B0950]: [
+            `意外遭遇`,
+            `Surprise Encounters`,
+        ],
+        [LangTextType.B0951]: [
+            `照明车`,
+            `Flare Rockets`,
+        ],
+        [LangTextType.B0952]: [
+            `建筑占领`,
+            `Capturing`,
+        ],
+        [LangTextType.B0953]: [
+            `资金`,
+            `Funds`,
+        ],
+        [LangTextType.B0954]: [
+            `生产部队`,
+            `Production`,
+        ],
+        [LangTextType.B0955]: [
+            `删除部队`,
+            `Deleting Units`,
+        ],
+        [LangTextType.B0956]: [
+            `部队维修`,
+            `Recovery`,
+        ],
+        [LangTextType.B0957]: [
+            `建筑视野`,
+            `Base Vision Range`,
+        ],
+        [LangTextType.B0958]: [
+            `装载部队`,
+            `Loading Units`,
+        ],
+        [LangTextType.B0959]: [
+            `运载部队`,
+            `Carrying Units`,
+        ],
+        [LangTextType.B0960]: [
+            `运输部队`,
+            `Transport Units`,
+        ],
+        [LangTextType.B0961]: [
+            `工程车`,
+            `Rigs`,
+        ],
+        [LangTextType.B0962]: [
+            `建筑建造`,
+            `Constructing`,
+        ],
+        [LangTextType.B0963]: [
+            `部队补给`,
+            `Resupplying`,
+        ],
+        [LangTextType.B0964]: [
+            `建造材料`,
+            `Material`,
+        ],
+        [LangTextType.B0965]: [
+            `下潜和上浮`,
+            `Diving and Surfacing`,
+        ],
+        [LangTextType.B0966]: [
+            `从航母生产部队`,
+            `Carrier Unit Production`,
+        ],
+        [LangTextType.B0967]: [
+            `雨天`,
+            `Rain`,
+        ],
+        [LangTextType.B0968]: [
+            `雪天`,
+            `Snow`,
+        ],
+        [LangTextType.B0969]: [
+            `沙尘暴`,
+            `SandStorms`,
+        ],
+        [LangTextType.B0970]: [
+            `CO Zone`,
+            `Command Zone`,
+        ],
+        [LangTextType.B0971]: [
+            `CO能量`,
+            `CO Power Gauge`,
+        ],
+        [LangTextType.B0972]: [
+            `CO战技`,
+            `CO Power`,
+        ],
+        [LangTextType.B0973]: [
+            `CO部队`,
+            `CO Units`,
+        ],
+        [LangTextType.B0974]: [
+            `摧毁CO部队`,
+            `Destruction of COU`,
+        ],
+        [LangTextType.B0975]: [
+            `存档与读档`,
+            `Saving and Loading`,
+        ],
+        [LangTextType.B0976]: [
+            `退出战局`,
+            `Quit`,
+        ],
+        [LangTextType.B0977]: [
+            `数据统计`,
+            `Status`,
+        ],
+        [LangTextType.B0978]: [
+            `教程`,
+            `Tutorial`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

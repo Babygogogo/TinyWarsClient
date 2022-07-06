@@ -96,6 +96,7 @@ namespace Twns.PanelHelpers {
         CommonRankListPanel                 : PanelConfig<Common.OpenDataForCommonRankListPanel>;
         CommonServerStatusPanel             : PanelConfig<Common.OpenDataForCommonServerStatusPanel>;
         CommonTileChartPanel                : PanelConfig<Common.OpenDataForCommonTileChartPanel>;
+        CommonTutorialPanel                 : PanelConfig<Common.OpenDataForCommonTutorialPanel>;
         CommonWarEventListPanel             : PanelConfig<Common.OpenDataForCommonWarEventListPanel>;
 
         LobbyBackgroundPanel                : PanelConfig<Lobby.OpenDataForLobbyBackgroundPanel>;
@@ -758,6 +759,13 @@ namespace Twns.PanelHelpers {
             CommonTileChartPanel: {
                 cls         : Common?.CommonTileChartPanel,
                 skinName    : `resource/skins/common/CommonTileChartPanel.exml`,
+                layer       : LayerType.Hud0,
+                needCache   : true,
+            },
+
+            CommonTutorialPanel: {
+                cls         : Common?.CommonTutorialPanel,
+                skinName    : `resource/skins/common/CommonTutorialPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             },

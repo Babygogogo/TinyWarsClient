@@ -361,12 +361,13 @@ namespace Twns.SoundManager {
                 Logger.error(`SoundManager.playShortSfx() empty audioBuffer.`);
                 return;
             }
+
+            cacheDict.set(shortSfxCode, audioBuffer);
             if (Date.now() - currentTime > 200) {
                 Logger.log(`SoundManager.playShortSfx() spent too much time on loading.`);
                 return;
             }
 
-            cacheDict.set(shortSfxCode, audioBuffer);
             _doPlayShortSfx(audioBuffer);
         }
     }

@@ -81,7 +81,7 @@ namespace Twns.BaseWar {
             }
             this._labelNoUnit.visible   = !dataArray.length;
             this._listUnit.bindData(dataArray);
-            this.setAndReviseSelectedUnitType(dataArray[0].unitType ?? null, true);
+            this.setAndReviseSelectedUnitType(dataArray[0]?.unitType ?? null, true);
         }
         protected _onClosing(): void {
             Notify.dispatch(NotifyType.BwProduceUnitPanelClosed);

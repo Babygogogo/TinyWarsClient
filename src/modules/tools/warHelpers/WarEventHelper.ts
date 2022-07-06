@@ -806,6 +806,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 action.actPromotionMultiplierPercentage ??
                 action.actActionState                   ??
                 action.actHasLoadedCo                   ??
+                action.actIsDiving                      ??
                 (action.actDestroyUnit || null)
             ) == null
         ) {
@@ -2339,6 +2340,11 @@ namespace Twns.WarHelpers.WarEventHelpers {
             ? Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0421), Lang.getText(actHasLoadedCo ? LangTextType.B0012 : LangTextType.B0013))
             : null;
 
+        const actIsDiving           = data.actIsDiving;
+        const textForActIsDiving    = actIsDiving == null
+            ? null
+            : Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0371), Lang.getText(actIsDiving ? LangTextType.B0012 : LangTextType.B0013));
+
         const hpMultiplierPercentage    = data.actHpMultiplierPercentage ?? 100;
         const hpDeltaValue              = data.actHpDeltaValue ?? 0;
         const textForHp                 = ((hpMultiplierPercentage !== 100) || (hpDeltaValue !== 0))
@@ -2366,6 +2372,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const textArrayForModifiers = Helpers.getNonNullElements([
             textForActActionState,
             textForActHasLoadedCo,
+            textForActIsDiving,
             textForHp,
             textForFuel,
             textForPriAmmo,
@@ -3405,6 +3412,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 data.actPromotionMultiplierPercentage   ??
                 data.actActionState                     ??
                 data.actHasLoadedCo                     ??
+                data.actIsDiving                        ??
                 (data.actDestroyUnit || null)
             ) == null
         ) {
@@ -4158,6 +4166,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 actDestroyUnit                      : null,
                 actActionState                      : null,
                 actHasLoadedCo                      : null,
+                actIsDiving                         : null,
                 actHpDeltaValue                     : 0,
                 actHpMultiplierPercentage           : 100,
                 actFuelDeltaValue                   : 0,

@@ -31,6 +31,7 @@ namespace Twns.WarEvent {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelNoEvent!     : TwnsUiLabel.UiLabel;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
+        private readonly _btnDeleteAll!     : TwnsUiButton.UiButton;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -39,6 +40,7 @@ namespace Twns.WarEvent {
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,       callback: this.close },
+                { ui: this._btnDeleteAll,   callback: this._onTouchedBtnDeleteAll },
             ]);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
@@ -58,6 +60,27 @@ namespace Twns.WarEvent {
         private _onNotifyWarEventFullDataChanged(): void {
             this._updateView();
         }
+        private _onTouchedBtnDeleteAll(): void {
+            const openData = this._getOpenData();
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0931),
+                content : Lang.getText(LangTextType.A0320),
+                callback: () => {
+                    const warEventFullData = openData.fullData;
+                    (warEventFullData.actionArray) && (warEventFullData.actionArray.length = 0);
+                    (warEventFullData.conditionArray) && (warEventFullData.conditionArray.length = 0);
+                    (warEventFullData.conditionNodeArray) && (warEventFullData.conditionNodeArray.length = 0);
+                    (warEventFullData.eventArray) && (warEventFullData.eventArray.length = 0);
+
+                    for (const templateWarRule of openData.templateWarRuleArray) {
+                        const arr = templateWarRule.warEventIdArray;
+                        (arr) && (arr.length = 0);
+                    }
+
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
 
         private _updateView(): void {
             this._updateComponentsForLanguage();
@@ -69,6 +92,7 @@ namespace Twns.WarEvent {
             this._labelTitle.text       = Lang.getText(LangTextType.B0461);
             this._labelNoEvent.text     = Lang.getText(LangTextType.B0278);
             this._btnClose.label        = Lang.getText(LangTextType.B0146);
+            this._btnDeleteAll.label    = Lang.getText(LangTextType.B0931);
         }
         private _updateListConditionAndLabelNoCondition(): void {
             const openData              = this._getOpenData();

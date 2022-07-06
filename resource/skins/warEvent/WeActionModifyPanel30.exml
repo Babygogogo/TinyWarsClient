@@ -225,12 +225,21 @@
                                          anchorOffsetY="0" alpha="0.8" left="0" top="0" bottom="0" right="0" x="10"
                                          y="10" />
                     <e:Group top="0" left="0">
-                        <e:Group x="440" verticalCenter="0" width="430" y="10">
-                            <TwnsUiButton:UiButton id="_btnDestroyUnit" label="切换类型"
-                                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
-                                                   top="0" left="0" x="10" y="10" />
-                            <TwnsUiLabel:UiLabel id="_labelDestroyUnit" text="取反" size="14" textColor="0xFFFFFF"
-                                                 left="126" right="10" verticalCenter="0" />
+                        <e:Group x="0" y="6">
+                            <e:Group x="0" width="430" y="0">
+                                <TwnsUiButton:UiButton id="_btnDestroyUnit" label="切换类型"
+                                                       skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                       width="120" top="0" left="0" x="10" y="10" />
+                                <TwnsUiLabel:UiLabel id="_labelDestroyUnit" text="取反" size="14" textColor="0xFFFFFF"
+                                                     left="126" right="10" verticalCenter="0" />
+                            </e:Group>
+                            <e:Group x="430" width="430" y="0">
+                                <TwnsUiButton:UiButton id="_btnActIsDiving" label="切换类型"
+                                                       skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                       width="120" top="0" left="0" x="10" y="10" />
+                                <TwnsUiLabel:UiLabel id="_labelActIsDiving" text="取反" size="14" textColor="0xFFFFFF"
+                                                     left="126" right="10" verticalCenter="0" />
+                            </e:Group>
                         </e:Group>
                         <e:Group x="0" y="38">
                             <e:Group width="430" left="0" verticalCenter="0">

@@ -26,6 +26,8 @@
                                            skinName="Skins.Component.Button.ButtonBlack001" />
                     <TwnsUiButton:UiButton id="_btnCo" label="更改密码" y="290" x="186"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnTutorial" label="更改密码" y="300" x="196"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
                     <e:layout>
                         <e:TileLayout orientation="rows" requestedColumnCount="2" horizontalGap="50" verticalGap="14" />
                     </e:layout>

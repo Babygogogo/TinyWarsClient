@@ -75,8 +75,12 @@ namespace Twns.WarEvent {
         private readonly _labelDestroyUnit!                     : TwnsUiLabel.UiLabel;
         private readonly _btnActActionState!                    : TwnsUiButton.UiButton;
         private readonly _labelActActionState!                  : TwnsUiLabel.UiLabel;
+
         private readonly _btnActHasLoadedCo!                    : TwnsUiButton.UiButton;
         private readonly _labelActHasLoadedCo!                  : TwnsUiLabel.UiLabel;
+        private readonly _btnActIsDiving!                       : TwnsUiButton.UiButton;
+        private readonly _labelActIsDiving!                     : TwnsUiLabel.UiLabel;
+
         private readonly _labelHp!                              : TwnsUiLabel.UiLabel;
         private readonly _labelHpMultiplierPercentage!          : TwnsUiLabel.UiLabel;
         private readonly _inputHpMultiplierPercentage!          : TwnsUiTextInput.UiTextInput;
@@ -131,7 +135,10 @@ namespace Twns.WarEvent {
 
                 { ui: this._btnDestroyUnit,                     callback: this._onTouchedBtnDestroyUnit },
                 { ui: this._btnActActionState,                  callback: this._onTouchedBtnActActionState },
+
                 { ui: this._btnActHasLoadedCo,                  callback: this._onTouchedBtnActHasLoadedCo },
+                { ui: this._btnActIsDiving,                     callback: this._onTouchedBtnActIsDiving },
+
                 { ui: this._inputHpDeltaValue,                  callback: this._onFocusInInputHpDeltaValue,                     eventType: egret.FocusEvent.FOCUS_IN },
                 { ui: this._inputHpDeltaValue,                  callback: this._onFocusOutInputHpDeltaValue,                    eventType: egret.FocusEvent.FOCUS_OUT },
                 { ui: this._inputHpMultiplierPercentage,        callback: this._onFocusInInputHpMultiplierPercentage,           eventType: egret.FocusEvent.FOCUS_IN },
@@ -384,6 +391,18 @@ namespace Twns.WarEvent {
             }
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
+        private _onTouchedBtnActIsDiving(): void {
+            const action    = this._getAction();
+            const isDiving  = action.actIsDiving;
+            if (isDiving === true) {
+                action.actIsDiving = false;
+            } else if (isDiving === false) {
+                action.actIsDiving = null;
+            } else {
+                action.actIsDiving = true;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
 
         private _onFocusInInputHpDeltaValue(): void {
             this._setInnerTouchMaskEnabled(true);
@@ -562,6 +581,7 @@ namespace Twns.WarEvent {
             this._updateLabelDestroyUnit();
             this._updateLabelActActionState();
             this._updateLabelActHasLoadedCo();
+            this._updateLabelActIsDiving();
             this._updateInputHpDeltaValue();
             this._updateInputHpMultiplierPercentage();
             this._updateInputFuelDeltaValue();
@@ -597,6 +617,7 @@ namespace Twns.WarEvent {
             this._btnDestroyUnit.label                      = Lang.getText(LangTextType.B0808);
             this._btnActActionState.label                   = Lang.getText(LangTextType.B0526);
             this._btnActHasLoadedCo.label                   = Lang.getText(LangTextType.B0421);
+            this._btnActIsDiving.label                      = Lang.getText(LangTextType.B0371);
             this._labelHp.text                              = Lang.getText(LangTextType.B0807);
             this._labelHpDeltaValue.text                    = Lang.getText(LangTextType.B0754);
             this._labelHpMultiplierPercentage.text          = `${Lang.getText(LangTextType.B0755)}%`;
@@ -714,6 +735,12 @@ namespace Twns.WarEvent {
             this._labelActHasLoadedCo.text  = hasLoadedCo == null
                 ? `--`
                 : Lang.getText(hasLoadedCo ? LangTextType.B0012 : LangTextType.B0013);
+        }
+        private _updateLabelActIsDiving(): void {
+            const actIsDiving           = this._getAction().actIsDiving;
+            this._labelActIsDiving.text = actIsDiving == null
+                ? `--`
+                : Lang.getText(actIsDiving ? LangTextType.B0012 : LangTextType.B0013);
         }
         private _updateInputHpDeltaValue(): void {
             const value                     = this._getAction().actHpDeltaValue;
