@@ -6105,6 +6105,17 @@ export const enum ServerErrorCode {
     User_UpdateMpwUnrankedHistory_0008,
     User_UpdateMpwUnrankedHistory_0009,
 
+    UserGuestPrivilege_0000,
+    UserGuestPrivilege_0001,
+    UserGuestPrivilege_0002,
+    UserGuestPrivilege_0003,
+    UserGuestPrivilege_0004,
+    UserGuestPrivilege_0005,
+    UserGuestPrivilege_0006,
+    UserGuestPrivilege_0007,
+    UserGuestPrivilege_0008,
+    UserGuestPrivilege_0009,
+
     MapManager_UpdateMapTagSingleData_0000,
     MapManager_UpdateMapTagSingleData_0001,
     MapManager_UpdateMapTagSingleData_0002,
@@ -11514,6 +11525,17 @@ export const enum ServerErrorCode {
     ExeCcrStartWar_DoExecute_0008,
     ExeCcrStartWar_DoExecute_0009,
 
+    ExeUserRegister_ExeWithSocket_0000,         // 账号不合法
+    ExeUserRegister_ExeWithSocket_0001,         // 账号已存在
+    ExeUserRegister_ExeWithSocket_0002,         // 已处于已登录的状态
+    ExeUserRegister_ExeWithSocket_0003,         // 密码不合法
+    ExeUserRegister_ExeWithSocket_0004,         // 昵称不合法
+    ExeUserRegister_ExeWithSocket_0005,         // 昵称已被使用
+    ExeUserRegister_ExeWithSocket_0006,         // 账号使用了guest
+    ExeUserRegister_ExeWithSocket_0007,         // 昵称使用了guest
+    ExeUserRegister_ExeWithSocket_0008,
+    ExeUserRegister_ExeWithSocket_0009,
+
     ExeUserSetMapRating_ExeWithSocket_0000,
     ExeUserSetMapRating_ExeWithSocket_0001,
     ExeUserSetMapRating_ExeWithSocket_0002,
@@ -11546,6 +11568,28 @@ export const enum ServerErrorCode {
     ExeUserLogin_DoExecute_0007,
     ExeUserLogin_DoExecute_0008,
     ExeUserLogin_DoExecute_0009,
+
+    ExeUserLoginAsGuest_ExecuteWithSocket_0000,
+    ExeUserLoginAsGuest_ExecuteWithSocket_0001,
+    ExeUserLoginAsGuest_ExecuteWithSocket_0002,
+    ExeUserLoginAsGuest_ExecuteWithSocket_0003,
+    ExeUserLoginAsGuest_ExecuteWithSocket_0004,
+    ExeUserLoginAsGuest_ExecuteWithSocket_0005,
+    ExeUserLoginAsGuest_ExecuteWithSocket_0006,
+    ExeUserLoginAsGuest_ExecuteWithSocket_0007,
+    ExeUserLoginAsGuest_ExecuteWithSocket_0008,
+    ExeUserLoginAsGuest_ExecuteWithSocket_0009,
+
+    ExeUserLoginAsGuest_DoExecute_0000,
+    ExeUserLoginAsGuest_DoExecute_0001,
+    ExeUserLoginAsGuest_DoExecute_0002,
+    ExeUserLoginAsGuest_DoExecute_0003,
+    ExeUserLoginAsGuest_DoExecute_0004,
+    ExeUserLoginAsGuest_DoExecute_0005,
+    ExeUserLoginAsGuest_DoExecute_0006,
+    ExeUserLoginAsGuest_DoExecute_0007,
+    ExeUserLoginAsGuest_DoExecute_0008,
+    ExeUserLoginAsGuest_DoExecute_0009,
 
     ExeUserSetAvatarId_ExeWithSocket_0000,
     ExeUserSetAvatarId_ExeWithSocket_0001,
@@ -12162,13 +12206,6 @@ export const enum ServerErrorCode {
     MsgUserLogin0006,                   // 账号或密码不正确
     MsgUserLogin0007,                   // 账号权限设定不存在
     MsgUserLogin0008,                   // 账号无权登录
-
-    MsgUserRegister0000,                // 账号不合法
-    MsgUserRegister0001,                // 账号已存在
-    MsgUserRegister0002,                // 已处于已登录的状态
-    MsgUserRegister0003,                // 密码不合法
-    MsgUserRegister0004,                // 昵称不合法
-    MsgUserRegister0005,                // 昵称已被使用
 
     MsgUserSetNickname0000,             // 昵称不合法
     MsgUserSetNickname0001,             // 昵称已被使用

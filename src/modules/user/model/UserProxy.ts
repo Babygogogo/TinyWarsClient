@@ -17,6 +17,7 @@ namespace Twns.User.UserProxy {
     export function init(): void {
         Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgUserLogin,                    callback: _onMsgUserLogin, },
+            { msgCode: NetMessageCodes.MsgUserLoginAsGuest,             callback: _onMsgUserLoginAsGuest },
             { msgCode: NetMessageCodes.MsgUserRegister,                 callback: _onMsgUserRegister, },
             { msgCode: NetMessageCodes.MsgUserLogout,                   callback: _onMsgUserLogout, },
             { msgCode: NetMessageCodes.MsgUserGetPublicInfo,            callback: _onMsgUserGetPublicInfo, },
@@ -57,6 +58,22 @@ namespace Twns.User.UserProxy {
         if (!data.errorCode) {
             User.UserModel.updateOnMsgUserLogin(data);
             Notify.dispatch(NotifyType.MsgUserLogin, data);
+        }
+    }
+
+    export function reqUserLoginAsGuest(userId: number | null, isAutoRelogin: boolean): void {
+        Net.NetManager.send({
+            MsgUserLoginAsGuest: { c: {
+                userId,
+                isAutoRelogin,
+            } },
+        });
+    }
+    function _onMsgUserLoginAsGuest(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserLoginAsGuest.IS;
+        if (!data.errorCode) {
+            User.UserModel.updateOnMsgUserLoginAsGuest(data);
+            Notify.dispatch(NotifyType.MsgUserLoginAsGuest, data);
         }
     }
 

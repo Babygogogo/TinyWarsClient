@@ -5,7 +5,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
@@ -17,9 +17,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.User {
-    import LangTextType         = Twns.Lang.LangTextType;
-    import NotifyType           = Twns.Notify.NotifyType;
-    import ClientErrorCode      = Twns.ClientErrorCode;
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
 
     export type OpenDataForUserRegisterPanel = void;
     export class UserRegisterPanel extends TwnsUiPanel.UiPanel<OpenDataForUserRegisterPanel> {
@@ -48,7 +47,7 @@ namespace Twns.User {
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
 
-            this._btnRegister.setShortSfxCode(Twns.Types.ShortSfxCode.ButtonConfirm01);
+            this._btnRegister.setShortSfxCode(Types.ShortSfxCode.ButtonConfirm01);
 
             this._updateComponentsForLanguage();
         }
@@ -61,15 +60,15 @@ namespace Twns.User {
 
         private _onMsgUserRegister(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgUserRegister.IS;
-            Twns.FloatText.show(Lang.getText(LangTextType.A0004));
+            FloatText.show(Lang.getText(LangTextType.A0004));
 
-            const account   = Twns.Helpers.getExisted(data.account, ClientErrorCode.UserRegisterPanel_OnMsgUserRegister_00);
+            const account   = Helpers.getExisted(data.account, ClientErrorCode.UserRegisterPanel_OnMsgUserRegister_00);
             const password  = this._inputPassword.text;
-            Twns.LocalStorage.setAccount(account);
-            Twns.LocalStorage.setPassword(password);
-            Twns.User.UserModel.setSelfAccount(account);
-            Twns.User.UserModel.setSelfPassword(password);
-            Twns.User.UserProxy.reqLogin(account, password, false);
+            LocalStorage.setAccount(account);
+            LocalStorage.setPassword(password);
+            User.UserModel.setSelfAccount(account);
+            User.UserModel.setSelfPassword(password);
+            User.UserProxy.reqLogin(account, password, false);
         }
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
@@ -79,14 +78,18 @@ namespace Twns.User {
             const account  = this._inputAccount.text;
             const password = this._inputPassword.text;
             const nickname = this._inputNickname.text;
-            if (!Twns.Helpers.checkIsAccountValid(account)) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0001));
-            } else if (!Twns.Helpers.checkIsPasswordValid(password)) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0003));
-            } else if (!Twns.Helpers.checkIsNicknameValid(nickname)) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0002));
+            if (!Helpers.checkIsAccountValid(account)) {
+                FloatText.show(Lang.getText(LangTextType.A0001));
+            } else if (account.toLowerCase().indexOf("guest_") === 0) {
+                FloatText.show(Lang.getText(LangTextType.A0367));
+            } else if (!Helpers.checkIsPasswordValid(password)) {
+                FloatText.show(Lang.getText(LangTextType.A0003));
+            } else if (!Helpers.checkIsNicknameValid(nickname)) {
+                FloatText.show(Lang.getText(LangTextType.A0002));
+            } else if (nickname.toLowerCase().indexOf("guest_") === 0) {
+                FloatText.show(Lang.getText(LangTextType.A0368));
             } else {
-                Twns.User.UserProxy.reqUserRegister(account, password, nickname);
+                User.UserProxy.reqUserRegister(account, password, nickname);
             }
         }
 
@@ -101,33 +104,33 @@ namespace Twns.User {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
 
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

@@ -46,8 +46,9 @@ namespace Twns.User {
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgUserLogin,    callback: this._onMsgUserLogin },
+                { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgUserLogin,        callback: this._onMsgUserLogin },
+                { type: NotifyType.MsgUserLoginAsGuest, callback: this._onMsgUserLoginAsGuest },
             ]);
             this._setUiListenerArray([
                 { ui: this,                         callback: this._onTouchedSelf },
@@ -75,6 +76,9 @@ namespace Twns.User {
         private _onMsgUserLogin(): void {
             FloatText.show(Lang.getText(LangTextType.A0000));
             this._btnLogin.enabled = false;
+        }
+        private _onMsgUserLoginAsGuest(): void {
+            this._onMsgUserLogin();
         }
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();

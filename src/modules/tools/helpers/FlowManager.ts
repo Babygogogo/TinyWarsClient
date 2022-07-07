@@ -84,6 +84,7 @@ namespace Twns.FlowManager {
     const _NOTIFY_EVENTS = [
         { type: NotifyType.NetworkConnected,                callback: _onNotifyNetworkConnected, },
         { type: NotifyType.MsgUserLogin,                    callback: _onMsgUserLogin },
+        { type: NotifyType.MsgUserLoginAsGuest,             callback: _onMsgUserLoginAsGuest },
         { type: NotifyType.MsgUserLogout,                   callback: _onMsgUserLogout },
         { type: NotifyType.MsgMpwCommonContinueWar,         callback: _onMsgMpwCommonContinueWar },
         { type: NotifyType.MsgCommonLatestConfigVersion,    callback: _onMsgCommonLatestConfigVersion },
@@ -346,14 +347,23 @@ namespace Twns.FlowManager {
     // Callbacks.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _onNotifyNetworkConnected(): void {
-        const account   = User.UserModel.getSelfAccount();
-        const password  = User.UserModel.getSelfPassword();
-        if ((_hasOnceWentToLobby)           &&
-            (!User.UserModel.getIsLoggedIn())    &&
-            (account != null)               &&
-            (password != null)
-        ) {
-            User.UserProxy.reqLogin(account, password, true);
+        if ((_hasOnceWentToLobby) && (!User.UserModel.getIsLoggedIn())) {
+            {
+                const account   = User.UserModel.getSelfAccount();
+                const password  = User.UserModel.getSelfPassword();
+                if ((account != null) && (password != null)) {
+                    User.UserProxy.reqLogin(account, password, true);
+                    return;
+                }
+            }
+
+            {
+                const guestUserId = User.UserModel.getSelfGuestUserId();
+                if (guestUserId != null) {
+                    User.UserProxy.reqUserLoginAsGuest(guestUserId, true);
+                    return;
+                }
+            }
         }
     }
 
@@ -377,6 +387,9 @@ namespace Twns.FlowManager {
                 MultiPlayerWar.MpwProxy.reqMpwCommonSyncWar(mcwWar, Types.SyncWarRequestType.ReconnectionRequest);
             }
         }
+    }
+    function _onMsgUserLoginAsGuest(): void {
+        _onMsgUserLogin();
     }
 
     function _onMsgUserLogout(): void {

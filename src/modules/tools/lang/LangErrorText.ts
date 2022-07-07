@@ -41,27 +41,35 @@ namespace Twns.Lang {
             "账号或密码不正确，请检查后重试",
             "Incorrect account and/or password.",
         ],
-        [ServerErrorCode.MsgUserRegister0000]: [
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0000]: [
             "账号不符合要求，请检查后重试",
             "Invalid account.",
         ],
-        [ServerErrorCode.MsgUserRegister0001]: [
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0001]: [
             "该账号已被注册，请修改后再试",
             "The account has been registered.",
         ],
-        [ServerErrorCode.MsgUserRegister0002]: [
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0002]: [
             "您已处于登陆状态，不可注册账号",
             "You have logged in already.",
         ],
-        [ServerErrorCode.MsgUserRegister0003]: [
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0003]: [
             "密码不符合要求，请检查后重试",
             "Invalid password.",
         ],
-        [ServerErrorCode.MsgUserRegister0004]: [
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0004]: [
             "昵称不符合要求，请检查后重试",
             "Invalid nickname.",
         ],
-        [ServerErrorCode.MsgUserRegister0005]: [
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0005]: [
+            "该昵称已被使用，请修改后再试",
+            "The nickname has been used.",
+        ],
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0006]: [
+            "该账号已被注册，请修改后再试",
+            "The account has been registered.",
+        ],
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0007]: [
             "该昵称已被使用，请修改后再试",
             "The nickname has been used.",
         ],
@@ -232,6 +240,10 @@ namespace Twns.Lang {
         [ServerErrorCode.ActorReplayManager_ReplayManagerSendFilteredReplayIdArray_0000]: [
             `您的请求过于频繁，请稍后重试`,
             `Your query requests are too frequent. Please retry later.`,
+        ],
+        [ServerErrorCode.UserGuestPrivilege_0000]: [
+            `游客无法进行此操作。请注册账号以体验游戏的全部玩法。`,
+            `Guests cannot do this. Feel free to reload the game and create your own account. :)`,
         ],
         [ServerErrorCode.ServerDisconnect0001]: [
             `服务器维护中`,

@@ -63,7 +63,9 @@ namespace Twns.Lang {
     export function getErrorText(code: ServerErrorCode | ClientErrorCode): string {
         const textList  = LangErrorText[code];
         const text      = textList ? textList[_languageType] : null;
-        return `${getText(LangTextType.B0452)} ${code}: ${text || getText(LangTextType.A0153)}`;
+        return code === ServerErrorCode.UserGuestPrivilege_0000
+            ? `${text || getText(LangTextType.A0153)}`
+            : `${getText(LangTextType.B0452)} ${code}: ${text || getText(LangTextType.A0153)}`;
     }
 
     export function getPlayerForceName(playerIndex: number): string {

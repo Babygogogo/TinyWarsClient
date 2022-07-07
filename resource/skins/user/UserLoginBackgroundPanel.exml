@@ -2,7 +2,19 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
-    <TwnsUiImage:UiImage id="_imgBackground" source="bg_002_png" left="0" right="0" top="0" bottom="0" />
+    <TwnsUiImage:UiImage id="_imgBackground" source="bg_002_png" left="0" right="0" top="0" bottom="0" locked="true" />
+    <TwnsUiButton:UiButton id="_btnGuest" label="Button" left="0" top="15">
+        <TwnsUiButton:skinName>
+            <e:Skin>
+                <e:Group y="0" width="160" x="0" height="36">
+                    <e:Image scale9Grid="3,3,1,1" source="uncompressedPentagon0010" width="160" height="36" y="0"
+                             left="0" />
+                    <TwnsUiLabel:UiLabel id="labelDisplay" size="20" textColor="0xffffff" text="English" wordWrap="true"
+                                         bold="true" verticalAlign="middle" verticalCenter="0" right="40" />
+                </e:Group>
+            </e:Skin>
+        </TwnsUiButton:skinName>
+    </TwnsUiButton:UiButton>
     <TwnsUiButton:UiButton id="_btnTutorial" right="20" scaleX="1.2" scaleY="1.2" top="20">
         <TwnsUiButton:skinName>
             <e:Skin>

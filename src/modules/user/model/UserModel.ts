@@ -25,6 +25,7 @@ namespace Twns.User.UserModel {
     let _selfInfo                   : IUserSelfInfo | null = null;
     let _selfAccount                : string;
     let _selfPassword               : string | null = null;
+    let _selfGuestUserId            : number | null = null;
     const _userPublicInfoAccessor   = Helpers.createCachedDataAccessor<number, IUserPublicInfo>({
         reqData                     : (userId: number) => User.UserProxy.reqUserGetPublicInfo(userId),
     });
@@ -80,6 +81,13 @@ namespace Twns.User.UserModel {
     }
     export function getSelfPassword(): string | null {
         return _selfPassword;
+    }
+
+    export function getSelfGuestUserId(): number | null {
+        return _selfGuestUserId;
+    }
+    function setSelfGuestUserId(guestUserId: number | null) {
+        _selfGuestUserId = guestUserId;
     }
 
     function getSelfUserPrivilege(): IUserPrivilege | null {
@@ -232,6 +240,15 @@ namespace Twns.User.UserModel {
 
         const userSelfInfo = data.userSelfInfo;
         (userSelfInfo) && (setSelfInfo(userSelfInfo));
+    }
+    export function updateOnMsgUserLoginAsGuest(data: NetMessage.MsgUserLoginAsGuest.IS): void {
+        setIsLoggedIn(true);
+
+        const userSelfInfo = data.userSelfInfo;
+        if (userSelfInfo) {
+            setSelfInfo(userSelfInfo);
+            setSelfGuestUserId(userSelfInfo.userId ?? null);
+        }
     }
     export async function updateOnMsgUserGetOnlineState(data: NetMessage.MsgUserGetOnlineState.IS): Promise<void> {
         const userPublicInfo = await getUserPublicInfo(Helpers.getExisted(data.userId));

@@ -28,6 +28,7 @@ namespace Twns.User {
     export type OpenDataForUserLoginBackgroundPanel = void;
     export class UserLoginBackgroundPanel extends TwnsUiPanel.UiPanel<OpenDataForUserLoginBackgroundPanel> {
         private readonly _imgBackground!    : TwnsUiImage.UiImage;
+        private readonly _btnGuest!         : TwnsUiButton.UiButton;
         private readonly _btnTutorial!      : TwnsUiButton.UiButton;
 
         private readonly _groupRightButton! : eui.Group;
@@ -47,6 +48,7 @@ namespace Twns.User {
             ]);
             this._setUiListenerArray([
                 { ui: this,                 callback: this._onTouchedSelf },
+                { ui: this._btnGuest,       callback: this._onTouchedBtnGuest },
                 { ui: this._btnTutorial,    callback: this._onTouchedBtnTutorial },
                 { ui: this._btnVersion,     callback: this._onTouchedBtnVersion },
                 { ui: this._btnSound,       callback: this._onTouchedBtnSound },
@@ -85,6 +87,9 @@ namespace Twns.User {
         private _onTouchedSelf(): void {
             SoundManager.init();
         }
+        private _onTouchedBtnGuest(): void {
+            User.UserProxy.reqUserLoginAsGuest(null, false);
+        }
         private _onTouchedBtnTutorial(): void {
             PanelHelpers.open(PanelHelpers.PanelDict.CommonTutorialPanel, void 0);
         }
@@ -96,6 +101,7 @@ namespace Twns.User {
         }
 
         private _updateComponentsForLanguage(): void {
+            this._btnGuest.label    = Lang.getText(LangTextType.B0982);
             this._btnVersion.label  = Lang.getText(LangTextType.B0620);
             this._btnSound.label    = Lang.getText(LangTextType.B0540);
             this._labelVersion.text = `${Lang.getGameVersionName(CommonConstants.GameVersion)}\nv.${window.CLIENT_VERSION}`;
@@ -116,6 +122,12 @@ namespace Twns.User {
                 obj         : this._imgBackground,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnGuest,
+                waitTime    : 1400,
+                beginProps  : { left: -40, alpha: 0 },
+                endProps    : { left: 0, alpha: 1 },
             });
             Helpers.resetTween({
                 obj         : this._listLanguage,
@@ -155,6 +167,11 @@ namespace Twns.User {
                 obj         : this._imgBackground,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnGuest,
+                beginProps  : { left: 0, alpha: 1 },
+                endProps    : { left: -40, alpha: 0 },
             });
             Helpers.resetTween({
                 obj         : this._listLanguage,

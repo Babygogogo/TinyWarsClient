@@ -29228,6 +29228,9 @@ declare namespace CommonProto {
             /** MessageContainer MsgUserSetMapEditorAutoSaveTime */
             MsgUserSetMapEditorAutoSaveTime?: (CommonProto.NetMessage.IMsgUserSetMapEditorAutoSaveTime|null);
 
+            /** MessageContainer MsgUserLoginAsGuest */
+            MsgUserLoginAsGuest?: (CommonProto.NetMessage.IMsgUserLoginAsGuest|null);
+
             /** MessageContainer MsgMapGetEnabledMapIdArray */
             MsgMapGetEnabledMapIdArray?: (CommonProto.NetMessage.IMsgMapGetEnabledMapIdArray|null);
 
@@ -29624,6 +29627,9 @@ declare namespace CommonProto {
 
             /** MessageContainer MsgUserSetMapEditorAutoSaveTime. */
             public MsgUserSetMapEditorAutoSaveTime?: (CommonProto.NetMessage.IMsgUserSetMapEditorAutoSaveTime|null);
+
+            /** MessageContainer MsgUserLoginAsGuest. */
+            public MsgUserLoginAsGuest?: (CommonProto.NetMessage.IMsgUserLoginAsGuest|null);
 
             /** MessageContainer MsgMapGetEnabledMapIdArray. */
             public MsgMapGetEnabledMapIdArray?: (CommonProto.NetMessage.IMsgMapGetEnabledMapIdArray|null);
@@ -38144,6 +38150,297 @@ declare namespace CommonProto {
                  * @returns Plain object
                  */
                 public static toObject(message: CommonProto.NetMessage.MsgUserSetMapEditorAutoSaveTime.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this S to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+
+        /** Properties of a MsgUserLoginAsGuest. */
+        interface IMsgUserLoginAsGuest {
+
+            /** MsgUserLoginAsGuest c */
+            c?: (CommonProto.NetMessage.MsgUserLoginAsGuest.IC|null);
+
+            /** MsgUserLoginAsGuest s */
+            s?: (CommonProto.NetMessage.MsgUserLoginAsGuest.IS|null);
+        }
+
+        /** Represents a MsgUserLoginAsGuest. */
+        class MsgUserLoginAsGuest implements IMsgUserLoginAsGuest {
+
+            /**
+             * Constructs a new MsgUserLoginAsGuest.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.NetMessage.IMsgUserLoginAsGuest);
+
+            /** MsgUserLoginAsGuest c. */
+            public c?: (CommonProto.NetMessage.MsgUserLoginAsGuest.IC|null);
+
+            /** MsgUserLoginAsGuest s. */
+            public s?: (CommonProto.NetMessage.MsgUserLoginAsGuest.IS|null);
+
+            /**
+             * Creates a new MsgUserLoginAsGuest instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MsgUserLoginAsGuest instance
+             */
+            public static create(properties?: CommonProto.NetMessage.IMsgUserLoginAsGuest): CommonProto.NetMessage.MsgUserLoginAsGuest;
+
+            /**
+             * Encodes the specified MsgUserLoginAsGuest message. Does not implicitly {@link CommonProto.NetMessage.MsgUserLoginAsGuest.verify|verify} messages.
+             * @param message MsgUserLoginAsGuest message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.NetMessage.IMsgUserLoginAsGuest, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MsgUserLoginAsGuest message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgUserLoginAsGuest.verify|verify} messages.
+             * @param message MsgUserLoginAsGuest message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.NetMessage.IMsgUserLoginAsGuest, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MsgUserLoginAsGuest message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MsgUserLoginAsGuest
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgUserLoginAsGuest;
+
+            /**
+             * Decodes a MsgUserLoginAsGuest message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MsgUserLoginAsGuest
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgUserLoginAsGuest;
+
+            /**
+             * Verifies a MsgUserLoginAsGuest message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MsgUserLoginAsGuest message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MsgUserLoginAsGuest
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgUserLoginAsGuest;
+
+            /**
+             * Creates a plain object from a MsgUserLoginAsGuest message. Also converts values to other types if specified.
+             * @param message MsgUserLoginAsGuest
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.NetMessage.MsgUserLoginAsGuest, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MsgUserLoginAsGuest to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace MsgUserLoginAsGuest {
+
+            /** Properties of a C. */
+            interface IC {
+
+                /** C userId */
+                userId?: (number|null);
+
+                /** C isAutoRelogin */
+                isAutoRelogin?: (boolean|null);
+            }
+
+            /** Represents a C. */
+            class C implements IC {
+
+                /**
+                 * Constructs a new C.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgUserLoginAsGuest.IC);
+
+                /** C userId. */
+                public userId: number;
+
+                /** C isAutoRelogin. */
+                public isAutoRelogin: boolean;
+
+                /**
+                 * Creates a new C instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns C instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgUserLoginAsGuest.IC): CommonProto.NetMessage.MsgUserLoginAsGuest.C;
+
+                /**
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgUserLoginAsGuest.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgUserLoginAsGuest.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgUserLoginAsGuest.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgUserLoginAsGuest.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgUserLoginAsGuest.C;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgUserLoginAsGuest.C;
+
+                /**
+                 * Verifies a C message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a C message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns C
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgUserLoginAsGuest.C;
+
+                /**
+                 * Creates a plain object from a C message. Also converts values to other types if specified.
+                 * @param message C
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgUserLoginAsGuest.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this C to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a S. */
+            interface IS {
+
+                /** S errorCode */
+                errorCode?: (number|null);
+
+                /** S userSelfInfo */
+                userSelfInfo?: (CommonProto.User.IUserSelfInfo|null);
+            }
+
+            /** Represents a S. */
+            class S implements IS {
+
+                /**
+                 * Constructs a new S.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgUserLoginAsGuest.IS);
+
+                /** S errorCode. */
+                public errorCode: number;
+
+                /** S userSelfInfo. */
+                public userSelfInfo?: (CommonProto.User.IUserSelfInfo|null);
+
+                /**
+                 * Creates a new S instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns S instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgUserLoginAsGuest.IS): CommonProto.NetMessage.MsgUserLoginAsGuest.S;
+
+                /**
+                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgUserLoginAsGuest.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgUserLoginAsGuest.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgUserLoginAsGuest.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgUserLoginAsGuest.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgUserLoginAsGuest.S;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgUserLoginAsGuest.S;
+
+                /**
+                 * Verifies a S message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a S message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns S
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgUserLoginAsGuest.S;
+
+                /**
+                 * Creates a plain object from a S message. Also converts values to other types if specified.
+                 * @param message S
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgUserLoginAsGuest.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this S to JSON.

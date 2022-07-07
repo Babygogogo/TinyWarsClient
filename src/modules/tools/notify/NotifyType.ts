@@ -141,6 +141,7 @@ namespace Twns.Notify {
         MsgChangeLogModifyMessage,
 
         MsgUserLogin,
+        MsgUserLoginAsGuest,
         MsgUserRegister,
         MsgUserLogout,
 

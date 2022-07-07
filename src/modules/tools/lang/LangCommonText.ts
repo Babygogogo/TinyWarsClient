@@ -1582,6 +1582,14 @@ namespace Twns.Lang {
             `您可以点击菜单中的状态按钮来查看当前对战各方的部队数、建筑数等各种数据。`,
             `Use the Status option to view the units deployed and bases captured by each army, as well as a range of other statistics.`,
         ],
+        [LangTextType.A0367]: [
+            "该账号已被注册，请修改后再试",
+            "The account has been registered.",
+        ],
+        [LangTextType.A0368]: [
+            "该昵称已被使用，请修改后再试",
+            "The nickname has been used.",
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -5497,6 +5505,10 @@ namespace Twns.Lang {
         [LangTextType.B0981]: [
             `将不会跳过一个回合`,
             `is not skipping a turn`,
+        ],
+        [LangTextType.B0982]: [
+            `游客`,
+            `Guest`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
