@@ -24,17 +24,44 @@
             <e:Group y="0" x="0">
                 <TwnsUiButton:UiButton id="_btnSave" label="确定" skinName="Skins.Component.Button.ButtonSelfAdaption001"
                                        width="200" x="0" y="0" />
-                <TwnsUiButton:UiButton id="_btnSaveAndSubmit" label="确定"
-                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="200" x="0" y="0" />
+                <e:Group x="260" y="0">
+                    <TwnsUiButton:UiButton id="_btnSaveAndSubmit" label="确定"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="200" x="-350"
+                                           y="0" />
+                    <TwnsUiButton:UiButton id="_btnHelpSaveAndSubmit" label="?"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="30" x="-90"
+                                           y="0" />
+                    <e:layout>
+                        <e:HorizontalLayout/>
+                    </e:layout>
+                </e:Group>
                 <e:layout>
-                    <e:HorizontalLayout gap="60" />
+                    <e:HorizontalLayout gap="96" />
                 </e:layout>
             </e:Group>
             <e:Group y="10" x="0">
-                <TwnsUiButton:UiButton id="_btnSimulation" label="确定"
-                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="200" x="0" y="0" />
-                <TwnsUiButton:UiButton id="_btnFreeMode" label="确定"
-                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="200" x="0" y="0" />
+                <e:Group x="0" y="0">
+                    <TwnsUiButton:UiButton id="_btnSimulation" label="确定"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="200" x="-350"
+                                           y="0" />
+                    <TwnsUiButton:UiButton id="_btnHelpSimulation" label="?"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="30" x="-90"
+                                           y="0" />
+                    <e:layout>
+                        <e:HorizontalLayout/>
+                    </e:layout>
+                </e:Group>
+                <e:Group x="260" y="0">
+                    <TwnsUiButton:UiButton id="_btnFreeMode" label="确定"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="200" x="-350"
+                                           y="0" />
+                    <TwnsUiButton:UiButton id="_btnHelpFreeMode" label="?"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="30" x="-90"
+                                           y="0" />
+                    <e:layout>
+                        <e:HorizontalLayout/>
+                    </e:layout>
+                </e:Group>
                 <e:layout>
                     <e:HorizontalLayout gap="60" />
                 </e:layout>

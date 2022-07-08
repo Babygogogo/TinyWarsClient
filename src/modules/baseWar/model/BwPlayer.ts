@@ -140,7 +140,7 @@ namespace Twns.BaseWar {
             };
         }
         public serializeForCreateSfw(): ISerialPlayer {
-            const war                   = this._getWar();
+            const war                   = this.getWar();
             const playerIndex           = this.getPlayerIndex();
             const teamIndexes           = war.getPlayerManager().getWatcherTeamIndexesForSelf();
             const shouldShowFund        = (!war.getFogMap().checkHasFogCurrently()) || (teamIndexes.has(this.getTeamIndex()));
@@ -170,7 +170,7 @@ namespace Twns.BaseWar {
         private _setWar(war: BwWar): void {
             this._war = war;
         }
-        private _getWar(): BwWar {
+        public getWar(): BwWar {
             return Helpers.getExisted(this._war);
         }
 
@@ -209,7 +209,7 @@ namespace Twns.BaseWar {
         }
 
         public getTeamIndex(): number {
-            return this._getWar().getCommonSettingManager().getTeamIndex(this.getPlayerIndex());
+            return this.getWar().getCommonSettingManager().getTeamIndex(this.getPlayerIndex());
         }
 
         public setRestTimeToBoot(seconds: number): void {
@@ -398,7 +398,7 @@ namespace Twns.BaseWar {
             return radius;
         }
         public getCoGridIndexListOnMap(): GridIndex[] {
-            return this._getWar().getUnitMap().getCoGridIndexListOnMap(this.getPlayerIndex());
+            return this.getWar().getUnitMap().getCoGridIndexListOnMap(this.getPlayerIndex());
         }
 
         public checkIsInCoZone(targetGridIndex: GridIndex, coGridIndexOnMap: GridIndex[]): boolean {
@@ -435,7 +435,7 @@ namespace Twns.BaseWar {
             if ((!currentSkills) || (!currentSkills.length)) {
                 return true;
             } else {
-                const gameConfig = this._getWar().getGameConfig();
+                const gameConfig = this.getWar().getGameConfig();
                 for (const skillId of currentSkills) {
                     if (gameConfig.getCoSkillCfg(skillId)?.showZone) {
                         return true;
@@ -455,7 +455,7 @@ namespace Twns.BaseWar {
                 return false;
             }
 
-            const war           = this._getWar();
+            const war           = this.getWar();
             const playerIndex   = this.getPlayerIndex();
             if ((!war.getCommonSettingManager().getSettingsCanActivateCoSkill(playerIndex))             ||
                 (!war.getWarEventManager().checkOngoingPersistentActionCanActivateCoSkill(playerIndex))
@@ -524,7 +524,7 @@ namespace Twns.BaseWar {
             }
 
             const coZoneRadius              = this.getCoZoneRadius();
-            const gameConfig                = this._getWar().getGameConfig();
+            const gameConfig                = this.getWar().getGameConfig();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => this.getCoGridIndexListOnMap());
             let modifier                    = 1;
             for (const skillId of this.getCoCurrentSkills() || []) {
@@ -546,7 +546,7 @@ namespace Twns.BaseWar {
         }
 
         private _getCoBasicCfg(): CommonProto.Config.ICoBasicCfg {
-            return Helpers.getExisted(this._getWar().getGameConfig().getCoBasicCfg(this.getCoId()));
+            return Helpers.getExisted(this.getWar().getGameConfig().getCoBasicCfg(this.getCoId()));
         }
     }
 }

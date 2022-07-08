@@ -5597,6 +5597,17 @@ export const enum ServerErrorCode {
     WarDestructionHelpers_DestroyUnitOnMap_0008,
     WarDestructionHelpers_DestroyUnitOnMap_0009,
 
+    WarDestructionHelpers_DestroyUnitLoaded_0000,
+    WarDestructionHelpers_DestroyUnitLoaded_0001,
+    WarDestructionHelpers_DestroyUnitLoaded_0002,
+    WarDestructionHelpers_DestroyUnitLoaded_0003,
+    WarDestructionHelpers_DestroyUnitLoaded_0004,
+    WarDestructionHelpers_DestroyUnitLoaded_0005,
+    WarDestructionHelpers_DestroyUnitLoaded_0006,
+    WarDestructionHelpers_DestroyUnitLoaded_0007,
+    WarDestructionHelpers_DestroyUnitLoaded_0008,
+    WarDestructionHelpers_DestroyUnitLoaded_0009,
+
     BwWarDataHelper_CreateInitialDataForMcw_0000,
     BwWarDataHelper_CreateInitialDataForMcw_0001,
     BwWarDataHelper_CreateInitialDataForMcw_0002,

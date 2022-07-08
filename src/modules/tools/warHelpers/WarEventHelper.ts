@@ -40,6 +40,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
     import IWarEventConditionNode   = WarEvent.IWarEventConditionNode;
     import BwWar                    = BaseWar.BwWar;
     import GameConfig               = Config.GameConfig;
+    import ConfigManager            = Config.ConfigManager;
 
     const CONDITION_TYPE_ARRAY = [
         // ConditionType.WecTurnIndexEqualTo,
@@ -224,7 +225,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             const actionId = action.WeaCommonData?.actionId;
             if ((actionId == null)                                              ||
                 (actionDict.has(actionId))                                      ||
-                (!Config.ConfigManager.checkIsValidWarEventActionId(actionId))
+                (!ConfigManager.checkIsValidWarEventActionId(actionId))
             ) {
                 return ClientErrorCode.WarEventFullDataValidation01;
             }
@@ -374,7 +375,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         const actionId = action.WeaCommonData?.actionId;
-        if ((actionId == null) || (!Config.ConfigManager.checkIsValidWarEventActionId(actionId))) {
+        if ((actionId == null) || (!ConfigManager.checkIsValidWarEventActionId(actionId))) {
             return false;
         }
 
@@ -600,7 +601,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const forceFogCode = action.forceFogCode;
         return (forceFogCode != null)
-            && (Config.ConfigManager.checkIsValidForceFogCode(forceFogCode))
+            && (ConfigManager.checkIsValidForceFogCode(forceFogCode))
             && (action.turnsCount != null);
     }
     function checkIsValidWeaSetCustomCounter(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetCustomCounter>): boolean {
@@ -613,7 +614,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             if (counterIdArray?.length) {
                 const counterIdSet = new Set<number>();
                 for (const counterId of counterIdArray) {
-                    if ((!Config.ConfigManager.checkIsValidCustomCounterId(counterId)) ||
+                    if ((!ConfigManager.checkIsValidCustomCounterId(counterId)) ||
                         (counterIdSet.has(counterId))
                     ) {
                         return false;
@@ -662,42 +663,42 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const conPlayerIndexArray = action.conPlayerIndexArray;
-            if ((conPlayerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+            if ((conPlayerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
                 return false;
             }
         }
 
         {
             const conAliveStateArray = action.conAliveStateArray;
-            if ((conAliveStateArray) && (!Config.ConfigManager.checkIsValidPlayerAliveStateSubset(conAliveStateArray))) {
+            if ((conAliveStateArray) && (!ConfigManager.checkIsValidPlayerAliveStateSubset(conAliveStateArray))) {
                 return false;
             }
         }
 
         {
             const comparator = action.conFundComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
 
         {
             const comparator = action.conEnergyPercentageComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
 
         {
             const conSkillTypeArray = action.conCoUsingSkillTypeArray;
-            if ((conSkillTypeArray) && (!Config.ConfigManager.checkIsValidCoSkillTypeSubset(conSkillTypeArray))) {
+            if ((conSkillTypeArray) && (!ConfigManager.checkIsValidCoSkillTypeSubset(conSkillTypeArray))) {
                 return false;
             }
         }
 
         {
             const actAliveState = action.actAliveState;
-            if ((actAliveState != null) && (!Config.ConfigManager.checkIsValidPlayerAliveState(actAliveState))) {
+            if ((actAliveState != null) && (!ConfigManager.checkIsValidPlayerAliveState(actAliveState))) {
                 return false;
             }
         }
@@ -721,14 +722,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const playerIndexArray = action.conPlayerIndexArray;
-            if ((playerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+            if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
                 return false;
             }
         }
 
         {
             const teamIndexArray = action.conTeamIndexArray;
-            if ((teamIndexArray) && (!Config.ConfigManager.checkIsValidTeamIndexSubset(teamIndexArray, playersCountUnneutral))) {
+            if ((teamIndexArray) && (!ConfigManager.checkIsValidTeamIndexSubset(teamIndexArray, playersCountUnneutral))) {
                 return false;
             }
         }
@@ -742,56 +743,72 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const locationIdArray = action.conLocationIdArray;
-            if ((locationIdArray) && (!Config.ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
+            if ((locationIdArray) && (!ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
                 return false;
             }
         }
 
         {
             const gridIndexArray = action.conGridIndexArray;
-            if ((gridIndexArray) && (!Config.ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, mapSize))) {
+            if ((gridIndexArray) && (!ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, mapSize))) {
                 return false;
             }
         }
 
         {
             const actionStateArray = action.conActionStateArray;
-            if ((actionStateArray) && (!Config.ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
+            if ((actionStateArray) && (!ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
                 return false;
             }
         }
 
         {
             const comparator = action.conHpComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
 
         {
             const comparator = action.conFuelPctComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
 
         {
             const comparator = action.conPriAmmoPctComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
 
         {
             const comparator = action.conPromotionComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
 
         {
             const actActionState = action.actActionState;
-            if ((actActionState != null) && (!Config.ConfigManager.checkIsValidUnitActionState(actActionState))) {
+            if ((actActionState != null) && (!ConfigManager.checkIsValidUnitActionState(actActionState))) {
+                return false;
+            }
+        }
+
+        {
+            const actUnitType = action.actUnitType;
+            if ((actUnitType != null) && (!gameConfig.checkIsValidUnitType(actUnitType))) {
+                return false;
+            }
+        }
+
+        {
+            const actPlayerIndex = action.actPlayerIndex;
+            if ((actPlayerIndex != null)                                                                                                                            &&
+                ((!ConfigManager.checkIsValidPlayerIndex(actPlayerIndex, playersCountUnneutral)) || (actPlayerIndex === CommonConstants.PlayerIndex.Neutral))
+            ) {
                 return false;
             }
         }
@@ -807,6 +824,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 action.actActionState                   ??
                 action.actHasLoadedCo                   ??
                 action.actIsDiving                      ??
+                action.actUnitType                      ??
+                action.actPlayerIndex                   ??
                 (action.actDestroyUnit || null)
             ) == null
         ) {
@@ -822,14 +841,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const locationIdArray = action.conLocationIdArray;
-            if ((locationIdArray) && (!Config.ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
+            if ((locationIdArray) && (!ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
                 return false;
             }
         }
 
         {
             const conPlayerIndexArray = action.conPlayerIndexArray;
-            if ((conPlayerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+            if ((conPlayerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
                 return false;
             }
         }
@@ -843,7 +862,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const gridIndexArray = action.conGridIndexArray;
-            if ((gridIndexArray) && (!Config.ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, mapSize))) {
+            if ((gridIndexArray) && (!ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, mapSize))) {
                 return false;
             }
         }
@@ -870,21 +889,21 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const locationIdArray = action.conLocationIdArray;
-            if ((locationIdArray) && (!Config.ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
+            if ((locationIdArray) && (!ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
                 return false;
             }
         }
 
         {
             const gridIndexArray = action.conGridIndexArray;
-            if ((gridIndexArray) && (!Config.ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, mapSize))) {
+            if ((gridIndexArray) && (!ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, mapSize))) {
                 return false;
             }
         }
 
         {
             const conPlayerIndexArray = action.conPlayerIndexArray;
-            if ((conPlayerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+            if ((conPlayerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
                 return false;
             }
         }
@@ -899,7 +918,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         {
             const conHp = action.conHp;
             if (conHp) {
-                if ((conHp.value == null) || (!Config.ConfigManager.checkIsValidValueComparator(conHp.comparator))) {
+                if ((conHp.value == null) || (!ConfigManager.checkIsValidValueComparator(conHp.comparator))) {
                     return false;
                 }
             }
@@ -908,7 +927,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         {
             const conHp = action.conBuildPoint;
             if (conHp) {
-                if ((conHp.value == null) || (!Config.ConfigManager.checkIsValidValueComparator(conHp.comparator))) {
+                if ((conHp.value == null) || (!ConfigManager.checkIsValidValueComparator(conHp.comparator))) {
                     return false;
                 }
             }
@@ -917,19 +936,19 @@ namespace Twns.WarHelpers.WarEventHelpers {
         {
             const conHp = action.conCapturePoint;
             if (conHp) {
-                if ((conHp.value == null) || (!Config.ConfigManager.checkIsValidValueComparator(conHp.comparator))) {
+                if ((conHp.value == null) || (!ConfigManager.checkIsValidValueComparator(conHp.comparator))) {
                     return false;
                 }
             }
         }
 
         const actAddLocationIdArray = action.actAddLocationIdArray ?? [];
-        if (!Config.ConfigManager.checkIsValidLocationIdSubset(actAddLocationIdArray)) {
+        if (!ConfigManager.checkIsValidLocationIdSubset(actAddLocationIdArray)) {
             return false;
         }
 
         const actDeleteLocationIdArray = action.actDeleteLocationIdArray ?? [];
-        if (!Config.ConfigManager.checkIsValidLocationIdSubset(actDeleteLocationIdArray)) {
+        if (!ConfigManager.checkIsValidLocationIdSubset(actDeleteLocationIdArray)) {
             return false;
         }
 
@@ -975,7 +994,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const conPlayerIndexArray = action.conPlayerIndexArray;
-            if ((conPlayerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+            if ((conPlayerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
                 return false;
             }
         }
@@ -1035,21 +1054,21 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = condition.eventsCountComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
 
         {
             const comparator = condition.timesInTurnComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
 
         {
             const comparator = condition.timesTotalComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
@@ -1067,7 +1086,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = condition.playersCountComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
@@ -1094,7 +1113,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             if (aliveStateArray) {
                 const aliveStateSet = new Set<number>();
                 for (const aliveState of aliveStateArray) {
-                    if ((!Config.ConfigManager.checkIsValidPlayerAliveState(aliveState))   ||
+                    if ((!ConfigManager.checkIsValidPlayerAliveState(aliveState))   ||
                         (aliveStateSet.has(aliveState))
                     ) {
                         return false;
@@ -1107,14 +1126,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = condition.fundComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
 
         {
             const comparator = condition.energyPercentageComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
@@ -1124,7 +1143,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             if (skillTypeArray) {
                 const skillTypeSet = new Set<number>();
                 for (const skillType of skillTypeArray) {
-                    if ((!Config.ConfigManager.checkIsValidCoSkillType(skillType)) ||
+                    if ((!ConfigManager.checkIsValidCoSkillType(skillType)) ||
                         (skillTypeSet.has(skillType))
                     ) {
                         return false;
@@ -1151,7 +1170,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = condition.turnIndexComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
             // no need to check turnIndex
@@ -1159,7 +1178,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = condition.turnIndexRemainderComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
 
@@ -1178,7 +1197,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const turnPhase = condition.turnPhase;
-            if ((turnPhase != null) && (!Config.ConfigManager.checkIsValidTurnPhaseCode(turnPhase))) {
+            if ((turnPhase != null) && (!ConfigManager.checkIsValidTurnPhaseCode(turnPhase))) {
                 return false;
             }
         }
@@ -1291,7 +1310,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         const tilesCountComparator = condition.tilesCountComparator;
         if ((tilesCountComparator == null)                                      ||
-            (!Config.ConfigManager.checkIsValidValueComparator(tilesCountComparator))
+            (!ConfigManager.checkIsValidValueComparator(tilesCountComparator))
         ) {
             return false;
         }
@@ -1305,28 +1324,28 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const gridIndexArray = condition.gridIndexArray;
-            if ((gridIndexArray) && (!Config.ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, mapSize))) {
+            if ((gridIndexArray) && (!ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, mapSize))) {
                 return false;
             }
         }
 
         {
             const locationIdArray = condition.locationIdArray;
-            if ((locationIdArray) && (!Config.ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
+            if ((locationIdArray) && (!ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
                 return false;
             }
         }
 
         {
             const playerIndexArray = condition.playerIndexArray;
-            if ((playerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+            if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
                 return false;
             }
         }
 
         {
             const teamIndexArray = condition.teamIndexArray;
-            if ((teamIndexArray) && (!Config.ConfigManager.checkIsValidTeamIndexSubset(teamIndexArray, playersCountUnneutral))) {
+            if ((teamIndexArray) && (!ConfigManager.checkIsValidTeamIndexSubset(teamIndexArray, playersCountUnneutral))) {
                 return false;
             }
         }
@@ -1340,7 +1359,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const actionStateArray = condition.actionStateArray;
-            if ((actionStateArray) && (!Config.ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
+            if ((actionStateArray) && (!ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
                 return false;
             }
         }
@@ -1351,35 +1370,35 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = condition.unitsCountComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
 
         {
             const comparator = condition.hpComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
 
         {
             const comparator = condition.fuelPctComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
 
         {
             const comparator = condition.priAmmoPctComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
 
         {
             const comparator = condition.promotionComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
@@ -1393,7 +1412,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const counterIdArray = condition.counterIdArray;
-            if ((counterIdArray?.length) && (!Config.ConfigManager.checkIsValidCustomCounterIdArray(counterIdArray))) {
+            if ((counterIdArray?.length) && (!ConfigManager.checkIsValidCustomCounterIdArray(counterIdArray))) {
                 return false;
             }
         }
@@ -1404,14 +1423,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = condition.counterCountComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
 
         {
             const comparator = condition.valueComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
@@ -1432,7 +1451,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = condition.valueRemainderComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
@@ -1446,7 +1465,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const actionIdArray = condition.ongoingActionIdArray;
-            if ((actionIdArray) && (!Config.ConfigManager.checkIsValidWarEventActionIdSubset(actionIdArray))) {
+            if ((actionIdArray) && (!ConfigManager.checkIsValidWarEventActionIdSubset(actionIdArray))) {
                 return false;
             }
         }
@@ -1457,7 +1476,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = condition.ongoingActionsCountComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
@@ -1471,7 +1490,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const playerIndexArray = condition.playerIndexArray;
-            if ((playerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+            if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
                 return false;
             }
         }
@@ -1480,7 +1499,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             const totalActions = condition.totalActions;
             if ((totalActions == null)                                                      ||
                 (totalActions.value == null)                                                ||
-                (!Config.ConfigManager.checkIsValidValueComparator(totalActions.comparator))
+                (!ConfigManager.checkIsValidValueComparator(totalActions.comparator))
             ) {
                 return false;
             }
@@ -2348,6 +2367,16 @@ namespace Twns.WarHelpers.WarEventHelpers {
             );
         }
 
+        const actUnitType           = data.actUnitType;
+        const textForActUnitType    = actUnitType == null
+            ? null
+            : Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0525), Lang.getUnitName(actUnitType, gameConfig));
+
+        const actPlayerIndex        = data.actPlayerIndex;
+        const textForActPlayerIndex = actPlayerIndex == null
+            ? null
+            : Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0983), `P${actPlayerIndex}`);
+
         const actActionState        = data.actActionState;
         const textForActActionState = actActionState != null
             ? Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0526), Lang.getUnitActionStateText(actActionState))
@@ -2388,6 +2417,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
             : null;
 
         const textArrayForModifiers = Helpers.getNonNullElements([
+            textForActUnitType,
+            textForActPlayerIndex,
             textForActActionState,
             textForActHasLoadedCo,
             textForActIsDiving,
@@ -2725,7 +2756,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = data.eventsCountComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
@@ -2736,14 +2767,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = data.timesTotalComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
         {
             const comparator = data.timesInTurnComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
@@ -2757,7 +2788,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = data.playersCountComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
@@ -2767,25 +2798,25 @@ namespace Twns.WarHelpers.WarEventHelpers {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
         }
 
-        if (data.aliveStateArray?.some(v => !Config.ConfigManager.checkIsValidPlayerAliveState(v))) {
+        if (data.aliveStateArray?.some(v => !ConfigManager.checkIsValidPlayerAliveState(v))) {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0784));
         }
 
         {
             const comparator = data.fundComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
         {
             const comparator = data.energyPercentageComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
-        if (data.coUsingSkillTypeArray?.some(v => !Config.ConfigManager.checkIsValidCoSkillType(v))) {
+        if (data.coUsingSkillTypeArray?.some(v => !ConfigManager.checkIsValidCoSkillType(v))) {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0785));
         }
 
@@ -2802,7 +2833,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
     function getErrorTipForWecTurnAndPlayer(data: WarEvent.IWecTurnAndPlayer, war: BwWar): string | null {
         {
             const comparator = data.turnIndexComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
@@ -2821,14 +2852,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
             }
 
             const comparator = data.turnIndexRemainderComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
         {
             const turnPhase = data.turnPhase;
-            if ((turnPhase != null) && (!Config.ConfigManager.checkIsValidTurnPhaseCode(turnPhase))) {
+            if ((turnPhase != null) && (!ConfigManager.checkIsValidTurnPhaseCode(turnPhase))) {
                 return Lang.getText(LangTextType.A0265);
             }
         }
@@ -2859,7 +2890,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         const comparator = data.tilesCountComparator;
-        if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+        if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
         }
 
@@ -2899,7 +2930,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = data.unitsCountComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
@@ -2931,35 +2962,35 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const actionStateArray = data.actionStateArray;
-            if ((actionStateArray) && (!Config.ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
+            if ((actionStateArray) && (!ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0526));
             }
         }
 
         {
             const comparator = data.hpComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
         {
             const comparator = data.fuelPctComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
         {
             const comparator = data.priAmmoPctComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
         {
             const comparator = data.promotionComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
@@ -2973,14 +3004,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = data.counterCountComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
         {
             const comparator = data.valueComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
@@ -3001,7 +3032,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = data.valueRemainderComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
@@ -3015,14 +3046,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
 
         {
             const comparator = data.ongoingActionsCountComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
         {
             const actionIdArray = data.ongoingActionIdArray;
-            if ((actionIdArray) && (!Config.ConfigManager.checkIsValidWarEventActionIdSubset(actionIdArray))) {
+            if ((actionIdArray) && (!ConfigManager.checkIsValidWarEventActionIdSubset(actionIdArray))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0889));
             }
         }
@@ -3032,7 +3063,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
     function getErrorTipForWecManualActionStatistics(data: WarEvent.IWecManualActionStatistics, war: BwWar): string | null {
         {
             const playerIndexArray = data.playerIndexArray;
-            if ((playerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, war.getPlayersCountUnneutral()))) {
+            if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, war.getPlayersCountUnneutral()))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
             }
         }
@@ -3042,7 +3073,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
             if ((totalActions == null) || (totalActions.value == null)) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0902));
             }
-            if (!Config.ConfigManager.checkIsValidValueComparator(totalActions.comparator)) {
+            if (!ConfigManager.checkIsValidValueComparator(totalActions.comparator)) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
@@ -3061,7 +3092,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         }
 
         const actionId = action.WeaCommonData?.actionId;
-        if ((actionId == null) || (!Config.ConfigManager.checkIsValidWarEventActionId(actionId))) {
+        if ((actionId == null) || (!ConfigManager.checkIsValidWarEventActionId(actionId))) {
             return Lang.getText(LangTextType.A0177);
         }
 
@@ -3238,7 +3269,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
     }
     function getErrorTipForWeaSetForceFogCode(data: WarEvent.IWeaSetForceFogCode): string | null {
         const forceFogCode = data.forceFogCode;
-        if ((forceFogCode == null) || (!Config.ConfigManager.checkIsValidForceFogCode(forceFogCode))) {
+        if ((forceFogCode == null) || (!ConfigManager.checkIsValidForceFogCode(forceFogCode))) {
             return Lang.getText(LangTextType.A0264);
         }
 
@@ -3251,7 +3282,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
     function getErrorTipForWeaSetCustomCounter(data: WarEvent.IWeaSetCustomCounter): string | null {
         const customCounterIdArray = data.customCounterIdArray;
         if ((customCounterIdArray)                                                                                                                                      &&
-            ((customCounterIdArray.length !== new Set(customCounterIdArray).size) || (customCounterIdArray.some(v => !Config.ConfigManager.checkIsValidCustomCounterId(v))))
+            ((customCounterIdArray.length !== new Set(customCounterIdArray).size) || (customCounterIdArray.some(v => !ConfigManager.checkIsValidCustomCounterId(v))))
         ) {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0799));
         }
@@ -3291,42 +3322,42 @@ namespace Twns.WarHelpers.WarEventHelpers {
     function getErrorTipForWeaSetPlayerState(data: WarEvent.IWeaSetPlayerState, playersCountUnneutral: number): string | null {
         {
             const conPlayerIndexArray = data.conPlayerIndexArray;
-            if ((conPlayerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+            if ((conPlayerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
                 return `${Lang.getText(LangTextType.A0212)}`;
             }
         }
 
         {
             const conAliveStateArray = data.conAliveStateArray;
-            if ((conAliveStateArray) && (!Config.ConfigManager.checkIsValidPlayerAliveStateSubset(conAliveStateArray))) {
+            if ((conAliveStateArray) && (!ConfigManager.checkIsValidPlayerAliveStateSubset(conAliveStateArray))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0784));
             }
         }
 
         {
             const conCoUsingSkillTypeArray = data.conCoUsingSkillTypeArray;
-            if ((conCoUsingSkillTypeArray) && (!Config.ConfigManager.checkIsValidCoSkillTypeSubset(conCoUsingSkillTypeArray))) {
+            if ((conCoUsingSkillTypeArray) && (!ConfigManager.checkIsValidCoSkillTypeSubset(conCoUsingSkillTypeArray))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0785));
             }
         }
 
         {
             const comparator = data.conFundComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
         {
             const comparator = data.conEnergyPercentageComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
         {
             const actAliveState = data.actAliveState;
-            if ((actAliveState != null) && (!Config.ConfigManager.checkIsValidPlayerAliveState(actAliveState))) {
+            if ((actAliveState != null) && (!ConfigManager.checkIsValidPlayerAliveState(actAliveState))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0784));
             }
         }
@@ -3347,14 +3378,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const gameConfig = war.getGameConfig();
         {
             const locationIdArray = data.conLocationIdArray;
-            if ((locationIdArray) && (!Config.ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
+            if ((locationIdArray) && (!ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0764));
             }
         }
 
         {
             const gridIndexArray = data.conGridIndexArray;
-            if ((gridIndexArray) && (!Config.ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, war.getTileMap().getMapSize()))) {
+            if ((gridIndexArray) && (!ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, war.getTileMap().getMapSize()))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0531));
             }
         }
@@ -3366,57 +3397,73 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const playersCountUnneutral = war.getPlayersCountUnneutral();
         {
             const playerIndexArray = data.conPlayerIndexArray;
-            if ((playerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+            if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
             }
         }
 
         {
             const teamIndexArray = data.conTeamIndexArray;
-            if ((teamIndexArray) && (!Config.ConfigManager.checkIsValidTeamIndexSubset(teamIndexArray, playersCountUnneutral))) {
+            if ((teamIndexArray) && (!ConfigManager.checkIsValidTeamIndexSubset(teamIndexArray, playersCountUnneutral))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0377));
             }
         }
 
         {
             const actionStateArray = data.conActionStateArray;
-            if ((actionStateArray) && (!Config.ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
+            if ((actionStateArray) && (!ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0526));
             }
         }
 
         {
             const comparator = data.conHpComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
         {
             const comparator = data.conFuelPctComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
         {
             const comparator = data.conPriAmmoPctComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
         {
             const comparator = data.conPromotionComparator;
-            if ((comparator == null) || (!Config.ConfigManager.checkIsValidValueComparator(comparator))) {
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
         {
             const actActionState = data.actActionState;
-            if ((actActionState != null) && (!Config.ConfigManager.checkIsValidUnitActionState(actActionState))) {
+            if ((actActionState != null) && (!ConfigManager.checkIsValidUnitActionState(actActionState))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0526));
+            }
+        }
+
+        {
+            const actUnitType = data.actUnitType;
+            if ((actUnitType != null) && (!gameConfig.checkIsValidUnitType(actUnitType))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0525));
+            }
+        }
+
+        {
+            const actPlayerIndex = data.actPlayerIndex;
+            if ((actPlayerIndex != null)                                                                                                                        &&
+                ((!ConfigManager.checkIsValidPlayerIndex(actPlayerIndex, playersCountUnneutral)) || (actPlayerIndex === CommonConstants.PlayerIndex.Neutral))
+            ) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
             }
         }
 
@@ -3431,6 +3478,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 data.actActionState                     ??
                 data.actHasLoadedCo                     ??
                 data.actIsDiving                        ??
+                data.actUnitType                        ??
+                data.actPlayerIndex                     ??
                 (data.actDestroyUnit || null)
             ) == null
         ) {
@@ -3442,14 +3491,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
     function getErrorTipForWeaSetTileType(data: WarEvent.IWeaSetTileType, war: BwWar): string | null {
         {
             const locationIdArray = data.conLocationIdArray;
-            if ((locationIdArray) && (!Config.ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
+            if ((locationIdArray) && (!ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0764));
             }
         }
 
         {
             const gridIndexArray = data.conGridIndexArray;
-            if ((gridIndexArray) && (!Config.ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, war.getTileMap().getMapSize()))) {
+            if ((gridIndexArray) && (!ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, war.getTileMap().getMapSize()))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0531));
             }
         }
@@ -3464,7 +3513,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const playersCountUnneutral = war.getPlayersCountUnneutral();
         {
             const conPlayerIndexArray = data.conPlayerIndexArray;
-            if ((conPlayerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+            if ((conPlayerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
             }
         }
@@ -3491,14 +3540,14 @@ namespace Twns.WarHelpers.WarEventHelpers {
     function getErrorTipForWeaSetTileState(data: WarEvent.IWeaSetTileState, war: BwWar): string | null {
         {
             const locationIdArray = data.conLocationIdArray;
-            if ((locationIdArray) && (!Config.ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
+            if ((locationIdArray) && (!ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0764));
             }
         }
 
         {
             const gridIndexArray = data.conGridIndexArray;
-            if ((gridIndexArray) && (!Config.ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, war.getTileMap().getMapSize()))) {
+            if ((gridIndexArray) && (!ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, war.getTileMap().getMapSize()))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0531));
             }
         }
@@ -3513,7 +3562,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
         const playersCountUnneutral = war.getPlayersCountUnneutral();
         {
             const conPlayerIndexArray = data.conPlayerIndexArray;
-            if ((conPlayerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+            if ((conPlayerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
             }
         }
@@ -3524,7 +3573,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 if (conHp.value == null) {
                     return Lang.getFormattedText(LangTextType.F0141, Lang.getText(LangTextType.B0807));
                 }
-                if (!Config.ConfigManager.checkIsValidValueComparator(conHp.comparator)) {
+                if (!ConfigManager.checkIsValidValueComparator(conHp.comparator)) {
                     return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0774));
                 }
             }
@@ -3536,7 +3585,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 if (conBuildPoint.value == null) {
                     return Lang.getFormattedText(LangTextType.F0141, Lang.getText(LangTextType.B0362));
                 }
-                if (!Config.ConfigManager.checkIsValidValueComparator(conBuildPoint.comparator)) {
+                if (!ConfigManager.checkIsValidValueComparator(conBuildPoint.comparator)) {
                     return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0774));
                 }
             }
@@ -3548,19 +3597,19 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 if (conCapturePoint.value == null) {
                     return Lang.getFormattedText(LangTextType.F0141, Lang.getText(LangTextType.B0361));
                 }
-                if (!Config.ConfigManager.checkIsValidValueComparator(conCapturePoint.comparator)) {
+                if (!ConfigManager.checkIsValidValueComparator(conCapturePoint.comparator)) {
                     return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0774));
                 }
             }
         }
 
         const actAddLocationIdArray = data.actAddLocationIdArray ?? [];
-        if (!Config.ConfigManager.checkIsValidLocationIdSubset(actAddLocationIdArray)) {
+        if (!ConfigManager.checkIsValidLocationIdSubset(actAddLocationIdArray)) {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0759));
         }
 
         const actDeleteLocationIdArray = data.actDeleteLocationIdArray ?? [];
-        if (!Config.ConfigManager.checkIsValidLocationIdSubset(actDeleteLocationIdArray)) {
+        if (!ConfigManager.checkIsValidLocationIdSubset(actDeleteLocationIdArray)) {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0760));
         }
 
@@ -3598,7 +3647,7 @@ namespace Twns.WarHelpers.WarEventHelpers {
     function getErrorTipForWeaPersistentModifyPlayerAttribute(data: WarEvent.IWeaPersistentModifyPlayerAttribute, war: BwWar, playersCountUnneutral: number): string | null {
         {
             const conPlayerIndexArray = data.conPlayerIndexArray;
-            if ((conPlayerIndexArray) && (!Config.ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+            if ((conPlayerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
             }
         }
@@ -4185,6 +4234,8 @@ namespace Twns.WarHelpers.WarEventHelpers {
                 conIsDiving                         : null,
                 actDestroyUnit                      : null,
                 actActionState                      : null,
+                actUnitType                         : null,
+                actPlayerIndex                      : null,
                 actHasLoadedCo                      : null,
                 actIsDiving                         : null,
                 actHpDeltaValue                     : 0,

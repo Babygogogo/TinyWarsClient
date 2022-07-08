@@ -73,9 +73,14 @@ namespace Twns.WarEvent {
 
         private readonly _btnDestroyUnit!                       : TwnsUiButton.UiButton;
         private readonly _labelDestroyUnit!                     : TwnsUiLabel.UiLabel;
+        private readonly _btnActUnitType!                       : TwnsUiButton.UiButton;
+        private readonly _btnClearActUnitType!                  : TwnsUiButton.UiButton;
+        private readonly _labelActUnitType!                     : TwnsUiLabel.UiLabel;
+        private readonly _btnActPlayerIndex!                    : TwnsUiButton.UiButton;
+        private readonly _labelActPlayerIndex!                  : TwnsUiLabel.UiLabel;
+
         private readonly _btnActActionState!                    : TwnsUiButton.UiButton;
         private readonly _labelActActionState!                  : TwnsUiLabel.UiLabel;
-
         private readonly _btnActHasLoadedCo!                    : TwnsUiButton.UiButton;
         private readonly _labelActHasLoadedCo!                  : TwnsUiLabel.UiLabel;
         private readonly _btnActIsDiving!                       : TwnsUiButton.UiButton;
@@ -134,8 +139,10 @@ namespace Twns.WarEvent {
                 { ui: this._inputConPromotion,                  callback: this._onFocusOutInputConPromotion,                    eventType: egret.FocusEvent.FOCUS_OUT },
 
                 { ui: this._btnDestroyUnit,                     callback: this._onTouchedBtnDestroyUnit },
+                { ui: this._btnActUnitType,                     callback: this._onTouchedBtnActUnitType },
+                { ui: this._btnClearActUnitType,                callback: this._onTouchedBtnClearActUnitType },
+                { ui: this._btnActPlayerIndex,                  callback: this._onTouchedBtnActPlayerIndex },
                 { ui: this._btnActActionState,                  callback: this._onTouchedBtnActActionState },
-
                 { ui: this._btnActHasLoadedCo,                  callback: this._onTouchedBtnActHasLoadedCo },
                 { ui: this._btnActIsDiving,                     callback: this._onTouchedBtnActIsDiving },
 
@@ -365,7 +372,42 @@ namespace Twns.WarEvent {
             action.actDestroyUnit = !action.actDestroyUnit;
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-
+        private _onTouchedBtnActUnitType(): void {
+            const gameConfig    = this._getOpenData().war.getGameConfig();
+            const action        = this._getAction();
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleUnitTypePanel, {
+                gameConfig,
+                currentUnitType : action.actUnitType ?? null,
+                unitTypeArray   : gameConfig.getAllUnitTypeArray(),
+                playerIndex     : action.actPlayerIndex || CommonConstants.PlayerIndex.First,
+                callback        : unitType => {
+                    if (action.actUnitType !== unitType) {
+                        action.actUnitType = unitType;
+                        Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    }
+                },
+            });
+        }
+        private _onTouchedBtnClearActUnitType(): void {
+            const action = this._getAction();
+            if (action.actUnitType != null) {
+                action.actUnitType = null;
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            }
+        }
+        private _onTouchedBtnActPlayerIndex(): void {
+            const action            = this._getAction();
+            const actPlayerIndex    = action.actPlayerIndex;
+            if (actPlayerIndex == null) {
+                action.actPlayerIndex = CommonConstants.PlayerIndex.First;
+            } else {
+                const nextPlayerIndex = actPlayerIndex + 1;
+                action.actPlayerIndex = nextPlayerIndex > this._getOpenData().war.getPlayersCountUnneutral()
+                    ? null
+                    : nextPlayerIndex;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
         private _onTouchedBtnActActionState(): void {
             const action        = this._getAction();
             const actionState   = action.actActionState;
@@ -580,6 +622,8 @@ namespace Twns.WarEvent {
 
             this._updateLabelDestroyUnit();
             this._updateLabelActActionState();
+            this._updateLabelActUnitType();
+            this._updateLabelActPlayerIndex();
             this._updateLabelActHasLoadedCo();
             this._updateLabelActIsDiving();
             this._updateInputHpDeltaValue();
@@ -617,6 +661,8 @@ namespace Twns.WarEvent {
             this._btnDestroyUnit.label                      = Lang.getText(LangTextType.B0808);
             this._btnActActionState.label                   = Lang.getText(LangTextType.B0526);
             this._btnActHasLoadedCo.label                   = Lang.getText(LangTextType.B0421);
+            this._btnActUnitType.label                      = Lang.getText(LangTextType.B0525);
+            this._btnActPlayerIndex.label                   = Lang.getText(LangTextType.B0521);
             this._btnActIsDiving.label                      = Lang.getText(LangTextType.B0371);
             this._labelHp.text                              = Lang.getText(LangTextType.B0807);
             this._labelHpDeltaValue.text                    = Lang.getText(LangTextType.B0754);
@@ -729,6 +775,18 @@ namespace Twns.WarEvent {
             this._labelActActionState.text  = actionState == null
                 ? `--`
                 : (Lang.getUnitActionStateText(actionState) ?? CommonConstants.ErrorTextForUndefined);
+        }
+        private _updateLabelActUnitType(): void {
+            const actUnitType           = this._getAction().actUnitType;
+            this._labelActUnitType.text = actUnitType == null
+                ? `--`
+                : (Lang.getUnitName(actUnitType, this._getOpenData().war.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined);
+        }
+        private _updateLabelActPlayerIndex(): void {
+            const actPlayerIndex            = this._getAction().actPlayerIndex;
+            this._labelActPlayerIndex.text  = actPlayerIndex == null
+                ? `--`
+                : `P${actPlayerIndex}`;
         }
         private _updateLabelActHasLoadedCo(): void {
             const hasLoadedCo               = this._getAction().actHasLoadedCo;

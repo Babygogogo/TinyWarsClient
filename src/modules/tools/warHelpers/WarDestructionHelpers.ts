@@ -9,34 +9,20 @@
 namespace Twns.WarHelpers.WarDestructionHelpers {
     import GridIndex        = Types.GridIndex;
     import BwWar            = BaseWar.BwWar;
+    import BwUnit           = BaseWar.BwUnit;
 
     export function destroyUnitOnMap(war: BwWar, gridIndex: GridIndex, showExplosionEffect: boolean): void {
-        const unitMap       = war.getUnitMap();
-        const unit          = Helpers.getExisted(unitMap.getUnitOnMap(gridIndex), ClientErrorCode.DestructionHelpers_DestroyUnitOnMap_00);
-        const allCoUnits    = unitMap.getAllCoUnits(unit.getPlayerIndex());
+        const unitMap           = war.getUnitMap();
+        const unit              = Helpers.getExisted(unitMap.getUnitOnMap(gridIndex), ClientErrorCode.DestructionHelpers_DestroyUnitOnMap_00);
+        const destroyedUnits    = [unit];
         unitMap.removeUnitOnMap(gridIndex, true);
         war.getTileMap().getTile(gridIndex).updateOnUnitLeave();
-
-        const destroyedUnits = [unit];
         for (const u of unitMap.getUnitsLoadedByLoader(unit, true)) {
             unitMap.removeUnitLoaded(u.getUnitId());
             destroyedUnits.push(u);
         }
 
-        const player                = unit.getPlayer();
-        const destroyedCoUnitsCount = destroyedUnits.filter(u => u.getHasLoadedCo()).length;
-        if (destroyedCoUnitsCount > 0) {
-            const currentEnergy     = player.getCoCurrentEnergy();
-            const totalCoUnitsCount = allCoUnits.length;
-            const restCoUnitsCount  = totalCoUnitsCount - destroyedCoUnitsCount;
-            player.setCoIsDestroyedInTurn(true);
-            if (restCoUnitsCount > 0) {
-                player.setCoCurrentEnergy(Math.floor(currentEnergy * restCoUnitsCount / totalCoUnitsCount));
-            } else {
-                player.setCoCurrentEnergy(0);
-                player.setCoUsingSkillType(Types.CoSkillType.Passive);
-            }
-        }
+        updatePlayersOnUnitDestroyed(destroyedUnits);
 
         if (showExplosionEffect) {
             const gridVisionEffect = war.getGridVisualEffect();
@@ -45,6 +31,33 @@ namespace Twns.WarHelpers.WarDestructionHelpers {
             const warView = war.getView();
             (warView) && (warView.showVibration());
             SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
+        }
+    }
+    export function destroyUnitLoaded(war: BwWar, unitId: number): void {
+        const unitMap           = war.getUnitMap();
+        const unit              = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
+        const destroyedUnits    = [unit];
+        unitMap.removeUnitLoaded(unitId);
+        for (const u of unitMap.getUnitsLoadedByLoader(unit, true)) {
+            unitMap.removeUnitLoaded(u.getUnitId());
+            destroyedUnits.push(u);
+        }
+
+        updatePlayersOnUnitDestroyed(destroyedUnits);
+    }
+    /** @param destroyedUnits 必须属于同一个玩家 */
+    function updatePlayersOnUnitDestroyed(destroyedUnits: BwUnit[]): void {
+        const destroyedCoUnitsCount = destroyedUnits.filter(u => u.getHasLoadedCo()).length;
+        if (destroyedCoUnitsCount > 0) {
+            const player            = destroyedUnits[0].getPlayer();
+            const restCoUnitsCount  = player.getWar().getUnitMap().getAllCoUnits(player.getPlayerIndex()).length;
+            player.setCoIsDestroyedInTurn(true);
+            if (restCoUnitsCount > 0) {
+                player.setCoCurrentEnergy(Math.floor(player.getCoCurrentEnergy() * restCoUnitsCount / (restCoUnitsCount + destroyedCoUnitsCount)));
+            } else {
+                player.setCoCurrentEnergy(0);
+                player.setCoUsingSkillType(Types.CoSkillType.Passive);
+            }
         }
     }
 

@@ -5507,8 +5507,12 @@ namespace Twns.Lang {
             `is not skipping a turn`,
         ],
         [LangTextType.B0982]: [
-            `游客`,
-            `Guest`,
+            `游客登陆`,
+            `Login as Guest`,
+        ],
+        [LangTextType.B0983]: [
+            `拥有者`,
+            `Owner`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

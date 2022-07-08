@@ -22,7 +22,7 @@ namespace Twns.Common {
 
     export type OpenDataForCommonChooseSingleUnitTypePanel = {
         gameConfig      : GameConfig;
-        currentUnitType : number;
+        currentUnitType : number | null;
         unitTypeArray   : number[];
         playerIndex     : number;
         callback        : (unitType: number) => void;
@@ -116,7 +116,7 @@ namespace Twns.Common {
 
     type DataForTypeRenderer = {
         gameConfig      : GameConfig;
-        currentUnitType : number;
+        currentUnitType : number | null;
         newUnitType     : number;
         playerIndex     : number;
         callback        : (unitType: number) => void;

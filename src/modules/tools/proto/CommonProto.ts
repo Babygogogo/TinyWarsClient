@@ -8734,6 +8734,12 @@ declare namespace CommonProto {
 
             /** WeaSetUnitState actIsDiving */
             actIsDiving?: (boolean|null);
+
+            /** WeaSetUnitState actUnitType */
+            actUnitType?: (number|null);
+
+            /** WeaSetUnitState actPlayerIndex */
+            actPlayerIndex?: (number|null);
         }
 
         /** Represents a WeaSetUnitState. */
@@ -8831,6 +8837,12 @@ declare namespace CommonProto {
 
             /** WeaSetUnitState actIsDiving. */
             public actIsDiving: boolean;
+
+            /** WeaSetUnitState actUnitType. */
+            public actUnitType: number;
+
+            /** WeaSetUnitState actPlayerIndex. */
+            public actPlayerIndex: number;
 
             /**
              * Creates a new WeaSetUnitState instance using the specified properties.

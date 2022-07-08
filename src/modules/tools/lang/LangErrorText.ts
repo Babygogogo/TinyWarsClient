@@ -242,8 +242,8 @@ namespace Twns.Lang {
             `Your query requests are too frequent. Please retry later.`,
         ],
         [ServerErrorCode.UserGuestPrivilege_0000]: [
-            `游客无法进行此操作。请注册账号以体验游戏的全部玩法。`,
-            `Guests cannot do this. Feel free to reload the game and create your own account. :)`,
+            `游客无法进行此操作，请注册账号。`,
+            `Unavailable to guests. Please register. :)`,
         ],
         [ServerErrorCode.ServerDisconnect0001]: [
             `服务器维护中`,

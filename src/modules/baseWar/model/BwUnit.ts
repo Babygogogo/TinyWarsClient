@@ -71,7 +71,7 @@ namespace Twns.BaseWar {
             this.setUnitId(unitId);
             this._setGameConfig(gameConfig);
             this._setTemplateCfg(unitTemplateCfg);
-            this._setPlayerIndex(playerIndex);
+            this.setPlayerIndex(playerIndex);
 
             this.setLoaderUnitId(unitData.loaderUnitId ?? null);
             this.setHasLoadedCo(unitData.hasLoadedCo ?? false);
@@ -253,7 +253,7 @@ namespace Twns.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for player index and team index.
         ////////////////////////////////////////////////////////////////////////////////
-        private _setPlayerIndex(index: number): void {
+        public setPlayerIndex(index: number): void {
             this._playerIndex = index;
         }
         public getPlayerIndex(): number {

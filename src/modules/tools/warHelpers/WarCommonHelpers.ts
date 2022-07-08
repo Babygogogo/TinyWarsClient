@@ -885,12 +885,23 @@ namespace Twns.WarHelpers.WarCommonHelpers {
                     unitMap.removeUnitOnMap(gridIndex, true);
 
                     if (!isFastExecute) {
-                        if ((destinationGridIndex == null)                                      ||
-                            (unit.getPlayerIndex() !== movingUnitPlayerIndex)                   ||
-                            (!GridIndexHelpers.checkIsEqual(destinationGridIndex, gridIndex))
-                        ) {
+                        // 这段代码会导致我方自杀式攻击时，在该部队的起点和终点分别出现一个爆炸特效（起点的是多余的）；在第三势力看来，如果进攻方从明处走到暗处进行自杀式攻击，也会在起点出现多余的爆炸特效
+                        // if ((destinationGridIndex == null)                                      ||
+                        //     (unit.getPlayerIndex() !== movingUnitPlayerIndex)                   ||
+                        //     (!GridIndexHelpers.checkIsEqual(destinationGridIndex, gridIndex))
+                        // ) {
+                        //     gridVisualEffect.showEffectExplosion(gridIndex);
+                        //     isShownExplosionEffect = true;
+                        // }
+                        // 暂时改成下面这段代码，不确定有没有问题
+                        if (unitId !== movingUnitId) {
                             gridVisualEffect.showEffectExplosion(gridIndex);
                             isShownExplosionEffect = true;
+                        } else {
+                            if (destinationGridIndex) {
+                                gridVisualEffect.showEffectExplosion(destinationGridIndex);
+                                isShownExplosionEffect = true;
+                            }
                         }
                     }
                 }

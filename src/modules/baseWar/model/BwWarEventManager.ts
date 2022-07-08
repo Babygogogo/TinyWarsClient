@@ -715,166 +715,223 @@ namespace Twns.BaseWar {
             // nothing to do
         }
         private async _callActionSetUnitStateWithoutExtraData(action: WarEvent.IWeaSetUnitState, isFastExecute: boolean): Promise<void> {
-            const playerIndexArray              = action.conPlayerIndexArray ?? [];
-            const teamIndexArray                = action.conTeamIndexArray ?? [];
-            const locationIdArray               = action.conLocationIdArray ?? [];
-            const gridIndexArray                = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_00)) ?? [];
-            const unitTypeArray                 = action.conUnitTypeArray ?? [];
-            const actionStateArray              = action.conActionStateArray ?? [];
-            const hasLoadedCo                   = action.conHasLoadedCo;
-            const conHp                         = action.conHp;
-            const conHpComparator               = action.conHpComparator ?? Types.ValueComparator.EqualTo;
-            const conFuelPct                    = action.conFuelPct;
-            const conFuelPctComparator          = action.conFuelPctComparator ?? Types.ValueComparator.EqualTo;
-            const conPriAmmoPct                 = action.conPriAmmoPct;
-            const conPriAmmoPctComparator       = action.conPriAmmoPctComparator ?? Types.ValueComparator.EqualTo;
-            const conPromotion                  = action.conPromotion;
-            const conPromotionComparator        = action.conPromotionComparator ?? Types.ValueComparator.EqualTo;
-            const conIsOwnerPlayerInTurn        = action.conIsOwnerPlayerInTurn;
-            const conIsDiving                   = action.conIsDiving;
-            const actDestroyUnit                = action.actDestroyUnit;
-            const actActionState                = action.actActionState;
-            const actHasLoadedCo                = action.actHasLoadedCo;
-            const actIsDiving                   = action.actIsDiving;
-            const hpDeltaValue                  = action.actHpDeltaValue ?? 0;
-            const hpMultiplierPercentage        = action.actHpMultiplierPercentage ?? 100;
-            const fuelDeltaValue                = action.actFuelDeltaValue ?? 0;
-            const fuelMultiplierPercentage      = action.actFuelMultiplierPercentage ?? 100;
-            const priAmmoDeltaValue             = action.actPriAmmoDeltaValue ?? 0;
-            const priAmmoMultiplierPercentage   = action.actPriAmmoMultiplierPercentage ?? 100;
-            const promotionDeltaValue           = action.actPromotionDeltaValue ?? 0;
-            const promotionMultiplierPercentage = action.actPromotionMultiplierPercentage ?? 100;
-            const war                           = this._getWar();
-            const unitMap                       = war.getUnitMap();
-            const tileMap                       = war.getTileMap();
-            const mapSize                       = tileMap.getMapSize();
-            const mapWidth                      = mapSize.width;
-            const mapHeight                     = mapSize.height;
-            const playerIndexInTurn             = war.getPlayerIndexInTurn();
-            const minHp                         = 1;
-            const minFuel                       = 0;
-            const minPromotion                  = 0;
-            const minPriAmmo                    = 0;
+            const conPlayerIndexArray               = action.conPlayerIndexArray ?? [];
+            const conTeamIndexArray                 = action.conTeamIndexArray ?? [];
+            const conLocationIdArray                = action.conLocationIdArray ?? [];
+            const conGridIndexArray                 = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_00)) ?? [];
+            const conUnitTypeArray                  = action.conUnitTypeArray ?? [];
+            const conActionStateArray               = action.conActionStateArray ?? [];
+            const conHasLoadedCo                    = action.conHasLoadedCo;
+            const conHp                             = action.conHp;
+            const conHpComparator                   = action.conHpComparator ?? Types.ValueComparator.EqualTo;
+            const conFuelPct                        = action.conFuelPct;
+            const conFuelPctComparator              = action.conFuelPctComparator ?? Types.ValueComparator.EqualTo;
+            const conPriAmmoPct                     = action.conPriAmmoPct;
+            const conPriAmmoPctComparator           = action.conPriAmmoPctComparator ?? Types.ValueComparator.EqualTo;
+            const conPromotion                      = action.conPromotion;
+            const conPromotionComparator            = action.conPromotionComparator ?? Types.ValueComparator.EqualTo;
+            const conIsOwnerPlayerInTurn            = action.conIsOwnerPlayerInTurn;
+            const conIsDiving                       = action.conIsDiving;
+            const actDestroyUnit                    = action.actDestroyUnit;
+            const actActionState                    = action.actActionState;
+            const actHasLoadedCo                    = action.actHasLoadedCo;
+            const actIsDiving                       = action.actIsDiving;
+            const actHpDeltaValue                   = action.actHpDeltaValue ?? 0;
+            const actHpMultiplierPercentage         = action.actHpMultiplierPercentage ?? 100;
+            const actFuelDeltaValue                 = action.actFuelDeltaValue ?? 0;
+            const actFuelMultiplierPercentage       = action.actFuelMultiplierPercentage ?? 100;
+            const actPriAmmoDeltaValue              = action.actPriAmmoDeltaValue ?? 0;
+            const actPriAmmoMultiplierPercentage    = action.actPriAmmoMultiplierPercentage ?? 100;
+            const actPromotionDeltaValue            = action.actPromotionDeltaValue ?? 0;
+            const actPromotionMultiplierPercentage  = action.actPromotionMultiplierPercentage ?? 100;
+            const actUnitType                       = action.actUnitType;
+            const actPlayerIndex                    = action.actPlayerIndex;
+            const war                               = this._getWar();
+            const unitMap                           = war.getUnitMap();
+            const tileMap                           = war.getTileMap();
+            const mapSize                           = tileMap.getMapSize();
+            const mapWidth                          = mapSize.width;
+            const mapHeight                         = mapSize.height;
+            const playerIndexInTurn                 = war.getPlayerIndexInTurn();
+            const minHp                             = 1;
+            const minFuel                           = 0;
+            const minPromotion                      = 0;
+            const minPriAmmo                        = 0;
+            const gameConfig                        = war.getGameConfig();
+            const handler                           = (unit: BwUnit) => {
+                const playerIndex = unit.getPlayerIndex();
+                if (conIsOwnerPlayerInTurn != null) {
+                    if (((conIsOwnerPlayerInTurn) && (playerIndex !== playerIndexInTurn))   ||
+                        ((!conIsOwnerPlayerInTurn) && (playerIndex === playerIndexInTurn))
+                    ) {
+                        return;
+                    }
+                }
+
+                const gridIndex = unit.getGridIndex();
+                const tile      = tileMap.getTile(gridIndex);
+                if (((conIsDiving != null) && (unit.getIsDiving() !== conIsDiving))                                             ||
+                    ((conUnitTypeArray.length) && (conUnitTypeArray.indexOf(unit.getUnitType()) < 0))                           ||
+                    ((conPlayerIndexArray.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0))                            ||
+                    ((conTeamIndexArray.length) && (conTeamIndexArray.indexOf(unit.getTeamIndex()) < 0))                        ||
+                    ((conGridIndexArray.length) && (!conGridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
+                    ((conLocationIdArray.length) && (!conLocationIdArray.some(v => tile.getHasLocationFlag(v))))                ||
+                    ((conActionStateArray.length) && (conActionStateArray.indexOf(unit.getActionState()) < 0))                  ||
+                    ((conHasLoadedCo != null) && (unit.getHasLoadedCo() !== conHasLoadedCo))
+                ) {
+                    return;
+                }
+
+                if ((conHp != null)                         &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : conHpComparator,
+                        targetValue : conHp,
+                        actualValue : unit.getCurrentHp(),
+                    }))
+                ) {
+                    return;
+                }
+
+                if ((conPromotion != null)                  &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : conPromotionComparator,
+                        targetValue : conPromotion,
+                        actualValue : unit.getCurrentPromotion(),
+                    }))
+                ) {
+                    return;
+                }
+
+                if ((conFuelPct != null)                    &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : conFuelPctComparator,
+                        targetValue : conFuelPct * 100,
+                        actualValue : unit.getCurrentFuel() * 100 / unit.getMaxFuel(),
+                    }))
+                ) {
+                    return;
+                }
+
+                if (conPriAmmoPct != null) {
+                    const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
+                    if ((maxAmmo == null)                       ||
+                        (!Helpers.checkIsMeetValueComparator({
+                            comparator  : conPriAmmoPctComparator,
+                            targetValue : conPriAmmoPct * 100,
+                            actualValue : Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_01) * 100 / maxAmmo,
+                        }))
+                    ) {
+                        return;
+                    }
+                }
+
+                const unitId        = unit.getUnitId();
+                const loaderUnitId  = unit.getLoaderUnitId();
+                if (actDestroyUnit) {
+                    if (loaderUnitId == null) {
+                        WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
+                    } else {
+                        WarHelpers.WarDestructionHelpers.destroyUnitLoaded(war, unitId);
+                    }
+
+                } else {
+                    const checkHasLoadedAnyUnit = Helpers.createLazyFunc(() => unitMap.checkHasLoadedAnyUnit(unitId));
+                    if ((actUnitType != null)                   &&
+                        (unit.getUnitType() !== actUnitType)    &&
+                        (loaderUnitId == null)                  &&
+                        (!checkHasLoadedAnyUnit())
+                    ) {
+                        const templateCfg = Helpers.getExisted(gameConfig.getUnitTemplateCfg(actUnitType));
+                        unit.init({
+                            gridIndex,
+                            playerIndex,
+                            unitType                    : actUnitType,
+                            unitId,
+                            actionState                 : unit.getActionState(),
+                            primaryWeaponCurrentAmmo    : getUnitNewAttribute(unit.getPrimaryWeaponCurrentAmmo(), templateCfg.primaryWeaponMaxAmmo),
+                            currentHp                   : unit.getCurrentHp(),
+                            isCapturingTile             : templateCfg.canCaptureTile ? (unit.checkIsCapturer() ? unit.getIsCapturingTile() : null) : null,
+                            isDiving                    : templateCfg.diveCfgs ? (unit.checkIsDiver() ? unit.getIsDiving() : null) : null,
+                            flareCurrentAmmo            : getUnitNewAttribute(unit.getFlareCurrentAmmo(), templateCfg.flareMaxAmmo),
+                            currentFuel                 : Math.min(unit.getCurrentFuel(), templateCfg.maxFuel),
+                            currentBuildMaterial        : getUnitNewAttribute(unit.getCurrentBuildMaterial(), templateCfg.maxBuildMaterial),
+                            currentProduceMaterial      : getUnitNewAttribute(unit.getCurrentProduceMaterial(), templateCfg.maxProduceMaterial),
+                            currentPromotion            : unit.getCurrentPromotion(),
+                            isBuildingTile              : gameConfig.getBuildableTileCfgs(actUnitType) ? (unit.checkIsTileBuilder() ? unit.getIsBuildingTile() : null) : null,
+                            loaderUnitId,
+                            hasLoadedCo                 : unit.getHasLoadedCo(),
+                            aiMode                      : unit.getAiMode(),
+                        }, gameConfig);
+                    }
+
+                    if ((actPlayerIndex != null)            &&
+                        (playerIndex !== actPlayerIndex)    &&
+                        (loaderUnitId == null)              &&
+                        (!checkHasLoadedAnyUnit())
+                    ) {
+                        unit.setPlayerIndex(actPlayerIndex);
+                    }
+
+                    unit.setCurrentHp(Helpers.getValueInRange({
+                        maxValue    : unit.getMaxHp(),
+                        minValue    : minHp,
+                        rawValue    : Math.floor(unit.getCurrentHp() * actHpMultiplierPercentage / 100 + actHpDeltaValue),
+                    }));
+
+                    unit.setCurrentFuel(Helpers.getValueInRange({
+                        maxValue    : unit.getMaxFuel(),
+                        minValue    : minFuel,
+                        rawValue    : Math.floor(unit.getCurrentFuel() * actFuelMultiplierPercentage / 100 + actFuelDeltaValue),
+                    }));
+
+                    unit.setCurrentPromotion(Helpers.getValueInRange({
+                        maxValue    : unit.getMaxPromotion(),
+                        minValue    : minPromotion,
+                        rawValue    : Math.floor(unit.getCurrentPromotion() * actPromotionMultiplierPercentage / 100 + actPromotionDeltaValue),
+                    }));
+
+                    {
+                        const currentAmmo = unit.getPrimaryWeaponCurrentAmmo();
+                        if (currentAmmo != null) {
+                            unit.setPrimaryWeaponCurrentAmmo(Helpers.getValueInRange({
+                                maxValue    : Helpers.getExisted(unit.getPrimaryWeaponMaxAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_02),
+                                minValue    : minPriAmmo,
+                                rawValue    : Math.floor(currentAmmo * actPriAmmoMultiplierPercentage / 100 + actPriAmmoDeltaValue),
+                            }));
+                        }
+                    }
+
+                    if (actActionState != null) {
+                        unit.setActionState(actActionState);
+                    }
+
+                    if (actHasLoadedCo != null) {
+                        unit.setHasLoadedCo(actHasLoadedCo);
+                    }
+
+                    if ((actIsDiving != null) && (unit.checkIsDiver())) {
+                        unit.setIsDiving(actIsDiving);
+                    }
+
+                    if (!isFastExecute) {
+                        unit.updateView();
+                    }
+                }
+            };
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
                     const gridIndex : Types.GridIndex = { x, y };
-                    const unit      = unitMap.getUnitOnMap(gridIndex);
-                    if (unit == null) {
+                    const unitOnMap = unitMap.getUnitOnMap(gridIndex);
+                    if (unitOnMap == null) {
                         continue;
                     }
 
-                    const playerIndex = unit.getPlayerIndex();
-                    if (conIsOwnerPlayerInTurn != null) {
-                        if (((conIsOwnerPlayerInTurn) && (playerIndex !== playerIndexInTurn))   ||
-                            ((!conIsOwnerPlayerInTurn) && (playerIndex === playerIndexInTurn))
-                        ) {
-                            continue;
-                        }
-                    }
+                    // TODO 如果以后需要以装载部队数量作为筛选条件，那么需要事先记录装载数量，否则部队处理顺序的变化会引起装载数量变化，从而导致处理结果不唯一
 
-                    const tile = tileMap.getTile(gridIndex);
-                    if (((conIsDiving != null) && (unit.getIsDiving() !== conIsDiving))                                         ||
-                        ((unitTypeArray.length) && (unitTypeArray.indexOf(unit.getUnitType()) < 0))                             ||
-                        ((playerIndexArray.length) && (playerIndexArray.indexOf(playerIndex) < 0))                              ||
-                        ((teamIndexArray.length) && (teamIndexArray.indexOf(unit.getTeamIndex()) < 0))                          ||
-                        ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
-                        ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))                  ||
-                        ((actionStateArray.length) && (actionStateArray.indexOf(unit.getActionState()) < 0))                    ||
-                        ((hasLoadedCo != null) && (unit.getHasLoadedCo() !== hasLoadedCo))
-                    ) {
-                        continue;
-                    }
-
-                    if ((conHp != null)                         &&
-                        (!Helpers.checkIsMeetValueComparator({
-                            comparator  : conHpComparator,
-                            targetValue : conHp,
-                            actualValue : unit.getCurrentHp(),
-                        }))
-                    ) {
-                        continue;
-                    }
-
-                    if ((conPromotion != null)                  &&
-                        (!Helpers.checkIsMeetValueComparator({
-                            comparator  : conPromotionComparator,
-                            targetValue : conPromotion,
-                            actualValue : unit.getCurrentPromotion(),
-                        }))
-                    ) {
-                        continue;
-                    }
-
-                    if ((conFuelPct != null)                    &&
-                        (!Helpers.checkIsMeetValueComparator({
-                            comparator  : conFuelPctComparator,
-                            targetValue : conFuelPct * 100,
-                            actualValue : unit.getCurrentFuel() * 100 / unit.getMaxFuel(),
-                        }))
-                    ) {
-                        continue;
-                    }
-
-                    if (conPriAmmoPct != null) {
-                        const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
-                        if ((maxAmmo == null)                       ||
-                            (!Helpers.checkIsMeetValueComparator({
-                                comparator  : conPriAmmoPctComparator,
-                                targetValue : conPriAmmoPct * 100,
-                                actualValue : Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_01) * 100 / maxAmmo,
-                            }))
-                        ) {
-                            continue;
-                        }
-                    }
-
-                    if (actDestroyUnit) {
-                        WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
-
-                    } else {
-                        unit.setCurrentHp(Helpers.getValueInRange({
-                            maxValue    : unit.getMaxHp(),
-                            minValue    : minHp,
-                            rawValue    : Math.floor(unit.getCurrentHp() * hpMultiplierPercentage / 100 + hpDeltaValue),
-                        }));
-
-                        unit.setCurrentFuel(Helpers.getValueInRange({
-                            maxValue    : unit.getMaxFuel(),
-                            minValue    : minFuel,
-                            rawValue    : Math.floor(unit.getCurrentFuel() * fuelMultiplierPercentage / 100 + fuelDeltaValue),
-                        }));
-
-                        unit.setCurrentPromotion(Helpers.getValueInRange({
-                            maxValue    : unit.getMaxPromotion(),
-                            minValue    : minPromotion,
-                            rawValue    : Math.floor(unit.getCurrentPromotion() * promotionMultiplierPercentage / 100 + promotionDeltaValue),
-                        }));
-
-                        {
-                            const currentAmmo = unit.getPrimaryWeaponCurrentAmmo();
-                            if (currentAmmo != null) {
-                                unit.setPrimaryWeaponCurrentAmmo(Helpers.getValueInRange({
-                                    maxValue    : Helpers.getExisted(unit.getPrimaryWeaponMaxAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_02),
-                                    minValue    : minPriAmmo,
-                                    rawValue    : Math.floor(currentAmmo * priAmmoMultiplierPercentage / 100 + priAmmoDeltaValue),
-                                }));
-                            }
-                        }
-
-                        if (actActionState != null) {
-                            unit.setActionState(actActionState);
-                        }
-
-                        if (actHasLoadedCo != null) {
-                            unit.setHasLoadedCo(actHasLoadedCo);
-                        }
-
-                        if ((actIsDiving != null) && (unit.checkIsDiver())) {
-                            unit.setIsDiving(actIsDiving);
-                        }
-
-                        if (!isFastExecute) {
-                            unit.updateView();
+                    handler(unitOnMap);
+                    for (const loadedUnit of unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
+                        if (unitMap.getUnitLoadedById(loadedUnit.getUnitId())) {    // 由于摧毁运输系部队时，被装载的部队也会同时摧毁，所以要再判断一次以免多次摧毁同一个部队
+                            handler(loadedUnit);
                         }
                     }
                 }
@@ -1658,6 +1715,14 @@ namespace Twns.BaseWar {
         }
 
         return null;
+    }
+
+    function getUnitNewAttribute(currentValue: Types.Undefinable<number>, newMaxValue: Types.Undefinable<number>): number | null {
+        if (newMaxValue == null) {
+            return null;
+        } else {
+            return (currentValue == null) ? newMaxValue : Math.min(currentValue, newMaxValue);
+        }
     }
 }
 

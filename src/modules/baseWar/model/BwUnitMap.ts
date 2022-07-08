@@ -11,40 +11,40 @@
 // import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 // import TwnsBwWar            from "./BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import GridIndex        = Twns.Types.GridIndex;
+    import GridIndex        = Types.GridIndex;
     import WarSerialization = CommonProto.WarSerialization;
     import ISerialUnitMap   = WarSerialization.ISerialUnitMap;
     import ISerialUnit      = WarSerialization.ISerialUnit;
-    import ClientErrorCode  = Twns.ClientErrorCode;
     import GameConfig       = Config.GameConfig;
 
     export class BwUnitMap {
         private _war?           : BaseWar.BwWar;
         private _nextUnitId?    : number;
         private _map?           : (BaseWar.BwUnit | null)[][];
-        private _mapSize?       : Twns.Types.MapSize;
+        private _mapSize?       : Types.MapSize;
         private _loadedUnits?   : Map<number, BaseWar.BwUnit>;
 
-        private readonly _view  = new Twns.BaseWar.BwUnitMapView();
+        private readonly _view  = new BaseWar.BwUnitMapView();
 
         public init({ data, gameConfig, mapSize, playersCountUnneutral }: {
-            data                    : Twns.Types.Undefinable<ISerialUnitMap>;
+            data                    : Types.Undefinable<ISerialUnitMap>;
             gameConfig              : GameConfig;
-            mapSize                 : Twns.Types.MapSize;
+            mapSize                 : Types.MapSize;
             playersCountUnneutral   : number;
         }): void {
             if (data == null) {
-                throw Twns.Helpers.newError(`Empty data.`, ClientErrorCode.BwUnitMap_Init_00);
+                throw Helpers.newError(`Empty data.`, ClientErrorCode.BwUnitMap_Init_00);
             }
 
-            const nextUnitId = Twns.Helpers.getExisted(data.nextUnitId, ClientErrorCode.BwUnitMap_Init_01);
+            const nextUnitId = Helpers.getExisted(data.nextUnitId, ClientErrorCode.BwUnitMap_Init_01);
             if (!WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
-                throw Twns.Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwUnitMap_Init_02);
+                throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwUnitMap_Init_02);
             }
 
             const mapWidth      = mapSize.width;
-            const map           = Twns.Helpers.createEmptyMap<BaseWar.BwUnit>(mapWidth);
+            const map           = Helpers.createEmptyMap<BaseWar.BwUnit>(mapWidth);
             const loadedUnits   = new Map<number, BaseWar.BwUnit>();
             const allUnits      = new Map<number, BaseWar.BwUnit>();
             for (const unitData of data.units || []) {
@@ -52,22 +52,22 @@ namespace Twns.BaseWar {
                 unit.init(unitData, gameConfig);
 
                 const gridIndex = unit.getGridIndex();
-                if ((!gridIndex) || (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
-                    throw Twns.Helpers.newError(`Invalid gridIndex: ${gridIndex.x}, ${gridIndex.y}`, ClientErrorCode.BwUnitMap_Init_03);
+                if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+                    throw Helpers.newError(`Invalid gridIndex: ${gridIndex.x}, ${gridIndex.y}`, ClientErrorCode.BwUnitMap_Init_03);
                 }
 
                 const unitId = unit.getUnitId();
                 if (allUnits.has(unitId)) {
-                    throw Twns.Helpers.newError(`Duplicated unitId: ${unitId}`, ClientErrorCode.BwUnitMap_Init_04);
+                    throw Helpers.newError(`Duplicated unitId: ${unitId}`, ClientErrorCode.BwUnitMap_Init_04);
                 }
                 if (unitId >= nextUnitId) {
-                    throw Twns.Helpers.newError(`Invalid unitId: ${unitId}`, ClientErrorCode.BwUnitMap_Init_05);
+                    throw Helpers.newError(`Invalid unitId: ${unitId}`, ClientErrorCode.BwUnitMap_Init_05);
                 }
                 allUnits.set(unitId, unit);
 
                 const playerIndex = unit.getPlayerIndex();
                 if ((playerIndex == null) || (playerIndex > playersCountUnneutral)) {
-                    throw Twns.Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwUnitMap_Init_06);
+                    throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwUnitMap_Init_06);
                 }
 
                 if (unit.getLoaderUnitId() != null) {
@@ -75,7 +75,7 @@ namespace Twns.BaseWar {
                 } else {
                     const { x, y } = gridIndex;
                     if (map[x][y]) {
-                        throw Twns.Helpers.newError(`The grid is occupied: ${x}, ${y}`, ClientErrorCode.BwUnitMap_Init_07);
+                        throw Helpers.newError(`The grid is occupied: ${x}, ${y}`, ClientErrorCode.BwUnitMap_Init_07);
                     }
 
                     map[x][y] = unit;
@@ -84,22 +84,22 @@ namespace Twns.BaseWar {
 
             const loadUnitCounts = new Map<number, number>();
             for (const [, loadedUnit] of loadedUnits) {
-                const loaderId  = Twns.Helpers.getExisted(loadedUnit.getLoaderUnitId(), ClientErrorCode.BwUnitMap_Init_08);
-                const loader    = Twns.Helpers.getExisted(allUnits.get(loaderId), ClientErrorCode.BwUnitMap_Init_09);
+                const loaderId  = Helpers.getExisted(loadedUnit.getLoaderUnitId(), ClientErrorCode.BwUnitMap_Init_08);
+                const loader    = Helpers.getExisted(allUnits.get(loaderId), ClientErrorCode.BwUnitMap_Init_09);
                 if (loader.getPlayerIndex() !== loadedUnit.getPlayerIndex()) {
-                    throw Twns.Helpers.newError(`Invalid playerIndex.`, ClientErrorCode.BwUnitMap_Init_10);
+                    throw Helpers.newError(`Invalid playerIndex.`, ClientErrorCode.BwUnitMap_Init_10);
                 }
 
                 const gridIndex1 = loader.getGridIndex();
                 const gridIndex2 = loadedUnit.getGridIndex();
-                if ((!gridIndex1) || (!gridIndex2) || (!Twns.GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2))) {
-                    throw Twns.Helpers.newError(`Invalid gridIndex.`, ClientErrorCode.BwUnitMap_Init_11);
+                if ((!gridIndex1) || (!gridIndex2) || (!GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2))) {
+                    throw Helpers.newError(`Invalid gridIndex.`, ClientErrorCode.BwUnitMap_Init_11);
                 }
 
                 const maxLoadCount  = loader.getMaxLoadUnitsCount();
                 const loadCount     = (loadUnitCounts.get(loaderId) || 0) + 1;
                 if ((maxLoadCount == null) || (loadCount > maxLoadCount)) {
-                    throw Twns.Helpers.newError(`Over load.`, ClientErrorCode.BwUnitMap_Init_12);
+                    throw Helpers.newError(`Over load.`, ClientErrorCode.BwUnitMap_Init_12);
                 }
                 loadUnitCounts.set(loaderId, loadCount);
 
@@ -108,7 +108,7 @@ namespace Twns.BaseWar {
                 if ((loadUnitCategory == null)                                          ||
                     (!gameConfig.checkIsUnitTypeInCategory(unitType, loadUnitCategory))
                 ) {
-                    throw Twns.Helpers.newError(`Invalid unitType: ${unitType}`, ClientErrorCode.BwUnitMap_Init_13);
+                    throw Helpers.newError(`Invalid unitType: ${unitType}`, ClientErrorCode.BwUnitMap_Init_13);
                 }
             }
 
@@ -120,9 +120,9 @@ namespace Twns.BaseWar {
             this.getView().init(this);
         }
         public fastInit({ data, gameConfig, mapSize, playersCountUnneutral }: {
-            data                    : Twns.Types.Undefinable<ISerialUnitMap>;
+            data                    : Types.Undefinable<ISerialUnitMap>;
             gameConfig              : GameConfig;
-            mapSize                 : Twns.Types.MapSize;
+            mapSize                 : Types.MapSize;
             playersCountUnneutral   : number;
         }): void {
             this.init({ data, gameConfig, mapSize, playersCountUnneutral });
@@ -159,7 +159,7 @@ namespace Twns.BaseWar {
             const war           = this.getWar();
             const units         : ISerialUnit[] = [];
             const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
-            for (const unit of Twns.WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+            for (const unit of WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
                 units.push(unit.serializeForCreateSfw());
 
                 if (teamIndexes.has(unit.getTeamIndex())) {
@@ -179,7 +179,7 @@ namespace Twns.BaseWar {
             const war           = this.getWar();
             const units         : ISerialUnit[] = [];
             const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
-            for (const unit of Twns.WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+            for (const unit of WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
                 units.push(unit.serializeForCreateMfr());
 
                 if (teamIndexes.has(unit.getTeamIndex())) {
@@ -199,13 +199,13 @@ namespace Twns.BaseWar {
             this._map = map;
         }
         private _getMap(): (BaseWar.BwUnit | null)[][] {
-            return Twns.Helpers.getExisted(this._map);
+            return Helpers.getExisted(this._map);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getView(): Twns.BaseWar.BwUnitMapView {
+        public getView(): BaseWar.BwUnitMapView {
             return this._view;
         }
 
@@ -213,24 +213,24 @@ namespace Twns.BaseWar {
             this._war = war;
         }
         public getWar(): BaseWar.BwWar {
-            return Twns.Helpers.getExisted(this._war);
+            return Helpers.getExisted(this._war);
         }
 
         private _setMapSize(width: number, height: number): void {
             this._mapSize = { width: width, height: height };
         }
-        public getMapSize(): Twns.Types.MapSize {
-            return Twns.Helpers.getExisted(this._mapSize);
+        public getMapSize(): Types.MapSize {
+            return Helpers.getExisted(this._mapSize);
         }
 
         public getNextUnitId(): number {
-            return Twns.Helpers.getExisted(this._nextUnitId);
+            return Helpers.getExisted(this._nextUnitId);
         }
         public setNextUnitId(id: number): void {
             this._nextUnitId = id;
         }
 
-        public getUnit(gridIndex: GridIndex, unitId: Twns.Types.Undefinable<number>): BaseWar.BwUnit | null {
+        public getUnit(gridIndex: GridIndex, unitId: Types.Undefinable<number>): BaseWar.BwUnit | null {
             if (unitId == null) {
                 return this.getUnitOnMap(gridIndex);
             } else {
@@ -273,7 +273,7 @@ namespace Twns.BaseWar {
             }
 
             const war = this.getWar();
-            return (Twns.WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+            return (WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                 war,
                 unitType            : unit.getUnitType(),
                 isDiving            : unit.getIsDiving(),
@@ -292,7 +292,7 @@ namespace Twns.BaseWar {
             this._loadedUnits = units;
         }
         public getLoadedUnits(): Map<number, BaseWar.BwUnit> {
-            return Twns.Helpers.getExisted(this._loadedUnits);
+            return Helpers.getExisted(this._loadedUnits);
         }
         public getUnitsLoadedByLoader(loader: BaseWar.BwUnit, isRecursive: boolean): BaseWar.BwUnit[] {
             const units: BaseWar.BwUnit[] = [];
@@ -303,6 +303,14 @@ namespace Twns.BaseWar {
                 }
             });
             return units;
+        }
+        public checkHasLoadedAnyUnit(loaderUnitId: number): boolean {
+            for (const [, unit] of this.getLoadedUnits()) {
+                if (unit.getLoaderUnitId() === loaderUnitId) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public getAllUnitsOnMap(): BaseWar.BwUnit[] {
@@ -324,24 +332,24 @@ namespace Twns.BaseWar {
         public setUnitLoaded(unit: BaseWar.BwUnit): void {
             const loadedUnits = this.getLoadedUnits();
             if (loadedUnits == null) {
-                throw Twns.Helpers.newError(`BwUnitMap.setUnitLoaded() the map is not initialized.`);
+                throw Helpers.newError(`BwUnitMap.setUnitLoaded() the map is not initialized.`);
             }
 
             const unitId = unit.getUnitId();
             if (unitId == null) {
-                throw Twns.Helpers.newError(`BwUnitMap.setUnitLoaded() the unit has no unitId.`);
+                throw Helpers.newError(`BwUnitMap.setUnitLoaded() the unit has no unitId.`);
             }
 
             if (loadedUnits.has(unitId)) {
-                throw Twns.Helpers.newError(`BwUnitMap.setUnitLoaded() the unit is already loaded?!?.`);
+                throw Helpers.newError(`BwUnitMap.setUnitLoaded() the unit is already loaded?!?.`);
             }
 
             loadedUnits.set(unitId, unit);
             this.getView().addUnit(unit.getView(), true);
         }
-        public setUnitUnloaded(unitId: number, gridIndex: Twns.Types.GridIndex): void {
+        public setUnitUnloaded(unitId: number, gridIndex: Types.GridIndex): void {
             const loadedUnits = this.getLoadedUnits();
-            this._getMap()[gridIndex.x][gridIndex.y] = Twns.Helpers.getExisted(loadedUnits.get(unitId));
+            this._getMap()[gridIndex.x][gridIndex.y] = Helpers.getExisted(loadedUnits.get(unitId));
             loadedUnits.delete(unitId);
         }
 
@@ -349,29 +357,29 @@ namespace Twns.BaseWar {
             const mapSize   = this.getMapSize();
             const map       = this._getMap();
             if ((!mapSize) || (!map)) {
-                throw Twns.Helpers.newError(`BwUnitMap.setUnitOnMap() the map is not initialized.`);
+                throw Helpers.newError(`BwUnitMap.setUnitOnMap() the map is not initialized.`);
             }
 
             const gridIndex = unit.getGridIndex();
-            if ((!gridIndex) || (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
-                throw Twns.Helpers.newError(`BwUnitMap.setUnitOnMap() the unit is outside map! gridIndex: ${JSON.stringify(gridIndex)}`);
+            if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+                throw Helpers.newError(`BwUnitMap.setUnitOnMap() the unit is outside map! gridIndex: ${JSON.stringify(gridIndex)}`);
             }
             if (this.getUnitOnMap(gridIndex)) {
-                throw Twns.Helpers.newError(`BwUnitMap.setUnitOnMap() another unit exists in the same grid! gridIndex: ${JSON.stringify(gridIndex)}`);
+                throw Helpers.newError(`BwUnitMap.setUnitOnMap() another unit exists in the same grid! gridIndex: ${JSON.stringify(gridIndex)}`);
             }
 
             map[gridIndex.x][gridIndex.y] = unit;
             this.getView().addUnit(unit.getView(), true);
         }
-        public removeUnitOnMap(gridIndex: Twns.Types.GridIndex, removeView: boolean): void {
+        public removeUnitOnMap(gridIndex: Types.GridIndex, removeView: boolean): void {
             const unit = this.getUnitOnMap(gridIndex);
             this._getMap()[gridIndex.x][gridIndex.y] = null;
-            (removeView) && (this.getView().removeUnit(Twns.Helpers.getExisted(unit).getView()));
+            (removeView) && (this.getView().removeUnit(Helpers.getExisted(unit).getView()));
         }
 
         public removeUnitLoaded(unitId: number): void {
             const loadedUnits   = this.getLoadedUnits();
-            const unit          = Twns.Helpers.getExisted(loadedUnits.get(unitId));
+            const unit          = Helpers.getExisted(loadedUnits.get(unitId));
             loadedUnits.delete(unitId);
             this.getView().removeUnit(unit.getView());
         }

@@ -33,8 +33,11 @@ namespace Twns.MapEditor {
         private readonly _btnDelete!            : TwnsUiButton.UiButton;
         private readonly _btnSave!              : TwnsUiButton.UiButton;
         private readonly _btnSaveAndSubmit!     : TwnsUiButton.UiButton;
+        private readonly _btnHelpSaveAndSubmit! : TwnsUiButton.UiButton;
         private readonly _btnSimulation!        : TwnsUiButton.UiButton;
+        private readonly _btnHelpSimulation!    : TwnsUiButton.UiButton;
         private readonly _btnFreeMode!          : TwnsUiButton.UiButton;
+        private readonly _btnHelpFreeMode!      : TwnsUiButton.UiButton;
 
         private _mapRawData         : CommonProto.Map.IMapRawData | null = null;
         private _mapErrorCode       = ClientErrorCode.NoError;
@@ -45,12 +48,15 @@ namespace Twns.MapEditor {
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnClose,           callback: this.close, },
-                { ui: this._btnDelete,          callback: this._onTouchedBtnDelete },
-                { ui: this._btnSave,            callback: this._onTouchedBtnSave, },
-                { ui: this._btnSaveAndSubmit,   callback: this._onTouchedBtnSaveAndSubmit },
-                { ui: this._btnSimulation,      callback: this._onTouchedBtnSimulation },
-                { ui: this._btnFreeMode,        callback: this._onTouchedBtnFreeMode },
+                { ui: this._btnClose,               callback: this.close, },
+                { ui: this._btnDelete,              callback: this._onTouchedBtnDelete },
+                { ui: this._btnSave,                callback: this._onTouchedBtnSave, },
+                { ui: this._btnSaveAndSubmit,       callback: this._onTouchedBtnSaveAndSubmit },
+                { ui: this._btnHelpSaveAndSubmit,   callback: this._onTouchedBtnHelpSaveAndSubmit },
+                { ui: this._btnSimulation,          callback: this._onTouchedBtnSimulation },
+                { ui: this._btnHelpSimulation,      callback: this._onTouchedBtnHelpSimulation },
+                { ui: this._btnFreeMode,            callback: this._onTouchedBtnFreeMode },
+                { ui: this._btnHelpFreeMode,        callback: this._onTouchedBtnHelpFreeMode },
             ]);
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
@@ -94,7 +100,7 @@ namespace Twns.MapEditor {
                 } else {
                     this._canSubmitForReview        = !errorCode;
                     labelReviewDescTitle.visible    = !!errorCode;
-                    labelReviewDesc.text            = errorCode ? Lang.getErrorText(errorCode) : Lang.getText(LangTextType.A0285);
+                    labelReviewDesc.text            = errorCode ? Lang.getErrorText(errorCode) : ``;
                 }
             }
         }
@@ -177,6 +183,11 @@ namespace Twns.MapEditor {
                 }
             }
         }
+        private _onTouchedBtnHelpSaveAndSubmit(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
+                content : Lang.getText(LangTextType.A0285),
+            });
+        }
 
         private _onTouchedBtnSimulation(): void {
             const war       = this._getOpenData().war;
@@ -203,6 +214,11 @@ namespace Twns.MapEditor {
                 });
             }
         }
+        private _onTouchedBtnHelpSimulation(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
+                content : Lang.getText(LangTextType.R0006),
+            });
+        }
 
         private _onTouchedBtnFreeMode(): void {
             const war       = this._getOpenData().war;
@@ -228,7 +244,11 @@ namespace Twns.MapEditor {
                     },
                 });
             }
-
+        }
+        private _onTouchedBtnHelpFreeMode(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
+                content : Lang.getText(LangTextType.R0007),
+            });
         }
 
         private _onNotifyLanguageChanged(): void {
