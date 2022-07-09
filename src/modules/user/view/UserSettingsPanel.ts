@@ -48,18 +48,13 @@ namespace Twns.User {
         private readonly _scroller!                 : eui.Scroller;
 
         private readonly _uiRadioLanguage!          : TwnsUiRadioButton.UiRadioButton;
-        private readonly _uiRadioTexture!           : TwnsUiRadioButton.UiRadioButton;
-        private readonly _uiRadioUnitAnimation!     : TwnsUiRadioButton.UiRadioButton;
-        private readonly _uiRadioTileAnimation!     : TwnsUiRadioButton.UiRadioButton;
-        private readonly _uiRadioShowGridBorder!    : TwnsUiRadioButton.UiRadioButton;
         private readonly _uiRadioAutoScrollMap!     : TwnsUiRadioButton.UiRadioButton;
 
         private readonly _groupButtons!             : eui.Group;
+        private readonly _btnGraphicSettings!       : TwnsUiButton.UiButton;
         private readonly _btnChangeGameVersion!     : TwnsUiButton.UiButton;
         private readonly _btnRankList!              : TwnsUiButton.UiButton;
         private readonly _btnShowOnlineUsers!       : TwnsUiButton.UiButton;
-        private readonly _btnSetOpacity!            : TwnsUiButton.UiButton;
-        private readonly _btnSetStageScaler!        : TwnsUiButton.UiButton;
         private readonly _btnServerStatus!          : TwnsUiButton.UiButton;
         private readonly _btnComplaint!             : TwnsUiButton.UiButton;
         private readonly _btnGameChart!             : TwnsUiButton.UiButton;
@@ -70,22 +65,19 @@ namespace Twns.User {
         protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: NotifyType.UserSettingsIsShowGridBorderChanged, callback: this._onNotifyUserSettingsIsShowGridBorderChanged },
                 { type: NotifyType.UserSettingsIsAutoScrollMapChanged,  callback: this._onNotifyUserSettingsIsAutoScrollMapChanged },
                 { type: NotifyType.MsgUserGetPublicInfo,                callback: this._onMsgUserGetPublicInfo },
                 { type: NotifyType.MsgUserSetNickname,                  callback: this._onMsgUserSetNickname },
-                { type: NotifyType.MsgUserSetDiscordInfo,                 callback: this._onMsgUserSetDiscordId },
+                { type: NotifyType.MsgUserSetDiscordInfo,               callback: this._onMsgUserSetDiscordId },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,               callback: this.close },
                 { ui: this._btnDamageCalculator,    callback: this._onTouchedBtnDamageCalculator },
+                { ui: this._btnGraphicSettings,     callback: this._onTouchedBtnGraphicSettings },
                 { ui: this._btnChangeGameVersion,   callback: this._onTouchedBtnChangeGameVersion },
                 { ui: this._btnRankList,            callback: this._onTouchedBtnRankList },
                 { ui: this._btnShowOnlineUsers,     callback: this._onTouchedBtnShowOnlineUsers },
                 { ui: this._btnSetSound,            callback: this._onTouchedBtnSetSound },
-                { ui: this._btnSetOpacity,          callback: this._onTouchedBtnSetOpacity },
-                { ui: this._btnSetStageScaler,      callback: this._onTouchedBtnSetStageScaler },
                 { ui: this._btnServerStatus,        callback: this._onTouchedBtnServerStatus },
                 { ui: this._btnComplaint,           callback: this._onTouchedBtnComplaint },
                 { ui: this._btnGameChart,           callback: this._onTouchedBtnGameChart },
@@ -118,74 +110,6 @@ namespace Twns.User {
                 },
                 checkerForLeftOn: () => {
                     return Lang.getCurrentLanguageType() === Types.LanguageType.Chinese;
-                },
-            });
-            this._uiRadioTexture.setData({
-                titleTextType   : LangTextType.B0628,
-                leftTextType    : LangTextType.B0385,
-                rightTextType   : LangTextType.B0386,
-                callbackOnLeft  : () => {
-                    User.UserProxy.reqUserSetSettings({
-                        unitAndTileTextureVersion: Types.UnitAndTileTextureVersion.V0,
-                    });
-                },
-                callbackOnRight : () => {
-                    User.UserProxy.reqUserSetSettings({
-                        unitAndTileTextureVersion: Types.UnitAndTileTextureVersion.V1,
-                    });
-                },
-                checkerForLeftOn: () => {
-                    return User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0;
-                },
-            });
-            this._uiRadioUnitAnimation.setData({
-                titleTextType   : LangTextType.B0629,
-                leftTextType    : LangTextType.B0561,
-                rightTextType   : LangTextType.B0562,
-                callbackOnLeft  : () => {
-                    Timer.startUnitAnimationTick();
-                    LocalStorage.setShowUnitAnimation(true);
-                },
-                callbackOnRight : () => {
-                    Timer.stopUnitAnimationTick();
-                    LocalStorage.setShowUnitAnimation(false);
-                },
-                checkerForLeftOn: () => {
-                    return Timer.checkIsUnitAnimationTicking();
-                },
-            });
-            this._uiRadioTileAnimation.setData({
-                titleTextType   : LangTextType.B0630,
-                leftTextType    : LangTextType.B0561,
-                rightTextType   : LangTextType.B0562,
-                callbackOnLeft  : () => {
-                    Timer.startTileAnimationTick();
-                    LocalStorage.setShowTileAnimation(true);
-                },
-                callbackOnRight : () => {
-                    Timer.stopTileAnimationTick();
-                    LocalStorage.setShowTileAnimation(false);
-                },
-                checkerForLeftOn: () => {
-                    return Timer.checkIsTileAnimationTicking();
-                },
-            });
-            this._uiRadioShowGridBorder.setData({
-                titleTextType   : LangTextType.B0584,
-                leftTextType    : LangTextType.B0561,
-                rightTextType   : LangTextType.B0562,
-                callbackOnLeft  : () => {
-                    User.UserProxy.reqUserSetSettings({
-                        isShowGridBorder: true,
-                    });
-                },
-                callbackOnRight : () => {
-                    User.UserProxy.reqUserSetSettings({
-                        isShowGridBorder: false,
-                    });
-                },
-                checkerForLeftOn: () => {
-                    return User.UserModel.getSelfSettingsIsShowGridBorder();
                 },
             });
             this._uiRadioAutoScrollMap.setData({
@@ -223,12 +147,6 @@ namespace Twns.User {
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyUnitAndTileTextureVersionChanged(): void {
-            this._uiRadioTexture.updateView();
-        }
-        private _onNotifyUserSettingsIsShowGridBorderChanged(): void {
-            this._uiRadioShowGridBorder.updateView();
-        }
         private _onNotifyUserSettingsIsAutoScrollMapChanged(): void {
             this._uiRadioAutoScrollMap.updateView();
         }
@@ -245,8 +163,13 @@ namespace Twns.User {
         }
         private _onTouchedBtnDamageCalculator(): void {
             PanelHelpers.open(PanelHelpers.PanelDict.CommonDamageCalculatorPanel, {
-                data    : null,
+                data                    : null,
+                war                     : null,
+                needReviseWeaponType    : true,
             });
+        }
+        private _onTouchedBtnGraphicSettings(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.UserGraphicSettingsPanel, void 0);
         }
         private _onTouchedBtnChangeGameVersion(): void {
             PanelHelpers.open(PanelHelpers.PanelDict.CommonChangeVersionPanel, void 0);
@@ -327,8 +250,7 @@ namespace Twns.User {
         private async _updateGroupButtons(): Promise<void> {
             const group = this._groupButtons;
             group.removeChildren();
-            group.addChild(this._btnSetOpacity);
-            group.addChild(this._btnSetStageScaler);
+            group.addChild(this._btnGraphicSettings);
             group.addChild(this._btnRankList);
             group.addChild(this._btnShowOnlineUsers);
             group.addChild(this._btnServerStatus);
@@ -346,11 +268,10 @@ namespace Twns.User {
 
         private _updateComponentsForLanguage(): void {
             this._labelTitle.text = Lang.getText(LangTextType.B0560);
+            this._updateBtnGraphicSettings();
             this._updateBtnChangeGameVersion();
             this._updateBtnRankList();
             this._updateBtnShowOnlineUsers();
-            this._updateBtnSetOpacity();
-            this._updateBtnSetStageScaler();
             this._updateBtnGameChart();
             this._updateBtnChangeLog();
             this._updateBtnGameManagement();
@@ -359,6 +280,9 @@ namespace Twns.User {
             this._updateBtnMapManagement();
         }
 
+        private _updateBtnGraphicSettings(): void {
+            this._btnGraphicSettings.label = Lang.getText(LangTextType.B0984);
+        }
         private _updateBtnChangeGameVersion(): void {
             this._btnChangeGameVersion.label = Lang.getText(LangTextType.B0620);
         }
@@ -367,12 +291,6 @@ namespace Twns.User {
         }
         private _updateBtnShowOnlineUsers(): void {
             this._btnShowOnlineUsers.label = Lang.getText(LangTextType.B0151);
-        }
-        private _updateBtnSetOpacity(): void {
-            this._btnSetOpacity.label = Lang.getText(LangTextType.B0827);
-        }
-        private _updateBtnSetStageScaler(): void {
-            this._btnSetStageScaler.label = Lang.getText(LangTextType.B0558);
         }
         private _updateBtnGameChart(): void {
             this._btnGameChart.label = Lang.getText(LangTextType.B0900);

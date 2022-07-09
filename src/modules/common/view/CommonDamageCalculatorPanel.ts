@@ -22,6 +22,7 @@ namespace Twns.Common {
         unitType        : number;
         unitHp          : number;
         unitWeaponType  : WeaponType | null;
+        hasPrimaryAmmo  : boolean;
         unitPromotion   : number;
         tileType        : number;
         towersCount     : number;
@@ -49,7 +50,9 @@ namespace Twns.Common {
     let _savedData: CalculatorData | null = null;
 
     export type OpenDataForCommonDamageCalculatorPanel = {
-        data    : CalculatorData | null;
+        war                     : BaseWar.BwWar | null;
+        data                    : CalculatorData | null;
+        needReviseWeaponType    : boolean;
     };
     export class CommonDamageCalculatorPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonDamageCalculatorPanel> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
@@ -58,7 +61,9 @@ namespace Twns.Common {
         private readonly _btnClose!             : TwnsUiButton.UiButton;
 
         private readonly _labelPlayer1!         : TwnsUiLabel.UiLabel;
+        private readonly _btnSelect1!           : TwnsUiButton.UiButton;
         private readonly _labelPlayer2!         : TwnsUiLabel.UiLabel;
+        private readonly _btnSelect2!           : TwnsUiButton.UiButton;
 
         private readonly _imgCo1!               : TwnsUiImage.UiImage;
         private readonly _imgCo2!               : TwnsUiImage.UiImage;
@@ -143,6 +148,8 @@ namespace Twns.Common {
         protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnClose,                   callback: this.close },
+                { ui: this._btnSelect1,                 callback: this._onTouchedBtnSelect1 },
+                { ui: this._btnSelect2,                 callback: this._onTouchedBtnSelect2 },
                 { ui: this._imgCo1,                     callback: this._onTouchedImgCo1, },
                 { ui: this._imgCo2,                     callback: this._onTouchedImgCo2, },
                 { ui: this._btnSkill1,                  callback: this._onTouchedBtnSkill1 },
@@ -205,12 +212,37 @@ namespace Twns.Common {
             }
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            const calculatorData = this._getOpenData().data;
+            const openData          = this._getOpenData();
+            const calculatorData    = openData.data;
             this._setCalculatorData(calculatorData ? cloneCalculatorData(calculatorData) : await createDefaultCalculatorData());
+            if (openData.needReviseWeaponType) {
+                this._reviseWeaponType();
+            }
+
             this._updateView();
         }
         protected _onClosing(): void {
             // nothing to do
+        }
+
+        public static createDefaultPlayerData(gameConfig: GameConfig): PlayerData {
+            const unitType = gameConfig.getFirstUnitType();
+            return {
+                coId            : CommonConstants.CoId.Empty,
+                coSkillType     : CoSkillType.Passive,
+                unitType,
+                unitHp          : CommonConstants.UnitMaxHp,
+                unitWeaponType  : WeaponType.Primary,
+                unitPromotion   : 0,
+                tileType        : Helpers.getExisted(gameConfig.getTileType(gameConfig.getDefaultTileBaseType(), CommonConstants.TileObjectType.Empty)),
+                towersCount     : 0,
+                offenseBonus    : 0,
+                upperLuck       : CommonConstants.WarRuleLuckDefaultUpperLimit,
+                lowerLuck       : CommonConstants.WarRuleLuckDefaultLowerLimit,
+                hasPrimaryAmmo  : !!gameConfig.getUnitTemplateCfg(unitType)?.primaryWeaponMaxAmmo,
+                fund            : 0,
+                citiesCount     : 0,
+            };
         }
 
         private _setCalculatorData(data: CalculatorData): void {
@@ -221,6 +253,72 @@ namespace Twns.Common {
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onTouchedBtnSelect1(): void {
+            const war = Helpers.getExisted(this._getOpenData().war);
+            PanelHelpers.open(PanelHelpers.PanelDict.BwUnitListPanel, {
+                war,
+                callbackOnSelect    : unit => {
+                    this._getCalculatorData().attackerData = this._createPlayerDataForUnit(unit);
+                    this._reviseWeaponType();
+                    this._updateView();
+                    PanelHelpers.close(PanelHelpers.PanelDict.BwUnitListPanel);
+                },
+            });
+        }
+        private _onTouchedBtnSelect2(): void {
+            const war = Helpers.getExisted(this._getOpenData().war);
+            PanelHelpers.open(PanelHelpers.PanelDict.BwUnitListPanel, {
+                war,
+                callbackOnSelect    : unit => {
+                    this._getCalculatorData().defenderData = this._createPlayerDataForUnit(unit);
+                    this._reviseWeaponType();
+                    this._updateView();
+                    PanelHelpers.close(PanelHelpers.PanelDict.BwUnitListPanel);
+                },
+            });
+        }
+        private _createPlayerDataForUnit(attackerUnit: BaseWar.BwUnit): PlayerData {
+            const attackerPlayerIndex   = attackerUnit.getPlayerIndex();
+            const attackerPlayer        = attackerUnit.getPlayer();
+            const attackerGridIndex     = attackerUnit.getGridIndex();
+            const war                   = attackerUnit.getWar();
+            const tileMap               = war.getTileMap();
+            const gameConfig            = war.getGameConfig();
+            const commonSettingsManager = war.getCommonSettingManager();
+            const hasFog                = war.getFogMap().checkHasFogCurrently();
+            const allTiles              = tileMap.getAllTiles();
+            const allCities             = allTiles.filter(v => v.getType() === CommonConstants.TileType.City);
+            const allCommandTowers      = allTiles.filter(v => v.getType() === CommonConstants.TileType.CommandTower);
+            const watcherTeamIndexes    = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+            const canSeeHiddenInfo1     = (!hasFog) || (watcherTeamIndexes.has(attackerPlayer.getTeamIndex()));
+            const getIsAffectedByCo1    = Helpers.createLazyFunc((): boolean => {
+                if ((attackerUnit.getHasLoadedCo()) || (!gameConfig.getCoBasicCfg(attackerPlayer.getCoId())?.maxLoadCount)) {
+                    return true;
+                }
+
+                const distance = GridIndexHelpers.getMinDistance(attackerGridIndex, attackerPlayer.getCoGridIndexListOnMap());
+                return (distance != null) && (distance <= attackerPlayer.getCoZoneRadius());
+            });
+            return {
+                coId            : attackerPlayer.getCoId(),
+                coSkillType     : attackerPlayer.checkCoIsUsingActiveSkill()
+                    ? attackerPlayer.getCoUsingSkillType()
+                    : (getIsAffectedByCo1() ? Types.CoSkillType.Passive : null),
+                unitType        : attackerUnit.getUnitType(),
+                unitHp          : attackerUnit.getCurrentHp(),
+                unitWeaponType  : null,
+                unitPromotion   : attackerUnit.getCurrentPromotion(),
+                tileType        : tileMap.getTile(attackerGridIndex).getType(),
+                towersCount     : allCommandTowers.filter(v => v.getPlayerIndex() === attackerPlayerIndex).length,
+                offenseBonus    : commonSettingsManager.getSettingsAttackPowerModifier(attackerPlayerIndex),
+                upperLuck       : commonSettingsManager.getSettingsLuckUpperLimit(attackerPlayerIndex),
+                lowerLuck       : commonSettingsManager.getSettingsLuckLowerLimit(attackerPlayerIndex),
+                hasPrimaryAmmo  : !!attackerUnit.getPrimaryWeaponCurrentAmmo(),
+                fund            : canSeeHiddenInfo1 ? attackerPlayer.getFund() : 0,
+                citiesCount     : canSeeHiddenInfo1 ? allCities.filter(v => v.getPlayerIndex() === attackerPlayerIndex).length : 0,
+            };
+        }
+
         private _onTouchedImgCo1(): void {
             this._handleTouchedImgCo(this._getCalculatorData().attackerData);
         }
@@ -287,7 +385,7 @@ namespace Twns.Common {
             const gameConfig    = this._getCalculatorData().gameConfig;
             const armorType2    = Helpers.getExisted(gameConfig.getUnitTemplateCfg(playerData2.unitType)?.armorType);
             const damageCfg     = (gameConfig.getDamageChartCfgs(playerData1.unitType) ?? {})[armorType2];
-            if (damageCfg[Types.WeaponType.Primary].damage != null) {
+            if ((damageCfg[Types.WeaponType.Primary].damage != null) && (playerData1.hasPrimaryAmmo)) {
                 playerData1.unitWeaponType = Types.WeaponType.Primary;
             } else if (damageCfg[Types.WeaponType.Secondary].damage != null) {
                 playerData1.unitWeaponType = Types.WeaponType.Secondary;
@@ -552,6 +650,9 @@ namespace Twns.Common {
             const attackerData              = data.attackerData;
             const defenderData              = data.defenderData;
             const gameConfig                = data.gameConfig;
+            const canSelect                 = this._getOpenData().war != null;
+            this._btnSelect1.visible        = canSelect;
+            this._btnSelect2.visible        = canSelect;
             this._imgCo1.source             = gameConfig.getCoEyeImageSource(attackerData.coId, true) ?? CommonConstants.ErrorTextForUndefined;
             this._imgCo2.source             = gameConfig.getCoEyeImageSource(defenderData.coId, true) ?? CommonConstants.ErrorTextForUndefined;
             this._labelHp1.text             = `${attackerData.unitHp}`;
@@ -592,6 +693,8 @@ namespace Twns.Common {
             this._labelTitle.text           = Lang.getText(LangTextType.B0828);
             this._labelPlayer1.text         = Lang.getText(LangTextType.B0831);
             this._labelPlayer2.text         = Lang.getText(LangTextType.B0832);
+            this._btnSelect1.label          = Lang.getText(LangTextType.B0258);
+            this._btnSelect2.label          = Lang.getText(LangTextType.B0258);
             this._btnHp1.label              = Lang.getText(LangTextType.B0339);
             this._btnHp2.label              = Lang.getText(LangTextType.B0339);
             this._btnWeapon1.label          = Lang.getText(LangTextType.B0830);
@@ -710,25 +813,8 @@ namespace Twns.Common {
         return {
             gameConfig,
             weatherType     : gameConfig.getDefaultWeatherType(),
-            attackerData    : createDefaultPlayerData(gameConfig),
-            defenderData    : createDefaultPlayerData(gameConfig),
-        };
-    }
-    function createDefaultPlayerData(gameConfig: GameConfig): PlayerData {
-        return {
-            coId            : CommonConstants.CoId.Empty,
-            coSkillType     : CoSkillType.Passive,
-            unitType        : gameConfig.getFirstUnitType(),
-            unitHp          : CommonConstants.UnitMaxHp,
-            unitWeaponType  : WeaponType.Primary,
-            unitPromotion   : 0,
-            tileType        : Helpers.getExisted(gameConfig.getTileType(gameConfig.getDefaultTileBaseType(), CommonConstants.TileObjectType.Empty)),
-            towersCount     : 0,
-            offenseBonus    : 0,
-            upperLuck       : CommonConstants.WarRuleLuckDefaultUpperLimit,
-            lowerLuck       : CommonConstants.WarRuleLuckDefaultLowerLimit,
-            fund            : 0,
-            citiesCount : 0,
+            attackerData    : CommonDamageCalculatorPanel.createDefaultPlayerData(gameConfig),
+            defenderData    : CommonDamageCalculatorPanel.createDefaultPlayerData(gameConfig),
         };
     }
     function getNextCoSkillType(gameConfig: GameConfig, coId: number, skillType: CoSkillType | null): CoSkillType | null {

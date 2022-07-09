@@ -99,7 +99,7 @@ namespace Twns.FlowManager {
         await ResVersionController.init();
         CompatibilityHelpers.init();
         Net.NetManager.addListeners(_NET_EVENTS);
-        Notify.addEventListeners(_NOTIFY_EVENTS);
+        Notify.addEventListeners(_NOTIFY_EVENTS, FlowManager);
         StageManager.init(stage);
         await Promise.all([ResManager.init(), ProtoManager.init()]);
         StageManager.setStageScale(LocalStorage.getStageScale());

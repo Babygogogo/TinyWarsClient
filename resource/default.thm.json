@@ -213,6 +213,7 @@
 		"resource/skins/singleRankRoom/SrrCreateSettingsPanel.exml",
 		"resource/skins/user/UserChangeNicknamePanel.exml",
 		"resource/skins/user/UserGameManagementPanel.exml",
+		"resource/skins/user/UserGraphicSettingsPanel.exml",
 		"resource/skins/user/UserLoginBackgroundPanel.exml",
 		"resource/skins/user/UserLoginPanel.exml",
 		"resource/skins/user/UserOnlineUsersPanel.exml",

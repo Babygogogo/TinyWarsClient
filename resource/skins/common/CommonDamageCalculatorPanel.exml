@@ -4,7 +4,7 @@
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgMask" source="uncompressedColorTransparent0001" left="0" right="0" top="0" bottom="0"
                          scale9Grid="1,1,2,2" locked="true" />
-    <e:Group id="_group" width="690" horizontalCenter="0" height="480" verticalCenter="0">
+    <e:Group id="_group" width="690" horizontalCenter="0" height="490" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0" locked="true">
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
                                  scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
@@ -17,7 +17,12 @@
             </e:Group>
         </e:Group>
         <e:Group x="30" y="60">
-            <TwnsUiLabel:UiLabel id="_labelPlayer1" text="Label" x="110" y="49" size="20" />
+            <e:Group x="0" y="0">
+                <TwnsUiLabel:UiLabel id="_labelPlayer1" text="Attacker" size="18" left="0" verticalCenter="0" />
+                <TwnsUiButton:UiButton id="_btnSelect1" label="Select" x="90"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="60"
+                                       verticalCenter="0" />
+            </e:Group>
             <e:Group y="40" left="0">
                 <e:Group id="_conTileView1" scaleX="1.5" scaleY="1.5" y="36" x="0" touchEnabled="false"
                          touchThrough="true" touchChildren="false" />
@@ -110,7 +115,12 @@
             </e:layout>
         </e:Group>
         <e:Group x="230" y="60">
-            <TwnsUiLabel:UiLabel text="Label" x="120" y="59" id="_labelPlayer2" size="20" />
+            <e:Group x="0" y="0">
+                <TwnsUiLabel:UiLabel text="Label" id="_labelPlayer2" size="18" left="0" verticalCenter="0" />
+                <TwnsUiButton:UiButton id="_btnSelect2" label="Select" x="90"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="60"
+                                       verticalCenter="0" />
+            </e:Group>
             <e:Group y="40" left="0">
                 <e:Group id="_conTileView2" scaleX="1.5" scaleY="1.5" y="36" x="0" touchChildren="false"
                          touchEnabled="false" touchThrough="true" />

@@ -26,7 +26,8 @@ namespace Twns.BaseWar {
     import NotifyType       = Notify.NotifyType;
 
     export type OpenDataForBwUnitListPanel = {
-        war : BwWar;
+        war                 : BwWar;
+        callbackOnSelect    : (unit: BwUnit) => void;
     };
     export class BwUnitListPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitListPanel> {
         private readonly _group!            : eui.Group;
@@ -115,16 +116,27 @@ namespace Twns.BaseWar {
         }
 
         private _createDataForList(): DataForUnitRenderer[] {
-            const war           = this._getOpenData().war;
-            const cursor        = war.getCursor();
-            const dataList      : DataForUnitRenderer[]= [];
-            const playerIndex   = this._playerIndex;
-            for (const unit of war.getUnitMap().getAllUnits()) {
+            const openData          = this._getOpenData();
+            const war               = openData.war;
+            const cursor            = war.getCursor();
+            const unitMap           = war.getUnitMap();
+            const dataList          : DataForUnitRenderer[]= [];
+            const playerIndex       = this._playerIndex;
+            const callbackOnSelect  = openData.callbackOnSelect;
+            for (const unit of WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf())) {
                 if (unit.getPlayerIndex() === playerIndex) {
                     dataList.push({
                         cursor,
-                        unit    : unit,
+                        unit,
+                        callbackOnSelect,
                     });
+                    for (const loadedUnit of unitMap.getUnitsLoadedByLoader(unit, true)) {
+                        dataList.push({
+                            cursor,
+                            unit    : loadedUnit,
+                            callbackOnSelect,
+                        });
+                    }
                 }
             }
             return dataList.sort(sorterForDataForList);
@@ -152,8 +164,9 @@ namespace Twns.BaseWar {
     const _IMAGE_SOURCE_FLARE       = `c03_t99_s02_f02`;
 
     type DataForUnitRenderer = {
-        unit    : BaseWar.BwUnit;
-        cursor  : BwCursor;
+        unit                : BaseWar.BwUnit;
+        cursor              : BwCursor;
+        callbackOnSelect    : (unit: BwUnit) => void;
     };
     class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
         private readonly _group!            : eui.Group;
@@ -197,27 +210,8 @@ namespace Twns.BaseWar {
         }
 
         public onItemTapEvent(): void {
-            const data      = this._getData();
-            const cursor    = data.cursor;
-            const war       = cursor.getWar();
-            if ((war.getIsExecutingAction()) || (war.getActionPlanner().checkIsStateRequesting())) {
-                return;
-            }
-
-            const gridIndex = data.unit.getGridIndex();
-            if (GridIndexHelpers.checkIsEqual(gridIndex, cursor.getGridIndex())) {
-                Notify.dispatch(NotifyType.BwCursorTapped, {
-                    current : gridIndex,
-                    tappedOn: gridIndex,
-                } as Notify.NotifyData.BwCursorTapped);
-                PanelHelpers.close(PanelHelpers.PanelDict.BwUnitListPanel);
-            } else {
-                cursor.setGridIndex(gridIndex);
-                cursor.updateView();
-                war.getView().tweenGridToCentralArea(gridIndex);
-                war.getGridVisualEffect().showEffectAiming(gridIndex, 800);
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
-            }
+            const data = this._getData();
+            data.callbackOnSelect(data.unit);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

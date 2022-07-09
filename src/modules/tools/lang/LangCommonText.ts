@@ -1744,7 +1744,7 @@ namespace Twns.Lang {
         ],
         [LangTextType.B0037]: [
             `装载`,
-            `load`,
+            `Load`,
         ],
         [LangTextType.B0038]: [
             `合流`,
@@ -5513,6 +5513,14 @@ namespace Twns.Lang {
         [LangTextType.B0983]: [
             `拥有者`,
             `Owner`,
+        ],
+        [LangTextType.B0984]: [
+            `图像设置`,
+            `Graphic Settings`,
+        ],
+        [LangTextType.B0985]: [
+            `天气动画`,
+            `Weather Animation`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

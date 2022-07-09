@@ -23,7 +23,7 @@ namespace TwnsUiRadioButton {
         callbackOnLeft          : () => void;
         callbackOnRight         : () => void;
         checkerForLeftOn        : () => boolean;
-        notifyListenerArray?    : Twns.Notify.Listener[];
+        // notifyListenerArray?    : Twns.Notify.Listener[];
     };
 
     export class UiRadioButton extends TwnsUiComponent.UiComponent {
@@ -63,11 +63,11 @@ namespace TwnsUiRadioButton {
             return this._data;
         }
         private _clearData(): void {
-            const data = this._getData();
-            if (data) {
-                const notifyListenerArray = data.notifyListenerArray;
-                (notifyListenerArray) && (Twns.Notify.removeEventListeners(notifyListenerArray));
-            }
+            // const data = this._getData();
+            // if (data) {
+            //     const notifyListenerArray = data.notifyListenerArray;
+            //     (notifyListenerArray) && (Twns.Notify.removeEventListeners(notifyListenerArray));
+            // }
 
             this._data = null;
         }

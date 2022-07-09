@@ -195,6 +195,7 @@ namespace Twns.PanelHelpers {
 
         UserChangeNicknamePanel             : PanelConfig<User.OpenDataForUserChangeNicknamePanel>;
         UserGameManagementPanel             : PanelConfig<User.OpenDataForUserGameManagementPanel>;
+        UserGraphicSettingsPanel            : PanelConfig<User.OpenDataForUserGraphicSettingsPanel>;
         UserLoginBackgroundPanel            : PanelConfig<User.OpenDataForUserLoginBackgroundPanel>;
         UserLoginPanel                      : PanelConfig<User.OpenDataForUserLoginPanel>;
         UserOnlineUsersPanel                : PanelConfig<User.OpenDataForUserOnlineUsersPanel>;
@@ -1314,6 +1315,12 @@ namespace Twns.PanelHelpers {
             UserGameManagementPanel: {
                 cls         : User?.UserGameManagementPanel,
                 skinName    : `resource/skins/user/UserGameManagementPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            UserGraphicSettingsPanel: {
+                cls         : User?.UserGraphicSettingsPanel,
+                skinName    : `resource/skins/user/UserGraphicSettingsPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 

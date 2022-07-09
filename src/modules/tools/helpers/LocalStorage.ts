@@ -14,7 +14,8 @@ namespace Twns.LocalStorage {
     const KEY_LANGUAGE                  = KEY_PREFIX + "Language";
     const KEY_SHOW_TILE_ANIMATION       = KEY_PREFIX + "ShowTileAnimation";
     const KEY_SHOW_UNIT_ANIMATION       = KEY_PREFIX + "ShowUnitAnimation";
-    const KEY_MAP_RAW_DATA_PREFIX       = KEY_PREFIX + "MapRawData_";
+    const KEY_SHOW_WEATHER_ANIMATION    = KEY_PREFIX + "ShowWeatherAnimation";
+    // const KEY_MAP_RAW_DATA_PREFIX       = KEY_PREFIX + "MapRawData_";
     const KEY_SOUND_BGM_MUTE            = KEY_PREFIX + "SoundBgmMute";
     const KEY_SOUND_BGM_VOLUME          = KEY_PREFIX + "SoundBgmVolume";
     const KEY_SOUND_EFFECT_MUTE         = KEY_PREFIX + "SoundEffectMute";
@@ -78,6 +79,14 @@ namespace Twns.LocalStorage {
     }
     export function getShowUnitAnimation(): boolean {
         const data = getString(KEY_SHOW_UNIT_ANIMATION);
+        return (data == null) || (data === VALUE_TRUE);
+    }
+
+    export function setShowWeatherAnimation(show: boolean): void {
+        setValue(KEY_SHOW_WEATHER_ANIMATION, show ? VALUE_TRUE : VALUE_FALSE);
+    }
+    export function getShowWeatherAnimation(): boolean {
+        const data = getString(KEY_SHOW_WEATHER_ANIMATION);
         return (data == null) || (data === VALUE_TRUE);
     }
 

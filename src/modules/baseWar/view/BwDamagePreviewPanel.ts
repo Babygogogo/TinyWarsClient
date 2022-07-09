@@ -78,6 +78,7 @@ namespace Twns.BaseWar {
             const actionPlanner         = war.getActionPlanner();
             const tileMap               = war.getTileMap();
             const commonSettingsManager = war.getCommonSettingManager();
+            const gameConfig            = war.getGameConfig();
             const allTiles              = tileMap.getAllTiles();
             const allCities             = allTiles.filter(v => v.getType() === CommonConstants.TileType.City);
             const allCommandTowers      = allTiles.filter(v => v.getType() === CommonConstants.TileType.CommandTower);
@@ -96,7 +97,7 @@ namespace Twns.BaseWar {
             const coSkillType1          = attackerPlayer.getCoUsingSkillType();
             const coSkillType2          = defenderPlayer.getCoUsingSkillType();
             const getIsAffectedByCo1    = Helpers.createLazyFunc((): boolean => {
-                if (attackerUnit.getHasLoadedCo()) {
+                if ((attackerUnit.getHasLoadedCo()) || (!gameConfig.getCoBasicCfg(attackerPlayer.getCoId())?.maxLoadCount)) {
                     return true;
                 }
 
@@ -104,7 +105,7 @@ namespace Twns.BaseWar {
                 return (distance != null) && (distance <= attackerPlayer.getCoZoneRadius());
             });
             const getIsAffectedByCo2    = Helpers.createLazyFunc((): boolean => {
-                if (defenderUnit.getHasLoadedCo()) {
+                if ((defenderUnit.getHasLoadedCo())  || (!gameConfig.getCoBasicCfg(attackerPlayer.getCoId())?.maxLoadCount)) {
                     return true;
                 }
 
@@ -113,8 +114,10 @@ namespace Twns.BaseWar {
             });
 
             PanelHelpers.open(PanelHelpers.PanelDict.CommonDamageCalculatorPanel, {
-                data: {
-                    gameConfig   : war.getGameConfig(),
+                war,
+                needReviseWeaponType    : false,
+                data                    : {
+                    gameConfig,
                     weatherType     : war.getWeatherManager().getCurrentWeatherType(),
                     attackerData    : {
                         coId            : attackerPlayer.getCoId(),
@@ -135,6 +138,7 @@ namespace Twns.BaseWar {
                         offenseBonus    : commonSettingsManager.getSettingsAttackPowerModifier(attackerPlayerIndex),
                         upperLuck       : commonSettingsManager.getSettingsLuckUpperLimit(attackerPlayerIndex),
                         lowerLuck       : commonSettingsManager.getSettingsLuckLowerLimit(attackerPlayerIndex),
+                        hasPrimaryAmmo  : !!attackerUnit.getPrimaryWeaponCurrentAmmo(),
                         fund            : canSeeHiddenInfo1 ? attackerPlayer.getFund() : 0,
                         citiesCount     : canSeeHiddenInfo1 ? allCities.filter(v => v.getPlayerIndex() === attackerPlayerIndex).length : 0,
                     },
@@ -157,6 +161,7 @@ namespace Twns.BaseWar {
                         offenseBonus    : commonSettingsManager.getSettingsAttackPowerModifier(defenderPlayerIndex),
                         upperLuck       : commonSettingsManager.getSettingsLuckUpperLimit(defenderPlayerIndex),
                         lowerLuck       : commonSettingsManager.getSettingsLuckLowerLimit(defenderPlayerIndex),
+                        hasPrimaryAmmo  : !!defenderUnit.getPrimaryWeaponCurrentAmmo(),
                         fund            : canSeeHiddenInfo2 ? defenderPlayer.getFund() : 0,
                         citiesCount     : canSeeHiddenInfo2 ? allCities.filter(v => v.getPlayerIndex() === defenderPlayerIndex).length : 0,
                     },

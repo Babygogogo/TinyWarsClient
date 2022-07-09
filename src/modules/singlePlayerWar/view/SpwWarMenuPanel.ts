@@ -173,8 +173,30 @@ namespace Twns.SinglePlayerWar {
         }
 
         private _onTouchedBtnUnitList(): void {
+            const war = this._getWar();
             PanelHelpers.open(PanelHelpers.PanelDict.BwUnitListPanel, {
-                war: this._getWar(),
+                war,
+                callbackOnSelect    : unit => {
+                    if ((war.getIsExecutingAction()) || (war.getActionPlanner().checkIsStateRequesting())) {
+                        return;
+                    }
+
+                    const cursor    = war.getCursor();
+                    const gridIndex = unit.getGridIndex();
+                    if (GridIndexHelpers.checkIsEqual(gridIndex, cursor.getGridIndex())) {
+                        Notify.dispatch(NotifyType.BwCursorTapped, {
+                            current : gridIndex,
+                            tappedOn: gridIndex,
+                        } as Notify.NotifyData.BwCursorTapped);
+                        PanelHelpers.close(PanelHelpers.PanelDict.BwUnitListPanel);
+                    } else {
+                        cursor.setGridIndex(gridIndex);
+                        cursor.updateView();
+                        war.getView().tweenGridToCentralArea(gridIndex);
+                        war.getGridVisualEffect().showEffectAiming(gridIndex, 800);
+                        SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                    }
+                },
             });
             this.close();
         }

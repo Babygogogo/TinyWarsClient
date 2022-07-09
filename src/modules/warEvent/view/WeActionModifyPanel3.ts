@@ -12,7 +12,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import Twns.Notify               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -25,12 +25,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.WarEvent {
-    import NotifyType               = Twns.Notify.NotifyType;
-    import ClientErrorCode          = Twns.ClientErrorCode;
-    import ColorValue               = Twns.Types.ColorValue;
+    import NotifyType               = Notify.NotifyType;
+    import ColorValue               = Types.ColorValue;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
-    import LangTextType             = Twns.Lang.LangTextType;
+    import LangTextType             = Lang.LangTextType;
     import BwWar                    = BaseWar.BwWar;
 
     export type OpenDataForWeActionModifyPanel3 = {
@@ -89,28 +88,28 @@ namespace Twns.WarEvent {
         }
 
         private _onTouchedBtnAddDialogue(): void {
-            const dialogueArray = Twns.Helpers.getExisted(this._getAction().dataArray);
-            if (dialogueArray.length > Twns.CommonConstants.WarEventActionDialogueMaxCount) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0228));
+            const dialogueArray = Helpers.getExisted(this._getAction().dataArray);
+            if (dialogueArray.length > CommonConstants.WarEventActionDialogueMaxCount) {
+                FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
                 dialogueArray.push(WarHelpers.WarEventHelpers.getDefaultCoDialogueData(this._getOpenData().war.getGameConfig()));
-                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
         private _onTouchedBtnClear(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0190),
                 callback: () => {
-                    Twns.Helpers.getExisted(this._getAction().dataArray).length = 0;
-                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Helpers.getExisted(this._getAction().dataArray).length = 0;
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             });
         }
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -121,14 +120,14 @@ namespace Twns.WarEvent {
             const openData          = this._getOpenData();
             const action            = openData.action;
             const war               = openData.war;
-            const dialogueAction    = Twns.Helpers.getExisted(action.WeaDialogue);
+            const dialogueAction    = Helpers.getExisted(action.WeaDialogue);
             const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForAction(openData.fullData, action, war);
             if (errorTip) {
-                Twns.FloatText.show(errorTip);
+                FloatText.show(errorTip);
                 return;
             }
 
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwDialoguePanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.BwDialoguePanel, {
                 gameConfig      : war.getGameConfig(),
                 actionData      : dialogueAction,
                 callbackOnClose : () => {
@@ -138,7 +137,7 @@ namespace Twns.WarEvent {
         }
 
         private _onTouchedBtnBackground(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeDialogueBackgroundPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.WeDialogueBackgroundPanel, {
                 action      : this._getAction(),
                 gameConfig  : this._getOpenData().war.getGameConfig(),
             });
@@ -184,14 +183,14 @@ namespace Twns.WarEvent {
             this._listDialogue.bindData(dataArray);
 
             const label     = this._labelDialoguesCount;
-            const maxCount  = Twns.CommonConstants.WarEventActionDialogueMaxCount;
+            const maxCount  = CommonConstants.WarEventActionDialogueMaxCount;
             const currCount = dataArray.length;
             label.text      = `${Lang.getText(LangTextType.B0675)}: ${currCount} / ${maxCount}`;
             label.textColor = ((currCount <= maxCount) && (currCount > 0)) ? ColorValue.White : ColorValue.Red;
         }
 
         private _getAction(): CommonProto.WarEvent.IWeaDialogue {
-            return Twns.Helpers.getExisted(this._getOpenData().action.WeaDialogue);
+            return Helpers.getExisted(this._getOpenData().action.WeaDialogue);
         }
     }
 
@@ -261,10 +260,10 @@ namespace Twns.WarEvent {
                     delete dataForDialogue.dataForAside;
                     dataForDialogue.dataForCoDialogue = {
                         coId        : data.war.getGameConfig().getCoIdArrayForDialogue()[0],
-                        side        : Twns.Types.WarEventActionDialogueSide.Left,
+                        side        : Types.WarEventActionDialogueSide.Left,
                         textArray   : dataForAside.textArray,
                     };
-                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     return;
                 }
             }
@@ -276,43 +275,43 @@ namespace Twns.WarEvent {
                     dataForDialogue.dataForAside = {
                         textArray: dataForCoDialogue.textArray,
                     };
-                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     return;
                 }
             }
 
-            throw Twns.Helpers.newError(`Invalid dataForDialogue.`, ClientErrorCode.WeActionModifyPanel3_OnTouchedBtnChangeType_00);
+            throw Helpers.newError(`Invalid dataForDialogue.`, ClientErrorCode.WeActionModifyPanel3_OnTouchedBtnChangeType_00);
         }
 
         private _onTouchedBtnInsert(): void {
             const data          = this._getData();
-            const dialogueArray = Twns.Helpers.getExisted(data.action.WeaDialogue?.dataArray);
-            if (dialogueArray.length > Twns.CommonConstants.WarEventActionDialogueMaxCount) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0228));
+            const dialogueArray = Helpers.getExisted(data.action.WeaDialogue?.dataArray);
+            if (dialogueArray.length > CommonConstants.WarEventActionDialogueMaxCount) {
+                FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
                 dialogueArray.splice(dialogueArray.indexOf(data.dataForDialogue), 0, WarHelpers.WarEventHelpers.getDefaultCoDialogueData(data.war.getGameConfig()));
-                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
         private _onTouchedBtnUp(): void {
             const data          = this._getData();
-            const dialogueArray = Twns.Helpers.getExisted(data.action.WeaDialogue?.dataArray);
+            const dialogueArray = Helpers.getExisted(data.action.WeaDialogue?.dataArray);
             const index         = dialogueArray.indexOf(data.dataForDialogue);
             if (index > 0) {
                 [dialogueArray[index - 1], dialogueArray[index]] = [dialogueArray[index], dialogueArray[index - 1]];
-                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
         private _onTouchedBtnDelete(): void {
             const data = this.data;
             if (data) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
-                    content : Lang.getText(LangTextType.A0029),
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
+                    content : Lang.getText(LangTextType.A0225),
                     callback: () => {
-                        Twns.Helpers.deleteElementFromArray(Twns.Helpers.getExisted(data.action.WeaDialogue?.dataArray), data.dataForDialogue);
-                        Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                        Helpers.deleteElementFromArray(Helpers.getExisted(data.action.WeaDialogue?.dataArray), data.dataForDialogue);
+                        Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     },
                 });
             }
@@ -321,10 +320,10 @@ namespace Twns.WarEvent {
         private _onTouchedGroupLeftSide(): void {
             const data = this._getData().dataForDialogue.dataForCoDialogue;
             if (data) {
-                data.side = data.side === Twns.Types.WarEventActionDialogueSide.Left
-                    ? Twns.Types.WarEventActionDialogueSide.Right
-                    : Twns.Types.WarEventActionDialogueSide.Left;
-                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                data.side = data.side === Types.WarEventActionDialogueSide.Left
+                    ? Types.WarEventActionDialogueSide.Right
+                    : Types.WarEventActionDialogueSide.Left;
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
 
@@ -334,14 +333,14 @@ namespace Twns.WarEvent {
             if (dataForCoDialogue) {
                 const currentCoId = dataForCoDialogue.coId ?? null;
                 const gameConfig    = data.war.getGameConfig();
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
                     gameConfig,
                     availableCoIdArray  : gameConfig.getCoIdArrayForDialogue(),
                     currentCoId,
                     callbackOnConfirm   : coId => {
                         if (coId !== currentCoId) {
                             dataForCoDialogue.coId = coId;
-                            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                            Notify.dispatch(NotifyType.WarEventFullDataChanged);
                         }
                     },
                 });
@@ -349,18 +348,18 @@ namespace Twns.WarEvent {
         }
 
         private _onTouchedBtnChineseName(): void {
-            const dataForDialogue       = Twns.Helpers.getExisted(this._getData().dataForDialogue.dataForCoDialogue);
+            const dataForDialogue       = Helpers.getExisted(this._getData().dataForDialogue.dataForCoDialogue);
             dataForDialogue.nameArray   = dataForDialogue.nameArray || [];
             const textArray             = dataForDialogue.nameArray;
-            const textData              = textArray.find(v => v.languageType === Twns.Types.LanguageType.Chinese);
+            const textData              = textArray.find(v => v.languageType === Types.LanguageType.Chinese);
             const currentText           = textData?.text;
 
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0455),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
-                maxChars        : Twns.CommonConstants.WarEventActionDialogueNameMaxLength,
-                tips            : Lang.getFormattedText(LangTextType.F0020, Twns.CommonConstants.WarEventActionDialogueNameMaxLength),
+                maxChars        : CommonConstants.WarEventActionDialogueNameMaxLength,
+                tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.WarEventActionDialogueNameMaxLength),
                 canBeEmpty      : true,
                 callback        : panel => {
                     const text = (panel.getInputText() || ``).trim();
@@ -369,7 +368,7 @@ namespace Twns.WarEvent {
                     }
 
                     if (!text.length) {
-                        Twns.Helpers.deleteElementFromArray(textArray, textData);
+                        Helpers.deleteElementFromArray(textArray, textData);
                         if (!textArray.length) {
                             delete dataForDialogue.nameArray;
                         }
@@ -378,29 +377,29 @@ namespace Twns.WarEvent {
                             textData.text = text;
                         } else {
                             textArray.push({
-                                languageType    : Twns.Types.LanguageType.Chinese,
+                                languageType    : Types.LanguageType.Chinese,
                                 text,
                             });
                         }
                     }
-                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
 
         private _onTouchedBtnEnglishName(): void {
-            const dataForDialogue       = Twns.Helpers.getExisted(this._getData().dataForDialogue.dataForCoDialogue);
+            const dataForDialogue       = Helpers.getExisted(this._getData().dataForDialogue.dataForCoDialogue);
             dataForDialogue.nameArray   = dataForDialogue.nameArray || [];
             const textArray             = dataForDialogue.nameArray;
-            const textData              = textArray.find(v => v.languageType === Twns.Types.LanguageType.English);
+            const textData              = textArray.find(v => v.languageType === Types.LanguageType.English);
             const currentText           = textData?.text;
 
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0456),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
-                maxChars        : Twns.CommonConstants.WarEventActionDialogueNameMaxLength,
-                tips            : Lang.getFormattedText(LangTextType.F0020, Twns.CommonConstants.WarEventActionDialogueNameMaxLength),
+                maxChars        : CommonConstants.WarEventActionDialogueNameMaxLength,
+                tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.WarEventActionDialogueNameMaxLength),
                 canBeEmpty      : true,
                 callback        : panel => {
                     const text = (panel.getInputText() || ``).trim();
@@ -409,7 +408,7 @@ namespace Twns.WarEvent {
                     }
 
                     if (!text.length) {
-                        Twns.Helpers.deleteElementFromArray(textArray, textData);
+                        Helpers.deleteElementFromArray(textArray, textData);
                         if (!textArray.length) {
                             delete dataForDialogue.nameArray;
                         }
@@ -418,28 +417,28 @@ namespace Twns.WarEvent {
                             textData.text = text;
                         } else {
                             textArray.push({
-                                languageType    : Twns.Types.LanguageType.English,
+                                languageType    : Types.LanguageType.English,
                                 text,
                             });
                         }
                     }
-                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
 
         private _onTouchedBtnChinese(): void {
             const dataForDialogue   = this._getData().dataForDialogue;
-            const textArray         = Twns.Helpers.getExisted(dataForDialogue.dataForAside?.textArray || dataForDialogue.dataForCoDialogue?.textArray);
-            const textData          = textArray.find(v => v.languageType === Twns.Types.LanguageType.Chinese);
+            const textArray         = Helpers.getExisted(dataForDialogue.dataForAside?.textArray || dataForDialogue.dataForCoDialogue?.textArray);
+            const textData          = textArray.find(v => v.languageType === Types.LanguageType.Chinese);
             const currentText       = textData?.text;
 
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0455),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
-                maxChars        : Twns.CommonConstants.WarEventActionDialogueTextMaxLength,
-                tips            : Lang.getFormattedText(LangTextType.F0020, Twns.CommonConstants.WarEventActionDialogueTextMaxLength),
+                maxChars        : CommonConstants.WarEventActionDialogueTextMaxLength,
+                tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.WarEventActionDialogueTextMaxLength),
                 canBeEmpty      : true,
                 isMultiLine     : true,
                 callback        : panel => {
@@ -449,32 +448,32 @@ namespace Twns.WarEvent {
                     }
 
                     if (!text.length) {
-                        Twns.Helpers.deleteElementFromArray(textArray, textData);
+                        Helpers.deleteElementFromArray(textArray, textData);
                     } else {
                         if (textData) {
                             textData.text = text;
                         } else {
                             textArray.push({
-                                languageType    : Twns.Types.LanguageType.Chinese,
+                                languageType    : Types.LanguageType.Chinese,
                                 text,
                             });
                         }
                     }
-                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
 
         private _onTouchedBtnDeleteChinese(): void {
             const dataForDialogue   = this._getData().dataForDialogue;
-            const textArray         = Twns.Helpers.getExisted(dataForDialogue.dataForAside?.textArray || dataForDialogue.dataForCoDialogue?.textArray);
-            const textData          = textArray.find(v => v.languageType === Twns.Types.LanguageType.Chinese);
+            const textArray         = Helpers.getExisted(dataForDialogue.dataForAside?.textArray || dataForDialogue.dataForCoDialogue?.textArray);
+            const textData          = textArray.find(v => v.languageType === Types.LanguageType.Chinese);
             if (textData?.text != null) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content     : Lang.getText(LangTextType.A0225),
                     callback    : () => {
                         textData.text = null;
-                        Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                        Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     }
                 });
             }
@@ -482,16 +481,16 @@ namespace Twns.WarEvent {
 
         private _onTouchedBtnEnglish(): void {
             const dataForDialogue   = this._getData().dataForDialogue;
-            const textArray         = Twns.Helpers.getExisted(dataForDialogue.dataForAside?.textArray || dataForDialogue.dataForCoDialogue?.textArray);
-            const textData          = textArray.find(v => v.languageType === Twns.Types.LanguageType.English);
+            const textArray         = Helpers.getExisted(dataForDialogue.dataForAside?.textArray || dataForDialogue.dataForCoDialogue?.textArray);
+            const textData          = textArray.find(v => v.languageType === Types.LanguageType.English);
             const currentText       = textData?.text;
 
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0456),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
-                maxChars        : Twns.CommonConstants.WarEventActionDialogueTextMaxLength,
-                tips            : Lang.getFormattedText(LangTextType.F0020, Twns.CommonConstants.WarEventActionDialogueTextMaxLength),
+                maxChars        : CommonConstants.WarEventActionDialogueTextMaxLength,
+                tips            : Lang.getFormattedText(LangTextType.F0020, CommonConstants.WarEventActionDialogueTextMaxLength),
                 canBeEmpty      : true,
                 isMultiLine     : true,
                 callback        : panel => {
@@ -501,32 +500,32 @@ namespace Twns.WarEvent {
                     }
 
                     if (!text.length) {
-                        Twns.Helpers.deleteElementFromArray(textArray, textData);
+                        Helpers.deleteElementFromArray(textArray, textData);
                     } else {
                         if (textData) {
                             textData.text = text;
                         } else {
                             textArray.push({
-                                languageType    : Twns.Types.LanguageType.English,
+                                languageType    : Types.LanguageType.English,
                                 text,
                             });
                         }
                     }
-                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
 
         private _onTouchedBtnDeleteEnglish(): void {
             const dataForDialogue   = this._getData().dataForDialogue;
-            const textArray         = Twns.Helpers.getExisted(dataForDialogue.dataForAside?.textArray || dataForDialogue.dataForCoDialogue?.textArray);
-            const textData          = textArray.find(v => v.languageType === Twns.Types.LanguageType.English);
+            const textArray         = Helpers.getExisted(dataForDialogue.dataForAside?.textArray || dataForDialogue.dataForCoDialogue?.textArray);
+            const textData          = textArray.find(v => v.languageType === Types.LanguageType.English);
             if (textData?.text != null) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content     : Lang.getText(LangTextType.A0225),
                     callback    : () => {
                         textData.text = null;
-                        Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                        Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     }
                 });
             }
@@ -550,8 +549,8 @@ namespace Twns.WarEvent {
                 groupCoDialogue.visible = false;
             } else {
                 groupCoDialogue.visible     = true;
-                this._imgLeftSide.visible   = dataForCoDialogue.side === Twns.Types.WarEventActionDialogueSide.Left;
-                this._labelCo.text          = data.war.getGameConfig().getCoNameAndTierText(Twns.Helpers.getExisted(dataForCoDialogue.coId)) ?? Twns.CommonConstants.ErrorTextForUndefined;
+                this._imgLeftSide.visible   = dataForCoDialogue.side === Types.WarEventActionDialogueSide.Left;
+                this._labelCo.text          = data.war.getGameConfig().getCoNameAndTierText(Helpers.getExisted(dataForCoDialogue.coId)) ?? CommonConstants.ErrorTextForUndefined;
             }
 
             {
@@ -559,12 +558,12 @@ namespace Twns.WarEvent {
                 this._labelChineseName.text = Lang.getLanguageText({
                     textArray: nameArray,
                     useAlternate: false,
-                    languageType: Twns.Types.LanguageType.Chinese,
+                    languageType: Types.LanguageType.Chinese,
                 }) || "";
                 this._labelEnglishName.text = Lang.getLanguageText({
                     textArray: nameArray,
                     useAlternate: false,
-                    languageType: Twns.Types.LanguageType.English,
+                    languageType: Types.LanguageType.English,
                 }) || "";
             }
 
@@ -573,12 +572,12 @@ namespace Twns.WarEvent {
                 this._labelChinese.text = Lang.getLanguageText({
                     textArray,
                     useAlternate: false,
-                    languageType: Twns.Types.LanguageType.Chinese,
+                    languageType: Types.LanguageType.Chinese,
                 }) || "";
                 this._labelEnglish.text = Lang.getLanguageText({
                     textArray,
                     useAlternate: false,
-                    languageType: Twns.Types.LanguageType.English,
+                    languageType: Types.LanguageType.English,
                 }) || "";
             }
         }

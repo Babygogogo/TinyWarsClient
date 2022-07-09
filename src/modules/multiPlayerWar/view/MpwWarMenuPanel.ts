@@ -12,7 +12,7 @@
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
 // import Notify                           from "../../tools/notify/Notify";
-// import Twns.Notify                   from "../../tools/notify/NotifyType";
+// import Notify                   from "../../tools/notify/NotifyType";
 // import ProtoTypes                       from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiImage                      from "../../tools/ui/UiImage";
@@ -24,8 +24,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiPlayerWar {
-    import LangTextType                 = Twns.Lang.LangTextType;
-    import NotifyType                   = Twns.Notify.NotifyType;
+    import LangTextType                 = Lang.LangTextType;
+    import NotifyType                   = Notify.NotifyType;
 
     export type OpenDataForMpwWarMenuPanel = void;
     export class MpwWarMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForMpwWarMenuPanel> {
@@ -88,7 +88,7 @@ namespace Twns.MultiPlayerWar {
         }
 
         private _getWar(): MultiPlayerWar.MpwWar {
-            return Twns.Helpers.getExisted(MultiPlayerWar.MpwModel.getWar());
+            return Helpers.getExisted(MultiPlayerWar.MpwModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,23 +105,23 @@ namespace Twns.MultiPlayerWar {
         }
         private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgSpmCreateSfw.IS;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
-                    Twns.FlowManager.gotoSinglePlayerWar({
-                        slotIndex       : Twns.Helpers.getExisted(data.slotIndex),
-                        slotExtraData   : Twns.Helpers.getExisted(data.extraData),
-                        warData         : Twns.Helpers.getExisted(data.warData),
+                    FlowManager.gotoSinglePlayerWar({
+                        slotIndex       : Helpers.getExisted(data.slotIndex),
+                        slotExtraData   : Helpers.getExisted(data.extraData),
+                        warData         : Helpers.getExisted(data.warData),
                     });
                 },
             });
         }
         private _onNotifyMsgMpwGetHalfwayReplayData(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgMpwGetHalfwayReplayData.IS;
-            Twns.FlowManager.gotoHalfwayReplayWar(Twns.Helpers.deepClone(Twns.Helpers.getExisted(data.warData)));
+            FlowManager.gotoHalfwayReplayWar(Helpers.deepClone(Helpers.getExisted(data.warData)));
         }
         private _onNotifyMsgMpwGetHalfwayReplayDataFailed(): void {
-            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.CommonBlockPanel);
+            PanelHelpers.close(PanelHelpers.PanelDict.CommonBlockPanel);
         }
         private _onNotifyMsgUserSetMapRating(): void {
             this._updateBtnMapRating();
@@ -138,28 +138,50 @@ namespace Twns.MultiPlayerWar {
             MultiPlayerWar.MpwProxy.reqMpwCommonSyncWar(
                 war,
                 war.getActionPlanner().checkIsStateRequesting()
-                    ? Twns.Types.SyncWarRequestType.PlayerForce
-                    : Twns.Types.SyncWarRequestType.PlayerRequest
+                    ? Types.SyncWarRequestType.PlayerForce
+                    : Types.SyncWarRequestType.PlayerRequest
             );
             this.close();
         }
 
         private _onTouchedBtnUnitList(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BwUnitListPanel, {
-                war: this._getWar(),
+            const war = this._getWar();
+            PanelHelpers.open(PanelHelpers.PanelDict.BwUnitListPanel, {
+                war,
+                callbackOnSelect    : unit => {
+                    if ((war.getIsExecutingAction()) || (war.getActionPlanner().checkIsStateRequesting())) {
+                        return;
+                    }
+
+                    const cursor    = war.getCursor();
+                    const gridIndex = unit.getGridIndex();
+                    if (GridIndexHelpers.checkIsEqual(gridIndex, cursor.getGridIndex())) {
+                        Notify.dispatch(NotifyType.BwCursorTapped, {
+                            current : gridIndex,
+                            tappedOn: gridIndex,
+                        } as Notify.NotifyData.BwCursorTapped);
+                        PanelHelpers.close(PanelHelpers.PanelDict.BwUnitListPanel);
+                    } else {
+                        cursor.setGridIndex(gridIndex);
+                        cursor.updateView();
+                        war.getView().tweenGridToCentralArea(gridIndex);
+                        war.getGridVisualEffect().showEffectAiming(gridIndex, 800);
+                        SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                    }
+                },
             });
             this.close();
         }
 
         private _onTouchedBtnDeleteUnit(): void {
             if (!this._checkCanDoAction()) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0239));
+                FloatText.show(Lang.getText(LangTextType.A0239));
                 return;
             }
 
             const war = this._getWar();
-            if (war.getPlayerInTurn().getUserId() !== Twns.User.UserModel.getSelfUserId()) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0242));
+            if (war.getPlayerInTurn().getUserId() !== User.UserModel.getSelfUserId()) {
+                FloatText.show(Lang.getText(LangTextType.A0242));
                 return;
             }
 
@@ -167,13 +189,13 @@ namespace Twns.MultiPlayerWar {
             const unit          = unitMap.getVisibleUnitOnMap(war.getCursor().getGridIndex());
             const playerIndex   = war.getPlayerIndexInTurn();
             if (!unit) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0027));
-            } else if ((unit.getPlayerIndex() !== playerIndex) || (unit.getActionState() !== Twns.Types.UnitActionState.Idle)) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0028));
+                FloatText.show(Lang.getText(LangTextType.A0027));
+            } else if ((unit.getPlayerIndex() !== playerIndex) || (unit.getActionState() !== Types.UnitActionState.Idle)) {
+                FloatText.show(Lang.getText(LangTextType.A0028));
             } else if (unitMap.countUnitsOnMapForPlayer(playerIndex) <= 1) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0076));
+                FloatText.show(Lang.getText(LangTextType.A0076));
             } else {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0081),
                     content : Lang.getText(LangTextType.A0029),
                     callback: () => war.getActionPlanner().setStateRequestingPlayerDeleteUnit(),
@@ -183,44 +205,44 @@ namespace Twns.MultiPlayerWar {
 
         private _onTouchedBtnSimulation(): void {
             if (!this._checkCanDoAction()) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0239));
+                FloatText.show(Lang.getText(LangTextType.A0239));
                 return;
             }
 
             const war = this._getWar();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmCreateSfwSaveSlotsPanel, war.serializeForCreateSfw());
+            PanelHelpers.open(PanelHelpers.PanelDict.SpmCreateSfwSaveSlotsPanel, war.serializeForCreateSfw());
         }
 
         private _onTouchedBtnFreeMode(): void {
             if (!this._checkCanDoAction()) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0239));
+                FloatText.show(Lang.getText(LangTextType.A0239));
                 return;
             }
 
             const war = this._getWar();
             if (war.getPlayerManager().getAliveOrDyingTeamsCount(false) < 2) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0199));
+                FloatText.show(Lang.getText(LangTextType.A0199));
                 return;
             }
 
             const warData   = war.serializeForCreateMfr();
             const errorCode = new TestWar.TwWar().getErrorCodeForInitForMfw(warData, war.getGameConfig());
             if (errorCode) {
-                Twns.FloatText.show(Lang.getErrorText(errorCode));
+                FloatText.show(Lang.getErrorText(errorCode));
                 return;
             }
 
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0201),
                 callback: () => {
-                    Twns.FlowManager.gotoMfrCreateSettingsPanel(warData);
+                    FlowManager.gotoMfrCreateSettingsPanel(warData);
                 }
             });
         }
 
         private _onTouchedBtnSetPath(): void {
-            const isEnabled = Twns.User.UserModel.getSelfSettingsIsSetPathMode();
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            const isEnabled = User.UserModel.getSelfSettingsIsSetPathMode();
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getFormattedText(
                     LangTextType.F0033,
                     Lang.getText(isEnabled ? LangTextType.B0431 : LangTextType.B0432),
@@ -229,14 +251,14 @@ namespace Twns.MultiPlayerWar {
                 textForCancel   : Lang.getText(LangTextType.B0434),
                 callback: () => {
                     if (!isEnabled) {
-                        Twns.User.UserProxy.reqUserSetSettings({
+                        User.UserProxy.reqUserSetSettings({
                             isSetPathMode   : true,
                         });
                     }
                 },
                 callbackOnCancel: () => {
                     if (isEnabled) {
-                        Twns.User.UserProxy.reqUserSetSettings({
+                        User.UserProxy.reqUserSetSettings({
                             isSetPathMode   : false,
                         });
                     }
@@ -245,11 +267,11 @@ namespace Twns.MultiPlayerWar {
         }
 
         private _onTouchedBtnReplay(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0249),
                 callback: () => {
-                    MultiPlayerWar.MpwProxy.reqMpwGetHalfwayReplayData(Twns.Helpers.getExisted(this._getWar().getWarId()));
-                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonBlockPanel, {
+                    MultiPlayerWar.MpwProxy.reqMpwGetHalfwayReplayData(Helpers.getExisted(this._getWar().getWarId()));
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonBlockPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0040),
                     });
@@ -258,53 +280,53 @@ namespace Twns.MultiPlayerWar {
         }
 
         private _onTouchedBtnUnitOpacity(): void {
-            Twns.User.UserModel.reqTickSelfSettingsUnitOpacity();
+            User.UserModel.reqTickSelfSettingsUnitOpacity();
         }
 
         private _onTouchedBtnMapRating(): void {
-            const mapId     = Twns.Helpers.getExisted(this._getWar().getMapId());
-            const minValue  = Twns.CommonConstants.MapMinRating;
-            const maxValue  = Twns.CommonConstants.MapMaxRating;
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+            const mapId     = Helpers.getExisted(this._getWar().getMapId());
+            const minValue  = CommonConstants.MapMinRating;
+            const maxValue  = CommonConstants.MapMaxRating;
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0363),
-                currentValue    : Twns.User.UserModel.getMapRating(mapId) || 0,
+                currentValue    : User.UserModel.getMapRating(mapId) || 0,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]\n${Lang.getText(LangTextType.A0238)}`,
                 callback        : panel => {
-                    Twns.User.UserProxy.reqUserSetMapRating(mapId, panel.getInputValue());
+                    User.UserProxy.reqUserSetMapRating(mapId, panel.getInputValue());
                 },
             });
         }
 
         private _onTouchedBtnSpectate(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MpwSpectatePanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MpwSpectatePanel, void 0);
         }
 
         private _onTouchedBtnSetDraw(): void {
             if (!this._checkCanDoAction()) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0239));
+                FloatText.show(Lang.getText(LangTextType.A0239));
                 return;
             }
 
             const war = this._getWar();
-            if (war.getPlayerInTurn().getUserId() !== Twns.User.UserModel.getSelfUserId()) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0242));
+            if (war.getPlayerInTurn().getUserId() !== User.UserModel.getSelfUserId()) {
+                FloatText.show(Lang.getText(LangTextType.A0242));
                 return;
             }
             if (war.getPlayerInTurn().getHasVotedForDraw()) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0240));
+                FloatText.show(Lang.getText(LangTextType.A0240));
                 return;
             }
 
             const actionPlanner = war.getActionPlanner();
             if (war.getDrawVoteManager().getRemainingVotes() == null) {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0031),
                     callback: () => actionPlanner.setStateRequestingPlayerVoteForDraw(true),
                 });
             } else {
-                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content             : Lang.getText(LangTextType.A0241),
                     textForConfirm      : Lang.getText(LangTextType.B0214),
                     textForCancel       : Lang.getText(LangTextType.B0215),
@@ -323,17 +345,17 @@ namespace Twns.MultiPlayerWar {
 
         private _onTouchedBtnSurrender(): void {
             if (!this._checkCanDoAction()) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0239));
+                FloatText.show(Lang.getText(LangTextType.A0239));
                 return;
             }
 
             const war = this._getWar();
-            if (war.getPlayerInTurn().getUserId() !== Twns.User.UserModel.getSelfUserId()) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0242));
+            if (war.getPlayerInTurn().getUserId() !== User.UserModel.getSelfUserId()) {
+                FloatText.show(Lang.getText(LangTextType.A0242));
                 return;
             }
 
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0055),
                 content : Lang.getText(LangTextType.A0026),
                 callback: () => {
@@ -345,19 +367,19 @@ namespace Twns.MultiPlayerWar {
 
         private _onTouchedBtnGotoWarList(): void {
             if (!this._checkCanDoAction()) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0239));
+                FloatText.show(Lang.getText(LangTextType.A0239));
                 return;
             }
 
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0652),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
                     const war = this._getWar();
                     if (war.getPlayerLoggedIn() != null) {
-                        Twns.FlowManager.gotoMyWarListPanel(war.getWarType());
+                        FlowManager.gotoMyWarListPanel(war.getWarType());
                     } else {
-                        Twns.FlowManager.gotoWatchWarListPanel();
+                        FlowManager.gotoWatchWarListPanel();
                     }
                 },
             });
@@ -365,14 +387,14 @@ namespace Twns.MultiPlayerWar {
 
         private _onTouchedBtnGotoLobby(): void {
             if (!this._checkCanDoAction()) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0239));
+                FloatText.show(Lang.getText(LangTextType.A0239));
                 return;
             }
 
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0054),
                 content : Lang.getText(LangTextType.A0025),
-                callback: () => Twns.FlowManager.gotoLobby(),
+                callback: () => FlowManager.gotoLobby(),
             });
         }
 
@@ -380,32 +402,32 @@ namespace Twns.MultiPlayerWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private _updateView(): void {
@@ -439,7 +461,7 @@ namespace Twns.MultiPlayerWar {
         }
 
         private _updateBtnUnitOpacity(): void {
-            this._btnUnitOpacity.label = `${Lang.getText(LangTextType.B0747)}: ${Twns.User.UserModel.getSelfSettingsOpacitySettings()?.unitOpacity ?? 100}%`;
+            this._btnUnitOpacity.label = `${Lang.getText(LangTextType.B0747)}: ${User.UserModel.getSelfSettingsOpacitySettings()?.unitOpacity ?? 100}%`;
         }
 
         private _updateBtnMapRating(): void {
@@ -449,12 +471,12 @@ namespace Twns.MultiPlayerWar {
                 btn.visible = false;
             } else {
                 btn.visible = true;
-                btn.label   = `${Lang.getText(LangTextType.B0804)}: ${Twns.User.UserModel.getMapRating(mapId) ?? `--`}`;
+                btn.label   = `${Lang.getText(LangTextType.B0804)}: ${User.UserModel.getMapRating(mapId) ?? `--`}`;
             }
         }
 
         private async _updateBtnSpectate(): Promise<void> {
-            const info = await WatchWar.WwModel.getWatchIncomingInfo(Twns.Helpers.getExisted(this._getWar().getWarId()));
+            const info = await WatchWar.WwModel.getWatchIncomingInfo(Helpers.getExisted(this._getWar().getWarId()));
             this._btnSpectate.setRedVisible(!!info?.requestSrcUserIdArray?.length);
         }
 
@@ -464,8 +486,8 @@ namespace Twns.MultiPlayerWar {
         private _checkCanDoAction(): boolean {
             const war = this._getWar();
             return (war.checkIsHumanInTurn())                                           &&
-                (war.getTurnManager().getPhaseCode() === Twns.Types.TurnPhaseCode.Main)      &&
-                (war.getActionPlanner().getState() === Twns.Types.ActionPlannerState.Idle);
+                (war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.Main)      &&
+                (war.getActionPlanner().getState() === Types.ActionPlannerState.Idle);
         }
     }
 }

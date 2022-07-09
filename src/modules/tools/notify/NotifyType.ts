@@ -13,6 +13,7 @@ namespace Twns.Notify {
         GridAnimationTick,
         UnitAndTileTextureVersionChanged,
         UserSettingsIsShowGridBorderChanged,
+        UserSettingsIsShowWeatherAnimationChanged,
         UserSettingsOpacitySettingsChanged,
         UserSettingsIsAutoScrollMapChanged,
 

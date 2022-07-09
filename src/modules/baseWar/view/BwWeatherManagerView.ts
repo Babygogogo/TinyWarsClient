@@ -9,14 +9,18 @@ namespace Twns.BaseWar {
     const SANDSTORM_ANGLE   = 70;
 
     export class BwWeatherManagerView extends eui.Component {
-        private _weatherManager?        : BaseWar.BwWeatherManager;
-        private _containerForRain       = new eui.Component();
-        private _imgArrayForRain        : TwnsUiImage.UiImage[] = [];
-        private _containerForSnow       = new eui.Component();
-        private _imgArrayForSnow        : TwnsUiImage.UiImage[] = [];
-        private _containerForSandstorm  = new eui.Component();
-        private _imgArrayForSandstorm   : TwnsUiImage.UiImage[] = [];
-        private _showingWeatherType     : number | null = null;
+        private readonly _notifyListeners   : Notify.Listener[] = [
+            { type: Notify.NotifyType.UserSettingsIsShowWeatherAnimationChanged,    callback: this._onNotifyUserSettingsIsShowWeatherAnimationChanged },
+        ];
+
+        private _weatherManager?            : BaseWar.BwWeatherManager;
+        private _containerForRain           = new eui.Component();
+        private _imgArrayForRain            : TwnsUiImage.UiImage[] = [];
+        private _containerForSnow           = new eui.Component();
+        private _imgArrayForSnow            : TwnsUiImage.UiImage[] = [];
+        private _containerForSandstorm      = new eui.Component();
+        private _imgArrayForSandstorm       : TwnsUiImage.UiImage[] = [];
+        private _showingWeatherType         : number | null = null;
 
         public constructor() {
             super();
@@ -57,10 +61,12 @@ namespace Twns.BaseWar {
 
         public startRunningView(): void {
             this.addEventListener(egret.Event.RESIZE, this._onResize, this);
+            Notify.addEventListeners(this._notifyListeners, this);
             this.resetView(true);
         }
         public stopRunningView(): void {
             this.removeEventListener(egret.Event.RESIZE, this._onResize, this);
+            Notify.removeEventListeners(this._notifyListeners, this);
             this._stopView();
         }
 
@@ -74,8 +80,17 @@ namespace Twns.BaseWar {
         private _onResize(): void {
             this.resetView(true);
         }
+        private _onNotifyUserSettingsIsShowWeatherAnimationChanged(): void {
+            this.resetView(false);
+        }
 
         public resetView(isForce: boolean): void {
+            if (!LocalStorage.getShowWeatherAnimation()) {
+                this._showingWeatherType = null;
+                this._stopView();
+                return;
+            }
+
             const weatherManager    = this._getWeatherManager();
             const weatherType       = weatherManager.getCurrentWeatherType();
             if ((!isForce) && (weatherType === this._showingWeatherType)) {

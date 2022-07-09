@@ -61,7 +61,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
     const _cachedActions        : IWarActionContainer[] = [];
 
     export function init(): void {
-        Notify.addEventListeners(_NOTIFY_LISTENERS);
+        Notify.addEventListeners(_NOTIFY_LISTENERS, MpwModel);
     }
 
     export async function getMyMcwWarIdArray(): Promise<number[]> {

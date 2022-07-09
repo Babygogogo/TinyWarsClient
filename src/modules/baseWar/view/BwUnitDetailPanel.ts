@@ -62,6 +62,7 @@ namespace Twns.BaseWar {
         private readonly _labelName!            : TwnsUiLabel.UiLabel;
         private readonly _labelName1!           : TwnsUiLabel.UiLabel;
         private readonly _btnUnitsInfo!         : TwnsUiButton.UiButton;
+        private readonly _btnDamageCalculator!  : TwnsUiButton.UiButton;
         private readonly _btnClose!             : TwnsUiButton.UiButton;
         private readonly _btnDelete!            : TwnsUiButton.UiButton;
 
@@ -85,9 +86,10 @@ namespace Twns.BaseWar {
                 { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwPlannerStateChanged },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnUnitsInfo,   callback: this._onTouchedBtnUnitsInfo },
-                { ui: this._btnClose,       callback: this.close },
-                { ui: this._btnDelete,      callback: this._onTouchedBtnDelete },
+                { ui: this._btnUnitsInfo,           callback: this._onTouchedBtnUnitsInfo },
+                { ui: this._btnDamageCalculator,    callback: this._onTouchedBtnDamageCalculator },
+                { ui: this._btnClose,               callback: this.close },
+                { ui: this._btnDelete,              callback: this._onTouchedBtnDelete },
             ]);
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
@@ -125,6 +127,59 @@ namespace Twns.BaseWar {
         private _onTouchedBtnUnitsInfo(): void {
             PanelHelpers.open(PanelHelpers.PanelDict.CommonDamageChartPanel, {
                 gameConfig  : this._getOpenData().unit.getGameConfig(),
+            });
+            this.close();
+        }
+        private _onTouchedBtnDamageCalculator(): void {
+            const attackerUnit          = this._getOpenData().unit;
+            const attackerPlayerIndex   = attackerUnit.getPlayerIndex();
+            const attackerPlayer        = attackerUnit.getPlayer();
+            const attackerGridIndex     = attackerUnit.getGridIndex();
+            const war                   = attackerUnit.getWar();
+            const tileMap               = war.getTileMap();
+            const gameConfig            = war.getGameConfig();
+            const commonSettingsManager = war.getCommonSettingManager();
+            const hasFog                = war.getFogMap().checkHasFogCurrently();
+            const allTiles              = tileMap.getAllTiles();
+            const allCities             = allTiles.filter(v => v.getType() === CommonConstants.TileType.City);
+            const allCommandTowers      = allTiles.filter(v => v.getType() === CommonConstants.TileType.CommandTower);
+            const defenderData          = Common.CommonDamageCalculatorPanel.createDefaultPlayerData(gameConfig);
+            const watcherTeamIndexes    = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+            const canSeeHiddenInfo1     = (!hasFog) || (watcherTeamIndexes.has(attackerPlayer.getTeamIndex()));
+            const getIsAffectedByCo1    = Helpers.createLazyFunc((): boolean => {
+                if ((attackerUnit.getHasLoadedCo()) || (!gameConfig.getCoBasicCfg(attackerPlayer.getCoId())?.maxLoadCount)) {
+                    return true;
+                }
+
+                const distance = GridIndexHelpers.getMinDistance(attackerGridIndex, attackerPlayer.getCoGridIndexListOnMap());
+                return (distance != null) && (distance <= attackerPlayer.getCoZoneRadius());
+            });
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonDamageCalculatorPanel, {
+                war,
+                needReviseWeaponType    : true,
+                data                    : {
+                    gameConfig      : war.getGameConfig(),
+                    weatherType     : war.getWeatherManager().getCurrentWeatherType(),
+                    attackerData    : {
+                        coId            : attackerPlayer.getCoId(),
+                        coSkillType     : attackerPlayer.checkCoIsUsingActiveSkill()
+                            ? attackerPlayer.getCoUsingSkillType()
+                            : (getIsAffectedByCo1() ? Types.CoSkillType.Passive : null),
+                        unitType        : attackerUnit.getUnitType(),
+                        unitHp          : attackerUnit.getCurrentHp(),
+                        unitWeaponType  : null,
+                        unitPromotion   : attackerUnit.getCurrentPromotion(),
+                        tileType        : tileMap.getTile(attackerGridIndex).getType(),
+                        towersCount     : allCommandTowers.filter(v => v.getPlayerIndex() === attackerPlayerIndex).length,
+                        offenseBonus    : commonSettingsManager.getSettingsAttackPowerModifier(attackerPlayerIndex),
+                        upperLuck       : commonSettingsManager.getSettingsLuckUpperLimit(attackerPlayerIndex),
+                        lowerLuck       : commonSettingsManager.getSettingsLuckLowerLimit(attackerPlayerIndex),
+                        hasPrimaryAmmo  : !!attackerUnit.getPrimaryWeaponCurrentAmmo(),
+                        fund            : canSeeHiddenInfo1 ? attackerPlayer.getFund() : 0,
+                        citiesCount     : canSeeHiddenInfo1 ? allCities.filter(v => v.getPlayerIndex() === attackerPlayerIndex).length : 0,
+                    },
+                    defenderData,
+                },
             });
             this.close();
         }

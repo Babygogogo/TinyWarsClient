@@ -5,7 +5,7 @@
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                          scale9Grid="1,1,2,2" />
-    <e:Group id="_group" width="520" height="380" horizontalCenter="0" verticalCenter="0">
+    <e:Group id="_group" width="520" height="310" horizontalCenter="0" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0">
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
                                  scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
@@ -49,19 +49,6 @@
                     <e:Group x="0" y="0">
                         <TwnsUiRadioButton:UiRadioButton id="_uiRadioLanguage" x="90" y="17"
                                                          skinName="Skins.Component.RadioButton.RadioButton001" />
-                        <TwnsUiRadioButton:UiRadioButton id="_uiRadioTexture" x="100" y="27"
-                                                         skinName="Skins.Component.RadioButton.RadioButton001" />
-                        <TwnsUiRadioButton:UiRadioButton id="_uiRadioShowGridBorder" x="80" y="7"
-                                                         skinName="Skins.Component.RadioButton.RadioButton001" />
-                        <e:layout>
-                            <e:HorizontalLayout gap="50" />
-                        </e:layout>
-                    </e:Group>
-                    <e:Group x="0" y="44">
-                        <TwnsUiRadioButton:UiRadioButton id="_uiRadioUnitAnimation" x="80" y="7"
-                                                         skinName="Skins.Component.RadioButton.RadioButton001" />
-                        <TwnsUiRadioButton:UiRadioButton id="_uiRadioTileAnimation" x="90" y="17"
-                                                         skinName="Skins.Component.RadioButton.RadioButton001" />
                         <TwnsUiRadioButton:UiRadioButton id="_uiRadioAutoScrollMap" x="100" y="27"
                                                          skinName="Skins.Component.RadioButton.RadioButton001" />
                         <e:layout>
@@ -93,9 +80,7 @@
                                            skinName="Skins.Component.Button.ButtonBlack001" />
                     <TwnsUiButton:UiButton id="_btnMapManagement" label="管理地图" y="360" x="256"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
-                    <TwnsUiButton:UiButton id="_btnSetOpacity" label="不透明度设置" y="370" x="266"
-                                           skinName="Skins.Component.Button.ButtonBlack001" />
-                    <TwnsUiButton:UiButton id="_btnSetStageScaler" label="分辨率设置" y="360" x="256"
+                    <TwnsUiButton:UiButton id="_btnGraphicSettings" label="画面设置" y="370" x="266"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
                     <e:layout>
                         <e:TileLayout orientation="rows" requestedColumnCount="3" horizontalGap="50" verticalGap="14" />

@@ -39,7 +39,7 @@ namespace Twns.Timer {
             { type: NotifyType.NetworkConnected,       callback: _onNotifyNetworkConnected, },
             { type: NotifyType.NetworkDisconnected,    callback: _onNotifyNetworkDisconnected, },
             { type: NotifyType.MsgCommonHeartbeat,     callback: _onMsgCommonHeartbeat, },
-        ]);
+        ], Timer);
 
         egret.setInterval(() => {
             (_serverTimestamp) && (++_serverTimestamp);

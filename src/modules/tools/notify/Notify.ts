@@ -26,7 +26,7 @@ namespace Twns.Notify {
         _DISPATCHER.addEventListener(getTypeName(type), callback, thisObject, useCapture, priority);
     }
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    export function addEventListeners(listeners: Listener[], thisObject?: any, useCapture?: boolean, priority?: number): void {
+    export function addEventListeners(listeners: Listener[], thisObject: any, useCapture?: boolean, priority?: number): void {
         for (const l of listeners) {
             addEventListener(
                 l.type,
@@ -43,7 +43,7 @@ namespace Twns.Notify {
         _DISPATCHER.removeEventListener(getTypeName(type), callback, thisObject, useCapture);
     }
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    export function removeEventListeners(listeners: Listener[], thisObject?: any, useCapture?: boolean): void {
+    export function removeEventListeners(listeners: Listener[], thisObject: any, useCapture?: boolean): void {
         for (const l of listeners) {
             removeEventListener(
                 l.type,
