@@ -127,8 +127,8 @@ namespace Twns.WarEvent {
                     minValue,
                     maxValue,
                     tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                    callback        : (panel) => {
-                        eventData.maxCallCountInPlayerTurn = panel.getInputValue();
+                    callback        : (value) => {
+                        eventData.maxCallCountInPlayerTurn = value;
                         Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     },
                 });
@@ -146,8 +146,8 @@ namespace Twns.WarEvent {
                     minValue,
                     maxValue,
                     tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                    callback        : (panel) => {
-                        eventData.maxCallCountTotal = panel.getInputValue();
+                    callback        : (value) => {
+                        eventData.maxCallCountTotal = value;
                         Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     },
                 });

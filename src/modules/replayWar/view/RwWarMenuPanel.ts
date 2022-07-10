@@ -261,8 +261,8 @@ namespace Twns.ReplayWar {
                         minValue,
                         maxValue,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            ReplayWar.RwProxy.reqReplaySetSelfRating(war.getReplayId(), panel.getInputValue());
+                        callback        : value => {
+                            ReplayWar.RwProxy.reqReplaySetSelfRating(war.getReplayId(), value);
                         },
                     });
                 },

@@ -37,6 +37,20 @@ namespace Twns.BaseWar {
                 throw Helpers.newError(`Invalid warRule.`, errorCodeForWarRule);
             }
 
+            {
+                const turnsLimit = settings.turnsLimit ?? CommonConstants.Turn.Limit.Default;
+                if (!Config.ConfigManager.checkIsValidTurnsLimit(turnsLimit)) {
+                    throw Helpers.newError(`Invalid turnsLimit: ${turnsLimit}`, ClientErrorCode.BwCommonSettingManager_Init_02);
+                }
+            }
+
+            {
+                const warActionsLimit = settings.warActionsLimit ?? CommonConstants.WarAction.Limit.Default;
+                if (!Config.ConfigManager.checkIsValidWarActionsLimit(warActionsLimit)) {
+                    throw Helpers.newError(`Invalid warActionsLimit: ${warActionsLimit}`, ClientErrorCode.BwCommonSettingManager_Init_03);
+                }
+            }
+
             this._setSettingsForCommon(settings);
         }
 
@@ -65,7 +79,10 @@ namespace Twns.BaseWar {
             return Helpers.getExisted(this._settingsForCommon, ClientErrorCode.BwCommonSettingManager_GetSettingsForCommon_00);
         }
         public getTurnsLimit(): number {
-            return this.getSettingsForCommon().turnsLimit ?? CommonConstants.WarMaxTurnsLimit;
+            return this.getSettingsForCommon().turnsLimit ?? CommonConstants.Turn.Limit.Default;
+        }
+        public getWarActionsLimit(): number {
+            return this.getSettingsForCommon().warActionsLimit ?? CommonConstants.WarAction.Limit.Default;
         }
         public getInstanceWarRule(): CommonProto.WarRule.IInstanceWarRule {
             return Helpers.getExisted(this.getSettingsForCommon().instanceWarRule);

@@ -321,16 +321,19 @@ namespace Twns.MultiFreeRoom {
                         callbackOnModify: null,
                     },
                     {
-                        settingsType    : WarBasicSettingsType.TurnsLimit,
-                        currentValue    : MultiFreeRoom.MfrCreateModel.getTurnsLimit(),
+                        settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                        currentValue    : `${MfrCreateModel.getTurnsLimit()}, ${MfrCreateModel.getWarActionsLimit()}`,
                         instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
-                            if (typeof newValue !== "number") {
+                            if (typeof newValue !== "string") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            MultiFreeRoom.MfrCreateModel.setTurnsLimit(newValue);
+
+                            const stringArray = newValue.split(`,`);
+                            MfrCreateModel.setTurnsLimit(parseInt(stringArray[0]));
+                            MfrCreateModel.setWarActionsLimit(parseInt(stringArray[1]));
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },

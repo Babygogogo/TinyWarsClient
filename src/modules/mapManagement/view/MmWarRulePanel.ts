@@ -604,8 +604,8 @@ namespace Twns.MapManagement {
                         minValue,
                         maxValue,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            WarHelpers.WarRuleHelpers.setInitialFund(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                        callback        : value => {
+                            WarHelpers.WarRuleHelpers.setInitialFund(templateWarRule, Helpers.getExisted(playerRule.playerIndex), value);
                             this._updateView();
                         },
                     });
@@ -627,8 +627,8 @@ namespace Twns.MapManagement {
                         minValue,
                         maxValue,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            WarHelpers.WarRuleHelpers.setIncomeMultiplier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                        callback        : value => {
+                            WarHelpers.WarRuleHelpers.setIncomeMultiplier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), value);
                             this._updateView();
                         },
                     });
@@ -650,8 +650,8 @@ namespace Twns.MapManagement {
                         minValue,
                         maxValue,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            WarHelpers.WarRuleHelpers.setEnergyAddPctOnLoadCo(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                        callback        : value => {
+                            WarHelpers.WarRuleHelpers.setEnergyAddPctOnLoadCo(templateWarRule, Helpers.getExisted(playerRule.playerIndex), value);
                             this._updateView();
                         },
                     });
@@ -673,8 +673,8 @@ namespace Twns.MapManagement {
                         minValue,
                         maxValue,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            WarHelpers.WarRuleHelpers.setEnergyGrowthMultiplier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                        callback        : value => {
+                            WarHelpers.WarRuleHelpers.setEnergyGrowthMultiplier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), value);
                             this._updateView();
                         },
                     });
@@ -696,8 +696,8 @@ namespace Twns.MapManagement {
                         minValue,
                         maxValue,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            WarHelpers.WarRuleHelpers.setMoveRangeModifier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                        callback        : value => {
+                            WarHelpers.WarRuleHelpers.setMoveRangeModifier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), value);
                             this._updateView();
                         },
                     });
@@ -719,8 +719,8 @@ namespace Twns.MapManagement {
                         minValue,
                         maxValue,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            WarHelpers.WarRuleHelpers.setAttackPowerModifier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                        callback        : value => {
+                            WarHelpers.WarRuleHelpers.setAttackPowerModifier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), value);
                             this._updateView();
                         },
                     });
@@ -742,8 +742,8 @@ namespace Twns.MapManagement {
                         minValue,
                         maxValue,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            WarHelpers.WarRuleHelpers.setVisionRangeModifier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                        callback        : value => {
+                            WarHelpers.WarRuleHelpers.setVisionRangeModifier(templateWarRule, Helpers.getExisted(playerRule.playerIndex), value);
                             this._updateView();
                         },
                     });
@@ -766,9 +766,8 @@ namespace Twns.MapManagement {
                         minValue,
                         maxValue,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            const value         = panel.getInputValue();
-                            const upperLimit    = WarHelpers.WarRuleHelpers.getLuckUpperLimit(templateWarRule, playerIndex);
+                        callback        : value => {
+                            const upperLimit = WarHelpers.WarRuleHelpers.getLuckUpperLimit(templateWarRule, playerIndex);
                             if (value <= upperLimit) {
                                 WarHelpers.WarRuleHelpers.setLuckLowerLimit(templateWarRule, playerIndex, value);
                             } else {
@@ -797,9 +796,8 @@ namespace Twns.MapManagement {
                         minValue,
                         maxValue,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                        callback        : panel => {
-                            const value         = panel.getInputValue();
-                            const lowerLimit    = WarHelpers.WarRuleHelpers.getLuckLowerLimit(templateWarRule, playerIndex);
+                        callback        : value => {
+                            const lowerLimit = WarHelpers.WarRuleHelpers.getLuckLowerLimit(templateWarRule, playerIndex);
                             if (value >= lowerLimit) {
                                 WarHelpers.WarRuleHelpers.setLuckUpperLimit(templateWarRule, playerIndex, value);
                             } else {

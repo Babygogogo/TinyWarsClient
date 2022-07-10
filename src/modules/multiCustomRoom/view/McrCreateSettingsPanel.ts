@@ -225,11 +225,12 @@ namespace Twns.MultiCustomRoom {
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            const instanceWarRule   = MultiCustomRoom.McrCreateModel.getInstanceWarRule();
-            const bootTimerParams   = MultiCustomRoom.McrCreateModel.getBootTimerParams();
-            const turnsLimit        = MultiCustomRoom.McrCreateModel.getTurnsLimit();
-            const gameConfig        = MultiCustomRoom.McrCreateModel.getGameConfig();
-            const warEventFullData  = (await MultiCustomRoom.McrCreateModel.getMapRawData()).warEventFullData ?? null;
+            const instanceWarRule   = McrCreateModel.getInstanceWarRule();
+            const bootTimerParams   = McrCreateModel.getBootTimerParams();
+            const turnsLimit        = McrCreateModel.getTurnsLimit();
+            const warActionsLimit   = McrCreateModel.getWarActionsLimit();
+            const gameConfig        = McrCreateModel.getGameConfig();
+            const warEventFullData  = (await McrCreateModel.getMapRawData()).warEventFullData ?? null;
             const timerType         = bootTimerParams[0] as Types.BootTimerType;
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
@@ -327,16 +328,19 @@ namespace Twns.MultiCustomRoom {
                         callbackOnModify: null,
                     },
                     {
-                        settingsType    : WarBasicSettingsType.TurnsLimit,
-                        currentValue    : turnsLimit,
+                        settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                        currentValue    : `${turnsLimit}, ${warActionsLimit}`,
                         instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
-                            if (typeof newValue !== "number") {
+                            if (typeof newValue !== "string") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            MultiCustomRoom.McrCreateModel.setTurnsLimit(newValue);
+
+                            const stringArray = newValue.split(`,`);
+                            McrCreateModel.setTurnsLimit(parseInt(stringArray[0]));
+                            McrCreateModel.setWarActionsLimit(parseInt(stringArray[1]));
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },

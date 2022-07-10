@@ -57,10 +57,17 @@ namespace Twns.MultiFreeRoom.MfrCreateModel {
     }
 
     export function getTurnsLimit(): number {
-        return getInitialWarData().settingsForCommon?.turnsLimit ?? Twns.CommonConstants.WarMaxTurnsLimit;
+        return getInitialWarData().settingsForCommon?.turnsLimit ?? Twns.CommonConstants.Turn.Limit.Default;
     }
     export function setTurnsLimit(turnsLimit: number): void {
         Twns.Helpers.getExisted(getInitialWarData().settingsForCommon).turnsLimit = turnsLimit;
+    }
+
+    export function getWarActionsLimit(): number {
+        return getInitialWarData().settingsForCommon?.warActionsLimit ?? CommonConstants.WarAction.Limit.Default;
+    }
+    export function setWarActionsLimit(warActionsLimit: number): void {
+        Helpers.getExisted(getInitialWarData().settingsForCommon).warActionsLimit = warActionsLimit;
     }
 
     export function getInitialWarData(): ISerialWar {

@@ -1169,7 +1169,7 @@ namespace Twns.BaseWar {
 
         public getCallableWarEventId(): number | null {                                // DONE
             const war = this._getWar();
-            if (war.getTurnManager().getTurnIndex() > war.getCommonSettingManager().getTurnsLimit()) {
+            if (war.checkIsExceedTurnsOrWarActionsLimit()) {
                 return null;
             }
 

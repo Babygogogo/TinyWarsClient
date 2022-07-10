@@ -150,11 +150,12 @@ namespace Twns.CoopCustomRoom {
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            const instanceWarRule   = CoopCustomRoom.CcrCreateModel.getInstanceWarRule();
-            const turnsLimit        = CoopCustomRoom.CcrCreateModel.getTurnsLimit();
-            const bootTimerParams   = CoopCustomRoom.CcrCreateModel.getBootTimerParams();
-            const gameConfig        = CoopCustomRoom.CcrCreateModel.getGameConfig();
-            const warEventFullData  = (await CoopCustomRoom.CcrCreateModel.getMapRawData()).warEventFullData ?? null;
+            const instanceWarRule   = CcrCreateModel.getInstanceWarRule();
+            const turnsLimit        = CcrCreateModel.getTurnsLimit();
+            const warActionsLimit   = CcrCreateModel.getWarActionsLimit();
+            const bootTimerParams   = CcrCreateModel.getBootTimerParams();
+            const gameConfig        = CcrCreateModel.getGameConfig();
+            const warEventFullData  = (await CcrCreateModel.getMapRawData()).warEventFullData ?? null;
             const timerType         = bootTimerParams[0] as Types.BootTimerType;
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
@@ -252,16 +253,19 @@ namespace Twns.CoopCustomRoom {
                         callbackOnModify: null,
                     },
                     {
-                        settingsType    : WarBasicSettingsType.TurnsLimit,
-                        currentValue    : turnsLimit,
-                        instanceWarRule: instanceWarRule,
+                        settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                        currentValue    : `${turnsLimit}, ${warActionsLimit}`,
+                        instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
-                            if (typeof newValue !== "number") {
+                            if (typeof newValue !== "string") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            CoopCustomRoom.CcrCreateModel.setTurnsLimit(newValue);
+
+                            const stringArray = newValue.split(`,`);
+                            CcrCreateModel.setTurnsLimit(parseInt(stringArray[0]));
+                            CcrCreateModel.setWarActionsLimit(parseInt(stringArray[1]));
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },

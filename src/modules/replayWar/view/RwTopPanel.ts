@@ -146,8 +146,8 @@ namespace Twns.ReplayWar {
                 maxValue,
                 currentValue    : war.getPauseTimeMs(),
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}](ms)\n${Lang.getText(LangTextType.A0290)}`,
-                callback        : panel => {
-                    war.setPauseTimeMs(panel.getInputValue());
+                callback        : value => {
+                    war.setPauseTimeMs(value);
                     this._updateLabelPauseTime();
                 },
             });

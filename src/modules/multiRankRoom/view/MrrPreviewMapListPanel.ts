@@ -299,8 +299,8 @@ namespace Twns.MultiRankRoom {
                         callbackOnModify: null,
                     },
                     {
-                        settingsType    : WarBasicSettingsType.TurnsLimit,
-                        currentValue    : CommonConstants.WarMaxTurnsLimit,
+                        settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                        currentValue    : `${CommonConstants.Turn.Limit.Default}, ${CommonConstants.WarAction.Limit.Default}`,
                         instanceWarRule,
                         gameConfig,
                         warEventFullData,

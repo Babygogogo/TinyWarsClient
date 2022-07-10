@@ -26,7 +26,8 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
 
     const _dataForCreateRoom: DataForCreateRoom = {
         settingsForCommon       : {
-            turnsLimit          : CommonConstants.WarMaxTurnsLimit,
+            turnsLimit          : CommonConstants.Turn.Limit.Default,
+            warActionsLimit     : CommonConstants.WarAction.Limit.Default,
             instanceWarRule     : {
                 templateWarRuleId   : null,
             },
@@ -52,7 +53,8 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
         setWarPassword("");
         setWarComment("");
         setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
-        setTurnsLimit(CommonConstants.WarMaxTurnsLimit);
+        setTurnsLimit(CommonConstants.Turn.Limit.Default);
+        setWarActionsLimit(CommonConstants.WarAction.Limit.Default);
         setSelfPlayerIndex(CommonConstants.PlayerIndex.First);
         await resetDataByTemplateWarRuleId(Helpers.getExisted((await getMapRawData()).templateWarRuleArray?.find(v => v.ruleAvailability?.canCcw)?.ruleId));
     }
@@ -152,6 +154,13 @@ namespace Twns.CoopCustomRoom.CcrCreateModel {
     }
     export function setTurnsLimit(turnsLimit: number): void {
         getSettingsForCommon().turnsLimit = turnsLimit;
+    }
+
+    export function getWarActionsLimit(): number {
+        return Helpers.getExisted(getSettingsForCommon().warActionsLimit);
+    }
+    export function setWarActionsLimit(warActionsLimit: number): void {
+        getSettingsForCommon().warActionsLimit = warActionsLimit;
     }
 
     export function setWarName(name: string | null): void {

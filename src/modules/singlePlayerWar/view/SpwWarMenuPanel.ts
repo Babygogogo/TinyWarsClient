@@ -35,6 +35,7 @@ namespace Twns.SinglePlayerWar {
         private readonly _group!                : eui.Group;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _btnClose!             : TwnsUiButton.UiButton;
+        private readonly _btnDamageCalculator!  : TwnsUiButton.UiButton;
 
         private readonly _btnSaveGame!          : TwnsUiButton.UiButton;
         private readonly _btnLoadGame!          : TwnsUiButton.UiButton;
@@ -64,6 +65,7 @@ namespace Twns.SinglePlayerWar {
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,                                   callback: this.close },
+                { ui: this._btnDamageCalculator,                        callback: this._onTouchedBtnDamageCalculator },
                 { ui: this._btnSaveGame,                                callback: this._onTouchedBtnSaveGame },
                 { ui: this._btnLoadGame,                                callback: this._onTouchedBtnLoadGame },
                 { ui: this._btnUnitList,                                callback: this._onTouchedBtnUnitList },
@@ -139,6 +141,15 @@ namespace Twns.SinglePlayerWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks for ui.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onTouchedBtnDamageCalculator(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonDamageCalculatorPanel, {
+                war                     : this._getWar(),
+                needReviseWeaponType    : true,
+                data                    : null,
+            });
+            this.close();
+        }
+
         private _onTouchedBtnSaveGame(): void {
             if (!this._checkCanDoAction()) {
                 FloatText.show(Lang.getText(LangTextType.A0239));
@@ -319,8 +330,8 @@ namespace Twns.SinglePlayerWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    User.UserProxy.reqUserSetMapRating(mapId, panel.getInputValue());
+                callback        : value => {
+                    User.UserProxy.reqUserSetMapRating(mapId, value);
                 },
             });
         }

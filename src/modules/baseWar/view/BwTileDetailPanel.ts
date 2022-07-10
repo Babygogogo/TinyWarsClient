@@ -899,8 +899,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCurrentHp(panel.getInputValue());
+                callback        : value => {
+                    tile.setCurrentHp(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -922,8 +922,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCurrentCapturePoint(panel.getInputValue());
+                callback        : value => {
+                    tile.setCurrentCapturePoint(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -945,8 +945,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCurrentBuildPoint(panel.getInputValue());
+                callback        : value => {
+                    tile.setCurrentBuildPoint(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -977,8 +977,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCrystalRadius(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCrystalRadius(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -999,8 +999,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCrystalPriority(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCrystalPriority(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1056,8 +1056,8 @@ namespace Twns.BaseWar {
                 minValue        : -10000000,
                 maxValue        : 10000000,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCrystalDeltaFund(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCrystalDeltaFund(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1079,8 +1079,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomCrystalDeltaEnergyPercentage(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCrystalDeltaEnergyPercentage(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1102,8 +1102,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomCrystalDeltaHp(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCrystalDeltaHp(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1125,8 +1125,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomCrystalDeltaFuelPercentage(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCrystalDeltaFuelPercentage(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1148,8 +1148,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomCrystalDeltaPrimaryAmmoPercentage(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCrystalDeltaPrimaryAmmoPercentage(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1170,8 +1170,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCannonRangeForUp(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonRangeForUp(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1192,8 +1192,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCannonRangeForRight(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonRangeForRight(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1214,8 +1214,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCannonRangeForDown(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonRangeForDown(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1236,8 +1236,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCannonRangeForLeft(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonRangeForLeft(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1258,8 +1258,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCannonPriority(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonPriority(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1280,8 +1280,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue        : 9999,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${Lang.getText(LangTextType.B0141)})`,
-                callback        : panel => {
-                    tile.setCustomCannonMaxTargetCount(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonMaxTargetCount(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1339,8 +1339,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomCannonDeltaHp(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonDeltaHp(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1362,8 +1362,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomCannonDeltaFuelPercentage(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonDeltaFuelPercentage(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1385,8 +1385,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomCannonDeltaPrimaryAmmoPercentage(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonDeltaPrimaryAmmoPercentage(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1407,8 +1407,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomLaserTurretRangeForUp(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretRangeForUp(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1429,8 +1429,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomLaserTurretRangeForRight(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretRangeForRight(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1451,8 +1451,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomLaserTurretRangeForDown(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretRangeForDown(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1473,8 +1473,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomLaserTurretRangeForLeft(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretRangeForLeft(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1495,8 +1495,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomLaserTurretPriority(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretPriority(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1554,8 +1554,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomLaserTurretDeltaHp(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretDeltaHp(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1577,8 +1577,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomLaserTurretDeltaFuelPercentage(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretDeltaFuelPercentage(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1600,8 +1600,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomLaserTurretDeltaPrimaryAmmoPercentage(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretDeltaPrimaryAmmoPercentage(value);
                     tile.flushDataToView();
                     this._updateView();
                 },

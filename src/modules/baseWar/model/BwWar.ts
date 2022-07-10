@@ -325,6 +325,12 @@ namespace Twns.BaseWar {
                 && (Timer.getServerTimestamp() > enterTurnTime + restTimeToBoot);
         }
 
+        public checkIsExceedTurnsOrWarActionsLimit(): boolean {
+            const commonSettingManager = this.getCommonSettingManager();
+            return (this.getTurnManager().getTurnIndex() > commonSettingManager.getTurnsLimit())
+                || (this.getExecutedActionManager().getExecutedActionsCount() > commonSettingManager.getWarActionsLimit());
+        }
+
         private _setWarId(warId: number | null): void {
             this._warId = warId;
         }

@@ -277,8 +277,8 @@ namespace Twns.MultiPlayerWar.MpwModel {
                     callbackOnModify: null,
                 },
                 {
-                    settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                    currentValue    : `${settingsForCommon.turnsLimit ?? CommonConstants.Turn.Limit.Default}, ${settingsForCommon.warActionsLimit ?? CommonConstants.WarAction.Limit.Default}`,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,
@@ -400,8 +400,8 @@ namespace Twns.MultiPlayerWar.MpwModel {
                     callbackOnModify: null,
                 },
                 {
-                    settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                    currentValue    : `${settingsForCommon.turnsLimit ?? CommonConstants.Turn.Limit.Default}, ${settingsForCommon.warActionsLimit ?? CommonConstants.WarAction.Limit.Default}`,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,
@@ -499,8 +499,8 @@ namespace Twns.MultiPlayerWar.MpwModel {
                     callbackOnModify: null,
                 },
                 {
-                    settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                    currentValue    : `${settingsForCommon.turnsLimit ?? CommonConstants.Turn.Limit.Default}, ${settingsForCommon.warActionsLimit ?? CommonConstants.WarAction.Limit.Default}`,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,
@@ -614,8 +614,8 @@ namespace Twns.MultiPlayerWar.MpwModel {
                     callbackOnModify: null,
                 },
                 {
-                    settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                    currentValue    : `${settingsForCommon.turnsLimit ?? CommonConstants.Turn.Limit.Default}, ${settingsForCommon.warActionsLimit ?? CommonConstants.WarAction.Limit.Default}`,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,

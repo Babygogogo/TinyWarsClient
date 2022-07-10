@@ -366,7 +366,8 @@ namespace Twns.Common {
                 playerIndex,
                 callback        : unitType => {
                     if (playerData.unitType !== unitType) {
-                        playerData.unitType = unitType;
+                        playerData.unitType         = unitType;
+                        playerData.hasPrimaryAmmo   = !!gameConfig.getUnitTemplateCfg(unitType)?.primaryWeaponMaxAmmo;
 
                         this._reviseWeaponType();
                         this._updateView();
@@ -430,8 +431,8 @@ namespace Twns.Common {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    playerData.unitHp = panel.getInputValue();
+                callback        : value => {
+                    playerData.unitHp = value;
                     this._updateView();
                 },
             });
@@ -478,8 +479,8 @@ namespace Twns.Common {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    playerData.towersCount = panel.getInputValue();
+                callback        : value => {
+                    playerData.towersCount = value;
                     this._updateView();
                 },
             });
@@ -501,8 +502,8 @@ namespace Twns.Common {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    playerData.offenseBonus = panel.getInputValue();
+                callback        : value => {
+                    playerData.offenseBonus = value;
                     this._updateView();
                 },
             });
@@ -524,8 +525,8 @@ namespace Twns.Common {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    playerData.upperLuck = panel.getInputValue();
+                callback        : value => {
+                    playerData.upperLuck = value;
                     this._updateView();
                 },
             });
@@ -547,8 +548,8 @@ namespace Twns.Common {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    playerData.lowerLuck = panel.getInputValue();
+                callback        : value => {
+                    playerData.lowerLuck = value;
                     this._updateView();
                 },
             });
@@ -570,8 +571,8 @@ namespace Twns.Common {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    playerData.fund = panel.getInputValue();
+                callback        : value => {
+                    playerData.fund = value;
                     this._updateView();
                 },
             });
@@ -593,8 +594,8 @@ namespace Twns.Common {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    playerData.citiesCount = panel.getInputValue();
+                callback        : value => {
+                    playerData.citiesCount = value;
                     this._updateView();
                 },
             });

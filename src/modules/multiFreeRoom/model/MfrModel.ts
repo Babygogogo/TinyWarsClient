@@ -282,9 +282,9 @@ namespace Twns.MultiFreeRoom.MfrModel {
                     callbackOnModify: null,
                 },
                 {
-                    settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
-                    instanceWarRule: instanceWarRule,
+                    settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                    currentValue    : `${settingsForCommon.turnsLimit ?? CommonConstants.Turn.Limit.Default}, ${settingsForCommon.warActionsLimit ?? CommonConstants.WarAction.Limit.Default}`,
+                    instanceWarRule,
                     gameConfig,
                     warEventFullData,
                     callbackOnModify: null,

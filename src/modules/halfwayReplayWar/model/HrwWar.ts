@@ -44,7 +44,7 @@ namespace Twns.HalfwayReplayWar {
         private _settingsForCcw?                    : CommonProto.WarSettings.ISettingsForCcw | null;
 
         private _visionTeamIndex                    : number | null = null;
-        private _pauseTimeMs                        = 1000;
+        private _pauseTimeMs                        = 200;
         private _isAutoReplay                       = false;
         private _nextActionId                       = 0;
         private _checkpointIdsForNextActionId       = new Map<number, number>();

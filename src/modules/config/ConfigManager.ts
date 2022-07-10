@@ -218,6 +218,15 @@ namespace Twns.Config.ConfigManager {
         const diveCfgs = templateCfg.diveCfgs;
         return (diveCfgs != null) && (!!diveCfgs[1]);
     }
+
+    export function checkIsValidTurnsLimit(turnsLimit: number): boolean {
+        return (turnsLimit >= CommonConstants.Turn.Limit.MinLimit)
+            && (turnsLimit <= CommonConstants.Turn.Limit.MaxLimit);
+    }
+    export function checkIsValidWarActionsLimit(warActionsLimit: number): boolean {
+        return (warActionsLimit >= CommonConstants.WarAction.Limit.MinLimit)
+            && (warActionsLimit <= CommonConstants.WarAction.Limit.MaxLimit);
+    }
 }
 
 // export default ConfigManager;

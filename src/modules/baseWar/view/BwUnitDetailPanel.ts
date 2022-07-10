@@ -848,8 +848,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    unit.setCurrentBuildMaterial(panel.getInputValue());
+                callback        : value => {
+                    unit.setCurrentBuildMaterial(value);
                     unit.updateView();
                     this._updateView();
                 },
@@ -869,8 +869,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    unit.setFlareCurrentAmmo(panel.getInputValue());
+                callback        : value => {
+                    unit.setFlareCurrentAmmo(value);
                     unit.updateView();
                     this._updateView();
                 },
@@ -892,8 +892,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    unit.setCurrentFuel(panel.getInputValue());
+                callback        : value => {
+                    unit.setCurrentFuel(value);
                     unit.updateView();
                     this._updateView();
                 },
@@ -935,8 +935,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    unit.setCurrentHp(panel.getInputValue());
+                callback        : value => {
+                    unit.setCurrentHp(value);
                     unit.updateView();
                     this._updateView();
                 },
@@ -978,8 +978,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    unit.setPrimaryWeaponCurrentAmmo(panel.getInputValue());
+                callback        : value => {
+                    unit.setPrimaryWeaponCurrentAmmo(value);
                     unit.updateView();
                     this._updateView();
                 },
@@ -1001,8 +1001,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    unit.setCurrentProduceMaterial(panel.getInputValue());
+                callback        : value => {
+                    unit.setCurrentProduceMaterial(value);
                     unit.updateView();
                     this._updateView();
                 },
@@ -1026,8 +1026,8 @@ namespace Twns.BaseWar {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    unit.setCurrentPromotion(panel.getInputValue());
+                callback        : value => {
+                    unit.setCurrentPromotion(value);
                     unit.updateView();
                     this._updateView();
                 },

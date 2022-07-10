@@ -5522,6 +5522,14 @@ namespace Twns.Lang {
             `天气动画`,
             `Weather Animation`,
         ],
+        [LangTextType.B0986]: [
+            `动作数限制`,
+            `Actions Limit`,
+        ],
+        [LangTextType.B0987]: [
+            `回合与动作数限制`,
+            `Max. Turns & Actions`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.Tile0000]: [
@@ -7161,10 +7169,10 @@ namespace Twns.Lang {
 
         [LangTextType.R0012]: [
             [
-                `若回合数超过了回合限制，则本局游戏将自动以和局结束。`,
+                `若回合数超过了回合限制，或战局总动作数超过了动作数限制，则本局游戏将自动以和局结束。`,
             ].join(`\n`),
             [
-                `If there is no winner by the time the turn limit has been exceeded, the game will be considered a Draw.`,
+                `If there is no winner by the time the turn limit OR the actions limit has been exceeded, the game will be considered a Draw.`,
             ].join(`\n`),
         ],
     };

@@ -356,8 +356,8 @@ namespace Twns.BaseWar {
                         maxValue        : maxHp,
                         minValue        : minHp,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minHp}, ${maxHp}]`,
-                        callback        : panel => {
-                            actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, panel.getInputValue());
+                        callback        : value => {
+                            actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, value);
                         },
                     });
                 }

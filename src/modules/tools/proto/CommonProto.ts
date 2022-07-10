@@ -10643,6 +10643,9 @@ declare namespace CommonProto {
             /** SettingsForCommon configVersion */
             configVersion?: (string|null);
 
+            /** SettingsForCommon warActionsLimit */
+            warActionsLimit?: (number|null);
+
             /** SettingsForCommon turnsLimit */
             turnsLimit?: (number|null);
 
@@ -10661,6 +10664,9 @@ declare namespace CommonProto {
 
             /** SettingsForCommon configVersion. */
             public configVersion: string;
+
+            /** SettingsForCommon warActionsLimit. */
+            public warActionsLimit: number;
 
             /** SettingsForCommon turnsLimit. */
             public turnsLimit: number;

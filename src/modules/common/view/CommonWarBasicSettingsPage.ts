@@ -115,8 +115,8 @@ namespace Twns.Common {
                 this._modifyAsWeather();
             } else if (settingsType === WarBasicSettingsType.WarEvent) {
                 this._modifyAsWarEvent();
-            } else if (settingsType === WarBasicSettingsType.TurnsLimit) {
-                this._modifyAsTurnsLimit();
+            } else if (settingsType === WarBasicSettingsType.TurnsAndWarActionsLimit) {
+                this._modifyAsTurnsAndWarActionsLimit();
             } else if (settingsType === WarBasicSettingsType.TimerType) {
                 this._modifyAsTimerType();
             } else if (settingsType === WarBasicSettingsType.TimerRegularParam) {
@@ -173,9 +173,9 @@ namespace Twns.Common {
                     });
                 }
 
-            } else if (settingsType === WarBasicSettingsType.TurnsLimit) {
+            } else if (settingsType === WarBasicSettingsType.TurnsAndWarActionsLimit) {
                 PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
-                    title  : Lang.getText(LangTextType.B0842),
+                    title  : Lang.getText(LangTextType.B0987),
                     content: Lang.getText(LangTextType.R0012),
                 });
 
@@ -212,8 +212,8 @@ namespace Twns.Common {
                 this._updateViewAsWeather();
             } else if (settingsType === WarBasicSettingsType.WarEvent) {
                 this._updateViewAsWarEvent();
-            } else if (settingsType === WarBasicSettingsType.TurnsLimit) {
-                this._updateViewAsTurnsLimit();
+            } else if (settingsType === WarBasicSettingsType.TurnsAndWarActionsLimit) {
+                this._updateViewAsTurnsAndWarActionsLimit();
             } else if (settingsType === WarBasicSettingsType.TimerType) {
                 this._updateViewAsTimerType();
             } else if (settingsType === WarBasicSettingsType.TimerRegularParam) {
@@ -296,9 +296,9 @@ namespace Twns.Common {
             labelValue.textColor    = warEventsCount ? 0xFFFF00 : 0xFFFFFF;
             this._btnHelp.visible   = (warEventsCount > 0) && (data.warEventFullData != null);
         }
-        private _updateViewAsTurnsLimit(): void {
+        private _updateViewAsTurnsAndWarActionsLimit(): void {
             const data              = this._getData();
-            this._labelValue.text   = `${data.currentValue ?? CommonConstants.WarMaxTurnsLimit}`;
+            this._labelValue.text   = `${data.currentValue}`;
             this._btnHelp.visible   = true;
         }
         private _updateViewAsTimerType(): void {
@@ -421,23 +421,35 @@ namespace Twns.Common {
         private _modifyAsWarEvent(): void {
             // nothing to do
         }
-        private _modifyAsTurnsLimit(): void {
-            const data          = this._getData();
-            const callback      = Helpers.getExisted(data.callbackOnModify);
-            const minValue      = CommonConstants.WarMinTurnsLimit;
-            const maxValue      = CommonConstants.WarMaxTurnsLimit;
-            const currentValue  = Number(data.currentValue) || maxValue;
+        private _modifyAsTurnsAndWarActionsLimit(): void {
+            const data                      = this._getData();
+            const callback                  = Helpers.getExisted(data.callbackOnModify);
+            const minValueForTurnsLimit     = CommonConstants.Turn.Limit.MinLimit;
+            const maxValueForTurnsLimit     = CommonConstants.Turn.Limit.MaxLimit;
+            const currentValue              = data.currentValue as string;
+            const stringArray               = currentValue.split(`,`);
             PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0842),
-                currentValue,
-                minValue,
-                maxValue,
-                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value = panel.getInputValue();
-                    if (value !== currentValue) {
-                        callback(value);
-                    }
+                currentValue    : parseInt(stringArray[0]),
+                minValue        : minValueForTurnsLimit,
+                maxValue        : maxValueForTurnsLimit,
+                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValueForTurnsLimit}, ${maxValueForTurnsLimit}]`,
+                callback        : newTurnsLimit => {
+                    const minValueForWarActionsLimit    = CommonConstants.WarAction.Limit.MinLimit;
+                    const maxValueForWarActionsLimit    = CommonConstants.WarAction.Limit.MaxLimit;
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        title           : Lang.getText(LangTextType.B0986),
+                        currentValue    : parseInt(stringArray[1]),
+                        minValue        : minValueForWarActionsLimit,
+                        maxValue        : maxValueForWarActionsLimit,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValueForWarActionsLimit}, ${maxValueForWarActionsLimit}]`,
+                        callback        : newWarActionsLimit => {
+                            const newValue = `${newTurnsLimit}, ${newWarActionsLimit}`;
+                            if (newValue !== data.currentValue) {
+                                callback(newValue);
+                            }
+                        },
+                    });
                 },
             });
         }
@@ -463,8 +475,7 @@ namespace Twns.Common {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
-                callback        : panel => {
-                    const value = panel.getInputValue();
+                callback        : value => {
                     if (value !== currentValue) {
                         callback(value);
                     }
@@ -483,8 +494,7 @@ namespace Twns.Common {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
-                callback        : panel => {
-                    const value = panel.getInputValue();
+                callback        : value => {
                     if (value !== currentValue) {
                         callback(value);
                     }

@@ -116,8 +116,8 @@ namespace TwnsUiMapInfo {
                     minValue,
                     maxValue,
                     tips            : `${Twns.Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]\n${Twns.Lang.getText(LangTextType.A0238)}`,
-                    callback        : panel => {
-                        Twns.User.UserProxy.reqUserSetMapRating(mapId, panel.getInputValue());
+                    callback        : value => {
+                        Twns.User.UserProxy.reqUserSetMapRating(mapId, value);
                     },
                 });
                 Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);

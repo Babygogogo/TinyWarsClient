@@ -816,7 +816,7 @@ namespace Twns.Types {
         TimerRegularParam,
         TimerIncrementalParam1,
         TimerIncrementalParam2,
-        TurnsLimit,
+        TurnsAndWarActionsLimit,
         SpmSaveSlotIndex,
         SpmSaveSlotComment,
     }

@@ -166,8 +166,7 @@ namespace Twns.MapEditor {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value = panel.getInputValue();
+                callback        : value => {
                     if (value !== currentValue) {
                         this._deltaTop = value;
                         this._updateComponentsForData();
@@ -185,8 +184,7 @@ namespace Twns.MapEditor {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value = panel.getInputValue();
+                callback        : value => {
                     if (value !== currentValue) {
                         this._deltaBottom = value;
                         this._updateComponentsForData();
@@ -204,8 +202,7 @@ namespace Twns.MapEditor {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value = panel.getInputValue();
+                callback        : value => {
                     if (value !== currentValue) {
                         this._deltaLeft = value;
                         this._updateComponentsForData();
@@ -223,8 +220,7 @@ namespace Twns.MapEditor {
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value = panel.getInputValue();
+                callback        : value => {
                     if (value !== currentValue) {
                         this._deltaRight = value;
                         this._updateComponentsForData();

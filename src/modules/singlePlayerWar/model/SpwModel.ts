@@ -213,7 +213,7 @@ namespace Twns.SinglePlayerWar.SpwModel {
         const hasVotedForDraw   = playerInTurn.getHasVotedForDraw();
         const turnPhaseCode     = war.getTurnPhaseCode();
         const turnIndex         = war.getTurnManager().getTurnIndex();
-        if (turnIndex > war.getCommonSettingManager().getTurnsLimit()) {
+        if (war.checkIsExceedTurnsOrWarActionsLimit()) {
             if (war.checkCanEnd()) {
                 await handleSystemEndWar(war);
                 await checkAndHandleSystemActions(war);

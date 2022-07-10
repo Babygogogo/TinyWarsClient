@@ -194,8 +194,8 @@ namespace Twns.MapEditor {
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                MapEditor.MeSimModel.setInitialFund(playerIndex, panel.getInputValue());
+                            callback        : value => {
+                                MapEditor.MeSimModel.setInitialFund(playerIndex, value);
                                 this._updateView();
                             },
                         });
@@ -219,8 +219,8 @@ namespace Twns.MapEditor {
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                MapEditor.MeSimModel.setIncomeMultiplier(playerIndex, panel.getInputValue());
+                            callback        : value => {
+                                MapEditor.MeSimModel.setIncomeMultiplier(playerIndex, value);
                                 this._updateView();
                             },
                         });
@@ -244,8 +244,8 @@ namespace Twns.MapEditor {
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                MapEditor.MeSimModel.setEnergyAddPctOnLoadCo(playerIndex, panel.getInputValue());
+                            callback        : value => {
+                                MapEditor.MeSimModel.setEnergyAddPctOnLoadCo(playerIndex, value);
                                 this._updateView();
                             },
                         });
@@ -269,8 +269,8 @@ namespace Twns.MapEditor {
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                MapEditor.MeSimModel.setEnergyGrowthMultiplier(playerIndex, panel.getInputValue());
+                            callback        : value => {
+                                MapEditor.MeSimModel.setEnergyGrowthMultiplier(playerIndex, value);
                                 this._updateView();
                             },
                         });
@@ -294,8 +294,8 @@ namespace Twns.MapEditor {
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                MapEditor.MeSimModel.setMoveRangeModifier(playerIndex, panel.getInputValue());
+                            callback        : value => {
+                                MapEditor.MeSimModel.setMoveRangeModifier(playerIndex, value);
                                 this._updateView();
                             },
                         });
@@ -319,8 +319,8 @@ namespace Twns.MapEditor {
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                MapEditor.MeSimModel.setAttackPowerModifier(playerIndex, panel.getInputValue());
+                            callback        : value => {
+                                MapEditor.MeSimModel.setAttackPowerModifier(playerIndex, value);
                                 this._updateView();
                             },
                         });
@@ -344,8 +344,8 @@ namespace Twns.MapEditor {
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                MapEditor.MeSimModel.setVisionRangeModifier(playerIndex, panel.getInputValue());
+                            callback        : value => {
+                                MapEditor.MeSimModel.setVisionRangeModifier(playerIndex, value);
                                 this._updateView();
                             },
                         });
@@ -369,9 +369,8 @@ namespace Twns.MapEditor {
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const value         = panel.getInputValue();
-                                const upperLimit    = MapEditor.MeSimModel.getLuckUpperLimit(playerIndex);
+                            callback        : value => {
+                                const upperLimit = MapEditor.MeSimModel.getLuckUpperLimit(playerIndex);
                                 if (value <= upperLimit) {
                                     MapEditor.MeSimModel.setLuckLowerLimit(playerIndex, value);
                                 } else {
@@ -401,9 +400,8 @@ namespace Twns.MapEditor {
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const value         = panel.getInputValue();
-                                const lowerLimit    = MapEditor.MeSimModel.getLuckLowerLimit(playerIndex);
+                            callback        : value => {
+                                const lowerLimit = MapEditor.MeSimModel.getLuckLowerLimit(playerIndex);
                                 if (value >= lowerLimit) {
                                     MapEditor.MeSimModel.setLuckUpperLimit(playerIndex, value);
                                 } else {
