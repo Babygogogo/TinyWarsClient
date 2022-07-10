@@ -783,14 +783,15 @@ namespace Twns.BaseWar {
                 player.setRestTimeToBoot(Helpers.getExisted(bootTimerParams[1], ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_00));
 
             } else if (timerType === Types.BootTimerType.Incremental) {
-                const oldRestTimeToBoot = player.getRestTimeToBoot();
-                const enterTurnTime     = this.getEnterTurnTime();
-                const incrementalTime   = Helpers.getExisted(bootTimerParams[2], ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_01);
-                const restTimeToBoot    = Math.max(
+                const oldRestTimeToBoot         = player.getRestTimeToBoot();
+                const enterTurnTime             = this.getEnterTurnTime();
+                const incrementalTimePerUnit    = Helpers.getExisted(bootTimerParams[2], ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_01);
+                const incrementalTimePerTurn    = bootTimerParams[3] ?? 0;
+                const restTimeToBoot            = Math.max(
                     0,
                     Math.min(
-                        CommonConstants.WarBootTimerIncrementalMaxLimit,
-                        oldRestTimeToBoot - (currTime - enterTurnTime) + incrementalTime * war.getUnitMap().countAllUnitsForPlayer(playerIndex),
+                        CommonConstants.WarBootTimer.Incremental.MaxLimit,
+                        oldRestTimeToBoot - (currTime - enterTurnTime) + incrementalTimePerUnit * war.getUnitMap().countAllUnitsForPlayer(playerIndex) + incrementalTimePerTurn,
                     ),
                 );
                 player.setRestTimeToBoot(restTimeToBoot);

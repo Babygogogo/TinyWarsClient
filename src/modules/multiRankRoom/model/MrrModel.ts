@@ -226,7 +226,7 @@ namespace Twns.MultiRankRoom.MrrModel {
         const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
         const mapId             = Helpers.getExisted(settingsForMrw.mapId);
         const warEventFullData  = (await WarMap.WarMapModel.getRawData(mapId))?.warEventFullData ?? null;
-        const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
+        const bootTimerParams   = CommonConstants.WarBootTimer.DefaultParams.concat();
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
@@ -300,16 +300,8 @@ namespace Twns.MultiRankRoom.MrrModel {
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
-                    currentValue    : bootTimerParams[1],
-                    instanceWarRule,
-                    gameConfig,
-                    warEventFullData,
-                    callbackOnModify: null,
-                },
-                {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
-                    currentValue    : bootTimerParams[2],
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParams,
+                    currentValue    : `${bootTimerParams[1]}, ${bootTimerParams[2]}, ${bootTimerParams[3] ?? 0}`,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,

@@ -3,14 +3,14 @@
 // import Helpers          from "../../tools/helpers/Helpers";
 // import Types            from "../../tools/helpers/Types";
 // import Notify           from "../../tools/notify/Notify";
-// import Twns.Notify   from "../../tools/notify/NotifyType";
+// import Notify   from "../../tools/notify/NotifyType";
 // import ProtoTypes       from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiFreeRoom.MfrCreateModel {
-    import NotifyType       = Twns.Notify.NotifyType;
-    import BootTimerType    = Twns.Types.BootTimerType;
+    import NotifyType       = Notify.NotifyType;
+    import BootTimerType    = Types.BootTimerType;
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
 
     export type DataForJoinRoom = CommonProto.NetMessage.MsgMfrJoinRoom.IC;
@@ -27,8 +27,8 @@ namespace Twns.MultiFreeRoom.MfrCreateModel {
     const _dataForCreateRoom: DataForCreateRoom = {
         settingsForMfw          : {},
 
-        selfPlayerIndex         : Twns.CommonConstants.PlayerIndex.First,
-        selfCoId                : Twns.CommonConstants.CoId.Empty,
+        selfPlayerIndex         : CommonConstants.PlayerIndex.First,
+        selfCoId                : CommonConstants.CoId.Empty,
     };
 
     export async function resetDataByInitialWarData(warData: ISerialWar): Promise<void> {
@@ -36,31 +36,31 @@ namespace Twns.MultiFreeRoom.MfrCreateModel {
         setWarName("");
         setWarPassword("");
         setWarComment("");
-        setBootTimerParams([BootTimerType.Regular, Twns.CommonConstants.WarBootTimerRegularDefaultValue]);
+        setBootTimerParams(CommonConstants.WarBootTimer.DefaultParams.concat());
 
-        const playerData = Twns.Helpers.getExisted(warData.playerManager?.players?.find(v => {
-            return (v.aliveState !== Twns.Types.PlayerAliveState.Dead)
-                && (v.playerIndex !== Twns.CommonConstants.PlayerIndex.Neutral)
+        const playerData = Helpers.getExisted(warData.playerManager?.players?.find(v => {
+            return (v.aliveState !== Types.PlayerAliveState.Dead)
+                && (v.playerIndex !== CommonConstants.PlayerIndex.Neutral)
                 && (v.userId != null);
         }));
-        setSelfPlayerIndex(Twns.Helpers.getExisted(playerData.playerIndex));
-        setSelfCoId(Twns.Helpers.getExisted(playerData.coId));
+        setSelfPlayerIndex(Helpers.getExisted(playerData.playerIndex));
+        setSelfCoId(Helpers.getExisted(playerData.coId));
     }
     export function getData(): DataForCreateRoom {
         return _dataForCreateRoom;
     }
     export function getInstanceWarRule(): CommonProto.WarRule.IInstanceWarRule {
-        return Twns.Helpers.getExisted(getInitialWarData().settingsForCommon?.instanceWarRule);
+        return Helpers.getExisted(getInitialWarData().settingsForCommon?.instanceWarRule);
     }
     function getSettingsForMfw(): CommonProto.WarSettings.ISettingsForMfw {
-        return Twns.Helpers.getExisted(getData().settingsForMfw);
+        return Helpers.getExisted(getData().settingsForMfw);
     }
 
     export function getTurnsLimit(): number {
-        return getInitialWarData().settingsForCommon?.turnsLimit ?? Twns.CommonConstants.Turn.Limit.Default;
+        return getInitialWarData().settingsForCommon?.turnsLimit ?? CommonConstants.Turn.Limit.Default;
     }
     export function setTurnsLimit(turnsLimit: number): void {
-        Twns.Helpers.getExisted(getInitialWarData().settingsForCommon).turnsLimit = turnsLimit;
+        Helpers.getExisted(getInitialWarData().settingsForCommon).turnsLimit = turnsLimit;
     }
 
     export function getWarActionsLimit(): number {
@@ -71,14 +71,14 @@ namespace Twns.MultiFreeRoom.MfrCreateModel {
     }
 
     export function getInitialWarData(): ISerialWar {
-        return Twns.Helpers.getExisted(getSettingsForMfw().initialWarData);
+        return Helpers.getExisted(getSettingsForMfw().initialWarData);
     }
     function setInitialWarData(warData: ISerialWar): void {
         getSettingsForMfw().initialWarData = warData;
     }
 
     export function getConfigVersion(): string {
-        return Twns.Helpers.getExisted(getInitialWarData().settingsForCommon?.configVersion);
+        return Helpers.getExisted(getInitialWarData().settingsForCommon?.configVersion);
     }
 
     export function setWarName(name: string | null): void {
@@ -105,46 +105,46 @@ namespace Twns.MultiFreeRoom.MfrCreateModel {
     export function setSelfPlayerIndex(playerIndex: number): void {
         if (playerIndex !== getSelfPlayerIndex()) {
             getData().selfPlayerIndex = playerIndex;
-            Twns.Notify.dispatch(NotifyType.MfrCreateSelfPlayerIndexChanged);
+            Notify.dispatch(NotifyType.MfrCreateSelfPlayerIndexChanged);
         }
     }
     export function getSelfPlayerIndex(): number {
-        return Twns.Helpers.getExisted(getData().selfPlayerIndex);
+        return Helpers.getExisted(getData().selfPlayerIndex);
     }
     export function getSelfPlayerData(): CommonProto.WarSerialization.ISerialPlayer {
         const playerIndex = getSelfPlayerIndex();
-        return Twns.Helpers.getExisted(getInitialWarData().playerManager?.players?.find(v => v.playerIndex === playerIndex));
+        return Helpers.getExisted(getInitialWarData().playerManager?.players?.find(v => v.playerIndex === playerIndex));
     }
 
     export function setSelfCoId(coId: number): void {
         if (getSelfCoId() !== coId) {
             getData().selfCoId = coId;
-            Twns.Notify.dispatch(NotifyType.MfrCreateSelfCoIdChanged);
+            Notify.dispatch(NotifyType.MfrCreateSelfCoIdChanged);
         }
     }
     export function getSelfCoId(): number {
-        return Twns.Helpers.getExisted(getData().selfCoId);
+        return Helpers.getExisted(getData().selfCoId);
     }
 
     export function setHasFog(hasFog: boolean): void {
-        Twns.Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
+        Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
     }
     export function getHasFog(): boolean {
-        return Twns.Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault);
+        return Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault);
     }
 
     export function setBootTimerParams(params: number[]): void {
         getSettingsForMfw().bootTimerParams = params;
     }
     export function getBootTimerParams(): number[] {
-        return Twns.Helpers.getExisted(getSettingsForMfw().bootTimerParams);
+        return Helpers.getExisted(getSettingsForMfw().bootTimerParams);
     }
     export function tickBootTimerType(): void {
         const params = getBootTimerParams();
         if ((params) && (params[0] === BootTimerType.Regular)) {
-            setBootTimerParams([BootTimerType.Incremental, 60 * 15, 10]);
+            setBootTimerParams(CommonConstants.WarBootTimer.Incremental.DefaultParams.concat());
         } else {
-            setBootTimerParams([BootTimerType.Regular, Twns.CommonConstants.WarBootTimerRegularDefaultValue]);
+            setBootTimerParams(CommonConstants.WarBootTimer.DefaultParams.concat());
         }
     }
     export function tickTimerRegularTime(): void {
@@ -161,11 +161,11 @@ namespace Twns.MultiFreeRoom.MfrCreateModel {
             }
         }
     }
-    export function setTimerIncrementalInitialTime(seconds: number): void {
-        getBootTimerParams()[1] = seconds;
-    }
-    export function setTimerIncrementalIncrementalValue(seconds: number): void {
-        getBootTimerParams()[2] = seconds;
+    export function setTimerIncrementalParamArray(paramArray: number[]): void {
+        const params    = getBootTimerParams();
+        params[1]       = paramArray[0];
+        params[2]       = paramArray[1];
+        params[3]       = paramArray[2];
     }
 
     export function tickTeamIndex(playerIndex: number): void {

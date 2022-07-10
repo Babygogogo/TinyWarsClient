@@ -365,30 +365,17 @@ namespace Twns.MultiFreeRoom {
             } else if (timerType === Types.BootTimerType.Incremental) {
                 openData.dataArrayForListSettings.push(
                     {
-                        settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
-                        currentValue    : bootTimerParams[1],
+                        settingsType    : WarBasicSettingsType.TimerIncrementalParams,
+                        currentValue    : `${bootTimerParams[1]}, ${bootTimerParams[2]}, ${bootTimerParams[3] ?? 0}`,
                         instanceWarRule: instanceWarRule,
                         gameConfig,
                         warEventFullData,
                         callbackOnModify: (newValue: number | string | null) => {
-                            if (typeof newValue !== "number") {
+                            if (typeof newValue !== "string") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            MultiFreeRoom.MfrCreateModel.setTimerIncrementalInitialTime(newValue);
-                            this._updateCommonWarBasicSettingsPage();
-                        },
-                    },
-                    {
-                        settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
-                        currentValue    : bootTimerParams[2],
-                        instanceWarRule: instanceWarRule,
-                        gameConfig,
-                        warEventFullData,
-                        callbackOnModify: (newValue: number | string | null) => {
-                            if (typeof newValue !== "number") {
-                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
-                            }
-                            MultiFreeRoom.MfrCreateModel.setTimerIncrementalIncrementalValue(newValue);
+
+                            MfrCreateModel.setTimerIncrementalParamArray(newValue.split(`,`).map(v => parseInt(v)));
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },

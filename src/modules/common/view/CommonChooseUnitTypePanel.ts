@@ -124,11 +124,48 @@ namespace Twns.Common {
     };
     class UnitTypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitTypeRenderer> {
         private readonly _groupShow!        : eui.Group;
+        private readonly _conUnitView!      : eui.Group;
         private readonly _labelUnitName!    : TwnsUiLabel.UiLabel;
 
+        private readonly _unitView          = new WarMap.WarMapUnitView();
+
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.UnitAnimationTick,   callback: this._onNotifyUnitAnimationTick },
+            ]);
+
+            this._conUnitView.addChild(this._unitView);
+        }
+
         protected _onDataChanged(): void {
+            this._updateComponentsForLanguage();
+            this._updateUnitView();
+        }
+
+        private _onNotifyLanguageChanged(): void {        // DONE
+            this._updateComponentsForLanguage();
+        }
+        private _onNotifyUnitAnimationTick(): void {
+            this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._updateLabelType();
+        }
+
+        private _updateLabelType(): void {
             const data                  = this._getData();
             this._labelUnitName.text    = Lang.getUnitName(data.unitType, data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
+        }
+        private _updateUnitView(): void {
+            const data = this._getData();
+            this._unitView.update({
+                gameConfig  : data.gameConfig,
+                gridIndex   : { x: 0, y: 0 },
+                playerIndex : CommonConstants.PlayerIndex.First,
+                unitType    : data.unitType,
+            });
         }
     }
 }

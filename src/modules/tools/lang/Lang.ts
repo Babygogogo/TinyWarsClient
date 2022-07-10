@@ -207,8 +207,7 @@ namespace Twns.Lang {
             case Types.WarBasicSettingsType.TurnsAndWarActionsLimit : return getText(LangTextType.B0987);
             case Types.WarBasicSettingsType.TimerType               : return getText(LangTextType.B0574);
             case Types.WarBasicSettingsType.TimerRegularParam       : return getText(LangTextType.B0021);
-            case Types.WarBasicSettingsType.TimerIncrementalParam1  : return getText(LangTextType.B0389);
-            case Types.WarBasicSettingsType.TimerIncrementalParam2  : return getText(LangTextType.B0390);
+            case Types.WarBasicSettingsType.TimerIncrementalParams  : return getText(LangTextType.B0990);
             case Types.WarBasicSettingsType.SpmSaveSlotIndex        : return getText(LangTextType.B0255);
             case Types.WarBasicSettingsType.SpmSaveSlotComment      : return getText(LangTextType.B0605);
             default                                                 : return null;

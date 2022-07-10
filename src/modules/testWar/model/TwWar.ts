@@ -235,7 +235,7 @@ namespace Twns.TestWar {
             throw Helpers.newError(`Invalid playersCountUnneutral: ${playersCountUnneutral}`, ClientErrorCode.TwWar_CreateInitialPlayerManagerDataForTw_00);
         }
 
-        const bootTimerParams   = [Types.BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue];
+        const bootTimerParams   = CommonConstants.WarBootTimer.DefaultParams.concat();
         const restTimeToBoot    = bootTimerParams[1];
         const players = [_createInitialSinglePlayerData({
             playerIndex         : 0,

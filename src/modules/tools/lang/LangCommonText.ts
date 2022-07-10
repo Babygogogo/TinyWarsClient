@@ -3139,8 +3139,8 @@ namespace Twns.Lang {
             `Initial Time`,
         ],
         [LangTextType.B0390]: [
-            `增量时间`,
-            `Incremental Time`,
+            `部队增量时间`,
+            `Incremental Time per Unit`,
         ],
         [LangTextType.B0391]: [
             `清空`,
@@ -5530,6 +5530,22 @@ namespace Twns.Lang {
             `回合与动作数限制`,
             `Max. Turns & Actions`,
         ],
+        [LangTextType.B0988]: [
+            `标准计时器`,
+            `Regular Timer`,
+        ],
+        [LangTextType.B0989]: [
+            `增量计时器`,
+            `Incremental Timer`,
+        ],
+        [LangTextType.B0990]: [
+            `计时器参数`,
+            `Timer Params`,
+        ],
+        [LangTextType.B0991]: [
+            `回合增量时间`,
+            `Incremental Time per Turn`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.Tile0000]: [
@@ -6961,35 +6977,17 @@ namespace Twns.Lang {
 
         [LangTextType.R0003]: [
             [
-                `本选项影响所有玩家的每回合的时限。`,
-                ``,
-                `如果某个玩家的回合时间超出了限制，则服务器将自动为该玩家执行投降操作。`,
                 `当战局正式开始，或某个玩家结束回合后，则服务器自动开始下个玩家回合的倒计时（无论该玩家是否在线）。`,
+                `如果某个玩家的回合时间超出了限制，则服务器将自动为该玩家执行投降操作。`,
+                ``,
                 `当前有“常规”和“增量”两种计时模式可选。`,
-                ``,
-                `常规计时：每回合的可用时间是固定不变的。`,
-                ``,
-                `增量计时：玩家每回合可用的时间将受到前面回合所消耗的时间的影响。此模式有两个参数，分别为“初始时间”和“增量时间”。`,
-                `第一回合，玩家拥有的时间就是“初始时间”。`,
-                `第二及后续所有回合，玩家拥有的时间=上一个回合的剩余时间+（上回合结束时的剩余部队数*增量时间）。`,
-                ``,
-                `默认为“常规计时-3天”。`,
             ].join("\n"),
 
             [
-                `This option determines the boot timer, aka time available for each turn. `,
-                ``,
-                `If a player hits the boot timer, the player will resign automatically. `,
                 `When the game starts, or a player ends his turn, the timer of the first (or the next) player will start to countdown, no matter that player is online or not. `,
+                `If a player hits the boot timer, the player will resign automatically. `,
+                ``,
                 `Currently, there are two timing modes available: regular and incremental.`,
-                ``,
-                `Regular timing: the available time for each round is fixed.`,
-                ``,
-                `Incremental timing: The time available for each round will be affected by the time consumed in the previous round. This mode has two parameters, namely "Initial Time" and "Incremental Time".`,
-                `For the first round, the time the player has is "Initial Time".`,
-                `For the second round and all subsequent rounds, the time the player has equals the remaining time of the previous round plus (the number of troops remaining in the previous round multiplies the "increment time").`,
-                ``,
-                `By default this option is selected as "regular timer with 3 days per round". `,
             ].join("\n"),
         ],
 
@@ -7174,6 +7172,34 @@ namespace Twns.Lang {
             [
                 `If there is no winner by the time the turn limit OR the actions limit has been exceeded, the game will be considered a Draw.`,
             ].join(`\n`),
+        ],
+
+        [LangTextType.R0013]: [
+            `每回合的可用时间是固定不变的。`,
+            `The available time for each round is fixed.`,
+        ],
+
+        [LangTextType.R0014]: [
+            [
+                `增量计时：玩家每回合可用的时间将受到前面回合所消耗的时间的影响。此模式有三个参数，分别为“初始时间”，“部队增量时间”和“回合增量时间”。`,
+                ``,
+                `第一回合，玩家拥有的时间就是“初始时间”。`,
+                `第二及后续所有回合，玩家拥有的时间=上一个回合的剩余时间+（上回合结束时的剩余部队数*部队增量时间）+回合增量时间。`,
+                ``,
+                `比如，假设部队增量时间是5秒，回合增量时间是60秒，上回合剩余时间是180秒，且你有10个部队`,
+                `那么本回合可用时间为: 180 + 5 * 10 + 60 = 290秒。`
+            ].join("\n"),
+
+            [
+                `The time available for each round will be affected by the time consumed in the previous round.`,
+                `This mode has three parameters, namely "Initial Time" "Incremental Time per Unit" and "Incremental Time per Turn".`,
+                ``,
+                `For the first round, the time the player has is "Initial Time".`,
+                `For the second round and all subsequent rounds, the time the player has equals the remaining time of the previous round plus (the number of troops remaining in the previous round multiplies the "Incremental Time per Unit") plus the "Incremental Timer per Turn".`,
+                ``,
+                `For example, assuming the "Incremental Time per Unit" is 5s, the "Incremental Time per Turn" is 60s, the remaining time of your previous round is 180s, and you have 10 units.`,
+                `Then the available time for this turn is: 180 + 5 * 10 + 60 = 290s.`,
+            ].join("\n"),
         ],
     };
 }

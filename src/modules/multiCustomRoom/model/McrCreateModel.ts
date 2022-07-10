@@ -53,7 +53,7 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
         setWarName("");
         setWarPassword("");
         setWarComment("");
-        setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
+        setBootTimerParams(CommonConstants.WarBootTimer.DefaultParams.concat());
         setTurnsLimit(CommonConstants.Turn.Limit.Default);
         setSelfPlayerIndex(CommonConstants.PlayerIndex.First);
         await resetDataByTemplateWarRuleId(Helpers.getExisted((await getMapRawData()).templateWarRuleArray?.find(v => v.ruleAvailability?.canMcw)?.ruleId));
@@ -231,9 +231,9 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
     export function tickBootTimerType(): void {
         const params = getBootTimerParams();
         if ((params) && (params[0] === BootTimerType.Regular)) {
-            setBootTimerParams([BootTimerType.Incremental, 60 * 15, 10]);
+            setBootTimerParams(CommonConstants.WarBootTimer.Incremental.DefaultParams.concat());
         } else {
-            setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
+            setBootTimerParams(CommonConstants.WarBootTimer.DefaultParams.concat());
         }
     }
     export function tickTimerRegularTime(): void {
@@ -250,11 +250,11 @@ namespace Twns.MultiCustomRoom.McrCreateModel {
             }
         }
     }
-    export function setTimerIncrementalInitialTime(seconds: number): void {
-        getBootTimerParams()[1] = seconds;
-    }
-    export function setTimerIncrementalIncrementalValue(seconds: number): void {
-        getBootTimerParams()[2] = seconds;
+    export function setTimerIncrementalParamArray(paramArray: number[]): void {
+        const params    = getBootTimerParams();
+        params[1]       = paramArray[0];
+        params[2]       = paramArray[1];
+        params[3]       = paramArray[2];
     }
 
     export function tickTeamIndex(playerIndex: number): void {

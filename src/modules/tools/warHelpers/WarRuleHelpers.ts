@@ -12,7 +12,6 @@
 namespace Twns.WarHelpers.WarRuleHelpers {
     import LangTextType         = Lang.LangTextType;
     import LanguageType         = Types.LanguageType;
-    import BootTimerType        = Types.BootTimerType;
     import BaseWarRule          = Types.BaseWarRule;
     import WarRule              = CommonProto.WarRule;
     import IRuleForGlobalParams = WarRule.IRuleForGlobalParams;
@@ -751,38 +750,6 @@ namespace Twns.WarHelpers.WarRuleHelpers {
         }
 
         return ClientErrorCode.NoError;
-    }
-
-    export function checkIsValidBootTimerParams(params: number[]): boolean {
-        const length = params.length;
-        if (!length) {
-            return false;
-        } else {
-            const type: BootTimerType = params[0];
-            if (type === BootTimerType.Regular) {
-                if (length !== 2) {
-                    return false;
-                } else {
-                    const timeLimit = params[1];
-                    return (timeLimit > 0) && (timeLimit <= CommonConstants.WarBootTimerRegularMaxLimit);
-                }
-
-            } else if (type === BootTimerType.Incremental) {
-                if (length !== 3) {
-                    return false;
-                } else {
-                    const initialTime           = params[1];
-                    const incrementTimePerUnit  = params[2];
-                    return (initialTime > 0)
-                        && (initialTime <= CommonConstants.WarBootTimerIncrementalMaxLimit)
-                        && (incrementTimePerUnit >= 0)
-                        && (incrementTimePerUnit <= CommonConstants.WarBootTimerIncrementalMaxLimit);
-                }
-
-            } else {
-                return false;
-            }
-        }
     }
 }
 

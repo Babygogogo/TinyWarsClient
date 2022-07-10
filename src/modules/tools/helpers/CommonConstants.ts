@@ -159,10 +159,24 @@ namespace Twns.CommonConstants {
     export const WarPasswordMaxLength                   = 4;
     export const WarCustomCounterMinId                  = 1;
     export const WarCustomCounterMaxId                  = 30;
-    export const WarBootTimerRegularMaxLimit            = 3600 * 24 * 7;
-    export const WarBootTimerRegularDefaultValue        = 3600 * 24 * 3;
-    export const WarBootTimerIncrementalMaxLimit        = 3600 * 24;
-    export const WarBootTimerDefaultParams              = [Types.BootTimerType.Regular, WarBootTimerRegularDefaultValue];
+
+    export const WarBootTimer = {
+        Regular : {
+            MaxLimit        : 3600 * 24 * 7,
+
+            DefaultParams   : [Types.BootTimerType.Regular, 3600 * 24 * 3],
+        },
+        Incremental : {
+            MaxLimit                        : 3600 * 24,
+            MaxLimitForInitialTime          : 3600 * 24,
+            MaxLimitForIncrementPerUnit     : 3600,
+            MaxLimitForIncrementPerTurn     : 3600 * 24,
+
+            DefaultParams                   : [Types.BootTimerType.Incremental, 60 * 10, 5, 30],
+        },
+
+        DefaultParams       : [Types.BootTimerType.Regular, 3600 * 24 * 3],
+    };
 
     export const Turn = {
         Limit   : {

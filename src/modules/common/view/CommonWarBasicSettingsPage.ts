@@ -121,10 +121,8 @@ namespace Twns.Common {
                 this._modifyAsTimerType();
             } else if (settingsType === WarBasicSettingsType.TimerRegularParam) {
                 this._modifyAsTimerRegularParam();
-            } else if (settingsType === WarBasicSettingsType.TimerIncrementalParam1) {
-                this._modifyAsTimerIncrementalParam1();
-            } else if (settingsType === WarBasicSettingsType.TimerIncrementalParam2) {
-                this._modifyAsTimerIncrementalParam2();
+            } else if (settingsType === WarBasicSettingsType.TimerIncrementalParams) {
+                this._modifyAsTimerIncrementalParams();
             } else if (settingsType === WarBasicSettingsType.SpmSaveSlotIndex) {
                 this._modifyAsSpmSaveSlotIndex();
             } else if (settingsType === WarBasicSettingsType.SpmSaveSlotComment) {
@@ -184,6 +182,16 @@ namespace Twns.Common {
                     title  : Lang.getText(LangTextType.B0574),
                     content: Lang.getText(LangTextType.R0003),
                 });
+            } else if (settingsType === WarBasicSettingsType.TimerRegularParam) {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
+                    title   : Lang.getText(LangTextType.B0988),
+                    content : Lang.getText(LangTextType.R0013),
+                });
+            } else if (settingsType === WarBasicSettingsType.TimerIncrementalParams) {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
+                    title   : Lang.getText(LangTextType.B0989),
+                    content : Lang.getText(LangTextType.R0014),
+                });
             }
         }
         private _onNotifyLanguageChanged(): void {
@@ -218,10 +226,8 @@ namespace Twns.Common {
                 this._updateViewAsTimerType();
             } else if (settingsType === WarBasicSettingsType.TimerRegularParam) {
                 this._updateViewAsTimerRegularParam();
-            } else if (settingsType === WarBasicSettingsType.TimerIncrementalParam1) {
-                this._updateViewAsTimerIncrementalParam1();
-            } else if (settingsType === WarBasicSettingsType.TimerIncrementalParam2) {
-                this._updateViewAsTimerIncrementalParam2();
+            } else if (settingsType === WarBasicSettingsType.TimerIncrementalParams) {
+                this._updateViewAsTimerIncrementalParams();
             } else if (settingsType === WarBasicSettingsType.SpmSaveSlotIndex) {
                 this._updateViewAsSpmSaveSlotIndex();
             } else if (settingsType === WarBasicSettingsType.SpmSaveSlotComment) {
@@ -309,17 +315,12 @@ namespace Twns.Common {
         private _updateViewAsTimerRegularParam(): void {
             const data              = this._getData();
             this._labelValue.text   = Helpers.getTimeDurationText2(data.currentValue as number);
-            this._btnHelp.visible   = false;
+            this._btnHelp.visible   = true;
         }
-        private _updateViewAsTimerIncrementalParam1(): void {
+        private _updateViewAsTimerIncrementalParams(): void {
             const data              = this._getData();
-            this._labelValue.text   = Helpers.getTimeDurationText2(data.currentValue as number);
-            this._btnHelp.visible   = false;
-        }
-        private _updateViewAsTimerIncrementalParam2(): void {
-            const data              = this._getData();
-            this._labelValue.text   = Helpers.getTimeDurationText2(data.currentValue as number);
-            this._btnHelp.visible   = false;
+            this._labelValue.text   = (data.currentValue as string).split(`,`).map(v => Helpers.getTimeDurationText2(parseInt(v))).join(`  `);
+            this._btnHelp.visible   = true;
         }
         private _updateViewAsSpmSaveSlotIndex(): void {
             const data              = this._getData();
@@ -427,10 +428,10 @@ namespace Twns.Common {
             const minValueForTurnsLimit     = CommonConstants.Turn.Limit.MinLimit;
             const maxValueForTurnsLimit     = CommonConstants.Turn.Limit.MaxLimit;
             const currentValue              = data.currentValue as string;
-            const stringArray               = currentValue.split(`,`);
+            const textArray                 = currentValue.split(`,`);
             PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0842),
-                currentValue    : parseInt(stringArray[0]),
+                currentValue    : parseInt(textArray[0]),
                 minValue        : minValueForTurnsLimit,
                 maxValue        : maxValueForTurnsLimit,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValueForTurnsLimit}, ${maxValueForTurnsLimit}]`,
@@ -439,13 +440,13 @@ namespace Twns.Common {
                     const maxValueForWarActionsLimit    = CommonConstants.WarAction.Limit.MaxLimit;
                     PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                         title           : Lang.getText(LangTextType.B0986),
-                        currentValue    : parseInt(stringArray[1]),
+                        currentValue    : parseInt(textArray[1]),
                         minValue        : minValueForWarActionsLimit,
                         maxValue        : maxValueForWarActionsLimit,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minValueForWarActionsLimit}, ${maxValueForWarActionsLimit}]`,
                         callback        : newWarActionsLimit => {
                             const newValue = `${newTurnsLimit}, ${newWarActionsLimit}`;
-                            if (newValue !== data.currentValue) {
+                            if (newValue !== currentValue) {
                                 callback(newValue);
                             }
                         },
@@ -463,41 +464,46 @@ namespace Twns.Common {
             const callback  = Helpers.getExisted(data.callbackOnModify);
             callback(null);
         }
-        private _modifyAsTimerIncrementalParam1(): void {
-            const data          = this._getData();
-            const callback      = Helpers.getExisted(data.callbackOnModify);
-            const minValue      = 1;
-            const maxValue      = CommonConstants.WarBootTimerIncrementalMaxLimit;
-            const currentValue  = Number(data.currentValue) ?? 0;
+        private _modifyAsTimerIncrementalParams(): void {
+            const data                      = this._getData();
+            const callback                  = Helpers.getExisted(data.callbackOnModify);
+            const minValueForInitialTime    = 10;
+            const maxValueForInitialTime    = CommonConstants.WarBootTimer.Incremental.MaxLimitForInitialTime;
+            const currentValue              = data.currentValue as string;
+            const timeParamArray            = currentValue.split(`,`).map(v => parseInt(v));
             PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0389),
-                currentValue,
-                minValue,
-                maxValue,
-                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
-                callback        : value => {
-                    if (value !== currentValue) {
-                        callback(value);
-                    }
-                },
-            });
-        }
-        private _modifyAsTimerIncrementalParam2(): void {
-            const data          = this._getData();
-            const callback      = Helpers.getExisted(data.callbackOnModify);
-            const minValue      = 0;
-            const maxValue      = CommonConstants.WarBootTimerIncrementalMaxLimit;
-            const currentValue  = Number(data.currentValue) ?? 0;
-            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
-                title           : Lang.getText(LangTextType.B0390),
-                currentValue,
-                minValue,
-                maxValue,
-                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
-                callback        : value => {
-                    if (value !== currentValue) {
-                        callback(value);
-                    }
+                currentValue    : timeParamArray[0],
+                minValue        : minValueForInitialTime,
+                maxValue        : maxValueForInitialTime,
+                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValueForInitialTime}, ${maxValueForInitialTime}] (${Lang.getText(LangTextType.B0017)})`,
+                callback        : newInitialTime => {
+                    const minValueForIncrementalTimePerUnit = 0;
+                    const maxValueForIncrementalTimePerUnit = CommonConstants.WarBootTimer.Incremental.MaxLimitForIncrementPerUnit;
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                        title           : Lang.getText(LangTextType.B0390),
+                        currentValue    : timeParamArray[1],
+                        minValue        : minValueForIncrementalTimePerUnit,
+                        maxValue        : maxValueForIncrementalTimePerUnit,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValueForIncrementalTimePerUnit}, ${maxValueForIncrementalTimePerUnit}] (${Lang.getText(LangTextType.B0017)})`,
+                        callback        : newIncrementalTimePerUnit => {
+                            const minValueForIncrementalTimePerTurn = 0;
+                            const maxValueForIncrementalTimePerTurn = CommonConstants.WarBootTimer.Incremental.MaxLimitForIncrementPerTurn;
+                            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
+                                title           : Lang.getText(LangTextType.B0991),
+                                currentValue    : timeParamArray[2],
+                                minValue        : minValueForIncrementalTimePerTurn,
+                                maxValue        : maxValueForIncrementalTimePerTurn,
+                                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValueForIncrementalTimePerTurn}, ${maxValueForIncrementalTimePerTurn}] (${Lang.getText(LangTextType.B0017)})`,
+                                callback        : newIncrementalTimePerTurn => {
+                                    const newValue = `${newInitialTime}, ${newIncrementalTimePerUnit}, ${newIncrementalTimePerTurn}`;
+                                    if (newValue !== currentValue) {
+                                        callback(newValue);
+                                    }
+                                },
+                            });
+                        },
+                    });
                 },
             });
         }

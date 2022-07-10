@@ -330,16 +330,8 @@ namespace Twns.MultiCustomRoom.McrModel {
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
-                    currentValue    : bootTimerParams[1],
-                    instanceWarRule,
-                    gameConfig,
-                    warEventFullData,
-                    callbackOnModify: null,
-                },
-                {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
-                    currentValue    : bootTimerParams[2],
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParams,
+                    currentValue    : `${bootTimerParams[1]}, ${bootTimerParams[2]}, ${bootTimerParams[3] ?? 0}`,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,

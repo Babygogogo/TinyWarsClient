@@ -185,7 +185,7 @@ namespace Twns.WatchWar.WwModel {
         const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_02);
         const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
         const { settingsForMcw, settingsForCcw, settingsForMfw, settingsForMrw } = warSettings;
-        const bootTimerParams   = settingsForMcw?.bootTimerParams ?? settingsForMfw?.bootTimerParams ?? settingsForCcw?.bootTimerParams ?? CommonConstants.WarBootTimerDefaultParams;
+        const bootTimerParams   = settingsForMcw?.bootTimerParams ?? settingsForMfw?.bootTimerParams ?? settingsForCcw?.bootTimerParams ?? CommonConstants.WarBootTimer.DefaultParams.concat();
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const mapId             = settingsForMcw?.mapId ?? settingsForMrw?.mapId ?? settingsForCcw?.mapId ?? null;
         const warEventFullData  = instanceWarRule.warEventFullData ?? null;
@@ -277,16 +277,8 @@ namespace Twns.WatchWar.WwModel {
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
-                    currentValue    : bootTimerParams[1],
-                    instanceWarRule,
-                    gameConfig,
-                    warEventFullData,
-                    callbackOnModify: null,
-                },
-                {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
-                    currentValue    : bootTimerParams[2],
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParams,
+                    currentValue    : `${bootTimerParams[1]}, ${bootTimerParams[2]}, ${bootTimerParams[3] ?? 0}`,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,

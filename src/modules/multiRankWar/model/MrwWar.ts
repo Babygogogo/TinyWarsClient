@@ -10,7 +10,6 @@
 namespace Twns.MultiRankWar {
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForMrw  = CommonProto.WarSettings.ISettingsForMrw;
-    import ClientErrorCode  = Twns.ClientErrorCode;
     import MpwWar           = MultiPlayerWar.MpwWar;
     import GameConfig       = Config.GameConfig;
 
@@ -19,7 +18,7 @@ namespace Twns.MultiRankWar {
 
         public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
-            this._setSettingsForMrw(Twns.Helpers.getExisted(data.settingsForMrw, ClientErrorCode.MrwWar_Init_00));
+            this._setSettingsForMrw(Helpers.getExisted(data.settingsForMrw, ClientErrorCode.MrwWar_Init_00));
 
             this._initView();
         }
@@ -34,21 +33,21 @@ namespace Twns.MultiRankWar {
             return false;
         }
         public getMapId(): number {
-            return Twns.Helpers.getExisted(this.getSettingsForMrw().mapId);
+            return Helpers.getExisted(this.getSettingsForMrw().mapId);
         }
 
         private _setSettingsForMrw(settings: ISettingsForMrw): void {
             this._settingsForMrw = settings;
         }
         public getSettingsForMrw(): ISettingsForMrw {
-            return Twns.Helpers.getExisted(this._settingsForMrw);
+            return Helpers.getExisted(this._settingsForMrw);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getSettingsBootTimerParams(): number[] {
-            return Twns.CommonConstants.WarBootTimerDefaultParams;
+            return CommonConstants.WarBootTimer.DefaultParams.concat();
         }
     }
 }

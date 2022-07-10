@@ -306,16 +306,8 @@ namespace Twns.MultiPlayerWar.MpwModel {
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
-                    currentValue    : bootTimerParams[1],
-                    instanceWarRule,
-                    gameConfig,
-                    warEventFullData,
-                    callbackOnModify: null,
-                },
-                {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
-                    currentValue    : bootTimerParams[2],
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParams,
+                    currentValue    : `${bootTimerParams[1]}, ${bootTimerParams[2]}, ${bootTimerParams[3] ?? 0}`,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,
@@ -429,16 +421,8 @@ namespace Twns.MultiPlayerWar.MpwModel {
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
-                    currentValue    : bootTimerParams[1],
-                    instanceWarRule,
-                    gameConfig,
-                    warEventFullData,
-                    callbackOnModify: null,
-                },
-                {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
-                    currentValue    : bootTimerParams[2],
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParams,
+                    currentValue    : `${bootTimerParams[1]}, ${bootTimerParams[2]}, ${bootTimerParams[3] ?? 0}`,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,
@@ -452,7 +436,7 @@ namespace Twns.MultiPlayerWar.MpwModel {
         return openData;
     }
     async function createDataForCommonWarBasicSettingsPageForMrw(instanceWarRule: IInstanceWarRule, settingsForCommon: ISettingsForCommon, settingsForMrw: ISettingsForMrw): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
+        const bootTimerParams   = CommonConstants.WarBootTimer.DefaultParams.concat();
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
         const warEventFullData  = (await WarMap.WarMapModel.getRawData(Helpers.getExisted(settingsForMrw.mapId)))?.warEventFullData ?? null;
@@ -528,16 +512,8 @@ namespace Twns.MultiPlayerWar.MpwModel {
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
-                    currentValue    : bootTimerParams[1],
-                    instanceWarRule,
-                    gameConfig,
-                    warEventFullData,
-                    callbackOnModify: null,
-                },
-                {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
-                    currentValue    : bootTimerParams[2],
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParams,
+                    currentValue    : `${bootTimerParams[1]}, ${bootTimerParams[2]}, ${bootTimerParams[3] ?? 0}`,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,
@@ -643,16 +619,8 @@ namespace Twns.MultiPlayerWar.MpwModel {
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
-                    currentValue    : bootTimerParams[1],
-                    instanceWarRule,
-                    gameConfig,
-                    warEventFullData,
-                    callbackOnModify: null,
-                },
-                {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
-                    currentValue    : bootTimerParams[2],
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParams,
+                    currentValue    : `${bootTimerParams[1]}, ${bootTimerParams[2]}, ${bootTimerParams[3] ?? 0}`,
                     instanceWarRule,
                     gameConfig,
                     warEventFullData,

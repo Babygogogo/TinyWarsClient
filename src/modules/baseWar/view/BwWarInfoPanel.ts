@@ -820,7 +820,7 @@ namespace Twns.BaseWar {
             } else {
                 const params            = war.getSettingsBootTimerParams();
                 const textForAddTime    = params[0] === Types.BootTimerType.Incremental
-                    ? `(+${params[2] * war.getUnitMap().getAllUnits().filter(v => v.getPlayerIndex() === playerIndex).length}s)`
+                    ? `(+${params[2] * war.getUnitMap().getAllUnits().filter(v => v.getPlayerIndex() === playerIndex).length + (params[3] ?? 0)}s)`
                     : ``;
 
                 label.text      = `${Helpers.getTimeDurationText2(restTime)}${textForAddTime}`;
