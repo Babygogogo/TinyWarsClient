@@ -2527,6 +2527,9 @@ declare namespace CommonProto {
 
             /** CoCategoryCfg name */
             name?: (string|null);
+
+            /** CoCategoryCfg bgmCodeArray */
+            bgmCodeArray?: (number[]|null);
         }
 
         /** Represents a CoCategoryCfg. */
@@ -2543,6 +2546,9 @@ declare namespace CommonProto {
 
             /** CoCategoryCfg name. */
             public name: string;
+
+            /** CoCategoryCfg bgmCodeArray. */
+            public bgmCodeArray: number[];
 
             /**
              * Creates a new CoCategoryCfg instance using the specified properties.
@@ -2654,9 +2660,6 @@ declare namespace CommonProto {
             /** CoBasicCfg image */
             image?: (number|null);
 
-            /** CoBasicCfg bgmCode */
-            bgmCode?: (number[]|null);
-
             /** CoBasicCfg tier */
             tier?: (number|null);
 
@@ -2738,9 +2741,6 @@ declare namespace CommonProto {
 
             /** CoBasicCfg image. */
             public image: number;
-
-            /** CoBasicCfg bgmCode. */
-            public bgmCode: number[];
 
             /** CoBasicCfg tier. */
             public tier: number;
@@ -27644,6 +27644,9 @@ declare namespace CommonProto {
             /** UserSettings isShowGridBorder */
             isShowGridBorder?: (boolean|null);
 
+            /** UserSettings coBgmSettings */
+            coBgmSettings?: (CommonProto.User.UserSettings.ICoBgmSettings[]|null);
+
             /** UserSettings isAutoScrollMap */
             isAutoScrollMap?: (boolean|null);
 
@@ -27668,6 +27671,9 @@ declare namespace CommonProto {
 
             /** UserSettings isShowGridBorder. */
             public isShowGridBorder: boolean;
+
+            /** UserSettings coBgmSettings. */
+            public coBgmSettings: CommonProto.User.UserSettings.ICoBgmSettings[];
 
             /** UserSettings isAutoScrollMap. */
             public isAutoScrollMap: boolean;
@@ -27744,6 +27750,105 @@ declare namespace CommonProto {
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
+        }
+
+        namespace UserSettings {
+
+            /** Properties of a CoBgmSettings. */
+            interface ICoBgmSettings {
+
+                /** CoBgmSettings coCategoryId */
+                coCategoryId?: (number|null);
+
+                /** CoBgmSettings bgmCodeArray */
+                bgmCodeArray?: (number[]|null);
+            }
+
+            /** Represents a CoBgmSettings. */
+            class CoBgmSettings implements ICoBgmSettings {
+
+                /**
+                 * Constructs a new CoBgmSettings.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.User.UserSettings.ICoBgmSettings);
+
+                /** CoBgmSettings coCategoryId. */
+                public coCategoryId: number;
+
+                /** CoBgmSettings bgmCodeArray. */
+                public bgmCodeArray: number[];
+
+                /**
+                 * Creates a new CoBgmSettings instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns CoBgmSettings instance
+                 */
+                public static create(properties?: CommonProto.User.UserSettings.ICoBgmSettings): CommonProto.User.UserSettings.CoBgmSettings;
+
+                /**
+                 * Encodes the specified CoBgmSettings message. Does not implicitly {@link CommonProto.User.UserSettings.CoBgmSettings.verify|verify} messages.
+                 * @param message CoBgmSettings message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.User.UserSettings.ICoBgmSettings, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified CoBgmSettings message, length delimited. Does not implicitly {@link CommonProto.User.UserSettings.CoBgmSettings.verify|verify} messages.
+                 * @param message CoBgmSettings message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.User.UserSettings.ICoBgmSettings, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a CoBgmSettings message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns CoBgmSettings
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.User.UserSettings.CoBgmSettings;
+
+                /**
+                 * Decodes a CoBgmSettings message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns CoBgmSettings
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.User.UserSettings.CoBgmSettings;
+
+                /**
+                 * Verifies a CoBgmSettings message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CoBgmSettings message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CoBgmSettings
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.User.UserSettings.CoBgmSettings;
+
+                /**
+                 * Creates a plain object from a CoBgmSettings message. Also converts values to other types if specified.
+                 * @param message CoBgmSettings
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.User.UserSettings.CoBgmSettings, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CoBgmSettings to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
         }
 
         /** Properties of a UserMapRating. */
@@ -29249,6 +29354,9 @@ declare namespace CommonProto {
             /** MessageContainer MsgUserLoginAsGuest */
             MsgUserLoginAsGuest?: (CommonProto.NetMessage.IMsgUserLoginAsGuest|null);
 
+            /** MessageContainer MsgUserSetCoBgmSettings */
+            MsgUserSetCoBgmSettings?: (CommonProto.NetMessage.IMsgUserSetCoBgmSettings|null);
+
             /** MessageContainer MsgMapGetEnabledMapIdArray */
             MsgMapGetEnabledMapIdArray?: (CommonProto.NetMessage.IMsgMapGetEnabledMapIdArray|null);
 
@@ -29648,6 +29756,9 @@ declare namespace CommonProto {
 
             /** MessageContainer MsgUserLoginAsGuest. */
             public MsgUserLoginAsGuest?: (CommonProto.NetMessage.IMsgUserLoginAsGuest|null);
+
+            /** MessageContainer MsgUserSetCoBgmSettings. */
+            public MsgUserSetCoBgmSettings?: (CommonProto.NetMessage.IMsgUserSetCoBgmSettings|null);
 
             /** MessageContainer MsgMapGetEnabledMapIdArray. */
             public MsgMapGetEnabledMapIdArray?: (CommonProto.NetMessage.IMsgMapGetEnabledMapIdArray|null);
@@ -38459,6 +38570,303 @@ declare namespace CommonProto {
                  * @returns Plain object
                  */
                 public static toObject(message: CommonProto.NetMessage.MsgUserLoginAsGuest.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this S to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+
+        /** Properties of a MsgUserSetCoBgmSettings. */
+        interface IMsgUserSetCoBgmSettings {
+
+            /** MsgUserSetCoBgmSettings c */
+            c?: (CommonProto.NetMessage.MsgUserSetCoBgmSettings.IC|null);
+
+            /** MsgUserSetCoBgmSettings s */
+            s?: (CommonProto.NetMessage.MsgUserSetCoBgmSettings.IS|null);
+        }
+
+        /** Represents a MsgUserSetCoBgmSettings. */
+        class MsgUserSetCoBgmSettings implements IMsgUserSetCoBgmSettings {
+
+            /**
+             * Constructs a new MsgUserSetCoBgmSettings.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.NetMessage.IMsgUserSetCoBgmSettings);
+
+            /** MsgUserSetCoBgmSettings c. */
+            public c?: (CommonProto.NetMessage.MsgUserSetCoBgmSettings.IC|null);
+
+            /** MsgUserSetCoBgmSettings s. */
+            public s?: (CommonProto.NetMessage.MsgUserSetCoBgmSettings.IS|null);
+
+            /**
+             * Creates a new MsgUserSetCoBgmSettings instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MsgUserSetCoBgmSettings instance
+             */
+            public static create(properties?: CommonProto.NetMessage.IMsgUserSetCoBgmSettings): CommonProto.NetMessage.MsgUserSetCoBgmSettings;
+
+            /**
+             * Encodes the specified MsgUserSetCoBgmSettings message. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetCoBgmSettings.verify|verify} messages.
+             * @param message MsgUserSetCoBgmSettings message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.NetMessage.IMsgUserSetCoBgmSettings, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MsgUserSetCoBgmSettings message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetCoBgmSettings.verify|verify} messages.
+             * @param message MsgUserSetCoBgmSettings message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.NetMessage.IMsgUserSetCoBgmSettings, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MsgUserSetCoBgmSettings message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MsgUserSetCoBgmSettings
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgUserSetCoBgmSettings;
+
+            /**
+             * Decodes a MsgUserSetCoBgmSettings message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MsgUserSetCoBgmSettings
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgUserSetCoBgmSettings;
+
+            /**
+             * Verifies a MsgUserSetCoBgmSettings message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MsgUserSetCoBgmSettings message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MsgUserSetCoBgmSettings
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgUserSetCoBgmSettings;
+
+            /**
+             * Creates a plain object from a MsgUserSetCoBgmSettings message. Also converts values to other types if specified.
+             * @param message MsgUserSetCoBgmSettings
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.NetMessage.MsgUserSetCoBgmSettings, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MsgUserSetCoBgmSettings to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace MsgUserSetCoBgmSettings {
+
+            /** Properties of a C. */
+            interface IC {
+
+                /** C coCategoryId */
+                coCategoryId?: (number|null);
+
+                /** C bgmCodeArray */
+                bgmCodeArray?: (number[]|null);
+            }
+
+            /** Represents a C. */
+            class C implements IC {
+
+                /**
+                 * Constructs a new C.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgUserSetCoBgmSettings.IC);
+
+                /** C coCategoryId. */
+                public coCategoryId: number;
+
+                /** C bgmCodeArray. */
+                public bgmCodeArray: number[];
+
+                /**
+                 * Creates a new C instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns C instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgUserSetCoBgmSettings.IC): CommonProto.NetMessage.MsgUserSetCoBgmSettings.C;
+
+                /**
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetCoBgmSettings.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgUserSetCoBgmSettings.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetCoBgmSettings.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgUserSetCoBgmSettings.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgUserSetCoBgmSettings.C;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgUserSetCoBgmSettings.C;
+
+                /**
+                 * Verifies a C message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a C message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns C
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgUserSetCoBgmSettings.C;
+
+                /**
+                 * Creates a plain object from a C message. Also converts values to other types if specified.
+                 * @param message C
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgUserSetCoBgmSettings.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this C to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a S. */
+            interface IS {
+
+                /** S errorCode */
+                errorCode?: (number|null);
+
+                /** S coCategoryId */
+                coCategoryId?: (number|null);
+
+                /** S bgmCodeArray */
+                bgmCodeArray?: (number[]|null);
+            }
+
+            /** Represents a S. */
+            class S implements IS {
+
+                /**
+                 * Constructs a new S.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgUserSetCoBgmSettings.IS);
+
+                /** S errorCode. */
+                public errorCode: number;
+
+                /** S coCategoryId. */
+                public coCategoryId: number;
+
+                /** S bgmCodeArray. */
+                public bgmCodeArray: number[];
+
+                /**
+                 * Creates a new S instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns S instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgUserSetCoBgmSettings.IS): CommonProto.NetMessage.MsgUserSetCoBgmSettings.S;
+
+                /**
+                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetCoBgmSettings.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgUserSetCoBgmSettings.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgUserSetCoBgmSettings.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgUserSetCoBgmSettings.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgUserSetCoBgmSettings.S;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgUserSetCoBgmSettings.S;
+
+                /**
+                 * Verifies a S message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a S message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns S
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgUserSetCoBgmSettings.S;
+
+                /**
+                 * Creates a plain object from a S message. Also converts values to other types if specified.
+                 * @param message S
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgUserSetCoBgmSettings.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this S to JSON.

@@ -41,6 +41,7 @@ namespace Twns.User {
         private readonly _btnPrevBgm!           : TwnsUiButton.UiButton;
         private readonly _btnNextBgm!           : TwnsUiButton.UiButton;
 
+        private readonly _btnCoBgmSettings!     : TwnsUiButton.UiButton;
         private readonly _btnCancel!            : TwnsUiButton.UiButton;
         private readonly _btnDefault!           : TwnsUiButton.UiButton;
         private readonly _btnConfirm!           : TwnsUiButton.UiButton;
@@ -68,6 +69,7 @@ namespace Twns.User {
                 { ui: this._btnPrevBgm,         callback: this._onTouchedBtnPrevBgm },
                 { ui: this._btnNextBgm,         callback: this._onTouchedBtnNextBgm },
 
+                { ui: this._btnCoBgmSettings,   callback: this._onTouchedBtnCoBgmSettings },
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
                 { ui: this._btnDefault,         callback: this._onTouchedBtnDefault },
                 { ui: this._btnConfirm,         callback: this._onTouchedBtnConfirm },
@@ -146,6 +148,10 @@ namespace Twns.User {
             await SoundManager.playNextBgm();
             this._updateLabelBgmName();
         }
+
+        private _onTouchedBtnCoBgmSettings(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.UserSetCoBgmSettingsPanel, void 0);
+        }
         private _onTouchedBtnCancel(): void {
             const prevBgmVolume = this._prevBgmVolume;
             (prevBgmVolume != null) && (SoundManager.setBgmVolume(prevBgmVolume));
@@ -187,6 +193,7 @@ namespace Twns.User {
             this._updateGroupEffectMute();
             this._updateGroupBgmVolume();
             this._updateGroupEffectVolume();
+            this._updateBtnCoBgmSettings();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -219,6 +226,10 @@ namespace Twns.User {
             this._imgEffectPoint.x          = pos;
             this._imgEffectBar.width        = pos;
             this._labelEffectVolume.text    = `${Math.floor(volume * 100)}`;
+        }
+
+        private _updateBtnCoBgmSettings(): void {
+            this._btnCoBgmSettings.visible = User.UserModel.getSelfUserId() != null;
         }
         private async _updateLabelBgmName(): Promise<void> {
             const langTextType      = (await Config.ConfigManager.getLatestGameConfig()).getBgmSfxCfg(SoundManager.getPlayingBgmCode())?.lang;

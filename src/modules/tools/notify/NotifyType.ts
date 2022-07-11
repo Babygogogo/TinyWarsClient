@@ -169,6 +169,7 @@ namespace Twns.Notify {
         MsgUserSetAvatarIdFailed,
         MsgUserSetMapEditorAutoSaveTime,
         MsgUserSetMapEditorAutoSaveTimeFailed,
+        MsgUserSetCoBgmSettings,
         MsgUserSetDiscordInfo,
         MsgUserSetDiscordInfoFailed,
         MsgUserGetOnlineUserIdArray,

@@ -137,7 +137,11 @@ namespace Twns.SoundManager {
         }
     }
     export function playCoBgm(coId: number, gameConfig: Config.GameConfig): void {
-        playBgm((gameConfig.getCoBasicCfg(coId)?.bgmCode ?? [])[0] ?? CommonConstants.BgmSfxCode.CoEmpty);
+        const coCategoryId  = gameConfig.getCoBasicCfg(coId)?.categoryId;
+        const bgmCodeArray  = (coCategoryId == null
+            ? null
+            : User.UserModel.getSelfSettings()?.coBgmSettings?.find(v => v.coCategoryId === coCategoryId)?.bgmCodeArray ?? gameConfig.getCoCategoryCfg(coCategoryId)?.bgmCodeArray) ?? [];
+        playBgm(bgmCodeArray[0] ?? CommonConstants.BgmSfxCode.CoEmpty);
     }
     export function playCoBgmWithWar(war: BaseWar.BwWar, force: boolean): void {
         const player = war.getPlayerInTurn();
@@ -146,7 +150,7 @@ namespace Twns.SoundManager {
         }
 
         const gameConfig    = war.getGameConfig();
-        const bgmCodeArray  = gameConfig.getCoBasicCfg(player.getCoId())?.bgmCode ?? [];
+        const bgmCodeArray  = gameConfig.getCoCategoryCfgByCoId(player.getCoId())?.bgmCodeArray ?? [];
         switch (player.getCoUsingSkillType()) {
             case Types.CoSkillType.Power        : playBgm(bgmCodeArray[1] ?? CommonConstants.BgmSfxCode.CoPower);   return;
             case Types.CoSkillType.SuperPower   : playBgm(bgmCodeArray[2] ?? CommonConstants.BgmSfxCode.CoPower);   return;

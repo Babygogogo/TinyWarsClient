@@ -5546,6 +5546,10 @@ namespace Twns.Lang {
             `回合增量时间`,
             `Incremental Time per Turn`,
         ],
+        [LangTextType.B0992]: [
+            `CO BGM 设置`,
+            `CO BGM Settings`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.Tile0000]: [

@@ -176,7 +176,7 @@ namespace Twns.User.UserModel {
         return getSelfUserComplexInfo()?.userMapRatingArray?.find(v => v.mapId === mapId)?.rating ?? null;
     }
 
-    function getSelfSettings(): IUserSettings | null {
+    export function getSelfSettings(): IUserSettings | null {
         return getSelfUserComplexInfo()?.userSettings ?? null;
     }
     export function getSelfSettingsTextureVersion(): Types.UnitAndTileTextureVersion {
@@ -321,6 +321,31 @@ namespace Twns.User.UserModel {
     }
     export function updateOnMsgUserSetMapEditorAutoSaveTime(data: NetMessage.MsgUserSetMapEditorAutoSaveTime.IS): void {
         setSelfMapEditorAutoSaveTime(data.time ?? null);
+    }
+    export function updateOnMsgUserSetCoBgmSettings(data: NetMessage.MsgUserSetCoBgmSettings.IS): void {
+        const selfSettings = getSelfSettings();
+        if (selfSettings == null) {
+            return;
+        }
+
+        const coCategoryId  = Helpers.getExisted(data.coCategoryId);
+        const bgmCodeArray  = data.bgmCodeArray;
+        const coBgmSettings = selfSettings.coBgmSettings ??= [];
+        const index         = coBgmSettings.findIndex(v => v.coCategoryId === coCategoryId);
+        if (index >= 0) {
+            if (bgmCodeArray) {
+                coBgmSettings[index].bgmCodeArray = bgmCodeArray;
+            } else {
+                coBgmSettings.splice(index, 1);
+            }
+        } else {
+            if (bgmCodeArray) {
+                coBgmSettings.push({
+                    coCategoryId,
+                    bgmCodeArray,
+                });
+            }
+        }
     }
 
     function _onNotifyNetworkDisconnected(): void {

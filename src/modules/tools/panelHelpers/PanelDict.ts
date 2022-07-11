@@ -54,6 +54,7 @@ namespace Twns.PanelHelpers {
         CommonBanCoCategoryIdPanel          : PanelConfig<Common.OpenDataForCommonBanCoCategoryIdPanel>;
         CommonBlockPanel                    : PanelConfig<Common.OpenDataForCommonBlockPanel>;
         CommonChangeVersionPanel            : PanelConfig<Common.OpenDataForCommonChangeVersionPanel>;
+        CommonChooseBgmPanel                : PanelConfig<Common.OpenDataForCommonChooseBgmPanel>;
         CommonChooseCoCategoryIdPanel       : PanelConfig<Common.OpenDataForCommonChooseCoCategoryIdPanel>;
         CommonChooseCoPanel                 : PanelConfig<Common.OpenDataForCommonChooseCoPanel>;
         CommonChooseCoSkillTypePanel        : PanelConfig<Common.OpenDataForCommonChooseCoSkillTypePanel>;
@@ -203,6 +204,7 @@ namespace Twns.PanelHelpers {
         UserProfileSettingsPanel            : PanelConfig<User.OpenDataForUserProfileSettingsPanel>;
         UserRegisterPanel                   : PanelConfig<User.OpenDataForUserRegisterPanel>;
         UserSetAvatarPanel                  : PanelConfig<User.OpenDataForUserSetAvatarPanel>;
+        UserSetCoBgmSettingsPanel           : PanelConfig<User.OpenDataForUserSetCoBgmSettingsPanel>;
         UserSetDiscordInfoPanel             : PanelConfig<User.OpenDataForUserSetDiscordInfoPanel>;
         UserSetOpacityPanel                 : PanelConfig<User.OpenDataForUserSetOpacityPanel>;
         UserSetPasswordPanel                : PanelConfig<User.OpenDataForUserSetPasswordPanel>;
@@ -506,6 +508,12 @@ namespace Twns.PanelHelpers {
             CommonChangeVersionPanel: {
                 cls         : Common?.CommonChangeVersionPanel,
                 skinName    : `resource/skins/common/CommonChangeVersionPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonChooseBgmPanel: {
+                cls         : Common?.CommonChooseBgmPanel,
+                skinName    : `resource/skins/common/CommonChooseBgmPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
@@ -1366,6 +1374,12 @@ namespace Twns.PanelHelpers {
             UserSetAvatarPanel: {
                 cls         : User?.UserSetAvatarPanel,
                 skinName    : `resource/skins/user/UserSetAvatarPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            UserSetCoBgmSettingsPanel: {
+                cls         : User?.UserSetCoBgmSettingsPanel,
+                skinName    : `resource/skins/user/UserSetCoBgmSettingsPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 

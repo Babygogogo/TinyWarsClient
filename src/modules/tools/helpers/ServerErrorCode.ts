@@ -11624,6 +11624,17 @@ export const enum ServerErrorCode {
     ExeUserSetMapEditorAutoSaveTime_ExeWithSocket_0008,
     ExeUserSetMapEditorAutoSaveTime_ExeWithSocket_0009,
 
+    ExeUserSetCoBgmSettings_ExeWithSocket_0000,
+    ExeUserSetCoBgmSettings_ExeWithSocket_0001,
+    ExeUserSetCoBgmSettings_ExeWithSocket_0002,
+    ExeUserSetCoBgmSettings_ExeWithSocket_0003,
+    ExeUserSetCoBgmSettings_ExeWithSocket_0004,
+    ExeUserSetCoBgmSettings_ExeWithSocket_0005,
+    ExeUserSetCoBgmSettings_ExeWithSocket_0006,
+    ExeUserSetCoBgmSettings_ExeWithSocket_0007,
+    ExeUserSetCoBgmSettings_ExeWithSocket_0008,
+    ExeUserSetCoBgmSettings_ExeWithSocket_0009,
+
     ExeSpmValidateSrw_ExeWithSocket_0000,
     ExeSpmValidateSrw_ExeWithSocket_0001,
     ExeSpmValidateSrw_ExeWithSocket_0002,

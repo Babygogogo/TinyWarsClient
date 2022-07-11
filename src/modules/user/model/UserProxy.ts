@@ -32,6 +32,7 @@ namespace Twns.User.UserProxy {
             { msgCode: NetMessageCodes.MsgUserSetMapRating,             callback: _onMsgUserSetMapRating },
             { msgCode: NetMessageCodes.MsgUserSetAvatarId,              callback: _onMsgUserSetAvatarId },
             { msgCode: NetMessageCodes.MsgUserSetMapEditorAutoSaveTime, callback: _onMsgUserSetMapEditorAutoSaveTime },
+            { msgCode: NetMessageCodes.MsgUserSetCoBgmSettings,         callback: _onMsgUserSetCoBgmSettings },
         ]);
     }
 
@@ -275,13 +276,29 @@ namespace Twns.User.UserProxy {
             }, },
         });
     }
-    async function _onMsgUserSetMapEditorAutoSaveTime(e: egret.Event): Promise<void> {
+    function _onMsgUserSetMapEditorAutoSaveTime(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserSetMapEditorAutoSaveTime.IS;
         if (data.errorCode) {
             Notify.dispatch(NotifyType.MsgUserSetMapEditorAutoSaveTimeFailed, data);
         } else {
             User.UserModel.updateOnMsgUserSetMapEditorAutoSaveTime(data);
             Notify.dispatch(NotifyType.MsgUserSetMapEditorAutoSaveTime, data);
+        }
+    }
+
+    export function reqUserSetCoBgmSettings(coCategoryId: number, bgmCodeArray: number[] | null): void {
+        Net.NetManager.send({
+            MsgUserSetCoBgmSettings: { c: {
+                coCategoryId,
+                bgmCodeArray,
+            } }
+        });
+    }
+    function _onMsgUserSetCoBgmSettings(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserSetCoBgmSettings.IS;
+        if (!data.errorCode) {
+            UserModel.updateOnMsgUserSetCoBgmSettings(data);
+            Notify.dispatch(NotifyType.MsgUserSetCoBgmSettings, data);
         }
     }
 }

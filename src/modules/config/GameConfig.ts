@@ -538,6 +538,10 @@ namespace Twns.Config {
         public getCoCategoryCfg(categoryId: number): CoCategoryCfg | null {
             return this._coCategoryCfgDict.get(categoryId) ?? null;
         }
+        public getCoCategoryCfgByCoId(coId: number): CoCategoryCfg | null {
+            const coCategoryId = this.getCoBasicCfg(coId)?.categoryId;
+            return coCategoryId == null ? null : this.getCoCategoryCfg(coCategoryId);
+        }
         public getEnabledCoCategoryIdArray(): number[] {
             const coCategoryIdSet = new Set<number>();
             for (const [, coBasicCfg] of this._coBasicCfgDict) {

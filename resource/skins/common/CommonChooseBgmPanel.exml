@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
+        xmlns:TwnsUiTextInput="TwnsUiTextInput.*" xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group width="700" horizontalCenter="0" height="440" verticalCenter="0">
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                             alpha="0.8" left="0" top="0" bottom="0" right="0" locked="true" />
+        <TwnsUiLabel:UiLabel id="_labelTitle" text="Reset Viewpoint" bold="true" size="22" top="10" textColor="0xffffff"
+                             horizontalCenter="0" locked="true" />
+        <TwnsUiButton:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                               width="120" right="0" top="0" locked="true" />
+        <TwnsUiScrollList:UiScrollList id="_listBgm" width="680" height="390" y="39" horizontalCenter="0">
+            <e:List>
+                <e:itemRendererSkinName>
+                    <e:Skin width="200" height="40" currentState="up" states="down,up">
+                        <e:Group id="_group" left="0" right="0" top="0" bottom="0">
+                            <TwnsUiImage:UiImage id="_imgBg" anchorOffsetX="0" anchorOffsetY="0" left="0" right="0"
+                                                 top="0" bottom="0" source="uncompressedColorTransparent0000" />
+                            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" bottom="0"
+                                                 x="10" y="10" source="uncompressedColorYellow0001" height="1"
+                                                 visible.up="false" locked="true" />
+                            <TwnsUiLabel:UiLabel id="_labelName" text="部队名五字" size="12" textColor="0xffffff" x="0"
+                                                 verticalCenter="0" width="138" />
+                            <e:Group id="_groupSelect" width="60" height="32" visible.up="false" verticalCenter="0"
+                                     right="0">
+                                <TwnsUiImage:UiImage id="_imgSelect" anchorOffsetX="0" anchorOffsetY="0"
+                                                     source="uncompressedColorYellow0001" left="0" right="0" top="0"
+                                                     bottom="0" scale9Grid="1,1,1,1" />
+                                <TwnsUiLabel:UiLabel id="_labelSelect" text="Build" visible.up="true" size="16"
+                                                     bold="true" textColor="0x000000" horizontalCenter="0"
+                                                     verticalCenter="0" />
+                            </e:Group>
+                        </e:Group>
+                    </e:Skin>
+                </e:itemRendererSkinName>
+                <e:layout>
+                    <e:TileLayout orientation="rows" verticalGap="10" requestedColumnCount="3"
+                                  columnAlign="justifyUsingGap" />
+                </e:layout>
+            </e:List>
+        </TwnsUiScrollList:UiScrollList>
+    </e:Group>
+</e:Skin>

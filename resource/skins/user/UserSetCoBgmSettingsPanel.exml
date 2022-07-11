@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group id="_group" width="580" height="460" horizontalCenter="0" verticalCenter="0">
+        <e:Group left="0" right="0" top="0" bottom="0">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                 scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
+            <e:Group y="0" left="0" right="0">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                                     source="uncompressedColorGrey0001" y="0" left="0" right="0" />
+                <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+                <TwnsUiButton:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001"
+                                       verticalCenter="0" right="30" />
+            </e:Group>
+        </e:Group>
+        <TwnsUiScrollList:UiScrollList id="_sclCo" left="30" right="30" top="50" bottom="20">
+            <e:List requireSelection="true">
+                <e:itemRendererSkinName>
+                    <e:Skin height="130" width="520" currentState="up" states="down,up">
+                        <e:Group left="0" top="0" bottom="0" right="0">
+                            <TwnsUiLabel:UiLabel id="_labelCoName" text="Label" left="0" size="20" y="4" />
+                            <e:Group top="0" right="0">
+                                <TwnsUiButton:UiButton id="_btnReset" label="Default" x="0"
+                                                       skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                       width="80" y="0" />
+                                <e:layout>
+                                    <e:HorizontalLayout/>
+                                </e:layout>
+                            </e:Group>
+                            <e:Group x="0" y="30">
+                                <e:Group x="0" y="0">
+                                    <TwnsUiButton:UiButton label="Save" id="_btnPassive"
+                                                           skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                           width="80" left="0" verticalCenter="0" />
+                                    <TwnsUiLabel:UiLabel text="Hope Never Dies (Brenner)" id="_labelPassive" size="14"
+                                                         x="90" verticalCenter="0" />
+                                </e:Group>
+                                <e:Group x="10" y="10">
+                                    <TwnsUiButton:UiButton label="Save" id="_btnPower"
+                                                           skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                           width="80" left="0" verticalCenter="0" />
+                                    <TwnsUiLabel:UiLabel text="Label" id="_labelPower" size="14" x="90"
+                                                         verticalCenter="0" />
+                                </e:Group>
+                                <e:Group x="20" y="20">
+                                    <TwnsUiButton:UiButton label="Save" id="_btnSuperPower"
+                                                           skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                           width="80" left="0" verticalCenter="0" />
+                                    <TwnsUiLabel:UiLabel text="Label" id="_labelSuperPower" size="14" x="90"
+                                                         verticalCenter="0" />
+                                </e:Group>
+                                <e:layout>
+                                    <e:VerticalLayout/>
+                                </e:layout>
+                            </e:Group>
+                        </e:Group>
+                    </e:Skin>
+                </e:itemRendererSkinName>
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:List>
+        </TwnsUiScrollList:UiScrollList>
+    </e:Group>
+</e:Skin>
