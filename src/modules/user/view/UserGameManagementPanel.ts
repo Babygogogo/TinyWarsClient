@@ -16,7 +16,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import Twns.Notify               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -34,8 +34,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.User {
-    import LangTextType             = Twns.Lang.LangTextType;
-    import NotifyType               = Twns.Notify.NotifyType;
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
 
     export type OpenDataForUserGameManagementPanel = void;
     export class UserGameManagementPanel extends TwnsUiPanel.UiPanel<OpenDataForUserGameManagementPanel> {
@@ -79,53 +79,53 @@ namespace Twns.User {
             this._updateComponentsForLanguage();
         }
         private _onTouchedBtnDeleteAllSpmRank(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title       : Lang.getText(LangTextType.B0879),
                 content     : Lang.getText(LangTextType.A0225),
-                callback    : () => Twns.SinglePlayerMode.SpmProxy.reqSpmDeleteAllScoreAndReplay(),
+                callback    : () => Gm.GmProxy.reqGmDeleteSpmAllScoreAndReplay(),
             });
         }
         private _onTouchedBtnSetPrivilege(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserSetPrivilegePanel, { userId: Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId()) });
+            PanelHelpers.open(PanelHelpers.PanelDict.UserSetPrivilegePanel, { userId: Helpers.getExisted(User.UserModel.getSelfUserId()) });
         }
         private _onTouchedBtnMapManagement(): void {
-            Twns.PanelHelpers.closeAllPanelsExcept([
-                Twns.PanelHelpers.PanelDict.LobbyBackgroundPanel,
+            PanelHelpers.closeAllPanelsExcept([
+                PanelHelpers.PanelDict.LobbyBackgroundPanel,
             ]);
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.LobbyBackgroundPanel, void 0);
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyBackgroundPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MmMainMenuPanel, void 0);
         }
         private _onTouchedBtnManageBroadcast(): void {
-            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BroadcastMessageListPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.BroadcastMessageListPanel, void 0);
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {
@@ -137,12 +137,12 @@ namespace Twns.User {
             const group = this._groupButtons;
             group.removeChildren();
 
-            if (Twns.User.UserModel.getIsSelfAdmin()) {
+            if (User.UserModel.getIsSelfAdmin()) {
                 group.addChild(this._btnSetPrivilege);
                 group.addChild(this._btnDeleteAllSpmRank);
                 group.addChild(this._btnManageBroadcast);
             }
-            if ((Twns.User.UserModel.getIsSelfAdmin()) || (Twns.User.UserModel.getIsSelfMapCommittee())) {
+            if ((User.UserModel.getIsSelfAdmin()) || (User.UserModel.getIsSelfMapCommittee())) {
                 group.addChild(this._btnMapManagement);
             }
         }

@@ -5,22 +5,23 @@
 // import WarCommonHelpers from "../../tools/warHelpers/WarCommonHelpers";
 // import TwnsMeField      from "./MeField";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
     import WarSerialization         = CommonProto.WarSerialization;
     import ISerialFogMap            = WarSerialization.ISerialFogMap;
     import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
 
-    export class MeFogMap extends Twns.BaseWar.BwFogMap {
+    export class MeFogMap extends BaseWar.BwFogMap {
         public serializeForCreateSfw(): ISerialFogMap {
             const mapSize           = this.getMapSize();
-            const maxPlayerIndex    = (this._getWar().getField() as Twns.MapEditor.MeField).getMaxPlayerIndex();
+            const maxPlayerIndex    = (this._getWar().getField() as MapEditor.MeField).getMaxPlayerIndex();
             const serialMapsFromPath: IDataForFogMapFromPath[] = [];
             for (const [playerIndex, map] of this._getAllMapsFromPath()) {
                 if (playerIndex > maxPlayerIndex) {
                     continue;
                 }
 
-                const visibilityArray = Twns.WarHelpers.WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                const visibilityArray = WarHelpers.WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
                 if (visibilityArray != null) {
                     serialMapsFromPath.push({
                         playerIndex,
@@ -37,7 +38,7 @@ namespace Twns.MapEditor {
             };
         }
 
-        public startRunning(war: Twns.BaseWar.BwWar): void {
+        public startRunning(war: BaseWar.BwWar): void {
             this._setWar(war);
 
             for (const tile of war.getTileMap().getAllTiles()) {

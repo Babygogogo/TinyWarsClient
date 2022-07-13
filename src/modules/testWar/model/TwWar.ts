@@ -34,6 +34,9 @@ namespace Twns.TestWar {
         public getCanCheat(): boolean {
             return false;
         }
+        public getShouldSerializeFullInfoForFreeModeGames(): boolean {
+            return false;
+        }
         public getPlayerManager(): TwPlayerManager {
             return this._playerManager;
         }

@@ -104,6 +104,10 @@ namespace Twns.MapEditor {
         public getCanCheat(): boolean {
             return true;
         }
+        public getShouldSerializeFullInfoForFreeModeGames(): boolean {
+            return true;
+        }
+
         public getIsNeedExecutedAction(): boolean {
             return false;
         }

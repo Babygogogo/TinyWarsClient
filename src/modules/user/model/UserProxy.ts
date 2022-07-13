@@ -26,7 +26,6 @@ namespace Twns.User.UserProxy {
             { msgCode: NetMessageCodes.MsgUserSetNickname,              callback: _onMsgUserSetNickname, },
             { msgCode: NetMessageCodes.MsgUserSetDiscordInfo,           callback: _onMsgUserSetDiscordInfo, },
             { msgCode: NetMessageCodes.MsgUserGetOnlineUserIdArray,     callback: _onMsgUserGetOnlineUserIdArray, },
-            { msgCode: NetMessageCodes.MsgUserSetPrivilege,             callback: _onMsgUserSetPrivilege, },
             { msgCode: NetMessageCodes.MsgUserSetPassword,              callback: _onMsgUserSetPassword, },
             { msgCode: NetMessageCodes.MsgUserSetSettings,              callback: _onMsgUserSetSettings, },
             { msgCode: NetMessageCodes.MsgUserSetMapRating,             callback: _onMsgUserSetMapRating },
@@ -195,20 +194,6 @@ namespace Twns.User.UserProxy {
         const data = e.data as NetMessage.MsgUserGetOnlineUserIdArray.IS;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.MsgUserGetOnlineUserIdArray, data);
-        }
-    }
-
-    export function reqUserSetPrivilege(userId: number, userPrivilege: CommonProto.User.IUserPrivilege): void {
-        Net.NetManager.send({ MsgUserSetPrivilege: { c: {
-            userId,
-            userPrivilege,
-        } } });
-    }
-    async function _onMsgUserSetPrivilege(e: egret.Event): Promise<void> {
-        const data = e.data as CommonProto.NetMessage.MsgUserSetPrivilege.IS;
-        if (!data.errorCode) {
-            User.UserModel.updateOnMsgUserSetPrivilege(data);
-            Notify.dispatch(NotifyType.MsgUserSetPrivilege, data);
         }
     }
 

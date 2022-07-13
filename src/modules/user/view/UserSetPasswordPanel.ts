@@ -5,7 +5,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -16,8 +16,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.User {
-    import NotifyType   = Twns.Notify.NotifyType;
-    import LangTextType = Twns.Lang.LangTextType;
+    import NotifyType   = Notify.NotifyType;
+    import LangTextType = Lang.LangTextType;
 
     export type OpenDataForUserSetPasswordPanel = void;
     export class UserSetPasswordPanel extends TwnsUiPanel.UiPanel<OpenDataForUserSetPasswordPanel> {
@@ -55,11 +55,11 @@ namespace Twns.User {
         }
 
         private _onMsgUserSetPassword(): void {
-            Twns.FloatText.show(Lang.getText(LangTextType.A0148));
+            FloatText.show(Lang.getText(LangTextType.A0148));
 
             const password = this._inputNewPassword0.text;
-            Twns.LocalStorage.setPassword(password);
-            Twns.User.UserModel.setSelfPassword(password);
+            LocalStorage.setPassword(password);
+            User.UserModel.setSelfPassword(password);
             this.close();
         }
         private _onNotifyLanguageChanged(): void {
@@ -68,12 +68,12 @@ namespace Twns.User {
 
         private _onTouchedBtnConfirm(): void {
             const newPassword = this._inputNewPassword0.text;
-            if (!Twns.Helpers.checkIsPasswordValid(newPassword)) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0003));
+            if (!Helpers.checkIsPasswordValid(newPassword)) {
+                FloatText.show(Lang.getText(LangTextType.A0003));
             } else if (newPassword !== this._inputNewPassword1.text) {
-                Twns.FloatText.show(Lang.getText(LangTextType.A0147));
+                FloatText.show(Lang.getText(LangTextType.A0147));
             } else {
-                Twns.User.UserProxy.reqUserSetPassword(this._inputOldPassword.text, newPassword);
+                User.UserProxy.reqUserSetPassword(this._inputOldPassword.text, newPassword);
             }
         }
 
@@ -87,32 +87,32 @@ namespace Twns.User {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Twns.Helpers.resetTween({
+            Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

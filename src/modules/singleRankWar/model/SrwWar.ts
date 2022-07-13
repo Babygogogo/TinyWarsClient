@@ -82,6 +82,9 @@ namespace Twns.SingleRankWar {
         public getCanCheat(): boolean {
             return false;
         }
+        public getShouldSerializeFullInfoForFreeModeGames(): boolean {
+            return false;
+        }
 
         public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];

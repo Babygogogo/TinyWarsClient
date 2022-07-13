@@ -60,6 +60,9 @@ namespace Twns.SingleCustomWar {
         public getCanCheat(): boolean {
             return true;
         }
+        public getShouldSerializeFullInfoForFreeModeGames(): boolean {
+            return true;
+        }
 
         public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];

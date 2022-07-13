@@ -263,7 +263,7 @@ namespace Twns.User.UserModel {
     export function updateOnMsgUserSetDiscordInfo(data: NetMessage.MsgUserSetDiscordInfo.IS): void {
         setSelfDiscordInfo(data.discordInfo ?? null);
     }
-    export function updateOnMsgUserSetPrivilege(data: NetMessage.MsgUserSetPrivilege.IS): void {
+    export function updateOnMsgGmSetUserPrivilege(data: NetMessage.MsgGmSetUserPrivilege.IS): void {
         if (data.userId === getSelfUserId()) {
             setSelfUserPrivilege(Helpers.getExisted(data.userPrivilege));
         }

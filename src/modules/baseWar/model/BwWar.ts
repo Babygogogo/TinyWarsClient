@@ -51,6 +51,7 @@ namespace Twns.BaseWar {
         public abstract getIsNeedExecutedAction(): boolean;
         public abstract getIsNeedSeedRandom(): boolean;
         public abstract getCanCheat(): boolean;
+        public abstract getShouldSerializeFullInfoForFreeModeGames(): boolean;
         public abstract getPlayerManager(): BwPlayerManager;
         public abstract getField(): BwField;
         public abstract getCommonSettingManager(): BwCommonSettingManager;

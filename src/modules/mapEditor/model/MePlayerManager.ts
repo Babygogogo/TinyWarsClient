@@ -5,9 +5,10 @@
 // import TwnsMeField          from "./MeField";
 // import MeUtility            from "./MeUtility";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MapEditor {
-    import BwPlayerManager      = Twns.BaseWar.BwPlayerManager;
-    import MeField              = Twns.MapEditor.MeField;
+    import BwPlayerManager      = BaseWar.BwPlayerManager;
+    import MeField              = MapEditor.MeField;
     import WarSerialization     = CommonProto.WarSerialization;
     import ISerialPlayerManager = WarSerialization.ISerialPlayerManager;
     import ISerialPlayer        = WarSerialization.ISerialPlayer;
@@ -16,8 +17,8 @@ namespace Twns.MapEditor {
         public serializeForCreateSfw(): ISerialPlayerManager {
             const maxPlayerIndex    = (this._getWar().getField() as MeField).getMaxPlayerIndex();
             const players           : ISerialPlayer[] = [];
-            for (let playerIndex = Twns.CommonConstants.PlayerIndex.Neutral; playerIndex <= maxPlayerIndex; ++playerIndex) {
-                players.push(Twns.MapEditor.MeHelpers.createDefaultISerialPlayer(playerIndex));
+            for (let playerIndex = CommonConstants.PlayerIndex.Neutral; playerIndex <= maxPlayerIndex; ++playerIndex) {
+                players.push(MapEditor.MeHelpers.createDefaultISerialPlayer(playerIndex));
             }
 
             return {
@@ -28,7 +29,7 @@ namespace Twns.MapEditor {
         public serializeForCreateMfr(): ISerialPlayerManager {
             const maxPlayerIndex    = (this._getWar().getField() as MeField).getMaxPlayerIndex();
             const players           : ISerialPlayer[] = [];
-            for (let playerIndex = Twns.CommonConstants.PlayerIndex.Neutral; playerIndex <= maxPlayerIndex; ++playerIndex) {
+            for (let playerIndex = CommonConstants.PlayerIndex.Neutral; playerIndex <= maxPlayerIndex; ++playerIndex) {
                 players.push(this.getPlayer(playerIndex).serializeForCreateMfr());
             }
 

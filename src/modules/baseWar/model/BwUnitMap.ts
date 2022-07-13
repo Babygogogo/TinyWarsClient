@@ -158,13 +158,20 @@ namespace Twns.BaseWar {
             const nextUnitId    = this.getNextUnitId();
             const war           = this.getWar();
             const units         : ISerialUnit[] = [];
-            const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
-            for (const unit of WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
-                units.push(unit.serializeForCreateSfw());
+            if (war.getShouldSerializeFullInfoForFreeModeGames()) {
+                for (const unit of this.getAllUnits()) {
+                    units.push(unit.serializeForCreateSfw());
+                }
 
-                if (teamIndexes.has(unit.getTeamIndex())) {
-                    for (const loadedUnit of this.getUnitsLoadedByLoader(unit, true)) {
-                        units.push(loadedUnit.serializeForCreateSfw());
+            } else {
+                const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+                for (const unit of WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+                    units.push(unit.serializeForCreateSfw());
+
+                    if (teamIndexes.has(unit.getTeamIndex())) {
+                        for (const loadedUnit of this.getUnitsLoadedByLoader(unit, true)) {
+                            units.push(loadedUnit.serializeForCreateSfw());
+                        }
                     }
                 }
             }
@@ -178,13 +185,20 @@ namespace Twns.BaseWar {
             const nextUnitId    = this.getNextUnitId();
             const war           = this.getWar();
             const units         : ISerialUnit[] = [];
-            const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
-            for (const unit of WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
-                units.push(unit.serializeForCreateMfr());
+            if (war.getShouldSerializeFullInfoForFreeModeGames()) {
+                for (const unit of this.getAllUnits()) {
+                    units.push(unit.serializeForCreateMfr());
+                }
 
-                if (teamIndexes.has(unit.getTeamIndex())) {
-                    for (const loadedUnit of this.getUnitsLoadedByLoader(unit, true)) {
-                        units.push(loadedUnit.serializeForCreateMfr());
+            } else {
+                const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+                for (const unit of WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+                    units.push(unit.serializeForCreateMfr());
+
+                    if (teamIndexes.has(unit.getTeamIndex())) {
+                        for (const loadedUnit of this.getUnitsLoadedByLoader(unit, true)) {
+                            units.push(loadedUnit.serializeForCreateMfr());
+                        }
                     }
                 }
             }

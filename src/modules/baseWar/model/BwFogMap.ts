@@ -117,32 +117,33 @@ namespace Twns.BaseWar {
             };
         }
         public serializeForCreateSfw(): ISerialFogMap {
-            const mapSize           = this.getMapSize();
-            const war               = this._getWar();
-            const targetTeamIndexes = war.getPlayerManager().getWatcherTeamIndexesForSelf();
-            const mapsFromPath       : IDataForFogMapFromPath[] = [];
+            if (this._getWar().getShouldSerializeFullInfoForFreeModeGames()) {
+                return this.serialize();
+            } else {
+                const mapSize           = this.getMapSize();
+                const war               = this._getWar();
+                const targetTeamIndexes = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+                const mapsFromPath       : IDataForFogMapFromPath[] = [];
 
-            for (const [playerIndex, map] of this._getAllMapsFromPath()) {
-                const player = war.getPlayer(playerIndex);
-                if ((player)                                                    &&
-                    (player.getAliveState() === Types.PlayerAliveState.Alive)   &&
-                    (targetTeamIndexes.has(player.getTeamIndex()))
-                ) {
-                    const visibilityArray = WarHelpers.WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
-                    if (visibilityArray != null) {
-                        mapsFromPath.push({
-                            playerIndex,
-                            visibilityArray,
-                        });
+                for (const [playerIndex, map] of this._getAllMapsFromPath()) {
+                    const player = war.getPlayer(playerIndex);
+                    if (targetTeamIndexes.has(player.getTeamIndex())) {
+                        const visibilityArray = WarHelpers.WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                        if (visibilityArray != null) {
+                            mapsFromPath.push({
+                                playerIndex,
+                                visibilityArray,
+                            });
+                        }
                     }
                 }
+                return {
+                    forceFogCode            : this.getForceFogCode(),
+                    forceExpirePlayerIndex  : this.getForceExpirePlayerIndex(),
+                    forceExpireTurnIndex    : this.getForceExpireTurnIndex(),
+                    mapsFromPath,
+                };
             }
-            return {
-                forceFogCode            : this.getForceFogCode(),
-                forceExpirePlayerIndex  : this.getForceExpirePlayerIndex(),
-                forceExpireTurnIndex    : this.getForceExpireTurnIndex(),
-                mapsFromPath,
-            };
         }
         public serializeForCreateMfr(): ISerialFogMap {
             return this.serializeForCreateSfw();

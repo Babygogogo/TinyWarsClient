@@ -805,7 +805,7 @@ namespace Twns.BaseWar {
                 if ((conFuelPct != null)                    &&
                     (!Helpers.checkIsMeetValueComparator({
                         comparator  : conFuelPctComparator,
-                        targetValue : conFuelPct * 100,
+                        targetValue : conFuelPct,
                         actualValue : unit.getCurrentFuel() * 100 / unit.getMaxFuel(),
                     }))
                 ) {
@@ -817,7 +817,7 @@ namespace Twns.BaseWar {
                     if ((maxAmmo == null)                       ||
                         (!Helpers.checkIsMeetValueComparator({
                             comparator  : conPriAmmoPctComparator,
-                            targetValue : conPriAmmoPct * 100,
+                            targetValue : conPriAmmoPct,
                             actualValue : Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_01) * 100 / maxAmmo,
                         }))
                     ) {
@@ -1527,7 +1527,7 @@ namespace Twns.BaseWar {
                 if ((fuelPct != null)                       &&
                     (!Helpers.checkIsMeetValueComparator({
                         comparator  : fuelPctComparator,
-                        targetValue : fuelPct * 100,
+                        targetValue : fuelPct,
                         actualValue : unit.getCurrentFuel() * 100 / unit.getMaxFuel(),
                     }))
                 ) {
@@ -1539,7 +1539,7 @@ namespace Twns.BaseWar {
                     if ((maxAmmo == null)   ||
                         (!Helpers.checkIsMeetValueComparator({
                             comparator  : priAmmoPctComparator,
-                            targetValue : priAmmoPct * 100,
+                            targetValue : priAmmoPct,
                             actualValue : Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_01) * 100 / maxAmmo
                         }))
                     ) {

@@ -252,7 +252,9 @@ namespace Twns.BaseWar {
         public serializeForCreateSfw(): ISerialTile {
             const war       = this.getWar();
             const gridIndex = this.getGridIndex();
-            if (WarHelpers.WarVisibilityHelpers.checkIsTileVisibleToTeams(war, gridIndex, war.getPlayerManager().getWatcherTeamIndexesForSelf())) {
+            if ((war.getShouldSerializeFullInfoForFreeModeGames())                                                                                  ||
+                (WarHelpers.WarVisibilityHelpers.checkIsTileVisibleToTeams(war, gridIndex, war.getPlayerManager().getWatcherTeamIndexesForSelf()))
+            ) {
                 return this.serialize();
 
             } else {

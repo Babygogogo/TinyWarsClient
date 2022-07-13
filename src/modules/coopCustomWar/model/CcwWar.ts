@@ -25,6 +25,10 @@ namespace Twns.CoopCustomWar {
         public getCanCheat(): boolean {
             return false;
         }
+        public getShouldSerializeFullInfoForFreeModeGames(): boolean {
+            return false;
+        }
+
         public getIsNeedExecutedAction(): boolean {
             return false;
         }

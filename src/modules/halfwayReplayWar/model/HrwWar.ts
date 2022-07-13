@@ -73,6 +73,9 @@ namespace Twns.HalfwayReplayWar {
         public getCanCheat(): boolean {
             return false;
         }
+        public getShouldSerializeFullInfoForFreeModeGames(): boolean {
+            return false;
+        }
 
         public getField(): HalfwayReplayWar.HrwField {
             return this._field;

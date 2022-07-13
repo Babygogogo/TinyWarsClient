@@ -5,7 +5,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
@@ -16,8 +16,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.User {
-    import LangTextType     = Twns.Lang.LangTextType;
-    import NotifyType       = Twns.Notify.NotifyType;
+    import LangTextType     = Lang.LangTextType;
+    import NotifyType       = Notify.NotifyType;
 
     export type OpenDataForUserSetPrivilegePanel = {
         userId  : number;
@@ -53,7 +53,7 @@ namespace Twns.User {
         protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.MsgUserGetPublicInfo,   callback: this._onNotifyMsgUserGetPublicInfo },
-                { type: NotifyType.MsgUserSetPrivilege,    callback: this._onNotifyMsgUserSetPrivilege },
+                { type: NotifyType.MsgGmSetUserPrivilege,    callback: this._onNotifyMsgUserSetPrivilege },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnGetInfo,             callback: this._onTouchedBtnGetInfo },
@@ -72,7 +72,7 @@ namespace Twns.User {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             const userId = this._getOpenData().userId;
             this._inputUserId.text = `${userId}`;
-            Twns.User.UserProxy.reqUserGetPublicInfo(userId);
+            User.UserProxy.reqUserGetPublicInfo(userId);
         }
         protected _onClosing(): void {
             // nothing to do
@@ -81,9 +81,9 @@ namespace Twns.User {
         private _onNotifyMsgUserGetPublicInfo(e: egret.Event): void {
             const data = e.data as CommonProto.NetMessage.MsgUserGetPublicInfo.IS;
             if (data.userId === this._getUserId()) {
-                const userPublicInfo                = Twns.Helpers.getExisted(data.userPublicInfo);
-                const userPrivilege                 = Twns.Helpers.getExisted(userPublicInfo.userPrivilege);
-                this._labelUserName.text            = userPublicInfo.nickname || Twns.CommonConstants.ErrorTextForUndefined;
+                const userPublicInfo                = Helpers.getExisted(data.userPublicInfo);
+                const userPrivilege                 = Helpers.getExisted(userPublicInfo.userPrivilege);
+                this._labelUserName.text            = userPublicInfo.nickname || CommonConstants.ErrorTextForUndefined;
                 this._imgCanChat.visible            = !!userPrivilege.canChat;
                 this._imgChatManager.visible        = !!userPrivilege.isChatManager;
                 this._imgCanLogin.visible           = !!userPrivilege.canLogin;
@@ -94,19 +94,19 @@ namespace Twns.User {
         }
 
         private _onNotifyMsgUserSetPrivilege(): void {
-            Twns.FloatText.show(Lang.getText(LangTextType.A0157));
+            FloatText.show(Lang.getText(LangTextType.A0157));
             this.close();
         }
 
         private _onTouchedBtnGetInfo(): void {
             const userId = this._getUserId();
-            (userId) && (Twns.User.UserProxy.reqUserGetPublicInfo(userId));
+            (userId) && (User.UserProxy.reqUserGetPublicInfo(userId));
         }
 
         private _onTouchedBtnConfirm(): void {
             const userId = this._getUserId();
             if (userId) {
-                Twns.User.UserProxy.reqUserSetPrivilege(userId, {
+                Gm.GmProxy.reqGmSetUserPrivilege(userId, {
                     canChat             : !!this._imgCanChat.visible,
                     canLogin            : !!this._imgCanLogin.visible,
                     isAdmin             : !!this._imgIsAdmin.visible,

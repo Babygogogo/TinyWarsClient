@@ -75,6 +75,10 @@ namespace Twns.ReplayWar {
         public getCanCheat(): boolean {
             return false;
         }
+        public getShouldSerializeFullInfoForFreeModeGames(): boolean {
+            return true;
+        }
+
         public getField(): ReplayWar.RwField {
             return this._field;
         }

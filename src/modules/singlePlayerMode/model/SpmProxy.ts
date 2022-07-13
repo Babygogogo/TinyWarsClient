@@ -6,20 +6,20 @@
 // import NetManager           from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import Twns.Notify       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import SpmModel             from "./SpmModel";
 // import SpmSrwRankModel      from "./SpmSrwRankModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.SinglePlayerMode.SpmProxy {
-    import NotifyType       = Twns.Notify.NotifyType;
-    import NetMessageCodes  = Twns.Net.NetMessageCodes;
-    import SpwWar           = Twns.SinglePlayerWar.SpwWar;
-    import SrwWar           = Twns.SingleRankWar.SrwWar;
+    import NotifyType       = Notify.NotifyType;
+    import NetMessageCodes  = Net.NetMessageCodes;
+    import SpwWar           = SinglePlayerWar.SpwWar;
+    import SrwWar           = SingleRankWar.SrwWar;
 
     export function init(): void {
-        Twns.Net.NetManager.addListeners([
+        Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgSpmCreateScw,                     callback: _onMsgSpmCreateScw },
             { msgCode: NetMessageCodes.MsgSpmCreateSfw,                     callback: _onMsgSpmCreateSfw },
             { msgCode: NetMessageCodes.MsgSpmCreateSrw,                     callback: _onMsgSpmCreateSrw },
@@ -31,12 +31,11 @@ namespace Twns.SinglePlayerMode.SpmProxy {
             { msgCode: NetMessageCodes.MsgSpmGetRankList,                   callback: _onMsgSpmGetRankList },
             { msgCode: NetMessageCodes.MsgSpmValidateSrw,                   callback: _onMsgSpmValidateSrw },
             { msgCode: NetMessageCodes.MsgSpmGetReplayData,                 callback: _onMsgSpmGetReplayData },
-            { msgCode: NetMessageCodes.MsgSpmDeleteAllScoreAndReplay,       callback: _onMsgSpmDeleteAllScoreAndReplay },
         ], null);
     }
 
     export function reqSpmGetWarSaveSlotFullData(slotIndex: number): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgSpmGetWarSaveSlotFullData: { c: {
                 slotIndex,
             }, },
@@ -45,31 +44,31 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     function _onMsgSpmGetWarSaveSlotFullData(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.IS;
         if (!data.errorCode) {
-            const slotIndex = Twns.Helpers.getExisted(data.slotIndex);
+            const slotIndex = Helpers.getExisted(data.slotIndex);
             const slotData  = data.slotData;
             if (slotData == null) {
-                Twns.SinglePlayerMode.SpmModel.setSlotFullData(slotIndex, null);
+                SinglePlayerMode.SpmModel.setSlotFullData(slotIndex, null);
             } else {
-                Twns.SinglePlayerMode.SpmModel.setSlotFullData(slotIndex, {
+                SinglePlayerMode.SpmModel.setSlotFullData(slotIndex, {
                     slotIndex,
-                    warData     : Twns.ProtoManager.decodeAsSerialWar(Twns.Helpers.getExisted(slotData.encodedWarData)),
-                    extraData   : Twns.ProtoManager.decodeAsSpmWarSaveSlotExtraData(Twns.Helpers.getExisted(slotData.encodedExtraData)),
+                    warData     : ProtoManager.decodeAsSerialWar(Helpers.getExisted(slotData.encodedWarData)),
+                    extraData   : ProtoManager.decodeAsSpmWarSaveSlotExtraData(Helpers.getExisted(slotData.encodedExtraData)),
                 });
             }
-            Twns.Notify.dispatch(NotifyType.MsgSpmGetWarSaveFullData, data);
+            Notify.dispatch(NotifyType.MsgSpmGetWarSaveFullData, data);
         }
     }
 
-    export function reqSpmCreateScw(param: Twns.SingleCustomRoom.ScrCreateModel.DataForCreateWar): void {
-        Twns.Net.NetManager.send({
+    export function reqSpmCreateScw(param: SingleCustomRoom.ScrCreateModel.DataForCreateWar): void {
+        Net.NetManager.send({
             MsgSpmCreateScw: { c: param },
         });
     }
     function _onMsgSpmCreateScw(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgSpmCreateScw.IS;
         if (!data.errorCode) {
-            Twns.SinglePlayerMode.SpmModel.updateOnMsgSpmCreateScw(data);
-            Twns.Notify.dispatch(NotifyType.MsgSpmCreateScw, data);
+            SinglePlayerMode.SpmModel.updateOnMsgSpmCreateScw(data);
+            Notify.dispatch(NotifyType.MsgSpmCreateScw, data);
         }
     }
 
@@ -78,7 +77,7 @@ namespace Twns.SinglePlayerMode.SpmProxy {
         slotExtraData   : CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
         warData         : CommonProto.WarSerialization.ISerialWar;
     }): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgSpmCreateSfw: { c: {
                 slotIndex,
                 slotExtraData,
@@ -89,26 +88,26 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     function _onMsgSpmCreateSfw(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgSpmCreateSfw.IS;
         if (!data.errorCode) {
-            Twns.SinglePlayerMode.SpmModel.updateOnMsgSpmCreateSfw(data);
-            Twns.Notify.dispatch(NotifyType.MsgSpmCreateSfw, data);
+            SinglePlayerMode.SpmModel.updateOnMsgSpmCreateSfw(data);
+            Notify.dispatch(NotifyType.MsgSpmCreateSfw, data);
         }
     }
 
     export function reqSpmCreateSrw(data: CommonProto.NetMessage.MsgSpmCreateSrw.IC): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgSpmCreateSrw: { c: data },
         });
     }
     function _onMsgSpmCreateSrw(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgSpmCreateSrw.IS;
         if (!data.errorCode) {
-            Twns.SinglePlayerMode.SpmModel.updateOnMsgSpmCreateSrw(data);
-            Twns.Notify.dispatch(NotifyType.MsgSpmCreateSrw, data);
+            SinglePlayerMode.SpmModel.updateOnMsgSpmCreateSrw(data);
+            Notify.dispatch(NotifyType.MsgSpmCreateSrw, data);
         }
     }
 
     export function reqSpmSaveScw(war: SpwWar): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgSpmSaveScw: { c: {
                 slotIndex       : war.getSaveSlotIndex(),
                 slotExtraData   : war.getSaveSlotExtraData(),
@@ -119,13 +118,13 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     function _onMsgSpmSaveScw(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgSpmSaveScw.IS;
         if (!data.errorCode) {
-            Twns.SinglePlayerMode.SpmModel.updateOnMsgSpmSaveScw(data);
-            Twns.Notify.dispatch(NotifyType.MsgSpmSaveScw, data);
+            SinglePlayerMode.SpmModel.updateOnMsgSpmSaveScw(data);
+            Notify.dispatch(NotifyType.MsgSpmSaveScw, data);
         }
     }
 
     export function reqSpmSaveSfw(war: SpwWar): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgSpmSaveSfw: { c: {
                 slotIndex       : war.getSaveSlotIndex(),
                 slotExtraData   : war.getSaveSlotExtraData(),
@@ -136,13 +135,13 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     function _onMsgSpmSaveSfw(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgSpmSaveSfw.IS;
         if (!data.errorCode) {
-            Twns.SinglePlayerMode.SpmModel.updateOnMsgSpmSaveSfw(data);
-            Twns.Notify.dispatch(NotifyType.MsgSpmSaveSfw, data);
+            SinglePlayerMode.SpmModel.updateOnMsgSpmSaveSfw(data);
+            Notify.dispatch(NotifyType.MsgSpmSaveSfw, data);
         }
     }
 
     export function reqSpmSaveSrw(war: SpwWar): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgSpmSaveSrw: { c: {
                 slotIndex       : war.getSaveSlotIndex(),
                 slotExtraData   : war.getSaveSlotExtraData(),
@@ -153,13 +152,13 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     function _onMsgSpmSaveSrw(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgSpmSaveSrw.IS;
         if (!data.errorCode) {
-            Twns.SinglePlayerMode.SpmModel.updateOnMsgSpmSaveSrw(data);
-            Twns.Notify.dispatch(NotifyType.MsgSpmSaveSrw, data);
+            SinglePlayerMode.SpmModel.updateOnMsgSpmSaveSrw(data);
+            Notify.dispatch(NotifyType.MsgSpmSaveSrw, data);
         }
     }
 
     export function reqSpmDeleteWarSaveSlot(slotIndex: number): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgSpmDeleteWarSaveSlot: { c: {
                 slotIndex,
             } },
@@ -168,13 +167,13 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     function _onMsgSpmDeleteWarSaveSlot(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgSpmDeleteWarSaveSlot.IS;
         if (!data.errorCode) {
-            Twns.SinglePlayerMode.SpmModel.updateOnMsgSpmDeleteWarSaveSlot(Twns.Helpers.getExisted(data.slotIndex));
-            Twns.Notify.dispatch(NotifyType.MsgSpmDeleteWarSaveSlot, data);
+            SinglePlayerMode.SpmModel.updateOnMsgSpmDeleteWarSaveSlot(Helpers.getExisted(data.slotIndex));
+            Notify.dispatch(NotifyType.MsgSpmDeleteWarSaveSlot, data);
         }
     }
 
     export function reqSpmGetRankList(mapId: number): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgSpmGetRankList: { c: {
                 mapId,
             } },
@@ -182,12 +181,12 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     }
     function _onMsgSpmGetRankList(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgSpmGetRankList.IS;
-        Twns.SinglePlayerMode.SpmModel.updateOnMsgSpmGetRankList(data);
-        Twns.Notify.dispatch(NotifyType.MsgSpmGetRankList, data);
+        SinglePlayerMode.SpmModel.updateOnMsgSpmGetRankList(data);
+        Notify.dispatch(NotifyType.MsgSpmGetRankList, data);
     }
 
     export function reqSpmValidateSrw(war: SrwWar): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgSpmValidateSrw: { c: {
                 warData     : war.serializeForValidation(),
             } },
@@ -196,12 +195,12 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     function _onMsgSpmValidateSrw(e: egret.Event): void {
         const data = e.data as CommonProto.NetMessage.MsgSpmValidateSrw.IS;
         if (!data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgSpmValidateSrw, data);
+            Notify.dispatch(NotifyType.MsgSpmValidateSrw, data);
         }
     }
 
     export function reqSpmGetReplayData(rankId: number): void {
-        Twns.Net.NetManager.send({
+        Net.NetManager.send({
             MsgSpmGetReplayData: { c: {
                 rankId,
             } },
@@ -209,21 +208,8 @@ namespace Twns.SinglePlayerMode.SpmProxy {
     }
     async function _onMsgSpmGetReplayData(e: egret.Event): Promise<void> {
         const data = e.data as CommonProto.NetMessage.MsgSpmGetReplayData.IS;
-        await Twns.SinglePlayerMode.SpmModel.updateOnMsgSpmGetReplayData(data);
-        Twns.Notify.dispatch(NotifyType.MsgSpmGetReplayData, data);
-    }
-
-    export function reqSpmDeleteAllScoreAndReplay(): void {
-        Twns.Net.NetManager.send({
-            MsgSpmDeleteAllScoreAndReplay: { c: {
-            } },
-        });
-    }
-    function _onMsgSpmDeleteAllScoreAndReplay(e: egret.Event): void {
-        const data = e.data as CommonProto.NetMessage.MsgSpmDeleteAllScoreAndReplay.IS;
-        if (!data.errorCode) {
-            Twns.Notify.dispatch(NotifyType.MsgSpmDeleteAllScoreAndReplay, data);
-        }
+        await SinglePlayerMode.SpmModel.updateOnMsgSpmGetReplayData(data);
+        Notify.dispatch(NotifyType.MsgSpmGetReplayData, data);
     }
 }
 

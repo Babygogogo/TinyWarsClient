@@ -173,7 +173,7 @@ namespace Twns.Notify {
         MsgUserSetDiscordInfo,
         MsgUserSetDiscordInfoFailed,
         MsgUserGetOnlineUserIdArray,
-        MsgUserSetPrivilege,
+        MsgGmSetUserPrivilege,
         MsgUserSetPassword,
         MsgUserGetSettings,
         MsgUserSetSettings,
@@ -319,7 +319,7 @@ namespace Twns.Notify {
         MsgSpmValidateSrw,
         MsgSpmGetReplayData,
         MsgSpmGetReplayDataFailed,
-        MsgSpmDeleteAllScoreAndReplay,
+        MsgGmDeleteSpmAllScoreAndReplay,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         MsgLbSpmOverallGetTopDataArray,

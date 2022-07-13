@@ -136,14 +136,14 @@ namespace Twns.BaseWar {
                 watchRequestSrcUserIdArray  : [...(this.getWatchRequestSrcUserIds() || [])],
                 watchOngoingSrcUserIdArray  : [...(this.getWatchOngoingSrcUserIds() || [])],
                 markedGridIdArray           : [...this.getMarkedGridIdArray()],
-                isSkipTurn                      : this.getIsSkipTurn(),
+                isSkipTurn                  : this.getIsSkipTurn(),
             };
         }
         public serializeForCreateSfw(): ISerialPlayer {
             const war                   = this.getWar();
             const playerIndex           = this.getPlayerIndex();
             const teamIndexes           = war.getPlayerManager().getWatcherTeamIndexesForSelf();
-            const shouldShowFund        = (!war.getFogMap().checkHasFogCurrently()) || (teamIndexes.has(this.getTeamIndex()));
+            const shouldShowFund        = (war.getShouldSerializeFullInfoForFreeModeGames()) || (!war.getFogMap().checkHasFogCurrently()) || (teamIndexes.has(this.getTeamIndex()));
             return {
                 playerIndex,
                 fund                        : shouldShowFund ? this.getFund() : 0,
@@ -160,11 +160,32 @@ namespace Twns.BaseWar {
                 watchRequestSrcUserIdArray  : [],
                 watchOngoingSrcUserIdArray  : [],
                 markedGridIdArray           : this.getMarkedGridIdArrayForTeamIndexes(teamIndexes),
-                isSkipTurn                      : this.getIsSkipTurn(),
+                isSkipTurn                  : this.getIsSkipTurn(),
             };
         }
         public serializeForCreateMfr(): ISerialPlayer {
-            return this.serializeForCreateSfw();
+            const war                   = this.getWar();
+            const playerIndex           = this.getPlayerIndex();
+            const teamIndexes           = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+            const shouldShowFund        = (war.getShouldSerializeFullInfoForFreeModeGames()) || (!war.getFogMap().checkHasFogCurrently()) || (teamIndexes.has(this.getTeamIndex()));
+            return {
+                playerIndex,
+                fund                        : shouldShowFund ? this.getFund() : 0,
+                hasVotedForDraw             : this.getHasVotedForDraw(),
+                aliveState                  : this.getAliveState(),
+                restTimeToBoot              : this.getRestTimeToBoot(),
+                coUsingSkillType            : this.getCoUsingSkillType(),
+                coIsDestroyedInTurn         : this.getCoIsDestroyedInTurn(),
+                unitAndTileSkinId           : playerIndex,
+                userId                      : playerIndex > 0 ? User.UserModel.getSelfUserId() : null,
+                coId                        : this.getCoId(),
+                coCurrentEnergy             : this.getCoCurrentEnergy(),
+                coPowerActivatedCount       : this.getCoPowerActivatedCount(),
+                watchRequestSrcUserIdArray  : [],
+                watchOngoingSrcUserIdArray  : [],
+                markedGridIdArray           : this.getMarkedGridIdArrayForTeamIndexes(teamIndexes),
+                isSkipTurn                  : this.getIsSkipTurn(),
+            };
         }
 
         private _setWar(war: BwWar): void {
