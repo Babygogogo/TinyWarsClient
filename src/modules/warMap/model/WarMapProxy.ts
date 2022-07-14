@@ -3,42 +3,59 @@
 // import NetManager           from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarMapModel          from "./WarMapModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace WarMapProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import NetMessage       = ProtoTypes.NetMessage;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+namespace Twns.WarMap.WarMapProxy {
+    import NotifyType       = Notify.NotifyType;
+    import NetMessage       = CommonProto.NetMessage;
+    import NetMessageCodes  = Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgMapGetEnabledMapIdArray,      callback: _onMsgMapGetEnabledMapIdArray },
+            { msgCode: NetMessageCodes.MsgMapGetMapTag,                 callback: _onMsgMapGetMapTag },
             { msgCode: NetMessageCodes.MsgMapGetBriefData,              callback: _onMsgMapGetBriefData },
             { msgCode: NetMessageCodes.MsgMapGetRawData,                callback: _onMsgMapGetRawData },
             { msgCode: NetMessageCodes.MsgMmSetWarRuleAvailability,     callback: _onMsgMmSetWarRuleAvailability },
             { msgCode: NetMessageCodes.MsgMmSetMapEnabled,              callback: _onMsgMmSetMapEnabled },
             { msgCode: NetMessageCodes.MsgMmGetReviewingMaps,           callback: _onMsgMmGetReviewingMaps },
             { msgCode: NetMessageCodes.MsgMmReviewMap,                  callback: _onMsgMmReviewMap },
-            { msgCode: NetMessageCodes.MsgMmSetMapTag,                  callback: _onMsgMmSetMapTag },
+            { msgCode: NetMessageCodes.MsgMmSetMapTagIdFlags,           callback: _onMsgMmSetMapTagIdFlags },
             { msgCode: NetMessageCodes.MsgMmSetMapName,                 callback: _onMsgMmSetMapName },
             { msgCode: NetMessageCodes.MsgMmAddWarRule,                 callback: _onMsgMmAddWarRule },
             { msgCode: NetMessageCodes.MsgMmDeleteWarRule,              callback: _onMsgMmDeleteWarRule },
+            { msgCode: NetMessageCodes.MsgMmSetWarRuleName,             callback: _onMsgMmSetWarRuleName },
+            { msgCode: NetMessageCodes.MsgMmSetMapTagSingleData,        callback: _onMsgMmSetMapTagSingleData },
         ], null);
     }
 
     function _onMsgMapGetEnabledMapIdArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMapGetEnabledMapIdArray.IS;
         if (!data.errorCode) {
-            WarMapModel.resetEnabledMapIdArray(data.mapIdArray || []);
+            WarMap.WarMapModel.resetEnabledMapIdArray(data.mapIdArray || []);
             Notify.dispatch(NotifyType.MsgMapGetEnabledMapIdArray, data);
         }
     }
 
+    export function reqMapGetMapTag(): void {
+        Net.NetManager.send({
+            MsgMapGetMapTag: { c: {
+            } }
+        });
+    }
+    function _onMsgMapGetMapTag(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMapGetMapTag.IS;
+        if (!data.errorCode) {
+            WarMapModel.setMapTag(Helpers.getExisted(data.mapTag));
+            Notify.dispatch(NotifyType.MsgMapGetMapTag, data);
+        }
+    }
+
     export function reqGetMapBriefData(mapId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMapGetBriefData: { c: {
                 mapId,
             }, },
@@ -46,12 +63,12 @@ namespace WarMapProxy {
     }
     function _onMsgMapGetBriefData(e: egret.Event): void {
         const data  = e.data as NetMessage.MsgMapGetBriefData.IS;
-        WarMapModel.setBriefData(Helpers.getExisted(data.mapId), data.mapBriefData ?? null);
+        WarMap.WarMapModel.setBriefData(Helpers.getExisted(data.mapId), data.mapBriefData ?? null);
         Notify.dispatch(NotifyType.MsgMapGetBriefData, data);
     }
 
     export function reqGetMapRawData(mapId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMapGetRawData: { c: {
                 mapId,
             }, },
@@ -59,16 +76,16 @@ namespace WarMapProxy {
     }
     function _onMsgMapGetRawData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMapGetRawData.IS;
-        WarMapModel.setRawData(Helpers.getExisted(data.mapId), data.mapRawData ?? null);
+        WarMap.WarMapModel.setRawData(Helpers.getExisted(data.mapId), data.mapRawData ?? null);
         Notify.dispatch(NotifyType.MsgMapGetRawData, data);
     }
 
     export function reqMmSetWarRuleAvailability({ mapId, ruleId, availability }: {
         mapId       : number;
         ruleId      : number;
-        availability: ProtoTypes.WarRule.IRuleAvailability;
+        availability: CommonProto.WarRule.IRuleAvailability;
     }): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMmSetWarRuleAvailability: { c: {
                 mapId,
                 ruleId,
@@ -79,13 +96,13 @@ namespace WarMapProxy {
     async function _onMsgMmSetWarRuleAvailability(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMmSetWarRuleAvailability.IS;
         if (!data.errorCode) {
-            await WarMapModel.updateOnSetWarRuleAvailability(data);
+            await WarMap.WarMapModel.updateOnSetWarRuleAvailability(data);
             Notify.dispatch(NotifyType.MsgMmSetWarRuleAvailability, data);
         }
     }
 
     export function reqMmSetMapEnabled(mapId: number, isEnabled: boolean): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMmSetMapEnabled: { c: {
                 mapId,
                 isEnabled,
@@ -100,14 +117,14 @@ namespace WarMapProxy {
     }
 
     export function reqMmGetReviewingMaps(): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMmGetReviewingMaps: { c: {} },
         });
     }
     function _onMsgMmGetReviewingMaps(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMmGetReviewingMaps.IS;
         if (!data.errorCode) {
-            WarMapModel.setMmReviewingMaps(data.maps || []);
+            WarMap.WarMapModel.setMmReviewingMaps(data.maps || []);
             Notify.dispatch(NotifyType.MsgMmGetReviewingMaps, data);
         }
     }
@@ -119,7 +136,7 @@ namespace WarMapProxy {
         isAccept        : boolean;
         reviewComment   : string | null;
     }): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMmReviewMap: { c: {
                 designerUserId,
                 slotIndex,
@@ -136,21 +153,22 @@ namespace WarMapProxy {
         }
     }
 
-    export function reqMmSetMapTag(mapId: number, mapTag: ProtoTypes.Map.IDataForMapTag | null): void {
-        NetManager.send({ MsgMmSetMapTag: { c: {
+    export function reqMmSetMapTagIdFlags(mapId: number, mapTagIdFlags: number): void {
+        Net.NetManager.send({ MsgMmSetMapTagIdFlags: { c: {
             mapId,
-            mapTag,
+            mapTagIdFlags,
         } } });
     }
-    function _onMsgMmSetMapTag(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMmSetMapTag.IS;
+    async function _onMsgMmSetMapTagIdFlags(e: egret.Event): Promise<void> {
+        const data = e.data as NetMessage.MsgMmSetMapTagIdFlags.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMmSetMapTag, data);
+            await WarMapModel.updateOnMsgMmSetMapTagIdFlags(data);
+            Notify.dispatch(NotifyType.MsgMmSetMapTagIdFlags, data);
         }
     }
 
-    export function reqMmSetMapName(mapId: number, mapNameArray: ProtoTypes.Structure.ILanguageText[]): void {
-        NetManager.send({ MsgMmSetMapName: { c: {
+    export function reqMmSetMapName(mapId: number, mapNameArray: CommonProto.Structure.ILanguageText[]): void {
+        Net.NetManager.send({ MsgMmSetMapName: { c: {
             mapId,
             mapNameArray,
         } } });
@@ -158,29 +176,29 @@ namespace WarMapProxy {
     async function _onMsgMmSetMapName(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMmSetMapName.IS;
         if (!data.errorCode) {
-            await WarMapModel.updateOnSetMapName(data);
+            await WarMap.WarMapModel.updateOnSetMapName(data);
             Notify.dispatch(NotifyType.MsgMmSetMapName, data);
         }
     }
 
-    export function reqMmAddWarRule(mapId: number, warRule: ProtoTypes.WarRule.IWarRule): void {
-        NetManager.send({
+    export function reqMmAddWarRule(mapId: number, templateWarRule: CommonProto.WarRule.ITemplateWarRule): void {
+        Net.NetManager.send({
             MsgMmAddWarRule: { c: {
                 mapId,
-                warRule,
+                templateWarRule,
             } },
         });
     }
     async function _onMsgMmAddWarRule(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMmAddWarRule.IS;
         if (!data.errorCode) {
-            await WarMapModel.updateOnAddWarRule(data);
+            await WarMap.WarMapModel.updateOnAddWarRule(data);
             Notify.dispatch(NotifyType.MsgMmAddWarRule, data);
         }
     }
 
     export function reqMmDeleteWarRule(mapId: number, ruleId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMmDeleteWarRule: { c: {
                 mapId,
                 ruleId,
@@ -190,8 +208,39 @@ namespace WarMapProxy {
     async function _onMsgMmDeleteWarRule(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMmDeleteWarRule.IS;
         if (!data.errorCode) {
-            await WarMapModel.updateOnDeleteWarRule(data);
+            await WarMap.WarMapModel.updateOnDeleteWarRule(data);
             Notify.dispatch(NotifyType.MsgMmDeleteWarRule, data);
+        }
+    }
+
+    export function reqMmSetWarRuleName(mapId: number, ruleId: number, ruleNameArray: CommonProto.Structure.ILanguageText[]): void {
+        Net.NetManager.send({
+            MsgMmSetWarRuleName : { c: {
+                mapId,
+                ruleId,
+                ruleNameArray,
+            } },
+        });
+    }
+    async function _onMsgMmSetWarRuleName(e: egret.Event): Promise<void> {
+        const data = e.data as NetMessage.MsgMmSetWarRuleName.IS;
+        if (!data.errorCode) {
+            await WarMap.WarMapModel.updateOnMsgMmSetWarRuleName(data);
+            Notify.dispatch(NotifyType.MsgMmSetWarRuleName, data);
+        }
+    }
+
+    export function reqMmSetMapTagSingleData(data: CommonProto.Map.MapTag.IMapTagSingleData): void {
+        Net.NetManager.send({
+            MsgMmSetMapTagSingleData: { c: {
+                data,
+            } },
+        });
+    }
+    function _onMsgMmSetMapTagSingleData(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMmSetMapTagSingleData.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(NotifyType.MsgMmSetMapTagSingleData, data);
         }
     }
 }

@@ -13,18 +13,18 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsLobbyPanel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
+namespace Twns.Lobby {
+    import NotifyType           = Notify.NotifyType;
+    import LangTextType         = Lang.LangTextType;
 
-    export type OpenData = void;
-    export class LobbyPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForLobbyPanel = void;
+    export class LobbyPanel extends TwnsUiPanel.UiPanel<OpenDataForLobbyPanel> {
         private readonly _groupTips!            : eui.Group;
         private readonly _groupWelcome!         : eui.Group;
         private readonly _labelTips0!           : TwnsUiLabel.UiLabel;
@@ -59,9 +59,9 @@ namespace TwnsLobbyPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserLogout,                       callback: this._onMsgUserLogout },
-                { type: NotifyType.MsgMcrGetJoinedRoomIdArray,          callback: this._onMsgMcrGetJoinedRoomIdArray },
-                { type: NotifyType.MsgMfrGetJoinedRoomIdArray,          callback: this._onMsgMfrGetJoinedRoomIdArray },
-                { type: NotifyType.MsgCcrGetJoinedRoomIdArray,          callback: this._onMsgCcrGetJoinedRoomIdArray },
+                { type: NotifyType.MsgMcrGetRoomPlayerInfo,             callback: this._onNotifyMsgMcrGetRoomPlayerInfo },
+                { type: NotifyType.MsgMfrGetRoomPlayerInfo,             callback: this._onNotifyMsgMfrGetRoomPlayerInfo },
+                { type: NotifyType.MsgCcrGetRoomPlayerInfo,             callback: this._onNotifyMsgCcrGetRoomPlayerInfo },
                 { type: NotifyType.MsgMrrGetJoinedRoomIdArray,          callback: this._onMsgMrrGetJoinedRoomIdArray },
                 { type: NotifyType.MsgMpwCommonGetWarProgressInfo,      callback: this._onMsgMpwCommonGetWarProgressInfo },
                 { type: NotifyType.MsgMpwWatchGetRequestedWarIdArray,   callback: this._onMsgMpwWatchGetRequestedWarIdArray },
@@ -70,6 +70,8 @@ namespace TwnsLobbyPanel {
             this._updateComponentsForLanguage();
             this._updateBtnMultiPlayer();
             this._updateBtnRanking();
+
+            SoundManager.playBgm(CommonConstants.BgmSfxCode.Lobby);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             // nothing to do
@@ -83,7 +85,7 @@ namespace TwnsLobbyPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedGroupDiscord(): void {
             if ((window) && (window.open)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, `Discord`),
                     callback: () => {
                         window.open(CommonConstants.DiscordUrl);
@@ -94,7 +96,7 @@ namespace TwnsLobbyPanel {
 
         private _onTouchedGroupGithub(): void {
             if ((window) && (window.open)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, `GitHub`),
                     callback: () => {
                         window.open(CommonConstants.GithubUrl);
@@ -106,7 +108,7 @@ namespace TwnsLobbyPanel {
         private _onTouchedGroupSwitchVersion(): void {
             if (window?.open) {
                 const isTest = (CommonConstants.GameVersion as any) === Types.GameVersion.Legacy;
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, Lang.getText(isTest ? LangTextType.B0854 : LangTextType.B0854)),
                     callback: () => {
                         window.open(isTest ? CommonConstants.TestVersionUrl : CommonConstants.LegacyVersionUrl);
@@ -117,32 +119,32 @@ namespace TwnsLobbyPanel {
 
         private _onTouchedBtnMultiPlayer(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.McrMainMenuPanel, void 0);
         }
 
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.SpmMainMenuPanel, void 0);
         }
 
         private _onTouchedBtnRanking(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MrrMainMenuPanel, void 0);
         }
 
         private _onMsgUserLogout(): void {
             this.close();
         }
 
-        private _onMsgMcrGetJoinedRoomIdArray(): void {
+        private _onNotifyMsgMcrGetRoomPlayerInfo(): void {
             this._updateBtnMultiPlayer();
         }
 
-        private _onMsgMfrGetJoinedRoomIdArray(): void {
+        private _onNotifyMsgMfrGetRoomPlayerInfo(): void {
             this._updateBtnMultiPlayer();
         }
 
-        private _onMsgCcrGetJoinedRoomIdArray(): void {
+        private _onNotifyMsgCcrGetRoomPlayerInfo(): void {
             this._updateBtnMultiPlayer();
         }
 
@@ -284,13 +286,13 @@ namespace TwnsLobbyPanel {
         }
 
         private async _updateBtnMultiPlayer(): Promise<void> {
-            this._btnMultiPlayer.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiPlayer());
+            this._btnMultiPlayer.setRedVisible(await LobbyModel.checkIsRedForMultiPlayer());
         }
 
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
-                (await MpwModel.checkIsRedForMyMrwWars()) ||
-                (await MrrModel.checkIsRed())
+                (await MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
+                (await MultiRankRoom.MrrModel.checkIsRed())
             );
         }
     }

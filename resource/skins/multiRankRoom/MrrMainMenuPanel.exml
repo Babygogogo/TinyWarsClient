@@ -10,7 +10,7 @@
                             <e:Image source="uncompressedPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
                             <TwnsUiImage:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <TwnsUiLabel:UiLabel size="20" text="Set Games Number" textAlign="center"
+                                <TwnsUiLabel:UiLabel size="20" text="Set Number of Games" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="2" x="-172"
                                                 textColor="0xaaaaaa" />
                                 <TwnsUiLabel:UiLabel size="22" textColor="0xFFFFFF" text="设定局数上限" textAlign="center"

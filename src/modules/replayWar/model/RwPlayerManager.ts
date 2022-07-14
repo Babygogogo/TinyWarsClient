@@ -1,11 +1,11 @@
 
 // import TwnsBwPlayerManager from "../../baseWar/model/BwPlayerManager";
 
-namespace TwnsRwPlayerManager {
-    import BwPlayerManager = TwnsBwPlayerManager.BwPlayerManager;
+namespace Twns.ReplayWar {
+    import BwPlayerManager = Twns.BaseWar.BwPlayerManager;
 
     export class RwPlayerManager extends BwPlayerManager {
-        public getAliveWatcherTeamIndexesForSelf(): Set<number> {
+        public getWatcherTeamIndexesForSelf(): Set<number> {
             return this.getAliveTeamIndexes(false);
         }
     }

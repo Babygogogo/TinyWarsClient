@@ -5,24 +5,23 @@
 // import * as protobuf        from "../../../../libs/modules/ProtobufJs/ProtobufJs";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace ProtoManager {
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import IMessageContainer        = ProtoTypes.NetMessage.IMessageContainer;
-    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
-    import IMapRawData              = ProtoTypes.Map.IMapRawData;
-    import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+namespace Twns.ProtoManager {
+    import IMessageContainer        = CommonProto.NetMessage.IMessageContainer;
+    import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
+    import IMapRawData              = CommonProto.Map.IMapRawData;
+    import ISpmWarSaveSlotExtraData = CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
 
     const PROTO_FILENAME = "resource/config/NetMessageProto.json";
 
-    let MessageContainerClass       : typeof ProtoTypes.NetMessage.MessageContainer;
-    let FullConfigClass             : typeof ProtoTypes.Config.FullConfig;
-    let SerialWarClass              : typeof ProtoTypes.WarSerialization.SerialWar;
-    let MapRawDataClass             : typeof ProtoTypes.Map.MapRawData;
-    let SpmWarSaveSlotExtraData     : typeof ProtoTypes.SinglePlayerMode.SpmWarSaveSlotExtraData;
+    let MessageContainerClass       : typeof CommonProto.NetMessage.MessageContainer;
+    let FullConfigClass             : typeof CommonProto.Config.FullConfig;
+    let SerialWarClass              : typeof CommonProto.WarSerialization.SerialWar;
+    let MapRawDataClass             : typeof CommonProto.Map.MapRawData;
+    let SpmWarSaveSlotExtraData     : typeof CommonProto.SinglePlayerMode.SpmWarSaveSlotExtraData;
 
     export function init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            protobuf.load(PROTO_FILENAME).then(
+            protobuf.load(ResVersionController.getResVirtualUrl(PROTO_FILENAME)).then(
                 protoRoot => {
                     if (!protoRoot) {
                         reject("no root!");
@@ -51,7 +50,7 @@ namespace ProtoManager {
         return MessageContainerClass.toObject(MessageContainerClass.decode(getDataForDecode(data)));
     }
 
-    export function decodeAsFullConfig(data: Uint8Array): ProtoTypes.Config.IFullConfig {
+    export function decodeAsFullConfig(data: Uint8Array): CommonProto.Config.IFullConfig {
         return FullConfigClass.toObject(FullConfigClass.decode(getDataForDecode(data)));
     }
 

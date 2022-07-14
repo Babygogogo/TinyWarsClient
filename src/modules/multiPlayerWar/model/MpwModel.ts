@@ -18,7 +18,7 @@
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
 // import Notify                               from "../../tools/notify/Notify";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import WarActionExecutor                    from "../../tools/warHelpers/WarActionExecutor";
 // import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
@@ -27,126 +27,82 @@
 // import TwnsMpwWar                           from "./MpwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace MpwModel {
-    import MpwWar                                   = TwnsMpwWar.MpwWar;
-    import CcwWar                                   = TwnsCcwWar.CcwWar;
-    import McwWar                                   = TwnsMcwWar.McwWar;
-    import MfwWar                                   = TwnsMfwWar.MfwWar;
-    import MrwWar                                   = TwnsMrwWar.MrwWar;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+namespace Twns.MultiPlayerWar.MpwModel {
+    import MpwWar                                   = MultiPlayerWar.MpwWar;
+    import CcwWar                                   = CoopCustomWar.CcwWar;
+    import McwWar                                   = MultiCustomWar.McwWar;
+    import MfwWar                                   = MultiFreeWar.MfwWar;
+    import MrwWar                                   = MultiRankWar.MrwWar;
+    import LangTextType                             = Lang.LangTextType;
+    import NotifyType                               = Notify.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
-    import IWarActionContainer                      = ProtoTypes.WarAction.IWarActionContainer;
-    import IWarRule                                 = ProtoTypes.WarRule.IWarRule;
-    import IMpwWarSettings                          = ProtoTypes.MultiPlayerWar.IMpwWarSettings;
-    import IMpwWarProgressInfo                      = ProtoTypes.MultiPlayerWar.IMpwWarProgressInfo;
-    import ISettingsForCommon                       = ProtoTypes.WarSettings.ISettingsForCommon;
-    import ISettingsForMcw                          = ProtoTypes.WarSettings.ISettingsForMcw;
-    import ISettingsForCcw                          = ProtoTypes.WarSettings.ISettingsForCcw;
-    import ISettingsForMrw                          = ProtoTypes.WarSettings.ISettingsForMrw;
-    import ISettingsForMfw                          = ProtoTypes.WarSettings.ISettingsForMfw;
-    import ISerialWar                               = ProtoTypes.WarSerialization.ISerialWar;
-    import MsgMpwCommonGetWarSettingsIs             = ProtoTypes.NetMessage.MsgMpwCommonGetWarSettings.IS;
-    import MsgMpwCommonGetWarProgressInfoIs         = ProtoTypes.NetMessage.MsgMpwCommonGetWarProgressInfo.IS;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import IWarActionContainer                      = CommonProto.WarAction.IWarActionContainer;
+    import IInstanceWarRule                         = CommonProto.WarRule.IInstanceWarRule;
+    import IMpwWarSettings                          = CommonProto.MultiPlayerWar.IMpwWarSettings;
+    import IMpwWarProgressInfo                      = CommonProto.MultiPlayerWar.IMpwWarProgressInfo;
+    import ISettingsForCommon                       = CommonProto.WarSettings.ISettingsForCommon;
+    import ISettingsForMcw                          = CommonProto.WarSettings.ISettingsForMcw;
+    import ISettingsForCcw                          = CommonProto.WarSettings.ISettingsForCcw;
+    import ISettingsForMrw                          = CommonProto.WarSettings.ISettingsForMrw;
+    import ISettingsForMfw                          = CommonProto.WarSettings.ISettingsForMfw;
+    import ISerialWar                               = CommonProto.WarSerialization.ISerialWar;
+    import MsgMpwCommonGetWarSettingsIs             = CommonProto.NetMessage.MsgMpwCommonGetWarSettings.IS;
+    import MsgMpwCommonGetWarProgressInfoIs         = CommonProto.NetMessage.MsgMpwCommonGetWarProgressInfo.IS;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Common.OpenDataForCommonWarPlayerInfoPage;
 
     const _NOTIFY_LISTENERS     : Notify.Listener[] = [
         { type: NotifyType.MsgMpwWatchGetIncomingInfo,      callback: _onNotifyMsgMpwWatchGetIncomingInfo },
         { type: NotifyType.MsgMpwWatchGetOutgoingInfo,      callback: _onNotifyMsgMpwWatchGetOutgoingInfo },
     ];
-    let _allMyWarIdArray        : number[] = [];
-    let _mcwPreviewingWarId     : number | null = null;
-    let _mrwPreviewingWarId     : number | null = null;
-    let _mfwPreviewingWarId     : number | null = null;
-    let _ccwPreviewingWarId     : number | null = null;
     let _war                    : MpwWar | null = null;
-    let _cachedSyncWarData      : ProtoTypes.NetMessage.MsgMpwCommonSyncWar.IS | null = null;
+    let _cachedSyncWarData      : CommonProto.NetMessage.MsgMpwCommonSyncWar.IS | null = null;
     const _cachedActions        : IWarActionContainer[] = [];
 
     export function init(): void {
-        Notify.addEventListeners(_NOTIFY_LISTENERS);
+        Notify.addEventListeners(_NOTIFY_LISTENERS, MpwModel);
     }
 
-    export function setAllMyWarIdArray(idArray: number[]): void {
-        _allMyWarIdArray = idArray || [];
-    }
     export async function getMyMcwWarIdArray(): Promise<number[]> {
-        const warIdArray: number[] = [];
-        for (const warId of _allMyWarIdArray) {
-            if ((await getWarSettings(warId))?.settingsForMcw) {
-                warIdArray.push(warId);
-            }
-        }
-        return warIdArray;
+        return getMyMpwWarIdArray(warSettings => warSettings?.settingsForMcw != null);
     }
     export async function getMyMrwWarIdArray(): Promise<number[]> {
-        const warIdArray: number[] = [];
-        for (const warId of _allMyWarIdArray) {
-            if ((await getWarSettings(warId))?.settingsForMrw) {
-                warIdArray.push(warId);
-            }
-        }
-        return warIdArray;
+        return getMyMpwWarIdArray(warSettings => warSettings?.settingsForMrw != null);
     }
     export async function getMyMfwWarIdArray(): Promise<number[]> {
-        const warIdArray: number[] = [];
-        for (const warId of _allMyWarIdArray) {
-            if ((await getWarSettings(warId))?.settingsForMfw) {
-                warIdArray.push(warId);
-            }
-        }
-        return warIdArray;
+        return getMyMpwWarIdArray(warSettings => warSettings?.settingsForMfw != null);
     }
     export async function getMyCcwWarIdArray(): Promise<number[]> {
+        return getMyMpwWarIdArray(warSettings => warSettings?.settingsForCcw != null);
+    }
+    async function getMyMpwWarIdArray(predicate: (warSettings: IMpwWarSettings | null) => boolean): Promise<number[]> {
+        const userId = User.UserModel.getSelfUserId();
+        if (userId == null) {
+            return [];
+        }
+
+        const allWarIdArray = _warProgressInfoAccessor.getRequestedKeyArray();
+        const [
+            warProgressInfoArray,
+            warSettingsArray,
+        ] = await Promise.all([
+            Promise.all(allWarIdArray.map(v => getWarProgressInfo(v))),
+            Promise.all(allWarIdArray.map(v => getWarSettings(v))),
+        ]);
+
         const warIdArray: number[] = [];
-        for (const warId of _allMyWarIdArray) {
-            if ((await getWarSettings(warId))?.settingsForCcw) {
-                warIdArray.push(warId);
+        for (let i = 0; i < allWarIdArray.length; ++i) {
+            const warProgressInfo = warProgressInfoArray[i];
+            if ((warProgressInfo != null)                                           &&
+                (!warProgressInfo.isEnded)                                          &&
+                (warProgressInfo.playerInfoList?.some(v => v.userId === userId))    &&
+                (predicate(warSettingsArray[i]))
+            ) {
+                warIdArray.push(allWarIdArray[i]);
             }
         }
         return warIdArray;
-    }
-
-    export function getMcwPreviewingWarId(): number | null {
-        return _mcwPreviewingWarId;
-    }
-    export function setMcwPreviewingWarId(warId: number | null): void {
-        if (getMcwPreviewingWarId() != warId) {
-            _mcwPreviewingWarId = warId;
-            Notify.dispatch(NotifyType.McwPreviewingWarIdChanged);
-        }
-    }
-
-    export function getMrwPreviewingWarId(): number | null {
-        return _mrwPreviewingWarId;
-    }
-    export function setMrwPreviewingWarId(warId: number | null): void {
-        if (getMrwPreviewingWarId() != warId) {
-            _mrwPreviewingWarId = warId;
-            Notify.dispatch(NotifyType.MrwPreviewingWarIdChanged);
-        }
-    }
-
-    export function getMfwPreviewingWarId(): number | null {
-        return _mfwPreviewingWarId;
-    }
-    export function setMfwPreviewingWarId(warId: number | null): void {
-        if (getMfwPreviewingWarId() != warId) {
-            _mfwPreviewingWarId = warId;
-            Notify.dispatch(NotifyType.MfwPreviewingWarIdChanged);
-        }
-    }
-
-    export function getCcwPreviewingWarId(): number | null {
-        return _ccwPreviewingWarId;
-    }
-    export function setCcwPreviewingWarId(warId: number | null): void {
-        if (getCcwPreviewingWarId() != warId) {
-            _ccwPreviewingWarId = warId;
-            Notify.dispatch(NotifyType.CcwPreviewingWarIdChanged);
-        }
     }
 
     export async function checkIsRedForMyMcwWars(): Promise<boolean> {
@@ -165,7 +121,7 @@ namespace MpwModel {
         if (progressInfo == null) {
             return false;
         } else {
-            const selfUserId = UserModel.getSelfUserId();
+            const selfUserId = User.UserModel.getSelfUserId();
             return (progressInfo.playerInfoList || []).some(v => (v.playerIndex === progressInfo.playerIndexInTurn) && (v.userId === selfUserId));
         }
     }
@@ -198,16 +154,33 @@ namespace MpwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for war progress info.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _warProgressInfoGetter = Helpers.createCachedDataAccessor<number, IMpwWarProgressInfo>({
+    const _warProgressInfoAccessor = Helpers.createCachedDataAccessor<number, IMpwWarProgressInfo>({
         reqData : (warId: number) => MpwProxy.reqMpwCommonGetWarProgressInfo(warId),
     });
 
     export function getWarProgressInfo(warId: number): Promise<IMpwWarProgressInfo | null> {
-        return _warProgressInfoGetter.getData(warId);
+        return _warProgressInfoAccessor.getData(warId);
     }
 
     export async function updateOnMsgMpwCommonGetWarProgressInfo(data: MsgMpwCommonGetWarProgressInfoIs): Promise<void> {
-        _warProgressInfoGetter.setData(Helpers.getExisted(data.warId), data.warProgressInfo ?? null);
+        _warProgressInfoAccessor.setData(Helpers.getExisted(data.warId), data.warProgressInfo ?? null);
+    }
+
+    export function updateOnMsgMpwCommonMarkTile(data: CommonProto.NetMessage.MsgMpwCommonMarkTile.IS): void {
+        const war = getWar();
+        if ((war) && (war.getWarId() === data.warId)) {
+            const player = war.getPlayerLoggedIn();
+            if (player == null) {
+                return;
+            }
+
+            const gridId = Helpers.getExisted(data.gridId);
+            if (data.isMark) {
+                player.addMarkedGridId(gridId);
+            } else {
+                player.deleteMarkedGridId(gridId);
+            }
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -218,77 +191,105 @@ namespace MpwModel {
         }
 
         const settingsForCommon                                                     = Helpers.getExisted(warInfo.settingsForCommon);
-        const warRule                                                               = Helpers.getExisted(settingsForCommon.warRule);
+        const instanceWarRule                                                       = Helpers.getExisted(settingsForCommon.instanceWarRule);
         const { settingsForCcw, settingsForMcw, settingsForMfw, settingsForMrw }    = warInfo;
         if (settingsForMcw) {
-            return await createDataForCommonWarBasicSettingsPageForMcw(warRule, settingsForCommon, settingsForMcw);
+            return await createDataForCommonWarBasicSettingsPageForMcw(instanceWarRule, settingsForCommon, settingsForMcw);
         } else if (settingsForCcw) {
-            return await createDataForCommonWarBasicSettingsPageForCcw(warRule, settingsForCommon, settingsForCcw);
+            return await createDataForCommonWarBasicSettingsPageForCcw(instanceWarRule, settingsForCommon, settingsForCcw);
         } else if (settingsForMrw) {
-            return await createDataForCommonWarBasicSettingsPageForMrw(warRule, settingsForCommon, settingsForMrw);
+            return await createDataForCommonWarBasicSettingsPageForMrw(instanceWarRule, settingsForCommon, settingsForMrw);
         } else if (settingsForMfw) {
-            return await createDataForCommonWarBasicSettingsPageForMfw(warRule, settingsForCommon, settingsForMfw);
+            return await createDataForCommonWarBasicSettingsPageForMfw(instanceWarRule, settingsForCommon, settingsForMfw);
         } else {
             throw Helpers.newError(`Invalid warInfo.`);
         }
     }
-    async function createDataForCommonWarBasicSettingsPageForMcw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForMcw: ISettingsForMcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    async function createDataForCommonWarBasicSettingsPageForMcw(instanceWarRule: IInstanceWarRule, settingsForCommon: ISettingsForCommon, settingsForMcw: ISettingsForMcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const bootTimerParams   = Helpers.getExisted(settingsForMcw.bootTimerParams);
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
+        const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
+        const warEventFullData  = (await WarMap.WarMapModel.getRawData(Helpers.getExisted(settingsForMcw.mapId)))?.warEventFullData ?? null;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
-                    settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)),
-                    warRule,
+                    settingsType    : WarBasicSettingsType.MapId,
+                    currentValue    : Helpers.getExisted(settingsForMcw.mapId),
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarName,
                     currentValue    : settingsForMcw.warName ?? null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarPassword,
                     currentValue    : settingsForMcw.warPassword ?? null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarComment,
                     currentValue    : settingsForMcw.warComment ?? null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
-                    settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
-                    warRule,
+                    settingsType    : WarBasicSettingsType.WarEvent,
+                    currentValue    : null,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                    currentValue    : `${settingsForCommon.turnsLimit ?? CommonConstants.Turn.Limit.Default}, ${settingsForCommon.warActionsLimit ?? CommonConstants.WarAction.Limit.Default}`,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             ],
@@ -297,21 +298,19 @@ namespace MpwModel {
             openData.dataArrayForListSettings.push({
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
-                warRule,
+                instanceWarRule,
+                gameConfig,
+                warEventFullData,
                 callbackOnModify: null,
             });
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
-                    currentValue    : bootTimerParams[1],
-                    warRule,
-                    callbackOnModify: null,
-                },
-                {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
-                    currentValue    : bootTimerParams[2],
-                    warRule,
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParams,
+                    currentValue    : `${bootTimerParams[1]}, ${bootTimerParams[2]}, ${bootTimerParams[3] ?? 0}`,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             );
@@ -321,63 +320,91 @@ namespace MpwModel {
 
         return openData;
     }
-    async function createDataForCommonWarBasicSettingsPageForCcw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForCcw: ISettingsForCcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    async function createDataForCommonWarBasicSettingsPageForCcw(instanceWarRule: IInstanceWarRule, settingsForCommon: ISettingsForCommon, settingsForCcw: ISettingsForCcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const bootTimerParams   = Helpers.getExisted(settingsForCcw.bootTimerParams);
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
+        const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
+        const warEventFullData  = (await WarMap.WarMapModel.getRawData(Helpers.getExisted(settingsForCcw.mapId)))?.warEventFullData ?? null;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
-                    settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForCcw.mapId)),
-                    warRule,
+                    settingsType    : WarBasicSettingsType.MapId,
+                    currentValue    : Helpers.getExisted(settingsForCcw.mapId),
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarName,
                     currentValue    : settingsForCcw.warName ?? null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarPassword,
                     currentValue    : settingsForCcw.warPassword ?? null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarComment,
                     currentValue    : settingsForCcw.warComment ?? null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
-                    settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
-                    warRule,
+                    settingsType    : WarBasicSettingsType.WarEvent,
+                    currentValue    : null,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                    currentValue    : `${settingsForCommon.turnsLimit ?? CommonConstants.Turn.Limit.Default}, ${settingsForCommon.warActionsLimit ?? CommonConstants.WarAction.Limit.Default}`,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             ],
@@ -386,21 +413,19 @@ namespace MpwModel {
             openData.dataArrayForListSettings.push({
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
-                warRule,
+                instanceWarRule,
+                gameConfig,
+                warEventFullData,
                 callbackOnModify: null,
             });
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
-                    currentValue    : bootTimerParams[1],
-                    warRule,
-                    callbackOnModify: null,
-                },
-                {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
-                    currentValue    : bootTimerParams[2],
-                    warRule,
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParams,
+                    currentValue    : `${bootTimerParams[1]}, ${bootTimerParams[2]}, ${bootTimerParams[3] ?? 0}`,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             );
@@ -410,45 +435,67 @@ namespace MpwModel {
 
         return openData;
     }
-    async function createDataForCommonWarBasicSettingsPageForMrw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForMrw: ISettingsForMrw): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
+    async function createDataForCommonWarBasicSettingsPageForMrw(instanceWarRule: IInstanceWarRule, settingsForCommon: ISettingsForCommon, settingsForMrw: ISettingsForMrw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+        const bootTimerParams   = CommonConstants.WarBootTimer.DefaultParams.concat();
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
+        const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
+        const warEventFullData  = (await WarMap.WarMapModel.getRawData(Helpers.getExisted(settingsForMrw.mapId)))?.warEventFullData ?? null;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
-                    settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMrw.mapId)),
-                    warRule,
+                    settingsType    : WarBasicSettingsType.MapId,
+                    currentValue    : Helpers.getExisted(settingsForMrw.mapId),
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
-                    settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
-                    warRule,
+                    settingsType    : WarBasicSettingsType.WarEvent,
+                    currentValue    : null,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                    currentValue    : `${settingsForCommon.turnsLimit ?? CommonConstants.Turn.Limit.Default}, ${settingsForCommon.warActionsLimit ?? CommonConstants.WarAction.Limit.Default}`,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             ],
@@ -457,21 +504,19 @@ namespace MpwModel {
             openData.dataArrayForListSettings.push({
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
-                warRule,
+                instanceWarRule,
+                gameConfig,
+                warEventFullData,
                 callbackOnModify: null,
             });
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
-                    currentValue    : bootTimerParams[1],
-                    warRule,
-                    callbackOnModify: null,
-                },
-                {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
-                    currentValue    : bootTimerParams[2],
-                    warRule,
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParams,
+                    currentValue    : `${bootTimerParams[1]}, ${bootTimerParams[2]}, ${bootTimerParams[3] ?? 0}`,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             );
@@ -481,57 +526,83 @@ namespace MpwModel {
 
         return openData;
     }
-    async function createDataForCommonWarBasicSettingsPageForMfw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForMfw: ISettingsForMfw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    async function createDataForCommonWarBasicSettingsPageForMfw(instanceWarRule: IInstanceWarRule, settingsForCommon: ISettingsForCommon, settingsForMfw: ISettingsForMfw): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const bootTimerParams   = Helpers.getExisted(settingsForMfw.bootTimerParams);
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
+        const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
+        const warEventFullData  = instanceWarRule.warEventFullData ?? null;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.WarName,
                     currentValue    : settingsForMfw.warName ?? null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarPassword,
                     currentValue    : settingsForMfw.warPassword ?? null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarComment,
                     currentValue    : settingsForMfw.warComment ?? null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
-                    settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
-                    warRule,
+                    settingsType    : WarBasicSettingsType.WarEvent,
+                    currentValue    : null,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                    currentValue    : `${settingsForCommon.turnsLimit ?? CommonConstants.Turn.Limit.Default}, ${settingsForCommon.warActionsLimit ?? CommonConstants.WarAction.Limit.Default}`,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             ],
@@ -540,21 +611,19 @@ namespace MpwModel {
             openData.dataArrayForListSettings.push({
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
-                warRule,
+                instanceWarRule,
+                gameConfig,
+                warEventFullData,
                 callbackOnModify: null,
             });
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
-                    currentValue    : bootTimerParams[1],
-                    warRule,
-                    callbackOnModify: null,
-                },
-                {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
-                    currentValue    : bootTimerParams[2],
-                    warRule,
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParams,
+                    currentValue    : `${bootTimerParams[1]}, ${bootTimerParams[2]}, ${bootTimerParams[3] ?? 0}`,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             );
@@ -572,32 +641,32 @@ namespace MpwModel {
         }
 
         const settingsForCommon                                                     = Helpers.getExisted(warInfo.settingsForCommon);
-        const warRule                                                               = Helpers.getExisted(settingsForCommon.warRule);
-        const configVersion                                                         = Helpers.getExisted(settingsForCommon.configVersion);
-        const hasFog                                                                = warRule.ruleForGlobalParams?.hasFogByDefault;
+        const instanceWarRule                                                       = Helpers.getExisted(settingsForCommon.instanceWarRule);
+        const gameConfig                                                            = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+        const hasFog                                                                = instanceWarRule.ruleForGlobalParams?.hasFogByDefault;
         const { settingsForCcw, settingsForMcw, settingsForMfw, settingsForMrw }    = warInfo;
         if (settingsForCcw) {
             return {
-                configVersion,
-                warRule,
+                gameConfig,
+                instanceWarRule,
                 warType     : hasFog ? Types.WarType.CcwFog : Types.WarType.CcwStd,
             };
         } else if (settingsForMcw) {
             return {
-                configVersion,
-                warRule,
+                gameConfig,
+                instanceWarRule,
                 warType     : hasFog ? Types.WarType.McwFog : Types.WarType.McwStd,
             };
         } else if (settingsForMfw) {
             return {
-                configVersion,
-                warRule,
+                gameConfig,
+                instanceWarRule,
                 warType     : hasFog ? Types.WarType.MfwFog : Types.WarType.MfwStd,
             };
         } else if (settingsForMrw) {
             return {
-                configVersion,
-                warRule,
+                gameConfig,
+                instanceWarRule,
                 warType     : hasFog ? Types.WarType.MrwFog : Types.WarType.MrwStd,
             };
         } else {
@@ -617,14 +686,14 @@ namespace MpwModel {
         }
 
         const settingsForCommon = Helpers.getExisted(warSettings.settingsForCommon);
-        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
-        const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
+        const playerInfoArray   : Common.PlayerInfo[] = [];
         for (const playerInfo of warProgressInfo.playerInfoList || []) {
             const playerIndex   = Helpers.getExisted(playerInfo.playerIndex);
             const userId        = playerInfo.userId ?? null;
             playerInfoArray.push({
                 playerIndex,
-                teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
+                teamIndex           : WarHelpers.WarRuleHelpers.getTeamIndex(instanceWarRule, playerIndex),
                 isAi                : userId == null,
                 userId,
                 coId                : Helpers.getExisted(playerInfo.coId),
@@ -632,16 +701,18 @@ namespace MpwModel {
                 isReady             : null,
                 isInTurn            : playerIndex === warProgressInfo.playerIndexInTurn,
                 isDefeat            : !playerInfo.isAlive,
+                restTimeToBoot      : playerInfo.restTimeToBoot ?? null,
             });
         }
 
         return {
-            configVersion           : Helpers.getExisted(settingsForCommon.configVersion),
-            playersCountUnneutral   : WarRuleHelpers.getPlayersCountUnneutral(warRule),
+            gameConfig              : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+            playersCountUnneutral   : WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(instanceWarRule),
             roomOwnerPlayerIndex    : null,
             callbackOnDeletePlayer  : null,
             callbackOnExitRoom      : null,
             playerInfoArray,
+            enterTurnTime           : warProgressInfo.enterTurnTime ?? null,
         };
     }
 
@@ -655,7 +726,7 @@ namespace MpwModel {
         }
 
         const war = createWarByWarData(data);
-        await war.init(data);
+        war.init(data, await Config.ConfigManager.getGameConfig(Helpers.getExisted(data.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         _setWar(war);
 
@@ -678,7 +749,7 @@ namespace MpwModel {
     }
 
     function _onNotifyMsgMpwWatchGetIncomingInfo(e: egret.Event): void {
-        const data  = e.data as ProtoTypes.NetMessage.MsgMpwWatchGetIncomingInfo.IS;
+        const data  = e.data as CommonProto.NetMessage.MsgMpwWatchGetIncomingInfo.IS;
         const war   = getWar();
         if (war?.getWarId() !== Helpers.getExisted(data.warId)) {
             return;
@@ -694,7 +765,7 @@ namespace MpwModel {
         player.setWatchRequestSrcUserIds(info?.requestSrcUserIdArray ?? []);
     }
     function _onNotifyMsgMpwWatchGetOutgoingInfo(e: egret.Event): void {
-        const data  = e.data as ProtoTypes.NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
+        const data  = e.data as CommonProto.NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
         const war   = getWar();
         if (war?.getWarId() !== Helpers.getExisted(data.warId)) {
             return;
@@ -705,7 +776,7 @@ namespace MpwModel {
             return;
         }
 
-        const selfUserId            = Helpers.getExisted(UserModel.getSelfUserId());
+        const selfUserId            = Helpers.getExisted(User.UserModel.getSelfUserId());
         const ongoingDstUserIdArray = info.ongoingDstUserIdArray ?? [];
         const requestDstUserIdArray = info.requestDstUserIdArray ?? [];
         for (const [, player] of war.getPlayerManager().getAllPlayersDict()) {
@@ -731,7 +802,7 @@ namespace MpwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Handlers for war actions that McwProxy receives.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function updateOnPlayerSyncWar(data: ProtoTypes.NetMessage.MsgMpwCommonSyncWar.IS): void {
+    export function updateOnPlayerSyncWar(data: CommonProto.NetMessage.MsgMpwCommonSyncWar.IS): void {
         const war = getWar();
         if ((war) && (war.getWarId() === data.warId)) {
             _cachedSyncWarData = data;
@@ -775,7 +846,7 @@ namespace MpwModel {
             const warData   = syncWarData.war;
             if (status === Types.SyncWarStatus.Defeated) {
                 war.setIsEnded(true);
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0023),
                     callback: () => {
@@ -786,7 +857,7 @@ namespace MpwModel {
 
             } else if (status === Types.SyncWarStatus.EndedOrNotExists) {
                 war.setIsEnded(true);
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0035),
                     callback: () => {
@@ -831,7 +902,7 @@ namespace MpwModel {
             } else if (status === Types.SyncWarStatus.NotJoined) {
                 // Something wrong!!
                 war.setIsEnded(true);
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0037),
                     callback: () => FlowManager.gotoLobby(),
@@ -850,7 +921,7 @@ namespace MpwModel {
             } else {
                 // Something wrong!!
                 war.setIsEnded(true);
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0037),
                     callback: () => FlowManager.gotoLobby(),
@@ -864,9 +935,9 @@ namespace MpwModel {
             return;
         }
 
-        const selfUserId = Helpers.getExisted(UserModel.getSelfUserId());
+        const selfUserId = Helpers.getExisted(User.UserModel.getSelfUserId());
         war.getExecutedActionManager().addExecutedAction(container);
-        await WarActionExecutor.checkAndExecute(war, container, false);
+        await WarHelpers.WarActionExecutor.checkAndExecute(war, container, false);
 
         const selfPlayer        = war.getPlayerManager().getPlayerByUserId(selfUserId);
         const callbackForGoBack = () => {
@@ -874,20 +945,20 @@ namespace MpwModel {
         };
         if (war.getIsEnded()) {
             if (war.getDrawVoteManager().getRemainingVotes() === 0) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0030),
                     callback: callbackForGoBack,
                 });
             } else {
                 if (selfPlayer == null) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0035),
                         callback: callbackForGoBack,
                     });
                 } else {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : selfPlayer.getAliveState() === Types.PlayerAliveState.Alive ? Lang.getText(LangTextType.A0022) : Lang.getText(LangTextType.A0023),
                         callback: callbackForGoBack,
@@ -896,9 +967,9 @@ namespace MpwModel {
             }
         } else {
             if (war.getIsRunning()) {
-                if (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().size) {
+                if (!war.getPlayerManager().getWatcherTeamIndexesForSelf().size) {
                     war.setIsEnded(true);
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0035),
                         content : selfPlayer ? Lang.getText(LangTextType.A0023) : Lang.getText(LangTextType.A0152),
                         callback: callbackForGoBack,
@@ -910,7 +981,7 @@ namespace MpwModel {
         }
     }
 
-    function createWarByWarData(data: ProtoTypes.WarSerialization.ISerialWar): MpwWar {
+    function createWarByWarData(data: CommonProto.WarSerialization.ISerialWar): MpwWar {
         if (data.settingsForMcw) {
             return new McwWar();
         } else if (data.settingsForMrw) {

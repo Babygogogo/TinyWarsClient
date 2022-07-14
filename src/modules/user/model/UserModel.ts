@@ -6,31 +6,31 @@
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import UserProxy            from "./UserProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace UserModel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NetMessage           = ProtoTypes.NetMessage;
-    import IUserPublicInfo      = ProtoTypes.User.IUserPublicInfo;
-    import IUserBriefInfo       = ProtoTypes.User.IUserBriefInfo;
-    import IUserSettings        = ProtoTypes.User.IUserSettings;
-    import IUserSelfInfo        = ProtoTypes.User.IUserSelfInfo;
-    import IUserPrivilege       = ProtoTypes.User.IUserPrivilege;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+namespace Twns.User.UserModel {
+    import NotifyType           = Notify.NotifyType;
+    import LangTextType         = Lang.LangTextType;
+    import NetMessage           = CommonProto.NetMessage;
+    import IUserPublicInfo      = CommonProto.User.IUserPublicInfo;
+    import IUserBriefInfo       = CommonProto.User.IUserBriefInfo;
+    import IUserSettings        = CommonProto.User.IUserSettings;
+    import IUserSelfInfo        = CommonProto.User.IUserSelfInfo;
+    import IUserPrivilege       = CommonProto.User.IUserPrivilege;
 
     let _isLoggedIn                 = false;
     let _selfInfo                   : IUserSelfInfo | null = null;
     let _selfAccount                : string;
     let _selfPassword               : string | null = null;
+    let _selfGuestUserId            : number | null = null;
     const _userPublicInfoAccessor   = Helpers.createCachedDataAccessor<number, IUserPublicInfo>({
-        reqData                     : (userId: number) => UserProxy.reqUserGetPublicInfo(userId),
+        reqData                     : (userId: number) => User.UserProxy.reqUserGetPublicInfo(userId),
     });
     const _userBriefInfoAccessor    = Helpers.createCachedDataAccessor<number, IUserBriefInfo>({
-        reqData                     : (userId: number) => UserProxy.reqUserGetBriefInfo(userId),
+        reqData                     : (userId: number) => User.UserProxy.reqUserGetBriefInfo(userId),
     });
 
     export function init(): void {
@@ -59,7 +59,7 @@ namespace UserModel {
     export function getSelfInfo(): IUserSelfInfo | null {
         return _selfInfo;
     }
-    function getSelfUserComplexInfo(): ProtoTypes.User.IUserComplexInfo | null {
+    function getSelfUserComplexInfo(): CommonProto.User.IUserComplexInfo | null {
         const selfInfo = getSelfInfo();
         return selfInfo ? selfInfo.userComplexInfo ?? null : null;
     }
@@ -81,6 +81,13 @@ namespace UserModel {
     }
     export function getSelfPassword(): string | null {
         return _selfPassword;
+    }
+
+    export function getSelfGuestUserId(): number | null {
+        return _selfGuestUserId;
+    }
+    function setSelfGuestUserId(guestUserId: number | null) {
+        _selfGuestUserId = guestUserId;
     }
 
     function getSelfUserPrivilege(): IUserPrivilege | null {
@@ -133,13 +140,12 @@ namespace UserModel {
         (userComplexInfo) && (userComplexInfo.mapEditorAutoSaveTime = time);
     }
 
-    export function getSelfDiscordId(): string | null {
-        const info = getSelfInfo();
-        return info ? info.discordId ?? null : null;
+    export function getSelfDiscordInfo(): CommonProto.User.IUserDiscordInfo | null {
+        return getSelfUserComplexInfo()?.userDiscordInfo ?? null;
     }
-    function setSelfDiscordId(discordId: string | null): void {
-        const info = getSelfInfo();
-        (info) && (info.discordId = discordId);
+    function setSelfDiscordInfo(discordInfo: CommonProto.User.IUserDiscordInfo | null): void {
+        const info = getSelfUserComplexInfo();
+        (info) && (info.userDiscordInfo = discordInfo);
     }
 
     export function getUserPublicInfo(userId: number): Promise<IUserPublicInfo | null> {
@@ -160,17 +166,17 @@ namespace UserModel {
         const info = await getUserPublicInfo(userId);
         return info ? info.nickname ?? null : null;
     }
-    export async function getUserMrwRankScoreInfo(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.UserRankInfo.IUserMrwRankInfo | null> {
+    export async function getUserMrwRankScoreInfo(userId: number, warType: Types.WarType, playersCount: number): Promise<CommonProto.User.UserRankInfo.IUserMrwRankInfo | null> {
         return (await getUserPublicInfo(userId))?.userMrwRankInfoArray?.find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount)) ?? null;
     }
-    export async function getUserMpwStatisticsData(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.UserWarStatistics.IUserMpwStatistics | null> {
+    export async function getUserMpwStatisticsData(userId: number, warType: Types.WarType, playersCount: number): Promise<CommonProto.User.UserWarStatistics.IUserMpwStatistics | null> {
         return (await getUserPublicInfo(userId))?.userMpwStatisticsArray?.find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount)) ?? null;
     }
     export function getMapRating(mapId: number): number | null {
         return getSelfUserComplexInfo()?.userMapRatingArray?.find(v => v.mapId === mapId)?.rating ?? null;
     }
 
-    function getSelfSettings(): IUserSettings | null {
+    export function getSelfSettings(): IUserSettings | null {
         return getSelfUserComplexInfo()?.userSettings ?? null;
     }
     export function getSelfSettingsTextureVersion(): Types.UnitAndTileTextureVersion {
@@ -186,10 +192,10 @@ namespace UserModel {
         return getSelfSettings()?.isAutoScrollMap ?? true;
     }
 
-    export function getSelfSettingsOpacitySettings(): ProtoTypes.User.IUserOpacitySettings | null {
+    export function getSelfSettingsOpacitySettings(): CommonProto.User.IUserOpacitySettings | null {
         return getSelfSettings()?.opacitySettings ?? null;
     }
-    export function setSelfSettingsOpacitySettings(opacitySettings: ProtoTypes.User.IUserOpacitySettings): void {
+    export function setSelfSettingsOpacitySettings(opacitySettings: CommonProto.User.IUserOpacitySettings): void {
         const selfSettings = getSelfSettings();
         if (selfSettings == null) {
             return;
@@ -201,16 +207,16 @@ namespace UserModel {
     export function reqTickSelfSettingsUnitOpacity(): void {
         const unitOpacity = getSelfSettingsOpacitySettings()?.unitOpacity;
         if ((unitOpacity === 100) || (unitOpacity == null)) {
-            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 75 } });
+            User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 75 } });
         } else if (unitOpacity === 75) {
-            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 50 } });
+            User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 50 } });
         } else if (unitOpacity === 50) {
-            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 0 } });
+            User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 0 } });
         } else {
-            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 100 } });
+            User.UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 100 } });
         }
     }
-    function mergeSelfSettingsOpacitySettings(newOpacitySettings: ProtoTypes.User.IUserOpacitySettings): void {
+    function mergeSelfSettingsOpacitySettings(newOpacitySettings: CommonProto.User.IUserOpacitySettings): void {
         const selfSettings = getSelfSettings();
         if (selfSettings == null) {
             return;
@@ -235,6 +241,15 @@ namespace UserModel {
         const userSelfInfo = data.userSelfInfo;
         (userSelfInfo) && (setSelfInfo(userSelfInfo));
     }
+    export function updateOnMsgUserLoginAsGuest(data: NetMessage.MsgUserLoginAsGuest.IS): void {
+        setIsLoggedIn(true);
+
+        const userSelfInfo = data.userSelfInfo;
+        if (userSelfInfo) {
+            setSelfInfo(userSelfInfo);
+            setSelfGuestUserId(userSelfInfo.userId ?? null);
+        }
+    }
     export async function updateOnMsgUserGetOnlineState(data: NetMessage.MsgUserGetOnlineState.IS): Promise<void> {
         const userPublicInfo = await getUserPublicInfo(Helpers.getExisted(data.userId));
         if (userPublicInfo) {
@@ -245,10 +260,10 @@ namespace UserModel {
     export function updateOnMsgUserSetNickname(data: NetMessage.MsgUserSetNickname.IS): void {
         setSelfNickname(Helpers.getExisted(data.nickname));
     }
-    export function updateOnMsgUserSetDiscordId(data: NetMessage.MsgUserSetDiscordId.IS): void {
-        setSelfDiscordId(data.discordId ?? null);
+    export function updateOnMsgUserSetDiscordInfo(data: NetMessage.MsgUserSetDiscordInfo.IS): void {
+        setSelfDiscordInfo(data.discordInfo ?? null);
     }
-    export function updateOnMsgUserSetPrivilege(data: NetMessage.MsgUserSetPrivilege.IS): void {
+    export function updateOnMsgGmSetUserPrivilege(data: NetMessage.MsgGmSetUserPrivilege.IS): void {
         if (data.userId === getSelfUserId()) {
             setSelfUserPrivilege(Helpers.getExisted(data.userPrivilege));
         }
@@ -270,7 +285,7 @@ namespace UserModel {
         (newSettings.opacitySettings != null)           && (mergeSelfSettingsOpacitySettings(newSettings.opacitySettings));
 
         if (oldVersion !== getSelfSettingsTextureVersion()) {
-            CommonModel.updateOnUnitAndTileTextureVersionChanged();
+            Common.CommonModel.updateOnUnitAndTileTextureVersionChanged();
             Notify.dispatch(NotifyType.UnitAndTileTextureVersionChanged);
         }
         if (oldIsShowGridBorder !== getSelfSettingsIsShowGridBorder()) {
@@ -306,6 +321,31 @@ namespace UserModel {
     }
     export function updateOnMsgUserSetMapEditorAutoSaveTime(data: NetMessage.MsgUserSetMapEditorAutoSaveTime.IS): void {
         setSelfMapEditorAutoSaveTime(data.time ?? null);
+    }
+    export function updateOnMsgUserSetCoBgmSettings(data: NetMessage.MsgUserSetCoBgmSettings.IS): void {
+        const selfSettings = getSelfSettings();
+        if (selfSettings == null) {
+            return;
+        }
+
+        const coCategoryId  = Helpers.getExisted(data.coCategoryId);
+        const bgmCodeArray  = data.bgmCodeArray;
+        const coBgmSettings = selfSettings.coBgmSettings ??= [];
+        const index         = coBgmSettings.findIndex(v => v.coCategoryId === coCategoryId);
+        if (index >= 0) {
+            if (bgmCodeArray) {
+                coBgmSettings[index].bgmCodeArray = bgmCodeArray;
+            } else {
+                coBgmSettings.splice(index, 1);
+            }
+        } else {
+            if (bgmCodeArray) {
+                coBgmSettings.push({
+                    coCategoryId,
+                    bgmCodeArray,
+                });
+            }
+        }
     }
 
     function _onNotifyNetworkDisconnected(): void {

@@ -16,7 +16,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -33,15 +33,15 @@
 // import TwnsUserSetStageScalePanel   from "./UserSetStageScalePanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsChatCommandPanel {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.Chat {
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForChatCommandPanel = {
         userId      : number | null;
         messageId   : number;
     };
-    export class ChatCommandPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class ChatCommandPanel extends TwnsUiPanel.UiPanel<OpenDataForChatCommandPanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
@@ -80,22 +80,22 @@ namespace TwnsChatCommandPanel {
             this._updateComponentsForLanguage();
         }
         private _onTouchedBtnUserInfo(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.UserPanel, {
                 userId  : this._getOpenData().userId,
             });
             this.close();
         }
         private _onTouchedBtnPrivateChat(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.ChatPanel, {
                 toUserId    : this._getOpenData().userId,
             });
             this.close();
         }
         private _onTouchedBtnDeleteMessage(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0286),
                 callback: () => {
-                    ChatProxy.reqChatDeleteMessage(this._getOpenData().messageId);
+                    Chat.ChatProxy.reqChatDeleteMessage(this._getOpenData().messageId);
                     this.close();
                 },
             });
@@ -113,7 +113,7 @@ namespace TwnsChatCommandPanel {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Helpers.resetTween({
@@ -127,7 +127,7 @@ namespace TwnsChatCommandPanel {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {
@@ -143,11 +143,11 @@ namespace TwnsChatCommandPanel {
             if ((userId != null) && (userId > 1000000)) {
                 group.addChild(this._btnUserInfo);
 
-                if (userId !== UserModel.getSelfUserId()) {
+                if (userId !== User.UserModel.getSelfUserId()) {
                     group.addChild(this._btnPrivateChat);
                 }
             }
-            if ((UserModel.getIsSelfAdmin()) || (UserModel.getIsSelfChatManager())) {
+            if ((User.UserModel.getIsSelfAdmin()) || (User.UserModel.getIsSelfChatManager())) {
                 group.addChild(this._btnDeleteMessage);
             }
         }

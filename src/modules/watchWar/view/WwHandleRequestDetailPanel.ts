@@ -3,7 +3,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -15,14 +15,14 @@
 // import WwProxy                  from "../model/WwProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWwHandleRequestDetailPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.WatchWar {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForWwHandleRequestDetailPanel = {
         warId: number;
     };
-    export class WwHandleRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WwHandleRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForWwHandleRequestDetailPanel> {
         private readonly _labelMenuTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelYes!                 : TwnsUiLabel.UiLabel;
         private readonly _labelNo!                  : TwnsUiLabel.UiLabel;
@@ -73,7 +73,7 @@ namespace TwnsWwHandleRequestDetailPanel {
 
         private async _onTouchedBtnConfirm(): Promise<void> {
             const warId = this._getOpenData().warId;
-            if (await WwModel.getWatchIncomingInfo(warId) == null) {
+            if (await Twns.WatchWar.WwModel.getWatchIncomingInfo(warId) == null) {
                 this.close();
                 return;
             }
@@ -87,10 +87,10 @@ namespace TwnsWwHandleRequestDetailPanel {
                     declineUserIds.push(data.userId);
                 }
             }
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getFormattedText(LangTextType.F0082, acceptUserIds.length, declineUserIds.length),
                 callback: () => {
-                    WwProxy.reqWatchHandleRequest(warId, acceptUserIds, declineUserIds);
+                    Twns.WatchWar.WwProxy.reqWatchHandleRequest(warId, acceptUserIds, declineUserIds);
                     this.close();
                 },
             });
@@ -116,11 +116,12 @@ namespace TwnsWwHandleRequestDetailPanel {
 
         private async _generateDataForListPlayer(): Promise<DataForRequesterRenderer[]> {
             const warId             = this._getOpenData().warId;
-            const playerInfoList    = (await MpwModel.getWarProgressInfo(warId))?.playerInfoList;
+            const playerInfoList    = (await Twns.MultiPlayerWar.MpwModel.getWarProgressInfo(warId))?.playerInfoList;
+            const watchInfo         = await Twns.WatchWar.WwModel.getWatchIncomingInfo(warId);
             const dataList          : DataForRequesterRenderer[] = [];
-            for (const info of (await WwModel.getWatchIncomingInfo(warId))?.srcUserInfoArray || []) {
-                const userId = info.userId;
-                if (userId != null) {
+            for (const userId of watchInfo?.requestSrcUserIdArray || []) {
+                const info = watchInfo?.srcUserInfoArray?.find(v => v.userId === userId);
+                if (info != null) {
                     dataList.push({
                         panel           : this,
                         userId,
@@ -155,7 +156,7 @@ namespace TwnsWwHandleRequestDetailPanel {
             this._labelIsWatchingOthers.text    = data.isWatchingOthers ? Lang.getText(LangTextType.B0012) : "";
             this._imgAccept.visible             = data.isAccept;
             this._imgDecline.visible            = !data.isAccept;
-            UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name ?? CommonConstants.ErrorTextForUndefined);
+            Twns.User.UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name ?? Twns.CommonConstants.ErrorTextForUndefined);
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {

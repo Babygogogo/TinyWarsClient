@@ -8,18 +8,15 @@
 // import UserModel        from "../../user/model/UserModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeTileSimpleView {
-    import TileBaseType             = Types.TileBaseType;
-    import TileDecoratorType        = Types.TileDecoratorType;
-    import TileObjectType           = Types.TileObjectType;
-
+namespace Twns.MapEditor {
     const { height: GRID_HEIGHT }   = CommonConstants.GridSize;
-    export type TileViewData = {
-        tileBaseType        : TileBaseType | null;
+    export type TileViewData        = {
+        gameConfig          : Config.GameConfig;
+        tileBaseType        : number | null;
         tileBaseShapeId     : number | null;
-        tileDecoratorType   : TileDecoratorType | null;
+        tileDecoratorType   : number | null;
         tileDecoratorShapeId: number | null;
-        tileObjectType      : TileObjectType | null;
+        tileObjectType      : number | null;
         tileObjectShapeId   : number | null;
         playerIndex         : number;
     };
@@ -29,11 +26,12 @@ namespace TwnsMeTileSimpleView {
         private readonly _imgDecorator  = new TwnsUiImage.UiImage();
         private readonly _imgObject     = new TwnsUiImage.UiImage();
 
-        private _baseType           : TileBaseType | null = null;
+        private _gameConfig         : Config.GameConfig | null = null;
+        private _baseType           : number | null = null;
         private _baseShapeId        : number | null = null;
-        private _decoratorType      : TileDecoratorType | null = null;
+        private _decoratorType      : number | null = null;
         private _decoratorShapeId   : number | null = null;
-        private _objectType         : TileObjectType | null = null;
+        private _objectType         : number | null = null;
         private _objectShapeId      : number | null = null;
         private _playerIndex        : number | null = null;
 
@@ -58,6 +56,7 @@ namespace TwnsMeTileSimpleView {
         }
 
         public init(data: TileViewData): MeTileSimpleView {
+            this._gameConfig        = data.gameConfig;
             this._baseType          = data.tileBaseType;
             this._baseShapeId       = data.tileBaseShapeId;
             this._decoratorType     = data.tileDecoratorType;
@@ -92,9 +91,13 @@ namespace TwnsMeTileSimpleView {
         }
 
         protected _updateImages(): void {
-            const version   = UserModel.getSelfSettingsTextureVersion();
-            const tickCount = Timer.getTileAnimationTickCount();
+            const gameConfig = this._gameConfig;
+            if (gameConfig == null) {
+                return;
+            }
 
+            const version   = User.UserModel.getSelfSettingsTextureVersion();
+            const tickCount = Timer.getTileAnimationTickCount();
             {
                 const objectType    = this._objectType;
                 const imgObject     = this.getImgObject();
@@ -102,7 +105,8 @@ namespace TwnsMeTileSimpleView {
                     imgObject.visible = false;
                 } else {
                     imgObject.visible = true;
-                    imgObject.source  = CommonModel.getCachedTileObjectImageSource({
+                    imgObject.source  = Common.CommonModel.getCachedTileObjectImageSource({
+                        gameConfig,
                         version,
                         themeType   : Types.TileThemeType.Clear,
                         skinId      : Helpers.getExisted(this._playerIndex),
@@ -117,11 +121,12 @@ namespace TwnsMeTileSimpleView {
             {
                 const baseType  = this._baseType;
                 const imgBase   = this.getImgBase();
-                if ((baseType == null) || (baseType === TileBaseType.Empty)) {
+                if (baseType == null) {
                     imgBase.visible = false;
                 } else {
                     imgBase.visible = true;
-                    imgBase.source  = CommonModel.getCachedTileBaseImageSource({
+                    imgBase.source  = Common.CommonModel.getCachedTileBaseImageSource({
+                        gameConfig,
                         version,
                         themeType   : Types.TileThemeType.Clear,
                         skinId      : CommonConstants.UnitAndTileNeutralSkinId,
@@ -136,18 +141,19 @@ namespace TwnsMeTileSimpleView {
             {
                 const decoratorType = this._decoratorType;
                 const imgDecorator  = this.getImgDecorator();
-                if ((decoratorType == null) || (decoratorType === TileDecoratorType.Empty)) {
+                if (decoratorType == null) {
                     imgDecorator.visible = false;
                 } else {
                     imgDecorator.visible = true;
-                    imgDecorator.source  = CommonModel.getCachedTileDecoratorImageSource({
+                    imgDecorator.source  = Common.CommonModel.getCachedTileDecoratorImageSource({
                         version,
                         themeType   : Types.TileThemeType.Clear,
                         skinId      : CommonConstants.UnitAndTileNeutralSkinId,
-                        decoratorType,
+                        tileDecorationType: decoratorType,
                         isDark      : false,
                         shapeId     : Helpers.getExisted(this._decoratorShapeId),
                         tickCount,
+                        gameConfig,
                     });
                 }
             }

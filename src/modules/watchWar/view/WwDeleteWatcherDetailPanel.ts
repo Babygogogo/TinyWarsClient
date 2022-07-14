@@ -3,7 +3,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -15,14 +15,14 @@
 // import WwProxy                  from "../model/WwProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWwDeleteWatcherDetailPanel {
-    import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+namespace Twns.WatchWar {
+    import LangTextType = Twns.Lang.LangTextType;
+    import NotifyType   = Twns.Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForWwDeleteWatcherDetailPanel = {
         warId: number;
     };
-    export class WwDeleteWatcherDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WwDeleteWatcherDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForWwDeleteWatcherDetailPanel> {
         private readonly _labelMenuTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelDelete!              : TwnsUiLabel.UiLabel;
         private readonly _labelKeep!                : TwnsUiLabel.UiLabel;
@@ -77,7 +77,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
 
         private async _onTouchedBtnConfirm(): Promise<void> {
             const warId = this._getOpenData().warId;
-            if (await WwModel.getWatchIncomingInfo(warId) == null) {
+            if (await Twns.WatchWar.WwModel.getWatchIncomingInfo(warId) == null) {
                 this.close();
                 return;
             }
@@ -89,7 +89,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
                 }
             }
             if (deleteUserIds.length) {
-                WwProxy.reqWatchDeleteWatcher(warId, deleteUserIds);
+                Twns.WatchWar.WwProxy.reqWatchDeleteWatcher(warId, deleteUserIds);
             }
             this.close();
         }
@@ -114,9 +114,9 @@ namespace TwnsWwDeleteWatcherDetailPanel {
 
         private async _generateDataForListPlayer(): Promise<DataForRequesterRenderer[]> {
             const warId             = this._getOpenData().warId;
-            const playerInfoList    = (await MpwModel.getWarProgressInfo(warId))?.playerInfoList;
+            const playerInfoList    = (await Twns.MultiPlayerWar.MpwModel.getWarProgressInfo(warId))?.playerInfoList;
             const dataList          : DataForRequesterRenderer[] = [];
-            for (const info of (await WwModel.getWatchIncomingInfo(warId))?.srcUserInfoArray || []) {
+            for (const info of (await Twns.WatchWar.WwModel.getWatchIncomingInfo(warId))?.srcUserInfoArray || []) {
                 const userId = info.userId;
                 if (userId != null) {
                     dataList.push({
@@ -153,7 +153,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
             this._labelIsWatchingOthers.text    = data.isWatchingOthers ? Lang.getText(LangTextType.B0012) : "";
             this._imgDelete.visible             = data.isDelete;
             this._imgKeep.visible               = !data.isDelete;
-            UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name ?? CommonConstants.ErrorTextForUndefined);
+            Twns.User.UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name ?? Twns.CommonConstants.ErrorTextForUndefined);
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {

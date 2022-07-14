@@ -11,7 +11,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
@@ -24,19 +24,18 @@
 // import TwnsMrrMainMenuPanel                 from "./MrrMainMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMrrPreviewMapListPanel {
-    import OpenDataForCommonWarAdvancedSettingsPage     = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarBasicSettingsPage        = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarMapInfoPage              = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import LangTextType                                 = TwnsLangTextType.LangTextType;
-    import NotifyType                                   = TwnsNotifyType.NotifyType;
+namespace Twns.MultiRankRoom {
+    import OpenDataForCommonWarAdvancedSettingsPage     = Common.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage        = Common.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarMapInfoPage              = Common.OpenDataForCommonMapInfoPage;
+    import LangTextType                                 = Lang.LangTextType;
+    import NotifyType                                   = Notify.NotifyType;
     import WarBasicSettingsType                         = Types.WarBasicSettingsType;
-    import ClientErrorCode                              = TwnsClientErrorCode.ClientErrorCode;
 
-    export type OpenData = {
+    export type OpenDataForMrrPreviewMapListPanel = {
         hasFog: boolean;
     };
-    export class MrrPreviewMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MrrPreviewMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForMrrPreviewMapListPanel> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
 
@@ -97,15 +96,15 @@ namespace TwnsMrrPreviewMapListPanel {
 
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMainMenuPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MrrMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
         }
 
         private _onTouchedBtnSwitch(): void {
             const hasFog = this._getOpenData().hasFog;
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrPreviewMapListPanel, { hasFog: !hasFog });
+            PanelHelpers.open(PanelHelpers.PanelDict.MrrPreviewMapListPanel, { hasFog: !hasFog });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -115,17 +114,17 @@ namespace TwnsMrrPreviewMapListPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
-                    pageData    : this._createDataForCommonMapInfoPage(),
+                    pageClass   : Common.CommonWarMapInfoPage,
+                    pageData    : await this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageClass   : Common.CommonWarAdvancedSettingsPage,
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
@@ -168,9 +167,9 @@ namespace TwnsMrrPreviewMapListPanel {
             }
         }
 
-        private _updateCommonMapInfoPage(): void {
+        private async _updateCommonMapInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
+                this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
             }
         }
 
@@ -187,10 +186,10 @@ namespace TwnsMrrPreviewMapListPanel {
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
-            const promiseArray: Promise<ProtoTypes.Map.IMapRawData | null>[] = [];
-            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
-                promiseArray.push((async (): Promise<ProtoTypes.Map.IMapRawData | null> => {
-                    const mapBriefData = await WarMapModel.getBriefData(mapId);
+            const promiseArray: Promise<CommonProto.Map.IMapRawData | null>[] = [];
+            for (const mapId of WarMap.WarMapModel.getEnabledMapIdArray()) {
+                promiseArray.push((async (): Promise<CommonProto.Map.IMapRawData | null> => {
+                    const mapBriefData = await WarMap.WarMapModel.getBriefData(mapId);
                     if (mapBriefData == null) {
                         return null;
                     }
@@ -198,7 +197,7 @@ namespace TwnsMrrPreviewMapListPanel {
                     if ((mapBriefData.mapExtraData?.isEnabled)  &&
                         (mapBriefData.ruleAvailability?.canMrw)
                     ) {
-                        return await WarMapModel.getRawData(mapId);
+                        return await WarMap.WarMapModel.getRawData(mapId);
                     }
 
                     return null;
@@ -208,7 +207,7 @@ namespace TwnsMrrPreviewMapListPanel {
             const hasFog    = this._getOpenData().hasFog;
             const dataArray : DataForMapNameRenderer[] = [];
             for (const mapRawData of await Promise.all(promiseArray)) {
-                if (mapRawData?.warRuleArray?.some(v => {
+                if (mapRawData?.templateWarRuleArray?.some(v => {
                     return (v.ruleAvailability?.canMrw) && (hasFog === v.ruleForGlobalParams?.hasFogByDefault);
                 })) {
                     dataArray.push({
@@ -222,11 +221,15 @@ namespace TwnsMrrPreviewMapListPanel {
             return dataArray.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 
-        private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
+        private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
             const mapId = this._getPreviewingMapId();
             return mapId == null
-                ? {}
-                : { mapInfo: { mapId } };
+                ? null
+                : {
+                    gameConfig  : await Config.ConfigManager.getLatestGameConfig(),
+                    hasFog      : this._getOpenData().hasFog,
+                    mapInfo     : { mapId },
+                };
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
@@ -235,58 +238,80 @@ namespace TwnsMrrPreviewMapListPanel {
                 return null;
             }
 
-            const mapRawData = await WarMapModel.getRawData(mapId);
+            const mapRawData = await WarMap.WarMapModel.getRawData(mapId);
             if (mapRawData == null) {
                 return null;
             }
 
-            const hasFog        = this._getOpenData().hasFog;
-            const warRuleArray  = mapRawData.warRuleArray?.filter(v => {
+            const hasFog                = this._getOpenData().hasFog;
+            const templateWarRuleArray  = mapRawData.templateWarRuleArray?.filter(v => {
                 return (v.ruleAvailability?.canMrw) && (hasFog === v.ruleForGlobalParams?.hasFogByDefault);
             });
-            if ((warRuleArray == null) || (!warRuleArray.length)) {
+            if ((templateWarRuleArray == null) || (!templateWarRuleArray.length)) {
                 return null;
             }
 
-            const warRule           = warRuleArray[0];
-            const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
+            const instanceWarRule   = WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRuleArray[0], mapRawData.warEventFullData);
+            const bootTimerParams   = CommonConstants.WarBootTimer.DefaultParams.concat();
             const timerType         = bootTimerParams[0] as Types.BootTimerType;
+            const gameConfig        = await Config.ConfigManager.getLatestGameConfig();
+            const warEventFullData  = mapRawData.warEventFullData ?? null;
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings    : [
                     {
-                        settingsType    : WarBasicSettingsType.MapName,
-                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(mapId),
-                        warRule,
+                        settingsType    : WarBasicSettingsType.MapId,
+                        currentValue    : mapId,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.HasFog,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.Weather,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
-                        settingsType    : WarBasicSettingsType.TurnsLimit,
-                        currentValue    : CommonConstants.WarMaxTurnsLimit,
-                        warRule,
+                        settingsType    : WarBasicSettingsType.WarEvent,
+                        currentValue    : null,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
+                        callbackOnModify: null,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                        currentValue    : `${CommonConstants.Turn.Limit.Default}, ${CommonConstants.WarAction.Limit.Default}`,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.TimerType,
                         currentValue    : timerType,
-                        warRule,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                 ],
@@ -295,21 +320,19 @@ namespace TwnsMrrPreviewMapListPanel {
                 openData.dataArrayForListSettings.push({
                     settingsType    : WarBasicSettingsType.TimerRegularParam,
                     currentValue    : bootTimerParams[1],
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 });
             } else if (timerType === Types.BootTimerType.Incremental) {
                 openData.dataArrayForListSettings.push(
                     {
-                        settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
-                        currentValue    : bootTimerParams[1],
-                        warRule,
-                        callbackOnModify: null,
-                    },
-                    {
-                        settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
-                        currentValue    : bootTimerParams[2],
-                        warRule,
+                        settingsType    : WarBasicSettingsType.TimerIncrementalParams,
+                        currentValue    : `${bootTimerParams[1]}, ${bootTimerParams[2]}, ${bootTimerParams[3] ?? 0}`,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                 );
@@ -326,18 +349,18 @@ namespace TwnsMrrPreviewMapListPanel {
                 return null;
             }
 
-            const mapRawData    = Helpers.getExisted(await WarMapModel.getRawData(mapId));
-            const hasFog        = this._getOpenData().hasFog;
-            const warRuleArray  = mapRawData.warRuleArray?.filter(v => {
+            const mapRawData            = Helpers.getExisted(await WarMap.WarMapModel.getRawData(mapId));
+            const hasFog                = this._getOpenData().hasFog;
+            const templateWarRuleArray  = mapRawData.templateWarRuleArray?.filter(v => {
                 return (v.ruleAvailability?.canMrw) && (hasFog === v.ruleForGlobalParams?.hasFogByDefault);
             });
-            if ((warRuleArray == null) || (!warRuleArray.length)) {
+            if ((templateWarRuleArray == null) || (!templateWarRuleArray.length)) {
                 return null;
             }
 
             return {
-                configVersion   : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
-                warRule         : warRuleArray[0],
+                gameConfig      : await Config.ConfigManager.getLatestGameConfig(),
+                instanceWarRule : WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRuleArray[0], mapRawData.warEventFullData),
                 warType         : hasFog ? Types.WarType.MrwFog : Types.WarType.MrwStd,
             };
         }
@@ -434,7 +457,7 @@ namespace TwnsMrrPreviewMapListPanel {
         }
 
         protected async _onDataChanged(): Promise<void> {
-            this._labelName.text = (await WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId)) || `??`;
+            this._labelName.text = (await WarMap.WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId)) || `??`;
         }
 
         private _onTouchTapBtnChoose(): void {

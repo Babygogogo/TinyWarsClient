@@ -16,7 +16,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -33,12 +33,12 @@
 // import TwnsUserSetStageScalePanel   from "./UserSetStageScalePanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserGameManagementPanel {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.User {
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
 
-    export type OpenData = void;
-    export class UserGameManagementPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserGameManagementPanel = void;
+    export class UserGameManagementPanel extends TwnsUiPanel.UiPanel<OpenDataForUserGameManagementPanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
@@ -79,24 +79,24 @@ namespace TwnsUserGameManagementPanel {
             this._updateComponentsForLanguage();
         }
         private _onTouchedBtnDeleteAllSpmRank(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title       : Lang.getText(LangTextType.B0879),
                 content     : Lang.getText(LangTextType.A0225),
-                callback    : () => SpmProxy.reqSpmDeleteAllScoreAndReplay(),
+                callback    : () => Gm.GmProxy.reqGmDeleteSpmAllScoreAndReplay(),
             });
         }
         private _onTouchedBtnSetPrivilege(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetPrivilegePanel, { userId: Helpers.getExisted(UserModel.getSelfUserId()) });
+            PanelHelpers.open(PanelHelpers.PanelDict.UserSetPrivilegePanel, { userId: Helpers.getExisted(User.UserModel.getSelfUserId()) });
         }
         private _onTouchedBtnMapManagement(): void {
-            TwnsPanelManager.closeAllPanelsExcept([
-                TwnsPanelConfig.Dict.LobbyBackgroundPanel,
+            PanelHelpers.closeAllPanelsExcept([
+                PanelHelpers.PanelDict.LobbyBackgroundPanel,
             ]);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBackgroundPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyBackgroundPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MmMainMenuPanel, void 0);
         }
         private _onTouchedBtnManageBroadcast(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.BroadcastMessageListPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.BroadcastMessageListPanel, void 0);
         }
 
         protected async _showOpenAnimation(): Promise<void> {
@@ -137,12 +137,12 @@ namespace TwnsUserGameManagementPanel {
             const group = this._groupButtons;
             group.removeChildren();
 
-            if (UserModel.getIsSelfAdmin()) {
+            if (User.UserModel.getIsSelfAdmin()) {
                 group.addChild(this._btnSetPrivilege);
                 group.addChild(this._btnDeleteAllSpmRank);
                 group.addChild(this._btnManageBroadcast);
             }
-            if ((UserModel.getIsSelfAdmin()) || (UserModel.getIsSelfMapCommittee())) {
+            if ((User.UserModel.getIsSelfAdmin()) || (User.UserModel.getIsSelfMapCommittee())) {
                 group.addChild(this._btnMapManagement);
             }
         }

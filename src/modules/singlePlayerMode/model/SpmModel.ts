@@ -3,17 +3,17 @@
 // import Helpers          from "../../tools/helpers/Helpers";
 // import Types            from "../../tools/helpers/Types";
 // import Notify           from "../../tools/notify/Notify";
-// import TwnsNotifyType   from "../../tools/notify/NotifyType";
+// import Notify   from "../../tools/notify/NotifyType";
 // import ProtoManager     from "../../tools/proto/ProtoManager";
 // import ProtoTypes       from "../../tools/proto/ProtoTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace SpmModel {
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NetMessage               = ProtoTypes.NetMessage;
+namespace Twns.SinglePlayerMode.SpmModel {
+    import NotifyType               = Notify.NotifyType;
+    import LangTextType             = Lang.LangTextType;
+    import NetMessage               = CommonProto.NetMessage;
     import SpmWarSaveSlotData       = Types.SpmWarSaveSlotData;
-    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
+    import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
     import ISpmRankInfoForRule      = NetMessage.MsgSpmGetRankList.ISpmRankInfoForRule;
     import MsgSpmGetRankListIs      = NetMessage.MsgSpmGetRankList.IS;
     import MsgSpmGetReplayDataIs    = NetMessage.MsgSpmGetReplayData.IS;
@@ -25,7 +25,7 @@ namespace SpmModel {
     }
 
     function _onNotifyMsgSpmValidateSrw(e: egret.Event): void {
-        const data      = e.data as ProtoTypes.NetMessage.MsgSpmValidateSrw.IS;
+        const data      = e.data as CommonProto.NetMessage.MsgSpmValidateSrw.IS;
         const status    = data.status;
         if (status === Types.SpmValidateSrwStatus.ConfigVersionNotLatest) {
             FloatText.show(Lang.getText(LangTextType.A0278));
@@ -41,40 +41,39 @@ namespace SpmModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for save slots.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _slotDict             = new Map<number, SpmWarSaveSlotData>();
-    let _hasReceivedSlotArray   = false;
+    const _slotFullDataAccessor = Helpers.createCachedDataAccessor<number, SpmWarSaveSlotData>({
+        reqData : (slotIndex) => SinglePlayerMode.SpmProxy.reqSpmGetWarSaveSlotFullData(slotIndex),
+    });
     let _previewingSlotIndex    : number;
 
-    export function getSlotDict(): Map<number, SpmWarSaveSlotData> {
-        return _slotDict;
+    export function setSlotFullData(slotIndex: number, fullData: SpmWarSaveSlotData | null): void {
+        _slotFullDataAccessor.setData(slotIndex, fullData);
     }
-    function setSlotData({ slotIndex, warData, slotExtraData }: {
-        slotIndex       : number;
-        warData         : ProtoTypes.WarSerialization.ISerialWar;
-        slotExtraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
-    }): void {
-        getSlotDict().set(slotIndex, {
-            slotIndex,
-            warData,
-            extraData   : slotExtraData,
-        });
+    export function getSlotFullData(slotIndex: number): Promise<SpmWarSaveSlotData | null> {
+        return _slotFullDataAccessor.getData(slotIndex);
     }
 
-    export function getHasReceivedSlotArray(): boolean {
-        return _hasReceivedSlotArray;
+    export async function checkIsEmpty(slotIndex: number): Promise<boolean> {
+        return await _slotFullDataAccessor.getData(slotIndex) == null;
     }
+    export async function getEmptySlotIndexArray(): Promise<number[]> {
+        const promiseArray: Promise<boolean>[] = [];
+        for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
+            promiseArray.push(checkIsEmpty(slotIndex));
+        }
 
-    export function checkIsEmpty(slotIndex: number): boolean {
-        return !getSlotDict().has(slotIndex);
-    }
-
-    export function getAvailableIndex(): number {
-        for (let index = 0; index < CommonConstants.SpwSaveSlotMaxCount; ++index) {
-            if (checkIsEmpty(index)) {
-                return index;
+        const emptyResultArray      = await Promise.all(promiseArray);
+        const emptySlotIndexArray   : number[] = [];
+        for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
+            if (emptyResultArray[slotIndex]) {
+                emptySlotIndexArray.push(slotIndex);
             }
         }
-        return 0;
+
+        return emptySlotIndexArray;
+    }
+    export async function getAvailableSlotIndex(): Promise<number> {
+        return (await getEmptySlotIndexArray())[0] ?? 0;
     }
 
     export function getPreviewingSlotIndex(): number {
@@ -87,69 +86,63 @@ namespace SpmModel {
         }
     }
 
-    export function updateOnMsgSpmGetWarSaveSlotFullDataArray(data: NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IS): void {
-        _hasReceivedSlotArray = true;
-
-        getSlotDict().clear();
-        for (const fullData of data.dataArray || []) {
-            setSlotData({
-                slotIndex       : Helpers.getExisted(fullData.slotIndex),
-                slotExtraData   : ProtoManager.decodeAsSpmWarSaveSlotExtraData(Helpers.getExisted(fullData.encodedExtraData)),
-                warData         : ProtoManager.decodeAsSerialWar(Helpers.getExisted(fullData.encodedWarData)),
-            });
-        }
-    }
     export function updateOnMsgSpmCreateScw(data: NetMessage.MsgSpmCreateScw.IS): void {
-        setSlotData({
-            slotIndex       : Helpers.getExisted(data.slotIndex),
-            slotExtraData   : Helpers.getExisted(data.extraData),
+        const slotIndex = Helpers.getExisted(data.slotIndex);
+        setSlotFullData(slotIndex, {
+            slotIndex,
+            extraData       : Helpers.getExisted(data.extraData),
             warData         : Helpers.getExisted(data.warData),
         });
     }
     export function updateOnMsgSpmCreateSfw(data: NetMessage.MsgSpmCreateSfw.IS): void {
-        setSlotData({
-            slotIndex       : Helpers.getExisted(data.slotIndex),
+        const slotIndex = Helpers.getExisted(data.slotIndex);
+        setSlotFullData(slotIndex, {
+            slotIndex,
+            extraData       : Helpers.getExisted(data.extraData),
             warData         : Helpers.getExisted(data.warData),
-            slotExtraData   : Helpers.getExisted(data.extraData),
         });
     }
     export function updateOnMsgSpmCreateSrw(data: NetMessage.MsgSpmCreateSrw.IS): void {
-        setSlotData({
-            slotIndex       : Helpers.getExisted(data.slotIndex),
+        const slotIndex = Helpers.getExisted(data.slotIndex);
+        setSlotFullData(slotIndex, {
+            slotIndex,
+            extraData       : Helpers.getExisted(data.extraData),
             warData         : Helpers.getExisted(data.warData),
-            slotExtraData   : Helpers.getExisted(data.extraData),
         });
     }
-    export function updateOnMsgSpmDeleteWarSaveSlot(slotIndex: number): void {
-        getSlotDict().delete(slotIndex);
-    }
     export function updateOnMsgSpmSaveScw(data: NetMessage.MsgSpmSaveScw.IS): void {
-        setSlotData({
-            slotIndex       : Helpers.getExisted(data.slotIndex),
+        const slotIndex = Helpers.getExisted(data.slotIndex);
+        setSlotFullData(slotIndex, {
+            slotIndex,
+            extraData       : Helpers.getExisted(data.slotExtraData),
             warData         : Helpers.getExisted(data.warData),
-            slotExtraData   : Helpers.getExisted(data.slotExtraData),
         });
     }
     export function updateOnMsgSpmSaveSfw(data: NetMessage.MsgSpmSaveSfw.IS): void {
-        setSlotData({
-            slotIndex       : Helpers.getExisted(data.slotIndex),
+        const slotIndex = Helpers.getExisted(data.slotIndex);
+        setSlotFullData(slotIndex, {
+            slotIndex,
+            extraData       : Helpers.getExisted(data.slotExtraData),
             warData         : Helpers.getExisted(data.warData),
-            slotExtraData   : Helpers.getExisted(data.slotExtraData),
         });
     }
     export function updateOnMsgSpmSaveSrw(data: NetMessage.MsgSpmSaveSrw.IS): void {
-        setSlotData({
-            slotIndex       : Helpers.getExisted(data.slotIndex),
+        const slotIndex = Helpers.getExisted(data.slotIndex);
+        setSlotFullData(slotIndex, {
+            slotIndex,
+            extraData       : Helpers.getExisted(data.slotExtraData),
             warData         : Helpers.getExisted(data.warData),
-            slotExtraData   : Helpers.getExisted(data.slotExtraData),
         });
+    }
+    export function updateOnMsgSpmDeleteWarSaveSlot(slotIndex: number): void {
+        setSlotFullData(slotIndex, null);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for rank list.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     const _rankDataGetter = Helpers.createCachedDataAccessor<number, ISpmRankInfoForRule[]>({
-        reqData : (mapId: number) => SpmProxy.reqSpmGetRankList(mapId),
+        reqData : (mapId: number) => SinglePlayerMode.SpmProxy.reqSpmGetRankList(mapId),
     });
 
     export function getRankData(mapId: number): Promise<ISpmRankInfoForRule[] | null> {
@@ -160,22 +153,51 @@ namespace SpmModel {
         _rankDataGetter.setData(Helpers.getExisted(data.mapId), data.infoArray ?? []);
     }
 
+    export async function getRankIndex(mapId: number, ruleId: number, score: number): Promise<number | null> {
+        const rankDataArray = (await getRankData(mapId))?.find(v => v.ruleId === ruleId)?.infoArray?.concat().sort((v1, v2) => Helpers.getExisted(v2.score) - Helpers.getExisted(v1.score));
+        if (rankDataArray == null) {
+            return null;
+        }
+
+        const index = rankDataArray.findIndex(v => v.score === score);
+        return index < 0 ? null : index + 1;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for replay data.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     const _replayDataAccessor = Helpers.createCachedDataAccessor<number, ISerialWar>({
-        reqData : (rankId: number) => SpmProxy.reqSpmGetReplayData(rankId),
+        reqData : (rankId: number) => SinglePlayerMode.SpmProxy.reqSpmGetReplayData(rankId),
     });
 
     export function getReplayData(rankId: number): Promise<ISerialWar | null> {
         return _replayDataAccessor.getData(rankId);
     }
     async function decodeAndReviseReplayData(encodedWar: Types.Undefinable<Uint8Array>): Promise<ISerialWar | null> {
+        // TODO: 目前认定只有war room有回放，以后有可能需要扩展到其他模式
         if (encodedWar == null) {
             return null;
         }
 
-        const warData = ProtoManager.decodeAsSerialWar(encodedWar);
+        const warData               = ProtoManager.decodeAsSerialWar(encodedWar);
+        const settingsForCommon     = Helpers.getExisted(warData.settingsForCommon);
+        const srcInstanceWarRule    = settingsForCommon.instanceWarRule;
+        if (srcInstanceWarRule == null) {
+            return null;
+        }
+
+        const mapRawData = await WarMap.WarMapModel.getRawData(Helpers.getExisted(warData.settingsForSrw?.mapId));
+        if (mapRawData == null) {
+            return null;
+        }
+
+        const templateWarRule = WarHelpers.WarRuleHelpers.getTemplateWarRule(srcInstanceWarRule.templateWarRuleId, mapRawData.templateWarRuleArray);
+        if (templateWarRule == null) {
+            return null;
+        }
+
+        settingsForCommon.instanceWarRule = WarHelpers.WarRuleHelpers.createInstanceWarRule(templateWarRule, mapRawData.warEventFullData);
+
         if (warData.field == null) {
             warData.field = {
                 fogMap  : {
@@ -188,30 +210,13 @@ namespace SpmModel {
             warData.turnManager = {
                 turnIndex       : CommonConstants.WarFirstTurnIndex,
                 turnPhaseCode   : Types.TurnPhaseCode.WaitBeginTurn,
-                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex     : CommonConstants.PlayerIndex.Neutral,
                 enterTurnTime   : 0,
             };
         }
 
-        const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
-        const mapRawData        = await WarMapModel.getRawData(Helpers.getExisted(warData.settingsForSrw?.mapId));
-        if (settingsForCommon.warRule == null) {
-            if (mapRawData == null) {
-                return null;
-            }
-
-            const ruleId    = Helpers.getExisted(settingsForCommon.presetWarRuleId);
-            const warRule   = mapRawData.warRuleArray?.find(v => v.ruleId === ruleId);
-            if (warRule == null) {
-                return null;
-            }
-
-            settingsForCommon.warRule = Helpers.deepClone(warRule);
-        }
-
         if (warData.warEventManager == null) {
             warData.warEventManager = {
-                warEventFullData    : WarEventHelper.trimAndCloneWarEventFullData(mapRawData?.warEventFullData, settingsForCommon.warRule.warEventIdArray),
                 calledCountList     : [],
             };
         }

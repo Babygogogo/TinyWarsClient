@@ -13,33 +13,38 @@
 // import TwnsSpwPlayerManager         from "./SpwPlayerManager";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpwWar {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import WarAction                = ProtoTypes.WarAction;
-    import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
-    import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
+namespace Twns.SinglePlayerWar {
+    import LangTextType             = Lang.LangTextType;
+    import WarAction                = CommonProto.WarAction;
+    import ISpmWarSaveSlotExtraData = CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+    import BwCommonSettingManager   = BaseWar.BwCommonSettingManager;
 
-    export abstract class SpwWar extends TwnsBwWar.BwWar {
-        private readonly _playerManager         = new TwnsSpwPlayerManager.SpwPlayerManager();
-        private readonly _field                 = new TwnsSpwField.SpwField();
+    export abstract class SpwWar extends BaseWar.BwWar {
+        private readonly _playerManager         = new SinglePlayerWar.SpwPlayerManager();
+        private readonly _field                 = new SinglePlayerWar.SpwField();
         private readonly _commonSettingManager  = new BwCommonSettingManager();
-        private readonly _warEventManager       = new TwnsBwWarEventManager.BwWarEventManager();
+        private readonly _warEventManager       = new BaseWar.BwWarEventManager();
+        private readonly _retractManager        = new SpwRetractManager();
 
         private _saveSlotIndex?     : number;
         private _saveSlotExtraData? : ISpmWarSaveSlotExtraData;
 
-        public abstract serialize(): ProtoTypes.WarSerialization.ISerialWar;
+        public abstract serialize(): CommonProto.WarSerialization.ISerialWar;
 
         public updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void {
-            const teamIndexes   = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-            const visibleUnits  = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, teamIndexes);
+            const teamIndexes   = this.getPlayerManager().getWatcherTeamIndexesForSelf();
+            const visibleUnits  = WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, teamIndexes);
             for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
                 if (!isFastExecute) {
-                    unit.setViewVisible(visibleUnits.has(unit));
+                    const isVisible = visibleUnits.has(unit);
+                    unit.setViewVisible(isVisible);
+                    if (isVisible) {
+                        unit.updateView();
+                    }
                 }
             }
 
-            const visibleTiles  = WarVisibilityHelpers.getAllTilesVisibleToTeams(this, teamIndexes);
+            const visibleTiles  = WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeams(this, teamIndexes);
             const tileMap       = this.getTileMap();
             for (const tile of tileMap.getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
@@ -60,7 +65,7 @@ namespace TwnsSpwWar {
         public async getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | null> {
             return Lang.getFormattedText(LangTextType.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn());
         }
-        public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | null> {
+        public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit, gameConfig: Config.GameConfig): Promise<string | null> {
             return null;
         }
         public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | null> {
@@ -82,7 +87,7 @@ namespace TwnsSpwWar {
         }
         public async getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | null> {
             const playerIndex = this.getPlayerIndexInTurn();
-            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+            if (playerIndex === CommonConstants.PlayerIndex.Neutral) {
                 return Lang.getFormattedText(LangTextType.F0022, Lang.getText(LangTextType.B0111), playerIndex);
             } else {
                 return Lang.getFormattedText(LangTextType.F0022, await this.getPlayerInTurn().getNickname(), playerIndex);
@@ -153,17 +158,20 @@ namespace TwnsSpwWar {
             return null;
         }
 
-        public getPlayerManager(): TwnsSpwPlayerManager.SpwPlayerManager {
+        public getPlayerManager(): SinglePlayerWar.SpwPlayerManager {
             return this._playerManager;
         }
-        public getField(): TwnsSpwField.SpwField {
+        public getField(): SinglePlayerWar.SpwField {
             return this._field;
         }
         public getCommonSettingManager(): BwCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager {
+        public getWarEventManager(): BaseWar.BwWarEventManager {
             return this._warEventManager;
+        }
+        public getRetractManager(): SpwRetractManager {
+            return this._retractManager;
         }
 
         public getIsExecuteActionsWithExtraData(): boolean {
@@ -189,10 +197,10 @@ namespace TwnsSpwWar {
         }
 
         public getHumanPlayerIndexes(): number[] {
-            return (this.getPlayerManager() as TwnsSpwPlayerManager.SpwPlayerManager).getHumanPlayerIndexes();
+            return (this.getPlayerManager() as SinglePlayerWar.SpwPlayerManager).getHumanPlayerIndexes();
         }
-        public getHumanPlayers(): TwnsBwPlayer.BwPlayer[] {
-            return (this.getPlayerManager() as TwnsSpwPlayerManager.SpwPlayerManager).getHumanPlayers();
+        public getHumanPlayers(): BaseWar.BwPlayer[] {
+            return (this.getPlayerManager() as SinglePlayerWar.SpwPlayerManager).getHumanPlayers();
         }
     }
 }

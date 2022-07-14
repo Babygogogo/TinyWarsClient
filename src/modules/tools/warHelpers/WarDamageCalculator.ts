@@ -11,14 +11,13 @@
 // import WarCommonHelpers     from "./WarCommonHelpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace WarDamageCalculator {
+namespace Twns.WarHelpers.WarDamageCalculator {
     import GridIndex            = Types.GridIndex;
-    import IBattleDamageInfo    = ProtoTypes.Structure.IBattleDamageInfo;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import BwUnit               = TwnsBwUnit.BwUnit;
-    import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
-    import BwWar                = TwnsBwWar.BwWar;
-    import BwTile               = TwnsBwTile.BwTile;
+    import IBattleDamageInfo    = CommonProto.Structure.IBattleDamageInfo;
+    import BwUnit               = BaseWar.BwUnit;
+    import BwUnitMap            = BaseWar.BwUnitMap;
+    import BwWar                = BaseWar.BwWar;
+    import BwTile               = BaseWar.BwTile;
 
     function checkIsInAttackRange(
         attackerGridIndex   : GridIndex,
@@ -190,7 +189,7 @@ namespace WarDamageCalculator {
             : 0;
         return Math.max(0, Math.floor(0.000001 +
             (baseAttackDamage * attackBonusMultiplier + luckValue)  *
-            (WarCommonHelpers.getNormalizedHp(attackerHp) / 10)     *
+            (WarHelpers.WarCommonHelpers.getNormalizedHp(attackerHp) / 10)     *
             defenseBonusMultiplier
         ));
     }

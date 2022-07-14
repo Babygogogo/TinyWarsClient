@@ -4,18 +4,17 @@
 // import Types            from "../helpers/Types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace NotifyData {
+namespace Twns.Notify.NotifyData {
     import GridIndex        = Types.GridIndex;
     import TouchPoints      = Types.TouchPoints;
 
-    export type ConfigLoaded                = number;
     export type McwPlayerIndexInTurnChanged = number;
-    export type BwPlayerFundChanged         = TwnsBwPlayer.BwPlayer;
-    export type McwPlayerEnergyChanged      = TwnsBwPlayer.BwPlayer;
-    export type BwCoIdChanged               = TwnsBwPlayer.BwPlayer;
-    export type BwCursorGridIndexChanged    = TwnsBwCursor.BwCursor;
-    export type BwTileLocationFlagSet       = TwnsBwTile.BwTile;
-    export type BwTileIsHighlightChanged    = TwnsBwTile.BwTile;
+    export type BwPlayerFundChanged         = BaseWar.BwPlayer;
+    export type McwPlayerEnergyChanged      = BaseWar.BwPlayer;
+    export type BwCoIdChanged               = BaseWar.BwPlayer;
+    export type BwCursorGridIndexChanged    = BaseWar.BwCursor;
+    export type BwTileLocationFlagSet       = BaseWar.BwTile;
+    export type BwTileIsHighlightChanged    = BaseWar.BwTile;
     export type BwCursorTapped              = { current: GridIndex, tappedOn: GridIndex };
     export type BwCursorDragged             = { current: GridIndex, draggedTo: GridIndex };
     export type BwFieldZoomed               = { previous: TouchPoints, current: TouchPoints };
@@ -24,6 +23,8 @@ namespace NotifyData {
     export type MeTileChanged               = { gridIndex: GridIndex };
     export type ScrCreatePlayerInfoChanged  = { playerIndex: number };
     export type SrrCreatePlayerInfoChanged  = { playerIndex: number };
+    export type BwPlayerMarkedGridIdAdded   = { player: BaseWar.BwPlayer, gridId: number };
+    export type BwPlayerMarkedGridIdDeleted = { player: BaseWar.BwPlayer, gridId: number };
 }
 
 // export default NotifyData;

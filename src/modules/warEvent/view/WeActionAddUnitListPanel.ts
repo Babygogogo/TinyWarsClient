@@ -6,7 +6,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -15,16 +15,16 @@
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionAddUnitListPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import IDataForAddUnit  = ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+namespace Twns.WarEvent {
+    import NotifyType       = Notify.NotifyType;
+    import IDataForAddUnit  = CommonProto.WarEvent.WeaAddUnit.IDataForAddUnit;
+    import LangTextType     = Lang.LangTextType;
 
-    export type OpenData = {
-        configVersion   : string;
+    export type OpenDataForWeActionAddUnitListPanel = {
+        gameConfig      : Config.GameConfig;
         dataForAddUnit  : IDataForAddUnit;
     };
-    export class WeActionAddUnitListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionAddUnitListPanel extends TwnsUiPanel.UiPanel<OpenDataForWeActionAddUnitListPanel> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
         private readonly _listType!     : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;
@@ -65,12 +65,14 @@ namespace TwnsWeActionAddUnitListPanel {
         private _updateListType(): void {
             const openData          = this._getOpenData();
             const dataForAddUnit    = openData.dataForAddUnit;
+            const gameConfig        = openData.gameConfig;
 
             const dataArray: DataForTypeRenderer[] = [];
-            for (const newUnitType of ConfigManager.getUnitTypesByCategory(openData.configVersion, Types.UnitCategory.All)) {
+            for (const newUnitType of openData.gameConfig.getAllUnitTypeArray()) {
                 dataArray.push({
                     newUnitType,
                     dataForAddUnit,
+                    gameConfig,
                 });
             }
             this._listType.bindData(dataArray);
@@ -78,8 +80,9 @@ namespace TwnsWeActionAddUnitListPanel {
     }
 
     type DataForTypeRenderer = {
-        newUnitType     : Types.UnitType;
+        newUnitType     : number;
         dataForAddUnit  : IDataForAddUnit;
+        gameConfig      : Config.GameConfig;
     };
     class TypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTypeRenderer> {
         private readonly _labelType!    : TwnsUiLabel.UiLabel;
@@ -101,8 +104,8 @@ namespace TwnsWeActionAddUnitListPanel {
 
         private _onTouchedSelf(): void {
             const data = this._getData();
-            resetUnitType(data.dataForAddUnit, data.newUnitType);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionAddUnitListPanel);
+            resetUnitType(data.dataForAddUnit, data.newUnitType, data.gameConfig);
+            PanelHelpers.close(PanelHelpers.PanelDict.WeActionAddUnitListPanel);
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onNotifyLanguageChanged(): void {        // DONE
@@ -114,28 +117,29 @@ namespace TwnsWeActionAddUnitListPanel {
         }
 
         private _updateLabelType(): void {
-            const data  = this.data;
-            const label = this._labelType;
-            if (data == null) {
-                label.text = ``;
-            } else {
-                label.text = Lang.getUnitName(data.newUnitType) || CommonConstants.ErrorTextForUndefined;
-            }
+            const data              = this._getData();
+            this._labelType.text    = Lang.getUnitName(data.newUnitType, data.gameConfig) || CommonConstants.ErrorTextForUndefined;
         }
     }
 
-    function resetUnitType(data: IDataForAddUnit, unitType: Types.UnitType): void {
+    function resetUnitType(data: IDataForAddUnit, unitType: number, gameConfig: Config.GameConfig): void {
         const unitData = Helpers.getExisted(data.unitData);
         if (unitData.unitType !== unitType) {
             unitData.unitType                   = unitType;
             unitData.primaryWeaponCurrentAmmo   = null;
             unitData.isCapturingTile            = null;
-            unitData.isDiving                   = null;
             unitData.flareCurrentAmmo           = null;
             unitData.currentFuel                = null;
             unitData.currentBuildMaterial       = null;
             unitData.currentProduceMaterial     = null;
             unitData.isBuildingTile             = null;
+
+            const unitTemplateCfg = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType));
+            if (unitTemplateCfg.diveCfgs == null) {
+                unitData.isDiving = null;
+            } else {
+                unitData.isDiving = Config.ConfigManager.checkIsUnitDivingByDefaultWithTemplateCfg(unitTemplateCfg);
+            }
         }
     }
 }

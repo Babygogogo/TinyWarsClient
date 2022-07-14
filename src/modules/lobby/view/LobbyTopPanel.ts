@@ -4,7 +4,7 @@
 // import Helpers                  from "../../tools/helpers/Helpers";
 // import SoundManager             from "../../tools/helpers/SoundManager";
 // import Types                    from "../../tools/helpers/Types";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 // import UserModel                from "../../user/model/UserModel";
@@ -12,11 +12,11 @@
 // import TwnsUserPanel            from "../../user/view/UserPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsLobbyTopPanel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.Lobby {
+    import NotifyType           = Notify.NotifyType;
 
-    export type OpenData = void;
-    export class LobbyTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForLobbyTopPanel = void;
+    export class LobbyTopPanel extends TwnsUiPanel.UiPanel<OpenDataForLobbyTopPanel> {
         private readonly _group!            : eui.Group;
 
         private readonly _groupUserInfo!    : eui.Group;
@@ -28,6 +28,7 @@ namespace TwnsLobbyTopPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,         callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserLogin,            callback: this._onMsgUserLogin },
+                { type: NotifyType.MsgUserLoginAsGuest,     callback: this._onMsgUserLoginAsGuest },
                 { type: NotifyType.MsgUserLogout,           callback: this._onMsgUserLogout },
                 { type: NotifyType.MsgUserSetNickname,      callback: this._onMsgUserSetNickname },
                 { type: NotifyType.MsgUserSetAvatarId,      callback: this._onNotifyMsgUserSetAvatarId },
@@ -44,6 +45,9 @@ namespace TwnsLobbyTopPanel {
         }
 
         private _onMsgUserLogin(): void {
+            this._updateView();
+        }
+        private _onMsgUserLoginAsGuest(): void {
             this._updateView();
         }
 
@@ -64,10 +68,10 @@ namespace TwnsLobbyTopPanel {
         }
 
         private _onTouchedGroupUserInfo(): void {
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.UserOnlineUsersPanel);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.ChatPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, {
-                userId: Helpers.getExisted(UserModel.getSelfUserId()),
+            PanelHelpers.close(PanelHelpers.PanelDict.UserOnlineUsersPanel);
+            PanelHelpers.close(PanelHelpers.PanelDict.ChatPanel);
+            PanelHelpers.open(PanelHelpers.PanelDict.UserPanel, {
+                userId: Helpers.getExisted(User.UserModel.getSelfUserId()),
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
@@ -94,15 +98,15 @@ namespace TwnsLobbyTopPanel {
         private _updateView(): void {
             this._updateLabelNickname();
             this._updateImgAvatar();
-            this._labelUserId.text = `ID: ${UserModel.getSelfUserId()}`;
+            this._labelUserId.text = `ID: ${User.UserModel.getSelfUserId()}`;
         }
 
         private _updateLabelNickname(): void {
-            this._labelNickname.text = UserModel.getSelfNickname() ?? CommonConstants.ErrorTextForUndefined;
+            this._labelNickname.text = User.UserModel.getSelfNickname() ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateImgAvatar(): void {
-            this._imgAvatar.source = ConfigManager.getUserAvatarImageSource(UserModel.getSelfAvatarId() ?? 1);
+            this._imgAvatar.source = Config.ConfigManager.getUserAvatarImageSource(User.UserModel.getSelfAvatarId() ?? 1);
         }
     }
 }

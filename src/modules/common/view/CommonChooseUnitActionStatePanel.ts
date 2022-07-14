@@ -4,28 +4,28 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 // import MeModel              from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseUnitActionStatePanel {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import UnitActionState      = Types.UnitActionState;
+namespace Twns.Common {
+    import LangTextType         = Twns.Lang.LangTextType;
+    import NotifyType           = Twns.Notify.NotifyType;
+    import UnitActionState      = Twns.Types.UnitActionState;
 
     const ACTION_STATES = [
         UnitActionState.Acted,
         UnitActionState.Idle,
     ];
 
-    export type OpenData = {
+    export type OpenDataForCommonChooseUnitActionStatePanel = {
         currentActionStateArray : UnitActionState[];
         callbackOnConfirm       : (unitActionState: UnitActionState[]) => void;
     };
-    export class CommonChooseUnitActionStatePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChooseUnitActionStatePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseUnitActionStatePanel> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnSelectAll!     : TwnsUiButton.UiButton;
         private readonly _btnUnselectAll!   : TwnsUiButton.UiButton;
@@ -95,7 +95,7 @@ namespace TwnsCommonChooseUnitActionStatePanel {
             const unitTypeArray = this._getOpenData().currentActionStateArray;
             const list          = this._listUnitType;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => unitTypeArray.indexOf(v.unitActionState) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => unitTypeArray.indexOf(v.unitActionState) >= 0 ? i : null)));
         }
     }
 
@@ -107,7 +107,7 @@ namespace TwnsCommonChooseUnitActionStatePanel {
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = Lang.getUnitActionStateText(this._getData().unitActionState) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName.text = Lang.getUnitActionStateText(this._getData().unitActionState) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
     }
 }

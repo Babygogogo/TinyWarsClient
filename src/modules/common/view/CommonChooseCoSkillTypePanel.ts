@@ -4,17 +4,17 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 // import MeModel              from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseCoSkillTypePanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import CoSkillType = Types.CoSkillType;
+namespace Twns.Common {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
+    import CoSkillType = Twns.Types.CoSkillType;
 
     const AVAILABLE_TYPES = [
         CoSkillType.Passive,
@@ -22,11 +22,11 @@ namespace TwnsCommonChooseCoSkillTypePanel {
         CoSkillType.SuperPower,
     ];
 
-    export type OpenData = {
+    export type OpenDataForCommonChooseCoSkillTypePanel = {
         currentSkillTypeArray  : CoSkillType[];
         callbackOnConfirm       : (skillTypeArray: CoSkillType[]) => void;
     };
-    export class CommonChooseCoSkillTypePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChooseCoSkillTypePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseCoSkillTypePanel> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnSelectAll!     : TwnsUiButton.UiButton;
         private readonly _btnUnselectAll!   : TwnsUiButton.UiButton;
@@ -97,7 +97,7 @@ namespace TwnsCommonChooseCoSkillTypePanel {
             const aliveStateArray   = openData.currentSkillTypeArray;
             const list              = this._listLocation;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => aliveStateArray.indexOf(v.coSkillType) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => aliveStateArray.indexOf(v.coSkillType) >= 0 ? i : null)));
         }
     }
 
@@ -109,7 +109,7 @@ namespace TwnsCommonChooseCoSkillTypePanel {
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = Lang.getCoSkillTypeName(this._getData().coSkillType) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName.text = Lang.getCoSkillTypeName(this._getData().coSkillType) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
     }
 }

@@ -9,7 +9,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
@@ -24,20 +24,19 @@
 // import TwnsScrCreateSaveSlotsPanel          from "./ScrCreateSaveSlotsPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSrrCreateSettingsPanel {
-    import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForSpmRankPage                   = TwnsSpmRankPage.OpenData;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+namespace Twns.SingleRankRoom {
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarMapInfoPage          = Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForSpmRankPage                   = SinglePlayerMode.OpenDataForSpmRankPage;
+    import LangTextType                             = Lang.LangTextType;
+    import NotifyType                               = Notify.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export type OpenData = void;
-    export class SrrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForSrrCreateSettingsPanel = void;
+    export class SrrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenDataForSrrCreateSettingsPanel> {
         private readonly _groupNavigator!       : eui.Group;
         private readonly _labelSinglePlayer!    : TwnsUiLabel.UiLabel;
         private readonly _labelWarRoomMode!     : TwnsUiLabel.UiLabel;
@@ -48,6 +47,7 @@ namespace TwnsSrrCreateSettingsPanel {
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForSpmRankPage>;
 
         private readonly _btnBack!              : TwnsUiButton.UiButton;
+        private readonly _btnQuickSettings!     : TwnsUiButton.UiButton;
         private readonly _btnConfirm!           : TwnsUiButton.UiButton;
 
         private _timeoutIdForBtnConfirm : number | null = null;
@@ -55,13 +55,15 @@ namespace TwnsSrrCreateSettingsPanel {
 
         protected _onOpening(): void {
             this._setUiListenerArray([
-                { ui: this._btnBack,        callback: this._onTouchedBtnBack },
-                { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
+                { ui: this._btnBack,            callback: this._onTouchedBtnBack },
+                { ui: this._btnQuickSettings,   callback: this._onTouchedBtnQuickSettings },
+                { ui: this._btnConfirm,         callback: this._onTouchedBtnConfirm },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgSpmCreateSrw,                 callback: this._onNotifyMsgSpmCreateSrw },
-                { type: NotifyType.SrrCreateWarSaveSlotChanged,     callback: this._onNotifySrrCreateWarSaveSlotChanged },
+                { type: NotifyType.LanguageChanged,                         callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgSpmCreateSrw,                         callback: this._onNotifyMsgSpmCreateSrw },
+                { type: NotifyType.SrrCreateModelTemplateWarRuleIdChanged,  callback: this._onNotifySrrCreateModelTemplateWarRuleIdChanged },
+                { type: NotifyType.SrrCreateWarSaveSlotChanged,             callback: this._onNotifySrrCreateWarSaveSlotChanged },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
         }
@@ -70,27 +72,27 @@ namespace TwnsSrrCreateSettingsPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
-                    pageData    : this._createDataForCommonWarAdvancedSettingsPage(),
+                    pageClass   : Common.CommonWarAdvancedSettingsPage,
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Common.CommonWarMapInfoPage,
                     pageData    : this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : TwnsSrrCreatePlayerInfoPage.SrrCreatePlayerInfoPage,
+                    pageClass   : SingleRankRoom.SrrCreatePlayerInfoPage,
                     pageData    : null,
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0436) },
-                    pageClass   : TwnsSpmRankPage.SpmRankPage,
+                    pageClass   : SinglePlayerMode.SpmRankPage,
                     pageData    : this._createDataForSpmRankPage(),
                 },
             ]);
@@ -108,20 +110,23 @@ namespace TwnsSrrCreateSettingsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.SrrCreateMapListPanel, null);
+            PanelHelpers.open(PanelHelpers.PanelDict.SrrCreateMapListPanel, { mapFilter: null });
         }
-        private _onTouchedBtnConfirm(): void {
-            const data      = SrrCreateModel.getData();
+        private _onTouchedBtnQuickSettings(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.SrrCreateQuickSettingsPanel, void 0);
+        }
+        private async _onTouchedBtnConfirm(): Promise<void> {
+            const data      = SingleRankRoom.SrrCreateModel.getData();
             const callback  = () => {
-                SpmProxy.reqSpmCreateSrw(data);
+                SinglePlayerMode.SpmProxy.reqSpmCreateSrw(data);
                 this._btnConfirm.enabled = false;
                 this._resetTimeoutForBtnConfirm();
             };
 
-            if (SpmModel.checkIsEmpty(Helpers.getExisted(data.slotIndex))) {
+            if (await SinglePlayerMode.SpmModel.checkIsEmpty(Helpers.getExisted(data.slotIndex))) {
                 callback();
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0070),
                     callback,
                 });
@@ -132,12 +137,16 @@ namespace TwnsSrrCreateSettingsPanel {
             this._updateComponentsForLanguage();
         }
         private _onNotifyMsgSpmCreateSrw(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSrw.IS;
+            const data = e.data as CommonProto.NetMessage.MsgSpmCreateSrw.IS;
             FlowManager.gotoSinglePlayerWar({
                 warData         : Helpers.getExisted(data.warData),
                 slotExtraData   : Helpers.getExisted(data.extraData),
                 slotIndex       : Helpers.getExisted(data.slotIndex),
             });
+        }
+        private _onNotifySrrCreateModelTemplateWarRuleIdChanged(): void {
+            this._updateCommonWarBasicSettingsPage();
+            this._updateCommonWarAdvancedSettingsPage();
         }
         private _onNotifySrrCreateWarSaveSlotChanged(): void {
             this._updateCommonWarBasicSettingsPage();
@@ -168,6 +177,7 @@ namespace TwnsSrrCreateSettingsPanel {
             this._labelGameSettings.text        = Lang.getText(LangTextType.B0604);
             this._btnBack.label                 = Lang.getText(LangTextType.B0146);
             this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+            this._btnQuickSettings.label        = Lang.getText(LangTextType.B0908);
         }
 
         private async _updateCommonWarBasicSettingsPage(): Promise<void> {
@@ -178,39 +188,54 @@ namespace TwnsSrrCreateSettingsPanel {
 
         private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(1, this._createDataForCommonWarAdvancedSettingsPage());
+                this._tabSettings.updatePageData(1, await this._createDataForCommonWarAdvancedSettingsPage());
             }
         }
 
         private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
-            const mapId = SrrCreateModel.getMapId();
+            const mapId         = SingleRankRoom.SrrCreateModel.getMapId();
+            const gameConfig    = SingleRankRoom.SrrCreateModel.getGameConfig();
+            const hasFog        = SrrCreateModel.getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault ?? null;
             return mapId == null
-                ? {}
-                : { mapInfo: { mapId } };
+                ? {
+                    gameConfig,
+                    hasFog,
+                }
+                : {
+                    gameConfig,
+                    hasFog,
+                    mapInfo: { mapId },
+                };
         }
 
         private _createDataForSpmRankPage(): OpenDataForSpmRankPage {
             return {
-                mapId   : SrrCreateModel.getMapId(),
+                mapId   : SingleRankRoom.SrrCreateModel.getMapId(),
             };
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            const warRule   = SrrCreateModel.getWarRule();
-            const openData  : OpenDataForCommonWarBasicSettingsPage = {
+            const instanceWarRule   = SingleRankRoom.SrrCreateModel.getInstanceWarRule();
+            const gameConfig        = SingleRankRoom.SrrCreateModel.getGameConfig();
+            const warEventFullData  = (await SingleRankRoom.SrrCreateModel.getMapRawData()).warEventFullData ?? null;
+            const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
                     {
-                        settingsType    : WarBasicSettingsType.MapName,
-                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(SrrCreateModel.getMapId()),
-                        warRule,
+                        settingsType    : WarBasicSettingsType.MapId,
+                        currentValue    : SingleRankRoom.SrrCreateModel.getMapId(),
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: async () => {
-                            await SrrCreateModel.tickPresetWarRuleId();
+                            await SingleRankRoom.SrrCreateModel.tickTemplateWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                             this._updateCommonWarAdvancedSettingsPage();
                         },
@@ -218,37 +243,53 @@ namespace TwnsSrrCreateSettingsPanel {
                     {
                         settingsType    : WarBasicSettingsType.HasFog,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.Weather,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
+                        callbackOnModify: null,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.WarEvent,
+                        currentValue    : null,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.SpmSaveSlotIndex,
-                        currentValue    : SrrCreateModel.getSaveSlotIndex(),
-                        warRule,
+                        currentValue    : SingleRankRoom.SrrCreateModel.getSaveSlotIndex(),
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: () => {
-                            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSaveSlotsPanel, {
-                                currentSlotIndex    : SrrCreateModel.getSaveSlotIndex(),
+                            PanelHelpers.open(PanelHelpers.PanelDict.SpmCreateSaveSlotsPanel, {
+                                currentSlotIndex    : SingleRankRoom.SrrCreateModel.getSaveSlotIndex(),
                                 callback            : slotIndex => {
-                                    SrrCreateModel.setSaveSlotIndex(slotIndex);
+                                    SingleRankRoom.SrrCreateModel.setSaveSlotIndex(slotIndex);
                                 },
                             });
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.SpmSaveSlotComment,
-                        currentValue    : SrrCreateModel.getSlotComment(),
-                        warRule,
+                        currentValue    : SingleRankRoom.SrrCreateModel.getSlotComment(),
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`, ClientErrorCode.SrrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_00);
                             }
-                            SrrCreateModel.setSlotComment(newValue);
+                            SingleRankRoom.SrrCreateModel.setSlotComment(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
@@ -258,13 +299,13 @@ namespace TwnsSrrCreateSettingsPanel {
             return openData;
         }
 
-        private _createDataForCommonWarAdvancedSettingsPage(): OpenDataForCommonWarAdvancedSettingsPage {
-            const settingsForCommon = Helpers.getExisted(SrrCreateModel.getSettingsForCommon());
-            const warRule           = Helpers.getExisted(settingsForCommon.warRule);
+        private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
+            const settingsForCommon = Helpers.getExisted(SingleRankRoom.SrrCreateModel.getSettingsForCommon());
+            const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
             return {
-                configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
-                warRule,
-                warType         : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
+                gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+                instanceWarRule,
+                warType         : instanceWarRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
             };
         }
 
@@ -281,6 +322,11 @@ namespace TwnsSrrCreateSettingsPanel {
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnQuickSettings,
+                beginProps  : { alpha: 0, left: -20 },
+                endProps    : { alpha: 1, left: 20 },
             });
             Helpers.resetTween({
                 obj         : this._btnConfirm,
@@ -305,6 +351,11 @@ namespace TwnsSrrCreateSettingsPanel {
                 obj         : this._btnBack,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnQuickSettings,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
             });
             Helpers.resetTween({
                 obj         : this._btnConfirm,

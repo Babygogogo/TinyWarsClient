@@ -11,7 +11,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Notify                       from "../../tools/notify/NotifyType";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
@@ -26,17 +26,17 @@
 // import TwnsSpmMainMenuPanel                 from "./SpmMainMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpmWarListPanel {
-    import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
-    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
+namespace Twns.SinglePlayerMode {
+    import LangTextType                             = Lang.LangTextType;
+    import NotifyType                               = Notify.NotifyType;
+    import OpenDataForCommonWarMapInfoPage          = Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Common.OpenDataForCommonWarPlayerInfoPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
-    export type OpenData = void;
-    export class SpmWarListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForSpmWarListPanel = void;
+    export class SpmWarListPanel extends TwnsUiPanel.UiPanel<OpenDataForSpmWarListPanel> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
@@ -57,9 +57,9 @@ namespace TwnsSpmWarListPanel {
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.SpmPreviewingWarSaveSlotChanged,    callback: this._onNotifySpmPreviewingWarSaveSlotChanged },
-                { type: NotifyType.MsgSpmGetWarSaveSlotFullDataArray,  callback: this._onNotifyMsgSpmGetWarSaveSlotFullDataArray },
+                { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.SpmPreviewingWarSaveSlotChanged,     callback: this._onNotifySpmPreviewingWarSaveSlotChanged },
+                { type: NotifyType.MsgSpmGetWarSaveSlotIndexArray,      callback: this._onNotifyMsgSpmGetWarSaveSlotIndexArray },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -90,20 +90,20 @@ namespace TwnsSpmWarListPanel {
             this._updateComponentsForPreviewingWarInfo();
         }
 
-        private _onNotifyMsgSpmGetWarSaveSlotFullDataArray(): void {
+        private _onNotifyMsgSpmGetWarSaveSlotIndexArray(): void {
             this._updateGroupWarList();
             this._updateComponentsForPreviewingWarInfo();
         }
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmMainMenuPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.SpmMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
         }
 
-        private _onTouchedBtnNextStep(): void {
-            const slotData = SpmModel.getSlotDict().get(SpmModel.getPreviewingSlotIndex());
+        private async _onTouchedBtnNextStep(): Promise<void> {
+            const slotData = await SinglePlayerMode.SpmModel.getSlotFullData(SinglePlayerMode.SpmModel.getPreviewingSlotIndex());
             if (slotData != null) {
                 FlowManager.gotoSinglePlayerWar({
                     slotIndex       : slotData.slotIndex,
@@ -120,22 +120,22 @@ namespace TwnsSpmWarListPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
-                    pageData    : this._createDataForCommonWarMapInfoPage(),
+                    pageClass   : Common.CommonWarMapInfoPage,
+                    pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
-                    pageData    : this._createDataForCommonWarPlayerInfoPage(),
+                    pageClass   : Common.CommonWarPlayerInfoPage,
+                    pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageClass   : Common.CommonWarAdvancedSettingsPage,
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
@@ -152,30 +152,27 @@ namespace TwnsSpmWarListPanel {
             this._btnNextStep.label         = Lang.getText(LangTextType.B0024);
         }
 
-        private _updateGroupWarList(): void {
+        private async _updateGroupWarList(): Promise<void> {
             const labelLoading  = this._labelLoading;
             const labelNoWar    = this._labelNoWar;
             const listWar       = this._listWar;
-            if (!SpmModel.getHasReceivedSlotArray()) {
-                labelLoading.visible    = true;
-                labelNoWar.visible     = false;
-                listWar.clear();
+            labelLoading.visible    = true;
+            labelNoWar.visible     = false;
+            listWar.clear();
 
-            } else {
-                const dataArray         = this._createDataForListWar();
-                const slotIndex         = SpmModel.getPreviewingSlotIndex();
-                labelLoading.visible    = false;
-                labelNoWar.visible      = !dataArray.length;
-                listWar.bindData(dataArray);
-                listWar.setSelectedIndex(dataArray.findIndex(v => v.slotIndex === slotIndex));
-            }
+            const dataArray         = await this._createDataForListWar();
+            const slotIndex         = SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
+            labelLoading.visible    = false;
+            labelNoWar.visible      = !dataArray.length;
+            listWar.bindData(dataArray);
+            listWar.setSelectedIndex(dataArray.findIndex(v => v.slotIndex === slotIndex));
         }
 
         private _updateComponentsForPreviewingWarInfo(): void {
             const groupTab      = this._groupTab;
             const btnNextStep   = this._btnNextStep;
-            const slotIndex     = SpmModel.getPreviewingSlotIndex();
-            if ((!SpmModel.getHasReceivedSlotArray()) || (slotIndex == null)) {
+            const slotIndex     = SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
+            if (slotIndex == null) {
                 groupTab.visible    = false;
                 btnNextStep.visible = false;
             } else {
@@ -189,15 +186,15 @@ namespace TwnsSpmWarListPanel {
             }
         }
 
-        private _updateCommonWarMapInfoPage(): void {
+        private async _updateCommonWarMapInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, this._createDataForCommonWarMapInfoPage());
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarMapInfoPage());
             }
         }
 
-        private _updateCommonWarPlayerInfoPage(): void {
+        private async _updateCommonWarPlayerInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(1, this._createDataForCommonWarPlayerInfoPage());
+                this._tabSettings.updatePageData(1, await this._createDataForCommonWarPlayerInfoPage());
             }
         }
 
@@ -213,57 +210,68 @@ namespace TwnsSpmWarListPanel {
             }
         }
 
-        private _createDataForListWar(): DataForWarRenderer[] {
-            const dataArray: DataForWarRenderer[] = [];
-            for (const [slotIndex] of SpmModel.getSlotDict()) {
-                dataArray.push({
-                    slotIndex,
-                });
+        private async _createDataForListWar(): Promise<DataForWarRenderer[]> {
+            const emptySlotIndexArray   = await SinglePlayerMode.SpmModel.getEmptySlotIndexArray();
+            const dataArray             : DataForWarRenderer[] = [];
+            for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
+                if (emptySlotIndexArray.indexOf(slotIndex) < 0) {
+                    dataArray.push({
+                        slotIndex,
+                    });
+                }
             }
 
             return dataArray;
         }
 
-        private _createDataForCommonWarMapInfoPage(): OpenDataForCommonWarMapInfoPage {
-            const slotIndex = SpmModel.getPreviewingSlotIndex();
-            const warData   = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex)?.warData;
+        private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
+            const slotIndex = SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
+            const warData   = slotIndex == null ? null : (await SinglePlayerMode.SpmModel.getSlotFullData(slotIndex))?.warData;
             if (warData == null) {
-                return {};
+                return null;
             }
 
-            const mapId = WarCommonHelpers.getMapId(warData);
+            const mapId = WarHelpers.WarCommonHelpers.getMapId(warData);
             if (mapId != null) {
-                return { mapInfo: { mapId } };
+                return {
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)),
+                    hasFog      : warData.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ?? null,
+                    mapInfo     : { mapId },
+                };
             }
 
             const initialWarData = warData.settingsForSfw?.initialWarData;
             if (initialWarData) {
-                return { warInfo: {
-                    warData : initialWarData,
-                    players : warData.playerManager?.players,
-                } };
+                return {
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(initialWarData.settingsForCommon?.configVersion)),
+                    hasFog      : initialWarData.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ?? null,
+                    warInfo     : {
+                        warData : initialWarData,
+                        players : warData.playerManager?.players,
+                    }
+                };
             } else {
-                return {};
+                return null;
             }
         }
 
-        private _createDataForCommonWarPlayerInfoPage(): OpenDataForCommonWarPlayerInfoPage {
-            const slotIndex = SpmModel.getPreviewingSlotIndex();
-            const slotData  = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex);
+        private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
+            const slotIndex = SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
+            const slotData  = slotIndex == null ? null : await SinglePlayerMode.SpmModel.getSlotFullData(slotIndex);
             const warData   = slotData?.warData;
             if (warData == null) {
                 return null;
             }
 
             const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
-            const warRule           = Helpers.getExisted(settingsForCommon.warRule);
-            const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+            const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
+            const playerInfoArray   : Common.PlayerInfo[] = [];
             for (const playerInfo of Helpers.getExisted(warData.playerManager?.players)) {
                 const playerIndex   = Helpers.getExisted(playerInfo.playerIndex);
                 const userId        = playerInfo.userId ?? null;
                 playerInfoArray.push({
                     playerIndex,
-                    teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
+                    teamIndex           : WarHelpers.WarRuleHelpers.getTeamIndex(instanceWarRule, playerIndex),
                     isAi                : userId == null,
                     userId,
                     coId                : Helpers.getExisted(playerInfo.coId),
@@ -271,72 +279,97 @@ namespace TwnsSpmWarListPanel {
                     isReady             : null,
                     isInTurn            : null,
                     isDefeat            : playerInfo.aliveState === Types.PlayerAliveState.Dead,
+                    restTimeToBoot      : playerInfo.restTimeToBoot ?? null,
                 });
             }
 
             return {
-                configVersion           : Helpers.getExisted(settingsForCommon.configVersion),
-                playersCountUnneutral   : WarRuleHelpers.getPlayersCountUnneutral(warRule),
+                gameConfig              : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+                playersCountUnneutral   : WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(instanceWarRule),
                 roomOwnerPlayerIndex    : null,
                 callbackOnDeletePlayer  : null,
                 callbackOnExitRoom      : null,
                 playerInfoArray,
+                enterTurnTime           : null,
             };
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            const slotIndex = SpmModel.getPreviewingSlotIndex();
-            const slotData  = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex);
+            const slotIndex = SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
+            const slotData  = slotIndex == null ? null : await SinglePlayerMode.SpmModel.getSlotFullData(slotIndex);
             const warData   = slotData?.warData;
             if (warData == null) {
                 return { dataArrayForListSettings: [] };
             }
 
-            const warRule   = Helpers.getExisted(warData.settingsForCommon?.warRule);
-            const mapId     = WarCommonHelpers.getMapId(warData);
+            const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
+            const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
+            const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
+            const warEventFullData  = instanceWarRule.warEventFullData ?? null;
+            const mapId             = WarHelpers.WarCommonHelpers.getMapId(warData);
             return { dataArrayForListSettings: [
                 {
-                    settingsType    : WarBasicSettingsType.MapName,
-                    warRule,
-                    currentValue    : mapId == null ? Lang.getText(LangTextType.B0321) : await WarMapModel.getMapNameInCurrentLanguage(mapId),
+                    settingsType    : WarBasicSettingsType.MapId,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
+                    currentValue    : mapId,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.SpmSaveSlotIndex,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     currentValue    : slotIndex,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.SpmSaveSlotComment,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     currentValue    : slotData?.extraData?.slotComment ?? null,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     currentValue    : null,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     currentValue    : null,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    warEventFullData,
+                    gameConfig,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.WarEvent,
+                    currentValue    : null,
+                    instanceWarRule,
+                    warEventFullData,
+                    gameConfig,
                     callbackOnModify: null,
                 },
             ] };
         }
 
         private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-            const slotIndex = SpmModel.getPreviewingSlotIndex();
-            const slotData  = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex);
+            const slotIndex = SinglePlayerMode.SpmModel.getPreviewingSlotIndex();
+            const slotData  = slotIndex == null ? null : await SinglePlayerMode.SpmModel.getSlotFullData(slotIndex);
             const warData   = slotData?.warData;
             if (warData == null) {
                 return null;
@@ -344,9 +377,9 @@ namespace TwnsSpmWarListPanel {
 
             const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
             return {
-                configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
-                warRule         : Helpers.getExisted(settingsForCommon.warRule),
-                warType         : WarCommonHelpers.getWarType(warData),
+                gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+                instanceWarRule : Helpers.getExisted(settingsForCommon.instanceWarRule),
+                warType         : WarHelpers.WarCommonHelpers.getWarType(warData),
             };
         }
 
@@ -425,39 +458,48 @@ namespace TwnsSpmWarListPanel {
         slotIndex: number;
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
-        private readonly _labelType!    : TwnsUiLabel.UiLabel;
-        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _labelType!        : TwnsUiLabel.UiLabel;
+        private readonly _labelTimestamp!   : TwnsUiLabel.UiLabel;
+        private readonly _labelName!        : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected async _onDataChanged(): Promise<void> {
-            const slotIndex = this._getData().slotIndex;
-            const slotData  = SpmModel.getSlotDict().get(slotIndex);
-            const labelType = this._labelType;
-            const labelName = this._labelName;
+            const slotIndex         = this._getData().slotIndex;
+            const slotData          = await SinglePlayerMode.SpmModel.getSlotFullData(slotIndex);
+            const labelType         = this._labelType;
+            const labelName         = this._labelName;
+            const labelTimestamp    = this._labelTimestamp;
+
             if (!slotData) {
-                labelType.text  = ``;
-                labelName.text  = ``;
+                labelType.text      = ``;
+                labelName.text      = ``;
+                labelTimestamp.text = ``;
+
             } else {
                 const warData   = slotData.warData;
-                labelType.text  = `${slotIndex}. ${Lang.getWarTypeName(WarCommonHelpers.getWarType(warData))}`;
+                labelType.text  = `#${slotIndex} ${Lang.getWarTypeName(WarHelpers.WarCommonHelpers.getWarType(warData))}`;
 
-                const slotComment = slotData.extraData.slotComment;
+                const slotExtraData = slotData.extraData;
+                const slotComment   = slotExtraData.slotComment;
                 if (slotComment) {
                     labelName.text = slotComment;
                 } else {
-                    const mapId     = WarCommonHelpers.getMapId(warData);
+                    const mapId     = WarHelpers.WarCommonHelpers.getMapId(warData);
                     labelName.text  = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
+                        : (await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
                 }
+
+                const timestamp     = slotExtraData.timestamp;
+                labelTimestamp.text = timestamp == null ? `` : Helpers.getTimestampShortText(timestamp);
             }
         }
 
         public onItemTapEvent(): void {
-            SpmModel.setPreviewingSlotIndex(this._getData().slotIndex);
+            SinglePlayerMode.SpmModel.setPreviewingSlotIndex(this._getData().slotIndex);
         }
     }
 }

@@ -5,8 +5,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiListItemRenderer {
-    import UiListener       = Types.UiListener;
-    import ShortSfxCode     = Types.ShortSfxCode;
+    import UiListener       = Twns.Types.UiListener;
+    import ShortSfxCode     = Twns.Types.ShortSfxCode;
 
     export class UiListItemRenderer<DataForRenderer> extends eui.ItemRenderer {
         private _isChildrenCreated          = false;
@@ -15,10 +15,10 @@ namespace TwnsUiListItemRenderer {
         private _isOpening                  = false;
 
         private _shortSfxCode               = ShortSfxCode.ButtonNeutral01;
-        private _notifyListenerArray        : Notify.Listener[] | null = null;
+        private _notifyListenerArray        : Twns.Notify.Listener[] | null = null;
         private _uiListenerArray            : UiListener[] | null = null;
 
-        public data                         : Types.Undefinable<DataForRenderer>;
+        public data                         : Twns.Types.Undefinable<DataForRenderer>;
 
         public constructor() {
             super();
@@ -124,7 +124,7 @@ namespace TwnsUiListItemRenderer {
         }
 
         protected _getData(): DataForRenderer {
-            return Helpers.getExisted(this.data);
+            return Twns.Helpers.getExisted(this.data);
         }
         protected _checkHasData(): boolean {
             return this.data != null;
@@ -137,10 +137,10 @@ namespace TwnsUiListItemRenderer {
             return this._shortSfxCode;
         }
 
-        protected _setNotifyListenerArray(array: Notify.Listener[] | null): void {
+        protected _setNotifyListenerArray(array: Twns.Notify.Listener[] | null): void {
             this._notifyListenerArray = array;
         }
-        protected _getNotifyListenerArray(): Notify.Listener[] | null {
+        protected _getNotifyListenerArray(): Twns.Notify.Listener[] | null {
             return this._notifyListenerArray;
         }
         protected _setUiListenerArray(array: UiListener[] | null): void {
@@ -153,7 +153,7 @@ namespace TwnsUiListItemRenderer {
         private _registerListeners(): void {
             const notifyListenerArray = this._getNotifyListenerArray();
             if (notifyListenerArray) {
-                Notify.addEventListeners(notifyListenerArray, this);
+                Twns.Notify.addEventListeners(notifyListenerArray, this);
             }
 
             const uiListenerArray = this._getUiListenerArray();
@@ -167,7 +167,7 @@ namespace TwnsUiListItemRenderer {
         private _unregisterListeners(): void {
             const notifyListenerArray = this._getNotifyListenerArray();
             if (notifyListenerArray) {
-                Notify.removeEventListeners(notifyListenerArray, this);
+                Twns.Notify.removeEventListeners(notifyListenerArray, this);
             }
 
             const uiListenerArray = this._getUiListenerArray();

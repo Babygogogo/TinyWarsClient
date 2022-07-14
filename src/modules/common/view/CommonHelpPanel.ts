@@ -7,12 +7,12 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonHelpPanel {
-    export type OpenData = {
-        title  : string;
+namespace Twns.Common {
+    export type OpenDataForCommonHelpPanel = {
+        title? : string;
         content: string;
     };
-    export class CommonHelpPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonHelpPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonHelpPanel> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
@@ -29,7 +29,7 @@ namespace TwnsCommonHelpPanel {
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             const openData                      = this._getOpenData();
-            this._labelTitle.text               = openData.title;
+            this._labelTitle.text               = openData.title ?? Lang.getText(Lang.LangTextType.B0143);
             this._scrContent.viewport.scrollV   = 0;
             this._labelContent.setRichText(openData.content);
         }

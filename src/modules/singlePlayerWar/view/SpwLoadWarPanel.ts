@@ -8,7 +8,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -20,12 +20,12 @@
 // import SpwModel                 from "../model/SpwModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpwLoadWarPanel {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.SinglePlayerWar {
+    import LangTextType         = Twns.Lang.LangTextType;
+    import NotifyType           = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class SpwLoadWarPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForSpwLoadWarPanel = void;
+    export class SpwLoadWarPanel extends TwnsUiPanel.UiPanel<OpenDataForSpwLoadWarPanel> {
         private readonly _group!            : eui.Group;
         private readonly _labelPanelTitle!  : TwnsUiLabel.UiLabel;
         private readonly _srlSaveSlot!      : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
@@ -61,7 +61,7 @@ namespace TwnsSpwLoadWarPanel {
         }
 
         private _onTouchedBtnHelp(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0325),
                 content : Lang.getText(LangTextType.R0006),
             });
@@ -74,11 +74,11 @@ namespace TwnsSpwLoadWarPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this._srlSaveSlot.bindData(this._createDataForList());
-            this._listSaveSlot.selectedIndex = Helpers.getExisted(SpwModel.getWar()).getSaveSlotIndex();
+            this._srlSaveSlot.bindData(await this._createDataForList());
+            this._listSaveSlot.selectedIndex = Twns.Helpers.getExisted(Twns.SinglePlayerWar.SpwModel.getWar()).getSaveSlotIndex();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -87,13 +87,12 @@ namespace TwnsSpwLoadWarPanel {
             this._btnHelp.label         = Lang.getText(LangTextType.B0143);
         }
 
-        private _createDataForList(): DataForSlotRenderer[] {
-            const dataList  : DataForSlotRenderer[] = [];
-            const slotDict  = SpmModel.getSlotDict();
-            for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
+        private async _createDataForList(): Promise<DataForSlotRenderer[]> {
+            const dataList: DataForSlotRenderer[] = [];
+            for (let slotIndex = 0; slotIndex < Twns.CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
-                    slotInfo    : slotDict.get(slotIndex) ?? null,
+                    slotInfo    : await Twns.SinglePlayerMode.SpmModel.getSlotFullData(slotIndex),
                 });
             }
 
@@ -103,7 +102,7 @@ namespace TwnsSpwLoadWarPanel {
 
     type DataForSlotRenderer = {
         slotIndex   : number;
-        slotInfo    : Types.SpmWarSaveSlotData | null;
+        slotInfo    : Twns.Types.SpmWarSaveSlotData | null;
     };
     class SlotRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSlotRenderer> {
         private readonly _group!            : eui.Group;
@@ -130,10 +129,10 @@ namespace TwnsSpwLoadWarPanel {
             const data      = this._getData();
             const slotInfo  = data.slotInfo;
             if (slotInfo) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0072),
                     callback: () => {
-                        FlowManager.gotoSinglePlayerWar({
+                        Twns.FlowManager.gotoSinglePlayerWar({
                             slotIndex       : slotInfo.slotIndex,
                             warData         : slotInfo.warData,
                             slotExtraData   : slotInfo.extraData,
@@ -158,16 +157,16 @@ namespace TwnsSpwLoadWarPanel {
                 labelMapName.text   = `----`;
             } else {
                 const warData   = slotInfo.warData;
-                labelType.text  = Lang.getWarTypeName(WarCommonHelpers.getWarType(warData)) || CommonConstants.ErrorTextForUndefined;
+                labelType.text  = Lang.getWarTypeName(Twns.WarHelpers.WarCommonHelpers.getWarType(warData)) || Twns.CommonConstants.ErrorTextForUndefined;
 
                 const slotComment = slotInfo.extraData.slotComment;
                 if (slotComment) {
                     labelMapName.text = slotComment;
                 } else {
-                    const mapId         = WarCommonHelpers.getMapId(warData);
+                    const mapId         = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
+                        : (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || Twns.CommonConstants.ErrorTextForUndefined);
                 }
             }
         }

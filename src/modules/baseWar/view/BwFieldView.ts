@@ -8,17 +8,17 @@
 // import TwnsBwUnitMapView            from "./BwUnitMapView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwFieldView {
+namespace Twns.BaseWar {
     export class BwFieldView extends egret.DisplayObjectContainer {
-        private _field?                 : TwnsBwField.BwField;
+        private _field?                 : BaseWar.BwField;
 
-        private _tileMapView?           : TwnsBwTileMapView.BwTileMapView;
-        private _actionPlannerView?     : TwnsBwActionPlannerView.BwActionPlannerView;
-        private _unitMapView?           : TwnsBwUnitMapView.BwUnitMapView;
-        private _cursorView?            : TwnsBwCursorView.BwCursorView;
-        private _gridVisionEffectView?  : TwnsBwGridVisualEffectView.BwGridVisualEffectView;
+        private _tileMapView?           : BaseWar.BwTileMapView;
+        private _actionPlannerView?     : BaseWar.BwActionPlannerView;
+        private _unitMapView?           : BaseWar.BwUnitMapView;
+        private _cursorView?            : BaseWar.BwCursorView;
+        private _gridVisionEffectView?  : Twns.BaseWar.BwGridVisualEffectView;
 
-        public init(field: TwnsBwField.BwField): void {
+        public init(field: BaseWar.BwField): void {
             if (!this._field) {
                 this._field = field;
 
@@ -35,7 +35,7 @@ namespace TwnsBwFieldView {
                 this.addChild(this._gridVisionEffectView);
             }
         }
-        public fastInit(field: TwnsBwField.BwField): void {
+        public fastInit(field: BaseWar.BwField): void {
             this._field = field;
         }
 
@@ -46,11 +46,11 @@ namespace TwnsBwFieldView {
             // nothing to do
         }
 
-        private _getUnitMapView(): TwnsBwUnitMapView.BwUnitMapView {
-            return Helpers.getExisted(this._unitMapView);
+        private _getUnitMapView(): BaseWar.BwUnitMapView {
+            return Twns.Helpers.getExisted(this._unitMapView);
         }
-        private _getTileMapView(): TwnsBwTileMapView.BwTileMapView {
-            return Helpers.getExisted(this._tileMapView);
+        private _getTileMapView(): BaseWar.BwTileMapView {
+            return Twns.Helpers.getExisted(this._tileMapView);
         }
 
         public setUnitsVisible(visible: boolean): void {

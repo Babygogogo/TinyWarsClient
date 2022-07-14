@@ -3,17 +3,17 @@
 // import NetManager           from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace MfrProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import NetMessage       = ProtoTypes.NetMessage;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+namespace Twns.MultiFreeRoom.MfrProxy {
+    import NotifyType       = Notify.NotifyType;
+    import NetMessage       = CommonProto.NetMessage;
+    import NetMessageCodes  = Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgMfrCreateRoom,                callback: _onMsgMfrCreateRoom },
             { msgCode: NetMessageCodes.MsgMfrJoinRoom,                  callback: _onMsgMfrJoinRoom },
             { msgCode: NetMessageCodes.MsgMfrDeleteRoom,                callback: _onMsgMfrDeleteRoom },
@@ -23,14 +23,12 @@ namespace MfrProxy {
             { msgCode: NetMessageCodes.MsgMfrSetSelfSettings,           callback: _onMsgMfrSetSelfSettings },
             { msgCode: NetMessageCodes.MsgMfrGetRoomStaticInfo,         callback: _onMsgMfrGetRoomStaticInfo },
             { msgCode: NetMessageCodes.MsgMfrGetRoomPlayerInfo,         callback: _onMsgMfrGetRoomPlayerInfo },
-            { msgCode: NetMessageCodes.MsgMfrGetJoinableRoomIdArray,    callback: _onMsgMfrGetJoinableRoomIdArray },
-            { msgCode: NetMessageCodes.MsgMfrGetJoinedRoomIdArray,      callback: _onMsgMfrGetJoinedRoomIdArray },
             { msgCode: NetMessageCodes.MsgMfrStartWar,                  callback: _onMsgMfrStartWar },
         ], null);
     }
 
-    export function reqCreateRoom(param: ProtoTypes.NetMessage.MsgMfrCreateRoom.IC): void {
-        NetManager.send({
+    export function reqCreateRoom(param: CommonProto.NetMessage.MsgMfrCreateRoom.IC): void {
+        Net.NetManager.send({
             MsgMfrCreateRoom: { c: param },
         });
     }
@@ -41,8 +39,8 @@ namespace MfrProxy {
         }
     }
 
-    export function reqMfrJoinRoom(param: ProtoTypes.NetMessage.MsgMfrJoinRoom.IC): void {
-        NetManager.send({
+    export function reqMfrJoinRoom(param: CommonProto.NetMessage.MsgMfrJoinRoom.IC): void {
+        Net.NetManager.send({
             MsgMfrJoinRoom: { c: param },
         });
     }
@@ -54,7 +52,7 @@ namespace MfrProxy {
     }
 
     export function reqMfrDeleteRoom(roomId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMfrDeleteRoom: { c: {
                 roomId,
             } },
@@ -68,7 +66,7 @@ namespace MfrProxy {
     }
 
     export function reqMfrExitRoom(roomId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMfrExitRoom: { c: {
                 roomId,
             }, },
@@ -81,11 +79,12 @@ namespace MfrProxy {
         }
     }
 
-    export function reqMfrDeletePlayer(roomId: number, playerIndex: number): void {
-        NetManager.send({
+    export function reqMfrDeletePlayer(roomId: number, playerIndex: number, forbidReentrance: boolean): void {
+        Net.NetManager.send({
             MsgMfrDeletePlayer: { c: {
                 roomId,
                 playerIndex,
+                forbidReentrance
             }, },
         });
     }
@@ -97,7 +96,7 @@ namespace MfrProxy {
     }
 
     export function reqMfrSetReady(roomId: number, isReady: boolean): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMfrSetReady: { c: {
                 roomId,
                 isReady,
@@ -112,7 +111,7 @@ namespace MfrProxy {
     }
 
     export function reqMfrSetSelfSettings(data: NetMessage.MsgMfrSetSelfSettings.IC): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMfrSetSelfSettings: { c: data },
         });
     }
@@ -124,7 +123,7 @@ namespace MfrProxy {
     }
 
     export function reqMfrGetRoomStaticInfo(roomId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMfrGetRoomStaticInfo: { c: {
                 roomId,
             }, },
@@ -139,7 +138,7 @@ namespace MfrProxy {
     }
 
     export function reqMfrGetRoomPlayerInfo(roomId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMfrGetRoomPlayerInfo: { c: {
                 roomId,
             }, },
@@ -153,37 +152,8 @@ namespace MfrProxy {
         }
     }
 
-    export function reqMfrGetJoinableRoomIdArray(roomFilter: Types.Undefinable<ProtoTypes.MultiFreeRoom.IRoomFilter>): void {
-        NetManager.send({
-            MsgMfrGetJoinableRoomIdArray: { c: {
-                roomFilter,
-            }, },
-        });
-    }
-    function _onMsgMfrGetJoinableRoomIdArray(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMfrGetJoinableRoomIdArray.IS;
-        if (!data.errorCode) {
-            MfrModel.setJoinableRoomIdArray(data.roomIdArray || []);
-            Notify.dispatch(NotifyType.MsgMfrGetJoinableRoomIdArray, data);
-        }
-    }
-
-    export function reqMfrGetJoinedRoomIdArray(): void {
-        NetManager.send({
-            MsgMfrGetJoinedRoomIdArray: { c: {
-            }, }
-        });
-    }
-    function _onMsgMfrGetJoinedRoomIdArray(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMfrGetJoinedRoomIdArray.IS;
-        if (!data.errorCode) {
-            MfrModel.setJoinedRoomIdArray(data.roomIdArray || []);
-            Notify.dispatch(NotifyType.MsgMfrGetJoinedRoomIdArray, data);
-        }
-    }
-
     export function reqMfrStartWar(roomId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMfrStartWar: { c: {
                 roomId,
             }, },

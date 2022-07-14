@@ -12,19 +12,57 @@
                 <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
                                      source="uncompressedColorGrey0001" y="0" left="0" right="0" />
                 <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
-                <TwnsUiButton:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001"
-                                       verticalCenter="0" right="30" />
+                <TwnsUiButton:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001" right="30"
+                                       verticalCenter="0" />
+                <e:Group id="_groupTopButtons" verticalCenter="0" right="76">
+                    <TwnsUiButton:UiButton id="_btnSetProfile" x="0" y="0" scaleX="1.2" scaleY="1.2">
+                        <TwnsUiButton:skinName>
+                            <e:Skin>
+                                <e:Group right="0" bottom="0" left="0" top="0">
+                                    <e:Image x="0" y="0" source="uncompressedCircle0006" />
+                                    <e:Image source="commonIcon0021" width="12" height="12" horizontalCenter="0"
+                                             verticalCenter="0" />
+                                </e:Group>
+                            </e:Skin>
+                        </TwnsUiButton:skinName>
+                    </TwnsUiButton:UiButton>
+                    <TwnsUiButton:UiButton id="_btnChat" label="聊天" scaleX="0.8" scaleY="0.8" y="0" x="0">
+                        <TwnsUiButton:skinName>
+                            <e:Skin>
+                                <e:Group left="0" right="0" y="0">
+                                    <e:Image source="commonIcon0006" y="0" x="0" />
+                                    <TwnsUiImage:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000"
+                                                         width="16" height="16" />
+                                </e:Group>
+                            </e:Skin>
+                        </TwnsUiButton:skinName>
+                    </TwnsUiButton:UiButton>
+                    <e:layout>
+                        <e:HorizontalLayout gap="20" />
+                    </e:layout>
+                </e:Group>
             </e:Group>
         </e:Group>
         <e:Group y="50" left="30">
             <e:Group x="0" y="0">
-                <TwnsUiImage:UiImage id="_imgAvatar" x="10" y="10" source="userAvatar0001" scaleX="0.44" scaleY="0.44" />
-                <e:Group x="90" y="6">
-                    <TwnsUiButton:UiButton id="_btnChat" label="聊天" skinName="Skins.Component.Button.ButtonYellow001"
-                                           width="100" left="0" top="0" />
-                    <TwnsUiButton:UiButton id="_btnSetAvatar" label="聊天"
-                                           skinName="Skins.Component.Button.ButtonYellow001" width="100" left="0"
-                                           top="0" />
+                <e:Group x="0" y="0">
+                    <TwnsUiImage:UiImage id="_imgAvatar" source="userAvatar0001" scaleX="0.44" scaleY="0.44" left="0"
+                                         top="0" />
+                    <TwnsUiButton:UiButton id="_btnSetAvatar" right="0" bottom="0" left="0" top="0">
+                        <TwnsUiButton:skinName>
+                            <e:Skin>
+                                <e:Group left="0" right="0" top="0" bottom="0">
+                                    <e:Group right="0" bottom="0" scaleX="0.8" scaleY="0.8">
+                                        <e:Image x="0" y="0" source="uncompressedCircle0006" />
+                                        <e:Image source="commonIcon0021" width="12" height="12" horizontalCenter="0"
+                                                 verticalCenter="0" />
+                                    </e:Group>
+                                    <e:Image left="0" right="0" top="0" bottom="0" x="10" y="10"
+                                             source="uncompressedColorTransparent0000" />
+                                </e:Group>
+                            </e:Skin>
+                        </TwnsUiButton:skinName>
+                    </TwnsUiButton:UiButton>
                 </e:Group>
                 <e:layout>
                     <e:HorizontalLayout verticalAlign="middle" gap="46" />
@@ -38,15 +76,6 @@
                 <TwnsUiLabel:UiLabel id="_labelUserIdTitle" text="User ID" size="12" textColor="0xFFFFFF" x="10"
                                      verticalCenter="1" />
                 <TwnsUiLabel:UiLabel id="_labelUserId" text="99999999" textColor="0xFFFFFF" size="16" x="100"
-                                     verticalCenter="1" />
-            </e:Group>
-            <e:Group y="90" x="20">
-                <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
-                                     scale9Grid="1,1,2,2" />
-                <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2"
-                                     bottom="2" left="90" />
-                <TwnsUiLabel:UiLabel text="Discord ID" size="12" textColor="0xFFFFFF" x="10" verticalCenter="1" />
-                <TwnsUiLabel:UiLabel id="_labelDiscordId" text="99999999" textColor="0xFFFFFF" size="16" x="100"
                                      verticalCenter="1" />
             </e:Group>
             <e:Group y="100" x="30">
@@ -83,6 +112,23 @@
                     </e:layout>
                 </e:Group>
             </e:Group>
+            <e:Group y="90" x="20">
+                <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
+                                     scale9Grid="1,1,2,2" />
+                <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2"
+                                     bottom="2" left="90" />
+                <TwnsUiLabel:UiLabel id="_labelLastActivityTimeTitle" text="Discord ID" size="12" textColor="0xFFFFFF"
+                                     x="10" verticalCenter="1" />
+                <e:Group x="100" verticalCenter="1" y="18">
+                    <TwnsUiLabel:UiLabel id="_labelLastActivityTime1" text="99999999" textColor="0xFFFFFF" size="16"
+                                         x="0" y="0" />
+                    <TwnsUiLabel:UiLabel id="_labelLastActivityTime2" text="99999999" textColor="0xFFFFFF" size="16"
+                                         x="10" y="0" />
+                    <e:layout>
+                        <e:HorizontalLayout/>
+                    </e:layout>
+                </e:Group>
+            </e:Group>
             <e:Group y="100" x="30">
                 <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
                                      scale9Grid="1,1,2,2" />
@@ -109,7 +155,7 @@
         </e:Group>
         <e:Group y="50" right="30">
             <e:Group x="0" y="0">
-                <e:Group left="0" top="0">
+                <e:Group left="0" top="0" right="0">
                     <e:Group x="0" y="0">
                         <TwnsUiLabel:UiLabel id="_labelStdRankScoreTitle" text="明战排位积分:" size="12" x="0" y="0"
                                              textColor="0xFFFFFF" />
@@ -135,6 +181,18 @@
                             <e:VerticalLayout gap="4" />
                         </e:layout>
                     </e:Group>
+                    <TwnsUiButton:UiButton id="_btnRankStdHistory" scaleX="1.2" scaleY="1.2" verticalCenter="0"
+                                           right="0">
+                        <TwnsUiButton:skinName>
+                            <e:Skin>
+                                <e:Group right="0" bottom="0" left="0" top="0">
+                                    <e:Image x="0" y="0" source="uncompressedCircle0006" />
+                                    <e:Image width="12" height="12" horizontalCenter="0" verticalCenter="0"
+                                             source="commonIcon0029" />
+                                </e:Group>
+                            </e:Skin>
+                        </TwnsUiButton:skinName>
+                    </TwnsUiButton:UiButton>
                 </e:Group>
                 <e:Group x="0" y="40">
                     <e:Group x="0" y="0" locked="true">
@@ -182,7 +240,7 @@
                 </e:Group>
             </e:Group>
             <e:Group x="0" y="106">
-                <e:Group y="0" x="0">
+                <e:Group y="0" left="0" right="0">
                     <e:Group x="0" y="0">
                         <TwnsUiLabel:UiLabel id="_labelFogRankScoreTitle" text="雾战排位积分:" size="12" x="0" y="0"
                                              textColor="0xFFFFFF" />
@@ -208,6 +266,18 @@
                             <e:VerticalLayout gap="4" />
                         </e:layout>
                     </e:Group>
+                    <TwnsUiButton:UiButton id="_btnRankFowHistory" scaleX="1.2" scaleY="1.2" verticalCenter="0"
+                                           right="0">
+                        <TwnsUiButton:skinName>
+                            <e:Skin>
+                                <e:Group right="0" bottom="0" left="0" top="0">
+                                    <e:Image x="0" y="0" source="uncompressedCircle0006" />
+                                    <e:Image width="12" height="12" horizontalCenter="0" verticalCenter="0"
+                                             source="commonIcon0029" />
+                                </e:Group>
+                            </e:Skin>
+                        </TwnsUiButton:skinName>
+                    </TwnsUiButton:UiButton>
                 </e:Group>
                 <e:Group x="0" y="40">
                     <e:Group x="0" y="0" locked="true">
@@ -254,8 +324,8 @@
                     </TwnsUiScrollList:UiScrollList>
                 </e:Group>
             </e:Group>
-            <e:Group x="10" y="10">
-                <e:Group left="0" top="0">
+            <e:Group x="10" y="10" width="360">
+                <e:Group left="0" top="0" right="0">
                     <e:Group x="0" y="0">
                         <TwnsUiLabel:UiLabel id="_labelSpmRankScoreTitle" text="明战排位积分:" size="12" x="0" y="0"
                                              textColor="0xFFFFFF" />
@@ -281,6 +351,18 @@
                             <e:VerticalLayout gap="4" />
                         </e:layout>
                     </e:Group>
+                    <TwnsUiButton:UiButton id="_btnMyWarRoomRecord" scaleX="1.2" scaleY="1.2" verticalCenter="0"
+                                           right="0">
+                        <TwnsUiButton:skinName>
+                            <e:Skin>
+                                <e:Group right="0" bottom="0" left="0" top="0">
+                                    <e:Image x="0" y="0" source="uncompressedCircle0006" />
+                                    <e:Image width="12" height="12" horizontalCenter="0" verticalCenter="0"
+                                             source="commonIcon0029" />
+                                </e:Group>
+                            </e:Skin>
+                        </TwnsUiButton:skinName>
+                    </TwnsUiButton:UiButton>
                 </e:Group>
             </e:Group>
             <e:layout>

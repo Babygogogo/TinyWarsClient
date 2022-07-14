@@ -3,6 +3,19 @@
         xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing" class="Skins.Component.MapInfo.MapInfo001">
     <e:Group id="_group" x="0" y="0">
+        <e:Group id="_groupFog" height="30" y="154" width="180" x="0">
+            <TwnsUiImage:UiImage source="uncompressedPentagon0004" left="0" right="0" top="0" bottom="0"
+                                 scale9Grid="13,3,1,1" scaleX="1" scaleY="1" locked="true" />
+            <e:Group x="22" verticalCenter="1">
+                <TwnsUiLabel:UiLabel id="_labelFogTitle" text="FoW:" size="12" x="0" textColor="0xFFFFFF" scaleX="1"
+                                     scaleY="1" y="0" height="14" />
+                <TwnsUiLabel:UiLabel id="_labelFog" text="Yes" size="18" x="10" textColor="0xFFFFFF" scaleX="1"
+                                     scaleY="1" bold="true" y="0" />
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="bottom" />
+                </e:layout>
+            </e:Group>
+        </e:Group>
         <e:Group id="_groupTile" right="0" width="180" bottom="290">
             <e:Group left="0" right="0">
                 <TwnsUiImage:UiImage height="30" y="0" source="uncompressedPentagon0005" scale9Grid="12,4,1,1" x="0"

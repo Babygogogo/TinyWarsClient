@@ -8,7 +8,7 @@
 // import Helpers                  from "../../tools/helpers/Helpers";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -17,9 +17,9 @@
 // import MeSimModel               from "../model/MeSimModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeSimAdvancedSettingsPage {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.MapEditor {
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
 
     export class MeSimAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
         private readonly _labelMapNameTitle!        : TwnsUiLabel.UiLabel;
@@ -64,15 +64,15 @@ namespace TwnsMeSimAdvancedSettingsPage {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = Lang.getLanguageText({ textArray: MeSimModel.getMapRawData().mapNameArray }) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelMapName.text = Lang.getLanguageText({ textArray: MapEditor.MeSimModel.getMapRawData().mapNameArray }) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + MeSimModel.getMapRawData().playersCountUnneutral;
+            this._labelPlayersCount.text = "" + MapEditor.MeSimModel.getMapRawData().playersCountUnneutral;
         }
 
         private _updateListPlayer(): void {
-            const playersCount  = Helpers.getExisted(MeSimModel.getMapRawData().playersCountUnneutral);
+            const playersCount  = Helpers.getExisted(MapEditor.MeSimModel.getMapRawData().playersCountUnneutral);
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -88,6 +88,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
         private readonly _listInfo! : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
+            this._setShortSfxCode(Types.ShortSfxCode.None);
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
@@ -95,18 +96,18 @@ namespace TwnsMeSimAdvancedSettingsPage {
             this._updateView();
         }
 
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             this._listInfo.visible  = true;
-            this._listInfo.bindData(this._createDataForListInfo());
+            this._listInfo.bindData(await this._createDataForListInfo());
         }
 
-        private _createDataForListInfo(): DataForInfoRenderer[] {
+        private async _createDataForListInfo(): Promise<DataForInfoRenderer[]> {
             const data          = this._getData();
             const playerIndex   = data.playerIndex;
             return [
                 this._createDataController(playerIndex),
                 this._createDataTeamIndex(playerIndex),
-                this._createDataCo(playerIndex),
+                await this._createDataCo(playerIndex),
                 this._createDataSkinId(playerIndex),
                 this._createDataInitialFund(playerIndex),
                 this._createDataIncomeMultiplier(playerIndex),
@@ -120,13 +121,13 @@ namespace TwnsMeSimAdvancedSettingsPage {
             ];
         }
         private _createDataController(playerIndex: number): DataForInfoRenderer {
-            const isControlledByPlayer = MeSimModel.getIsControlledByPlayer(playerIndex);
+            const isControlledByPlayer = MapEditor.MeSimModel.getIsControlledByPlayer(playerIndex);
             return {
                 titleText               : Lang.getText(LangTextType.B0424),
                 infoText                : isControlledByPlayer ? Lang.getText(LangTextType.B0031) : Lang.getText(LangTextType.B0256),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    MeSimModel.setIsControlledByPlayer(playerIndex, !isControlledByPlayer);
+                    MapEditor.MeSimModel.setIsControlledByPlayer(playerIndex, !isControlledByPlayer);
                     this._updateView();
                 },
             };
@@ -134,30 +135,31 @@ namespace TwnsMeSimAdvancedSettingsPage {
         private _createDataTeamIndex(playerIndex: number): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0019),
-                infoText                : Lang.getPlayerTeamName(MeSimModel.getTeamIndex(playerIndex)) ?? CommonConstants.ErrorTextForUndefined,
+                infoText                : Lang.getPlayerTeamName(MapEditor.MeSimModel.getTeamIndex(playerIndex)) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        MeSimModel.tickTeamIndex(playerIndex);
+                        MapEditor.MeSimModel.tickTeamIndex(playerIndex);
                         this._updateView();
                     });
                 },
             };
         }
-        private _createDataCo(playerIndex: number): DataForInfoRenderer {
-            const coId          = MeSimModel.getCoId(playerIndex);
-            const configVersion = Helpers.getExisted(MeSimModel.getWarData().settingsForCommon?.configVersion);
+        private async _createDataCo(playerIndex: number): Promise<DataForInfoRenderer> {
+            const coId          = MapEditor.MeSimModel.getCoId(playerIndex);
+            const gameConfig    = await Config.ConfigManager.getGameConfig(Helpers.getExisted(MapEditor.MeSimModel.getWarData().settingsForCommon?.configVersion));
             return {
                 titleText               : Lang.getText(LangTextType.B0425),
-                infoText                : ConfigManager.getCoNameAndTierText(configVersion, coId),
+                infoText                : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
+                        gameConfig,
                         currentCoId         : coId,
-                        availableCoIdArray  : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                        availableCoIdArray  : gameConfig.getEnabledCoArray().map(v => v.coId),
                         callbackOnConfirm   : newCoId => {
                             if (newCoId !== coId) {
-                                MeSimModel.setCoId(playerIndex, newCoId);
+                                MapEditor.MeSimModel.setCoId(playerIndex, newCoId);
                                 this._updateView();
                             }
                         },
@@ -168,16 +170,16 @@ namespace TwnsMeSimAdvancedSettingsPage {
         private _createDataSkinId(playerIndex: number): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0397),
-                infoText                : Lang.getUnitAndTileSkinName(MeSimModel.getUnitAndTileSkinId(playerIndex)) ?? CommonConstants.ErrorTextForUndefined,
+                infoText                : Lang.getUnitAndTileSkinName(MapEditor.MeSimModel.getUnitAndTileSkinId(playerIndex)) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    MeSimModel.tickUnitAndTileSkinId(playerIndex);
+                    MapEditor.MeSimModel.tickUnitAndTileSkinId(playerIndex);
                     this._updateView();
                 },
             };
         }
         private _createDataInitialFund(playerIndex: number): DataForInfoRenderer {
-            const currValue = MeSimModel.getInitialFund(playerIndex);
+            const currValue = MapEditor.MeSimModel.getInitialFund(playerIndex);
             return {
                 titleText               : Lang.getText(LangTextType.B0178),
                 infoText                : `${currValue}`,
@@ -186,14 +188,14 @@ namespace TwnsMeSimAdvancedSettingsPage {
                     this._confirmUseCustomRule(() => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                         const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0178),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                MeSimModel.setInitialFund(playerIndex, panel.getInputValue());
+                            callback        : value => {
+                                MapEditor.MeSimModel.setInitialFund(playerIndex, value);
                                 this._updateView();
                             },
                         });
@@ -202,7 +204,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
             };
         }
         private _createDataIncomeMultiplier(playerIndex: number): DataForInfoRenderer {
-            const currValue = MeSimModel.getIncomeMultiplier(playerIndex);
+            const currValue = MapEditor.MeSimModel.getIncomeMultiplier(playerIndex);
             const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
             const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
             return {
@@ -211,14 +213,14 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0179),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                MeSimModel.setIncomeMultiplier(playerIndex, panel.getInputValue());
+                            callback        : value => {
+                                MapEditor.MeSimModel.setIncomeMultiplier(playerIndex, value);
                                 this._updateView();
                             },
                         });
@@ -227,7 +229,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
             };
         }
         private _createDataEnergyAddPctOnLoadCo(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeSimModel.getEnergyAddPctOnLoadCo(playerIndex);
+            const currValue     = MapEditor.MeSimModel.getEnergyAddPctOnLoadCo(playerIndex);
             const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
             const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
             return {
@@ -236,14 +238,14 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0180),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                MeSimModel.setEnergyAddPctOnLoadCo(playerIndex, panel.getInputValue());
+                            callback        : value => {
+                                MapEditor.MeSimModel.setEnergyAddPctOnLoadCo(playerIndex, value);
                                 this._updateView();
                             },
                         });
@@ -252,7 +254,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
             };
         }
         private _createDataEnergyGrowthMultiplier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeSimModel.getEnergyGrowthMultiplier(playerIndex);
+            const currValue     = MapEditor.MeSimModel.getEnergyGrowthMultiplier(playerIndex);
             const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
             const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
             return {
@@ -261,14 +263,14 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0181),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                MeSimModel.setEnergyGrowthMultiplier(playerIndex, panel.getInputValue());
+                            callback        : value => {
+                                MapEditor.MeSimModel.setEnergyGrowthMultiplier(playerIndex, value);
                                 this._updateView();
                             },
                         });
@@ -277,7 +279,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
             };
         }
         private _createDataMoveRangeModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeSimModel.getMoveRangeModifier(playerIndex);
+            const currValue     = MapEditor.MeSimModel.getMoveRangeModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
             return {
@@ -286,14 +288,14 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0182),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                MeSimModel.setMoveRangeModifier(playerIndex, panel.getInputValue());
+                            callback        : value => {
+                                MapEditor.MeSimModel.setMoveRangeModifier(playerIndex, value);
                                 this._updateView();
                             },
                         });
@@ -302,7 +304,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
             };
         }
         private _createDataAttackPowerModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeSimModel.getAttackPowerModifier(playerIndex);
+            const currValue     = MapEditor.MeSimModel.getAttackPowerModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
             const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
             return {
@@ -311,14 +313,14 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0183),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                MeSimModel.setAttackPowerModifier(playerIndex, panel.getInputValue());
+                            callback        : value => {
+                                MapEditor.MeSimModel.setAttackPowerModifier(playerIndex, value);
                                 this._updateView();
                             },
                         });
@@ -327,7 +329,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
             };
         }
         private _createDataVisionRangeModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeSimModel.getVisionRangeModifier(playerIndex);
+            const currValue     = MapEditor.MeSimModel.getVisionRangeModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
             return {
@@ -336,14 +338,14 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0184),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                MeSimModel.setVisionRangeModifier(playerIndex, panel.getInputValue());
+                            callback        : value => {
+                                MapEditor.MeSimModel.setVisionRangeModifier(playerIndex, value);
                                 this._updateView();
                             },
                         });
@@ -352,7 +354,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
             };
         }
         private _createDataLuckLowerLimit(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeSimModel.getLuckLowerLimit(playerIndex);
+            const currValue     = MapEditor.MeSimModel.getLuckLowerLimit(playerIndex);
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
@@ -361,20 +363,19 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0189),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const value         = panel.getInputValue();
-                                const upperLimit    = MeSimModel.getLuckUpperLimit(playerIndex);
+                            callback        : value => {
+                                const upperLimit = MapEditor.MeSimModel.getLuckUpperLimit(playerIndex);
                                 if (value <= upperLimit) {
-                                    MeSimModel.setLuckLowerLimit(playerIndex, value);
+                                    MapEditor.MeSimModel.setLuckLowerLimit(playerIndex, value);
                                 } else {
-                                    MeSimModel.setLuckUpperLimit(playerIndex, value);
-                                    MeSimModel.setLuckLowerLimit(playerIndex, upperLimit);
+                                    MapEditor.MeSimModel.setLuckUpperLimit(playerIndex, value);
+                                    MapEditor.MeSimModel.setLuckLowerLimit(playerIndex, upperLimit);
                                 }
                                 this._updateView();
                             },
@@ -384,7 +385,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
             };
         }
         private _createDataLuckUpperLimit(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeSimModel.getLuckUpperLimit(playerIndex);
+            const currValue     = MapEditor.MeSimModel.getLuckUpperLimit(playerIndex);
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
@@ -393,20 +394,19 @@ namespace TwnsMeSimAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0190),
                             currentValue    : currValue,
                             minValue,
                             maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const value         = panel.getInputValue();
-                                const lowerLimit    = MeSimModel.getLuckLowerLimit(playerIndex);
+                            callback        : value => {
+                                const lowerLimit = MapEditor.MeSimModel.getLuckLowerLimit(playerIndex);
                                 if (value >= lowerLimit) {
-                                    MeSimModel.setLuckUpperLimit(playerIndex, value);
+                                    MapEditor.MeSimModel.setLuckUpperLimit(playerIndex, value);
                                 } else {
-                                    MeSimModel.setLuckLowerLimit(playerIndex, value);
-                                    MeSimModel.setLuckUpperLimit(playerIndex, lowerLimit);
+                                    MapEditor.MeSimModel.setLuckLowerLimit(playerIndex, value);
+                                    MapEditor.MeSimModel.setLuckUpperLimit(playerIndex, lowerLimit);
                                 }
                                 this._updateView();
                             },
@@ -417,13 +417,13 @@ namespace TwnsMeSimAdvancedSettingsPage {
         }
 
         private _confirmUseCustomRule(callback: () => void): void {
-            if (MeSimModel.getPresetWarRuleId() == null) {
+            if (MapEditor.MeSimModel.getTemplateWarRuleId() == null) {
                 callback();
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0129),
                     callback: () => {
-                        MeSimModel.setPresetWarRuleId(null);
+                        MapEditor.MeSimModel.setCustomWarRuleId();
                         callback();
                     },
                 });
@@ -446,6 +446,7 @@ namespace TwnsMeSimAdvancedSettingsPage {
             this._setUiListenerArray([
                 { ui: this._btnTitle,   callback: this._onTouchedBtnTitle },
             ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected _onDataChanged(): void {

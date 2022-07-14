@@ -25,6 +25,7 @@
 declare interface Window {
     CLIENT_VERSION      : string;
     GAME_SERVER_PORT    : number;
+    RES_HASH_DICT_PATH? : string;
     browser             : any;
     Main                : typeof egret.DisplayObject;
     JSONParseClass      : {
@@ -54,7 +55,7 @@ class Main extends egret.DisplayObjectContainer {
             // egret.ticker.resume();
         };
 
-        FlowManager.startGame(this.stage);
+        Twns.FlowManager.startGame(this.stage);
     }
 }
 

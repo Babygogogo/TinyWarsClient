@@ -6,13 +6,12 @@
 // import Types                from "./Types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace Helpers {
+namespace Twns.Helpers {
     import ColorType            = Types.ColorType;
-    import ILanguageText        = ProtoTypes.Structure.ILanguageText;
-    import IMessageContainer    = ProtoTypes.NetMessage.IMessageContainer;
-    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import ILanguageText        = CommonProto.Structure.ILanguageText;
+    import IMessageContainer    = CommonProto.NetMessage.IMessageContainer;
+    import IWarActionContainer  = CommonProto.WarAction.IWarActionContainer;
+    import LangTextType         = Lang.LangTextType;
 
     const COLOR_MATRIX_FILTERS = {
         [ColorType.Gray]: new egret.ColorMatrixFilter([
@@ -54,8 +53,9 @@ namespace Helpers {
             && (str.length <= 20);
     }
 
-    export function checkIsDiscordIdValid(str: string | null): boolean {
-        return (typeof str == "string") && (str.length >= 17) && (str.length <= 18);
+    export function checkIsDiscordIdValid(str: string): boolean {
+        return (str.length === 0)
+            || ((str.length >= 17) && (str.length <= 18));
     }
 
     export function formatString(...args: (Types.Undefinable<number | string>)[]): string {
@@ -122,7 +122,7 @@ namespace Helpers {
         return (new Array(Math.max(times, 0) + 1)).join(str);
     }
 
-    export function getSuffixForRank(rank: Types.Undefinable<number>): string | null {
+    export function getSuffixForRankIndex(rank: Types.Undefinable<number>): string | null {
         if (rank == null) {
             return null;
         } else {
@@ -267,7 +267,7 @@ namespace Helpers {
             languageTypeSet.add(languageType);
 
             const text = data.text;
-            if (text == null) {
+            if ((text == null) || (text !== text.trim())) {
                 return false;
             }
 
@@ -314,6 +314,19 @@ namespace Helpers {
             || ((comparator === Types.ValueComparator.NotGreaterThan)   && (actualValue <= targetValue))
             || ((comparator === Types.ValueComparator.LessThan)         && (actualValue < targetValue))
             || ((comparator === Types.ValueComparator.NotLessThan)      && (actualValue >= targetValue));
+    }
+    export function checkIsMeetValueComparator2(actualValue: number, valueAndComparator: CommonProto.Structure.IValueAndComparator): boolean {
+        const targetValue   = getExisted(valueAndComparator.value, ClientErrorCode.Helpers_CheckIsMeetValueComparator2_00);
+        const comparator    = valueAndComparator.comparator;
+        switch (comparator) {
+            case Types.ValueComparator.EqualTo          : return actualValue === targetValue;
+            case Types.ValueComparator.NotEqualTo       : return actualValue !== targetValue;
+            case Types.ValueComparator.GreaterThan      : return actualValue > targetValue;
+            case Types.ValueComparator.NotGreaterThan   : return actualValue <= targetValue;
+            case Types.ValueComparator.LessThan         : return actualValue < targetValue;
+            case Types.ValueComparator.NotLessThan      : return actualValue >= targetValue;
+            default                                     : throw newError(`Invalid comparator: ${comparator}`, ClientErrorCode.Helpers_CheckIsMeetValueComparator2_01);
+        }
     }
     export function getNextValueComparator(comparator: Types.Undefinable<Types.ValueComparator>): Types.ValueComparator {
         switch (comparator) {
@@ -481,8 +494,8 @@ namespace Helpers {
     // export function createCachedDataGetter<DataType, NetMessageType>({ dataDict, dataExpireTime = 999999, notifyTypeForSucceed, notifyTypeForFail, checkIsTargetMessage, reqData }: {
     //     dataDict                : Map<number, DataType | null>;
     //     dataExpireTime?         : number;
-    //     notifyTypeForSucceed    : TwnsNotifyType.NotifyType;
-    //     notifyTypeForFail       : TwnsNotifyType.NotifyType;
+    //     notifyTypeForSucceed    : Notify.NotifyType;
+    //     notifyTypeForFail       : Notify.NotifyType;
     //     checkIsTargetMessage    : (msg: NetMessageType, key: number) => boolean;
     //     reqData                 : (key: number) => void;
     // }): (key: number) => Promise<DataType | null> {
@@ -556,8 +569,9 @@ namespace Helpers {
         dataExpireTime?     : number;
         reqData             : (key: KeyType) => void;
     }): {
-        getData     : (key: KeyType) => Promise<DataType | null>;
-        setData     : (key: KeyType, data: DataType | null) => void;
+        getData                 : (key: KeyType) => Promise<DataType | null>;
+        getRequestedKeyArray    : () => KeyType[];
+        setData                 : (key: KeyType, data: DataType | null) => void;
     } {
         const dataDict              = new Map<KeyType, DataType | null>();
         const dataTimestampDict     = new Map<KeyType, number>();
@@ -598,6 +612,19 @@ namespace Helpers {
                     reqData(key);
                 });
             },
+
+            getRequestedKeyArray: (): KeyType[] => {
+                const keyArray: KeyType[] = [];
+                for (const [key] of dataDict) {
+                    keyArray.push(key);
+                }
+                for (const [key] of requestDict) {
+                    keyArray.push(key);
+                }
+
+                return keyArray;
+            },
+
             setData : (key: KeyType, data: DataType | null): void => {
                 dataTimestampDict.set(key, Timer.getServerTimestamp());
                 dataDict.set(key, data);
@@ -673,6 +700,31 @@ namespace Helpers {
             .to(endProps, tweenTime || CommonConstants.DefaultTweenTime, egret.Ease.sineOut);
         if (callback) {
             tween.call(callback);
+        }
+    }
+
+    /** 1 <= id <= 30 */
+    export function getIdFlagsByIdArray(idArray: number[]): number {
+        let idFlags = 0;
+        for (const id of idArray) {
+            idFlags |= 1 << (id - 1);
+        }
+        return idFlags;
+    }
+    /** 1 <= id <= 30 */
+    export function getIdArrayByIdFlags(idFlags: number): number[] {
+        const idArray: number[] = [];
+        for (let id = 1; id <= 30; ++id) {
+            if (idFlags & (1 << (id - 1))) {
+                idArray.push(id);
+            }
+        }
+        return idArray;
+    }
+
+    export function assert(condition: boolean, errorCode: ClientErrorCode): asserts condition {
+        if (!condition) {
+            throw newError(`Assertion failed!`, errorCode);
         }
     }
 

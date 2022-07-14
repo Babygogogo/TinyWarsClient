@@ -3,18 +3,18 @@
 // import NetManager           from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import McrJoinModel         from "./McrJoinModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace McrProxy {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import NetMessage       = ProtoTypes.NetMessage;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
+namespace Twns.MultiCustomRoom.McrProxy {
+    import NotifyType       = Notify.NotifyType;
+    import NetMessage       = CommonProto.NetMessage;
+    import NetMessageCodes  = Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgMcrCreateRoom,                callback: _onMsgMcrCreateRoom },
             { msgCode: NetMessageCodes.MsgMcrJoinRoom,                  callback: _onMsgMcrJoinRoom },
             { msgCode: NetMessageCodes.MsgMcrDeleteRoom,                callback: _onMsgMcrDeleteRoom },
@@ -24,14 +24,12 @@ namespace McrProxy {
             { msgCode: NetMessageCodes.MsgMcrSetSelfSettings,           callback: _onMsgMcrSetSelfSettings },
             { msgCode: NetMessageCodes.MsgMcrGetRoomStaticInfo,         callback: _onMsgMcrGetRoomStaticInfo },
             { msgCode: NetMessageCodes.MsgMcrGetRoomPlayerInfo,         callback: _onMsgMcrGetRoomPlayerInfo },
-            { msgCode: NetMessageCodes.MsgMcrGetJoinableRoomIdArray,    callback: _onMsgMcrGetJoinableRoomIdArray },
-            { msgCode: NetMessageCodes.MsgMcrGetJoinedRoomIdArray,      callback: _onMsgMcrGetJoinedRoomIdArray },
             { msgCode: NetMessageCodes.MsgMcrStartWar,                  callback: _onMsgMcrStartWar },
         ], null);
     }
 
     export function reqCreateRoom(param: NetMessage.MsgMcrCreateRoom.IC): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMcrCreateRoom: { c: param },
         });
     }
@@ -39,11 +37,13 @@ namespace McrProxy {
         const data = e.data as NetMessage.MsgMcrCreateRoom.IS;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.MsgMcrCreateRoom, data);
+        } else {
+            Notify.dispatch(NotifyType.MsgMcrCreateRoomFailed, data);
         }
     }
 
     export function reqMcrJoinRoom(data: NetMessage.MsgMcrJoinRoom.IC): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMcrJoinRoom: { c: data },
         });
     }
@@ -55,7 +55,7 @@ namespace McrProxy {
     }
 
     export function reqMcrDeleteRoom(roomId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMcrDeleteRoom: { c: {
                 roomId,
             } },
@@ -69,7 +69,7 @@ namespace McrProxy {
     }
 
     export function reqMcrExitRoom(roomId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMcrExitRoom: { c: {
                 roomId,
             }, },
@@ -94,11 +94,12 @@ namespace McrProxy {
     //     }
     // }
 
-    export function reqMcrDeletePlayer(roomId: number, playerIndex: number): void {
-        NetManager.send({
+    export function reqMcrDeletePlayer(roomId: number, playerIndex: number, forbidReentrance: boolean): void {
+        Net.NetManager.send({
             MsgMcrDeletePlayer: { c: {
                 roomId,
                 playerIndex,
+                forbidReentrance
             }, },
         });
     }
@@ -110,7 +111,7 @@ namespace McrProxy {
     }
 
     export function reqMcrSetReady(roomId: number, isReady: boolean): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMcrSetReady: { c: {
                 roomId,
                 isReady,
@@ -125,7 +126,7 @@ namespace McrProxy {
     }
 
     export function reqMcrSetSelfSettings(data: NetMessage.MsgMcrSetSelfSettings.IC): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMcrSetSelfSettings: { c: data },
         });
     }
@@ -137,68 +138,49 @@ namespace McrProxy {
     }
 
     export function reqMcrGetRoomStaticInfo(roomId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMcrGetRoomStaticInfo: { c: {
                 roomId,
             }, },
         });
     }
     function _onMsgMcrGetRoomStaticInfo(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMcrGetRoomStaticInfo.IS;
+        const data      = e.data as NetMessage.MsgMcrGetRoomStaticInfo.IS;
+        const roomId    = data.roomId;
         if (!data.errorCode) {
-            McrModel.setRoomStaticInfo(Helpers.getExisted(data.roomId), data.roomStaticInfo ?? null);
+            McrModel.setRoomStaticInfo(Helpers.getExisted(roomId), data.roomStaticInfo ?? null);
             Notify.dispatch(NotifyType.MsgMcrGetRoomStaticInfo, data);
+        } else {
+            if (roomId != null) {
+                McrModel.setRoomStaticInfo(roomId, data.roomStaticInfo ?? null);
+            }
+            Notify.dispatch(NotifyType.MsgMcrGetRoomStaticInfoFailed, data);
         }
     }
 
     export function reqMcrGetRoomPlayerInfo(roomId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMcrGetRoomPlayerInfo: { c: {
                 roomId,
             }, },
         });
     }
     function _onMsgMcrGetRoomPlayerInfo(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMcrGetRoomPlayerInfo.IS;
+        const data      = e.data as NetMessage.MsgMcrGetRoomPlayerInfo.IS;
+        const roomId    = data.roomId;
         if (!data.errorCode) {
-            McrModel.setRoomPlayerInfo(Helpers.getExisted(data.roomId), data.roomPlayerInfo ?? null);
+            McrModel.setRoomPlayerInfo(Helpers.getExisted(roomId), data.roomPlayerInfo ?? null);
             Notify.dispatch(NotifyType.MsgMcrGetRoomPlayerInfo, data);
-        }
-    }
-
-    export function reqMcrGetJoinableRoomIdArray(roomFilter: Types.Undefinable<ProtoTypes.MultiCustomRoom.IRoomFilter>): void {
-        NetManager.send({
-            MsgMcrGetJoinableRoomIdArray: { c: {
-                roomFilter,
-            }, },
-        });
-    }
-    function _onMsgMcrGetJoinableRoomIdArray(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMcrGetJoinableRoomIdArray.IS;
-        if (!data.errorCode) {
-            McrModel.setJoinableRoomIdArray(data.roomIdArray || []);
-            McrJoinModel.updateOnMsgMcrGetJoinableRoomIdArray();
-            Notify.dispatch(NotifyType.MsgMcrGetJoinableRoomIdArray, data);
-        }
-    }
-
-    export function reqMcrGetJoinedRoomIdArray(): void {
-        NetManager.send({
-            MsgMcrGetJoinedRoomIdArray: { c: {
-            }, }
-        });
-    }
-    function _onMsgMcrGetJoinedRoomIdArray(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMcrGetJoinedRoomIdArray.IS;
-        if (!data.errorCode) {
-            McrModel.setJoinedRoomIdArray(data.roomIdArray || []);
-            McrJoinModel.updateOnMsgMcrGetJoinedRoomIdArray();
-            Notify.dispatch(NotifyType.MsgMcrGetJoinedRoomIdArray, data);
+        } else {
+            if (roomId != null) {
+                McrModel.setRoomPlayerInfo(roomId, data.roomPlayerInfo ?? null);
+            }
+            Notify.dispatch(NotifyType.MsgMcrGetRoomPlayerInfoFailed, data);
         }
     }
 
     export function reqMcrStartWar(roomId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMcrStartWar: { c: {
                 roomId,
             }, },

@@ -3,12 +3,12 @@
 // import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 // import TwnsRwWar            from "./RwWar";
 
-namespace TwnsRwFogMap {
-    export class RwFogMap extends TwnsBwFogMap.BwFogMap {
-        public startRunning(war: TwnsRwWar.RwWar): void {
+namespace Twns.ReplayWar {
+    export class RwFogMap extends Twns.BaseWar.BwFogMap {
+        public startRunning(war: Twns.ReplayWar.RwWar): void {
             this._setWar(war);
 
-            const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeam(war, war.getPlayerInTurn().getTeamIndex());
+            const visibleTiles = Twns.WarHelpers.WarVisibilityHelpers.getAllTilesVisibleToTeam(war, war.getPlayerInTurn().getTeamIndex());
             for (const tile of war.getTileMap().getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
             }

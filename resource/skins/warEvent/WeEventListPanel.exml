@@ -2,62 +2,90 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
-    <e:Group left="0" top="0" bottom="0" right="0">
-        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
-                             alpha="0.8" left="0" top="0" bottom="0" right="0" locked="true" />
-        <TwnsUiLabel:UiLabel id="_labelTitle" text="创建战局" bold="true" size="22" top="10" textColor="0xffffff"
-                             horizontalCenter="0" locked="true" />
-        <TwnsUiButton:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001"
-                               width="120" right="0" top="0" locked="true" />
-        <e:Group x="0" y="0">
-            <TwnsUiButton:UiButton id="_btnAddEvent" label="新增事件"
-                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0" y="0" locked="true" />
-            <TwnsUiButton:UiButton id="_btnClear" label="Delete Redundancy"
-                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0" y="0" />
-            <e:layout>
-                <e:HorizontalLayout gap="0" />
-            </e:layout>
-        </e:Group>
-        <TwnsUiScrollList:UiScrollList id="_listWarEvent" top="40" bottom="5" right="5" left="5">
-            <e:List>
-                <e:itemRendererSkinName>
-                    <e:Skin>
-                        <e:Group left="0" right="0">
-                            <TwnsUiButton:UiButton id="_btnModify" label="A00" width="60" height="24" verticalCenter="0">
-                                <TwnsUiButton:skinName>
-                                    <e:Skin>
-                                        <e:Group left="0" right="0" top="0" bottom="0">
-                                            <e:Image source="uncompressedRectangle0007" scale9Grid="9,9,2,2" left="0"
-                                                     right="0" top="0" bottom="0" locked="true" />
-                                            <TwnsUiLabel:UiLabel id="labelDisplay" size="18" textColor="0xffffff"
-                                                                 text="asdf" textAlign="center" verticalAlign="middle"
-                                                                 wordWrap="true" verticalCenter="1" x="22" />
-                                            <TwnsUiImage:UiImage source="commonIcon0021" verticalCenter="0" x="4" />
-                                            <TwnsUiImage:UiImage id="_imgRed" width="14" height="14"
-                                                                 source="uncompressedCircle0009" right="0" top="0"
-                                                                 locked="true" />
-                                        </e:Group>
-                                    </e:Skin>
-                                </TwnsUiButton:skinName>
-                            </TwnsUiButton:UiButton>
-                            <e:Group id="_groupDesc" verticalCenter="0" left="60" right="0">
-                                <TwnsUiLabel:UiLabel id="_labelError" text="日期" size="10" textColor="0xffffff" x="-150"
-                                                     y="94" />
-                                <TwnsUiLabel:UiLabel id="_labelDesc" text="日期" size="13" textColor="0xffffff" x="-120"
-                                                     y="93" />
-                                <e:layout>
-                                    <e:VerticalLayout gap="1" horizontalAlign="justify" />
-                                </e:layout>
+    <e:Group left="0" right="0" top="0" bottom="0">
+        <e:Group left="0" top="0" bottom="0" width="70">
+            <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0"
+                                 anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0" locked="true" />
+            <TwnsUiScrollList:UiScrollList id="_listWarEventId" top="0" bottom="0" left="0">
+                <e:List>
+                    <e:itemRendererSkinName>
+                        <e:Skin currentState="up" states="down,up" width="70" height="40">
+                            <e:Group left="0" right="0" top="0" bottom="0">
+                                <TwnsUiImage:UiImage source="uncompressedRectangle0007" left="0" right="0" top="0"
+                                                     bottom="0" scale9Grid="7,7,6,6" />
+                                <TwnsUiLabel:UiLabel id="_labelEventId" text="日期" size="14" textColor="0xffffff" x="10"
+                                                     verticalCenter="0" bold.down="true" size.down="18"
+                                                     textColor.down="0x00FF00" />
                             </e:Group>
-                        </e:Group>
-                    </e:Skin>
-                </e:itemRendererSkinName>
+                        </e:Skin>
+                    </e:itemRendererSkinName>
+                    <e:layout>
+                        <e:VerticalLayout />
+                    </e:layout>
+                </e:List>
+            </TwnsUiScrollList:UiScrollList>
+        </e:Group>
+        <e:Group left="70" top="0" bottom="0" right="0" scaleX="1" scaleY="1">
+            <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0"
+                                 anchorOffsetY="0" alpha="0.8" left="0" top="0" bottom="0" right="0" locked="true" />
+            <TwnsUiLabel:UiLabel id="_labelTitle" text="创建战局" bold="true" size="22" top="10" textColor="0xffffff"
+                                 horizontalCenter="0" locked="true" />
+            <TwnsUiButton:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                   width="120" right="0" top="0" locked="true" />
+            <e:Group x="0" y="0">
+                <TwnsUiButton:UiButton id="_btnAddEvent" label="新增事件"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0" y="0" locked="true" />
+                <TwnsUiButton:UiButton id="_btnClear" label="Delete Redundancy"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0" y="0" />
+                <TwnsUiButton:UiButton id="_btnEventList" label="Event List"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" x="10" y="10" />
                 <e:layout>
-                    <e:VerticalLayout paddingTop="4" gap="2" horizontalAlign="justify" />
+                    <e:HorizontalLayout gap="0" />
                 </e:layout>
-            </e:List>
-        </TwnsUiScrollList:UiScrollList>
-        <TwnsUiLabel:UiLabel id="_labelNoEvent" text="无事件" horizontalCenter="0" size="24" verticalCenter="0"
-                             locked="true" />
+            </e:Group>
+            <TwnsUiScrollList:UiScrollList id="_listWarEventDetail" top="40" bottom="5" right="5" left="5">
+                <e:List>
+                    <e:itemRendererSkinName>
+                        <e:Skin>
+                            <e:Group left="0" right="0">
+                                <TwnsUiButton:UiButton id="_btnModify" label="A00" width="60" height="24"
+                                                       verticalCenter="0">
+                                    <TwnsUiButton:skinName>
+                                        <e:Skin>
+                                            <e:Group left="0" right="0" top="0" bottom="0">
+                                                <e:Image source="uncompressedRectangle0007" scale9Grid="9,9,2,2"
+                                                         left="0" right="0" top="0" bottom="0" locked="true" />
+                                                <TwnsUiLabel:UiLabel id="labelDisplay" size="18" textColor="0xffffff"
+                                                                     text="asdf" textAlign="center"
+                                                                     verticalAlign="middle" wordWrap="true"
+                                                                     verticalCenter="1" x="22" />
+                                                <TwnsUiImage:UiImage source="commonIcon0021" verticalCenter="0" x="4" />
+                                                <TwnsUiImage:UiImage id="_imgRed" width="14" height="14"
+                                                                     source="uncompressedCircle0009" right="0" top="0"
+                                                                     locked="true" />
+                                            </e:Group>
+                                        </e:Skin>
+                                    </TwnsUiButton:skinName>
+                                </TwnsUiButton:UiButton>
+                                <e:Group id="_groupDesc" verticalCenter="0" left="60" right="0">
+                                    <TwnsUiLabel:UiLabel id="_labelError" text="日期" size="10" textColor="0xffffff"
+                                                         x="-150" y="94" />
+                                    <TwnsUiLabel:UiLabel id="_labelDesc" text="日期" size="13" textColor="0xffffff"
+                                                         x="-120" y="93" />
+                                    <e:layout>
+                                        <e:VerticalLayout gap="1" horizontalAlign="justify" />
+                                    </e:layout>
+                                </e:Group>
+                            </e:Group>
+                        </e:Skin>
+                    </e:itemRendererSkinName>
+                    <e:layout>
+                        <e:VerticalLayout paddingTop="4" gap="2" horizontalAlign="justify" />
+                    </e:layout>
+                </e:List>
+            </TwnsUiScrollList:UiScrollList>
+            <TwnsUiLabel:UiLabel id="_labelNoEvent" text="无事件" horizontalCenter="0" size="24" verticalCenter="0"
+                                 locked="true" />
+        </e:Group>
     </e:Group>
 </e:Skin>

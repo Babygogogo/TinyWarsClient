@@ -77,10 +77,17 @@
                                                  source="uncompressedPentagon0003" visible.up="false"
                                                  scale9Grid="4,4,1,1" />
                             <e:Group x="10" verticalCenter="0">
+                                <e:Group x="0" y="0">
+                                    <TwnsUiLabel:UiLabel id="_labelType" text="#1 Simulation Std" size="10"
+                                                         maxTextWidth="150" top="0" left="0" />
+                                    <TwnsUiLabel:UiLabel id="_labelTimestamp" text="1999/11/11 19:19:19" size="10"
+                                                         x="90" maxTextWidth="150" top="0" />
+                                </e:Group>
                                 <TwnsUiLabel:UiLabel id="_labelName" text="地图名称" size="16" x="0" maxTextWidth="150"
                                                      y="14" />
-                                <TwnsUiLabel:UiLabel id="_labelType" text="地图名称" size="12" x="0" maxTextWidth="150"
-                                                     y="0" />
+                                <e:layout>
+                                    <e:VerticalLayout gap="4" />
+                                </e:layout>
                             </e:Group>
                         </e:Skin>
                     </e:itemRendererSkinName>

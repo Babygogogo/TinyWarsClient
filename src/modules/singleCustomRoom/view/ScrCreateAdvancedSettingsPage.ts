@@ -10,7 +10,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -20,9 +20,9 @@
 // import ScrCreateModel           from "../model/ScrCreateModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsScrCreateAdvancedSettingsPage {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.SingleCustomRoom {
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
     import PlayerRuleType       = Types.PlayerRuleType;
 
     export class ScrCreateAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
@@ -42,8 +42,8 @@ namespace TwnsScrCreateAdvancedSettingsPage {
 
         protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.ScrCreatePresetWarRuleIdChanged,    callback: this._onNotifyScrCreatePresetWarRuleIdChanged },
+                { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.ScrCreateTemplateWarRuleIdChanged,   callback: this._onNotifyScrCreateTemplateWarRuleIdChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnReset,       callback: this._onTouchedBtnReset },
@@ -57,7 +57,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             this.top    = 0;
             this.bottom = 0;
 
-            this._initialWarRuleId  = ScrCreateModel.getPresetWarRuleId();
+            this._initialWarRuleId  = SingleCustomRoom.ScrCreateModel.getTemplateWarRuleId();
 
             this._updateComponentsForLanguage();
             this._initListSetting();
@@ -72,18 +72,18 @@ namespace TwnsScrCreateAdvancedSettingsPage {
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyScrCreatePresetWarRuleIdChanged(): void {
+        private _onNotifyScrCreateTemplateWarRuleIdChanged(): void {
             this._updateBtnReset();
             this._updateBtnCustomize();
         }
         private _onTouchedBtnReset(): void {
-            ScrCreateModel.resetDataByWarRuleId(Helpers.getExisted(this._initialWarRuleId));
+            SingleCustomRoom.ScrCreateModel.resetDataByTemplateWarRuleId(Helpers.getExisted(this._initialWarRuleId));
         }
         private _onTouchedBtnCustomize(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
-                    ScrCreateModel.setCustomWarRuleId();
+                    SingleCustomRoom.ScrCreateModel.setCustomWarRuleId();
                 },
             });
         }
@@ -97,20 +97,22 @@ namespace TwnsScrCreateAdvancedSettingsPage {
         }
 
         private _updateBtnReset(): void {
-            this._btnReset.visible = (this._initialWarRuleId != null) && (ScrCreateModel.getPresetWarRuleId() == null);
+            this._btnReset.visible = (this._initialWarRuleId != null) && (SingleCustomRoom.ScrCreateModel.getTemplateWarRuleId() == null);
         }
         private _updateBtnCustomize(): void {
-            this._btnCustomize.visible = ScrCreateModel.getPresetWarRuleId() != null;
+            this._btnCustomize.visible = SingleCustomRoom.ScrCreateModel.getTemplateWarRuleId() != null;
         }
 
         private _initListSetting(): void {
             this._listSetting.bindData([
                 { playerRuleType: PlayerRuleType.TeamIndex },
-                { playerRuleType: PlayerRuleType.BannedCoIdArray },
+                { playerRuleType: PlayerRuleType.BannedCoCategoryIdArray },
+                { playerRuleType: PlayerRuleType.BannedUnitTypeArray },
                 { playerRuleType: PlayerRuleType.InitialFund },
                 { playerRuleType: PlayerRuleType.IncomeMultiplier },
                 { playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
                 { playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
+                { playerRuleType: PlayerRuleType.CanActivateCoSkill },
                 { playerRuleType: PlayerRuleType.MoveRangeModifier },
                 { playerRuleType: PlayerRuleType.AttackPowerModifier },
                 { playerRuleType: PlayerRuleType.VisionRangeModifier },
@@ -120,7 +122,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
         }
 
         private async _updateListPlayer(): Promise<void> {
-            const playersCount  = Helpers.getExisted((await ScrCreateModel.getMapRawData()).playersCountUnneutral);
+            const playersCount  = Helpers.getExisted((await SingleCustomRoom.ScrCreateModel.getMapRawData()).playersCountUnneutral);
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -150,15 +152,15 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             if (data) {
                 const playerRuleType    = data.playerRuleType;
                 this._labelName.text    = Lang.getPlayerRuleName(playerRuleType) || CommonConstants.ErrorTextForUndefined;
-                this._btnHelp.visible   = playerRuleType === PlayerRuleType.BannedCoIdArray;
+                this._btnHelp.visible   = playerRuleType === PlayerRuleType.BannedCoCategoryIdArray;
             }
         }
 
         private _onTouchedBtnHelp(): void {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
-            if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+            if (playerRuleType === PlayerRuleType.BannedCoCategoryIdArray) {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
                     title   : `CO`,
                     content : Lang.getText(LangTextType.R0004),
                 });
@@ -194,11 +196,13 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             const playerIndex = this._getData().playerIndex;
             return [
                 { playerIndex, playerRuleType: PlayerRuleType.TeamIndex },
-                { playerIndex, playerRuleType: PlayerRuleType.BannedCoIdArray },
+                { playerIndex, playerRuleType: PlayerRuleType.BannedCoCategoryIdArray },
+                { playerIndex, playerRuleType: PlayerRuleType.BannedUnitTypeArray },
                 { playerIndex, playerRuleType: PlayerRuleType.InitialFund },
                 { playerIndex, playerRuleType: PlayerRuleType.IncomeMultiplier },
                 { playerIndex, playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
                 { playerIndex, playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
+                { playerIndex, playerRuleType: PlayerRuleType.CanActivateCoSkill },
                 { playerIndex, playerRuleType: PlayerRuleType.MoveRangeModifier },
                 { playerIndex, playerRuleType: PlayerRuleType.AttackPowerModifier },
                 { playerIndex, playerRuleType: PlayerRuleType.VisionRangeModifier },
@@ -223,7 +227,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
         private readonly _inputValue!   : TwnsUiTextInput.UiTextInput;
         private readonly _labelValue!   : TwnsUiLabel.UiLabel;
 
-        private _callbackForTouchLabelValue     : (() => void) | null = null;
+        private _callbackForTouchLabelValue     : (() => void | Promise<void>) | null = null;
         private _callbackForFocusOutInputValue  : (() => void) | null = null;
 
         protected _onOpened(): void {
@@ -233,8 +237,8 @@ namespace TwnsScrCreateAdvancedSettingsPage {
                 { ui: this._inputValue, callback: this._onFocusOutInputValue, eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.ScrCreatePresetWarRuleIdChanged,    callback: this._onNotifyScrCreatePresetWarRuleIdChanged },
-                { type: NotifyType.ScrCreateBannedCoIdArrayChanged,    callback: this._onNotifyScrCreateBannedCoIdArrayChanged },
+                { type: NotifyType.ScrCreateTemplateWarRuleIdChanged,       callback: this._onNotifyScrCreateTemplateWarRuleIdChanged },
+                { type: NotifyType.ScrCreateBannedCoCategoryIdArrayChanged, callback: this._onNotifyScrCreateBannedCoCategoryIdArrayChanged },
             ]);
             this._labelValue.touchEnabled = true;
         }
@@ -249,10 +253,10 @@ namespace TwnsScrCreateAdvancedSettingsPage {
         }
 
         private _onTouchedBtnCustom(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
-                    ScrCreateModel.setCustomWarRuleId();
+                    SingleCustomRoom.ScrCreateModel.setCustomWarRuleId();
                 },
             });
         }
@@ -270,16 +274,16 @@ namespace TwnsScrCreateAdvancedSettingsPage {
                 this._updateComponentsForValue();
             }
         }
-        private _onNotifyScrCreatePresetWarRuleIdChanged(): void {
+        private _onNotifyScrCreateTemplateWarRuleIdChanged(): void {
             this._updateBtnCustom();
             this._updateComponentsForValue();
         }
-        private _onNotifyScrCreateBannedCoIdArrayChanged(): void {
+        private _onNotifyScrCreateBannedCoCategoryIdArrayChanged(): void {
             this._updateComponentsForValue();
         }
 
         private _updateBtnCustom(): void {
-            this._btnCustom.visible = ScrCreateModel.getPresetWarRuleId() != null;
+            this._btnCustom.visible = SingleCustomRoom.ScrCreateModel.getTemplateWarRuleId() != null;
         }
         private _updateComponentsForValue(): void {
             const data = this.data;
@@ -287,11 +291,13 @@ namespace TwnsScrCreateAdvancedSettingsPage {
                 const playerIndex = data.playerIndex;
                 switch (data.playerRuleType) {
                     case PlayerRuleType.TeamIndex               : this._updateComponentsForValueAsTeamIndex(playerIndex);               return;
-                    case PlayerRuleType.BannedCoIdArray         : this._updateComponentsForValueAsBannedCoIdArray(playerIndex);         return;
+                    case PlayerRuleType.BannedCoCategoryIdArray : this._updateComponentsForValueAsBannedCoCategoryIdArray(playerIndex); return;
+                    case PlayerRuleType.BannedUnitTypeArray     : this._updateComponentsForValueAsBannedUnitTypeArray(playerIndex);     return;
                     case PlayerRuleType.InitialFund             : this._updateComponentsForValueAsInitialFund(playerIndex);             return;
                     case PlayerRuleType.IncomeMultiplier        : this._updateComponentsForValueAsIncomeMultiplier(playerIndex);        return;
                     case PlayerRuleType.EnergyAddPctOnLoadCo    : this._updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex);    return;
                     case PlayerRuleType.EnergyGrowthMultiplier  : this._updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex);  return;
+                    case PlayerRuleType.CanActivateCoSkill      : this._updateComponentsForValueAsCanActivateCoSkill(playerIndex);      return;
                     case PlayerRuleType.MoveRangeModifier       : this._updateComponentsForValueAsMoveRangeModifier(playerIndex);       return;
                     case PlayerRuleType.AttackPowerModifier     : this._updateComponentsForValueAsAttackPowerModifier(playerIndex);     return;
                     case PlayerRuleType.VisionRangeModifier     : this._updateComponentsForValueAsVisionRangeModifier(playerIndex);     return;
@@ -307,46 +313,67 @@ namespace TwnsScrCreateAdvancedSettingsPage {
 
             const labelValue                    = this._labelValue;
             labelValue.visible                  = true;
-            labelValue.text                     = Lang.getPlayerTeamName(ScrCreateModel.getTeamIndex(playerIndex)) || CommonConstants.ErrorTextForUndefined;
+            labelValue.text                     = Lang.getPlayerTeamName(SingleCustomRoom.ScrCreateModel.getTeamIndex(playerIndex)) || CommonConstants.ErrorTextForUndefined;
             labelValue.textColor                = 0xFFFFFF;
-            this._callbackForTouchLabelValue    = () => ScrCreateModel.tickTeamIndex(playerIndex);
+            this._callbackForTouchLabelValue    = () => SingleCustomRoom.ScrCreateModel.tickTeamIndex(playerIndex);
         }
-        private _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): void {
+        private _updateComponentsForValueAsBannedCoCategoryIdArray(playerIndex: number): void {
             this._inputValue.visible            = false;
             this._callbackForFocusOutInputValue = null;
 
-            const labelValue                    = this._labelValue;
-            const currValue                     = (ScrCreateModel.getBannedCoIdArray(playerIndex) || []).length;
-            labelValue.visible                  = true;
-            labelValue.text                     = `${currValue}`;
-            labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
-            this._callbackForTouchLabelValue    = () => {
-                const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
-                const selfCoId      = ScrCreateModel.getCoId(playerIndex);
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
+            const labelValue                        = this._labelValue;
+            const currentBannedCoCategoryIdArray    = SingleCustomRoom.ScrCreateModel.getBannedCoCategoryIdArray(playerIndex) ?? [];
+            const currValue                         = currentBannedCoCategoryIdArray.length;
+            labelValue.visible                      = true;
+            labelValue.text                         = `${currValue}`;
+            labelValue.textColor                    = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
+            this._callbackForTouchLabelValue        = () => {
+                const gameConfig    = SingleCustomRoom.ScrCreateModel.getGameConfig();
+                const selfCoId      = SingleCustomRoom.ScrCreateModel.getCoId(playerIndex);
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonBanCoCategoryIdPanel, {
                     playerIndex,
-                    configVersion,
-                    bannedCoIdArray     : ScrCreateModel.getBannedCoIdArray(playerIndex) || [],
-                    fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
-                    maxBanCount         : null,
+                    gameConfig,
+                    bannedCoCategoryIdArray : currentBannedCoCategoryIdArray,
+                    maxBanCount             : null,
                     selfCoId,
-                    callbackOnConfirm   : (bannedCoIdSet) => {
+                    callbackOnConfirm       : bannedCoCategoryIdSet => {
                         const callback = () => {
-                            ScrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
-                            Notify.dispatch(NotifyType.ScrCreateBannedCoIdArrayChanged);
-                            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBanCoPanel);
+                            SingleCustomRoom.ScrCreateModel.setBannedCoCategoryIdArray(playerIndex, bannedCoCategoryIdSet);
+                            Notify.dispatch(NotifyType.ScrCreateBannedCoCategoryIdArrayChanged);
+                            PanelHelpers.close(PanelHelpers.PanelDict.CommonBanCoCategoryIdPanel);
                         };
-                        if (!bannedCoIdSet.has(selfCoId)) {
+                        if (!bannedCoCategoryIdSet.has(Helpers.getExisted(gameConfig.getCoBasicCfg(selfCoId)?.categoryId))) {
                             callback();
                         } else {
-                            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0057),
                                 callback: () => {
-                                    ScrCreateModel.setCoId(playerIndex, CommonConstants.CoEmptyId);
+                                    SingleCustomRoom.ScrCreateModel.setCoId(playerIndex, CommonConstants.CoId.Empty);
                                     callback();
                                 },
                             });
                         }
+                    },
+                });
+            };
+        }
+        private _updateComponentsForValueAsBannedUnitTypeArray(playerIndex: number): void {
+            this._inputValue.visible            = false;
+            this._callbackForFocusOutInputValue = null;
+
+            const currentBannedUnitTypeArray    = SingleCustomRoom.ScrCreateModel.getBannedUnitTypeArray(playerIndex) ?? [];
+            const labelValue                    = this._labelValue;
+            const currValue                     = currentBannedUnitTypeArray.length;
+            labelValue.visible                  = true;
+            labelValue.text                     = `${currValue}`;
+            labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
+            this._callbackForTouchLabelValue    = () => {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseUnitTypePanel, {
+                    currentUnitTypeArray    : currentBannedUnitTypeArray,
+                    gameConfig              : SingleCustomRoom.ScrCreateModel.getGameConfig(),
+                    callbackOnConfirm       : bannedUnitTypeArray => {
+                        SingleCustomRoom.ScrCreateModel.setBannedUnitTypeArray(playerIndex, bannedUnitTypeArray);
+                        this._updateComponentsForValue();
                     },
                 });
             };
@@ -356,7 +383,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrCreateModel.getInitialFund(playerIndex);
+            const currValue                     = SingleCustomRoom.ScrCreateModel.getInitialFund(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
@@ -371,7 +398,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrCreateModel.setInitialFund(playerIndex, value);
+                    SingleCustomRoom.ScrCreateModel.setInitialFund(playerIndex, value);
                 }
             };
         }
@@ -380,7 +407,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrCreateModel.getIncomeMultiplier(playerIndex);
+            const currValue                     = SingleCustomRoom.ScrCreateModel.getIncomeMultiplier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
@@ -395,7 +422,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrCreateModel.setIncomeMultiplier(playerIndex, value);
+                    SingleCustomRoom.ScrCreateModel.setIncomeMultiplier(playerIndex, value);
                 }
             };
         }
@@ -404,7 +431,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrCreateModel.getEnergyAddPctOnLoadCo(playerIndex);
+            const currValue                     = SingleCustomRoom.ScrCreateModel.getEnergyAddPctOnLoadCo(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
@@ -419,7 +446,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrCreateModel.setEnergyAddPctOnLoadCo(playerIndex, value);
+                    SingleCustomRoom.ScrCreateModel.setEnergyAddPctOnLoadCo(playerIndex, value);
                 }
             };
         }
@@ -428,7 +455,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrCreateModel.getEnergyGrowthMultiplier(playerIndex);
+            const currValue                     = SingleCustomRoom.ScrCreateModel.getEnergyGrowthMultiplier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
@@ -443,8 +470,23 @@ namespace TwnsScrCreateAdvancedSettingsPage {
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrCreateModel.setEnergyGrowthMultiplier(playerIndex, value);
+                    SingleCustomRoom.ScrCreateModel.setEnergyGrowthMultiplier(playerIndex, value);
                 }
+            };
+        }
+        private _updateComponentsForValueAsCanActivateCoSkill(playerIndex: number): void {
+            this._inputValue.visible            = false;
+            this._callbackForFocusOutInputValue = null;
+
+            const instanceWarRule               = SingleCustomRoom.ScrCreateModel.getInstanceWarRule();
+            const canActivateCoSkill            = WarHelpers.WarRuleHelpers.getCanActivateCoSkill(instanceWarRule, playerIndex);
+            const labelValue                    = this._labelValue;
+            labelValue.visible                  = true;
+            labelValue.text                     = Lang.getText(canActivateCoSkill ? LangTextType.B0012 : LangTextType.B0013);
+            labelValue.textColor                = canActivateCoSkill ? 0xFFFFFF : 0xFF0000;
+            this._callbackForTouchLabelValue    = () => {
+                WarHelpers.WarRuleHelpers.setCanActivateCoSkill(instanceWarRule, playerIndex, !canActivateCoSkill);
+                this._updateComponentsForValue();
             };
         }
         private _updateComponentsForValueAsMoveRangeModifier(playerIndex: number): void {
@@ -452,7 +494,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrCreateModel.getMoveRangeModifier(playerIndex);
+            const currValue                     = SingleCustomRoom.ScrCreateModel.getMoveRangeModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
@@ -467,7 +509,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrCreateModel.setMoveRangeModifier(playerIndex, value);
+                    SingleCustomRoom.ScrCreateModel.setMoveRangeModifier(playerIndex, value);
                 }
             };
         }
@@ -476,7 +518,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrCreateModel.getAttackPowerModifier(playerIndex);
+            const currValue                     = SingleCustomRoom.ScrCreateModel.getAttackPowerModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
@@ -491,7 +533,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrCreateModel.setAttackPowerModifier(playerIndex, value);
+                    SingleCustomRoom.ScrCreateModel.setAttackPowerModifier(playerIndex, value);
                 }
             };
         }
@@ -500,7 +542,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrCreateModel.getVisionRangeModifier(playerIndex);
+            const currValue                     = SingleCustomRoom.ScrCreateModel.getVisionRangeModifier(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
@@ -515,7 +557,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrCreateModel.setVisionRangeModifier(playerIndex, value);
+                    SingleCustomRoom.ScrCreateModel.setVisionRangeModifier(playerIndex, value);
                 }
             };
         }
@@ -524,7 +566,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrCreateModel.getLuckLowerLimit(playerIndex);
+            const currValue                     = SingleCustomRoom.ScrCreateModel.getLuckLowerLimit(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
@@ -536,11 +578,11 @@ namespace TwnsScrCreateAdvancedSettingsPage {
                 if ((isNaN(value))                                          ||
                     (value > CommonConstants.WarRuleLuckMaxLimit)           ||
                     (value < CommonConstants.WarRuleLuckMinLimit)           ||
-                    (value > ScrCreateModel.getLuckUpperLimit(playerIndex))
+                    (value > SingleCustomRoom.ScrCreateModel.getLuckUpperLimit(playerIndex))
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrCreateModel.setLuckLowerLimit(playerIndex, value);
+                    SingleCustomRoom.ScrCreateModel.setLuckLowerLimit(playerIndex, value);
                 }
             };
         }
@@ -549,7 +591,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = ScrCreateModel.getLuckUpperLimit(playerIndex);
+            const currValue                     = SingleCustomRoom.ScrCreateModel.getLuckUpperLimit(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
             inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
@@ -561,11 +603,11 @@ namespace TwnsScrCreateAdvancedSettingsPage {
                 if ((isNaN(value))                                          ||
                     (value > CommonConstants.WarRuleLuckMaxLimit)           ||
                     (value < CommonConstants.WarRuleLuckMinLimit)           ||
-                    (value < ScrCreateModel.getLuckLowerLimit(playerIndex))
+                    (value < SingleCustomRoom.ScrCreateModel.getLuckLowerLimit(playerIndex))
                 ) {
                     FloatText.show(Lang.getText(LangTextType.A0098));
                 } else {
-                    ScrCreateModel.setLuckUpperLimit(playerIndex, value);
+                    SingleCustomRoom.ScrCreateModel.setLuckUpperLimit(playerIndex, value);
                 }
             };
         }

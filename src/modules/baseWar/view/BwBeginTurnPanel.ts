@@ -7,9 +7,9 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwBeginTurnPanel {
-    export type OpenData = {
-        configVersion       : string;
+namespace Twns.BaseWar {
+    export type OpenDataForBwBeginTurnPanel = {
+        gameConfig          : Twns.Config.GameConfig;
         playerIndex         : number;
         teamIndex           : number;
         nickname            : string;
@@ -17,7 +17,7 @@ namespace TwnsBwBeginTurnPanel {
         unitAndTileSkinId   : number;
         callbackOnFinish    : () => void;
     };
-    export class BwBeginTurnPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwBeginTurnPanel extends TwnsUiPanel.UiPanel<OpenDataForBwBeginTurnPanel> {
         private readonly _group!            : eui.Group;
         private readonly _labelPlayerIndex! : TwnsUiLabel.UiLabel;
         private readonly _labelNickname!    : TwnsUiLabel.UiLabel;
@@ -30,12 +30,12 @@ namespace TwnsBwBeginTurnPanel {
         protected _onOpening(): void {
             this._setIsTouchMaskEnabled();
             this._setCallbackOnTouchedMask(() => {
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
                 this._clearTimeoutForClose();
                 this.close();
             });
         }
-        protected async _updateOnOpenDataChanged(oldOpenData: OpenData | null): Promise<void> {
+        protected async _updateOnOpenDataChanged(oldOpenData: OpenDataForBwBeginTurnPanel | null): Promise<void> {
             if (oldOpenData) {
                 oldOpenData.callbackOnFinish();
                 this._resetTimeoutForClose();
@@ -44,9 +44,9 @@ namespace TwnsBwBeginTurnPanel {
             const openData              = this._getOpenData();
             this._labelPlayerIndex.text = `${Lang.getPlayerForceName(openData.playerIndex)} (${Lang.getPlayerTeamName(openData.teamIndex)})`;
             this._labelNickname.text    = openData.nickname;
-            this._labelTurnStart.text   = Lang.getText(TwnsLangTextType.LangTextType.B0679);
-            this._imgSkin.source        = WarCommonHelpers.getImageSourceForCoHeadFrame(openData.unitAndTileSkinId);
-            this._imgCo.source          = ConfigManager.getCoHeadImageSource(openData.configVersion, openData.coId);
+            this._labelTurnStart.text   = Lang.getText(Twns.Lang.LangTextType.B0679);
+            this._imgSkin.source        = Twns.WarHelpers.WarCommonHelpers.getImageSourceForCoHeadFrame(openData.unitAndTileSkinId);
+            this._imgCo.source          = openData.gameConfig.getCoHeadImageSource(openData.coId) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         protected _onClosing(): void {
             this._clearTimeoutForClose();
@@ -72,7 +72,7 @@ namespace TwnsBwBeginTurnPanel {
             egret.Tween.get(this)
                 .to({ alpha: 1 }, 150);
 
-            await Helpers.wait(250);
+            await Twns.Helpers.wait(250);
 
             this._resetTimeoutForClose();
         }
@@ -80,7 +80,7 @@ namespace TwnsBwBeginTurnPanel {
             egret.Tween.get(this)
                 .to({ alpha: 0 }, 150);
 
-            await Helpers.wait(250);
+            await Twns.Helpers.wait(250);
         }
     }
 }

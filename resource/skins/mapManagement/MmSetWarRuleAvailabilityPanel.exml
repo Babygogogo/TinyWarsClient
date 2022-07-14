@@ -5,8 +5,8 @@
     <e:Group width="580" horizontalCenter="0" height="240" verticalCenter="0">
         <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="0" right="0" top="0" bottom="0" locked="true" />
-        <TwnsUiLabel:UiLabel text="可用性设定" textColor="0xFFFFFF" y="10" size="22" textAlign="right" horizontalCenter="0"
-                             locked="true" />
+        <TwnsUiLabel:UiLabel id="_labelTitle" text="可用性设定" textColor="0xFFFFFF" y="10" size="22" textAlign="right"
+                             horizontalCenter="0" />
         <e:Scroller left="5" right="5" top="40" bottom="50">
             <e:Group>
                 <e:Group id="_groupMcw" y="178" x="229">

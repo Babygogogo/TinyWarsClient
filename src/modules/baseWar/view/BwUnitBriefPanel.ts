@@ -8,7 +8,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
@@ -20,18 +20,18 @@
 // import TwnsBwUnitView           from "./BwUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwUnitBriefPanel {
-    import BwWar                = TwnsBwWar.BwWar;
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import BwUnit               = TwnsBwUnit.BwUnit;
+namespace Twns.BaseWar {
+    import BwWar        = BaseWar.BwWar;
+    import NotifyType   = Notify.NotifyType;
+    import BwUnit       = BaseWar.BwUnit;
 
-    const _CELL_WIDTH           = 70;
+    const _CELL_WIDTH   = 70;
 
-    export type OpenData = {
+    export type OpenDataForBwUnitBriefPanel = {
         war : BwWar;
     };
     // eslint-disable-next-line no-shadow
-    export class BwUnitBriefPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwUnitBriefPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitBriefPanel> {
         private readonly _group!        : eui.Group;
         private readonly _btnExpand!    : TwnsUiButton.UiButton;
         private readonly _btnNarrow!    : TwnsUiButton.UiButton;
@@ -97,7 +97,7 @@ namespace TwnsBwUnitBriefPanel {
             this._updateView();
         }
         private _onNotifyBwUnitChanged(e: egret.Event): void {
-            const data = e.data as NotifyData.BwUnitChanged;
+            const data = e.data as Notify.NotifyData.BwUnitChanged;
             if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData().war.getCursor().getGridIndex())) {
                 this._updateView();
             }
@@ -126,7 +126,10 @@ namespace TwnsBwUnitBriefPanel {
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
             for (let i = 0; i < this._cellList.length; ++i) {
                 if (this._cellList[i] === e.currentTarget) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitDetailPanel, { unit: this._unitList[i] });
+                    PanelHelpers.open(PanelHelpers.PanelDict.BwUnitDetailPanel, {
+                        unit        : this._unitList[i],
+                        canDelete   : this._getOpenData().war.getCanCheat(),
+                    });
                     return;
                 }
             }
@@ -155,10 +158,10 @@ namespace TwnsBwUnitBriefPanel {
             const unitMap       = war.getUnitMap();
             const gridIndex     = war.getCursor().getGridIndex();
             const unitOnMap     = unitMap.getUnitOnMap(gridIndex);
-            const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const teamIndexes   = war.getPlayerManager().getWatcherTeamIndexesForSelf();
 
             if ((unitOnMap)                                         &&
-                (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                (WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                     war,
                     gridIndex,
                     unitType            : unitOnMap.getUnitType(),
@@ -169,7 +172,8 @@ namespace TwnsBwUnitBriefPanel {
             ) {
                 unitList.push(unitOnMap);
 
-                if ((!war.getFogMap().checkHasFogCurrently())   ||
+                if ((!war.getFogMap().checkHasFogCurrently())               ||
+                    (war.getGameConfig().checkIsLoadedUnitVisibleInFog())   ||
                     (teamIndexes.has(unitOnMap.getTeamIndex()))
                 ) {
                     for (const loadedUnit of unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
@@ -274,7 +278,7 @@ namespace TwnsBwUnitBriefPanel {
         private readonly _imgHp!        : TwnsUiImage.UiImage;
         private readonly _imgFuel!      : TwnsUiImage.UiImage;
         private readonly _imgState!     : TwnsUiImage.UiImage;
-        private readonly _unitView      = new TwnsBwUnitView.BwUnitView();
+        private readonly _unitView      = new BaseWar.BwUnitView();
 
         private _unit               : BwUnit | null = null;
         private _isChildrenCreated  = false;
@@ -322,7 +326,7 @@ namespace TwnsBwUnitBriefPanel {
                 this._unitView.init(unit).startRunningView();
                 this._labelHp.text      = `${unit.getCurrentHp()}`;
                 this._labelFuel.text    = `${unit.getCurrentFuel()}`;
-                this._labelName.text    = Lang.getUnitName(unit.getUnitType()) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelName.text    = Lang.getUnitName(unit.getUnitType(), unit.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined;
 
                 if (unit.getCurrentBuildMaterial() != null) {
                     this._imgState.visible      = true;

@@ -9,11 +9,11 @@
 // import TwnsMeWar            from "./MeWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace MeModel {
-    import MeWar            = TwnsMeWar.MeWar;
+namespace Twns.MapEditor.MeModel {
+    import MeWar            = MapEditor.MeWar;
     import MapReviewStatus  = Types.MapReviewStatus;
-    import IMapRawData      = ProtoTypes.Map.IMapRawData;
-    import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
+    import IMapRawData      = CommonProto.Map.IMapRawData;
+    import IMapEditorData   = CommonProto.Map.IMapEditorData;
 
     const MAP_DICT  = new Map<number, IMapEditorData>();
     let _war        : MeWar | null = null;
@@ -34,7 +34,7 @@ namespace MeModel {
             });
         }
 
-        const maxSlotsCount = UserModel.getIsSelfMapCommittee()
+        const maxSlotsCount = User.UserModel.getIsSelfMapCommittee()
             ? CommonConstants.MapEditorSlotMaxCountForCommittee
             : CommonConstants.MapEditorSlotMaxCountForNormal;
         for (let i = 0; i < maxSlotsCount; ++i) {
@@ -66,6 +66,11 @@ namespace MeModel {
         return null;
     }
 
+    export function updateOnMsgMeDeleteSlot(data: CommonProto.NetMessage.MsgMeDeleteSlot.IS): void {
+        const slotIndex = Helpers.getExisted(data.slotIndex);
+        MAP_DICT.delete(slotIndex);
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,12 +80,15 @@ namespace MeModel {
             unloadWar();
         }
 
-        mapRawData = mapRawData || await MeUtility.createDefaultMapRawData(slotIndex);
-        _war = new MeWar();
-        await _war.initWithMapEditorData({
-            mapRawData,
-            slotIndex
-        });
+        const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
+        _war                = new MeWar();
+        await _war.initWithMapEditorData(
+            {
+                mapRawData  : mapRawData ?? await MapEditor.MeHelpers.createDefaultMapRawData(slotIndex, gameConfig),
+                slotIndex
+            },
+            gameConfig
+        );
         _war.setIsMapModified(false);
         _war.setIsReviewingMap(isReview);
         _war.startRunning()
@@ -114,16 +122,11 @@ namespace MeModel {
         }
 
         for (const tileData of mapRawData.tileDataArray || []) {
-            if (tileData.baseType !== Types.TileBaseType.Sea) {
+            if (tileData.baseType !== CommonConstants.TileBaseType.Sea) {
                 continue;
             }
 
-            const shapeId = tileData.baseShapeId;
-            if (shapeId) {
-                tileData.decoratorType      = Types.TileDecoratorType.Shore;
-                tileData.decoratorShapeId   = shapeId;
-                tileData.baseShapeId        = 0;
-            }
+            tileData.baseShapeId = null;
         }
         return mapRawData;
     }

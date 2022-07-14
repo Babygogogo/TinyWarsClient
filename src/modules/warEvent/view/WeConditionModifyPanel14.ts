@@ -5,7 +5,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -16,19 +16,19 @@
 // import TwnsWeConditionTypeListPanel from "./WeConditionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeConditionModifyPanel14 {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
+namespace Twns.WarEvent {
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
-    export type OpenData = {
-        war         : TwnsBwWar.BwWar;
+    export type OpenDataForWeConditionModifyPanel14 = {
+        war         : BaseWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
     /** WecPlayerIndexInTurnEqualTo */
-    export class WeConditionModifyPanel14 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeConditionModifyPanel14 extends TwnsUiPanel.UiPanel<OpenDataForWeConditionModifyPanel14> {
         private readonly _labelTitle!                       : TwnsUiLabel.UiLabel;
         private readonly _btnType!                          : TwnsUiButton.UiButton;
         private readonly _btnClose!                         : TwnsUiButton.UiButton;
@@ -40,6 +40,10 @@ namespace TwnsWeConditionModifyPanel14 {
         private readonly _labelPlayerIndex!                 : TwnsUiLabel.UiLabel;
         private readonly _btnAliveState!                    : TwnsUiButton.UiButton;
         private readonly _labelAliveState!                  : TwnsUiLabel.UiLabel;
+        private readonly _btnIsSkipTurn!                    : TwnsUiButton.UiButton;
+        private readonly _labelIsSkipTurn!                  : TwnsUiLabel.UiLabel;
+        private readonly _btnCoCategory!                    : TwnsUiButton.UiButton;
+        private readonly _labelCoCategory!                  : TwnsUiLabel.UiLabel;
         private readonly _btnUsingSkillType!                : TwnsUiButton.UiButton;
         private readonly _labelUsingSkillType!              : TwnsUiLabel.UiLabel;
         private readonly _labelFund!                        : TwnsUiLabel.UiLabel;
@@ -66,6 +70,8 @@ namespace TwnsWeConditionModifyPanel14 {
                 { ui: this._imgInnerTouchMask,              callback: this._onTouchedImgInnerTouchMask },
                 { ui: this._btnPlayerIndex,                 callback: this._onTouchedBtnPlayerIndex },
                 { ui: this._btnAliveState,                  callback: this._onTouchedBtnAliveState },
+                { ui: this._btnIsSkipTurn,                  callback: this._onTouchedBtnIsSkipTurn },
+                { ui: this._btnCoCategory,                  callback: this._onTouchedBtnCoCategory },
                 { ui: this._btnUsingSkillType,              callback: this._onTouchedBtnUsingSkillType },
                 { ui: this._inputFund,                      callback: this._onFocusInInputFund,                     eventType: egret.FocusEvent.FOCUS_IN },
                 { ui: this._inputFund,                      callback: this._onFocusOutInputFund,                    eventType: egret.FocusEvent.FOCUS_OUT },
@@ -98,7 +104,7 @@ namespace TwnsWeConditionModifyPanel14 {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.WeConditionTypeListPanel, {
                 fullData    : openData.fullData,
                 condition   : openData.condition,
                 war         : openData.war,
@@ -109,7 +115,7 @@ namespace TwnsWeConditionModifyPanel14 {
         }
         private _onTouchedBtnPlayerIndex(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerIndexPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChoosePlayerIndexPanel, {
                 currentPlayerIndexArray : condition.playerIndexArray ?? [],
                 maxPlayerIndex          : this._getOpenData().war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : playerIndexArray => {
@@ -120,7 +126,7 @@ namespace TwnsWeConditionModifyPanel14 {
         }
         private _onTouchedBtnAliveState(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerAliveStatePanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChoosePlayerAliveStatePanel, {
                 currentAliveStateArray  : condition.aliveStateArray ?? [],
                 callbackOnConfirm       : aliveStateArray => {
                     condition.aliveStateArray = aliveStateArray;
@@ -128,9 +134,33 @@ namespace TwnsWeConditionModifyPanel14 {
                 },
             });
         }
+        private _onTouchedBtnIsSkipTurn(): void {
+            const condition     = this._getCondition();
+            const isSkipTurn    = condition.isSkipTurn;
+            if (isSkipTurn == null) {
+                condition.isSkipTurn = true;
+            } else if (isSkipTurn) {
+                condition.isSkipTurn = false;
+            } else {
+                condition.isSkipTurn = null;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onTouchedBtnCoCategory(): void {
+            const condition = this._getCondition();
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseCoCategoryIdPanel, {
+                currentCoCategoryIdArray        : condition.coCategoryIdArray ?? [],
+                gameConfig                      : this._getOpenData().war.getGameConfig(),
+                forceUnchosenCoCategoryIdArray  : null,
+                callbackOnConfirm               : coCategoryIdArray => {
+                    condition.coCategoryIdArray = coCategoryIdArray;
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                }
+            });
+        }
         private _onTouchedBtnUsingSkillType(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoSkillTypePanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseCoSkillTypePanel, {
                 currentSkillTypeArray   : condition.coUsingSkillTypeArray ?? [],
                 callbackOnConfirm       : skillTypeArray => {
                     condition.coUsingSkillTypeArray = skillTypeArray;
@@ -199,6 +229,8 @@ namespace TwnsWeConditionModifyPanel14 {
             this._updateLabelDescAndLabelError();
             this._updateLabelPlayerIndex();
             this._updateLabelAliveState();
+            this._updateLabelIsSkipTurn();
+            this._updateLabelCoCategory();
             this._updateLabelUsingSkillType();
             this._updateInputFund();
             this._updateLabelFundComparator();
@@ -214,6 +246,8 @@ namespace TwnsWeConditionModifyPanel14 {
             this._btnType.label                         = Lang.getText(LangTextType.B0516);
             this._btnPlayerIndex.label                  = Lang.getText(LangTextType.B0521);
             this._btnAliveState.label                   = Lang.getText(LangTextType.B0784);
+            this._btnIsSkipTurn.label                   = Lang.getText(LangTextType.B0979);
+            this._btnCoCategory.label                   = Lang.getText(LangTextType.B0425);
             this._btnUsingSkillType.label               = Lang.getText(LangTextType.B0785);
             this._labelFund.text                        = Lang.getText(LangTextType.B0032);
             this._btnFundComparator.label               = Lang.getText(LangTextType.B0774);
@@ -228,11 +262,12 @@ namespace TwnsWeConditionModifyPanel14 {
         private _updateLabelDescAndLabelError(): void {
             const openData          = this._getOpenData();
             const condition         = openData.condition;
-            const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition, openData.war);
+            const war               = openData.war;
+            const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = WarEventHelper.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelPlayerIndex(): void {
             const playerIndexArray      = this._getCondition().playerIndexArray;
@@ -241,6 +276,17 @@ namespace TwnsWeConditionModifyPanel14 {
         private _updateLabelAliveState(): void {
             const aliveStateArray       = this._getCondition().aliveStateArray;
             this._labelAliveState.text  = aliveStateArray?.length ? aliveStateArray.map(v => Lang.getPlayerAliveStateName(v)).join(`, `) : Lang.getText(LangTextType.B0776);
+        }
+        private _updateLabelIsSkipTurn(): void {
+            const isSkipTurn            = this._getCondition().isSkipTurn;
+            this._labelIsSkipTurn.text  = isSkipTurn == null
+                ? `--`
+                : Lang.getText(isSkipTurn ? LangTextType.B0012 : LangTextType.B0013);
+        }
+        private _updateLabelCoCategory(): void {
+            const coCategoryIdArray     = this._getCondition().coCategoryIdArray;
+            const gameConfig            = this._getOpenData().war.getGameConfig();
+            this._labelCoCategory.text  = coCategoryIdArray?.length ? coCategoryIdArray.map(v => gameConfig.getCoCategoryCfg(v)?.name).join(`, `) : Lang.getText(LangTextType.B0776);
         }
         private _updateLabelUsingSkillType(): void {
             const usingSkillTypeArray       = this._getCondition().coUsingSkillTypeArray;
@@ -271,8 +317,8 @@ namespace TwnsWeConditionModifyPanel14 {
             this._labelPlayersCountComparator.text  = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
         }
 
-        private _getCondition(): ProtoTypes.WarEvent.IWecPlayerState {
-            return Helpers.getExisted(this._getOpenData().condition.WecPlayerState);
+        private _getCondition(): CommonProto.WarEvent.IWecPlayerPresence {
+            return Helpers.getExisted(this._getOpenData().condition.WecPlayerPresence);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {
             this._imgInnerTouchMask.visible = isEnabled;

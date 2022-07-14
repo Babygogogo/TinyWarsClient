@@ -6,7 +6,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -14,13 +14,13 @@
 // import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBroadcastAddMessagePanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+namespace Twns.Broadcast {
+    import LangTextType     = Lang.LangTextType;
+    import NotifyType       = Notify.NotifyType;
+    import ILanguageText    = CommonProto.Structure.ILanguageText;
 
-    export type OpenData = void;
-    export class BroadcastAddMessagePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForBroadcastAddMessagePanel = void;
+    export class BroadcastAddMessagePanel extends TwnsUiPanel.UiPanel<OpenDataForBroadcastAddMessagePanel> {
         private readonly _group!                : eui.Group;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelChinese!         : TwnsUiLabel.UiLabel;
@@ -99,7 +99,7 @@ namespace TwnsBroadcastAddMessagePanel {
                 FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.BroadcastTextMaxLength));
             } else {
                 const startTime = this._startTime;
-                BroadcastProxy.reqBroadcastAddMessage(textList, startTime, startTime + this._duration);
+                Broadcast.BroadcastProxy.reqBroadcastAddMessage(textList, startTime, startTime + this._duration);
                 this.close();
             }
         }
@@ -114,14 +114,14 @@ namespace TwnsBroadcastAddMessagePanel {
             const minValue  = 2022;
             const maxValue  = 2100;
             const date      = new Date(this._startTime * 1000);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0059),
                 minValue,
                 maxValue,
                 currentValue    : date.getFullYear(),
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    date.setFullYear(panel.getInputValue());
+                callback        : value => {
+                    date.setFullYear(value);
                     this._startTime = Math.floor(date.getTime() / 1000);
                     this._updateLabelStartTime();
                     this._updateLabelDuration();
@@ -132,14 +132,14 @@ namespace TwnsBroadcastAddMessagePanel {
             const minValue  = 1;
             const maxValue  = 12;
             const date      = new Date(this._startTime * 1000);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0058),
                 minValue,
                 maxValue,
                 currentValue    : date.getMonth() + 1,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    date.setMonth(panel.getInputValue() - 1);
+                callback        : value => {
+                    date.setMonth(value - 1);
                     this._startTime = Math.floor(date.getTime() / 1000);
                     this._updateLabelStartTime();
                     this._updateLabelDuration();
@@ -150,14 +150,14 @@ namespace TwnsBroadcastAddMessagePanel {
             const minValue  = 1;
             const maxValue  = 31;
             const date      = new Date(this._startTime * 1000);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0057),
                 minValue,
                 maxValue,
                 currentValue    : date.getDate(),
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    date.setDate(panel.getInputValue());
+                callback        : value => {
+                    date.setDate(value);
                     this._startTime = Math.floor(date.getTime() / 1000);
                     this._updateLabelStartTime();
                     this._updateLabelDuration();
@@ -168,14 +168,14 @@ namespace TwnsBroadcastAddMessagePanel {
             const minValue  = 0;
             const maxValue  = 23;
             const date      = new Date(this._startTime * 1000);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0884),
                 minValue,
                 maxValue,
                 currentValue    : date.getHours(),
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    date.setHours(panel.getInputValue());
+                callback        : value => {
+                    date.setHours(value);
                     this._startTime = Math.floor(date.getTime() / 1000);
                     this._updateLabelStartTime();
                     this._updateLabelDuration();
@@ -186,14 +186,14 @@ namespace TwnsBroadcastAddMessagePanel {
             const minValue  = 0;
             const maxValue  = 59;
             const date      = new Date(this._startTime * 1000);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0885),
                 minValue,
                 maxValue,
                 currentValue    : date.getMinutes(),
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    date.setMinutes(panel.getInputValue());
+                callback        : value => {
+                    date.setMinutes(value);
                     this._startTime = Math.floor(date.getTime() / 1000);
                     this._updateLabelStartTime();
                     this._updateLabelDuration();
@@ -204,14 +204,14 @@ namespace TwnsBroadcastAddMessagePanel {
             const minValue  = 0;
             const maxValue  = 59;
             const date      = new Date(this._startTime * 1000);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0886),
                 minValue,
                 maxValue,
                 currentValue    : date.getSeconds(),
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    date.setSeconds(panel.getInputValue());
+                callback        : value => {
+                    date.setSeconds(value);
                     this._startTime = Math.floor(date.getTime() / 1000);
                     this._updateLabelStartTime();
                     this._updateLabelDuration();
@@ -222,14 +222,13 @@ namespace TwnsBroadcastAddMessagePanel {
         private _onTouchedBtnDuration(): void {
             const minValue  = 30;
             const maxValue  = 3600 * 24;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0883),
                 minValue,
                 maxValue,
                 currentValue    : this._duration,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}](s)`,
-                callback        : panel => {
-                    const newValue = panel.getInputValue();
+                callback        : newValue => {
                     this._duration = newValue;
                     this._updateLabelDuration();
                 },

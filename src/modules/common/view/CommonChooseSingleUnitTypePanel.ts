@@ -5,7 +5,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -15,18 +15,19 @@
 // import WarEventHelper           from "../model/WarEventHelper";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseSingleUnitTypePanel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import UnitType             = Types.UnitType;
+namespace Twns.Common {
+    import NotifyType           = Notify.NotifyType;
+    import LangTextType         = Lang.LangTextType;
+    import GameConfig           = Config.GameConfig;
 
-    export type OpenData = {
-        currentUnitType : UnitType;
-        unitTypeArray   : UnitType[];
+    export type OpenDataForCommonChooseSingleUnitTypePanel = {
+        gameConfig      : GameConfig;
+        currentUnitType : number | null;
+        unitTypeArray   : number[];
         playerIndex     : number;
-        callback        : (unitType: UnitType) => void;
+        callback        : (unitType: number) => void;
     };
-    export class CommonChooseSingleUnitTypePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChooseSingleUnitTypePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseSingleUnitTypePanel> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
@@ -69,9 +70,11 @@ namespace TwnsCommonChooseSingleUnitTypePanel {
         private _updateListType(): void {
             const openData      = this._getOpenData();
             const playerIndex   = openData.playerIndex;
+            const gameConfig    = openData.gameConfig;
             const dataArray     : DataForTypeRenderer[] = [];
             for (const newUnitType of openData.unitTypeArray) {
                 dataArray.push({
+                    gameConfig,
                     currentUnitType: openData.currentUnitType,
                     newUnitType,
                     playerIndex,
@@ -112,16 +115,17 @@ namespace TwnsCommonChooseSingleUnitTypePanel {
     }
 
     type DataForTypeRenderer = {
-        currentUnitType : UnitType;
-        newUnitType     : UnitType;
+        gameConfig      : GameConfig;
+        currentUnitType : number | null;
+        newUnitType     : number;
         playerIndex     : number;
-        callback        : (unitType: UnitType) => void;
+        callback        : (unitType: number) => void;
     };
     class TypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTypeRenderer> {
         private readonly _conUnitView!  : eui.Group;
         private readonly _labelType!    : TwnsUiLabel.UiLabel;
 
-        private readonly _unitView      = new TwnsWarMapUnitView.WarMapUnitView();
+        private readonly _unitView      = new WarMap.WarMapUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -145,7 +149,7 @@ namespace TwnsCommonChooseSingleUnitTypePanel {
             if (newUnitType !== data.currentUnitType) {
                 data.callback(newUnitType);
 
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonChooseSingleUnitTypePanel);
+                PanelHelpers.close(PanelHelpers.PanelDict.CommonChooseSingleUnitTypePanel);
             }
         }
 
@@ -161,14 +165,16 @@ namespace TwnsCommonChooseSingleUnitTypePanel {
         }
 
         private _updateLabelType(): void {
-            const data      = this._getData();
-            const label     = this._labelType;
-            label.text      = Lang.getUnitName(data.newUnitType) || CommonConstants.ErrorTextForUndefined;
-            label.textColor = data.currentUnitType === data.newUnitType ? 0x00FF00 : 0xFFFFFF;
+            const data          = this._getData();
+            const label         = this._labelType;
+            const newUnitType   = data.newUnitType;
+            label.text          = Lang.getUnitName(newUnitType, data.gameConfig) || CommonConstants.ErrorTextForUndefined;
+            label.textColor     = data.currentUnitType === newUnitType ? 0x00FF00 : 0xFFFFFF;
         }
         private _updateUnitView(): void {
             const data = this._getData();
             this._unitView.update({
+                gameConfig  : data.gameConfig,
                 gridIndex   : { x: 0, y: 0 },
                 playerIndex : data.playerIndex,
                 unitType    : data.newUnitType,

@@ -7,22 +7,21 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsRwReplayProgressPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+namespace Twns.ReplayWar {
+    import NotifyType       = Notify.NotifyType;
+    import LangTextType     = Lang.LangTextType;
 
-    export type OpenData = {
-        war: TwnsRwWar.RwWar;
+    export type OpenDataForRwReplayProgressPanel = {
+        war: ReplayWar.RwWar | HalfwayReplayWar.HrwWar;
     };
-    export class RwReplayProgressPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class RwReplayProgressPanel extends TwnsUiPanel.UiPanel<OpenDataForRwReplayProgressPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -117,12 +116,12 @@ namespace TwnsRwReplayProgressPanel {
             this._updateLabelTarget();
         }
         private async _onTouchedBtnConfirm(): Promise<void> {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonBlockPanel, {
                 title   : Lang.getText(LangTextType.B0088),
                 content : Lang.getText(LangTextType.A0040),
             });
             await this._getOpenData().war.loadCheckpoint(this._getSelectedCheckpointId());
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBlockPanel);
+            PanelHelpers.close(PanelHelpers.PanelDict.CommonBlockPanel);
             this.close();
         }
         private _onTouchedPanelMask(): void {

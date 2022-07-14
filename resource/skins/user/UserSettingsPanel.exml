@@ -5,7 +5,7 @@
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                          scale9Grid="1,1,2,2" />
-    <e:Group id="_group" width="520" height="430" horizontalCenter="0" verticalCenter="0">
+    <e:Group id="_group" width="520" height="310" horizontalCenter="0" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0">
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
                                  scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
@@ -28,26 +28,26 @@
                         </e:Skin>
                     </TwnsUiButton:skinName>
                 </TwnsUiButton:UiButton>
+                <TwnsUiButton:UiButton id="_btnSetSound" verticalCenter="0" right="130" x="484" y="27" scaleX="1.2"
+                                       scaleY="1.2">
+                    <TwnsUiButton:skinName>
+                        <e:Skin>
+                            <e:Group horizontalCenter="0" verticalCenter="0">
+                                <e:Image id="_imgDisplay" width="100%" height="100%" source="commonIconSound0000" />
+                                <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
+                                         textColor="0xffffff" />
+                                <TwnsUiImage:UiImage id="_imgExtra" verticalCenter="0" horizontalCenter="0" />
+                            </e:Group>
+                        </e:Skin>
+                    </TwnsUiButton:skinName>
+                </TwnsUiButton:UiButton>
             </e:Group>
         </e:Group>
-        <e:Scroller id="_scroller" left="0" right="0" top="50" bottom="10">
-            <e:Group x="20" y="0">
+        <e:Scroller id="_scroller" top="50" bottom="10" horizontalCenter="0">
+            <e:Group y="0">
                 <e:Group x="10">
                     <e:Group x="0" y="0">
                         <TwnsUiRadioButton:UiRadioButton id="_uiRadioLanguage" x="90" y="17"
-                                                         skinName="Skins.Component.RadioButton.RadioButton001" />
-                        <TwnsUiRadioButton:UiRadioButton id="_uiRadioTexture" x="100" y="27"
-                                                         skinName="Skins.Component.RadioButton.RadioButton001" />
-                        <TwnsUiRadioButton:UiRadioButton id="_uiRadioShowGridBorder" x="80" y="7"
-                                                         skinName="Skins.Component.RadioButton.RadioButton001" />
-                        <e:layout>
-                            <e:HorizontalLayout gap="50" />
-                        </e:layout>
-                    </e:Group>
-                    <e:Group x="0" y="44">
-                        <TwnsUiRadioButton:UiRadioButton id="_uiRadioUnitAnimation" x="80" y="7"
-                                                         skinName="Skins.Component.RadioButton.RadioButton001" />
-                        <TwnsUiRadioButton:UiRadioButton id="_uiRadioTileAnimation" x="90" y="17"
                                                          skinName="Skins.Component.RadioButton.RadioButton001" />
                         <TwnsUiRadioButton:UiRadioButton id="_uiRadioAutoScrollMap" x="100" y="27"
                                                          skinName="Skins.Component.RadioButton.RadioButton001" />
@@ -62,12 +62,6 @@
                 <e:Group id="_groupButtons" y="220" horizontalCenter="0">
                     <TwnsUiButton:UiButton id="_btnRankList" label="积分排名" y="300" x="196"
                                            skinName="Skins.Component.Button.ButtonBlack001" width="120" height="34" />
-                    <TwnsUiButton:UiButton id="_btnChangeNickname" label="更改昵称" y="290" x="186"
-                                           skinName="Skins.Component.Button.ButtonBlack001" />
-                    <TwnsUiButton:UiButton id="_btnChangePassword" label="更改密码" y="290" x="186"
-                                           skinName="Skins.Component.Button.ButtonBlack001" />
-                    <TwnsUiButton:UiButton id="_btnChangeDiscordId" label="更改Discord ID" y="300" x="196"
-                                           skinName="Skins.Component.Button.ButtonBlack001" />
                     <TwnsUiButton:UiButton id="_btnChangeGameVersion" label="更改Discord ID" y="300" x="196"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
                     <TwnsUiButton:UiButton id="_btnShowOnlineUsers" label="在线玩家" y="310" x="206"
@@ -78,7 +72,7 @@
                                            skinName="Skins.Component.Button.ButtonBlack001" />
                     <TwnsUiButton:UiButton id="_btnComplaint" label="意见反馈" y="340" x="236"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
-                    <TwnsUiButton:UiButton id="_btnUnitsInfo" label="部队属性表" y="360" x="256"
+                    <TwnsUiButton:UiButton id="_btnGameChart" label="部队属性表" y="360" x="256"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
                     <TwnsUiButton:UiButton id="_btnChangeLog" label="更新日志" y="360" x="256"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
@@ -86,18 +80,14 @@
                                            skinName="Skins.Component.Button.ButtonBlack001" />
                     <TwnsUiButton:UiButton id="_btnMapManagement" label="管理地图" y="360" x="256"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
-                    <TwnsUiButton:UiButton id="_btnSetSound" label="声音设置" y="360" x="256"
-                                           skinName="Skins.Component.Button.ButtonBlack001" />
-                    <TwnsUiButton:UiButton id="_btnSetOpacity" label="不透明度设置" y="370" x="266"
-                                           skinName="Skins.Component.Button.ButtonBlack001" />
-                    <TwnsUiButton:UiButton id="_btnSetStageScaler" label="分辨率设置" y="360" x="256"
+                    <TwnsUiButton:UiButton id="_btnGraphicSettings" label="画面设置" y="370" x="266"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
                     <e:layout>
                         <e:TileLayout orientation="rows" requestedColumnCount="3" horizontalGap="50" verticalGap="14" />
                     </e:layout>
                 </e:Group>
                 <e:layout>
-                    <e:VerticalLayout horizontalAlign="center" gap="20" paddingTop="2" />
+                    <e:VerticalLayout horizontalAlign="left" gap="20" paddingTop="2" />
                 </e:layout>
             </e:Group>
         </e:Scroller>

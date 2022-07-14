@@ -6,7 +6,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -14,20 +14,19 @@
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel5 {
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import BwWar                    = TwnsBwWar.BwWar;
-    import WeatherType              = Types.WeatherType;
+namespace Twns.WarEvent {
+    import NotifyType               = Notify.NotifyType;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
+    import LangTextType             = Lang.LangTextType;
+    import BwWar                    = BaseWar.BwWar;
 
-    export type OpenData = {
+    export type OpenDataForWeActionModifyPanel5 = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel5 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel5 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel5> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnType!          : TwnsUiButton.UiButton;
         private readonly _btnBack!          : TwnsUiButton.UiButton;
@@ -71,24 +70,16 @@ namespace TwnsWeActionModifyPanel5 {
         }
 
         private _onTouchedBtnWeather(): void {
-            const action            = Helpers.getExisted(this._getOpenData().action.WeaSetWeather);
-            const weatherType = action.weatherType;
-            if (weatherType === WeatherType.Clear) {
-                action.weatherType = WeatherType.Rainy;
-            } else if (weatherType === WeatherType.Rainy) {
-                action.weatherType = WeatherType.Sandstorm;
-            } else if (weatherType === WeatherType.Sandstorm) {
-                action.weatherType = WeatherType.Snowy;
-            } else {
-                action.weatherType = WeatherType.Clear;
-            }
+            const openData      = this._getOpenData();
+            const action        = Helpers.getExisted(openData.action.WeaSetWeather);
+            action.weatherType  = openData.war.getGameConfig().getNextWeatherType(action.weatherType);
 
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -126,7 +117,8 @@ namespace TwnsWeActionModifyPanel5 {
         }
 
         private _updateLabelWeather(): void {
-            this._labelWeather.text = Lang.getWeatherName(Helpers.getExisted(this._getOpenData().action.WeaSetWeather?.weatherType));
+            const openData          = this._getOpenData();
+            this._labelWeather.text = Lang.getWeatherName(Helpers.getExisted(openData.action.WeaSetWeather?.weatherType), openData.war.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateInputTurns(): void {

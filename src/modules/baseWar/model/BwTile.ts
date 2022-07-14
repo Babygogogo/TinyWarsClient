@@ -14,26 +14,23 @@
 // import TwnsBwWar            from "./BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwTile {
-    import TileType                     = Types.TileType;
-    import TileObjectType               = Types.TileObjectType;
-    import TileDecoratorType            = Types.TileDecoratorType;
-    import TileBaseType                 = Types.TileBaseType;
+namespace Twns.BaseWar {
     import TileTemplateCfg              = Types.TileTemplateCfg;
-    import ITileCustomCrystalData       = ProtoTypes.WarSerialization.ITileCustomCrystalData;
-    import ITileCustomCannonData        = ProtoTypes.WarSerialization.ITileCustomCannonData;
-    import ITileCustomLaserTurretData   = ProtoTypes.WarSerialization.ITileCustomLaserTurretData;
-    import ISerialTile                  = ProtoTypes.WarSerialization.ISerialTile;
-    import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
+    import ITileCustomCrystalData       = CommonProto.WarSerialization.ITileCustomCrystalData;
+    import ITileCustomCannonData        = CommonProto.WarSerialization.ITileCustomCannonData;
+    import ITileCustomLaserTurretData   = CommonProto.WarSerialization.ITileCustomLaserTurretData;
+    import ISerialTile                  = CommonProto.WarSerialization.ISerialTile;
+    import GameConfig                   = Config.GameConfig;
 
     export class BwTile {
+        private _gameConfig?            : GameConfig;
         private _templateCfg?           : TileTemplateCfg;
         private _gridX?                 : number;
         private _gridY?                 : number;
         private _playerIndex?           : number;
-        private _baseType?              : TileBaseType;
-        private _decoratorType?         : TileDecoratorType | null;
-        private _objectType?            : TileObjectType;
+        private _baseType?              : number;
+        private _decoratorType?         : number | null;
+        private _objectType?            : number;
 
         private _baseShapeId?           : number;
         private _decoratorShapeId?      : number | null;
@@ -48,40 +45,42 @@ namespace TwnsBwTile {
         private _customCannonData?      : ITileCustomCannonData | null;
         private _customLaserTurretData? : ITileCustomLaserTurretData | null;
 
-        private readonly _view  = new TwnsBwTileView.BwTileView();
+        private readonly _view  = new BaseWar.BwTileView();
         private _hasFog         = false;
-        private _war?           : TwnsBwWar.BwWar;
+        private _war?           : BwWar;
 
-        public init(data: ISerialTile, configVersion: string): void {
-            this.deserialize(data, configVersion);
+        public init(data: ISerialTile, gameConfig: GameConfig): void {
+            this.deserialize(data, gameConfig);
             this.setHasFog(false);
         }
-        public fastInit(data: ISerialTile, configVersion: string): void {
-            this.init(data, configVersion);
+        public fastInit(data: ISerialTile, gameConfig: GameConfig): void {
+            this.init(data, gameConfig);
         }
 
-        public startRunning(war: TwnsBwWar.BwWar): void {
+        public startRunning(war: BwWar): void {
             this._setWar(war);
         }
         public startRunningView(): void {
             this.flushDataToView();
         }
 
-        public getErrorCodeForTileData(data: ISerialTile, playersCountUnneutral: number): ClientErrorCode {
+        public getErrorCodeForTileData(data: ISerialTile, playersCountUnneutral: number, gameConfig: GameConfig): ClientErrorCode {
             const playerIndex = data.playerIndex;
             if ((playerIndex != null) && (playerIndex > playersCountUnneutral)) {
                 return ClientErrorCode.BwTile_GetErrorCodeForTileData_00;
             }
 
             try {
-                this.init(data, Helpers.getExisted(ConfigManager.getLatestConfigVersion()));
+                this.init(data, gameConfig);
             } catch (e) {
                 return (e as Types.CustomError).errorCode ?? ClientErrorCode.BwTile_GetErrorCodeForTileData_01;
             }
 
             return ClientErrorCode.NoError;
         }
-        public deserialize(data: ISerialTile, configVersion: string): void {
+        public deserialize(data: ISerialTile, gameConfig: GameConfig): void {
+            this._setGameConfig(gameConfig);
+
             const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex), ClientErrorCode.BwTile_Deserialize_00);
             const gridX     = gridIndex.x;
             const gridY     = gridIndex.y;
@@ -92,16 +91,16 @@ namespace TwnsBwTile {
                 throw Helpers.newError(`Invalid gridX and/or gridY: ${gridX}, ${gridY}`, ClientErrorCode.BwTile_Deserialize_01);
             }
 
-            const objectType    = Helpers.getExisted(data.objectType, ClientErrorCode.BwTile_Deserialize_02) as TileObjectType;
-            const baseType      = Helpers.getExisted(data.baseType, ClientErrorCode.BwTile_Deserialize_03) as TileBaseType;
+            const objectType    = Helpers.getExisted(data.objectType, ClientErrorCode.BwTile_Deserialize_02);
+            const baseType      = Helpers.getExisted(data.baseType, ClientErrorCode.BwTile_Deserialize_03);
             const playerIndex   = data.playerIndex;
-            if ((playerIndex == null)                                                           ||
-                (!ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType))
+            if ((playerIndex == null)                                                                           ||
+                (!gameConfig.checkIsValidPlayerIndexForTileObject({ playerIndex, tileObjectType: objectType }))
             ) {
                 throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTile_Deserialize_04);
             }
 
-            const templateCfg       = ConfigManager.getTileTemplateCfg(configVersion, baseType, objectType);
+            const templateCfg       = Helpers.getExisted(gameConfig.getTileTemplateCfg(Helpers.getExisted(gameConfig.getTileType(baseType, objectType))));
             const maxBuildPoint     = templateCfg.maxBuildPoint;
             const currentBuildPoint = data.currentBuildPoint;
             if (maxBuildPoint == null) {
@@ -145,51 +144,49 @@ namespace TwnsBwTile {
             }
 
             // 处理海岸独立的残留数据
-            if ((baseType === Types.TileBaseType.Sea) && (data.baseShapeId)) {
-                data.decoratorType      = Types.TileDecoratorType.Shore;
-                data.decoratorShapeId   = data.baseShapeId;
-                data.baseShapeId        = 0;
+            if ((baseType === 3 /*Types.TileBaseType.Sea*/) && (data.baseShapeId)) {
+                throw Helpers.newError(`Deprecated seashore data: ${baseType}, ${data.baseShapeId}`, ClientErrorCode.BwTile_Deserialize_11);
             }
 
             const baseShapeId = data.baseShapeId;
-            if (!ConfigManager.checkIsValidTileBaseShapeId(baseType, baseShapeId)) {
-                throw Helpers.newError(`Invalid baseShapeId: ${baseShapeId}`, ClientErrorCode.BwTile_Deserialize_11);
+            if (!gameConfig.checkIsValidTileBaseShapeId(baseType, baseShapeId)) {
+                throw Helpers.newError(`Invalid baseShapeId: ${baseShapeId}`, ClientErrorCode.BwTile_Deserialize_12);
             }
 
             const objectShapeId = data.objectShapeId;
-            if (!ConfigManager.checkIsValidTileObjectShapeId(objectType, objectShapeId)) {
-                throw Helpers.newError(`Invalid objectShapeId: ${objectShapeId}`, ClientErrorCode.BwTile_Deserialize_12);
+            if (!gameConfig.checkIsValidTileObjectShapeId(objectType, objectShapeId)) {
+                throw Helpers.newError(`Invalid objectShapeId: ${objectShapeId}`, ClientErrorCode.BwTile_Deserialize_13);
             }
 
             const decoratorType     = data.decoratorType ?? null;
             const decoratorShapeId  = data.decoratorShapeId ?? null;
-            if (!ConfigManager.checkIsValidTileDecoratorShapeId(decoratorType, decoratorShapeId)) {
-                throw Helpers.newError(`Invalid decoratorType/shapeId: ${decoratorType}, ${decoratorShapeId}`, ClientErrorCode.BwTile_Deserialize_13);
+            if (!gameConfig.checkIsValidTileDecoratorShapeId(decoratorType, decoratorShapeId)) {
+                throw Helpers.newError(`Invalid decoratorType/shapeId: ${decoratorType}, ${decoratorShapeId}`, ClientErrorCode.BwTile_Deserialize_14);
             }
 
-            const tileType          = templateCfg.type;
+            const mapWeaponType     = templateCfg.mapWeaponType;
             const customCrystalData = data.customCrystalData ?? null;
-            if ((customCrystalData != null) && (tileType !== TileType.CustomCrystal)) {
-                throw Helpers.newError(`CustomCrystalData is present while the tile is not CustomCrystal.`, ClientErrorCode.BwTile_Deserialize_14);
+            if ((customCrystalData != null) && (mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)) {
+                throw Helpers.newError(`CustomCrystalData is present while the tile is not CustomCrystal.`, ClientErrorCode.BwTile_Deserialize_15);
             }
-            if ((customCrystalData != null) && (!ConfigManager.checkIsValidCustomCrystalData(customCrystalData))) {
-                throw Helpers.newError(`Invalid customCrystalData.`, ClientErrorCode.BwTile_Deserialize_15);
+            if ((customCrystalData != null) && (!Config.ConfigManager.checkIsValidCustomCrystalData(customCrystalData))) {
+                throw Helpers.newError(`Invalid customCrystalData.`, ClientErrorCode.BwTile_Deserialize_16);
             }
 
             const customCannonData = data.customCannonData ?? null;
-            if ((customCannonData != null) && (tileType !== TileType.CustomCannon)) {
-                throw Helpers.newError(`CustomCannonData is present while the tile is not CustomCannon.`, ClientErrorCode.BwTile_Deserialize_16);
+            if ((customCannonData != null) && (mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)) {
+                throw Helpers.newError(`CustomCannonData is present while the tile is not CustomCannon.`, ClientErrorCode.BwTile_Deserialize_17);
             }
-            if ((customCannonData != null) && (!ConfigManager.checkIsValidCustomCannonData(customCannonData))) {
-                throw Helpers.newError(`Invalid customCannonData.`, ClientErrorCode.BwTile_Deserialize_17);
+            if ((customCannonData != null) && (!Config.ConfigManager.checkIsValidCustomCannonData(customCannonData))) {
+                throw Helpers.newError(`Invalid customCannonData.`, ClientErrorCode.BwTile_Deserialize_18);
             }
 
             const customLaserTurretData = data.customLaserTurretData ?? null;
-            if ((customLaserTurretData != null) && (tileType !== TileType.CustomLaserTurret)) {
-                throw Helpers.newError(`CustomLaserTurretData is present while the tile is not CustomLaserTurret.`, ClientErrorCode.BwTile_Deserialize_18);
+            if ((customLaserTurretData != null) && (mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)) {
+                throw Helpers.newError(`CustomLaserTurretData is present while the tile is not CustomLaserTurret.`, ClientErrorCode.BwTile_Deserialize_19);
             }
-            if ((customLaserTurretData != null) && (!ConfigManager.checkIsValidCustomLaserTurretData(customLaserTurretData))) {
-                throw Helpers.newError(`Invalid customLaserTurretData.`, ClientErrorCode.BwTile_Deserialize_19);
+            if ((customLaserTurretData != null) && (!Config.ConfigManager.checkIsValidCustomLaserTurretData(customLaserTurretData))) {
+                throw Helpers.newError(`Invalid customLaserTurretData.`, ClientErrorCode.BwTile_Deserialize_20);
             }
 
             this._setTemplateCfg(templateCfg);
@@ -218,6 +215,7 @@ namespace TwnsBwTile {
                 gridIndex               : this.getGridIndex(),
                 baseType                : this.getBaseType(),
                 objectType              : this.getObjectType(),
+                decoratorType           : this.getDecorationType(),
                 playerIndex             : this.getPlayerIndex(),
 
                 customCrystalData       : this._customCrystalData,
@@ -240,9 +238,6 @@ namespace TwnsBwTile {
             const objectShapeId = this.getObjectShapeId();
             (objectShapeId !== 0) && (data.objectShapeId = objectShapeId);
 
-            const decoratorType = this.getDecoratorType();
-            (decoratorType !== TileDecoratorType.Empty) && (data.decoratorType = decoratorType);
-
             const decoratorShapeId = this.getDecoratorShapeId();
             (decoratorShapeId !== 0) && (data.decoratorShapeId = decoratorShapeId);
 
@@ -257,18 +252,19 @@ namespace TwnsBwTile {
         public serializeForCreateSfw(): ISerialTile {
             const war       = this.getWar();
             const gridIndex = this.getGridIndex();
-            if (WarVisibilityHelpers.checkIsTileVisibleToTeams(war, gridIndex, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf())) {
+            if ((war.getShouldSerializeFullInfoForFreeModeGames())                                                                                  ||
+                (WarHelpers.WarVisibilityHelpers.checkIsTileVisibleToTeams(war, gridIndex, war.getPlayerManager().getWatcherTeamIndexesForSelf()))
+            ) {
                 return this.serialize();
 
             } else {
-                const baseType      = this.getBaseType();
-                const objectType    = this.getObjectType();
                 const playerIndex   = this.getPlayerIndex();
                 const data          : ISerialTile = {
                     gridIndex,
-                    baseType,
-                    objectType,
-                    playerIndex             : objectType === Types.TileObjectType.Headquarters ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                    baseType                : this.getBaseType(),
+                    objectType              : this.getObjectType(),
+                    decoratorType           : this.getDecorationType(),
+                    playerIndex             : this.getTemplateCfg().isAlwaysShowOwner ? playerIndex : CommonConstants.PlayerIndex.Neutral,
 
                     customCrystalData       : this._customCrystalData,
                     customCannonData        : this._customCannonData,
@@ -283,9 +279,6 @@ namespace TwnsBwTile {
 
                 const objectShapeId = this.getObjectShapeId();
                 (objectShapeId !== 0) && (data.objectShapeId = objectShapeId);
-
-                const decoratorType = this.getDecoratorType();
-                (decoratorType !== TileDecoratorType.Empty) && (data.decoratorType = decoratorType);
 
                 const decoratorShapeId = this.getDecoratorShapeId();
                 (decoratorShapeId !== 0) && (data.decoratorShapeId = decoratorShapeId);
@@ -303,21 +296,24 @@ namespace TwnsBwTile {
             return this.serializeForCreateSfw();
         }
 
-        private _setWar(war: TwnsBwWar.BwWar): void {
+        private _setWar(war: BwWar): void {
             this._war = war;
         }
-        public getWar(): TwnsBwWar.BwWar {
+        public getWar(): BwWar {
             return Helpers.getExisted(this._war);
         }
 
-        public getConfigVersion(): string {
-            return this._getTemplateCfg().version;
+        public getGameConfig(): GameConfig {
+            return Helpers.getExisted(this._gameConfig);
+        }
+        private _setGameConfig(config: GameConfig): void {
+            this._gameConfig = config;
         }
 
         private _setTemplateCfg(cfg: TileTemplateCfg): void {
             this._templateCfg = cfg;
         }
-        private _getTemplateCfg(): Types.TileTemplateCfg {
+        public getTemplateCfg(): Types.TileTemplateCfg {
             return Helpers.getExisted(this._templateCfg);
         }
 
@@ -329,12 +325,13 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
-        public getView(): TwnsBwTileView.BwTileView {
+        public getView(): BaseWar.BwTileView {
             return this._view;
         }
         public flushDataToView(): void {
             const view = this.getView();
             view.setData({
+                gameConfig  : this.getGameConfig(),
                 tileData    : this.serialize(),
                 hasFog      : this.getHasFog(),
                 skinId      : this.getSkinId(),
@@ -343,24 +340,24 @@ namespace TwnsBwTile {
             view.updateView();
         }
 
-        private _setBaseType(baseType: TileBaseType): void {
+        private _setBaseType(baseType: number): void {
             this._baseType = baseType;
         }
-        public getBaseType(): TileBaseType {
+        public getBaseType(): number {
             return Helpers.getExisted(this._baseType);
         }
 
-        private _setObjectType(objectType: TileObjectType): void {
+        private _setObjectType(objectType: number): void {
             this._objectType = objectType;
         }
-        public getObjectType(): TileObjectType {
+        public getObjectType(): number {
             return Helpers.getExisted(this._objectType);
         }
 
-        private _setDecoratorType(decoratorType: TileDecoratorType | null): void {
+        private _setDecoratorType(decoratorType: number | null): void {
             this._decoratorType = decoratorType;
         }
-        public getDecoratorType(): TileDecoratorType | null {
+        public getDecorationType(): number | null {
             return Helpers.getDefined(this._decoratorType, ClientErrorCode.BwTile_GetDecoratorType_00);
         }
 
@@ -393,7 +390,7 @@ namespace TwnsBwTile {
         // Functions for hp and armor.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxHp(): number | null {
-            return this._getTemplateCfg().maxHp ?? null;
+            return this.getTemplateCfg().maxHp ?? null;
         }
 
         public getCurrentHp(): number | null {
@@ -414,19 +411,19 @@ namespace TwnsBwTile {
             this._currentHp = hp;
         }
 
-        public getArmorType(): Types.ArmorType | null {
-            return this._getTemplateCfg().armorType ?? null;
+        public getArmorType(): number | null {
+            return this.getTemplateCfg().armorType ?? null;
         }
 
         public checkIsArmorAffectByLuck(): boolean {
-            return this._getTemplateCfg().isAffectedByLuck === 1;
+            return this.getTemplateCfg().isAffectedByLuck === 1;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for build.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxBuildPoint(): number | null {
-            return this._getTemplateCfg().maxBuildPoint ?? null;
+            return this.getTemplateCfg().maxBuildPoint ?? null;
         }
 
         public getCurrentBuildPoint(): number | null {
@@ -451,7 +448,7 @@ namespace TwnsBwTile {
         // Functions for capture.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxCapturePoint(): number | null {
-            return this._getTemplateCfg().maxCapturePoint ?? null;
+            return this.getTemplateCfg().maxCapturePoint ?? null;
         }
 
         public getCurrentCapturePoint(): number | null {
@@ -473,7 +470,7 @@ namespace TwnsBwTile {
         }
 
         public checkIsDefeatOnCapture(): boolean {
-            const cfg = this._getTemplateCfg();
+            const cfg = this.getTemplateCfg();
             return cfg.isDefeatedOnCapture === 1;
         }
 
@@ -498,7 +495,7 @@ namespace TwnsBwTile {
             } else {
                 this._setLocationFlags(this.getLocationFlags() & ~(1 << (locationId - 1)));
             }
-            Notify.dispatch(TwnsNotifyType.NotifyType.BwTileLocationFlagSet, this as NotifyData.BwTileLocationFlagSet);
+            Notify.dispatch(Notify.NotifyType.BwTileLocationFlagSet, this as Notify.NotifyData.BwTileLocationFlagSet);
         }
         public setHasLocationFlagArray(locationIdArray: number[], hasFlag: boolean): void {
             for (const locationId of locationIdArray) {
@@ -508,7 +505,7 @@ namespace TwnsBwTile {
                     this._setLocationFlags(this.getLocationFlags() & ~(1 << (locationId - 1)));
                 }
             }
-            Notify.dispatch(TwnsNotifyType.NotifyType.BwTileLocationFlagSet, this as NotifyData.BwTileLocationFlagSet);
+            Notify.dispatch(Notify.NotifyType.BwTileLocationFlagSet, this as Notify.NotifyData.BwTileLocationFlagSet);
         }
         public getHasLocationFlagArray(): number[] {
             const locationIdArray: number[] = [];
@@ -529,7 +526,7 @@ namespace TwnsBwTile {
         public setIsHighlighted(isHighlighted: boolean): void {
             if (this._isHighlighted !== isHighlighted) {
                 this._isHighlighted = isHighlighted;
-                Notify.dispatch(TwnsNotifyType.NotifyType.BwTileIsHighlightedChanged, this as NotifyData.BwTileIsHighlightChanged);
+                Notify.dispatch(Notify.NotifyType.BwTileIsHighlightedChanged, this as Notify.NotifyData.BwTileIsHighlightChanged);
             }
         }
 
@@ -540,19 +537,19 @@ namespace TwnsBwTile {
             return Math.floor(this.getDefenseAmount() / 10);
         }
         public getDefenseAmount(): number {
-            return this._getTemplateCfg().defenseAmount;
+            return this.getTemplateCfg().defenseAmount;
         }
-        public getDefenseAmountForUnit(unit: TwnsBwUnit.BwUnit): number {
+        public getDefenseAmountForUnit(unit: BwUnit): number {
             return this.checkCanDefendUnit(unit)
                 ? this.getDefenseAmount() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp()
                 : 0;
         }
 
-        public getDefenseUnitCategory(): Types.UnitCategory {
-            return this._getTemplateCfg().defenseUnitCategory;
+        public getDefenseUnitCategory(): number {
+            return this.getTemplateCfg().defenseUnitCategory;
         }
-        public checkCanDefendUnit(unit: TwnsBwUnit.BwUnit): boolean {
-            return ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), this.getDefenseUnitCategory());
+        public checkCanDefendUnit(unit: BwUnit): boolean {
+            return this.getGameConfig().checkIsUnitTypeInCategory(unit.getUnitType(), this.getDefenseUnitCategory());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -582,16 +579,17 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for type.
         ////////////////////////////////////////////////////////////////////////////////
-        public getType(): TileType {
-            return this._getTemplateCfg().type;
+        public getType(): number {
+            return this.getTemplateCfg().type;
         }
 
         public resetByTypeAndPlayerIndex({ baseType, objectType, playerIndex }: {
-            baseType        : TileBaseType;
-            objectType      : TileObjectType;
+            baseType        : number;
+            objectType      : number;
             playerIndex     : number;
         }): void {
-            if (!ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType)) {
+            const gameConfig = this.getGameConfig();
+            if (!gameConfig.checkIsValidPlayerIndexForTileObject({ playerIndex, tileObjectType: objectType })) {
                 throw Helpers.newError(`Invalid playerIndex: ${playerIndex}, baseType: ${baseType}, objectType: ${objectType}`);
             }
 
@@ -602,27 +600,28 @@ namespace TwnsBwTile {
                 playerIndex,
                 baseShapeId     : baseType === this.getBaseType() ? this.getBaseShapeId() : null,
                 objectShapeId   : objectType === this.getObjectType() ? this.getObjectShapeId() : null,
-                decoratorType   : this.getDecoratorType(),
+                decoratorType   : this.getDecorationType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
                 locationFlags   : this.getLocationFlags(),
                 isHighlighted   : this.getIsHighlighted(),
-            }, this.getConfigVersion());
+            }, gameConfig);
             this.startRunning(this.getWar());
         }
 
         public resetOnTileObjectDestroyed(): void {
+            const gameConfig = this.getGameConfig();
             this.init({
                 gridIndex       : this.getGridIndex(),
-                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex     : CommonConstants.PlayerIndex.Neutral,
                 baseType        : this.getBaseType(),
                 baseShapeId     : this.getBaseShapeId(),
-                objectType      : TileObjectType.Empty,
-                objectShapeId   : getNewObjectShapeIdOnObjectDestroyed(this.getObjectType(), this.getObjectShapeId()),
-                decoratorType   : this.getDecoratorType(),
+                objectType      : CommonConstants.TileObjectType.Empty,
+                objectShapeId   : getNewObjectShapeIdOnObjectDestroyed(this.getObjectType(), this.getObjectShapeId(), gameConfig),
+                decoratorType   : this.getDecorationType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
                 locationFlags   : this.getLocationFlags(),
                 isHighlighted   : this.getIsHighlighted(),
-            }, this.getConfigVersion());
+            }, gameConfig);
             this.startRunning(this.getWar());
         }
 
@@ -633,16 +632,16 @@ namespace TwnsBwTile {
         public deleteTileObject(): void {
             this.init({
                 gridIndex       : this.getGridIndex(),
-                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex     : CommonConstants.PlayerIndex.Neutral,
                 baseType        : this.getBaseType(),
                 baseShapeId     : this.getBaseShapeId(),
-                objectType      : TileObjectType.Empty,
+                objectType      : CommonConstants.TileObjectType.Empty,
                 objectShapeId   : null,
-                decoratorType   : this.getDecoratorType(),
+                decoratorType   : this.getDecorationType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
                 locationFlags   : this.getLocationFlags(),
                 isHighlighted   : this.getIsHighlighted(),
-            }, this.getConfigVersion());
+            }, this.getGameConfig());
             this.startRunning(this.getWar());
         }
 
@@ -650,7 +649,7 @@ namespace TwnsBwTile {
         // Functions for income.
         ////////////////////////////////////////////////////////////////////////////////
         public getCfgIncome(): number {
-            return this._getTemplateCfg().incomePerTurn ?? 0;
+            return this.getTemplateCfg().incomePerTurn ?? 0;
         }
         public getIncomeForPlayer(playerIndex: number): number {
             if (this.getPlayerIndex() !== playerIndex) {
@@ -658,7 +657,7 @@ namespace TwnsBwTile {
             }
 
             const war                       = this.getWar();
-            const configVersion             = war.getConfigVersion();
+            const gameConfig                = war.getGameConfig();
             const player                    = this.getPlayer();
             const tileType                  = this.getType();
             const gridIndex                 = this.getGridIndex();
@@ -666,10 +665,10 @@ namespace TwnsBwTile {
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             let modifierForSkill            = 1;
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfTileIncome;
-                if ((cfg)                                                                       &&
-                    (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, cfg[1]))  &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                const cfg = gameConfig.getCoSkillCfg(skillId)?.selfTileIncome;
+                if ((cfg)                                                       &&
+                    (gameConfig.checkIsTileTypeInCategory(tileType, cfg[1]))    &&
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap,
@@ -698,7 +697,7 @@ namespace TwnsBwTile {
             return Helpers.getExisted(this._playerIndex);
         }
 
-        public getPlayer(): TwnsBwPlayer.BwPlayer {
+        public getPlayer(): BwPlayer {
             return this.getWar().getPlayer(this.getPlayerIndex());
         }
 
@@ -710,22 +709,22 @@ namespace TwnsBwTile {
         // Functions for move cost.
         ////////////////////////////////////////////////////////////////////////////////
         private _getMoveCostCfg(): { [moveType: number]: Types.MoveCostCfg } {
-            return ConfigManager.getMoveCostCfg(this.getConfigVersion(), this.getBaseType(), this.getObjectType());
+            return Helpers.getExisted(this.getGameConfig().getMoveCostCfg(this.getType()));
         }
 
-        public getMoveCostByMoveType(moveType: Types.MoveType): number | null {
+        public getMoveCostByMoveType(moveType: number): number | null {
             return this._getMoveCostCfg()[moveType]?.cost ?? null;
         }
-        public getMoveCostByUnit(unit: TwnsBwUnit.BwUnit): number | null {
+        public getMoveCostByUnit(unit: BwUnit): number | null {
             const tileType      = this.getType();
             const unitType      = unit.getUnitType();
             const war           = this.getWar();
-            const configVersion = war.getConfigVersion();
-            if (((tileType === TileType.Seaport) || (tileType === TileType.TempSeaport))                            &&
-                (this.getTeamIndex() !== unit.getTeamIndex())                                                       &&
-                (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.LargeNaval))
-            ) {
-                return null;
+            const gameConfig    = war.getGameConfig();
+            if (this.getTeamIndex() !== unit.getTeamIndex()) {
+                const blockEnemyUnitCategory = this.getTemplateCfg().blockEnemyUnitCategory;
+                if ((blockEnemyUnitCategory != null) && (gameConfig.checkIsUnitTypeInCategory(unitType, blockEnemyUnitCategory))) {
+                    return null;
+                }
             }
 
             const rawCost = this.getMoveCostByMoveType(unit.getMoveType());
@@ -738,11 +737,11 @@ namespace TwnsBwTile {
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfUnitMoveCost;
-                if ((cfg)                                                                       &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))  &&
-                    (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, cfg[2]))  &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                const cfg = gameConfig.getCoSkillCfg(skillId)?.selfUnitMoveCost;
+                if ((cfg)                                                       &&
+                    (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))    &&
+                    (gameConfig.checkIsTileTypeInCategory(tileType, cfg[2]))    &&
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap,
@@ -759,26 +758,26 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for repair/supply unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public getRepairUnitCategory(): Types.UnitCategory | null {
-            return this._getTemplateCfg().repairUnitCategory ?? null;
+        public getRepairUnitCategory(): number | null {
+            return this.getTemplateCfg().repairUnitCategory ?? null;
         }
 
         public getCfgNormalizedRepairHp(): number | null {
-            return this._getTemplateCfg().repairAmount ?? null;
+            return this.getTemplateCfg().repairAmount ?? null;
         }
 
         public getNormalizedRepairAmountAndCostModifier(): { amountModifier: number, costMultiplierPct: number } {
             const player                    = this.getPlayer();
-            const configVersion             = this.getConfigVersion();
+            const gameConfig                = this.getGameConfig();
             const gridIndex                 = this.getGridIndex();
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             let amountModifier              = 0;
             let costMultiplierPct           = 100;
             for (const skillId of player.getCoCurrentSkills()) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfRepairAmountBonus;
+                const cfg = gameConfig.getCoSkillCfg(skillId)?.selfRepairAmountBonus;
                 if ((cfg)                                               &&
-                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap,
@@ -793,22 +792,22 @@ namespace TwnsBwTile {
             return { amountModifier, costMultiplierPct };
         }
 
-        public checkCanRepairUnit(unit: TwnsBwUnit.BwUnit): boolean {
+        public checkCanRepairUnit(unit: BwUnit): boolean {
             const category = this.getRepairUnitCategory();
             return (category != null)
                 && ((unit.getCurrentHp() < unit.getMaxHp()) || (unit.checkCanBeSupplied()))
                 && (unit.getTeamIndex() === this.getTeamIndex())
-                && (ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), category));
+                && (this.getGameConfig().checkIsUnitTypeInCategory(unit.getUnitType(), category));
         }
-        public checkCanSupplyUnit(unit: TwnsBwUnit.BwUnit): boolean {
+        public checkCanSupplyUnit(unit: BwUnit): boolean {
             const category = this.getRepairUnitCategory();
             return (category != null)
                 && (unit.checkCanBeSupplied())
                 && (unit.getTeamIndex() === this.getTeamIndex())
-                && (ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), category));
+                && (this.getGameConfig().checkIsUnitTypeInCategory(unit.getUnitType(), category));
         }
 
-        public getRepairHpAndCostForUnit(unit: TwnsBwUnit.BwUnit): Types.RepairHpAndCost | null {
+        public getRepairHpAndCostForUnit(unit: BwUnit): Types.RepairHpAndCost | null {
             if (!this.checkCanRepairUnit(unit)) {
                 return null;
             }
@@ -822,7 +821,7 @@ namespace TwnsBwTile {
             const productionCost        = Math.floor(unit.getProductionFinalCost() * modifier.costMultiplierPct / 100);
             const currentHp             = unit.getCurrentHp();
             const normalizedMaxHp       = unit.getNormalizedMaxHp();
-            const normalizedCurrentHp   = WarCommonHelpers.getNormalizedHp(currentHp);
+            const normalizedCurrentHp   = WarHelpers.WarCommonHelpers.getNormalizedHp(currentHp);
             const normalizedRepairHp    = Math.min(
                 normalizedMaxHp - normalizedCurrentHp,
                 cfgNormalizedRepairHp + modifier.amountModifier,
@@ -839,30 +838,29 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for hide unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public checkCanHideUnit(unitType: Types.UnitType): boolean {
-            const configVersion = this.getConfigVersion();
-            const category      = this.getCfgHideUnitCategory();
+        public checkCanHideUnit(unitType: number): boolean {
+            const category = this.getCfgHideUnitCategory();
             return category == null
                 ? false
-                : ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category);
+                : this.getGameConfig().checkIsUnitTypeInCategory(unitType, category);
         }
 
         public checkIsUnitHider(): boolean {
             const category = this.getCfgHideUnitCategory();
-            return (category != null) && (category != Types.UnitCategory.None);
+            return (category != null) && (!!this.getGameConfig().getUnitCategoryCfg(category)?.unitTypes?.length);
         }
 
-        public getCfgHideUnitCategory(): Types.UnitCategory | null {
-            return this._getTemplateCfg().hideUnitCategory ?? null;
+        public getCfgHideUnitCategory(): number | null {
+            return this.getTemplateCfg().hideUnitCategory ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public getCfgProduceUnitCategory(): Types.UnitCategory | null {
-            return this._getTemplateCfg().produceUnitCategory ?? null;
+        public getCfgProduceUnitCategory(): number | null {
+            return this.getTemplateCfg().produceUnitCategory ?? null;
         }
-        public getProduceUnitCategoryForPlayer(playerIndex: number): Types.UnitCategory | null {
+        public getProduceUnitCategoryForPlayer(playerIndex: number): number | null {
             if (this.getPlayerIndex() !== playerIndex) {
                 return null;
             } else {
@@ -878,18 +876,18 @@ namespace TwnsBwTile {
                 return null;
             }
 
-            const configVersion             = war.getConfigVersion();
+            const gameConfig                = war.getGameConfig();
             const tileType                  = this.getType();
             const coZoneRadius              = player.getCoZoneRadius();
             const gridIndex                 = this.getGridIndex();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfUnitProduction;
+                const skillCfg = gameConfig.getCoSkillCfg(skillId)?.selfUnitProduction;
                 if (skillCfg) {
                     const tileCategory = skillCfg[2];
-                    if ((tileCategory != null)                                                              &&
-                        (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, tileCategory))    &&
-                        (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    if ((tileCategory != null)                                          &&
+                        (gameConfig.checkIsTileTypeInCategory(tileType, tileCategory))  &&
+                        (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex,
                             coSkillAreaType         : skillCfg[0],
                             getCoGridIndexArrayOnMap,
@@ -906,21 +904,21 @@ namespace TwnsBwTile {
 
         public checkIsCfgUnitProducer(): boolean {
             const category = this.getCfgProduceUnitCategory();
-            return (category != null) && (category !== Types.UnitCategory.None);
+            return (category != null) && (!!this.getGameConfig().getUnitCategoryCfg(category)?.unitTypes?.length);
         }
         public checkIsUnitProducerForPlayer(playerIndex: number): boolean {
             const category = this.getProduceUnitCategoryForPlayer(playerIndex);
-            return (category != null) && (category !== Types.UnitCategory.None);
+            return (category != null) && (!!this.getGameConfig().getUnitCategoryCfg(category)?.unitTypes?.length);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for vision.
         ////////////////////////////////////////////////////////////////////////////////
         public getCfgVisionRange(): number {
-            return this._getTemplateCfg().visionRange;
+            return this.getTemplateCfg().visionRange;
         }
         public checkIsVisionEnabledForAllPlayers(): boolean {
-            return this._getTemplateCfg().isVisionEnabledForAllPlayers === 1;
+            return this.getTemplateCfg().isVisionEnabledForAllPlayers === 1;
         }
 
         public getVisionRangeForPlayer(playerIndex: number): number | null {
@@ -931,7 +929,7 @@ namespace TwnsBwTile {
             const war                   = this.getWar();
             const tileVisionFixedCfg    = war.getWeatherManager().getCurrentWeatherCfg().tileVisionFixed;
             if (tileVisionFixedCfg) {
-                if (ConfigManager.checkIsTileTypeInCategory(war.getConfigVersion(), this.getType(), tileVisionFixedCfg[0])) {
+                if (war.getGameConfig().checkIsTileTypeInCategory(this.getType(), tileVisionFixedCfg[0])) {
                     return tileVisionFixedCfg[1];
                 }
             }
@@ -945,10 +943,10 @@ namespace TwnsBwTile {
             const war                   = this.getWar();
             const cfgVisionRange        = this.getCfgVisionRange();
             const tileVisionFixedCfg    = war.getWeatherManager().getCurrentWeatherCfg().tileVisionFixed;
-
+            const gameConfig            = war.getGameConfig();
             if (this.checkIsVisionEnabledForAllPlayers()) {
                 if (tileVisionFixedCfg) {
-                    if (ConfigManager.checkIsTileTypeInCategory(war.getConfigVersion(), this.getType(), tileVisionFixedCfg[0])) {
+                    if (gameConfig.checkIsTileTypeInCategory(this.getType(), tileVisionFixedCfg[0])) {
                         return tileVisionFixedCfg[1];
                     }
                 }
@@ -967,7 +965,7 @@ namespace TwnsBwTile {
 
             if (teamIndexes.has(this.getTeamIndex())) {
                 if (tileVisionFixedCfg) {
-                    if (ConfigManager.checkIsTileTypeInCategory(war.getConfigVersion(), this.getType(), tileVisionFixedCfg[0])) {
+                    if (gameConfig.checkIsTileTypeInCategory(this.getType(), tileVisionFixedCfg[0])) {
                         return tileVisionFixedCfg[1];
                     }
                 }
@@ -982,44 +980,40 @@ namespace TwnsBwTile {
         // Functions for global attack/defense bonus.
         ////////////////////////////////////////////////////////////////////////////////
         public getGlobalAttackBonus(): number | null {
-            return this._getTemplateCfg().globalAttackBonus ?? null;
+            return this.getTemplateCfg().globalAttackBonus ?? null;
         }
         public getGlobalDefenseBonus(): number | null {
-            return this._getTemplateCfg().globalDefenseBonus ?? null;
+            return this.getTemplateCfg().globalDefenseBonus ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for load co.
         ////////////////////////////////////////////////////////////////////////////////
-        public getLoadCoUnitCategory(): Types.UnitCategory | null {
-            return this._getTemplateCfg().loadCoUnitCategory ?? null;
+        public getLoadCoUnitCategory(): number | null {
+            return this.getTemplateCfg().loadCoUnitCategory ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for map weapon.
         ////////////////////////////////////////////////////////////////////////////////
         public checkIsMapWeapon(): boolean {
-            const type = this.getType();
-            // TODO
-            return (type === TileType.Crystal)
-                || (type === TileType.CustomCrystal)
-                || (type === TileType.CannonDown)
-                || (type === TileType.CannonLeft)
-                || (type === TileType.CannonRight)
-                || (type === TileType.CannonUp)
-                || (type === TileType.CustomCannon)
-                || (type === TileType.LaserTurret)
-                || (type === TileType.CustomLaserTurret);
+            return this.getTemplateCfg().mapWeaponType != null;
+        }
+        public checkIsCustomMapWeapon(): boolean {
+            const mapWeaponType = this.getTemplateCfg().mapWeaponType;
+            return mapWeaponType == null
+                ? false
+                : !!this.getGameConfig().getMapWeaponCfg(mapWeaponType).isCustom;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for crystal data.
         ////////////////////////////////////////////////////////////////////////////////
         public getCustomCrystalData(): ITileCustomCrystalData | null {
-            const tileType = this.getType();
-            if (tileType === TileType.Crystal) {
+            const mapWeaponType = this.getTemplateCfg().mapWeaponType;
+            if (mapWeaponType === CommonConstants.MapWeaponType.Crystal) {
                 return CommonConstants.TileDefaultCrystalData;
-            } else if (tileType === TileType.CustomCrystal) {
+            } else if (mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal) {
                 return this._customCrystalData ?? CommonConstants.TileDefaultCrystalData;
             } else {
                 return null;
@@ -1079,16 +1073,16 @@ namespace TwnsBwTile {
         // Functions for cannon data.
         ////////////////////////////////////////////////////////////////////////////////
         public getCustomCannonData(): ITileCustomCannonData | null {
-            const tileType = this.getType();
-            if (tileType === TileType.CannonDown) {
+            const mapWeaponType = this.getTemplateCfg().mapWeaponType;
+            if (mapWeaponType === CommonConstants.MapWeaponType.CannonDown) {
                 return CommonConstants.TileDefaultCannonDownData;
-            } else if (tileType === TileType.CannonLeft) {
+            } else if (mapWeaponType === CommonConstants.MapWeaponType.CannonLeft) {
                 return CommonConstants.TileDefaultCannonLeftData;
-            } else if (tileType === TileType.CannonUp) {
+            } else if (mapWeaponType === CommonConstants.MapWeaponType.CannonUp) {
                 return CommonConstants.TileDefaultCannonUpData;
-            } else if (tileType === TileType.CannonRight) {
+            } else if (mapWeaponType === CommonConstants.MapWeaponType.CannonRight) {
                 return CommonConstants.TileDefaultCannonRightData;
-            } else if (tileType === TileType.CustomCannon) {
+            } else if (mapWeaponType === CommonConstants.MapWeaponType.CustomCannon) {
                 return this._customCannonData ?? CommonConstants.TileDefaultCustomCannonData;
             } else {
                 return null;
@@ -1099,11 +1093,11 @@ namespace TwnsBwTile {
         }
 
         public checkIsNormalCannon(): boolean {
-            const tileType = this.getType();
-            return (tileType === TileType.CannonRight)
-                || (tileType === TileType.CannonUp)
-                || (tileType === TileType.CannonLeft)
-                || (tileType === TileType.CannonDown);
+            const mapWeaponType = this.getTemplateCfg().mapWeaponType;
+            return (mapWeaponType === CommonConstants.MapWeaponType.CannonRight)
+                || (mapWeaponType === CommonConstants.MapWeaponType.CannonUp)
+                || (mapWeaponType === CommonConstants.MapWeaponType.CannonLeft)
+                || (mapWeaponType === CommonConstants.MapWeaponType.CannonDown);
         }
         private _initCustomCannonData(): void {
             if (this._customCannonData == null) {
@@ -1167,10 +1161,10 @@ namespace TwnsBwTile {
         // Functions for cannon data.
         ////////////////////////////////////////////////////////////////////////////////
         public getCustomLaserTurretData(): ITileCustomLaserTurretData | null {
-            const tileType = this.getType();
-            if (tileType === TileType.LaserTurret) {
+            const mapWeaponType = this.getTemplateCfg().mapWeaponType;
+            if (mapWeaponType === CommonConstants.MapWeaponType.LaserTurret) {
                 return CommonConstants.TileDefaultCustomLaserTurretData;
-            } else if (tileType === TileType.CustomLaserTurret) {
+            } else if (mapWeaponType === CommonConstants.MapWeaponType.CustomLaserTurret) {
                 return this._customLaserTurretData ?? CommonConstants.TileDefaultCustomLaserTurretData;
             } else {
                 return null;
@@ -1245,45 +1239,19 @@ namespace TwnsBwTile {
         }
 
         public getTileThemeType(): Types.TileThemeType {
-            const war           = this.getWar();
-            const weatherType   = war.getWeatherManager().getCurrentWeatherType();
-            if (weatherType === Types.WeatherType.Rainy) {
-                return Types.TileThemeType.Rainy;
-            } else if (weatherType === Types.WeatherType.Sandstorm) {
-                return Types.TileThemeType.Sandstorm;
-            } else if (weatherType === Types.WeatherType.Snowy) {
-                return Types.TileThemeType.Snowy;
-            } else {
-                return Types.TileThemeType.Clear;
-            }
+            const war = this.getWar();
+            return Helpers.getExisted(war.getGameConfig().getWeatherCfg(war.getWeatherManager().getCurrentWeatherType())?.tileTheme);
         }
     }
 
-    function getNewObjectShapeIdOnObjectDestroyed(oldType: TileObjectType, oldShapeId: number): number {
-        if ((oldType === TileObjectType.CannonDown)         ||
-            (oldType === TileObjectType.CannonLeft)         ||
-            (oldType === TileObjectType.CannonRight)        ||
-            (oldType === TileObjectType.CannonUp)           ||
-            (oldType === TileObjectType.CustomCannon)       ||
-            (oldType === TileObjectType.CustomCrystal)      ||
-            (oldType === TileObjectType.CustomLaserTurret)  ||
-            (oldType === TileObjectType.Meteor)             ||
-            (oldType === TileObjectType.Crystal)            ||
-            (oldType === TileObjectType.LaserTurret)
-        ) {
-            return 3;
-        } else if (oldType === TileObjectType.PipeJoint) {
-            if (oldShapeId === 0) {
-                return 1;
-            } else if (oldShapeId === 1) {
-                return 2;
-            } else {
-                // throw Helpers.newError(`Invalid oldType and oldShapeId: ${oldType}, ${oldShapeId}`, ServerErrorCode.BwTile_GetNewObjectShapeIdOnObjectDestroyed_0000);
-                return 0;
+    function getNewObjectShapeIdOnObjectDestroyed(oldType: number, oldShapeId: number, gameConfig: GameConfig): number {
+        const shapeIdArray = Helpers.getExisted(gameConfig.getTileObjectCfg(oldType)?.shapeIdAfterDestruction);
+        for (let i = 1; i < shapeIdArray.length; i += 2) {
+            if (shapeIdArray[i] === oldShapeId) {
+                return shapeIdArray[i + 1];
             }
-        } else {
-            return 0;
         }
+        return shapeIdArray[0];
     }
 }
 

@@ -7,7 +7,7 @@
 // import Timer                from "../../tools/helpers/Timer";
 // import Types                from "../../tools/helpers/Types";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
@@ -15,14 +15,15 @@
 // import TwnsWarMapUnitView   from "./WarMapUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWarMapView {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.WarMap {
+    import NotifyType       = Notify.NotifyType;
     import MapSize          = Types.MapSize;
-    import IMapRawData      = ProtoTypes.Map.IMapRawData;
-    import WarSerialization = ProtoTypes.WarSerialization;
+    import IMapRawData      = CommonProto.Map.IMapRawData;
+    import WarSerialization = CommonProto.WarSerialization;
     import ISerialWar       = WarSerialization.ISerialWar;
     import ISerialTile      = WarSerialization.ISerialTile;
     import ISerialPlayer    = WarSerialization.ISerialPlayer;
+    import GameConfig       = Config.GameConfig;
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
@@ -37,27 +38,29 @@ namespace TwnsWarMapView {
             this.addChild(this._unitMapView);
         }
 
-        public showMapByMapData(mapRawData: IMapRawData): void {
+        public showMapByMapData(mapRawData: IMapRawData, gameConfig: GameConfig): void {
             this.width  = GRID_WIDTH  * Helpers.getExisted(mapRawData.mapWidth);
             this.height = GRID_HEIGHT * Helpers.getExisted(mapRawData.mapHeight);
-            this._tileMapView.showTileMap(Helpers.getExisted(mapRawData.tileDataArray));
+            this._tileMapView.showTileMap(gameConfig, Helpers.getExisted(mapRawData.tileDataArray));
             this._unitMapView.showUnitMap({
                 unitDataArray   : mapRawData.unitDataArray || [],
                 players         : null,
+                gameConfig,
             });
         }
-        public showMapByWarData(warData: ISerialWar, players?: Types.Undefinable<ISerialPlayer[]>): void {
+        public showMapByWarData(warData: ISerialWar, gameConfig: GameConfig, players?: Types.Undefinable<ISerialPlayer[]>): void {
             const field     = Helpers.getExisted(warData.field);
             const tileMap   = Helpers.getExisted(field.tileMap);
-            const mapSize   = WarCommonHelpers.getMapSize(tileMap);
+            const mapSize   = WarHelpers.WarCommonHelpers.getMapSize(tileMap);
             this.width      = GRID_WIDTH * mapSize.width;
             this.height     = GRID_HEIGHT * mapSize.height;
 
             players = players || Helpers.getExisted(warData.playerManager?.players);
-            this._tileMapView.showTileMap(Helpers.getExisted(tileMap.tiles), players);
+            this._tileMapView.showTileMap(gameConfig, Helpers.getExisted(tileMap.tiles), players);
             this._unitMapView.showUnitMap({
                 unitDataArray   : field.unitMap?.units || [],
                 players,
+                gameConfig,
             });
         }
 
@@ -100,15 +103,19 @@ namespace TwnsWarMapView {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
-        public showTileMap(dataList: ISerialTile[], players?: ISerialPlayer[]): void {
-            this._baseLayer.updateWithTileDataList(dataList, players);
-            this._decoratorLayer.updateWithTileDataList(dataList, players);
-            this._objectLayer.updateWithTileDataList(dataList, players);
+        public showTileMap(gameConfig: GameConfig, dataList: ISerialTile[], players?: ISerialPlayer[]): void {
+            this._baseLayer.updateWithTileDataList(gameConfig, dataList, players);
+            this._decoratorLayer.updateWithTileDataList(gameConfig, dataList, players);
+            this._objectLayer.updateWithTileDataList(gameConfig, dataList, players);
             this._resetGridBorderLayer(dataList);
             this._updateBorderLayer(dataList);
         }
         public clear(): void {
-            this.showTileMap([]);
+            this._baseLayer.clear();
+            this._decoratorLayer.clear();
+            this._objectLayer.clear();
+            this._resetGridBorderLayer([]);
+            this._updateBorderLayer([]);
         }
 
         private _onAddedToStage(): void {
@@ -158,7 +165,7 @@ namespace TwnsWarMapView {
             this._updateGridBorderLayerVisible();
         }
         private _updateGridBorderLayerVisible(): void {
-            this._gridBorderLayer.visible = UserModel.getSelfSettingsIsShowGridBorder();
+            this._gridBorderLayer.visible = User.UserModel.getSelfSettingsIsShowGridBorder();
         }
 
         private _initBorderLayer(): void {
@@ -249,11 +256,13 @@ namespace TwnsWarMapView {
     }
 
     abstract class TileLayerBase extends eui.Component {
+        private _gameConfig             : GameConfig | null = null;
         private readonly _tileDataMap   : Types.WarMapTileViewData[][] = [];
         private readonly _imageMap      : TwnsUiImage.UiImage[][] = [];
 
-        public updateWithTileDataList(tileDataArray: ISerialTile[], players?: ISerialPlayer[]): void {
-            const mapSize = getMapSize(tileDataArray);
+        public updateWithTileDataList(gameConfig: GameConfig, tileDataArray: ISerialTile[], players?: ISerialPlayer[]): void {
+            const mapSize       = getMapSize(tileDataArray);
+            this._gameConfig    = gameConfig;
             this._resetTileDataMap(mapSize, tileDataArray, players);
             this._resetImageMap(mapSize);
 
@@ -261,6 +270,11 @@ namespace TwnsWarMapView {
         }
 
         public updateViewOnTick(): void {
+            const gameConfig = this._gameConfig;
+            if (gameConfig == null) {
+                return;
+            }
+
             const imageMap      = this._imageMap;
             const tileDataMap   = this._tileDataMap;
             const width         = tileDataMap.length;
@@ -268,9 +282,16 @@ namespace TwnsWarMapView {
             const tickCount     = Timer.getTileAnimationTickCount();
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
-                    imageMap[x][y].source = this._getImageSource(tileDataMap[x][y], tickCount);
+                    imageMap[x][y].source = this._getImageSource(gameConfig, tileDataMap[x][y], tickCount);
                 }
             }
+        }
+
+        public clear(): void {
+            const mapSize       = getMapSize([]);
+            this._gameConfig    = null;
+            this._resetTileDataMap(mapSize, [], []);
+            this._resetImageMap(mapSize);
         }
 
         private _resetTileDataMap(mapSize: MapSize, tileDataArray: ISerialTile[], players?: ISerialPlayer[]): void {
@@ -330,16 +351,17 @@ namespace TwnsWarMapView {
             }
         }
 
-        protected abstract _getImageSource(tileData: Types.WarMapTileViewData, tickCount: number): string;
+        protected abstract _getImageSource(gameConfig: GameConfig, tileData: Types.WarMapTileViewData, tickCount: number): string;
         protected abstract _getImageY(gridY: number): number;
     }
 
     class TileBaseLayer extends TileLayerBase {
-        protected _getImageSource(tileData: ISerialTile, tickCount: number): string {
+        protected _getImageSource(gameConfig: GameConfig, tileData: ISerialTile, tickCount: number): string {
             return tileData == null
                 ? ``
-                : CommonModel.getCachedTileBaseImageSource({
-                    version     : UserModel.getSelfSettingsTextureVersion(),
+                : Common.CommonModel.getCachedTileBaseImageSource({
+                    gameConfig,
+                    version     : User.UserModel.getSelfSettingsTextureVersion(),
                     themeType   : Types.TileThemeType.Clear,
                     baseType    : Helpers.getExisted(tileData.baseType),
                     shapeId     : tileData.baseShapeId || 0,
@@ -355,17 +377,18 @@ namespace TwnsWarMapView {
     }
 
     class TileDecoratorLayer extends TileLayerBase {
-        protected _getImageSource(tileData: ISerialTile, tickCount: number): string {
+        protected _getImageSource(gameConfig: GameConfig, tileData: ISerialTile, tickCount: number): string {
             return tileData == null
                 ? ``
-                : CommonModel.getCachedTileDecoratorImageSource({
-                    version         : UserModel.getSelfSettingsTextureVersion(),
-                    themeType       : Types.TileThemeType.Clear,
-                    decoratorType   : tileData.decoratorType ?? null,
-                    shapeId         : tileData.decoratorShapeId ?? null,
-                    isDark          : false,
-                    skinId          : CommonConstants.UnitAndTileNeutralSkinId,
+                : Common.CommonModel.getCachedTileDecoratorImageSource({
+                    version             : User.UserModel.getSelfSettingsTextureVersion(),
+                    themeType           : Types.TileThemeType.Clear,
+                    tileDecorationType  : tileData.decoratorType ?? null,
+                    shapeId             : tileData.decoratorShapeId ?? 0,
+                    isDark              : false,
+                    skinId              : CommonConstants.UnitAndTileNeutralSkinId,
                     tickCount,
+                    gameConfig,
                 });
         }
 
@@ -375,13 +398,14 @@ namespace TwnsWarMapView {
     }
 
     class TileObjectLayer extends TileLayerBase {
-        protected _getImageSource(tileData: Types.WarMapTileViewData, tickCount: number): string {
+        protected _getImageSource(gameConfig: GameConfig, tileData: Types.WarMapTileViewData, tickCount: number): string {
             return tileData == null
                 ? ``
-                : CommonModel.getCachedTileObjectImageSource({
-                    version     : UserModel.getSelfSettingsTextureVersion(),
+                : Common.CommonModel.getCachedTileObjectImageSource({
+                    gameConfig,
+                    version     : User.UserModel.getSelfSettingsTextureVersion(),
                     themeType   : Types.TileThemeType.Clear,
-                    objectType  : tileData.objectType || Types.TileObjectType.Empty,
+                    objectType  : tileData.objectType || CommonConstants.TileObjectType.Empty,
                     shapeId     : tileData.objectShapeId || 0,
                     isDark      : false,
                     skinId      : Helpers.getExisted(tileData.skinId || tileData.playerIndex),
@@ -407,7 +431,7 @@ namespace TwnsWarMapView {
     }
 
     class WarMapUnitMapView extends egret.DisplayObjectContainer {
-        private readonly _unitViews             : TwnsWarMapUnitView.WarMapUnitView[] = [];
+        private readonly _unitViews             : WarMapUnitView[] = [];
         private readonly _airLayer              = new egret.DisplayObjectContainer();
         private readonly _groundLayer           = new egret.DisplayObjectContainer();
         private readonly _seaLayer              = new egret.DisplayObjectContainer();
@@ -425,11 +449,12 @@ namespace TwnsWarMapView {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
-        public showUnitMap({ unitDataArray, players }: {
+        public showUnitMap({ unitDataArray, players, gameConfig }: {
             unitDataArray   : WarSerialization.ISerialUnit[];
             players         : ISerialPlayer[] | null;
+            gameConfig      : GameConfig;
         }): void {
-            this._initWithDataList(_createUnitViewDataList({ unitDataArray, players }));
+            this._initWithDataList(_createUnitViewDataList({ unitDataArray, players, gameConfig }));
         }
         private _initWithDataList(dataList: Types.WarMapUnitViewData[]): void {
             this.clear();
@@ -478,9 +503,9 @@ namespace TwnsWarMapView {
         }
         private _reviseZOrderForSingleLayer(layer: egret.DisplayObjectContainer): void {
             const unitsCount    = layer.numChildren;
-            const unitViews     : TwnsWarMapUnitView.WarMapUnitView[] = [];
+            const unitViews     : WarMapUnitView[] = [];
             for (let i = 0; i < unitsCount; ++i) {
-                unitViews.push(layer.getChildAt(i) as TwnsWarMapUnitView.WarMapUnitView);
+                unitViews.push(layer.getChildAt(i) as WarMapUnitView);
             }
             unitViews.sort((v1, v2): number => {
                 const g1 = Helpers.getExisted(GridIndexHelpers.convertGridIndex(v1.getUnitData()?.gridIndex));
@@ -496,24 +521,22 @@ namespace TwnsWarMapView {
         }
 
         private _addUnit(data: Types.WarMapUnitViewData, tickCount: number): void {
-            const unitType = Helpers.getExisted(data.unitType);
-            const view     = new TwnsWarMapUnitView.WarMapUnitView(data, tickCount);
+            const view = new WarMapUnitView(data, tickCount);
             this._unitViews.push(view);
 
-            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
-            if (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.Air)) {
-                this._airLayer.addChild(view);
-            } else if (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.Ground)) {
-                this._groundLayer.addChild(view);
-            } else {
-                this._seaLayer.addChild(view);
+            switch (data.gameConfig.getUnitTemplateCfg(Helpers.getExisted(data.unitType))?.layer) {
+                case CommonConstants.UnitDisplayLayer.Air       : this._airLayer.addChild(view);                                                    break;
+                case CommonConstants.UnitDisplayLayer.Ground    : this._groundLayer.addChild(view);                                                 break;
+                case CommonConstants.UnitDisplayLayer.Sea       : this._seaLayer.addChild(view);                                                    break;
+                default                                         : throw Helpers.newError(`Invalid layer`, ClientErrorCode.WarMapView_AddUnit_00);
             }
         }
     }
 
-    function _createUnitViewDataList({ unitDataArray, players }: {
+    function _createUnitViewDataList({ unitDataArray, players, gameConfig }: {
         unitDataArray   : WarSerialization.ISerialUnit[];
         players         : ISerialPlayer[] | null;
+        gameConfig      : GameConfig;
     }): Types.WarMapUnitViewData[] {
         const dataArray: Types.WarMapUnitViewData[] = [];
         if (unitDataArray) {
@@ -521,7 +544,9 @@ namespace TwnsWarMapView {
             for (const unitData of unitDataArray) {
                 const loaderUnitId = unitData.loaderUnitId;
                 if (loaderUnitId == null) {
-                    dataArray.push(Helpers.deepClone(unitData));
+                    const data      = Helpers.deepClone(unitData) as Types.WarMapUnitViewData;
+                    data.gameConfig = gameConfig;
+                    dataArray.push(data);
                 } else {
                     loaderUnitIdSet.add(loaderUnitId);
                 }

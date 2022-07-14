@@ -5,7 +5,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -16,19 +16,19 @@
 // import TwnsWeConditionTypeListPanel from "./WeConditionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeConditionModifyPanel32 {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
+namespace Twns.WarEvent {
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
-    export type OpenData = {
-        war         : TwnsBwWar.BwWar;
+    export type OpenDataForWeConditionModifyPanel32 = {
+        war         : BaseWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
     /** WecPlayerIndexInTurnEqualTo */
-    export class WeConditionModifyPanel32 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeConditionModifyPanel32 extends TwnsUiPanel.UiPanel<OpenDataForWeConditionModifyPanel32> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnType!          : TwnsUiButton.UiButton;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
@@ -37,6 +37,9 @@ namespace TwnsWeConditionModifyPanel32 {
 
         private readonly _btnPlayerIndex!               : TwnsUiButton.UiButton;
         private readonly _labelPlayerIndex!             : TwnsUiLabel.UiLabel;
+        private readonly _btnConIsPlayerInTurn!         : TwnsUiButton.UiButton;
+        private readonly _labelConIsPlayerInTurn!       : TwnsUiLabel.UiLabel;
+
         private readonly _btnTeamIndex!                 : TwnsUiButton.UiButton;
         private readonly _labelTeamIndex!               : TwnsUiLabel.UiLabel;
         private readonly _btnTileType!                  : TwnsUiButton.UiButton;
@@ -58,7 +61,10 @@ namespace TwnsWeConditionModifyPanel32 {
             this._setUiListenerArray([
                 { ui: this._btnClose,                   callback: this.close },
                 { ui: this._btnType,                    callback: this._onTouchedBtnType },
+
                 { ui: this._btnPlayerIndex,             callback: this._onTouchedBtnPlayerIndex },
+                { ui: this._btnConIsPlayerInTurn,       callback: this._onTouchedBtnConIsPlayerInTurn },
+
                 { ui: this._btnTeamIndex,               callback: this._onTouchedBtnTeamIndex },
                 { ui: this._btnTileType,                callback: this._onTouchedBtnTileType },
                 { ui: this._btnLocation,                callback: this._onTouchedBtnLocation },
@@ -84,7 +90,7 @@ namespace TwnsWeConditionModifyPanel32 {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.WeConditionTypeListPanel, {
                 fullData    : openData.fullData,
                 condition   : openData.condition,
                 war         : openData.war,
@@ -92,7 +98,7 @@ namespace TwnsWeConditionModifyPanel32 {
         }
         private _onTouchedBtnPlayerIndex(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerIndexPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChoosePlayerIndexPanel, {
                 currentPlayerIndexArray : condition.playerIndexArray ?? [],
                 maxPlayerIndex          : this._getOpenData().war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : playerIndexArray => {
@@ -101,9 +107,22 @@ namespace TwnsWeConditionModifyPanel32 {
                 },
             });
         }
+        private _onTouchedBtnConIsPlayerInTurn(): void {
+            const condition             = this._getCondition();
+            const isOwnerPlayerInTurn   = condition.isOwnerPlayerInTurn;
+            if (isOwnerPlayerInTurn == null) {
+                condition.isOwnerPlayerInTurn = true;
+            } else if (isOwnerPlayerInTurn) {
+                condition.isOwnerPlayerInTurn = false;
+            } else {
+                condition.isOwnerPlayerInTurn = null;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+
         private _onTouchedBtnTeamIndex(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTeamIndexPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseTeamIndexPanel, {
                 currentTeamIndexArray   : condition.teamIndexArray ?? [],
                 maxTeamIndex            : this._getOpenData().war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : teamIndexArray => {
@@ -114,7 +133,8 @@ namespace TwnsWeConditionModifyPanel32 {
         }
         private _onTouchedBtnTileType(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTileTypePanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseTileTypePanel, {
+                gameConfig              : this._getOpenData().war.getGameConfig(),
                 currentTileTypeArray    : condition.tileTypeArray ?? [],
                 callbackOnConfirm       : tileTypeArray => {
                     condition.tileTypeArray = tileTypeArray;
@@ -124,7 +144,7 @@ namespace TwnsWeConditionModifyPanel32 {
         }
         private _onTouchedBtnLocation(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseLocationPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseLocationPanel, {
                 currentLocationIdArray  : condition.locationIdArray ?? [],
                 callbackOnConfirm       : locationIdArray => {
                     condition.locationIdArray = locationIdArray;
@@ -134,7 +154,7 @@ namespace TwnsWeConditionModifyPanel32 {
         }
         private _onTouchedBtnGridIndex(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseGridIndexPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseGridIndexPanel, {
                 currentGridIndexArray   : Helpers.getNonNullElements(condition.gridIndexArray?.map(v => GridIndexHelpers.convertGridIndex(v)) ?? []),
                 mapSize                 : this._getOpenData().war.getTileMap().getMapSize(),
                 callbackOnConfirm       : gridIndexArray => {
@@ -163,6 +183,7 @@ namespace TwnsWeConditionModifyPanel32 {
 
             this._updateLabelDescAndLabelError();
             this._updateLabelPlayerIndex();
+            this._updateLabelConIsPlayerInTurn();
             this._updateLabelTeamIndex();
             this._updateLabelTileType();
             this._updateLabelLocation();
@@ -176,6 +197,7 @@ namespace TwnsWeConditionModifyPanel32 {
             this._btnClose.label                = Lang.getText(LangTextType.B0146);
             this._btnType.label                 = Lang.getText(LangTextType.B0516);
             this._btnPlayerIndex.label          = Lang.getText(LangTextType.B0031);
+            this._btnConIsPlayerInTurn.label    = Lang.getText(LangTextType.B0086);
             this._btnTeamIndex.label            = Lang.getText(LangTextType.B0377);
             this._btnTileType.label             = Lang.getText(LangTextType.B0718);
             this._btnLocation.label             = Lang.getText(LangTextType.B0764);
@@ -190,15 +212,25 @@ namespace TwnsWeConditionModifyPanel32 {
         private _updateLabelDescAndLabelError(): void {
             const openData          = this._getOpenData();
             const condition         = openData.condition;
-            const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition, openData.war);
+            const war               = openData.war;
+            const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = WarEventHelper.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelPlayerIndex(): void {
             const playerIndexArray      = this._getCondition().playerIndexArray;
             this._labelPlayerIndex.text = playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`, `) : Lang.getText(LangTextType.B0776);
+        }
+        private _updateLabelConIsPlayerInTurn(): void {
+            const isOwnerPlayerInTurn   = this._getCondition().isOwnerPlayerInTurn;
+            const label                 = this._labelConIsPlayerInTurn;
+            if (isOwnerPlayerInTurn == null) {
+                label.text = `--`;
+            } else {
+                label.text = Lang.getText(isOwnerPlayerInTurn ? LangTextType.B0012 : LangTextType.B0013);
+            }
         }
         private _updateLabelTeamIndex(): void {
             const teamIndexArray        = this._getCondition().teamIndexArray;
@@ -206,7 +238,8 @@ namespace TwnsWeConditionModifyPanel32 {
         }
         private _updateLabelTileType(): void {
             const tileTypeArray         = this._getCondition().tileTypeArray;
-            this._labelTileType.text    = tileTypeArray?.length ? tileTypeArray.map(v => Lang.getTileName(v)).join(`, `) : Lang.getText(LangTextType.B0776);
+            const gameConfig            = this._getOpenData().war.getGameConfig();
+            this._labelTileType.text    = tileTypeArray?.length ? tileTypeArray.map(v => Lang.getTileName(v, gameConfig)).join(`, `) : Lang.getText(LangTextType.B0776);
         }
         private _updateLabelLocation(): void {
             const locationIdArray       = this._getCondition().locationIdArray;
@@ -224,7 +257,7 @@ namespace TwnsWeConditionModifyPanel32 {
             this._inputTilesCount.text = `${this._getCondition().tilesCount}`;
         }
 
-        private _getCondition(): ProtoTypes.WarEvent.IWecTilePresence {
+        private _getCondition(): CommonProto.WarEvent.IWecTilePresence {
             return Helpers.getExisted(this._getOpenData().condition.WecTilePresence);
         }
     }

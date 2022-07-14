@@ -2,21 +2,21 @@
 // import TwnsBwPlayerManager from "../../baseWar/model/BwPlayerManager";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsHrwPlayerManager {
-    import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+namespace Twns.HalfwayReplayWar {
+    import ClientErrorCode = Twns.ClientErrorCode;
 
-    export class HrwPlayerManager extends TwnsBwPlayerManager.BwPlayerManager {
+    export class HrwPlayerManager extends Twns.BaseWar.BwPlayerManager {
         private _watcherTeamIndexes?    : Set<number>;
 
-        public initWatcherTeamIndexes(warData: ProtoTypes.WarSerialization.ISerialWar): void {
+        public initWatcherTeamIndexes(warData: CommonProto.WarSerialization.ISerialWar): void {
             const teamIndexes = new Set<number>();
-            for (const a of warData.halfwayReplayActionArray ?? []) {
-                teamIndexes.add(Helpers.getExisted(a.teamIndex, ClientErrorCode.HrwPlayerManager_InitWatcherTeamIndexes_00));
+            for (const data of warData.executedActionManager?.halfwayReplayActionArray ?? []) {
+                teamIndexes.add(Twns.Helpers.getExisted(data.teamIndex, ClientErrorCode.HrwPlayerManager_InitWatcherTeamIndexes_00));
             }
             this._watcherTeamIndexes = teamIndexes;
         }
-        public getAliveWatcherTeamIndexesForSelf(): Set<number> {
-            return Helpers.getExisted(this._watcherTeamIndexes, ClientErrorCode.HrwPlayerManager_GetAliveWatcherTeamIndexesForSelf_00);
+        public getWatcherTeamIndexesForSelf(): Set<number> {
+            return Twns.Helpers.getExisted(this._watcherTeamIndexes, ClientErrorCode.HrwPlayerManager_GetAliveWatcherTeamIndexesForSelf_00);
         }
     }
 }

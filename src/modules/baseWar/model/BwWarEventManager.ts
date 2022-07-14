@@ -14,59 +14,69 @@
 // import TwnsBwWar            from "./BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwWarEventManager {
-    import ISerialWarEventManager           = ProtoTypes.WarSerialization.ISerialWarEventManager;
-    import IDataForWarEventCalledCount      = ProtoTypes.WarSerialization.IDataForWarEventCalledCount;
-    import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
-    import WarEvent                         = ProtoTypes.WarEvent;
-    import IWarActionSystemCallWarEvent     = ProtoTypes.WarAction.IWarActionSystemCallWarEvent;
-    import ICustomCounter                   = ProtoTypes.WarSerialization.ICustomCounter;
-    import ClientErrorCode                  = TwnsClientErrorCode.ClientErrorCode;
-    import BwUnitMap                        = TwnsBwUnitMap.BwUnitMap;
-    import BwWar                            = TwnsBwWar.BwWar;
+namespace Twns.BaseWar {
+    import ISerialWarEventManager           = CommonProto.WarSerialization.ISerialWarEventManager;
+    import IDataForWarEventCalledCount      = CommonProto.WarSerialization.IDataForWarEventCalledCount;
+    import IWarEventFullData                = CommonProto.Map.IWarEventFullData;
+    import WarEvent                         = CommonProto.WarEvent;
+    import IWarActionSystemCallWarEvent     = CommonProto.WarAction.IWarActionSystemCallWarEvent;
+    import ICustomCounter                   = CommonProto.WarSerialization.ICustomCounter;
+    import WarEventHelpers                  = WarHelpers.WarEventHelpers;
 
     export class BwWarEventManager {
-        private _war?                   : BwWar;
-        private _warEventFullData?      : IWarEventFullData | null;
-        private _calledCountList?       : IDataForWarEventCalledCount[] | null;
-        private _customCounterArray?    : ICustomCounter[] | null;
+        private _war?                           : BwWar;
+        private _calledCountList?               : IDataForWarEventCalledCount[] | null;
+        private _customCounterArray?            : ICustomCounter[] | null;
+        private _ongoingPersistentActionIdSet?  : Set<number>;
 
-        public init(data: Types.Undefinable<ISerialWarEventManager>): void {
+        public init(data: Types.Undefinable<ISerialWarEventManager>, warEventFullData: Types.Undefinable<CommonProto.Map.IWarEventFullData>): void {
             if (!data) {
-                this._setWarEventFullData(null);
                 this._setCalledCountList(null);
                 this._setCustomCounterArray(null);
+                this._setOngoingPersistentActionIdSet(new Set());
             } else {
+                // TODO: validate the data.
                 const customCounterArray = data.customCounterArray ?? null;
-                if ((customCounterArray) && (!ConfigManager.checkIsValidCustomCounterArray(customCounterArray))) {
+                if ((customCounterArray) && (!Config.ConfigManager.checkIsValidCustomCounterArray(customCounterArray))) {
                     throw Helpers.newError(`BwWarEventManager.init() invalid customCounterArray.`, ClientErrorCode.BwWarEventManager_Init_00);
                 }
 
-                // TODO: validate the data.
-                const warEventFullData = Helpers.deepClone(data.warEventFullData) ?? null;
+                const ongoingPersistentActionIdArray    = data.ongoingPersistentActionIdArray ?? [];
+                const ongoingPersistentActionIdSet      = new Set(ongoingPersistentActionIdArray);
+                if (ongoingPersistentActionIdArray.length !== ongoingPersistentActionIdSet.size) {
+                    throw Helpers.newError(`BwWarEventMAnager.init() invalid ongoingPersistentActionIdArray.`, ClientErrorCode.BwWarEventManager_Init_01);
+                }
+                for (const actionId of ongoingPersistentActionIdSet) {
+                    const action = warEventFullData?.actionArray?.find(v => v.WeaCommonData?.actionId === actionId);
+                    if ((action == null) || (!WarEventHelpers.checkIsPersistentAction(action))) {
+                        throw Helpers.newError(`BwWarEventMAnager.init() invalid ongoingPersistentActionIdArray.`, ClientErrorCode.BwWarEventManager_Init_02);
+                    }
+                }
 
-                this._setWarEventFullData(warEventFullData);
                 this._setCalledCountList(Helpers.deepClone(data.calledCountList) ?? null);
                 this._setCustomCounterArray(Helpers.deepClone(customCounterArray));
+                this._setOngoingPersistentActionIdSet(ongoingPersistentActionIdSet);
             }
         }
         public fastInit(data: ISerialWarEventManager): void {
-            this.init(data);
+            this._setCalledCountList(Helpers.deepClone(data.calledCountList) ?? null);
+            this._setCustomCounterArray(Helpers.deepClone(data.customCounterArray ?? null));
+            this._setOngoingPersistentActionIdSet(new Set(data.ongoingPersistentActionIdArray));
         }
 
         public serialize(): ISerialWarEventManager {
             return {
-                warEventFullData    : this.getWarEventFullData(),
-                calledCountList     : this._getCalledCountList(),
-                customCounterArray  : this._getCustomCounterArray(),
-        };
+                calledCountList                 : this._getCalledCountList(),
+                customCounterArray              : this._getCustomCounterArray(),
+                ongoingPersistentActionIdArray  : [...this.getOngoingPersistentActionIdSet()],
+            };
         }
         public serializeForCreateSfw(): ISerialWarEventManager {
-            return Helpers.deepClone({
-                warEventFullData    : this.getWarEventFullData(),
-                calledCountList     : this._getCalledCountList(),
-                customCounterArray  : this._getCustomCounterArray(),
-            });
+            return {
+                calledCountList                 : Helpers.deepClone(this._getCalledCountList()),
+                customCounterArray              : Helpers.deepClone(this._getCustomCounterArray()),
+                ongoingPersistentActionIdArray  : [...this.getOngoingPersistentActionIdSet()],
+            };
         }
         public serializeForCreateMfr(): ISerialWarEventManager {
             return this.serializeForCreateSfw();
@@ -83,11 +93,8 @@ namespace TwnsBwWarEventManager {
             return Helpers.getExisted(this._war);
         }
 
-        protected _setWarEventFullData(data: IWarEventFullData | null): void {
-            this._warEventFullData = data;
-        }
         public getWarEventFullData(): IWarEventFullData | null {
-            return Helpers.getDefined(this._warEventFullData, ClientErrorCode.BwWarEventManager_GetWarEventFullData_00);
+            return this._getWar().getCommonSettingManager().getInstanceWarRule().warEventFullData ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,11 +165,11 @@ namespace TwnsBwWarEventManager {
         }
 
         private _setCustomCounter(counterId: number, counterValue: number): void {
-            if (!ConfigManager.checkIsValidCustomCounterId(counterId)) {
+            if (!Config.ConfigManager.checkIsValidCustomCounterId(counterId)) {
                 throw Helpers.newError(`BwWarEventManager._setCustomCounter() invalid counterId: ${counterId}`, ClientErrorCode.BwWarEventManager_SetCustomCounter_00);
             }
 
-            if (!ConfigManager.checkIsValidCustomCounterValue(counterValue)) {
+            if (!Config.ConfigManager.checkIsValidCustomCounterValue(counterValue)) {
                 throw Helpers.newError(`BwWarEventManager._setCustomCounter() invalid counterValue: ${counterValue}`, ClientErrorCode.BwWarEventManager_SetCustomCounter_01);
             }
 
@@ -185,11 +192,58 @@ namespace TwnsBwWarEventManager {
             }
         }
         private _getCustomCounter(counterId: number): number {
-            if (!ConfigManager.checkIsValidCustomCounterId(counterId)) {
+            if (!Config.ConfigManager.checkIsValidCustomCounterId(counterId)) {
                 throw Helpers.newError(`BwWarEventManager._getCustomCounter() invalid counterId: ${counterId}`, ClientErrorCode.BwWarEventManager_GetCustomCounter_00);
             }
 
             return this._getCustomCounterArray()?.find(v => v.customCounterId === counterId)?.customCounterValue ?? 0;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for persistent actions.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        protected _setOngoingPersistentActionIdSet(actionIdArray: Set<number>): void {
+            this._ongoingPersistentActionIdSet = actionIdArray;
+        }
+        public getOngoingPersistentActionIdSet(): Set<number> {
+            return Helpers.getExisted(this._ongoingPersistentActionIdSet, ClientErrorCode.BwWarEventManager_GetOngoingPersistentActionIdSet_00);
+        }
+
+        public checkOngoingPersistentActionCanActivateCoSkill(playerIndex: number): boolean {
+            for (const actionId of this.getOngoingPersistentActionIdSet()) {
+                const action = this.getWarEventAction(actionId).WeaPersistentModifyPlayerAttribute;
+                if (action == null) {
+                    continue;
+                }
+                if (action.actCanActivateCoSkill !== false) {
+                    continue;
+                }
+
+                const conPlayerIndexArray = action.conPlayerIndexArray;
+                if ((!conPlayerIndexArray?.length) || ((conPlayerIndexArray ?? []).indexOf(playerIndex) >= 0)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        public checkOngoingPersistentActionBannedUnitType(playerIndex: number, unitType: number): boolean {
+            for (const actionId of this.getOngoingPersistentActionIdSet()) {
+                const action = this.getWarEventAction(actionId).WeaPersistentModifyPlayerAttribute;
+                if (action == null) {
+                    continue;
+                }
+                if ((action.actBannedUnitTypeArray ?? []).indexOf(unitType) < 0) {
+                    continue;
+                }
+
+                const conPlayerIndexArray = action.conPlayerIndexArray;
+                if ((!conPlayerIndexArray?.length) || ((conPlayerIndexArray ?? []).indexOf(playerIndex) >= 0)) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,7 +260,7 @@ namespace TwnsBwWarEventManager {
             }
 
             const extraData = Helpers.getExisted(action.extraData, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_01);
-            WarCommonHelpers.handleCommonExtraDataForWarActions({
+            WarHelpers.WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war             : this._getWar(),
                 commonExtraData : Helpers.getExisted(extraData.commonExtraData, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_02),
                 isFastExecute,
@@ -228,15 +282,13 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaPlayBgm)                         { await this._callActionPlayBgmWithExtraData(action.WeaPlayBgm, isFastExecute); }
             else if (action.WeaSetForceFogCode)                 { await this._callActionSetForceFogCodeWithExtraData(action.WeaSetForceFogCode, isFastExecute); }
             else if (action.WeaSetCustomCounter)                { await this._callActionSetCustomCounterWithExtraData(action.WeaSetCustomCounter, isFastExecute); }
-            else if (action.WeaDeprecatedSetPlayerAliveState)   { await this._callActionDeprecatedSetPlayerAliveStateWithExtraData(action.WeaDeprecatedSetPlayerAliveState, isFastExecute); }
-            else if (action.WeaDeprecatedSetPlayerFund)         { await this._callActionDeprecatedSetPlayerFundWithExtraData(action.WeaDeprecatedSetPlayerFund, isFastExecute); }
-            else if (action.WeaDeprecatedSetPlayerCoEnergy)     { await this._callActionDeprecatedSetPlayerCoEnergyWithExtraData(action.WeaDeprecatedSetPlayerCoEnergy, isFastExecute); }
-            else if (action.WeaSetPlayerAliveState)             { await this._callActionSetPlayerAliveStateWithExtraData(action.WeaSetPlayerAliveState, isFastExecute); }
+            else if (action.WeaStopPersistentAction)            { await this._callActionStopPersistentActionWithExtraData(action.WeaStopPersistentAction, isFastExecute); }
             else if (action.WeaSetPlayerState)                  { await this._callActionSetPlayerStateWithExtraData(action.WeaSetPlayerState, isFastExecute); }
-            else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithExtraData(action.WeaSetUnitState, isFastExecute); }
             else if (action.WeaSetTileType)                     { await this._callActionSetTileTypeWithExtraData(action.WeaSetTileType, isFastExecute); }
             else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithExtraData(action.WeaSetTileState, isFastExecute); }
+            else if (action.WeaPersistentShowText)              { await this._callActionPersistentShowTextWithExtraData(action.WeaPersistentShowText, isFastExecute, warEventActionId); }
+            else if (action.WeaPersistentModifyPlayerAttribute) { await this._callActionPersistentModifyPlayerAttributeWithExtraData(action.WeaPersistentModifyPlayerAttribute, isFastExecute, warEventActionId); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -253,15 +305,13 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaPlayBgm)                         { await this._callActionPlayBgmWithoutExtraData(action.WeaPlayBgm, isFastExecute); }
             else if (action.WeaSetForceFogCode)                 { await this._callActionSetForceFogCodeWithoutExtraData(action.WeaSetForceFogCode, isFastExecute); }
             else if (action.WeaSetCustomCounter)                { await this._callActionSetCustomCounterWithoutExtraData(action.WeaSetCustomCounter, isFastExecute); }
-            else if (action.WeaDeprecatedSetPlayerAliveState)   { await this._callActionDeprecatedSetPlayerAliveStateWithoutExtraData(action.WeaDeprecatedSetPlayerAliveState, isFastExecute); }
-            else if (action.WeaDeprecatedSetPlayerFund)         { await this._callActionDeprecatedSetPlayerFundWithoutExtraData(action.WeaDeprecatedSetPlayerFund, isFastExecute); }
-            else if (action.WeaDeprecatedSetPlayerCoEnergy)     { await this._callActionDeprecatedSetPlayerCoEnergyWithoutExtraData(action.WeaDeprecatedSetPlayerCoEnergy, isFastExecute); }
-            else if (action.WeaSetPlayerAliveState)             { await this._callActionSetPlayerAliveStateWithoutExtraData(action.WeaSetPlayerAliveState, isFastExecute); }
+            else if (action.WeaStopPersistentAction)            { await this._callActionStopPersistentActionWithoutExtraData(action.WeaStopPersistentAction, isFastExecute); }
             else if (action.WeaSetPlayerState)                  { await this._callActionSetPlayerStateWithoutExtraData(action.WeaSetPlayerState, isFastExecute); }
-            else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithoutExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithoutExtraData(action.WeaSetUnitState, isFastExecute); }
             else if (action.WeaSetTileType)                     { await this._callActionSetTileTypeWithoutExtraData(action.WeaSetTileType, isFastExecute); }
             else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithoutExtraData(action.WeaSetTileState, isFastExecute); }
+            else if (action.WeaPersistentShowText)              { await this._callActionPersistentShowTextWithoutExtraData(action.WeaPersistentShowText, isFastExecute, warEventActionId); }
+            else if (action.WeaPersistentModifyPlayerAttribute) { await this._callActionPersistentModifyPlayerAttributeWithoutExtraData(action.WeaPersistentModifyPlayerAttribute, isFastExecute, warEventActionId); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -279,12 +329,12 @@ namespace TwnsBwWarEventManager {
                 throw Helpers.newError(`Empty unitArray.`);
             }
 
-            const war               = this._getWar();
-            const unitMap           = war.getUnitMap();
-            const tileMap           = war.getTileMap();
-            const playerManager     = war.getPlayerManager();
-            const configVersion     = war.getConfigVersion();
-            const mapSize           = unitMap.getMapSize();
+            const war           = this._getWar();
+            const unitMap       = war.getUnitMap();
+            const tileMap       = war.getTileMap();
+            const playerManager = war.getPlayerManager();
+            const gameConfig    = war.getGameConfig();
+            const mapSize       = unitMap.getMapSize();
             for (const data of unitArray) {
                 const unitData = Helpers.getExisted(data.unitData);
                 if (unitData.loaderUnitId != null) {
@@ -295,14 +345,13 @@ namespace TwnsBwWarEventManager {
                 const needMovableTile       = Helpers.getExisted(data.needMovableTile);
                 const unitId                = unitMap.getNextUnitId();
                 const unitType              = Helpers.getExisted(unitData.unitType);
-                const unitCfg               = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
-                const moveType              = unitCfg.moveType;
+                const moveType              = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.moveType);
                 const rawGridIndex          = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
-                if (WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
+                if (WarHelpers.WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
-                    configVersion,
-                    playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
+                    gameConfig,
+                    playersCountUnneutral   : CommonConstants.PlayerIndex.Max,
                 })) {
                     throw Helpers.newError(`Invalid unitData: ${JSON.stringify(unitData)}`);
                 }
@@ -332,8 +381,8 @@ namespace TwnsBwWarEventManager {
                 revisedUnitData.gridIndex   = gridIndex;
                 revisedUnitData.unitId      = unitId;
 
-                const unit = new TwnsBwUnit.BwUnit();
-                unit.init(revisedUnitData, configVersion);
+                const unit = new BwUnit();
+                unit.init(revisedUnitData, gameConfig);
 
                 unit.startRunning(war);
                 unitMap.setNextUnitId(unitId + 1);
@@ -348,8 +397,8 @@ namespace TwnsBwWarEventManager {
             }
 
             return new Promise<void>(resolve => {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
-                    configVersion   : this._getWar().getConfigVersion(),
+                PanelHelpers.open(PanelHelpers.PanelDict.BwDialoguePanel, {
+                    gameConfig   : this._getWar().getGameConfig(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -361,8 +410,8 @@ namespace TwnsBwWarEventManager {
             }
 
             return new Promise<void>(resolve => {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
-                    configVersion   : this._getWar().getConfigVersion(),
+                PanelHelpers.open(PanelHelpers.PanelDict.BwDialoguePanel, {
+                    gameConfig   : this._getWar().getGameConfig(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -443,8 +492,8 @@ namespace TwnsBwWarEventManager {
             }
 
             return new Promise<void>(resolve => {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwSimpleDialoguePanel, {
-                    configVersion   : this._getWar().getConfigVersion(),
+                PanelHelpers.open(PanelHelpers.PanelDict.BwSimpleDialoguePanel, {
+                    gameConfig   : this._getWar().getGameConfig(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -456,8 +505,8 @@ namespace TwnsBwWarEventManager {
             }
 
             return new Promise<void>(resolve => {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwSimpleDialoguePanel, {
-                    configVersion   : this._getWar().getConfigVersion(),
+                PanelHelpers.open(PanelHelpers.PanelDict.BwSimpleDialoguePanel, {
+                    gameConfig   : this._getWar().getGameConfig(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -560,80 +609,17 @@ namespace TwnsBwWarEventManager {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionDeprecatedSetPlayerAliveStateWithExtraData(action: WarEvent.IWeaDeprecatedSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
-            // nothing to do
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionDeprecatedSetPlayerAliveStateWithoutExtraData(action: WarEvent.IWeaDeprecatedSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
-            const war = this._getWar();
-            const playerIndex = action.playerIndex;
-            if ((playerIndex == null) || (playerIndex === CommonConstants.WarNeutralPlayerIndex)) {
-                throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`);
-            }
-
-            const playerAliveState = Helpers.getExisted(action.playerAliveState);
-            if (!ConfigManager.checkIsValidPlayerAliveState(playerAliveState)) {
-                throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`);
-            }
-
-            const player = war.getPlayer(playerIndex);
-            if (player) {
-                player.setAliveState(playerAliveState);
+        private async _callActionStopPersistentActionWithExtraData(action: WarEvent.IWeaStopPersistentAction, isFastExecute: boolean): Promise<void> {
+            const actionIdSet = this.getOngoingPersistentActionIdSet();
+            for (const actionId of action.actionIdArray ?? []) {
+                actionIdSet.delete(actionId);
             }
         }
-
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionDeprecatedSetPlayerFundWithExtraData(action: WarEvent.IWeaDeprecatedSetPlayerFund, isFastExecute: boolean): Promise<void> {
-            // nothing to do
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionDeprecatedSetPlayerFundWithoutExtraData(action: WarEvent.IWeaDeprecatedSetPlayerFund, isFastExecute: boolean): Promise<void> {
-            const player                = this._getWar().getPlayer(Helpers.getExisted(action.playerIndex));
-            const multiplierPercentage  = action.multiplierPercentage ?? 100;
-            const deltaValue            = action.deltaValue ?? 0;
-            const maxValue              = CommonConstants.WarPlayerMaxFund;
-            player.setFund(Math.min(
-                maxValue,
-                Math.max(-maxValue, Math.floor(player.getFund() * multiplierPercentage / 100 + deltaValue)))
-            );
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionDeprecatedSetPlayerCoEnergyWithExtraData(action: WarEvent.IWeaDeprecatedSetPlayerCoEnergy, isFastExecute: boolean): Promise<void> {
-            // nothing to do
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionDeprecatedSetPlayerCoEnergyWithoutExtraData(action: WarEvent.IWeaDeprecatedSetPlayerCoEnergy, isFastExecute: boolean): Promise<void> {
-            const player                = this._getWar().getPlayer(Helpers.getExisted(action.playerIndex));
-            const multiplierPercentage  = action.multiplierPercentage ?? 100;
-            const deltaPercentage       = action.deltaPercentage ?? 0;
-            const maxEnergy             = player.getCoMaxEnergy();
-            if (maxEnergy > 0) {
-                player.setCoCurrentEnergy(Math.max(
-                    0,
-                    Math.min(maxEnergy, Math.floor(player.getCoCurrentEnergy() * multiplierPercentage / 100 + maxEnergy * deltaPercentage / 100))
-                ));
-            }
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionSetPlayerAliveStateWithExtraData(action: WarEvent.IWeaSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
-            // nothing to do
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionSetPlayerAliveStateWithoutExtraData(action: WarEvent.IWeaSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
-            const playerAliveState = Helpers.getExisted(action.playerAliveState);
-            if (!ConfigManager.checkIsValidPlayerAliveState(playerAliveState)) {
-                throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`);
-            }
-
-            const playerIndexArray = action.playerIndexArray;
-            for (const [playerIndex, player] of this._getWar().getPlayerManager().getAllPlayersDict()) {
-                if ((playerIndexArray?.length) && (playerIndexArray.indexOf(playerIndex) < 0)) {
-                    continue;
-                }
-
-                player.setAliveState(playerAliveState);
+        private async _callActionStopPersistentActionWithoutExtraData(action: WarEvent.IWeaStopPersistentAction, isFastExecute: boolean): Promise<void> {
+            const actionIdSet = this.getOngoingPersistentActionIdSet();
+            for (const actionId of action.actionIdArray ?? []) {
+                actionIdSet.delete(actionId);
             }
         }
 
@@ -650,15 +636,29 @@ namespace TwnsBwWarEventManager {
             const conFundComparator             = action.conFundComparator ?? Types.ValueComparator.EqualTo;
             const conEnergyPercentage           = action.conEnergyPercentage;
             const conEnergyPercentageComparator = action.conEnergyPercentageComparator ?? Types.ValueComparator.EqualTo;
+            const conIsPlayerInTurn             = action.conIsPlayerInTurn;
+            const conIsSkipTurn                 = action.conIsSkipTurn;
             const actFundMultiplierPercentage   = action.actFundMultiplierPercentage ?? 100;
             const actFundDeltaValue             = action.actFundDeltaValue ?? 0;
             const actCoEnergyMultiplierPct      = action.actCoEnergyMultiplierPct ?? 100;
             const actCoEnergyDeltaPct           = action.actCoEnergyDeltaPct ?? 0;
+            const actIsSkipTurn                 = action.actIsSkipTurn;
             const maxFund                       = CommonConstants.WarPlayerMaxFund;
             const actAliveState                 = action.actAliveState;
+            const war                           = this._getWar();
+            const playerIndexInTurn             = war.getPlayerIndexInTurn();
 
-            for (const [playerIndex, player] of this._getWar().getPlayerManager().getAllPlayersDict()) {
-                if (((conPlayerIndexArray?.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0))                           ||
+            for (const [playerIndex, player] of war.getPlayerManager().getAllPlayersDict()) {
+                if (conIsPlayerInTurn != null) {
+                    if (((conIsPlayerInTurn) && (playerIndex !== playerIndexInTurn))    ||
+                        ((!conIsPlayerInTurn) && (playerIndex === playerIndexInTurn))
+                    ) {
+                        continue;
+                    }
+                }
+
+                if (((conIsSkipTurn != null) && (player.getIsSkipTurn() !== conIsSkipTurn))                                     ||
+                    ((conPlayerIndexArray?.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0))                           ||
                     ((conAliveStateArray?.length) && (conAliveStateArray.indexOf(player.getAliveState()) < 0))                  ||
                     ((conCoUsingSkillTypeArray?.length) && (conCoUsingSkillTypeArray.indexOf(player.getCoUsingSkillType()) < 0))
                 ) {
@@ -704,29 +704,8 @@ namespace TwnsBwWarEventManager {
                 if (actAliveState != null) {
                     player.setAliveState(actAliveState);
                 }
-            }
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionSetPlayerCoEnergyWithExtraData(action: WarEvent.IWeaSetPlayerCoEnergy, isFastExecute: boolean): Promise<void> {
-            // nothing to do
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionSetPlayerCoEnergyWithoutExtraData(action: WarEvent.IWeaSetPlayerCoEnergy, isFastExecute: boolean): Promise<void> {
-            const multiplierPercentage  = action.actCoEnergyMultiplierPct ?? 100;
-            const deltaPercentage       = action.actCoEnergyDeltaPct ?? 0;
-            const playerIndexArray      = action.playerIndexArray;
-            for (const [playerIndex, player] of this._getWar().getPlayerManager().getAllPlayersDict()) {
-                if ((playerIndexArray?.length) && (playerIndexArray.indexOf(playerIndex) < 0)) {
-                    continue;
-                }
-
-                const maxEnergy = player.getCoMaxEnergy();
-                if (maxEnergy > 0) {
-                    player.setCoCurrentEnergy(Math.max(
-                        0,
-                        Math.min(maxEnergy, Math.floor(player.getCoCurrentEnergy() * multiplierPercentage / 100 + maxEnergy * deltaPercentage / 100))
-                    ));
+                if (actIsSkipTurn != null) {
+                    player.setIsSkipTurn(actIsSkipTurn);
                 }
             }
         }
@@ -736,145 +715,223 @@ namespace TwnsBwWarEventManager {
             // nothing to do
         }
         private async _callActionSetUnitStateWithoutExtraData(action: WarEvent.IWeaSetUnitState, isFastExecute: boolean): Promise<void> {
-            const playerIndexArray              = action.conPlayerIndexArray ?? [];
-            const teamIndexArray                = action.conTeamIndexArray ?? [];
-            const locationIdArray               = action.conLocationIdArray ?? [];
-            const gridIndexArray                = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_00)) ?? [];
-            const unitTypeArray                 = action.conUnitTypeArray ?? [];
-            const actionStateArray              = action.conActionStateArray ?? [];
-            const hasLoadedCo                   = action.conHasLoadedCo;
-            const conHp                         = action.conHp;
-            const conHpComparator               = action.conHpComparator ?? Types.ValueComparator.EqualTo;
-            const conFuelPct                    = action.conFuelPct;
-            const conFuelPctComparator          = action.conFuelPctComparator ?? Types.ValueComparator.EqualTo;
-            const conPriAmmoPct                 = action.conPriAmmoPct;
-            const conPriAmmoPctComparator       = action.conPriAmmoPctComparator ?? Types.ValueComparator.EqualTo;
-            const conPromotion                  = action.conPromotion;
-            const conPromotionComparator        = action.conPromotionComparator ?? Types.ValueComparator.EqualTo;
-            const destroyUnit                   = action.actDestroyUnit;
-            const actActionState                = action.actActionState;
-            const actHasLoadedCo                = action.actHasLoadedCo;
-            const hpDeltaValue                  = action.actHpDeltaValue ?? 0;
-            const hpMultiplierPercentage        = action.actHpMultiplierPercentage ?? 100;
-            const fuelDeltaValue                = action.actFuelDeltaValue ?? 0;
-            const fuelMultiplierPercentage      = action.actFuelMultiplierPercentage ?? 100;
-            const priAmmoDeltaValue             = action.actPriAmmoDeltaValue ?? 0;
-            const priAmmoMultiplierPercentage   = action.actPriAmmoMultiplierPercentage ?? 100;
-            const promotionDeltaValue           = action.actPromotionDeltaValue ?? 0;
-            const promotionMultiplierPercentage = action.actPromotionMultiplierPercentage ?? 100;
-            const war                           = this._getWar();
-            const unitMap                       = war.getUnitMap();
-            const tileMap                       = war.getTileMap();
-            const mapSize                       = tileMap.getMapSize();
-            const mapWidth                      = mapSize.width;
-            const mapHeight                     = mapSize.height;
-            const minHp                         = 1;
-            const minFuel                       = 0;
-            const minPromotion                  = 0;
-            const minPriAmmo                    = 0;
+            const conPlayerIndexArray               = action.conPlayerIndexArray ?? [];
+            const conTeamIndexArray                 = action.conTeamIndexArray ?? [];
+            const conLocationIdArray                = action.conLocationIdArray ?? [];
+            const conGridIndexArray                 = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_00)) ?? [];
+            const conUnitTypeArray                  = action.conUnitTypeArray ?? [];
+            const conActionStateArray               = action.conActionStateArray ?? [];
+            const conHasLoadedCo                    = action.conHasLoadedCo;
+            const conHp                             = action.conHp;
+            const conHpComparator                   = action.conHpComparator ?? Types.ValueComparator.EqualTo;
+            const conFuelPct                        = action.conFuelPct;
+            const conFuelPctComparator              = action.conFuelPctComparator ?? Types.ValueComparator.EqualTo;
+            const conPriAmmoPct                     = action.conPriAmmoPct;
+            const conPriAmmoPctComparator           = action.conPriAmmoPctComparator ?? Types.ValueComparator.EqualTo;
+            const conPromotion                      = action.conPromotion;
+            const conPromotionComparator            = action.conPromotionComparator ?? Types.ValueComparator.EqualTo;
+            const conIsOwnerPlayerInTurn            = action.conIsOwnerPlayerInTurn;
+            const conIsDiving                       = action.conIsDiving;
+            const actDestroyUnit                    = action.actDestroyUnit;
+            const actActionState                    = action.actActionState;
+            const actHasLoadedCo                    = action.actHasLoadedCo;
+            const actIsDiving                       = action.actIsDiving;
+            const actHpDeltaValue                   = action.actHpDeltaValue ?? 0;
+            const actHpMultiplierPercentage         = action.actHpMultiplierPercentage ?? 100;
+            const actFuelDeltaValue                 = action.actFuelDeltaValue ?? 0;
+            const actFuelMultiplierPercentage       = action.actFuelMultiplierPercentage ?? 100;
+            const actPriAmmoDeltaValue              = action.actPriAmmoDeltaValue ?? 0;
+            const actPriAmmoMultiplierPercentage    = action.actPriAmmoMultiplierPercentage ?? 100;
+            const actPromotionDeltaValue            = action.actPromotionDeltaValue ?? 0;
+            const actPromotionMultiplierPercentage  = action.actPromotionMultiplierPercentage ?? 100;
+            const actUnitType                       = action.actUnitType;
+            const actPlayerIndex                    = action.actPlayerIndex;
+            const war                               = this._getWar();
+            const unitMap                           = war.getUnitMap();
+            const tileMap                           = war.getTileMap();
+            const mapSize                           = tileMap.getMapSize();
+            const mapWidth                          = mapSize.width;
+            const mapHeight                         = mapSize.height;
+            const playerIndexInTurn                 = war.getPlayerIndexInTurn();
+            const minHp                             = 1;
+            const minFuel                           = 0;
+            const minPromotion                      = 0;
+            const minPriAmmo                        = 0;
+            const gameConfig                        = war.getGameConfig();
+            const handler                           = (unit: BwUnit) => {
+                const playerIndex = unit.getPlayerIndex();
+                if (conIsOwnerPlayerInTurn != null) {
+                    if (((conIsOwnerPlayerInTurn) && (playerIndex !== playerIndexInTurn))   ||
+                        ((!conIsOwnerPlayerInTurn) && (playerIndex === playerIndexInTurn))
+                    ) {
+                        return;
+                    }
+                }
+
+                const gridIndex = unit.getGridIndex();
+                const tile      = tileMap.getTile(gridIndex);
+                if (((conIsDiving != null) && (unit.getIsDiving() !== conIsDiving))                                             ||
+                    ((conUnitTypeArray.length) && (conUnitTypeArray.indexOf(unit.getUnitType()) < 0))                           ||
+                    ((conPlayerIndexArray.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0))                            ||
+                    ((conTeamIndexArray.length) && (conTeamIndexArray.indexOf(unit.getTeamIndex()) < 0))                        ||
+                    ((conGridIndexArray.length) && (!conGridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
+                    ((conLocationIdArray.length) && (!conLocationIdArray.some(v => tile.getHasLocationFlag(v))))                ||
+                    ((conActionStateArray.length) && (conActionStateArray.indexOf(unit.getActionState()) < 0))                  ||
+                    ((conHasLoadedCo != null) && (unit.getHasLoadedCo() !== conHasLoadedCo))
+                ) {
+                    return;
+                }
+
+                if ((conHp != null)                         &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : conHpComparator,
+                        targetValue : conHp,
+                        actualValue : unit.getCurrentHp(),
+                    }))
+                ) {
+                    return;
+                }
+
+                if ((conPromotion != null)                  &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : conPromotionComparator,
+                        targetValue : conPromotion,
+                        actualValue : unit.getCurrentPromotion(),
+                    }))
+                ) {
+                    return;
+                }
+
+                if ((conFuelPct != null)                    &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : conFuelPctComparator,
+                        targetValue : conFuelPct,
+                        actualValue : unit.getCurrentFuel() * 100 / unit.getMaxFuel(),
+                    }))
+                ) {
+                    return;
+                }
+
+                if (conPriAmmoPct != null) {
+                    const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
+                    if ((maxAmmo == null)                       ||
+                        (!Helpers.checkIsMeetValueComparator({
+                            comparator  : conPriAmmoPctComparator,
+                            targetValue : conPriAmmoPct,
+                            actualValue : Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_01) * 100 / maxAmmo,
+                        }))
+                    ) {
+                        return;
+                    }
+                }
+
+                const unitId        = unit.getUnitId();
+                const loaderUnitId  = unit.getLoaderUnitId();
+                if (actDestroyUnit) {
+                    if (loaderUnitId == null) {
+                        WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
+                    } else {
+                        WarHelpers.WarDestructionHelpers.destroyUnitLoaded(war, unitId);
+                    }
+
+                } else {
+                    const checkHasLoadedAnyUnit = Helpers.createLazyFunc(() => unitMap.checkHasLoadedAnyUnit(unitId));
+                    if ((actUnitType != null)                   &&
+                        (unit.getUnitType() !== actUnitType)    &&
+                        (loaderUnitId == null)                  &&
+                        (!checkHasLoadedAnyUnit())
+                    ) {
+                        const templateCfg = Helpers.getExisted(gameConfig.getUnitTemplateCfg(actUnitType));
+                        unit.init({
+                            gridIndex,
+                            playerIndex,
+                            unitType                    : actUnitType,
+                            unitId,
+                            actionState                 : unit.getActionState(),
+                            primaryWeaponCurrentAmmo    : getUnitNewAttribute(unit.getPrimaryWeaponCurrentAmmo(), templateCfg.primaryWeaponMaxAmmo),
+                            currentHp                   : unit.getCurrentHp(),
+                            isCapturingTile             : templateCfg.canCaptureTile ? (unit.checkIsCapturer() ? unit.getIsCapturingTile() : null) : null,
+                            isDiving                    : templateCfg.diveCfgs ? (unit.checkIsDiver() ? unit.getIsDiving() : null) : null,
+                            flareCurrentAmmo            : getUnitNewAttribute(unit.getFlareCurrentAmmo(), templateCfg.flareMaxAmmo),
+                            currentFuel                 : Math.min(unit.getCurrentFuel(), templateCfg.maxFuel),
+                            currentBuildMaterial        : getUnitNewAttribute(unit.getCurrentBuildMaterial(), templateCfg.maxBuildMaterial),
+                            currentProduceMaterial      : getUnitNewAttribute(unit.getCurrentProduceMaterial(), templateCfg.maxProduceMaterial),
+                            currentPromotion            : unit.getCurrentPromotion(),
+                            isBuildingTile              : gameConfig.getBuildableTileCfgs(actUnitType) ? (unit.checkIsTileBuilder() ? unit.getIsBuildingTile() : null) : null,
+                            loaderUnitId,
+                            hasLoadedCo                 : unit.getHasLoadedCo(),
+                            aiMode                      : unit.getAiMode(),
+                        }, gameConfig);
+                    }
+
+                    if ((actPlayerIndex != null)            &&
+                        (playerIndex !== actPlayerIndex)    &&
+                        (loaderUnitId == null)              &&
+                        (!checkHasLoadedAnyUnit())
+                    ) {
+                        unit.setPlayerIndex(actPlayerIndex);
+                    }
+
+                    unit.setCurrentHp(Helpers.getValueInRange({
+                        maxValue    : unit.getMaxHp(),
+                        minValue    : minHp,
+                        rawValue    : Math.floor(unit.getCurrentHp() * actHpMultiplierPercentage / 100 + actHpDeltaValue),
+                    }));
+
+                    unit.setCurrentFuel(Helpers.getValueInRange({
+                        maxValue    : unit.getMaxFuel(),
+                        minValue    : minFuel,
+                        rawValue    : Math.floor(unit.getCurrentFuel() * actFuelMultiplierPercentage / 100 + actFuelDeltaValue),
+                    }));
+
+                    unit.setCurrentPromotion(Helpers.getValueInRange({
+                        maxValue    : unit.getMaxPromotion(),
+                        minValue    : minPromotion,
+                        rawValue    : Math.floor(unit.getCurrentPromotion() * actPromotionMultiplierPercentage / 100 + actPromotionDeltaValue),
+                    }));
+
+                    {
+                        const currentAmmo = unit.getPrimaryWeaponCurrentAmmo();
+                        if (currentAmmo != null) {
+                            unit.setPrimaryWeaponCurrentAmmo(Helpers.getValueInRange({
+                                maxValue    : Helpers.getExisted(unit.getPrimaryWeaponMaxAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_02),
+                                minValue    : minPriAmmo,
+                                rawValue    : Math.floor(currentAmmo * actPriAmmoMultiplierPercentage / 100 + actPriAmmoDeltaValue),
+                            }));
+                        }
+                    }
+
+                    if (actActionState != null) {
+                        unit.setActionState(actActionState);
+                    }
+
+                    if (actHasLoadedCo != null) {
+                        unit.setHasLoadedCo(actHasLoadedCo);
+                    }
+
+                    if ((actIsDiving != null) && (unit.checkIsDiver())) {
+                        unit.setIsDiving(actIsDiving);
+                    }
+
+                    if (!isFastExecute) {
+                        unit.updateView();
+                    }
+                }
+            };
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
                     const gridIndex : Types.GridIndex = { x, y };
-                    const unit      = unitMap.getUnitOnMap(gridIndex);
-                    const tile      = tileMap.getTile(gridIndex);
-                    if ((unit == null)                                                                                          ||
-                        ((unitTypeArray.length) && (unitTypeArray.indexOf(unit.getUnitType()) < 0))                             ||
-                        ((playerIndexArray.length) && (playerIndexArray.indexOf(unit.getPlayerIndex()) < 0))                    ||
-                        ((teamIndexArray.length) && (teamIndexArray.indexOf(unit.getTeamIndex()) < 0))                          ||
-                        ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
-                        ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))                  ||
-                        ((actionStateArray.length) && (actionStateArray.indexOf(unit.getActionState()) < 0))                    ||
-                        ((hasLoadedCo != null) && (unit.getHasLoadedCo() !== hasLoadedCo))
-                    ) {
+                    const unitOnMap = unitMap.getUnitOnMap(gridIndex);
+                    if (unitOnMap == null) {
                         continue;
                     }
 
-                    if ((conHp != null)                         &&
-                        (!Helpers.checkIsMeetValueComparator({
-                            comparator  : conHpComparator,
-                            targetValue : conHp,
-                            actualValue : unit.getCurrentHp(),
-                        }))
-                    ) {
-                        continue;
-                    }
+                    // TODO 如果以后需要以装载部队数量作为筛选条件，那么需要事先记录装载数量，否则部队处理顺序的变化会引起装载数量变化，从而导致处理结果不唯一
 
-                    if ((conPromotion != null)                  &&
-                        (!Helpers.checkIsMeetValueComparator({
-                            comparator  : conPromotionComparator,
-                            targetValue : conPromotion,
-                            actualValue : unit.getCurrentPromotion(),
-                        }))
-                    ) {
-                        continue;
-                    }
-
-                    if ((conFuelPct != null)                    &&
-                        (!Helpers.checkIsMeetValueComparator({
-                            comparator  : conFuelPctComparator,
-                            targetValue : conFuelPct * 100,
-                            actualValue : unit.getCurrentFuel() * 100 / unit.getMaxFuel(),
-                        }))
-                    ) {
-                        continue;
-                    }
-
-                    if (conPriAmmoPct != null) {
-                        const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
-                        if ((maxAmmo == null)                       ||
-                            (!Helpers.checkIsMeetValueComparator({
-                                comparator  : conPriAmmoPctComparator,
-                                targetValue : conPriAmmoPct * 100,
-                                actualValue : Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_01) * 100 / maxAmmo,
-                            }))
-                        ) {
-                            continue;
-                        }
-                    }
-
-                    if (destroyUnit) {
-                        WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
-
-                    } else {
-                        unit.setCurrentHp(Helpers.getValueInRange({
-                            maxValue    : unit.getMaxHp(),
-                            minValue    : minHp,
-                            rawValue    : Math.floor(unit.getCurrentHp() * hpMultiplierPercentage / 100 + hpDeltaValue),
-                        }));
-
-                        unit.setCurrentFuel(Helpers.getValueInRange({
-                            maxValue    : unit.getMaxFuel(),
-                            minValue    : minFuel,
-                            rawValue    : Math.floor(unit.getCurrentFuel() * fuelMultiplierPercentage / 100 + fuelDeltaValue),
-                        }));
-
-                        unit.setCurrentPromotion(Helpers.getValueInRange({
-                            maxValue    : unit.getMaxPromotion(),
-                            minValue    : minPromotion,
-                            rawValue    : Math.floor(unit.getCurrentPromotion() * promotionMultiplierPercentage / 100 + promotionDeltaValue),
-                        }));
-
-                        {
-                            const currentAmmo = unit.getPrimaryWeaponCurrentAmmo();
-                            if (currentAmmo != null) {
-                                unit.setPrimaryWeaponCurrentAmmo(Helpers.getValueInRange({
-                                    maxValue    : Helpers.getExisted(unit.getPrimaryWeaponMaxAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_02),
-                                    minValue    : minPriAmmo,
-                                    rawValue    : Math.floor(currentAmmo * priAmmoMultiplierPercentage / 100 + priAmmoDeltaValue),
-                                }));
-                            }
-                        }
-
-                        if (actActionState != null) {
-                            unit.setActionState(actActionState);
-                        }
-
-                        if (actHasLoadedCo != null) {
-                            unit.setHasLoadedCo(actHasLoadedCo);
-                        }
-
-                        if (!isFastExecute) {
-                            unit.updateView();
+                    handler(unitOnMap);
+                    for (const loadedUnit of unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
+                        if (unitMap.getUnitLoadedById(loadedUnit.getUnitId())) {    // 由于摧毁运输系部队时，被装载的部队也会同时摧毁，所以要再判断一次以免多次摧毁同一个部队
+                            handler(loadedUnit);
                         }
                     }
                 }
@@ -887,7 +944,7 @@ namespace TwnsBwWarEventManager {
         }
         private async _callActionSetTileTypeWithoutExtraData(action: WarEvent.IWeaSetTileType, isFastExecute: boolean): Promise<void> {
             const war                       = this._getWar();
-            const configVersion             = war.getConfigVersion();
+            const gameConfig                = war.getGameConfig();
             const actTileData               = Helpers.getExisted(action.actTileData, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_00);
             const rawActBaseType            = Helpers.getExisted(actTileData.baseType, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_01);
             const rawActObjectType          = Helpers.getExisted(actTileData.objectType, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_02);
@@ -898,16 +955,31 @@ namespace TwnsBwWarEventManager {
             const conIsHighlighted          = action.conIsHighlighted;
             const conLocationIdArray        = action.conLocationIdArray ?? [];
             const conGridIndexArray         = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_03)) ?? [];
+            const conPlayerIndexArray       = action.conPlayerIndexArray ?? [];
+            const conIsOwnerPlayerInTurn    = action.conIsOwnerPlayerInTurn;
+            const conTileTypeArray          = action.conTileTypeArray ?? [];
             const unitMap                   = war.getUnitMap();
             const tileMap                   = war.getTileMap();
             const mapSize                   = tileMap.getMapSize();
             const mapWidth                  = mapSize.width;
             const mapHeight                 = mapSize.height;
+            const playerIndexInTurn         = war.getPlayerIndexInTurn();
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
-                    const gridIndex : Types.GridIndex = { x, y };
-                    const tile      = tileMap.getTile(gridIndex);
+                    const gridIndex     : Types.GridIndex = { x, y };
+                    const tile          = tileMap.getTile(gridIndex);
+                    const playerIndex   = tile.getPlayerIndex();
+                    if (conIsOwnerPlayerInTurn != null) {
+                        if (((conIsOwnerPlayerInTurn) && (playerIndex !== playerIndexInTurn))   ||
+                            ((!conIsOwnerPlayerInTurn) && (playerIndex === playerIndexInTurn))
+                        ) {
+                            continue;
+                        }
+                    }
+
                     if (((conIsHighlighted != null) && (tile.getIsHighlighted() !== conIsHighlighted))                              ||
+                        ((conPlayerIndexArray.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0))                            ||
+                        ((conTileTypeArray.length) && (conTileTypeArray.indexOf(tile.getType()) < 0))                               ||
                         ((conGridIndexArray.length) && (!conGridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
                         ((conLocationIdArray.length) && (!conLocationIdArray.some(v => tile.getHasLocationFlag(v))))
                     ) {
@@ -918,25 +990,25 @@ namespace TwnsBwWarEventManager {
                     const actObjectType = actIsModifyTileObject ? rawActObjectType : tile.getObjectType();
                     if (unitMap.getUnitOnMap(gridIndex)) {
                         if (actDestroyUnit) {
-                            WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
-                        } else if (ConfigManager.getTileTemplateCfg(configVersion, actBaseType, actObjectType).maxHp != null) {
+                            WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
+                        } else if (gameConfig.getTileTemplateCfg(Helpers.getExisted(gameConfig.getTileType(actBaseType, actObjectType)))?.maxHp != null) {
                             continue;
                         }
                     }
 
-                    const tileData: ProtoTypes.WarSerialization.ISerialTile = {
+                    const tileData: CommonProto.WarSerialization.ISerialTile = {
                         gridIndex,
-                        playerIndex         : actIsModifyTileObject ? actTileData.playerIndex : tile.getPlayerIndex(),
+                        playerIndex         : actIsModifyTileObject ? actTileData.playerIndex : playerIndex,
                         baseType            : actBaseType,
                         baseShapeId         : actIsModifyTileBase ? actTileData.baseShapeId : tile.getBaseShapeId(),
-                        decoratorType       : actIsModifyTileDecorator ? actTileData.decoratorType : tile.getDecoratorType(),
+                        decoratorType       : actIsModifyTileDecorator ? actTileData.decoratorType : tile.getDecorationType(),
                         decoratorShapeId    : actIsModifyTileDecorator ? actTileData.decoratorShapeId : tile.getDecoratorShapeId(),
                         objectType          : actObjectType,
                         objectShapeId       : actIsModifyTileObject ? actTileData.objectShapeId : tile.getObjectShapeId(),
                         locationFlags       : tile.getLocationFlags(),
                         isHighlighted       : tile.getIsHighlighted(),
                     };
-                    tile.init(tileData, configVersion);
+                    tile.init(tileData, gameConfig);
                     tile.startRunning(war);
 
                     if (!isFastExecute) {
@@ -956,9 +1028,16 @@ namespace TwnsBwWarEventManager {
             const mapSize                               = tileMap.getMapSize();
             const mapWidth                              = mapSize.width;
             const mapHeight                             = mapSize.height;
+            const playerIndexInTurn                     = war.getPlayerIndexInTurn();
             const conIsHighlighted                      = action.conIsHighlighted;
             const conLocationIdArray                    = action.conLocationIdArray ?? [];
             const conGridIndexArray                     = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_00)) ?? [];
+            const conHp                                 = action.conHp;
+            const conCapturePoint                       = action.conCapturePoint;
+            const conBuildPoint                         = action.conBuildPoint;
+            const conPlayerIndexArray                   = action.conPlayerIndexArray ?? [];
+            const conIsOwnerPlayerInTurn                = action.conIsOwnerPlayerInTurn;
+            const conTileTypeArray                      = action.conTileTypeArray ?? [];
             const actHpMultiplierPercentage             = action.actHpMultiplierPercentage;
             const actHpDeltaValue                       = action.actHpDeltaValue;
             const actBuildPointMultiplierPercentage     = action.actBuildPointMultiplierPercentage;
@@ -970,17 +1049,48 @@ namespace TwnsBwWarEventManager {
             const actIsHighlighted                      = action.actIsHighlighted;
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
-                    const gridIndex : Types.GridIndex = { x, y };
-                    const tile      = tileMap.getTile(gridIndex);
+                    const gridIndex     : Types.GridIndex = { x, y };
+                    const tile          = tileMap.getTile(gridIndex);
+                    const playerIndex   = tile.getPlayerIndex();
+                    if (conIsOwnerPlayerInTurn != null) {
+                        if (((conIsOwnerPlayerInTurn) && (playerIndex !== playerIndexInTurn))   ||
+                            ((!conIsOwnerPlayerInTurn) && (playerIndex === playerIndexInTurn))
+                        ) {
+                            continue;
+                        }
+                    }
+
                     if (((conIsHighlighted != null) && (tile.getIsHighlighted() !== conIsHighlighted))                              ||
+                        ((conPlayerIndexArray.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0))                            ||
+                        ((conTileTypeArray.length) && (conTileTypeArray.indexOf(tile.getType()) < 0))                               ||
                         ((conGridIndexArray.length) && (!conGridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
                         ((conLocationIdArray.length) && (!conLocationIdArray.some(v => tile.getHasLocationFlag(v))))
                     ) {
                         continue;
                     }
 
+                    const currentHp = tile.getCurrentHp();
+                    if (conHp != null) {
+                        if ((currentHp == null) || (!Helpers.checkIsMeetValueComparator2(currentHp, conHp))) {
+                            continue;
+                        }
+                    }
+
+                    const currentBuildPoint = tile.getCurrentBuildPoint();
+                    if (conBuildPoint != null) {
+                        if ((currentBuildPoint == null) || (!Helpers.checkIsMeetValueComparator2(currentBuildPoint, conBuildPoint))) {
+                            continue;
+                        }
+                    }
+
+                    const currentCapturePoint = tile.getCurrentCapturePoint();
+                    if (conCapturePoint != null) {
+                        if ((currentCapturePoint == null) || (!Helpers.checkIsMeetValueComparator2(currentCapturePoint, conCapturePoint))) {
+                            continue;
+                        }
+                    }
+
                     {
-                        const currentHp = tile.getCurrentHp();
                         if ((currentHp != null)                                                 &&
                             ((actHpMultiplierPercentage != null) || (actHpDeltaValue != null))
                         ) {
@@ -993,7 +1103,6 @@ namespace TwnsBwWarEventManager {
                     }
 
                     {
-                        const currentBuildPoint = tile.getCurrentBuildPoint();
                         if ((currentBuildPoint != null)                                                         &&
                             ((actBuildPointDeltaValue != null) || (actBuildPointMultiplierPercentage != null))
                         ) {
@@ -1006,7 +1115,6 @@ namespace TwnsBwWarEventManager {
                     }
 
                     {
-                        const currentCapturePoint = tile.getCurrentCapturePoint();
                         if ((currentCapturePoint != null)                                                           &&
                             ((actCapturePointDeltaValue != null) || (actCapturePointMultiplierPercentage != null))
                         ) {
@@ -1041,8 +1149,32 @@ namespace TwnsBwWarEventManager {
             }
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionPersistentShowTextWithExtraData(action: WarEvent.IWeaPersistentShowText, isFastExecute: boolean, actionId: number): Promise<void> {
+            this.getOngoingPersistentActionIdSet().add(actionId);
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionPersistentShowTextWithoutExtraData(action: WarEvent.IWeaPersistentShowText, isFastExecute: boolean, actionId: number): Promise<void> {
+            this.getOngoingPersistentActionIdSet().add(actionId);
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionPersistentModifyPlayerAttributeWithExtraData(action: WarEvent.IWeaPersistentModifyPlayerAttribute, isFastExecute: boolean, actionId: number): Promise<void> {
+            this.getOngoingPersistentActionIdSet().add(actionId);
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionPersistentModifyPlayerAttributeWithoutExtraData(action: WarEvent.IWeaPersistentModifyPlayerAttribute, isFastExecute: boolean, actionId: number): Promise<void> {
+            this.getOngoingPersistentActionIdSet().add(actionId);
+        }
+
         public getCallableWarEventId(): number | null {                                // DONE
-            for (const warEventId of this._getWar().getCommonSettingManager().getWarRule().warEventIdArray || []) {
+            const war = this._getWar();
+            if (war.checkIsExceedTurnsOrWarActionsLimit()) {
+                return null;
+            }
+
+            for (const warEvent of this._getWar().getCommonSettingManager().getInstanceWarRule().warEventFullData?.eventArray || []) {
+                const warEventId = Helpers.getExisted(warEvent.eventId);
                 if (this._checkCanCallWarEvent(warEventId)) {
                     return warEventId;
                 }
@@ -1071,6 +1203,7 @@ namespace TwnsBwWarEventManager {
                 throw Helpers.newError(`Empty conditionIdArray and subNodeIdArray.`);
             }
 
+            let isMeetAnyConditionOrNode = false;
             if (conditionIdArray) {
                 for (const conditionId of conditionIdArray) {
                     const isConditionMet = this._checkIsMeetCondition(conditionId);
@@ -1080,6 +1213,7 @@ namespace TwnsBwWarEventManager {
                     if ((!isAnd) && (isConditionMet)) {
                         return true;
                     }
+                    isMeetAnyConditionOrNode ||= isConditionMet;
                 }
             }
 
@@ -1092,63 +1226,28 @@ namespace TwnsBwWarEventManager {
                     if ((!isAnd) && (isSubNodeMet)) {
                         return true;
                     }
+                    isMeetAnyConditionOrNode ||= isSubNodeMet;
                 }
             }
 
-            return true;
+            return isMeetAnyConditionOrNode;
         }
         private _checkIsMeetCondition(conditionId: number): boolean {
             const condition = this._getCondition(conditionId);
 
-            if      (condition.WecEventCalledCountTotalEqualTo)     { return this._checkIsMeetConEventCalledCountTotalEqualTo(condition.WecEventCalledCountTotalEqualTo); }
-            else if (condition.WecEventCalledCountTotalGreaterThan) { return this._checkIsMeetConEventCalledCountTotalGreaterThan(condition.WecEventCalledCountTotalGreaterThan); }
-            else if (condition.WecEventCalledCountTotalLessThan)    { return this._checkIsMeetConEventCalledCountTotalLessThan(condition.WecEventCalledCountTotalLessThan); }
-            else if (condition.WecEventCalledCount)                 { return this._checkIsMeetConEventCalledCount(condition.WecEventCalledCount); }
-            else if (condition.WecPlayerAliveStateEqualTo)          { return this._checkIsMeetConPlayerAliveStateEqualTo(condition.WecPlayerAliveStateEqualTo); }
-            else if (condition.WecPlayerState)                      { return this._checkIsMeetConPlayerState(condition.WecPlayerState); }
-            else if (condition.WecPlayerIndexInTurnEqualTo)         { return this._checkIsMeetConPlayerIndexInTurnEqualTo(condition.WecPlayerIndexInTurnEqualTo); }
-            else if (condition.WecPlayerIndexInTurnGreaterThan)     { return this._checkIsMeetConPlayerIndexInTurnGreaterThan(condition.WecPlayerIndexInTurnGreaterThan); }
-            else if (condition.WecPlayerIndexInTurnLessThan)        { return this._checkIsMeetConPlayerIndexInTurnLessThan(condition.WecPlayerIndexInTurnLessThan); }
-            else if (condition.WecTurnIndexEqualTo)                 { return this._checkIsMeetConTurnIndexEqualTo(condition.WecTurnIndexEqualTo); }
-            else if (condition.WecTurnIndexGreaterThan)             { return this._checkIsMeetConTurnIndexGreaterThan(condition.WecTurnIndexGreaterThan); }
-            else if (condition.WecTurnIndexLessThan)                { return this._checkIsMeetConTurnIndexLessThan(condition.WecTurnIndexLessThan); }
-            else if (condition.WecTurnIndexRemainderEqualTo)        { return this._checkIsMeetConTurnIndexRemainderEqualTo(condition.WecTurnIndexRemainderEqualTo); }
+            if (condition.WecEventCalledCount)                      { return this._checkIsMeetConEventCalledCount(condition.WecEventCalledCount); }
+            else if (condition.WecPlayerPresence)                   { return this._checkIsMeetConPlayerPresence(condition.WecPlayerPresence); }
             else if (condition.WecTurnAndPlayer)                    { return this._checkIsMeetConTurnAndPlayer(condition.WecTurnAndPlayer); }
-            else if (condition.WecTurnPhaseEqualTo)                 { return this._checkIsMeetConTurnPhaseEqualTo(condition.WecTurnPhaseEqualTo); }
             else if (condition.WecWeatherAndFog)                    { return this._checkIsMeetConWeatherAndFog(condition.WecWeatherAndFog); }
-            else if (condition.WecTilePlayerIndexEqualTo)           { return this._checkIsMeetConTilePlayerIndexEqualTo(condition.WecTilePlayerIndexEqualTo); }
-            else if (condition.WecTileTypeEqualTo)                  { return this._checkIsMeetConTileTypeEqualTo(condition.WecTileTypeEqualTo); }
             else if (condition.WecTilePresence)                     { return this._checkIsMeetConTilePresence(condition.WecTilePresence); }
             else if (condition.WecUnitPresence)                     { return this._checkIsMeetConUnitPresence(condition.WecUnitPresence); }
             else if (condition.WecCustomCounter)                    { return this._checkIsMeetConCustomCounter(condition.WecCustomCounter); }
+            else if (condition.WecOngoingPersistentActionPresence)  { return this._checkIsMeetConOngoingPersistentActionPresence(condition.WecOngoingPersistentActionPresence); }
+            else if (condition.WecManualActionStatistics)           { return this._checkIsMeetConManualActionStatistics(condition.WecManualActionStatistics); }
 
             throw Helpers.newError(`Invalid condition!`);
         }
 
-        private _checkIsMeetConEventCalledCountTotalEqualTo(condition: WarEvent.IWecEventCalledCountTotalEqualTo): boolean {
-            const eventIdEqualTo    = Helpers.getExisted(condition.eventIdEqualTo);
-            const countEqualTo      = Helpers.getExisted(condition.countEqualTo);
-            const isNot             = Helpers.getExisted(condition.isNot);
-            return (this.getWarEventCalledCountTotal(eventIdEqualTo) === countEqualTo)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConEventCalledCountTotalGreaterThan(condition: WarEvent.IWecEventCalledCountTotalGreaterThan): boolean {
-            const eventIdEqualTo    = Helpers.getExisted(condition.eventIdEqualTo);
-            const countGreaterThan  = Helpers.getExisted(condition.countGreaterThan);
-            const isNot             = Helpers.getExisted(condition.isNot);
-            return (this.getWarEventCalledCountTotal(eventIdEqualTo) > countGreaterThan)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConEventCalledCountTotalLessThan(condition: WarEvent.IWecEventCalledCountTotalLessThan): boolean {
-            const eventIdEqualTo    = Helpers.getExisted(condition.eventIdEqualTo);
-            const countLessThan     = Helpers.getExisted(condition.countLessThan);
-            const isNot             = Helpers.getExisted(condition.isNot);
-            return (this.getWarEventCalledCountTotal(eventIdEqualTo) < countLessThan)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
         private _checkIsMeetConEventCalledCount(condition: WarEvent.IWecEventCalledCount): boolean {
             const eventIdArray          = condition.eventIdArray ?? [];
             const timesInTurn           = condition.timesInTurn;
@@ -1157,7 +1256,8 @@ namespace TwnsBwWarEventManager {
             const timesTotalComparator  = Helpers.getExisted(condition.timesTotalComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_01);
 
             let eventsCount = 0;
-            for (const eventId of this._getWar().getCommonSettingManager().getWarRule().warEventIdArray ?? []) {
+            for (const warEvent of this._getWar().getCommonSettingManager().getInstanceWarRule().warEventFullData?.eventArray ?? []) {
+                const eventId = Helpers.getExisted(warEvent.eventId, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_02);
                 if ((eventIdArray.length) && (eventIdArray.indexOf(eventId) < 0)) {
                     continue;
                 }
@@ -1186,32 +1286,28 @@ namespace TwnsBwWarEventManager {
             }
 
             return Helpers.checkIsMeetValueComparator({
-                comparator  : Helpers.getExisted(condition.eventsCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_02),
-                targetValue : Helpers.getExisted(condition.eventsCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_03),
+                comparator  : Helpers.getExisted(condition.eventsCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_03),
+                targetValue : Helpers.getExisted(condition.eventsCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_04),
                 actualValue : eventsCount,
             });
         }
 
-        private _checkIsMeetConPlayerAliveStateEqualTo(condition: WarEvent.IWecPlayerAliveStateEqualTo): boolean {
-            const playerIndexEqualTo    = Helpers.getExisted(condition.playerIndexEqualTo);
-            const aliveStateEqualTo     = Helpers.getExisted(condition.aliveStateEqualTo);
-            const isNot                 = Helpers.getExisted(condition.isNot);
-            const player                = this._getWar().getPlayer(playerIndexEqualTo);
-            return (player.getAliveState() === aliveStateEqualTo)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConPlayerState(condition: WarEvent.IWecPlayerState): boolean {
+        private _checkIsMeetConPlayerPresence(condition: WarEvent.IWecPlayerPresence): boolean {
             const playerIndexArray              = condition.playerIndexArray ?? [];
             const aliveStateArray               = condition.aliveStateArray ?? [];
             const coUsingSkillTypeArray         = condition.coUsingSkillTypeArray ?? [];
+            const coCategoryIdArray             = condition.coCategoryIdArray ?? [];
             const targetFund                    = condition.fund;
+            const isSkipTurn                    = condition.isSkipTurn;
             const fundComparator                = Helpers.getExisted(condition.fundComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_00);
             const targetEnergyPercentage        = condition.energyPercentage;
             const energyPercentageComparator    = Helpers.getExisted(condition.energyPercentageComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_01);
+            const war                           = this._getWar();
+            const gameConfig                    = war.getGameConfig();
             let playersCount                    = 0;
-            for (const [playerIndex, player] of this._getWar().getPlayerManager().getAllPlayersDict()) {
-                if (((playerIndexArray.length) && (playerIndexArray.indexOf(playerIndex) < 0))                              ||
+            for (const [playerIndex, player] of war.getPlayerManager().getAllPlayersDict()) {
+                if (((isSkipTurn != null) && (player.getIsSkipTurn() !== isSkipTurn))                                       ||
+                    ((playerIndexArray.length) && (playerIndexArray.indexOf(playerIndex) < 0))                              ||
                     ((aliveStateArray.length) && (aliveStateArray.indexOf(player.getAliveState()) < 0))                     ||
                     ((coUsingSkillTypeArray.length) && (coUsingSkillTypeArray.indexOf(player.getCoUsingSkillType()) < 0))
                 ) {
@@ -1224,6 +1320,13 @@ namespace TwnsBwWarEventManager {
                     actualValue : player.getFund(),
                 }))) {
                     continue;
+                }
+
+                if (coCategoryIdArray.length) {
+                    const categoryId = gameConfig.getCoBasicCfg(player.getCoId())?.categoryId;
+                    if ((categoryId == null) || (coCategoryIdArray.indexOf(categoryId) < 0)) {
+                        continue;
+                    }
                 }
 
                 if (targetEnergyPercentage != null) {
@@ -1247,64 +1350,6 @@ namespace TwnsBwWarEventManager {
             });
         }
 
-        private _checkIsMeetConPlayerIndexInTurnEqualTo(condition: WarEvent.IWecPlayerIndexInTurnEqualTo): boolean {
-            const valueEqualTo  = Helpers.getExisted(condition.valueEqualTo);
-            const isNot         = Helpers.getExisted(condition.isNot);
-            const playerIndex   = this._getWar().getPlayerIndexInTurn();
-            return (playerIndex === valueEqualTo)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConPlayerIndexInTurnGreaterThan(condition: WarEvent.IWecPlayerIndexInTurnGreaterThan): boolean {
-            const valueGreaterThan  = Helpers.getExisted(condition.valueGreaterThan);
-            const isNot             = Helpers.getExisted(condition.isNot);
-            const playerIndex       = this._getWar().getPlayerIndexInTurn();
-            return (playerIndex > valueGreaterThan)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConPlayerIndexInTurnLessThan(condition: WarEvent.IWecPlayerIndexInTurnLessThan): boolean {
-            const valueLessThan = Helpers.getExisted(condition.valueLessThan);
-            const isNot         = Helpers.getExisted(condition.isNot);
-            const playerIndex   = this._getWar().getPlayerIndexInTurn();
-            return (playerIndex < valueLessThan)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-
-        private _checkIsMeetConTurnIndexEqualTo(condition: WarEvent.IWecTurnIndexEqualTo): boolean {
-            const valueEqualTo  = Helpers.getExisted(condition.valueEqualTo);
-            const isNot         = Helpers.getExisted(condition.isNot);
-            const turnIndex     = this._getWar().getTurnManager().getTurnIndex();
-            return (turnIndex === valueEqualTo)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConTurnIndexGreaterThan(condition: WarEvent.IWecTurnIndexGreaterThan): boolean {
-            const valueGreaterThan  = Helpers.getExisted(condition.valueGreaterThan);
-            const isNot             = Helpers.getExisted(condition.isNot);
-            const turnIndex         = this._getWar().getTurnManager().getTurnIndex();
-            return (turnIndex > valueGreaterThan)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConTurnIndexLessThan(condition: WarEvent.IWecTurnIndexLessThan): boolean {
-            const valueLessThan     = Helpers.getExisted(condition.valueLessThan);
-            const isNot             = Helpers.getExisted(condition.isNot);
-            const turnIndex         = this._getWar().getTurnManager().getTurnIndex();
-            return (turnIndex < valueLessThan)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConTurnIndexRemainderEqualTo(condition: WarEvent.IWecTurnIndexRemainderEqualTo): boolean {
-            const divider           = Helpers.getExisted(condition.divider);
-            const remainderEqualTo  = Helpers.getExisted(condition.remainderEqualTo);
-            const isNot             = Helpers.getExisted(condition.isNot);
-            const turnIndex         = this._getWar().getTurnManager().getTurnIndex();
-            return (turnIndex % divider === remainderEqualTo)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
         private _checkIsMeetConTurnAndPlayer(condition: WarEvent.IWecTurnAndPlayer): boolean {
             const turnManager   = this._getWar().getTurnManager();
             const turnIndex     = turnManager.getTurnIndex();
@@ -1351,15 +1396,6 @@ namespace TwnsBwWarEventManager {
             return true;
         }
 
-        private _checkIsMeetConTurnPhaseEqualTo(condition: WarEvent.IWecTurnPhaseEqualTo): boolean {
-            const valueEqualTo  = Helpers.getExisted(condition.valueEqualTo);
-            const isNot         = Helpers.getExisted(condition.isNot);
-            const phaseCode     = this._getWar().getTurnManager().getPhaseCode();
-            return (phaseCode === valueEqualTo)
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-
         private _checkIsMeetConWeatherAndFog(condition: WarEvent.IWecWeatherAndFog): boolean {
             const war               = this._getWar();
             const weatherTypeArray  = condition.weatherTypeArray;
@@ -1375,38 +1411,35 @@ namespace TwnsBwWarEventManager {
             return true;
         }
 
-        private _checkIsMeetConTilePlayerIndexEqualTo(condition: WarEvent.IWecTilePlayerIndexEqualTo): boolean {
-            const tile  = this._getWar().getTileMap().getTile(Helpers.getExisted(GridIndexHelpers.convertGridIndex(condition.gridIndex), ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePlayerIndexEqualTo_00));
-            const isNot = condition.isNot;
-            return (tile.getPlayerIndex() === Helpers.getExisted(condition.playerIndex, ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePlayerIndexEqualTo_01))
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
-        private _checkIsMeetConTileTypeEqualTo(condition: WarEvent.IWecTileTypeEqualTo): boolean {
-            const tile  = this._getWar().getTileMap().getTile(Helpers.getExisted(GridIndexHelpers.convertGridIndex(condition.gridIndex), ClientErrorCode.BwWarEventManager_CheckIsMeetConTileTypeEqualTo_00));
-            const isNot = condition.isNot;
-            return (tile.getType() === Helpers.getExisted(condition.tileType, ClientErrorCode.BwWarEventManager_CheckIsMeetConTileTypeEqualTo_01))
-                ? (isNot ? false : true)
-                : (isNot ? true : false);
-        }
         private _checkIsMeetConTilePresence(condition: WarEvent.IWecTilePresence): boolean {
-            const playerIndexArray      = condition.playerIndexArray ?? [];
-            const teamIndexArray        = condition.teamIndexArray ?? [];
-            const locationIdArray       = condition.locationIdArray ?? [];
-            const gridIndexArray        = condition.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePresence_00)) ?? [];
-            const tileTypeArray         = condition.tileTypeArray ?? [];
-            const war                   = this._getWar();
-            const tileMap               = war.getTileMap();
-            const mapSize               = tileMap.getMapSize();
-            const mapWidth              = mapSize.width;
-            const mapHeight             = mapSize.height;
-            let tilesCount              = 0;
+            const playerIndexArray          = condition.playerIndexArray ?? [];
+            const teamIndexArray            = condition.teamIndexArray ?? [];
+            const locationIdArray           = condition.locationIdArray ?? [];
+            const gridIndexArray            = condition.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePresence_00)) ?? [];
+            const tileTypeArray             = condition.tileTypeArray ?? [];
+            const conIsOwnerPlayerInTurn    = condition.isOwnerPlayerInTurn;
+            const war                       = this._getWar();
+            const tileMap                   = war.getTileMap();
+            const mapSize                   = tileMap.getMapSize();
+            const mapWidth                  = mapSize.width;
+            const mapHeight                 = mapSize.height;
+            const playerIndexInTurn         = war.getPlayerIndexInTurn();
+            let tilesCount                  = 0;
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
-                    const gridIndex : Types.GridIndex = { x, y };
-                    const tile      = tileMap.getTile(gridIndex);
+                    const gridIndex     : Types.GridIndex = { x, y };
+                    const tile          = tileMap.getTile(gridIndex);
+                    const playerIndex   = tile.getPlayerIndex();
+                    if (conIsOwnerPlayerInTurn != null) {
+                        if (((conIsOwnerPlayerInTurn) && (playerIndex !== playerIndexInTurn))   ||
+                            ((!conIsOwnerPlayerInTurn) && (playerIndex === playerIndexInTurn))
+                        ) {
+                            continue;
+                        }
+                    }
+
                     if (((tileTypeArray.length) && (tileTypeArray.indexOf(tile.getType()) < 0))                                 ||
-                        ((playerIndexArray.length) && (playerIndexArray.indexOf(tile.getPlayerIndex()) < 0))                    ||
+                        ((playerIndexArray.length) && (playerIndexArray.indexOf(playerIndex) < 0))                              ||
                         ((teamIndexArray.length) && (teamIndexArray.indexOf(tile.getTeamIndex()) < 0))                          ||
                         ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
                         ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))
@@ -1425,90 +1458,96 @@ namespace TwnsBwWarEventManager {
             });
         }
         private _checkIsMeetConUnitPresence(condition: WarEvent.IWecUnitPresence): boolean {
-            const playerIndexArray      = condition.playerIndexArray ?? [];
-            const teamIndexArray        = condition.teamIndexArray ?? [];
-            const locationIdArray       = condition.locationIdArray ?? [];
-            const gridIndexArray        = condition.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_00)) ?? [];
-            const unitTypeArray         = condition.unitTypeArray ?? [];
-            const actionStateArray      = condition.actionStateArray ?? [];
-            const hasLoadedCo           = condition.hasLoadedCo;
-            const hp                    = condition.hp;
-            const hpComparator          = condition.hpComparator ?? Types.ValueComparator.EqualTo;
-            const fuelPct               = condition.fuelPct;
-            const fuelPctComparator     = condition.fuelPctComparator ?? Types.ValueComparator.EqualTo;
-            const priAmmoPct            = condition.priAmmoPct;
-            const priAmmoPctComparator  = condition.priAmmoPctComparator ?? Types.ValueComparator.EqualTo;
-            const promotion             = condition.promotion;
-            const promotionComparator   = condition.promotionComparator ?? Types.ValueComparator.EqualTo;
-            const war                   = this._getWar();
-            const unitMap               = war.getUnitMap();
-            const tileMap               = war.getTileMap();
-            const mapSize               = tileMap.getMapSize();
-            const mapWidth              = mapSize.width;
-            const mapHeight             = mapSize.height;
-            let unitsCount              = 0;
-            for (let x = 0; x < mapWidth; ++x) {
-                for (let y = 0; y < mapHeight; ++y) {
-                    const gridIndex : Types.GridIndex = { x, y };
-                    const unit      = unitMap.getUnitOnMap(gridIndex);
-                    const tile      = tileMap.getTile(gridIndex);
-                    if ((unit == null)                                                                                          ||
-                        ((unitTypeArray.length) && (unitTypeArray.indexOf(unit.getUnitType()) < 0))                             ||
-                        ((playerIndexArray.length) && (playerIndexArray.indexOf(unit.getPlayerIndex()) < 0))                    ||
-                        ((teamIndexArray.length) && (teamIndexArray.indexOf(unit.getTeamIndex()) < 0))                          ||
-                        ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
-                        ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))                  ||
-                        ((actionStateArray.length) && (actionStateArray.indexOf(unit.getActionState()) < 0))                    ||
-                        ((hasLoadedCo != null) && (unit.getHasLoadedCo() !== hasLoadedCo))
+            const playerIndexArray          = condition.playerIndexArray ?? [];
+            const teamIndexArray            = condition.teamIndexArray ?? [];
+            const locationIdArray           = condition.locationIdArray ?? [];
+            const gridIndexArray            = condition.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_00)) ?? [];
+            const unitTypeArray             = condition.unitTypeArray ?? [];
+            const actionStateArray          = condition.actionStateArray ?? [];
+            const hasLoadedCo               = condition.hasLoadedCo;
+            const hp                        = condition.hp;
+            const conIsOwnerPlayerInTurn    = condition.isOwnerPlayerInTurn;
+            const conIsDiving               = condition.isDiving;
+            const hpComparator              = condition.hpComparator ?? Types.ValueComparator.EqualTo;
+            const fuelPct                   = condition.fuelPct;
+            const fuelPctComparator         = condition.fuelPctComparator ?? Types.ValueComparator.EqualTo;
+            const priAmmoPct                = condition.priAmmoPct;
+            const priAmmoPctComparator      = condition.priAmmoPctComparator ?? Types.ValueComparator.EqualTo;
+            const promotion                 = condition.promotion;
+            const promotionComparator       = condition.promotionComparator ?? Types.ValueComparator.EqualTo;
+            const war                       = this._getWar();
+            const unitMap                   = war.getUnitMap();
+            const tileMap                   = war.getTileMap();
+            const playerIndexInTurn         = war.getPlayerIndexInTurn();
+            let unitsCount                  = 0;
+            for (const unit of unitMap.getAllUnits()) {
+                const playerIndex = unit.getPlayerIndex();
+                if (conIsOwnerPlayerInTurn != null) {
+                    if (((conIsOwnerPlayerInTurn) && (playerIndex !== playerIndexInTurn))   ||
+                        ((!conIsOwnerPlayerInTurn) && (playerIndex === playerIndexInTurn))
                     ) {
                         continue;
                     }
-
-                    if ((hp != null)                            &&
-                        (!Helpers.checkIsMeetValueComparator({
-                            comparator  : hpComparator,
-                            targetValue : hp,
-                            actualValue : unit.getCurrentHp(),
-                        }))
-                    ) {
-                        continue;
-                    }
-
-                    if ((promotion != null)                     &&
-                        (!Helpers.checkIsMeetValueComparator({
-                            comparator  : promotionComparator,
-                            targetValue : promotion,
-                            actualValue : unit.getCurrentPromotion(),
-                        }))
-                    ) {
-                        continue;
-                    }
-
-                    if ((fuelPct != null)                       &&
-                        (!Helpers.checkIsMeetValueComparator({
-                            comparator  : fuelPctComparator,
-                            targetValue : fuelPct * 100,
-                            actualValue : unit.getCurrentFuel() * 100 / unit.getMaxFuel(),
-                        }))
-                    ) {
-                        continue;
-                    }
-
-                    if (priAmmoPct != null) {
-                        const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
-                        if ((maxAmmo == null)   ||
-                            (!Helpers.checkIsMeetValueComparator({
-                                comparator  : priAmmoPctComparator,
-                                targetValue : priAmmoPct * 100,
-                                actualValue : Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_01) * 100 / maxAmmo
-                            }))
-                        ) {
-                            continue;
-                        }
-                    }
-
-                    ++unitsCount;
                 }
+
+                const gridIndex = unit.getGridIndex();
+                const tile      = tileMap.getTile(gridIndex);
+                if (((conIsDiving != null) && (unit.getIsDiving() !== conIsDiving))                                         ||
+                    ((unitTypeArray.length) && (unitTypeArray.indexOf(unit.getUnitType()) < 0))                             ||
+                    ((playerIndexArray.length) && (playerIndexArray.indexOf(playerIndex) < 0))                              ||
+                    ((teamIndexArray.length) && (teamIndexArray.indexOf(unit.getTeamIndex()) < 0))                          ||
+                    ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
+                    ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))                  ||
+                    ((actionStateArray.length) && (actionStateArray.indexOf(unit.getActionState()) < 0))                    ||
+                    ((hasLoadedCo != null) && (unit.getHasLoadedCo() !== hasLoadedCo))
+                ) {
+                    continue;
+                }
+
+                if ((hp != null)                            &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : hpComparator,
+                        targetValue : hp,
+                        actualValue : unit.getCurrentHp(),
+                    }))
+                ) {
+                    continue;
+                }
+
+                if ((promotion != null)                     &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : promotionComparator,
+                        targetValue : promotion,
+                        actualValue : unit.getCurrentPromotion(),
+                    }))
+                ) {
+                    continue;
+                }
+
+                if ((fuelPct != null)                       &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : fuelPctComparator,
+                        targetValue : fuelPct,
+                        actualValue : unit.getCurrentFuel() * 100 / unit.getMaxFuel(),
+                    }))
+                ) {
+                    continue;
+                }
+
+                if (priAmmoPct != null) {
+                    const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
+                    if ((maxAmmo == null)   ||
+                        (!Helpers.checkIsMeetValueComparator({
+                            comparator  : priAmmoPctComparator,
+                            targetValue : priAmmoPct,
+                            actualValue : Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_01) * 100 / maxAmmo
+                        }))
+                    ) {
+                        continue;
+                    }
+                }
+
+                ++unitsCount;
             }
 
             return Helpers.checkIsMeetValueComparator({
@@ -1563,6 +1602,56 @@ namespace TwnsBwWarEventManager {
             });
         }
 
+        private _checkIsMeetConOngoingPersistentActionPresence(condition: WarEvent.IWecOngoingPersistentActionPresence): boolean {
+            const conActionIdArray      = condition.ongoingActionIdArray;
+            const ongoingActionIdSet    = this.getOngoingPersistentActionIdSet();
+            let counter                 = 0;
+            if (!conActionIdArray?.length) {
+                counter = ongoingActionIdSet.size;
+            } else {
+                for (const actionId of conActionIdArray) {
+                    if (ongoingActionIdSet.has(actionId)) {
+                        ++counter;
+                    }
+                }
+            }
+
+            return Helpers.checkIsMeetValueComparator({
+                comparator  : Helpers.getExisted(condition.ongoingActionsCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_00),
+                targetValue : Helpers.getExisted(condition.ongoingActionsCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConOngoingPersistentActionPresence_01),
+                actualValue : counter,
+            });
+        }
+
+        private _checkIsMeetConManualActionStatistics(condition: WarEvent.IWecManualActionStatistics): boolean {
+            const war                       = this._getWar();
+            const conPlayerIndexArray       = condition.playerIndexArray;
+            const revisedConPlayerIndexSet  = conPlayerIndexArray?.length
+                ? new Set(conPlayerIndexArray)
+                : new Set(war.getPlayerManager().getAllPlayers().map(v => v.getPlayerIndex()));
+
+            const conIsPlayerInTurn = condition.isPlayerInTurn;
+            if (conIsPlayerInTurn != null) {
+                const playerIndexInTurn = war.getPlayerIndexInTurn();
+                if (!conIsPlayerInTurn) {
+                    revisedConPlayerIndexSet.delete(playerIndexInTurn);
+                } else {
+                    if (!revisedConPlayerIndexSet.has(playerIndexInTurn)) {
+                        revisedConPlayerIndexSet.clear();
+                    } else {
+                        revisedConPlayerIndexSet.clear();
+                        revisedConPlayerIndexSet.add(playerIndexInTurn);
+                    }
+                }
+            }
+
+            return Helpers.checkIsMeetValueComparator({
+                comparator  : Helpers.getExisted(condition.totalActions?.comparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConManualActionStatistics_00),
+                targetValue : Helpers.getExisted(condition.totalActions?.value, ClientErrorCode.BwWarEventManager_CheckIsMeetConManualActionStatistics_01),
+                actualValue : war.getWarStatisticsManager().getManualActionsCountForPlayersInRecentTurns(revisedConPlayerIndexSet, condition.recentTurnsCount),
+            });
+        }
+
         public getWarEvent(warEventId: number): WarEvent.IWarEvent {                    // DONE
             return Helpers.getExisted(this.getWarEventFullData()?.eventArray?.find(v => v.eventId === warEventId));
         }
@@ -1580,8 +1669,8 @@ namespace TwnsBwWarEventManager {
     function getGridIndexForAddUnit({ origin, unitMap, tileMap, moveType, needMovableTile, canBeBlockedByUnit }: {
         origin              : Types.GridIndex;
         unitMap             : BwUnitMap;
-        tileMap             : TwnsBwTileMap.BwTileMap;
-        moveType            : Types.MoveType;
+        tileMap             : BwTileMap;
+        moveType            : number;
         needMovableTile     : boolean;
         canBeBlockedByUnit  : boolean;
     }): Types.GridIndex | null {
@@ -1598,25 +1687,28 @@ namespace TwnsBwWarEventManager {
         );
 
         for (let distance = 0; distance <= maxDistance; ++distance) {
-            const gridIndex = GridIndexHelpers.getGridsWithinDistance(
-                {
-                    origin, minDistance: distance, maxDistance: distance, mapSize, predicate: (g): boolean => {
-                        if (unitMap.getUnitOnMap(g)) {
-                            return false;
-                        }
-
-                        const tile = tileMap.getTile(g);
-                        if (tile.getMaxHp() != null) {
-                            return false;
-                        }
-
-                        if ((needMovableTile) && (tile.getMoveCostByMoveType(moveType) == null)) {
-                            return false;
-                        }
-
-                        return true;
+            const gridIndex = GridIndexHelpers.getGridsWithinDistance({
+                origin,
+                minDistance : distance,
+                maxDistance : distance,
+                mapSize,
+                predicate   : (g): boolean => {
+                    if (unitMap.getUnitOnMap(g)) {
+                        return false;
                     }
-                }            )[0];
+
+                    const tile = tileMap.getTile(g);
+                    if (tile.getMaxHp() != null) {
+                        return false;
+                    }
+
+                    if ((needMovableTile) && (tile.getMoveCostByMoveType(moveType) == null)) {
+                        return false;
+                    }
+
+                    return true;
+                }
+            })[0];
             if (gridIndex) {
                 return gridIndex;
             }
@@ -1625,6 +1717,13 @@ namespace TwnsBwWarEventManager {
         return null;
     }
 
+    function getUnitNewAttribute(currentValue: Types.Undefinable<number>, newMaxValue: Types.Undefinable<number>): number | null {
+        if (newMaxValue == null) {
+            return null;
+        } else {
+            return (currentValue == null) ? newMaxValue : Math.min(currentValue, newMaxValue);
+        }
+    }
 }
 
 // export default TwnsBwWarEventManager;

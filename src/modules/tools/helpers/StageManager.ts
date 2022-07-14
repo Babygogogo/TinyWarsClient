@@ -1,16 +1,15 @@
 
 // import Notify           from "../notify/Notify";
-// import TwnsNotifyType   from "../notify/NotifyType";
+// import Notify   from "../notify/NotifyType";
 // import TwnsUiPanel      from "../ui/UiPanel";
 // import CommonConstants  from "./CommonConstants";
 // import Helpers          from "./Helpers";
 // import Types            from "./Types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace StageManager {
+namespace Twns.StageManager {
     import LayerType            = Types.LayerType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import NotifyType           = Notify.NotifyType;
 
     // The game is in landscape mode, which means that its design max height equals its design width, 960.
     const DESIGN_WIDTH         = 960;

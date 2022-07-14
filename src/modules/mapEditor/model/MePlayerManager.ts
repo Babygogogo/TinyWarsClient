@@ -5,10 +5,11 @@
 // import TwnsMeField          from "./MeField";
 // import MeUtility            from "./MeUtility";
 
-namespace TwnsMePlayerManager {
-    import BwPlayerManager      = TwnsBwPlayerManager.BwPlayerManager;
-    import MeField              = TwnsMeField.MeField;
-    import WarSerialization     = ProtoTypes.WarSerialization;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.MapEditor {
+    import BwPlayerManager      = BaseWar.BwPlayerManager;
+    import MeField              = MapEditor.MeField;
+    import WarSerialization     = CommonProto.WarSerialization;
     import ISerialPlayerManager = WarSerialization.ISerialPlayerManager;
     import ISerialPlayer        = WarSerialization.ISerialPlayer;
 
@@ -16,8 +17,8 @@ namespace TwnsMePlayerManager {
         public serializeForCreateSfw(): ISerialPlayerManager {
             const maxPlayerIndex    = (this._getWar().getField() as MeField).getMaxPlayerIndex();
             const players           : ISerialPlayer[] = [];
-            for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= maxPlayerIndex; ++playerIndex) {
-                players.push(MeUtility.createDefaultISerialPlayer(playerIndex));
+            for (let playerIndex = CommonConstants.PlayerIndex.Neutral; playerIndex <= maxPlayerIndex; ++playerIndex) {
+                players.push(MapEditor.MeHelpers.createDefaultISerialPlayer(playerIndex));
             }
 
             return {
@@ -28,7 +29,7 @@ namespace TwnsMePlayerManager {
         public serializeForCreateMfr(): ISerialPlayerManager {
             const maxPlayerIndex    = (this._getWar().getField() as MeField).getMaxPlayerIndex();
             const players           : ISerialPlayer[] = [];
-            for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= maxPlayerIndex; ++playerIndex) {
+            for (let playerIndex = CommonConstants.PlayerIndex.Neutral; playerIndex <= maxPlayerIndex; ++playerIndex) {
                 players.push(this.getPlayer(playerIndex).serializeForCreateMfr());
             }
 
@@ -38,7 +39,7 @@ namespace TwnsMePlayerManager {
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
-        public getAliveWatcherTeamIndexesForSelf(): Set<number> {
+        public getWatcherTeamIndexesForSelf(): Set<number> {
             return this.getAliveTeamIndexes(false);
         }
     }

@@ -66,6 +66,8 @@
         </e:Group>
         <TwnsUiButton:UiButton id="_btnBack" label="Back" y="20" height="30" width="180"
                                skinName="Skins.Component.Button.ButtonYellow001" left="0"></TwnsUiButton:UiButton>
+        <TwnsUiButton:UiButton id="_btnQuickSettings" label="确定" height="30" width="160" bottom="70" left="20" x="30"
+                               y="500" skinName="Skins.Component.Button.ButtonBlue001" />
         <TwnsUiButton:UiButton id="_btnConfirm" label="确定" height="30" width="160" bottom="20" left="20"
                                skinName="Skins.Component.Button.ButtonYellow001"></TwnsUiButton:UiButton>
     </e:Group>

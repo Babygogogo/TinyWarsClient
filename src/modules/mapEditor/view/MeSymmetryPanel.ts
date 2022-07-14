@@ -3,7 +3,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
@@ -12,15 +12,15 @@
 // import TwnsMeWar            from "../model/MeWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeSymmetryPanel {
-    import MeWar        = TwnsMeWar.MeWar;
-    import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+namespace Twns.MapEditor {
+    import MeWar        = MapEditor.MeWar;
+    import LangTextType = Lang.LangTextType;
+    import NotifyType   = Notify.NotifyType;
     import SymmetryType = Types.SymmetryType;
     import GridIndex    = Types.GridIndex;
 
-    export type OpenData = void;
-    export class MeSymmetryPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeSymmetryPanel = void;
+    export class MeSymmetryPanel extends TwnsUiPanel.UiPanel<OpenDataForMeSymmetryPanel> {
         private readonly _groupLeftRight!               : eui.Group;
         private readonly _labelLeftRightTitle!          : TwnsUiLabel.UiLabel;
         private readonly _labelLeftRightRate!           : TwnsUiLabel.UiLabel;
@@ -76,7 +76,7 @@ namespace TwnsMeSymmetryPanel {
         private readonly _btnUpRightDownLeft2!          : TwnsUiButton.UiButton;
         private readonly _btnDownLeftUpRight2!          : TwnsUiButton.UiButton;
 
-        private _asymmetricalCounters   : MeUtility.AsymmetricalCounters | null = null;
+        private _asymmetricalCounters   : MapEditor.MeHelpers.AsymmetricalCounters | null = null;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -113,7 +113,7 @@ namespace TwnsMeSymmetryPanel {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this._asymmetricalCounters  = MeUtility.getAsymmetricalCounters(this._getWar());
+            this._asymmetricalCounters  = MapEditor.MeHelpers.getAsymmetricalCounters(this._getWar());
 
             this._updateGroupLeftRight();
             this._updateGroupUpDown();
@@ -126,7 +126,7 @@ namespace TwnsMeSymmetryPanel {
         }
 
         private _getWar(): MeWar {
-            return Helpers.getExisted(MeModel.getWar());
+            return Helpers.getExisted(MapEditor.MeModel.getWar());
         }
 
         private _onTouchedGroupLeftRightBox(): void {
@@ -176,7 +176,7 @@ namespace TwnsMeSymmetryPanel {
         }
 
         private _onTouchedBtnUpDown1(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0864),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -195,7 +195,7 @@ namespace TwnsMeSymmetryPanel {
             });
         }
         private _onTouchedBtnDownUp1(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0865),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -214,7 +214,7 @@ namespace TwnsMeSymmetryPanel {
             });
         }
         private _onTouchedBtnLeftRight1(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0866),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -233,7 +233,7 @@ namespace TwnsMeSymmetryPanel {
             });
         }
         private _onTouchedBtnRightLeft1(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0867),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -261,7 +261,7 @@ namespace TwnsMeSymmetryPanel {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0868),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -285,7 +285,7 @@ namespace TwnsMeSymmetryPanel {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0869),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -309,7 +309,7 @@ namespace TwnsMeSymmetryPanel {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0870),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -333,7 +333,7 @@ namespace TwnsMeSymmetryPanel {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0871),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -349,7 +349,7 @@ namespace TwnsMeSymmetryPanel {
         }
 
         private _onTouchedBtnUpDown2(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0864),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -368,7 +368,7 @@ namespace TwnsMeSymmetryPanel {
             });
         }
         private _onTouchedBtnDownUp2(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0865),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -387,7 +387,7 @@ namespace TwnsMeSymmetryPanel {
             });
         }
         private _onTouchedBtnLeftRight2(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0866),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -406,7 +406,7 @@ namespace TwnsMeSymmetryPanel {
             });
         }
         private _onTouchedBtnRightLeft2(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0867),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -434,7 +434,7 @@ namespace TwnsMeSymmetryPanel {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0868),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -458,7 +458,7 @@ namespace TwnsMeSymmetryPanel {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0869),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -482,7 +482,7 @@ namespace TwnsMeSymmetryPanel {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0870),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -506,7 +506,7 @@ namespace TwnsMeSymmetryPanel {
                 return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0871),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -659,28 +659,29 @@ namespace TwnsMeSymmetryPanel {
         }
     }
 
-    function autoFillTile(war: TwnsBwWar.BwWar, dstGridIndex: GridIndex, symmetryType: SymmetryType): void {
+    function autoFillTile(war: BaseWar.BwWar, dstGridIndex: GridIndex, symmetryType: SymmetryType): void {
         const tileMap               = war.getTileMap();
+        const gameConfig            = war.getGameConfig();
         const dstTile               = tileMap.getTile(dstGridIndex);
-        const srcTile               = tileMap.getTile(Helpers.getExisted(MeUtility.getSymmetricalGridIndex(dstGridIndex, symmetryType, tileMap.getMapSize())));
+        const srcTile               = tileMap.getTile(Helpers.getExisted(MapEditor.MeHelpers.getSymmetricalGridIndex(dstGridIndex, symmetryType, tileMap.getMapSize())));
         const tileData              = Helpers.deepClone(srcTile.serialize());
-        const decoratorType         = srcTile.getDecoratorType();
+        const decoratorType         = srcTile.getDecorationType();
         const decoratorShapeId      = srcTile.getDecoratorShapeId();
         const objectType            = srcTile.getObjectType();
         tileData.gridIndex          = dstGridIndex;
         tileData.isHighlighted      = dstTile.getIsHighlighted();
         tileData.locationFlags      = dstTile.getLocationFlags();
-        tileData.baseShapeId        = ConfigManager.getSymmetricalTileBaseShapeId(srcTile.getBaseType(), srcTile.getBaseShapeId(), symmetryType);
-        tileData.objectType         = ConfigManager.getSymmetricalTileObjectType(objectType, symmetryType);
-        tileData.objectShapeId      = ConfigManager.getSymmetricalTileObjectShapeId(objectType, srcTile.getObjectShapeId(), symmetryType);
+        tileData.baseShapeId        = gameConfig.getSymmetricalTileBaseShapeId(srcTile.getBaseType(), srcTile.getBaseShapeId(), symmetryType);
+        tileData.objectType         = gameConfig.getSymmetricalTileObjectType(objectType, symmetryType);
+        tileData.objectShapeId      = gameConfig.getSymmetricalTileObjectShapeId(objectType, srcTile.getObjectShapeId(), symmetryType);
         if ((decoratorType != null) && (decoratorShapeId != null)) {
-            tileData.decoratorShapeId = ConfigManager.getSymmetricalTileDecoratorShapeId(decoratorType, decoratorShapeId, symmetryType);
+            tileData.decoratorShapeId = gameConfig.getSymmetricalTileDecoratorShapeId(decoratorType, decoratorShapeId, symmetryType);
         }
 
         if ((srcTile.getMaxHp() !== null) && (war.getUnitMap().getUnitOnMap(dstGridIndex))) {
-            WarDestructionHelpers.destroyUnitOnMap(war, dstGridIndex, true);
+            WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, dstGridIndex, true);
         }
-        dstTile.init(tileData, war.getConfigVersion());
+        dstTile.init(tileData, gameConfig);
         dstTile.startRunning(war);
         dstTile.flushDataToView();
     }

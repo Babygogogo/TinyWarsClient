@@ -1,5 +1,6 @@
 
-namespace NoSleepManager {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.NoSleepManager {
     let noSleepObject: {
         enable  : () => void;
         disable : () => void;

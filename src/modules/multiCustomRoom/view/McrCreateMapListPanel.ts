@@ -6,7 +6,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -22,21 +22,14 @@
 // import TwnsMcrMainMenuPanel         from "./McrMainMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMcrCreateMapListPanel {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import IDataForMapTag           = ProtoTypes.Map.IDataForMapTag;
+namespace Twns.MultiCustomRoom {
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
 
-    type FiltersForMapList = {
-        mapName?        : string | null;
-        mapDesigner?    : string | null;
-        playersCount?   : number | null;
-        playedTimes?    : number | null;
-        minRating?      : number | null;
-        mapTag?         : IDataForMapTag | null;
+    export type OpenDataForMcrCreateMapListPanel = {
+        mapFilter   : Common.MapFilter | null;
     };
-    export type OpenData = FiltersForMapList | null;
-    export class McrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class McrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrCreateMapListPanel> {
         private readonly _groupMapView!         : eui.Group;
         private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
@@ -56,8 +49,6 @@ namespace TwnsMcrCreateMapListPanel {
 
         private readonly _uiMapInfo!            : TwnsUiMapInfo.UiMapInfo;
 
-        private _mapFilters                     : FiltersForMapList = {};
-
         protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnSearch,      callback: this._onTouchTapBtnSearch },
@@ -72,7 +63,7 @@ namespace TwnsMcrCreateMapListPanel {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this.setMapFilters(this._getOpenData() || this._mapFilters);
+            this._updateView();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -92,36 +83,38 @@ namespace TwnsMcrCreateMapListPanel {
             return this._listMap.getSelectedData()?.mapId ?? null;
         }
 
-        public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
-            this._mapFilters = mapFilters;
-
-            const oldSelectedMapId      = this._getSelectedMapId();
-            const dataArray             = await this._createDataForListMap();
-            this._labelNoMap.visible    = dataArray.length <= 0;
-            this._listMap.bindData(dataArray);
-            await this.setAndReviseSelectedMapId(oldSelectedMapId ?? -1, true);
-        }
-
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchTapBtnSearch(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrCreateSearchMapPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonMapFilterPanel, {
+                mapFilter           : this._getOpenData().mapFilter,
+                callbackOnConfirm   : mapFilter => {
+                    PanelHelpers.open(PanelHelpers.PanelDict.McrCreateMapListPanel, {
+                        mapFilter,
+                    });
+                },
+                callbackOnReset     : () => {
+                    PanelHelpers.open(PanelHelpers.PanelDict.McrCreateMapListPanel, {
+                        mapFilter   : null,
+                    });
+                }
+            });
         }
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.McrMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
         }
 
         private async _onTouchedBtnNextStep(): Promise<void> {
             const selectedMapId = this._getSelectedMapId();
             if (selectedMapId != null) {
                 this.close();
-                await McrCreateModel.resetDataByMapId(selectedMapId);
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.McrCreateSettingsPanel, void 0);
+                await MultiCustomRoom.McrCreateModel.resetDataByMapId(selectedMapId);
+                PanelHelpers.open(PanelHelpers.PanelDict.McrCreateSettingsPanel, void 0);
             }
         }
 
@@ -132,6 +125,14 @@ namespace TwnsMcrCreateMapListPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        public async _updateView(): Promise<void> {
+            const oldSelectedMapId      = this._getSelectedMapId();
+            const dataArray             = await this._createDataForListMap();
+            this._labelNoMap.visible    = dataArray.length <= 0;
+            this._listMap.bindData(dataArray);
+            await this.setAndReviseSelectedMapId(oldSelectedMapId ?? -1, true);
+        }
+
         private _updateComponentsForLanguage(): void {
             this._labelCreateRoom.text          = Lang.getText(LangTextType.B0000);
             this._labelMultiPlayer.text         = Lang.getText(LangTextType.B0137);
@@ -144,43 +145,59 @@ namespace TwnsMcrCreateMapListPanel {
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
-            const dataArray                                 : DataForMapNameRenderer[] = [];
-            const mapFilters                                = this._mapFilters;
-            const filterTag                                 = mapFilters.mapTag || {};
-            const mapName                                   = (mapFilters.mapName || "").toLowerCase();
-            const mapDesigner                               = (mapFilters.mapDesigner || "").toLowerCase();
-            const { playersCount, playedTimes, minRating }  = mapFilters;
-            const promiseArray                              : Promise<void>[] = [];
+            const mapFilter             = this._getOpenData().mapFilter;
+            const filterMapTagIdFlags   = mapFilter?.mapTagIdFlags;
+            const filterMapName         = mapFilter?.mapName?.trim().toLowerCase();
+            const filterMapDesigner     = mapFilter?.mapDesigner?.trim().toLowerCase();
+            const filterPlayersCount    = mapFilter?.playersCount;
+            const filterMinRating       = mapFilter?.minRating;
+            const filterPlayedTimes     = mapFilter?.playedTimes;
+            const dataArray             : DataForMapNameRenderer[] = [];
 
-            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+            const promiseArray: Promise<void>[] = [];
+            for (const mapId of WarMap.WarMapModel.getEnabledMapIdArray()) {
                 promiseArray.push((async () => {
-                    const mapBriefData = await WarMapModel.getBriefData(mapId);
-                    if (mapBriefData == null) {
+                    const mapBriefData = await WarMap.WarMapModel.getBriefData(mapId);
+                    if ((mapBriefData == null) || (!mapBriefData.ruleAvailability?.canMcw)) {
+                        return;
+                    }
+                    if (!mapBriefData.mapExtraData?.isEnabled) {
+                        return;
+                    }
+                    if ((filterMapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(filterMapDesigner))) {
+                        return;
+                    }
+                    if ((filterPlayersCount) && (mapBriefData.playersCountUnneutral !== filterPlayersCount)) {
+                        return;
+                    }
+                    if ((filterPlayedTimes != null) && (await WarMap.WarMapModel.getTotalPlayedTimes(mapId) < filterPlayedTimes)) {
                         return;
                     }
 
-                    const mapExtraData      = Helpers.getExisted(mapBriefData.mapExtraData);
-                    const mapTag            = mapBriefData.mapTag || {};
-                    const realMapName       = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                    const rating            = await WarMapModel.getAverageRating(mapId);
-                    const actualPlayedTimes = await WarMapModel.getTotalPlayedTimes(mapId);
-                    if ((!mapBriefData.ruleAvailability?.canMcw)                                                            ||
-                        (!mapExtraData.isEnabled)                                                                           ||
-                        ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                                     ||
-                        ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))                ||
-                        ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                           ||
-                        ((playedTimes != null) && (actualPlayedTimes < playedTimes))                                        ||
-                        ((minRating != null) && ((rating == null) || (rating < minRating)))                                 ||
-                        ((filterTag.fog != null) && ((!!mapTag.fog) !== filterTag.fog))
+                    const realMapName = Helpers.getExisted(await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
+                    if ((filterMapName) && (realMapName.toLowerCase().indexOf(filterMapName) < 0)) {
+                        return;
+                    }
+
+                    const rating = await WarMap.WarMapModel.getAverageRating(mapId);
+                    if ((filterMinRating != null)                       &&
+                        ((rating == null) || (rating < filterMinRating))
                     ) {
                         return;
-                    } else {
-                        dataArray.push({
-                            mapId,
-                            mapName : realMapName,
-                            panel   : this,
-                        });
                     }
+
+                    const mapTagIdFlags = mapBriefData.mapTagIdFlags;
+                    if ((filterMapTagIdFlags)                                                                       &&
+                        ((mapTagIdFlags == null) || ((filterMapTagIdFlags & mapTagIdFlags) !== filterMapTagIdFlags))
+                    ) {
+                        return;
+                    }
+
+                    dataArray.push({
+                        mapId,
+                        mapName : realMapName,
+                        panel   : this,
+                    });
                 })());
             }
 
@@ -197,9 +214,10 @@ namespace TwnsMcrCreateMapListPanel {
             } else {
                 zoomMap.visible     = true;
                 uiMapInfo.visible   = true;
-                zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)));
+                zoomMap.showMapByMapData(Helpers.getExisted(await WarMap.WarMapModel.getRawData(mapId)), await Config.ConfigManager.getLatestGameConfig());
                 uiMapInfo.setData({
-                    mapInfo: {
+                    hasFog  : null,
+                    mapInfo : {
                         mapId,
                     },
                 });
@@ -305,7 +323,7 @@ namespace TwnsMcrCreateMapListPanel {
         protected async _onDataChanged(): Promise<void> {
             const label = this._labelName;
             label.text  = ``;
-            label.text  = await WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId) ?? CommonConstants.ErrorTextForUndefined;
+            label.text  = await WarMap.WarMapModel.getMapNameInCurrentLanguage(this._getData().mapId) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _onTouchTapBtnChoose(): void {

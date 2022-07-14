@@ -61,15 +61,26 @@
                     <e:HorizontalLayout verticalAlign="middle" />
                 </e:layout>
             </e:Group>
-            <e:Group x="291" y="30">
-                <TwnsUiButton:UiButton id="_btnPlayerIndex" label="切换类型"
-                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
-                                       left="0" x="10" y="10" />
-                <TwnsUiLabel:UiLabel id="_labelPlayerIndex" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
-                                     width="650" />
-                <e:layout>
-                    <e:HorizontalLayout verticalAlign="middle" />
-                </e:layout>
+            <e:Group x="0" y="136">
+                <e:Group x="0" y="0">
+                    <TwnsUiButton:UiButton id="_btnPlayerIndex" label="切换类型"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
+                                           left="0" x="10" y="10" />
+                    <TwnsUiLabel:UiLabel id="_labelPlayerIndex" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20" />
+                    <e:layout>
+                        <e:HorizontalLayout verticalAlign="middle" />
+                    </e:layout>
+                </e:Group>
+                <e:Group x="400" top="0">
+                    <TwnsUiButton:UiButton id="_btnConIsPlayerInTurn" label="切换类型"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
+                                           scaleX="1" scaleY="1" left="0" top="0" />
+                    <TwnsUiLabel:UiLabel id="_labelConIsPlayerInTurn" text="取反" size="14" textColor="0xFFFFFF"
+                                         x="405.9999999999998" y="161" scaleX="1" scaleY="1" />
+                    <e:layout>
+                        <e:HorizontalLayout verticalAlign="middle" />
+                    </e:layout>
+                </e:Group>
             </e:Group>
             <e:Group y="200" x="0">
                 <e:Group x="261" y="0">

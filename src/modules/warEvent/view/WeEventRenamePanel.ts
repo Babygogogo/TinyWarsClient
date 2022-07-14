@@ -7,7 +7,7 @@
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -15,17 +15,17 @@
 // import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeEventRenamePanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
-    import BwWar            = TwnsBwWar.BwWar;
+namespace Twns.WarEvent {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
+    import ILanguageText    = CommonProto.Structure.ILanguageText;
+    import BwWar            = Twns.BaseWar.BwWar;
 
-    export type OpenData = {
+    export type OpenDataForWeEventRenamePanel = {
         war         : BwWar;
         warEventId  : number;
     };
-    export class WeEventRenamePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeEventRenamePanel extends TwnsUiPanel.UiPanel<OpenDataForWeEventRenamePanel> {
         private readonly _inputChinese!     : TwnsUiTextInput.UiTextInput;
         private readonly _inputEnglish!     : TwnsUiTextInput.UiTextInput;
         private readonly _labelTip!         : TwnsUiLabel.UiLabel;
@@ -46,8 +46,8 @@ namespace TwnsWeEventRenamePanel {
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
 
-            this._inputChinese.maxChars = CommonConstants.WarEventNameMaxLength;
-            this._inputEnglish.maxChars = CommonConstants.WarEventNameMaxLength;
+            this._inputChinese.maxChars = Twns.CommonConstants.WarEventNameMaxLength;
+            this._inputEnglish.maxChars = Twns.CommonConstants.WarEventNameMaxLength;
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -64,18 +64,18 @@ namespace TwnsWeEventRenamePanel {
             const chineseText   = this._inputChinese.text || ``;
             const englishText   = this._inputEnglish.text || ``;
             const textList      : ILanguageText[] = [
-                { languageType: Types.LanguageType.Chinese, text: chineseText || englishText },
-                { languageType: Types.LanguageType.English, text: englishText || chineseText },
+                { languageType: Twns.Types.LanguageType.Chinese, text: chineseText || englishText },
+                { languageType: Twns.Types.LanguageType.English, text: englishText || chineseText },
             ];
-            if (textList.every(v => Helpers.getExisted(v.text).length <= 0)) {
-                FloatText.show(Lang.getText(LangTextType.A0155));
-            } else if (textList.some(v => Helpers.getExisted(v.text).length > CommonConstants.WarEventNameMaxLength)) {
-                FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.WarEventNameMaxLength));
+            if (textList.every(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
+                Twns.FloatText.show(Lang.getText(LangTextType.A0155));
+            } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > Twns.CommonConstants.WarEventNameMaxLength)) {
+                Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.WarEventNameMaxLength));
             } else {
                 const openData = this._getOpenData();
-                Helpers.getExisted(openData.war.getWarEventManager().getWarEvent(openData.warEventId)).eventNameArray = textList;
+                Twns.Helpers.getExisted(openData.war.getWarEventManager().getWarEvent(openData.warEventId)).eventNameArray = textList;
 
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 this.close();
             }
         }
@@ -85,8 +85,8 @@ namespace TwnsWeEventRenamePanel {
 
             const openData          = this._getOpenData();
             const nameArray         = openData.war.getWarEventManager().getWarEvent(openData.warEventId)?.eventNameArray;
-            this._inputChinese.text = Lang.getLanguageText({ textArray: nameArray, languageType: Types.LanguageType.Chinese, useAlternate: false }) || CommonConstants.ErrorTextForUndefined;
-            this._inputEnglish.text = Lang.getLanguageText({ textArray: nameArray, languageType: Types.LanguageType.English, useAlternate: false }) || CommonConstants.ErrorTextForUndefined;
+            this._inputChinese.text = Lang.getLanguageText({ textArray: nameArray, languageType: Twns.Types.LanguageType.Chinese, useAlternate: false }) || Twns.CommonConstants.ErrorTextForUndefined;
+            this._inputEnglish.text = Lang.getLanguageText({ textArray: nameArray, languageType: Twns.Types.LanguageType.English, useAlternate: false }) || Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateComponentsForLanguage(): void {

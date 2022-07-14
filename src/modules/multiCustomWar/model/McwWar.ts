@@ -5,17 +5,18 @@
 // import Types                from "../../tools/helpers/Types";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
-namespace TwnsMcwWar {
-    import MpwWar           = TwnsMpwWar.MpwWar;
-    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
-    import ISettingsForMcw  = ProtoTypes.WarSettings.ISettingsForMcw;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.MultiCustomWar {
+    import MpwWar           = MultiPlayerWar.MpwWar;
+    import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
+    import ISettingsForMcw  = CommonProto.WarSettings.ISettingsForMcw;
+    import GameConfig       = Config.GameConfig;
 
     export class McwWar extends MpwWar {
         private _settingsForMcw?: ISettingsForMcw;
 
-        public async init(data: ISerialWar): Promise<void> {
-            await this._baseInit(data);
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
+            this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
             this._setSettingsForMcw(Helpers.getExisted(data.settingsForMcw, ClientErrorCode.McwWar_Init_00));
 
             this._initView();
@@ -24,11 +25,10 @@ namespace TwnsMcwWar {
         public getCanCheat(): boolean {
             return false;
         }
-        public getWarType(): Types.WarType {
-            return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.McwFog
-                : Types.WarType.McwStd;
+        public getShouldSerializeFullInfoForFreeModeGames(): boolean {
+            return false;
         }
+
         public getIsNeedExecutedAction(): boolean {
             return false;
         }

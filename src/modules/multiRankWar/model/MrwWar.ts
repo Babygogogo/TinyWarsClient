@@ -6,17 +6,18 @@
 // import Types                from "../../tools/helpers/Types";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
-namespace TwnsMrwWar {
-    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
-    import ISettingsForMrw  = ProtoTypes.WarSettings.ISettingsForMrw;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import MpwWar           = TwnsMpwWar.MpwWar;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.MultiRankWar {
+    import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
+    import ISettingsForMrw  = CommonProto.WarSettings.ISettingsForMrw;
+    import MpwWar           = MultiPlayerWar.MpwWar;
+    import GameConfig       = Config.GameConfig;
 
     export class MrwWar extends MpwWar {
         private _settingsForMrw?    : ISettingsForMrw;
 
-        public async init(data: ISerialWar): Promise<void> {
-            await this._baseInit(data);
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
+            this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
             this._setSettingsForMrw(Helpers.getExisted(data.settingsForMrw, ClientErrorCode.MrwWar_Init_00));
 
             this._initView();
@@ -25,11 +26,10 @@ namespace TwnsMrwWar {
         public getCanCheat(): boolean {
             return false;
         }
-        public getWarType(): Types.WarType {
-            return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.MrwFog
-                : Types.WarType.MrwStd;
+        public getShouldSerializeFullInfoForFreeModeGames(): boolean {
+            return false;
         }
+
         public getIsNeedExecutedAction(): boolean {
             return false;
         }
@@ -51,7 +51,7 @@ namespace TwnsMrwWar {
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getSettingsBootTimerParams(): number[] {
-            return CommonConstants.WarBootTimerDefaultParams;
+            return CommonConstants.WarBootTimer.DefaultParams.concat();
         }
     }
 }

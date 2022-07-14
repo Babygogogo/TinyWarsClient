@@ -7,7 +7,7 @@
 // import Logger                               from "../../tools/helpers/Logger";
 // import Types                                from "../../tools/helpers/Types";
 // import Notify                               from "../../tools/notify/Notify";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
 // import UserModel                            from "../../user/model/UserModel";
@@ -16,23 +16,22 @@
 // import MrrSelfSettingsModel                 from "./MrrSelfSettingsModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace MrrModel {
-    import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+namespace Twns.MultiRankRoom.MrrModel {
+    import NotifyType                               = Notify.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
-    import IMrrRoomInfo                             = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
+    import IMrrRoomInfo                             = CommonProto.MultiRankRoom.IMrrRoomInfo;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Common.OpenDataForCommonWarPlayerInfoPage;
 
     let _previewingRoomId           : number | null = null;
     let _maxConcurrentCountForStd   = 0;
     let _maxConcurrentCountForFog   = 0;
     const _roomInfoAccessor         = Helpers.createCachedDataAccessor<number, IMrrRoomInfo>({
-        reqData : (roomId: number) => MrrProxy.reqMrrGetRoomPublicInfo(roomId),
+        reqData : (roomId: number) => MultiRankRoom.MrrProxy.reqMrrGetRoomPublicInfo(roomId),
     });
     const _joinedRoomIdArrayAccessor = Helpers.createCachedDataAccessor<null, number[]>({
-        reqData : () => MrrProxy.reqMrrGetJoinedRoomIdArray(),
+        reqData : () => MultiRankRoom.MrrProxy.reqMrrGetJoinedRoomIdArray(),
     });
 
     export function setMaxConcurrentCount(hasFog: boolean, count: number): void {
@@ -60,44 +59,44 @@ namespace MrrModel {
         return _joinedRoomIdArrayAccessor.getData(null);
     }
 
-    export async function updateOnMsgMrrGetRoomPublicInfo(data: ProtoTypes.NetMessage.MsgMrrGetRoomPublicInfo.IS): Promise<void> {
+    export async function updateOnMsgMrrGetRoomPublicInfo(data: CommonProto.NetMessage.MsgMrrGetRoomPublicInfo.IS): Promise<void> {
         const roomId    = Helpers.getExisted(data.roomId);
         const roomInfo  = data.roomInfo ?? null;
         setRoomInfo(roomId, roomInfo);
 
-        if (MrrSelfSettingsModel.getRoomId() === roomId) {
-            await MrrSelfSettingsModel.resetData(roomId);
+        if (MultiRankRoom.MrrSelfSettingsModel.getRoomId() === roomId) {
+            await MultiRankRoom.MrrSelfSettingsModel.resetData(roomId);
         }
     }
-    export async function updateOnMsgMrrSetBannedCoIdList(data: ProtoTypes.NetMessage.MsgMrrSetBannedCoIdList.IS): Promise<void> {
+    export async function updateOnMsgMrrSetBannedCoCategoryIdArray(data: CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.IS): Promise<void> {
         const roomId    = Helpers.getExisted(data.roomId);
         const roomInfo  = await getRoomInfo(roomId);
         if (!roomInfo) {
             return;
         }
 
-        const settingsForMrw    = Helpers.getExisted(roomInfo.settingsForMrw);
-        const srcPlayerIndex    = data.playerIndex;
-        const bannedCoIdList    = data.bannedCoIdList;
+        const settingsForMrw            = Helpers.getExisted(roomInfo.settingsForMrw);
+        const srcPlayerIndex            = data.playerIndex;
+        const bannedCoCategoryIdArray   = data.bannedCoCategoryIdArray;
         if (settingsForMrw.dataArrayForBanCo == null) {
             settingsForMrw.dataArrayForBanCo = [{
                 srcPlayerIndex,
-                bannedCoIdList,
+                bannedCoCategoryIdArray,
             }];
         } else {
             const dataArray     = settingsForMrw.dataArrayForBanCo;
             const playerData    = dataArray.find(v => v.srcPlayerIndex === data.playerIndex);
             if (playerData) {
-                playerData.bannedCoIdList = data.bannedCoIdList;
+                playerData.bannedCoCategoryIdArray = data.bannedCoCategoryIdArray;
             } else {
                 dataArray.push({
                     srcPlayerIndex,
-                    bannedCoIdList,
+                    bannedCoCategoryIdArray,
                 });
             }
         }
     }
-    export async function updateOnMsgMrrSetSelfSettings(data: ProtoTypes.NetMessage.MsgMrrSetSelfSettings.IS): Promise<void> {
+    export async function updateOnMsgMrrSetSelfSettings(data: CommonProto.NetMessage.MsgMrrSetSelfSettings.IS): Promise<void> {
         const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
         if (!roomInfo) {
             return;
@@ -134,7 +133,7 @@ namespace MrrModel {
             }
         }
     }
-    export function updateOnMsgMrrDeleteRoomByServer(data: ProtoTypes.NetMessage.MsgMrrDeleteRoomByServer.IS): void {
+    export function updateOnMsgMrrDeleteRoomByServer(data: CommonProto.NetMessage.MsgMrrDeleteRoomByServer.IS): void {
         setRoomInfo(Helpers.getExisted(data.roomId), null);
     }
 
@@ -151,7 +150,7 @@ namespace MrrModel {
             return false;
         }
 
-        const selfUserId = UserModel.getSelfUserId();
+        const selfUserId = User.UserModel.getSelfUserId();
         const playerData = roomInfo.playerDataList?.find(v => v.userId === selfUserId);
         if (playerData == null) {
             return false;
@@ -186,13 +185,13 @@ namespace MrrModel {
         }
 
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
-        const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
+        const playerInfoArray   : Common.PlayerInfo[] = [];
         for (const playerInfo of (roomInfo.playerDataList || [])) {
             const playerIndex = Helpers.getExisted(playerInfo.playerIndex);
             playerInfoArray.push({
                 playerIndex,
-                teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
+                teamIndex           : WarHelpers.WarRuleHelpers.getTeamIndex(instanceWarRule, playerIndex),
                 isAi                : false,
                 userId              : playerInfo.userId ?? null,
                 coId                : playerInfo.coId ?? null,
@@ -200,16 +199,18 @@ namespace MrrModel {
                 isReady             : Helpers.getExisted(playerInfo.isReady),
                 isInTurn            : null,
                 isDefeat            : null,
+                restTimeToBoot      : null,
             });
         }
 
         return {
-            configVersion           : Helpers.getExisted(settingsForCommon.configVersion),
-            playersCountUnneutral   : WarRuleHelpers.getPlayersCountUnneutral(warRule),
+            gameConfig              : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+            playersCountUnneutral   : WarHelpers.WarRuleHelpers.getPlayersCountUnneutral(instanceWarRule),
             roomOwnerPlayerIndex    : null,
             callbackOnExitRoom      : null,
             callbackOnDeletePlayer  : null,
             playerInfoArray,
+            enterTurnTime           : null,
         };
     }
 
@@ -220,46 +221,69 @@ namespace MrrModel {
         }
 
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
+        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
         const settingsForMrw    = Helpers.getExisted(roomInfo.settingsForMrw);
-        const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
+        const gameConfig        = Helpers.getExisted(await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)));
+        const mapId             = Helpers.getExisted(settingsForMrw.mapId);
+        const warEventFullData  = (await WarMap.WarMapModel.getRawData(mapId))?.warEventFullData ?? null;
+        const bootTimerParams   = CommonConstants.WarBootTimer.DefaultParams.concat();
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
-                    settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMrw.mapId)),
-                    warRule,
+                    settingsType    : WarBasicSettingsType.MapId,
+                    currentValue    : mapId,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
-                    settingsType    : WarBasicSettingsType.TurnsLimit,
-                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
-                    warRule,
+                    settingsType    : WarBasicSettingsType.WarEvent,
+                    currentValue    : null,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                    currentValue    : `${settingsForCommon.turnsLimit ?? CommonConstants.Turn.Limit.Default}, ${settingsForCommon.warActionsLimit ?? CommonConstants.WarAction.Limit.Default}`,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             ],
@@ -268,21 +292,19 @@ namespace MrrModel {
             openData.dataArrayForListSettings.push({
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
-                warRule,
+                instanceWarRule,
+                gameConfig,
+                warEventFullData,
                 callbackOnModify: null,
             });
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
                 {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
-                    currentValue    : bootTimerParams[1],
-                    warRule,
-                    callbackOnModify: null,
-                },
-                {
-                    settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
-                    currentValue    : bootTimerParams[2],
-                    warRule,
+                    settingsType    : WarBasicSettingsType.TimerIncrementalParams,
+                    currentValue    : `${bootTimerParams[1]}, ${bootTimerParams[2]}, ${bootTimerParams[3] ?? 0}`,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: null,
                 },
             );
@@ -300,11 +322,11 @@ namespace MrrModel {
         }
 
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
+        const instanceWarRule   = Helpers.getExisted(settingsForCommon.instanceWarRule);
         return {
-            configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
-            warRule,
-            warType         : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
+            gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+            instanceWarRule,
+            warType         : instanceWarRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
         };
     }
 }

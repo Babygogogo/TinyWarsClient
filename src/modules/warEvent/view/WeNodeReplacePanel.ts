@@ -5,7 +5,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -15,19 +15,19 @@
 // import WarEventHelper           from "../model/WarEventHelper";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeNodeReplacePanel {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
+namespace Twns.WarEvent {
+    import LangTextType         = Twns.Lang.LangTextType;
+    import NotifyType           = Twns.Notify.NotifyType;
+    import ClientErrorCode      = Twns.ClientErrorCode;
+    import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
 
-    export type OpenData = {
+    export type OpenDataForWeNodeReplacePanel = {
         eventId         : number;
         parentNodeId?   : number;
         nodeId          : number | null;
         fullData        : IWarEventFullData;
     };
-    export class WeNodeReplacePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeNodeReplacePanel extends TwnsUiPanel.UiPanel<OpenDataForWeNodeReplacePanel> {
         private readonly _listNode!     : TwnsUiScrollList.UiScrollList<DataForNodeRenderer>;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelNoNode!  : TwnsUiLabel.UiLabel;
@@ -80,7 +80,7 @@ namespace TwnsWeNodeReplacePanel {
                     eventId,
                     parentNodeId,
                     srcNodeId,
-                    candidateNodeId : Helpers.getExisted(node.nodeId),
+                    candidateNodeId : Twns.Helpers.getExisted(node.nodeId),
                     fullData,
                 });
             }
@@ -132,33 +132,33 @@ namespace TwnsWeNodeReplacePanel {
             const fullData          = data.fullData;
             const parentNodeId      = data.parentNodeId;
             const candidateNodeId   = data.candidateNodeId;
-            const candidateNode     = Helpers.getExisted((fullData.conditionNodeArray || []).find(v => v.nodeId === candidateNodeId), ClientErrorCode.WeNodeReplacePanel_NodeRenderer_OnTouchedBtnCopy_00);
-            const isAnd             = Helpers.getExisted(candidateNode.isAnd);
+            const candidateNode     = Twns.Helpers.getExisted((fullData.conditionNodeArray || []).find(v => v.nodeId === candidateNodeId), ClientErrorCode.WeNodeReplacePanel_NodeRenderer_OnTouchedBtnCopy_00);
+            const isAnd             = Twns.Helpers.getExisted(candidateNode.isAnd);
             const conditionIdArray  = (candidateNode.conditionIdArray || []).concat();
             const subNodeIdArray    = (candidateNode.subNodeIdArray || []).concat();
             if (parentNodeId == null) {
-                if (WarEventHelper.createAndReplaceSubNodeInEvent({
+                if (Twns.WarHelpers.WarEventHelpers.createAndReplaceSubNodeInEvent({
                     fullData,
                     eventId         : data.eventId,
                     isAnd,
                     conditionIdArray,
                     subNodeIdArray,
                 }) != null) {
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             } else {
-                if (WarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: candidateNodeId }).nodeIdSet.has(parentNodeId)) {
-                    FloatText.show(Lang.getText(LangTextType.A0179));
+                if (Twns.WarHelpers.WarEventHelpers.getAllSubNodesAndConditionsForNode({ fullData, nodeId: candidateNodeId }).nodeIdSet.has(parentNodeId)) {
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0179));
                     return;
                 }
 
-                if (WarEventHelper.cloneAndReplaceNodeInParentNode({
+                if (Twns.WarHelpers.WarEventHelpers.cloneAndReplaceNodeInParentNode({
                     fullData,
                     parentNodeId,
                     nodeIdForClone  : candidateNodeId,
                     nodeIdForDelete : data.srcNodeId,
                 }) != null) {
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             }
         }
@@ -172,26 +172,26 @@ namespace TwnsWeNodeReplacePanel {
             const fullData      = data.fullData;
             const newNodeId     = data.candidateNodeId;
             if (parentNodeId == null) {
-                if (WarEventHelper.replaceSubNodeInEvent({
+                if (Twns.WarHelpers.WarEventHelpers.replaceSubNodeInEvent({
                     fullData,
                     eventId     : data.eventId,
                     newNodeId,
                 })) {
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             } else {
-                if (WarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: newNodeId }).nodeIdSet.has(parentNodeId)) {
-                    FloatText.show(Lang.getText(LangTextType.A0179));
+                if (Twns.WarHelpers.WarEventHelpers.getAllSubNodesAndConditionsForNode({ fullData, nodeId: newNodeId }).nodeIdSet.has(parentNodeId)) {
+                    Twns.FloatText.show(Lang.getText(LangTextType.A0179));
                     return;
                 }
 
-                if (WarEventHelper.replaceSubNodeInParentNode({
+                if (Twns.WarHelpers.WarEventHelpers.replaceSubNodeInParentNode({
                     fullData,
                     parentNodeId,
                     oldNodeId   : data.srcNodeId,
                     newNodeId,
                 })) {
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             }
         }

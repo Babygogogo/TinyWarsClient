@@ -5,7 +5,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -16,19 +16,19 @@
 // import TwnsWeConditionTypeListPanel from "./WeConditionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeConditionModifyPanel23 {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
+namespace Twns.WarEvent {
+    import LangTextType             = Twns.Lang.LangTextType;
+    import NotifyType               = Twns.Notify.NotifyType;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
-    export type OpenData = {
-        war         : TwnsBwWar.BwWar;
+    export type OpenDataForWeConditionModifyPanel23 = {
+        war         : BaseWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
     /** WecPlayerIndexInTurnEqualTo */
-    export class WeConditionModifyPanel23 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeConditionModifyPanel23 extends TwnsUiPanel.UiPanel<OpenDataForWeConditionModifyPanel23> {
         private readonly _labelTitle!                       : TwnsUiLabel.UiLabel;
         private readonly _btnType!                          : TwnsUiButton.UiButton;
         private readonly _btnClose!                         : TwnsUiButton.UiButton;
@@ -92,7 +92,7 @@ namespace TwnsWeConditionModifyPanel23 {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeConditionTypeListPanel, {
                 fullData    : openData.fullData,
                 condition   : openData.condition,
                 war         : openData.war,
@@ -103,12 +103,12 @@ namespace TwnsWeConditionModifyPanel23 {
         }
         private _onTouchedBtnEventId(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseWarEventIdPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseWarEventIdPanel, {
                 currentEventIdArray     : condition.eventIdArray ?? [],
-                availableEventIdArray   : Helpers.getNonNullElements(this._getOpenData().fullData.eventArray?.map(v => v.eventId) ?? []),
+                availableEventIdArray   : Twns.Helpers.getNonNullElements(this._getOpenData().fullData.eventArray?.map(v => v.eventId) ?? []),
                 callbackOnConfirm       : eventIdArray => {
                     condition.eventIdArray = eventIdArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
@@ -120,15 +120,15 @@ namespace TwnsWeConditionModifyPanel23 {
             const value = !text ? null : parseInt(text);
             if ((value == null) || (!isNaN(value))) {
                 this._getCondition().timesInTurn = value;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             } else {
                 this._updateInputTimesInTurn();
             }
         }
         private _onTouchedBtnTimesInTurnComparator(): void {
             const condition                 = this._getCondition();
-            condition.timesInTurnComparator = Helpers.getNextValueComparator(condition.timesInTurnComparator);
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            condition.timesInTurnComparator = Twns.Helpers.getNextValueComparator(condition.timesInTurnComparator);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputTimesTotal(): void {
             this._setInnerTouchMaskEnabled(true);
@@ -138,15 +138,15 @@ namespace TwnsWeConditionModifyPanel23 {
             const value = !text ? null : parseInt(text);
             if ((value == null) || (!isNaN(value))) {
                 this._getCondition().timesTotal = value;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             } else {
                 this._updateInputTimesTotal();
             }
         }
         private _onTouchedBtnTimesTotalComparator(): void {
             const condition                 = this._getCondition();
-            condition.timesTotalComparator  = Helpers.getNextValueComparator(condition.timesTotalComparator);
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            condition.timesTotalComparator  = Twns.Helpers.getNextValueComparator(condition.timesTotalComparator);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onFocusInInputEventsCount(): void {
             this._setInnerTouchMaskEnabled(true);
@@ -156,15 +156,15 @@ namespace TwnsWeConditionModifyPanel23 {
             const value = !text ? null : parseInt(text);
             if ((value != null) && (!isNaN(value))) {
                 this._getCondition().eventsCount = value;
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             } else {
                 this._updateInputEventsCount();
             }
         }
         private _onTouchedBtnEventsCountComparator(): void {
             const condition                 = this._getCondition();
-            condition.eventsCountComparator = Helpers.getNextValueComparator(condition.eventsCountComparator);
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            condition.eventsCountComparator = Twns.Helpers.getNextValueComparator(condition.eventsCountComparator);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _updateView(): void {
@@ -198,11 +198,12 @@ namespace TwnsWeConditionModifyPanel23 {
         private _updateLabelDescAndLabelError(): void {
             const openData          = this._getOpenData();
             const condition         = openData.condition;
-            const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition, openData.war);
+            const war               = openData.war;
+            const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = WarEventHelper.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
+            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelEventId(): void {
             const eventIdArray      = this._getCondition().eventIdArray;
@@ -213,28 +214,28 @@ namespace TwnsWeConditionModifyPanel23 {
             this._inputTimesInTurn.text = timesInTurn == null ? `` : `${timesInTurn}`;
         }
         private _updateLabelTimesInTurnComparator(): void {
-            const comparator                = Helpers.getExisted(this._getCondition().timesInTurnComparator);
-            this._labelTimesInTurnComparator.text  = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            const comparator                = Twns.Helpers.getExisted(this._getCondition().timesInTurnComparator);
+            this._labelTimesInTurnComparator.text  = Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputTimesTotal(): void {
             const timesTotal            = this._getCondition().timesTotal;
             this._inputTimesTotal.text  = timesTotal == null ? `` : `${timesTotal}`;
         }
         private _updateLabelTimesTotalComparator(): void {
-            const comparator                        = Helpers.getExisted(this._getCondition().timesTotalComparator);
-            this._labelTimesTotalComparator.text    = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            const comparator                        = Twns.Helpers.getExisted(this._getCondition().timesTotalComparator);
+            this._labelTimesTotalComparator.text    = Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
         private _updateInputEventsCount(): void {
             const eventsCount           = this._getCondition().eventsCount;
             this._inputEventsCount.text = eventsCount == null ? `` : `${eventsCount}`;
         }
         private _updateEventsCountComparator(): void {
-            const comparator                        = Helpers.getExisted(this._getCondition().eventsCountComparator);
-            this._labelEventsCountComparator.text   = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+            const comparator                        = Twns.Helpers.getExisted(this._getCondition().eventsCountComparator);
+            this._labelEventsCountComparator.text   = Lang.getValueComparatorName(comparator) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
-        private _getCondition(): ProtoTypes.WarEvent.IWecEventCalledCount {
-            return Helpers.getExisted(this._getOpenData().condition.WecEventCalledCount);
+        private _getCondition(): CommonProto.WarEvent.IWecEventCalledCount {
+            return Twns.Helpers.getExisted(this._getOpenData().condition.WecEventCalledCount);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {
             this._imgInnerTouchMask.visible = isEnabled;

@@ -1,9 +1,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwWeatherManagerView {
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import WeatherType      = Types.WeatherType;
-
+namespace Twns.BaseWar {
     const RAIN_DENSITY      = 0.3;
     const RAIN_ANGLE        = 20;
     const SNOW_DENSITY      = 0.3;
@@ -12,14 +9,18 @@ namespace TwnsBwWeatherManagerView {
     const SANDSTORM_ANGLE   = 70;
 
     export class BwWeatherManagerView extends eui.Component {
-        private _weatherManager?        : TwnsBwWeatherManager.BwWeatherManager;
-        private _containerForRain       = new eui.Component();
-        private _imgArrayForRain        : TwnsUiImage.UiImage[] = [];
-        private _containerForSnow       = new eui.Component();
-        private _imgArrayForSnow        : TwnsUiImage.UiImage[] = [];
-        private _containerForSandstorm  = new eui.Component();
-        private _imgArrayForSandstorm   : TwnsUiImage.UiImage[] = [];
-        private _showingWeatherType     = WeatherType.Clear;
+        private readonly _notifyListeners   : Notify.Listener[] = [
+            { type: Notify.NotifyType.UserSettingsIsShowWeatherAnimationChanged,    callback: this._onNotifyUserSettingsIsShowWeatherAnimationChanged },
+        ];
+
+        private _weatherManager?            : BaseWar.BwWeatherManager;
+        private _containerForRain           = new eui.Component();
+        private _imgArrayForRain            : TwnsUiImage.UiImage[] = [];
+        private _containerForSnow           = new eui.Component();
+        private _imgArrayForSnow            : TwnsUiImage.UiImage[] = [];
+        private _containerForSandstorm      = new eui.Component();
+        private _imgArrayForSandstorm       : TwnsUiImage.UiImage[] = [];
+        private _showingWeatherType         : number | null = null;
 
         public constructor() {
             super();
@@ -54,44 +55,56 @@ namespace TwnsBwWeatherManagerView {
             }
         }
 
-        public init(manager: TwnsBwWeatherManager.BwWeatherManager): void {
+        public init(manager: BaseWar.BwWeatherManager): void {
             this._setWeatherManager(manager);
         }
 
         public startRunningView(): void {
             this.addEventListener(egret.Event.RESIZE, this._onResize, this);
+            Notify.addEventListeners(this._notifyListeners, this);
             this.resetView(true);
         }
         public stopRunningView(): void {
             this.removeEventListener(egret.Event.RESIZE, this._onResize, this);
+            Notify.removeEventListeners(this._notifyListeners, this);
             this._stopView();
         }
 
-        private _getWeatherManager(): TwnsBwWeatherManager.BwWeatherManager {
+        private _getWeatherManager(): BaseWar.BwWeatherManager {
             return Helpers.getExisted(this._weatherManager, ClientErrorCode.BwWeatherManagerView_GetWeatherManager_00);
         }
-        private _setWeatherManager(manager: TwnsBwWeatherManager.BwWeatherManager): void {
+        private _setWeatherManager(manager: BaseWar.BwWeatherManager): void {
             this._weatherManager = manager;
         }
 
         private _onResize(): void {
             this.resetView(true);
         }
+        private _onNotifyUserSettingsIsShowWeatherAnimationChanged(): void {
+            this.resetView(false);
+        }
 
         public resetView(isForce: boolean): void {
-            const weatherType = this._getWeatherManager().getCurrentWeatherType();
+            if (!LocalStorage.getShowWeatherAnimation()) {
+                this._showingWeatherType = null;
+                this._stopView();
+                return;
+            }
+
+            const weatherManager    = this._getWeatherManager();
+            const weatherType       = weatherManager.getCurrentWeatherType();
             if ((!isForce) && (weatherType === this._showingWeatherType)) {
                 return;
             }
 
-            this._stopView();
-
             this._showingWeatherType = weatherType;
-            switch (weatherType) {
-                case WeatherType.Rainy      : this._showRain();         break;
-                case WeatherType.Sandstorm  : this._showSandstorm();    break;
-                case WeatherType.Snowy      : this._showSnow();         break;
-                default                     :                           break;
+
+            this._stopView();
+            switch (weatherManager.getWar().getGameConfig().getWeatherCfg(weatherType)?.anim) {
+                case CommonConstants.WeatherAnimationType.Rainy     : this._showRain();         break;
+                case CommonConstants.WeatherAnimationType.Sandstorm : this._showSandstorm();    break;
+                case CommonConstants.WeatherAnimationType.Snowy     : this._showSnow();         break;
+                default                                             :                           break;
             }
         }
         private _stopView(): void {

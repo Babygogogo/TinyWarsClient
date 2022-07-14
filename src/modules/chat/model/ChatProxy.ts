@@ -5,18 +5,18 @@
 // import NetManager           from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import ChatModel            from "./ChatModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace ChatProxy {
-    import NetMessage       = ProtoTypes.NetMessage;
-    import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.Chat.ChatProxy {
+    import NetMessage       = CommonProto.NetMessage;
+    import NetMessageCodes  = Twns.Net.NetMessageCodes;
+    import NotifyType       = Twns.Notify.NotifyType;
 
     export function init(): void {
-        NetManager.addListeners([
+        Twns.Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgChatAddMessage,               callback: _onMsgChatAddMessage },
             { msgCode: NetMessageCodes.MsgChatGetAllMessages,           callback: _onMsgChatGetAllMessages },
             { msgCode: NetMessageCodes.MsgChatUpdateReadProgress,       callback: _onMsgChatUpdateReadProgress },
@@ -27,10 +27,10 @@ namespace ChatProxy {
 
     export function reqChatAddMessage(
         content     : string,
-        toCategory  : Types.ChatMessageToCategory,
+        toCategory  : Twns.Types.ChatMessageToCategory,
         toTarget    : number,
     ): void {
-        NetManager.send({ MsgChatAddMessage: { c: {
+        Twns.Net.NetManager.send({ MsgChatAddMessage: { c: {
             toCategory,
             toTarget,
             content,
@@ -39,28 +39,28 @@ namespace ChatProxy {
     function _onMsgChatAddMessage(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChatAddMessage.IS;
         if (!data.errorCode) {
-            ChatModel.updateOnAddMessage(Helpers.getExisted(data.message), true);
-            Notify.dispatch(NotifyType.MsgChatAddMessage, data);
+            Twns.Chat.ChatModel.updateOnAddMessage(Twns.Helpers.getExisted(data.message), true);
+            Twns.Notify.dispatch(NotifyType.MsgChatAddMessage, data);
         }
     }
 
     export function reqGetAllMessages(): void {
-        NetManager.send({ MsgChatGetAllMessages: { c: {} } });
+        Twns.Net.NetManager.send({ MsgChatGetAllMessages: { c: {} } });
     }
     function _onMsgChatGetAllMessages(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChatGetAllMessages.IS;
         if (!data.errorCode) {
-            ChatModel.setAllMessages(data.messageList || []);
-            Notify.dispatch(NotifyType.MsgChatGetAllMessages, data);
+            Twns.Chat.ChatModel.setAllMessages(data.messageList || []);
+            Twns.Notify.dispatch(NotifyType.MsgChatGetAllMessages, data);
         }
     }
 
     export function reqUpdateReadProgress(
-        toCategory  : Types.ChatMessageToCategory,
+        toCategory  : Twns.Types.ChatMessageToCategory,
         toTarget    : number,
-        timestamp   = Timer.getServerTimestamp(),
+        timestamp   = Twns.Timer.getServerTimestamp(),
     ): void {
-        NetManager.send({ MsgChatUpdateReadProgress: { c: {
+        Twns.Net.NetManager.send({ MsgChatUpdateReadProgress: { c: {
             progress: {
                 toCategory,
                 toTarget,
@@ -71,30 +71,30 @@ namespace ChatProxy {
     function _onMsgChatUpdateReadProgress(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChatUpdateReadProgress.IS;
         if (!data.errorCode) {
-            ChatModel.setReadProgress(Helpers.getExisted(data.progress));
-            Notify.dispatch(NotifyType.MsgChatUpdateReadProgress, data);
+            Twns.Chat.ChatModel.setReadProgress(Twns.Helpers.getExisted(data.progress));
+            Twns.Notify.dispatch(NotifyType.MsgChatUpdateReadProgress, data);
         }
     }
 
     export function reqGetAllReadProgressList(): void {
-        NetManager.send({ MsgChatGetAllReadProgressList: { c: {} } });
+        Twns.Net.NetManager.send({ MsgChatGetAllReadProgressList: { c: {} } });
     }
     function _onMsgChatGetAllReadProgressList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChatGetAllReadProgressList.IS;
         if (!data.errorCode) {
-            ChatModel.resetAllReadProgress(data.list || []);
-            Notify.dispatch(NotifyType.MsgChatGetAllReadProgressList, data);
+            Twns.Chat.ChatModel.resetAllReadProgress(data.list || []);
+            Twns.Notify.dispatch(NotifyType.MsgChatGetAllReadProgressList, data);
         }
     }
 
     export function reqChatDeleteMessage(messageId: number): void {
-        NetManager.send({ MsgChatDeleteMessage: { c: { messageId } } });
+        Twns.Net.NetManager.send({ MsgChatDeleteMessage: { c: { messageId } } });
     }
     function _onMsgChatDeleteMessage(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChatDeleteMessage.IS;
         if (!data.errorCode) {
-            ChatModel.updateOnDeleteMessage(Helpers.getExisted(data.messageId));
-            Notify.dispatch(NotifyType.MsgChatDeleteMessage, data);
+            Twns.Chat.ChatModel.updateOnDeleteMessage(Twns.Helpers.getExisted(data.messageId));
+            Twns.Notify.dispatch(NotifyType.MsgChatDeleteMessage, data);
         }
     }
 }

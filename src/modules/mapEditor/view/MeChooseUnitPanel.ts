@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -17,18 +17,19 @@
 // import MeModel                  from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeChooseUnitPanel {
-    import DataForDrawUnit  = TwnsMeDrawer.DataForDrawUnit;
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.MapEditor {
+    import DataForDrawUnit  = MapEditor.DataForDrawUnit;
+    import LangTextType     = Lang.LangTextType;
+    import NotifyType       = Notify.NotifyType;
 
     const MAX_RECENT_COUNT = 10;
 
-    export type OpenData = void;
-    export class MeChooseUnitPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeChooseUnitPanel = void;
+    export class MeChooseUnitPanel extends TwnsUiPanel.UiPanel<OpenDataForMeChooseUnitPanel> {
         private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
         private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
-        private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
+        private readonly _listPlayerIndex!  : TwnsUiScrollList.UiScrollList<DataForPlayerIndexRenderer>;
+        private readonly _listUnit!         : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
         private _dataListForRecent   : DataForUnitRenderer[] = [];
@@ -43,20 +44,33 @@ namespace TwnsMeChooseUnitPanel {
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
 
+            this._listPlayerIndex.setItemRenderer(PlayerIndexRenderer);
             this._listRecent.setItemRenderer(UnitRenderer);
-            this._listCategory.setItemRenderer(CategoryRenderer);
+            this._listUnit.setItemRenderer(UnitRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this._updateListCategory();
+            this._resetListPlayerIndex(CommonConstants.PlayerIndex.First);
+            this._updateListUnit();
             this._updateListRecent();
         }
         protected _onClosing(): void {
             // nothing to do
         }
 
-        public updateOnChooseUnit(data: DataForDrawUnit): void {
+        public setAndReviseSelectedPlayerIndex(newPlayerIndex: number, needScroll: boolean): void {
+            const listPlayerIndex   = this._listPlayerIndex;
+            const index             = Helpers.getExisted(listPlayerIndex.getRandomIndex(v => v.playerIndex === newPlayerIndex));
+            listPlayerIndex.setSelectedIndex(index);
+            this._updateListUnit();
+
+            if (needScroll) {
+                listPlayerIndex.scrollVerticalToIndex(index);
+            }
+        }
+
+        public async updateOnChooseUnit(data: DataForDrawUnit): Promise<void> {
             const dataList      = this._dataListForRecent;
             const filteredList  = dataList.filter(v => {
                 const oldData = v.dataForDrawUnit;
@@ -65,8 +79,9 @@ namespace TwnsMeChooseUnitPanel {
             });
             dataList.length     = 0;
             dataList[0]         = {
-                dataForDrawUnit: data,
-                panel   : this,
+                dataForDrawUnit : data,
+                panel           : this,
+                gameConfig      : await Config.ConfigManager.getLatestGameConfig(),
             };
             for (const v of filteredList) {
                 if (dataList.length < MAX_RECENT_COUNT) {
@@ -93,36 +108,42 @@ namespace TwnsMeChooseUnitPanel {
             this._labelRecentTitle.text = `${Lang.getText(LangTextType.B0372)}:`;
         }
 
-        private _createDataForListUnit(): DataForCategoryRenderer[] {
-            const mapping = new Map<number, DataForDrawUnit[]>();
-            for (const unitType of ConfigManager.getUnitTypesByCategory(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), Types.UnitCategory.All)) {
-                for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
-                    if (!mapping.has(playerIndex)) {
-                        mapping.set(playerIndex, []);
-                    }
-
-                    Helpers.getExisted(mapping.get(playerIndex)).push({
-                        playerIndex,
-                        unitType,
-                    });
-                }
-            }
-
-            const dataList: DataForCategoryRenderer[] = [];
-            for (const [, dataListForDrawUnit] of mapping) {
-                dataList.push({
-                    dataListForDrawUnit,
-                    panel               : this,
+        private _resetListPlayerIndex(selectedPlayerIndex: number | null): void {
+            const dataArray: DataForPlayerIndexRenderer[] = [];
+            for (let playerIndex = CommonConstants.PlayerIndex.First; playerIndex <= CommonConstants.PlayerIndex.Max; ++playerIndex) {
+                dataArray.push({
+                    playerIndex,
+                    panel       : this,
                 });
             }
 
-            return dataList;
+            const list = this._listPlayerIndex;
+            list.bindData(dataArray);
+            list.setSelectedIndex(list.getFirstIndex(v => v.playerIndex === selectedPlayerIndex) ?? (dataArray.length ? 0 : -1));
         }
 
-        private _updateListCategory(): void {
-            const dataList = this._createDataForListUnit();
-            this._listCategory.bindData(dataList);
-            this._listCategory.scrollVerticalTo(0);
+        private async _updateListUnit(): Promise<void> {
+            const playerIndex = this._listPlayerIndex.getSelectedData()?.playerIndex;
+            const listUnit    = this._listUnit;
+            if (playerIndex == null) {
+                listUnit.clear();
+                return;
+            }
+
+            const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
+            const dataArray     : DataForUnitRenderer[] = [];
+            for (const unitType of gameConfig.getAllUnitTypeArray()) {
+                dataArray.push({
+                    panel           : this,
+                    dataForDrawUnit : {
+                        playerIndex,
+                        unitType,
+                    },
+                    gameConfig,
+                });
+            }
+
+            listUnit.bindData(dataArray);
         }
 
         private _updateListRecent(): void {
@@ -131,43 +152,34 @@ namespace TwnsMeChooseUnitPanel {
         }
     }
 
-    type DataForCategoryRenderer = {
-        dataListForDrawUnit : DataForDrawUnit[];
-        panel               : MeChooseUnitPanel;
+    type DataForPlayerIndexRenderer = {
+        playerIndex : number;
+        panel       : MeChooseUnitPanel;
     };
-    class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
-        private readonly _listUnit! : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
-
-        protected _onOpened(): void {
-            this._listUnit.setItemRenderer(UnitRenderer);
-            this._listUnit.setScrollPolicyH(eui.ScrollPolicy.OFF);
-        }
+    class PlayerIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerIndexRenderer> {
+        private readonly _labelPlayerIndex! : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            const data              = this._getData();
-            const unitViewIdList    = data.dataListForDrawUnit;
-            const dataListForUnit   : DataForUnitRenderer[] = [];
-            const panel             = data.panel;
-            for (const unitViewId of unitViewIdList) {
-                dataListForUnit.push({
-                    panel,
-                    dataForDrawUnit: unitViewId,
-                });
-            }
-            this._listUnit.bindData(dataListForUnit);
+            this._labelPlayerIndex.text = `P${this._getData().playerIndex}`;
+        }
+
+        public onItemTapEvent(): void {
+            const data = this._getData();
+            data.panel.setAndReviseSelectedPlayerIndex(data.playerIndex, false);
         }
     }
 
     type DataForUnitRenderer = {
         dataForDrawUnit : DataForDrawUnit;
         panel           : MeChooseUnitPanel;
+        gameConfig      : Config.GameConfig;
     };
     class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
         private readonly _group!        : eui.Group;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _conUnitView!  : eui.Group;
 
-        private _unitView   = new TwnsBwUnitView.BwUnitView();
+        private _unitView   = new BaseWar.BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -191,17 +203,17 @@ namespace TwnsMeChooseUnitPanel {
             const data              = this._getData();
             const dataForDrawUnit   = data.dataForDrawUnit;
             const unitType          = dataForDrawUnit.unitType;
-            const war               = Helpers.getExisted(MeModel.getWar());
-            this._labelName.text    = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
+            const war               = Helpers.getExisted(MapEditor.MeModel.getWar());
+            this._labelName.text    = Lang.getUnitName(unitType, data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
 
             const unitView  = this._unitView;
-            const unit      = new TwnsBwUnit.BwUnit();
+            const unit      = new BaseWar.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType,
                 playerIndex : dataForDrawUnit.playerIndex,
-            }, war.getConfigVersion());
+            }, war.getGameConfig());
             unit.startRunning(war);
             unitView.init(unit);
             unitView.startRunningView();
@@ -213,7 +225,7 @@ namespace TwnsMeChooseUnitPanel {
             const dataForDrawUnit   = data.dataForDrawUnit;
             panel.updateOnChooseUnit(dataForDrawUnit);
             panel.close();
-            Helpers.getExisted(MeModel.getWar()).getDrawer().setModeDrawUnit(dataForDrawUnit);
+            Helpers.getExisted(MapEditor.MeModel.getWar()).getDrawer().setModeDrawUnit(dataForDrawUnit);
         }
     }
 }

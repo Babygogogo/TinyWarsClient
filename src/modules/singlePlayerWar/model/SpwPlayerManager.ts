@@ -4,15 +4,15 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpwPlayerManager {
-    import BwPlayerManager  = TwnsBwPlayerManager.BwPlayerManager;
+namespace Twns.SinglePlayerWar {
+    import BwPlayerManager  = BaseWar.BwPlayerManager;
 
     export class SpwPlayerManager extends BwPlayerManager {
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
-        public getHumanPlayers(): TwnsBwPlayer.BwPlayer[] {
-            const players: TwnsBwPlayer.BwPlayer[] = [];
+        public getHumanPlayers(): BaseWar.BwPlayer[] {
+            const players: BaseWar.BwPlayer[] = [];
             for (const [, player] of this.getAllPlayersDict()) {
                 if (player.getUserId() != null) {
                     players.push(player);
@@ -30,7 +30,7 @@ namespace TwnsSpwPlayerManager {
             return playerIndexes;
         }
 
-        public getAliveWatcherTeamIndexesForSelf(): Set<number> {
+        public getWatcherTeamIndexesForSelf(): Set<number> {
             const humanPlayers = this.getHumanPlayers();
             if (!humanPlayers.length) {
                 return this.getAliveTeamIndexes(false);

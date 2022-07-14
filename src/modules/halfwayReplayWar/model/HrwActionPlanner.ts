@@ -10,15 +10,15 @@
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsHrwActionPlanner {
-    import LangTextType         = TwnsLangTextType.LangTextType;
+namespace Twns.HalfwayReplayWar {
+    import LangTextType         = Lang.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import UnitState            = Types.UnitActionState;
     import GridIndex            = Types.GridIndex;
     import State                = Types.ActionPlannerState;
     import UnitActionType       = Types.UnitActionType;
 
-    export class HrwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
+    export class HrwActionPlanner extends BaseWar.BwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,14 +27,14 @@ namespace TwnsHrwActionPlanner {
 
             const currState = this.getState();
             if (currState === State.ChoosingAction) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitActionsPanel, this._getDataForUnitActionsPanel());
+                PanelHelpers.open(PanelHelpers.PanelDict.BwUnitActionsPanel, this._getDataForUnitActionsPanel());
             } else {
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwUnitActionsPanel);
+                PanelHelpers.close(PanelHelpers.PanelDict.BwUnitActionsPanel);
             }
             if ((currState === State.MakingMovePath) || (currState === State.ChoosingAttackTarget)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDamagePreviewPanel, { war: this._getWar() });
+                PanelHelpers.open(PanelHelpers.PanelDict.BwDamagePreviewPanel, { war: this._getWar() });
             } else {
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwDamagePreviewPanel);
+                PanelHelpers.close(PanelHelpers.PanelDict.BwDamagePreviewPanel);
             }
         }
 
@@ -124,7 +124,7 @@ namespace TwnsHrwActionPlanner {
             }
         }
         protected _getNextStateOnTapWhenChoosingDropDestination(gridIndex: GridIndex): State {
-            if (Helpers.getExisted(this.getAvailableDropDestinations()).every(g => !GridIndexHelpers.checkIsEqual(g, gridIndex))) {
+            if (Helpers.getExisted(this.getAvailableDropDestinations()).every(g => !Twns.GridIndexHelpers.checkIsEqual(g, gridIndex))) {
                 return State.ChoosingAction;
             } else {
                 const chosenUnits               = [this.getChoosingUnitForDrop()];
@@ -145,7 +145,7 @@ namespace TwnsHrwActionPlanner {
             }
         }
         protected _getNextStateOnTapWhenChoosingFlareDestination(gridIndex: GridIndex): State {
-            if (GridIndexHelpers.getDistance(this.getMovePathDestination(), gridIndex) > Helpers.getExisted(Helpers.getExisted(this.getFocusUnit()).getFlareMaxRange())) {
+            if (Twns.GridIndexHelpers.getDistance(this.getMovePathDestination(), gridIndex) > Helpers.getExisted(Helpers.getExisted(this.getFocusUnit()).getFlareMaxRange())) {
                 return State.ChoosingAction;
             } else {
                 return State.ChoosingFlareDestination;
@@ -156,7 +156,7 @@ namespace TwnsHrwActionPlanner {
         }
         protected _getNextStateOnTapWhenChoosingProductionTarget(gridIndex: GridIndex): State {
             const previousGridIndex = this.getCursor().getPreviousGridIndex();
-            if ((previousGridIndex) && GridIndexHelpers.checkIsEqual(previousGridIndex, gridIndex)) {
+            if ((previousGridIndex) && Twns.GridIndexHelpers.checkIsEqual(previousGridIndex, gridIndex)) {
                 return State.ChoosingProductionTarget;
             } else {
                 const turnManager       = this._getTurnManager();
@@ -315,10 +315,10 @@ namespace TwnsHrwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getActionUnitBeLoaded(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = Helpers.getExisted(this.getFocusUnit());
-            if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
+            if (Twns.GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
                 return [];
             } else {
                 const loader = this._getUnitMap().getUnitOnMap(destination);
@@ -329,10 +329,10 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitJoin(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitJoin(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = Helpers.getExisted(this.getFocusUnit());
-            if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
+            if (Twns.GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
                 return [];
             } else {
                 const target = this._getUnitMap().getUnitOnMap(destination);
@@ -343,7 +343,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitUseCoSuperPower(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -354,7 +354,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitUseCoPower(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -365,7 +365,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitLoadCo(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitLoadCo(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -376,7 +376,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitCapture(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitCapture(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -387,7 +387,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitDive(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitDive(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -398,7 +398,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitSurface(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitSurface(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -409,7 +409,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitBuildTile(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitBuildTile(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -420,7 +420,7 @@ namespace TwnsHrwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitSupply(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitSupply(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -428,7 +428,7 @@ namespace TwnsHrwActionPlanner {
                 const playerIndex   = focusUnit.getPlayerIndex();
                 const unitMap       = this._getUnitMap();
                 if (focusUnit.checkIsAdjacentUnitSupplier()) {
-                    for (const gridIndex of GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this.getMapSize())) {
+                    for (const gridIndex of Twns.GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this.getMapSize())) {
                         const unit = unitMap.getUnitOnMap(gridIndex);
                         if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
                             return [{ actionType: UnitActionType.Supply, callback: () => {
@@ -440,34 +440,41 @@ namespace TwnsHrwActionPlanner {
                 return [];
             }
         }
-        protected _getActionUnitProduceUnit(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
                 const focusUnit         = Helpers.getExisted(this.getFocusUnit());
                 const produceUnitType   = focusUnit.getProduceUnitType();
-                if ((this.getFocusUnitLoaded()) || (this.getMovePath().length !== 1) || (produceUnitType == null)) {
+                const war               = focusUnit.getWar();
+                const playerIndex       = focusUnit.getPlayerIndex();
+                if ((this.getFocusUnitLoaded())                                                                                         ||
+                    (this.getMovePath().length !== 1)                                                                                   ||
+                    (produceUnitType == null)                                                                                           ||
+                    ((war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerIndex) ?? []).indexOf(produceUnitType) >= 0)   ||
+                    (war.getWarEventManager().checkOngoingPersistentActionBannedUnitType(playerIndex, produceUnitType))
+                ) {
                     return [];
                 } else {
                     const costForProduceUnit = focusUnit.getProduceUnitCost();
                     if (Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) < 1) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
-                            callback            : () => FloatText.show(Lang.getText(LangTextType.B0051)),
+                            callback            : () => Twns.FloatText.show(Lang.getText(LangTextType.B0051)),
                             costForProduceUnit,
                             produceUnitType,
                         }];
                     } else if (focusUnit.getLoadedUnitsCount() >= Helpers.getExisted(focusUnit.getMaxLoadUnitsCount())) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
-                            callback            : () => FloatText.show(Lang.getText(LangTextType.B0052)),
+                            callback            : () => Twns.FloatText.show(Lang.getText(LangTextType.B0052)),
                             costForProduceUnit,
                             produceUnitType,
                         }];
                     } else if (this._getWar().getPlayerInTurn().getFund() < focusUnit.getProduceUnitCost()) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
-                            callback            : () => FloatText.show(Lang.getText(LangTextType.B0053)),
+                            callback            : () => Twns.FloatText.show(Lang.getText(LangTextType.B0053)),
                             costForProduceUnit,
                             produceUnitType,
                         }];
@@ -484,7 +491,7 @@ namespace TwnsHrwActionPlanner {
                 }
             }
         }
-        protected _getActionUnitWait(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitWait(): BaseWar.DataForUnitAction[] {
             const existingUnit = this._getUnitMap().getUnitOnMap(this.getMovePathDestination());
             if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
                 return [];

@@ -5,7 +5,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -15,18 +15,18 @@
 // import WarEventHelper               from "../model/WarEventHelper";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel40 {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
+namespace Twns.WarEvent {
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
 
-    export type OpenData = {
-        war         : TwnsBwWar.BwWar;
+    export type OpenDataForWeActionModifyPanel40 = {
+        war         : BaseWar.BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel40 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel40 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel40> {
         private readonly _labelTitle!                       : TwnsUiLabel.UiLabel;
         private readonly _btnType!                          : TwnsUiButton.UiButton;
         private readonly _btnClose!                         : TwnsUiButton.UiButton;
@@ -40,6 +40,14 @@ namespace TwnsWeActionModifyPanel40 {
         private readonly _labelGridIndex!                   : TwnsUiLabel.UiLabel;
         private readonly _btnConIsHighlighted!              : TwnsUiButton.UiButton;
         private readonly _labelConIsHighlighted!            : TwnsUiLabel.UiLabel;
+
+        private readonly _btnPlayerIndex!                   : TwnsUiButton.UiButton;
+        private readonly _labelPlayerIndex!                 : TwnsUiLabel.UiLabel;
+        private readonly _btnConIsPlayerInTurn!             : TwnsUiButton.UiButton;
+        private readonly _labelConIsPlayerInTurn!           : TwnsUiLabel.UiLabel;
+
+        private readonly _btnConTileType!                   : TwnsUiButton.UiButton;
+        private readonly _labelConTileType!                 : TwnsUiLabel.UiLabel;
 
         private readonly _btnDestroyUnit!                   : TwnsUiButton.UiButton;
         private readonly _labelDestroyUnit!                 : TwnsUiLabel.UiLabel;
@@ -64,7 +72,7 @@ namespace TwnsWeActionModifyPanel40 {
         private readonly _btnActIsHighlighted!              : TwnsUiButton.UiButton;
         private readonly _labelActIsHighlighted!            : TwnsUiLabel.UiLabel;
 
-        private readonly _tileView                      = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private readonly _tileView                      = new MapEditor.MeTileSimpleView();
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -79,6 +87,11 @@ namespace TwnsWeActionModifyPanel40 {
                 { ui: this._btnLocation,                        callback: this._onTouchedBtnLocation },
                 { ui: this._btnGridIndex,                       callback: this._onTouchedBtnGridIndex },
                 { ui: this._btnConIsHighlighted,                callback: this._onTouchedBtnConIsHighlighted },
+
+                { ui: this._btnPlayerIndex,                     callback: this._onTouchedBtnPlayerIndex },
+                { ui: this._btnConIsPlayerInTurn,               callback: this._onTouchedBtnConIsPlayerInTurn },
+
+                { ui: this._btnConTileType,                     callback: this._onTouchedBtnConTileType },
 
                 { ui: this._btnDestroyUnit,                     callback: this._onTouchedBtnDestroyUnit },
                 { ui: this._btnActIsHighlighted,                callback: this._onTouchedBtnActIsHighlighted },
@@ -124,7 +137,7 @@ namespace TwnsWeActionModifyPanel40 {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 fullData    : openData.fullData,
                 action      : openData.action,
                 war         : openData.war,
@@ -135,7 +148,7 @@ namespace TwnsWeActionModifyPanel40 {
         }
         private _onTouchedBtnLocation(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseLocationPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseLocationPanel, {
                 currentLocationIdArray  : action.conLocationIdArray ?? [],
                 callbackOnConfirm       : locationIdArray => {
                     action.conLocationIdArray = locationIdArray;
@@ -145,7 +158,7 @@ namespace TwnsWeActionModifyPanel40 {
         }
         private _onTouchedBtnGridIndex(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseGridIndexPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseGridIndexPanel, {
                 currentGridIndexArray   : Helpers.getNonNullElements(action.conGridIndexArray?.map(v => GridIndexHelpers.convertGridIndex(v)) ?? []),
                 mapSize                 : this._getOpenData().war.getTileMap().getMapSize(),
                 callbackOnConfirm       : gridIndexArray => {
@@ -167,6 +180,42 @@ namespace TwnsWeActionModifyPanel40 {
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
+        private _onTouchedBtnPlayerIndex(): void {
+            const action = this._getAction();
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChoosePlayerIndexPanel, {
+                currentPlayerIndexArray : action.conPlayerIndexArray ?? [],
+                maxPlayerIndex          : this._getOpenData().war.getPlayersCountUnneutral(),
+                callbackOnConfirm       : playerIndexArray => {
+                    action.conPlayerIndexArray = playerIndexArray;
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
+        private _onTouchedBtnConIsPlayerInTurn(): void {
+            const action                    = this._getAction();
+            const conIsOwnerPlayerInTurn    = action.conIsOwnerPlayerInTurn;
+            if (conIsOwnerPlayerInTurn == null) {
+                action.conIsOwnerPlayerInTurn = true;
+            } else if (conIsOwnerPlayerInTurn) {
+                action.conIsOwnerPlayerInTurn = false;
+            } else {
+                action.conIsOwnerPlayerInTurn = null;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+
+        private _onTouchedBtnConTileType(): void {
+            const action = this._getAction();
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseTileTypePanel, {
+                gameConfig              : this._getOpenData().war.getGameConfig(),
+                currentTileTypeArray    : action.conTileTypeArray ?? [],
+                callbackOnConfirm       : tileTypeArray => {
+                    action.conTileTypeArray = tileTypeArray;
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
+
         private _onTouchedBtnDestroyUnit(): void {
             const action          = this._getAction();
             action.actDestroyUnit = !action.actDestroyUnit;
@@ -179,7 +228,8 @@ namespace TwnsWeActionModifyPanel40 {
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActTileBase(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTileBasePanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseTileBasePanel, {
+                gameConfig  : this._getOpenData().war.getGameConfig(),
                 callback    : (baseType, baseShapeId) => {
                     const tileData          = Helpers.getExisted(this._getAction().actTileData);
                     tileData.baseType       = baseType;
@@ -195,8 +245,9 @@ namespace TwnsWeActionModifyPanel40 {
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActTileDecorator(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTileDecoratorPanel, {
-                callback: (decoratorType, decoratorShapeId) => {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseTileDecorationPanel, {
+                gameConfig  : this._getOpenData().war.getGameConfig(),
+                callback    : (decoratorType, decoratorShapeId) => {
                     const tileData              = Helpers.getExisted(this._getAction().actTileData);
                     tileData.decoratorType      = decoratorType;
                     tileData.decoratorShapeId   = decoratorShapeId;
@@ -217,8 +268,9 @@ namespace TwnsWeActionModifyPanel40 {
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActTileObject(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTileObjectPanel, {
-                callback: (objectType, objectShapeId, playerIndex) => {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseTileObjectPanel, {
+                gameConfig  : this._getOpenData().war.getGameConfig(),
+                callback    : (objectType, objectShapeId, playerIndex) => {
                     const tileData          = Helpers.getExisted(this._getAction().actTileData);
                     tileData.objectType     = objectType;
                     tileData.objectShapeId  = objectShapeId;
@@ -229,9 +281,9 @@ namespace TwnsWeActionModifyPanel40 {
         }
         private _onTouchedBtnDeleteActTileObject(): void {
             const tileData          = Helpers.getExisted(this._getAction().actTileData);
-            tileData.objectType     = Types.TileObjectType.Empty;
+            tileData.objectType     = CommonConstants.TileObjectType.Empty;
             tileData.objectShapeId  = null;
-            tileData.playerIndex    = CommonConstants.WarNeutralPlayerIndex;
+            tileData.playerIndex    = CommonConstants.PlayerIndex.Neutral;
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnActIsHighlighted(): void {
@@ -255,6 +307,11 @@ namespace TwnsWeActionModifyPanel40 {
             this._updateLabelGridIndex();
             this._updateLabelConIsHighlighted();
 
+            this._updateLabelPlayerIndex();
+            this._updateLabelConIsPlayerInTurn();
+
+            this._updateLabelConTileType();
+
             this._updateLabelDestroyUnit();
             this._updateTileView();
             this._updateLabelActIsHighlighted();
@@ -270,6 +327,11 @@ namespace TwnsWeActionModifyPanel40 {
             this._btnLocation.label                         = Lang.getText(LangTextType.B0764);
             this._btnGridIndex.label                        = Lang.getText(LangTextType.B0531);
             this._btnConIsHighlighted.label                 = Lang.getText(LangTextType.B0847);
+
+            this._btnPlayerIndex.label                      = Lang.getText(LangTextType.B0031);
+            this._btnConIsPlayerInTurn.label                = Lang.getText(LangTextType.B0086);
+
+            this._btnConTileType.label                      = Lang.getText(LangTextType.B0718);
 
             this._btnDestroyUnit.label                      = Lang.getText(LangTextType.B0826);
             this._btnActIsHighlighted.label                 = Lang.getText(LangTextType.B0847);
@@ -291,11 +353,12 @@ namespace TwnsWeActionModifyPanel40 {
         private _updateLabelDescAndLabelError(): void {
             const openData          = this._getOpenData();
             const action            = openData.action;
-            const errorTip          = WarEventHelper.getErrorTipForAction(openData.fullData, action, openData.war);
+            const war               = openData.war;
+            const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForAction(openData.fullData, action, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = WarEventHelper.getDescForAction(action) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelLocation(): void {
             const locationIdArray       = this._getAction().conLocationIdArray;
@@ -315,6 +378,26 @@ namespace TwnsWeActionModifyPanel40 {
             }
         }
 
+        private _updateLabelPlayerIndex(): void {
+            const playerIndexArray      = this._getAction().conPlayerIndexArray;
+            this._labelPlayerIndex.text = playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`, `) : Lang.getText(LangTextType.B0776);
+        }
+        private _updateLabelConIsPlayerInTurn(): void {
+            const conIsOwnerPlayerInTurn    = this._getAction().conIsOwnerPlayerInTurn;
+            const label                     = this._labelConIsPlayerInTurn;
+            if (conIsOwnerPlayerInTurn == null) {
+                label.text = `--`;
+            } else {
+                label.text = Lang.getText(conIsOwnerPlayerInTurn ? LangTextType.B0012 : LangTextType.B0013);
+            }
+        }
+
+        private _updateLabelConTileType(): void {
+            const conTileTypeArray      = this._getAction().conTileTypeArray;
+            const gameConfig            = this._getOpenData().war.getGameConfig();
+            this._labelConTileType.text = conTileTypeArray?.length ? conTileTypeArray.map(v => Lang.getTileName(v, gameConfig)).join(`, `) : Lang.getText(LangTextType.B0776);
+        }
+
         private _updateLabelDestroyUnit(): void {
             this._labelDestroyUnit.text = Lang.getText(this._getAction().actDestroyUnit ? LangTextType.B0012 : LangTextType.B0013);
         }
@@ -329,6 +412,7 @@ namespace TwnsWeActionModifyPanel40 {
                 tileDecoratorType   : tileData.decoratorType ?? null,
                 tileDecoratorShapeId: tileData.decoratorShapeId ?? null,
                 playerIndex         : Helpers.getExisted(tileData.playerIndex),
+                gameConfig          : this._getOpenData().war.getGameConfig(),
             });
             tileView.updateView();
         }
@@ -355,7 +439,7 @@ namespace TwnsWeActionModifyPanel40 {
         }
 
 
-        private _getAction(): ProtoTypes.WarEvent.IWeaSetTileType {
+        private _getAction(): CommonProto.WarEvent.IWeaSetTileType {
             return Helpers.getExisted(this._getOpenData().action.WeaSetTileType);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {

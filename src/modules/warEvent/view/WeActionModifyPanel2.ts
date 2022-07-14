@@ -6,7 +6,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -14,19 +14,19 @@
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel2 {
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import BwWar                    = TwnsBwWar.BwWar;
+namespace Twns.WarEvent {
+    import NotifyType               = Twns.Notify.NotifyType;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
+    import LangTextType             = Twns.Lang.LangTextType;
+    import BwWar                    = BaseWar.BwWar;
 
-    export type OpenData = {
+    export type OpenDataForWeActionModifyPanel2 = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel2 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel2 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel2> {
         private readonly _labelTitle!                   : TwnsUiLabel.UiLabel;
         private readonly _btnType!                      : TwnsUiButton.UiButton;
         private readonly _btnBack!                      : TwnsUiButton.UiButton;
@@ -87,18 +87,18 @@ namespace TwnsWeActionModifyPanel2 {
 
         private _onTouchedBtnSwitchCounterId(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCustomCounterIdPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonChooseCustomCounterIdPanel, {
                 currentCustomCounterIdArray : action.customCounterIdArray ?? [],
                 callbackOnConfirm           : customCounterIdArray => {
                     action.customCounterIdArray = customCounterIdArray;
-                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                    Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -115,13 +115,13 @@ namespace TwnsWeActionModifyPanel2 {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.deltaValue = null;
             } else {
-                const maxValue      = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
+                const maxValue      = Twns.CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
                 action.deltaValue   = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
                 );
             }
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onFocusInInputMultiplierPercentage(): void {
@@ -134,13 +134,13 @@ namespace TwnsWeActionModifyPanel2 {
             if ((rawValue == null) || (isNaN(rawValue))) {
                 action.multiplierPercentage = null;
             } else {
-                const maxValue              = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
+                const maxValue              = Twns.CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
                 action.multiplierPercentage = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
                 );
             }
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -170,11 +170,12 @@ namespace TwnsWeActionModifyPanel2 {
         private _updateLabelDescAndLabelError(): void {
             const openData          = this._getOpenData();
             const action            = openData.action;
-            const errorTip          = WarEventHelper.getErrorTipForAction(openData.fullData, action, openData.war);
+            const war               = openData.war;
+            const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForAction(openData.fullData, action, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
-            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = WarEventHelper.getDescForAction(action) || CommonConstants.ErrorTextForUndefined;
+            labelError.textColor    = errorTip ? Twns.Types.ColorValue.Red : Twns.Types.ColorValue.Green;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelCounterId(): void {
@@ -197,8 +198,8 @@ namespace TwnsWeActionModifyPanel2 {
             this._labelTips.text    = Lang.getFormattedText(LangTextType.F0088, Math.floor(10000 * (action.multiplierPercentage ?? 100) / 100 + (action.deltaValue ?? 0)));
         }
 
-        private _getAction(): ProtoTypes.WarEvent.IWeaSetCustomCounter {
-            return Helpers.getExisted(this._getOpenData().action.WeaSetCustomCounter);
+        private _getAction(): CommonProto.WarEvent.IWeaSetCustomCounter {
+            return Twns.Helpers.getExisted(this._getOpenData().action.WeaSetCustomCounter);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {
             this._imgInnerTouchMask.visible = isEnabled;

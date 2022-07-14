@@ -2,9 +2,9 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
-    <e:Group id="_group" top="40" bottom="0" width="160" x="0">
+    <e:Group id="_group" top="0" bottom="0" width="160" x="0">
         <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
-                             alpha="0.8" left="0" right="0" top="0" bottom="0" />
+                             alpha="0.8" left="0" right="0" top="0" bottom="0" locked="true" />
         <TwnsUiLabel:UiLabel id="_labelMenuTitle" text="菜单" y="10" bold="true" size="20" textColor="0xffffff"
                              horizontalCenter="0" />
         <TwnsUiLabel:UiLabel id="_labelNoCommand" text="(暂无可用选项)" bold="true" size="20" textColor="0xFFFFFF"
@@ -27,9 +27,9 @@
         <TwnsUiButton:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" bottom="0"
                                left="0" right="0"></TwnsUiButton:UiButton>
     </e:Group>
-    <e:Group top="40" bottom="0" right="0" left="160">
+    <e:Group top="0" bottom="0" right="0" left="160">
         <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
-                             alpha="0.8" left="0" right="0" top="0" bottom="0" />
+                             alpha="0.8" left="0" right="0" top="0" bottom="0" locked="true" />
         <e:Scroller left="0" right="0" top="10" bottom="10">
             <e:Group left="0" right="0" y="10">
                 <TwnsUiLabel:UiLabel id="_labelMapInfoTitle" text="地图信息" y="0" bold="true" size="20"
@@ -49,6 +49,15 @@
                                                bottom="0" height="28"
                                                skinName="Skins.Component.Button.ButtonSelfAdaption001" />
                         <TwnsUiLabel:UiLabel id="_labelMapDesigner" text="作者名称" size="16" textColor="0xFFFFFF" x="180"
+                                             verticalCenter="0" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" gap="10" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group id="_groupMapDesc">
+                        <TwnsUiButton:UiButton id="_btnMapDesc" label="修改" x="330" width="160" height="28"
+                                               skinName="Skins.Component.Button.ButtonSelfAdaption001" y="0" />
+                        <TwnsUiLabel:UiLabel id="_labelMapDesc" text="作者名称" size="16" textColor="0xFFFFFF" x="180"
                                              verticalCenter="0" />
                         <e:layout>
                             <e:HorizontalLayout verticalAlign="middle" gap="10" />

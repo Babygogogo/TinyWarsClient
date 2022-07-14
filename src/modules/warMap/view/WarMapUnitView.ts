@@ -11,7 +11,7 @@
 // import UserModel        from "../../user/model/UserModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWarMapUnitView {
+namespace Twns.WarMap {
     const { width: GRID_WIDTH, height: GRID_HEIGHT }    = CommonConstants.GridSize;
     const IMG_UNIT_STATE_WIDTH                          = 10;
     const IMG_UNIT_STATE_HEIGHT                         = 12;
@@ -74,9 +74,10 @@ namespace TwnsWarMapUnitView {
                 return;
             }
 
-            this._imgUnit.source = CommonModel.getCachedUnitImageSource({
-                version     : UserModel.getSelfSettingsTextureVersion(),
-                skinId      : data.skinId || ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data.playerIndex)),
+            this._imgUnit.source = Common.CommonModel.getCachedUnitImageSource({
+                gameConfig  : data.gameConfig,
+                version     : User.UserModel.getSelfSettingsTextureVersion(),
+                skinId      : data.skinId || Config.ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data.playerIndex)),
                 unitType    : Helpers.getExisted(data.unitType),
                 isMoving    : false,
                 isDark      : this._isDark,
@@ -97,10 +98,10 @@ namespace TwnsWarMapUnitView {
             }
 
             const hp            = unitData.currentHp;
-            const normalizedHp  = hp == null ? null : WarCommonHelpers.getNormalizedHp(hp);
+            const normalizedHp  = hp == null ? null : WarHelpers.WarCommonHelpers.getNormalizedHp(hp);
             const imgHp         = this._imgHp;
             if ((normalizedHp == null)                                                      ||
-                (normalizedHp >= WarCommonHelpers.getNormalizedHp(this._getUnitTemplateCfg().maxHp))
+                (normalizedHp >= WarHelpers.WarCommonHelpers.getNormalizedHp(this._getUnitTemplateCfg().maxHp))
             ) {
                 imgHp.visible = false;
             } else {
@@ -231,16 +232,17 @@ namespace TwnsWarMapUnitView {
         }
 
         private _getUnitTemplateCfg(): Types.UnitTemplateCfg {
-            return ConfigManager.getUnitTemplateCfg(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), Helpers.getExisted(this.getUnitData()?.unitType));
+            const data = Helpers.getExisted(this.getUnitData());
+            return Helpers.getExisted(data.gameConfig.getUnitTemplateCfg(Helpers.getExisted(data.unitType)));
         }
         private _getSkinId(): number {
             const data = this.getUnitData();
-            return data?.skinId ?? ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data?.playerIndex));
+            return data?.skinId ?? Config.ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data?.playerIndex));
         }
     }
 
     function getImageSourcePrefix(isDark: boolean): string {
-        return CommonModel.getUnitAndTileTexturePrefix() + (isDark ? `c07` : `c03`);
+        return Common.CommonModel.getUnitAndTileTexturePrefix() + (isDark ? `c07` : `c03`);
     }
 }
 

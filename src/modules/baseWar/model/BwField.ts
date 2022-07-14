@@ -13,15 +13,11 @@
 // import TwnsBwUnitMap            from "./BwUnitMap";
 // import TwnsBwWar                from "./BwWar";
 
-namespace TwnsBwField {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import ISerialField         = ProtoTypes.WarSerialization.ISerialField;
-    import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
-    import BwWar                = TwnsBwWar.BwWar;
-    import BwCursor             = TwnsBwCursor.BwCursor;
-    import BwFogMap             = TwnsBwFogMap.BwFogMap;
-    import BwGridVisualEffect   = TwnsBwGridVisualEffect.BwGridVisualEffect;
-    import BwFieldView          = TwnsBwFieldView.BwFieldView;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.BaseWar {
+    import ISerialField         = CommonProto.WarSerialization.ISerialField;
+    import BwGridVisualEffect   = BaseWar.BwGridVisualEffect;
+    import GameConfig           = Config.GameConfig;
 
     export abstract class BwField {
         private readonly _cursor            = new BwCursor();
@@ -29,21 +25,21 @@ namespace TwnsBwField {
         private readonly _view              = new BwFieldView();
 
         public abstract getFogMap(): BwFogMap;
-        public abstract getTileMap(): TwnsBwTileMap.BwTileMap;
+        public abstract getTileMap(): BwTileMap;
         public abstract getUnitMap(): BwUnitMap;
-        public abstract getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner;
+        public abstract getActionPlanner(): BaseWar.BwActionPlanner;
 
-        public init({ data, configVersion, playersCountUnneutral }: {
+        public init({ data, gameConfig, playersCountUnneutral }: {
             data                    : Types.Undefinable<ISerialField>;
-            configVersion           : string;
+            gameConfig              : GameConfig;
             playersCountUnneutral   : number;
         }): void {
             if (data == null) {
                 throw Helpers.newError(`Empty data.`, ClientErrorCode.BwField_Init_00);
             }
 
-            const mapSize = WarCommonHelpers.getMapSize(data.tileMap);
-            if (!WarCommonHelpers.checkIsValidMapSize(mapSize)) {
+            const mapSize = WarHelpers.WarCommonHelpers.getMapSize(data.tileMap);
+            if (!WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
                 throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwField_Init_01);
             }
 
@@ -56,7 +52,7 @@ namespace TwnsBwField {
             const tileMap = this.getTileMap();
             tileMap.init({
                 data                : data.tileMap,
-                configVersion,
+                gameConfig,
                 mapSize,
                 playersCountUnneutral
             });
@@ -64,7 +60,7 @@ namespace TwnsBwField {
             const unitMap = this.getUnitMap();
             unitMap.init({
                 data                : data.unitMap,
-                configVersion,
+                gameConfig,
                 mapSize,
                 playersCountUnneutral
             });
@@ -85,12 +81,12 @@ namespace TwnsBwField {
             this.getGridVisualEffect().init();
             this.getView().init(this);
         }
-        public fastInit({ data, configVersion, playersCountUnneutral }: {
+        public fastInit({ data, gameConfig, playersCountUnneutral }: {
             data                    : ISerialField;
-            configVersion           : string;
+            gameConfig              : GameConfig;
             playersCountUnneutral   : number;
         }): void {
-            const mapSize = WarCommonHelpers.getMapSize(data.tileMap);
+            const mapSize = WarHelpers.WarCommonHelpers.getMapSize(data.tileMap);
             this.getFogMap().fastInit({
                 data                : data.fogMap,
                 mapSize,
@@ -98,13 +94,13 @@ namespace TwnsBwField {
             });
             this.getTileMap().fastInit({
                 data                : data.tileMap,
-                configVersion,
+                gameConfig,
                 mapSize,
                 playersCountUnneutral,
             });
             this.getUnitMap().fastInit({
                 data                : data.unitMap,
-                configVersion,
+                gameConfig,
                 mapSize,
                 playersCountUnneutral,
             });

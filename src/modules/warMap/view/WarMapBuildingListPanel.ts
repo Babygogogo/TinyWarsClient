@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -14,16 +14,17 @@
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWarMapBuildingListPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.WarMap {
+    import LangTextType     = Lang.LangTextType;
+    import NotifyType       = Notify.NotifyType;
+    import GameConfig       = Config.GameConfig;
 
-    export type OpenData = {
-        configVersion           : string;
-        tileDataArray           : ProtoTypes.WarSerialization.ISerialTile[];
+    export type OpenDataForWarMapBuildingListPanel = {
+        gameConfig              : GameConfig;
+        tileDataArray           : CommonProto.WarSerialization.ISerialTile[];
         playersCountUnneutral   : number;
     };
-    export class WarMapBuildingListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WarMapBuildingListPanel extends TwnsUiPanel.UiPanel<OpenDataForWarMapBuildingListPanel> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _listTile!     : TwnsUiScrollList.UiScrollList<DataForTileRenderer>;
 
@@ -54,10 +55,11 @@ namespace TwnsWarMapBuildingListPanel {
 
         private _updateListTile(): void {
             const openData      = this._getOpenData();
-            const configVersion = openData.configVersion;
+            const gameConfig    = openData.gameConfig;
+            const tileBaseType  = gameConfig.getDefaultTileBaseType();
             const dict          = new Map<number, Map<number, number>>();
             for (const tileData of openData.tileDataArray || []) {
-                const template = ConfigManager.getTileTemplateCfg(configVersion, Types.TileBaseType.Plain, Helpers.getExisted(tileData.objectType));
+                const template = gameConfig.getTileTemplateCfg(Helpers.getExisted(gameConfig.getTileType(tileBaseType, Helpers.getExisted(tileData.objectType))));
                 if ((template) && (template.maxCapturePoint != null)) {
                     const tileType = template.type;
                     if (!dict.has(tileType)) {
@@ -73,10 +75,10 @@ namespace TwnsWarMapBuildingListPanel {
             const dataList: DataForTileRenderer[] = [];
             for (const [tileType, subDict] of dict) {
                 dataList.push({
-                    configVersion,
                     maxPlayerIndex  : openData.playersCountUnneutral,
                     tileType,
                     dict            : subDict,
+                    gameConfig,
                 });
             }
             this._listTile.bindData(dataList);
@@ -84,9 +86,9 @@ namespace TwnsWarMapBuildingListPanel {
     }
 
     type DataForTileRenderer = {
-        configVersion   : string;
+        gameConfig      : GameConfig;
         maxPlayerIndex  : number;
-        tileType        : Types.TileType;
+        tileType        : number;
         dict            : Map<number, number>;
     };
     class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileRenderer> {
@@ -100,7 +102,7 @@ namespace TwnsWarMapBuildingListPanel {
         private readonly _labelNum5!        : TwnsUiLabel.UiLabel;
         private readonly _labelTotalNum!    : TwnsUiLabel.UiLabel;
 
-        private _tileView       = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private _tileView       = new MapEditor.MeTileSimpleView();
         private _labelNumList   : TwnsUiLabel.UiLabel[] = [];
 
         protected _onOpened(): void {
@@ -137,14 +139,15 @@ namespace TwnsWarMapBuildingListPanel {
             const dict              = data.dict;
             const maxPlayerIndex    = data.maxPlayerIndex;
             let totalNum            = 0;
-            for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+            for (let playerIndex = CommonConstants.PlayerIndex.Neutral; playerIndex <= CommonConstants.PlayerIndex.Max; ++playerIndex) {
                 const num                               = dict.get(playerIndex) || 0;
                 totalNum                                += num;
                 this._labelNumList[playerIndex].text    = playerIndex <= maxPlayerIndex ? `${num}` : `--`;
             }
             this._labelTotalNum.text = `${totalNum}`;
 
-            const tileObjectType = ConfigManager.getTileObjectTypeByTileType(data.tileType);
+            const gameConfig        = data.gameConfig;
+            const tileObjectType    = gameConfig.getTileObjectTypeByTileType(data.tileType);
             this._tileView.init({
                 tileBaseType        : null,
                 tileBaseShapeId     : null,
@@ -152,9 +155,8 @@ namespace TwnsWarMapBuildingListPanel {
                 tileDecoratorShapeId: null,
                 tileObjectType      : tileObjectType,
                 tileObjectShapeId   : 0,
-                playerIndex         : tileObjectType === Types.TileObjectType.Headquarters
-                    ? CommonConstants.WarFirstPlayerIndex
-                    : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : CommonConstants.PlayerIndex.Neutral,
+                gameConfig,
             });
             this._tileView.updateView();
         }

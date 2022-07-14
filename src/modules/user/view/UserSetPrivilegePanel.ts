@@ -5,7 +5,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
@@ -15,14 +15,14 @@
 // import UserProxy            from "../../user/model/UserProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserSetPrivilegePanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.User {
+    import LangTextType     = Lang.LangTextType;
+    import NotifyType       = Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForUserSetPrivilegePanel = {
         userId  : number;
     };
-    export class UserSetPrivilegePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class UserSetPrivilegePanel extends TwnsUiPanel.UiPanel<OpenDataForUserSetPrivilegePanel> {
         private readonly _btnGetInfo!               : TwnsUiButton.UiButton;
         private readonly _inputUserId!              : TwnsUiTextInput.UiTextInput;
         private readonly _labelUserName!            : TwnsUiLabel.UiLabel;
@@ -53,7 +53,7 @@ namespace TwnsUserSetPrivilegePanel {
         protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.MsgUserGetPublicInfo,   callback: this._onNotifyMsgUserGetPublicInfo },
-                { type: NotifyType.MsgUserSetPrivilege,    callback: this._onNotifyMsgUserSetPrivilege },
+                { type: NotifyType.MsgGmSetUserPrivilege,    callback: this._onNotifyMsgUserSetPrivilege },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnGetInfo,             callback: this._onTouchedBtnGetInfo },
@@ -72,14 +72,14 @@ namespace TwnsUserSetPrivilegePanel {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             const userId = this._getOpenData().userId;
             this._inputUserId.text = `${userId}`;
-            UserProxy.reqUserGetPublicInfo(userId);
+            User.UserProxy.reqUserGetPublicInfo(userId);
         }
         protected _onClosing(): void {
             // nothing to do
         }
 
         private _onNotifyMsgUserGetPublicInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgUserGetPublicInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgUserGetPublicInfo.IS;
             if (data.userId === this._getUserId()) {
                 const userPublicInfo                = Helpers.getExisted(data.userPublicInfo);
                 const userPrivilege                 = Helpers.getExisted(userPublicInfo.userPrivilege);
@@ -100,13 +100,13 @@ namespace TwnsUserSetPrivilegePanel {
 
         private _onTouchedBtnGetInfo(): void {
             const userId = this._getUserId();
-            (userId) && (UserProxy.reqUserGetPublicInfo(userId));
+            (userId) && (User.UserProxy.reqUserGetPublicInfo(userId));
         }
 
         private _onTouchedBtnConfirm(): void {
             const userId = this._getUserId();
             if (userId) {
-                UserProxy.reqUserSetPrivilege(userId, {
+                Gm.GmProxy.reqGmSetUserPrivilege(userId, {
                     canChat             : !!this._imgCanChat.visible,
                     canLogin            : !!this._imgCanLogin.visible,
                     isAdmin             : !!this._imgIsAdmin.visible,

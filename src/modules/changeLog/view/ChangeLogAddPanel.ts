@@ -6,7 +6,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -14,13 +14,13 @@
 // import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsChangeLogAddPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+namespace Twns.ChangeLog {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
+    import ILanguageText    = CommonProto.Structure.ILanguageText;
 
-    export type OpenData = void;
-    export class ChangeLogAddPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForChangeLogAddPanel = void;
+    export class ChangeLogAddPanel extends TwnsUiPanel.UiPanel<OpenDataForChangeLogAddPanel> {
         private readonly _inputChinese! : TwnsUiTextInput.UiTextInput;
         private readonly _inputEnglish! : TwnsUiTextInput.UiTextInput;
         private readonly _labelTip!     : TwnsUiLabel.UiLabel;
@@ -41,8 +41,8 @@ namespace TwnsChangeLogAddPanel {
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
 
-            this._inputChinese.maxChars = CommonConstants.ChangeLogTextMaxLength;
-            this._inputEnglish.maxChars = CommonConstants.ChangeLogTextMaxLength;
+            this._inputChinese.maxChars = Twns.CommonConstants.ChangeLogTextMaxLength;
+            this._inputEnglish.maxChars = Twns.CommonConstants.ChangeLogTextMaxLength;
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -59,15 +59,15 @@ namespace TwnsChangeLogAddPanel {
             const chineseText   = this._inputChinese.text || ``;
             const englishText   = this._inputEnglish.text || ``;
             const textList      : ILanguageText[] = [
-                { languageType: Types.LanguageType.Chinese, text: chineseText || englishText },
-                { languageType: Types.LanguageType.English, text: englishText || chineseText },
+                { languageType: Twns.Types.LanguageType.Chinese, text: chineseText || englishText },
+                { languageType: Twns.Types.LanguageType.English, text: englishText || chineseText },
             ];
-            if (textList.every(v => Helpers.getExisted(v.text).length <= 0)) {
-                FloatText.show(Lang.getText(LangTextType.A0155));
-            } else if (textList.some(v => Helpers.getExisted(v.text).length > CommonConstants.ChangeLogTextMaxLength)) {
-                FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.ChangeLogTextMaxLength));
+            if (textList.every(v => Twns.Helpers.getExisted(v.text).length <= 0)) {
+                Twns.FloatText.show(Lang.getText(LangTextType.A0155));
+            } else if (textList.some(v => Twns.Helpers.getExisted(v.text).length > Twns.CommonConstants.ChangeLogTextMaxLength)) {
+                Twns.FloatText.show(Lang.getFormattedText(LangTextType.F0034, Twns.CommonConstants.ChangeLogTextMaxLength));
             } else {
-                ChangeLogProxy.reqChangeLogAddMessage(textList);
+                Twns.ChangeLog.ChangeLogProxy.reqChangeLogAddMessage(textList);
                 this.close();
             }
         }

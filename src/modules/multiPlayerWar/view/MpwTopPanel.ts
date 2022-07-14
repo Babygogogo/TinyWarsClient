@@ -13,7 +13,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -29,9 +29,9 @@
 // import TwnsMpwWarMenuPanel      from "./MpwWarMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMpwTopPanel {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.MultiPlayerWar {
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
 
     // eslint-disable-next-line no-shadow
     enum PanelSkinState {
@@ -39,12 +39,17 @@ namespace TwnsMpwTopPanel {
         Expanded,
     }
 
-    export type OpenData = {
-        war     : TwnsMpwWar.MpwWar;
+    export type OpenDataForMpwTopPanel = {
+        war     : MultiPlayerWar.MpwWar;
     };
-    export class MpwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MpwTopPanel extends TwnsUiPanel.UiPanel<OpenDataForMpwTopPanel> {
         private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForListPlayer>;
-        private readonly _labelWeather!         : TwnsUiLabel.UiLabel;
+
+        private readonly _groupVisionTeam!      : eui.Group;
+        private readonly _labelVisionTeamTitle! : TwnsUiLabel.UiLabel;
+        private readonly _labelVisionTeam!      : TwnsUiLabel.UiLabel;
+
+        private readonly _btnWeather!           : TwnsUiButton.UiButton;
         private readonly _groupTimer!           : eui.Group;
         private readonly _labelTimer!           : TwnsUiLabel.UiLabel;
         private readonly _btnChat!              : TwnsUiButton.UiButton;
@@ -86,7 +91,8 @@ namespace TwnsMpwTopPanel {
                 { type: NotifyType.MsgUserGetOnlineState,           callback: this._onNotifyMsgUserGetOnlineState },
             ]);
             this._setUiListenerArray([
-                { ui: this._labelWeather,       callback: this._onTouchedLabelWeather },
+                { ui: this._groupVisionTeam,    callback: this._onTouchedGroupVisionTeam },
+                { ui: this._btnWeather,         callback: this._onTouchedBtnWeather },
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
                 { ui: this._groupCo,            callback: this._onTouchedGroupCo },
                 { ui: this._groupInfo,          callback: this._onTouchedGroupInfo },
@@ -95,7 +101,6 @@ namespace TwnsMpwTopPanel {
                 { ui: this._btnExpand,          callback: this._onTouchedBtnExpand },
                 { ui: this._btnNarrow,          callback: this._onTouchedBtnNarrow },
             ]);
-            this._labelWeather.touchEnabled = true;
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
@@ -118,15 +123,15 @@ namespace TwnsMpwTopPanel {
 
             const war = this._getOpenData().war;
             if ((!war.getIsExecutingAction()) && (war.checkIsBoot())) {
-                MpwProxy.reqMpwCommonHandleBoot(Helpers.getExisted(war.getWarId()));
+                MultiPlayerWar.MpwProxy.reqMpwCommonHandleBoot(Helpers.getExisted(war.getWarId()));
             }
 
             const userId = war.getPlayerInTurn().getUserId();
             if ((userId != null)                        &&
-                (userId !== UserModel.getSelfUserId())  &&
+                (userId !== User.UserModel.getSelfUserId())  &&
                 (Timer.getServerTimestamp() % 60 == 0)
             ) {
-                UserProxy.reqUserGetOnlineState(userId);
+                User.UserProxy.reqUserGetOnlineState(userId);
             }
         }
         private _onNotifyBwPlayerFundChanged(): void {
@@ -141,8 +146,8 @@ namespace TwnsMpwTopPanel {
             SoundManager.playCoBgmWithWar(war, false);
 
             const userId = war.getPlayerInTurn().getUserId();
-            if ((userId != null) && (userId !== UserModel.getSelfUserId())) {
-                UserProxy.reqUserGetOnlineState(userId);
+            if ((userId != null) && (userId !== User.UserModel.getSelfUserId())) {
+                User.UserProxy.reqUserGetOnlineState(userId);
             }
         }
         private _onNotifyBwCoEnergyChanged(): void {
@@ -156,7 +161,7 @@ namespace TwnsMpwTopPanel {
             this._updateLabelFundAndAddFund();
         }
         private _onNotifyBwForceWeatherTypeChanged(): void {
-            this._updateLabelWeather();
+            this._updateBtnWeather();
         }
 
         private _onNotifyMsgChatGetAllReadProgressList(): void {
@@ -172,7 +177,7 @@ namespace TwnsMpwTopPanel {
             this._updateBtnChat();
         }
         private _onNotifyMsgUserGetOnlineState(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgUserGetOnlineState.IS;
+            const data = e.data as CommonProto.NetMessage.MsgUserGetOnlineState.IS;
             if (data.userId === this._getOpenData().war.getPlayerInTurn().getUserId()) {
                 this._updateLabelPlayerState();
             }
@@ -181,21 +186,30 @@ namespace TwnsMpwTopPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks for touch.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedLabelWeather(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+        private _onTouchedGroupVisionTeam(): void {
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+
+            const war = this._getOpenData().war;
+            war.tickVisionTeamIndex();
+            war.updateTilesAndUnitsOnVisibilityChanged(false);
+
+            this._updateGroupVisionTeam();
+        }
+
+        private _onTouchedBtnWeather(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
                 title  : Lang.getText(LangTextType.B0705),
                 content: this._getOpenData().war.getWeatherManager().getDesc(),
             });
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onTouchedGroupPlayer(): void {
             const userId = this._getOpenData().war.getPlayerInTurn().getUserId();
             if (userId != null) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
+                PanelHelpers.open(PanelHelpers.PanelDict.UserPanel, { userId });
 
-                if (userId !== UserModel.getSelfUserId()) {
-                    UserProxy.reqUserGetOnlineState(userId);
+                if (userId !== User.UserModel.getSelfUserId()) {
+                    User.UserProxy.reqUserGetOnlineState(userId);
                 }
 
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -203,28 +217,28 @@ namespace TwnsMpwTopPanel {
         }
 
         private _onTouchedGroupCo(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonCoListPanel, {
                 war : this._getOpenData().war,
             });
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.MpwWarMenuPanel);
+            PanelHelpers.close(PanelHelpers.PanelDict.MpwWarMenuPanel);
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onTouchedGroupInfo(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonCoListPanel, {
                 war : this._getOpenData().war,
             });
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.MpwWarMenuPanel);
+            PanelHelpers.close(PanelHelpers.PanelDict.MpwWarMenuPanel);
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onTouchedBtnChat(): void {
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.MpwWarMenuPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {});
+            PanelHelpers.close(PanelHelpers.PanelDict.MpwWarMenuPanel);
+            PanelHelpers.open(PanelHelpers.PanelDict.ChatPanel, {});
         }
 
         private _onTouchedBtnSettings(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSettingsPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.UserSettingsPanel, void 0);
         }
 
         private _onTouchedBtnExpand(): void {
@@ -240,12 +254,13 @@ namespace TwnsMpwTopPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateComponentsForLanguage();
+
             this._updateListPlayer();
             this._updateImgSkinAndCo();
             this._updateLabelPlayerState();
             this._updateLabelPlayer();
             this._updateLabelTurnIndex();
-            this._updateLabelWeather();
+            this._updateBtnWeather();
             this._updateGroupTimer();
             this._updateLabelFundAndAddFund();
             this._updateLabelEnergy();
@@ -253,7 +268,7 @@ namespace TwnsMpwTopPanel {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._updateLabelWeather();
+            this._updateGroupVisionTeam();
             this._updateLabelPlayerState();
             this._updateLabelTurnIndex();
         }
@@ -265,11 +280,11 @@ namespace TwnsMpwTopPanel {
         private async _updateLabelPlayerState(): Promise<void> {
             const userId    = this._getOpenData().war.getPlayerInTurn().getUserId();
             const label     = this._labelPlayerState;
-            if ((userId == null) || (userId === UserModel.getSelfUserId())) {
+            if ((userId == null) || (userId === User.UserModel.getSelfUserId())) {
                 label.text      = Lang.getText(LangTextType.B0676);
                 label.textColor = Types.ColorValue.Green;
             } else {
-                const userPublicInfo = await UserModel.getUserPublicInfo(userId);
+                const userPublicInfo = await User.UserModel.getUserPublicInfo(userId);
                 if ((userPublicInfo == null) || (!userPublicInfo.isOnline)) {
                     label.text      = Lang.getText(LangTextType.B0677);
                     label.textColor = Types.ColorValue.Red;
@@ -289,8 +304,25 @@ namespace TwnsMpwTopPanel {
             this._labelTurnIndex.text = `${Lang.getText(LangTextType.B0191)} ${this._getOpenData().war.getTurnManager().getTurnIndex()}`;
         }
 
-        private _updateLabelWeather(): void {
-            this._labelWeather.text = Lang.getWeatherName(this._getOpenData().war.getWeatherManager().getCurrentWeatherType());
+        private _updateGroupVisionTeam(): void {
+            const war   = this._getOpenData().war;
+            const group = this._groupVisionTeam;
+            if (!war.checkCanTickVisionTeamIndex()) {
+                group.visible = false;
+            } else {
+                group.visible = true;
+
+                const teamIndex                 = war.getVisionTeamIndex();
+                this._labelVisionTeamTitle.text = Lang.getText(LangTextType.B0891);
+                this._labelVisionTeam.text      = teamIndex == null
+                    ? Lang.getText(LangTextType.B0890)
+                    : (Lang.getPlayerTeamName(teamIndex) ?? CommonConstants.ErrorTextForUndefined);
+            }
+        }
+
+        private _updateBtnWeather(): void {
+            const war               = this._getOpenData().war;
+            this._btnWeather.icon   = war.getGameConfig().getWeatherCfg(war.getWeatherManager().getCurrentWeatherType())?.icon ?? ``;
         }
 
         private _updateGroupTimer(): void {
@@ -316,7 +348,7 @@ namespace TwnsMpwTopPanel {
             const labelFund     = this._labelFund;
             const labelAddFund  = this._labelAddFund;
             if ((war.getFogMap().checkHasFogCurrently())                                                        &&
-                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
+                (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
             ) {
                 labelFund.text      = `????`;
                 labelAddFund.text   = `(+??)`;
@@ -329,8 +361,8 @@ namespace TwnsMpwTopPanel {
         private _updateImgSkinAndCo(): void {
             const war               = this._getOpenData().war;
             const player            = war.getPlayerInTurn();
-            this._imgSkin.source    = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
-            this._imgCo.source      = ConfigManager.getCoEyeImageSource(war.getConfigVersion(), player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
+            this._imgSkin.source    = WarHelpers.WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
+            this._imgCo.source      = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelEnergy(): void {
@@ -358,7 +390,7 @@ namespace TwnsMpwTopPanel {
         }
 
         private _updateBtnChat(): void {
-            this._btnChat.setRedVisible(ChatModel.checkHasUnreadMessage());
+            this._btnChat.setRedVisible(Chat.ChatModel.checkHasUnreadMessage());
         }
 
         private _setPanelSkinState(state: PanelSkinState): void {
@@ -377,7 +409,7 @@ namespace TwnsMpwTopPanel {
                     playerIndex,
                 });
             }
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex < playerIndexInTurn; ++playerIndex) {
+            for (let playerIndex = CommonConstants.PlayerIndex.First; playerIndex < playerIndexInTurn; ++playerIndex) {
                 dataArray.push({
                     war,
                     playerIndex,
@@ -388,7 +420,7 @@ namespace TwnsMpwTopPanel {
     }
 
     type DataForListPlayer = {
-        war         : TwnsMpwWar.MpwWar
+        war         : MultiPlayerWar.MpwWar
         playerIndex : number;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForListPlayer> {
@@ -414,8 +446,8 @@ namespace TwnsMpwTopPanel {
             const data              = this._getData();
             const war               = data.war;
             const player            = war.getPlayer(data.playerIndex);
-            this._imgSkin.source    = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
-            this._imgCo.source      = ConfigManager.getCoEyeImageSource(war.getConfigVersion(), player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
+            this._imgSkin.source    = WarHelpers.WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
+            this._imgCo.source      = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
             this._updateImgOnlineState();
             this._updateLabelFundAndAddFund();
             this._updateLabelEnergy();
@@ -430,15 +462,15 @@ namespace TwnsMpwTopPanel {
             const war       = data.war;
             const userId    = war.getPlayer(data.playerIndex).getUserId();
             if ((userId != null)                        &&
-                (userId !== UserModel.getSelfUserId())  &&
+                (userId !== User.UserModel.getSelfUserId())  &&
                 (Timer.getServerTimestamp() % 60 == 0)
             ) {
-                UserProxy.reqUserGetOnlineState(userId);
+                User.UserProxy.reqUserGetOnlineState(userId);
             }
         }
 
         private _onNotifyBwPlayerFundChanged(e: egret.Event): void {
-            const eventData = e.data as NotifyData.BwPlayerFundChanged;
+            const eventData = e.data as Notify.NotifyData.BwPlayerFundChanged;
             const data      = this._getData();
             if (eventData === data.war.getPlayer(data.playerIndex)) {
                 this._updateLabelFundAndAddFund();
@@ -461,10 +493,10 @@ namespace TwnsMpwTopPanel {
             const data      = this._getData();
             const userId    = data.war.getPlayer(data.playerIndex).getUserId();
             if (userId != null) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
+                PanelHelpers.open(PanelHelpers.PanelDict.UserPanel, { userId });
 
-                if (userId !== UserModel.getSelfUserId()) {
-                    UserProxy.reqUserGetOnlineState(userId);
+                if (userId !== User.UserModel.getSelfUserId()) {
+                    User.UserProxy.reqUserGetOnlineState(userId);
                 }
             }
         }
@@ -473,10 +505,10 @@ namespace TwnsMpwTopPanel {
             const data      = this._getData();
             const userId    = data.war.getPlayer(data.playerIndex).getUserId();
             const img       = this._imgOnlineState;
-            if ((userId == null) || (userId === UserModel.getSelfUserId())) {
+            if ((userId == null) || (userId === User.UserModel.getSelfUserId())) {
                 img.source = `uncompressedColorGreen0000`;
             } else {
-                const userPublicInfo = await UserModel.getUserPublicInfo(userId);
+                const userPublicInfo = await User.UserModel.getUserPublicInfo(userId);
                 if ((userPublicInfo == null) || (!userPublicInfo.isOnline)) {
                     img.source = `uncompressedColorRed0000`;
                 } else {
@@ -492,7 +524,7 @@ namespace TwnsMpwTopPanel {
             const labelFund     = this._labelFund;
             const labelAddFund  = this._labelAddFund;
             if ((war.getFogMap().checkHasFogCurrently())                                                &&
-                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(player.getTeamIndex()))
+                (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(player.getTeamIndex()))
             ) {
                 labelFund.text      = `????`;
                 labelAddFund.text   = `(+??)`;

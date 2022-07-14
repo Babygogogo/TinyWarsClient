@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
@@ -16,8 +16,8 @@
 // import TwnsBwTileView           from "./BwTileView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwTileBriefPanel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.BaseWar {
+    import NotifyType           = Notify.NotifyType;
 
     const _IMAGE_SOURCE_HP      = `c04_t10_s00_f00`;
     const _IMAGE_SOURCE_CAPTURE = `c04_t10_s04_f00`;
@@ -27,13 +27,13 @@ namespace TwnsBwTileBriefPanel {
     // const _IMAGE_SOURCE_BUILD   = `c04_t10_s05_f00`;
     // const _CELL_WIDTH           = 80;
 
-    export type OpenData = {
-        war : TwnsBwWar.BwWar;
+    export type OpenDataForBwTileBriefPanel = {
+        war : BaseWar.BwWar;
     };
-    export class BwTileBriefPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwTileBriefPanel extends TwnsUiPanel.UiPanel<OpenDataForBwTileBriefPanel> {
         private readonly _group!            : eui.Group;
         private readonly _conTileView!      : eui.Group;
-        private readonly _tileView          = new TwnsBwTileView.BwTileView();
+        private readonly _tileView          = new BaseWar.BwTileView();
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
         private readonly _labelGridIndex!   : TwnsUiLabel.UiLabel;
         private readonly _labelState!       : TwnsUiLabel.UiLabel;
@@ -79,7 +79,7 @@ namespace TwnsBwTileBriefPanel {
         //     this._adjustPositionOnTouch(e.data);
         // }
         private _onNotifyBwCursorGridIndexChanged(e: egret.Event): void {
-            const data  = e.data as NotifyData.BwCursorGridIndexChanged;
+            const data  = e.data as Notify.NotifyData.BwCursorGridIndexChanged;
             const war   = this._getOpenData().war;
             if ((war.getIsRunning()) && (data === war.getCursor())) {
                 this._updateView();
@@ -94,7 +94,7 @@ namespace TwnsBwTileBriefPanel {
             }
         }
         private _onNotifyMeTileChanged(e: egret.Event): void {
-            const data  = e.data as NotifyData.MeTileChanged;
+            const data  = e.data as Notify.NotifyData.MeTileChanged;
             const war   = this._getOpenData().war;
             if ((war.getIsRunning()) && (GridIndexHelpers.checkIsEqual(data.gridIndex, war.getCursor().getGridIndex()))) {
                 this._updateView();
@@ -108,9 +108,68 @@ namespace TwnsBwTileBriefPanel {
         }
 
         private _onTouchedThis(): void {
-            const war   = this._getOpenData().war;
-            const tile  = war.getTileMap().getTile(war.getCursor().getGridIndex());
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileDetailPanel, { tile });
+            const war                   = this._getOpenData().war;
+            const gridIndex             = war.getCursor().getGridIndex();
+            const tileMap               = war.getTileMap();
+            const tile                  = tileMap.getTile(gridIndex);
+            const warType               = war.getWarType();
+            const gridId                = GridIndexHelpers.getGridId(gridIndex, tileMap.getMapSize());
+            const callbackForMarkTile   = getCallbackForMarkTile(war, gridId);
+            const callbackForUnmarkTile = getCallbackForUnmarkTile(war, gridId);
+
+            if ((warType === Types.WarType.Me)                              ||
+                (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(warType))  ||
+                (tile.getMaxHp() != null)
+            ) {
+                PanelHelpers.open(PanelHelpers.PanelDict.BwTileDetailPanel, {
+                    tile,
+                    callbackForAddUnit  : null,
+                    callbackForMarkTile,
+                    callbackForUnmarkTile,
+                });
+            } else {
+                const playerIndexAndSkinIdArray = war.getPlayerManager().getAllPlayers()
+                    .filter(v => v.getPlayerIndex() !== CommonConstants.PlayerIndex.Neutral)
+                    .map(v => ({ playerIndex: v.getPlayerIndex(), skinId: v.getUnitAndTileSkinId()}))
+                    .sort((v1, v2) => v1.playerIndex - v2.playerIndex);
+                const skinIdArray               = playerIndexAndSkinIdArray.map(v => v.skinId);
+
+                PanelHelpers.open(PanelHelpers.PanelDict.BwTileDetailPanel, {
+                    tile,
+                    callbackForAddUnit: () => {
+                        const gameConfig = war.getGameConfig();
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseUnitAndSkinPanel, {
+                            gameConfig,
+                            unitTypeArray   : gameConfig.getAllUnitTypeArray(),
+                            skinIdArray,
+                            callback        : (unitType, skinId) => {
+                                const unitMap = war.getUnitMap();
+                                if (unitMap.getUnitOnMap(gridIndex)) {
+                                    WarHelpers.WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, false);
+                                }
+
+                                const unitId    = unitMap.getNextUnitId();
+                                const unit      = new BwUnit();
+                                unit.init({
+                                    gridIndex,
+                                    playerIndex     : playerIndexAndSkinIdArray.find(v => v.skinId === skinId)?.playerIndex,
+                                    unitType,
+                                    unitId          : unitId,
+                                }, gameConfig);
+                                unit.startRunning(war);
+                                unit.startRunningView();
+                                unitMap.setUnitOnMap(unit);
+                                unitMap.setNextUnitId(unitId + 1);
+                                war.updateTilesAndUnitsOnVisibilityChanged(false);
+                                Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as Notify.NotifyData.BwUnitChanged);
+                            },
+                        });
+                    },
+                    callbackForMarkTile,
+                    callbackForUnmarkTile,
+                });
+            }
+
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
@@ -123,7 +182,7 @@ namespace TwnsBwTileBriefPanel {
             const tile                  = war.getTileMap().getTile(gridIndex);
             this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
             this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;
-            this._labelName.text        = Lang.getTileName(tile.getType()) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = Lang.getTileName(tile.getType(), war.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined;
             this._updateTileView();
 
             if (tile.getCurrentHp() != null) {
@@ -152,6 +211,7 @@ namespace TwnsBwTileBriefPanel {
             const tile      = war.getTileMap().getTile(war.getCursor().getGridIndex());
             const tileView  = this._tileView;
             tileView.setData({
+                gameConfig  : tile.getGameConfig(),
                 tileData    : tile.serialize(),
                 hasFog      : tile.getHasFog(),
                 skinId      : tile.getSkinId(),
@@ -205,6 +265,57 @@ namespace TwnsBwTileBriefPanel {
             });
 
             await Helpers.wait(50);
+        }
+    }
+
+    function getCallbackForMarkTile(war: BwWar, gridId: number): (() => void) | null {
+        if (war instanceof MultiPlayerWar.MpwWar) {
+            const player = war.getPlayerLoggedIn();
+            if (player == null) {
+                return null;
+            }
+            if (player.checkHasMarkedGridId(gridId)) {
+                return null;
+            }
+
+            return () => {
+                MultiPlayerWar.MpwProxy.reqMpwCommonMarkTile(Helpers.getExisted(war.getWarId()), gridId, true);
+            };
+
+        } else {
+            const player = war.getPlayer(CommonConstants.PlayerIndex.Neutral);
+            if (player.checkHasMarkedGridId(gridId)) {
+                return null;
+            }
+
+            return () => {
+                player.addMarkedGridId(gridId);
+            };
+        }
+    }
+    function getCallbackForUnmarkTile(war: BwWar, gridId: number): (() => void) | null {
+        if (war instanceof MultiPlayerWar.MpwWar) {
+            const player = war.getPlayerLoggedIn();
+            if (player == null) {
+                return null;
+            }
+            if (!player.checkHasMarkedGridId(gridId)) {
+                return null;
+            }
+
+            return () => {
+                MultiPlayerWar.MpwProxy.reqMpwCommonMarkTile(Helpers.getExisted(war.getWarId()), gridId, false);
+            };
+
+        } else {
+            const player = war.getPlayer(CommonConstants.PlayerIndex.Neutral);
+            if (!player.checkHasMarkedGridId(gridId)) {
+                return null;
+            }
+
+            return () => {
+                player.deleteMarkedGridId(gridId);
+            };
         }
     }
 }

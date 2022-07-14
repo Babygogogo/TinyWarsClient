@@ -2,9 +2,7 @@
 // import TwnsLangTextType     from "./LangTextType";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsLangCommonText {
-    import LangTextType = TwnsLangTextType.LangTextType;
-
+namespace Twns.Lang {
     export const LangCommonText: { [type: number]: string [] } = {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Long strings.
@@ -63,15 +61,15 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0013]: [
             "发生网络错误，请重新登陆。",
-            "Network went wrong. Please re-login.",
+            "Connection failed. Please re-login.",
         ],
         [LangTextType.A0014]: [
             "发生网络错误，请稍后再试。亦可尝试刷新浏览器。",
-            "Network went wrong. Please try again later or refresh the browser.",
+            "Connection failed. Please try again later or refresh the browser.",
         ],
         [LangTextType.A0015]: [
-            "已成功创建战局，请等待其他玩家加入",
-            "The war is created successfully.",
+            "已成功创建房间，请等待其他玩家加入",
+            "The room has been created successfully. Please wait for other players to join.",
         ],
         [LangTextType.A0016]: [
             "已成功退出房间",
@@ -107,15 +105,15 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0024]: [
             `您确定要结束回合吗？`,
-            `Are you sure to end your turn?`,
+            `Are you sure you want to end your turn?`,
         ],
         [LangTextType.A0025]: [
             `您确定要返回大厅吗？`,
-            `Are you sure to go to the lobby?`,
+            `Are you sure you want to go to the lobby?`,
         ],
         [LangTextType.A0026]: [
             `您确定要投降吗？`,
-            `Are you sure to resign?`,
+            `Are you sure you want to resign?`,
         ],
         [LangTextType.A0027]: [
             `请先选中您想要删除的部队，再进行此操作`,
@@ -127,7 +125,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0029]: [
             `是否确定要删除此部队？`,
-            `Are you sure to delete the selected unit?`,
+            `Are you sure you want to delete the selected unit?`,
         ],
         [LangTextType.A0030]: [
             `所有玩家都已同意和局，战局结束！\n即将回到大厅...`,
@@ -135,15 +133,15 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0031]: [
             `您确定要求和吗？`,
-            `Are you sure to request a drawn game?`,
+            `Are you sure you want to request a drawn game?`,
         ],
         [LangTextType.A0032]: [
             `您确定要同意和局吗？`,
-            `Are you sure to agree the request from your opponent for a drawn game?`,
+            `Are you sure you want to agree the request from your opponent for a drawn game?`,
         ],
         [LangTextType.A0033]: [
             `您确定要拒绝和局吗？`,
-            `Are you sure to decline the request from your opponent for a drawn game?`,
+            `Are you sure you want to decline the request from your opponent for a drawn game?`,
         ],
         [LangTextType.A0034]: [
             `已有玩家求和，请先决定是否同意（通过菜单选项操作）`,
@@ -206,8 +204,8 @@ namespace TwnsLangCommonText {
             `Invalid discord ID.`,
         ],
         [LangTextType.A0049]: [
-            `Discord ID 已更改`,
-            `Your discord ID is changed successfully`,
+            `Discord相关设置已更改`,
+            `Your discord settings are changed successfully.`,
         ],
         [LangTextType.A0050]: [
             `您尚未选择任何CO。`,
@@ -215,11 +213,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0051]: [
             `是否确定要创建战局？`,
-            `Are you sure to create the game?`,
+            `Are you sure you want to create the game?`,
         ],
         [LangTextType.A0052]: [
             `是否确定要加入战局？`,
-            `Are you sure to join the game?`,
+            `Are you sure you want to join the game?`,
         ],
         [LangTextType.A0053]: [
             `该功能正在开发中，敬请期待`,
@@ -227,11 +225,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0054]: [
             `您确定要发动CO POWER吗？`,
-            `Are you sure to activate the CO POWER?`,
+            `Are you sure you want to activate the CO POWER?`,
         ],
         [LangTextType.A0055]: [
             `当前有其他操作可选。您确定要直接待机吗？`,
-            `Another action is available. Are you sure to make the unit wait?`,
+            `Another action is available. Are you sure you want to make the unit wait?`,
         ],
         [LangTextType.A0056]: [
             `未知错误，请拖动截图发给作者，谢谢`,
@@ -239,11 +237,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0057]: [
             `禁用此项会清空您当前选择的CO（您可以重新选择一个）。确定要禁用吗？`,
-            `You have chosen a CO that is banned by your current selection. Are you sure to continue the ban?`,
+            `You have chosen a CO that is banned by your current selection. Are you sure you want to continue the ban?`,
         ],
         [LangTextType.A0058]: [
             `您确定要发动SUPER POWER吗？`,
-            `Are you sure to activate the SUPER POWER?`,
+            `Are you sure you want to activate the SUPER POWER?`,
         ],
         [LangTextType.A0059]: [
             `已成功修改地图可用性`,
@@ -299,15 +297,15 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0070]: [
             `您选择的存档位置非空，其内容将被覆盖。确定要继续创建战局吗？`,
-            `The save slot is not empty and will be overwritten. Are you sure to create the game?`,
+            `The save slot is not empty and will be overwritten. Are you sure you want to create the game?`,
         ],
         [LangTextType.A0071]: [
             `您的存档将被覆盖。确定要存档吗？`,
-            `Your save slot will be overwritten. Are you sure to continue?`,
+            `Your save slot will be overwritten. Are you sure you want to continue?`,
         ],
         [LangTextType.A0072]: [
             `您当前的进度将会丢失。确定要读档吗？`,
-            `Your current progress will be lost. Are you sure to continue?`,
+            `Your current progress will be lost. Are you sure you want to continue?`,
         ],
         [LangTextType.A0073]: [
             `已成功存档`,
@@ -315,7 +313,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0074]: [
             `确定要重新载入所有地图吗？`,
-            `Are you sure to reload all maps?`,
+            `Are you sure you want to reload all maps?`,
         ],
         [LangTextType.A0075]: [
             `地图重载成功`,
@@ -367,7 +365,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0082]: [
             `确定要保存此地图吗？`,
-            `Are you sure to save the map?`,
+            `Are you sure you want to save the map?`,
         ],
         [LangTextType.A0083]: [
             `此地图存在以下问题，暂不能提审，但可以正常保存以备后续编辑。`,
@@ -375,7 +373,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0084]: [
             `您已提审过其他地图。若提审此地图，则其他地图将被自动撤销提审。确定要继续吗？`,
-            `You have submitted some other maps for review. If you submit this map, the submitted maps will not be reviewed. Are you sure to continue?`,
+            `You have submitted some other maps for review. If you submit this map, the submitted maps will not be reviewed. Are you sure you want to continue?`,
         ],
         [LangTextType.A0085]: [
             `已成功保存地图`,
@@ -395,15 +393,15 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0089]: [
             `您确定要填充整个地图吗？`,
-            `Are you sure to fill the map?`,
+            `Are you sure you want to fill the map?`,
         ],
         [LangTextType.A0090]: [
             `您确定要让过审此地图吗？`,
-            `Are you sure to accept the map?`,
+            `Are you sure you want to accept the map?`,
         ],
         [LangTextType.A0091]: [
             `您确定要拒审此地图吗？`,
-            `Are you sure to reject the map?`,
+            `Are you sure you want to reject the map?`,
         ],
         [LangTextType.A0092]: [
             `您已成功过审该地图。`,
@@ -419,7 +417,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0095]: [
             `您确定要导入此地图吗？`,
-            `Are you sure to import this map?`,
+            `Are you sure you want to import this map?`,
         ],
         [LangTextType.A0096]: [
             `至少需要保留一个预设规则`,
@@ -427,7 +425,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0097]: [
             `确定要删除这个预设规则吗？`,
-            `Are you sure to delete this preset rule?`,
+            `Are you sure you want to delete this preset rule?`,
         ],
         [LangTextType.A0098]: [
             `输入的值无效，请重试`,
@@ -447,7 +445,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0102]: [
             `这是一局自定义规则的游戏，请确保您已经理解了所有的规则设定。\n确定要加入这局游戏吗？`,
-            `Please make sure that you have recognized all the custom rules before joining this game.\nAre you sure to continue?`,
+            `Please make sure that you have recognized all the custom rules before joining this game.\nAre you sure you want to continue?`,
         ],
         [LangTextType.A0103]: [
             `有玩家正在进行操作，请等待该操作结束后重试`,
@@ -471,7 +469,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0108]: [
             `开启作弊模式后，您可以随意修改战局上的各种数据。开启作弊模式后，将无法再取消。\n确定要开启吗？`,
-            `You can modify most of the game data if cheating is enabled. However, you can't disable it after enabling it.\nAre you sure to continue?`,
+            `You can modify most of the game data if cheating is enabled. However, you can't disable it after enabling it.\nAre you sure you want to continue?`,
         ],
         [LangTextType.A0109]: [
             `请先把CO搭载到部队上`,
@@ -479,11 +477,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0110]: [
             `您确定要让AI来控制这个势力吗？`,
-            `Are you sure to make the A.I. to take control of the force?`,
+            `Are you sure you want to make the A.I. to take control of the force?`,
         ],
         [LangTextType.A0111]: [
             `您确定要自行控制这个势力吗？`,
-            `Are you sure to take control of the force?`,
+            `Are you sure you want to take control of the force?`,
         ],
         [LangTextType.A0112]: [
             `有棋子正在移动中，请稍候再试`,
@@ -491,11 +489,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0113]: [
             `您确定要切换该部队的行动状态吗？`,
-            `Are you sure to switch the unit's action state?`,
+            `Are you sure you want to switch the unit's action state?`,
         ],
         [LangTextType.A0114]: [
             `您确定要切换该部队的下潜状态吗？`,
-            `Are you sure to switch the unit's diving state?`,
+            `Are you sure you want to switch the unit's dived state?`,
         ],
         [LangTextType.A0115]: [
             `请联系babygogogo以解决问题`,
@@ -543,7 +541,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0126]: [
             `您确定要退出此房间吗？`,
-            `Are you sure to exit the room?`,
+            `Are you sure you want to exit the room?`,
         ],
         [LangTextType.A0127]: [
             `您已被请出此房间。`,
@@ -555,7 +553,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0129]: [
             `您确定要使用自定义规则吗？`,
-            `Are you sure to use a custom rule?`,
+            `Are you sure you want to use a custom rule?`,
         ],
         [LangTextType.A0130]: [
             `您必须保留"无CO"选项。`,
@@ -587,19 +585,19 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0137]: [
             `进入准备状态后，您将无法再次修改CO和势力颜色设定。确定要继续吗？`,
-            `You can't change your CO and color settings after being ready. Are you sure to continue?`,
+            `You can't change your CO and color settings after being ready. Are you sure you want to continue?`,
         ],
         [LangTextType.A0138]: [
             `确定要禁用这些CO吗？`,
-            `Are you sure to ban these COs?`,
+            `Are you sure you want to ban these COs?`,
         ],
         [LangTextType.A0139]: [
             `确定要不禁用任何CO吗？`,
-            `Are you sure to ban no CO?`,
+            `Are you sure you want to ban no CO?`,
         ],
         [LangTextType.A0140]: [
             `确定要删除当前存档吗？（注：其他存档不受影响；您可以继续游玩当前游戏并存档）`,
-            `Are you sure to clear the current save slot?`,
+            `Are you sure you want to clear the current save slot?`,
         ],
         [LangTextType.A0141]: [
             `已成功删除存档。`,
@@ -611,7 +609,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0143]: [
             `此地图已被修改，确定不保存直接退出吗？`,
-            `The map has been modified. Are you sure to exit anyway?`,
+            `The map has been modified. Are you sure you want to exit anyway?`,
         ],
         [LangTextType.A0144]: [
             `请输入存档备注以便于区分，可留空`,
@@ -635,7 +633,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0149]: [
             `您确定要删除此房间吗？`,
-            `Are you sure to delete this room?`
+            `Are you sure you want to delete this room?`
         ],
         [LangTextType.A0150]: [
             `正在加载图片\n请耐心等候`,
@@ -723,11 +721,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0171]: [
             `您确定要删除事件吗？`,
-            `Are you sure to delete this event?`,
+            `Are you sure you want to delete this event?`,
         ],
         [LangTextType.A0172]: [
             `您确定要删除该条件节点吗？`,
-            `Are you sure to delete the condition node?`,
+            `Are you sure you want to delete the condition node?`,
         ],
         [LangTextType.A0173]: [
             `条件节点数量已达上限`,
@@ -739,11 +737,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0175]: [
             `您确定要删除该条件吗？`,
-            `Are you sure to delete the condition?`,
+            `Are you sure you want to delete the condition?`,
         ],
         [LangTextType.A0176]: [
             `您确定要删除该动作吗？`,
-            `Are you sure to delete the action?`,
+            `Are you sure you want to delete the action?`,
         ],
         [LangTextType.A0177]: [
             `此动作数据出错，请删除`,
@@ -791,7 +789,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0188]: [
             `未被引用的条件节点、条件、动作都将被删除。您确定要继续吗？`,
-            `All of the unused condition nodes, conditions and actions will be deleted. Are you sure to continue?`,
+            `All of the unused condition nodes, conditions and actions will be deleted. Are you sure you want to continue?`,
         ],
         [LangTextType.A0189]: [
             `此动作已包含太多部队`,
@@ -799,7 +797,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0190]: [
             `您确定要清空所有部队吗？`,
-            `Are you sure to delete all the units?`,
+            `Are you sure you want to delete all the units?`,
         ],
         [LangTextType.A0191]: [
             `此动作包含的部队的数量不合法`,
@@ -843,7 +841,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0201]: [
             `将离开战局并前往创建自由模式房间的页面。\n您确定要继续吗？`,
-            `You have to leave the war scene (you can enter it again later) in order to create the free mode room.\nAre you sure to continue?`,
+            `You have to leave the war scene (you can enter it again later) in order to create the free mode room.\nAre you sure you want to continue?`,
         ],
         [LangTextType.A0202]: [
             `已有其他玩家选择该势力`,
@@ -859,7 +857,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0205]: [
             `无法撤销准备状态`,
-            `It's not allowed to cancel the "ready" state.`,
+            `You can't cancel when in the 'ready' state.`,
         ],
         [LangTextType.A0206]: [
             [
@@ -869,8 +867,8 @@ namespace TwnsLangCommonText {
                 `注：正式开局前，您的对手不会知道您选择了哪个CO。`,
             ].join(`\n`),
             [
-                `Once you're ready, you can not undo nor change your CO and/or color.`,
-                `Are you sure to continue?`,
+                `Once you're ready, you cannot un-ready nor change your CO/color.`,
+                `Are you sure you want to continue?`,
                 ``,
                 `Tips: Your opponent(s) will not know which CO you have chosen until the game starts.`,
             ].join(`\n`),
@@ -881,7 +879,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0208]: [
             `您确定要不使用任何CO吗？`,
-            `Are you sure to use no CO?`,
+            `Are you sure you want to use no CO?`,
         ],
         [LangTextType.A0209]: [
             `排位模式下无法修改势力`,
@@ -909,11 +907,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0215]: [
             `"即将战败"状态下，玩家无法行动。除非有其他事件把玩家状态改为"存活"，否则系统将自动清除所有该玩家的部队，建筑将变为中立，且状态将变为已战败。`,
-            `In the Being Defeated state, players can not do anything. His/her troops will be cleared, and buildings will be neutral, unless his/her state is changed to be Alive.`,
+            `In the Being Defeated state, players cannot do anything. His/her troops will be cleared, and buildings will be neutral, unless his/her state is changed to be Alive.`,
         ],
         [LangTextType.A0216]: [
             `"已战败"状态下，玩家无法行动。如果玩家是直接从存活状态切换到已战败状态，则其部队和建筑所有权都会残留。`,
-            `In the Defeated state, players can not do anything. If his/her previous state is Alive, his/her troops will remain.`,
+            `In the Defeated state, players cannot do anything. If his/her previous state is Alive, his/her troops will remain.`,
         ],
         [LangTextType.A0217]: [
             `所有数值设定与《高级战争：毁灭之日》保持一致。`,
@@ -949,11 +947,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0225]: [
             `您确定要继续吗？`,
-            `Are you sure to continue?`,
+            `Are you sure you want to continue?`,
         ],
         [LangTextType.A0226]: [
             `您确定要跳过剧情吗？`,
-            `Are you sure to skip the story?`,
+            `Are you sure you want to skip the story?`,
         ],
         [LangTextType.A0227]: [
             `此动作包含的对话数量不合法`,
@@ -981,7 +979,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0233]: [
             `已有的地形装饰物会被覆盖。您确定要自动填充吗？`,
-            `The current tile decorations will be overwritten. Are you sure to auto fill?`,
+            `The current tile decorations will be overwritten. Are you sure you want to auto fill?`,
         ],
         [LangTextType.A0234]: [
             `导出失败，请使用chrome浏览器重试`,
@@ -997,7 +995,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0237]: [
             `当前的地图数据将被覆盖（但存档不受影响）。您确定要继续导入吗？`,
-            `The current map data will be overwritten, but the saved data will not be affected. Are you sure to import?`,
+            `The current map data will be overwritten, but the saved data will not be affected. Are you sure you want to import?`,
         ],
         [LangTextType.A0238]: [
             `您对地图的评分越高，该地图在您参与的排位赛中的出现率也越高。`,
@@ -1021,7 +1019,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0243]: [
             `您确定要切换CO搭载状态吗？`,
-            `Are you sure to switch the CO onboard state?`,
+            `Are you sure you want to switch the CO onboard state?`,
         ],
         [LangTextType.A0244]: [
             `已成功保存并提审地图`,
@@ -1029,7 +1027,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0245]: [
             `您已提审此地图的上一个版本。\n若继续保存此地图（不论是否提审），则上一个版本会被自动撤销提审。\n\n确定要继续吗？`,
-            `You have submitted the previous version of this map for review.\nIf you continue saving this map, the submitted version will not be reviewed.\n\nAre you sure to continue?`,
+            `You have submitted the previous version of this map for review.\nIf you continue saving this map, the submitted version will not be reviewed.\n\nAre you sure you want to continue?`,
         ],
         [LangTextType.A0246]: [
             `请填写自动保存的时间间隔，单位为秒。\n若当前地图已被提审，则自动保存功能将失效。\n您可以不填写时间间隔，以此禁用自动保存功能。`,
@@ -1045,7 +1043,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0249]: [
             `您将离开战局模式并进入回放（您可以随时返回）。\n确定要继续吗？`,
-            `You have to leave the war scene (you can enter it again later).\nAre you sure to continue?`,
+            `You have to leave the war scene (you can enter it again later).\nAre you sure you want to continue?`,
         ],
         [LangTextType.A0250]: [
             `指定坐标不合法`,
@@ -1077,7 +1075,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0257]: [
             `您确定要切换该部队的A.I.模式吗？`,
-            `Are you sure to switch the unit's A.I. mode?`,
+            `Are you sure you want to switch the unit's A.I. mode?`,
         ],
         [LangTextType.A0258]: [
             `此动作指定的对话背景不合法`,
@@ -1085,11 +1083,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0259]: [
             `已绘制的道路和桥梁的造型将被覆盖，但覆盖结果可能不会完全符合您的预期。\n建议您先保存地图再进行此操作。\n确定要调整吗？`,
-            `The drawn roads and bridges will be overwritten, however the results may not meet your expectations completely.\nIt's recommended that you save this map before continuing.\nAre you sure to adjust them?`
+            `The drawn roads and bridges will be overwritten, however the results may not meet your expectations completely.\nIt's recommended that you save this map before continuing.\nAre you sure you want to adjust them?`
         ],
         [LangTextType.A0260]: [
             `已绘制的等离子、超级等离子的造型将被覆盖，但覆盖结果可能不会完全符合您的预期。\n建议您先保存地图再进行此操作。\n确定要调整吗？`,
-            `The drawn (super) plasmas will be overwritten, however the results may not meet your expectations completely.\nIt's recommended that you save this map before continuing.\nAre you sure to adjust them?`
+            `The drawn (super) plasmas will be overwritten, however the results may not meet your expectations completely.\nIt's recommended that you save this map before continuing.\nAre you sure you want to adjust them?`
         ],
         [LangTextType.A0261]: [
             `地图文件体积太大，无法保存`,
@@ -1146,9 +1144,9 @@ namespace TwnsLangCommonText {
             [
                 `Alive: players can do anything as usual. It's possible to make a (Being) Defeated player Alive again.`,
                 ``,
-                `Being Defeated: players can not do anything. His/her troops will be cleared, and buildings will be neutral, unless his/her state is changed to be Alive.`,
+                `Being Defeated: players cannot do anything. His/her troops will be cleared, and buildings will be neutral, unless his/her state is changed to be Alive.`,
                 ``,
-                `Defeated: players can not do anything. If his/her previous state is Alive, his/her troops will remain.`,
+                `Defeated: players cannot do anything. If his/her previous state is Alive, his/her troops will remain.`,
             ].join(`\n`),
         ],
         [LangTextType.A0273]: [
@@ -1241,7 +1239,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0286]: [
             `此操作无法撤销。您确定要继续吗？`,
-            `This operation can not be undone. Are you sure to continue?`,
+            `This operation cannot be undone. Are you sure you want to continue?`,
         ],
         [LangTextType.A0287]: [
             `已成功修改规则可用性`,
@@ -1272,7 +1270,7 @@ namespace TwnsLangCommonText {
                 `2. 多人模式相关数据不会变化，回放也会保留。`,
             ].join(`\n`),
             [
-                `Are you sure to delete this rule?`,
+                `Are you sure you want to delete this rule?`,
                 ``,
                 `Note:`,
                 `1. If this rule has been used in the war room mode, the relevant ranking, score and replay will be cleared.`,
@@ -1300,7 +1298,7 @@ namespace TwnsLangCommonText {
             [
                 `This map contains rules that can be used for multiplayer ranked matches. Please check the settings carefully to ensure that there are no quality problems.`,
                 ``,
-                `Are you sure to accept this map?`,
+                `Are you sure you want to accept this map?`,
             ].join(`\n`),
             ``,
         ],
@@ -1327,6 +1325,270 @@ namespace TwnsLangCommonText {
         [LangTextType.A0302]: [
             `没有可用的统计数据`,
             `No statistics available.`,
+        ],
+        [LangTextType.A0303]: [
+            `存档不存在，无法读取`,
+            `The game data doesn't exist and can not be loaded.`,
+        ],
+        [LangTextType.A0304]: [
+            `自动保存失败`,
+            `Auto save failed.`,
+        ],
+        [LangTextType.A0305]: [
+            `未指定事件动作ID`,
+            `No event action ID is specified.`,
+        ],
+        [LangTextType.A0306]: [
+            `存在重复的事件动作ID`,
+            `There are duplicated event action IDs.`,
+        ],
+        [LangTextType.A0307]: [
+            `指定的事件动作ID无效`,
+            `There is invalid event action ID.`,
+        ],
+        [LangTextType.A0308]: [
+            `指定的文本不合法`,
+            `The specified text is not valid.`,
+        ],
+        [LangTextType.A0309]: [
+            `禁止使用CO主动技。`,
+            `Cannot Use CO Power.`,
+        ],
+        [LangTextType.A0310]: [
+            `已成功修改规则名称`,
+            `The rule name has been updated successfully.`,
+        ],
+        [LangTextType.A0311]: [
+            `请先命名此地图标签`,
+            `Please name the map tag first.`,
+        ],
+        [LangTextType.A0312]: [
+            `已成功修改地图标签`,
+            `The map tag has been updated successfully.`,
+        ],
+        [LangTextType.A0313]: [
+            `请小心修改标签设定，因为所有带有该标签的地图都会受到影响。`,
+            `Please modify the settings carefully. All the tagged maps will be affected.`,
+        ],
+        [LangTextType.A0314]: [
+            `您确定要删除此槽位的所有数据吗？`,
+            `Are you sure you want to delete the data in this map slot?`,
+        ],
+        [LangTextType.A0315]: [
+            `此地图正在审核中，暂时无法删除`,
+            `The map is being reviewed, therefore you can't delete it right now.`,
+        ],
+        [LangTextType.A0316]: [
+            `由于地图设计存在问题，所以此地图暂时不能提审`,
+            `This map can't be submitted for review because of the listed problem.`,
+        ],
+        [LangTextType.A0317]: [
+            `此地图尚未保存。您确定要跳过保存吗？`,
+            `This map has not been saved. Are you sure you want to skip the save?`,
+        ],
+        [LangTextType.A0318]: [
+            `无法进一步撤销`,
+            `Unable to undo further.`,
+        ],
+        [LangTextType.A0319]: [
+            `无法进一步重做`,
+            `Unable to redo further.`,
+        ],
+        [LangTextType.A0320]: [
+            `所有事件、条件、条件节点、动作都会被删除。\n您确定要继续吗？`,
+            `All the events / conditions / condition nodes / actions will be deleted.\nAre you sure you want to continue?`,
+        ],
+        [LangTextType.A0321]: [
+            `您可以通过双指缩放或滚动鼠标滚轮来缩放地图。`,
+            `You can zoom the map with "pinch-to-zoom" gesture and/or with mouse wheel.`,
+        ],
+        [LangTextType.A0322]: [
+            `要移动您的部队，请点击该部队，并选择一个目标地点。您可以通过滑动来指定移动路线。之后，您可以在弹出的菜单中选择想要的操作。`,
+            `Select the unit you want to deploy, then where you want it to go. Options sometimes appear after a unit moves.`,
+        ],
+        [LangTextType.A0323]: [
+            `部队的最大HP是10。如果部队的HP小于10，则该数字会显示在部队图标上。如果HP降为0，则该部队会被摧毁。`,
+            `Units have a maximum of 10 normalized HP. If a unit's HP is less than 10, this number is displayed below the unit. If its HP falls to 0, the unit is destroyed.`,
+        ],
+        [LangTextType.A0324]: [
+            `您和您的对手以回合的形式来移动部队。当您的部队完成行动后，可以在菜单中选择结束回合。`,
+            `You and your enemy will take turns moving your units. Select End Turn from the menu to finish your forces' moves for the day.`,
+        ],
+        [LangTextType.A0325]: [
+            `要发起一次近战攻击，请移动您的部队到敌方部队的相邻格子中，并选择攻击。`,
+            `To perform a direct attack, move your unit next to an enemy unit and choose Attack.`,
+        ],
+        [LangTextType.A0326]: [
+            `每当您击败一个敌人部队，您的部队会升级一次，同时提升其攻防属性。每个部队最多可以升级三次。`,
+            `If you defeat an enemy unit, the winning unit's level will rise, increasing its attack and defense. A single unit can rise 3 levels.`,
+        ],
+        [LangTextType.A0327]: [
+            `您可以点击画面左下方的地形小窗来打开该地形的详细属性面板。`,
+            `You can view a terrain's detailed info by touching the brief info box at the left bottom corner.`,
+        ],
+        [LangTextType.A0328]: [
+            `您可以点击画面左下方的部队小窗来打开该部队的详细属性面板。`,
+            `You can view a unit's detailed info by touching the brief info box at the left bottom corner.`,
+        ],
+        [LangTextType.A0329]: [
+            `大多数部队都有主武器，主武器的弹药数量是有限的。弹药耗尽时，将无法以主武器进行攻击。`,
+            `Most units have main weapons that can run out of ammo. Keep an eye on the ammo indicator.`,
+        ],
+        [LangTextType.A0330]: [
+            `所有部队都有燃料，而且有可能会耗尽。部队可以在友方特定的建筑上获得燃料和弹药补给。`,
+            `Though rare, it is possible for a unit to run out of fuel. Units can refuel at any friendly city or bases.`,
+        ],
+        [LangTextType.A0331]: [
+            `远程部队可以在远处对敌方发起攻击，且不受反击。但大多数远程部队无法在同一回合同时移动和攻击。`,
+            `Indirect-attack units can fire over long distances without facing a counter-attack, but they usually cannot move and attack in the same turn.`,
+        ],
+        [LangTextType.A0332]: [
+            `您可以点击一个部队来查看它的攻击/移动/视野范围。`,
+            `To see a waited unit's attack range, simply touch it. You can also view enemy attack ranges.`,
+        ],
+        [LangTextType.A0333]: [
+            `您可以通过地形小窗和详细信息面板来查看地形给部队提供的防御力加成。`,
+            `Use terrain info to see features and defenses offered by different terrain.`,
+        ],
+        [LangTextType.A0334]: [
+            `您可以在菜单中点击部队列表按钮来查看对战各方的部队表。这可能有助于您制定战略战术。`,
+            `Select Units from the menu to display all of units of yours or your enemies'. Use this chart to help plan your strategy.`,
+        ],
+        [LangTextType.A0335]: [
+            `您可以在菜单中点击作战目标按钮来查看当前战局的胜负条件。不同战局的胜负条件有可能不同。`,
+            `Select Terms from the menu to view victory conditions. These conditions vary by map.`,
+        ],
+        [LangTextType.A0336]: [
+            `您可以对两个负伤的同类型部队进行合流操作，从而获得一个HP更多的部队。如果两个部队等级不同，则较高的等级会被保留。`,
+            `By combining 2 damaged units, you can create a single unit with more HP. if 2 units with different levels join, the highest level will be kept.`,
+        ],
+        [LangTextType.A0337]: [
+            `战争迷雾会阻止您看到远方的敌人部队。某些地形可以隐蔽部队，您必须从其邻近的格子来看清这些地形。`,
+            `Thick, black dust makes it impossible to see enemies from a distance. Units hiding in woods or rubble can only be seen from an adjacent square.`,
+        ],
+        [LangTextType.A0338]: [
+            `高山可以给步兵和反坦克兵提供额外3格视野范围。`,
+            `Mountains add 3 to the vision of infantry and mech units.`,
+        ],
+        [LangTextType.A0339]: [
+            `在雾战中，如果您的部队在行动中撞上了隐藏的地方部队，则该部队的行动会被强行打断。`,
+            `During Fog of War, units will be forced to end their turn prematurely if they encounter a hidden enemy.`,
+        ],
+        [LangTextType.A0340]: [
+            `照明车在雾战中特别有用。它们的照明弹可以暂时清除远处的迷雾。`,
+            `Flares are designed for Fog of War conditions. Their rockets clear the fog and helps your forces see.`,
+        ],
+        [LangTextType.A0341]: [
+            `步兵、反坦克兵、摩托兵可以占领建筑。每次执行占领操作，则建筑的占领点数会减去该部队当前的HP值，减到0即可完成占领。如果部队中途离开，则必须重新开始占领。`,
+            `Infantry, mechs, and bikes can capture by subtracting their HP to the property total until it reaches 0. If a unit leaves, the capture must begin anew.`,
+        ],
+        [LangTextType.A0342]: [
+            `您所占有的建筑数量越多，则资金收入也越多。资金可以用于生产和维修部队。`,
+            `Your funds are boosted when you capture cities. Funds can be used to build new units and repair damaged ones.`,
+        ],
+        [LangTextType.A0343]: [
+            `您可以在工厂中生产陆军，在机场中生产空军，在港口中生产海军。`,
+            `You can use funds to build new land, naval, and air units at factories, ports, and airports.`,
+        ],
+        [LangTextType.A0344]: [
+            `您可以选中您的多余的部队，并在菜单中点击删除部队按钮，从而将该部队删除。`,
+            `You can delete surplus units by selecting the target unit and going to the Delete Unit option in the menu.`,
+        ],
+        [LangTextType.A0345]: [
+            `在友方指定建筑上停留的部队可以自动补充弹药、燃料，以及恢复HP（每回合2HP）。恢复HP需要消耗资金。`,
+            `If you station a unit on a friendly base or city, it will recover all ammo and fuel, plus 2 HP per day. HP recovery will drain some of your funds.`,
+        ],
+        [LangTextType.A0346]: [
+            `在雾战中，友方建筑可以提供视野。占领建筑总是多多益善。`,
+            `During Fog of War, visibility increases around your bases. The more bases you capture, the farther you can see.`,
+        ],
+        [LangTextType.A0347]: [
+            `您可以把部队装载到运输部队中。不同类型的运输部队可以装载的部队的类型和数量也不同。`,
+            `You can load units onto transport vehicles. Some carry a single infantry or mech unit, but others transport 2 units of any type.`,
+        ],
+        [LangTextType.A0348]: [
+            `利用运输部队，可以更快地把部队运输到更远的地方。`,
+            `Use transport vehicles to carry slower units over long distances in a short period of time.`,
+        ],
+        [LangTextType.A0349]: [
+            `运输直升机、工程车、炮艇、登陆舰、巡洋舰、航母都可以用来运输部队。这些部队被摧毁时，装载于其上的部队也会自动被摧毁。`,
+            `T copters, rigs, gunboats, landers, cruisers, and carriers all can transport units. If a transport unit is destroyed, the unit it is carrying will also be lost.`,
+        ],
+        [LangTextType.A0350]: [
+            `工程车可以给邻近部队提供弹药和燃料的补给，可以运输部队，可以建造临时机场和临时港口。`,
+            `Rigs can resupply units in adjacent squares, transport troops, and build a single temporary port or airport.`,
+        ],
+        [LangTextType.A0351]: [
+            `工程车可以在平原上建造临时机场，也可以在沙滩上建造临时海港。与占领建筑类似，需要把建造点数降到0才能完成建造。`,
+            `Rigs can build temporary airports on plains and temporary ports on beaches. As with capturing, construction requires 20 HP.`,
+        ],
+        [LangTextType.A0352]: [
+            `工程车最多可以同时补给邻近的4个部队，但无法恢复HP。`,
+            `Rigs can resupply ammo and fuel to a maximum of 4 neighboring units at a time. However, they can't restore HP.`,
+        ],
+        [LangTextType.A0353]: [
+            `一些部队可以建造临时建筑，还有一些部队可以生产新的部队。`,
+            `Certain units can use construction material to build temporary bases on beaches and plains. Some units can even use it to build other units!`,
+        ],
+        [LangTextType.A0354]: [
+            `潜艇可以执行下潜操作。下潜后，潜艇只会被临近的地方部队发现，且只会受到敌方潜艇和巡洋舰的攻击，但会消耗大量燃料。`,
+            `Only subs can dive. Diving conceals subs from the enemy but uses a lot of fuel. Subs can be hit by other subs and cruisers while submerged.`,
+        ],
+        [LangTextType.A0355]: [
+            `航母可以消耗15000资金来生产舰载机。从生产后的第二回合开始，舰载机可以直接从航母中弹射出来。`,
+            `Carriers can build seaplanes at a fund cost of 15000. Seaplanes can be launched the day after they are built.`,
+        ],
+        [LangTextType.A0356]: [
+            `雨天会强制进入雾战，且建筑的视野降为0，部队的视野降为1。`,
+            `Visibility decreases in heavy rain, leading to enforced Fog of War conditions. Unit visibility is 1, while visibility near bases is zero.`,
+        ],
+        [LangTextType.A0357]: [
+            `雪天时，所有部队的移动力减1。`,
+            `During a snowfall, the mobility of all units will drop by 1.`,
+        ],
+        [LangTextType.A0358]: [
+            `沙尘暴时，所有部队的攻击力减30%。`,
+            `Sandstorms reduce the attack power of all units by 30%.`,
+        ],
+        [LangTextType.A0359]: [
+            `CO Zone是指CO部队附近的范围。在这个范围内，部队的攻防获得加成，具体数值由CO决定。`,
+            `The area surrounding a CO's unit is known as a Command Zone. In this area, the attack and defense of nearby units is boosted.`,
+        ],
+        [LangTextType.A0360]: [
+            `我方部队在CO Zone里对敌方部队造成伤害时，CO能量会自动增长。随着能量增长，CO Zone的范围也会变大。`,
+            `Damage enemies in the Command Zone to increase your CO Power Gauge. The CO Zone will expands as the gauge increases.`,
+        ],
+        [LangTextType.A0361]: [
+            `当CO能量达到指定值时，您可以消耗能量来激活CO主动技。`,
+            `When the CO Power Gauge is full, you can use the commander's CO Power. After you use the CO Power, the gauge will decrease.`,
+        ],
+        [LangTextType.A0362]: [
+            `您可以在总部以及生产型建筑上，通过消耗一定资金来把CO装载到部队中。该部队会直接升到三级。`,
+            `Your CO can board a unit at your HQ or any production bases. The unit's level will rise to Vet, but at the cost of half the unit's value.`,
+        ],
+        [LangTextType.A0363]: [
+            `如果您的CO部队被摧毁，则已积累的能量值会消失。您可以在下回合重新装载CO。`,
+            `If the unit carrying your CO is destroyed, the CO Power Gauge will disappear. However, the CO can board a new unit the next day.`,
+        ],
+        [LangTextType.A0364]: [
+            `在单人游戏中，您可以自由地使用存档和读档功能。但在多人游戏中，您的每一步都讲自动存档，无法悔棋。`,
+            `In single player games, if you want to save a game midway through a mission, use the Save option in the menu. To revert to the quick save, use the Load option.\nHowever, you can not save/load the game in multi player games.`,
+        ],
+        [LangTextType.A0365]: [
+            `在单人游戏中，您可以在菜单中选择离开战局。此时的战局数据不会被保存。`,
+            `In single player games, you can choose Quit from the menu and try the fight again from the start. Note that this will cause you to exit without saving.`,
+        ],
+        [LangTextType.A0366]: [
+            `您可以点击菜单中的状态按钮来查看当前对战各方的部队数、建筑数等各种数据。`,
+            `Use the Status option to view the units deployed and bases captured by each army, as well as a range of other statistics.`,
+        ],
+        [LangTextType.A0367]: [
+            "该账号已被注册，请修改后再试",
+            "The account has been registered.",
+        ],
+        [LangTextType.A0368]: [
+            "该昵称已被使用，请修改后再试",
+            "The nickname has been used.",
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1482,7 +1744,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0037]: [
             `装载`,
-            `load`,
+            `Load`,
         ],
         [LangTextType.B0038]: [
             `合流`,
@@ -1977,11 +2239,11 @@ namespace TwnsLangCommonText {
             `Units`,
         ],
         [LangTextType.B0161]: [
-            `部队价值`,
-            `Units Value`,
+            `价值`,
+            `Value`,
         ],
         [LangTextType.B0162]: [
-            `姓名`,
+            `名称`,
             `Name`,
         ],
         [LangTextType.B0163]: [
@@ -2126,11 +2388,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0198]: [
             `明战排位积分`,
-            `Std Rank Score`,
+            `Std Rating`,
         ],
         [LangTextType.B0199]: [
             `雾战排位积分`,
-            `FoW Rank Score`,
+            `FoW Rating`,
         ],
         [LangTextType.B0200]: [
             `多人自由对战`,
@@ -2221,7 +2483,7 @@ namespace TwnsLangCommonText {
             `Keep`,
         ],
         [LangTextType.B0222]: [
-            `继续观战`,
+            `继续`,
             `Continue`,
         ],
         [LangTextType.B0223]: [
@@ -2329,8 +2591,8 @@ namespace TwnsLangCommonText {
             `Next Turn`,
         ],
         [LangTextType.B0249]: [
-            `开始回放`,
-            `Start Replays`,
+            `开始`,
+            `Start`,
         ],
         [LangTextType.B0250]: [
             `暂停回放`,
@@ -2702,7 +2964,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0346]: [
             `移动后攻击`,
-            `Run & hit`,
+            `Move & Atk`,
         ],
         [LangTextType.B0347]: [
             `建筑材料`,
@@ -2722,7 +2984,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0351]: [
             `移动基础消耗表`,
-            `Base Move Cost Chart`,
+            `Base Move Cost`,
         ],
         [LangTextType.B0352]: [
             `防御加成`,
@@ -2802,7 +3064,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0371]: [
             `下潜中`,
-            `Diving`,
+            `Dived`,
         ],
         [LangTextType.B0372]: [
             `最近`,
@@ -2842,7 +3104,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0381]: [
             `暂无消息`,
-            `No Message`,
+            `No Messages`,
         ],
         [LangTextType.B0382]: [
             `发送`,
@@ -2857,8 +3119,8 @@ namespace TwnsLangCommonText {
             `Public(CN)`,
         ],
         [LangTextType.B0385]: [
-            `原版`,
-            `Legacy`,
+            `经典版`,
+            `Classic`,
         ],
         [LangTextType.B0386]: [
             `新版`,
@@ -2877,8 +3139,8 @@ namespace TwnsLangCommonText {
             `Initial Time`,
         ],
         [LangTextType.B0390]: [
-            `增量时间`,
-            `Incremental Time`,
+            `部队增量时间`,
+            `Incremental Time per Unit`,
         ],
         [LangTextType.B0391]: [
             `清空`,
@@ -2929,8 +3191,8 @@ namespace TwnsLangCommonText {
             `Ready`,
         ],
         [LangTextType.B0403]: [
-            `禁用CO数量`,
-            `Banned COs Number`,
+            `已禁用CO`,
+            `Banned COs`,
         ],
         [LangTextType.B0404]: [
             `排位赛`,
@@ -2970,7 +3232,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0413]: [
             `设定战局数量`,
-            `Set Games Number`,
+            `Set Number of Games`,
         ],
         [LangTextType.B0414]: [
             `房间状态`,
@@ -3801,12 +4063,12 @@ namespace TwnsLangCommonText {
             `Switch Game Version`,
         ],
         [LangTextType.B0621]: [
-            `原版`,
-            `Legacy Version`,
+            `经典版`,
+            `Classic Version`,
         ],
         [LangTextType.B0622]: [
-            `测试版`,
-            `Test Version`,
+            `实验版`,
+            `Experimental Version`,
         ],
         [LangTextType.B0623]: [
             `当前版本`,
@@ -4106,7 +4368,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0697]: [
             `可移动后攻击`,
-            `Run & Hit`,
+            `Move & Atk`,
         ],
         [LangTextType.B0698]: [
             `搭载部队`,
@@ -4461,8 +4723,8 @@ namespace TwnsLangCommonText {
             `Activating CO Skill Type`,
         ],
         [LangTextType.B0786]: [
-            `玩家状态...`,
-            `Players' State ...`
+            `特定玩家数量统计...`,
+            `Player Presence ...`
         ],
         [LangTextType.B0787]: [
             `CO能量百分比`,
@@ -4597,8 +4859,8 @@ namespace TwnsLangCommonText {
             `War Room Overall Score`,
         ],
         [LangTextType.B0820]: [
-            `挑战模式总排名`,
-            `War Room Overall Rank`,
+            `总排名`,
+            `Overall Rank`,
         ],
         [LangTextType.B0821]: [
             `地图ID`,
@@ -4729,12 +4991,12 @@ namespace TwnsLangCommonText {
             `Modify Object`,
         ],
         [LangTextType.B0853]: [
-            `Legacy版(毁灭之日)`,
-            `Legacy Version (AW DoR)`,
+            `经典版(毁灭之日)`,
+            `Classic Version (AW DoR)`,
         ],
         [LangTextType.B0854]: [
-            `Test版(老三代平衡版)`,
-            `Test Version (AW 1/2/DS rebalanced)`,
+            `实验版(老三代平衡版)`,
+            `Experimental Version (AW 1/2/DS rebalanced)`,
         ],
         [LangTextType.B0855]: [
             `当前宽高及格子数`,
@@ -4864,288 +5126,1214 @@ namespace TwnsLangCommonText {
             `秒`,
             `Second`,
         ],
+        [LangTextType.B0887]: [
+            `停止持续性动作`,
+            `Stop Persistent Event Actions`,
+        ],
+        [LangTextType.B0888]: [
+            `持续性显示文本`,
+            `Persistently Show Text`,
+        ],
+        [LangTextType.B0889]: [
+            `动作ID`,
+            `Action ID`,
+        ],
+        [LangTextType.B0890]: [
+            `自动`,
+            `Auto`,
+        ],
+        [LangTextType.B0891]: [
+            `视野`,
+            `POV`,
+        ],
+        [LangTextType.B0892]: [
+            `地图审核`,
+            `Map Review`,
+        ],
+        [LangTextType.B0893]: [
+            `地图描述`,
+            `Map Description`,
+        ],
+        [LangTextType.B0894]: [
+            `无描述`,
+            `No Description`,
+        ],
+        [LangTextType.B0895]: [
+            `禁用部队`,
+            `Banned Units`,
+        ],
+        [LangTextType.B0896]: [
+            `无可用部队`,
+            `No available units`,
+        ],
+        [LangTextType.B0897]: [
+            `可使用CO主动技`,
+            `Can Use CO Power`,
+        ],
+        [LangTextType.B0898]: [
+            `选择CO`,
+            `Choose COs`,
+        ],
+        [LangTextType.B0899]: [
+            `地形`,
+            `Terrains`,
+        ],
+        [LangTextType.B0900]: [
+            `游戏数据`,
+            `Game Chart`,
+        ],
+        [LangTextType.B0901]: [
+            `生效中的持续性动作...`,
+            `Ongoing Persistent Actions ...`,
+        ],
+        [LangTextType.B0902]: [
+            `动作数量`,
+            `Number of Actions`,
+        ],
+        [LangTextType.B0903]: [
+            `持续性修改玩家属性`,
+            `Persistently Modify Players' Attribute`,
+        ],
+        [LangTextType.B0904]: [
+            `排名`,
+            `Rank`,
+        ],
+        [LangTextType.B0905]: [
+            `记录`,
+            `Record`,
+        ],
+        [LangTextType.B0906]: [
+            `我的挑战模式记录`,
+            `My War Room Records`,
+        ],
+        [LangTextType.B0907]: [
+            `历史最高分`,
+            `High Score`,
+        ],
+        [LangTextType.B0908]: [
+            `快速设置`,
+            `Quick Settings`,
+        ],
+        [LangTextType.B0909]: [
+            `难度`,
+            `Difficulty`,
+        ],
+        [LangTextType.B0910]: [
+            `地形属性表`,
+            `Tiles Info`,
+        ],
+        [LangTextType.B0911]: [
+            `历史`,
+            `History`,
+        ],
+        [LangTextType.B0912]: [
+            `非排位赛`,
+            `Unranked`,
+        ],
+        [LangTextType.B0913]: [
+            `选择`,
+            `Selection`,
+        ],
+        [LangTextType.B0914]: [
+            `标记`,
+            `Mark`,
+        ],
+        [LangTextType.B0915]: [
+            `取消标记`,
+            `Unmark`,
+        ],
+        [LangTextType.B0916]: [
+            `禁止再次进入房间`,
+            `No re-entry`,
+        ],
+        [LangTextType.B0917]: [
+            `上次活动时间`,
+            `Last Activity`,
+        ],
+        [LangTextType.B0918]: [
+            `回合轮转提醒`,
+            `Turn Notifications`
+        ],
+        [LangTextType.B0919]: [
+            `Ban/Pick提醒`,
+            `Ban/Pick Notifications`
+        ],
+        [LangTextType.B0920]: [
+            `房间满员提醒`,
+            `Room Notifications`
+        ],
+        [LangTextType.B0921]: [
+            `保存并提审`,
+            `Save & Submit for Review`,
+        ],
+        [LangTextType.B0922]: [
+            `玩家数量`,
+            `Player Count`,
+        ],
+        [LangTextType.B0923]: [
+            `悔棋`,
+            `Undo`,
+        ],
+        [LangTextType.B0924]: [
+            `重做`,
+            `Redo`,
+        ],
+        [LangTextType.B0925]: [
+            `在回合中`,
+            `is in turn`,
+        ],
+        [LangTextType.B0926]: [
+            `不在回合中`,
+            `is not in turn`,
+        ],
+        [LangTextType.B0927]: [
+            `已下潜`,
+            `is dived`,
+        ],
+        [LangTextType.B0928]: [
+            `未下潜`,
+            `is not dived`,
+        ],
+        [LangTextType.B0929]: [
+            `玩家主动操作数...`,
+            `Players' Manual Actions Statistics...`,
+        ],
+        [LangTextType.B0930]: [
+            `最近回合数`,
+            `Recent Turns`,
+        ],
+        [LangTextType.B0931]: [
+            `全部删除`,
+            `Delete All`,
+        ],
+        [LangTextType.B0932]: [
+            `地图缩放`,
+            `Zooming`,
+        ],
+        [LangTextType.B0933]: [
+            `部队操作`,
+            `Unit Deployment`,
+        ],
+        [LangTextType.B0934]: [
+            `部队HP`,
+            `Unit HP`,
+        ],
+        [LangTextType.B0935]: [
+            `结束回合`,
+            `Ending a Turn`,
+        ],
+        [LangTextType.B0936]: [
+            `近战攻击`,
+            `Direct Attacks`,
+        ],
+        [LangTextType.B0937]: [
+            `部队升级`,
+            `Leveling up Units`,
+        ],
+        [LangTextType.B0938]: [
+            `地形属性`,
+            `About Terrain Info`,
+        ],
+        [LangTextType.B0939]: [
+            `部队属性`,
+            `About Unit Info`,
+        ],
+        [LangTextType.B0940]: [
+            `弹药`,
+            `Ammunition`,
+        ],
+        [LangTextType.B0941]: [
+            `燃料`,
+            `Fuel`,
+        ],
+        [LangTextType.B0942]: [
+            `远程攻击`,
+            `Indirect Attacks`,
+        ],
+        [LangTextType.B0943]: [
+            `攻击范围`,
+            `Attack Range`,
+        ],
+        [LangTextType.B0944]: [
+            `地形效果`,
+            `Terrain Effects`,
+        ],
+        [LangTextType.B0945]: [
+            `部队属性表`,
+            `Unit Chart`,
+        ],
+        [LangTextType.B0946]: [
+            `胜负条件`,
+            `Terms`,
+        ],
+        [LangTextType.B0947]: [
+            `部队合流`,
+            `Joining`,
+        ],
+        [LangTextType.B0948]: [
+            `雾战`,
+            `Fog of War`,
+        ],
+        [LangTextType.B0949]: [
+            `视野加成`,
+            `Mountain Vision`,
+        ],
+        [LangTextType.B0950]: [
+            `意外遭遇`,
+            `Surprise Encounters`,
+        ],
+        [LangTextType.B0951]: [
+            `照明车`,
+            `Flare Rockets`,
+        ],
+        [LangTextType.B0952]: [
+            `建筑占领`,
+            `Capturing`,
+        ],
+        [LangTextType.B0953]: [
+            `资金`,
+            `Funds`,
+        ],
+        [LangTextType.B0954]: [
+            `生产部队`,
+            `Production`,
+        ],
+        [LangTextType.B0955]: [
+            `删除部队`,
+            `Deleting Units`,
+        ],
+        [LangTextType.B0956]: [
+            `部队维修`,
+            `Recovery`,
+        ],
+        [LangTextType.B0957]: [
+            `建筑视野`,
+            `Base Vision Range`,
+        ],
+        [LangTextType.B0958]: [
+            `装载部队`,
+            `Loading Units`,
+        ],
+        [LangTextType.B0959]: [
+            `运载部队`,
+            `Carrying Units`,
+        ],
+        [LangTextType.B0960]: [
+            `运输部队`,
+            `Transport Units`,
+        ],
+        [LangTextType.B0961]: [
+            `工程车`,
+            `Rigs`,
+        ],
+        [LangTextType.B0962]: [
+            `建筑建造`,
+            `Constructing`,
+        ],
+        [LangTextType.B0963]: [
+            `部队补给`,
+            `Resupplying`,
+        ],
+        [LangTextType.B0964]: [
+            `建造材料`,
+            `Material`,
+        ],
+        [LangTextType.B0965]: [
+            `下潜和上浮`,
+            `Diving and Surfacing`,
+        ],
+        [LangTextType.B0966]: [
+            `从航母生产部队`,
+            `Carrier Unit Production`,
+        ],
+        [LangTextType.B0967]: [
+            `雨天`,
+            `Rain`,
+        ],
+        [LangTextType.B0968]: [
+            `雪天`,
+            `Snow`,
+        ],
+        [LangTextType.B0969]: [
+            `沙尘暴`,
+            `SandStorms`,
+        ],
+        [LangTextType.B0970]: [
+            `CO Zone`,
+            `Command Zone`,
+        ],
+        [LangTextType.B0971]: [
+            `CO能量`,
+            `CO Power Gauge`,
+        ],
+        [LangTextType.B0972]: [
+            `CO战技`,
+            `CO Power`,
+        ],
+        [LangTextType.B0973]: [
+            `CO部队`,
+            `CO Units`,
+        ],
+        [LangTextType.B0974]: [
+            `摧毁CO部队`,
+            `Destruction of COU`,
+        ],
+        [LangTextType.B0975]: [
+            `存档与读档`,
+            `Saving and Loading`,
+        ],
+        [LangTextType.B0976]: [
+            `退出战局`,
+            `Quit`,
+        ],
+        [LangTextType.B0977]: [
+            `数据统计`,
+            `Status`,
+        ],
+        [LangTextType.B0978]: [
+            `教程`,
+            `Tutorial`,
+        ],
+        [LangTextType.B0979]: [
+            `跳过回合`,
+            `Skip a Turn`,
+        ],
+        [LangTextType.B0980]: [
+            `将跳过一个回合`,
+            `is skipping a turn`,
+        ],
+        [LangTextType.B0981]: [
+            `将不会跳过一个回合`,
+            `is not skipping a turn`,
+        ],
+        [LangTextType.B0982]: [
+            `游客登陆`,
+            `Login as Guest`,
+        ],
+        [LangTextType.B0983]: [
+            `拥有者`,
+            `Owner`,
+        ],
+        [LangTextType.B0984]: [
+            `图像设置`,
+            `Graphic Settings`,
+        ],
+        [LangTextType.B0985]: [
+            `天气动画`,
+            `Weather Animation`,
+        ],
+        [LangTextType.B0986]: [
+            `动作数限制`,
+            `Actions Limit`,
+        ],
+        [LangTextType.B0987]: [
+            `回合与动作数限制`,
+            `Max. Turns & Actions`,
+        ],
+        [LangTextType.B0988]: [
+            `标准计时器`,
+            `Regular Timer`,
+        ],
+        [LangTextType.B0989]: [
+            `增量计时器`,
+            `Incremental Timer`,
+        ],
+        [LangTextType.B0990]: [
+            `计时器参数`,
+            `Timer Params`,
+        ],
+        [LangTextType.B0991]: [
+            `回合增量时间`,
+            `Incremental Time per Turn`,
+        ],
+        [LangTextType.B0992]: [
+            `CO BGM 设置`,
+            `CO BGM Settings`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        [LangTextType.B1000]: [
+        [LangTextType.Tile0000]: [
             `平原`,
             `Plain`,
         ],
-        [LangTextType.B1001]: [
+        [LangTextType.Tile0001]: [
             `河流`,
             `River`,
         ],
-        [LangTextType.B1002]: [
+        [LangTextType.Tile0002]: [
             `海洋`,
             `Sea`,
         ],
-        [LangTextType.B1003]: [
+        [LangTextType.Tile0003]: [
             `沙滩`,
             `Beach`,
         ],
-        [LangTextType.B1004]: [
+        [LangTextType.Tile0004]: [
             `道路`,
             `Road`,
         ],
-        [LangTextType.B1005]: [
+        [LangTextType.Tile0005]: [
             `桥梁(平原)`,
             `BridgeOnPlain`,
         ],
-        [LangTextType.B1006]: [
+        [LangTextType.Tile0006]: [
             `桥梁(河)`,
             `BridgeOnRiver`,
         ],
-        [LangTextType.B1007]: [
+        [LangTextType.Tile0007]: [
             `桥梁(沙滩)`,
             `BridgeOnBeach`,
         ],
-        [LangTextType.B1008]: [
+        [LangTextType.Tile0008]: [
             `桥梁(海)`,
             `BridgeOnSea`,
         ],
-        [LangTextType.B1009]: [
+        [LangTextType.Tile0009]: [
             `森林`,
             `Wood`,
         ],
-        [LangTextType.B1010]: [
+        [LangTextType.Tile0010]: [
             `高山`,
             `Mountain`,
         ],
-        [LangTextType.B1011]: [
+        [LangTextType.Tile0011]: [
             `荒野`,
             `Wasteland`,
         ],
-        [LangTextType.B1012]: [
+        [LangTextType.Tile0012]: [
             `废墟`,
             `Ruins`,
         ],
-        [LangTextType.B1013]: [
+        [LangTextType.Tile0013]: [
             `火堆`,
             `Fire`,
         ],
-        [LangTextType.B1014]: [
+        [LangTextType.Tile0014]: [
             `巨浪`,
             `Rough`,
         ],
-        [LangTextType.B1015]: [
+        [LangTextType.Tile0015]: [
             `迷雾(海)`,
             `MistOnSea`,
         ],
-        [LangTextType.B1016]: [
+        [LangTextType.Tile0016]: [
             `礁石`,
             `Reef`,
         ],
-        [LangTextType.B1017]: [
+        [LangTextType.Tile0017]: [
             `等离子`,
             `Plasma`,
         ],
-        [LangTextType.B1018]: [
+        [LangTextType.Tile0018]: [
             `超级等离子`,
             `SuperPlasma`,
         ],
-        [LangTextType.B1019]: [
+        [LangTextType.Tile0019]: [
             `陨石`,
             `Meteor`,
         ],
-        [LangTextType.B1020]: [
+        [LangTextType.Tile0020]: [
             `导弹井`,
             `Silo`,
         ],
-        [LangTextType.B1021]: [
+        [LangTextType.Tile0021]: [
             `空导弹井`,
             `EmptySilo`,
         ],
-        [LangTextType.B1022]: [
+        [LangTextType.Tile0022]: [
             `指挥部`,
             `Headquarters`,
         ],
-        [LangTextType.B1023]: [
+        [LangTextType.Tile0023]: [
             `城市`,
             `City`,
         ],
-        [LangTextType.B1024]: [
+        [LangTextType.Tile0024]: [
             `指挥塔`,
             `CommandTower`,
         ],
-        [LangTextType.B1025]: [
+        [LangTextType.Tile0025]: [
             `雷达`,
             `Radar`,
         ],
-        [LangTextType.B1026]: [
+        [LangTextType.Tile0026]: [
             `工厂`,
             `Factory`,
         ],
-        [LangTextType.B1027]: [
+        [LangTextType.Tile0027]: [
             `机场`,
             `Airport`,
         ],
-        [LangTextType.B1028]: [
+        [LangTextType.Tile0028]: [
             `海港`,
             `Seaport`,
         ],
-        [LangTextType.B1029]: [
+        [LangTextType.Tile0029]: [
             `临时机场`,
             `TempAirport`,
         ],
-        [LangTextType.B1030]: [
+        [LangTextType.Tile0030]: [
             `临时海港`,
             `TempSeaport`,
         ],
-        [LangTextType.B1031]: [
+        [LangTextType.Tile0031]: [
             `迷雾(平原)`,
             `MistOnPlain`,
         ],
-        [LangTextType.B1032]: [
+        [LangTextType.Tile0032]: [
             `迷雾(河)`,
             `MistOnRiver`,
         ],
-        [LangTextType.B1033]: [
+        [LangTextType.Tile0033]: [
             `迷雾(沙滩)`,
             `MistOnBeach`,
         ],
-        [LangTextType.B1034]: [
+        [LangTextType.Tile0034]: [
             `水晶`,
             `Crystal`,
         ],
-        [LangTextType.B1035]: [
+        [LangTextType.Tile0035]: [
             `神秘水晶`,
             `Myst.Crystal`,
         ],
-        [LangTextType.B1036]: [
+        [LangTextType.Tile0036]: [
             `加农炮(下)`,
             `Cannon(Down)`,
         ],
-        [LangTextType.B1037]: [
+        [LangTextType.Tile0037]: [
             `神秘加农炮`,
             `Myst.Cannon`,
         ],
-        [LangTextType.B1038]: [
+        [LangTextType.Tile0038]: [
             `激光炮`,
             `LaserTurret`,
         ],
-        [LangTextType.B1039]: [
+        [LangTextType.Tile0039]: [
             `神秘激光炮`,
             `Myst.LaserTurret`,
         ],
-        [LangTextType.B1040]: [
+        [LangTextType.Tile0040]: [
             `管道接口`,
             `Joint`,
         ],
-        [LangTextType.B1041]: [
+        [LangTextType.Tile0041]: [
             `加农炮(左)`,
             `Cannon(Left)`,
         ],
-        [LangTextType.B1042]: [
+        [LangTextType.Tile0042]: [
             `加农炮(右)`,
             `Cannon(Right)`,
         ],
-        [LangTextType.B1043]: [
+        [LangTextType.Tile0043]: [
             `加农炮(上)`,
             `Cannon(Up)`,
         ],
-
-        [LangTextType.B1200]: [
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [LangTextType.TileObject0000]: [
+            `无`,
+            `None`,
+        ],
+        [LangTextType.TileObject0001]: [
+            `道路`,
+            `Road`,
+        ],
+        [LangTextType.TileObject0002]: [
+            `桥梁`,
+            `Bridge`,
+        ],
+        [LangTextType.TileObject0003]: [
+            `森林`,
+            `Wood`,
+        ],
+        [LangTextType.TileObject0004]: [
+            `高山`,
+            `Mountain`,
+        ],
+        [LangTextType.TileObject0005]: [
+            `荒野`,
+            `Wasteland`,
+        ],
+        [LangTextType.TileObject0006]: [
+            `废墟`,
+            `Ruins`,
+        ],
+        [LangTextType.TileObject0007]: [
+            `火堆`,
+            `Fire`,
+        ],
+        [LangTextType.TileObject0008]: [
+            `巨浪`,
+            `Rough`,
+        ],
+        [LangTextType.TileObject0009]: [
+            `迷雾`,
+            `Mist`,
+        ],
+        [LangTextType.TileObject0010]: [
+            `礁石`,
+            `Reef`,
+        ],
+        [LangTextType.TileObject0011]: [
+            `等离子`,
+            `Plasma`,
+        ],
+        [LangTextType.TileObject0012]: [
+            `陨石`,
+            `Meteor`,
+        ],
+        [LangTextType.TileObject0013]: [
+            `导弹井`,
+            `Silo`,
+        ],
+        [LangTextType.TileObject0014]: [
+            `空导弹井`,
+            `EmptySilo`,
+        ],
+        [LangTextType.TileObject0015]: [
+            `指挥部`,
+            `Headquarters`,
+        ],
+        [LangTextType.TileObject0016]: [
+            `城市`,
+            `City`,
+        ],
+        [LangTextType.TileObject0017]: [
+            `指挥塔`,
+            `CommandTower`,
+        ],
+        [LangTextType.TileObject0018]: [
+            `雷达`,
+            `Radar`,
+        ],
+        [LangTextType.TileObject0019]: [
+            `工厂`,
+            `Factory`,
+        ],
+        [LangTextType.TileObject0020]: [
+            `机场`,
+            `Airport`,
+        ],
+        [LangTextType.TileObject0021]: [
+            `海港`,
+            `Seaport`,
+        ],
+        [LangTextType.TileObject0022]: [
+            `临时机场`,
+            `TempAirport`,
+        ],
+        [LangTextType.TileObject0023]: [
+            `临时海港`,
+            `TempSeaport`,
+        ],
+        [LangTextType.TileObject0024]: [
+            `管道`,
+            `Pipe`,
+        ],
+        [LangTextType.TileObject0025]: [
+            `水晶`,
+            `Crystal`,
+        ],
+        [LangTextType.TileObject0026]: [
+            `神秘水晶`,
+            `Myst.Crystal`,
+        ],
+        [LangTextType.TileObject0027]: [
+            `加农炮(上)`,
+            `Cannon(Up)`,
+        ],
+        [LangTextType.TileObject0028]: [
+            `加农炮(下)`,
+            `Cannon(Down)`,
+        ],
+        [LangTextType.TileObject0029]: [
+            `加农炮(左)`,
+            `Cannon(Left)`,
+        ],
+        [LangTextType.TileObject0030]: [
+            `加农炮(右)`,
+            `Cannon(Right)`,
+        ],
+        [LangTextType.TileObject0031]: [
+            `神秘加农炮`,
+            `Myst.Cannon`,
+        ],
+        [LangTextType.TileObject0032]: [
+            `激光炮`,
+            `LaserTurret`,
+        ],
+        [LangTextType.TileObject0033]: [
+            `神秘激光炮`,
+            `Myst.LaserTurret`,
+        ],
+        [LangTextType.TileObject0034]: [
+            `管道接口`,
+            `Joint`,
+        ],
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [LangTextType.TileDecoration0000]: [
+            `无`,
+            `None`,
+        ],
+        [LangTextType.TileDecoration0001]: [
+            `海岸`,
+            `Shore`,
+        ],
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [LangTextType.Unit0000]: [
             `步兵`,
             `Infantry`,
         ],
-        [LangTextType.B1201]: [
+        [LangTextType.Unit0001]: [
             `反坦克兵`,
             `Mech`,
         ],
-        [LangTextType.B1202]: [
+        [LangTextType.Unit0002]: [
             `摩托兵`,
             `Bike`,
         ],
-        [LangTextType.B1203]: [
+        [LangTextType.Unit0003]: [
             `侦察车`,
             `Recon`,
         ],
-        [LangTextType.B1204]: [
+        [LangTextType.Unit0004]: [
             `照明车`,
             `Flare`,
         ],
-        [LangTextType.B1205]: [
+        [LangTextType.Unit0005]: [
             `防空车`,
             `AntiAir`,
         ],
-        [LangTextType.B1206]: [
+        [LangTextType.Unit0006]: [
             `轻型坦克`,
             `Tank`,
         ],
-        [LangTextType.B1207]: [
+        [LangTextType.Unit0007]: [
             `中型坦克`,
             `MediumTank`,
         ],
-        [LangTextType.B1208]: [
+        [LangTextType.Unit0008]: [
             `弩级坦克`,
             `WarTank`,
         ],
-        [LangTextType.B1209]: [
+        [LangTextType.Unit0009]: [
             `自行火炮`,
             `Artillery`,
         ],
-        [LangTextType.B1210]: [
+        [LangTextType.Unit0010]: [
             `反坦克炮`,
             `AntiTank`,
         ],
-        [LangTextType.B1211]: [
+        [LangTextType.Unit0011]: [
             `火箭炮`,
             `Rockets`,
         ],
-        [LangTextType.B1212]: [
+        [LangTextType.Unit0012]: [
             `防空导弹车`,
             `Missiles`,
         ],
-        [LangTextType.B1213]: [
+        [LangTextType.Unit0013]: [
             `工程车`,
             `Rig`,
         ],
-        [LangTextType.B1214]: [
+        [LangTextType.Unit0014]: [
             `战斗机`,
             `Fighter`,
         ],
-        [LangTextType.B1215]: [
+        [LangTextType.Unit0015]: [
             `轰炸机`,
             `Bomber`,
         ],
-        [LangTextType.B1216]: [
+        [LangTextType.Unit0016]: [
             `攻击机`,
             `Duster`,
         ],
-        [LangTextType.B1217]: [
+        [LangTextType.Unit0017]: [
             `武装直升机`,
             `BattleCopter`,
         ],
-        [LangTextType.B1218]: [
+        [LangTextType.Unit0018]: [
             `运输直升机`,
             `TransportCopter`,
         ],
-        [LangTextType.B1219]: [
+        [LangTextType.Unit0019]: [
             `舰载机`,
             `Seaplane`,
         ],
-        [LangTextType.B1220]: [
+        [LangTextType.Unit0020]: [
             `战列舰`,
             `Battleship`,
         ],
-        [LangTextType.B1221]: [
+        [LangTextType.Unit0021]: [
             `航母`,
             `Carrier`,
         ],
-        [LangTextType.B1222]: [
+        [LangTextType.Unit0022]: [
             `潜艇`,
             `Submarine`,
         ],
-        [LangTextType.B1223]: [
+        [LangTextType.Unit0023]: [
             `驱逐舰`,
             `Cruiser`,
         ],
-        [LangTextType.B1224]: [
+        [LangTextType.Unit0024]: [
             `登陆舰`,
             `Lander`,
         ],
-        [LangTextType.B1225]: [
+        [LangTextType.Unit0025]: [
             `炮艇`,
             `Gunboat`,
+        ],
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [LangTextType.Bgm0000]: [
+            `Wandering Path (Lobby)`,
+            `Wandering Path (Lobby)`,
+        ],
+        [LangTextType.Bgm0001]: [
+            `Design Time (Map Editor)`,
+            `Design Time (Map Editor)`,
+        ],
+        [LangTextType.Bgm0002]: [
+            `We Will Prevail (Will)`,
+            `We Will Prevail (Will)`,
+        ],
+        [LangTextType.Bgm0003]: [
+            `Hope Never Dies (Brenner)`,
+            `Hope Never Dies (Brenner)`,
+        ],
+        [LangTextType.Bgm0004]: [
+            `Lost Memories (Isabella)`,
+            `Lost Memories (Isabella)`,
+        ],
+        [LangTextType.Bgm0005]: [
+            `Proud Soldier (Gage)`,
+            `Proud Soldier (Gage)`,
+        ],
+        [LangTextType.Bgm0006]: [
+            `Days of Ruin (No CO)`,
+            `Days of Ruin (No CO)`,
+        ],
+        [LangTextType.Bgm0007]: [
+            `Rutty (??)`,
+            `Rutty (??)`,
+        ],
+        [LangTextType.Bgm0008]: [
+            `Supreme Logician (Lin)`,
+            `Supreme Logician (Lin)`,
+        ],
+        [LangTextType.Bgm0009]: [
+            `Goddess of Revenge (Tasha)`,
+            `Goddess of Revenge (Tasha)`,
+        ],
+        [LangTextType.Bgm0010]: [
+            `Hero of Legend (Forsythe)`,
+            `Hero of Legend (Forsythe)`,
+        ],
+        [LangTextType.Bgm0011]: [
+            `Flight of the Coward (Waylon)`,
+            `Flight of the Coward (Waylon)`,
+        ],
+        [LangTextType.Bgm0012]: [
+            `Madman's Reign (Greyfield)`,
+            `Madman's Reign (Greyfield)`,
+        ],
+        [LangTextType.Bgm0013]: [
+            `Cruel Rose (Tabitha)`,
+            `Cruel Rose (Tabitha)`,
+        ],
+        [LangTextType.Bgm0014]: [
+            `Puppet Master (Caulder)`,
+            `Puppet Master (Caulder)`,
+        ],
+        [LangTextType.Bgm0015]: [
+            `Power Up (Power)`,
+            `Power Up (Power)`,
+        ],
+        [LangTextType.Bgm0016]: [
+            `Hawke's Theme (Hawk)`,
+            `Hawke's Theme (Hawk)`,
+        ],
+        [LangTextType.Bgm0017]: [
+            `The Beast's Theme`,
+            `The Beast's Theme`,
+        ],
+        [LangTextType.Bgm0018]: [
+            `First Strike (Lobby)`,
+            `First Strike (Lobby)`,
+        ],
+        [LangTextType.Bgm0019]: [
+            `Destructive Tendencies`,
+            `Destructive Tendencies`,
+        ],
+        [LangTextType.Bgm0020]: [
+            `Apocalypse - Chaos Suite`,
+            `Apocalypse - Chaos Suite`,
+        ],
+        [LangTextType.Bgm0021]: [
+            `Stormy Times (Power)`,
+            `Stormy Times (Power)`,
+        ],
+        [LangTextType.Bgm0022]: [
+            `Road to War`,
+            `Road to War`,
+        ],
+        [LangTextType.Bgm0023]: [
+            `The Way of Sadness`,
+            `The Way of Sadness`,
+        ],
+        [LangTextType.Bgm0024]: [
+            `Battle Ready`,
+            `Battle Ready`,
+        ],
+        [LangTextType.Bgm0025]: [
+            `Mr. Bear (Penny)`,
+            `Mr. Bear (Penny)`,
+        ],
+        [LangTextType.Bgm0026]: [
+            `Adder's Theme (Adder)`,
+            `Adder's Theme (Adder)`,
+        ],
+        [LangTextType.Bgm0027]: [
+            `Flak's Theme (Flak)`,
+            `Flak's Theme (Flak)`,
+        ],
+        [LangTextType.Bgm0028]: [
+            `Kindle's Theme (Kindle)`,
+            `Kindle's Theme (Kindle)`,
+        ],
+        [LangTextType.Bgm0029]: [
+            `Koal's Theme (Koal)`,
+            `Koal's Theme (Koal)`,
+        ],
+        [LangTextType.Bgm0030]: [
+            `Lash's Theme (Lash)`,
+            `Lash's Theme (Lash)`,
+        ],
+        [LangTextType.Bgm0031]: [
+            `Von Bolt's Theme (Von Bolt)`,
+            `Von Bolt's Theme (Von Bolt)`,
+        ],
+        [LangTextType.Bgm0032]: [
+            `Colin's Theme (Colin)`,
+            `Colin's Theme (Colin)`,
+        ],
+        [LangTextType.Bgm0033]: [
+            `Grit's Theme (Grit)`,
+            `Grit's Theme (Grit)`,
+        ],
+        [LangTextType.Bgm0034]: [
+            `Olaf's Theme (Olaf)`,
+            `Olaf's Theme (Olaf)`,
+        ],
+        [LangTextType.Bgm0035]: [
+            `Sasha's Theme (Sasha)`,
+            `Sasha's Theme (Sasha)`,
+        ],
+        [LangTextType.Bgm0036]: [
+            `Drake's Theme (Drake)`,
+            `Drake's Theme (Drake)`,
+        ],
+        [LangTextType.Bgm0037]: [
+            `Eagle's Theme (Eagle)`,
+            `Eagle's Theme (Eagle)`,
+        ],
+        [LangTextType.Bgm0038]: [
+            `Javier's Theme (Javier)`,
+            `Javier's Theme (Javier)`,
+        ],
+        [LangTextType.Bgm0039]: [
+            `Jess's Theme (Jess)`,
+            `Jess's Theme (Jess)`,
+        ],
+        [LangTextType.Bgm0040]: [
+            `Andy's Theme (Andy)`,
+            `Andy's Theme (Andy)`,
+        ],
+        [LangTextType.Bgm0041]: [
+            `Hachi's Theme (Hachi)`,
+            `Hachi's Theme (Hachi)`,
+        ],
+        [LangTextType.Bgm0042]: [
+            `Jake's Theme (Jake)`,
+            `Jake's Theme (Jake)`,
+        ],
+        [LangTextType.Bgm0043]: [
+            `Max's Theme (Max)`,
+            `Max's Theme (Max)`,
+        ],
+        [LangTextType.Bgm0044]: [
+            `Nell's Theme (Nell)`,
+            `Nell's Theme (Nell)`,
+        ],
+        [LangTextType.Bgm0045]: [
+            `Rachel's Theme (Rachel)`,
+            `Rachel's Theme (Rachel)`,
+        ],
+        [LangTextType.Bgm0046]: [
+            `Sami's Theme (Sami)`,
+            `Sami's Theme (Sami)`,
+        ],
+        [LangTextType.Bgm0047]: [
+            `Sonja's Theme (Sonja)`,
+            `Sonja's Theme (Sonja)`,
+        ],
+        [LangTextType.Bgm0048]: [
+            `Grimm's Theme (Grimm)`,
+            `Grimm's Theme (Grimm)`,
+        ],
+        [LangTextType.Bgm0049]: [
+            `Kanbei's Theme (Kanbei)`,
+            `Kanbei's Theme (Kanbei)`,
+        ],
+        [LangTextType.Bgm0050]: [
+            `Sensei's Theme (Sensei)`,
+            `Sensei's Theme (Sensei)`,
+        ],
+        [LangTextType.Bgm0051]: [
+            `Jugger's Theme (Jugger)`,
+            `Jugger's Theme (Jugger)`,
+        ],
+        [LangTextType.Bgm0052]: [
+            `Sturm's Theme (Sturm)`,
+            `Sturm's Theme (Sturm)`,
+        ],
+        [LangTextType.Bgm0053]: [
+            `Power! (DS Power)`,
+            `Power! (DS Power)`,
+        ],
+        [LangTextType.Bgm0054]: [
+            `Super CO Power! (DS Power)`,
+            `Super CO Power! (DS Power)`,
+        ],
+        [LangTextType.Bgm0055]: [
+            `Black Hole Power! (DS Power)`,
+            `Black Hole Power! (DS Power)`,
+        ],
+        [LangTextType.Bgm0056]: [
+            `Black Hole Super CO Power! (DS Power)`,
+            `Black Hole Super CO Power! (DS Power)`,
+        ],
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [LangTextType.MoveType0000]: [
+            `步兵`,
+            `Inf`,
+        ],
+        [LangTextType.MoveType0001]: [
+            `反坦克兵`,
+            `Mech`,
+        ],
+        [LangTextType.MoveType0002]: [
+            `轮胎A`,
+            `TireA`,
+        ],
+        [LangTextType.MoveType0003]: [
+            `轮胎B`,
+            `TireB`,
+        ],
+        [LangTextType.MoveType0004]: [
+            `履带`,
+            `Tank`,
+        ],
+        [LangTextType.MoveType0005]: [
+            `飞行`,
+            `Air`,
+        ],
+        [LangTextType.MoveType0006]: [
+            `航行`,
+            `Ship`,
+        ],
+        [LangTextType.MoveType0007]: [
+            `运输`,
+            `Trans`,
+        ],
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [LangTextType.UnitCategory0000]: [
+            `无`,
+            `None`,
+        ],
+        [LangTextType.UnitCategory0001]: [
+            `全部`,
+            `All`,
+        ],
+        [LangTextType.UnitCategory0002]: [
+            `陆军`,
+            `Ground`,
+        ],
+        [LangTextType.UnitCategory0003]: [
+            `海军`,
+            `Naval`,
+        ],
+        [LangTextType.UnitCategory0004]: [
+            `空军`,
+            `Air`,
+        ],
+        [LangTextType.UnitCategory0005]: [
+            `陆军&海军`,
+            `Ground & Naval`,
+        ],
+        [LangTextType.UnitCategory0006]: [
+            `陆军&空军`,
+            `Ground & Air`,
+        ],
+        [LangTextType.UnitCategory0007]: [
+            `近战`,
+            `Direct`,
+        ],
+        [LangTextType.UnitCategory0008]: [
+            `远程`,
+            `Indirect`,
+        ],
+        [LangTextType.UnitCategory0009]: [
+            `步行`,
+            `Foot`,
+        ],
+        [LangTextType.UnitCategory0010]: [
+            `步兵系`,
+            `Inf`,
+        ],
+        [LangTextType.UnitCategory0011]: [
+            `车辆系`,
+            `Vehicle`,
+        ],
+        [LangTextType.UnitCategory0012]: [
+            `近战机械`,
+            `DirectMachine`,
+        ],
+        [LangTextType.UnitCategory0013]: [
+            `运输系`,
+            `Transport`,
+        ],
+        [LangTextType.UnitCategory0014]: [
+            `大型船只`,
+            `LargeNaval`,
+        ],
+        [LangTextType.UnitCategory0015]: [
+            `直升机`,
+            `Copter`,
+        ],
+        [LangTextType.UnitCategory0016]: [
+            `坦克`,
+            `Tank`,
+        ],
+        [LangTextType.UnitCategory0017]: [
+            `空军除舰载机`,
+            `AirExceptSeaplane`,
+        ],
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [LangTextType.WeatherType0000]: [
+            `正常天气`,
+            `Normal`,
+        ],
+        [LangTextType.WeatherType0001]: [
+            `沙尘暴`,
+            `Sandstorm`,
+        ],
+        [LangTextType.WeatherType0002]: [
+            `雪天`,
+            `Snowy`,
+        ],
+        [LangTextType.WeatherType0003]: [
+            `雨天`,
+            `Rainy`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -5269,7 +6457,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.F0029]: [
             `您确定要踢掉玩家"%s"吗？`,
-            `Are you sure to kick off the player '%s'?`,
+            `Are you sure you want to kick off the player '%s'?`,
         ],
         [LangTextType.F0030]: [
             `%s (p%d) 回合结束。`,
@@ -5285,7 +6473,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.F0033]: [
             `启用SetPath模式后，在指定部队移动路线时，您需要连续点击两次目标格子才能呼出操作菜单。这会增加操作量，但同时也便于指定移动路线，这在雾战中尤其有用。\n您确定要启用吗？\n（当前状态：%s）`,
-            `While the Set Path mode is enabled, you have to double click (or touch) a tile in order to make the unit action panel appear when you are moving units. This mode can be useful especially in FoW.\nAre you sure to enable it? \n(Current status: %s)`,
+            `While the Set Path mode is enabled, you have to double click (or touch) a tile in order to make the unit action panel appear when you are moving units. This mode can be useful especially in FoW.\nAre you sure you want to enable it? \n(Current status: %s)`,
         ],
         [LangTextType.F0034]: [
             `最多输入%d个字符，请检查`,
@@ -5393,7 +6581,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.F0060]: [
             `当前正在使用条件节点%s。确定要用新的空节点代替它吗？`,
-            `The condition node %s is being used. Are you sure to replace it by a new empty one?`,
+            `The condition node %s is being used. Are you sure you want to replace it by a new empty one?`,
         ],
         [LangTextType.F0061]: [
             `此条件节点中包含了重复的节点%s。请删除重复的节点。`,
@@ -5441,7 +6629,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.F0072]: [
             `您确定要修改 P%d 的所属队伍吗？`,
-            `Are you sure to modify the team of P%d?`,
+            `Are you sure you want to modify the team of P%d?`,
         ],
         [LangTextType.F0073]: [
             `当前天气：%s（默认：%s）。`,
@@ -5481,11 +6669,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.F0082]: [
             `您将同意%d人的观战请求，同时拒绝%d人的观战请求。\n您确定要继续吗？`,
-            `You are going to accept %d players' requests while declining %d players' ones.\nAre you sure to continue?`,
+            `You are going to accept %d players' requests while declining %d players' ones.\nAre you sure you want to continue?`,
         ],
         [LangTextType.F0083]: [
             `您将向%d个玩家发起观战请求。\n您确定要继续吗？`,
-            `You are going to send requests to %d players.\nAre you sure to continue?`,
+            `You are going to send requests to %d players.\nAre you sure you want to continue?`,
         ],
         [LangTextType.F0084]: [
             `%s 已成功创建`,
@@ -5524,8 +6712,8 @@ namespace TwnsLangCommonText {
             `Select %s`,
         ],
         [LangTextType.F0093]: [
-            `类型为 %s、且位于 %s、且归属于 %s 的地形的数量 %s %s`,
-            `The number of %s at %s that owned by %s is %s %s.`,
+            `类型为 %s%s 的地形的数量 %s %s`,
+            `Get all terrains that is %s%s. The number of the terrains %s %s.`,
         ],
         [LangTextType.F0094]: [
             `当前回合数是 %s、且回合阶段为 %s、且是 %s 的回合`,
@@ -5671,6 +6859,66 @@ namespace TwnsLangCommonText {
             `找到坐标为 %s%s 的所有地块，并修改其类型。`,
             `Get all terrains that the coordinate is %s%s, then modify their type.`,
         ],
+        [LangTextType.F0130]: [
+            `停止ID为 %s 的持续性事件动作。`,
+            `Stop the persistent event actions whose ID is: %s.`,
+        ],
+        [LangTextType.F0131]: [
+            `持续性显示文字: %s`,
+            `Persistently show text: %s`,
+        ],
+        [LangTextType.F0132]: [
+            `CO是 %s`,
+            `the CO is %s`,
+        ],
+        [LangTextType.F0133]: [
+            `无法选中 "%s"。`,
+            `"%s" cannot be chosen.`,
+        ],
+        [LangTextType.F0134]: [
+            `必须选中 "%s"。`,
+            `"%s" must be chosen.`,
+        ],
+        [LangTextType.F0135]: [
+            `生效中的ID为 %s 的持续性动作的数量 %s %s`,
+            `The number of ongoing persistent actions whose ID is %s %s %s.`,
+        ],
+        [LangTextType.F0136]: [
+            `找到玩家序号为 %s 的所有玩家，并持续性修改他们的属性。`,
+            `Get all players that is %s, then persistently modify their attributes.`,
+        ],
+        [LangTextType.F0137]: [
+            `禁止生产部队: %s。`,
+            `Prohibit the units production: %s.`,
+        ],
+        [LangTextType.F0138]: [
+            `剩余%s`,
+            `Remaining %s`,
+        ],
+        [LangTextType.F0139]: [
+            `占领点数 %s %s`,
+            `the Capture Point %s %s`,
+        ],
+        [LangTextType.F0140]: [
+            `建筑点数 %s %s`,
+            `the Build Point %s %s`,
+        ],
+        [LangTextType.F0141]: [
+            `尚未指定 %s`,
+            `%s is not specified.`,
+        ],
+        [LangTextType.F0142]: [
+            `类型为 %s`,
+            `the type is %s`,
+        ],
+        [LangTextType.F0143]: [
+            `找到玩家序号为 %s%s 的所有玩家。%s他们所进行的的主动操作的总数量 %s %s`,
+            `Get all players that is %s%s. The total number of manual actions they have taken %s%s %s.`,
+        ],
+        [LangTextType.F0144]: [
+            `在最近的%d个回合中，`,
+            `in the recent %d turns `
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Rich strings.
@@ -5733,35 +6981,17 @@ namespace TwnsLangCommonText {
 
         [LangTextType.R0003]: [
             [
-                `本选项影响所有玩家的每回合的时限。`,
-                ``,
-                `如果某个玩家的回合时间超出了限制，则服务器将自动为该玩家执行投降操作。`,
                 `当战局正式开始，或某个玩家结束回合后，则服务器自动开始下个玩家回合的倒计时（无论该玩家是否在线）。`,
+                `如果某个玩家的回合时间超出了限制，则服务器将自动为该玩家执行投降操作。`,
+                ``,
                 `当前有“常规”和“增量”两种计时模式可选。`,
-                ``,
-                `常规计时：每回合的可用时间是固定不变的。`,
-                ``,
-                `增量计时：玩家每回合可用的时间将受到前面回合所消耗的时间的影响。此模式有两个参数，分别为“初始时间”和“增量时间”。`,
-                `第一回合，玩家拥有的时间就是“初始时间”。`,
-                `第二及后续所有回合，玩家拥有的时间=上一个回合的剩余时间+（上回合结束时的剩余部队数*增量时间）。`,
-                ``,
-                `默认为“常规计时-3天”。`,
             ].join("\n"),
 
             [
-                `This option determines the boot timer, aka time available for each turn. `,
-                ``,
-                `If a player hits the boot timer, the player will resign automatically. `,
                 `When the game starts, or a player ends his turn, the timer of the first (or the next) player will start to countdown, no matter that player is online or not. `,
+                `If a player hits the boot timer, the player will resign automatically. `,
+                ``,
                 `Currently, there are two timing modes available: regular and incremental.`,
-                ``,
-                `Regular timing: the available time for each round is fixed.`,
-                ``,
-                `Incremental timing: The time available for each round will be affected by the time consumed in the previous round. This mode has two parameters, namely "Initial Time" and "Incremental Time".`,
-                `For the first round, the time the player has is "Initial Time".`,
-                `For the second round and all subsequent rounds, the time the player has equals the remaining time of the previous round plus (the number of troops remaining in the previous round multiplies the "increment time").`,
-                ``,
-                `By default this option is selected as "regular timer with 3 days per round". `,
             ].join("\n"),
         ],
 
@@ -5840,15 +7070,11 @@ namespace TwnsLangCommonText {
                 `模拟战是一种辅助您进行战局规划/地图测试的工具。`,
                 `该工具允许您把当前所见到的战局信息原样复制到单人战局中。您可以在该单人战局中随意操作，还可以无限制地存档、读档，直到您找到最好的走法为止。`,
                 `在该模式下，游戏规则仍然正常生效。换言之，您可以结束回合，或者做其他任何常规操作，游戏会为您正常结算相关数据。`,
-                ``,
-                `另：上帝模式开发中，敬请期待！`,
             ].join("\n"),
             [
                 `Simulation (or Move Planner) is a tool to plan game moves and test maps.`,
                 `It enables you to copy the game screen to a single player game. You may move any unit and save/load for unlimited times till you're satisfied with the move.`,
                 `In this mode the game rule works normally. For example, you may end your turn and the fund will be added as usual.`,
-                ``,
-                `Sandbox Mode (where you can set unit HP for a better planning purpose) is now under development, and it may be online SOOOON.`,
             ].join("\n"),
         ],
 
@@ -5945,11 +7171,39 @@ namespace TwnsLangCommonText {
 
         [LangTextType.R0012]: [
             [
-                `若回合数超过了回合限制，则本局游戏将自动以和局结束。`,
+                `若回合数超过了回合限制，或战局总动作数超过了动作数限制，则本局游戏将自动以和局结束。`,
             ].join(`\n`),
             [
-                `If there is no winner by the time the turn limit has been exceeded, the game will be considered a Draw.`,
+                `If there is no winner by the time the turn limit OR the actions limit has been exceeded, the game will be considered a Draw.`,
             ].join(`\n`),
+        ],
+
+        [LangTextType.R0013]: [
+            `每回合的可用时间是固定不变的。`,
+            `The available time for each round is fixed.`,
+        ],
+
+        [LangTextType.R0014]: [
+            [
+                `增量计时：玩家每回合可用的时间将受到前面回合所消耗的时间的影响。此模式有三个参数，分别为“初始时间”，“部队增量时间”和“回合增量时间”。`,
+                ``,
+                `第一回合，玩家拥有的时间就是“初始时间”。`,
+                `第二及后续所有回合，玩家拥有的时间=上一个回合的剩余时间+（上回合结束时的剩余部队数*部队增量时间）+回合增量时间。`,
+                ``,
+                `比如，假设部队增量时间是5秒，回合增量时间是60秒，上回合剩余时间是180秒，且你有10个部队`,
+                `那么本回合可用时间为: 180 + 5 * 10 + 60 = 290秒。`
+            ].join("\n"),
+
+            [
+                `The time available for each round will be affected by the time consumed in the previous round.`,
+                `This mode has three parameters, namely "Initial Time" "Incremental Time per Unit" and "Incremental Time per Turn".`,
+                ``,
+                `For the first round, the time the player has is "Initial Time".`,
+                `For the second round and all subsequent rounds, the time the player has equals the remaining time of the previous round plus (the number of troops remaining in the previous round multiplies the "Incremental Time per Unit") plus the "Incremental Timer per Turn".`,
+                ``,
+                `For example, assuming the "Incremental Time per Unit" is 5s, the "Incremental Time per Turn" is 60s, the remaining time of your previous round is 180s, and you have 10 units.`,
+                `Then the available time for this turn is: 180 + 5 * 10 + 60 = 290s.`,
+            ].join("\n"),
         ],
     };
 }

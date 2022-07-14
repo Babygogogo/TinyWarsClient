@@ -5,7 +5,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
@@ -16,13 +16,12 @@
 // import UserProxy            from "../model/UserProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserRegisterPanel {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+namespace Twns.User {
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
 
-    export type OpenData = void;
-    export class UserRegisterPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserRegisterPanel = void;
+    export class UserRegisterPanel extends TwnsUiPanel.UiPanel<OpenDataForUserRegisterPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -60,16 +59,16 @@ namespace TwnsUserRegisterPanel {
         }
 
         private _onMsgUserRegister(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgUserRegister.IS;
+            const data = e.data as CommonProto.NetMessage.MsgUserRegister.IS;
             FloatText.show(Lang.getText(LangTextType.A0004));
 
             const account   = Helpers.getExisted(data.account, ClientErrorCode.UserRegisterPanel_OnMsgUserRegister_00);
             const password  = this._inputPassword.text;
             LocalStorage.setAccount(account);
             LocalStorage.setPassword(password);
-            UserModel.setSelfAccount(account);
-            UserModel.setSelfPassword(password);
-            UserProxy.reqLogin(account, password, false);
+            User.UserModel.setSelfAccount(account);
+            User.UserModel.setSelfPassword(password);
+            User.UserProxy.reqLogin(account, password, false);
         }
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
@@ -81,12 +80,16 @@ namespace TwnsUserRegisterPanel {
             const nickname = this._inputNickname.text;
             if (!Helpers.checkIsAccountValid(account)) {
                 FloatText.show(Lang.getText(LangTextType.A0001));
+            } else if (account.toLowerCase().indexOf("guest_") === 0) {
+                FloatText.show(Lang.getText(LangTextType.A0367));
             } else if (!Helpers.checkIsPasswordValid(password)) {
                 FloatText.show(Lang.getText(LangTextType.A0003));
             } else if (!Helpers.checkIsNicknameValid(nickname)) {
                 FloatText.show(Lang.getText(LangTextType.A0002));
+            } else if (nickname.toLowerCase().indexOf("guest_") === 0) {
+                FloatText.show(Lang.getText(LangTextType.A0368));
             } else {
-                UserProxy.reqUserRegister(account, password, nickname);
+                User.UserProxy.reqUserRegister(account, password, nickname);
             }
         }
 

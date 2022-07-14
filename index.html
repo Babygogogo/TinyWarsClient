@@ -123,7 +123,7 @@
                                 location.href = "";
                             }
                         </script>
-                        <span id="loadingDesTxt">Now loading... Get stuck? <a class="clickme" href="javascript:sclick();">Touch me to refresh</a></span>
+                        <span id="loadingDesTxt">Now loading... Got stuck? <a class="clickme" href="javascript:sclick();">Touch me to refresh</a></span>
                     </font>
                 </div>
                 <div id="loadingBarCon">
@@ -162,11 +162,13 @@
     };
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', './manifest.json?v=' + Math.random(), true);
+    xhr.open('GET', './manifest.json?v=' + Math.random() + Math.random(), true);
     xhr.addEventListener("load", function () {
+        var manifest                = JSON.parse(xhr.response);
+        window.RES_HASH_DICT_PATH   = manifest.resHashDictPath;
+
         document.getElementById("loadingBar").className = "line-scale"
 
-        var manifest = JSON.parse(xhr.response);
         var list = manifest.initial.concat(manifest.game);
         loadScript(list, function () {
             /**

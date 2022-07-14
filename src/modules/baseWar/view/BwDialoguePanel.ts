@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -14,15 +14,15 @@
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwDialoguePanel {
-    import LangTextType = TwnsLangTextType.LangTextType;
+namespace Twns.BaseWar {
+    import LangTextType = Twns.Lang.LangTextType;
 
-    export type OpenData = {
-        configVersion   : string;
-        actionData      : ProtoTypes.WarEvent.IWeaDialogue;
+    export type OpenDataForBwDialoguePanel = {
+        gameConfig      : Twns.Config.GameConfig;
+        actionData      : CommonProto.WarEvent.IWeaDialogue;
         callbackOnClose : () => void;
     };
-    export class BwDialoguePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwDialoguePanel extends TwnsUiPanel.UiPanel<OpenDataForBwDialoguePanel> {
         private readonly _group!        : eui.Group;
         private readonly _imgBg!        : TwnsUiImage.UiImage;
         private readonly _imgCo1!       : TwnsUiImage.UiImage;
@@ -43,16 +43,16 @@ namespace TwnsBwDialoguePanel {
                 { ui: this._imgTouchMask,   callback: this._onTouchedImgTouchMask },
             ]);
             this._setNotifyListenerArray([
-                { type: TwnsNotifyType.NotifyType.LanguageChanged,  callback: this._onNotifyLanguageChanged },
+                { type: Twns.Notify.NotifyType.LanguageChanged,  callback: this._onNotifyLanguageChanged },
             ]);
             this._imgTouchMask.touchEnabled = true;
         }
-        protected async _updateOnOpenDataChanged(oldOpenData: OpenData | null): Promise<void> {
+        protected async _updateOnOpenDataChanged(oldOpenData: OpenDataForBwDialoguePanel | null): Promise<void> {
             if (oldOpenData) {
                 oldOpenData.callbackOnClose();
             }
 
-            this._imgBg.source          = ConfigManager.getDialogueBackgroundImage(this._getOpenData().actionData.backgroundId ?? 0);
+            this._imgBg.source          = Twns.Config.ConfigManager.getDialogueBackgroundImage(this._getOpenData().actionData.backgroundId ?? 0);
             this._groupName1.visible    = false;
             this._groupName2.visible    = false;
             this._imgCo1.source         = ``;
@@ -65,18 +65,18 @@ namespace TwnsBwDialoguePanel {
         }
 
         private _onTouchedBtnSkip(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0226),
                 callback: () => this.close(),
             });
         }
         private _onTouchedImgTouchMask(): void {
-            if (Helpers.getExisted(this._getOpenData().actionData.dataArray)[this._dialogueIndex + 1]) {
+            if (Twns.Helpers.getExisted(this._getOpenData().actionData.dataArray)[this._dialogueIndex + 1]) {
                 this._tickDialogue();
             } else {
                 this.close();
             }
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -175,35 +175,36 @@ namespace TwnsBwDialoguePanel {
             const imgCo1                                = this._imgCo1;
             const imgCo2                                = this._imgCo2;
             const openData                              = this._getOpenData();
-            const { dataForCoDialogue, dataForAside }   = Helpers.getExisted(openData.actionData.dataArray)[this._dialogueIndex];
+            const { dataForCoDialogue, dataForAside }   = Twns.Helpers.getExisted(openData.actionData.dataArray)[this._dialogueIndex];
 
             if (dataForCoDialogue) {
                 const { side, nameArray }   = dataForCoDialogue;
-                const coId                  = Helpers.getExisted(dataForCoDialogue.coId);
-                const coImageSource         = ConfigManager.getCoBustImageSource(openData.configVersion, coId);
-                const coName                = Lang.getLanguageText({ textArray: nameArray }) ?? ConfigManager.getCoNameAndTierText(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), coId);
+                const coId                  = Twns.Helpers.getExisted(dataForCoDialogue.coId);
+                const gameConfig            = openData.gameConfig;
+                const coImageSource         = gameConfig.getCoBustImageSource(coId) ?? Twns.CommonConstants.ErrorTextForUndefined;
+                const coName                = Lang.getLanguageText({ textArray: nameArray }) ?? gameConfig.getCoNameAndTierText(coId) ?? Twns.CommonConstants.ErrorTextForUndefined;
 
-                if (side === Types.WarEventActionDialogueSide.Left) {
+                if (side === Twns.Types.WarEventActionDialogueSide.Left) {
                     groupName1.visible  = true;
                     groupName2.visible  = false;
                     labelName1.text     = coName;
                     imgCo1.source       = coImageSource;
-                    Helpers.changeColor(imgCo1, Types.ColorType.Origin);
-                    Helpers.changeColor(imgCo2, Types.ColorType.Dark);
+                    Twns.Helpers.changeColor(imgCo1, Twns.Types.ColorType.Origin);
+                    Twns.Helpers.changeColor(imgCo2, Twns.Types.ColorType.Dark);
 
-                } else if (side === Types.WarEventActionDialogueSide.Right) {
+                } else if (side === Twns.Types.WarEventActionDialogueSide.Right) {
                     groupName1.visible  = false;
                     groupName2.visible  = true;
                     labelName2.text     = coName;
                     imgCo2.source       = coImageSource;
-                    Helpers.changeColor(imgCo1, Types.ColorType.Dark);
-                    Helpers.changeColor(imgCo2, Types.ColorType.Origin);
+                    Twns.Helpers.changeColor(imgCo1, Twns.Types.ColorType.Dark);
+                    Twns.Helpers.changeColor(imgCo2, Twns.Types.ColorType.Origin);
 
                 } else {
-                    throw Helpers.newError(`BwDialoguePanel._updateComponentsForDialogue() invalid side.`);
+                    throw Twns.Helpers.newError(`BwDialoguePanel._updateComponentsForDialogue() invalid side.`);
                 }
 
-                labelContent.setRichText(Helpers.getExisted(Lang.getLanguageText({
+                labelContent.setRichText(Twns.Helpers.getExisted(Lang.getLanguageText({
                     textArray   : dataForCoDialogue.textArray,
                 })).replace(/\\n/g, "\n"));
 
@@ -213,29 +214,29 @@ namespace TwnsBwDialoguePanel {
                 imgCo1.source       = ``;
                 imgCo2.source       = ``;
 
-                labelContent.setRichText(Helpers.getExisted(Lang.getLanguageText({
+                labelContent.setRichText(Twns.Helpers.getExisted(Lang.getLanguageText({
                     textArray   : dataForAside.textArray,
                 })).replace(/\\n/g, "\n"));
             }
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 }

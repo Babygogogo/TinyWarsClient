@@ -8,9 +8,9 @@
 // import TwnsChatPanel    from "../view/ChatPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace ChatModel {
-    import ChatCategory     = Types.ChatMessageToCategory;
-    import IChatMessage     = ProtoTypes.Chat.IChatMessage;
+namespace Twns.Chat.ChatModel {
+    import ChatCategory     = Twns.Types.ChatMessageToCategory;
+    import IChatMessage     = CommonProto.Chat.IChatMessage;
 
     type MessageDict                    = Map<number, IChatMessage[]>;
     const _allMessageDict               = new Map<ChatCategory, MessageDict>();
@@ -35,20 +35,20 @@ namespace ChatModel {
     export function updateOnAddMessage(msg: IChatMessage, showFloatText: boolean): void {
         const fromUserId = msg.fromUserId;
         if (fromUserId == null) {
-            Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
+            Twns.Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
         } else {
             const msgToCategory = msg.toCategory;
-            const msgToTarget   = Helpers.getExisted(msg.toTarget);
+            const msgToTarget   = Twns.Helpers.getExisted(msg.toTarget);
             const msgContent    = msg.content;
-            const isSentBySelf  = UserModel.getSelfUserId() === fromUserId;
+            const isSentBySelf  = Twns.User.UserModel.getSelfUserId() === fromUserId;
 
             if (msgToCategory === ChatCategory.PublicChannel) {
                 addMessage(ChatCategory.PublicChannel, msg, msgToTarget);
 
             } else if (msgToCategory === ChatCategory.WarAndTeam) {
                 addMessage(ChatCategory.WarAndTeam, msg, msgToTarget);
-                if ((!isSentBySelf) && (showFloatText) && (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.ChatPanel))) {
-                    UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                if ((!isSentBySelf) && (showFloatText) && (!Twns.PanelHelpers.getRunningPanel(Twns.PanelHelpers.PanelDict.ChatPanel))) {
+                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => Twns.FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else if (msgToCategory === ChatCategory.Private) {
@@ -56,25 +56,37 @@ namespace ChatModel {
                     addMessage(ChatCategory.Private, msg, msgToTarget);
                 } else {
                     addMessage(ChatCategory.Private, msg, fromUserId);
-                    if ((showFloatText) && (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.ChatPanel))) {
-                        UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                    if ((showFloatText) && (!Twns.PanelHelpers.getRunningPanel(Twns.PanelHelpers.PanelDict.ChatPanel))) {
+                        Twns.User.UserModel.getUserNickname(fromUserId).then(name => Twns.FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                     }
                 }
 
             } else if (msgToCategory === ChatCategory.McrRoom) {
                 addMessage(msgToCategory, msg, msgToTarget);
-                if ((!isSentBySelf) && (showFloatText) && (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.ChatPanel))) {
-                    UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                if ((!isSentBySelf) && (showFloatText) && (!Twns.PanelHelpers.getRunningPanel(Twns.PanelHelpers.PanelDict.ChatPanel))) {
+                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => Twns.FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else if (msgToCategory === ChatCategory.MfrRoom) {
                 addMessage(msgToCategory, msg, msgToTarget);
-                if ((!isSentBySelf) && (showFloatText) && (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.ChatPanel))) {
-                    UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                if ((!isSentBySelf) && (showFloatText) && (!Twns.PanelHelpers.getRunningPanel(Twns.PanelHelpers.PanelDict.ChatPanel))) {
+                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => Twns.FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                }
+
+            } else if (msgToCategory === ChatCategory.CcrRoom) {
+                addMessage(msgToCategory, msg, msgToTarget);
+                if ((!isSentBySelf) && (showFloatText) && (!Twns.PanelHelpers.getRunningPanel(Twns.PanelHelpers.PanelDict.ChatPanel))) {
+                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => Twns.FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                }
+
+            } else if (msgToCategory === ChatCategory.MapReview) {
+                addMessage(msgToCategory, msg, msgToTarget);
+                if ((!isSentBySelf) && (showFloatText) && (!Twns.PanelHelpers.getRunningPanel(Twns.PanelHelpers.PanelDict.ChatPanel))) {
+                    Twns.User.UserModel.getUserNickname(fromUserId).then(name => Twns.FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else {
-                Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
+                Twns.Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
             }
         }
     }
@@ -92,7 +104,7 @@ namespace ChatModel {
         if (!_allMessageDict.has(toCategory)) {
             _allMessageDict.set(toCategory, new Map());
         }
-        return Helpers.getExisted(_allMessageDict.get(toCategory));
+        return Twns.Helpers.getExisted(_allMessageDict.get(toCategory));
     }
     export function getLatestMessageTimestamp(toCategory: ChatCategory, toTarget: number): number {
         const messageList   = getMessagesForCategory(toCategory).get(toTarget) || [];
@@ -100,16 +112,16 @@ namespace ChatModel {
         return message ? message.timestamp || 0 : 0;
     }
 
-    export function resetAllReadProgress(list: ProtoTypes.Chat.IChatReadProgress[]): void {
+    export function resetAllReadProgress(list: CommonProto.Chat.IChatReadProgress[]): void {
         _allProgressDict.clear();
         for (const p of list || []) {
             setReadProgress(p);
         }
     }
-    export function setReadProgress(progress: ProtoTypes.Chat.IChatReadProgress): void {
-        const toCategory    = Helpers.getExisted(progress.toCategory);
-        const toTarget      = Helpers.getExisted(progress.toTarget);
-        const timestamp     = Helpers.getExisted(progress.timestamp);
+    export function setReadProgress(progress: CommonProto.Chat.IChatReadProgress): void {
+        const toCategory    = Twns.Helpers.getExisted(progress.toCategory);
+        const toTarget      = Twns.Helpers.getExisted(progress.toTarget);
+        const timestamp     = Twns.Helpers.getExisted(progress.timestamp);
         const subDict       = _allProgressDict.get(toCategory);
         if (subDict) {
             subDict.set(toTarget, timestamp);
@@ -140,7 +152,7 @@ namespace ChatModel {
         if (!length) {
             return false;
         } else {
-            return getReadProgressTimestamp(toCategory, toTarget) < Helpers.getExisted(messages[length - 1].timestamp);
+            return getReadProgressTimestamp(toCategory, toTarget) < Twns.Helpers.getExisted(messages[length - 1].timestamp);
         }
     }
 
@@ -150,7 +162,7 @@ namespace ChatModel {
             _allMessageDict.set(toCategory, new Map<number, IChatMessage[]>([[toTarget, [msg]]]));
         } else {
             if (dict.has(toTarget)) {
-                Helpers.getExisted(dict.get(toTarget)).push(msg);
+                Twns.Helpers.getExisted(dict.get(toTarget)).push(msg);
             } else {
                 dict.set(toTarget, [msg]);
             }

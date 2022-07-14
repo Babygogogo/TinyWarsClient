@@ -3,7 +3,8 @@
 // import ProtoTypes       from "../proto/ProtoTypes";
 // import CommonConstants  from "./CommonConstants";
 
-namespace LocalStorage {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.LocalStorage {
     import storage                      = egret.localStorage;
 
     const KEY_PREFIX                    = "TinyWarsStorage_";
@@ -13,7 +14,8 @@ namespace LocalStorage {
     const KEY_LANGUAGE                  = KEY_PREFIX + "Language";
     const KEY_SHOW_TILE_ANIMATION       = KEY_PREFIX + "ShowTileAnimation";
     const KEY_SHOW_UNIT_ANIMATION       = KEY_PREFIX + "ShowUnitAnimation";
-    const KEY_MAP_RAW_DATA_PREFIX       = KEY_PREFIX + "MapRawData_";
+    const KEY_SHOW_WEATHER_ANIMATION    = KEY_PREFIX + "ShowWeatherAnimation";
+    // const KEY_MAP_RAW_DATA_PREFIX       = KEY_PREFIX + "MapRawData_";
     const KEY_SOUND_BGM_MUTE            = KEY_PREFIX + "SoundBgmMute";
     const KEY_SOUND_BGM_VOLUME          = KEY_PREFIX + "SoundBgmVolume";
     const KEY_SOUND_EFFECT_MUTE         = KEY_PREFIX + "SoundEffectMute";
@@ -23,40 +25,40 @@ namespace LocalStorage {
     const VALUE_FALSE                   = "0";
 
     export function setAccount(account: string): void {
-        storage.setItem(KEY_ACCOUNT, account);
+        setValue(KEY_ACCOUNT, account);
     }
     export function getAccount(): string {
-        return storage.getItem(KEY_ACCOUNT);
+        return getString(KEY_ACCOUNT) ?? ``;
     }
 
     export function setPassword(password: string): void {
-        storage.setItem(KEY_PASSWORD, password);
+        setValue(KEY_PASSWORD, password);
     }
     export function getPassword(): string {
-        return storage.getItem(KEY_PASSWORD);
+        return getString(KEY_PASSWORD) ?? ``;
     }
 
     export function setIsRememberPassword(remember: boolean): void {
-        storage.setItem(KEY_REMEMBER_PASSWORD, remember ? VALUE_TRUE : VALUE_FALSE);
+        setValue(KEY_REMEMBER_PASSWORD, remember ? VALUE_TRUE : VALUE_FALSE);
     }
     export function getIsRememberPassword(): boolean {
-        const value = storage.getItem(KEY_REMEMBER_PASSWORD);
+        const value = getString(KEY_REMEMBER_PASSWORD);
         return (value == null) || (value === VALUE_TRUE);
     }
 
-    export function setMapRawData(mapId: number, data: ProtoTypes.Map.IMapRawData): void {
-        storage.setItem(KEY_MAP_RAW_DATA_PREFIX + mapId, JSON.stringify(data));
-    }
-    export function getMapRawData(mapId: number): ProtoTypes.Map.IMapRawData | null {
-        const data = storage.getItem(KEY_MAP_RAW_DATA_PREFIX + mapId);
-        return data ? JSON.parse(data) : null;
-    }
+    // export function setMapRawData(mapId: number, data: CommonProto.Map.IMapRawData): void {
+    //     setValue(KEY_MAP_RAW_DATA_PREFIX + mapId, JSON.stringify(data));
+    // }
+    // export function getMapRawData(mapId: number): CommonProto.Map.IMapRawData | null {
+    //     const data = storage.getItem(KEY_MAP_RAW_DATA_PREFIX + mapId);
+    //     return data ? JSON.parse(data) : null;
+    // }
 
     export function setLanguageType(language: Types.LanguageType): void {
-        storage.setItem(KEY_LANGUAGE, "" + language);
+        setValue(KEY_LANGUAGE, "" + language);
     }
     export function getLanguageType(): Types.LanguageType {
-        const t = parseInt(storage.getItem(KEY_LANGUAGE));
+        const t = getInt(KEY_LANGUAGE);
         if ((t === Types.LanguageType.English) || (t === Types.LanguageType.Chinese)) {
             return t;
         } else {
@@ -65,56 +67,95 @@ namespace LocalStorage {
     }
 
     export function setShowTileAnimation(show: boolean): void {
-        storage.setItem(KEY_SHOW_TILE_ANIMATION, show ? VALUE_TRUE : VALUE_FALSE);
+        setValue(KEY_SHOW_TILE_ANIMATION, show ? VALUE_TRUE : VALUE_FALSE);
     }
     export function getShowTileAnimation(): boolean {
-        const data = storage.getItem(KEY_SHOW_TILE_ANIMATION);
+        const data = getString(KEY_SHOW_TILE_ANIMATION);
         return (data == null) || (data === VALUE_TRUE);
     }
 
     export function setShowUnitAnimation(show: boolean): void {
-        storage.setItem(KEY_SHOW_UNIT_ANIMATION, show ? VALUE_TRUE : VALUE_FALSE);
+        setValue(KEY_SHOW_UNIT_ANIMATION, show ? VALUE_TRUE : VALUE_FALSE);
     }
     export function getShowUnitAnimation(): boolean {
-        const data = storage.getItem(KEY_SHOW_UNIT_ANIMATION);
+        const data = getString(KEY_SHOW_UNIT_ANIMATION);
+        return (data == null) || (data === VALUE_TRUE);
+    }
+
+    export function setShowWeatherAnimation(show: boolean): void {
+        setValue(KEY_SHOW_WEATHER_ANIMATION, show ? VALUE_TRUE : VALUE_FALSE);
+    }
+    export function getShowWeatherAnimation(): boolean {
+        const data = getString(KEY_SHOW_WEATHER_ANIMATION);
         return (data == null) || (data === VALUE_TRUE);
     }
 
     export function setIsSoundBgmMute(isMute: boolean): void {
-        storage.setItem(KEY_SOUND_BGM_MUTE, isMute ? VALUE_TRUE : VALUE_FALSE);
+        setValue(KEY_SOUND_BGM_MUTE, isMute ? VALUE_TRUE : VALUE_FALSE);
     }
     export function getIsSoundBgmMute(): boolean {
-        return storage.getItem(KEY_SOUND_BGM_MUTE) == VALUE_TRUE;
+        return getString(KEY_SOUND_BGM_MUTE) == VALUE_TRUE;
     }
 
     export function setSoundBgmVolume(volume: number): void {
-        storage.setItem(KEY_SOUND_BGM_VOLUME, `${volume}`);
+        setValue(KEY_SOUND_BGM_VOLUME, `${volume}`);
     }
     export function getSoundBgmVolume(): number {
-        const volume = parseFloat(storage.getItem(KEY_SOUND_BGM_VOLUME));
-        return (volume >= 0) && (volume <= 1) ? volume : 1;
+        const volume = getFloat(KEY_SOUND_BGM_VOLUME);
+        return (volume != null) && (volume >= 0) && (volume <= 1) ? volume : 1;
     }
 
     export function setIsSoundEffectMute(isMute: boolean): void {
-        storage.setItem(KEY_SOUND_EFFECT_MUTE, isMute ? VALUE_TRUE : VALUE_FALSE);
+        setValue(KEY_SOUND_EFFECT_MUTE, isMute ? VALUE_TRUE : VALUE_FALSE);
     }
     export function getIsSoundEffectMute(): boolean {
-        return storage.getItem(KEY_SOUND_EFFECT_MUTE) == VALUE_TRUE;
+        return getString(KEY_SOUND_EFFECT_MUTE) == VALUE_TRUE;
     }
 
     export function setSoundEffectVolume(volume: number): void {
-        storage.setItem(KEY_SOUND_EFFECT_VOLUME, `${volume}`);
+        setValue(KEY_SOUND_EFFECT_VOLUME, `${volume}`);
     }
     export function getSoundEffectVolume(): number {
-        const volume = parseFloat(storage.getItem(KEY_SOUND_EFFECT_VOLUME));
-        return (volume >= 0) && (volume <= 1) ? volume : 1;
+        const volume = getFloat(KEY_SOUND_EFFECT_VOLUME);
+        return (volume != null) && (volume >= 0) && (volume <= 1) ? volume : 1;
     }
 
     export function setStageScale(scale: number): void {
-        storage.setItem(KEY_STAGE_SCALE, `${scale}`);
+        setValue(KEY_STAGE_SCALE, `${scale}`);
     }
     export function getStageScale(): number {
-        return parseInt(storage.getItem(KEY_STAGE_SCALE)) || CommonConstants.StageMinScale;
+        return getInt(KEY_STAGE_SCALE) || CommonConstants.StageMinScale;
+    }
+
+    function setValue(key: string, value: string): void {
+        try {
+            storage.setItem(key, value);
+        } catch {
+            Cookies.setValue(key, value);
+        }
+    }
+    function getInt(key: string): number | null {
+        try {
+            const i = parseInt(storage.getItem(key));
+            return isNaN(i) ? null : i;
+        } catch {
+            return Cookies.getInt(key);
+        }
+    }
+    function getFloat(key: string): number | null {
+        try {
+            const f = parseFloat(storage.getItem(key));
+            return isNaN(f) ? null : f;
+        } catch {
+            return Cookies.getInt(key);
+        }
+    }
+    function getString(key: string): string | null {
+        try {
+            return storage.getItem(key);
+        } catch {
+            return Cookies.getString(key);
+        }
     }
 }
 

@@ -6,7 +6,7 @@
 // import Types                            from "../../tools/helpers/Types";
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import Notify                   from "../../tools/notify/NotifyType";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiLabel                      from "../../tools/ui/UiLabel";
 // import TwnsUiPanel                      from "../../tools/ui/UiPanel";
@@ -23,15 +23,15 @@
 // import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeTopPanel {
-    import MeDrawer                 = TwnsMeDrawer.MeDrawer;
-    import MeWar                    = TwnsMeWar.MeWar;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.MapEditor {
+    import MeDrawer                 = MapEditor.MeDrawer;
+    import MeWar                    = MapEditor.MeWar;
+    import NotifyType               = Notify.NotifyType;
     import DrawerMode               = Types.MapEditorDrawerMode;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+    import LangTextType             = Lang.LangTextType;
 
-    export type OpenData = void;
-    export class MeTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeTopPanel = void;
+    export class MeTopPanel extends TwnsUiPanel.UiPanel<OpenDataForMeTopPanel> {
         private readonly _groupMode!                    : eui.Group;
         // private readonly _labelMode!                    : TwnsUiLabel.UiLabel;
         private readonly _conUnitView!                  : eui.Group;
@@ -69,13 +69,14 @@ namespace TwnsMeTopPanel {
         private readonly _btnVisibility!                : TwnsUiButton.UiButton;
         private readonly _btnSymmetry!                  : TwnsUiButton.UiButton;
         private readonly _btnSettings!                  : TwnsUiButton.UiButton;
+        private readonly _btnChat!                      : TwnsUiButton.UiButton;
         private readonly _btnMenu!                      : TwnsUiButton.UiButton;
 
         private readonly _labelLocationTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelLocation!                : TwnsUiLabel.UiLabel;
 
-        private _unitView   = new TwnsBwUnitView.BwUnitView();
-        private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private _unitView   = new BaseWar.BwUnitView();
+        private _tileView   = new MapEditor.MeTileSimpleView();
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -94,6 +95,7 @@ namespace TwnsMeTopPanel {
                 { type: NotifyType.BwTileLocationFlagSet,           callback: this._onNotifyBwTileLocationFlatSet },
                 { type: NotifyType.MsgMeSubmitMap,                  callback: this._onMsgMeSubmitMap },
                 { type: NotifyType.MsgMmReviewMap,                  callback: this._onMsgMmReviewMap },
+                { type: NotifyType.MsgMeDeleteSlot,                 callback: this._onNotifyMsgMeDeleteSlot },
             ]);
             this._setUiListenerArray([
                 { ui: this._groupModePreview,               callback: this._onTouchedGroupModePreview },
@@ -116,6 +118,7 @@ namespace TwnsMeTopPanel {
                 { ui: this._btnVisibility,                  callback: this._onTouchedBtnVisibility },
                 { ui: this._btnSymmetry,                    callback: this._onTouchedBtnSymmetry },
                 { ui: this._btnSettings,                    callback: this._onTouchedBtnSettings },
+                { ui: this._btnChat,                        callback: this._onTouchedBtnChat },
                 { ui: this._btnMenu,                        callback: this._onTouchedBtnMenu, },
             ]);
 
@@ -138,7 +141,7 @@ namespace TwnsMeTopPanel {
         }
 
         private _getWar(): MeWar {
-            return Helpers.getExisted(MeModel.getWar());
+            return Helpers.getExisted(MapEditor.MeModel.getWar());
         }
         private _getDrawer(): MeDrawer {
             return this._getWar().getDrawer();
@@ -150,23 +153,28 @@ namespace TwnsMeTopPanel {
         private _onNotifyLanguageChanged(): void  {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyTimeTick(): void {
-            const autoSaveTime = UserModel.getSelfMapEditorAutoSaveTime();
+        private async _onNotifyTimeTick(): Promise<void> {
+            const autoSaveTime = User.UserModel.getSelfMapEditorAutoSaveTime();
             if ((!autoSaveTime) || (Timer.getServerTimestamp() % autoSaveTime !== 0)) {
                 return;
             }
 
-            const war = MeModel.getWar();
+            const war = MapEditor.MeModel.getWar();
             if ((war == null) || (!war.getIsMapModified()) || (war.getIsReviewingMap())) {
                 return;
             }
 
             const slotIndex = war.getMapSlotIndex();
-            if (slotIndex === MeModel.getReviewingMapSlotIndex()) {
+            if (slotIndex === MapEditor.MeModel.getReviewingMapSlotIndex()) {
                 return;
             }
 
-            MeProxy.reqMeSubmitMap(slotIndex, war.serializeForMap(), false);
+            const mapRawData = war.serializeForMap();
+            if (await MapEditor.MeHelpers.getCriticalErrorCodeForMapRawData(mapRawData)) {
+                FloatText.show(Lang.getText(LangTextType.A0304));
+            } else {
+                MapEditor.MeProxy.reqMeSubmitMap(slotIndex, mapRawData, false);
+            }
         }
         private _onNotifyTileAnimationTick(): void {
             this._tileView.updateOnAnimationTick();
@@ -206,7 +214,7 @@ namespace TwnsMeTopPanel {
             this._updateLabelLocation();
         }
         private _onMsgMeSubmitMap(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMeSubmitMap.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMeSubmitMap.IS;
             if (!data.needReview) {
                 FloatText.show(Lang.getText(LangTextType.A0085));
             } else {
@@ -222,7 +230,7 @@ namespace TwnsMeTopPanel {
             this._getWar().setIsMapModified(false);
         }
         private _onMsgMmReviewMap(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMmReviewMap.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMmReviewMap.IS;
             if (data.isAccept) {
                 FloatText.show(Lang.getText(LangTextType.A0092));
             } else {
@@ -230,25 +238,29 @@ namespace TwnsMeTopPanel {
             }
             FlowManager.gotoLobby();
         }
+        private _onNotifyMsgMeDeleteSlot(): void {
+            FloatText.show(Lang.getText(LangTextType.A0081));
+            FlowManager.gotoMyWarListPanel(Types.WarType.Me);
+        }
 
         private _onTouchedGroupModePreview(): void {
             this._getDrawer().setModePreview();
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDrawTileBase(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseTileBasePanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeChooseTileBasePanel, void 0);
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDrawTileDecorator(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseTileDecoratorPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeChooseTileDecorationPanel, void 0);
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDrawTileObject(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseTileObjectPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeChooseTileObjectPanel, void 0);
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDrawUnit(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseUnitPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeChooseUnitPanel, void 0);
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDeleteTileObject(): void {
@@ -256,28 +268,33 @@ namespace TwnsMeTopPanel {
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDrawLocation(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseLocationPanel, { isAdd: true });
+            PanelHelpers.open(PanelHelpers.PanelDict.MeChooseLocationPanel, { isAdd: true });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedGroupModeDeleteLocation(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseLocationPanel, { isAdd: false });
+            PanelHelpers.open(PanelHelpers.PanelDict.MeChooseLocationPanel, { isAdd: false });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _onTouchedBtnSaveMap(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeConfirmSaveMapPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeConfirmSaveMapPanel, {
+                war     : this._getWar(),
+            });
         }
         private _onTouchedBtnLoadMap(): void {
             const war = this._getWar();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0072),
                 callback: async () => {
-                    const slotIndex = war.getMapSlotIndex();
-                    const data      = MeModel.getData(slotIndex);
+                    const slotIndex     = war.getMapSlotIndex();
+                    const gameConfig    = war.getGameConfig();
                     war.stopRunning();
-                    await war.initWithMapEditorData({
-                        mapRawData: (data ? data.mapRawData : null) || await MeUtility.createDefaultMapRawData(slotIndex),
-                        slotIndex,
-                    });
+                    await war.initWithMapEditorData(
+                        {
+                            mapRawData  : MapEditor.MeModel.getData(slotIndex)?.mapRawData ?? await MapEditor.MeHelpers.createDefaultMapRawData(slotIndex, gameConfig),
+                            slotIndex,
+                        },
+                        gameConfig
+                    );
                     war.setIsMapModified(false);
                     war.startRunning()
                         .startRunningView();
@@ -285,30 +302,36 @@ namespace TwnsMeTopPanel {
             });
         }
         private _onTouchedBtnReviewAccept(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAcceptMapPanel, { war: this._getWar() });
+            PanelHelpers.open(PanelHelpers.PanelDict.MmAcceptMapPanel, { war: this._getWar() });
         }
         private _onTouchedBtnReviewReject(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmRejectMapPanel, { war: this._getWar() });
+            PanelHelpers.open(PanelHelpers.PanelDict.MmRejectMapPanel, { war: this._getWar() });
         }
         private _onTouchedBtnWarRule(): void {
             const war = this._getWar();
             if (!war.getIsReviewingMap()) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarRulePanel, void 0);
+                PanelHelpers.open(PanelHelpers.PanelDict.MeWarRulePanel, void 0);
             } else {
-                if (war.getWarRuleArray().length) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarRulePanel, void 0);
+                if (war.getTemplateWarRuleArray().length) {
+                    PanelHelpers.open(PanelHelpers.PanelDict.MeWarRulePanel, void 0);
                 } else {
                     FloatText.show(Lang.getText(LangTextType.A0100));
                 }
             }
         }
         private _onTouchedBtnWarEvent(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeEventListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.WeEventListPanel, {
                 war: this._getWar(),
             });
         }
         private _onTouchedBtnMapTag(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeMapTagPanel, void 0);
+            const war = this._getWar();
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseMapTagIdPanel, {
+                currentMapTagIdFlags    : war.getMapTagIdFlags() ?? 0,
+                callbackOnConfirm       : mapTagIdFlags => {
+                    war.setMapTagIdFlags(mapTagIdFlags);
+                },
+            });
         }
         private _onTouchedGroupModeDeleteTileDecorator(): void {
             this._getDrawer().setModeDeleteTileDecorator();
@@ -320,16 +343,24 @@ namespace TwnsMeTopPanel {
         }
 
         private _onTouchedBtnVisibility(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeVisibilityPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeVisibilityPanel, void 0);
         }
         private _onTouchedBtnSymmetry(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeSymmetryPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeSymmetryPanel, void 0);
         }
         private _onTouchedBtnSettings(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSettingsPanel,  void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.UserSettingsPanel,  void 0);
+        }
+        private _onTouchedBtnChat(): void {
+            const war = this._getWar();
+            PanelHelpers.open(PanelHelpers.PanelDict.ChatPanel, {
+                toMapReviewTarget: war.getIsReviewingMap()
+                    ? war.getMapDesignerUserId()
+                    : Helpers.getExisted(User.UserModel.getSelfUserId())
+            });
         }
         private _onTouchedBtnMenu(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeWarMenuPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -375,6 +406,7 @@ namespace TwnsMeTopPanel {
             this._btnVisibility.label               = Lang.getText(LangTextType.B0301);
             this._btnSymmetry.label                 = Lang.getText(LangTextType.B0306);
             this._btnSettings.label                 = Lang.getText(LangTextType.B0560);
+            this._btnChat.label                     = Lang.getText(LangTextType.B0383);
             this._btnMenu.label                     = Lang.getText(LangTextType.B0155);
             this._labelLocationTitle.text           = `${Lang.getText(LangTextType.B0764)}:`;
         }
@@ -396,6 +428,7 @@ namespace TwnsMeTopPanel {
             group.addChild(this._btnVisibility);
             group.addChild(this._btnSymmetry);
             group.addChild(this._btnSettings);
+            group.addChild(this._btnChat);
             group.addChild(this._btnMenu);
         }
 
@@ -434,10 +467,11 @@ namespace TwnsMeTopPanel {
         // }
 
         private _updateTileView(): void {
-            const drawer    = this._getDrawer();
-            const mode      = drawer.getMode();
-            const con       = this._conTileView;
-            const tileView  = this._tileView;
+            const drawer        = this._getDrawer();
+            const mode          = drawer.getMode();
+            const con           = this._conTileView;
+            const tileView      = this._tileView;
+            const gameConfig    = this._getWar().getGameConfig();
             if (mode === DrawerMode.DrawTileBase) {
                 con.visible = true;
 
@@ -449,7 +483,8 @@ namespace TwnsMeTopPanel {
                     tileDecoratorShapeId: null,
                     tileObjectShapeId   : null,
                     tileObjectType      : null,
-                    playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex         : CommonConstants.PlayerIndex.Neutral,
+                    gameConfig
                 });
                 tileView.updateView();
 
@@ -464,7 +499,8 @@ namespace TwnsMeTopPanel {
                     tileDecoratorShapeId: tileDecoratorData.shapeId,
                     tileObjectShapeId   : null,
                     tileObjectType      : null,
-                    playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex         : CommonConstants.PlayerIndex.Neutral,
+                    gameConfig
                 });
                 tileView.updateView();
 
@@ -480,6 +516,7 @@ namespace TwnsMeTopPanel {
                     tileObjectShapeId   : tileObjectData.shapeId,
                     tileObjectType      : tileObjectData.objectType,
                     playerIndex         : tileObjectData.playerIndex,
+                    gameConfig
                 });
                 tileView.updateView();
 
@@ -560,40 +597,41 @@ namespace TwnsMeTopPanel {
                 tileDecoratorShapeId: null,
                 tileObjectType      : null,
                 tileObjectShapeId   : null,
-                playerIndex         : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : CommonConstants.PlayerIndex.Neutral,
+                gameConfig          : this._getWar().getGameConfig(),
             });
             tileView.startRunningView();
         }
         private _initUnitView(): void {
             const war   = this._getWar();
-            const unit  = new TwnsBwUnit.BwUnit();
+            const unit  = new BaseWar.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
-                unitType    : Types.UnitType.Infantry,
-                playerIndex : CommonConstants.WarFirstPlayerIndex,
-            }, this._getWar().getConfigVersion());
+                unitType    : war.getGameConfig().getFirstUnitType(),
+                playerIndex : CommonConstants.PlayerIndex.First,
+            }, this._getWar().getGameConfig());
             unit.startRunning(war);
 
             this._unitView.init(unit);
         }
     }
 
-    function getTextColorForDrawerMode(mode: DrawerMode): number {
-        switch (mode) {
-            case DrawerMode.Preview                 : return 0xffffff;
-            case DrawerMode.DrawUnit                : return 0x00ff00;
-            case DrawerMode.DrawTileBase            : return 0x00ff00;
-            case DrawerMode.DrawTileObject          : return 0x00ff00;
-            case DrawerMode.DrawTileDecorator       : return 0x00ff00;
-            case DrawerMode.DeleteUnit              : return 0xff0000;
-            case DrawerMode.DeleteTileDecorator     : return 0xff0000;
-            case DrawerMode.DeleteTileObject        : return 0xff0000;
-            case DrawerMode.AddTileToLocation       : return 0x00ff00;
-            case DrawerMode.DeleteTileFromLocation  : return 0xff0000;
-            default                                 : return 0xffffff;
-        }
-    }
+    // function getTextColorForDrawerMode(mode: DrawerMode): number {
+    //     switch (mode) {
+    //         case DrawerMode.Preview                 : return 0xffffff;
+    //         case DrawerMode.DrawUnit                : return 0x00ff00;
+    //         case DrawerMode.DrawTileBase            : return 0x00ff00;
+    //         case DrawerMode.DrawTileObject          : return 0x00ff00;
+    //         case DrawerMode.DrawTileDecorator       : return 0x00ff00;
+    //         case DrawerMode.DeleteUnit              : return 0xff0000;
+    //         case DrawerMode.DeleteTileDecorator     : return 0xff0000;
+    //         case DrawerMode.DeleteTileObject        : return 0xff0000;
+    //         case DrawerMode.AddTileToLocation       : return 0x00ff00;
+    //         case DrawerMode.DeleteTileFromLocation  : return 0xff0000;
+    //         default                                 : return 0xffffff;
+    //     }
+    // }
 }
 
 // export default TwnsMeTopPanel;

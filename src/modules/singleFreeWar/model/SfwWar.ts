@@ -7,18 +7,18 @@
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSfwWar {
-    import SpwWar           = TwnsSpwWar.SpwWar;
-    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
-    import ISettingsForSfw  = ProtoTypes.WarSettings.ISettingsForSfw;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+namespace Twns.SingleFreeWar {
+    import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
+    import ISettingsForSfw  = CommonProto.WarSettings.ISettingsForSfw;
+    import GameConfig       = Config.GameConfig;
 
-    export class SfwWar extends SpwWar {
+    export class SfwWar extends SinglePlayerWar.SpwWar {
         private _settingsForSfw?    : ISettingsForSfw;
 
-        public async init(data: ISerialWar): Promise<void> {
-            await this._baseInit(data);
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
+            this._baseInit(data, gameConfig, WarHelpers.WarCommonHelpers.getWarType(data));
             this._setSettingsForSfw(Helpers.getExisted(data.settingsForSfw, ClientErrorCode.SfwWar_Init_00));
+            this.getRetractManager().setCanRetract(true);
 
             this._initView();
         }
@@ -29,15 +29,17 @@ namespace TwnsSfwWar {
                 settingsForSfw              : this._getSettingsForSfw(),
 
                 warId                       : this.getWarId(),
+                isEnded                     : this.getIsEnded(),
                 seedRandomInitialState      : null,
                 seedRandomCurrentState      : null,
-                executedActions             : [],
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                 weatherManager              : this.getWeatherManager().serialize(),
                 warEventManager             : this.getWarEventManager().serialize(),
                 playerManager               : this.getPlayerManager().serialize(),
                 turnManager                 : this.getTurnManager().serialize(),
                 field                       : this.getField().serialize(),
+                executedActionManager       : null,
+                warStatisticsManager        : this.getWarStatisticsManager().serialize(),
             };
         }
 
@@ -51,17 +53,14 @@ namespace TwnsSfwWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getWarType(): Types.WarType {
-            return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.SfwFog
-                : Types.WarType.SfwStd;
-        }
-
         public getMapId(): number | null {
             return null;
         }
 
         public getCanCheat(): boolean {
+            return true;
+        }
+        public getShouldSerializeFullInfoForFreeModeGames(): boolean {
             return true;
         }
 

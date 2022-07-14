@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 // import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
@@ -13,15 +13,14 @@
 // import TwnsBwWar                from "../model/BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwDamagePreviewPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import BwWar            = TwnsBwWar.BwWar;
+namespace Twns.BaseWar {
+    import NotifyType       = Notify.NotifyType;
+    import LangTextType     = Lang.LangTextType;
 
-    export type OpenData = {
+    export type OpenDataForBwDamagePreviewPanel = {
         war: BwWar;
     };
-    export class BwDamagePreviewPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwDamagePreviewPanel extends TwnsUiPanel.UiPanel<OpenDataForBwDamagePreviewPanel> {
         private readonly _group!                : eui.Group;
         private readonly _labelAttackTitle!     : TwnsUiLabel.UiLabel;
         private readonly _labelAttackValue!     : TwnsUiLabel.UiLabel;
@@ -79,9 +78,10 @@ namespace TwnsBwDamagePreviewPanel {
             const actionPlanner         = war.getActionPlanner();
             const tileMap               = war.getTileMap();
             const commonSettingsManager = war.getCommonSettingManager();
+            const gameConfig            = war.getGameConfig();
             const allTiles              = tileMap.getAllTiles();
-            const allCities             = allTiles.filter(v => v.getType() === Types.TileType.City);
-            const allCommandTowers      = allTiles.filter(v => v.getType() === Types.TileType.CommandTower);
+            const allCities             = allTiles.filter(v => v.getType() === CommonConstants.TileType.City);
+            const allCommandTowers      = allTiles.filter(v => v.getType() === CommonConstants.TileType.CommandTower);
             const attackerUnit          = Helpers.getExisted(actionPlanner.getFocusUnit());
             const attackerPlayer        = attackerUnit.getPlayer();
             const attackerGridIndex     = actionPlanner.getMovePathDestination();
@@ -91,13 +91,13 @@ namespace TwnsBwDamagePreviewPanel {
             const defenderPlayer        = defenderUnit.getPlayer();
             const defenderPlayerIndex   = defenderUnit.getPlayerIndex();
             const hasFog                = war.getFogMap().checkHasFogCurrently();
-            const watcherTeamIndexes    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const watcherTeamIndexes    = war.getPlayerManager().getWatcherTeamIndexesForSelf();
             const canSeeHiddenInfo1     = (!hasFog) || (watcherTeamIndexes.has(attackerPlayer.getTeamIndex()));
             const canSeeHiddenInfo2     = (!hasFog) || (watcherTeamIndexes.has(defenderPlayer.getTeamIndex()));
             const coSkillType1          = attackerPlayer.getCoUsingSkillType();
             const coSkillType2          = defenderPlayer.getCoUsingSkillType();
             const getIsAffectedByCo1    = Helpers.createLazyFunc((): boolean => {
-                if (attackerUnit.getHasLoadedCo()) {
+                if ((attackerUnit.getHasLoadedCo()) || (!gameConfig.getCoBasicCfg(attackerPlayer.getCoId())?.maxLoadCount)) {
                     return true;
                 }
 
@@ -105,7 +105,7 @@ namespace TwnsBwDamagePreviewPanel {
                 return (distance != null) && (distance <= attackerPlayer.getCoZoneRadius());
             });
             const getIsAffectedByCo2    = Helpers.createLazyFunc((): boolean => {
-                if (defenderUnit.getHasLoadedCo()) {
+                if ((defenderUnit.getHasLoadedCo())  || (!gameConfig.getCoBasicCfg(attackerPlayer.getCoId())?.maxLoadCount)) {
                     return true;
                 }
 
@@ -113,9 +113,11 @@ namespace TwnsBwDamagePreviewPanel {
                 return (distance != null) && (distance <= defenderPlayer.getCoZoneRadius());
             });
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageCalculatorPanel, {
-                data: {
-                    configVersion   : war.getConfigVersion(),
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonDamageCalculatorPanel, {
+                war,
+                needReviseWeaponType    : false,
+                data                    : {
+                    gameConfig,
                     weatherType     : war.getWeatherManager().getCurrentWeatherType(),
                     attackerData    : {
                         coId            : attackerPlayer.getCoId(),
@@ -136,6 +138,7 @@ namespace TwnsBwDamagePreviewPanel {
                         offenseBonus    : commonSettingsManager.getSettingsAttackPowerModifier(attackerPlayerIndex),
                         upperLuck       : commonSettingsManager.getSettingsLuckUpperLimit(attackerPlayerIndex),
                         lowerLuck       : commonSettingsManager.getSettingsLuckLowerLimit(attackerPlayerIndex),
+                        hasPrimaryAmmo  : !!attackerUnit.getPrimaryWeaponCurrentAmmo(),
                         fund            : canSeeHiddenInfo1 ? attackerPlayer.getFund() : 0,
                         citiesCount     : canSeeHiddenInfo1 ? allCities.filter(v => v.getPlayerIndex() === attackerPlayerIndex).length : 0,
                     },
@@ -158,6 +161,7 @@ namespace TwnsBwDamagePreviewPanel {
                         offenseBonus    : commonSettingsManager.getSettingsAttackPowerModifier(defenderPlayerIndex),
                         upperLuck       : commonSettingsManager.getSettingsLuckUpperLimit(defenderPlayerIndex),
                         lowerLuck       : commonSettingsManager.getSettingsLuckLowerLimit(defenderPlayerIndex),
+                        hasPrimaryAmmo  : !!defenderUnit.getPrimaryWeaponCurrentAmmo(),
                         fund            : canSeeHiddenInfo2 ? defenderPlayer.getFund() : 0,
                         citiesCount     : canSeeHiddenInfo2 ? allCities.filter(v => v.getPlayerIndex() === defenderPlayerIndex).length : 0,
                     },
@@ -194,13 +198,13 @@ namespace TwnsBwDamagePreviewPanel {
                     group.visible = false;
                 } else {
                     const attackerUnitId        = attackerUnit.getUnitId();
-                    const battleDamageInfoArray = WarDamageCalculator.getEstimatedBattleDamage({
+                    const battleDamageInfoArray = WarHelpers.WarDamageCalculator.getEstimatedBattleDamage({
                         war,
                         attackerMovePath: movePath,
                         launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
                         targetGridIndex : gridIndex,
                     });
-                    const damages = WarDamageCalculator.getAttackAndCounterDamage({
+                    const damages = WarHelpers.WarDamageCalculator.getAttackAndCounterDamage({
                         battleDamageInfoArray,
                         attackerUnitId,
                         targetGridIndex     : gridIndex,
@@ -212,10 +216,10 @@ namespace TwnsBwDamagePreviewPanel {
                     const attackerSkinId                    = attackerUnit.getSkinId();
                     const targetSkinId                      = target.getSkinId();
                     group.visible                           = true;
-                    labelAttackTitle.textColor              = WarCommonHelpers.getTextColorForSkinId(attackerSkinId);
-                    labelAttackTitle.stroke                 = WarCommonHelpers.getTextStrokeForSkinId(attackerSkinId);
-                    labelCounterTitle.textColor             = WarCommonHelpers.getTextColorForSkinId(targetSkinId);
-                    labelCounterTitle.stroke                = WarCommonHelpers.getTextStrokeForSkinId(targetSkinId);
+                    labelAttackTitle.textColor              = WarHelpers.WarCommonHelpers.getTextColorForSkinId(attackerSkinId);
+                    labelAttackTitle.stroke                 = WarHelpers.WarCommonHelpers.getTextStrokeForSkinId(attackerSkinId);
+                    labelCounterTitle.textColor             = WarHelpers.WarCommonHelpers.getTextColorForSkinId(targetSkinId);
+                    labelCounterTitle.stroke                = WarHelpers.WarCommonHelpers.getTextStrokeForSkinId(targetSkinId);
                     labelAttackValue.text                   = `${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}`;
                     labelCounterValue.text                  = `${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
                 }

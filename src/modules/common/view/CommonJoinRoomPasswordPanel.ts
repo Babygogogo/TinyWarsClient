@@ -5,7 +5,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -14,17 +14,17 @@
 // import WarMapModel          from "../../warMap/model/WarMapModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonJoinRoomPasswordPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForCommonJoinRoomPasswordPanel = {
         warName             : string | null;
         mapId               : number | null;
         password            : string;
         callbackOnSucceed   : () => void;
     };
-    export class CommonJoinRoomPasswordPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonJoinRoomPasswordPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonJoinRoomPasswordPanel> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _group!                : eui.Group;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
@@ -66,7 +66,7 @@ namespace TwnsCommonJoinRoomPasswordPanel {
         private async _onTouchedBtnConfirm(): Promise<void> {
             const openData = this._getOpenData();
             if (this._inputWarPassword.text !== openData.password) {
-                FloatText.show(Lang.getText(LangTextType.A0017));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0017));
             } else {
                 openData.callbackOnSucceed();
                 this.close();
@@ -79,7 +79,7 @@ namespace TwnsCommonJoinRoomPasswordPanel {
             this._labelPasswordTitle.text   = `${Lang.getText(LangTextType.B0171)}:`;
             this._btnCancel.label           = Lang.getText(LangTextType.B0154);
             this._btnConfirm.label          = Lang.getText(LangTextType.B0026);
-            this._labelTips.text            = Lang.getFormattedText(LangTextType.F0068, CommonConstants.WarPasswordMaxLength);
+            this._labelTips.text            = Lang.getFormattedText(LangTextType.F0068, Twns.CommonConstants.WarPasswordMaxLength);
             this._updateLabelWarName();
         }
         private async _updateLabelWarName(): Promise<void> {
@@ -91,7 +91,7 @@ namespace TwnsCommonJoinRoomPasswordPanel {
             } else {
                 const mapId = openData.mapId;
                 if (mapId != null) {
-                    label.text = await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
+                    label.text = await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || Twns.CommonConstants.ErrorTextForUndefined;
                 } else {
                     label.text = Lang.getText(LangTextType.B0555);
                 }
@@ -99,32 +99,32 @@ namespace TwnsCommonJoinRoomPasswordPanel {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: -40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: -40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 }

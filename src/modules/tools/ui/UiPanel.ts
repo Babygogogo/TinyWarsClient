@@ -22,14 +22,14 @@ namespace TwnsUiPanel {
     export const EVENT_PANEL_SKIN_LOADED            = `EventPanelSkinLoaded`;
     export const EVENT_PANEL_CHILDREN_CREATED       = `EventPanelChildrenCreated`;
 
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import UiListener       = Types.UiListener;
-    import PanelConfig      = TwnsPanelConfig.PanelConfig;
+    import ClientErrorCode  = Twns.ClientErrorCode;
+    import UiListener       = Twns.Types.UiListener;
+    import PanelConfig      = Twns.PanelHelpers.PanelConfig;
 
     export abstract class UiPanel<OpenData> extends eui.Component {
         private _isChildrenCreated      = false;
         private _isSkinLoaded           = false;
-        private _notifyListenerArray    : Notify.Listener[] | null = null;
+        private _notifyListenerArray    : Twns.Notify.Listener[] | null = null;
         private _uiListenerArray        : UiListener[] | null = null;
         private _panelConfig            : PanelConfig<OpenData> | null = null;
 
@@ -86,7 +86,7 @@ namespace TwnsUiPanel {
             this._panelConfig = config;
         }
         public getPanelConfig(): PanelConfig<OpenData> {
-            return Helpers.getExisted(this._panelConfig);
+            return Twns.Helpers.getExisted(this._panelConfig);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -98,10 +98,10 @@ namespace TwnsUiPanel {
 
             this._setOpenData(openData);
             if (!this._checkIsReadyForOpen()) {
-                throw Helpers.newError(`UiPanel2.initOnOpening() !this._checkIsReadyForOpen().`);
+                throw Twns.Helpers.newError(`UiPanel2.initOnOpening() !this._checkIsReadyForOpen().`);
             }
 
-            const stage = StageManager.getStage();
+            const stage = Twns.StageManager.getStage();
             this.resize(stage.stageWidth, stage.stageHeight);
             this._resetSoundForCommonButtons();
 
@@ -130,11 +130,11 @@ namespace TwnsUiPanel {
             this._setHasSetOpenData(false);
         }
         protected _getOpenData(): OpenData {
-            return Helpers.getDefined(this._openData, ClientErrorCode.UiPanel_GetOpenData_00);
+            return Twns.Helpers.getDefined(this._openData, ClientErrorCode.UiPanel_GetOpenData_00);
         }
         public async updateWithOpenData(openData: OpenData): Promise<void> {
             if (!this._checkIsReadyForOpen()) {
-                throw Helpers.newError(`UiPanel2.updateWithOpenData() !this._checkIsReadyForOpen().`);
+                throw Twns.Helpers.newError(`UiPanel2.updateWithOpenData() !this._checkIsReadyForOpen().`);
             }
 
             const oldOpenData = this._openData ?? null;
@@ -161,7 +161,7 @@ namespace TwnsUiPanel {
         // Functions for close self.
         ////////////////////////////////////////////////////////////////////////////////
         public close(): void {
-            TwnsPanelManager.close(this.getPanelConfig());
+            Twns.PanelHelpers.close(this.getPanelConfig());
         }
 
         public async clearOnClosing(): Promise<void> {
@@ -246,7 +246,7 @@ namespace TwnsUiPanel {
             }
 
             if (this._getIsCloseOnTouchedMask()) {
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonCancel01);
+                Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonCancel01);
                 this.close();
             }
         }
@@ -258,21 +258,21 @@ namespace TwnsUiPanel {
             for (const name of NAMES_FOR_BUTTON_CLOSE) {
                 const btn = (this as any)[name];
                 if (btn instanceof TwnsUiButton.UiButton) {
-                    btn.setShortSfxCode(Types.ShortSfxCode.ButtonCancel01);
+                    btn.setShortSfxCode(Twns.Types.ShortSfxCode.ButtonCancel01);
                 }
             }
             for (const name of NAMES_FOR_BUTTON_CONFIRM) {
                 const btn = (this as any)[name];
                 if (btn instanceof TwnsUiButton.UiButton) {
-                    btn.setShortSfxCode(Types.ShortSfxCode.ButtonConfirm01);
+                    btn.setShortSfxCode(Twns.Types.ShortSfxCode.ButtonConfirm01);
                 }
             }
         }
 
-        protected _setNotifyListenerArray(array: Notify.Listener[] | null): void {
+        protected _setNotifyListenerArray(array: Twns.Notify.Listener[] | null): void {
             this._notifyListenerArray = array;
         }
-        protected _getNotifyListenerArray(): Notify.Listener[] | null {
+        protected _getNotifyListenerArray(): Twns.Notify.Listener[] | null {
             return this._notifyListenerArray;
         }
         protected _setUiListenerArray(array: UiListener[] | null): void {
@@ -285,7 +285,7 @@ namespace TwnsUiPanel {
         protected _registerListeners(): void {
             const notifyListenerArray = this._getNotifyListenerArray();
             if (notifyListenerArray) {
-                Notify.addEventListeners(notifyListenerArray, this);
+                Twns.Notify.addEventListeners(notifyListenerArray, this);
             }
 
             const uiListenerArray = this._getUiListenerArray();
@@ -299,7 +299,7 @@ namespace TwnsUiPanel {
         protected _unregisterListeners(): void {
             const notifyListenerArray = this._getNotifyListenerArray();
             if (notifyListenerArray) {
-                Notify.removeEventListeners(notifyListenerArray, this);
+                Twns.Notify.removeEventListeners(notifyListenerArray, this);
             }
 
             const uiListenerArray = this._getUiListenerArray();
@@ -313,7 +313,7 @@ namespace TwnsUiPanel {
 
     function createTouchMask(): eui.Group {
         const mask          = new eui.Group();
-        const stage         = StageManager.getStage();
+        const stage         = Twns.StageManager.getStage();
         mask.width          = stage.stageWidth;
         mask.height         = stage.stageHeight;
         mask.touchEnabled   = true;

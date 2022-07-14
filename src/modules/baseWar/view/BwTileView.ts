@@ -9,11 +9,8 @@
 // import UserModel        from "../../user/model/UserModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwTileView {
-    import TileObjectType       = Types.TileObjectType;
-    import TileBaseType         = Types.TileBaseType;
-    import TileDecoratorType    = Types.TileDecoratorType;
-    import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
+namespace Twns.BaseWar {
+    import ISerialTile          = CommonProto.WarSerialization.ISerialTile;
 
     const {
         height  : GRID_HEIGHT,
@@ -21,6 +18,7 @@ namespace TwnsBwTileView {
     } = CommonConstants.GridSize;
 
     export type DataForTileView = {
+        gameConfig  : Config.GameConfig;
         tileData    : ISerialTile;
         themeType   : Types.TileThemeType;
         hasFog      : boolean;
@@ -63,22 +61,25 @@ namespace TwnsBwTileView {
         }
 
         public updateView(): void {
-            const data      = Helpers.getExisted(this.getData());
-            const skinId    = data.skinId;
-            const hasFog    = data.hasFog;
-            const tileData  = data.tileData;
-            const themeType = data.themeType;
-            const version   = UserModel.getSelfSettingsTextureVersion();
-            const tickCount = Timer.getTileAnimationTickCount();
+            const data          = Helpers.getExisted(this.getData());
+            const skinId        = data.skinId;
+            const hasFog        = data.hasFog;
+            const tileData      = data.tileData;
+            const themeType     = data.themeType;
+            const gameConfig    = data.gameConfig;
+            const version       = User.UserModel.getSelfSettingsTextureVersion();
+            const tickCount     = Timer.getTileAnimationTickCount();
+            const tileBaseType  = Helpers.getExisted(tileData.baseType);
 
             {
                 const objectType    = Helpers.getExisted(tileData.objectType);
                 const imgObject     = this.getImgObject();
                 imgObject.visible   = true;
-                imgObject.source    = CommonModel.getCachedTileObjectImageSource({
+                imgObject.source    = Common.CommonModel.getCachedTileObjectImageSource({
+                    gameConfig,
                     version,
                     themeType,
-                    skinId      : ((hasFog) && (objectType !== TileObjectType.Headquarters)) ? CommonConstants.UnitAndTileNeutralSkinId : skinId,
+                    skinId      : ((hasFog) && (!gameConfig.getTileTemplateCfgByBaseTypeAndObjectType(tileBaseType, objectType)?.isAlwaysShowOwner)) ? CommonConstants.UnitAndTileNeutralSkinId : skinId,
                     shapeId     : tileData.objectShapeId || 0,
                     objectType,
                     isDark      : hasFog,
@@ -87,41 +88,36 @@ namespace TwnsBwTileView {
             }
 
             {
-                const baseType  = tileData.baseType;
                 const imgBase   = this.getImgBase();
-                if (baseType == null) {
-                    throw Helpers.newError(`BwTileView.updateView() empty baseType.`);
-                } else if (baseType === TileBaseType.Empty) {
-                    imgBase.visible = false;
-                } else {
-                    imgBase.visible = true;
-                    imgBase.source  = CommonModel.getCachedTileBaseImageSource({
-                        version,
-                        themeType,
-                        skinId      : CommonConstants.UnitAndTileNeutralSkinId,
-                        shapeId     : tileData.baseShapeId || 0,
-                        baseType,
-                        isDark      : hasFog,
-                        tickCount,
-                    });
-                }
+                imgBase.visible = true;
+                imgBase.source  = Common.CommonModel.getCachedTileBaseImageSource({
+                    gameConfig,
+                    version,
+                    themeType,
+                    skinId      : CommonConstants.UnitAndTileNeutralSkinId,
+                    shapeId     : tileData.baseShapeId || 0,
+                    baseType    : tileBaseType,
+                    isDark      : hasFog,
+                    tickCount,
+                });
             }
 
             {
                 const decoratorType     = tileData.decoratorType;
                 const imgDecorator      = this.getImgDecorator();
-                if ((decoratorType == null) || (decoratorType == TileDecoratorType.Empty)) {
+                if (decoratorType == null) {
                     imgDecorator.visible = false;
                 } else {
                     imgDecorator.visible    = true;
-                    imgDecorator.source     = CommonModel.getCachedTileDecoratorImageSource({
+                    imgDecorator.source     = Common.CommonModel.getCachedTileDecoratorImageSource({
                         version,
                         themeType,
-                        skinId          : CommonConstants.UnitAndTileNeutralSkinId,
-                        decoratorType,
-                        shapeId         : tileData.decoratorShapeId ?? null,
-                        isDark          : hasFog,
+                        skinId              : CommonConstants.UnitAndTileNeutralSkinId,
+                        tileDecorationType  : decoratorType,
+                        shapeId             : tileData.decoratorShapeId ?? 0,
+                        isDark              : hasFog,
                         tickCount,
+                        gameConfig,
                     });
                 }
             }

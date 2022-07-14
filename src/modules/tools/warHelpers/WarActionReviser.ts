@@ -12,16 +12,16 @@
 // import WarCommonHelpers     from "./WarCommonHelpers";
 // import WarVisibilityHelpers from "./WarVisibilityHelpers";
 
-namespace WarActionReviser {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.WarHelpers.WarActionReviser {
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import GridIndex            = Types.GridIndex;
     import DropDestination      = Types.DropDestination;
     import PlayerAliveState     = Types.PlayerAliveState;
-    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
-    import WarAction            = ProtoTypes.WarAction;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
-    import BwWar                = TwnsBwWar.BwWar;
+    import IWarActionContainer  = CommonProto.WarAction.IWarActionContainer;
+    import WarAction            = CommonProto.WarAction;
+    import BwUnitMap            = BaseWar.BwUnitMap;
+    import BwWar                = BaseWar.BwWar;
 
     export function revise(war: BwWar, rawAction: IWarActionContainer): IWarActionContainer {
         if (Object.keys(rawAction).length !== 2) {
@@ -76,7 +76,7 @@ namespace WarActionReviser {
             throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_RevisePlayerDeleteUnit_00);
         }
 
-        const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(rawAction.gridIndex), ClientErrorCode.WarActionReviser_RevisePlayerDeleteUnit_01);
+        const gridIndex         = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(rawAction.gridIndex), ClientErrorCode.WarActionReviser_RevisePlayerDeleteUnit_01);
         const playerIndexInTurn = war.getPlayerIndexInTurn();
         const playerInTurn      = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
@@ -134,8 +134,8 @@ namespace WarActionReviser {
 
         const unitMap   = war.getUnitMap();
         const mapSize   = unitMap.getMapSize();
-        const gridIndex = GridIndexHelpers.convertGridIndex(rawAction.gridIndex);
-        if ((gridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+        const gridIndex = Twns.GridIndexHelpers.convertGridIndex(rawAction.gridIndex);
+        if ((gridIndex == null) || (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
             throw Helpers.newError(`Invalid gridIndex.`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_02);
         }
 
@@ -148,46 +148,53 @@ namespace WarActionReviser {
         if ((playerInTurn == null)                                      ||
             (playerInTurn.getAliveState() !== PlayerAliveState.Alive)   ||
             (playerIndexInTurn == null)                                 ||
-            (playerIndexInTurn === CommonConstants.WarNeutralPlayerIndex)
+            (playerIndexInTurn === CommonConstants.PlayerIndex.Neutral)
         ) {
             throw Helpers.newError(`Invalid playerIndexInTurn: ${playerIndexInTurn}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_04);
         }
 
+        const unitType = Helpers.getExisted(rawAction.unitType, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_05);
+        if ((war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerIndexInTurn) ?? []).indexOf(unitType) >= 0) {
+            throw Helpers.newError(`UnitType is banned by rule: ${unitType}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_06);
+        }
+        if (war.getWarEventManager().checkOngoingPersistentActionBannedUnitType(playerIndexInTurn, unitType)) {
+            throw Helpers.newError(`UnitType is banned by rule: ${unitType}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_07);
+        }
+
         const tile                  = war.getTileMap().getTile(gridIndex);
-        const unitType              = Helpers.getExisted(rawAction.unitType, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_05);
-        const configVersion         = war.getConfigVersion();
+        const gameConfig            = war.getGameConfig();
         const fund                  = playerInTurn.getFund();
         const skillCfg              = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndexInTurn);
         const produceUnitCategory   = skillCfg
             ? skillCfg[1]
             : (playerIndexInTurn === tile.getPlayerIndex() ? tile.getCfgProduceUnitCategory() : null);
-        if ((produceUnitCategory == null)                                                           ||
-            (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, produceUnitCategory))
+        if ((produceUnitCategory == null)                                           ||
+            (!gameConfig.checkIsUnitTypeInCategory(unitType, produceUnitCategory))
         ) {
-            throw Helpers.newError(`Invalid produceUnitCategory: ${produceUnitCategory}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_06);
+            throw Helpers.newError(`Invalid produceUnitCategory: ${produceUnitCategory}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_08);
         }
 
         if ((skillCfg)                                      &&
             ((unitHp > skillCfg[4]) || (unitHp < skillCfg[3]))
         ) {
-            throw Helpers.newError(`Invalid unitHp: ${unitHp}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_07);
+            throw Helpers.newError(`Invalid unitHp: ${unitHp}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_09);
         }
         if ((!skillCfg) && (unitHp !== CommonConstants.UnitMaxHp)) {
-            throw Helpers.newError(`Invalid unitHp: ${unitHp}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_08);
+            throw Helpers.newError(`Invalid unitHp: ${unitHp}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_10);
         }
 
-        const cfgCost   = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
+        const cfgCost   = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_11);
         const modifier  = playerInTurn.getUnitCostModifier(gridIndex, false, unitType);
         const cost      = Math.floor(
             cfgCost
             * (skillCfg ? skillCfg[5] : 100)
-            * WarCommonHelpers.getNormalizedHp(unitHp)
+            * WarHelpers.WarCommonHelpers.getNormalizedHp(unitHp)
             * modifier
             / 100
             / CommonConstants.UnitHpNormalizer
         );
         if (cost > fund) {
-            throw Helpers.newError(`Invalid cost: ${cost}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_09);
+            throw Helpers.newError(`Invalid cost: ${cost}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_12);
         }
 
         return {
@@ -206,7 +213,7 @@ namespace WarActionReviser {
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null)                                                      ||
-            (playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex)   ||
+            (playerInTurn.getPlayerIndex() === CommonConstants.PlayerIndex.Neutral)   ||
             (playerInTurn.getAliveState() !== PlayerAliveState.Alive)
         ) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerSurrender_01);
@@ -228,7 +235,7 @@ namespace WarActionReviser {
             throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerVoteForDraw_01);
         }
 
-        if ((playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex) ||
+        if ((playerInTurn.getPlayerIndex() === CommonConstants.PlayerIndex.Neutral) ||
             (playerInTurn.getHasVotedForDraw())
         ) {
             throw Helpers.newError(`Voted for draw.`, ClientErrorCode.WarActionReviser_RevisePlayerVoteForDraw_02);
@@ -255,7 +262,7 @@ namespace WarActionReviser {
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null)                                                      ||
-            (playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex)   ||
+            (playerInTurn.getPlayerIndex() === CommonConstants.PlayerIndex.Neutral)   ||
             (playerInTurn.getAliveState() !== PlayerAliveState.Alive)
         ) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerUseCoSkill_01);
@@ -303,7 +310,7 @@ namespace WarActionReviser {
         }
 
         const targetPlayerIndex = rawAction.targetPlayerIndex;
-        if ((targetPlayerIndex == null) || (targetPlayerIndex === CommonConstants.WarNeutralPlayerIndex)) {
+        if ((targetPlayerIndex == null) || (targetPlayerIndex === CommonConstants.PlayerIndex.Neutral)) {
             throw Helpers.newError(`Invalid targetPlayerIndex: ${targetPlayerIndex}`, ClientErrorCode.WarActionReviser_ReviseSystemDestroyPlayerForce_01);
         }
 
@@ -331,14 +338,12 @@ namespace WarActionReviser {
     }
 
     function reviseSystemEndTurn(war: BwWar, rawAction: WarAction.IWarActionSystemEndTurn): IWarActionContainer {
-        const playerInTurn = war.getPlayerInTurn();
         if (war.getTurnPhaseCode() !== Types.TurnPhaseCode.Main) {
             throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseSystemEndTurn_00);
         }
 
-        if ((playerInTurn.getPlayerIndex() !== CommonConstants.WarNeutralPlayerIndex)   &&
-            (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
-        ) {
+        const playerInTurn = war.getPlayerInTurn();
+        if ((war.getDrawVoteManager().getRemainingVotes() != null) && (!playerInTurn.getHasVotedForDraw())) {
             throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_ReviseSystemEndTurn_01);
         }
 
@@ -365,10 +370,8 @@ namespace WarActionReviser {
             throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseSystemVoteForDraw_00);
         }
 
-        if ((playerInTurn.getPlayerIndex() !== CommonConstants.WarNeutralPlayerIndex)   &&
-            (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
-        ) {
-            throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_ReviseSystemVoteForDraw_01);
+        if (playerInTurn.getHasVotedForDraw()) {
+            throw Helpers.newError(`playerInTurn getHasVotedForDraw() is true.`, ClientErrorCode.WarActionReviser_ReviseSystemVoteForDraw_01);
         }
 
         return {
@@ -390,8 +393,8 @@ namespace WarActionReviser {
 
         const tileMap           = war.getTileMap();
         const mapSize           = tileMap.getMapSize();
-        const targetGridIndex   = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
-        if ((targetGridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))) {
+        const targetGridIndex   = Twns.GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
+        if ((targetGridIndex == null) || (!Twns.GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))) {
             throw Helpers.newError(`Invalid targetGridIndex.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackTile_02);
         }
 
@@ -402,9 +405,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackTile_04);
         }
 
@@ -434,16 +437,16 @@ namespace WarActionReviser {
 
         const unitMap           = war.getUnitMap();
         const mapSize           = unitMap.getMapSize();
-        const targetGridIndex   = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
-        if ((targetGridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))) {
+        const targetGridIndex   = Twns.GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
+        if ((targetGridIndex == null) || (!Twns.GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))) {
             throw Helpers.newError(`Invalid targetGridIndex.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackUnit_02);
         }
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackUnit_03);
         }
 
@@ -473,7 +476,7 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const unitMap       = war.getUnitMap();
         const focusUnit     = Helpers.getExisted(unitMap.getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitBeLoaded_02);
         const rawPathNodes  = rawPath ? rawPath.nodes || [] : [];
@@ -506,9 +509,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitBuildTile_02);
         }
 
@@ -538,9 +541,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitCaptureTile_02);
         }
 
@@ -570,9 +573,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitDive_02);
         }
 
@@ -601,9 +604,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitDropUnit_02);
         }
 
@@ -636,7 +639,7 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const unitMap       = war.getUnitMap();
         const focusUnit     = Helpers.getExisted(unitMap.getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitJoinUnit_02);
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
@@ -665,9 +668,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_02);
         }
 
@@ -675,12 +678,12 @@ namespace WarActionReviser {
         const focusUnit         = Helpers.getExisted(unitMap.getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_03);
         const mapSize           = unitMap.getMapSize();
         const flareMaxRange     = Helpers.getExisted(focusUnit.getFlareMaxRange(), ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_04);
-        const targetGridIndex   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex), ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_05);
+        const targetGridIndex   = Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex), ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_05);
         if ((rawPathNodes.length !== 1)                                                     ||
             (!focusUnit.getFlareCurrentAmmo())                                              ||
             (!war.getFogMap().checkHasFogCurrently())                                       ||
-            (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))                  ||
-            (GridIndexHelpers.getDistance(targetGridIndex, revisedPath.nodes[0]) > flareMaxRange)
+            (!Twns.GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))                  ||
+            (Twns.GridIndexHelpers.getDistance(targetGridIndex, revisedPath.nodes[0]) > flareMaxRange)
         ) {
             throw Helpers.newError(`Can not launch.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_06);
         }
@@ -706,9 +709,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchSilo_02);
         }
 
@@ -720,9 +723,9 @@ namespace WarActionReviser {
             throw Helpers.newError(`Can not launch silo.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchSilo_04);
         }
 
-        const targetGridIndex = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
+        const targetGridIndex = Twns.GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
         if ((targetGridIndex == null)                                       ||
-            (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))
+            (!Twns.GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))
         ) {
             throw Helpers.newError(`Invalid targetGridIndex.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchSilo_05);
         }
@@ -748,9 +751,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitLoadCo_02);
         }
 
@@ -779,13 +782,26 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_02);
         }
 
-        const focusUnit     = Helpers.getExisted(war.getUnitMap().getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_03);
+        const focusUnit         = Helpers.getExisted(war.getUnitMap().getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_03);
+        const produceUnitType   = focusUnit.getProduceUnitType();
+        if (produceUnitType == null) {
+            throw Helpers.newError(`Empty produceUnitType.`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_04);
+        }
+
+        const playerIndex = playerInTurn.getPlayerIndex();
+        if ((war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerIndex) ?? []).indexOf(produceUnitType) >= 0) {
+            throw Helpers.newError(`The produceUnitType is banned by rule: ${produceUnitType}`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_05);
+        }
+        if (war.getWarEventManager().checkOngoingPersistentActionBannedUnitType(playerIndex, produceUnitType)) {
+            throw Helpers.newError(`The produceUnitType is banned by persistent action: ${produceUnitType}`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_06);
+        }
+
         const fund          = playerInTurn.getFund();
         const cost          = focusUnit.getProduceUnitCost();
         const maxLoadCount  = focusUnit.getMaxLoadUnitsCount();
@@ -797,7 +813,7 @@ namespace WarActionReviser {
             (maxLoadCount == null)                          ||
             (focusUnit.getLoadedUnitsCount() >= maxLoadCount)
         ) {
-            throw Helpers.newError(`Invalid focusUnit.`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_04);
+            throw Helpers.newError(`Invalid focusUnit.`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_07);
         }
 
         return {
@@ -820,9 +836,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitSupplyUnit_02);
         }
 
@@ -852,9 +868,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitSurface_02);
         }
 
@@ -883,9 +899,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitUseCoSkill_02);
         }
 
@@ -922,9 +938,9 @@ namespace WarActionReviser {
 
         const rawPath       = rawAction.path;
         const launchUnitId  = rawAction.launchUnitId;
-        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const revisedPath   = WarHelpers.WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
-        if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
+        if (WarHelpers.WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
             throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitWait_02);
         }
 
@@ -992,10 +1008,10 @@ namespace WarActionReviser {
 
         for (let i = 0; i < destinationsCount; ++i) {
             const data              = destinations[i];
-            const droppingGridIndex = GridIndexHelpers.convertGridIndex(data.gridIndex);
+            const droppingGridIndex = Twns.GridIndexHelpers.convertGridIndex(data.gridIndex);
             if ((!droppingGridIndex)                                                        ||
-                (!GridIndexHelpers.checkIsInsideMap(droppingGridIndex, mapSize))            ||
-                (!GridIndexHelpers.checkIsAdjacent(droppingGridIndex, loaderEndingGridIndex))
+                (!Twns.GridIndexHelpers.checkIsInsideMap(droppingGridIndex, mapSize))            ||
+                (!Twns.GridIndexHelpers.checkIsAdjacent(droppingGridIndex, loaderEndingGridIndex))
             ) {
                 return false;
             }
@@ -1036,7 +1052,7 @@ namespace WarActionReviser {
                     return false;
                 }
 
-                if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                if (Twns.WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     gridIndex           : droppingGridIndex,
                     unitType,
@@ -1050,10 +1066,10 @@ namespace WarActionReviser {
 
             for (let j = i + 1; j < destinationsCount; ++j) {
                 const nextData  = destinations[j];
-                const gridIndex = GridIndexHelpers.convertGridIndex(nextData.gridIndex);
+                const gridIndex = Twns.GridIndexHelpers.convertGridIndex(nextData.gridIndex);
                 if ((!gridIndex)                                                    ||
                     (droppingUnitId === nextData.unitId)                            ||
-                    (GridIndexHelpers.checkIsEqual(droppingGridIndex, gridIndex))
+                    (Twns.GridIndexHelpers.checkIsEqual(droppingGridIndex, gridIndex))
                 ) {
                     return false;
                 }
@@ -1080,7 +1096,7 @@ namespace WarActionReviser {
         return destinations;
     }
 
-    function checkCanDoSupply(unitMap: BwUnitMap, focusUnit: TwnsBwUnit.BwUnit, destination: GridIndex): boolean {
+    function checkCanDoSupply(unitMap: BwUnitMap, focusUnit: BaseWar.BwUnit, destination: GridIndex): boolean {
         if (focusUnit.checkIsAdjacentUnitSupplier()) {
             const mapSize = unitMap.getMapSize();
             if (mapSize == null) {
@@ -1088,7 +1104,7 @@ namespace WarActionReviser {
             }
 
             const playerIndex = focusUnit.getPlayerIndex();
-            for (const gridIndex of GridIndexHelpers.getAdjacentGrids(destination, mapSize)) {
+            for (const gridIndex of Twns.GridIndexHelpers.getAdjacentGrids(destination, mapSize)) {
                 const unit = unitMap.getUnitOnMap(gridIndex);
                 if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
                     return true;

@@ -11,62 +11,63 @@
 // import TwnsBwWar            from "./BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwTileMap {
-    import MapSize          = Types.MapSize;
-    import WarSerialization = ProtoTypes.WarSerialization;
+namespace Twns.BaseWar {
+    import MapSize          = Twns.Types.MapSize;
+    import WarSerialization = CommonProto.WarSerialization;
     import ISerialTileMap   = WarSerialization.ISerialTileMap;
     import ISerialTile      = WarSerialization.ISerialTile;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import ClientErrorCode  = Twns.ClientErrorCode;
+    import GameConfig       = Config.GameConfig;
 
     export class BwTileMap {
-        private _map?                   : TwnsBwTile.BwTile[][];
+        private _map?                   : Twns.BaseWar.BwTile[][];
         private _mapSize?               : MapSize;
         private _locationVisibleFlags   = 0;
-        private _war?                   : TwnsBwWar.BwWar;
+        private _war?                   : Twns.BaseWar.BwWar;
 
-        private readonly _view  = new TwnsBwTileMapView.BwTileMapView();
+        private readonly _view  = new Twns.BaseWar.BwTileMapView();
 
-        public init({ data, configVersion, mapSize, playersCountUnneutral }: {
-            data                    : Types.Undefinable<ISerialTileMap>;
-            configVersion           : string;
+        public init({ data, gameConfig, mapSize, playersCountUnneutral }: {
+            data                    : Twns.Types.Undefinable<ISerialTileMap>;
+            gameConfig              : GameConfig;
             mapSize                 : MapSize;
             playersCountUnneutral   : number;
         }): void {
             if (data == null) {
-                throw Helpers.newError(`Empty data.`, ClientErrorCode.BwTileMap_Init_00);
+                throw Twns.Helpers.newError(`Empty data.`, ClientErrorCode.BwTileMap_Init_00);
             }
 
-            const tiles     = Helpers.getExisted(data.tiles, ClientErrorCode.BwTileMap_Init_01);
+            const tiles     = Twns.Helpers.getExisted(data.tiles, ClientErrorCode.BwTileMap_Init_01);
             const mapWidth  = mapSize.width;
             const mapHeight = mapSize.height;
-            if ((!WarCommonHelpers.checkIsValidMapSize(mapSize)) ||
+            if ((!Twns.WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) ||
                 (mapWidth * mapHeight !== tiles.length)
             ) {
-                throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwTileMap_Init_02);
+                throw Twns.Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwTileMap_Init_02);
             }
 
-            const map = Helpers.createEmptyMap<TwnsBwTile.BwTile>(mapWidth, mapHeight);
+            const map = Twns.Helpers.createEmptyMap<Twns.BaseWar.BwTile>(mapWidth, mapHeight);
             for (const tileData of tiles) {
-                const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.BwTileMap_Init_03);
-                if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
-                    throw Helpers.newError(`The gridIndex is not inside the map.`, ClientErrorCode.BwTileMap_Init_04);
+                const gridIndex = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.BwTileMap_Init_03);
+                if (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
+                    throw Twns.Helpers.newError(`The gridIndex is not inside the map.`, ClientErrorCode.BwTileMap_Init_04);
                 }
 
                 const gridX = gridIndex.x;
                 const gridY = gridIndex.y;
                 if (map[gridX][gridY]) {
-                    throw Helpers.newError(`Duplicated gridIndex: ${gridX}, ${gridY}`, ClientErrorCode.BwTileMap_Init_05);
+                    throw Twns.Helpers.newError(`Duplicated gridIndex: ${gridX}, ${gridY}`, ClientErrorCode.BwTileMap_Init_05);
                 }
 
-                const tile = new TwnsBwTile.BwTile();
-                tile.init(tileData, configVersion);
+                const tile = new Twns.BaseWar.BwTile();
+                tile.init(tileData, gameConfig);
 
                 const playerIndex = tile.getPlayerIndex();
                 if ((playerIndex == null)                                   ||
-                    (playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                    (playerIndex < Twns.CommonConstants.PlayerIndex.Neutral)   ||
                     (playerIndex > playersCountUnneutral)
                 ) {
-                    throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTileMap_Init_06);
+                    throw Twns.Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwTileMap_Init_06);
                 }
 
                 map[gridX][gridY] = tile;
@@ -78,22 +79,22 @@ namespace TwnsBwTileMap {
             this.getView().init(this);
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        public fastInit({ data, configVersion, mapSize, playersCountUnneutral }: {
-            data                    : Types.Undefinable<ISerialTileMap>;
-            configVersion           : string;
+        public fastInit({ data, gameConfig, mapSize, playersCountUnneutral }: {
+            data                    : Twns.Types.Undefinable<ISerialTileMap>;
+            gameConfig              : GameConfig;
             mapSize                 : MapSize;
             playersCountUnneutral   : number;
         }): void {
             const map = this._getMap();
             for (const tileData of data ? data.tiles || [] : []) {
-                const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
-                map[gridIndex.x][gridIndex.y].fastInit(tileData, configVersion);
+                const gridIndex = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(tileData.gridIndex));
+                map[gridIndex.x][gridIndex.y].fastInit(tileData, gameConfig);
             }
 
             this.getView().fastInit(this);
         }
 
-        public startRunning(war: TwnsBwWar.BwWar): void {
+        public startRunning(war: Twns.BaseWar.BwWar): void {
             this._setWar(war);
             this._forEachTile(tile => tile.startRunning(war));
         }
@@ -139,39 +140,39 @@ namespace TwnsBwTileMap {
             return { tiles: tilesData };
         }
 
-        private _setWar(war: TwnsBwWar.BwWar): void {
+        private _setWar(war: Twns.BaseWar.BwWar): void {
             this._war = war;
         }
-        public getWar(): TwnsBwWar.BwWar {
-            return Helpers.getExisted(this._war);
+        public getWar(): Twns.BaseWar.BwWar {
+            return Twns.Helpers.getExisted(this._war);
         }
 
-        private _setMap(map: TwnsBwTile.BwTile[][]): void {
+        private _setMap(map: Twns.BaseWar.BwTile[][]): void {
             this._map = map;
         }
-        protected _getMap(): TwnsBwTile.BwTile[][] {
-            return Helpers.getExisted(this._map);
+        protected _getMap(): Twns.BaseWar.BwTile[][] {
+            return Twns.Helpers.getExisted(this._map);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getView(): TwnsBwTileMapView.BwTileMapView {
+        public getView(): Twns.BaseWar.BwTileMapView {
             return this._view;
         }
 
-        private _forEachTile(func: (t: TwnsBwTile.BwTile) => any): void {
+        private _forEachTile(func: (t: Twns.BaseWar.BwTile) => any): void {
             for (const column of this._getMap()) {
                 for (const tile of column) {
                     func(tile);
                 }
             }
         }
-        public getTile(gridIndex: Types.GridIndex): TwnsBwTile.BwTile {
+        public getTile(gridIndex: Twns.Types.GridIndex): Twns.BaseWar.BwTile {
             return this._getMap()[gridIndex.x][gridIndex.y];
         }
-        public getAllTiles(): TwnsBwTile.BwTile[] {
-            const tileArray: TwnsBwTile.BwTile[] = [];
+        public getAllTiles(): Twns.BaseWar.BwTile[] {
+            const tileArray: Twns.BaseWar.BwTile[] = [];
             this._forEachTile(tile => tileArray.push(tile));
             return tileArray;
         }
@@ -180,7 +181,7 @@ namespace TwnsBwTileMap {
             this._mapSize = { width: width, height: height };
         }
         public getMapSize(): MapSize {
-            return Helpers.getExisted(this._mapSize);
+            return Twns.Helpers.getExisted(this._mapSize);
         }
 
         public getTilesCount(playerIndex: number): number {
@@ -215,7 +216,7 @@ namespace TwnsBwTileMap {
         public setLocationVisibleFlags(flags: number): void {
             this._setLocationVisibleFlags(flags);
             this.getView().resetLocationLayer();
-            Notify.dispatch(TwnsNotifyType.NotifyType.BwTileMapLocationVisibleSet);
+            Twns.Notify.dispatch(Twns.Notify.NotifyType.BwTileMapLocationVisibleSet);
         }
         public getLocationVisibleFlags(): number {
             return this._locationVisibleFlags;
@@ -234,7 +235,7 @@ namespace TwnsBwTileMap {
             }
         }
         public setAllLocationVisible(isVisible: boolean): void {
-            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+            for (let locationId = Twns.CommonConstants.MapMinLocationId; locationId <= Twns.CommonConstants.MapMaxLocationId; ++locationId) {
                 if (isVisible) {
                     this._setLocationVisibleFlags(this.getLocationVisibleFlags() | (1 << (locationId - 1)));
                 } else {
@@ -242,7 +243,7 @@ namespace TwnsBwTileMap {
                 }
             }
             this.getView().resetLocationLayer();
-            Notify.dispatch(TwnsNotifyType.NotifyType.BwTileMapLocationVisibleSet);
+            Twns.Notify.dispatch(Twns.Notify.NotifyType.BwTileMapLocationVisibleSet);
         }
     }
 }

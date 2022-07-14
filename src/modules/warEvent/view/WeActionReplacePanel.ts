@@ -5,7 +5,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -15,17 +15,18 @@
 // import WarEventHelper           from "../model/WarEventHelper";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionReplacePanel {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
+namespace Twns.WarEvent {
+    import LangTextType         = Twns.Lang.LangTextType;
+    import NotifyType           = Twns.Notify.NotifyType;
+    import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
 
-    export type OpenData = {
+    export type OpenDataForWeActionReplacePanel = {
+        war         : BaseWar.BwWar;
         fullData    : IWarEventFullData;
         eventId     : number;
         actionId    : number;
     };
-    export class WeActionReplacePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionReplacePanel extends TwnsUiPanel.UiPanel<OpenDataForWeActionReplacePanel> {
         private readonly _listAction!       : TwnsUiScrollList.UiScrollList<DataForActionRenderer>;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelNoAction!    : TwnsUiLabel.UiLabel;
@@ -71,13 +72,15 @@ namespace TwnsWeActionReplacePanel {
             const eventId       = openData.eventId;
             const srcActionId   = openData.actionId;
             const fullData      = openData.fullData;
+            const war           = openData.war;
 
             const dataArray: DataForActionRenderer[] = [];
             for (const action of openData.fullData.actionArray || []) {
                 dataArray.push({
+                    war,
                     eventId,
                     srcActionId,
-                    candidateActionId: Helpers.getExisted(action.WeaCommonData?.actionId),
+                    candidateActionId: Twns.Helpers.getExisted(action.WeaCommonData?.actionId),
                     fullData,
                 });
             }
@@ -88,6 +91,7 @@ namespace TwnsWeActionReplacePanel {
     }
 
     type DataForActionRenderer = {
+        war                 : BaseWar.BwWar;
         eventId             : number;
         srcActionId         : number;
         candidateActionId   : number;
@@ -120,26 +124,26 @@ namespace TwnsWeActionReplacePanel {
 
         private _onTouchedBtnCopy(): void {          // DONE
             const data = this._getData();
-            if (WarEventHelper.cloneAndReplaceActionInEvent({
+            if (WarHelpers.WarEventHelpers.cloneAndReplaceActionInEvent({
                 fullData            : data.fullData,
                 eventId             : data.eventId,
                 actionIdForDelete   : data.srcActionId,
                 actionIdForClone    : data.candidateActionId,
             }) != null) {
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionReplacePanel);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionReplacePanel);
             }
         }
         private _onTouchedBtnSelect(): void {        // DONE
             const data = this._getData();
-            if (WarEventHelper.replaceActionInEvent({
+            if (WarHelpers.WarEventHelpers.replaceActionInEvent({
                 fullData    : data.fullData,
                 eventId     : data.eventId,
                 oldActionId : data.srcActionId,
                 newActionId : data.candidateActionId,
             })) {
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionReplacePanel);
+                Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.WeActionReplacePanel);
             }
         }
         private _onNotifyLanguageChanged(): void {        // DONE
@@ -173,7 +177,7 @@ namespace TwnsWeActionReplacePanel {
             if (action == null) {
                 label.text = Lang.getText(LangTextType.A0168);
             } else {
-                label.text = WarEventHelper.getDescForAction(action) || CommonConstants.ErrorTextForUndefined;
+                label.text = WarHelpers.WarEventHelpers.getDescForAction(action, data.war.getGameConfig()) || Twns.CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateBtnSelect(): void {

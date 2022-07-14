@@ -10,7 +10,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -21,13 +21,15 @@
 // import TwnsUserSetSoundPanel        from "./UserSetSoundPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserLoginBackgroundPanel {
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import LangTextType             = TwnsLangTextType.LangTextType;
+namespace Twns.User {
+    import NotifyType               = Notify.NotifyType;
+    import LangTextType             = Lang.LangTextType;
 
-    export type OpenData = void;
-    export class UserLoginBackgroundPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserLoginBackgroundPanel = void;
+    export class UserLoginBackgroundPanel extends TwnsUiPanel.UiPanel<OpenDataForUserLoginBackgroundPanel> {
         private readonly _imgBackground!    : TwnsUiImage.UiImage;
+        private readonly _btnGuest!         : TwnsUiButton.UiButton;
+        private readonly _btnTutorial!      : TwnsUiButton.UiButton;
 
         private readonly _groupRightButton! : eui.Group;
         private readonly _btnVersion!       : TwnsUiButton.UiButton;
@@ -46,6 +48,8 @@ namespace TwnsUserLoginBackgroundPanel {
             ]);
             this._setUiListenerArray([
                 { ui: this,                 callback: this._onTouchedSelf },
+                { ui: this._btnGuest,       callback: this._onTouchedBtnGuest },
+                { ui: this._btnTutorial,    callback: this._onTouchedBtnTutorial },
                 { ui: this._btnVersion,     callback: this._onTouchedBtnVersion },
                 { ui: this._btnSound,       callback: this._onTouchedBtnSound },
             ]);
@@ -56,9 +60,9 @@ namespace TwnsUserLoginBackgroundPanel {
             this._updateComponentsForLanguage();
             this._initListLanguage();
 
-            if (ConfigManager.getLatestConfigVersion()) {
-                // this._initGroupUnits();
-            }
+            // if (Config.ConfigManager.getLatestConfigVersion()) {
+            //     this._initGroupUnits();
+            // }
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             // nothing to do
@@ -74,7 +78,7 @@ namespace TwnsUserLoginBackgroundPanel {
             const group = this._groupUnits;
             const tick  = Timer.getUnitAnimationTickCount();
             for (let i = group.numChildren - 1; i >= 0; --i) {
-                ((group.getChildAt(i) as eui.Component).getChildAt(0) as TwnsWarMapUnitView.WarMapUnitView).updateOnAnimationTick(tick);
+                ((group.getChildAt(i) as eui.Component).getChildAt(0) as WarMap.WarMapUnitView).updateOnAnimationTick(tick);
             }
         }
         private _onMsgCommonLatestConfigVersion(): void {
@@ -83,14 +87,21 @@ namespace TwnsUserLoginBackgroundPanel {
         private _onTouchedSelf(): void {
             SoundManager.init();
         }
+        private _onTouchedBtnGuest(): void {
+            User.UserProxy.reqUserLoginAsGuest(null, false);
+        }
+        private _onTouchedBtnTutorial(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonTutorialPanel, void 0);
+        }
         private _onTouchedBtnVersion(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChangeVersionPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChangeVersionPanel, void 0);
         }
         private _onTouchedBtnSound(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetSoundPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.UserSetSoundPanel, void 0);
         }
 
         private _updateComponentsForLanguage(): void {
+            this._btnGuest.label    = Lang.getText(LangTextType.B0982);
             this._btnVersion.label  = Lang.getText(LangTextType.B0620);
             this._btnSound.label    = Lang.getText(LangTextType.B0540);
             this._labelVersion.text = `${Lang.getGameVersionName(CommonConstants.GameVersion)}\nv.${window.CLIENT_VERSION}`;
@@ -113,10 +124,22 @@ namespace TwnsUserLoginBackgroundPanel {
                 endProps    : { alpha: 1 },
             });
             Helpers.resetTween({
+                obj         : this._btnGuest,
+                waitTime    : 1400,
+                beginProps  : { left: -40, alpha: 0 },
+                endProps    : { left: 0, alpha: 1 },
+            });
+            Helpers.resetTween({
                 obj         : this._listLanguage,
                 waitTime    : 1400,
                 beginProps  : { left: -40, alpha: 0 },
                 endProps    : { left: 0, alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnTutorial,
+                waitTime    : 1500,
+                beginProps  : { right: -20, alpha: 0 },
+                endProps    : { right: 20, alpha: 1 },
             });
             Helpers.resetTween({
                 obj         : this._groupRightButton,
@@ -146,12 +169,22 @@ namespace TwnsUserLoginBackgroundPanel {
                 endProps    : { alpha: 0 },
             });
             Helpers.resetTween({
+                obj         : this._btnGuest,
+                beginProps  : { left: 0, alpha: 1 },
+                endProps    : { left: -40, alpha: 0 },
+            });
+            Helpers.resetTween({
                 obj         : this._listLanguage,
                 beginProps  : { left: 0, alpha: 1 },
                 endProps    : { left: -40, alpha: 0 },
             });
             Helpers.resetTween({
                 obj         : this._labelVersion,
+                beginProps  : { right: 20, alpha: 1 },
+                endProps    : { right: -20, alpha: 0 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnTutorial,
                 beginProps  : { right: 20, alpha: 1 },
                 endProps    : { right: -20, alpha: 0 },
             });

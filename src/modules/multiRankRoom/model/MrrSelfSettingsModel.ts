@@ -2,17 +2,16 @@
 // import CommonConstants      from "../../tools/helpers/CommonConstants";
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 // import UserModel            from "../../user/model/UserModel";
 // import MrrModel             from "./MrrModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace MrrSelfSettingsModel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
+namespace Twns.MultiRankRoom.MrrSelfSettingsModel {
+    import NotifyType       = Notify.NotifyType;
+    import IMrrRoomInfo     = CommonProto.MultiRankRoom.IMrrRoomInfo;
 
     let _roomId             : number | null;
     let _coId               : number | null;
@@ -25,16 +24,16 @@ namespace MrrSelfSettingsModel {
         clearUnitAndTileSkinId();
         clearAvailableCoIdArray();
 
-        const roomInfo          = Helpers.getExisted(await MrrModel.getRoomInfo(roomId));
+        const roomInfo          = Helpers.getExisted(await MultiRankRoom.MrrModel.getRoomInfo(roomId));
         const playerDataList    = roomInfo ? roomInfo.playerDataList || [] : [];
-        const selfUserId        = UserModel.getSelfUserId();
+        const selfUserId        = User.UserModel.getSelfUserId();
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
         if ((roomInfo.timeForStartSetSelfSettings == null) || (selfPlayerData == null)) {
             return;
         }
 
         const selfPlayerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
-        const availableCoIdArray    = generateAvailableCoIdArray(roomInfo, selfPlayerIndex);
+        const availableCoIdArray    = await generateAvailableCoIdArray(roomInfo, selfPlayerIndex);
         if (!availableCoIdArray.length) {
             throw Helpers.newError(`Empty availableCoIdArray`, ClientErrorCode.MrrSelfSettingsModel_ResetData_00);
         }
@@ -49,7 +48,7 @@ namespace MrrSelfSettingsModel {
                 throw Helpers.newError(`Empty availableSkinIdList.`, ClientErrorCode.MrrSelfSettingsModel_ResetData_01);
             }
 
-            setCoId(CommonConstants.CoEmptyId);
+            setCoId(CommonConstants.CoId.Empty);
             setUnitAndTileSkinId(availableSkinIdList.indexOf(selfPlayerIndex) >= 0 ? selfPlayerIndex : availableSkinIdList[0]);
         }
     }
@@ -96,20 +95,20 @@ namespace MrrSelfSettingsModel {
         _availableCoIdArray = null;
     }
 
-    function generateAvailableCoIdArray(roomInfo: IMrrRoomInfo, playerIndex: number): number[] {
-        const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const configVersion     = Helpers.getExisted(settingsForCommon.configVersion);
-        const settingsForMrw    = Helpers.getExisted(roomInfo.settingsForMrw);
-        const dataArrayForBanCo = Helpers.getExisted(settingsForMrw.dataArrayForBanCo);
-        const playerRule        = WarRuleHelpers.getPlayerRule(Helpers.getExisted(settingsForCommon.warRule), playerIndex);
-        const bannedCoIdSet     = new Set<number>(playerRule.bannedCoIdArray);
-        for (const data of dataArrayForBanCo) {
-            for (const coId of data.bannedCoIdList || []) {
-                bannedCoIdSet.add(coId);
+    async function generateAvailableCoIdArray(roomInfo: IMrrRoomInfo, playerIndex: number): Promise<number[]> {
+        const settingsForCommon     = Helpers.getExisted(roomInfo.settingsForCommon);
+        const gameConfig            = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+        const bannedCoCategoryIdSet = new Set<number>();
+        for (const data of Helpers.getExisted(roomInfo.settingsForMrw?.dataArrayForBanCo)) {
+            for (const coCategoryId of data.bannedCoCategoryIdArray ?? []) {
+                bannedCoCategoryIdSet.add(coCategoryId);
             }
         }
-
-        return WarRuleHelpers.getAvailableCoIdArray(configVersion, bannedCoIdSet);
+        return WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({
+            baseWarRule : Helpers.getExisted(settingsForCommon.instanceWarRule),
+            playerIndex,
+            gameConfig,
+        }).filter(v => !bannedCoCategoryIdSet.has(Helpers.getExisted(gameConfig.getCoBasicCfg(v)?.categoryId)));
     }
 
     function generateAvailableSkinIdList(roomInfo: IMrrRoomInfo): number[] {

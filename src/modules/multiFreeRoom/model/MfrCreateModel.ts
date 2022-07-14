@@ -3,17 +3,17 @@
 // import Helpers          from "../../tools/helpers/Helpers";
 // import Types            from "../../tools/helpers/Types";
 // import Notify           from "../../tools/notify/Notify";
-// import TwnsNotifyType   from "../../tools/notify/NotifyType";
+// import Notify   from "../../tools/notify/NotifyType";
 // import ProtoTypes       from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace MfrCreateModel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.MultiFreeRoom.MfrCreateModel {
+    import NotifyType       = Notify.NotifyType;
     import BootTimerType    = Types.BootTimerType;
-    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
+    import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
 
-    export type DataForJoinRoom = ProtoTypes.NetMessage.MsgMfrJoinRoom.IC;
+    export type DataForJoinRoom = CommonProto.NetMessage.MsgMfrJoinRoom.IC;
 
     const REGULAR_TIME_LIMITS = [
         60 * 60 * 24 * 1,   // 1 day
@@ -22,13 +22,13 @@ namespace MfrCreateModel {
         60 * 60 * 24 * 7,   // 7 days
     ];
 
-    type DataForCreateRoom  = ProtoTypes.NetMessage.MsgMfrCreateRoom.IC;
+    type DataForCreateRoom  = CommonProto.NetMessage.MsgMfrCreateRoom.IC;
 
     const _dataForCreateRoom: DataForCreateRoom = {
         settingsForMfw          : {},
 
-        selfPlayerIndex         : CommonConstants.WarFirstPlayerIndex,
-        selfCoId                : CommonConstants.CoEmptyId,
+        selfPlayerIndex         : CommonConstants.PlayerIndex.First,
+        selfCoId                : CommonConstants.CoId.Empty,
     };
 
     export async function resetDataByInitialWarData(warData: ISerialWar): Promise<void> {
@@ -36,11 +36,11 @@ namespace MfrCreateModel {
         setWarName("");
         setWarPassword("");
         setWarComment("");
-        setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
+        setBootTimerParams(CommonConstants.WarBootTimer.DefaultParams.concat());
 
         const playerData = Helpers.getExisted(warData.playerManager?.players?.find(v => {
             return (v.aliveState !== Types.PlayerAliveState.Dead)
-                && (v.playerIndex !== CommonConstants.WarNeutralPlayerIndex)
+                && (v.playerIndex !== CommonConstants.PlayerIndex.Neutral)
                 && (v.userId != null);
         }));
         setSelfPlayerIndex(Helpers.getExisted(playerData.playerIndex));
@@ -49,18 +49,25 @@ namespace MfrCreateModel {
     export function getData(): DataForCreateRoom {
         return _dataForCreateRoom;
     }
-    export function getWarRule(): ProtoTypes.WarRule.IWarRule {
-        return Helpers.getExisted(getInitialWarData().settingsForCommon?.warRule);
+    export function getInstanceWarRule(): CommonProto.WarRule.IInstanceWarRule {
+        return Helpers.getExisted(getInitialWarData().settingsForCommon?.instanceWarRule);
     }
-    function getSettingsForMfw(): ProtoTypes.WarSettings.ISettingsForMfw {
+    function getSettingsForMfw(): CommonProto.WarSettings.ISettingsForMfw {
         return Helpers.getExisted(getData().settingsForMfw);
     }
 
     export function getTurnsLimit(): number {
-        return getInitialWarData().settingsForCommon?.turnsLimit ?? CommonConstants.WarMaxTurnsLimit;
+        return getInitialWarData().settingsForCommon?.turnsLimit ?? CommonConstants.Turn.Limit.Default;
     }
     export function setTurnsLimit(turnsLimit: number): void {
         Helpers.getExisted(getInitialWarData().settingsForCommon).turnsLimit = turnsLimit;
+    }
+
+    export function getWarActionsLimit(): number {
+        return getInitialWarData().settingsForCommon?.warActionsLimit ?? CommonConstants.WarAction.Limit.Default;
+    }
+    export function setWarActionsLimit(warActionsLimit: number): void {
+        Helpers.getExisted(getInitialWarData().settingsForCommon).warActionsLimit = warActionsLimit;
     }
 
     export function getInitialWarData(): ISerialWar {
@@ -104,7 +111,7 @@ namespace MfrCreateModel {
     export function getSelfPlayerIndex(): number {
         return Helpers.getExisted(getData().selfPlayerIndex);
     }
-    export function getSelfPlayerData(): ProtoTypes.WarSerialization.ISerialPlayer {
+    export function getSelfPlayerData(): CommonProto.WarSerialization.ISerialPlayer {
         const playerIndex = getSelfPlayerIndex();
         return Helpers.getExisted(getInitialWarData().playerManager?.players?.find(v => v.playerIndex === playerIndex));
     }
@@ -120,10 +127,10 @@ namespace MfrCreateModel {
     }
 
     export function setHasFog(hasFog: boolean): void {
-        Helpers.getExisted(getWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
+        Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
     }
     export function getHasFog(): boolean {
-        return Helpers.getExisted(getWarRule().ruleForGlobalParams?.hasFogByDefault);
+        return Helpers.getExisted(getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault);
     }
 
     export function setBootTimerParams(params: number[]): void {
@@ -135,9 +142,9 @@ namespace MfrCreateModel {
     export function tickBootTimerType(): void {
         const params = getBootTimerParams();
         if ((params) && (params[0] === BootTimerType.Regular)) {
-            setBootTimerParams([BootTimerType.Incremental, 60 * 15, 10]);
+            setBootTimerParams(CommonConstants.WarBootTimer.Incremental.DefaultParams.concat());
         } else {
-            setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
+            setBootTimerParams(CommonConstants.WarBootTimer.DefaultParams.concat());
         }
     }
     export function tickTimerRegularTime(): void {
@@ -154,81 +161,81 @@ namespace MfrCreateModel {
             }
         }
     }
-    export function setTimerIncrementalInitialTime(seconds: number): void {
-        getBootTimerParams()[1] = seconds;
-    }
-    export function setTimerIncrementalIncrementalValue(seconds: number): void {
-        getBootTimerParams()[2] = seconds;
+    export function setTimerIncrementalParamArray(paramArray: number[]): void {
+        const params    = getBootTimerParams();
+        params[1]       = paramArray[0];
+        params[2]       = paramArray[1];
+        params[3]       = paramArray[2];
     }
 
     export function tickTeamIndex(playerIndex: number): void {
-        WarRuleHelpers.tickTeamIndex(getWarRule(), playerIndex);
+        WarHelpers.WarRuleHelpers.tickTeamIndex(getInstanceWarRule(), playerIndex);
     }
     export function getTeamIndex(playerIndex: number): number {
-        return WarRuleHelpers.getTeamIndex(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getTeamIndex(getInstanceWarRule(), playerIndex);
     }
 
     export function setInitialFund(playerIndex: number, fund: number): void {
-        WarRuleHelpers.setInitialFund(getWarRule(), playerIndex, fund);
+        WarHelpers.WarRuleHelpers.setInitialFund(getInstanceWarRule(), playerIndex, fund);
     }
     export function getInitialFund(playerIndex: number): number {
-        return WarRuleHelpers.getInitialFund(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getInitialFund(getInstanceWarRule(), playerIndex);
     }
 
     export function setIncomeMultiplier(playerIndex: number, multiplier: number): void {
-        WarRuleHelpers.setIncomeMultiplier(getWarRule(), playerIndex, multiplier);
+        WarHelpers.WarRuleHelpers.setIncomeMultiplier(getInstanceWarRule(), playerIndex, multiplier);
     }
     export function getIncomeMultiplier(playerIndex: number): number {
-        return WarRuleHelpers.getIncomeMultiplier(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getIncomeMultiplier(getInstanceWarRule(), playerIndex);
     }
 
     export function setEnergyAddPctOnLoadCo(playerIndex: number, percentage: number): void {
-        WarRuleHelpers.setEnergyAddPctOnLoadCo(getWarRule(), playerIndex, percentage);
+        WarHelpers.WarRuleHelpers.setEnergyAddPctOnLoadCo(getInstanceWarRule(), playerIndex, percentage);
     }
     export function getEnergyAddPctOnLoadCo(playerIndex: number): number {
-        return WarRuleHelpers.getEnergyAddPctOnLoadCo(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getEnergyAddPctOnLoadCo(getInstanceWarRule(), playerIndex);
     }
 
     export function setEnergyGrowthMultiplier(playerIndex: number, multiplier: number): void {
-        WarRuleHelpers.setEnergyGrowthMultiplier(getWarRule(), playerIndex, multiplier);
+        WarHelpers.WarRuleHelpers.setEnergyGrowthMultiplier(getInstanceWarRule(), playerIndex, multiplier);
     }
     export function getEnergyGrowthMultiplier(playerIndex: number): number {
-        return WarRuleHelpers.getEnergyGrowthMultiplier(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getEnergyGrowthMultiplier(getInstanceWarRule(), playerIndex);
     }
 
     export function setLuckLowerLimit(playerIndex: number, limit: number): void {
-        WarRuleHelpers.setLuckLowerLimit(getWarRule(), playerIndex, limit);
+        WarHelpers.WarRuleHelpers.setLuckLowerLimit(getInstanceWarRule(), playerIndex, limit);
     }
     export function getLuckLowerLimit(playerIndex: number): number {
-        return WarRuleHelpers.getLuckLowerLimit(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getLuckLowerLimit(getInstanceWarRule(), playerIndex);
     }
 
     export function setLuckUpperLimit(playerIndex: number, limit: number): void {
-        WarRuleHelpers.setLuckUpperLimit(getWarRule(), playerIndex, limit);
+        WarHelpers.WarRuleHelpers.setLuckUpperLimit(getInstanceWarRule(), playerIndex, limit);
     }
     export function getLuckUpperLimit(playerIndex: number): number {
-        return WarRuleHelpers.getLuckUpperLimit(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getLuckUpperLimit(getInstanceWarRule(), playerIndex);
     }
 
     export function setMoveRangeModifier(playerIndex: number, modifier: number): void {
-        WarRuleHelpers.setMoveRangeModifier(getWarRule(), playerIndex, modifier);
+        WarHelpers.WarRuleHelpers.setMoveRangeModifier(getInstanceWarRule(), playerIndex, modifier);
     }
     export function getMoveRangeModifier(playerIndex: number): number {
-        return WarRuleHelpers.getMoveRangeModifier(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getMoveRangeModifier(getInstanceWarRule(), playerIndex);
     }
 
     export function setAttackPowerModifier(playerIndex: number, modifier: number): void {
-        WarRuleHelpers.setAttackPowerModifier(getWarRule(), playerIndex, modifier);
+        WarHelpers.WarRuleHelpers.setAttackPowerModifier(getInstanceWarRule(), playerIndex, modifier);
     }
     export function getAttackPowerModifier(playerIndex: number): number {
-        return WarRuleHelpers.getAttackPowerModifier(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getAttackPowerModifier(getInstanceWarRule(), playerIndex);
     }
 
     export function setVisionRangeModifier(playerIndex: number, modifier: number): void {
-        WarRuleHelpers.setVisionRangeModifier(getWarRule(), playerIndex, modifier);
+        WarHelpers.WarRuleHelpers.setVisionRangeModifier(getInstanceWarRule(), playerIndex, modifier);
     }
     export function getVisionRangeModifier(playerIndex: number): number {
-        return WarRuleHelpers.getVisionRangeModifier(getWarRule(), playerIndex);
+        return WarHelpers.WarRuleHelpers.getVisionRangeModifier(getInstanceWarRule(), playerIndex);
     }
 }
 

@@ -11,7 +11,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -26,11 +26,10 @@
 // import TwnsBwWar                from "../model/BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwWarInfoPanel {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
+namespace Twns.BaseWar {
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
+    import IDataForPlayerRule   = CommonProto.WarRule.IDataForPlayerRule;
 
     // eslint-disable-next-line no-shadow
     enum InfoType {
@@ -42,7 +41,9 @@ namespace TwnsBwWarInfoPanel {
         BuildingsAndIncome,
         UnitsAndValue,
         TimeLimit,
+        BannedUnitTypeArray,
         InitialFund,
+        CanActivateCoSkill,
         IncomeMultiplier,
         EnergyAddPctOnLoadCo,
         EnergyGrowthMultiplier,
@@ -53,10 +54,10 @@ namespace TwnsBwWarInfoPanel {
         LuckUpperLimit,
     }
 
-    export type OpenData = {
-        war : TwnsBwWar.BwWar;
+    export type OpenDataForBwWarInfoPanel = {
+        war : BaseWar.BwWar;
     };
-    export class BwWarInfoPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwWarInfoPanel extends TwnsUiPanel.UiPanel<OpenDataForBwWarInfoPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -64,12 +65,16 @@ namespace TwnsBwWarInfoPanel {
         private readonly _labelMapDesigner! : TwnsUiLabel.UiLabel;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
 
-        private readonly _scroller!         : eui.Scroller;
-        private readonly _labelTurnTitle!   : TwnsUiLabel.UiLabel;
-        private readonly _labelTurn!        : TwnsUiLabel.UiLabel;
-        private readonly _labelTurnsLimit!  : TwnsUiLabel.UiLabel;
-        private readonly _listRuleTitle!    : TwnsUiScrollList.UiScrollList<DataForRuleTitleRenderer>;
-        private readonly _listPlayer!       : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+        private readonly _scroller!             : eui.Scroller;
+        private readonly _labelTurnTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelTurn!            : TwnsUiLabel.UiLabel;
+        private readonly _labelTurnsLimit!      : TwnsUiLabel.UiLabel;
+        private readonly _labelWarActionTitle!  : TwnsUiLabel.UiLabel;
+        private readonly _labelWarAction!       : TwnsUiLabel.UiLabel;
+        private readonly _labelWarActionLimit!  : TwnsUiLabel.UiLabel;
+
+        private readonly _listRuleTitle!        : TwnsUiScrollList.UiScrollList<DataForRuleTitleRenderer>;
+        private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -102,16 +107,20 @@ namespace TwnsBwWarInfoPanel {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const playerRuleTypeArray   = getInfoTypeArray();
-            const war                   = this._getOpenData().war;
-            this._labelTurn.text        = Helpers.getNumText(war.getTurnManager().getTurnIndex());
-            this._labelTurnsLimit.text  = `/${war.getCommonSettingManager().getTurnsLimit()}`;
+            const playerRuleTypeArray       = getInfoTypeArray();
+            const war                       = this._getOpenData().war;
+            const commonSettingsManager     = war.getCommonSettingManager();
+            this._labelTurn.text            = `${war.getTurnManager().getTurnIndex()}`;
+            this._labelWarAction.text       = `${war.getExecutedActionManager().getExecutedActionsCount()}`;
+            this._labelTurnsLimit.text      = `/${commonSettingsManager.getTurnsLimit()}`;
+            this._labelWarActionLimit.text  = `/${commonSettingsManager.getWarActionsLimit()}`;
             this._initListSetting(playerRuleTypeArray);
             this._updateListPlayer(playerRuleTypeArray);
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTurnTitle.text   = Lang.getText(LangTextType.B0687).toLocaleUpperCase();
+            this._labelTurnTitle.text       = Lang.getText(LangTextType.B0687).toLocaleUpperCase();
+            this._labelWarActionTitle.text  = Lang.getText(LangTextType.B0616).toLocaleUpperCase();
             this._updateLabelTitle();
             this._updateLabelMapNameAndDesigner();
         }
@@ -131,7 +140,7 @@ namespace TwnsBwWarInfoPanel {
                 labelMapName.text       = ``;
                 labelMapDesigner.text   = ``;
             } else {
-                const briefInfo         = Helpers.getExisted(await WarMapModel.getBriefData(mapId), ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_00);
+                const briefInfo         = Helpers.getExisted(await WarMap.WarMapModel.getBriefData(mapId), ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_00);
                 labelMapName.text       = Helpers.getExisted(Lang.getLanguageText({ textArray: briefInfo.mapNameArray }), ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_01);
                 labelMapDesigner.text   = `${Lang.getText(LangTextType.B0251)}: ${Helpers.getExisted(briefInfo.designerName, ClientErrorCode.BwWarInfoPanel_UpdateLabelMapNameAndDesigner_02)}`;
             }
@@ -152,9 +161,9 @@ namespace TwnsBwWarInfoPanel {
 
         private _updateListPlayer(infoTypeArray: InfoType[]): void {
             const war               = this._getOpenData().war;
-            const playerRuleArray   = Helpers.getExisted(war.getWarRule().ruleForPlayers?.playerRuleDataArray, ClientErrorCode.BwWarInfoPanel_UpdateListPlayer_00);
+            const playerRuleArray   = Helpers.getExisted(war.getInstanceWarRule().ruleForPlayers?.playerRuleDataArray, ClientErrorCode.BwWarInfoPanel_UpdateListPlayer_00);
             const dataArray         : DataForPlayerRenderer[] = [];
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playerRuleArray.length; ++playerIndex) {
+            for (let playerIndex = CommonConstants.PlayerIndex.First; playerIndex <= playerRuleArray.length; ++playerIndex) {
                 dataArray.push({
                     war,
                     playerIndex,
@@ -242,7 +251,7 @@ namespace TwnsBwWarInfoPanel {
     // PlayerRenderer
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForPlayerRenderer = {
-        war             : TwnsBwWar.BwWar;
+        war             : BaseWar.BwWar;
         playerIndex     : number;
         playerRule      : IDataForPlayerRule;
         infoTypeArray   : InfoType[];
@@ -276,8 +285,8 @@ namespace TwnsBwWarInfoPanel {
             const playerIndex           = data.playerIndex;
             const war                   = data.war;
             const player                = war.getPlayer(playerIndex);
-            this._imgSkin.source        = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
-            this._imgCo.source          = ConfigManager.getCoEyeImageSource(war.getConfigVersion(), player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
+            this._imgSkin.source        = WarHelpers.WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
+            this._imgCo.source          = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
             this._labelPlayerName.text  = `P${playerIndex}`;
         }
 
@@ -302,7 +311,7 @@ namespace TwnsBwWarInfoPanel {
     // InfoRenderer
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForInfoRenderer = {
-        war                 : TwnsBwWar.BwWar;
+        war                 : BaseWar.BwWar;
         infoType            : InfoType;
         playerIndex         : number;
         playerRenderer      : PlayerRenderer;
@@ -338,6 +347,8 @@ namespace TwnsBwWarInfoPanel {
                 this._modifyAsEnergy();
             } else if (infoType === InfoType.CurrentFund) {
                 this._modifyAsCurrentFund();
+            } else if (infoType === InfoType.BannedUnitTypeArray) {
+                this._modifyAsBannedUnitTypeArray();
             } else if (infoType === InfoType.InitialFund) {
                 this._modifyAsInitialFund();
             } else if (infoType === InfoType.IncomeMultiplier) {
@@ -346,6 +357,8 @@ namespace TwnsBwWarInfoPanel {
                 this._modifyAsEnergyAddPctOnLoadCo();
             } else if (infoType === InfoType.EnergyGrowthMultiplier) {
                 this._modifyAsEnergyGrowthMultiplier();
+            } else if (infoType === InfoType.CanActivateCoSkill) {
+                this._modifyAsCanActivateCoSkill();
             } else if (infoType === InfoType.MoveRangeModifier) {
                 this._modifyAsMoveRangeModifier();
             } else if (infoType === InfoType.AttackPowerModifier) {
@@ -369,14 +382,14 @@ namespace TwnsBwWarInfoPanel {
             const { playerIndex, war }  = this._getData();
             const player                = war.getPlayer(playerIndex);
             const isHuman               = player.getUserId() != null;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : isHuman ? Lang.getText(LangTextType.A0110) : Lang.getText(LangTextType.A0111),
                 callback: () => {
                     if (!isHuman) {
-                        player.setUserId(UserModel.getSelfUserId());
+                        player.setUserId(User.UserModel.getSelfUserId());
                     } else {
                         player.setUserId(null);
-                        SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war);
+                        SinglePlayerWar.SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war);
                     }
                     this._updateView();
                 },
@@ -384,12 +397,12 @@ namespace TwnsBwWarInfoPanel {
         }
         private _modifyAsTeamIndex(): void {
             const { playerIndex, war } = this._getData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getFormattedText(LangTextType.F0072, playerIndex),
                 callback: () => {
                     const playersCountUnneutral = war.getPlayerManager().getTotalPlayersCount(false);
-                    const warRule               = war.getWarRule();
-                    WarRuleHelpers.setTeamIndex(warRule, playerIndex, (WarRuleHelpers.getTeamIndex(warRule, playerIndex) % playersCountUnneutral) + 1);
+                    const instanceWarRule       = war.getInstanceWarRule();
+                    WarHelpers.WarRuleHelpers.setTeamIndex(instanceWarRule, playerIndex, (WarHelpers.WarRuleHelpers.getTeamIndex(instanceWarRule, playerIndex) % playersCountUnneutral) + 1);
                     this._updateView();
                 },
             });
@@ -397,10 +410,12 @@ namespace TwnsBwWarInfoPanel {
         private _modifyAsCo(): void {
             const { playerIndex, war, playerRenderer }  = this._getData();
             const player                                = war.getPlayer(playerIndex);
+            const gameConfig                            = war.getGameConfig();
             const currentCoId                           = player.getCoId();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
+                gameConfig,
                 currentCoId,
-                availableCoIdArray  : ConfigManager.getEnabledCoArray(war.getConfigVersion()).map(v => v.coId),
+                availableCoIdArray  : gameConfig.getEnabledCoArray().map(v => v.coId),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
                         player.setCoId(newCoId);
@@ -418,14 +433,14 @@ namespace TwnsBwWarInfoPanel {
             const minValue              = 0;
             const maxValue              = player.getCoMaxEnergy();
             const currValue             = player.getCoCurrentEnergy();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : `P${playerIndex} ${Lang.getText(LangTextType.B0159)}`,
                 currentValue    : currValue,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    player.setCoCurrentEnergy(panel.getInputValue());
+                callback        : value => {
+                    player.setCoCurrentEnergy(value);
                     this._updateView();
                 },
             });
@@ -436,14 +451,26 @@ namespace TwnsBwWarInfoPanel {
             const currValue             = player.getFund();
             const maxValue              = CommonConstants.WarRuleInitialFundMaxLimit;
             const minValue              = CommonConstants.WarRuleInitialFundMinLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : `P${player.getPlayerIndex()} ${Lang.getText(LangTextType.B0032)}`,
                 currentValue    : currValue,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    player.setFund(panel.getInputValue());
+                callback        : value => {
+                    player.setFund(value);
+                    this._updateView();
+                },
+            });
+        }
+        private _modifyAsBannedUnitTypeArray(): void {
+            const { war, playerIndex }          = this._getData();
+            const currentBannedUnitTypeArray    = war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerIndex) ?? [];
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseUnitTypePanel, {
+                currentUnitTypeArray    : currentBannedUnitTypeArray,
+                gameConfig              : war.getGameConfig(),
+                callbackOnConfirm       : bannedUnitTypeArray => {
+                    WarHelpers.WarRuleHelpers.setBannedUnitTypeArray(war.getInstanceWarRule(), playerIndex, bannedUnitTypeArray);
                     this._updateView();
                 },
             });
@@ -453,14 +480,14 @@ namespace TwnsBwWarInfoPanel {
             const currValue             = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
             const maxValue              = CommonConstants.WarRuleInitialFundMaxLimit;
             const minValue              = CommonConstants.WarRuleInitialFundMinLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0178),
                 currentValue    : currValue,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    WarRuleHelpers.setInitialFund(war.getWarRule(), playerIndex, panel.getInputValue());
+                callback        : value => {
+                    WarHelpers.WarRuleHelpers.setInitialFund(war.getInstanceWarRule(), playerIndex, value);
                     this._updateView();
                 },
             });
@@ -470,14 +497,14 @@ namespace TwnsBwWarInfoPanel {
             const currValue             = war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex);
             const maxValue              = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
             const minValue              = CommonConstants.WarRuleIncomeMultiplierMinLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0179),
                 currentValue    : currValue,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    WarRuleHelpers.setIncomeMultiplier(war.getWarRule(), playerIndex, panel.getInputValue());
+                callback        : value => {
+                    WarHelpers.WarRuleHelpers.setIncomeMultiplier(war.getInstanceWarRule(), playerIndex, value);
                     this._updateView();
                 },
             });
@@ -487,14 +514,14 @@ namespace TwnsBwWarInfoPanel {
             const currValue             = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
             const minValue              = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
             const maxValue              = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0180),
                 currentValue    : currValue,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    WarRuleHelpers.setEnergyAddPctOnLoadCo(war.getWarRule(), playerIndex, panel.getInputValue());
+                callback        : value => {
+                    WarHelpers.WarRuleHelpers.setEnergyAddPctOnLoadCo(war.getInstanceWarRule(), playerIndex, value);
                     this._updateView();
                 },
             });
@@ -504,31 +531,37 @@ namespace TwnsBwWarInfoPanel {
             const currValue             = war.getCommonSettingManager().getSettingsEnergyGrowthMultiplier(playerIndex);
             const minValue              = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
             const maxValue              = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0181),
                 currentValue    : currValue,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    WarRuleHelpers.setEnergyGrowthMultiplier(war.getWarRule(), playerIndex, panel.getInputValue());
+                callback        : value => {
+                    WarHelpers.WarRuleHelpers.setEnergyGrowthMultiplier(war.getInstanceWarRule(), playerIndex, value);
                     this._updateView();
                 },
             });
+        }
+        private _modifyAsCanActivateCoSkill(): void {
+            const { war, playerIndex }  = this._getData();
+            const currValue             = war.getCommonSettingManager().getSettingsCanActivateCoSkill(playerIndex);
+            WarHelpers.WarRuleHelpers.setCanActivateCoSkill(war.getInstanceWarRule(), playerIndex, !currValue);
+            this._updateView();
         }
         private _modifyAsMoveRangeModifier(): void {
             const { playerIndex, war }  = this._getData();
             const currValue             = war.getCommonSettingManager().getSettingsMoveRangeModifier(playerIndex);
             const minValue              = CommonConstants.WarRuleMoveRangeModifierMinLimit;
             const maxValue              = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0182),
                 currentValue    : currValue,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    WarRuleHelpers.setMoveRangeModifier(war.getWarRule(), playerIndex, panel.getInputValue());
+                callback        : value => {
+                    WarHelpers.WarRuleHelpers.setMoveRangeModifier(war.getInstanceWarRule(), playerIndex, value);
                     this._updateView();
                 },
             });
@@ -538,14 +571,14 @@ namespace TwnsBwWarInfoPanel {
             const currValue             = war.getCommonSettingManager().getSettingsAttackPowerModifier(playerIndex);
             const minValue              = CommonConstants.WarRuleOffenseBonusMinLimit;
             const maxValue              = CommonConstants.WarRuleOffenseBonusMaxLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0183),
                 currentValue    : currValue,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    WarRuleHelpers.setAttackPowerModifier(war.getWarRule(), playerIndex, panel.getInputValue());
+                callback        : value => {
+                    WarHelpers.WarRuleHelpers.setAttackPowerModifier(war.getInstanceWarRule(), playerIndex, value);
                     this._updateView();
                 },
             });
@@ -555,14 +588,14 @@ namespace TwnsBwWarInfoPanel {
             const currValue             = war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex);
             const minValue              = CommonConstants.WarRuleVisionRangeModifierMinLimit;
             const maxValue              = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0184),
                 currentValue    : currValue,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    WarRuleHelpers.setVisionRangeModifier(war.getWarRule(), playerIndex, panel.getInputValue());
+                callback        : value => {
+                    WarHelpers.WarRuleHelpers.setVisionRangeModifier(war.getInstanceWarRule(), playerIndex, value);
                     this._updateView();
                 },
             });
@@ -572,22 +605,21 @@ namespace TwnsBwWarInfoPanel {
             const currValue                             = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
             const minValue                              = CommonConstants.WarRuleLuckMinLimit;
             const maxValue                              = CommonConstants.WarRuleLuckMaxLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0189),
                 currentValue    : currValue,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value         = panel.getInputValue();
-                    const upperLimit    = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
-                    const warRule       = war.getWarRule();
+                callback        : value => {
+                    const upperLimit        = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
+                    const instanceWarRule   = war.getInstanceWarRule();
                     if (value <= upperLimit) {
-                        WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
+                        WarHelpers.WarRuleHelpers.setLuckLowerLimit(instanceWarRule, playerIndex, value);
                         this._updateView();
                     } else {
-                        WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
-                        WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, upperLimit);
+                        WarHelpers.WarRuleHelpers.setLuckUpperLimit(instanceWarRule, playerIndex, value);
+                        WarHelpers.WarRuleHelpers.setLuckLowerLimit(instanceWarRule, playerIndex, upperLimit);
                         playerRenderer.refreshListInfo();
                     }
                 },
@@ -598,22 +630,21 @@ namespace TwnsBwWarInfoPanel {
             const currValue                             = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
             const minValue                              = CommonConstants.WarRuleLuckMinLimit;
             const maxValue                              = CommonConstants.WarRuleLuckMaxLimit;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0190),
                 currentValue    : currValue,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value         = panel.getInputValue();
-                    const lowerLimit    = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
-                    const warRule       = war.getWarRule();
+                callback        : value => {
+                    const lowerLimit        = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
+                    const instanceWarRule   = war.getInstanceWarRule();
                     if (value >= lowerLimit) {
-                        WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
+                        WarHelpers.WarRuleHelpers.setLuckUpperLimit(instanceWarRule, playerIndex, value);
                         this._updateView();
                     } else {
-                        WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
-                        WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
+                        WarHelpers.WarRuleHelpers.setLuckLowerLimit(instanceWarRule, playerIndex, value);
+                        WarHelpers.WarRuleHelpers.setLuckUpperLimit(instanceWarRule, playerIndex, lowerLimit);
                         playerRenderer.refreshListInfo();
                     }
                 },
@@ -638,6 +669,8 @@ namespace TwnsBwWarInfoPanel {
                 this._updateViewAsUnitsAndValue();
             } else if (infoType === InfoType.TimeLimit) {
                 this._updateViewAsTimeLimit();
+            } else if (infoType === InfoType.BannedUnitTypeArray) {
+                this._updateViewAsBannedUnitTypeArray();
             } else if (infoType === InfoType.InitialFund) {
                 this._updateViewAsInitialFund();
             } else if (infoType === InfoType.IncomeMultiplier) {
@@ -646,6 +679,8 @@ namespace TwnsBwWarInfoPanel {
                 this._updateViewAsEnergyAddPctOnLoadCo();
             } else if (infoType === InfoType.EnergyGrowthMultiplier) {
                 this._updateViewAsEnergyGrowthMultiplier();
+            } else if (infoType === InfoType.CanActivateCoSkill) {
+                this._updateViewAsCanActivateCoSkill();
             } else if (infoType === InfoType.MoveRangeModifier) {
                 this._updateViewAsMoveRangeModifier();
             } else if (infoType === InfoType.AttackPowerModifier) {
@@ -667,7 +702,7 @@ namespace TwnsBwWarInfoPanel {
             const labelValue        = this._labelValue;
             labelValue.text         = userId == null
                 ? Lang.getText(LangTextType.B0607)
-                : Helpers.getExisted(await UserModel.getUserNickname(userId), ClientErrorCode.BwWarInfoPanel_InfoRenderer_UpdateViewAsPlayer_00);
+                : Helpers.getExisted(await User.UserModel.getUserNickname(userId), ClientErrorCode.BwWarInfoPanel_InfoRenderer_UpdateViewAsPlayer_00);
             labelValue.textColor    = 0xFFFFFF;
 
             const canModify         = checkCanModifyPlayerInfo(war);
@@ -689,7 +724,7 @@ namespace TwnsBwWarInfoPanel {
             const data              = this._getData();
             const war               = data.war;
             const labelValue        = this._labelValue;
-            labelValue.text         = ConfigManager.getCoNameAndTierText(war.getConfigVersion(), war.getPlayer(data.playerIndex).getCoId());
+            labelValue.text         = war.getGameConfig().getCoNameAndTierText(war.getPlayer(data.playerIndex).getCoId()) ?? CommonConstants.ErrorTextForUndefined;
             labelValue.textColor    = 0xFFFFFF;
 
             const canModify         = checkCanModifyPlayerInfo(war);
@@ -714,7 +749,7 @@ namespace TwnsBwWarInfoPanel {
             const labelValue        = this._labelValue;
             labelValue.textColor    = 0xFFFFFF;
             if ((war.getFogMap().checkHasFogCurrently())                                                    &&
-                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(player.getTeamIndex()))
+                (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(player.getTeamIndex()))
             ) {
                 labelValue.text = `????`;
             } else {
@@ -732,7 +767,7 @@ namespace TwnsBwWarInfoPanel {
             const labelValue        = this._labelValue;
             labelValue.textColor    = 0xFFFFFF;
             if ((war.getFogMap().checkHasFogCurrently())                                                                    &&
-                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(war.getPlayer(playerIndex).getTeamIndex()))
+                (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(war.getPlayer(playerIndex).getTeamIndex()))
             ) {
                 labelValue.text = `????`;
             } else {
@@ -749,7 +784,7 @@ namespace TwnsBwWarInfoPanel {
             const labelValue        = this._labelValue;
             labelValue.textColor    = 0xFFFFFF;
             if ((war.getFogMap().checkHasFogCurrently())                                                                    &&
-                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(war.getPlayer(playerIndex).getTeamIndex()))
+                (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(war.getPlayer(playerIndex).getTeamIndex()))
             ) {
                 labelValue.text = `????`;
             } else {
@@ -785,7 +820,7 @@ namespace TwnsBwWarInfoPanel {
             } else {
                 const params            = war.getSettingsBootTimerParams();
                 const textForAddTime    = params[0] === Types.BootTimerType.Incremental
-                    ? `(+${params[2] * war.getUnitMap().getAllUnits().filter(v => v.getPlayerIndex() === playerIndex).length}s)`
+                    ? `(+${params[2] * war.getUnitMap().getAllUnits().filter(v => v.getPlayerIndex() === playerIndex).length + (params[3] ?? 0)}s)`
                     : ``;
 
                 label.text      = `${Helpers.getTimeDurationText2(restTime)}${textForAddTime}`;
@@ -797,10 +832,22 @@ namespace TwnsBwWarInfoPanel {
             this._btnModify.visible = false;
             this._imgModify.visible = false;
         }
+        private _updateViewAsBannedUnitTypeArray(): void {
+            const data              = this._getData();
+            const war               = data.war;
+            const currValue         = war.getCommonSettingManager().getSettingsBannedUnitTypeArray(data.playerIndex)?.length ?? 0;
+            const labelValue        = this._labelValue;
+            labelValue.text         = `${currValue}`;
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleBannedUnitTypeCountDefault, true);
+
+            const canModify         = checkCanModifyPlayerInfo(war);
+            this._btnModify.visible = canModify;
+            this._imgModify.visible = canModify;
+        }
         private _updateViewAsInitialFund(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getInitialFund(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getInitialFund(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
@@ -812,7 +859,7 @@ namespace TwnsBwWarInfoPanel {
         private _updateViewAsIncomeMultiplier(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getIncomeMultiplier(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getIncomeMultiplier(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
@@ -824,7 +871,7 @@ namespace TwnsBwWarInfoPanel {
         private _updateViewAsEnergyAddPctOnLoadCo(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getEnergyAddPctOnLoadCo(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getEnergyAddPctOnLoadCo(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
@@ -836,7 +883,7 @@ namespace TwnsBwWarInfoPanel {
         private _updateViewAsEnergyGrowthMultiplier(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getEnergyGrowthMultiplier(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getEnergyGrowthMultiplier(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
@@ -845,10 +892,22 @@ namespace TwnsBwWarInfoPanel {
             this._btnModify.visible = canModify;
             this._imgModify.visible = canModify;
         }
+        private _updateViewAsCanActivateCoSkill(): void {
+            const data              = this._getData();
+            const war               = data.war;
+            const currValue         = WarHelpers.WarRuleHelpers.getCanActivateCoSkill(war.getInstanceWarRule(), data.playerIndex);
+            const labelValue        = this._labelValue;
+            labelValue.text         = Lang.getText(currValue ? LangTextType.B0012 : LangTextType.B0013);
+            labelValue.textColor    = currValue ? 0xFFFFFF : 0xFF0000;
+
+            const canModify         = checkCanModifyPlayerInfo(war);
+            this._btnModify.visible = canModify;
+            this._imgModify.visible = canModify;
+        }
         private _updateViewAsMoveRangeModifier(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getMoveRangeModifier(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getMoveRangeModifier(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
@@ -860,7 +919,7 @@ namespace TwnsBwWarInfoPanel {
         private _updateViewAsAttackPowerModifier(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getAttackPowerModifier(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getAttackPowerModifier(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
@@ -872,7 +931,7 @@ namespace TwnsBwWarInfoPanel {
         private _updateViewAsVisionRangeModifier(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getVisionRangeModifier(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getVisionRangeModifier(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
@@ -884,7 +943,7 @@ namespace TwnsBwWarInfoPanel {
         private _updateViewAsLuckLowerLimit(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getLuckLowerLimit(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getLuckLowerLimit(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
@@ -896,7 +955,7 @@ namespace TwnsBwWarInfoPanel {
         private _updateViewAsLuckUpperLimit(): void {
             const data              = this._getData();
             const war               = data.war;
-            const currValue         = WarRuleHelpers.getLuckUpperLimit(war.getWarRule(), data.playerIndex);
+            const currValue         = WarHelpers.WarRuleHelpers.getLuckUpperLimit(war.getInstanceWarRule(), data.playerIndex);
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
@@ -907,11 +966,11 @@ namespace TwnsBwWarInfoPanel {
         }
     }
 
-    function getTextColor(value: number, defaultValue: number): number {
+    function getTextColor(value: number, defaultValue: number, isLessBetter = false): number {
         if (value > defaultValue) {
-            return 0x00FF00;
+            return isLessBetter ? 0xFF0000 : 0x00FF00;
         } else if (value < defaultValue) {
-            return 0xFF0000;
+            return isLessBetter ? 0x00FF00 : 0xFF0000;
         } else {
             return 0xFFFFFF;
         }
@@ -927,10 +986,12 @@ namespace TwnsBwWarInfoPanel {
             InfoType.BuildingsAndIncome,
             InfoType.UnitsAndValue,
             InfoType.TimeLimit,
+            InfoType.BannedUnitTypeArray,
             InfoType.InitialFund,
             InfoType.IncomeMultiplier,
             InfoType.EnergyAddPctOnLoadCo,
             InfoType.EnergyGrowthMultiplier,
+            InfoType.CanActivateCoSkill,
             InfoType.MoveRangeModifier,
             InfoType.AttackPowerModifier,
             InfoType.VisionRangeModifier,
@@ -948,10 +1009,12 @@ namespace TwnsBwWarInfoPanel {
             case InfoType.BuildingsAndIncome        : return Lang.getText(LangTextType.B0689);
             case InfoType.UnitsAndValue             : return Lang.getText(LangTextType.B0688);
             case InfoType.TimeLimit                 : return Lang.getText(LangTextType.B0021);
+            case InfoType.BannedUnitTypeArray       : return Lang.getText(LangTextType.B0895);
             case InfoType.InitialFund               : return Lang.getText(LangTextType.B0178);
             case InfoType.IncomeMultiplier          : return Lang.getText(LangTextType.B0179);
             case InfoType.EnergyAddPctOnLoadCo      : return Lang.getText(LangTextType.B0180);
             case InfoType.EnergyGrowthMultiplier    : return Lang.getText(LangTextType.B0181);
+            case InfoType.CanActivateCoSkill        : return Lang.getText(LangTextType.B0897);
             case InfoType.MoveRangeModifier         : return Lang.getText(LangTextType.B0182);
             case InfoType.AttackPowerModifier       : return Lang.getText(LangTextType.B0183);
             case InfoType.VisionRangeModifier       : return Lang.getText(LangTextType.B0184);
@@ -960,7 +1023,7 @@ namespace TwnsBwWarInfoPanel {
             default                                 : return null;
         }
     }
-    function checkCanModifyPlayerInfo(war: TwnsBwWar.BwWar): boolean {
+    function checkCanModifyPlayerInfo(war: BaseWar.BwWar): boolean {
         const warType = war.getWarType();
         return (warType === Types.WarType.ScwFog)
             || (warType === Types.WarType.ScwStd)

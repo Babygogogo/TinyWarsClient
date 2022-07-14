@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 // import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
@@ -15,14 +15,14 @@
 // import TwnsMpwWarMenuPanel      from "./MpwWarMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMpwSidePanel {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.MultiPlayerWar {
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
 
-    export type OpenData = {
-        war     : TwnsMpwWar.MpwWar;
+    export type OpenDataForMpwSidePanel = {
+        war : MultiPlayerWar.MpwWar;
     };
-    export class MpwSidePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MpwSidePanel extends TwnsUiPanel.UiPanel<OpenDataForMpwSidePanel> {
         private readonly _groupLeft!    : eui.Group;
         private readonly _btnCop!       : TwnsUiButton.UiButton;
         private readonly _btnScop!      : TwnsUiButton.UiButton;
@@ -99,7 +99,7 @@ namespace TwnsMpwSidePanel {
             if (!war.getPlayerInTurn().checkCanUseCoSkill(skillType)) {
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0142),
                     content : Lang.getText(LangTextType.A0054),
                     callback: () => war.getActionPlanner().setStateRequestingPlayerUseCoSkill(skillType),
@@ -113,7 +113,7 @@ namespace TwnsMpwSidePanel {
             if (!war.getPlayerInTurn().checkCanUseCoSkill(skillType)) {
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0144),
                     content : Lang.getText(LangTextType.A0058),
                     callback: () => war.getActionPlanner().setStateRequestingPlayerUseCoSkill(skillType),
@@ -128,7 +128,7 @@ namespace TwnsMpwSidePanel {
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
                 actionPlanner.setStateIdle();
 
-                const gridIndex = WarCommonHelpers.getIdleUnitGridIndex(war);
+                const gridIndex = WarHelpers.WarCommonHelpers.getIdleUnitGridIndex(war);
                 if (!gridIndex) {
                     SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 } else {
@@ -148,7 +148,7 @@ namespace TwnsMpwSidePanel {
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
                 actionPlanner.setStateIdle();
 
-                const gridIndex = WarCommonHelpers.getIdleBuildingGridIndex(war);
+                const gridIndex = WarHelpers.WarCommonHelpers.getIdleBuildingGridIndex(war);
                 if (!gridIndex) {
                     SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 } else {
@@ -164,11 +164,11 @@ namespace TwnsMpwSidePanel {
         private _onTouchedBtnEndTurn(): void {
             const war = this._getOpenData().war;
             if ((war.getDrawVoteManager().getRemainingVotes()) && (!war.getPlayerInTurn().getHasVotedForDraw())) {
-                FloatText.show(Lang.getText(LangTextType.A0034));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0034));
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0036),
-                    content : this._getHintForEndTurn(),
+                    content : WarHelpers.WarCommonHelpers.getHintForEndTurn(war),
                     callback: () => this._getOpenData().war.getActionPlanner().setStateRequestingPlayerEndTurn(),
                 });
             }
@@ -182,14 +182,14 @@ namespace TwnsMpwSidePanel {
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarInfoPanel, { war });
+            PanelHelpers.open(PanelHelpers.PanelDict.BwWarInfoPanel, { war });
         }
         private _onTouchedBtnMenu(): void {
             const actionPlanner = this._getOpenData().war.getActionPlanner();
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MpwWarMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MpwWarMenuPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -273,7 +273,7 @@ namespace TwnsMpwSidePanel {
                 btn.visible = false;
             } else {
                 btn.visible = true;
-                btn.icon    = WarCommonHelpers.getIdleUnitGridIndex(war) == null ? `commonIcon0018` : `commonIcon0015`;
+                btn.icon    = WarHelpers.WarCommonHelpers.getIdleUnitGridIndex(war) == null ? `commonIcon0018` : `commonIcon0015`;
             }
         }
 
@@ -289,7 +289,7 @@ namespace TwnsMpwSidePanel {
                 btn.visible = false;
             } else {
                 btn.visible = true;
-                btn.icon    = WarCommonHelpers.getIdleBuildingGridIndex(war) == null ? `commonIcon0019` : `commonIcon0016`;
+                btn.icon    = WarHelpers.WarCommonHelpers.getIdleBuildingGridIndex(war) == null ? `commonIcon0019` : `commonIcon0016`;
             }
         }
 
@@ -303,55 +303,6 @@ namespace TwnsMpwSidePanel {
                 && (!actionPlanner.checkIsStateRequesting())
                 && (turnManager.getPlayerIndexInTurn() === war.getPlayerIndexLoggedIn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Util functions.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _getHintForEndTurn(): string {
-            const war           = this._getOpenData().war;
-            const playerIndex   = war.getPlayerIndexLoggedIn();
-            const unitMap       = war.getUnitMap();
-            const hints         = new Array<string>();
-
-            if (playerIndex != null) {
-                {
-                    let idleUnitsCount = 0;
-                    for (const unit of unitMap.getAllUnitsOnMap()) {
-                        if ((unit.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle)) {
-                            ++idleUnitsCount;
-                        }
-                    }
-                    (idleUnitsCount) && (hints.push(Lang.getFormattedText(LangTextType.F0006, idleUnitsCount)));
-                }
-
-                {
-                    const idleBuildingsDict = new Map<Types.TileType, Types.GridIndex[]>();
-                    for (const tile of war.getTileMap().getAllTiles()) {
-                        if ((tile.checkIsUnitProducerForPlayer(playerIndex)) && (!unitMap.getUnitOnMap(tile.getGridIndex()))) {
-                            const tileType  = tile.getType();
-                            const gridIndex = tile.getGridIndex();
-                            if (!idleBuildingsDict.has(tileType)) {
-                                idleBuildingsDict.set(tileType, [gridIndex]);
-                            } else {
-                                Helpers.getExisted(idleBuildingsDict.get(tileType)).push(gridIndex);
-                            }
-                        }
-                    }
-                    const textArrayForBuildings: string[] = [];
-                    for (const [tileType, gridIndexArray] of idleBuildingsDict) {
-                        textArrayForBuildings.push(Lang.getFormattedText(
-                            LangTextType.F0007, gridIndexArray.length,
-                            Lang.getTileName(tileType),
-                            gridIndexArray.map(v => `(${v.x}, ${v.y})`).join(`, `)),
-                        );
-                    }
-                    (textArrayForBuildings.length) && (hints.push(textArrayForBuildings.join(`\n`)));
-                }
-            }
-
-            hints.push(Lang.getText(LangTextType.A0024));
-            return hints.join(`\n\n`);
         }
     }
 }

@@ -7,7 +7,7 @@
 // import Types                            from "../../tools/helpers/Types";
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import Notify                   from "../../tools/notify/NotifyType";
 // import ProtoTypes                       from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiLabel                      from "../../tools/ui/UiLabel";
@@ -20,15 +20,14 @@
 // import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeMfwSettingsPanel {
-    import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import MeMfwAdvancedSettingsPage    = TwnsMeMfwAdvancedSettingsPage.MeMfwAdvancedSettingsPage;
-    import MeMfwBasicSettingsPage       = TwnsMeMfwBasicSettingsPage.MeMfwBasicSettingsPage;
-    import NotifyType                   = TwnsNotifyType.NotifyType;
-    import LangTextType                 = TwnsLangTextType.LangTextType;
+namespace Twns.MapEditor {
+    import MeMfwAdvancedSettingsPage    = MapEditor.MeMfwAdvancedSettingsPage;
+    import MeMfwBasicSettingsPage       = MapEditor.MeMfwBasicSettingsPage;
+    import NotifyType                   = Notify.NotifyType;
+    import LangTextType                 = Lang.LangTextType;
 
-    export type OpenData = void;
-    export class MeMfwSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeMfwSettingsPanel = void;
+    export class MeMfwSettingsPanel extends TwnsUiPanel.UiPanel<OpenDataForMeMfwSettingsPanel> {
         private readonly _tabSettings!      : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnBack!          : TwnsUiButton.UiButton;
@@ -67,17 +66,16 @@ namespace TwnsMeMfwSettingsPanel {
 
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarMenuPanel, void 0);
         }
 
         private async _onTouchedBtnConfirm(): Promise<void> {
-            MeMfwModel.reviseWarRuleForAi();
-            const warData   = MeMfwModel.getWarData();
-            const errorCode = await (new TwnsTwWar.TwWar().getErrorCodeForInit(warData));
+            MapEditor.MeMfwModel.reviseInstanceWarRuleForAi();
+            const warData   = MapEditor.MeMfwModel.getWarData();
+            const errorCode = new TestWar.TwWar().getErrorCodeForInitForMfw(warData, await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0201),
                     callback: () => {
                         FlowManager.gotoMfrCreateSettingsPanel(warData);
@@ -87,8 +85,8 @@ namespace TwnsMeMfwSettingsPanel {
         }
 
         private _onMsgSpmCreateSfw(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            const data = e.data as CommonProto.NetMessage.MsgSpmCreateSfw.IS;
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({

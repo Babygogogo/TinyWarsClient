@@ -16,19 +16,18 @@
 // import TwnsMpwWar               from "./MpwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMpwActionPlanner {
-    import LangTextType         = TwnsLangTextType.LangTextType;
+namespace Twns.MultiPlayerWar {
+    import LangTextType         = Lang.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import UnitState            = Types.UnitActionState;
     import GridIndex            = Types.GridIndex;
     import State                = Types.ActionPlannerState;
     import UnitActionType       = Types.UnitActionType;
-    import UnitType             = Types.UnitType;
 
-    export class MpwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
+    export class MpwActionPlanner extends BaseWar.BwActionPlanner {
         private _getPlayerIndexLoggedIn(): number | null {
             const war = this._getWar();
-            if (!(war instanceof TwnsMpwWar.MpwWar)) {
+            if (!(war instanceof MultiPlayerWar.MpwWar)) {
                 throw Helpers.newError(`Invalid war.`);
             }
             return war.getPlayerIndexLoggedIn();
@@ -37,13 +36,13 @@ namespace TwnsMpwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting requesting state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: UnitType, unitHp: number): void {
+        public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: number, unitHp: number): void {
             const war = this._getWar();
             if (war == null) {
                 throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerProduceUnit() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerProduceUnit  : {
                     gridIndex,
@@ -62,7 +61,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerVoteForDraw() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerVoteForDraw  : {
                     isAgree,
@@ -79,7 +78,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitProduceUnit() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitProduceUnit: {
                     path: {
@@ -99,7 +98,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitBeLoaded   : {
                     path: {
@@ -119,7 +118,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitJoinUnit   : {
                     path: {
@@ -139,7 +138,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitUseCoSuperPower() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitUseCoSkill : {
                     path: {
@@ -160,7 +159,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitUseCoPower() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitUseCoSkill : {
                     path: {
@@ -181,7 +180,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitLoadCo() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitLoadCo : {
                     path: {
@@ -201,7 +200,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitWait() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitWait   : {
                     path: {
@@ -221,7 +220,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitAttackUnit() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitAttackUnit : {
                     path: {
@@ -243,7 +242,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitAttackTile() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitAttackTile : {
                     path: {
@@ -265,7 +264,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitBuildTile() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitBuildTile  : {
                     path: {
@@ -285,7 +284,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitCaptureTile() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitCaptureTile: {
                     path: {
@@ -305,7 +304,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDive() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitDive   : {
                     path: {
@@ -325,7 +324,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitSurface() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitSurface    : {
                     path: {
@@ -360,7 +359,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDropOnTap() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitDropUnit   : {
                     path: {
@@ -385,7 +384,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDropOnChooseAction() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitDropUnit   : {
                     path: {
@@ -406,7 +405,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitLaunchFlare() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitLaunchFlare: {
                     path: {
@@ -427,7 +426,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitLaunchSilo() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitLaunchSilo : {
                     path: {
@@ -448,7 +447,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitSupply() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitSupplyUnit : {
                     path: {
@@ -468,7 +467,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerEndTurn() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerEndTurn  : {
                 },
@@ -484,7 +483,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerSurrender() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerSurrender: {
                 },
@@ -505,7 +504,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerDeleteUnit() empty gridIndex.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerDeleteUnit   : {
                     gridIndex,
@@ -522,7 +521,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerUseCoSkill() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerUseCoSkill   : {
                     skillType,
@@ -541,21 +540,21 @@ namespace TwnsMpwActionPlanner {
 
             const currState = this.getState();
             if (currState === State.ChoosingAction) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitActionsPanel, this._getDataForUnitActionsPanel());
+                PanelHelpers.open(PanelHelpers.PanelDict.BwUnitActionsPanel, this._getDataForUnitActionsPanel());
             } else {
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwUnitActionsPanel);
+                PanelHelpers.close(PanelHelpers.PanelDict.BwUnitActionsPanel);
             }
             if ((currState === State.MakingMovePath) || (currState === State.ChoosingAttackTarget)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDamagePreviewPanel, { war: this._getWar() });
+                PanelHelpers.open(PanelHelpers.PanelDict.BwDamagePreviewPanel, { war: this._getWar() });
             } else {
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwDamagePreviewPanel);
+                PanelHelpers.close(PanelHelpers.PanelDict.BwDamagePreviewPanel);
             }
         }
 
-        protected _checkCanControlUnit(unit: TwnsBwUnit.BwUnit): boolean {
+        protected _checkCanControlUnit(unit: BaseWar.BwUnit): boolean {
             const war           = this._getWar();
             const playerInTurn  = war.getPlayerInTurn();
-            return (playerInTurn.getUserId() === UserModel.getSelfUserId())
+            return (playerInTurn.getUserId() === User.UserModel.getSelfUserId())
                 && (playerInTurn.getPlayerIndex() === unit.getPlayerIndex());
         }
 
@@ -818,7 +817,7 @@ namespace TwnsMpwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getActionUnitBeLoaded(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = Helpers.getExisted(this.getFocusUnit());
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -830,7 +829,7 @@ namespace TwnsMpwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitJoin(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitJoin(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = Helpers.getExisted(this.getFocusUnit());
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -842,7 +841,7 @@ namespace TwnsMpwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitUseCoSuperPower(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -851,7 +850,7 @@ namespace TwnsMpwActionPlanner {
                     : [{
                         actionType  : UnitActionType.UseCoSuperPower,
                         callback    : () => {
-                            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0058),
                                 callback: () => this._setStateRequestingUnitUseCoSuperPower(),
                             });
@@ -859,7 +858,7 @@ namespace TwnsMpwActionPlanner {
                     }];
             }
         }
-        protected _getActionUnitUseCoPower(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -868,7 +867,7 @@ namespace TwnsMpwActionPlanner {
                     : [{
                         actionType  : UnitActionType.UseCoPower,
                         callback    : () => {
-                            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0054),
                                 callback: () => this._setStateRequestingUnitUseCoPower(),
                             });
@@ -876,7 +875,7 @@ namespace TwnsMpwActionPlanner {
                     }];
             }
         }
-        protected _getActionUnitLoadCo(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitLoadCo(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -885,7 +884,7 @@ namespace TwnsMpwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitCapture(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitCapture(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -894,7 +893,7 @@ namespace TwnsMpwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitDive(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitDive(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -903,7 +902,7 @@ namespace TwnsMpwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitSurface(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitSurface(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -912,7 +911,7 @@ namespace TwnsMpwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitBuildTile(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitBuildTile(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -921,7 +920,7 @@ namespace TwnsMpwActionPlanner {
                     : [];
             }
         }
-        protected _getActionUnitSupply(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitSupply(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -939,13 +938,20 @@ namespace TwnsMpwActionPlanner {
                 return [];
             }
         }
-        protected _getActionUnitProduceUnit(): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
                 const focusUnit         = Helpers.getExisted(this.getFocusUnit());
                 const produceUnitType   = focusUnit.getProduceUnitType();
-                if ((this.getFocusUnitLoaded()) || (this.getMovePath().length !== 1) || (produceUnitType == null)) {
+                const playerIndex       = focusUnit.getPlayerIndex();
+                const war               = focusUnit.getWar();
+                if ((this.getFocusUnitLoaded())                                                                                         ||
+                    (this.getMovePath().length !== 1)                                                                                   ||
+                    (produceUnitType == null)                                                                                           ||
+                    ((war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerIndex) ?? []).indexOf(produceUnitType) >= 0)   ||
+                    (war.getWarEventManager().checkOngoingPersistentActionBannedUnitType(playerIndex, produceUnitType))
+                ) {
                     return [];
                 } else {
                     const costForProduceUnit = focusUnit.getProduceUnitCost();
@@ -963,7 +969,7 @@ namespace TwnsMpwActionPlanner {
                             costForProduceUnit,
                             produceUnitType,
                         }];
-                    } else if (Helpers.getExisted((this._getWar() as TwnsMpwWar.MpwWar).getPlayerLoggedIn()?.getFund()) < costForProduceUnit) {
+                    } else if (Helpers.getExisted((this._getWar() as MultiPlayerWar.MpwWar).getPlayerLoggedIn()?.getFund()) < costForProduceUnit) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
                             callback            : () => FloatText.show(Lang.getText(LangTextType.B0053)),
@@ -981,7 +987,7 @@ namespace TwnsMpwActionPlanner {
                 }
             }
         }
-        protected _getActionUnitWait(hasOtherAction: boolean): TwnsBwActionPlanner.DataForUnitAction[] {
+        protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitAction[] {
             const existingUnit = this._getUnitMap().getUnitOnMap(this.getMovePathDestination());
             if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
                 return [];
@@ -991,7 +997,7 @@ namespace TwnsMpwActionPlanner {
                         actionType  : UnitActionType.Wait,
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitDropOnChooseAction()
-                            : () => TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                            : () => PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0055),
                                 callback: () => this._setStateRequestingUnitDropOnChooseAction(),
                             }),
@@ -1001,7 +1007,7 @@ namespace TwnsMpwActionPlanner {
                         actionType  : UnitActionType.Wait,
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitWait()
-                            : () => TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                            : () => PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0055),
                                 callback: () => this._setStateRequestingUnitWait(),
                             }),

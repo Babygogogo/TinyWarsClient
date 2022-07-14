@@ -12,9 +12,12 @@
         "requestable",
         "scroller",
         "seedrandom",
+        "signalr",
         "tinywars",
         "tweens",
         "Twns",
+        "Unmark",
+        "Unranked",
         "zoomable"
     ]
 }

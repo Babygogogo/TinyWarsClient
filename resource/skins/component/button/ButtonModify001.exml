@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*"
+        xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*"
+        xmlns:w="http://ns.egret.com/wing" class="Skins.Component.Button.ButtonModify001">
+    <e:Group left="0" right="0" top="0" bottom="0">
+        <e:Image source="uncompressedColorTransparent0000" left="0" right="0" top="0" bottom="0" />
+        <e:Image horizontalCenter="0" verticalCenter="0"  source="commonIcon0021"/>
+        <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true" textColor="0xffffff" />
+        <TwnsUiImage:UiImage id="_imgExtra" verticalCenter="0" horizontalCenter="0" />
+    </e:Group>
+</e:Skin>

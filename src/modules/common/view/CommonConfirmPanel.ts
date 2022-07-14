@@ -9,10 +9,10 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonConfirmPanel {
-    import LangTextType = TwnsLangTextType.LangTextType;
+namespace Twns.Common {
+    import LangTextType = Lang.LangTextType;
 
-    export type OpenData = {
+    export type OpenDataForCommonConfirmPanel = {
         title?              : string;
         content             : string;
         callback            : () => any;
@@ -21,7 +21,7 @@ namespace TwnsCommonConfirmPanel {
         textForCancel?      : string;
         showButtonClose?    : boolean;
     };
-    export class CommonConfirmPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonConfirmPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonConfirmPanel> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
 
         private readonly _group!        : eui.Group;
@@ -54,15 +54,15 @@ namespace TwnsCommonConfirmPanel {
         }
 
         private _onTouchedBtnCancel(): void {
-            const openData = this._getOpenData();
-            (openData.callbackOnCancel) && (openData.callbackOnCancel());
-
+            const callback = this._getOpenData().callbackOnCancel;
             this.close();
+            (callback) && (callback());
         }
 
         private _onTouchedBtnConfirm(): void {
-            this._getOpenData().callback();
+            const callback = this._getOpenData().callback;
             this.close();
+            callback();
         }
 
         protected async _showOpenAnimation(): Promise<void> {

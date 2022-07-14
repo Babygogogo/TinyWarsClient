@@ -4,16 +4,15 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Types                from "../../tools/helpers/Types";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 // import UserModel            from "../../user/model/UserModel";
 // import TwnsBwUnitMap        from "../model/BwUnitMap";
 // import TwnsBwUnitView       from "./BwUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwUnitMapView {
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import UnitCategory         = Types.UnitCategory;
+namespace Twns.BaseWar {
+    import NotifyType           = Notify.NotifyType;
     import ActionPlannerState   = Types.ActionPlannerState;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
@@ -29,7 +28,7 @@ namespace TwnsBwUnitMapView {
             { type: NotifyType.UserSettingsOpacitySettingsChanged,  callback: this._onNotifyUserSettingsOpacitySettingsChanged },
         ];
 
-        private _unitMap    : TwnsBwUnitMap.BwUnitMap | null = null;
+        private _unitMap    : BaseWar.BwUnitMap | null = null;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers.
@@ -43,7 +42,7 @@ namespace TwnsBwUnitMapView {
             this._updateOpacityForAllLayers();
         }
 
-        public init(unitMap: TwnsBwUnitMap.BwUnitMap): void {
+        public init(unitMap: BaseWar.BwUnitMap): void {
             this._setUnitMap(unitMap);
 
             this._clearAllUnits();
@@ -62,17 +61,17 @@ namespace TwnsBwUnitMapView {
             Notify.removeEventListeners(this._notifyListeners, this);
         }
 
-        private _getUnitMap(): TwnsBwUnitMap.BwUnitMap {
+        private _getUnitMap(): BaseWar.BwUnitMap {
             return Helpers.getExisted(this._unitMap);
         }
-        private _setUnitMap(unitMap: TwnsBwUnitMap.BwUnitMap): void {
+        private _setUnitMap(unitMap: BaseWar.BwUnitMap): void {
             this._unitMap = unitMap;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public addUnit(view: TwnsBwUnitView.BwUnitView, needResetZOrder: boolean): void {
+        public addUnit(view: BaseWar.BwUnitView, needResetZOrder: boolean): void {
             const model = Helpers.getExisted(view.getUnit());
 
             view.x = _GRID_WIDTH * model.getGridX();
@@ -84,11 +83,11 @@ namespace TwnsBwUnitMapView {
             (needResetZOrder) && (this._resetZOrderForLayer(layer));
         }
 
-        public removeUnit(view: TwnsBwUnitView.BwUnitView): void {
+        public removeUnit(view: BaseWar.BwUnitView): void {
             (view.parent) && (view.parent.removeChild(view));
         }
 
-        public resetZOrder(unitType: Types.UnitType): void {
+        public resetZOrder(unitType: number): void {
             this._resetZOrderForLayer(this._getLayerByUnitType(unitType));
         }
 
@@ -193,7 +192,7 @@ namespace TwnsBwUnitMapView {
 
         private _resetZOrderForLayer(layer: egret.DisplayObjectContainer): void {
             const viewsCount    = layer.numChildren;
-            const views         = new Array<TwnsBwUnitView.BwUnitView>(viewsCount);
+            const views         = new Array<BaseWar.BwUnitView>(viewsCount);
             for (let i = 0; i < viewsCount; ++i) {
                 views[i] = layer.getChildAt(i) as any;
             }
@@ -211,7 +210,7 @@ namespace TwnsBwUnitMapView {
         private _updateAnimationsOnTick(layer: egret.DisplayObjectContainer): void {
             const viewsCount = layer.numChildren;
             for (let i = 0; i < viewsCount; ++i) {
-                const view = layer.getChildAt(i) as TwnsBwUnitView.BwUnitView;
+                const view = layer.getChildAt(i) as BaseWar.BwUnitView;
                 view.tickUnitAnimationFrame();
             }
         }
@@ -219,35 +218,31 @@ namespace TwnsBwUnitMapView {
         private _updateIndicatorOnTick(layer: egret.DisplayObjectContainer): void {
             const viewsCount = layer.numChildren;
             for (let i = 0; i < viewsCount; ++i) {
-                const view = layer.getChildAt(i) as TwnsBwUnitView.BwUnitView;
+                const view = layer.getChildAt(i) as BaseWar.BwUnitView;
                 view.tickStateAnimationFrame();
             }
         }
 
-        private _getLayerByUnitType(unitType: Types.UnitType): egret.DisplayObjectContainer {
-            const version = this._getUnitMap().getWar().getConfigVersion();
-            if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Air)) {
-                return this._layerForAir;
-            } else if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Ground)) {
-                return this._layerForGround;
-            } else if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Naval)) {
-                return this._layerForNaval;
-            } else {
-                throw Helpers.newError(`Invalid unitType: ${unitType}`);
+        private _getLayerByUnitType(unitType: number): egret.DisplayObjectContainer {
+            switch (this._getUnitMap().getWar().getGameConfig().getUnitTemplateCfg(unitType)?.layer) {
+                case CommonConstants.UnitDisplayLayer.Air       : return this._layerForAir;
+                case CommonConstants.UnitDisplayLayer.Ground    : return this._layerForGround;
+                case CommonConstants.UnitDisplayLayer.Sea       : return this._layerForNaval;
+                default                                         : throw Helpers.newError(`Invalid layer.`, ClientErrorCode.BwUnitMapView_GetLayerByUnitType_00);
             }
         }
 
         private _resetVisibleForAllUnitsOnMap(): void {
             const unitMap       = this._getUnitMap();
             const war           = unitMap.getWar();
-            const visibleUnits  = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const visibleUnits  = WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getWatcherTeamIndexesForSelf());
             for (const unit of unitMap.getAllUnitsOnMap()) {
                 unit.setViewVisible(visibleUnits.has(unit));
             }
         }
 
         private _updateOpacityForAllLayers(): void {
-            const opacity               = (UserModel.getSelfSettingsOpacitySettings()?.unitOpacity ?? 100) / 100;
+            const opacity               = (User.UserModel.getSelfSettingsOpacitySettings()?.unitOpacity ?? 100) / 100;
             this._layerForAir.alpha     = opacity;
             this._layerForGround.alpha  = opacity;
             this._layerForNaval.alpha   = opacity;

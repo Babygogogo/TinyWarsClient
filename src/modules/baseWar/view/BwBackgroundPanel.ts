@@ -3,9 +3,9 @@
 // import Types                from "../../tools/helpers/Types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwBackgroundPanel {
-    export type OpenData = void;
-    export class BwBackgroundPanel extends TwnsUiPanel.UiPanel<OpenData> {
+namespace Twns.BaseWar {
+    export type OpenDataForBwBackgroundPanel = void;
+    export class BwBackgroundPanel extends TwnsUiPanel.UiPanel<OpenDataForBwBackgroundPanel> {
         protected _onOpening(): void {
             // nothing to do
         }

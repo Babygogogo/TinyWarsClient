@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -17,18 +17,18 @@
 // import TwnsBwUnitView           from "./BwUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwUnitActionsPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import UnitActionType   = Types.UnitActionType;
-    import BwWar            = TwnsBwWar.BwWar;
+namespace Twns.BaseWar {
+    import NotifyType       = Twns.Notify.NotifyType;
+    import LangTextType     = Twns.Lang.LangTextType;
+    import UnitActionType   = Twns.Types.UnitActionType;
+    import BwWar            = BaseWar.BwWar;
 
-    export type OpenData = {
+    export type OpenDataForBwUnitActionsPanel = {
         war         : BwWar;
-        destination : Types.GridIndex;
-        actionList  : TwnsBwActionPlanner.DataForUnitAction[];
+        destination : Twns.Types.GridIndex;
+        actionList  : Twns.BaseWar.DataForUnitAction[];
     };
-    export class BwUnitActionsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwUnitActionsPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitActionsPanel> {
         private readonly _group!        : eui.Group;
         private readonly _listAction!   : TwnsUiScrollList.UiScrollList<DataForUnitActionRenderer>;
 
@@ -64,7 +64,7 @@ namespace TwnsBwUnitActionsPanel {
         private _updateView(): void {
             const openData = this._getOpenData();
             if (openData == null) {
-                throw Helpers.newError(`BwUnitActionsPanel._updateView() empty openData.`);
+                throw Twns.Helpers.newError(`BwUnitActionsPanel._updateView() empty openData.`);
             }
 
             const war       = openData.war;
@@ -80,13 +80,13 @@ namespace TwnsBwUnitActionsPanel {
                         costForProduceUnit  : data.costForProduceUnit ?? null,
                     });
                 } else {
-                    const unitForProduce = new TwnsBwUnit.BwUnit();
+                    const unitForProduce = new BaseWar.BwUnit();
                     unitForProduce.init({
                         gridIndex   : { x: -1, y: -1 },
                         unitId      : -1,
                         unitType    : produceUnitType,
                         playerIndex : war.getPlayerIndexInTurn(),
-                    }, war.getConfigVersion());
+                    }, war.getGameConfig());
                     unitForProduce.startRunning(war);
 
                     dataArray.push({
@@ -107,14 +107,14 @@ namespace TwnsBwUnitActionsPanel {
         private _updatePosition(): void {
             const openData = this._getOpenData();
             if (openData == null) {
-                throw Helpers.newError(`BwUnitActionsPanel._updatePosition() empty openData.`);
+                throw Twns.Helpers.newError(`BwUnitActionsPanel._updatePosition() empty openData.`);
             }
 
             const container = openData.war.getView().getFieldContainer();
             const contents  = container.getContents();
             const gridIndex = openData.destination;
-            const gridSize  = CommonConstants.GridSize;
-            const stage     = StageManager.getStage();
+            const gridSize  = Twns.CommonConstants.GridSize;
+            const stage     = Twns.StageManager.getStage();
             const group     = this._group;
             const point     = contents.localToGlobal(
                 (gridIndex.x + 1) * gridSize.width,
@@ -126,24 +126,24 @@ namespace TwnsBwUnitActionsPanel {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { scaleX: 0, scaleY: 0 },
                 endProps    : { scaleX: 1, scaleY: 1 },
                 tweenTime   : 100,
             });
 
-            await Helpers.wait(100);
+            await Twns.Helpers.wait(100);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { scaleX: 1, scaleY: 1 },
                 endProps    : { scaleX: 0, scaleY: 0 },
                 tweenTime   : 100,
             });
 
-            await Helpers.wait(100);
+            await Twns.Helpers.wait(100);
         }
     }
 
@@ -151,7 +151,7 @@ namespace TwnsBwUnitActionsPanel {
         war                 : BwWar;
         actionType          : UnitActionType;
         callback            : () => void;
-        unit?               : TwnsBwUnit.BwUnit;
+        unit?               : BaseWar.BwUnit;
         costForProduceUnit  : number | null;
         isLastAction?       : boolean;
     };
@@ -161,21 +161,21 @@ namespace TwnsBwUnitActionsPanel {
         private readonly _conUnitView!      : eui.Group;
         private readonly _imgBottomLine!    : TwnsUiImage.UiImage;
 
-        private readonly _unitView      = new TwnsBwUnitView.BwUnitView();
+        private readonly _unitView      = new BaseWar.BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
                 { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
-            this._setShortSfxCode(Types.ShortSfxCode.CursorConfirm01);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.CursorConfirm01);
 
             this._conUnitView.addChild(this._unitView);
         }
 
         protected _onDataChanged(): void {
             const data                  = this._getData();
-            this._labelAction.text      = Lang.getUnitActionName(data.actionType) || CommonConstants.ErrorTextForUndefined;
+            this._labelAction.text      = Lang.getUnitActionName(data.actionType) || Twns.CommonConstants.ErrorTextForUndefined;
             this._imgBottomLine.visible = !data.isLastAction;
 
             const unit      = data.unit;
@@ -185,11 +185,11 @@ namespace TwnsBwUnitActionsPanel {
                 labelCost.text      = "";
                 unitView.visible    = false;
             } else {
-                if (data.actionType !== Types.UnitActionType.ProduceUnit) {
+                if (data.actionType !== Twns.Types.UnitActionType.ProduceUnit) {
                     labelCost.text = ``;
                 } else {
                     const cost      = data.costForProduceUnit;
-                    labelCost.text  = `${Lang.getText(LangTextType.B0079)}: ${cost != null ? cost : CommonConstants.ErrorTextForUndefined}`;
+                    labelCost.text  = `${Lang.getText(LangTextType.B0079)}: ${cost != null ? cost : Twns.CommonConstants.ErrorTextForUndefined}`;
                 }
                 unitView.visible = true;
                 unitView.init(unit).startRunningView();

@@ -1,6 +1,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsNotifyType {
+namespace Twns.Notify {
     // eslint-disable-next-line no-shadow
     export const enum NotifyType {
         NetworkConnected,
@@ -13,6 +13,7 @@ namespace TwnsNotifyType {
         GridAnimationTick,
         UnitAndTileTextureVersionChanged,
         UserSettingsIsShowGridBorderChanged,
+        UserSettingsIsShowWeatherAnimationChanged,
         UserSettingsOpacitySettingsChanged,
         UserSettingsIsAutoScrollMapChanged,
 
@@ -21,41 +22,31 @@ namespace TwnsNotifyType {
         GlobalTouchMove,
         ZoomableContentsMoved,
 
-        ConfigLoaded,
         TileModelUpdated,
         LanguageChanged,
 
         ChatPanelOpened,
         ChatPanelClosed,
 
-        McrCreateBannedCoIdArrayChanged,
+        McrCreateBannedCoCategoryIdArrayChanged,
         McrCreateTeamIndexChanged,
         McrCreateSelfCoIdChanged,
         McrCreateSelfSkinIdChanged,
         McrCreateSelfPlayerIndexChanged,
-        McrCreatePresetWarRuleIdChanged,
-
-        McrJoinTargetRoomIdChanged,
-        McrJoinedPreviewingRoomIdChanged,
+        McrCreateTemplateWarRuleIdChanged,
 
         MfrCreateSelfCoIdChanged,
         MfrCreateTeamIndexChanged,
         MfrCreateSelfPlayerIndexChanged,
         MfrCreateSelfSkinIdChanged,
 
-        MfrJoinTargetRoomIdChanged,
-        MfrJoinedPreviewingRoomIdChanged,
-
-        CcrCreateBannedCoIdArrayChanged,
+        CcrCreateBannedCoCategoryIdArrayChanged,
         CcrCreateTeamIndexChanged,
         CcrCreateAiCoIdChanged,
         CcrCreateSelfCoIdChanged,
         CcrCreateSelfSkinIdChanged,
         CcrCreateSelfPlayerIndexChanged,
-        CcrCreatePresetWarRuleIdChanged,
-
-        CcrJoinTargetRoomIdChanged,
-        CcrJoinedPreviewingRoomIdChanged,
+        CcrCreateTemplateWarRuleIdChanged,
 
         MrrMyRoomAdded,
         MrrMyRoomDeleted,
@@ -63,20 +54,15 @@ namespace TwnsNotifyType {
         MrrSelfSettingsCoIdChanged,
         MrrSelfSettingsSkinIdChanged,
 
-        ScrCreatePresetWarRuleIdChanged,
-        ScrCreateBannedCoIdArrayChanged,
+        ScrCreateTemplateWarRuleIdChanged,
+        ScrCreateBannedCoCategoryIdArrayChanged,
         ScrCreateWarSaveSlotChanged,
         ScrCreatePlayerInfoChanged,
 
-        SrrCreatePresetWarRuleIdChanged,
-        SrrCreateBannedCoIdArrayChanged,
+        SrrCreateModelTemplateWarRuleIdChanged,
         SrrCreateWarSaveSlotChanged,
         SrrCreatePlayerInfoChanged,
 
-        McwPreviewingWarIdChanged,
-        MrwPreviewingWarIdChanged,
-        MfwPreviewingWarIdChanged,
-        CcwPreviewingWarIdChanged,
         RwPreviewingReplayIdChanged,
         SpmPreviewingWarSaveSlotChanged,
 
@@ -89,6 +75,8 @@ namespace TwnsNotifyType {
         BwPlayerIndexInTurnChanged,
 
         BwPlayerFundChanged,
+        BwPlayerMarkedGridIdAdded,
+        BwPlayerMarkedGridIdDeleted,
         BwCoEnergyChanged,
         BwCoUsingSkillTypeChanged,
         BwCoIdChanged,
@@ -132,8 +120,8 @@ namespace TwnsNotifyType {
         MeDrawerModeChanged,
         MeTileChanged,
         MeMapNameChanged,
+        MeMapDescChanged,
         MeWarEventIdArrayChanged,
-        MeBannedCoIdArrayChanged,
 
         WarEventFullDataChanged,
 
@@ -154,12 +142,14 @@ namespace TwnsNotifyType {
         MsgChangeLogModifyMessage,
 
         MsgUserLogin,
+        MsgUserLoginAsGuest,
         MsgUserRegister,
         MsgUserLogout,
 
         MsgMapGetRawData,
         MsgMapGetRawDataFailed,
         MsgMapGetEnabledMapIdArray,
+        MsgMapGetMapTag,
         MsgMapGetEnabledRawDataList,
         MsgMapGetBriefData,
         MsgMapGetBriefDataFailed,
@@ -179,10 +169,11 @@ namespace TwnsNotifyType {
         MsgUserSetAvatarIdFailed,
         MsgUserSetMapEditorAutoSaveTime,
         MsgUserSetMapEditorAutoSaveTimeFailed,
-        MsgUserSetDiscordId,
-        MsgUserSetDiscordIdFailed,
+        MsgUserSetCoBgmSettings,
+        MsgUserSetDiscordInfo,
+        MsgUserSetDiscordInfoFailed,
         MsgUserGetOnlineUserIdArray,
-        MsgUserSetPrivilege,
+        MsgGmSetUserPrivilege,
         MsgUserSetPassword,
         MsgUserGetSettings,
         MsgUserSetSettings,
@@ -191,23 +182,27 @@ namespace TwnsNotifyType {
         MsgMeGetDataList,
         MsgMeGetData,
         MsgMeSubmitMap,
+        MsgMeDeleteSlot,
         MsgMmAddWarRule,
         MsgMmDeleteWarRule,
+        MsgMmSetWarRuleName,
+        MsgMmSetMapTagSingleData,
 
         MsgMmSetWarRuleAvailability,
         MsgMmReloadAllMaps,
         MsgMmSetMapEnabled,
         MsgMmGetReviewingMaps,
         MsgMmReviewMap,
-        MsgMmSetMapTag,
+        MsgMmSetMapTagIdFlags,
         MsgMmSetMapName,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         MsgMcrCreateRoom,
+        MsgMcrCreateRoomFailed,
         MsgMcrGetRoomStaticInfo,
+        MsgMcrGetRoomStaticInfoFailed,
         MsgMcrGetRoomPlayerInfo,
-        MsgMcrGetJoinedRoomIdArray,
-        MsgMcrGetJoinableRoomIdArray,
+        MsgMcrGetRoomPlayerInfoFailed,
         MsgMcrExitRoom,
         MsgMcrJoinRoom,
         MsgMcrDeleteRoom,
@@ -219,8 +214,6 @@ namespace TwnsNotifyType {
         MsgMfrCreateRoom,
         MsgMfrGetRoomStaticInfo,
         MsgMfrGetRoomPlayerInfo,
-        MsgMfrGetJoinedRoomIdArray,
-        MsgMfrGetJoinableRoomIdArray,
         MsgMfrExitRoom,
         MsgMfrJoinRoom,
         MsgMfrDeleteRoom,
@@ -232,8 +225,6 @@ namespace TwnsNotifyType {
         MsgCcrCreateRoom,
         MsgCcrGetRoomStaticInfo,
         MsgCcrGetRoomPlayerInfo,
-        MsgCcrGetJoinedRoomIdArray,
-        MsgCcrGetJoinableRoomIdArray,
         MsgCcrExitRoom,
         MsgCcrJoinRoom,
         MsgCcrDeleteRoom,
@@ -247,18 +238,18 @@ namespace TwnsNotifyType {
         MsgMrrGetRoomPublicInfo,
         MsgMrrGetRoomPublicInfoFailed,
         MsgMrrGetJoinedRoomIdArray,
-        MsgMrrSetBannedCoIdList,
+        MsgMrrSetBannedCoCategoryIdArray,
         MsgMrrSetSelfSettings,
         MsgMrrDeleteRoomByServer,
 
         MsgReplayGetReplayIdArray,
-        MsgReplayGetInfo,
+        MsgReplayGetBriefInfo,
         MsgReplayGetData,
         MsgReplayGetDataFailed,
-        MsgReplaySetRating,
+        MsgReplayGetSelfRating,
+        MsgReplaySetSelfRating,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        MsgMpwCommonGetMyWarIdArray,
         MsgMpwCommonContinueWarFailed,
         MsgMpwCommonContinueWar,
         MsgMpwCommonSyncWar,
@@ -266,7 +257,7 @@ namespace TwnsNotifyType {
         MsgMpwCommonGetWarSettings,
         MsgMpwCommonGetWarSettingsFailed,
         MsgMpwCommonGetWarProgressInfo,
-        MsgMpwCommonGetWarProgressInfoFailed,
+        MsgMpwCommonMarkTile,
         MsgMpwWatchGetIncomingInfo,
         MsgMpwWatchGetIncomingInfoFailed,
         MsgMpwWatchGetOutgoingInfo,
@@ -317,7 +308,8 @@ namespace TwnsNotifyType {
         MsgSpmCreateScw,
         MsgSpmCreateSfw,
         MsgSpmCreateSrw,
-        MsgSpmGetWarSaveSlotFullDataArray,
+        MsgSpmGetWarSaveSlotIndexArray,
+        MsgSpmGetWarSaveFullData,
         MsgSpmDeleteWarSaveSlot,
         MsgSpmSaveScw,
         MsgSpmSaveSfw,
@@ -327,8 +319,13 @@ namespace TwnsNotifyType {
         MsgSpmValidateSrw,
         MsgSpmGetReplayData,
         MsgSpmGetReplayDataFailed,
-        MsgSpmDeleteAllScoreAndReplay,
+        MsgGmDeleteSpmAllScoreAndReplay,
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        MsgLbSpmOverallGetTopDataArray,
+        MsgLbSpmOverallGetRankIndex,
+        MsgLbMrwGetRankIndex,
     }
 }
 
-// export default TwnsNotifyType;
+// export default Twns.Notify;

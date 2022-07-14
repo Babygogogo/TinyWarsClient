@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -19,11 +19,10 @@
 // import TwnsWarMapUnitView       from "../../warMap/view/WarMapUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonDamageChartPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import UnitType         = Types.UnitType;
-    import TileType         = Types.TileType;
+namespace Twns.Common {
+    import NotifyType       = Notify.NotifyType;
+    import LangTextType     = Lang.LangTextType;
+    import GameConfig       = Config.GameConfig;
 
     // eslint-disable-next-line no-shadow
     enum UnitInfoType {
@@ -40,10 +39,10 @@ namespace TwnsCommonDamageChartPanel {
         IsDiver,
         LoadUnit,
     }
-    export type OpenData = {
-        configVersion   : string;
+    export type OpenDataForCommonDamageChartPanel = {
+        gameConfig   : GameConfig;
     };
-    export class CommonDamageChartPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonDamageChartPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonDamageChartPanel> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _groupList!            : eui.Group;
         private readonly _listUnit!             : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
@@ -66,7 +65,7 @@ namespace TwnsCommonDamageChartPanel {
 
         private _selectedIndex                  : number | null = null;
         private _dataForListUnit?               : DataForUnitRenderer[];
-        private readonly _unitView              = new TwnsWarMapUnitView.WarMapUnitView();
+        private readonly _unitView              = new WarMap.WarMapUnitView();
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -200,11 +199,13 @@ namespace TwnsCommonDamageChartPanel {
                 : dataArray[selectedIndex];
             if (data) {
                 const unitType          = data.unitType;
-                this._labelName.text    = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
-                this._labelName1.text   = Lang.getUnitName(unitType, Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
+                const gameConfig        = data.gameConfig;
+                this._labelName.text    = Lang.getUnitName(unitType, gameConfig) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelName1.text   = Lang.getUnitName(unitType, gameConfig, Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
                 this._unitView.update({
+                    gameConfig      : this._getOpenData().gameConfig,
                     gridIndex       : { x: 0, y: 0 },
-                    playerIndex     : CommonConstants.WarFirstPlayerIndex,
+                    playerIndex     : CommonConstants.PlayerIndex.First,
                     unitType,
                     actionState     : Types.UnitActionState.Idle,
                 }, Timer.getUnitAnimationTickCount());
@@ -221,22 +222,22 @@ namespace TwnsCommonDamageChartPanel {
             if (unitData == null) {
                 listInfo.clear();
             } else {
-                const configVersion     = unitData.configVersion;
+                const gameConfig        = unitData.gameConfig;
                 const unitType          = unitData.unitType;
-                const unitTemplateCfg   = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
+                const unitTemplateCfg   = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType));
                 const dataArray         : DataForInfoRenderer[] = Helpers.getNonNullElements([
-                    this._createInfoHp(unitTemplateCfg),
-                    this._createInfoProductionCost(unitTemplateCfg),
-                    this._createInfoMovement(unitTemplateCfg),
-                    this._createInfoFuel(unitTemplateCfg),
-                    this._createInfoAttackRange(unitTemplateCfg),
-                    this._createInfoVision(unitTemplateCfg),
-                    this._createInfoPrimaryWeaponAmmo(unitTemplateCfg),
-                    this._createInfoBuildMaterial(unitTemplateCfg),
-                    this._createInfoProduceMaterial(unitTemplateCfg),
-                    this._createInfoFlareAmmo(unitTemplateCfg),
-                    this._createInfoIsDiver(unitTemplateCfg),
-                    this._createInfoLoadUnit(unitTemplateCfg),
+                    this._createInfoHp(unitTemplateCfg, gameConfig),
+                    this._createInfoProductionCost(unitTemplateCfg, gameConfig),
+                    this._createInfoMovement(unitTemplateCfg, gameConfig),
+                    this._createInfoFuel(unitTemplateCfg, gameConfig),
+                    this._createInfoAttackRange(unitTemplateCfg, gameConfig),
+                    this._createInfoVision(unitTemplateCfg, gameConfig),
+                    this._createInfoPrimaryWeaponAmmo(unitTemplateCfg, gameConfig),
+                    this._createInfoBuildMaterial(unitTemplateCfg, gameConfig),
+                    this._createInfoProduceMaterial(unitTemplateCfg, gameConfig),
+                    this._createInfoFlareAmmo(unitTemplateCfg, gameConfig),
+                    this._createInfoIsDiver(unitTemplateCfg, gameConfig),
+                    this._createInfoLoadUnit(unitTemplateCfg, gameConfig),
                 ]);
                 let index = 0;
                 for (const data of dataArray) {
@@ -254,102 +255,114 @@ namespace TwnsCommonDamageChartPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Util functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _createInfoHp(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoHp(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer {
             return {
                 index           : 0,
                 infoType        : UnitInfoType.Hp,
                 unitTemplateCfg,
+                gameConfig,
             };
         }
-        private _createInfoProductionCost(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoProductionCost(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.ProductionCost,
                 unitTemplateCfg,
+                gameConfig,
             };
         }
-        private _createInfoMovement(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoMovement(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Movement,
                 unitTemplateCfg,
+                gameConfig,
             };
         }
-        private _createInfoFuel(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoFuel(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Fuel,
                 unitTemplateCfg,
+                gameConfig,
             };
         }
-        private _createInfoAttackRange(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoAttackRange(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer | null {
             return unitTemplateCfg.minAttackRange == null
                 ? null
                 : {
                     index       : 0,
                     infoType    : UnitInfoType.AttackRange,
                     unitTemplateCfg,
+                    gameConfig,
                 };
         }
-        private _createInfoVision(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoVision(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Vision,
                 unitTemplateCfg,
+                gameConfig,
             };
         }
-        private _createInfoPrimaryWeaponAmmo(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoPrimaryWeaponAmmo(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer | null {
             return unitTemplateCfg.primaryWeaponMaxAmmo == null
                 ? null
                 : {
                     index       : 0,
                     infoType    : UnitInfoType.PrimaryWeaponAmmo,
                     unitTemplateCfg,
+                    gameConfig,
                 };
         }
-        private _createInfoBuildMaterial(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoBuildMaterial(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer | null {
             return unitTemplateCfg.maxBuildMaterial == null
                 ? null
                 : {
                     index       : 0,
                     infoType    : UnitInfoType.BuildMaterial,
                     unitTemplateCfg,
+                    gameConfig,
                 };
         }
-        private _createInfoProduceMaterial(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoProduceMaterial(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer | null {
             return unitTemplateCfg.maxProduceMaterial == null
                 ? null
                 : {
                     index       : 0,
                     infoType    : UnitInfoType.ProduceMaterial,
                     unitTemplateCfg,
+                    gameConfig,
                 };
         }
-        private _createInfoFlareAmmo(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoFlareAmmo(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer | null {
             return unitTemplateCfg.flareMaxAmmo == null
                 ? null
                 : {
                     index       : 0,
                     infoType    : UnitInfoType.FlareAmmo,
                     unitTemplateCfg,
+                    gameConfig,
                 };
         }
-        private _createInfoIsDiver(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoIsDiver(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer | null {
             return !unitTemplateCfg.diveCfgs
                 ? null
                 : {
                     index       : 0,
                     infoType    : UnitInfoType.IsDiver,
                     unitTemplateCfg,
+                    gameConfig,
                 };
         }
-        private _createInfoLoadUnit(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoLoadUnit(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg, gameConfig: GameConfig): DataForInfoRenderer | null {
             return unitTemplateCfg.loadUnitCategory == null
                 ? null
                 : {
                     index       : 0,
                     infoType    : UnitInfoType.LoadUnit,
                     unitTemplateCfg,
+                    gameConfig,
                 };
         }
 
@@ -359,24 +372,24 @@ namespace TwnsCommonDamageChartPanel {
             const dataForUnit       = (selectedIndex == null) || (dataArrayForUnit == null) ? null : dataArrayForUnit[selectedIndex];
             const dataArray         : DataForDamageRenderer[] = [];
             if (dataForUnit) {
-                const configVersion     = dataForUnit.configVersion;
+                const gameConfig        = dataForUnit.gameConfig;
                 const attackUnitType    = dataForUnit.unitType;
-                const playerIndex       = CommonConstants.WarFirstPlayerIndex;
+                const playerIndex       = CommonConstants.PlayerIndex.First;
                 let index               = 0;
-                for (const targetUnitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
+                for (const targetUnitType of gameConfig.getAllUnitTypeArray()) {
                     dataArray.push({
                         index,
-                        configVersion,
+                        gameConfig,
                         attackUnitType,
                         targetUnitType,
                         playerIndex,
                     });
                     ++index;
                 }
-                for (const targetTileType of ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.DestroyableForDamageChart)) {
+                for (const targetTileType of gameConfig.getTileTypeArrayForDamageChart()) {
                     dataArray.push({
                         index,
-                        configVersion,
+                        gameConfig,
                         attackUnitType,
                         targetTileType,
                     });
@@ -389,11 +402,11 @@ namespace TwnsCommonDamageChartPanel {
 
         private _createDataForListUnit(): DataForUnitRenderer[] {
             const data          : DataForUnitRenderer[] = [];
-            const configVersion = this._getOpenData().configVersion;
-            const unitTypes     = ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All);
+            const gameConfig    = this._getOpenData().gameConfig;
+            const unitTypes     = gameConfig.getAllUnitTypeArray();
             for (let index = 0; index < unitTypes.length; ++index) {
                 data.push({
-                    configVersion,
+                    gameConfig,
                     index,
                     unitType: unitTypes[index],
                     panel   : this,
@@ -409,8 +422,8 @@ namespace TwnsCommonDamageChartPanel {
     }
 
     type DataForUnitRenderer = {
-        configVersion   : string;
-        unitType        : Types.UnitType;
+        gameConfig      : GameConfig;
+        unitType        : number;
         index           : number;
         panel           : CommonDamageChartPanel;
     };
@@ -426,7 +439,7 @@ namespace TwnsCommonDamageChartPanel {
 
         protected _onDataChanged(): void {
             const data              = this._getData();
-            this._labelName.text    = Lang.getUnitName(data.unitType) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName.text    = Lang.getUnitName(data.unitType, data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _onTouchedImgChoose(): void {
@@ -438,7 +451,8 @@ namespace TwnsCommonDamageChartPanel {
     type DataForInfoRenderer = {
         index           : number;
         infoType        : UnitInfoType;
-        unitTemplateCfg : ProtoTypes.Config.IUnitTemplateCfg;
+        unitTemplateCfg : CommonProto.Config.IUnitTemplateCfg;
+        gameConfig      : GameConfig;
     };
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
         private readonly _imgBg!            : TwnsUiImage.UiImage;
@@ -569,7 +583,7 @@ namespace TwnsCommonDamageChartPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0340);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = true;
-            this._labelExtraInfo.text   = Lang.getMoveTypeName(Helpers.getExisted(unit.moveType)) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelExtraInfo.text   = Lang.getMoveTypeName(Helpers.getExisted(unit.moveType), data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
         }
         private _updateViewAsPrimaryWeaponAmmo(): void {
             const data                  = this._getData();
@@ -593,7 +607,7 @@ namespace TwnsCommonDamageChartPanel {
                 groupExtra.visible = false;
             } else {
                 groupExtra.visible          = true;
-                this._labelExtraInfo.text   = Lang.getUnitName(Helpers.getExisted(unit.produceUnitType)) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelExtraInfo.text   = Lang.getUnitName(Helpers.getExisted(unit.produceUnitType), data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateViewAsProductionCost(): void {
@@ -624,24 +638,24 @@ namespace TwnsCommonDamageChartPanel {
             } else {
                 labelValue.text             = `0 / ${maxValue}`;
                 groupExtra.visible          = true;
-                this._labelExtraInfo.text   = Lang.getUnitCategoryName(Helpers.getExisted(unit.loadUnitCategory)) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelExtraInfo.text   = Lang.getUnitCategoryName(Helpers.getExisted(unit.loadUnitCategory), data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
     }
 
     type DataForDamageRenderer = {
-        configVersion   : string;
+        gameConfig      : GameConfig;
         index           : number;
-        attackUnitType  : UnitType;
+        attackUnitType  : number;
         playerIndex?    : number;
-        targetUnitType? : UnitType;
-        targetTileType? : TileType;
+        targetUnitType? : number;
+        targetTileType? : number;
     };
     class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDamageRenderer> {
         private readonly _group!                : eui.Group;
         private readonly _imgBg!                : TwnsUiImage.UiImage;
         private readonly _conView!              : eui.Group;
-        private readonly _unitView              = new TwnsWarMapUnitView.WarMapUnitView();
+        private readonly _unitView              = new WarMap.WarMapUnitView();
         private readonly _tileView!             : TwnsUiImage.UiImage;
         private readonly _labelPrimaryAttack!   : TwnsUiLabel.UiLabel;
         private readonly _labelSecondaryAttack! : TwnsUiLabel.UiLabel;
@@ -680,28 +694,29 @@ namespace TwnsCommonDamageChartPanel {
             const data              = this._getData();
             this._imgBg.visible     = data.index % 2 === 1;
 
-            const configVersion     = data.configVersion;
+            const gameConfig        = data.gameConfig;
             const attackUnitType    = data.attackUnitType;
             const targetUnitType    = data.targetUnitType;
             if (targetUnitType != null) {
                 this._unitView.visible = true;
                 this._tileView.visible = false;
                 this._unitView.update({
+                    gameConfig,
                     gridIndex       : { x: 0, y: 0 },
                     unitType        : targetUnitType,
                     playerIndex     : data.playerIndex,
                     actionState     : Types.UnitActionState.Idle,
                 }, Timer.getUnitAnimationTickCount());
 
-                const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
-                const targetArmorType           = ConfigManager.getUnitTemplateCfg(configVersion, targetUnitType).armorType;
+                const attackCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(attackUnitType));
+                const targetArmorType           = Helpers.getExisted(gameConfig.getUnitTemplateCfg(targetUnitType)?.armorType);
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
                 this._labelPrimaryAttack.text   = primaryAttackDamage == null ? `--` : `${primaryAttackDamage}`;
                 this._labelSecondaryAttack.text = secondaryAttackDamage == null ? `--` : `${secondaryAttackDamage}`;
 
-                const defendCfg                 = ConfigManager.getDamageChartCfgs(configVersion, targetUnitType);
-                const attackerArmorType         = ConfigManager.getUnitTemplateCfg(configVersion, attackUnitType).armorType;
+                const defendCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(targetUnitType));
+                const attackerArmorType         = Helpers.getExisted(gameConfig.getUnitTemplateCfg(attackUnitType)?.armorType);
                 const primaryDefendDamage       = defendCfg[attackerArmorType][Types.WeaponType.Primary].damage;
                 const secondaryDefendDamage     = defendCfg[attackerArmorType][Types.WeaponType.Secondary].damage;
                 this._labelPrimaryDefend.text   = primaryDefendDamage == null ? `--` : `${primaryDefendDamage}`;
@@ -712,16 +727,17 @@ namespace TwnsCommonDamageChartPanel {
                 this._tileView.visible = true;
 
                 const targetTileType            = Helpers.getExisted(data.targetTileType);
-                const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
-                const targetCfg                 = ConfigManager.getTileTemplateCfgByType(configVersion, targetTileType);
+                const attackCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(attackUnitType));
+                const targetCfg                 = Helpers.getExisted(gameConfig.getTileTemplateCfg(targetTileType));
                 const targetArmorType           = Helpers.getExisted(targetCfg.armorType);
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
-                this._tileView.source           = CommonModel.getCachedTileObjectImageSource({
-                    version     : UserModel.getSelfSettingsTextureVersion(),
+                this._tileView.source           = Common.CommonModel.getCachedTileObjectImageSource({
+                    gameConfig,
+                    version     : User.UserModel.getSelfSettingsTextureVersion(),
                     themeType   : Types.TileThemeType.Clear,
                     skinId      : CommonConstants.UnitAndTileNeutralSkinId,
-                    objectType  : ConfigManager.getTileObjectTypeByTileType(targetTileType),
+                    objectType  : Helpers.getExisted(gameConfig.getTileObjectTypeByTileType(targetTileType)),
                     isDark      : false,
                     shapeId     : 0,
                     tickCount   : Timer.getTileAnimationTickCount(),

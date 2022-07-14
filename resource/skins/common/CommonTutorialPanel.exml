@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group horizontalCenter="0" width="780" height="480" verticalCenter="0">
+        <e:Group id="_groupList" width="240" top="0" bottom="0" left="0">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.9" left="0" right="0" top="0" bottom="0"
+                                 source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
+            <TwnsUiScrollList:UiScrollList id="_listName" left="20" right="20" bottom="70" top="20">
+                <e:List requireSelection="true">
+                    <e:itemRendererSkinName>
+                        <e:Skin width="200" height="36" currentState="up" states="up,down">
+                            <TwnsUiLabel:UiLabel id="_labelName" text="地图名称" size="20" verticalCenter="0"
+                                                 textColor="0x667A85" textColor.down="0xFFFFFF" maxTextWidth="200"
+                                                 left="0" bold.down="true" />
+                            <e:Image id="_imgChoose" source="uncompressedColorTransparent0000" left="0" right="0"
+                                     top="0" bottom="0" />
+                        </e:Skin>
+                    </e:itemRendererSkinName>
+                </e:List>
+            </TwnsUiScrollList:UiScrollList>
+            <TwnsUiButton:UiButton id="_btnBack" label="返回" left="20" right="20" bottom="20"
+                                   skinName="Skins.Component.Button.ButtonYellow003" height="30" />
+        </e:Group>
+        <e:Group id="_groupInfo" width="520" right="0" top="0" bottom="0">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.9" left="0" right="0" top="0" bottom="0"
+                                 source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
+            <e:Group y="20" left="20" right="20" height="36">
+                <TwnsUiImage:UiImage source="uncompressedColorBlack0000" left="0" right="0" top="0" bottom="0"
+                                     scale9Grid="1,1,2,2" alpha="0.4" />
+                <TwnsUiLabel:UiLabel id="_labelTutorialTitle" text="Label" size="24" x="20" verticalCenter="0" />
+            </e:Group>
+            <e:Group y="70" horizontalCenter="0">
+                <TwnsUiImage:UiImage id="_imgTutorial" y="0" x="0" source="tutorialContent0007" scaleX="2" scaleY="2" />
+                <TwnsUiLabel:UiLabel id="_labelTutorial" text="Label" y="220" size="18" x="0" width="440" />
+                <e:layout>
+                    <e:VerticalLayout gap="10" horizontalAlign="center" />
+                </e:layout>
+            </e:Group>
+        </e:Group>
+    </e:Group>
+</e:Skin>

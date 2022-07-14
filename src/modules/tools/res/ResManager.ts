@@ -4,7 +4,7 @@
 // import StageManager         from "../helpers/StageManager";
 // import ResAutoRelease       from "./ResAutoRelease";
 
-namespace ResManager {
+namespace Twns.ResManager {
     let _isLoadedMainResource = false;
 
     export async function init(): Promise<void> {
@@ -15,7 +15,7 @@ namespace ResManager {
         await _initTheme();
         // await RES.loadGroup("preload", 0, LoadingUiPanel.create());
         // LoadingUiPanel.destroy();
-        ResAutoRelease.startAutoRelease();
+        Twns.ResAutoRelease.startAutoRelease();
     }
 
     export function loadMainRes(): Promise<void> {
@@ -26,8 +26,8 @@ namespace ResManager {
                     resolve();
                 },
                 (reason) => {
-                    Logger.error("ResManager.loadMainRes() error! ", reason);
-                    FloatText.show("Error loading main resource! " + reason);
+                    Twns.Logger.error("ResManager.loadMainRes() error! ", reason);
+                    Twns.FloatText.show("Error loading main resource! " + reason);
                     reject();
                 }
             );
@@ -40,7 +40,7 @@ namespace ResManager {
 
     function _initTheme(): Promise<void> {
         return new Promise<void>((resolve): void => {
-            new eui.Theme("resource/default.thm.json", StageManager.getStage())
+            new eui.Theme("resource/default.thm.json", Twns.StageManager.getStage())
                 .once(eui.UIEvent.COMPLETE, resolve, null);
         });
     }

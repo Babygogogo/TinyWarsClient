@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group width="380" height="400" horizontalCenter="0" verticalCenter="0">
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                             alpha="0.8" right="0" top="0" bottom="0" left="0" locked="true" />
+        <TwnsUiButton:UiButton id="_btnClose" width="60" skinName="Skins.Component.Button.ButtonClose002" right="0"
+                               top="0" />
+        <TwnsUiLabel:UiLabel id="_labelTitle" text="Add Tiles To Locations" size="20" bold="true" top="10" y="10"
+                             horizontalCenter="0" />
+        <e:Group x="10" y="40">
+            <TwnsUiLabel:UiLabel text="#" size="14" y="0" x="0" />
+            <TwnsUiLabel:UiLabel id="_labelMapTagEnabled" text="Enabled" size="14" y="0" x="30" />
+            <TwnsUiLabel:UiLabel id="_labelMapTagName" text="Name" size="14" y="0" x="100" />
+        </e:Group>
+        <TwnsUiScrollList:UiScrollList id="_listLocation" top="60" bottom="50" left="10" right="10">
+            <e:List allowMultipleSelection="true">
+                <e:itemRendererSkinName>
+                    <e:Skin width="360" height="30" currentState="up">
+                        <e:Group left="0" right="0" top="0" bottom="0">
+                            <TwnsUiLabel:UiLabel id="_labelMapTagId" text="30" textColor="0xFFFFFF" size="16"
+                                                 verticalCenter="0" left="0" />
+                            <e:Group id="_groupIsEnabled" verticalCenter="0" left="40">
+                                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                                                     source="uncompressedColorTransparent0000" left="0" right="0"
+                                                     top="0" bottom="0" />
+                                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" verticalCenter="0"
+                                                     y="20" source="common0005" horizontalCenter="0" />
+                                <TwnsUiImage:UiImage id="_imgIsEnabled" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                                                     x="0" verticalCenter="0" source="common0006" />
+                            </e:Group>
+                            <TwnsUiLabel:UiLabel id="_labelMapTagName" text="30" textColor="0xFFFFFF" size="16"
+                                                 verticalCenter="0" x="100" y="17" />
+                            <e:Group id="_groupModifyName" left="100" right="0" top="0" bottom="0">
+                                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                                                     source="uncompressedColorTransparent0000" left="0" right="0"
+                                                     top="0" bottom="0" />
+                                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" verticalCenter="0"
+                                                     source="commonIcon0021" right="0" />
+                            </e:Group>
+                        </e:Group>
+                    </e:Skin>
+                </e:itemRendererSkinName>
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:List>
+        </TwnsUiScrollList:UiScrollList>
+        <TwnsUiLabel:UiLabel id="_labelTips"
+                             text="Please modify the settings carefully. All the tagged maps will be affected."
+                             size="14" left="10" right="10" bottom="10" />
+    </e:Group>
+</e:Skin>

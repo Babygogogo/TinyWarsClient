@@ -4,7 +4,7 @@
         xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                          scale9Grid="1,1,2,2" locked="true" />
-    <e:Group height="390" verticalCenter="0" width="880" horizontalCenter="0">
+    <e:Group height="450" verticalCenter="0" width="880" horizontalCenter="0">
         <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="0" top="0" bottom="0" right="0" locked="true" />
         <TwnsUiLabel:UiLabel id="_labelTitle" text="创建战局" bold="true" size="22" top="10" textColor="0xffffff"
@@ -27,6 +27,13 @@
                                          anchorOffsetY="0" alpha="0.8" left="0" top="0" bottom="0" right="0"
                                          locked="true" />
                     <e:Group left="0" right="0">
+                        <e:Group y="20" left="0" right="0">
+                            <TwnsUiButton:UiButton id="_btnConTileType" label="切换类型"
+                                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
+                                                   top="0" left="0" x="10" y="10" />
+                            <TwnsUiLabel:UiLabel id="_labelConTileType" text="取反" size="14" textColor="0xFFFFFF"
+                                                 left="126" right="10" verticalCenter="0" />
+                        </e:Group>
                         <e:Group y="96" left="0" right="0">
                             <TwnsUiButton:UiButton id="_btnLocation" label="切换类型"
                                                    skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
@@ -40,6 +47,26 @@
                                                    top="0" left="0" x="10" y="10" />
                             <TwnsUiLabel:UiLabel id="_labelGridIndex" text="取反" size="14" textColor="0xFFFFFF"
                                                  left="126" right="10" verticalCenter="0" />
+                        </e:Group>
+                        <e:Group x="0" y="70">
+                            <e:Group x="0" y="0">
+                                <TwnsUiButton:UiButton id="_btnPlayerIndex" label="切换类型"
+                                                       skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                       width="120" top="0" left="0" x="10" y="10" />
+                                <TwnsUiLabel:UiLabel id="_labelPlayerIndex" text="取反" size="14" textColor="0xFFFFFF"
+                                                     left="126" right="10" verticalCenter="0" />
+                            </e:Group>
+                            <e:Group x="410" y="0">
+                                <TwnsUiButton:UiButton id="_btnConIsPlayerInTurn" label="切换类型"
+                                                       skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                       width="120" scaleX="1" scaleY="1" left="0" top="0" />
+                                <TwnsUiLabel:UiLabel id="_labelConIsPlayerInTurn" text="取反" size="14"
+                                                     textColor="0xFFFFFF" x="405.9999999999998" y="161" scaleX="1"
+                                                     scaleY="1" />
+                                <e:layout>
+                                    <e:HorizontalLayout verticalAlign="middle" />
+                                </e:layout>
+                            </e:Group>
                         </e:Group>
                         <e:Group y="138" left="0" right="0" x="10">
                             <TwnsUiButton:UiButton id="_btnConIsHighlighted" label="切换类型"

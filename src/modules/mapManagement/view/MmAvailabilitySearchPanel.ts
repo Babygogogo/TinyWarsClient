@@ -2,7 +2,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
 // import TwnsUiPanel                  from "../../tools/ui/UiPanel";
@@ -10,12 +10,12 @@
 // import TwnsMmAvailabilityListPanel  from "./MmAvailabilityListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmAvailabilitySearchPanel {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.MapManagement {
+    import LangTextType             = Twns.Lang.LangTextType;
+    import NotifyType               = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class MmAvailabilitySearchPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMmAvailabilitySearchPanel = void;
+    export class MmAvailabilitySearchPanel extends TwnsUiPanel.UiPanel<OpenDataForMmAvailabilitySearchPanel> {
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
         private readonly _btnReset!                 : TwnsUiButton.UiButton;
         private readonly _btnSearch!                : TwnsUiButton.UiButton;
@@ -57,12 +57,12 @@ namespace TwnsMmAvailabilitySearchPanel {
         }
 
         private _onTouchedBtnReset(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAvailabilityListPanel, {});
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmModifyMapListPanel, {});
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAvailabilityListPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MmModifyMapListPanel, {
                 mapName     : this._inputMapName.text || null,
                 mapDesigner : this._inputDesigner.text || null,
                 playersCount: Number(this._inputPlayersCount.text) || null,

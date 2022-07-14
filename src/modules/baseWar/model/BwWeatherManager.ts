@@ -1,18 +1,16 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwWeatherManager {
-    import WeatherType              = Types.WeatherType;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import ISerialWeatherManager    = ProtoTypes.WarSerialization.ISerialWeatherManager;
+namespace Twns.BaseWar {
+    import LangTextType             = Lang.LangTextType;
+    import ISerialWeatherManager    = CommonProto.WarSerialization.ISerialWeatherManager;
 
     export class BwWeatherManager {
-        private _forceWeatherType?      : WeatherType | null;
+        private _forceWeatherType?      : number | null;
         private _expirePlayerIndex?     : number | null;
         private _expireTurnIndex?       : number | null;
-        private _war?                   : TwnsBwWar.BwWar;
+        private _war?                   : BaseWar.BwWar;
 
-        private readonly _view = new TwnsBwWeatherManagerView.BwWeatherManagerView();
+        private readonly _view = new BaseWar.BwWeatherManagerView();
 
         public init(data: Types.Undefinable<ISerialWeatherManager>): void {
             this.setForceWeatherType(data?.forceWeatherType ?? null);
@@ -39,7 +37,7 @@ namespace TwnsBwWeatherManager {
             return this.serialize();
         }
 
-        public startRunning(war: TwnsBwWar.BwWar): void {
+        public startRunning(war: BaseWar.BwWar): void {
             this._setWar(war);
         }
         public startRunningView(): void {
@@ -49,34 +47,34 @@ namespace TwnsBwWeatherManager {
             this.getView().stopRunningView();
         }
 
-        private _setWar(war: TwnsBwWar.BwWar): void {
+        private _setWar(war: BaseWar.BwWar): void {
             this._war = war;
         }
-        private _getWar(): TwnsBwWar.BwWar {
+        public getWar(): BaseWar.BwWar {
             return Helpers.getExisted(this._war, ClientErrorCode.BwWeatherManager_GetWar_00);
         }
 
-        public getView(): TwnsBwWeatherManagerView.BwWeatherManagerView {
+        public getView(): BaseWar.BwWeatherManagerView {
             return this._view;
         }
 
-        public getDefaultWeatherType(): WeatherType {
-            return this._getWar().getCommonSettingManager().getSettingsDefaultWeatherType();
+        public getDefaultWeatherType(): number {
+            return this.getWar().getCommonSettingManager().getSettingsDefaultWeatherType();
         }
-        public getCurrentWeatherType(): WeatherType {
+        public getCurrentWeatherType(): number {
             return this.getForceWeatherType() ?? this.getDefaultWeatherType();
         }
         public getCurrentWeatherCfg(): Types.WeatherCfg {
-            return ConfigManager.getWeatherCfg(this._getWar().getConfigVersion(), this.getCurrentWeatherType());
+            return Helpers.getExisted(this.getWar().getGameConfig().getWeatherCfg(this.getCurrentWeatherType()));
         }
 
-        public setForceWeatherType(type: WeatherType | null): void {
+        public setForceWeatherType(type: number | null): void {
             if (this._forceWeatherType !== type) {
                 this._forceWeatherType = type;
-                Notify.dispatch(TwnsNotifyType.NotifyType.BwForceWeatherTypeChanged);
+                Notify.dispatch(Notify.NotifyType.BwForceWeatherTypeChanged);
             }
         }
-        public getForceWeatherType(): WeatherType | null {
+        public getForceWeatherType(): number | null {
             return Helpers.getDefined(this._forceWeatherType, ClientErrorCode.BwWeatherManager_GetForceWeatherType_00);
         }
 
@@ -101,7 +99,7 @@ namespace TwnsBwWeatherManager {
                 return;
             }
 
-            const turnManager       = this._getWar().getTurnManager();
+            const turnManager       = this.getWar().getTurnManager();
             const currentTurnIndex  = turnManager.getTurnIndex();
             if ((expireTurnIndex < currentTurnIndex)                                                                ||
                 (expireTurnIndex === currentTurnIndex) && (expirePlayerIndex <= turnManager.getPlayerIndexInTurn())
@@ -113,14 +111,15 @@ namespace TwnsBwWeatherManager {
         }
 
         public getDesc(): string {
-            const expireTurnIndex = this.getExpireTurnIndex();
-            const currentWeatherName = Lang.getWeatherName(this.getCurrentWeatherType());
-            const defaultWeatherName = Lang.getWeatherName(this.getDefaultWeatherType());
+            const war               = this.getWar();
+            const gameConfig        = war.getGameConfig();
+            const expireTurnIndex   = this.getExpireTurnIndex();
+            const currentWeatherName = Lang.getWeatherName(this.getCurrentWeatherType(), gameConfig);
+            const defaultWeatherName = Lang.getWeatherName(this.getDefaultWeatherType(), gameConfig);
             if (expireTurnIndex == null) {
                 return `${Lang.getFormattedText(LangTextType.F0073, currentWeatherName, defaultWeatherName)}`
                     + `\n\n${Lang.getText(LangTextType.R0009)}`;
             } else {
-                const war           = this._getWar();
                 const turnManager   = war.getTurnManager();
                 return `${Lang.getFormattedText(LangTextType.F0073, currentWeatherName, defaultWeatherName)}`
                     + `\n${Lang.getFormattedText(LangTextType.F0074, expireTurnIndex, this.getExpirePlayerIndex(), turnManager.getTurnIndex(), turnManager.getPlayerIndexInTurn())}`

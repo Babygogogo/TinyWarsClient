@@ -7,7 +7,7 @@
 // import TwnsSpmMainMenuPanel                 from "../../singlePlayerMode/view/SpmMainMenuPanel";
 // import Helpers                              from "../../tools/helpers/Helpers";
 // import Types                                from "../../tools/helpers/Types";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Twns.Notify                       from "../../tools/notify/NotifyType";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiPanel                          from "../../tools/ui/UiPanel";
 // import MrrModel                             from "../model/MrrModel";
@@ -16,12 +16,12 @@
 // import TwnsMrrSetMaxConcurrentCountPanel    from "./MrrSetMaxConcurrentCountPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMrrMainMenuPanel {
-    import NotifyType                       = TwnsNotifyType.NotifyType;
+namespace Twns.MultiRankRoom {
+    import NotifyType                       = Twns.Notify.NotifyType;
     import Tween                            = egret.Tween;
 
-    export type OpenData = void;
-    export class MrrMainMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMrrMainMenuPanel = void;
+    export class MrrMainMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForMrrMainMenuPanel> {
         private readonly _group!                : eui.Group;
         private readonly _btnMultiPlayer!       : TwnsUiButton.UiButton;
         private readonly _btnRanking!           : TwnsUiButton.UiButton;
@@ -48,9 +48,9 @@ namespace TwnsMrrMainMenuPanel {
                 { type: NotifyType.MsgUserLogout,                       callback: this._onMsgUserLogout },
                 { type: NotifyType.MsgMrrGetRoomPublicInfo,             callback: this._onMsgMrrGetRoomPublicInfo },
                 { type: NotifyType.MsgMrrGetJoinedRoomIdArray,          callback: this._onMsgMrrGetJoinedRoomIdArray },
-                { type: NotifyType.MsgMcrGetJoinedRoomIdArray,          callback: this._onMsgMcrGetJoinedRoomIdArray },
-                { type: NotifyType.MsgMfrGetJoinedRoomIdArray,          callback: this._onMsgMfrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgCcrGetJoinedRoomIdArray,         callback: this._onMsgCcrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMcrGetRoomPlayerInfo,             callback: this._onNotifyMsgMcrGetRoomPlayerInfo },
+                { type: NotifyType.MsgMfrGetRoomPlayerInfo,             callback: this._onNotifyMsgMfrGetRoomPlayerInfo },
+                { type: NotifyType.MsgCcrGetRoomPlayerInfo,             callback: this._onNotifyMsgCcrGetRoomPlayerInfo },
                 { type: NotifyType.MsgMpwCommonGetWarProgressInfo,      callback: this._onMsgMpwCommonGetWarProgressInfo },
                 { type: NotifyType.MsgMpwWatchGetRequestedWarIdArray,   callback: this._onMsgMpwWatchGetRequestedWarIdArray },
             ]);
@@ -67,38 +67,38 @@ namespace TwnsMrrMainMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnMultiPlayer(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.McrMainMenuPanel, void 0);
         }
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmMainMenuPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.SpmMainMenuPanel, void 0);
         }
         private _onTouchedBtnSetGameNumber(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrSetMaxConcurrentCountPanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MrrSetMaxConcurrentCountPanel, void 0);
         }
         private _onTouchedBtnMyRoom(): void {
             this.close();
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMyRoomListPanel, void 0);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyTopPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyBottomPanel);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MrrMyRoomListPanel, void 0);
         }
         private _onTouchedBtnContinueWar(): void {
             this.close();
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrwMyWarListPanel, void 0);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyTopPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyBottomPanel);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MrwMyWarListPanel, void 0);
         }
         private _onTouchedBtnPreviewStdMaps(): void {
             this.close();
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrPreviewMapListPanel, { hasFog: false });
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyTopPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyBottomPanel);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MrrPreviewMapListPanel, { hasFog: false });
         }
         private _onTouchedBtnPreviewFogMaps(): void {
             this.close();
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrPreviewMapListPanel, { hasFog: true });
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyTopPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.LobbyBottomPanel);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.MrrPreviewMapListPanel, { hasFog: true });
         }
 
         private _onMsgUserLogout(): void {
@@ -110,13 +110,13 @@ namespace TwnsMrrMainMenuPanel {
         private _onMsgMrrGetJoinedRoomIdArray(): void {
             this._updateComponentsForRed();
         }
-        private _onMsgMcrGetJoinedRoomIdArray(): void {
+        private _onNotifyMsgMcrGetRoomPlayerInfo(): void {
             this._updateBtnMultiPlayer();
         }
-        private _onMsgMfrGetJoinedRoomInfoList(): void {
+        private _onNotifyMsgMfrGetRoomPlayerInfo(): void {
             this._updateBtnMultiPlayer();
         }
-        private _onMsgCcrGetJoinedRoomInfoList(): void {
+        private _onNotifyMsgCcrGetRoomPlayerInfo(): void {
             this._updateBtnMultiPlayer();
         }
         private _onMsgMpwCommonGetWarProgressInfo(): void {
@@ -140,22 +140,22 @@ namespace TwnsMrrMainMenuPanel {
             this._updateBtnRanking();
             this._updateBtnContinueWar();
 
-            this._btnMyRoom.setRedVisible(await MrrModel.checkIsRed());
+            this._btnMyRoom.setRedVisible(await Twns.MultiRankRoom.MrrModel.checkIsRed());
         }
 
         private async _updateBtnMultiPlayer(): Promise<void> {
-            this._btnMultiPlayer.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiPlayer());
+            this._btnMultiPlayer.setRedVisible(await Lobby.LobbyModel.checkIsRedForMultiPlayer());
         }
 
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
-                (await MpwModel.checkIsRedForMyMrwWars()) ||
-                (await MrrModel.checkIsRed())
+                (await MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
+                (await Twns.MultiRankRoom.MrrModel.checkIsRed())
             );
         }
 
         private async _updateBtnContinueWar(): Promise<void> {
-            this._btnContinueWar.setRedVisible(await MpwModel.checkIsRedForMyMrwWars());
+            this._btnContinueWar.setRedVisible(await MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars());
         }
 
         protected async _showOpenAnimation(): Promise<void> {
@@ -164,18 +164,18 @@ namespace TwnsMrrMainMenuPanel {
             group.right = 60;
             group.alpha = 1;
 
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnMultiPlayer,
                 beginProps  : { alpha: 0, right: -40 },
                 endProps    : { alpha: 1, right: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnRanking,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 100,
                 endProps    : { alpha: 1, right: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnSinglePlayer,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 200,
@@ -187,51 +187,51 @@ namespace TwnsMrrMainMenuPanel {
             groupLeft.left  = 0;
             groupLeft.alpha = 1;
 
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnSetGameNumber,
                 beginProps  : { alpha: 0, left: -40 },
                 endProps    : { alpha: 1, left: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnMyRoom,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 50,
                 endProps    : { alpha: 1, left: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnContinueWar,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 100,
                 endProps    : { alpha: 1, left: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnPreviewStdMaps,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 150,
                 endProps    : { alpha: 1, left: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._btnPreviewFogMaps,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
             });
 
-            await Helpers.wait(200 + CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(200 + Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, right: 60 },
                 endProps    : { alpha: 0, right: 20 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._groupLeft,
                 beginProps  : { alpha: 1, left: 0 },
                 endProps    : { alpha: 0, left: -40},
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 }

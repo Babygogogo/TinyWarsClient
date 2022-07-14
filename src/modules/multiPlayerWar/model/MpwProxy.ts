@@ -9,25 +9,25 @@
 // import NetManager               from "../../tools/network/NetManager";
 // import TwnsNetMessageCodes      from "../../tools/network/NetMessageCodes";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace MpwProxy {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import NetMessage           = ProtoTypes.NetMessage;
-    import NetMessageCodes      = TwnsNetMessageCodes.NetMessageCodes;
+namespace Twns.MultiPlayerWar.MpwProxy {
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
+    import NetMessage           = CommonProto.NetMessage;
+    import NetMessageCodes      = Net.NetMessageCodes;
 
     export function init(): void {
-        NetManager.addListeners([
+        Net.NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgMpwCommonBroadcastGameStart,      callback: _onMsgMpwCommonBroadcastGameStart },
             { msgCode: NetMessageCodes.MsgMpwCommonHandleBoot,              callback: _onMsgMpwCommonHandleBoot },
             { msgCode: NetMessageCodes.MsgMpwCommonContinueWar,             callback: _onMsgMpwCommonContinueWar },
-            { msgCode: NetMessageCodes.MsgMpwCommonGetMyWarIdArray,         callback: _onMsgMpwCommonGetMyWarIdArray },
             { msgCode: NetMessageCodes.MsgMpwCommonSyncWar,                 callback: _onMsgMpwCommonSyncWar },
             { msgCode: NetMessageCodes.MsgMpwCommonGetWarSettings,          callback: _onMsgMpwCommonGetWarSettings },
             { msgCode: NetMessageCodes.MsgMpwCommonGetWarProgressInfo,      callback: _onMsgMpwCommonGetWarProgressInfo },
+            { msgCode: NetMessageCodes.MsgMpwCommonMarkTile,                callback: _onMsgMpwCommonMarkTile },
             { msgCode: NetMessageCodes.MsgMpwGetHalfwayReplayData,          callback: _onMsgMpwGetHalfwayReplayData },
 
             { msgCode: NetMessageCodes.MsgMpwExecuteWarAction,              callback: _onMsgMpwExecuteWarAction },
@@ -37,7 +37,7 @@ namespace MpwProxy {
     function _onMsgMpwCommonBroadcastGameStart(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwCommonBroadcastGameStart.IS;
         Lang.getGameStartDesc(data).then(desc => {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0392),
                 content : desc,
                 callback: () => {
@@ -48,7 +48,7 @@ namespace MpwProxy {
     }
 
     export function reqMpwCommonContinueWar(warId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMpwCommonContinueWar: { c: {
                 warId,
             }, },
@@ -63,19 +63,8 @@ namespace MpwProxy {
         }
     }
 
-    export function reqMpwCommonGetMyWarIdArray(): void {
-        NetManager.send({
-            MsgMpwCommonGetMyWarIdArray: { c: {} },
-        });
-    }
-    function _onMsgMpwCommonGetMyWarIdArray(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwCommonGetMyWarIdArray.IS;
-        MpwModel.setAllMyWarIdArray(data.warIdArray || []);
-        Notify.dispatch(NotifyType.MsgMpwCommonGetMyWarIdArray, data);
-    }
-
-    export function reqMpwCommonSyncWar(war: TwnsBwWar.BwWar, requestType: Types.SyncWarRequestType): void {
-        NetManager.send({
+    export function reqMpwCommonSyncWar(war: BaseWar.BwWar, requestType: Types.SyncWarRequestType): void {
+        Net.NetManager.send({
             MsgMpwCommonSyncWar: { c: {
                 warId               : war.getWarId(),
                 executedActionsCount: war.getExecutedActionManager().getExecutedActionsCount(),
@@ -92,7 +81,7 @@ namespace MpwProxy {
     }
 
     export function reqMpwCommonGetWarSettings(warId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMpwCommonGetWarSettings: { c: {
                 warId
             } },
@@ -105,7 +94,7 @@ namespace MpwProxy {
     }
 
     export function reqMpwCommonGetWarProgressInfo(warId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMpwCommonGetWarProgressInfo: { c: {
                 warId
             } },
@@ -117,8 +106,25 @@ namespace MpwProxy {
         Notify.dispatch(NotifyType.MsgMpwCommonGetWarProgressInfo, data);
     }
 
+    export function reqMpwCommonMarkTile(warId: number, gridId: number, isMark: boolean): void {
+        Net.NetManager.send({
+            MsgMpwCommonMarkTile: { c: {
+                isMark,
+                gridId,
+                warId,
+            } },
+        });
+    }
+    function _onMsgMpwCommonMarkTile(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwCommonMarkTile.IS;
+        if (!data.errorCode) {
+            MpwModel.updateOnMsgMpwCommonMarkTile(data);
+            Notify.dispatch(NotifyType.MsgMpwCommonMarkTile, data);
+        }
+    }
+
     export function reqMpwGetHalfwayReplayData(warId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMpwGetHalfwayReplayData: { c: {
                 warId,
             } },
@@ -134,7 +140,7 @@ namespace MpwProxy {
     }
 
     export function reqMpwCommonHandleBoot(warId: number): void {
-        NetManager.send({
+        Net.NetManager.send({
             MsgMpwCommonHandleBoot: { c: {
                 warId,
             }, },
@@ -147,8 +153,8 @@ namespace MpwProxy {
         }
     }
 
-    export function reqMpwExecuteWarAction(war: TwnsBwWar.BwWar, actionContainer: ProtoTypes.WarAction.IWarActionContainer): void {
-        NetManager.send({
+    export function reqMpwExecuteWarAction(war: BaseWar.BwWar, actionContainer: CommonProto.WarAction.IWarActionContainer): void {
+        Net.NetManager.send({
             MsgMpwExecuteWarAction: { c: {
                 warId           : war.getWarId(),
                 actionContainer,

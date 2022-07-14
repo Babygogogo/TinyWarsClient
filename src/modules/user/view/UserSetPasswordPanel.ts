@@ -5,7 +5,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -15,12 +15,12 @@
 // import UserProxy            from "../../user/model/UserProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserSetPasswordPanel {
-    import NotifyType   = TwnsNotifyType.NotifyType;
-    import LangTextType = TwnsLangTextType.LangTextType;
+namespace Twns.User {
+    import NotifyType   = Notify.NotifyType;
+    import LangTextType = Lang.LangTextType;
 
-    export type OpenData = void;
-    export class UserSetPasswordPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserSetPasswordPanel = void;
+    export class UserSetPasswordPanel extends TwnsUiPanel.UiPanel<OpenDataForUserSetPasswordPanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _group!                    : eui.Group;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
@@ -59,7 +59,7 @@ namespace TwnsUserSetPasswordPanel {
 
             const password = this._inputNewPassword0.text;
             LocalStorage.setPassword(password);
-            UserModel.setSelfPassword(password);
+            User.UserModel.setSelfPassword(password);
             this.close();
         }
         private _onNotifyLanguageChanged(): void {
@@ -73,7 +73,7 @@ namespace TwnsUserSetPasswordPanel {
             } else if (newPassword !== this._inputNewPassword1.text) {
                 FloatText.show(Lang.getText(LangTextType.A0147));
             } else {
-                UserProxy.reqUserSetPassword(this._inputOldPassword.text, newPassword);
+                User.UserProxy.reqUserSetPassword(this._inputOldPassword.text, newPassword);
             }
         }
 

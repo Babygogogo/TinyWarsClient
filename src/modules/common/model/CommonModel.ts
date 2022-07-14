@@ -6,14 +6,10 @@
 // import UserModel        from "../../user/model/UserModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace CommonModel {
-    import UnitType                 = Types.UnitType;
+namespace Twns.Common.CommonModel {
     import TileThemeType            = Types.TileThemeType;
-    import TileBaseType             = Types.TileBaseType;
-    import TileDecoratorType        = Types.TileDecoratorType;
-    import TileObjectType           = Types.TileObjectType;
     import TextureVersion           = Types.UnitAndTileTextureVersion;
-    import IDataForMrwPlayerRank    = ProtoTypes.Structure.IDataForMrwPlayerRank;
+    import IDataForMrwPlayerRank    = CommonProto.Structure.IDataForMrwPlayerRank;
 
     type FrameCfg = {
         source  : string | null;
@@ -21,13 +17,12 @@ namespace CommonModel {
     };
 
     let _unitAndTileTexturePrefix       = `v01_`;
-    const _unitImageSourceDict          = new Map<TextureVersion, Map<boolean, Map<boolean, Map<number, Map<UnitType, FrameCfg>>>>>();
-    const _tileBaseImageSourceDict      = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<TileBaseType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
-    const _tileDecoratorImageSourceDict = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<TileDecoratorType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
-    const _tileObjectImageSourceDict    = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<TileObjectType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
+    const _unitImageSourceDict          = new Map<TextureVersion, Map<boolean, Map<boolean, Map<number, Map<number, FrameCfg>>>>>();
+    const _tileBaseImageSourceDict      = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<number, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
+    const _tileDecoratorImageSourceDict = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<number, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
+    const _tileObjectImageSourceDict    = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<number, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
 
     let _mrwRankArray: IDataForMrwPlayerRank[] | null = null;
-    let _spmOverallRankArray: number[] | null = null;
 
     export function init(): void {
         updateOnUnitAndTileTextureVersionChanged();
@@ -44,7 +39,7 @@ namespace CommonModel {
         return _unitAndTileTexturePrefix;
     }
     function updateUnitAndTileTexturePrefix(): void {
-        _unitAndTileTexturePrefix = `v${Helpers.getNumText(UserModel.getSelfSettingsTextureVersion())}_`;
+        _unitAndTileTexturePrefix = `v${Helpers.getNumText(User.UserModel.getSelfSettingsTextureVersion())}_`;
     }
 
     export function tickTileImageSources(): void {
@@ -57,17 +52,15 @@ namespace CommonModel {
         _unitImageSourceDict.clear();
     }
 
-    export function getCachedUnitImageSource(
-        params: {
-            version     : TextureVersion;
-            skinId      : number;
-            unitType    : UnitType;
-            isDark      : boolean;
-            isMoving    : boolean;
-            tickCount   : number;
-        },
-    ): string {
-        const { version, skinId, unitType, isDark, isMoving, tickCount } = params;
+    export function getCachedUnitImageSource({ gameConfig, version, skinId, unitType, isDark, isMoving, tickCount }: {
+        gameConfig  : Config.GameConfig;
+        version     : TextureVersion;
+        skinId      : number;
+        unitType    : number;
+        isDark      : boolean;
+        isMoving    : boolean;
+        tickCount   : number;
+    }): string {
         if (!_unitImageSourceDict.has(version)) {
             _unitImageSourceDict.set(version, new Map());
         }
@@ -95,22 +88,22 @@ namespace CommonModel {
         const cfg = Helpers.getExisted(dict4.get(unitType));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
-            cfg.source  = ConfigManager.getUnitImageSource(params);
+            cfg.source  = gameConfig.getUnitImageSource({ version, skinId, unitType, isDark, isMoving, tickCount });
         }
 
         return Helpers.getExisted(cfg.source);
     }
 
-    export function getCachedTileBaseImageSource(params: {
+    export function getCachedTileBaseImageSource({ gameConfig, version, themeType, skinId, baseType, isDark, shapeId, tickCount } : {
+        gameConfig  : Config.GameConfig;
         version     : TextureVersion;
         themeType   : TileThemeType;
         skinId      : number;
-        baseType    : TileBaseType;
+        baseType    : number;
         isDark      : boolean;
         shapeId     : number;
         tickCount   : number;
     }): string {
-        const { version, themeType, skinId, baseType, isDark, shapeId, tickCount } = params;
         if (!_tileBaseImageSourceDict.has(version)) {
             _tileBaseImageSourceDict.set(version, new Map());
         }
@@ -148,27 +141,24 @@ namespace CommonModel {
         const cfg = Helpers.getExisted(dict6.get(tickCount));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
-            cfg.source  = ConfigManager.getTileBaseImageSource(params);
+            cfg.source  = gameConfig.getTileBaseImageSource({ version, themeType, skinId, baseType, isDark, shapeId, tickCount });
         }
 
         return Helpers.getExisted(cfg.source);
     }
 
-    export function getCachedTileDecoratorImageSource(params: {
-        version         : TextureVersion;
-        themeType       : TileThemeType;
-        skinId          : number;
-        decoratorType   : TileDecoratorType | null;
-        isDark          : boolean;
-        shapeId         : number | null;
-        tickCount       : number;
+    export function getCachedTileDecoratorImageSource({ version, themeType, skinId, tileDecorationType, isDark, shapeId, tickCount, gameConfig }: {
+        version             : TextureVersion;
+        themeType           : TileThemeType;
+        skinId              : number;
+        tileDecorationType  : number | null;
+        isDark              : boolean;
+        shapeId             : number;
+        tickCount           : number;
+        gameConfig          : Config.GameConfig;
     }): string {
-        const { version, themeType, skinId, decoratorType, isDark, shapeId, tickCount } = params;
-        if ((decoratorType == null)                     ||
-            (decoratorType === TileDecoratorType.Empty) ||
-            (shapeId == null)
-        ) {
-            return "";
+        if (tileDecorationType == null) {
+            return ``;
         }
 
         if (!_tileDecoratorImageSourceDict.has(version)) {
@@ -186,11 +176,11 @@ namespace CommonModel {
         }
 
         const dict3 = Helpers.getExisted(dict2.get(skinId));
-        if (!dict3.has(decoratorType)) {
-            dict3.set(decoratorType, new Map());
+        if (!dict3.has(tileDecorationType)) {
+            dict3.set(tileDecorationType, new Map());
         }
 
-        const dict4 = Helpers.getExisted(dict3.get(decoratorType));
+        const dict4 = Helpers.getExisted(dict3.get(tileDecorationType));
         if (!dict4.has(isDark)) {
             dict4.set(isDark, new Map());
         }
@@ -208,22 +198,22 @@ namespace CommonModel {
         const cfg = Helpers.getExisted(dict6.get(tickCount));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
-            cfg.source  = ConfigManager.getTileDecoratorImageSource(params);
+            cfg.source  = gameConfig.getTileDecorationImageSource({ version, themeType, skinId, tileDecorationType, isDark, shapeId, tickCount });
         }
 
         return Helpers.getExisted(cfg.source);
     }
 
-    export function getCachedTileObjectImageSource(params: {
+    export function getCachedTileObjectImageSource({ gameConfig, version, themeType, skinId, objectType, isDark, shapeId, tickCount }: {
+        gameConfig  : Config.GameConfig;
         version     : TextureVersion;
         themeType   : TileThemeType;
         skinId      : number;
-        objectType  : TileObjectType;
+        objectType  : number;
         isDark      : boolean;
         shapeId     : number;
         tickCount   : number;
     }): string {
-        const { version, themeType, skinId, objectType, isDark, shapeId, tickCount } = params;
         if (!_tileObjectImageSourceDict.has(version)) {
             _tileObjectImageSourceDict.set(version, new Map());
         }
@@ -261,7 +251,7 @@ namespace CommonModel {
         const cfg = Helpers.getExisted(dict6.get(tickCount));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
-            cfg.source  = ConfigManager.getTileObjectImageSource(params);
+            cfg.source  = gameConfig.getTileObjectImageSource({ version, themeType, skinId, objectType, isDark, shapeId, tickCount });
         }
 
         return Helpers.getExisted(cfg.source);
@@ -272,13 +262,6 @@ namespace CommonModel {
     }
     export function getMrwRankList(): IDataForMrwPlayerRank[] | null {
         return _mrwRankArray;
-    }
-
-    export function setSpmOverallRankArray(rankArray: number[]): void {
-        _spmOverallRankArray = rankArray;
-    }
-    export function getSpmOverallRankArray(): number[] | null {
-        return _spmOverallRankArray;
     }
 }
 

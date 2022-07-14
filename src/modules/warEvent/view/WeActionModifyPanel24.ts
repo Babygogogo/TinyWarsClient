@@ -6,7 +6,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -14,19 +14,19 @@
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel24 {
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import BwWar                    = TwnsBwWar.BwWar;
+namespace Twns.WarEvent {
+    import NotifyType               = Notify.NotifyType;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
+    import LangTextType             = Lang.LangTextType;
+    import BwWar                    = BaseWar.BwWar;
 
-    export type OpenData = {
+    export type OpenDataForWeActionModifyPanel24 = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel24 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel24 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel24> {
         private readonly _labelTitle!                   : TwnsUiLabel.UiLabel;
         private readonly _btnType!                      : TwnsUiButton.UiButton;
         private readonly _btnBack!                      : TwnsUiButton.UiButton;
@@ -36,6 +36,11 @@ namespace TwnsWeActionModifyPanel24 {
 
         private readonly _btnSwitchPlayerIndex!                 : TwnsUiButton.UiButton;
         private readonly _labelPlayerIndex!                     : TwnsUiLabel.UiLabel;
+        private readonly _btnConIsPlayerInTurn!                 : TwnsUiButton.UiButton;
+        private readonly _labelConIsPlayerInTurn!               : TwnsUiLabel.UiLabel;
+        private readonly _btnConIsSkipTurn!                     : TwnsUiButton.UiButton;
+        private readonly _labelConIsSkipTurn!                   : TwnsUiLabel.UiLabel;
+
         private readonly _btnConCoUsingSkillType!               : TwnsUiButton.UiButton;
         private readonly _labelConCoUsingSkillType!             : TwnsUiLabel.UiLabel;
         private readonly _btnConAliveState!                     : TwnsUiButton.UiButton;
@@ -52,6 +57,8 @@ namespace TwnsWeActionModifyPanel24 {
         private readonly _btnActAliveState!                 : TwnsUiButton.UiButton;
         private readonly _labelActAliveState!               : TwnsUiLabel.UiLabel;
         private readonly _btnActAliveStateHelp!             : TwnsUiButton.UiButton;
+        private readonly _btnActIsSkipTurn!                 : TwnsUiButton.UiButton;
+        private readonly _labelActIsSkipTurn!               : TwnsUiLabel.UiLabel;
         private readonly _labelActFund!                     : TwnsUiLabel.UiLabel;
         private readonly _labelActFundMultiplierPct!        : TwnsUiLabel.UiLabel;
         private readonly _inputActFundMultiplierPct!        : TwnsUiTextInput.UiTextInput;
@@ -70,6 +77,8 @@ namespace TwnsWeActionModifyPanel24 {
                 { ui: this._imgInnerTouchMask,                  callback: this._onTouchedImgInnerTouchMask },
 
                 { ui: this._btnSwitchPlayerIndex,               callback: this._onTouchedBtnSwitchPlayerIndex },
+                { ui: this._btnConIsPlayerInTurn,               callback: this._onTouchedBtnConIsPlayerInTurn },
+                { ui: this._btnConIsSkipTurn,                   callback: this._onTouchedBtnConIsSkipTurn },
                 { ui: this._btnConCoUsingSkillType,             callback: this._onTouchedBtnConCoUsingSkillType },
                 { ui: this._btnConAliveState,                   callback: this._onTouchedBtnConAliveState },
                 { ui: this._inputConFund,                       callback: this._onFocusInInputConFund,                      eventType: egret.FocusEvent.FOCUS_IN },
@@ -81,6 +90,7 @@ namespace TwnsWeActionModifyPanel24 {
 
                 { ui: this._btnActAliveState,                   callback: this._onTouchedBtnActAliveState },
                 { ui: this._btnActAliveStateHelp,               callback: this._onTouchedBtnActAliveStateHelp },
+                { ui: this._btnActIsSkipTurn,                   callback: this._onTouchedBtnActIsSkipTurn },
                 { ui: this._inputActFundDeltaValue,             callback: this._onFocusInInputActFundDeltaValue,            eventType: egret.FocusEvent.FOCUS_IN },
                 { ui: this._inputActFundDeltaValue,             callback: this._onFocusOutInputActFundDeltaValue,           eventType: egret.FocusEvent.FOCUS_OUT },
                 { ui: this._inputActFundMultiplierPct,          callback: this._onFocusInInputActFundMultiplierPct,         eventType: egret.FocusEvent.FOCUS_IN },
@@ -120,7 +130,7 @@ namespace TwnsWeActionModifyPanel24 {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -134,7 +144,7 @@ namespace TwnsWeActionModifyPanel24 {
         private _onTouchedBtnSwitchPlayerIndex(): void {
             const openData  = this._getOpenData();
             const action    = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerIndexPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChoosePlayerIndexPanel, {
                 currentPlayerIndexArray : action.conPlayerIndexArray ?? [],
                 maxPlayerIndex          : openData.war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : playerIndexArray => {
@@ -144,9 +154,34 @@ namespace TwnsWeActionModifyPanel24 {
             });
         }
 
+        private _onTouchedBtnConIsPlayerInTurn(): void {
+            const action            = this._getAction();
+            const conIsPlayerInTurn = action.conIsPlayerInTurn;
+            if (conIsPlayerInTurn == null) {
+                action.conIsPlayerInTurn = true;
+            } else if (conIsPlayerInTurn) {
+                action.conIsPlayerInTurn = false;
+            } else {
+                action.conIsPlayerInTurn = null;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onTouchedBtnConIsSkipTurn(): void {
+            const action        = this._getAction();
+            const conIsSkipTurn = action.conIsSkipTurn;
+            if (conIsSkipTurn == null) {
+                action.conIsSkipTurn = true;
+            } else if (conIsSkipTurn) {
+                action.conIsSkipTurn = false;
+            } else {
+                action.conIsSkipTurn = null;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+
         private _onTouchedBtnConCoUsingSkillType(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoSkillTypePanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseCoSkillTypePanel, {
                 currentSkillTypeArray   : action.conCoUsingSkillTypeArray ?? [],
                 callbackOnConfirm       : skillTypeArray => {
                     action.conCoUsingSkillTypeArray = skillTypeArray;
@@ -157,7 +192,7 @@ namespace TwnsWeActionModifyPanel24 {
 
         private _onTouchedBtnConAliveState(): void {
             const action = this._getAction();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerAliveStatePanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChoosePlayerAliveStatePanel, {
                 currentAliveStateArray  : action.conAliveStateArray ?? [],
                 callbackOnConfirm       : aliveStateArray => {
                     action.conAliveStateArray = aliveStateArray;
@@ -219,10 +254,23 @@ namespace TwnsWeActionModifyPanel24 {
         }
 
         private _onTouchedBtnActAliveStateHelp(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0784),
                 content : Lang.getText(LangTextType.A0272),
             });
+        }
+
+        private _onTouchedBtnActIsSkipTurn(): void {
+            const action        = this._getAction();
+            const actIsSkipTurn = action.actIsSkipTurn;
+            if (actIsSkipTurn == null) {
+                action.actIsSkipTurn = true;
+            } else if (actIsSkipTurn) {
+                action.actIsSkipTurn = false;
+            } else {
+                action.actIsSkipTurn = null;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onFocusInInputActFundDeltaValue(): void {
@@ -308,6 +356,8 @@ namespace TwnsWeActionModifyPanel24 {
             this._updateComponentsForLanguage();
 
             this._updateLabelPlayerIndex();
+            this._updateLabelConIsPlayerInTurn();
+            this._updateLabelConIsSkipTurn();
             this._updateLabelConCoUsingSkillType();
             this._updateConLabelAliveState();
             this._updateInputConFund();
@@ -316,6 +366,7 @@ namespace TwnsWeActionModifyPanel24 {
             this._updateLabelConEnergyPercentageComparator();
 
             this._updateLabelActAliveState();
+            this._updateLabelActIsSkipTurn();
             this._updateInputActFundDeltaValue();
             this._updateInputActFundMultiplierPercentage();
             this._updateInputActCoEnergyDeltaPct();
@@ -327,6 +378,8 @@ namespace TwnsWeActionModifyPanel24 {
             this._btnType.label                             = Lang.getText(LangTextType.B0516);
             this._btnBack.label                             = Lang.getText(LangTextType.B0146);
             this._btnSwitchPlayerIndex.label                = Lang.getText(LangTextType.B0521);
+            this._btnConIsPlayerInTurn.label                = Lang.getText(LangTextType.B0086);
+            this._btnConIsSkipTurn.label                    = Lang.getText(LangTextType.B0979);
             this._btnConCoUsingSkillType.label              = Lang.getText(LangTextType.B0785);
             this._btnConAliveState.label                    = Lang.getText(LangTextType.B0784);
             this._btnActAliveState.label                    = Lang.getText(LangTextType.B0784);
@@ -335,6 +388,7 @@ namespace TwnsWeActionModifyPanel24 {
             this._labelConEnergyPercentage.text             = Lang.getText(LangTextType.B0787);
             this._btnConEnergyPercentageComparator.label    = Lang.getText(LangTextType.B0774);
 
+            this._btnActIsSkipTurn.label                    = Lang.getText(LangTextType.B0979);
             this._labelActFund.text                         = Lang.getText(LangTextType.B0032);
             this._labelActFundDeltaValue.text               = Lang.getText(LangTextType.B0754);
             this._labelActFundMultiplierPct.text            = `${Lang.getText(LangTextType.B0755)}%`;
@@ -348,16 +402,33 @@ namespace TwnsWeActionModifyPanel24 {
         private _updateLabelDescAndLabelError(): void {
             const openData          = this._getOpenData();
             const action            = openData.action;
-            const errorTip          = WarEventHelper.getErrorTipForAction(openData.fullData, action, openData.war);
+            const war               = openData.war;
+            const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForAction(openData.fullData, action, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = WarEventHelper.getDescForAction(action) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForAction(action, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelPlayerIndex(): void {
             const playerIndexArray      = this._getAction().conPlayerIndexArray;
             this._labelPlayerIndex.text = playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`/`) : Lang.getText(LangTextType.B0766);
+        }
+
+        private _updateLabelConIsPlayerInTurn(): void {
+            const conIsPlayerInTurn = this._getAction().conIsPlayerInTurn;
+            const label             = this._labelConIsPlayerInTurn;
+            if (conIsPlayerInTurn == null) {
+                label.text = `--`;
+            } else {
+                label.text = Lang.getText(conIsPlayerInTurn ? LangTextType.B0012 : LangTextType.B0013);
+            }
+        }
+        private _updateLabelConIsSkipTurn(): void {
+            const conIsSkipTurn             = this._getAction().conIsSkipTurn;
+            this._labelConIsSkipTurn.text   = conIsSkipTurn == null
+                ? `--`
+                : Lang.getText(conIsSkipTurn ? LangTextType.B0012 : LangTextType.B0013);
         }
 
         private _updateLabelConCoUsingSkillType(): void {
@@ -394,6 +465,12 @@ namespace TwnsWeActionModifyPanel24 {
             const aliveState                = this._getAction().actAliveState;
             this._labelActAliveState.text   = aliveState == null ? `--` : (Lang.getPlayerAliveStateName(aliveState) ?? CommonConstants.ErrorTextForUndefined);
         }
+        private _updateLabelActIsSkipTurn(): void {
+            const actIsSkipTurn             = this._getAction().actIsSkipTurn;
+            this._labelActIsSkipTurn.text   = actIsSkipTurn == null
+                ? `--`
+                : Lang.getText(actIsSkipTurn ? LangTextType.B0012 : LangTextType.B0013);
+        }
 
         private _updateInputActFundDeltaValue(): void {
             const value                 = this._getAction().actFundDeltaValue;
@@ -415,7 +492,7 @@ namespace TwnsWeActionModifyPanel24 {
             this._inputActCoEnergyMultiplierPct.text    = `${value == null ? `` : value}`;
         }
 
-        private _getAction(): ProtoTypes.WarEvent.IWeaSetPlayerState {
+        private _getAction(): CommonProto.WarEvent.IWeaSetPlayerState {
             return Helpers.getExisted(this._getOpenData().action.WeaSetPlayerState);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {

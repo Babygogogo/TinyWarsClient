@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage id="_imgMask" anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
+                         source="uncompressedColorTransparent0001" scale9Grid="1,1,2,2" locked="true" />
+    <e:Group id="_group" width="780" height="410" horizontalCenter="0" verticalCenter="0">
+        <e:Group left="0" right="0" top="0" bottom="0" locked="true">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                 scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
+            <e:Group y="0" left="0" right="0">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                                     source="uncompressedColorGrey0001" y="0" left="0" right="0" />
+                <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+                <TwnsUiButton:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001"
+                                       verticalCenter="0" right="30" />
+            </e:Group>
+        </e:Group>
+        <e:Group x="20" y="60">
+            <e:Group width="512" height="32" y="0" x="0">
+                <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorBlack0000"
+                                     scale9Grid="1,1,2,2" />
+                <TwnsUiLabel:UiLabel id="_labelWarRuleTitle" text="War Password" textColor="0xFFFFFF" size="16"
+                                     maxTextWidth="140" x="10" verticalCenter="0" bold="true" />
+                <e:Group verticalCenter="0" height="24" x="190" width="300">
+                    <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" left="0" right="0"
+                                         top="0" bottom="0" />
+                    <TwnsUiLabel:UiLabel id="_labelWarRule" size="16" touchEnabled="false" text="Yes" x="10"
+                                         verticalCenter="1" textColor="0xFFFFFF" />
+                    <TwnsUiButton:UiButton id="_btnModifyWarRule" top="0" bottom="0" width="50" right="0"
+                                           skinName="Skins.Component.Button.ButtonModify001" />
+                </e:Group>
+            </e:Group>
+            <e:Group width="512" height="32" y="10" x="10">
+                <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorBlack0000"
+                                     scale9Grid="1,1,2,2" />
+                <TwnsUiLabel:UiLabel id="_labelSaveSlotTitle" text="War Password" textColor="0xFFFFFF" size="16"
+                                     maxTextWidth="140" x="10" verticalCenter="0" bold="true" />
+                <e:Group verticalCenter="0" height="24" x="190" width="300">
+                    <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" left="0" right="0"
+                                         top="0" bottom="0" />
+                    <TwnsUiLabel:UiLabel id="_labelSaveSlot" size="16" touchEnabled="false" text="Yes" x="10"
+                                         verticalCenter="1" textColor="0xFFFFFF" />
+                    <TwnsUiButton:UiButton id="_btnModifySaveSlot" top="0" bottom="0" width="50" right="0"
+                                           skinName="Skins.Component.Button.ButtonModify001" />
+                </e:Group>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout/>
+            </e:layout>
+        </e:Group>
+        <e:Group x="560" y="60">
+            <TwnsUiLabel:UiLabel id="_labelHighScoreTitle" text="War Password" textColor="0xFFFFFF" size="16"
+                                 maxTextWidth="140" x="0" bold="true" y="0" />
+            <TwnsUiLabel:UiLabel id="_labelHighScore" text="War Password" textColor="0xFFFFFF" size="16"
+                                 maxTextWidth="140" x="10" y="10" />
+            <e:layout>
+                <e:VerticalLayout/>
+            </e:layout>
+        </e:Group>
+        <TwnsUiScrollList:UiScrollList id="_listPlayer" width="740" height="240" y="150" x="20">
+            <e:List>
+                <e:itemRendererSkinName>
+                    <e:Skin width="140" height="240" currentState="up" states="up,down">
+                        <e:Group left="0" right="0" top="0" bottom="0">
+                            <TwnsUiImage:UiImage scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0"
+                                                 scale9Grid="1,1,2,2" source="uncompressedColorBlack0000" alpha="0.4" />
+                            <e:Group left="0" right="0" top="0" bottom="0" x="0" y="0" scaleX="1" scaleY="1">
+                                <e:Group id="_groupCo" horizontalCenter="0" y="10">
+                                    <e:Group horizontalCenter="0">
+                                        <TwnsUiImage:UiImage id="_imgSkin" scaleX="1" scaleY="1"
+                                                             source="uncompressedRectangle0002" scale9Grid="2,2,1,1"
+                                                             width="100" height="100" horizontalCenter="0"
+                                                             verticalCenter="0" />
+                                        <TwnsUiImage:UiImage id="_imgCoHead" width="98" height="98" horizontalCenter="0"
+                                                             verticalCenter="0" source="coHead0001" />
+                                    </e:Group>
+                                    <TwnsUiImage:UiImage id="_imgCoInfo" scaleX="1" scaleY="1" source="commonIcon0001"
+                                                         x="96" y="-6" />
+                                    <TwnsUiLabel:UiLabel id="_labelPlayerType" text="Player" size="22" stroke="2"
+                                                         textColor="0xfad804" bold="true" horizontalCenter="0"
+                                                         bottom="22" />
+                                    <e:Group width="120" height="24" y="88" horizontalCenter="0">
+                                        <TwnsUiImage:UiImage scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0"
+                                                             scale9Grid="1,1,2,2" x="0" y="228"
+                                                             source="uncompressedColorBlack0000" locked="true" />
+                                        <TwnsUiLabel:UiLabel id="_labelCo" text="zhaotiantong" size="16" scaleX="1"
+                                                             scaleY="1" verticalCenter="0" bold="true"
+                                                             horizontalCenter="0" />
+                                    </e:Group>
+                                </e:Group>
+                                <e:Group x="20" y="130">
+                                    <e:Group x="0" y="0">
+                                        <TwnsUiLabel:UiLabel id="_labelPlayerIndex" text="P1" size="14" x="0" y="0" />
+                                        <TwnsUiLabel:UiLabel id="_labelTeamIndex" text="A队" size="14" x="10" y="0" />
+                                        <e:layout>
+                                            <e:HorizontalLayout gap="20" />
+                                        </e:layout>
+                                    </e:Group>
+                                    <TwnsUiImage:UiImage width="100" height="1" y="20"
+                                                         source="uncompressedColorWhite0000" x="0" smoothing="false" />
+                                    <TwnsUiButton:UiButton id="_btnChangeCo" label="Controller" y="30"
+                                                           skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                           width="100" x="0" />
+                                    <TwnsUiButton:UiButton id="_btnChangeSkinId" label="Color" y="70"
+                                                           skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                           width="100" x="0" />
+                                </e:Group>
+                            </e:Group>
+                        </e:Group>
+                    </e:Skin>
+                </e:itemRendererSkinName>
+                <e:layout>
+                    <e:HorizontalLayout gap="10" verticalAlign="contentJustify" />
+                </e:layout>
+            </e:List>
+        </TwnsUiScrollList:UiScrollList>
+    </e:Group>
+</e:Skin>

@@ -3,7 +3,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -15,12 +15,12 @@
 // import TwnsUserPanel            from "../../user/view/UserPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserOnlineUsersPanel {
-    import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+namespace Twns.User {
+    import LangTextType = Twns.Lang.LangTextType;
+    import NotifyType   = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class UserOnlineUsersPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserOnlineUsersPanel = void;
+    export class UserOnlineUsersPanel extends TwnsUiPanel.UiPanel<OpenDataForUserOnlineUsersPanel> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _group!                : eui.Group;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
@@ -34,7 +34,7 @@ namespace TwnsUserOnlineUsersPanel {
         private readonly _listUser!             : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
         private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
 
-        private _msg        : ProtoTypes.NetMessage.MsgUserGetOnlineUserIdArray.IS | null = null;
+        private _msg        : CommonProto.NetMessage.MsgUserGetOnlineUserIdArray.IS | null = null;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -49,7 +49,7 @@ namespace TwnsUserOnlineUsersPanel {
 
             this._listUser.setItemRenderer(UserRenderer);
 
-            UserProxy.reqUserGetOnlineUserIdArray();
+            Twns.User.UserProxy.reqUserGetOnlineUserIdArray();
 
             this._updateView();
             this._updateComponentsForLanguage();
@@ -97,7 +97,7 @@ namespace TwnsUserOnlineUsersPanel {
                     dataArray.push({
                         index   : 0,
                         userId,
-                        nickname: (await UserModel.getUserBriefInfo(userId))?.nickname,
+                        nickname: (await Twns.User.UserModel.getUserBriefInfo(userId))?.nickname,
                     });
                 })());
             }
@@ -141,39 +141,39 @@ namespace TwnsUserOnlineUsersPanel {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
     type DataForUserRenderer = {
         index       : number;
-        userId      : Types.Undefinable<number>;
-        nickname    : Types.Undefinable<string>;
+        userId      : Twns.Types.Undefinable<number>;
+        nickname    : Twns.Types.Undefinable<string>;
     };
     class UserRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUserRenderer> {
         private readonly _imgBg!        : TwnsUiImage.UiImage;
@@ -201,7 +201,7 @@ namespace TwnsUserOnlineUsersPanel {
             if (data) {
                 const userId = data.userId;
                 if (userId != null) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.UserPanel, { userId });
                 }
             }
         }

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*"
+        xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
+        xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group id="_group" width="460" height="400" horizontalCenter="0" verticalCenter="0">
+        <e:Group left="0" right="0" top="0" bottom="0" locked="true">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                 scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
+            <e:Group y="0" left="0" right="0">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                                     source="uncompressedColorGrey0001" y="0" left="0" right="0" />
+                <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+            </e:Group>
+        </e:Group>
+        <e:Group y="54" left="30" right="30">
+            <TwnsUiLabel:UiLabel id="_labelDiscordId" text="New ID" textColor="0xFFFFFF" size="20" verticalCenter="1"
+                                 textAlign="center" />
+            <TwnsUiTextInput:UiTextInput id="_inputDiscordId" anchorOffsetX="0" anchorOffsetY="0" maxChars="18" verticalCenter="0"
+                                         skinName="Skins.Component.TextInput.TextInput003" right="0" left="80"></TwnsUiTextInput:UiTextInput>
+        </e:Group>
+        <e:Group y="100" left="30" width="400">
+            <e:Group id="_groupTurn" y="0" x="0" width="400">
+                <e:Group x="0" y="0" scaleX="0.5" scaleY="0.5">
+                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" x="0" y="0" source="commonCheckbox0000" />
+                    <TwnsUiImage:UiImage id="_imgTurn" anchorOffsetX="0" anchorOffsetY="0" x="0" y="0"
+                                         source="commonCheckbox0001" visible="true" />
+                </e:Group>
+                <TwnsUiLabel:UiLabel id="_labelTurn" text="记住密码" x="20" size="16" textColor="0xFFFFFF" y="1" />
+            </e:Group>
+            <e:Group id="_groupRankPhase" y="10" x="0" width="400">
+                <e:Group x="0" y="0" scaleX="0.5" scaleY="0.5">
+                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" x="0" y="0" source="commonCheckbox0000" />
+                    <TwnsUiImage:UiImage id="_imgRankPhase" anchorOffsetX="0" anchorOffsetY="0" x="0" y="0"
+                                         source="commonCheckbox0001" visible="true" />
+                </e:Group>
+                <TwnsUiLabel:UiLabel id="_labelRankPhase" text="记住密码" x="20" size="16" textColor="0xFFFFFF" y="1" />
+            </e:Group>
+            <e:Group id="_groupRoom" y="20" x="0" width="400">
+                <e:Group x="0" y="0" scaleX="0.5" scaleY="0.5">
+                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" x="0" y="0" source="commonCheckbox0000" />
+                    <TwnsUiImage:UiImage id="_imgRoom" anchorOffsetX="0" anchorOffsetY="0" x="0" y="0"
+                                         source="commonCheckbox0001" visible="true" />
+                </e:Group>
+                <TwnsUiLabel:UiLabel id="_labelRoom" text="记住密码" x="20" size="16" textColor="0xFFFFFF" y="1" />
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout/>
+            </e:layout>
+        </e:Group>
+        <e:Group x="30" bottom="20">
+            <e:Group y="14" width="400" x="0">
+                <e:Group scaleX="1" scaleY="1" horizontalCenter="0">
+                    <TwnsUiButton:UiButton id="_btnConfirm" label="确认" y="0" width="100"
+                                           skinName="Skins.Component.Button.ButtonYellow001" x="0" />
+                    <TwnsUiButton:UiButton id="_btnClose" label="确认" y="10" width="100" x="0"
+                                           skinName="Skins.Component.Button.ButtonGrey001" />
+                    <e:layout>
+                        <e:HorizontalLayout gap="60" />
+                    </e:layout>
+                </e:Group>
+            </e:Group>
+            <e:Group x="0" y="145">
+                <TwnsUiLabel:UiLabel id="_labelNote" text="输入正确的Discord ID，并加入以下游戏频道（可点击链接复制）即可实时收到游戏相关消息，如回合轮转等。"
+                                     textColor="0xFFFFFF" size="12" lineSpacing="1" textAlign="left" y="0" width="400"
+                                     x="0" />
+                <TwnsUiLabel:UiLabel id="_labelUrl" text="https://discord.com/" size="20" lineSpacing="1"
+                                     textAlign="left" textColor="0x34ACE6" x="0" y="130" />
+                <e:layout>
+                    <e:VerticalLayout gap="10" />
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout gap="10" />
+            </e:layout>
+        </e:Group>
+    </e:Group>
+</e:Skin>

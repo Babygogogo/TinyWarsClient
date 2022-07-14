@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -20,12 +20,12 @@
 // import TwnsChangeLogModifyPanel from "./ChangeLogModifyPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBroadcastMessageListPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.Broadcast {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class BroadcastMessageListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForBroadcastMessageListPanel = void;
+    export class BroadcastMessageListPanel extends TwnsUiPanel.UiPanel<OpenDataForBroadcastMessageListPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
@@ -52,7 +52,7 @@ namespace TwnsBroadcastMessageListPanel {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
 
-            BroadcastProxy.reqBroadcastGetAllMessageIdArray();
+            Twns.Broadcast.BroadcastProxy.reqBroadcastGetAllMessageIdArray();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -66,7 +66,7 @@ namespace TwnsBroadcastMessageListPanel {
         }
 
         private _onTouchedBtnAddMessage(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.BroadcastAddMessagePanel, void 0);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.BroadcastAddMessagePanel, void 0);
         }
 
         private _updateView(): void {
@@ -83,7 +83,7 @@ namespace TwnsBroadcastMessageListPanel {
         }
         private _updateListMessageAndLabelNoMessage(): void {
             const dataArray: DataForMessageRenderer[] = [];
-            for (const messageId of BroadcastModel.getAllMessageIdArray()) {
+            for (const messageId of Twns.Broadcast.BroadcastModel.getAllMessageIdArray()) {
                 dataArray.push({
                     messageId,
                 });
@@ -94,36 +94,36 @@ namespace TwnsBroadcastMessageListPanel {
         }
         private _updateBtnAddMessage(): void {
             const btn   = this._btnAddMessage;
-            btn.visible = UserModel.getIsSelfAdmin();
+            btn.visible = Twns.User.UserModel.getIsSelfAdmin();
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -142,7 +142,7 @@ namespace TwnsBroadcastMessageListPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
 
             this._updateComponentsForLanguage();
         }
@@ -150,26 +150,26 @@ namespace TwnsBroadcastMessageListPanel {
         protected async _onDataChanged(): Promise<void> {
             const data          = this._getData();
             const messageId     = data.messageId;
-            const messageData   = await BroadcastModel.getMessageData(messageId);
+            const messageData   = await Twns.Broadcast.BroadcastModel.getMessageData(messageId);
             if (messageData == null) {
                 return;
             }
 
-            this._labelIndex.text   = `#${messageId}    ${Helpers.getTimestampShortText(Helpers.getExisted(messageData.startTime))} ~ ${Helpers.getTimestampShortText(Helpers.getExisted(messageData.endTime))}`;
+            this._labelIndex.text   = `#${messageId}    ${Twns.Helpers.getTimestampShortText(Twns.Helpers.getExisted(messageData.startTime))} ~ ${Twns.Helpers.getTimestampShortText(Twns.Helpers.getExisted(messageData.endTime))}`;
 
             const textArray         = messageData.textList;
             this._labelContent.text = [
-                `${Lang.getText(LangTextType.B0455)}: ${Lang.getLanguageText({ textArray, languageType: Types.LanguageType.Chinese, useAlternate: false }) ?? `----`}`,
-                `${Lang.getText(LangTextType.B0456)}: ${Lang.getLanguageText({ textArray, languageType: Types.LanguageType.English, useAlternate: false }) ?? `----`}`,
+                `${Lang.getText(LangTextType.B0455)}: ${Lang.getLanguageText({ textArray, languageType: Twns.Types.LanguageType.Chinese, useAlternate: false }) ?? `----`}`,
+                `${Lang.getText(LangTextType.B0456)}: ${Lang.getLanguageText({ textArray, languageType: Twns.Types.LanguageType.English, useAlternate: false }) ?? `----`}`,
             ].join(`\n\n`);
         }
 
         private _onTouchedBtnDelete(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0220),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
-                    BroadcastProxy.reqBroadcastDeleteMessage(this._getData().messageId);
+                    Twns.Broadcast.BroadcastProxy.reqBroadcastDeleteMessage(this._getData().messageId);
                 },
             });
         }

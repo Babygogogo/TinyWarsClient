@@ -7,7 +7,7 @@
 // import Types                        from "../../tools/helpers/Types";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -22,20 +22,14 @@
 // import TwnsScrCreateSettingsPanel   from "./ScrCreateSettingsPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsScrCreateMapListPanel {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import IDataForMapTag           = ProtoTypes.Map.IDataForMapTag;
+namespace Twns.SingleCustomRoom {
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
 
-    type FiltersForMapList = {
-        mapName?        : string | null;
-        mapDesigner?    : string | null;
-        playersCount?   : number | null;
-        minRating?      : number | null;
-        mapTag?         : IDataForMapTag | null;
+    export type OpenDataForScrCreateMapListPanel = {
+        mapFilter   : Common.MapFilter | null;
     };
-    export type OpenData = FiltersForMapList | null;
-    export class ScrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class ScrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForScrCreateMapListPanel> {
         private readonly _groupMapView!         : eui.Group;
         private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
@@ -56,7 +50,6 @@ namespace TwnsScrCreateMapListPanel {
 
         private readonly _uiMapInfo!            : TwnsUiMapInfo.UiMapInfo;
 
-        private _mapFilters         : FiltersForMapList = {};
         private _dataForList        : DataForMapNameRenderer[] = [];
         private _selectedMapId      : number | null = null;
 
@@ -74,7 +67,7 @@ namespace TwnsScrCreateMapListPanel {
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this.setMapFilters(this._getOpenData() || this._mapFilters);
+            this._updateView();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -100,9 +93,50 @@ namespace TwnsScrCreateMapListPanel {
             return this._selectedMapId;
         }
 
-        public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
-            this._mapFilters            = mapFilters;
-            const dataArray             = await this._createDataForListMap();
+        ////////////////////////////////////////////////////////////////////////////////
+        // Callbacks.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _onTouchTapBtnSearch(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonMapFilterPanel, {
+                mapFilter           : this._getOpenData().mapFilter,
+                callbackOnConfirm   : mapFilter => {
+                    PanelHelpers.open(PanelHelpers.PanelDict.ScrCreateMapListPanel, {
+                        mapFilter,
+                    });
+                },
+                callbackOnReset     : () => {
+                    PanelHelpers.open(PanelHelpers.PanelDict.ScrCreateMapListPanel, {
+                        mapFilter   : null,
+                    });
+                }
+            });
+        }
+
+        private _onTouchTapBtnBack(): void {
+            this.close();
+            PanelHelpers.open(PanelHelpers.PanelDict.SpmMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
+        }
+
+        private async _onTouchedBtnNextStep(): Promise<void> {
+            const selectedMapId = this.getSelectedMapId();
+            if (selectedMapId != null) {
+                this.close();
+                await SingleCustomRoom.ScrCreateModel.resetDataByMapId(selectedMapId);
+                PanelHelpers.open(PanelHelpers.PanelDict.ScrCreateSettingsPanel, void 0);
+            }
+        }
+
+        private _onNotifyLanguageChanged(): void {
+            this._updateComponentsForLanguage();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Private functions.
+        ////////////////////////////////////////////////////////////////////////////////
+        private async _updateView(): Promise<void> {
+            const dataArray             = await this._createDataArrayForListMap();
             this._dataForList           = dataArray;
 
             const length                = dataArray.length;
@@ -117,36 +151,6 @@ namespace TwnsScrCreateMapListPanel {
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
-        // Callbacks.
-        ////////////////////////////////////////////////////////////////////////////////
-        private _onTouchTapBtnSearch(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ScrCreateSearchMapPanel, void 0);
-        }
-
-        private _onTouchTapBtnBack(): void {
-            this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmMainMenuPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
-        }
-
-        private async _onTouchedBtnNextStep(): Promise<void> {
-            const selectedMapId = this.getSelectedMapId();
-            if (selectedMapId != null) {
-                this.close();
-                await ScrCreateModel.resetDataByMapId(selectedMapId);
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.ScrCreateSettingsPanel, void 0);
-            }
-        }
-
-        private _onNotifyLanguageChanged(): void {
-            this._updateComponentsForLanguage();
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////
-        // Private functions.
-        ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
             this._labelCustomMode.text          = Lang.getText(LangTextType.B0603);
             this._labelSinglePlayer.text        = Lang.getText(LangTextType.B0138);
@@ -158,54 +162,75 @@ namespace TwnsScrCreateMapListPanel {
             this._btnNextStep.label             = Lang.getText(LangTextType.B0566);
         }
 
-        private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
-            const data                          : DataForMapNameRenderer[] = [];
-            const mapFilters                    = this._mapFilters;
-            const { playersCount, minRating }   = mapFilters;
-            const filterTag                     = mapFilters.mapTag || {};
-            let { mapName, mapDesigner }        = mapFilters;
-            (mapName)       && (mapName     = mapName.toLowerCase());
-            (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
+        private async _createDataArrayForListMap(): Promise<DataForMapNameRenderer[]> {
+            const mapFilter             = this._getOpenData().mapFilter;
+            const filterMapTagIdFlags   = mapFilter?.mapTagIdFlags;
+            const filterMapName         = mapFilter?.mapName?.trim().toLowerCase();
+            const filterMapDesigner     = mapFilter?.mapDesigner?.trim().toLowerCase();
+            const filterPlayersCount    = mapFilter?.playersCount;
+            const filterMinRating       = mapFilter?.minRating;
+            const filterPlayedTimes     = mapFilter?.playedTimes;
+            const dataArray             : DataForMapNameRenderer[] = [];
 
             const promiseArray: Promise<void>[] = [];
-            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+            for (const mapId of WarMap.WarMapModel.getEnabledMapIdArray()) {
                 promiseArray.push((async () => {
-                    const mapBriefData = await WarMapModel.getBriefData(mapId);
-                    if (mapBriefData == null) {
+                    const mapBriefData = await WarMap.WarMapModel.getBriefData(mapId);
+                    if ((mapBriefData == null) || (!mapBriefData.ruleAvailability?.canScw)) {
+                        return;
+                    }
+                    if (!mapBriefData.mapExtraData?.isEnabled) {
+                        return;
+                    }
+                    if ((filterMapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(filterMapDesigner))) {
+                        return;
+                    }
+                    if ((filterPlayersCount) && (mapBriefData.playersCountUnneutral !== filterPlayersCount)) {
+                        return;
+                    }
+                    if ((filterPlayedTimes != null) && (await WarMap.WarMapModel.getTotalPlayedTimes(mapId) < filterPlayedTimes)) {
                         return;
                     }
 
-                    const mapExtraData  = Helpers.getExisted(mapBriefData.mapExtraData);
-                    const mapTag        = mapBriefData.mapTag || {};
-                    const realMapName   = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                    const rating        = await WarMapModel.getAverageRating(mapId);
-                    if ((!mapBriefData.ruleAvailability?.canScw)                                                ||
-                        (!mapExtraData.isEnabled)                                                               ||
-                        ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                         ||
-                        ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))    ||
-                        ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))               ||
-                        ((minRating != null) && ((rating == null) || (rating < minRating)))                     ||
-                        ((filterTag.fog != null) && ((!!mapTag.fog) !== filterTag.fog))
+                    const realMapName = Helpers.getExisted(await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId));
+                    if ((filterMapName) && (realMapName.toLowerCase().indexOf(filterMapName) < 0)) {
+                        return;
+                    }
+
+                    const rating = await WarMap.WarMapModel.getAverageRating(mapId);
+                    if ((filterMinRating != null)                       &&
+                        ((rating == null) || (rating < filterMinRating))
                     ) {
                         return;
-                    } else {
-                        data.push({
-                            mapId,
-                            mapName : realMapName,
-                            panel   : this,
-                        });
                     }
+
+                    const mapTagIdFlags = mapBriefData.mapTagIdFlags;
+                    if ((filterMapTagIdFlags)                                                                       &&
+                        ((mapTagIdFlags == null) || ((filterMapTagIdFlags & mapTagIdFlags) !== filterMapTagIdFlags))
+                    ) {
+                        return;
+                    }
+
+                    dataArray.push({
+                        mapId,
+                        mapName : realMapName,
+                        panel   : this,
+                    });
                 })());
             }
 
             await Promise.all(promiseArray);
-            return data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
+            return dataArray.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 
         private async _showMap(mapId: number): Promise<void> {
-            this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)));
+            this._zoomMap.showMapByMapData(
+                Helpers.getExisted(await WarMap.WarMapModel.getRawData(mapId)),
+                await Config.ConfigManager.getLatestGameConfig()
+            );
             this._uiMapInfo.setData({
-                mapInfo: {
+                hasFog  : null,
+                mapInfo : {
                     mapId,
                 },
             });
@@ -320,7 +345,7 @@ namespace TwnsScrCreateMapListPanel {
 
         protected _onDataChanged(): void {
             const data          = this._getData();
-            WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v || CommonConstants.ErrorTextForUndefined);
+            WarMap.WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v || CommonConstants.ErrorTextForUndefined);
         }
 
         private _onTouchTapBtnChoose(): void {

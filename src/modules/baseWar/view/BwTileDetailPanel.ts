@@ -9,7 +9,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -24,79 +24,48 @@
 // import TwnsBwTileView           from "./BwTileView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwTileDetailPanel {
-    import BwTile           = TwnsBwTile.BwTile;
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import UnitType         = Types.UnitType;
+namespace Twns.BaseWar {
+    import BwTile           = BaseWar.BwTile;
+    import LangTextType     = Lang.LangTextType;
+    import NotifyType       = Notify.NotifyType;
+    import GameConfig       = Config.GameConfig;
+    import TileInfoType     = Types.TileInfoType;
 
-    // eslint-disable-next-line no-shadow
-    enum TileInfoType {
-        DefenseBonus,
-        Income,
-        Vision,
-        HideUnitCategory,
-        IsDefeatedOnCapture,
-        ProduceUnitCategory,
-        GlobalBonus,
-        RepairUnitCategory,
-        Hp,
-        CapturePoint,
-        BuildPoint,
-        IsHighlighted,
-
-        CrystalRadius,
-        CrystalPriority,
-        CrystalCanAffectSelf,
-        CrystalCanAffectAlly,
-        CrystalCanAffectEnemy,
-        CrystalDeltaFund,
-        CrystalDeltaEnergyPercentage,
-        CrystalDeltaHp,
-        CrystalDeltaFuelPercentage,
-        CrystalDeltaPrimaryAmmoPercentage,
-
-        CannonRangeForLeft,
-        CannonRangeForRight,
-        CannonRangeForUp,
-        CannonRangeForDown,
-        CannonPriority,
-        CannonMaxTargetCount,
-        CannonCanAffectSelf,
-        CannonCanAffectAlly,
-        CannonCanAffectEnemy,
-        CannonDeltaHp,
-        CannonDeltaFuelPercentage,
-        CannonDeltaPrimaryAmmoPercentage,
-
-        LaserTurretRangeForLeft,
-        LaserTurretRangeForRight,
-        LaserTurretRangeForUp,
-        LaserTurretRangeForDown,
-        LaserTurretPriority,
-        LaserTurretCanAffectSelf,
-        LaserTurretCanAffectAlly,
-        LaserTurretCanAffectEnemy,
-        LaserTurretDeltaHp,
-        LaserTurretDeltaFuelPercentage,
-        LaserTurretDeltaPrimaryAmmoPercentage,
-    }
-
-    export type OpenData = {
-        tile    : BwTile;
+    export type OpenDataForBwTileDetailPanel = {
+        tile                    : BwTile;
+        callbackForMarkTile     : (() => void) | null;
+        callbackForUnmarkTile   : (() => void) | null;
+        callbackForAddUnit      : (() => void) | null;
     };
-    export class BwTileDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwTileDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForBwTileDetailPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
         private readonly _labelName1!       : TwnsUiLabel.UiLabel;
         private readonly _conTileView!      : eui.Group;
         private readonly _listInfo!         : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+
+        private readonly _groupMoveCost!    : eui.Group;
         private readonly _labelMoveCost!    : TwnsUiLabel.UiLabel;
-        private readonly _listMoveCost!     : TwnsUiScrollList.UiScrollList<DataForMoveRangeRenderer>;
+        private readonly _listMoveCost!     : TwnsUiScrollList.UiScrollList<DataForMoveCostRenderer>;
+
+        private readonly _groupDamageChart! : eui.Group;
+        private readonly _labelDamageChart! : TwnsUiLabel.UiLabel;
+        private readonly _labelMain1!       : TwnsUiLabel.UiLabel;
+        private readonly _labelSub1!        : TwnsUiLabel.UiLabel;
+        private readonly _labelMain2!       : TwnsUiLabel.UiLabel;
+        private readonly _labelSub2!        : TwnsUiLabel.UiLabel;
+        private readonly _listDamageChart!  : TwnsUiScrollList.UiScrollList<DataForDamageRenderer>;
+
+        private readonly _groupButtons!     : eui.Group;
+        private readonly _btnMark!          : TwnsUiButton.UiButton;
+        private readonly _btnUnmark!        : TwnsUiButton.UiButton;
+        private readonly _btnAddUnit!       : TwnsUiButton.UiButton;
+
+        private readonly _btnTilesInfo!     : TwnsUiButton.UiButton;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
 
-        private readonly _tileView          = new TwnsBwTileView.BwTileView();
+        private readonly _tileView          = new BaseWar.BwTileView();
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -106,6 +75,10 @@ namespace TwnsBwTileDetailPanel {
                 { type: NotifyType.BwTileIsHighlightedChanged,      callback: this._onNotifyTileIsHighlightedChanged },
             ]);
             this._setUiListenerArray([
+                { ui: this._btnMark,                                callback: this._onTouchedBtnMark },
+                { ui: this._btnUnmark,                              callback: this._onTouchedBtnUnmark },
+                { ui: this._btnAddUnit,                             callback: this._onTouchedBtnAddUnit },
+                { ui: this._btnTilesInfo,                           callback: this._onTouchedBtnTilesInfo },
                 { ui: this._btnClose,                               callback: this.close },
             ]);
             this._setIsTouchMaskEnabled();
@@ -113,6 +86,7 @@ namespace TwnsBwTileDetailPanel {
 
             this._listInfo.setItemRenderer(InfoRenderer);
             this._listMoveCost.setItemRenderer(MoveCostRenderer);
+            this._listDamageChart.setItemRenderer(DamageRenderer);
 
             const tileView      = this._tileView;
             const conTileView   = this._conTileView;
@@ -144,33 +118,76 @@ namespace TwnsBwTileDetailPanel {
             this._updateTileView();
         }
 
+        private _onTouchedBtnMark(): void {
+            Helpers.getExisted(this._getOpenData().callbackForMarkTile)();
+            this.close();
+        }
+        private _onTouchedBtnUnmark(): void {
+            Helpers.getExisted(this._getOpenData().callbackForUnmarkTile)();
+            this.close();
+        }
+        private _onTouchedBtnAddUnit(): void {
+            Helpers.getExisted(this._getOpenData().callbackForAddUnit)();
+            this.close();
+        }
+        private _onTouchedBtnTilesInfo(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonTileChartPanel, {
+                gameConfig  : this._getOpenData().tile.getGameConfig(),
+            });
+            this.close();
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateComponentsForLanguage();
+
+            this._updateGroupButtons();
             this._updateLabelName();
             this._updateTileView();
             this._updateListInfo();
+            this._updateGroupMoveCost();
+            this._updateGroupDamageChart();
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMoveCost.text    = Lang.getText(LangTextType.B0351);
-            this._btnClose.label        = Lang.getText(LangTextType.B0204);
-            this._updateListMoveCost();
+            this._labelMoveCost.text        = Lang.getText(LangTextType.B0351);
+            this._labelDamageChart.text     = Lang.getText(LangTextType.B0334);
+            this._labelMain1.text           = Lang.getText(LangTextType.B0692);
+            this._labelSub1.text            = Lang.getText(LangTextType.B0693);
+            this._labelMain2.text           = Lang.getText(LangTextType.B0692);
+            this._labelSub2.text            = Lang.getText(LangTextType.B0693);
+            this._btnMark.label             = Lang.getText(LangTextType.B0914);
+            this._btnUnmark.label           = Lang.getText(LangTextType.B0915);
+            this._btnAddUnit.label          = Lang.getText(LangTextType.B0535);
+            this._btnTilesInfo.label        = Lang.getText(LangTextType.B0910);
+            this._btnClose.label            = Lang.getText(LangTextType.B0204);
+        }
+
+        private _updateGroupButtons(): void {
+            const openData  = this._getOpenData();
+            const group     = this._groupButtons;
+            group.removeChildren();
+            (openData.callbackForMarkTile) && (group.addChild(this._btnMark));
+            (openData.callbackForUnmarkTile) && (group.addChild(this._btnUnmark));
+            (openData.callbackForAddUnit) && (group.addChild(this._btnAddUnit));
         }
 
         private _updateLabelName(): void {
             const data              = this._getOpenData();
             const tile              = data.tile;
-            this._labelName.text    = Lang.getTileName(tile.getType()) ?? CommonConstants.ErrorTextForUndefined;
-            this._labelName1.text   = Lang.getTileName(tile.getType(), Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
+            const tileType          = tile.getType();
+            const gameConfig        = tile.getGameConfig();
+            this._labelName.text    = Lang.getTileName(tileType, gameConfig) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName1.text   = Lang.getTileName(tileType, gameConfig, Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateTileView(): void {
             const tile      = this._getOpenData().tile;
             const tileView  = this._tileView;
             tileView.setData({
+                gameConfig  : tile.getGameConfig(),
                 tileData    : tile.serialize(),
                 hasFog      : tile.getHasFog(),
                 skinId      : tile.getSkinId(),
@@ -238,23 +255,39 @@ namespace TwnsBwTileDetailPanel {
             this._listInfo.bindData(dataArray);
         }
 
-        private _updateListMoveCost(): void {
-            this._listMoveCost.bindData(this._createDataForListMoveCost());
+        private _updateGroupMoveCost(): void {
+            const group = this._groupMoveCost;
+            if (this._getOpenData().tile.getMaxHp() != null) {
+                group.visible = false;
+            } else {
+                group.visible = true;
+                this._listMoveCost.bindData(this._createDataForListMoveCost());
+            }
         }
 
-        private _createDataForListMoveCost(): DataForMoveRangeRenderer[] {
-            const openData          = this._getOpenData();
-            const tile              = openData.tile;
-            const configVersion     = tile.getConfigVersion();
-            const tileCfg           = ConfigManager.getTileTemplateCfgByType(configVersion, tile.getType());
-            const playerIndex       = tile.getPlayerIndex() || 1;
+        private _updateGroupDamageChart(): void {
+            const group = this._groupDamageChart;
+            if (this._getOpenData().tile.getMaxHp() == null) {
+                group.visible = false;
+            } else {
+                group.visible = true;
+                this._listDamageChart.bindData(this._createDataForListDamageChart());
+            }
+        }
 
-            const dataArray : DataForMoveRangeRenderer[] = [];
+        private _createDataForListMoveCost(): DataForMoveCostRenderer[] {
+            const openData      = this._getOpenData();
+            const tile          = openData.tile;
+            const gameConfig    = tile.getGameConfig();
+            const tileCfg       = Helpers.getExisted(gameConfig.getTileTemplateCfg(tile.getType()));
+            const playerIndex   = tile.getPlayerIndex() || 1;
+
+            const dataArray : DataForMoveCostRenderer[] = [];
             let index       = 0;
-            for (const unitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
+            for (const unitType of gameConfig.getAllUnitTypeArray()) {
                 dataArray.push({
                     index,
-                    configVersion,
+                    gameConfig,
                     unitType,
                     tileCfg,
                     playerIndex,
@@ -263,6 +296,28 @@ namespace TwnsBwTileDetailPanel {
             }
 
             return dataArray.sort(sorterForDataForList);
+        }
+
+        private _createDataForListDamageChart(): DataForDamageRenderer[] {
+            const tile              = this._getOpenData().tile;
+            const gameConfig        = tile.getGameConfig();
+            const targetTileType    = tile.getType();
+            const playerIndex       = CommonConstants.PlayerIndex.First;
+
+            const dataArray : DataForDamageRenderer[] = [];
+            let index       = 0;
+            for (const attackerUnitType of gameConfig.getAllUnitTypeArray()) {
+                dataArray.push({
+                    gameConfig,
+                    index,
+                    targetTileType,
+                    attackerUnitType,
+                    playerIndex,
+                });
+                ++index;
+            }
+
+            return dataArray;
         }
 
         protected async _showOpenAnimation(): Promise<void> {
@@ -295,7 +350,7 @@ namespace TwnsBwTileDetailPanel {
         }
     }
 
-    function sorterForDataForList(a: DataForMoveRangeRenderer, b: DataForMoveRangeRenderer): number {
+    function sorterForDataForList(a: DataForMoveCostRenderer, b: DataForMoveCostRenderer): number {
         return a.unitType - b.unitType;
     }
 
@@ -303,7 +358,7 @@ namespace TwnsBwTileDetailPanel {
         index       : number;
         infoType    : TileInfoType;
         tile        : BwTile;
-        war         : TwnsBwWar.BwWar;
+        war         : BaseWar.BwWar;
     };
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
         private readonly _imgBg!            : TwnsUiImage.UiImage;
@@ -438,12 +493,11 @@ namespace TwnsBwTileDetailPanel {
             }
         }
         private _updateViewAsDefenseBonus(): void {
-            const data                  = this._getData();
-            const tile                  = data.tile;
+            const tile                  = this._getData().tile;
             this._labelTitle.text       = Lang.getText(LangTextType.B0352);
             this._labelValue.text       = `${tile.getDefenseAmount()}`;
             this._groupExtra.visible    = true;
-            this._labelExtraInfo.text   = Lang.getUnitCategoryName(tile.getDefenseUnitCategory()) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelExtraInfo.text   = Lang.getUnitCategoryName(tile.getDefenseUnitCategory(), tile.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined;
             this._imgModify.visible     = false;
         }
         private _updateViewAsIncome(): void {
@@ -470,10 +524,10 @@ namespace TwnsBwTileDetailPanel {
             }
         }
         private _updateViewAsHideUnitCategory(): void {
-            const data                  = this._getData();
-            const unitCategory          = data.tile.getCfgHideUnitCategory();
+            const tile                  = this._getData().tile;
+            const unitCategory          = tile.getCfgHideUnitCategory();
             this._labelTitle.text       = Lang.getText(LangTextType.B0356);
-            this._labelValue.text       = unitCategory == null ? `--` : (Lang.getUnitCategoryName(unitCategory) ?? CommonConstants.ErrorTextForUndefined);
+            this._labelValue.text       = unitCategory == null ? `--` : (Lang.getUnitCategoryName(unitCategory, tile.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined);
             this._groupExtra.visible    = false;
             this._imgModify.visible     = false;
         }
@@ -485,10 +539,10 @@ namespace TwnsBwTileDetailPanel {
             this._imgModify.visible     = false;
         }
         private _updateViewAsProduceUnitCategory(): void {
-            const data                  = this._getData();
-            const unitCategory          = data.tile.getCfgProduceUnitCategory();
+            const tile                  = this._getData().tile;
+            const unitCategory          = tile.getCfgProduceUnitCategory();
             this._labelTitle.text       = Lang.getText(LangTextType.B0358);
-            this._labelValue.text       = unitCategory == null ? `--` : (Lang.getUnitCategoryName(unitCategory) ?? CommonConstants.ErrorTextForUndefined);
+            this._labelValue.text       = unitCategory == null ? `--` : (Lang.getUnitCategoryName(unitCategory, tile.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined);
             this._groupExtra.visible    = false;
             this._imgModify.visible     = false;
         }
@@ -507,7 +561,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0360);
             this._labelValue.text       = `${tile.getCfgNormalizedRepairHp()}`;
             this._groupExtra.visible    = true;
-            this._labelExtraInfo.text   = unitCategory == null ? `--` : (Lang.getUnitCategoryName(unitCategory) ?? CommonConstants.ErrorTextForUndefined);
+            this._labelExtraInfo.text   = unitCategory == null ? `--` : (Lang.getUnitCategoryName(unitCategory, tile.getGameConfig()) ?? CommonConstants.ErrorTextForUndefined);
             this._imgModify.visible     = false;
         }
         private _updateViewAsHp(): void {
@@ -516,7 +570,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0339);
             this._labelValue.text       = `${currentHp} / ${tile.getMaxHp()}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (currentHp != null);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (currentHp != null);
         }
         private _updateViewAsCapturePoint(): void {
             const { tile, war }         = this._getData();
@@ -524,7 +578,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0361);
             this._labelValue.text       = `${currentValue} / ${tile.getMaxCapturePoint()}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (currentValue != null);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (currentValue != null);
         }
         private _updateViewAsBuildPoint(): void {
             const { tile, war }         = this._getData();
@@ -532,14 +586,14 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0362);
             this._labelValue.text       = `${currentValue} / ${tile.getMaxBuildPoint()}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (currentValue != null);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (currentValue != null);
         }
         private _updateViewAsIsHighlighted(): void {
             const { tile, war }         = this._getData();
             this._labelTitle.text       = Lang.getText(LangTextType.B0847);
             this._labelValue.text       = Lang.getText(tile.getIsHighlighted() ? LangTextType.B0012 : LangTextType.B0013);
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = WarCommonHelpers.checkCanCheatInWar(war.getWarType());
+            this._imgModify.visible     = WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType());
         }
         private _updateViewAsCrystalRadius(): void {
             const { tile, war }         = this._getData();
@@ -547,7 +601,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0734);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal);
         }
         private _updateViewAsCrystalPriority(): void {
             const { tile, war }         = this._getData();
@@ -555,7 +609,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0739);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal);
         }
         private _updateViewAsCrystalCanAffectSelf(): void {
             const { tile, war }         = this._getData();
@@ -563,7 +617,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0735);
             this._labelValue.text       = Lang.getText(currentValue ? LangTextType.B0012 : LangTextType.B0013);
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal);
         }
         private _updateViewAsCrystalCanAffectAlly(): void {
             const { tile, war }         = this._getData();
@@ -571,7 +625,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0736);
             this._labelValue.text       = Lang.getText(currentValue ? LangTextType.B0012 : LangTextType.B0013);
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal);
         }
         private _updateViewAsCrystalCanAffectEnemy(): void {
             const { tile, war }         = this._getData();
@@ -579,7 +633,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0737);
             this._labelValue.text       = Lang.getText(currentValue ? LangTextType.B0012 : LangTextType.B0013);
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal);
         }
         private _updateViewAsCrystalDeltaFund(): void {
             const { tile, war }         = this._getData();
@@ -587,7 +641,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0738);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal);
         }
         private _updateViewAsCrystalDeltaEnergyPercentage(): void {
             const { tile, war }         = this._getData();
@@ -595,7 +649,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0730);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal);
         }
         private _updateViewAsCrystalDeltaHp(): void {
             const { tile, war }         = this._getData();
@@ -603,7 +657,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0731);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal);
         }
         private _updateViewAsCrystalDeltaFuelPercentage(): void {
             const { tile, war }         = this._getData();
@@ -611,7 +665,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0732);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal);
         }
         private _updateViewAsCrystalDeltaPrimaryAmmoPercentage(): void {
             const { tile, war }         = this._getData();
@@ -619,7 +673,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0733);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getTemplateCfg().mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal);
         }
         private _updateViewAsCannonRangeForUp(): void {
             const { tile, war }         = this._getData();
@@ -627,7 +681,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0742)})`;
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCannon);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsCannonRangeForRight(): void {
             const { tile, war }         = this._getData();
@@ -635,7 +689,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0743)})`;
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCannon);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsCannonRangeForDown(): void {
             const { tile, war }         = this._getData();
@@ -643,7 +697,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0744)})`;
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCannon);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsCannonRangeForLeft(): void {
             const { tile, war }         = this._getData();
@@ -651,7 +705,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0745)})`;
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCannon);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsCannonPriority(): void {
             const { tile, war }         = this._getData();
@@ -659,7 +713,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0739);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCannon);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsCannonMaxTargetCount(): void {
             const { tile, war }         = this._getData();
@@ -667,7 +721,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0746);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCannon);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsCannonCanAffectSelf(): void {
             const { tile, war }         = this._getData();
@@ -675,7 +729,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0735);
             this._labelValue.text       = Lang.getText(currentValue ? LangTextType.B0012 : LangTextType.B0013);
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCannon);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsCannonCanAffectAlly(): void {
             const { tile, war }         = this._getData();
@@ -683,7 +737,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0736);
             this._labelValue.text       = Lang.getText(currentValue ? LangTextType.B0012 : LangTextType.B0013);
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCannon);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsCannonCanAffectEnemy(): void {
             const { tile, war }         = this._getData();
@@ -691,7 +745,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0737);
             this._labelValue.text       = Lang.getText(currentValue ? LangTextType.B0012 : LangTextType.B0013);
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCannon);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsCannonDeltaHp(): void {
             const { tile, war }         = this._getData();
@@ -699,7 +753,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0731);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCannon);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsCannonDeltaFuelPercentage(): void {
             const { tile, war }         = this._getData();
@@ -707,7 +761,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0732);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCannon);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsCannonDeltaPrimaryAmmoPercentage(): void {
             const { tile, war }         = this._getData();
@@ -715,7 +769,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0733);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCannon);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsLaserTurretRangeForUp(): void {
             const { tile, war }         = this._getData();
@@ -723,7 +777,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0742)})`;
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomLaserTurret);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsLaserTurretRangeForRight(): void {
             const { tile, war }         = this._getData();
@@ -731,7 +785,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0743)})`;
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomLaserTurret);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsLaserTurretRangeForDown(): void {
             const { tile, war }         = this._getData();
@@ -739,7 +793,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0744)})`;
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomLaserTurret);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsLaserTurretRangeForLeft(): void {
             const { tile, war }         = this._getData();
@@ -747,7 +801,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0745)})`;
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomLaserTurret);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsLaserTurretPriority(): void {
             const { tile, war }         = this._getData();
@@ -755,7 +809,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0739);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomLaserTurret);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsLaserTurretCanAffectSelf(): void {
             const { tile, war }         = this._getData();
@@ -763,7 +817,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0735);
             this._labelValue.text       = Lang.getText(currentValue ? LangTextType.B0012 : LangTextType.B0013);
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomLaserTurret);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsLaserTurretCanAffectAlly(): void {
             const { tile, war }         = this._getData();
@@ -771,7 +825,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0736);
             this._labelValue.text       = Lang.getText(currentValue ? LangTextType.B0012 : LangTextType.B0013);
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomLaserTurret);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsLaserTurretCanAffectEnemy(): void {
             const { tile, war }         = this._getData();
@@ -779,7 +833,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0737);
             this._labelValue.text       = Lang.getText(currentValue ? LangTextType.B0012 : LangTextType.B0013);
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomLaserTurret);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsLaserTurretDeltaHp(): void {
             const { tile, war }         = this._getData();
@@ -787,7 +841,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0731);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomLaserTurret);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsLaserTurretDeltaFuelPercentage(): void {
             const { tile, war }         = this._getData();
@@ -795,7 +849,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0732);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomLaserTurret);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
         private _updateViewAsLaserTurretDeltaPrimaryAmmoPercentage(): void {
             const { tile, war }         = this._getData();
@@ -803,7 +857,7 @@ namespace TwnsBwTileDetailPanel {
             this._labelTitle.text       = Lang.getText(LangTextType.B0733);
             this._labelValue.text       = `${currentValue}`;
             this._groupExtra.visible    = false;
-            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomLaserTurret);
+            this._imgModify.visible     = (WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.checkIsCustomMapWeapon());
         }
 
         private _modifyAsDefenseBonus(): void {
@@ -833,20 +887,20 @@ namespace TwnsBwTileDetailPanel {
         private _modifyAsHp(): void {
             const { tile, war } = this._getData();
             const maxValue      = tile.getMaxHp();
-            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType()) || (maxValue == null)) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType()) || (maxValue == null)) {
                 return;
             }
 
             const currValue = tile.getCurrentHp();
             const minValue  = 1;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0339),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCurrentHp(panel.getInputValue());
+                callback        : value => {
+                    tile.setCurrentHp(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -856,20 +910,20 @@ namespace TwnsBwTileDetailPanel {
         private _modifyAsCapturePoint(): void {
             const { tile, war } = this._getData();
             const maxValue      = tile.getMaxCapturePoint();
-            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType()) || (maxValue == null)) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType()) || (maxValue == null)) {
                 return;
             }
 
             const currValue = tile.getCurrentCapturePoint();
             const minValue  = 1;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0361),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCurrentCapturePoint(panel.getInputValue());
+                callback        : value => {
+                    tile.setCurrentCapturePoint(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -879,20 +933,20 @@ namespace TwnsBwTileDetailPanel {
         private _modifyAsBuildPoint(): void {
             const { tile, war } = this._getData();
             const maxValue      = tile.getMaxBuildPoint();
-            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType()) || (maxValue == null)) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType()) || (maxValue == null)) {
                 return;
             }
 
             const currValue = tile.getCurrentBuildPoint();
             const minValue  = 1;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0362),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCurrentBuildPoint(panel.getInputValue());
+                callback        : value => {
+                    tile.setCurrentBuildPoint(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -901,7 +955,7 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsIsHighlighted(): void {
             const { tile, war } = this._getData();
-            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) {
+            if (!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) {
                 return;
             }
 
@@ -911,20 +965,20 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCrystalRadius(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)) {
                 return;
             }
 
             const currValue = tile.getCustomCrystalData()?.radius;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0734),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCrystalRadius(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCrystalRadius(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -933,20 +987,20 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCrystalPriority(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)) {
                 return;
             }
 
             const currValue = tile.getCustomCrystalData()?.priority;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0739),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCrystalPriority(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCrystalPriority(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -955,7 +1009,7 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCrystalCanAffectSelf(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)) {
                 return;
             }
 
@@ -967,7 +1021,7 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCrystalCanAffectAlly(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)) {
                 return;
             }
 
@@ -979,7 +1033,7 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCrystalCanAffectEnemy(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)) {
                 return;
             }
 
@@ -991,19 +1045,19 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCrystalDeltaFund(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)) {
                 return;
             }
 
             const currValue = tile.getCustomCrystalData()?.deltaFund;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0738),
                 currentValue    : currValue ?? 0,
-                minValue        : 10000000,
-                maxValue        : -10000000,
+                minValue        : -10000000,
+                maxValue        : 10000000,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCrystalDeltaFund(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCrystalDeltaFund(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1012,21 +1066,21 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCrystalDeltaEnergyPercentage(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)) {
                 return;
             }
 
             const currValue = tile.getCustomCrystalData()?.deltaEnergyPercentage;
             const minValue  = -100;
             const maxValue  = 100;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0730),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomCrystalDeltaEnergyPercentage(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCrystalDeltaEnergyPercentage(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1035,21 +1089,21 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCrystalDeltaHp(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)) {
                 return;
             }
 
             const currValue = tile.getCustomCrystalData()?.deltaHp;
-            const minValue  = -WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
-            const maxValue  = WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            const minValue  = -WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
+            const maxValue  = WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0731),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomCrystalDeltaHp(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCrystalDeltaHp(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1058,21 +1112,21 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCrystalDeltaFuelPercentage(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)) {
                 return;
             }
 
             const currValue = tile.getCustomCrystalData()?.deltaFuelPercentage;
             const minValue  = -100;
             const maxValue  = 100;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0732),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomCrystalDeltaFuelPercentage(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCrystalDeltaFuelPercentage(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1081,21 +1135,21 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCrystalDeltaPrimaryAmmoPercentage(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)) {
                 return;
             }
 
             const currValue = tile.getCustomCrystalData()?.deltaPrimaryAmmoPercentage;
             const minValue  = -100;
             const maxValue  = 100;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0733),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomCrystalDeltaPrimaryAmmoPercentage(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCrystalDeltaPrimaryAmmoPercentage(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1104,20 +1158,20 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCannonRangeForUp(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCannon)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)) {
                 return;
             }
 
             const currValue = tile.getCustomCannonData()?.rangeForUp;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0742)})`,
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCannonRangeForUp(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonRangeForUp(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1126,20 +1180,20 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCannonRangeForRight(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCannon)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)) {
                 return;
             }
 
             const currValue = tile.getCustomCannonData()?.rangeForRight;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0743)})`,
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCannonRangeForRight(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonRangeForRight(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1148,20 +1202,20 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCannonRangeForDown(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCannon)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)) {
                 return;
             }
 
             const currValue = tile.getCustomCannonData()?.rangeForDown;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0744)})`,
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCannonRangeForDown(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonRangeForDown(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1170,20 +1224,20 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCannonRangeForLeft(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCannon)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)) {
                 return;
             }
 
             const currValue = tile.getCustomCannonData()?.rangeForLeft;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0745)})`,
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCannonRangeForLeft(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonRangeForLeft(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1192,20 +1246,20 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCannonPriority(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCannon)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)) {
                 return;
             }
 
             const currValue = tile.getCustomCannonData()?.priority;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0739),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomCannonPriority(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonPriority(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1214,20 +1268,20 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCannonMaxTargetCount(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCannon)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)) {
                 return;
             }
 
             const currValue = tile.getCustomCannonData()?.maxTargetCount;
             const minValue  = 1;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0746),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue        : 9999,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${Lang.getText(LangTextType.B0141)})`,
-                callback        : panel => {
-                    tile.setCustomCannonMaxTargetCount(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonMaxTargetCount(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1236,7 +1290,7 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCannonCanAffectSelf(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCannon)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)) {
                 return;
             }
 
@@ -1248,7 +1302,7 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCannonCanAffectAlly(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCannon)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)) {
                 return;
             }
 
@@ -1260,7 +1314,7 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCannonCanAffectEnemy(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCannon)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)) {
                 return;
             }
 
@@ -1272,21 +1326,21 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCannonDeltaHp(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCannon)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)) {
                 return;
             }
 
             const currValue = tile.getCustomCannonData()?.deltaHp;
-            const minValue  = -WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
-            const maxValue  = WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            const minValue  = -WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
+            const maxValue  = WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0731),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomCannonDeltaHp(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonDeltaHp(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1295,21 +1349,21 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCannonDeltaFuelPercentage(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCannon)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)) {
                 return;
             }
 
             const currValue = tile.getCustomCannonData()?.deltaFuelPercentage;
             const minValue  = -100;
             const maxValue  = 100;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0732),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomCannonDeltaFuelPercentage(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonDeltaFuelPercentage(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1318,21 +1372,21 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsCannonDeltaPrimaryAmmoPercentage(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCannon)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)) {
                 return;
             }
 
             const currValue = tile.getCustomCannonData()?.deltaPrimaryAmmoPercentage;
             const minValue  = -100;
             const maxValue  = 100;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0733),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomCannonDeltaPrimaryAmmoPercentage(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomCannonDeltaPrimaryAmmoPercentage(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1341,20 +1395,20 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsLaserTurretRangeForUp(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomLaserTurret)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)) {
                 return;
             }
 
             const currValue = tile.getCustomLaserTurretData()?.rangeForUp;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0742)})`,
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomLaserTurretRangeForUp(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretRangeForUp(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1363,20 +1417,20 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsLaserTurretRangeForRight(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomLaserTurret)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)) {
                 return;
             }
 
             const currValue = tile.getCustomLaserTurretData()?.rangeForRight;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0743)})`,
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomLaserTurretRangeForRight(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretRangeForRight(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1385,20 +1439,20 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsLaserTurretRangeForDown(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomLaserTurret)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)) {
                 return;
             }
 
             const currValue = tile.getCustomLaserTurretData()?.rangeForDown;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0744)})`,
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomLaserTurretRangeForDown(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretRangeForDown(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1407,20 +1461,20 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsLaserTurretRangeForLeft(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomLaserTurret)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)) {
                 return;
             }
 
             const currValue = tile.getCustomLaserTurretData()?.rangeForLeft;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0745)})`,
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomLaserTurretRangeForLeft(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretRangeForLeft(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1429,20 +1483,20 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsLaserTurretPriority(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomLaserTurret)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)) {
                 return;
             }
 
             const currValue = tile.getCustomLaserTurretData()?.priority;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0739),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue        : 9999,
                 tips            : ``,
-                callback        : panel => {
-                    tile.setCustomLaserTurretPriority(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretPriority(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1451,7 +1505,7 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsLaserTurretCanAffectSelf(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomLaserTurret)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)) {
                 return;
             }
 
@@ -1463,7 +1517,7 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsLaserTurretCanAffectAlly(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomLaserTurret)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)) {
                 return;
             }
 
@@ -1475,7 +1529,7 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsLaserTurretCanAffectEnemy(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomLaserTurret)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)) {
                 return;
             }
 
@@ -1487,21 +1541,21 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsLaserTurretDeltaHp(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomLaserTurret)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)) {
                 return;
             }
 
             const currValue = tile.getCustomLaserTurretData()?.deltaHp;
-            const minValue  = -WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
-            const maxValue  = WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            const minValue  = -WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
+            const maxValue  = WarHelpers.WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0731),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomLaserTurretDeltaHp(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretDeltaHp(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1510,21 +1564,21 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsLaserTurretDeltaFuelPercentage(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomLaserTurret)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)) {
                 return;
             }
 
             const currValue = tile.getCustomLaserTurretData()?.deltaFuelPercentage;
             const minValue  = -100;
             const maxValue  = 100;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0732),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomLaserTurretDeltaFuelPercentage(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretDeltaFuelPercentage(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1533,21 +1587,21 @@ namespace TwnsBwTileDetailPanel {
         }
         private _modifyAsLaserTurretDeltaPrimaryAmmoPercentage(): void {
             const { tile, war } = this._getData();
-            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomLaserTurret)) {
+            if ((!WarHelpers.WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)) {
                 return;
             }
 
             const currValue = tile.getCustomLaserTurretData()?.deltaPrimaryAmmoPercentage;
             const minValue  = -100;
             const maxValue  = 100;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0733),
                 currentValue    : currValue ?? 0,
                 minValue,
                 maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    tile.setCustomLaserTurretDeltaPrimaryAmmoPercentage(panel.getInputValue());
+                callback        : value => {
+                    tile.setCustomLaserTurretDeltaPrimaryAmmoPercentage(value);
                     tile.flushDataToView();
                     this._updateView();
                 },
@@ -1556,18 +1610,18 @@ namespace TwnsBwTileDetailPanel {
         }
     }
 
-    type DataForMoveRangeRenderer = {
+    type DataForMoveCostRenderer = {
         index           : number;
-        configVersion   : string;
-        unitType        : UnitType;
-        tileCfg         : ProtoTypes.Config.ITileTemplateCfg;
+        gameConfig      : GameConfig;
+        unitType        : number;
+        tileCfg         : CommonProto.Config.ITileTemplateCfg;
         playerIndex     : number;
     };
-    class MoveCostRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMoveRangeRenderer> {
+    class MoveCostRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMoveCostRenderer> {
         private readonly _group!            : eui.Group;
         private readonly _imgBg!            : TwnsUiImage.UiImage;
         private readonly _conView!          : eui.Group;
-        private readonly _unitView          = new TwnsWarMapUnitView.WarMapUnitView();
+        private readonly _unitView          = new WarMap.WarMapUnitView();
         private readonly _labelMoveCost!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
@@ -1601,13 +1655,14 @@ namespace TwnsBwTileDetailPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             const data                  = this._getData();
-            const configVersion         = data.configVersion;
+            const gameConfig            = data.gameConfig;
             const unitType              = data.unitType;
-            const moveCostCfg           = ConfigManager.getMoveCostCfgByTileType(configVersion, Helpers.getExisted(data.tileCfg.type));
-            const moveCost              = moveCostCfg[ConfigManager.getUnitTemplateCfg(configVersion, unitType).moveType].cost;
+            const moveCostCfg           = Helpers.getExisted(gameConfig.getMoveCostCfg(Helpers.getExisted(data.tileCfg.type)));
+            const moveCost              = moveCostCfg[Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.moveType)].cost;
             this._imgBg.visible         = data.index % 8 < 4;
             this._labelMoveCost.text    = moveCost != null ? `${moveCost}` : `--`;
             this._unitView.update({
+                gameConfig,
                 gridIndex       : { x: 0, y: 0 },
                 playerIndex     : data.playerIndex,
                 unitType        : data.unitType,
@@ -1616,7 +1671,74 @@ namespace TwnsBwTileDetailPanel {
         }
     }
 
-    function createInfoDefenseBonus(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer {
+    type DataForDamageRenderer = {
+        gameConfig          : GameConfig;
+        index               : number;
+        targetTileType      : number;
+        playerIndex?        : number;
+        attackerUnitType    : number;
+    };
+    class DamageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDamageRenderer> {
+        private readonly _group!                : eui.Group;
+        private readonly _imgBg!                : TwnsUiImage.UiImage;
+        private readonly _conView!              : eui.Group;
+        private readonly _unitView              = new WarMap.WarMapUnitView();
+        private readonly _tileView!             : TwnsUiImage.UiImage;
+        private readonly _labelPrimaryAttack!   : TwnsUiLabel.UiLabel;
+        private readonly _labelSecondaryAttack! : TwnsUiLabel.UiLabel;
+
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
+            ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
+
+            this._conView.addChild(this._unitView);
+        }
+
+        private _onNotifyUnitAnimationTick(): void {
+            this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
+        }
+
+        private _onNotifyUnitStateIndicatorTick(): void {
+            this._unitView.updateOnStateIndicatorTick();
+        }
+
+        protected _onDataChanged(): void {
+            this._updateView();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for view.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _updateView(): void {
+            const data              = this._getData();
+            this._imgBg.visible     = data.index % 4 >= 2;
+
+            const gameConfig        = data.gameConfig;
+            const targetTileType    = data.targetTileType;
+            const attackerUnitType  = data.attackerUnitType;
+            this._unitView.visible  = true;
+            this._tileView.visible  = false;
+            this._unitView.update({
+                gameConfig,
+                gridIndex       : { x: 0, y: 0 },
+                unitType        : attackerUnitType,
+                playerIndex     : data.playerIndex,
+                actionState     : Types.UnitActionState.Idle,
+            }, Timer.getUnitAnimationTickCount());
+
+            const attackCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(attackerUnitType));
+            const targetArmorType           = Helpers.getExisted(gameConfig.getTileTemplateCfg(targetTileType)?.armorType);
+            const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
+            const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
+            this._labelPrimaryAttack.text   = primaryAttackDamage == null ? `--` : `${primaryAttackDamage}`;
+            this._labelSecondaryAttack.text = secondaryAttackDamage == null ? `--` : `${secondaryAttackDamage}`;
+        }
+    }
+
+    function createInfoDefenseBonus(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer {
         return {
             index       : 0,
             infoType    : TileInfoType.DefenseBonus,
@@ -1624,7 +1746,7 @@ namespace TwnsBwTileDetailPanel {
             tile,
         };
     }
-    function createInfoIncome(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoIncome(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         const income = tile.getCfgIncome();
         return income == 0
             ? null
@@ -1635,7 +1757,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoVision(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoVision(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return ((tile.getCfgVisionRange() == 0) && (!tile.checkIsVisionEnabledForAllPlayers()) && (tile.getMaxCapturePoint() == null))
             ? null
             : {
@@ -1645,7 +1767,7 @@ namespace TwnsBwTileDetailPanel {
                 tile
             };
     }
-    function createInfoHideUnitCategory(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer {
+    function createInfoHideUnitCategory(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer {
         return {
             index       : 0,
             infoType    : TileInfoType.HideUnitCategory,
@@ -1653,7 +1775,7 @@ namespace TwnsBwTileDetailPanel {
             tile,
         };
     }
-    function createInfoIsDefeatOnCapture(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoIsDefeatOnCapture(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return !tile.checkIsDefeatOnCapture()
             ? null
             : {
@@ -1663,7 +1785,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoProduceUnitCategory(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoProduceUnitCategory(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return tile.getCfgProduceUnitCategory() == null
             ? null
             : {
@@ -1673,7 +1795,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoGlobalBonus(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoGlobalBonus(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return ((tile.getGlobalAttackBonus() == null) && (tile.getGlobalDefenseBonus() == null))
             ? null
             : {
@@ -1683,7 +1805,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoRepairUnitCategory(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoRepairUnitCategory(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getRepairUnitCategory() == null)
             ? null
             : {
@@ -1693,7 +1815,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoHp(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoHp(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getMaxHp() == null)
             ? null
             : {
@@ -1703,7 +1825,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCapturePoint(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCapturePoint(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getMaxCapturePoint() == null)
             ? null
             : {
@@ -1713,7 +1835,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoBuildPoint(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoBuildPoint(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getMaxBuildPoint() == null)
             ? null
             : {
@@ -1723,7 +1845,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoIsHighlighted(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoIsHighlighted(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return {
             index       : 0,
             infoType    : TileInfoType.IsHighlighted,
@@ -1731,7 +1853,7 @@ namespace TwnsBwTileDetailPanel {
             tile,
         };
     }
-    function createInfoCrystalRadius(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCrystalRadius(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getCustomCrystalData() == null)
             ? null
             : {
@@ -1741,8 +1863,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalPriority(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomCrystal)
+    function createInfoCrystalPriority(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1751,8 +1873,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalCanAffectSelf(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomCrystal)
+    function createInfoCrystalCanAffectSelf(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1761,8 +1883,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalCanAffectAlly(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomCrystal)
+    function createInfoCrystalCanAffectAlly(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1771,8 +1893,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalCanAffectEnemy(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomCrystal)
+    function createInfoCrystalCanAffectEnemy(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1781,8 +1903,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalDeltaFund(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomCrystal)
+    function createInfoCrystalDeltaFund(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1791,8 +1913,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalDeltaEnergyPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomCrystal)
+    function createInfoCrystalDeltaEnergyPercentage(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1801,7 +1923,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalDeltaHp(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCrystalDeltaHp(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getCustomCrystalData() == null)
             ? null
             : {
@@ -1811,8 +1933,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalDeltaFuelPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomCrystal)
+    function createInfoCrystalDeltaFuelPercentage(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1821,8 +1943,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalDeltaPrimaryAmmoPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomCrystal)
+    function createInfoCrystalDeltaPrimaryAmmoPercentage(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCrystal)
             ? null
             : {
                 index       : 0,
@@ -1831,8 +1953,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonRangeForUp(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return ((tile.getType() !== Types.TileType.CustomCannon) && (!tile.getCustomCannonData()?.rangeForUp))
+    function createInfoCannonRangeForUp(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return ((tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon) && (!tile.getCustomCannonData()?.rangeForUp))
             ? null
             : {
                 index       : 0,
@@ -1841,8 +1963,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonRangeForDown(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return ((tile.getType() !== Types.TileType.CustomCannon) && (!tile.getCustomCannonData()?.rangeForDown))
+    function createInfoCannonRangeForDown(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return ((tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon) && (!tile.getCustomCannonData()?.rangeForDown))
             ? null
             : {
                 index       : 0,
@@ -1851,8 +1973,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonRangeForLeft(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return ((tile.getType() !== Types.TileType.CustomCannon) && (!tile.getCustomCannonData()?.rangeForLeft))
+    function createInfoCannonRangeForLeft(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return ((tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon) && (!tile.getCustomCannonData()?.rangeForLeft))
             ? null
             : {
                 index       : 0,
@@ -1861,8 +1983,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonRangeForRight(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return ((tile.getType() !== Types.TileType.CustomCannon) && (!tile.getCustomCannonData()?.rangeForRight))
+    function createInfoCannonRangeForRight(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return ((tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon) && (!tile.getCustomCannonData()?.rangeForRight))
             ? null
             : {
                 index       : 0,
@@ -1871,8 +1993,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonPriority(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomCannon)
+    function createInfoCannonPriority(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)
             ? null
             : {
                 index       : 0,
@@ -1881,8 +2003,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonMaxTargetCount(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomCannon)
+    function createInfoCannonMaxTargetCount(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)
             ? null
             : {
                 index       : 0,
@@ -1891,8 +2013,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonCanAffectSelf(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomCannon)
+    function createInfoCannonCanAffectSelf(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)
             ? null
             : {
                 index       : 0,
@@ -1901,8 +2023,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonCanAffectAlly(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomCannon)
+    function createInfoCannonCanAffectAlly(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)
             ? null
             : {
                 index       : 0,
@@ -1911,8 +2033,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonCanAffectEnemy(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomCannon)
+    function createInfoCannonCanAffectEnemy(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)
             ? null
             : {
                 index       : 0,
@@ -1921,7 +2043,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonDeltaHp(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCannonDeltaHp(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getCustomCannonData() == null)
             ? null
             : {
@@ -1931,8 +2053,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonDeltaFuelPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomCannon)
+    function createInfoCannonDeltaFuelPercentage(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)
             ? null
             : {
                 index       : 0,
@@ -1941,8 +2063,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonDeltaPrimaryAmmoPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomCannon)
+    function createInfoCannonDeltaPrimaryAmmoPercentage(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomCannon)
             ? null
             : {
                 index       : 0,
@@ -1951,8 +2073,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretRangeForUp(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return ((tile.getType() !== Types.TileType.CustomLaserTurret) && (!tile.getCustomLaserTurretData()?.rangeForUp))
+    function createInfoLaserTurretRangeForUp(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return ((tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret) && (!tile.getCustomLaserTurretData()?.rangeForUp))
             ? null
             : {
                 index       : 0,
@@ -1961,8 +2083,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretRangeForDown(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return ((tile.getType() !== Types.TileType.CustomLaserTurret) && (!tile.getCustomLaserTurretData()?.rangeForDown))
+    function createInfoLaserTurretRangeForDown(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return ((tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret) && (!tile.getCustomLaserTurretData()?.rangeForDown))
             ? null
             : {
                 index       : 0,
@@ -1971,8 +2093,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretRangeForLeft(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return ((tile.getType() !== Types.TileType.CustomLaserTurret) && (!tile.getCustomLaserTurretData()?.rangeForLeft))
+    function createInfoLaserTurretRangeForLeft(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return ((tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret) && (!tile.getCustomLaserTurretData()?.rangeForLeft))
             ? null
             : {
                 index       : 0,
@@ -1981,8 +2103,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretRangeForRight(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return ((tile.getType() !== Types.TileType.CustomLaserTurret) && (!tile.getCustomLaserTurretData()?.rangeForRight))
+    function createInfoLaserTurretRangeForRight(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return ((tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret) && (!tile.getCustomLaserTurretData()?.rangeForRight))
             ? null
             : {
                 index       : 0,
@@ -1991,8 +2113,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretPriority(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomLaserTurret)
+    function createInfoLaserTurretPriority(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)
             ? null
             : {
                 index       : 0,
@@ -2001,8 +2123,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretCanAffectSelf(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomLaserTurret)
+    function createInfoLaserTurretCanAffectSelf(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)
             ? null
             : {
                 index       : 0,
@@ -2011,8 +2133,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretCanAffectAlly(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomLaserTurret)
+    function createInfoLaserTurretCanAffectAlly(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)
             ? null
             : {
                 index       : 0,
@@ -2021,8 +2143,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretCanAffectEnemy(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomLaserTurret)
+    function createInfoLaserTurretCanAffectEnemy(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)
             ? null
             : {
                 index       : 0,
@@ -2031,7 +2153,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretDeltaHp(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoLaserTurretDeltaHp(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getCustomLaserTurretData() == null)
             ? null
             : {
@@ -2041,8 +2163,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretDeltaFuelPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomLaserTurret)
+    function createInfoLaserTurretDeltaFuelPercentage(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)
             ? null
             : {
                 index       : 0,
@@ -2051,8 +2173,8 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretDeltaPrimaryAmmoPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
-        return (tile.getType() !== Types.TileType.CustomLaserTurret)
+    function createInfoLaserTurretDeltaPrimaryAmmoPercentage(war: BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return (tile.getTemplateCfg().mapWeaponType !== CommonConstants.MapWeaponType.CustomLaserTurret)
             ? null
             : {
                 index       : 0,

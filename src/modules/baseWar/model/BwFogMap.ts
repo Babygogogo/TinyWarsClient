@@ -10,16 +10,15 @@
 // import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwFogMap {
+namespace Twns.BaseWar {
     import ForceFogCode             = Types.ForceFogCode;
     import GridIndex                = Types.GridIndex;
     import MapSize                  = Types.MapSize;
     import Visibility               = Types.Visibility;
-    import WarSerialization         = ProtoTypes.WarSerialization;
+    import WarSerialization         = CommonProto.WarSerialization;
     import ISerialFogMap            = WarSerialization.ISerialFogMap;
     import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar                    = TwnsBwWar.BwWar;
+    import BwWar                    = BaseWar.BwWar;
 
     export abstract class BwFogMap {
         private _forceFogCode?              : ForceFogCode;
@@ -50,7 +49,7 @@ namespace TwnsBwFogMap {
 
             const forceExpirePlayerIndex = data.forceExpirePlayerIndex;
             if ((forceExpirePlayerIndex != null)                                                                                    &&
-                ((forceExpirePlayerIndex < CommonConstants.WarNeutralPlayerIndex) || (forceExpirePlayerIndex > playersCountUnneutral))
+                ((forceExpirePlayerIndex < CommonConstants.PlayerIndex.Neutral) || (forceExpirePlayerIndex > playersCountUnneutral))
             ) {
                 throw Helpers.newError(`Invalid forceExpirePlayerIndex: ${forceExpirePlayerIndex}`, ClientErrorCode.BwFogMap_Init_02);
             }
@@ -62,7 +61,7 @@ namespace TwnsBwFogMap {
                 throw Helpers.newError(`Invalid forceExpireTurnIndex: ${forceExpireTurnIndex}`, ClientErrorCode.BwFogMap_Init_03);
             }
 
-            if (!WarCommonHelpers.checkIsValidMapSize(mapSize)) {
+            if (!WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
                 throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwFogMap_Init_04);
             }
 
@@ -101,7 +100,7 @@ namespace TwnsBwFogMap {
             const mapSize               = this.getMapSize();
             const serialMapsFromPath    : IDataForFogMapFromPath[] = [];
             for (const [playerIndex, map] of this._getAllMapsFromPath()) {
-                const visibilityArray = WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                const visibilityArray = WarHelpers.WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
                 if (visibilityArray != null) {
                     serialMapsFromPath.push({
                         playerIndex,
@@ -118,32 +117,33 @@ namespace TwnsBwFogMap {
             };
         }
         public serializeForCreateSfw(): ISerialFogMap {
-            const mapSize           = this.getMapSize();
-            const war               = this._getWar();
-            const targetTeamIndexes = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-            const mapsFromPath       : IDataForFogMapFromPath[] = [];
+            if (this._getWar().getShouldSerializeFullInfoForFreeModeGames()) {
+                return this.serialize();
+            } else {
+                const mapSize           = this.getMapSize();
+                const war               = this._getWar();
+                const targetTeamIndexes = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+                const mapsFromPath       : IDataForFogMapFromPath[] = [];
 
-            for (const [playerIndex, map] of this._getAllMapsFromPath()) {
-                const player = war.getPlayer(playerIndex);
-                if ((player)                                                    &&
-                    (player.getAliveState() === Types.PlayerAliveState.Alive)   &&
-                    (targetTeamIndexes.has(player.getTeamIndex()))
-                ) {
-                    const visibilityArray = WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
-                    if (visibilityArray != null) {
-                        mapsFromPath.push({
-                            playerIndex,
-                            visibilityArray,
-                        });
+                for (const [playerIndex, map] of this._getAllMapsFromPath()) {
+                    const player = war.getPlayer(playerIndex);
+                    if (targetTeamIndexes.has(player.getTeamIndex())) {
+                        const visibilityArray = WarHelpers.WarCommonHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                        if (visibilityArray != null) {
+                            mapsFromPath.push({
+                                playerIndex,
+                                visibilityArray,
+                            });
+                        }
                     }
                 }
+                return {
+                    forceFogCode            : this.getForceFogCode(),
+                    forceExpirePlayerIndex  : this.getForceExpirePlayerIndex(),
+                    forceExpireTurnIndex    : this.getForceExpireTurnIndex(),
+                    mapsFromPath,
+                };
             }
-            return {
-                forceFogCode            : this.getForceFogCode(),
-                forceExpirePlayerIndex  : this.getForceExpirePlayerIndex(),
-                forceExpireTurnIndex    : this.getForceExpireTurnIndex(),
-                mapsFromPath,
-            };
         }
         public serializeForCreateMfr(): ISerialFogMap {
             return this.serializeForCreateSfw();
@@ -194,7 +194,7 @@ namespace TwnsBwFogMap {
                 return false;
             } else {
                 const war               = this._getWar();
-                const weatherFogType    = ConfigManager.getWeatherCfg(war.getConfigVersion(), war.getWeatherManager().getCurrentWeatherType()).fog;
+                const weatherFogType    = war.getGameConfig().getWeatherCfg(war.getWeatherManager().getCurrentWeatherType())?.fog;
                 if (weatherFogType === Types.WeatherFogType.Fog) {
                     return true;
                 } else if (weatherFogType === Types.WeatherFogType.NoFog) {
@@ -257,7 +257,7 @@ namespace TwnsBwFogMap {
                 }
             }
         }
-        public updateMapFromPathsByUnitAndPath(unit: TwnsBwUnit.BwUnit, path: GridIndex[]): void {
+        public updateMapFromPathsByUnitAndPath(unit: BaseWar.BwUnit, path: GridIndex[]): void {
             const playerIndex   = unit.getPlayerIndex();
             const mapSize       = this.getMapSize();
             const mapFromPath   = this._getMapFromPath(playerIndex);

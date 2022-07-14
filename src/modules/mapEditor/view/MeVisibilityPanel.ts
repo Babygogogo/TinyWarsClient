@@ -4,19 +4,19 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 // import MeModel              from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeVisibilityPanel {
-    import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+namespace Twns.MapEditor {
+    import LangTextType = Twns.Lang.LangTextType;
+    import NotifyType   = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class MeVisibilityPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeVisibilityPanel = void;
+    export class MeVisibilityPanel extends TwnsUiPanel.UiPanel<OpenDataForMeVisibilityPanel> {
         private readonly _groupUnit!            : eui.Group;
         private readonly _labelUnit!            : TwnsUiLabel.UiLabel;
         private readonly _imgUnit!              : TwnsUiImage.UiImage;
@@ -64,8 +64,8 @@ namespace TwnsMeVisibilityPanel {
             // nothing to do
         }
 
-        private _getWar(): TwnsMeWar.MeWar {
-            return Helpers.getExisted(MeModel.getWar());
+        private _getWar(): Twns.MapEditor.MeWar {
+            return Twns.Helpers.getExisted(Twns.MapEditor.MeModel.getWar());
         }
 
         private _onTouchedGroupTileBase(): void {
@@ -94,7 +94,7 @@ namespace TwnsMeVisibilityPanel {
 
         private _onTouchedBtnShowAllLocations(): void {
             const tileMap = this._getWar().getTileMap();
-            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+            for (let locationId = Twns.CommonConstants.MapMinLocationId; locationId <= Twns.CommonConstants.MapMaxLocationId; ++locationId) {
                 tileMap.setIsLocationVisible(locationId, true);
             }
         }
@@ -103,9 +103,9 @@ namespace TwnsMeVisibilityPanel {
             const tileMap       = war.getTileMap();
             const drawer        = war.getDrawer();
             const drawerMode    = drawer.getMode();
-            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
-                if (((drawerMode === Types.MapEditorDrawerMode.AddTileToLocation) && (drawer.getDataForAddTileToLocation()?.locationIdArray.some(v => v === locationId)))           ||
-                    ((drawerMode === Types.MapEditorDrawerMode.DeleteTileFromLocation) && (drawer.getDataForDeleteTileFromLocation()?.locationIdArray.some(v => v === locationId)))
+            for (let locationId = Twns.CommonConstants.MapMinLocationId; locationId <= Twns.CommonConstants.MapMaxLocationId; ++locationId) {
+                if (((drawerMode === Twns.Types.MapEditorDrawerMode.AddTileToLocation) && (drawer.getDataForAddTileToLocation()?.locationIdArray.some(v => v === locationId)))           ||
+                    ((drawerMode === Twns.Types.MapEditorDrawerMode.DeleteTileFromLocation) && (drawer.getDataForDeleteTileFromLocation()?.locationIdArray.some(v => v === locationId)))
                 ) {
                     continue;
                 }
@@ -142,7 +142,7 @@ namespace TwnsMeVisibilityPanel {
         private _updateListLocation(): void {
             const dataArray : DataForLocationRenderer[] = [];
             const war       = this._getWar();
-            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+            for (let locationId = Twns.CommonConstants.MapMinLocationId; locationId <= Twns.CommonConstants.MapMaxLocationId; ++locationId) {
                 dataArray.push({ war, locationId });
             }
             this._listLocation.bindData(dataArray);
@@ -150,7 +150,7 @@ namespace TwnsMeVisibilityPanel {
     }
 
     type DataForLocationRenderer = {
-        war         : TwnsMeWar.MeWar;
+        war         : Twns.MapEditor.MeWar;
         locationId  : number;
     };
     class LocationRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForLocationRenderer> {
@@ -179,10 +179,10 @@ namespace TwnsMeVisibilityPanel {
             const locationId    = data.locationId;
             const war           = data.war;
             const drawer        = war.getDrawer();
-            if (((drawer.getMode() === Types.MapEditorDrawerMode.AddTileToLocation) && (drawer.getDataForAddTileToLocation()?.locationIdArray.some(v => v === locationId)))             ||
-                ((drawer.getMode() === Types.MapEditorDrawerMode.DeleteTileFromLocation) && (drawer.getDataForDeleteTileFromLocation()?.locationIdArray.some(v => v === locationId)))
+            if (((drawer.getMode() === Twns.Types.MapEditorDrawerMode.AddTileToLocation) && (drawer.getDataForAddTileToLocation()?.locationIdArray.some(v => v === locationId)))             ||
+                ((drawer.getMode() === Twns.Types.MapEditorDrawerMode.DeleteTileFromLocation) && (drawer.getDataForDeleteTileFromLocation()?.locationIdArray.some(v => v === locationId)))
             ) {
-                FloatText.show(Lang.getText(LangTextType.A0267));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0267));
                 return;
             }
 

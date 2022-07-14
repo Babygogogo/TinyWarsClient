@@ -11,7 +11,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Notify                       from "../../tools/notify/NotifyType";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiImage                          from "../../tools/ui/UiImage";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
@@ -28,18 +28,18 @@
 // import TwnsMcrCreateMapListPanel            from "./McrCreateMapListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMcrCreateSettingsPanel {
-    import McrCreateAdvancedSettingsPage            = TwnsMcrCreateAdvancedSettingsPage.McrCreateAdvancedSettingsPage;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+namespace Twns.MultiCustomRoom {
+    import McrCreateAdvancedSettingsPage            = MultiCustomRoom.McrCreateAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarMapInfoPage          = Common.OpenDataForCommonMapInfoPage;
+    import LangTextType                             = Lang.LangTextType;
+    import NotifyType                               = Notify.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export type OpenData = void;
-    export class McrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMcrCreateSettingsPanel = void;
+    export class McrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrCreateSettingsPanel> {
         private readonly _groupNavigator!           : eui.Group;
         private readonly _labelMultiPlayer!         : TwnsUiLabel.UiLabel;
         private readonly _labelCreateRoom!          : TwnsUiLabel.UiLabel;
@@ -78,6 +78,7 @@ namespace TwnsMcrCreateSettingsPanel {
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.McrCreateSelfCoIdChanged,   callback: this._onNotifyMcrCreateSelfCoIdChanged },
                 { type: NotifyType.MsgMcrCreateRoom,           callback: this._onNotifyMsgMcrCreateRoom },
+                { type: NotifyType.MsgMcrCreateRoomFailed,     callback: this._onNotifyMsgMcrCreateRoomFailed },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._sclPlayerIndex.setItemRenderer(PlayerIndexRenderer);
@@ -88,7 +89,7 @@ namespace TwnsMcrCreateSettingsPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
@@ -98,7 +99,7 @@ namespace TwnsMcrCreateSettingsPanel {
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Common.CommonWarMapInfoPage,
                     pageData    : this._createDataForCommonMapInfoPage(),
                 },
             ]);
@@ -119,27 +120,29 @@ namespace TwnsMcrCreateSettingsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrCreateMapListPanel, null);
+            PanelHelpers.open(PanelHelpers.PanelDict.McrCreateMapListPanel, { mapFilter: null });
         }
         private _onTouchedBtnConfirm(): void {
-            const data = McrCreateModel.getData();
-            McrProxy.reqCreateRoom(data);
+            const data = MultiCustomRoom.McrCreateModel.getData();
+            MultiCustomRoom.McrProxy.reqCreateRoom(data);
 
             this._btnConfirm.enabled = false;
             this._resetTimeoutForBtnConfirm();
         }
         private _onTouchedBtnChooseCo(): void {
-            const currentCoId = McrCreateModel.getSelfCoId();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+            const currentCoId = MultiCustomRoom.McrCreateModel.getSelfCoId();
+            const gameConfig    = MultiCustomRoom.McrCreateModel.getGameConfig();
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
+                gameConfig,
                 currentCoId,
-                availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
-                    warRule         : McrCreateModel.getWarRule(),
-                    playerIndex     : McrCreateModel.getSelfPlayerIndex(),
-                    configVersion   : McrCreateModel.getConfigVersion(),
+                availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({
+                    baseWarRule         : MultiCustomRoom.McrCreateModel.getInstanceWarRule(),
+                    playerIndex     : MultiCustomRoom.McrCreateModel.getSelfPlayerIndex(),
+                    gameConfig,
                 }),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
-                        McrCreateModel.setSelfCoId(newCoId);
+                        MultiCustomRoom.McrCreateModel.setSelfCoId(newCoId);
                     }
                 },
             });
@@ -153,6 +156,9 @@ namespace TwnsMcrCreateSettingsPanel {
         }
         private _onNotifyMsgMcrCreateRoom(): void {
             FloatText.show(Lang.getText(LangTextType.A0015));
+            FlowManager.gotoLobby();
+        }
+        private _onNotifyMsgMcrCreateRoomFailed(): void {
             FlowManager.gotoLobby();
         }
 
@@ -186,15 +192,15 @@ namespace TwnsMcrCreateSettingsPanel {
             this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
         }
 
-        private _updateBtnChooseCo(): void {
-            const cfg               = ConfigManager.getCoBasicCfg(McrCreateModel.getConfigVersion(), McrCreateModel.getSelfCoId());
-            this._btnChooseCo.label = cfg.name;
+        private async _updateBtnChooseCo(): Promise<void> {
+            const gameConfig        = MultiCustomRoom.McrCreateModel.getGameConfig();
+            this._btnChooseCo.label = gameConfig.getCoBasicCfg(MultiCustomRoom.McrCreateModel.getSelfCoId())?.name ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private async _initSclPlayerIndex(): Promise<void> {
-            const playersCountUnneutral = Helpers.getExisted((await McrCreateModel.getMapRawData()).playersCountUnneutral);
+            const playersCountUnneutral = Helpers.getExisted((await MultiCustomRoom.McrCreateModel.getMapRawData()).playersCountUnneutral);
             const dataArray             : DataForPlayerIndexRenderer[] = [];
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            for (let playerIndex = CommonConstants.PlayerIndex.First; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
                     playerIndex,
                 });
@@ -219,101 +225,133 @@ namespace TwnsMcrCreateSettingsPanel {
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            const warRule           = McrCreateModel.getWarRule();
+            const instanceWarRule   = McrCreateModel.getInstanceWarRule();
             const bootTimerParams   = McrCreateModel.getBootTimerParams();
             const turnsLimit        = McrCreateModel.getTurnsLimit();
+            const warActionsLimit   = McrCreateModel.getWarActionsLimit();
+            const gameConfig        = McrCreateModel.getGameConfig();
+            const warEventFullData  = (await McrCreateModel.getMapRawData()).warEventFullData ?? null;
             const timerType         = bootTimerParams[0] as Types.BootTimerType;
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
                 dataArrayForListSettings: [
                     {
-                        settingsType    : WarBasicSettingsType.MapName,
-                        currentValue    : await WarMapModel.getMapNameInCurrentLanguage(McrCreateModel.getMapId()),
-                        warRule,
+                        settingsType    : WarBasicSettingsType.MapId,
+                        currentValue    : MultiCustomRoom.McrCreateModel.getMapId(),
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: null,
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarName,
-                        currentValue    : McrCreateModel.getWarName(),
-                        warRule,
+                        currentValue    : MultiCustomRoom.McrCreateModel.getWarName(),
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue == "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            McrCreateModel.setWarName(newValue);
+                            MultiCustomRoom.McrCreateModel.setWarName(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarPassword,
-                        currentValue    : McrCreateModel.getWarPassword(),
-                        warRule,
+                        currentValue    : MultiCustomRoom.McrCreateModel.getWarPassword(),
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue == "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            McrCreateModel.setWarPassword(newValue);
+                            MultiCustomRoom.McrCreateModel.setWarPassword(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarComment,
-                        currentValue    : McrCreateModel.getWarComment(),
-                        warRule,
+                        currentValue    : MultiCustomRoom.McrCreateModel.getWarComment(),
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue == "number") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            McrCreateModel.setWarComment(newValue);
+                            MultiCustomRoom.McrCreateModel.setWarComment(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.WarRuleTitle,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: async () => {
-                            await McrCreateModel.tickPresetWarRuleId();
+                            await MultiCustomRoom.McrCreateModel.tickTemplateWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.HasFog,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: () => {
-                            McrCreateModel.setHasFog(!McrCreateModel.getHasFog());
-                            McrCreateModel.setCustomWarRuleId();
+                            MultiCustomRoom.McrCreateModel.setHasFog(!MultiCustomRoom.McrCreateModel.getHasFog());
+                            MultiCustomRoom.McrCreateModel.setCustomWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.Weather,
                         currentValue    : null,
-                        warRule,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: () => {
-                            McrCreateModel.tickDefaultWeatherType();
-                            McrCreateModel.setCustomWarRuleId();
+                            MultiCustomRoom.McrCreateModel.tickDefaultWeatherType();
+                            MultiCustomRoom.McrCreateModel.setCustomWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
-                        settingsType    : WarBasicSettingsType.TurnsLimit,
-                        currentValue    : turnsLimit,
-                        warRule,
+                        settingsType    : WarBasicSettingsType.WarEvent,
+                        currentValue    : null,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
+                        callbackOnModify: null,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TurnsAndWarActionsLimit,
+                        currentValue    : `${turnsLimit}, ${warActionsLimit}`,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: string | number | null) => {
-                            if (typeof newValue !== "number") {
+                            if (typeof newValue !== "string") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            McrCreateModel.setTurnsLimit(newValue);
+
+                            const stringArray = newValue.split(`,`);
+                            McrCreateModel.setTurnsLimit(parseInt(stringArray[0]));
+                            McrCreateModel.setWarActionsLimit(parseInt(stringArray[1]));
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
                     {
                         settingsType    : WarBasicSettingsType.TimerType,
                         currentValue    : timerType,
-                        warRule,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: async () => {
-                            McrCreateModel.tickBootTimerType();
+                            MultiCustomRoom.McrCreateModel.tickBootTimerType();
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
@@ -323,35 +361,28 @@ namespace TwnsMcrCreateSettingsPanel {
                 openData.dataArrayForListSettings.push({
                     settingsType    : WarBasicSettingsType.TimerRegularParam,
                     currentValue    : bootTimerParams[1],
-                    warRule,
+                    instanceWarRule,
+                    gameConfig,
+                    warEventFullData,
                     callbackOnModify: () => {
-                        McrCreateModel.tickTimerRegularTime();
+                        MultiCustomRoom.McrCreateModel.tickTimerRegularTime();
                         this._updateCommonWarBasicSettingsPage();
                     },
                 });
             } else if (timerType === Types.BootTimerType.Incremental) {
                 openData.dataArrayForListSettings.push(
                     {
-                        settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
-                        currentValue    : bootTimerParams[1],
-                        warRule,
+                        settingsType    : WarBasicSettingsType.TimerIncrementalParams,
+                        currentValue    : `${bootTimerParams[1]}, ${bootTimerParams[2]}, ${bootTimerParams[3] ?? 0}`,
+                        instanceWarRule,
+                        gameConfig,
+                        warEventFullData,
                         callbackOnModify: (newValue: number | string | null) => {
-                            if ((typeof newValue == "string") || (newValue == null)) {
+                            if (typeof newValue !== "string") {
                                 throw Helpers.newError(`Invalid newValue: ${newValue}`);
                             }
-                            McrCreateModel.setTimerIncrementalInitialTime(newValue);
-                            this._updateCommonWarBasicSettingsPage();
-                        },
-                    },
-                    {
-                        settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
-                        currentValue    : bootTimerParams[2],
-                        warRule,
-                        callbackOnModify: (newValue: number | string | null) => {
-                            if ((typeof newValue == "string") || (newValue == null)) {
-                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
-                            }
-                            McrCreateModel.setTimerIncrementalIncrementalValue(newValue);
+
+                            McrCreateModel.setTimerIncrementalParamArray(newValue.split(`,`).map(v => parseInt(v)));
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },
@@ -363,10 +394,14 @@ namespace TwnsMcrCreateSettingsPanel {
             return openData;
         }
         private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
-            const mapId = McrCreateModel.getMapId();
+            const mapId = MultiCustomRoom.McrCreateModel.getMapId();
             return mapId == null
-                ? {}
-                : { mapInfo: { mapId } };
+                ? null
+                : {
+                    gameConfig  : MultiCustomRoom.McrCreateModel.getGameConfig(),
+                    hasFog      : McrCreateModel.getInstanceWarRule().ruleForGlobalParams?.hasFogByDefault ?? null,
+                    mapInfo     : { mapId },
+                };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -465,17 +500,17 @@ namespace TwnsMcrCreateSettingsPanel {
         public onItemTapEvent(): void {
             const data = this.data;
             if (data) {
-                const creator       = McrCreateModel;
+                const creator       = MultiCustomRoom.McrCreateModel;
                 const playerIndex   = data.playerIndex;
                 creator.setSelfPlayerIndex(playerIndex);
 
-                const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
-                    warRule         : creator.getWarRule(),
+                const availableCoIdArray = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({
+                    baseWarRule         : creator.getInstanceWarRule(),
                     playerIndex,
-                    configVersion   : McrCreateModel.getConfigVersion(),
+                    gameConfig      : MultiCustomRoom.McrCreateModel.getGameConfig(),
                 });
                 if (availableCoIdArray.indexOf(creator.getSelfCoId()) < 0) {
-                    creator.setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
+                    creator.setSelfCoId(WarHelpers.WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
                 }
             }
         }
@@ -493,12 +528,12 @@ namespace TwnsMcrCreateSettingsPanel {
             const data = this.data;
             if (data) {
                 const playerIndex       = data.playerIndex;
-                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(McrCreateModel.getWarRule(), playerIndex))})`;
+                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(MultiCustomRoom.McrCreateModel.getInstanceWarRule(), playerIndex))})`;
             }
         }
         private _updateState(): void {
             const data          = this.data;
-            this.currentState   = ((data) && (data.playerIndex === McrCreateModel.getSelfPlayerIndex())) ? `down` : `up`;
+            this.currentState   = ((data) && (data.playerIndex === MultiCustomRoom.McrCreateModel.getSelfPlayerIndex())) ? `down` : `up`;
         }
     }
 
@@ -521,7 +556,7 @@ namespace TwnsMcrCreateSettingsPanel {
         public onItemTapEvent(): void {
             const data = this.data;
             if (data) {
-                McrCreateModel.setSelfUnitAndTileSkinId(data.skinId);
+                MultiCustomRoom.McrCreateModel.setSelfUnitAndTileSkinId(data.skinId);
             }
         }
         private _onNotifyMcrCreateSelfSkinIdChanged(): void {
@@ -532,7 +567,7 @@ namespace TwnsMcrCreateSettingsPanel {
             const data = this.data;
             if (data) {
                 const skinId            = data.skinId;
-                this._imgColor.source   = WarCommonHelpers.getImageSourceForSkinId(skinId, McrCreateModel.getSelfUnitAndTileSkinId() === skinId);
+                this._imgColor.source   = WarHelpers.WarCommonHelpers.getImageSourceForSkinId(skinId, MultiCustomRoom.McrCreateModel.getSelfUnitAndTileSkinId() === skinId);
             }
         }
     }

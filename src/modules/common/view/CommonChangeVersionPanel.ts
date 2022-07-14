@@ -4,7 +4,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -13,13 +13,13 @@
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChangeVersionPanel {
-    import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
-    import GameVersion  = Types.GameVersion;
+namespace Twns.Common {
+    import LangTextType = Twns.Lang.LangTextType;
+    import NotifyType   = Twns.Notify.NotifyType;
+    import GameVersion  = Twns.Types.GameVersion;
 
-    export type OpenData = void;
-    export class CommonChangeVersionPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForCommonChangeVersionPanel = void;
+    export class CommonChangeVersionPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChangeVersionPanel> {
         private readonly _group!        : eui.Group;
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
@@ -64,14 +64,14 @@ namespace TwnsCommonChangeVersionPanel {
 
         private async _onTouchedBtnConfirm(): Promise<void> {
             const selectedVersion = this._getSelectedGameVersion();
-            if ((selectedVersion == null) || (selectedVersion === CommonConstants.GameVersion)) {
+            if ((selectedVersion == null) || (selectedVersion === Twns.CommonConstants.GameVersion)) {
                 this.close();
                 return;
             }
 
             const url = getUrlForGameVersion(selectedVersion);
             if (url == null) {
-                throw Helpers.newError(`CommonChangeVersionPanel._onTouchedBtnConfirm() empty url.`);
+                throw Twns.Helpers.newError(`CommonChangeVersionPanel._onTouchedBtnConfirm() empty url.`);
             } else {
                 window.open(url);
             }
@@ -96,7 +96,7 @@ namespace TwnsCommonChangeVersionPanel {
             const dataArray     = this._createDataForListVersion();
             const listVersion   = this._listVersion;
             listVersion.bindData(dataArray);
-            listVersion.setSelectedIndex(dataArray.findIndex(v => v.gameVersion === CommonConstants.GameVersion));
+            listVersion.setSelectedIndex(dataArray.findIndex(v => v.gameVersion === Twns.CommonConstants.GameVersion));
         }
 
         private _createDataForListVersion(): DataForVersionRenderer[] {
@@ -114,32 +114,32 @@ namespace TwnsCommonChangeVersionPanel {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -172,16 +172,16 @@ namespace TwnsCommonChangeVersionPanel {
 
             const data = this.data;
             if (data == null) {
-                throw Helpers.newError(`CommonChangeVersionPanel.VersionRenderer._updateView() empty data.`);
+                throw Twns.Helpers.newError(`CommonChangeVersionPanel.VersionRenderer._updateView() empty data.`);
             }
 
             const gameVersion       = data.gameVersion;
-            this._labelName.text    = Lang.getGameVersionName(gameVersion) || CommonConstants.ErrorTextForUndefined;
-            this._labelDesc.text    = Lang.getGameVersionDesc(gameVersion) || CommonConstants.ErrorTextForUndefined;
+            this._labelName.text    = Lang.getGameVersionName(gameVersion) || Twns.CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = Lang.getGameVersionDesc(gameVersion) || Twns.CommonConstants.ErrorTextForUndefined;
 
             const labelCurrent      = this._labelCurrent;
             labelCurrent.text       = `(${Lang.getText(LangTextType.B0623)})`;
-            labelCurrent.visible    = gameVersion === CommonConstants.GameVersion;
+            labelCurrent.visible    = gameVersion === Twns.CommonConstants.GameVersion;
         }
     }
 

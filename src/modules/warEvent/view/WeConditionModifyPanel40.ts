@@ -5,7 +5,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -16,19 +16,19 @@
 // import TwnsWeConditionTypeListPanel from "./WeConditionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeConditionModifyPanel40 {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
+namespace Twns.WarEvent {
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
-    export type OpenData = {
-        war         : TwnsBwWar.BwWar;
+    export type OpenDataForWeConditionModifyPanel40 = {
+        war         : BaseWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
     /** WecPlayerIndexInTurnEqualTo */
-    export class WeConditionModifyPanel40 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeConditionModifyPanel40 extends TwnsUiPanel.UiPanel<OpenDataForWeConditionModifyPanel40> {
         private readonly _labelTitle!                   : TwnsUiLabel.UiLabel;
         private readonly _btnType!                      : TwnsUiButton.UiButton;
         private readonly _btnClose!                     : TwnsUiButton.UiButton;
@@ -38,6 +38,12 @@ namespace TwnsWeConditionModifyPanel40 {
 
         private readonly _btnPlayerIndex!               : TwnsUiButton.UiButton;
         private readonly _labelPlayerIndex!             : TwnsUiLabel.UiLabel;
+        private readonly _btnConIsOwnerPlayerInTurn!    : TwnsUiButton.UiButton;
+        private readonly _labelConIsOwnerPlayerInTurn!  : TwnsUiLabel.UiLabel;
+
+        private readonly _btnConIsDiving!               : TwnsUiButton.UiButton;
+        private readonly _labelConIsDiving!             : TwnsUiLabel.UiLabel;
+
         private readonly _btnTeamIndex!                 : TwnsUiButton.UiButton;
         private readonly _labelTeamIndex!               : TwnsUiLabel.UiLabel;
         private readonly _btnUnitType!                  : TwnsUiButton.UiButton;
@@ -81,6 +87,8 @@ namespace TwnsWeConditionModifyPanel40 {
                 { ui: this._btnType,                    callback: this._onTouchedBtnType },
                 { ui: this._imgInnerTouchMask,          callback: this._onTouchedImgInnerTouchMask },
                 { ui: this._btnPlayerIndex,             callback: this._onTouchedBtnPlayerIndex },
+                { ui: this._btnConIsOwnerPlayerInTurn,  callback: this._onTouchedBtnConIsOwnerPlayerInTurn },
+                { ui: this._btnConIsDiving,             callback: this._onTouchedBtnConIsDiving },
                 { ui: this._btnTeamIndex,               callback: this._onTouchedBtnTeamIndex },
                 { ui: this._btnUnitType,                callback: this._onTouchedBtnUnitType },
                 { ui: this._btnLocation,                callback: this._onTouchedBtnLocation },
@@ -124,7 +132,7 @@ namespace TwnsWeConditionModifyPanel40 {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.WeConditionTypeListPanel, {
                 fullData    : openData.fullData,
                 condition   : openData.condition,
                 war         : openData.war,
@@ -135,7 +143,7 @@ namespace TwnsWeConditionModifyPanel40 {
         }
         private _onTouchedBtnPlayerIndex(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerIndexPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChoosePlayerIndexPanel, {
                 currentPlayerIndexArray : condition.playerIndexArray ?? [],
                 maxPlayerIndex          : this._getOpenData().war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : playerIndexArray => {
@@ -144,9 +152,33 @@ namespace TwnsWeConditionModifyPanel40 {
                 },
             });
         }
+        private _onTouchedBtnConIsOwnerPlayerInTurn(): void {
+            const condition             = this._getCondition();
+            const isOwnerPlayerInTurn   = condition.isOwnerPlayerInTurn;
+            if (isOwnerPlayerInTurn == null) {
+                condition.isOwnerPlayerInTurn = true;
+            } else if (isOwnerPlayerInTurn) {
+                condition.isOwnerPlayerInTurn = false;
+            } else {
+                condition.isOwnerPlayerInTurn = null;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onTouchedBtnConIsDiving(): void {
+            const condition     = this._getCondition();
+            const conIsDiving   = condition.isDiving;
+            if (conIsDiving == null) {
+                condition.isDiving = true;
+            } else if (conIsDiving) {
+                condition.isDiving = false;
+            } else {
+                condition.isDiving = null;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
         private _onTouchedBtnTeamIndex(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTeamIndexPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseTeamIndexPanel, {
                 currentTeamIndexArray   : condition.teamIndexArray ?? [],
                 maxTeamIndex            : this._getOpenData().war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : teamIndexArray => {
@@ -157,7 +189,8 @@ namespace TwnsWeConditionModifyPanel40 {
         }
         private _onTouchedBtnUnitType(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseUnitTypePanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseUnitTypePanel, {
+                gameConfig              : this._getOpenData().war.getGameConfig(),
                 currentUnitTypeArray    : condition.unitTypeArray ?? [],
                 callbackOnConfirm       : unitTypeArray => {
                     condition.unitTypeArray = unitTypeArray;
@@ -167,7 +200,7 @@ namespace TwnsWeConditionModifyPanel40 {
         }
         private _onTouchedBtnLocation(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseLocationPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseLocationPanel, {
                 currentLocationIdArray  : condition.locationIdArray ?? [],
                 callbackOnConfirm       : locationIdArray => {
                     condition.locationIdArray = locationIdArray;
@@ -177,7 +210,7 @@ namespace TwnsWeConditionModifyPanel40 {
         }
         private _onTouchedBtnGridIndex(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseGridIndexPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseGridIndexPanel, {
                 currentGridIndexArray   : Helpers.getNonNullElements(condition.gridIndexArray?.map(v => GridIndexHelpers.convertGridIndex(v)) ?? []),
                 mapSize                 : this._getOpenData().war.getTileMap().getMapSize(),
                 callbackOnConfirm       : gridIndexArray => {
@@ -188,7 +221,7 @@ namespace TwnsWeConditionModifyPanel40 {
         }
         private _onTouchedBtnActionState(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseUnitActionStatePanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseUnitActionStatePanel, {
                 currentActionStateArray : condition.actionStateArray ?? [],
                 callbackOnConfirm       : actionStateArray => {
                     condition.actionStateArray = actionStateArray;
@@ -303,6 +336,8 @@ namespace TwnsWeConditionModifyPanel40 {
 
             this._updateLabelDescAndLabelError();
             this._updateLabelPlayerIndex();
+            this._updateLabelConIsPlayerInTurn();
+            this._updateLabelConIsDiving();
             this._updateLabelTeamIndex();
             this._updateLabelUnitType();
             this._updateLabelLocation();
@@ -322,26 +357,28 @@ namespace TwnsWeConditionModifyPanel40 {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text               = `${Lang.getText(LangTextType.B0501)} C${this._getOpenData().condition.WecCommonData?.conditionId}`;
-            this._btnClose.label                = Lang.getText(LangTextType.B0146);
-            this._btnType.label                 = Lang.getText(LangTextType.B0516);
-            this._btnPlayerIndex.label          = Lang.getText(LangTextType.B0031);
-            this._btnTeamIndex.label            = Lang.getText(LangTextType.B0377);
-            this._btnUnitType.label             = Lang.getText(LangTextType.B0525);
-            this._btnLocation.label             = Lang.getText(LangTextType.B0764);
-            this._btnGridIndex.label            = Lang.getText(LangTextType.B0531);
-            this._btnActionState.label          = Lang.getText(LangTextType.B0526);
-            this._btnHasLoadedCo.label          = Lang.getText(LangTextType.B0421);
-            this._btnHpComparator.label         = Lang.getText(LangTextType.B0774);
-            this._labelHp.text                  = Lang.getText(LangTextType.B0807);
-            this._btnFuelPctComparator.label    = Lang.getText(LangTextType.B0774);
-            this._labelFuelPct.text             = `${Lang.getText(LangTextType.B0342)}%`;
-            this._btnPriAmmoPctComparator.label = Lang.getText(LangTextType.B0774);
-            this._labelPriAmmoPct.text          = `${Lang.getText(LangTextType.B0350)}%`;
-            this._btnPromotionComparator.label  = Lang.getText(LangTextType.B0774);
-            this._labelPromotion.text           = Lang.getText(LangTextType.B0370);
-            this._btnUnitsCountComparator.label = Lang.getText(LangTextType.B0774);
-            this._labelUnitsCount.text          = Lang.getText(LangTextType.B0773);
+            this._labelTitle.text                   = `${Lang.getText(LangTextType.B0501)} C${this._getOpenData().condition.WecCommonData?.conditionId}`;
+            this._btnClose.label                    = Lang.getText(LangTextType.B0146);
+            this._btnType.label                     = Lang.getText(LangTextType.B0516);
+            this._btnPlayerIndex.label              = Lang.getText(LangTextType.B0031);
+            this._btnConIsOwnerPlayerInTurn.label   = Lang.getText(LangTextType.B0086);
+            this._btnConIsDiving.label              = Lang.getText(LangTextType.B0371);
+            this._btnTeamIndex.label                = Lang.getText(LangTextType.B0377);
+            this._btnUnitType.label                 = Lang.getText(LangTextType.B0525);
+            this._btnLocation.label                 = Lang.getText(LangTextType.B0764);
+            this._btnGridIndex.label                = Lang.getText(LangTextType.B0531);
+            this._btnActionState.label              = Lang.getText(LangTextType.B0526);
+            this._btnHasLoadedCo.label              = Lang.getText(LangTextType.B0421);
+            this._btnHpComparator.label             = Lang.getText(LangTextType.B0774);
+            this._labelHp.text                      = Lang.getText(LangTextType.B0807);
+            this._btnFuelPctComparator.label        = Lang.getText(LangTextType.B0774);
+            this._labelFuelPct.text                 = `${Lang.getText(LangTextType.B0342)}%`;
+            this._btnPriAmmoPctComparator.label     = Lang.getText(LangTextType.B0774);
+            this._labelPriAmmoPct.text              = `${Lang.getText(LangTextType.B0350)}%`;
+            this._btnPromotionComparator.label      = Lang.getText(LangTextType.B0774);
+            this._labelPromotion.text               = Lang.getText(LangTextType.B0370);
+            this._btnUnitsCountComparator.label     = Lang.getText(LangTextType.B0774);
+            this._labelUnitsCount.text              = Lang.getText(LangTextType.B0773);
             // this._labelGridIndex.text   = Lang.getText(LangTextType.B0531);
 
             this._updateLabelDescAndLabelError();
@@ -350,15 +387,34 @@ namespace TwnsWeConditionModifyPanel40 {
         private _updateLabelDescAndLabelError(): void {
             const openData          = this._getOpenData();
             const condition         = openData.condition;
-            const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition, openData.war);
+            const war               = openData.war;
+            const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = WarEventHelper.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelPlayerIndex(): void {
             const playerIndexArray      = this._getCondition().playerIndexArray;
             this._labelPlayerIndex.text = playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`, `) : Lang.getText(LangTextType.B0776);
+        }
+        private _updateLabelConIsPlayerInTurn(): void {
+            const isOwnerPlayerInTurn   = this._getCondition().isOwnerPlayerInTurn;
+            const label                 = this._labelConIsOwnerPlayerInTurn;
+            if (isOwnerPlayerInTurn == null) {
+                label.text = `--`;
+            } else {
+                label.text = Lang.getText(isOwnerPlayerInTurn ? LangTextType.B0012 : LangTextType.B0013);
+            }
+        }
+        private _updateLabelConIsDiving(): void {
+            const isDiving  = this._getCondition().isDiving;
+            const label     = this._labelConIsDiving;
+            if (isDiving == null) {
+                label.text = `--`;
+            } else {
+                label.text = Lang.getText(isDiving ? LangTextType.B0012 : LangTextType.B0013);
+            }
         }
         private _updateLabelTeamIndex(): void {
             const teamIndexArray        = this._getCondition().teamIndexArray;
@@ -366,7 +422,8 @@ namespace TwnsWeConditionModifyPanel40 {
         }
         private _updateLabelUnitType(): void {
             const unitTypeArray         = this._getCondition().unitTypeArray;
-            this._labelUnitType.text    = unitTypeArray?.length ? unitTypeArray.map(v => Lang.getUnitName(v)).join(`, `) : Lang.getText(LangTextType.B0776);
+            const gameConfig            = this._getOpenData().war.getGameConfig();
+            this._labelUnitType.text    = unitTypeArray?.length ? unitTypeArray.map(v => Lang.getUnitName(v, gameConfig)).join(`, `) : Lang.getText(LangTextType.B0776);
         }
         private _updateLabelLocation(): void {
             const locationIdArray       = this._getCondition().locationIdArray;
@@ -420,7 +477,7 @@ namespace TwnsWeConditionModifyPanel40 {
             this._inputUnitsCount.text = `${this._getCondition().unitsCount}`;
         }
 
-        private _getCondition(): ProtoTypes.WarEvent.IWecUnitPresence {
+        private _getCondition(): CommonProto.WarEvent.IWecUnitPresence {
             return Helpers.getExisted(this._getOpenData().condition.WecUnitPresence);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {

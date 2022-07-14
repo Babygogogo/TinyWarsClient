@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -18,13 +18,13 @@
 // import MeProxy                  from "../model/MeProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeMapListPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+namespace Twns.MapEditor {
+    import NotifyType       = Notify.NotifyType;
+    import IMapEditorData   = CommonProto.Map.IMapEditorData;
+    import LangTextType     = Lang.LangTextType;
 
-    export type OpenData = void;
-    export class MeMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeMapListPanel = void;
+    export class MeMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForMeMapListPanel> {
         private readonly _zoomMap!          : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelNoData!      : TwnsUiLabel.UiLabel;
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
@@ -49,7 +49,7 @@ namespace TwnsMeMapListPanel {
             this._updateComponentsForLanguage();
             this._labelLoading.visible = true;
 
-            MeProxy.reqMeGetMapDataList();
+            MapEditor.MeProxy.reqMeGetMapDataList();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -79,7 +79,7 @@ namespace TwnsMeMapListPanel {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifySMeGetDataList(): void {
-            const newData               = this._createDataForListMap(MeModel.getDataDict());
+            const newData               = this._createDataForListMap(MapEditor.MeModel.getDataDict());
             this._dataForListMap        = newData;
             this._labelLoading.visible  = false;
 
@@ -133,7 +133,7 @@ namespace TwnsMeMapListPanel {
 
             } else {
                 this._labelNoData.visible = false;
-                this._zoomMap.showMapByMapData(mapData);
+                this._zoomMap.showMapByMapData(mapData, await Config.ConfigManager.getLatestGameConfig());
             }
         }
     }
@@ -155,6 +155,7 @@ namespace TwnsMeMapListPanel {
                 { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._btnChoose.setShortSfxCode(Types.ShortSfxCode.None);
+            this._btnNext.setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected _onDataChanged(): void {
@@ -179,7 +180,7 @@ namespace TwnsMeMapListPanel {
             const reviewStatus  = mapData.reviewStatus;
 
             if (reviewStatus === Types.MapReviewStatus.Rejected) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0305),
                     content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                     callback: () => {
@@ -187,7 +188,7 @@ namespace TwnsMeMapListPanel {
                     },
                 });
             } else if (reviewStatus === Types.MapReviewStatus.Accepted) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0326),
                     content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                     callback: () => {

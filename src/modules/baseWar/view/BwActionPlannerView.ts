@@ -5,18 +5,18 @@
 // import Timer                from "../../tools/helpers/Timer";
 // import Types                from "../../tools/helpers/Types";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsBwActionPlanner  from "../model/BwActionPlanner";
 // import TwnsBwUnit           from "../model/BwUnit";
 // import TwnsBwUnitView       from "./BwUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwActionPlannerView {
-    import NotifyType   = TwnsNotifyType.NotifyType;
-    import State        = Types.ActionPlannerState;
-    import GridIndex    = Types.GridIndex;
-    import Direction    = Types.Direction;
+namespace Twns.BaseWar {
+    import NotifyType   = Twns.Notify.NotifyType;
+    import State        = Twns.Types.ActionPlannerState;
+    import GridIndex    = Twns.Types.GridIndex;
+    import Direction    = Twns.Types.Direction;
 
     const _PATH_GRID_SOURCE_EMPTY               = ``;
     const _PATH_GRID_SOURCE_LINE_VERTICAL       = `c08_t01_s01_f01`;
@@ -30,7 +30,7 @@ namespace TwnsBwActionPlannerView {
     const _PATH_GRID_SOURCE_CORNER_UP_LEFT      = `c08_t01_s09_f01`;
     const _PATH_GRID_SOURCE_CORNER_UP_RIGHT     = `c08_t01_s10_f01`;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Twns.CommonConstants.GridSize;
     const _MOVABLE_GRID_FRAMES = [
         `c08_t02_s01_f01`, `c08_t02_s01_f02`, `c08_t02_s01_f03`, `c08_t02_s01_f04`,
         `c08_t02_s01_f05`, `c08_t02_s01_f06`, `c08_t02_s01_f07`, `c08_t02_s01_f08`,
@@ -92,7 +92,7 @@ namespace TwnsBwActionPlannerView {
     const ALPHA_FOR_VISIBLE_GRIDS_NORMAL    = 0.6;
 
     export class BwActionPlannerView extends egret.DisplayObjectContainer {
-        private _actionPlanner?                 : TwnsBwActionPlanner.BwActionPlanner;
+        private _actionPlanner?                 : Twns.BaseWar.BwActionPlanner;
 
         private _conForGrids                    = new egret.DisplayObjectContainer();
         private _conForMovableGrids             = new egret.DisplayObjectContainer();
@@ -106,9 +106,9 @@ namespace TwnsBwActionPlannerView {
         private readonly _imgForMoveDestination = new TwnsUiImage.UiImage(_MOVABLE_GRID_FRAMES[0]);
 
         private _conForUnits            = new egret.DisplayObjectContainer();
-        private _focusUnitViews         = new Map<number, TwnsBwUnitView.BwUnitView>();
+        private _focusUnitViews         = new Map<number, Twns.BaseWar.BwUnitView>();
 
-        private _notifyEvents: Notify.Listener[] = [
+        private _notifyEvents: Twns.Notify.Listener[] = [
             { type: NotifyType.GridAnimationTick,       callback: this._onNotifyGridAnimationTick },
             { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
             { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
@@ -128,7 +128,7 @@ namespace TwnsBwActionPlannerView {
             this.addChild(this._conForUnits);
         }
 
-        public init(actionPlanner: TwnsBwActionPlanner.BwActionPlanner): void {
+        public init(actionPlanner: Twns.BaseWar.BwActionPlanner): void {
             this._actionPlanner = actionPlanner;
             this._initConForMovableGrids();
             this._initConForMoveDestination();
@@ -136,21 +136,21 @@ namespace TwnsBwActionPlannerView {
             this._initConForMovePath();
             this._initConForVisibleGrids();
         }
-        public fastInit(actionPlanner: TwnsBwActionPlanner.BwActionPlanner): void {
+        public fastInit(actionPlanner: Twns.BaseWar.BwActionPlanner): void {
             this._actionPlanner = actionPlanner;
         }
 
         public startRunningView(): void {
-            Notify.addEventListeners(this._notifyEvents, this);
+            Twns.Notify.addEventListeners(this._notifyEvents, this);
 
             this.updateView();
         }
         public stopRunningView(): void {
-            Notify.removeEventListeners(this._notifyEvents, this);
+            Twns.Notify.removeEventListeners(this._notifyEvents, this);
         }
 
-        private _getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {
-            return Helpers.getExisted(this._actionPlanner);
+        private _getActionPlanner(): Twns.BaseWar.BwActionPlanner {
+            return Twns.Helpers.getExisted(this._actionPlanner);
         }
 
         public getContainerForGrids(): egret.DisplayObjectContainer {
@@ -161,16 +161,16 @@ namespace TwnsBwActionPlannerView {
         }
 
         private _getImgsForMovableGrids(): TwnsUiImage.UiImage[][] {
-            return Helpers.getExisted(this._imgsForMovableGrids);
+            return Twns.Helpers.getExisted(this._imgsForMovableGrids);
         }
         private _getImgsForAttackableGrids(): TwnsUiImage.UiImage[][] {
-            return Helpers.getExisted(this._imgsForAttackableGrids);
+            return Twns.Helpers.getExisted(this._imgsForAttackableGrids);
         }
         private _getImgForMoveDestination(): TwnsUiImage.UiImage {
-            return Helpers.getExisted(this._imgForMoveDestination);
+            return Twns.Helpers.getExisted(this._imgForMoveDestination);
         }
         private _getImgsForVisibleGrids(): TwnsUiImage.UiImage[][] {
-            return Helpers.getExisted(this._imgsForVisibleGrids);
+            return Twns.Helpers.getExisted(this._imgsForVisibleGrids);
         }
 
         private _initConForMovableGrids(): void {
@@ -179,7 +179,7 @@ namespace TwnsBwActionPlannerView {
             con.alpha = ALPHA_FOR_MOVABLE_GRIDS;
 
             const { width, height } = this._getActionPlanner().getMapSize();
-            const images            = Helpers.createEmptyMap<TwnsUiImage.UiImage>(width, height);
+            const images            = Twns.Helpers.createEmptyMap<TwnsUiImage.UiImage>(width, height);
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
                     const image     = new TwnsUiImage.UiImage(_MOVABLE_GRID_FRAMES[0]);
@@ -207,7 +207,7 @@ namespace TwnsBwActionPlannerView {
             con.alpha = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
             const { width, height } = this._getActionPlanner().getMapSize();
-            const images            = Helpers.createEmptyMap<TwnsUiImage.UiImage>(width, height);
+            const images            = Twns.Helpers.createEmptyMap<TwnsUiImage.UiImage>(width, height);
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
                     const image     = new TwnsUiImage.UiImage(_ATTACKABLE_GRID_FRAMES[0]);
@@ -230,7 +230,7 @@ namespace TwnsBwActionPlannerView {
             con.alpha = ALPHA_FOR_VISIBLE_GRIDS_NORMAL;
 
             const { width, height } = this._getActionPlanner().getMapSize();
-            const images            = Helpers.createEmptyMap<TwnsUiImage.UiImage>(width, height);
+            const images            = Twns.Helpers.createEmptyMap<TwnsUiImage.UiImage>(width, height);
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
                     const image     = new TwnsUiImage.UiImage(_VISIBLE_GRID_FRAMES[0]);
@@ -249,7 +249,7 @@ namespace TwnsBwActionPlannerView {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyGridAnimationTick(): void {
-            const tick                  = Timer.getGridAnimationTickCount();
+            const tick                  = Twns.Timer.getGridAnimationTickCount();
             const sourceForMovable      = _MOVABLE_GRID_FRAMES[tick % _MOVABLE_GRID_FRAMES.length];
             const sourceForAttackable   = _ATTACKABLE_GRID_FRAMES[tick % _ATTACKABLE_GRID_FRAMES.length];
             const sourceForVisible      = _VISIBLE_GRID_FRAMES[tick % _VISIBLE_GRID_FRAMES.length];
@@ -306,8 +306,8 @@ namespace TwnsBwActionPlannerView {
                 con.visible = true;
                 con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
-                const movableArea               = Helpers.getExisted(actionPlanner.getMovableArea());
-                const attackableArea            = Helpers.getExisted(actionPlanner.getAttackableArea());
+                const movableArea               = Twns.Helpers.getExisted(actionPlanner.getMovableArea());
+                const attackableArea            = Twns.Helpers.getExisted(actionPlanner.getAttackableArea());
                 const { width, height }         = actionPlanner.getMapSize();
                 const imgsForAttackableGrids    = this._getImgsForAttackableGrids();
                 for (let x = 0; x < width; ++x) {
@@ -321,8 +321,8 @@ namespace TwnsBwActionPlannerView {
                 con.visible = true;
                 con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
-                const movableArea               = Helpers.getExisted(actionPlanner.getMovableArea());
-                const attackableArea            = Helpers.getExisted(actionPlanner.getAttackableArea());
+                const movableArea               = Twns.Helpers.getExisted(actionPlanner.getMovableArea());
+                const attackableArea            = Twns.Helpers.getExisted(actionPlanner.getAttackableArea());
                 const { width, height }         = actionPlanner.getMapSize();
                 const imgsForAttackableGrids    = this._getImgsForAttackableGrids();
                 for (let x = 0; x < width; ++x) {
@@ -343,7 +343,7 @@ namespace TwnsBwActionPlannerView {
                         imgsForAttackableGrids[x][y].visible = false;
                     }
                 }
-                for (const grid of Helpers.getExisted(actionPlanner.getAttackableGridsAfterMove())) {
+                for (const grid of Twns.Helpers.getExisted(actionPlanner.getAttackableGridsAfterMove())) {
                     imgsForAttackableGrids[grid.x][grid.y].visible = true;
                 }
 
@@ -357,10 +357,10 @@ namespace TwnsBwActionPlannerView {
                 const { width, height } = actionPlanner.getMapSize();
                 const imgs              = this._getImgsForAttackableGrids();
                 const destination       = actionPlanner.getMovePathDestination();
-                const range             = Helpers.getExisted(actionPlanner.getFocusUnit()?.getFlareMaxRange());
+                const range             = Twns.Helpers.getExisted(actionPlanner.getFocusUnit()?.getFlareMaxRange());
                 for (let x = 0; x < width; ++x) {
                     for (let y = 0; y < height; ++y) {
-                        imgs[x][y].visible = GridIndexHelpers.getDistance(destination, { x, y }) <= range;
+                        imgs[x][y].visible = Twns.GridIndexHelpers.getDistance(destination, { x, y }) <= range;
                     }
                 }
 
@@ -430,7 +430,7 @@ namespace TwnsBwActionPlannerView {
             } else if (state === State.MakingMovePath) {
                 con.visible = true;
 
-                const movableArea       = Helpers.getExisted(actionPlanner.getMovableArea());
+                const movableArea       = Twns.Helpers.getExisted(actionPlanner.getMovableArea());
                 const { width, height } = actionPlanner.getMapSize();
                 const imgs              = this._getImgsForMovableGrids();
                 for (let x = 0; x < width; ++x) {
@@ -442,7 +442,7 @@ namespace TwnsBwActionPlannerView {
             } else if (state === State.ChoosingAction) {
                 con.visible = true;
 
-                const movableArea       = Helpers.getExisted(actionPlanner.getMovableArea());
+                const movableArea       = Twns.Helpers.getExisted(actionPlanner.getMovableArea());
                 const { width, height } = actionPlanner.getMapSize();
                 const imgs              = this._getImgsForMovableGrids();
                 for (let x = 0; x < width; ++x) {
@@ -464,7 +464,7 @@ namespace TwnsBwActionPlannerView {
                         imgs[x][y].visible = false;
                     }
                 }
-                for (const grid of Helpers.getExisted(actionPlanner.getAvailableDropDestinations())) {
+                for (const grid of Twns.Helpers.getExisted(actionPlanner.getAvailableDropDestinations())) {
                     imgs[grid.x][grid.y].visible = true;
                 }
 
@@ -483,7 +483,7 @@ namespace TwnsBwActionPlannerView {
             } else if (state === State.PreviewingUnitMovableArea) {
                 con.visible = true;
 
-                const area              = Helpers.getExisted(actionPlanner.getAreaForPreviewingMove());
+                const area              = Twns.Helpers.getExisted(actionPlanner.getAreaForPreviewingMove());
                 const { width, height } = actionPlanner.getMapSize();
                 const imgs              = this._getImgsForMovableGrids();
                 for (let x = 0; x < width; ++x) {
@@ -551,7 +551,7 @@ namespace TwnsBwActionPlannerView {
                         imgs[x][y].visible = false;
                     }
                 }
-                for (const gridIndex of Helpers.getExisted(actionPlanner.getAreaForPreviewingVisible())) {
+                for (const gridIndex of Twns.Helpers.getExisted(actionPlanner.getAreaForPreviewingVisible())) {
                     imgs[gridIndex.x][gridIndex.y].visible = true;
                 }
 
@@ -666,7 +666,7 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = true;
 
-                const unitOnMap     = Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
+                const unitOnMap     = Twns.Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
                 const unitLoaded    = actionPlanner.getFocusUnitLoaded();
                 const movePath      = actionPlanner.getMovePath();
                 if (!unitLoaded) {
@@ -681,7 +681,7 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = true;
 
-                const unitOnMap     = Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
+                const unitOnMap     = Twns.Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
                 const unitLoaded    = actionPlanner.getFocusUnitLoaded();
                 const movePath      = actionPlanner.getMovePath();
                 if (!unitLoaded) {
@@ -700,7 +700,7 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = true;
 
-                const unitOnMap     = Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
+                const unitOnMap     = Twns.Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
                 const unitLoaded    = actionPlanner.getFocusUnitLoaded();
                 const movePath      = actionPlanner.getMovePath();
                 if (!unitLoaded) {
@@ -715,7 +715,7 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = true;
 
-                const focusUnitOnMap    = Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
+                const focusUnitOnMap    = Twns.Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
                 const focusUnitLoaded   = actionPlanner.getFocusUnitLoaded();
                 const movePath          = actionPlanner.getMovePath();
                 if (!focusUnitLoaded) {
@@ -730,8 +730,8 @@ namespace TwnsBwActionPlannerView {
                 }
 
                 const cursorGridIndex = actionPlanner.getCursor().getGridIndex();
-                if (actionPlanner.getAvailableDropDestinations()?.some(grid => GridIndexHelpers.checkIsEqual(grid, cursorGridIndex))) {
-                    this._addUnitView(Helpers.getExisted(actionPlanner.getChoosingUnitForDrop()), cursorGridIndex);
+                if (actionPlanner.getAvailableDropDestinations()?.some(grid => Twns.GridIndexHelpers.checkIsEqual(grid, cursorGridIndex))) {
+                    this._addUnitView(Twns.Helpers.getExisted(actionPlanner.getChoosingUnitForDrop()), cursorGridIndex);
                 }
 
             } else if (state === State.ChoosingFlareDestination) {
@@ -739,7 +739,7 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = true;
 
-                const unitOnMap     = Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
+                const unitOnMap     = Twns.Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
                 const unitLoaded    = actionPlanner.getFocusUnitLoaded();
                 const movePath      = actionPlanner.getMovePath();
                 if (!unitLoaded) {
@@ -754,7 +754,7 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = true;
 
-                const unitOnMap     = Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
+                const unitOnMap     = Twns.Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
                 const unitLoaded    = actionPlanner.getFocusUnitLoaded();
                 const movePath      = actionPlanner.getMovePath();
                 if (!unitLoaded) {
@@ -783,7 +783,7 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = true;
 
-                const unit = Helpers.getExisted(actionPlanner.getUnitForPreviewingMovableArea());
+                const unit = Twns.Helpers.getExisted(actionPlanner.getUnitForPreviewingMovableArea());
                 this._addUnitView(unit, unit.getGridIndex());
 
             } else if (state === State.PreviewingUnitVisibleArea) {
@@ -791,7 +791,7 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = true;
 
-                const unit = Helpers.getExisted(actionPlanner.getUnitForPreviewingVisibleArea());
+                const unit = Twns.Helpers.getExisted(actionPlanner.getUnitForPreviewingVisibleArea());
                 this._addUnitView(unit, unit.getGridIndex());
 
             } else if (state === State.PreviewingTileAttackableArea) {
@@ -807,11 +807,11 @@ namespace TwnsBwActionPlannerView {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _addUnitView(unit: TwnsBwUnit.BwUnit, gridIndex: GridIndex, alpha = 1): void {
-            const view = new TwnsBwUnitView.BwUnitView().init(unit).startRunningView();
+        private _addUnitView(unit: Twns.BaseWar.BwUnit, gridIndex: GridIndex, alpha = 1): void {
+            const view = new Twns.BaseWar.BwUnitView().init(unit).startRunningView();
             // view.alpha = alpha;
             _resetUnitViewXy(view, gridIndex);
-            view.showUnitAnimation(Types.UnitAnimationType.Move);
+            view.showUnitAnimation(Twns.Types.UnitAnimationType.Move);
             this._focusUnitViews.set(unit.getUnitId(), view);
             this._conForUnits.addChild(view);
         }
@@ -827,7 +827,7 @@ namespace TwnsBwActionPlannerView {
     }
 
     function _createImgForMovePathGrid(prev: GridIndex, curr: GridIndex, next: GridIndex): TwnsUiImage.UiImage | null {
-        const source = Helpers.getExisted(_PATH_GRID_SOURCES.get(GridIndexHelpers.getAdjacentDirection(prev, curr))).get(GridIndexHelpers.getAdjacentDirection(next, curr));
+        const source = Twns.Helpers.getExisted(_PATH_GRID_SOURCES.get(Twns.GridIndexHelpers.getAdjacentDirection(prev, curr))).get(Twns.GridIndexHelpers.getAdjacentDirection(next, curr));
         if (!source) {
             return null;
         } else {
@@ -839,7 +839,7 @@ namespace TwnsBwActionPlannerView {
         }
     }
 
-    function _resetUnitViewXy(view: TwnsBwUnitView.BwUnitView, gridIndex: GridIndex): void {
+    function _resetUnitViewXy(view: Twns.BaseWar.BwUnitView, gridIndex: GridIndex): void {
         view.x  = gridIndex.x * _GRID_WIDTH;
         view.y  = gridIndex.y * _GRID_HEIGHT;
     }

@@ -4,23 +4,24 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 // import MeModel              from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseTileTypePanel {
-    import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
-    import TileType     = Types.TileType;
+namespace Twns.Common {
+    import LangTextType = Lang.LangTextType;
+    import NotifyType   = Notify.NotifyType;
+    import GameConfig   = Config.GameConfig;
 
-    export type OpenData = {
-        currentTileTypeArray    : TileType[];
-        callbackOnConfirm       : (tileTypeArray: TileType[]) => void;
+    export type OpenDataForCommonChooseTileTypePanel = {
+        gameConfig              : GameConfig;
+        currentTileTypeArray    : number[];
+        callbackOnConfirm       : (tileTypeArray: number[]) => void;
     };
-    export class CommonChooseTileTypePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChooseTileTypePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseTileTypePanel> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnSelectAll!     : TwnsUiButton.UiButton;
         private readonly _btnUnselectAll!   : TwnsUiButton.UiButton;
@@ -82,9 +83,13 @@ namespace TwnsCommonChooseTileTypePanel {
         }
 
         private _updateListTileType(): void {
-            const dataArray : DataForTileTypeRenderer[] = [];
-            for (const tileType of ConfigManager.getTileTypesByCategory(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), Types.TileCategory.All)) {
-                dataArray.push({ tileType });
+            const gameConfig    = this._getOpenData().gameConfig;
+            const dataArray     : DataForTileTypeRenderer[] = [];
+            for (const tileType of gameConfig.getAllTileTypeArray()) {
+                dataArray.push({
+                    tileType,
+                    gameConfig,
+                });
             }
 
             const tileTypeArray = this._getOpenData().currentTileTypeArray;
@@ -95,14 +100,16 @@ namespace TwnsCommonChooseTileTypePanel {
     }
 
     type DataForTileTypeRenderer = {
-        tileType    : TileType;
+        tileType    : number;
+        gameConfig  : GameConfig;
     };
     class TileTypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileTypeRenderer> {
         private readonly _groupShow!        : eui.Group;
         private readonly _labelTileName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelTileName.text = Lang.getTileName(this._getData().tileType) ?? CommonConstants.ErrorTextForUndefined;
+            const data                  = this._getData();
+            this._labelTileName.text    = Lang.getTileName(data.tileType, data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
         }
     }
 }

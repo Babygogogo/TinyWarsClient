@@ -75,7 +75,7 @@
                             </e:layout>
                         </e:Group>
                     </e:Group>
-                    <TwnsUiScrollList:UiScrollList id="_listSkillDesc" y="25" width="320" x="0">
+                    <TwnsUiScrollList:UiScrollList id="_listSkillDesc" y="25" width="320" x="0" height="170">
                         <e:List>
                             <e:itemRendererSkinName>
                                 <e:Skin width="320">

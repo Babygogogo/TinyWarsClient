@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -17,81 +17,92 @@
 // import UserProxy                from "../../user/model/UserProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserPanel {
-    import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
+namespace Twns.User {
+    import LangTextType = Lang.LangTextType;
+    import NotifyType   = Notify.NotifyType;
     import WarType      = Types.WarType;
 
-    export type OpenData = {
+    export type OpenDataForUserPanel = {
         userId  : number;
     };
-    export class UserPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        private readonly _imgMask!                  : TwnsUiImage.UiImage;
-        private readonly _group!                    : eui.Group;
-        private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
-        private readonly _btnClose!                 : TwnsUiButton.UiButton;
+    export class UserPanel extends TwnsUiPanel.UiPanel<OpenDataForUserPanel> {
+        private readonly _imgMask!                      : TwnsUiImage.UiImage;
+        private readonly _group!                        : eui.Group;
+        private readonly _labelTitle!                   : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!                     : TwnsUiButton.UiButton;
 
-        private readonly _btnChat!                  : TwnsUiButton.UiButton;
-        private readonly _imgAvatar!                : TwnsUiImage.UiImage;
-        private readonly _btnSetAvatar!             : TwnsUiButton.UiButton;
-        private readonly _imgLogo!                  : TwnsUiImage.UiImage;
+        private readonly _groupTopButtons!              : eui.Group;
+        private readonly _btnChat!                      : TwnsUiButton.UiButton;
+        private readonly _btnSetProfile!                : TwnsUiButton.UiButton;
 
-        private readonly _labelStdRankScoreTitle!   : TwnsUiLabel.UiLabel;
-        private readonly _labelStdRankScore!        : TwnsUiLabel.UiLabel;
-        private readonly _labelStdRankRankTitle!    : TwnsUiLabel.UiLabel;
-        private readonly _labelStdRankRank!         : TwnsUiLabel.UiLabel;
-        private readonly _labelStdRankRankSuffix!   : TwnsUiLabel.UiLabel;
-        private readonly _labelFogRankScoreTitle!   : TwnsUiLabel.UiLabel;
-        private readonly _labelFogRankScore!        : TwnsUiLabel.UiLabel;
-        private readonly _labelFogRankRankTitle!    : TwnsUiLabel.UiLabel;
-        private readonly _labelFogRankRank!         : TwnsUiLabel.UiLabel;
-        private readonly _labelFogRankRankSuffix!   : TwnsUiLabel.UiLabel;
-        private readonly _labelSpmRankScoreTitle!   : TwnsUiLabel.UiLabel;
-        private readonly _labelSpmRankScore!        : TwnsUiLabel.UiLabel;
-        private readonly _labelSpmRankRankTitle!    : TwnsUiLabel.UiLabel;
-        private readonly _labelSpmRankRank!         : TwnsUiLabel.UiLabel;
-        private readonly _labelSpmRankRankSuffix!   : TwnsUiLabel.UiLabel;
+        private readonly _imgAvatar!                    : TwnsUiImage.UiImage;
+        private readonly _btnSetAvatar!                 : TwnsUiButton.UiButton;
+        private readonly _imgLogo!                      : TwnsUiImage.UiImage;
 
-        private readonly _labelRegisterTimeTitle!   : TwnsUiLabel.UiLabel;
-        private readonly _labelRegisterTime1!       : TwnsUiLabel.UiLabel;
-        private readonly _labelRegisterTime2!       : TwnsUiLabel.UiLabel;
-        private readonly _labelLastLoginTimeTitle!  : TwnsUiLabel.UiLabel;
-        private readonly _labelLastLoginTime1!      : TwnsUiLabel.UiLabel;
-        private readonly _labelLastLoginTime2!      : TwnsUiLabel.UiLabel;
-        private readonly _labelOnlineTimeTitle!     : TwnsUiLabel.UiLabel;
-        private readonly _labelOnlineTime!          : TwnsUiLabel.UiLabel;
-        private readonly _labelLoginCountTitle!     : TwnsUiLabel.UiLabel;
-        private readonly _labelLoginCount!          : TwnsUiLabel.UiLabel;
-        private readonly _labelUserId!              : TwnsUiLabel.UiLabel;
-        private readonly _labelUserIdTitle!         : TwnsUiLabel.UiLabel;
-        private readonly _labelDiscordId!           : TwnsUiLabel.UiLabel;
+        private readonly _labelStdRankScoreTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelStdRankScore!            : TwnsUiLabel.UiLabel;
+        private readonly _labelStdRankRankTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _labelStdRankRank!             : TwnsUiLabel.UiLabel;
+        private readonly _labelStdRankRankSuffix!       : TwnsUiLabel.UiLabel;
+        private readonly _btnRankStdHistory!            : TwnsUiButton.UiButton;
+        private readonly _labelFogRankScoreTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelFogRankScore!            : TwnsUiLabel.UiLabel;
+        private readonly _labelFogRankRankTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _labelFogRankRank!             : TwnsUiLabel.UiLabel;
+        private readonly _labelFogRankRankSuffix!       : TwnsUiLabel.UiLabel;
+        private readonly _btnRankFowHistory!            : TwnsUiButton.UiButton;
+        private readonly _labelSpmRankScoreTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmRankScore!            : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmRankRankTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmRankRank!             : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmRankRankSuffix!       : TwnsUiLabel.UiLabel;
+        private readonly _btnMyWarRoomRecord!           : TwnsUiButton.UiButton;
 
-        private readonly _labelHistoryStd!          : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryStdWin!       : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryStdLose!      : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryStdDraw!      : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryStdRatio!     : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryFog!          : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryFogWin!       : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryFogLose!      : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryFogDraw!      : TwnsUiLabel.UiLabel;
-        private readonly _labelHistoryFogRatio!     : TwnsUiLabel.UiLabel;
+        private readonly _labelRegisterTimeTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelRegisterTime1!           : TwnsUiLabel.UiLabel;
+        private readonly _labelRegisterTime2!           : TwnsUiLabel.UiLabel;
+        private readonly _labelLastLoginTimeTitle!      : TwnsUiLabel.UiLabel;
+        private readonly _labelLastLoginTime1!          : TwnsUiLabel.UiLabel;
+        private readonly _labelLastLoginTime2!          : TwnsUiLabel.UiLabel;
+        private readonly _labelOnlineTimeTitle!         : TwnsUiLabel.UiLabel;
+        private readonly _labelOnlineTime!              : TwnsUiLabel.UiLabel;
+        private readonly _labelLoginCountTitle!         : TwnsUiLabel.UiLabel;
+        private readonly _labelLoginCount!              : TwnsUiLabel.UiLabel;
+        private readonly _labelUserId!                  : TwnsUiLabel.UiLabel;
+        private readonly _labelUserIdTitle!             : TwnsUiLabel.UiLabel;
+        private readonly _labelLastActivityTimeTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelLastActivityTime1!       : TwnsUiLabel.UiLabel;
+        private readonly _labelLastActivityTime2!       : TwnsUiLabel.UiLabel;
 
-        private readonly _sclHistoryStd!            : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
-        private readonly _sclHistoryFog!            : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
+        private readonly _labelHistoryStd!              : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryStdWin!           : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryStdLose!          : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryStdDraw!          : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryStdRatio!         : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryFog!              : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryFogWin!           : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryFogLose!          : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryFogDraw!          : TwnsUiLabel.UiLabel;
+        private readonly _labelHistoryFogRatio!         : TwnsUiLabel.UiLabel;
+
+        private readonly _sclHistoryStd!                : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
+        private readonly _sclHistoryFog!                : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,         callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserGetPublicInfo,    callback: this._onNotifyMsgUserGetPublicInfo },
                 { type: NotifyType.MsgUserSetNickname,      callback: this._onNotifyMsgUserSetNickname },
-                { type: NotifyType.MsgUserSetDiscordId,     callback: this._onNotifyMsgUserSetDiscordId },
                 { type: NotifyType.MsgUserSetAvatarId,      callback: this._onNotifyMsgUserSetAvatarId },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnChat,            callback: this._onTouchedBtnChat },
-                { ui: this._btnSetAvatar,       callback: this._onTouchedBtnSetAvatar },
-                { ui: this._btnClose,           callback: this.close },
+                { ui: this._btnChat,                callback: this._onTouchedBtnChat },
+                { ui: this._btnSetProfile,          callback: this._onTouchedBtnSetProfile },
+                { ui: this._btnSetAvatar,           callback: this._onTouchedBtnSetAvatar },
+                { ui: this._btnRankStdHistory,      callback: this._onTouchedBtnRankStdHistory },
+                { ui: this._btnRankFowHistory,      callback: this._onTouchedBtnRankFowHistory },
+                { ui: this._btnMyWarRoomRecord,     callback: this._onTouchedBtnMyWarRoomRecord },
+                { ui: this._btnClose,               callback: this.close },
             ]);
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
@@ -102,7 +113,7 @@ namespace TwnsUserPanel {
             this._updateView();
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            UserProxy.reqUserGetPublicInfo(this._getOpenData().userId);
+            User.UserProxy.reqUserGetPublicInfo(this._getOpenData().userId);
         }
         protected _onClosing(): void {
             // nothing to do
@@ -116,29 +127,41 @@ namespace TwnsUserPanel {
         }
         private _onNotifyMsgUserSetNickname(): void {
             const userId = this._getOpenData().userId;
-            if (userId === UserModel.getSelfUserId()) {
-                UserProxy.reqUserGetPublicInfo(userId);
-            }
-        }
-        private _onNotifyMsgUserSetDiscordId(): void {
-            const userId = this._getOpenData().userId;
-            if (userId === UserModel.getSelfUserId()) {
-                UserProxy.reqUserGetPublicInfo(userId);
+            if (userId === User.UserModel.getSelfUserId()) {
+                User.UserProxy.reqUserGetPublicInfo(userId);
             }
         }
         private _onNotifyMsgUserSetAvatarId(): void {
             const userId = this._getOpenData().userId;
-            if (userId === UserModel.getSelfUserId()) {
-                UserProxy.reqUserGetPublicInfo(userId);
+            if (userId === User.UserModel.getSelfUserId()) {
+                User.UserProxy.reqUserGetPublicInfo(userId);
             }
         }
         private _onTouchedBtnChat(): void {
             const userId = this._getOpenData().userId;
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: userId });
+            PanelHelpers.open(PanelHelpers.PanelDict.ChatPanel, { toUserId: userId });
+        }
+        private _onTouchedBtnSetProfile(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.UserProfileSettingsPanel, void 0);
         }
         private _onTouchedBtnSetAvatar(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetAvatarPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.UserSetAvatarPanel, void 0);
+        }
+        private _onTouchedBtnRankStdHistory(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.UserWarHistoryPanel, {
+                userId      : this._getOpenData().userId,
+                historyType : User.UserWarHistoryType.RankStd,
+            });
+        }
+        private _onTouchedBtnRankFowHistory(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.UserWarHistoryPanel, {
+                userId      : this._getOpenData().userId,
+                historyType : User.UserWarHistoryType.RankFow,
+            });
+        }
+        private _onTouchedBtnMyWarRoomRecord(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.SpmMyWarRoomRecordPanel, void 0);
         }
 
         protected async _showOpenAnimation(): Promise<void> {
@@ -172,79 +195,66 @@ namespace TwnsUserPanel {
 
         private async _updateView(): Promise<void> {
             const userId    = this._getOpenData().userId;
-            const info      = await UserModel.getUserPublicInfo(userId);
+            const info      = await User.UserModel.getUserPublicInfo(userId);
             if (info) {
-                const registerTime          = info.registerTime;
-                const labelRegisterTime1    = this._labelRegisterTime1;
-                const labelRegisterTime2    = this._labelRegisterTime2;
-                if (registerTime == null) {
-                    labelRegisterTime1.text     = CommonConstants.ErrorTextForUndefined;
-                    labelRegisterTime2.text     = CommonConstants.ErrorTextForUndefined;
-                } else {
-                    labelRegisterTime1.text     = Helpers.getTimestampShortText(registerTime, { hour: false, minute: false, second: false });
-                    labelRegisterTime2.text     = Helpers.getTimestampShortText(registerTime, { year: false, month: false, date: false });
-                }
+                updateLabelsForTime(info.registerTime, this._labelRegisterTime1, this._labelRegisterTime2);
+                updateLabelsForTime(info.lastLoginTime, this._labelLastLoginTime1, this._labelLastLoginTime2);
+                updateLabelsForTime(info.lastActivityTime, this._labelLastActivityTime1, this._labelLastActivityTime2);
 
-                const loginTime             = info.lastLoginTime;
-                const labelLastLoginTime1   = this._labelLastLoginTime1;
-                const labelLastLoginTime2   = this._labelLastLoginTime2;
-                if (loginTime == null) {
-                    labelLastLoginTime1.text    = CommonConstants.ErrorTextForUndefined;
-                    labelLastLoginTime2.text    = CommonConstants.ErrorTextForUndefined;
-                } else {
-                    labelLastLoginTime1.text    = Helpers.getTimestampShortText(loginTime, { hour: false, minute: false, second: false });
-                    labelLastLoginTime2.text    = Helpers.getTimestampShortText(loginTime, { year: false, month: false, date: false });
-                }
-
-                this._labelLoginCount.text      = `${info.loginCount}`;
-                this._labelUserId.text          = `${userId}`;
-                this._labelDiscordId.text       = info.discordId || "--";
+                this._labelLoginCount.text  = `${info.loginCount}`;
+                this._labelUserId.text      = `${userId}`;
             }
 
             this._updateComponentsForLanguage();
             this._updateLabelOnlineTime();
-            this._updateBtnChat();
+            this._updateGroupTopButtons();
             this._updateBtnSetAvatar();
             this._updateImgAvatar();
         }
 
-        private _updateBtnChat(): void {
-            this._btnChat.visible = this._getOpenData().userId !== UserModel.getSelfUserId();
+        private _updateGroupTopButtons(): void {
+            const group = this._groupTopButtons;
+            group.removeChildren();
+
+            if (this._getOpenData().userId === User.UserModel.getSelfUserId()) {
+                group.addChild(this._btnSetProfile);
+            } else {
+                group.addChild(this._btnChat);
+            }
         }
 
         private _updateBtnSetAvatar(): void {
-            this._btnSetAvatar.visible = this._getOpenData().userId === UserModel.getSelfUserId();
+            this._btnSetAvatar.visible = this._getOpenData().userId === User.UserModel.getSelfUserId();
         }
 
         private async _updateImgAvatar(): Promise<void> {
-            const info              = await UserModel.getUserPublicInfo(this._getOpenData().userId);
-            this._imgAvatar.source  = ConfigManager.getUserAvatarImageSource(info?.avatarId ?? 1);
+            const info              = await User.UserModel.getUserPublicInfo(this._getOpenData().userId);
+            this._imgAvatar.source  = Config.ConfigManager.getUserAvatarImageSource(info?.avatarId ?? 1);
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelStdRankScoreTitle.text   = Lang.getText(LangTextType.B0198);
-            this._labelStdRankRankTitle.text    = Lang.getText(LangTextType.B0546);
-            this._labelFogRankScoreTitle.text   = Lang.getText(LangTextType.B0199);
-            this._labelFogRankRankTitle.text    = Lang.getText(LangTextType.B0547);
-            this._labelSpmRankScoreTitle.text   = Lang.getText(LangTextType.B0819);
-            this._labelSpmRankRankTitle.text    = Lang.getText(LangTextType.B0820);
-            this._labelUserIdTitle.text         = Lang.getText(LangTextType.B0640);
-            this._labelRegisterTimeTitle.text   = Lang.getText(LangTextType.B0194);
-            this._labelLastLoginTimeTitle.text  = Lang.getText(LangTextType.B0195);
-            this._labelOnlineTimeTitle.text     = Lang.getText(LangTextType.B0196);
-            this._labelLoginCountTitle.text     = Lang.getText(LangTextType.B0197);
-            this._labelHistoryStd.text          = Lang.getText(LangTextType.B0548);
-            this._labelHistoryStdWin.text       = Lang.getText(LangTextType.B0550);
-            this._labelHistoryStdLose.text      = Lang.getText(LangTextType.B0551);
-            this._labelHistoryStdDraw.text      = Lang.getText(LangTextType.B0552);
-            this._labelHistoryStdRatio.text     = Lang.getText(LangTextType.B0553);
-            this._labelHistoryFog.text          = Lang.getText(LangTextType.B0549);
-            this._labelHistoryFogWin.text       = Lang.getText(LangTextType.B0550);
-            this._labelHistoryFogLose.text      = Lang.getText(LangTextType.B0551);
-            this._labelHistoryFogDraw.text      = Lang.getText(LangTextType.B0552);
-            this._labelHistoryFogRatio.text     = Lang.getText(LangTextType.B0553);
-            this._btnChat.label                 = Lang.getText(LangTextType.B0383);
-            this._btnSetAvatar.label            = Lang.getText(LangTextType.B0707);
+            this._labelStdRankScoreTitle.text       = Lang.getText(LangTextType.B0198);
+            this._labelStdRankRankTitle.text        = Lang.getText(LangTextType.B0546);
+            this._labelFogRankScoreTitle.text       = Lang.getText(LangTextType.B0199);
+            this._labelFogRankRankTitle.text        = Lang.getText(LangTextType.B0547);
+            this._labelSpmRankScoreTitle.text       = Lang.getText(LangTextType.B0819);
+            this._labelSpmRankRankTitle.text        = Lang.getText(LangTextType.B0820);
+            this._labelUserIdTitle.text             = Lang.getText(LangTextType.B0640);
+            this._labelRegisterTimeTitle.text       = Lang.getText(LangTextType.B0194);
+            this._labelLastLoginTimeTitle.text      = Lang.getText(LangTextType.B0195);
+            this._labelOnlineTimeTitle.text         = Lang.getText(LangTextType.B0196);
+            this._labelLoginCountTitle.text         = Lang.getText(LangTextType.B0197);
+            this._labelHistoryStd.text              = Lang.getText(LangTextType.B0548);
+            this._labelHistoryStdWin.text           = Lang.getText(LangTextType.B0550);
+            this._labelHistoryStdLose.text          = Lang.getText(LangTextType.B0551);
+            this._labelHistoryStdDraw.text          = Lang.getText(LangTextType.B0552);
+            this._labelHistoryStdRatio.text         = Lang.getText(LangTextType.B0553);
+            this._labelHistoryFog.text              = Lang.getText(LangTextType.B0549);
+            this._labelHistoryFogWin.text           = Lang.getText(LangTextType.B0550);
+            this._labelHistoryFogLose.text          = Lang.getText(LangTextType.B0551);
+            this._labelHistoryFogDraw.text          = Lang.getText(LangTextType.B0552);
+            this._labelHistoryFogRatio.text         = Lang.getText(LangTextType.B0553);
+            this._labelLastActivityTimeTitle.text   = Lang.getText(LangTextType.B0917);
 
             this._updateLabelTitle();
             this._updateComponentsForStdRank();
@@ -255,40 +265,44 @@ namespace TwnsUserPanel {
         }
 
         private async _updateLabelTitle(): Promise<void> {
-            const nickname          = await UserModel.getUserNickname(this._getOpenData().userId);
+            const nickname          = await User.UserModel.getUserNickname(this._getOpenData().userId);
             this._labelTitle.text   = Lang.getFormattedText(LangTextType.F0009, nickname);
         }
         private async _updateComponentsForStdRank(): Promise<void> {
-            const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwStd, 2);
+            const userId                    = this._getOpenData().userId;
+            const data                      = await User.UserModel.getUserMrwRankScoreInfo(userId, WarType.MrwStd, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            const rankName                  = `(${ConfigManager.getRankName(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), score)})`;
+            const rankName                  = `(${(await Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? CommonConstants.ErrorTextForUndefined})`;
             this._labelStdRankScore.text    = `${score} ${rankName}`;
 
-            const rank                          = data ? data.currentRank : null;
-            this._labelStdRankRank.text         = rank == null ? `--` : `${rank}`;
-            this._labelStdRankRankSuffix.text   = Helpers.getSuffixForRank(rank) || ``;
+            const rankIndex                     = await Leaderboard.LeaderboardModel.getMrwRankIndex(WarType.MrwStd, userId);
+            this._labelStdRankRank.text         = rankIndex == null ? `--` : `${rankIndex}`;
+            this._labelStdRankRankSuffix.text   = Helpers.getSuffixForRankIndex(rankIndex) || ``;
         }
         private async _updateComponentsForFogRank(): Promise<void> {
-            const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwFog, 2);
+            const userId                    = this._getOpenData().userId;
+            const data                      = await User.UserModel.getUserMrwRankScoreInfo(userId, WarType.MrwFog, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            const rankName                  = `(${ConfigManager.getRankName(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), score)})`;
+            const rankName                  = `(${(await Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? CommonConstants.ErrorTextForUndefined})`;
             this._labelFogRankScore.text    = `${score} ${rankName}`;
 
-            const rank                          = data ? data.currentRank : null;
-            this._labelFogRankRank.text         = rank == null ? `--` : `${rank}`;
-            this._labelFogRankRankSuffix.text   = Helpers.getSuffixForRank(rank) || ``;
+            const rankIndex                     = await Leaderboard.LeaderboardModel.getMrwRankIndex(WarType.MrwFog, userId);
+            this._labelFogRankRank.text         = rankIndex == null ? `--` : `${rankIndex}`;
+            this._labelFogRankRankSuffix.text   = Helpers.getSuffixForRankIndex(rankIndex) || ``;
         }
         private async _updateComponentsForSpmRank(): Promise<void> {
-            const rankInfo                      = (await UserModel.getUserPublicInfo(this._getOpenData().userId))?.userSpmOverallRankInfo;
-            const score                         = rankInfo?.currentScore ?? 0;
-            this._labelSpmRankScore.text        = score > 0 ? Helpers.formatString(`%.2f`, score) : `--`;
+            const userId                        = this._getOpenData().userId;
+            this._btnMyWarRoomRecord.visible    = userId === User.UserModel.getSelfUserId();
 
-            const rank                          = rankInfo?.currentRank ?? 0;
-            const isRankValid                   = (rank > 0) && (score > 0);
-            this._labelSpmRankRank.text         = isRankValid ? `${rank}` : `--`;
-            this._labelSpmRankRankSuffix.text   = isRankValid ? Helpers.getSuffixForRank(rank) || `` : ``;
+            const rankScore                     = (await User.UserModel.getUserPublicInfo(userId))?.spmOverallRankScore ?? 0;
+            const rankIndex                     = (await Leaderboard.LeaderboardModel.getSpmOverallRankIndex(userId)) ?? 0;
+            this._labelSpmRankScore.text        = rankScore > 0 ? Helpers.formatString(`%.2f`, rankScore) : `--`;
+
+            const isRankValid                   = (rankIndex > 0) && (rankScore > 0);
+            this._labelSpmRankRank.text         = isRankValid ? `${rankIndex}` : `--`;
+            this._labelSpmRankRankSuffix.text   = isRankValid ? Helpers.getSuffixForRankIndex(rankIndex) || `` : ``;
         }
         private _updateSclHistoryStd(): void {
             const userId    = this._getOpenData().userId;
@@ -299,7 +313,7 @@ namespace TwnsUserPanel {
                 warType     : WarType.MrwStd,
                 playersCount: 2,
             }];
-            for (let playersCount = 2; playersCount <= CommonConstants.WarMaxPlayerIndex; ++playersCount) {
+            for (let playersCount = 2; playersCount <= CommonConstants.PlayerIndex.Max; ++playersCount) {
                 dataList.push({
                     index       : index++,
                     userId,
@@ -319,7 +333,7 @@ namespace TwnsUserPanel {
                 warType     : WarType.MrwFog,
                 playersCount: 2,
             }];
-            for (let playersCount = 2; playersCount <= CommonConstants.WarMaxPlayerIndex; ++playersCount) {
+            for (let playersCount = 2; playersCount <= CommonConstants.PlayerIndex.Max; ++playersCount) {
                 dataList.push({
                     index       : index++,
                     userId,
@@ -331,7 +345,7 @@ namespace TwnsUserPanel {
             this._sclHistoryFog.bindData(dataList);
         }
         private async _updateLabelOnlineTime(): Promise<void> {
-            const info                  = await UserModel.getUserPublicInfo(this._getOpenData().userId);
+            const info                  = await User.UserModel.getUserPublicInfo(this._getOpenData().userId);
             const onlineTime            = info ? info.onlineTime : null;
             this._labelOnlineTime.text  = onlineTime == null ? CommonConstants.ErrorTextForUndefined : Helpers.getTimeDurationText2(onlineTime);
         }
@@ -367,7 +381,7 @@ namespace TwnsUserPanel {
                 labelType.text  = `${playersCount}P`;
             }
 
-            const info              = await UserModel.getUserMpwStatisticsData(data.userId, warType, playersCount);
+            const info              = await User.UserModel.getUserMpwStatisticsData(data.userId, warType, playersCount);
             const winCount          = info ? info.wins || 0 : 0;
             const loseCount         = info ? info.loses || 0 : 0;
             const drawCount         = info ? info.draws || 0 : 0;
@@ -376,6 +390,16 @@ namespace TwnsUserPanel {
             this._labelLose.text    = `${loseCount}`;
             this._labelDraw.text    = `${drawCount}`;
             this._labelRatio.text   = totalCount ? Helpers.formatString(`%.2f`, winCount / totalCount * 100) : `--`;
+        }
+    }
+
+    function updateLabelsForTime(time: Types.Undefinable<number>, label1: TwnsUiLabel.UiLabel, label2: TwnsUiLabel.UiLabel): void {
+        if (time == null) {
+            label1.text    = CommonConstants.ErrorTextForUndefined;
+            label2.text    = CommonConstants.ErrorTextForUndefined;
+        } else {
+            label1.text    = Helpers.getTimestampShortText(time, { hour: false, minute: false, second: false });
+            label2.text    = Helpers.getTimestampShortText(time, { year: false, month: false, date: false });
         }
     }
 }

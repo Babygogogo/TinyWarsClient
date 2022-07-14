@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 // import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
@@ -15,19 +15,21 @@
 // import TwnsSpwWarMenuPanel      from "./SpwWarMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpwSidePanel {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.SinglePlayerWar {
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
 
-    export type OpenData = {
-        war     : TwnsSpwWar.SpwWar;
+    export type OpenDataForSpwSidePanel = {
+        war : SpwWar;
     };
-    export class SpwSidePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class SpwSidePanel extends TwnsUiPanel.UiPanel<OpenDataForSpwSidePanel> {
         private readonly _groupLeft!    : eui.Group;
         private readonly _btnCop!       : TwnsUiButton.UiButton;
         private readonly _btnScop!      : TwnsUiButton.UiButton;
 
         private readonly _groupRight!   : eui.Group;
+        private readonly _btnUndo!      : TwnsUiButton.UiButton;
+        private readonly _btnRedo!      : TwnsUiButton.UiButton;
         private readonly _btnNextUnit!  : TwnsUiButton.UiButton;
         private readonly _btnNextTile!  : TwnsUiButton.UiButton;
         private readonly _btnEndTurn!   : TwnsUiButton.UiButton;
@@ -47,6 +49,8 @@ namespace TwnsSpwSidePanel {
             this._setUiListenerArray([
                 { ui: this._btnCop,             callback: this._onTouchedBtnCop },
                 { ui: this._btnScop,            callback: this._onTouchedBtnScop },
+                { ui: this._btnUndo,            callback: this._onTouchedBtnUndo },
+                { ui: this._btnRedo,            callback: this._onTouchedBtnRedo },
                 { ui: this._btnNextUnit,        callback: this._onTouchedBtnNextUnit, },
                 { ui: this._btnNextTile,        callback: this._onTouchedBtnNextTile, },
                 { ui: this._btnEndTurn,         callback: this._onTouchedBtnEndTurn, },
@@ -99,7 +103,7 @@ namespace TwnsSpwSidePanel {
             if (!war.getPlayerInTurn().checkCanUseCoSkill(skillType)) {
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0142),
                     content : Lang.getText(LangTextType.A0054),
                     callback: () => war.getActionPlanner().setStateRequestingPlayerUseCoSkill(skillType),
@@ -113,12 +117,38 @@ namespace TwnsSpwSidePanel {
             if (!war.getPlayerInTurn().checkCanUseCoSkill(skillType)) {
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0144),
                     content : Lang.getText(LangTextType.A0058),
                     callback: () => war.getActionPlanner().setStateRequestingPlayerUseCoSkill(skillType),
                 });
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            }
+        }
+        private _onTouchedBtnUndo(): void {
+            const war               = this._getOpenData().war;
+            const retractManager    = war.getRetractManager();
+            const retractId         = retractManager.getNextRetractId() - 2;
+            const retractState      = retractManager.getRetractState(retractId);
+            if (retractState == null) {
+                FloatText.show(Lang.getText(LangTextType.A0318));
+            } else {
+                war.fastLoadState(ProtoManager.decodeAsSerialWar(retractState));
+                retractManager.setNextRetractId(retractId + 1);
+                SoundManager.playCoBgmWithWar(war, false);
+            }
+        }
+        private _onTouchedBtnRedo(): void {
+            const war               = this._getOpenData().war;
+            const retractManager    = war.getRetractManager();
+            const retractId         = Math.max(1, retractManager.getNextRetractId());
+            const retractState      = retractManager.getRetractState(retractId);
+            if (retractState == null) {
+                FloatText.show(Lang.getText(LangTextType.A0319));
+            } else {
+                war.fastLoadState(ProtoManager.decodeAsSerialWar(retractState));
+                retractManager.setNextRetractId(retractId + 1);
+                SoundManager.playCoBgmWithWar(war, false);
             }
         }
         private _onTouchedBtnNextUnit(): void {
@@ -128,7 +158,7 @@ namespace TwnsSpwSidePanel {
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
                 actionPlanner.setStateIdle();
 
-                const gridIndex = WarCommonHelpers.getIdleUnitGridIndex(war);
+                const gridIndex = WarHelpers.WarCommonHelpers.getIdleUnitGridIndex(war);
                 if (!gridIndex) {
                     SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 } else {
@@ -148,7 +178,7 @@ namespace TwnsSpwSidePanel {
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
                 actionPlanner.setStateIdle();
 
-                const gridIndex = WarCommonHelpers.getIdleBuildingGridIndex(war);
+                const gridIndex = WarHelpers.WarCommonHelpers.getIdleBuildingGridIndex(war);
                 if (!gridIndex) {
                     SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 } else {
@@ -166,9 +196,9 @@ namespace TwnsSpwSidePanel {
             if ((war.getDrawVoteManager().getRemainingVotes()) && (!war.getPlayerInTurn().getHasVotedForDraw())) {
                 FloatText.show(Lang.getText(LangTextType.A0034));
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0036),
-                    content : this._getHintForEndTurn(),
+                    content : WarHelpers.WarCommonHelpers.getHintForEndTurn(war),
                     callback: () => this._getOpenData().war.getActionPlanner().setStateRequestingPlayerEndTurn(),
                 });
             }
@@ -182,14 +212,14 @@ namespace TwnsSpwSidePanel {
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarInfoPanel, { war });
+            PanelHelpers.open(PanelHelpers.PanelDict.BwWarInfoPanel, { war });
         }
         private _onTouchedBtnMenu(): void {
             const actionPlanner = this._getOpenData().war.getActionPlanner();
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpwWarMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.SpwWarMenuPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -202,6 +232,7 @@ namespace TwnsSpwSidePanel {
         private _updateDynamicButtons(): void {
             this._updateBtnCop();
             this._updateBtnScop();
+            this._updateButtonsForRetract();
             this._updateBtnEndTurn();
             this._updateBtnNextUnit();
             this._updateBtnNextTile();
@@ -211,6 +242,8 @@ namespace TwnsSpwSidePanel {
         private _updateComponentsForLanguage(): void {
             this._btnCop.label      = Lang.getText(LangTextType.B0142);
             this._btnScop.label     = Lang.getText(LangTextType.B0144);
+            this._btnUndo.label     = Lang.getText(LangTextType.B0923);
+            this._btnRedo.label     = Lang.getText(LangTextType.B0924);
             this._btnNextUnit.label = Lang.getText(LangTextType.B0685);
             this._btnNextTile.label = Lang.getText(LangTextType.B0686);
             this._btnEndTurn.label  = Lang.getText(LangTextType.B0036);
@@ -253,6 +286,12 @@ namespace TwnsSpwSidePanel {
             }
         }
 
+        private _updateButtonsForRetract(): void {
+            const canRetract        = this._getOpenData().war.getRetractManager().getCanRetract();
+            this._btnUndo.visible   = canRetract;
+            this._btnRedo.visible   = canRetract;
+        }
+
         private _updateBtnEndTurn(): void {
             const war                   = this._getOpenData().war;
             const turnManager           = war.getTurnManager();
@@ -273,7 +312,7 @@ namespace TwnsSpwSidePanel {
                 btn.visible = false;
             } else {
                 btn.visible = true;
-                btn.icon    = WarCommonHelpers.getIdleUnitGridIndex(war) == null ? `commonIcon0018` : `commonIcon0015`;
+                btn.icon    = WarHelpers.WarCommonHelpers.getIdleUnitGridIndex(war) == null ? `commonIcon0018` : `commonIcon0015`;
             }
         }
 
@@ -289,7 +328,7 @@ namespace TwnsSpwSidePanel {
                 btn.visible = false;
             } else {
                 btn.visible = true;
-                btn.icon    = WarCommonHelpers.getIdleBuildingGridIndex(war) == null ? `commonIcon0019` : `commonIcon0016`;
+                btn.icon    = WarHelpers.WarCommonHelpers.getIdleBuildingGridIndex(war) == null ? `commonIcon0019` : `commonIcon0016`;
             }
         }
 
@@ -303,55 +342,6 @@ namespace TwnsSpwSidePanel {
                 && (!actionPlanner.checkIsStateRequesting())
                 && (war.checkIsHumanInTurn())
                 && (turnManager.getPhaseCode() === Types.TurnPhaseCode.Main);
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Util functions.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _getHintForEndTurn(): string {
-            const war           = this._getOpenData().war;
-            const playerIndex   = war.getPlayerIndexInTurn();
-            const unitMap       = war.getUnitMap();
-            const hints         = new Array<string>();
-
-            if (playerIndex != null) {
-                {
-                    let idleUnitsCount = 0;
-                    for (const unit of unitMap.getAllUnitsOnMap()) {
-                        if ((unit.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle)) {
-                            ++idleUnitsCount;
-                        }
-                    }
-                    (idleUnitsCount) && (hints.push(Lang.getFormattedText(LangTextType.F0006, idleUnitsCount)));
-                }
-
-                {
-                    const idleBuildingsDict = new Map<Types.TileType, Types.GridIndex[]>();
-                    for (const tile of war.getTileMap().getAllTiles()) {
-                        if ((tile.checkIsUnitProducerForPlayer(playerIndex)) && (!unitMap.getUnitOnMap(tile.getGridIndex()))) {
-                            const tileType  = tile.getType();
-                            const gridIndex = tile.getGridIndex();
-                            if (!idleBuildingsDict.has(tileType)) {
-                                idleBuildingsDict.set(tileType, [gridIndex]);
-                            } else {
-                                Helpers.getExisted(idleBuildingsDict.get(tileType)).push(gridIndex);
-                            }
-                        }
-                    }
-                    const textArrayForBuildings: string[] = [];
-                    for (const [tileType, gridIndexArray] of idleBuildingsDict) {
-                        textArrayForBuildings.push(Lang.getFormattedText(
-                            LangTextType.F0007, gridIndexArray.length,
-                            Lang.getTileName(tileType),
-                            gridIndexArray.map(v => `(${v.x}, ${v.y})`).join(`, `)),
-                        );
-                    }
-                    (textArrayForBuildings.length) && (hints.push(textArrayForBuildings.join(`\n`)));
-                }
-            }
-
-            hints.push(Lang.getText(LangTextType.A0024));
-            return hints.join(`\n\n`);
         }
     }
 }

@@ -10,7 +10,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import Notify                   from "../../tools/notify/Notify";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -25,13 +25,15 @@
 // import TwnsBwUnitView           from "./BwUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeDialogueBackgroundPanel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.WarEvent {
+    import NotifyType   = Twns.Notify.NotifyType;
+    import GameConfig   = Config.GameConfig;
 
-    export type OpenData = {
-        action  : ProtoTypes.WarEvent.IWeaDialogue;
+    export type OpenDataForWeDialogueBackgroundPanel = {
+        gameConfig  : GameConfig;
+        action      : CommonProto.WarEvent.IWeaDialogue;
     };
-    export class WeDialogueBackgroundPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeDialogueBackgroundPanel extends TwnsUiPanel.UiPanel<OpenDataForWeDialogueBackgroundPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _listBackground!   : TwnsUiScrollList.UiScrollList<DataForBackgroundRenderer>;
@@ -82,9 +84,10 @@ namespace TwnsWeDialogueBackgroundPanel {
         }
 
         private _createDataForList(): DataForBackgroundRenderer[] {
-            const maxId     = ConfigManager.getSystemDialogueBackgroundMaxId(Helpers.getExisted(ConfigManager.getLatestConfigVersion()));
+            const openData  = this._getOpenData();
+            const maxId     = openData.gameConfig.getSystemCfg().dialogueBackgroundMaxId;
             const dataArray : DataForBackgroundRenderer[] = [];
-            const action    = this._getOpenData().action;
+            const action    = openData.action;
             for (let backgroundId = 0; backgroundId <= maxId; ++backgroundId) {
                 dataArray.push({
                     backgroundId,
@@ -97,39 +100,39 @@ namespace TwnsWeDialogueBackgroundPanel {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
 
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
     type DataForBackgroundRenderer = {
         backgroundId            : number;
-        action                  : ProtoTypes.WarEvent.IWeaDialogue;
+        action                  : CommonProto.WarEvent.IWeaDialogue;
         panel                   : WeDialogueBackgroundPanel;
     };
     class BackgroundRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForBackgroundRenderer> {
@@ -148,7 +151,7 @@ namespace TwnsWeDialogueBackgroundPanel {
             ]);
 
             this._imgBg.touchEnabled = true;
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+            this._setShortSfxCode(Twns.Types.ShortSfxCode.None);
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -160,15 +163,15 @@ namespace TwnsWeDialogueBackgroundPanel {
         }
 
         private _onTouchedImgBg(): void {
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onTouchedGroupSelect(): void {
             const data                  = this._getData();
             const panel                 = data.panel;
             data.action.backgroundId    = data.backgroundId;
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonConfirm01);
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            Twns.SoundManager.playShortSfx(Twns.Types.ShortSfxCode.ButtonConfirm01);
+            Twns.Notify.dispatch(NotifyType.WarEventFullDataChanged);
             panel.close();
         }
 
@@ -176,7 +179,7 @@ namespace TwnsWeDialogueBackgroundPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            this._imgTarget.source = ConfigManager.getDialogueBackgroundImage(this._getData().backgroundId);
+            this._imgTarget.source = Twns.Config.ConfigManager.getDialogueBackgroundImage(this._getData().backgroundId);
         }
     }
 }

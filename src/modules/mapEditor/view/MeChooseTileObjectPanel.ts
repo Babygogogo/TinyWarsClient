@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -16,18 +16,19 @@
 // import TwnsMeTileSimpleView     from "./MeTileSimpleView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeChooseTileObjectPanel {
-    import DataForDrawTileObject    = TwnsMeDrawer.DataForDrawTileObject;
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.MapEditor {
+    import DataForDrawTileObject    = MapEditor.DataForDrawTileObject;
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
 
     const MAX_RECENT_COUNT = 10;
 
-    export type OpenData = void;
-    export class MeChooseTileObjectPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMeChooseTileObjectPanel = void;
+    export class MeChooseTileObjectPanel extends TwnsUiPanel.UiPanel<OpenDataForMeChooseTileObjectPanel> {
         private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
         private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForTileObjectRenderer>;
-        private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
+        private readonly _listPlayerIndex!  : TwnsUiScrollList.UiScrollList<DataForPlayerIndexRenderer>;
+        private readonly _listTileObject!   : TwnsUiScrollList.UiScrollList<DataForTileObjectRenderer>;
         private readonly _btnAdjustRoad!    : TwnsUiButton.UiButton;
         private readonly _btnAdjustPlasma!  : TwnsUiButton.UiButton;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
@@ -46,20 +47,33 @@ namespace TwnsMeChooseTileObjectPanel {
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
 
+            this._listPlayerIndex.setItemRenderer(PlayerIndexRenderer);
             this._listRecent.setItemRenderer(TileObjectRenderer);
-            this._listCategory.setItemRenderer(CategoryRenderer);
+            this._listTileObject.setItemRenderer(TileObjectRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
+            this._resetListPlayerIndex(CommonConstants.PlayerIndex.Neutral);
             this._updateListRecent();
-            this._updateListCategory();
+            this._updateListTileObject();
         }
         protected _onClosing(): void {
             // nothing to do
         }
 
-        public updateOnChooseTileObject(data: DataForDrawTileObject): void {
+        public setAndReviseSelectedPlayerIndex(newPlayerIndex: number, needScroll: boolean): void {
+            const listWarEventId    = this._listPlayerIndex;
+            const index             = Helpers.getExisted(listWarEventId.getRandomIndex(v => v.playerIndex === newPlayerIndex));
+            listWarEventId.setSelectedIndex(index);
+            this._updateListTileObject();
+
+            if (needScroll) {
+                listWarEventId.scrollVerticalToIndex(index);
+            }
+        }
+
+        public async updateOnChooseTileObject(data: DataForDrawTileObject): Promise<void> {
             const dataList      = this._dataListForRecent;
             const filteredList  = dataList.filter(v => {
                 const oldData = v.dataForDrawTileObject;
@@ -71,6 +85,7 @@ namespace TwnsMeChooseTileObjectPanel {
             dataList[0]         = {
                 dataForDrawTileObject   : data,
                 panel                   : this,
+                gameConfig              : await Config.ConfigManager.getLatestGameConfig(),
             };
             for (const v of filteredList) {
                 if (dataList.length < MAX_RECENT_COUNT) {
@@ -90,10 +105,10 @@ namespace TwnsMeChooseTileObjectPanel {
         }
 
         private _onTouchedBtnAdjustRoad(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content: Lang.getText(LangTextType.A0259),
                 callback: () => {
-                    const drawer = Helpers.getExisted(MeModel.getWar()).getDrawer();
+                    const drawer = Helpers.getExisted(MapEditor.MeModel.getWar()).getDrawer();
                     drawer.autoAdjustRoads();
                     drawer.autoAdjustBridges();
                     this.close();
@@ -101,10 +116,10 @@ namespace TwnsMeChooseTileObjectPanel {
             });
         }
         private _onTouchedBtnAdjustPlasma(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content: Lang.getText(LangTextType.A0260),
                 callback: () => {
-                    const drawer = Helpers.getExisted(MeModel.getWar()).getDrawer();
+                    const drawer = Helpers.getExisted(MapEditor.MeModel.getWar()).getDrawer();
                     drawer.autoAdjustPlasmas();
                     drawer.autoAdjustPipes();
                     this.close();
@@ -122,41 +137,51 @@ namespace TwnsMeChooseTileObjectPanel {
             this._labelRecentTitle.text = `${Lang.getText(LangTextType.B0372)}:`;
         }
 
-        private _createDataForListCategory(): DataForCategoryRenderer[] {
-            const mapping = new Map<number, DataForDrawTileObject[]>();
-            for (const [objectType, cfg] of CommonConstants.TileObjectShapeConfigs) {
-                for (let playerIndex = cfg.minPlayerIndex; playerIndex <= cfg.maxPlayerIndex; ++playerIndex) {
-                    if (!mapping.has(playerIndex)) {
-                        mapping.set(playerIndex, []);
-                    }
-
-                    const dataListForDrawTileObject = Helpers.getExisted(mapping.get(playerIndex));
-                    const shapesCount               = UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0 ? cfg.shapesCountForV0 : cfg.shapesCount;
-                    for (let shapeId = 0; shapeId < shapesCount; ++shapeId) {
-                        dataListForDrawTileObject.push({
-                            objectType,
-                            playerIndex,
-                            shapeId
-                        });
-                    }
-                }
-            }
-
-            const dataList: DataForCategoryRenderer[] = [];
-            for (const [, dataListForDrawTileObject] of mapping) {
-                dataList.push({
-                    dataListForDrawTileObject,
-                    panel                       : this,
+        private _resetListPlayerIndex(selectedPlayerIndex: number | null): void {
+            const dataArray: DataForPlayerIndexRenderer[] = [];
+            for (let playerIndex = CommonConstants.PlayerIndex.Neutral; playerIndex <= CommonConstants.PlayerIndex.Max; ++playerIndex) {
+                dataArray.push({
+                    playerIndex,
+                    panel       : this,
                 });
             }
 
-            return dataList;
+            const list = this._listPlayerIndex;
+            list.bindData(dataArray);
+            list.setSelectedIndex(list.getFirstIndex(v => v.playerIndex === selectedPlayerIndex) ?? (dataArray.length ? 0 : -1));
         }
 
-        private _updateListCategory(): void {
-            const dataList = this._createDataForListCategory();
-            this._listCategory.bindData(dataList);
-            this._listCategory.scrollVerticalTo(0);
+        private async _updateListTileObject(): Promise<void> {
+            const playerIndex       = this._listPlayerIndex.getSelectedData()?.playerIndex;
+            const listTileObject    = this._listTileObject;
+            if (playerIndex == null) {
+                listTileObject.clear();
+                return;
+            }
+
+            const gameConfig    = await Config.ConfigManager.getLatestGameConfig();
+            const dataArray     : DataForTileObjectRenderer[] = [];
+            for (const cfg of gameConfig.getAllTileObjectCfgArray()) {
+                const playerIndexRange = Helpers.getExisted(cfg.playerIndexRange);
+                if ((playerIndex < playerIndexRange[0]) || (playerIndex > playerIndexRange[1])) {
+                    continue;
+                }
+
+                const shapesCount = Helpers.getExisted(User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0 ? cfg.shapesCountForV0 : cfg.shapesCount);
+                for (let shapeId = 0; shapeId < shapesCount; ++shapeId) {
+                    dataArray.push({
+                        panel                   : this,
+                        dataForDrawTileObject   : {
+                            objectType  : cfg.tileObjectType,
+                            playerIndex,
+                            shapeId,
+                        },
+                        gameConfig,
+                    });
+                }
+            }
+
+            listTileObject.bindData(dataArray);
         }
 
         private _updateListRecent(): void {
@@ -165,38 +190,26 @@ namespace TwnsMeChooseTileObjectPanel {
         }
     }
 
-    type DataForCategoryRenderer = {
-        dataListForDrawTileObject   : DataForDrawTileObject[];
-        panel                       : MeChooseTileObjectPanel;
+    type DataForPlayerIndexRenderer = {
+        playerIndex : number;
+        panel       : MeChooseTileObjectPanel;
     };
-    class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
-        private readonly _labelCategory!    : TwnsUiLabel.UiLabel;
-        private readonly _listTileObject!   : TwnsUiScrollList.UiScrollList<DataForTileObjectRenderer>;
-
-        protected _onOpened(): void {
-            this._listTileObject.setItemRenderer(TileObjectRenderer);
-            this._listTileObject.setScrollPolicyH(eui.ScrollPolicy.OFF);
-        }
+    class PlayerIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerIndexRenderer> {
+        private readonly _labelPlayerIndex! : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            const data                      = this._getData();
-            const dataListForDrawTileObject = data.dataListForDrawTileObject;
-            this._labelCategory.text        = Lang.getPlayerForceName(dataListForDrawTileObject[0].playerIndex);
+            this._labelPlayerIndex.text = `P${this._getData().playerIndex}`;
+        }
 
-            const dataListForTileObject : DataForTileObjectRenderer[] = [];
-            const panel                 = data.panel;
-            for (const dataForDrawTileObject of dataListForDrawTileObject) {
-                dataListForTileObject.push({
-                    panel,
-                    dataForDrawTileObject,
-                });
-            }
-            this._listTileObject.bindData(dataListForTileObject);
+        public onItemTapEvent(): void {
+            const data = this._getData();
+            data.panel.setAndReviseSelectedPlayerIndex(data.playerIndex, false);
         }
     }
 
     type DataForTileObjectRenderer = {
         dataForDrawTileObject   : DataForDrawTileObject;
+        gameConfig              : Config.GameConfig;
         panel                   : MeChooseTileObjectPanel;
     };
     class TileObjectRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileObjectRenderer> {
@@ -204,7 +217,7 @@ namespace TwnsMeChooseTileObjectPanel {
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _conTileView!  : eui.Group;
 
-        private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private _tileView   = new MapEditor.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -227,7 +240,8 @@ namespace TwnsMeChooseTileObjectPanel {
             const data                  = this._getData();
             const dataForDrawTileObject = data.dataForDrawTileObject;
             const tileObjectType        = dataForDrawTileObject.objectType;
-            this._labelName.text        = Lang.getTileName(ConfigManager.getTileType(Types.TileBaseType.Plain, tileObjectType)) || CommonConstants.ErrorTextForUndefined;
+            const gameConfig            = data.gameConfig;
+            this._labelName.text        = Lang.getTileObjectName(tileObjectType, gameConfig) ?? CommonConstants.ErrorTextForUndefined;
             this._tileView.init({
                 tileObjectType,
                 tileObjectShapeId   : dataForDrawTileObject.shapeId,
@@ -236,6 +250,7 @@ namespace TwnsMeChooseTileObjectPanel {
                 tileDecoratorType   : null,
                 tileDecoratorShapeId: null,
                 playerIndex         : dataForDrawTileObject.playerIndex,
+                gameConfig
             });
             this._tileView.updateView();
         }
@@ -246,7 +261,7 @@ namespace TwnsMeChooseTileObjectPanel {
             const dataForDrawTileObject = data.dataForDrawTileObject;
             panel.updateOnChooseTileObject(dataForDrawTileObject);
             panel.close();
-            Helpers.getExisted(MeModel.getWar()).getDrawer().setModeDrawTileObject(dataForDrawTileObject);
+            Helpers.getExisted(MapEditor.MeModel.getWar()).getDrawer().setModeDrawTileObject(dataForDrawTileObject);
         }
     }
 }

@@ -1,20 +1,21 @@
 
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Types                from "../../tools/helpers/Types";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiCoInfo         from "../../tools/ui/UiCoInfo";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonCoInfoPanel {
-    import NotifyType   = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import NotifyType   = Notify.NotifyType;
+    import GameConfig   = Config.GameConfig;
 
-    export type OpenData = {
-        configVersion   : string;
+    export type OpenDataForCommonCoInfoPanel = {
+        gameConfig      : GameConfig;
         coId            : number;
     };
-    export class CommonCoInfoPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonCoInfoPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonCoInfoPanel> {
         private readonly _imgMask!  : TwnsUiImage.UiImage;
         private readonly _group!    : eui.Group;
         private readonly _uiCoInfo! : TwnsUiCoInfo.UiCoInfo;
@@ -31,7 +32,7 @@ namespace TwnsCommonCoInfoPanel {
 
             const openData = this._getOpenData();
             this._uiCoInfo.setCoData({
-                configVersion   : openData.configVersion,
+                gameConfig   : openData.gameConfig,
                 coId            : openData.coId,
             });
         }
@@ -59,7 +60,7 @@ namespace TwnsCommonCoInfoPanel {
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Helpers.resetTween({
@@ -73,7 +74,7 @@ namespace TwnsCommonCoInfoPanel {
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 }

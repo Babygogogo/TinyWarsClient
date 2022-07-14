@@ -4,7 +4,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -13,12 +13,12 @@
 // import RwProxy              from "../model/RwProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCcrSearchRoomPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.CoopCustomRoom {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class CcrSearchRoomPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForCcrSearchRoomPanel = void;
+    export class CcrSearchRoomPanel extends TwnsUiPanel.UiPanel<OpenDataForCcrSearchRoomPanel> {
         private readonly _imgMask!                      : TwnsUiImage.UiImage;
 
         private readonly _group!                        : eui.Group;
@@ -66,18 +66,18 @@ namespace TwnsCcrSearchRoomPanel {
         }
 
         private _onTouchedBtnReset(): void {
-            CcrProxy.reqCcrGetJoinableRoomIdArray(null);
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrJoinRoomListPanel, { mapFilter: null });
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
-            CcrProxy.reqCcrGetJoinableRoomIdArray({
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CcrJoinRoomListPanel, { mapFilter: {
                 roomId          : getNumber(this._inputReplayId.text),
                 mapName         : this._inputMapName.text || null,
                 userNickname    : this._inputUserNickname.text || null,
                 coName          : this._inputCoName.text || null,
                 hasFog          : this._hasFog,
-            });
+            } });
             this.close();
         }
 
@@ -124,32 +124,32 @@ namespace TwnsCcrSearchRoomPanel {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 

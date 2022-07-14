@@ -25,41 +25,44 @@
 // import TwnsBwWarEventManager        from "./BwWarEventManager";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwWar {
-    import WarAction                = ProtoTypes.WarAction;
-    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+namespace Twns.BaseWar {
+    import WarAction                = CommonProto.WarAction;
+    import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
+    import GameConfig               = Config.GameConfig;
 
     export abstract class BwWar {
-        private readonly _weatherManager        = new TwnsBwWeatherManager.BwWeatherManager();
-        private readonly _turnManager           = new TwnsBwTurnManager.BwTurnManager();
-        private readonly _executedActionManager = new TwnsBwExecutedActionManager.BwExecutedActionManager();
-        private readonly _randomNumberManager   = new TwnsBwRandomNumberManager.BwRandomNumberManager();
-        private readonly _drawVoteManager       = new TwnsBwDrawVoteManager.BwDrawVoteManager();
-        private readonly _view                  = new TwnsBwWarView.BwWarView();
+        private readonly _weatherManager        = new BaseWar.BwWeatherManager();
+        private readonly _turnManager           = new BwTurnManager();
+        private readonly _executedActionManager = new BaseWar.BwExecutedActionManager();
+        private readonly _randomNumberManager   = new BaseWar.BwRandomNumberManager();
+        private readonly _drawVoteManager       = new BaseWar.BwDrawVoteManager();
+        private readonly _warStatisticsManager  = new BaseWar.BwWarStatisticsManager();
+        private readonly _view                  = new BaseWar.BwWarView();
 
+        private _gameConfig             : GameConfig | null = null;
         private _warId                  : number | null = null;
+        private _warType                = Types.WarType.Undefined;
         private _isRunning              = false;
         private _isExecutingAction      = false;
         private _isEnded                = false;
 
-        public abstract init(data: ISerialWar): Promise<void>;
-        public abstract getWarType(): Types.WarType;
+        public abstract init(data: ISerialWar, gameConfig: GameConfig): void;
         public abstract getMapId(): number | null;
         public abstract getIsNeedExecutedAction(): boolean;
         public abstract getIsNeedSeedRandom(): boolean;
         public abstract getCanCheat(): boolean;
-        public abstract getPlayerManager(): TwnsBwPlayerManager.BwPlayerManager;
-        public abstract getField(): TwnsBwField.BwField;
-        public abstract getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager;
-        public abstract getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager;
+        public abstract getShouldSerializeFullInfoForFreeModeGames(): boolean;
+        public abstract getPlayerManager(): BwPlayerManager;
+        public abstract getField(): BwField;
+        public abstract getCommonSettingManager(): BwCommonSettingManager;
+        public abstract getWarEventManager(): BaseWar.BwWarEventManager;
         public abstract getBootRestTime(playerIndex: number): number | null;
         public abstract getSettingsBootTimerParams(): number[];
         public abstract getIsExecuteActionsWithExtraData(): boolean;
         public abstract updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void;
         public abstract getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | null>;
         public abstract getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | null>;
-        public abstract getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | null>;
+        public abstract getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit, gameConfig: GameConfig): Promise<string | null>;
         public abstract getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | null>;
         public abstract getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | null>;
         public abstract getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | null>;
@@ -85,43 +88,94 @@ namespace TwnsBwWar {
         public abstract getDescForExeUnitUseCoSkill(action: WarAction.IWarActionUnitUseCoSkill): Promise<string | null>;
         public abstract getDescForExeUnitWait(action: WarAction.IWarActionUnitWait): Promise<string | null>;
 
-        protected async _baseInit(data: ISerialWar): Promise<void> {
+        protected _baseInit(data: ISerialWar, gameConfig: GameConfig, warType: Types.WarType): void {
             const settingsForCommon = Helpers.getExisted(data.settingsForCommon, ClientErrorCode.BwWar_BaseInit_00);
             const configVersion     = Helpers.getExisted(settingsForCommon.configVersion, ClientErrorCode.BwWar_BaseInit_01);
-            if (!await ConfigManager.checkIsVersionValid(configVersion)) {
+            if (configVersion !== gameConfig.getVersion()) {
                 throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.BwWar_BaseInit_02);
             }
 
+            this._setGameConfig(gameConfig);
             this.getWeatherManager().init(data.weatherManager);
             this.getDrawVoteManager().init(data.playerManager, data.remainingVotesForDraw);
 
-            const dataForWarEventManager = data.warEventManager;
-            await this.getCommonSettingManager().init({
+            const mapSize = WarHelpers.WarCommonHelpers.getMapSize(data.field?.tileMap);
+            if (!WarHelpers.WarCommonHelpers.checkIsValidMapSize(mapSize)) {
+                throw Helpers.newError(`Invalid mapSize: ${JSON.stringify(mapSize)}`, ClientErrorCode.BwWar_BaseInit_03);
+            }
+
+            if (warType === Types.WarType.Undefined) {
+                throw Helpers.newError(`Invalid warType: ${warType}`, ClientErrorCode.BwWar_BaseInit_04);
+            }
+
+            this._setWarType(warType);
+            this.getCommonSettingManager().init({
                 settings                : settingsForCommon,
-                allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(dataForWarEventManager?.warEventFullData),
-                playersCountUnneutral   : WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),
+                warType,
+                mapSize,
+                playersCountUnneutral   : WarHelpers.WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),
+                gameConfig,
             });
 
-            this.getWarEventManager().init(dataForWarEventManager);
+            this.getWarEventManager().init(data.warEventManager, settingsForCommon.instanceWarRule?.warEventFullData);
             this.getRandomNumberManager().init({
                 isNeedSeedRandom: this.getIsNeedSeedRandom(),
                 initialState    : data.seedRandomInitialState,
                 currentState    : data.seedRandomCurrentState,
             });
-            this.getExecutedActionManager().init(this.getIsNeedExecutedAction(), data.executedActions || []);
-
-            const playerManager = this.getPlayerManager();
-            playerManager.init(data.playerManager, configVersion);
-
-            const playersCountUnneutral = playerManager.getTotalPlayersCount(false);
-            this.getTurnManager().init(data.turnManager, playersCountUnneutral);
-            this.getField().init({
-                data                : data.field,
-                configVersion,
-                playersCountUnneutral,
+            this.getExecutedActionManager().init({
+                isNeedExecutedActions   : this.getIsNeedExecutedAction(),
+                data                    : data.executedActionManager,
             });
 
+            const playerManager = this.getPlayerManager();
+            playerManager.init(data.playerManager, gameConfig);
+
+            const playersCountUnneutral = playerManager.getTotalPlayersCount(false);
+            const turnManagerData       = Helpers.getExisted(data.turnManager, ClientErrorCode.BwWar_BaseInit_05);
+            this.getTurnManager().init(turnManagerData, playersCountUnneutral);
+            this.getField().init({
+                data                : data.field,
+                gameConfig,
+                playersCountUnneutral,
+            });
+            this.getWarStatisticsManager().init(data.warStatisticsManager, playersCountUnneutral, Helpers.getExisted(turnManagerData.turnIndex, ClientErrorCode.BwWar_BaseInit_06));
+
             this._setWarId(data.warId ?? null);
+            this.setIsEnded(!!data.isEnded);
+        }
+
+        public fastLoadState(warData: ISerialWar): void {
+            this.stopRunning();
+
+            const gameConfig            = this.getGameConfig();
+            const playerManager         = this.getPlayerManager();
+            const playersCountUnneutral = playerManager.getTotalPlayersCount(false);
+            this.getWeatherManager().fastInit(warData.weatherManager);
+            playerManager.fastInit(Helpers.getExisted(warData.playerManager), gameConfig);
+            this.getTurnManager().fastInit(Helpers.getExisted(warData.turnManager), playersCountUnneutral);
+            this.getWarEventManager().fastInit(Helpers.getExisted(warData.warEventManager));
+            this.getField().fastInit({
+                data                    : Helpers.getExisted(warData.field),
+                gameConfig,
+                playersCountUnneutral,
+            });
+            this.getDrawVoteManager().setRemainingVotes(warData.remainingVotesForDraw ?? null);
+            this.getRandomNumberManager().init({
+                isNeedSeedRandom    : this.getIsNeedSeedRandom(),
+                initialState        : warData.seedRandomInitialState,
+                currentState        : warData.seedRandomCurrentState,
+            });
+            this.getWarStatisticsManager().fastInit(warData.warStatisticsManager);
+            this.setIsEnded(!!warData.isEnded);
+
+            const warView = this.getView();
+            warView.fastInit(this);
+            this.startRunning().startRunningView();
+            this.updateTilesAndUnitsOnVisibilityChanged(false);
+            warView.updatePersistentText();
+
+            SoundManager.playCoBgmWithWar(this, false);
         }
 
         protected _initView(): void {
@@ -130,7 +184,7 @@ namespace TwnsBwWar {
         protected _fastInitView(): void {
             this.getView().fastInit(this);
         }
-        public getView(): TwnsBwWarView.BwWarView {
+        public getView(): BaseWar.BwWarView {
             return this._view;
         }
 
@@ -145,15 +199,17 @@ namespace TwnsBwWar {
                 settingsForSfw              : null,
 
                 warId                       : this.getWarId(),
+                isEnded                     : false,
                 seedRandomInitialState      : null,
                 seedRandomCurrentState      : null,
-                executedActions             : [],
+                executedActionManager       : null,
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                 weatherManager              : this.getWeatherManager().serializeForCreateSfw(),
                 warEventManager             : this.getWarEventManager().serializeForCreateSfw(),
                 playerManager               : this.getPlayerManager().serializeForCreateSfw(),
                 turnManager                 : this.getTurnManager().serializeForCreateSfw(),
                 field                       : this.getField().serializeForCreateSfw(),
+                warStatisticsManager        : this.getWarStatisticsManager().serializeForCreateSfw(),
             };
         }
         public serializeForCreateMfr(): ISerialWar {
@@ -167,15 +223,17 @@ namespace TwnsBwWar {
                 settingsForSfw              : null,
 
                 warId                       : this.getWarId(),
+                isEnded                     : false,
                 seedRandomInitialState      : null,
                 seedRandomCurrentState      : null,
-                executedActions             : [],
+                executedActionManager       : null,
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                 weatherManager              : this.getWeatherManager().serializeForCreateMfr(),
                 warEventManager             : this.getWarEventManager().serializeForCreateMfr(),
                 playerManager               : this.getPlayerManager().serializeForCreateMfr(),
                 turnManager                 : this.getTurnManager().serializeForCreateMfr(),
                 field                       : this.getField().serializeForCreateMfr(),
+                warStatisticsManager        : this.getWarStatisticsManager().serializeForCreateMfr(),
             };
         }
 
@@ -187,6 +245,7 @@ namespace TwnsBwWar {
             this.getTurnManager().startRunning(this);
             this.getPlayerManager().startRunning(this);
             this.getField().startRunning(this);
+            this.getWarStatisticsManager().startRunning(this);
 
             this._setIsRunning(true);
 
@@ -267,6 +326,12 @@ namespace TwnsBwWar {
                 && (Timer.getServerTimestamp() > enterTurnTime + restTimeToBoot);
         }
 
+        public checkIsExceedTurnsOrWarActionsLimit(): boolean {
+            const commonSettingManager = this.getCommonSettingManager();
+            return (this.getTurnManager().getTurnIndex() > commonSettingManager.getTurnsLimit())
+                || (this.getExecutedActionManager().getExecutedActionsCount() > commonSettingManager.getWarActionsLimit());
+        }
+
         private _setWarId(warId: number | null): void {
             this._warId = warId;
         }
@@ -274,21 +339,31 @@ namespace TwnsBwWar {
             return this._warId;
         }
 
-        public getConfigVersion(): string {
-            return this.getCommonSettingManager().getConfigVersion();
+        private _setWarType(warType: Types.WarType): void {
+            this._warType = warType;
+        }
+        public getWarType(): Types.WarType {
+            return this._warType;
         }
 
-        public getWarRule(): ProtoTypes.WarRule.IWarRule {
-            return this.getCommonSettingManager().getWarRule();
+        public getGameConfig(): Config.GameConfig {
+            return Helpers.getExisted(this._gameConfig);
+        }
+        private _setGameConfig(gameConfig: GameConfig): void {
+            this._gameConfig = gameConfig;
+        }
+
+        public getInstanceWarRule(): CommonProto.WarRule.IInstanceWarRule {
+            return this.getCommonSettingManager().getInstanceWarRule();
         }
 
         public getPlayersCountUnneutral(): number {
             return this.getPlayerManager().getTotalPlayersCount(false);
         }
-        public getPlayer(playerIndex: number): TwnsBwPlayer.BwPlayer {
+        public getPlayer(playerIndex: number): BwPlayer {
             return this.getPlayerManager().getPlayer(playerIndex);
         }
-        public getPlayerInTurn(): TwnsBwPlayer.BwPlayer {
+        public getPlayerInTurn(): BwPlayer {
             return this.getPlayerManager().getPlayerInTurn();
         }
         public getPlayerIndexInTurn(): number {
@@ -299,25 +374,25 @@ namespace TwnsBwWar {
             return (player != null) && (player.getUserId() != null);
         }
 
-        public getTurnManager(): TwnsBwTurnManager.BwTurnManager {
+        public getTurnManager(): BwTurnManager {
             return this._turnManager;
         }
-        public getFogMap(): TwnsBwFogMap.BwFogMap {
+        public getFogMap(): BaseWar.BwFogMap {
             return this.getField().getFogMap();
         }
-        public getUnitMap(): TwnsBwUnitMap.BwUnitMap {
+        public getUnitMap(): BwUnitMap {
             return this.getField().getUnitMap();
         }
-        public getTileMap(): TwnsBwTileMap.BwTileMap {
+        public getTileMap(): BwTileMap {
             return this.getField().getTileMap();
         }
-        public getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {
+        public getActionPlanner(): BwActionPlanner {
             return this.getField().getActionPlanner();
         }
-        public getGridVisualEffect(): TwnsBwGridVisualEffect.BwGridVisualEffect {
+        public getGridVisualEffect(): BaseWar.BwGridVisualEffect {
             return this.getField().getGridVisualEffect();
         }
-        public getCursor(): TwnsBwCursor.BwCursor {
+        public getCursor(): BaseWar.BwCursor {
             return this.getField().getCursor();
         }
 
@@ -328,21 +403,20 @@ namespace TwnsBwWar {
             return this.getTurnManager().getPhaseCode();
         }
 
-        public getWatcherTeamIndexes(watcherUserId: number): Set<number> {
-            return this.getPlayerManager().getAliveWatcherTeamIndexes(watcherUserId);
-        }
-
-        public getWeatherManager(): TwnsBwWeatherManager.BwWeatherManager {
+        public getWeatherManager(): BaseWar.BwWeatherManager {
             return this._weatherManager;
         }
-        public getDrawVoteManager(): TwnsBwDrawVoteManager.BwDrawVoteManager {
+        public getDrawVoteManager(): BaseWar.BwDrawVoteManager {
             return this._drawVoteManager;
         }
-        public getRandomNumberManager(): TwnsBwRandomNumberManager.BwRandomNumberManager {
+        public getRandomNumberManager(): BaseWar.BwRandomNumberManager {
             return this._randomNumberManager;
         }
-        public getExecutedActionManager(): TwnsBwExecutedActionManager.BwExecutedActionManager {
+        public getExecutedActionManager(): BaseWar.BwExecutedActionManager {
             return this._executedActionManager;
+        }
+        public getWarStatisticsManager(): BwWarStatisticsManager {
+            return this._warStatisticsManager;
         }
     }
 }

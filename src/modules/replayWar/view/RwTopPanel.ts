@@ -10,7 +10,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
@@ -19,21 +19,26 @@
 // import TwnsRwWarMenuPanel       from "./RwWarMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsRwTopPanel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
+namespace Twns.ReplayWar {
+    import NotifyType           = Notify.NotifyType;
+    import LangTextType         = Lang.LangTextType;
 
-    export type OpenData = {
-        war : TwnsRwWar.RwWar;
+    export type OpenDataForRwTopPanel = {
+        war : ReplayWar.RwWar | HalfwayReplayWar.HrwWar;
     };
-    export class RwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class RwTopPanel extends TwnsUiPanel.UiPanel<OpenDataForRwTopPanel> {
         private readonly _groupPlayer!          : eui.Group;
         private readonly _labelPlayer!          : TwnsUiLabel.UiLabel;
+        private readonly _labelFundTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelFund!            : TwnsUiLabel.UiLabel;
 
         private readonly _groupPauseTime!       : eui.Group;
         private readonly _labelPauseTimeTitle!  : TwnsUiLabel.UiLabel;
         private readonly _labelPauseTime!       : TwnsUiLabel.UiLabel;
+
+        private readonly _groupVisionTeam!      : TwnsUiButton.UiButton;
+        private readonly _labelVisionTeamTitle! : TwnsUiLabel.UiLabel;
+        private readonly _labelVisionTeam!      : TwnsUiLabel.UiLabel;
 
         private readonly _groupProgress!        : eui.Group;
         private readonly _labelTurnTitle!       : TwnsUiLabel.UiLabel;
@@ -46,12 +51,14 @@ namespace TwnsRwTopPanel {
         private readonly _labelCurrEnergy!      : TwnsUiLabel.UiLabel;
         private readonly _labelPowerEnergy!     : TwnsUiLabel.UiLabel;
         private readonly _labelZoneEnergy!      : TwnsUiLabel.UiLabel;
-        private readonly _btnChat!              : TwnsUiButton.UiButton;
-        private readonly _btnFastRewind!        : TwnsUiButton.UiButton;
-        private readonly _btnFastForward!       : TwnsUiButton.UiButton;
+        private readonly _btnRewindBegin!       : TwnsUiButton.UiButton;
+        private readonly _btnRewindTurn!        : TwnsUiButton.UiButton;
+        private readonly _btnRewindAction!      : TwnsUiButton.UiButton;
+        private readonly _btnForwardAction!     : TwnsUiButton.UiButton;
+        private readonly _btnForwardTurn!       : TwnsUiButton.UiButton;
+        private readonly _btnForwardEnd!        : TwnsUiButton.UiButton;
         private readonly _btnPlay!              : TwnsUiButton.UiButton;
         private readonly _btnPause!             : TwnsUiButton.UiButton;
-        private readonly _btnUnitList!          : TwnsUiButton.UiButton;
         private readonly _btnMenu!              : TwnsUiButton.UiButton;
 
         protected _onOpening(): void {
@@ -63,22 +70,21 @@ namespace TwnsRwTopPanel {
                 { type: NotifyType.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
                 { type: NotifyType.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: NotifyType.ReplayAutoReplayChanged,        callback: this._onNotifyReplayAutoReplayChanged },
-                { type: NotifyType.MsgChatGetAllReadProgressList,  callback: this._onMsgChatUpdateReadProgressList },
-                { type: NotifyType.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
-                { type: NotifyType.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
-                { type: NotifyType.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
             ]);
             this._setUiListenerArray([
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
                 { ui: this._groupCo,            callback: this._onTouchedGroupCo },
                 { ui: this._groupPauseTime,     callback: this._onTouchedGroupPauseTime },
+                { ui: this._groupVisionTeam,    callback: this._onTouchedGroupVisionTeam },
                 { ui: this._groupProgress,      callback: this._onTouchedGroupProgress },
-                { ui: this._btnChat,            callback: this._onTouchedBtnChat },
-                { ui: this._btnFastRewind,      callback: this._onTouchedBtnFastRewind },
-                { ui: this._btnFastForward,     callback: this._onTouchedBtnFastForward, },
+                { ui: this._btnRewindAction,    callback: this._onTouchedBtnRewindAction },
+                { ui: this._btnRewindTurn,      callback: this._onTouchedBtnRewindTurn },
+                { ui: this._btnRewindBegin,     callback: this._onTouchedBtnRewindBegin },
+                { ui: this._btnForwardAction,   callback: this._onTouchedBtnForwardAction, },
+                { ui: this._btnForwardTurn,     callback: this._onTouchedBtnForwardTurn, },
+                { ui: this._btnForwardEnd,      callback: this._onTouchedBtnForwardEnd, },
                 { ui: this._btnPlay,            callback: this._onTouchedBtnPlay, },
                 { ui: this._btnPause,           callback: this._onTouchedBtnPause, },
-                { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
             ]);
         }
@@ -89,7 +95,7 @@ namespace TwnsRwTopPanel {
             // nothing to do
         }
 
-        private _getWar(): TwnsRwWar.RwWar {
+        private _getWar(): ReplayWar.RwWar | HalfwayReplayWar.HrwWar {
             return this._getOpenData().war;
         }
 
@@ -119,44 +125,36 @@ namespace TwnsRwTopPanel {
         private _onNotifyReplayAutoReplayChanged(): void {
             this._updateView();
         }
-        private _onMsgChatUpdateReadProgressList(): void {
-            this._updateBtnChat();
-        }
-        private _onMsgChatUpdateReadProgress(): void {
-            this._updateBtnChat();
-        }
-        private _onMsgChatGetAllMessages(): void {
-            this._updateBtnChat();
-        }
-        private _onMsgChatAddMessage(): void {
-            this._updateBtnChat();
-        }
 
         private _onTouchedGroupPlayer(): void {
             const userId = this._getWar().getPlayerInTurn().getUserId();
-            (userId) && (TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId }));
+            (userId) && (PanelHelpers.open(PanelHelpers.PanelDict.UserPanel, { userId }));
         }
         private _onTouchedGroupCo(): void {
             const war = this._getWar();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoListPanel, { war });
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonCoListPanel, { war });
         }
         private _onTouchedGroupPauseTime(): void {
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+
             const war       = this._getWar();
             const minValue  = 0;
             const maxValue  = 5000;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0846),
                 minValue,
                 maxValue,
                 currentValue    : war.getPauseTimeMs(),
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}](ms)\n${Lang.getText(LangTextType.A0290)}`,
-                callback        : panel => {
-                    war.setPauseTimeMs(panel.getInputValue());
+                callback        : value => {
+                    war.setPauseTimeMs(value);
                     this._updateLabelPauseTime();
                 },
             });
         }
         private _onTouchedGroupProgress(): void {
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+
             const war = this._getWar();
             if (war.getIsAutoReplay()) {
                 war.setIsAutoReplay(false);
@@ -168,13 +166,36 @@ namespace TwnsRwTopPanel {
             } else if (war.getIsExecutingAction()) {
                 FloatText.show(Lang.getText(LangTextType.A0044));
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.RwReplayProgressPanel, { war });
+                PanelHelpers.open(PanelHelpers.PanelDict.RwReplayProgressPanel, { war });
             }
         }
-        private _onTouchedBtnChat(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {});
+        private _onTouchedGroupVisionTeam(): void {
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+
+            const war = this._getWar();
+            war.tickVisionTeamIndex();
+            war.updateTilesAndUnitsOnVisibilityChanged(false);
+
+            this._updateLabelVisionTeam();
         }
-        private async _onTouchedBtnFastRewind(): Promise<void> {
+        private async _onTouchedBtnRewindAction(): Promise<void> {
+            const war = this._getWar();
+            war.setIsAutoReplay(false);
+
+            if (!war.getIsRunning()) {
+                FloatText.show(Lang.getText(LangTextType.A0040));
+            } else if (war.getIsExecutingAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0044));
+            } else if (war.checkIsInBeginning()) {
+                FloatText.show(Lang.getText(LangTextType.A0042));
+            } else {
+                await Helpers.checkAndCallLater();
+                await war.loadPreviousAction();
+                await Helpers.checkAndCallLater();
+                this._updateView();
+            }
+        }
+        private async _onTouchedBtnRewindTurn(): Promise<void> {
             const war = this._getWar();
             war.setIsAutoReplay(false);
 
@@ -191,7 +212,41 @@ namespace TwnsRwTopPanel {
                 this._updateView();
             }
         }
-        private async _onTouchedBtnFastForward(): Promise<void> {
+        private async _onTouchedBtnRewindBegin(): Promise<void> {
+            const war = this._getWar();
+            war.setIsAutoReplay(false);
+
+            if (!war.getIsRunning()) {
+                FloatText.show(Lang.getText(LangTextType.A0040));
+            } else if (war.getIsExecutingAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0044));
+            } else if (war.checkIsInBeginning()) {
+                FloatText.show(Lang.getText(LangTextType.A0042));
+            } else {
+                await Helpers.checkAndCallLater();
+                await war.loadCheckpoint(0);
+                await Helpers.checkAndCallLater();
+                this._updateView();
+            }
+        }
+        private async _onTouchedBtnForwardAction(): Promise<void> {
+            const war = this._getWar();
+            war.setIsAutoReplay(false);
+
+            if (!war.getIsRunning()) {
+                FloatText.show(Lang.getText(LangTextType.A0040));
+            } else if (war.getIsExecutingAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0044));
+            } else if (war.checkIsInEnd()) {
+                FloatText.show(Lang.getText(LangTextType.A0043));
+            } else {
+                await Helpers.checkAndCallLater();
+                await war.loadNextAction();
+                await Helpers.checkAndCallLater();
+                this._updateView();
+            }
+        }
+        private async _onTouchedBtnForwardTurn(): Promise<void> {
             const war = this._getWar();
             war.setIsAutoReplay(false);
 
@@ -208,6 +263,30 @@ namespace TwnsRwTopPanel {
                 this._updateView();
             }
         }
+        private async _onTouchedBtnForwardEnd(): Promise<void> {
+            const war = this._getWar();
+            war.setIsAutoReplay(false);
+
+            if (!war.getIsRunning()) {
+                FloatText.show(Lang.getText(LangTextType.A0040));
+            } else if (war.getIsExecutingAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0044));
+            } else if (war.checkIsInEnd()) {
+                FloatText.show(Lang.getText(LangTextType.A0043));
+            } else {
+                await Helpers.checkAndCallLater();
+
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonBlockPanel, {
+                    title   : Lang.getText(LangTextType.B0088),
+                    content : Lang.getText(LangTextType.A0040),
+                });
+                await war.loadCheckpoint(war.getAllCheckpointInfoArray().length - 1);
+                PanelHelpers.close(PanelHelpers.PanelDict.CommonBlockPanel);
+
+                await Helpers.checkAndCallLater();
+                this._updateView();
+            }
+        }
         private _onTouchedBtnPlay(): void {
             const war = this._getWar();
             if (war.checkIsInEnd()) {
@@ -219,17 +298,14 @@ namespace TwnsRwTopPanel {
         private _onTouchedBtnPause(): void {
             this._getWar().setIsAutoReplay(false);
         }
-        private _onTouchedBtnUnitList(): void {
-            const war = this._getWar();
-            war.getField().getActionPlanner().setStateIdle();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitListPanel, { war });
-        }
         private _onTouchedBtnMenu(): void {
-            const actionPlanner = this._getWar().getActionPlanner();
+            const war           = this._getWar();
+            const actionPlanner = war.getActionPlanner();
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.RwWarMenuPanel, void 0);
+
+            PanelHelpers.open(PanelHelpers.PanelDict.RwWarMenuPanel, { war });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -238,6 +314,7 @@ namespace TwnsRwTopPanel {
         private _updateView(): void {
             this._updateComponentsForLanguage();
             this._updateLabelPauseTime();
+            this._updateLabelVisionTeam();
             this._updateLabelTurn();
             this._updateLabelAction();
             this._updateLabelPlayer();
@@ -245,17 +322,29 @@ namespace TwnsRwTopPanel {
             this._updateLabelCo();
             this._updateBtnPlay();
             this._updateBtnPause();
-            this._updateBtnChat();
         }
 
         private _updateComponentsForLanguage(): void {
             this._labelTurnTitle.text       = Lang.getText(LangTextType.B0091);
             this._labelActionTitle.text     = Lang.getText(LangTextType.B0090);
             this._labelPauseTimeTitle.text  = Lang.getText(LangTextType.B0846);
+            this._labelVisionTeamTitle.text = Lang.getText(LangTextType.B0891);
+            this._labelFundTitle.text       = `${Lang.getText(LangTextType.B0032)}: `;
+            this._btnRewindAction.label     = Lang.getText(LangTextType.B0616);
+            this._btnRewindTurn.label       = Lang.getText(LangTextType.B0687);
+            this._btnForwardTurn.label      = Lang.getText(LangTextType.B0687);
+            this._btnForwardAction.label    = Lang.getText(LangTextType.B0616);
         }
 
         private _updateLabelPauseTime(): void {
             this._labelPauseTime.text = `${this._getWar().getPauseTimeMs()}`;
+        }
+
+        private _updateLabelVisionTeam(): void {
+            const teamIndex             = this._getWar().getVisionTeamIndex();
+            this._labelVisionTeam.text  = teamIndex == null
+                ? Lang.getText(LangTextType.B0890)
+                : (Lang.getPlayerTeamName(teamIndex) ?? CommonConstants.ErrorTextForUndefined);
         }
 
         private _updateLabelTurn(): void {
@@ -289,7 +378,7 @@ namespace TwnsRwTopPanel {
             if ((war) && (war.getIsRunning())) {
                 const player        = war.getPlayerInTurn();
                 const coId          = player.getCoId();
-                this._labelCo.text  = `${coId == null ? "----" : ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`;
+                this._labelCo.text  = `${coId == null ? "----" : war.getGameConfig().getCoBasicCfg(coId)?.name}`;
 
                 const skillType = player.getCoUsingSkillType();
                 if (skillType === Types.CoSkillType.Power) {
@@ -316,10 +405,6 @@ namespace TwnsRwTopPanel {
 
         private _updateBtnPause(): void {
             this._btnPause.visible = this._getWar().getIsAutoReplay();
-        }
-
-        private _updateBtnChat(): void {
-            this._btnChat.setRedVisible(ChatModel.checkHasUnreadMessage());
         }
     }
 }

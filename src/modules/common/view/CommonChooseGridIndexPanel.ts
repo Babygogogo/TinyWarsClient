@@ -4,24 +4,24 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 // import MeModel              from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseGridIndexPanel {
-    import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
-    import GridIndex    = Types.GridIndex;
+namespace Twns.Common {
+    import LangTextType = Twns.Lang.LangTextType;
+    import NotifyType   = Twns.Notify.NotifyType;
+    import GridIndex    = Twns.Types.GridIndex;
 
-    export type OpenData = {
+    export type OpenDataForCommonChooseGridIndexPanel = {
         currentGridIndexArray   : GridIndex[];
-        mapSize                 : Types.MapSize;
+        mapSize                 : Twns.Types.MapSize;
         callbackOnConfirm       : (teamIndexArray: GridIndex[]) => void;
     };
-    export class CommonChooseGridIndexPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChooseGridIndexPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseGridIndexPanel> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnAdd!           : TwnsUiButton.UiButton;
         private readonly _inputGridX!       : TwnsUiTextInput.UiTextInput;
@@ -60,27 +60,27 @@ namespace TwnsCommonChooseGridIndexPanel {
 
         public updateOnDeleteGridIndex(gridIndex: GridIndex): void {
             const list = this._listLocation;
-            list.bindData(list.getBoundDataArray()?.filter(v => !GridIndexHelpers.checkIsEqual(gridIndex, v.gridIndex)) ?? []);
+            list.bindData(list.getBoundDataArray()?.filter(v => !Twns.GridIndexHelpers.checkIsEqual(gridIndex, v.gridIndex)) ?? []);
         }
 
         private _onTouchedBtnAdd(): void {
             const x = parseInt(this._inputGridX.text);
             const y = parseInt(this._inputGridY.text);
             if ((isNaN(x)) || (isNaN(y))) {
-                FloatText.show(Lang.getText(LangTextType.A0250));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0250));
                 return;
             }
 
             const gridIndex: GridIndex = { x, y };
-            if (!GridIndexHelpers.checkIsInsideMap(gridIndex, this._getOpenData().mapSize)) {
-                FloatText.show(Lang.getText(LangTextType.A0251));
+            if (!Twns.GridIndexHelpers.checkIsInsideMap(gridIndex, this._getOpenData().mapSize)) {
+                Twns.FloatText.show(Lang.getText(LangTextType.A0251));
                 return;
             }
 
             const list              = this._listLocation;
             const gridIndexArray    = list.getBoundDataArray()?.map(v => v.gridIndex) ?? [];
-            if (gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))) {
-                FloatText.show(Lang.getText(LangTextType.A0268));
+            if (gridIndexArray.some(v => Twns.GridIndexHelpers.checkIsEqual(v, gridIndex))) {
+                Twns.FloatText.show(Lang.getText(LangTextType.A0268));
                 return;
             }
 
@@ -88,7 +88,7 @@ namespace TwnsCommonChooseGridIndexPanel {
             list.bindData(gridIndexArray.sort(gridIndexSorter).map(v => { return { gridIndex: v, panel: this }; }));
         }
         private _onTouchedBtnDeleteAll(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
                     this._listLocation.clear();
@@ -176,7 +176,7 @@ namespace TwnsCommonChooseGridIndexPanel {
         }
 
         private _onTouchedBtnDelete(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
                     const data = this._getData();

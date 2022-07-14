@@ -5,7 +5,7 @@
 // import Helpers                      from "../../tools/helpers/Helpers";
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Twns.Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
 // import TwnsUiLabel                  from "../../tools/ui/UiLabel";
@@ -14,11 +14,9 @@
 // import MeSimModel                   from "../model/MeSimModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeSimBasicSettingsPage {
-    import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonHelpPanel          = TwnsCommonHelpPanel.CommonHelpPanel;
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.MapEditor {
+    import LangTextType             = Twns.Lang.LangTextType;
+    import NotifyType               = Twns.Notify.NotifyType;
 
     export class MeSimBasicSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
         private readonly _btnMapNameTitle!      : TwnsUiButton.UiButton;
@@ -64,24 +62,24 @@ namespace TwnsMeSimBasicSettingsPage {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnModifyWarRule(): void {
-            MeSimModel.tickPresetWarRuleId();
+        private async _onTouchedBtnModifyWarRule(): Promise<void> {
+            await MapEditor.MeSimModel.tickTemplateWarRuleId();
             this._updateComponentsForWarRule();
         }
 
         private _onTouchedBtnModifyHasFog(): void {
             const callback = () => {
-                MeSimModel.setHasFog(!MeSimModel.getHasFog());
+                MapEditor.MeSimModel.setHasFog(!MapEditor.MeSimModel.getHasFog());
                 this._updateImgHasFog();
                 this._updateLabelWarRule();
             };
-            if (MeSimModel.getPresetWarRuleId() == null) {
+            if (MapEditor.MeSimModel.getTemplateWarRuleId() == null) {
                 callback();
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0129),
                     callback: () => {
-                        MeSimModel.setPresetWarRuleId(null);
+                        MapEditor.MeSimModel.setCustomWarRuleId();
                         callback();
                     },
                 });
@@ -89,18 +87,18 @@ namespace TwnsMeSimBasicSettingsPage {
         }
 
         private _onTouchedBtnHelpHasFog(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
                 title  : Lang.getText(LangTextType.B0020),
                 content: Lang.getText(LangTextType.R0002),
             });
         }
 
         private async _onTouchedBtnBuildings(): Promise<void> {
-            const mapRawData = MeSimModel.getMapRawData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WarMapBuildingListPanel, {
-                configVersion           : Helpers.getExisted(MeSimModel.getWarData().settingsForCommon?.configVersion),
-                tileDataArray           : Helpers.getExisted(mapRawData.tileDataArray),
-                playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),
+            const mapRawData = MapEditor.MeSimModel.getMapRawData();
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WarMapBuildingListPanel, {
+                gameConfig              : await Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(MapEditor.MeSimModel.getWarData().settingsForCommon?.configVersion)),
+                tileDataArray           : Twns.Helpers.getExisted(mapRawData.tileDataArray),
+                playersCountUnneutral   : Twns.Helpers.getExisted(mapRawData.playersCountUnneutral),
             });
         }
 
@@ -120,18 +118,24 @@ namespace TwnsMeSimBasicSettingsPage {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = Lang.getLanguageText({ textArray: MeSimModel.getMapRawData().mapNameArray }) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelMapName.text = Lang.getLanguageText({ textArray: MapEditor.MeSimModel.getMapRawData().mapNameArray }) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
 
         private async _updateLabelWarRule(): Promise<void> {
-            const label             = this._labelWarRule;
-            const settingsForCommon = Helpers.getExisted(MeSimModel.getWarData().settingsForCommon);
-            label.text              = Lang.getWarRuleNameInLanguage(Helpers.getExisted(settingsForCommon.warRule)) ?? CommonConstants.ErrorTextForUndefined;
-            label.textColor         = settingsForCommon.presetWarRuleId == null ? 0xFF0000 : 0x00FF00;
+            const labelWarRule      = this._labelWarRule;
+            const instanceWarRule   = Twns.Helpers.getExisted(MapEditor.MeSimModel.getWarData().settingsForCommon?.instanceWarRule);
+            const templateWarRuleId = instanceWarRule.templateWarRuleId;
+            if (templateWarRuleId == null) {
+                labelWarRule.text       = Lang.getText(LangTextType.B0321);
+                labelWarRule.textColor  = 0xFFFF00;
+            } else {
+                labelWarRule.text       = `(#${templateWarRuleId}) ${Lang.getLanguageText({ textArray: instanceWarRule.ruleNameArray }) ?? Twns.CommonConstants.ErrorTextForUndefined}`;
+                labelWarRule.textColor  = 0xFFFFFF;
+            }
         }
 
         private _updateImgHasFog(): void {
-            this._imgHasFog.visible = MeSimModel.getHasFog();
+            this._imgHasFog.visible = MapEditor.MeSimModel.getHasFog();
         }
     }
 }

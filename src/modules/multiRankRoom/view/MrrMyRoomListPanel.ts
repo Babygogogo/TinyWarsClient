@@ -10,7 +10,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiLabel                          from "../../tools/ui/UiLabel";
@@ -27,16 +27,16 @@
 // import TwnsMrrRoomInfoPanel                 from "./MrrRoomInfoPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMrrMyRoomListPanel {
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
+namespace Twns.MultiRankRoom {
+    import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarMapInfoPage          = Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Common.OpenDataForCommonWarPlayerInfoPage;
+    import LangTextType                             = Lang.LangTextType;
+    import NotifyType                               = Notify.NotifyType;
 
-    export type OpenData = void;
-    export class MrrMyRoomListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMrrMyRoomListPanel = void;
+    export class MrrMyRoomListPanel extends TwnsUiPanel.UiPanel<OpenDataForMrrMyRoomListPanel> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
@@ -63,7 +63,7 @@ namespace TwnsMrrMyRoomListPanel {
                 { type: NotifyType.MsgMrrDeleteRoomByServer,            callback: this._onNotifyMsgMrrDeleteRoomByServer },
                 { type: NotifyType.MsgMrrGetRoomPublicInfo,             callback: this._onNotifyMsgMrrGetRoomPublicInfo },
                 { type: NotifyType.MsgMrrSetSelfSettings,               callback: this._onNotifyMsgMrrSetSelfSettings },
-                { type: NotifyType.MsgMrrSetBannedCoIdList,             callback: this._onNotifyMsgMrrSetBannedCoIdList },
+                { type: NotifyType.MsgMrrSetBannedCoCategoryIdArray,    callback: this._onNotifyMsgMrrSetBannedCoCategoryIdArray },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -80,7 +80,7 @@ namespace TwnsMrrMyRoomListPanel {
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();
 
-            MrrProxy.reqMrrGetJoinedRoomIdArray();
+            MultiRankRoom.MrrProxy.reqMrrGetJoinedRoomIdArray();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -108,39 +108,39 @@ namespace TwnsMrrMyRoomListPanel {
         }
 
         private _onNotifyMsgMrrGetRoomPublicInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMrrGetRoomPublicInfo.IS;
-            if (data.roomId === MrrModel.getPreviewingRoomId()) {
+            const data = e.data as CommonProto.NetMessage.MsgMrrGetRoomPublicInfo.IS;
+            if (data.roomId === MultiRankRoom.MrrModel.getPreviewingRoomId()) {
                 this._updateComponentsForPreviewingRoomInfo();
             }
         }
 
         private _onNotifyMsgMrrSetSelfSettings(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMrrSetSelfSettings.IS;
-            if (data.roomId === MrrModel.getPreviewingRoomId()) {
+            const data = e.data as CommonProto.NetMessage.MsgMrrSetSelfSettings.IS;
+            if (data.roomId === MultiRankRoom.MrrModel.getPreviewingRoomId()) {
                 this._updateCommonWarPlayerInfoPage();
             }
         }
 
-        private _onNotifyMsgMrrSetBannedCoIdList(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMrrSetBannedCoIdList.IS;
-            if (data.roomId === MrrModel.getPreviewingRoomId()) {
+        private _onNotifyMsgMrrSetBannedCoCategoryIdArray(e: egret.Event): void {
+            const data = e.data as CommonProto.NetMessage.MsgMrrSetBannedCoCategoryIdArray.IS;
+            if (data.roomId === MultiRankRoom.MrrModel.getPreviewingRoomId()) {
                 this._updateCommonWarPlayerInfoPage();
             }
         }
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMainMenuPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.MrrMainMenuPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyTopPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.LobbyBottomPanel, void 0);
         }
 
         private async _onTouchedBtnNextStep(): Promise<void> {
-            const roomId = MrrModel.getPreviewingRoomId();
+            const roomId = MultiRankRoom.MrrModel.getPreviewingRoomId();
             if (roomId != null) {
                 this.close();
-                await MrrSelfSettingsModel.resetData(roomId);
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrRoomInfoPanel, { roomId });
+                await MultiRankRoom.MrrSelfSettingsModel.resetData(roomId);
+                PanelHelpers.open(PanelHelpers.PanelDict.MrrRoomInfoPanel, { roomId });
             }
         }
 
@@ -151,22 +151,22 @@ namespace TwnsMrrMyRoomListPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageClass   : Common.CommonWarPlayerInfoPage,
                     pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageClass   : Common.CommonWarAdvancedSettingsPage,
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
@@ -179,7 +179,7 @@ namespace TwnsMrrMyRoomListPanel {
             this._labelMyRoom.text          = Lang.getText(LangTextType.B0410);
             this._btnBack.label             = Lang.getText(LangTextType.B0146);
             this._labelNoRoom.text          = Lang.getText(LangTextType.B0582);
-            this._btnNextStep.label         = Lang.getText(LangTextType.B0398);
+            this._btnNextStep.label         = Lang.getText(LangTextType.B0222);
         }
 
         private async _updateGroupRoomList(): Promise<void> {
@@ -193,7 +193,7 @@ namespace TwnsMrrMyRoomListPanel {
 
             } else {
                 const dataArray         = await this._createDataForListRoom();
-                const roomId            = MrrModel.getPreviewingRoomId();
+                const roomId            = MultiRankRoom.MrrModel.getPreviewingRoomId();
                 labelLoading.visible    = false;
                 labelNoRoom.visible     = !dataArray.length;
                 listRoom.bindData(dataArray);
@@ -204,7 +204,7 @@ namespace TwnsMrrMyRoomListPanel {
         private _updateComponentsForPreviewingRoomInfo(): void {
             const groupTab      = this._groupTab;
             const btnNextStep   = this._btnNextStep;
-            const roomId        = MrrModel.getPreviewingRoomId();
+            const roomId        = MultiRankRoom.MrrModel.getPreviewingRoomId();
             if ((!this._hasReceivedData) || (roomId == null)) {
                 groupTab.visible    = false;
                 btnNextStep.visible = false;
@@ -221,7 +221,7 @@ namespace TwnsMrrMyRoomListPanel {
 
         private async _createDataForListRoom(): Promise<DataForRoomRenderer[]> {
             const dataArray: DataForRoomRenderer[] = [];
-            for (const roomId of await MrrModel.getJoinedRoomIdArray() ?? []) {
+            for (const roomId of await MultiRankRoom.MrrModel.getJoinedRoomIdArray() ?? []) {
                 dataArray.push({
                     roomId,
                 });
@@ -255,23 +255,28 @@ namespace TwnsMrrMyRoomListPanel {
         }
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const roomId = MrrModel.getPreviewingRoomId();
-            const mapId = roomId == null ? null : (await MrrModel.getRoomInfo(roomId))?.settingsForMrw?.mapId;
+            const roomId    = MultiRankRoom.MrrModel.getPreviewingRoomId();
+            const roomInfo  = roomId == null ? null : await MultiRankRoom.MrrModel.getRoomInfo(roomId);
+            const mapId     = roomInfo?.settingsForMrw?.mapId;
             return mapId == null
                 ? null
-                : { mapInfo: { mapId } };
+                : {
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
+                    hasFog      : roomInfo?.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ?? null,
+                    mapInfo     : { mapId }
+                };
         }
 
         private _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
-            return MrrModel.createDataForCommonWarPlayerInfoPage(MrrModel.getPreviewingRoomId());
+            return MultiRankRoom.MrrModel.createDataForCommonWarPlayerInfoPage(MultiRankRoom.MrrModel.getPreviewingRoomId());
         }
 
         private _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            return MrrModel.createDataForCommonWarBasicSettingsPage(MrrModel.getPreviewingRoomId());
+            return MultiRankRoom.MrrModel.createDataForCommonWarBasicSettingsPage(MultiRankRoom.MrrModel.getPreviewingRoomId());
         }
 
         private _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-            return MrrModel.createDataForCommonWarAdvancedSettingsPage(MrrModel.getPreviewingRoomId());
+            return MultiRankRoom.MrrModel.createDataForCommonWarAdvancedSettingsPage(MultiRankRoom.MrrModel.getPreviewingRoomId());
         }
 
         protected async _showOpenAnimation(): Promise<void> {
@@ -362,16 +367,16 @@ namespace TwnsMrrMyRoomListPanel {
 
         protected async _onDataChanged(): Promise<void> {
             const roomId            = this._getData().roomId;
-            this._imgRed.visible    = await MrrModel.checkIsRedForRoom(roomId);
+            this._imgRed.visible    = await MultiRankRoom.MrrModel.checkIsRedForRoom(roomId);
 
-            const roomInfo          = await MrrModel.getRoomInfo(roomId);
+            const roomInfo          = await MultiRankRoom.MrrModel.getRoomInfo(roomId);
             this._labelName.text    = roomInfo
-                ? (await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(roomInfo.settingsForMrw?.mapId)) ?? CommonConstants.ErrorTextForUndefined)
+                ? (await WarMap.WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(roomInfo.settingsForMrw?.mapId)) ?? CommonConstants.ErrorTextForUndefined)
                 : ``;
         }
 
         private _onTouchTapBtnChoose(): void {
-            MrrModel.setPreviewingRoomId(this._getData().roomId);
+            MultiRankRoom.MrrModel.setPreviewingRoomId(this._getData().roomId);
         }
     }
 }

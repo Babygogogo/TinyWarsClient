@@ -6,21 +6,21 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Types                from "../../tools/helpers/Types";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 // import UserModel            from "../../user/model/UserModel";
 // import TwnsBwWar            from "./BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwPlayer {
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.BaseWar {
+    import NotifyType       = Notify.NotifyType;
     import GridIndex        = Types.GridIndex;
     import PlayerAliveState = Types.PlayerAliveState;
     import CoSkillType      = Types.CoSkillType;
     import CoType           = Types.CoType;
-    import ISerialPlayer    = ProtoTypes.WarSerialization.ISerialPlayer;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import GameConfig       = Config.GameConfig;
+    import ISerialPlayer    = CommonProto.WarSerialization.ISerialPlayer;
 
     export class BwPlayer {
         private _playerIndex?               : number;
@@ -35,13 +35,14 @@ namespace TwnsBwPlayer {
         private _coUsingSkillType?          : Types.CoSkillType;
         private _coIsDestroyedInTurn?       : boolean;
         private _coPowerActivatedCount?     : number;
-        private _hasTakenManualAction?      : boolean;
         private _watchOngoingSrcUserIds?    : Set<number>;
         private _watchRequestSrcUserIds?    : Set<number>;
+        private _markedGridIdArray          : number[] = [];
+        private _isSkipTurn                 = false;
 
-        private _war?                       : TwnsBwWar.BwWar;
+        private _war?                       : BwWar;
 
-        public init(data: ISerialPlayer, configVersion: string): void {
+        public init(data: ISerialPlayer, gameConfig: GameConfig): void {
             const fund              = Helpers.getExisted(data.fund, ClientErrorCode.BwPlayer_Init_00);
             const hasVotedForDraw   = Helpers.getExisted(data.hasVotedForDraw, ClientErrorCode.BwPlayer_Init_01);
             const aliveState        = data.aliveState as PlayerAliveState;
@@ -54,8 +55,8 @@ namespace TwnsBwPlayer {
 
             const playerIndex = data.playerIndex;
             if ((playerIndex == null)                               ||
-                (playerIndex > CommonConstants.WarMaxPlayerIndex)   ||
-                (playerIndex < CommonConstants.WarNeutralPlayerIndex)
+                (playerIndex > CommonConstants.PlayerIndex.Max)   ||
+                (playerIndex < CommonConstants.PlayerIndex.Neutral)
             ) {
                 throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`, ClientErrorCode.BwPlayer_Init_03);
             }
@@ -64,14 +65,13 @@ namespace TwnsBwPlayer {
             const coIsDestroyedInTurn   = Helpers.getExisted(data.coIsDestroyedInTurn, ClientErrorCode.BwPlayer_Init_05);
             const unitAndTileSkinId     = data.unitAndTileSkinId;
             if ((unitAndTileSkinId == null)                                                             ||
-                ((unitAndTileSkinId === 0) && (playerIndex !== CommonConstants.WarNeutralPlayerIndex))  ||
-                ((unitAndTileSkinId !== 0) && (playerIndex === CommonConstants.WarNeutralPlayerIndex))
+                ((unitAndTileSkinId === 0) && (playerIndex !== CommonConstants.PlayerIndex.Neutral))  ||
+                ((unitAndTileSkinId !== 0) && (playerIndex === CommonConstants.PlayerIndex.Neutral))
             ) {
                 throw Helpers.newError(`Invalid unitAndTileSkinId: ${unitAndTileSkinId}`, ClientErrorCode.BwPlayer_Init_06);
             }
 
             const coId              = Helpers.getExisted(data.coId, ClientErrorCode.BwPlayer_Init_07);
-            const coConfig          = ConfigManager.getCoBasicCfg(configVersion, coId);
             const coUsingSkillType  = data.coUsingSkillType as CoSkillType;
             if ((coUsingSkillType !== CoSkillType.Passive)  &&
                 (coUsingSkillType !== CoSkillType.Power)    &&
@@ -109,12 +109,13 @@ namespace TwnsBwPlayer {
             this.setCoId(coId);
             this.setCoCurrentEnergy(coCurrentEnergy);
             this._setCoPowerActivatedCount(data.coPowerActivatedCount ?? 0);
-            this.setHasTakenManualAction(data.hasTakenManualAction ?? false);
             this.setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdArray || []);
             this.setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
+            this._setMarkedGridIdArray(data.markedGridIdArray ?? []);
+            this.setIsSkipTurn(data.isSkipTurn ?? false);
         }
 
-        public startRunning(war: TwnsBwWar.BwWar): void {
+        public startRunning(war: BwWar): void {
             this._setWar(war);
         }
 
@@ -132,15 +133,17 @@ namespace TwnsBwPlayer {
                 coId                        : this.getCoId(),
                 coCurrentEnergy             : this.getCoCurrentEnergy(),
                 coPowerActivatedCount       : this.getCoPowerActivatedCount(),
-                hasTakenManualAction        : this.getHasTakenManualAction(),
                 watchRequestSrcUserIdArray  : [...(this.getWatchRequestSrcUserIds() || [])],
                 watchOngoingSrcUserIdArray  : [...(this.getWatchOngoingSrcUserIds() || [])],
+                markedGridIdArray           : [...this.getMarkedGridIdArray()],
+                isSkipTurn                  : this.getIsSkipTurn(),
             };
         }
         public serializeForCreateSfw(): ISerialPlayer {
-            const war                   = this._getWar();
+            const war                   = this.getWar();
             const playerIndex           = this.getPlayerIndex();
-            const shouldShowFund        = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(this.getTeamIndex()));
+            const teamIndexes           = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+            const shouldShowFund        = (war.getShouldSerializeFullInfoForFreeModeGames()) || (!war.getFogMap().checkHasFogCurrently()) || (teamIndexes.has(this.getTeamIndex()));
             return {
                 playerIndex,
                 fund                        : shouldShowFund ? this.getFund() : 0,
@@ -150,23 +153,45 @@ namespace TwnsBwPlayer {
                 coUsingSkillType            : this.getCoUsingSkillType(),
                 coIsDestroyedInTurn         : this.getCoIsDestroyedInTurn(),
                 unitAndTileSkinId           : this.getUnitAndTileSkinId(),
-                userId                      : playerIndex > 0 ? UserModel.getSelfUserId() : null,
+                userId                      : playerIndex > 0 ? User.UserModel.getSelfUserId() : null,
                 coId                        : this.getCoId(),
                 coCurrentEnergy             : this.getCoCurrentEnergy(),
                 coPowerActivatedCount       : this.getCoPowerActivatedCount(),
-                hasTakenManualAction        : this.getHasTakenManualAction(),
                 watchRequestSrcUserIdArray  : [],
-                watchOngoingSrcUserIdArray  : []
+                watchOngoingSrcUserIdArray  : [],
+                markedGridIdArray           : this.getMarkedGridIdArrayForTeamIndexes(teamIndexes),
+                isSkipTurn                  : this.getIsSkipTurn(),
             };
         }
         public serializeForCreateMfr(): ISerialPlayer {
-            return this.serializeForCreateSfw();
+            const war                   = this.getWar();
+            const playerIndex           = this.getPlayerIndex();
+            const teamIndexes           = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+            const shouldShowFund        = (war.getShouldSerializeFullInfoForFreeModeGames()) || (!war.getFogMap().checkHasFogCurrently()) || (teamIndexes.has(this.getTeamIndex()));
+            return {
+                playerIndex,
+                fund                        : shouldShowFund ? this.getFund() : 0,
+                hasVotedForDraw             : this.getHasVotedForDraw(),
+                aliveState                  : this.getAliveState(),
+                restTimeToBoot              : this.getRestTimeToBoot(),
+                coUsingSkillType            : this.getCoUsingSkillType(),
+                coIsDestroyedInTurn         : this.getCoIsDestroyedInTurn(),
+                unitAndTileSkinId           : playerIndex,
+                userId                      : playerIndex > 0 ? User.UserModel.getSelfUserId() : null,
+                coId                        : this.getCoId(),
+                coCurrentEnergy             : this.getCoCurrentEnergy(),
+                coPowerActivatedCount       : this.getCoPowerActivatedCount(),
+                watchRequestSrcUserIdArray  : [],
+                watchOngoingSrcUserIdArray  : [],
+                markedGridIdArray           : this.getMarkedGridIdArrayForTeamIndexes(teamIndexes),
+                isSkipTurn                  : this.getIsSkipTurn(),
+            };
         }
 
-        private _setWar(war: TwnsBwWar.BwWar): void {
+        private _setWar(war: BwWar): void {
             this._war = war;
         }
-        private _getWar(): TwnsBwWar.BwWar {
+        public getWar(): BwWar {
             return Helpers.getExisted(this._war);
         }
 
@@ -201,11 +226,11 @@ namespace TwnsBwPlayer {
             return Helpers.getExisted(this._playerIndex);
         }
         public checkIsNeutral(): boolean {
-            return this.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex;
+            return this.getPlayerIndex() === CommonConstants.PlayerIndex.Neutral;
         }
 
         public getTeamIndex(): number {
-            return this._getWar().getCommonSettingManager().getTeamIndex(this.getPlayerIndex());
+            return this.getWar().getCommonSettingManager().getTeamIndex(this.getPlayerIndex());
         }
 
         public setRestTimeToBoot(seconds: number): void {
@@ -241,6 +266,58 @@ namespace TwnsBwPlayer {
             this.getWatchRequestSrcUserIds().delete(userId);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for marker.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _setMarkedGridIdArray(gridIdArray: number[] | null): void {
+            this._markedGridIdArray = gridIdArray?.concat() ?? [];
+        }
+        public getMarkedGridIdArray(): number[] {
+            return this._markedGridIdArray;
+        }
+        public getMarkedGridIdArrayForTeamIndexes(teamIndexes: Set<number>): number[] {
+            return teamIndexes.has(this.getTeamIndex())
+                ? this._markedGridIdArray
+                : [];
+        }
+        public checkHasMarkedGridId(gridId: number): boolean {
+            return this._markedGridIdArray.indexOf(gridId) >= 0;
+        }
+        public addMarkedGridId(gridId: number): boolean {
+            const array = this._markedGridIdArray;
+            if (array.indexOf(gridId) >= 0) {
+                return false;
+            } else {
+                array.push(gridId);
+                Notify.dispatch(NotifyType.BwPlayerMarkedGridIdAdded, {
+                    player: this,
+                    gridId,
+                } as Notify.NotifyData.BwPlayerMarkedGridIdAdded);
+
+                return true;
+            }
+        }
+        public deleteMarkedGridId(gridId: number): boolean {
+            const hasDeleted = Helpers.deleteElementFromArray(this._markedGridIdArray, gridId) > 0;
+            if (hasDeleted) {
+                Notify.dispatch(NotifyType.BwPlayerMarkedGridIdDeleted, {
+                    player: this,
+                    gridId,
+                } as Notify.NotifyData.BwPlayerMarkedGridIdDeleted);
+            }
+            return hasDeleted;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for skip turn.
+        ////////////////////////////////////////////////////////////////////////////////
+        public setIsSkipTurn(isSkipTurn: boolean): void {
+            this._isSkipTurn = isSkipTurn;
+        }
+        public getIsSkipTurn(): boolean {
+            return this._isSkipTurn;
+        }
+
         public setUserId(id: number | null): void {
             this._userId = id;
         }
@@ -259,7 +336,7 @@ namespace TwnsBwPlayer {
             const userId = this.getUserId();
             return (userId == null)
                 ?  `A.I.`
-                : await UserModel.getUserNickname(userId) || `??`;
+                : await User.UserModel.getUserNickname(userId) || `??`;
         }
 
         public setCoId(coId: number): void {
@@ -280,7 +357,7 @@ namespace TwnsBwPlayer {
             return Helpers.getExisted(this._coCurrentEnergy);
         }
         public getCoMaxEnergy(): number {
-            return this._getRevisedEnergy(WarCommonHelpers.getCoMaxEnergy(this._getCoBasicCfg()));
+            return this._getRevisedEnergy(WarHelpers.WarCommonHelpers.getCoMaxEnergy(this._getCoBasicCfg()));
         }
         public getCoZoneExpansionEnergyList(): number[] | null {
             const cfg = this._getCoBasicCfg();
@@ -329,13 +406,6 @@ namespace TwnsBwPlayer {
             this._coPowerActivatedCount = count;
         }
 
-        public getHasTakenManualAction(): boolean {
-            return Helpers.getExisted(this._hasTakenManualAction);
-        }
-        public setHasTakenManualAction(hasTaken: boolean): void {
-            this._hasTakenManualAction = hasTaken;
-        }
-
         public getCoZoneRadius(): number {
             const cfg       = this._getCoBasicCfg();
             const energy    = this.getCoCurrentEnergy();
@@ -349,7 +419,7 @@ namespace TwnsBwPlayer {
             return radius;
         }
         public getCoGridIndexListOnMap(): GridIndex[] {
-            return this._getWar().getUnitMap().getCoGridIndexListOnMap(this.getPlayerIndex());
+            return this.getWar().getUnitMap().getCoGridIndexListOnMap(this.getPlayerIndex());
         }
 
         public checkIsInCoZone(targetGridIndex: GridIndex, coGridIndexOnMap: GridIndex[]): boolean {
@@ -386,9 +456,9 @@ namespace TwnsBwPlayer {
             if ((!currentSkills) || (!currentSkills.length)) {
                 return true;
             } else {
-                const version = this._getWar().getConfigVersion();
+                const gameConfig = this.getWar().getGameConfig();
                 for (const skillId of currentSkills) {
-                    if (ConfigManager.getCoSkillCfg(version, skillId).showZone) {
+                    if (gameConfig.getCoSkillCfg(skillId)?.showZone) {
                         return true;
                     }
                 }
@@ -402,6 +472,14 @@ namespace TwnsBwPlayer {
 
             if ((this.checkCoIsUsingActiveSkill())  ||
                 (!this.getCoSkills(skillType))
+            ) {
+                return false;
+            }
+
+            const war           = this.getWar();
+            const playerIndex   = this.getPlayerIndex();
+            if ((!war.getCommonSettingManager().getSettingsCanActivateCoSkill(playerIndex))             ||
+                (!war.getWarEventManager().checkOngoingPersistentActionCanActivateCoSkill(playerIndex))
             ) {
                 return false;
             }
@@ -461,20 +539,20 @@ namespace TwnsBwPlayer {
             }
         }
 
-        public getUnitCostModifier(gridIndex: GridIndex, hasLoadedCo: boolean, unitType: Types.UnitType): number {
-            if (this.getCoId() === CommonConstants.CoEmptyId) {
+        public getUnitCostModifier(gridIndex: GridIndex, hasLoadedCo: boolean, unitType: number): number {
+            if (this.getCoId() === CommonConstants.CoId.Empty) {
                 return 1;
             }
 
             const coZoneRadius              = this.getCoZoneRadius();
-            const configVersion             = this._getWar()?.getConfigVersion();
+            const gameConfig                = this.getWar().getGameConfig();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => this.getCoGridIndexListOnMap());
             let modifier                    = 1;
             for (const skillId of this.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfUnitCost;
-                if ((cfg)                                                                           &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
-                    ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                const cfg = gameConfig.getCoSkillCfg(skillId)?.selfUnitCost;
+                if ((cfg)                                                                   &&
+                    (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
+                    ((hasLoadedCo) || (WarHelpers.WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
                         getCoGridIndexArrayOnMap,
@@ -488,8 +566,8 @@ namespace TwnsBwPlayer {
             return modifier;
         }
 
-        private _getCoBasicCfg(): ProtoTypes.Config.ICoBasicCfg {
-            return ConfigManager.getCoBasicCfg(this._getWar().getConfigVersion(), this.getCoId());
+        private _getCoBasicCfg(): CommonProto.Config.ICoBasicCfg {
+            return Helpers.getExisted(this.getWar().getGameConfig().getCoBasicCfg(this.getCoId()));
         }
     }
 }

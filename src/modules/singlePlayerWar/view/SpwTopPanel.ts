@@ -9,7 +9,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -23,9 +23,9 @@
 // import TwnsSpwWarMenuPanel      from "./SpwWarMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpwTopPanel {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.SinglePlayerWar {
+    import LangTextType         = Lang.LangTextType;
+    import NotifyType           = Notify.NotifyType;
 
     // eslint-disable-next-line no-shadow
     enum PanelSkinState {
@@ -33,13 +33,14 @@ namespace TwnsSpwTopPanel {
         Expanded,
     }
 
-    export type OpenData = {
-        war     : TwnsSpwWar.SpwWar;
+    export type OpenDataForSpwTopPanel = {
+        war     : SinglePlayerWar.SpwWar;
     };
-    export class SpwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class SpwTopPanel extends TwnsUiPanel.UiPanel<OpenDataForSpwTopPanel> {
         private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForListPlayer>;
-        private readonly _labelWeather!         : TwnsUiLabel.UiLabel;
-        private readonly _labelSinglePlayer!    : TwnsUiLabel.UiLabel;
+        private readonly _btnWeather!           : TwnsUiButton.UiButton;
+        private readonly _btnSave!              : TwnsUiLabel.UiLabel;
+        private readonly _btnLoad!              : TwnsUiLabel.UiLabel;
         private readonly _btnChat!              : TwnsUiButton.UiButton;
         private readonly _btnSettings!          : TwnsUiButton.UiButton;
 
@@ -74,18 +75,22 @@ namespace TwnsSpwTopPanel {
                 { type: NotifyType.MsgChatUpdateReadProgress,       callback: this._onNotifyMsgChatUpdateReadProgress },
                 { type: NotifyType.MsgChatGetAllMessages,           callback: this._onNotifyMsgChatGetAllMessages },
                 { type: NotifyType.MsgChatAddMessage,               callback: this._onNotifyMsgChatAddMessage },
+                { type: NotifyType.MsgSpmSaveScw,                   callback: this._onNotifyMsgSpmSaveScw },
+                { type: NotifyType.MsgSpmSaveSfw,                   callback: this._onNotifyMsgSpmSaveSfw },
+                { type: NotifyType.MsgSpmSaveSrw,                   callback: this._onNotifyMsgSpmSaveSrw },
             ]);
             this._setUiListenerArray([
-                { ui: this._labelWeather,       callback: this._onTouchedLabelWeather },
+                { ui: this._btnWeather,         callback: this._onTouchedBtnWeather },
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
                 { ui: this._groupCo,            callback: this._onTouchedGroupCo },
                 { ui: this._groupInfo,          callback: this._onTouchedGroupInfo },
+                { ui: this._btnSave,            callback: this._onTouchedBtnSave },
+                { ui: this._btnLoad,            callback: this._onTouchedBtnLoad },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
                 { ui: this._btnSettings,        callback: this._onTouchedBtnSettings, },
                 { ui: this._btnExpand,          callback: this._onTouchedBtnExpand },
                 { ui: this._btnNarrow,          callback: this._onTouchedBtnNarrow },
             ]);
-            this._labelWeather.touchEnabled = true;
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
@@ -121,7 +126,7 @@ namespace TwnsSpwTopPanel {
             SoundManager.playCoBgmWithWar(this._getOpenData().war, false);
         }
         private _onNotifyBwForceWeatherTypeChanged(): void {
-            this._updateLabelWeather();
+            this._updateBtnWeather();
         }
         private _onNotifyWarActionNormalExecuted(): void {
             this._updateLabelFundAndAddFund();
@@ -140,48 +145,107 @@ namespace TwnsSpwTopPanel {
             this._updateBtnChat();
         }
 
+        private _onNotifyMsgSpmSaveScw(): void {
+            FloatText.show(Lang.getText(LangTextType.A0073));
+        }
+        private _onNotifyMsgSpmSaveSfw(): void {
+            FloatText.show(Lang.getText(LangTextType.A0073));
+        }
+        private _onNotifyMsgSpmSaveSrw(): void {
+            FloatText.show(Lang.getText(LangTextType.A0073));
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks for touch.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedLabelWeather(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+        private _onTouchedBtnWeather(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonHelpPanel, {
                 title  : Lang.getText(LangTextType.B0705),
                 content: this._getOpenData().war.getWeatherManager().getDesc(),
             });
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onTouchedGroupPlayer(): void {
             const userId = this._getOpenData().war.getPlayerInTurn().getUserId();
             if (userId != null) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
+                PanelHelpers.open(PanelHelpers.PanelDict.UserPanel, { userId });
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
             }
         }
 
         private _onTouchedGroupCo(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonCoListPanel, {
                 war : this._getOpenData().war,
             });
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.SpwWarMenuPanel);
+            PanelHelpers.close(PanelHelpers.PanelDict.SpwWarMenuPanel);
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onTouchedGroupInfo(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonCoListPanel, {
                 war : this._getOpenData().war,
             });
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.SpwWarMenuPanel);
+            PanelHelpers.close(PanelHelpers.PanelDict.SpwWarMenuPanel);
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
+        private _onTouchedBtnSave(): void {
+            if (!this._checkCanDoAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0239));
+                return;
+            }
+
+            const war = this._getOpenData().war;
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0260),
+                content : Lang.getText(LangTextType.A0071),
+                callback: () => {
+                    const warType = war.getWarType();
+                    if ((warType === Types.WarType.ScwFog) || (warType === Types.WarType.ScwStd)) {
+                        SinglePlayerMode.SpmProxy.reqSpmSaveScw(war);
+                    } else if ((warType === Types.WarType.SfwFog) || (warType === Types.WarType.SfwStd)) {
+                        SinglePlayerMode.SpmProxy.reqSpmSaveSfw(war);
+                    } else if ((warType === Types.WarType.SrwFog) || (warType === Types.WarType.SrwStd)) {
+                        SinglePlayerMode.SpmProxy.reqSpmSaveSrw(war);
+                    } else {
+                        throw Helpers.newError(`Invalid warType: ${warType}`, ClientErrorCode.SpwWarMenuPanel_OnTOuchedBtnSaveGame_00);
+                    }
+                },
+            });
+        }
+
+        private async _onTouchedBtnLoad(): Promise<void> {
+            if (!this._checkCanDoAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0239));
+                return;
+            }
+
+            const slotInfo = await SinglePlayerMode.SpmModel.getSlotFullData(this._getOpenData().war.getSaveSlotIndex());
+            if (slotInfo == null) {
+                FloatText.show(Lang.getText(LangTextType.A0303));
+                return;
+            }
+
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0261),
+                content : Lang.getText(LangTextType.A0072),
+                callback: () => {
+                    FlowManager.gotoSinglePlayerWar({
+                        slotIndex       : slotInfo.slotIndex,
+                        warData         : slotInfo.warData,
+                        slotExtraData   : slotInfo.extraData,
+                    });
+                },
+            });
+        }
+
         private _onTouchedBtnChat(): void {
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.SpwWarMenuPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {});
+            PanelHelpers.close(PanelHelpers.PanelDict.SpwWarMenuPanel);
+            PanelHelpers.open(PanelHelpers.PanelDict.ChatPanel, {});
         }
 
         private _onTouchedBtnSettings(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSettingsPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.UserSettingsPanel, void 0);
         }
 
         private _onTouchedBtnExpand(): void {
@@ -197,7 +261,7 @@ namespace TwnsSpwTopPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateComponentsForLanguage();
-            this._updateLabelWeather();
+            this._updateBtnWeather();
             this._updateListPlayer();
             this._updateImgSkinAndCo();
             this._updateLabelPlayer();
@@ -208,13 +272,13 @@ namespace TwnsSpwTopPanel {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelSinglePlayer.text = Lang.getText(LangTextType.B0138);
-            this._updateLabelWeather();
+            this._updateBtnWeather();
             this._updateLabelTurnIndex();
         }
 
-        private _updateLabelWeather(): void {
-            this._labelWeather.text = Lang.getWeatherName(this._getOpenData().war.getWeatherManager().getCurrentWeatherType());
+        private _updateBtnWeather(): void {
+            const war               = this._getOpenData().war;
+            this._btnWeather.icon   = war.getGameConfig().getWeatherCfg(war.getWeatherManager().getCurrentWeatherType())?.icon ?? ``;
         }
 
         private _updateListPlayer(): void {
@@ -236,7 +300,7 @@ namespace TwnsSpwTopPanel {
             const labelFund     = this._labelFund;
             const labelAddFund  = this._labelAddFund;
             if ((war.getFogMap().checkHasFogCurrently())                                                        &&
-                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
+                (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
             ) {
                 labelFund.text      = `????`;
                 labelAddFund.text   = `(+??)`;
@@ -249,8 +313,8 @@ namespace TwnsSpwTopPanel {
         private _updateImgSkinAndCo(): void {
             const war               = this._getOpenData().war;
             const player            = war.getPlayerInTurn();
-            this._imgSkin.source    = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
-            this._imgCo.source      = ConfigManager.getCoEyeImageSource(war.getConfigVersion(), player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
+            this._imgSkin.source    = WarHelpers.WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
+            this._imgCo.source      = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelEnergy(): void {
@@ -278,7 +342,7 @@ namespace TwnsSpwTopPanel {
         }
 
         private _updateBtnChat(): void {
-            this._btnChat.setRedVisible(ChatModel.checkHasUnreadMessage());
+            this._btnChat.setRedVisible(Chat.ChatModel.checkHasUnreadMessage());
         }
 
         private _setPanelSkinState(state: PanelSkinState): void {
@@ -297,7 +361,7 @@ namespace TwnsSpwTopPanel {
                     playerIndex,
                 });
             }
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex < playerIndexInTurn; ++playerIndex) {
+            for (let playerIndex = CommonConstants.PlayerIndex.First; playerIndex < playerIndexInTurn; ++playerIndex) {
                 dataArray.push({
                     war,
                     playerIndex,
@@ -305,10 +369,17 @@ namespace TwnsSpwTopPanel {
             }
             return dataArray;
         }
+
+        private _checkCanDoAction(): boolean {
+            const war = this._getOpenData().war;
+            return (war.checkIsHumanInTurn())                                           &&
+                (war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.Main)      &&
+                (war.getActionPlanner().getState() === Types.ActionPlannerState.Idle);
+        }
     }
 
     type DataForListPlayer = {
-        war         : TwnsSpwWar.SpwWar
+        war         : SinglePlayerWar.SpwWar
         playerIndex : number;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForListPlayer> {
@@ -331,14 +402,14 @@ namespace TwnsSpwTopPanel {
         protected _onDataChanged(): void {
             const data              = this._getData();
             const player            = data.war.getPlayer(data.playerIndex);
-            this._imgSkin.source    = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
+            this._imgSkin.source    = WarHelpers.WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
             this._updateImgCo();
             this._updateLabelFundAndAddFund();
             this._updateLabelEnergy();
         }
 
         private _onNotifyBwPlayerFundChanged(e: egret.Event): void {
-            const eventData = e.data as NotifyData.BwPlayerFundChanged;
+            const eventData = e.data as Notify.NotifyData.BwPlayerFundChanged;
             const data      = this._getData();
             if (eventData === data.war.getPlayer(data.playerIndex)) {
                 this._updateLabelFundAndAddFund();
@@ -358,7 +429,7 @@ namespace TwnsSpwTopPanel {
         }
 
         private _onNotifyBwCoIdChanged(e: egret.Event): void {
-            const eventData = e.data as NotifyData.BwCoIdChanged;
+            const eventData = e.data as Notify.NotifyData.BwCoIdChanged;
             const data      = this._getData();
             if (eventData === data.war.getPlayer(data.playerIndex)) {
                 this._updateImgCo();
@@ -369,7 +440,7 @@ namespace TwnsSpwTopPanel {
             const data      = this._getData();
             const userId    = data.war.getPlayer(data.playerIndex).getUserId();
             if (userId != null) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
+                PanelHelpers.open(PanelHelpers.PanelDict.UserPanel, { userId });
             }
         }
 
@@ -377,7 +448,7 @@ namespace TwnsSpwTopPanel {
             const data          = this._getData();
             const war           = data.war;
             const player        = war.getPlayer(data.playerIndex);
-            this._imgCo.source  = ConfigManager.getCoEyeImageSource(war.getConfigVersion(), player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
+            this._imgCo.source  = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelFundAndAddFund(): void {
@@ -387,7 +458,7 @@ namespace TwnsSpwTopPanel {
             const labelFund     = this._labelFund;
             const labelAddFund  = this._labelAddFund;
             if ((war.getFogMap().checkHasFogCurrently())                                                &&
-                (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(player.getTeamIndex()))
+                (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(player.getTeamIndex()))
             ) {
                 labelFund.text      = `????`;
                 labelAddFund.text   = `(+??)`;

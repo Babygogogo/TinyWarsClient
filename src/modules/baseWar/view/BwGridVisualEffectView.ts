@@ -7,11 +7,11 @@
 // import TwnsBwGridVisualEffect   from "../model/BwGridVisualEffect";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwGridVisualEffectView {
-    import GridIndex            = Types.GridIndex;
-    import BwGridVisualEffect   = TwnsBwGridVisualEffect.BwGridVisualEffect;
+namespace Twns.BaseWar {
+    import GridIndex            = Twns.Types.GridIndex;
+    import BwGridVisualEffect   = Twns.BaseWar.BwGridVisualEffect;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = CommonConstants.GridSize;
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = Twns.CommonConstants.GridSize;
     const BLOCK_OFFSET_X                                = Math.floor(_GRID_WIDTH * 0.3);
     const BLOCK_OFFSET_Y                                = Math.floor(_GRID_HEIGHT * 0.3);
     const DIVE_OFFSET_X                                 = -_GRID_WIDTH;
@@ -138,7 +138,7 @@ namespace TwnsBwGridVisualEffectView {
         img.scaleX          = 2;
         img.scaleY          = 2;
 
-        const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos   = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.x       = BLOCK_OFFSET_X + pos.x;
         img.y       = BLOCK_OFFSET_Y + pos.y;
 
@@ -152,14 +152,14 @@ namespace TwnsBwGridVisualEffectView {
 
     function createEffectDive(gridIndex: GridIndex): egret.DisplayObject {
         const img       = new TwnsUiImage.UiImage(`c04_t08_s07_f01`);
-        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos       = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.smoothing   = false;
         img.x           = DIVE_OFFSET_X + pos.x;
         img.y           = DIVE_OFFSET_Y + pos.y;
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 7; ++i) {
-            tween.wait(50).set({ source: `c04_t08_s07_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(50).set({ source: `c04_t08_s07_f${Twns.Helpers.getNumText(i, 2)}` });
         }
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
 
@@ -168,14 +168,14 @@ namespace TwnsBwGridVisualEffectView {
 
     function createEffectExplosion(gridIndex: GridIndex): egret.DisplayObject {
         const img       = new TwnsUiImage.UiImage(`c04_t08_s01_f01`);
-        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos       = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.smoothing   = false;
         img.x           = EXPLOSION_OFFSET_X + pos.x;
         img.y           = EXPLOSION_OFFSET_Y + pos.y;
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 9; ++i) {
-            tween.wait(50).set({ source: `c04_t08_s01_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(50).set({ source: `c04_t08_s01_f${Twns.Helpers.getNumText(i, 2)}` });
         }
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
 
@@ -188,14 +188,14 @@ namespace TwnsBwGridVisualEffectView {
 
     function createEffectDamage(gridIndex: GridIndex): egret.DisplayObject {
         const img       = new TwnsUiImage.UiImage(`c04_t08_s02_f01`);
-        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos       = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.smoothing   = false;
         img.x           = DAMAGE_OFFSET_X + pos.x;
         img.y           = DAMAGE_OFFSET_Y + pos.y;
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 8; ++i) {
-            tween.wait(50).set({ source: `c04_t08_s02_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(50).set({ source: `c04_t08_s02_f${Twns.Helpers.getNumText(i, 2)}` });
         }
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
 
@@ -209,7 +209,7 @@ namespace TwnsBwGridVisualEffectView {
         img.scaleX          = 2;
         img.scaleY          = 2;
 
-        const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos   = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.x       = SUPPLY_OFFSET_X + pos.x;
         img.y       = SUPPLY_OFFSET_Y + pos.y;
 
@@ -228,7 +228,7 @@ namespace TwnsBwGridVisualEffectView {
         img.scaleX          = 2;
         img.scaleY          = 2;
 
-        const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos   = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.x       = REPAIR_OFFSET_X + pos.x;
         img.y       = REPAIR_OFFSET_Y + pos.y;
 
@@ -242,19 +242,19 @@ namespace TwnsBwGridVisualEffectView {
 
     function createEffectSiloExplosion(gridIndex: GridIndex): egret.DisplayObject {
         const img       = new TwnsUiImage.UiImage(`c04_t08_s02_f01`);
-        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos       = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.smoothing   = false;
         img.x           = DAMAGE_OFFSET_X + pos.x;
         img.y           = DAMAGE_OFFSET_Y + pos.y;
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 8; ++i) {
-            tween.wait(50).set({ source: `c04_t08_s02_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(50).set({ source: `c04_t08_s02_f${Twns.Helpers.getNumText(i, 2)}` });
         }
 
         tween.set({ x: EXPLOSION_OFFSET_X + pos.x, y: EXPLOSION_OFFSET_Y + pos.y, source: `c04_t08_s01_f01` });
         for (let i = 2; i <= 9; ++i) {
-            tween.wait(50).set({ source: `c04_t08_s01_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(50).set({ source: `c04_t08_s01_f${Twns.Helpers.getNumText(i, 2)}` });
         }
 
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
@@ -264,14 +264,14 @@ namespace TwnsBwGridVisualEffectView {
 
     function createEffectSkillActivation(gridIndex: GridIndex): egret.DisplayObject {
         const img       = new TwnsUiImage.UiImage(`c04_t08_s06_f01`);
-        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos       = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.smoothing   = false;
         img.x           = SKILL_ACTIVATION_OFFSET_X + pos.x;
         img.y           = SKILL_ACTIVATION_OFFSET_Y + pos.y;
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 34; ++i) {
-            tween.wait(34).set({ source: `c04_t08_s06_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(34).set({ source: `c04_t08_s06_f${Twns.Helpers.getNumText(i, 2)}` });
         }
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
 
@@ -280,14 +280,14 @@ namespace TwnsBwGridVisualEffectView {
 
     function createEffectCharge(gridIndex: GridIndex): egret.DisplayObject {
         const img       = new TwnsUiImage.UiImage(`c04_t08_s06_f11`);
-        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos       = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.smoothing   = false;
         img.x           = SKILL_ACTIVATION_OFFSET_X + pos.x;
         img.y           = SKILL_ACTIVATION_OFFSET_Y + pos.y;
 
         const tween = egret.Tween.get(img);
         for (let i = 12; i <= 25; ++i) {
-            tween.wait(34).set({ source: `c04_t08_s06_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(34).set({ source: `c04_t08_s06_f${Twns.Helpers.getNumText(i, 2)}` });
         }
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
 
@@ -296,14 +296,14 @@ namespace TwnsBwGridVisualEffectView {
 
     function createEffectSurface(gridIndex: GridIndex): egret.DisplayObject {
         const img       = new TwnsUiImage.UiImage(`c04_t08_s08_f01`);
-        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        const pos       = Twns.GridIndexHelpers.createPointByGridIndex(gridIndex);
         img.smoothing   = false;
         img.x           = DAMAGE_OFFSET_X + pos.x;
         img.y           = DAMAGE_OFFSET_Y + pos.y;
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 5; ++i) {
-            tween.wait(50).set({ source: `c04_t08_s08_f${Helpers.getNumText(i, 2)}` });
+            tween.wait(50).set({ source: `c04_t08_s08_f${Twns.Helpers.getNumText(i, 2)}` });
         }
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
 

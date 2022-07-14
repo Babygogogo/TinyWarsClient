@@ -2,7 +2,7 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import Logger               from "../../tools/helpers/Logger";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import ProtoManager         from "../../tools/proto/ProtoManager";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
@@ -10,42 +10,42 @@
 // import TwnsRwWar            from "./RwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace HrwModel {
-    import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
-    import WarAction                    = ProtoTypes.WarAction;
-    import WarSerialization             = ProtoTypes.WarSerialization;
+namespace Twns.HalfwayReplayWar.HrwModel {
+    import ClientErrorCode              = Twns.ClientErrorCode;
+    import WarAction                    = CommonProto.WarAction;
+    import WarSerialization             = CommonProto.WarSerialization;
     import IWarActionContainer          = WarAction.IWarActionContainer;
-    import IMovingUnitAndPath           = ProtoTypes.Structure.IMovingUnitAndPath;
-    import ICommonExtraDataForWarAction = ProtoTypes.Structure.ICommonExtraDataForWarAction;
+    import IMovingUnitAndPath           = CommonProto.Structure.IMovingUnitAndPath;
+    import ICommonExtraDataForWarAction = CommonProto.Structure.ICommonExtraDataForWarAction;
 
-    let _replayData         : ProtoTypes.NetMessage.MsgReplayGetData.IS | null = null;
-    let _war                : TwnsHrwWar.HrwWar | null = null;
+    let _replayData         : CommonProto.NetMessage.MsgReplayGetData.IS | null = null;
+    let _war                : Twns.HalfwayReplayWar.HrwWar | null = null;
 
     export function init(): void {
         // nothing to do
     }
 
-    export function setReplayData(data: ProtoTypes.NetMessage.MsgReplayGetData.IS): void {
+    export function setReplayData(data: CommonProto.NetMessage.MsgReplayGetData.IS): void {
         _replayData = data;
     }
-    export function getReplayData(): ProtoTypes.NetMessage.MsgReplayGetData.IS | null {
+    export function getReplayData(): CommonProto.NetMessage.MsgReplayGetData.IS | null {
         return _replayData;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar(warData: WarSerialization.ISerialWar): Promise<TwnsHrwWar.HrwWar> {
+    export async function loadWar(warData: WarSerialization.ISerialWar): Promise<Twns.HalfwayReplayWar.HrwWar> {
         if (_war) {
-            Logger.warn(`HrwModel.loadWar() another war has been loaded already!`);
+            Twns.Logger.warn(`HrwModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
-        const mapId = WarCommonHelpers.getMapId(warData);
+        const mapId = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
         if (mapId != null) {
-            const mapRawData    = Helpers.getExisted(await WarMapModel.getRawData(mapId));
+            const mapRawData    = Twns.Helpers.getExisted(await Twns.WarMap.WarMapModel.getRawData(mapId));
             const unitDataArray = mapRawData.unitDataArray || [];
-            const field         = Helpers.getExisted(warData.field);
+            const field         = Twns.Helpers.getExisted(warData.field);
             field.tileMap       = { tiles: mapRawData.tileDataArray };
             field.unitMap       = {
                 units       : unitDataArray,
@@ -55,19 +55,20 @@ namespace HrwModel {
         {
             const settingsForMfw = warData.settingsForMfw;
             if (settingsForMfw) {
-                const initialWarData            = Helpers.getExisted(settingsForMfw.initialWarData);
-                warData.remainingVotesForDraw   = Helpers.deepClone(initialWarData.remainingVotesForDraw);
-                warData.weatherManager          = Helpers.deepClone(initialWarData.weatherManager);
-                warData.warEventManager         = Helpers.deepClone(initialWarData.warEventManager);
-                warData.playerManager           = Helpers.deepClone(initialWarData.playerManager);
-                warData.turnManager             = Helpers.deepClone(initialWarData.turnManager);
-                warData.field                   = Helpers.deepClone(initialWarData.field);
+                const initialWarData            = Twns.Helpers.getExisted(settingsForMfw.initialWarData);
+                warData.remainingVotesForDraw   = Twns.Helpers.deepClone(initialWarData.remainingVotesForDraw);
+                warData.weatherManager          = Twns.Helpers.deepClone(initialWarData.weatherManager);
+                warData.warEventManager         = Twns.Helpers.deepClone(initialWarData.warEventManager);
+                warData.playerManager           = Twns.Helpers.deepClone(initialWarData.playerManager);
+                warData.turnManager             = Twns.Helpers.deepClone(initialWarData.turnManager);
+                warData.field                   = Twns.Helpers.deepClone(initialWarData.field);
             }
         }
-        warData.executedActions = generateExecutedActions(warData);
 
-        const war = new TwnsHrwWar.HrwWar();
-        await war.init(warData);
+        Twns.Helpers.getExisted(warData.executedActionManager).executedActionArray = generateExecutedActions(warData);
+
+        const war = new Twns.HalfwayReplayWar.HrwWar();
+        war.init(warData, await Twns.Config.ConfigManager.getGameConfig(Twns.Helpers.getExisted(warData.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         _war = war;
         return _war;
@@ -80,19 +81,19 @@ namespace HrwModel {
         }
     }
 
-    export function getWar(): TwnsHrwWar.HrwWar | null {
+    export function getWar(): Twns.HalfwayReplayWar.HrwWar | null {
         return _war;
     }
 
     function generateExecutedActions(warData: WarSerialization.ISerialWar): IWarActionContainer[] {
-        const halfwayReplayActionArray      = warData.halfwayReplayActionArray ?? [];
+        const halfwayReplayActionArray      = warData.executedActionManager?.halfwayReplayActionArray ?? [];
         const actionsCount                  = halfwayReplayActionArray[0]?.actionArray?.length ?? 0;
         const rearrangedHalfwayActionArray  : IWarActionContainer[][] = new Array(actionsCount);
         const teamsCount                    = halfwayReplayActionArray.length;
         for (let actionId = 0; actionId < actionsCount; ++actionId) {
             const actionArrayForTeams: IWarActionContainer[] = new Array(teamsCount);
             for (let i = 0; i < teamsCount; ++i) {
-                actionArrayForTeams[i] = Helpers.getExisted(halfwayReplayActionArray[i].actionArray, ClientErrorCode.HrwModel_GenerateExecutedActions_00)[actionId];
+                actionArrayForTeams[i] = Twns.Helpers.getExisted(halfwayReplayActionArray[i].actionArray, ClientErrorCode.HrwModel_GenerateExecutedActions_00)[actionId];
             }
             rearrangedHalfwayActionArray[actionId] = actionArrayForTeams;
         }
@@ -102,35 +103,35 @@ namespace HrwModel {
             const actionForTeams = rearrangedHalfwayActionArray[actionId];
             executedActionArray.push({
                 actionId,
-                WarActionPlayerDeleteUnit           : mergePlayerDeleteUnit(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionPlayerDeleteUnit))),
-                WarActionPlayerEndTurn              : mergePlayerEndTurn(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionPlayerEndTurn))),
-                WarActionPlayerProduceUnit          : mergePlayerProduceUnit(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionPlayerProduceUnit))),
-                WarActionPlayerSurrender            : mergePlayerSurrender(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionPlayerSurrender))),
-                WarActionPlayerUseCoSkill           : mergePlayerUseCoSkill(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionPlayerUseCoSkill))),
-                WarActionPlayerVoteForDraw          : mergePlayerVoteForDraw(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionPlayerVoteForDraw))),
-                WarActionSystemBeginTurn            : mergeSystemBeginTurn(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionSystemBeginTurn))),
-                WarActionSystemCallWarEvent         : mergeSystemCallWarEvent(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionSystemCallWarEvent))),
-                WarActionSystemDestroyPlayerForce   : mergeSystemDestroyPlayerForce(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionSystemDestroyPlayerForce))),
-                WarActionSystemEndTurn              : mergeSystemEndTurn(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionSystemEndTurn))),
-                WarActionSystemEndWar               : mergeSystemEndWar(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionSystemEndWar))),
-                WarActionSystemHandleBootPlayer     : mergeSystemHandleBootPlayer(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionSystemHandleBootPlayer))),
-                WarActionSystemVoteForDraw          : mergeSystemVoteForDraw(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionSystemVoteForDraw))),
-                WarActionUnitAttackTile             : mergeUnitAttackTile(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitAttackTile))),
-                WarActionUnitAttackUnit             : mergeUnitAttackUnit(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitAttackUnit))),
-                WarActionUnitBeLoaded               : mergeUnitBeLoaded(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitBeLoaded))),
-                WarActionUnitBuildTile              : mergeUnitBuildTile(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitBuildTile))),
-                WarActionUnitCaptureTile            : mergeUnitCaptureTile(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitCaptureTile))),
-                WarActionUnitDive                   : mergeUnitDive(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitDive))),
-                WarActionUnitDropUnit               : mergeUnitDropUnit(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitDropUnit))),
-                WarActionUnitJoinUnit               : mergeUnitJoinUnit(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitJoinUnit))),
-                WarActionUnitLaunchFlare            : mergeUnitLaunchFlare(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitLaunchFlare))),
-                WarActionUnitLaunchSilo             : mergeUnitLaunchSilo(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitLaunchSilo))),
-                WarActionUnitLoadCo                 : mergeUnitLoadCo(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitLoadCo))),
-                WarActionUnitProduceUnit            : mergeUnitProduceUnit(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitProduceUnit))),
-                WarActionUnitSupplyUnit             : mergeUnitSupplyUnit(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitSupplyUnit))),
-                WarActionUnitSurface                : mergeUnitSurface(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitSurface))),
-                WarActionUnitUseCoSkill             : mergeUnitUseCoSkill(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitUseCoSkill))),
-                WarActionUnitWait                   : mergeUnitWait(Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitWait))),
+                WarActionPlayerDeleteUnit           : mergePlayerDeleteUnit(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionPlayerDeleteUnit))),
+                WarActionPlayerEndTurn              : mergePlayerEndTurn(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionPlayerEndTurn))),
+                WarActionPlayerProduceUnit          : mergePlayerProduceUnit(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionPlayerProduceUnit))),
+                WarActionPlayerSurrender            : mergePlayerSurrender(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionPlayerSurrender))),
+                WarActionPlayerUseCoSkill           : mergePlayerUseCoSkill(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionPlayerUseCoSkill))),
+                WarActionPlayerVoteForDraw          : mergePlayerVoteForDraw(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionPlayerVoteForDraw))),
+                WarActionSystemBeginTurn            : mergeSystemBeginTurn(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionSystemBeginTurn))),
+                WarActionSystemCallWarEvent         : mergeSystemCallWarEvent(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionSystemCallWarEvent))),
+                WarActionSystemDestroyPlayerForce   : mergeSystemDestroyPlayerForce(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionSystemDestroyPlayerForce))),
+                WarActionSystemEndTurn              : mergeSystemEndTurn(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionSystemEndTurn))),
+                WarActionSystemEndWar               : mergeSystemEndWar(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionSystemEndWar))),
+                WarActionSystemHandleBootPlayer     : mergeSystemHandleBootPlayer(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionSystemHandleBootPlayer))),
+                WarActionSystemVoteForDraw          : mergeSystemVoteForDraw(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionSystemVoteForDraw))),
+                WarActionUnitAttackTile             : mergeUnitAttackTile(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitAttackTile))),
+                WarActionUnitAttackUnit             : mergeUnitAttackUnit(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitAttackUnit))),
+                WarActionUnitBeLoaded               : mergeUnitBeLoaded(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitBeLoaded))),
+                WarActionUnitBuildTile              : mergeUnitBuildTile(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitBuildTile))),
+                WarActionUnitCaptureTile            : mergeUnitCaptureTile(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitCaptureTile))),
+                WarActionUnitDive                   : mergeUnitDive(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitDive))),
+                WarActionUnitDropUnit               : mergeUnitDropUnit(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitDropUnit))),
+                WarActionUnitJoinUnit               : mergeUnitJoinUnit(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitJoinUnit))),
+                WarActionUnitLaunchFlare            : mergeUnitLaunchFlare(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitLaunchFlare))),
+                WarActionUnitLaunchSilo             : mergeUnitLaunchSilo(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitLaunchSilo))),
+                WarActionUnitLoadCo                 : mergeUnitLoadCo(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitLoadCo))),
+                WarActionUnitProduceUnit            : mergeUnitProduceUnit(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitProduceUnit))),
+                WarActionUnitSupplyUnit             : mergeUnitSupplyUnit(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitSupplyUnit))),
+                WarActionUnitSurface                : mergeUnitSurface(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitSurface))),
+                WarActionUnitUseCoSkill             : mergeUnitUseCoSkill(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitUseCoSkill))),
+                WarActionUnitWait                   : mergeUnitWait(Twns.Helpers.getNonNullElements(actionForTeams.map(v => v.WarActionUnitWait))),
             });
         }
 
@@ -153,7 +154,7 @@ namespace HrwModel {
         return actionArray.length
             ? {
                 extraData: {
-                    commonExtraData : mergeCommonExtraData(actionArray.map(v => Helpers.getExisted(v.extraData?.commonExtraData))),
+                    commonExtraData : mergeCommonExtraData(actionArray.map(v => Twns.Helpers.getExisted(v.extraData?.commonExtraData))),
                     skillDataArray  : actionArray[0].extraData?.skillDataArray,
                     skillType       : actionArray[0].extraData?.skillType,
                 },
@@ -164,7 +165,7 @@ namespace HrwModel {
         return actionArray.length
             ? {
                 extraData: {
-                    commonExtraData : mergeCommonExtraData(actionArray.map(v => Helpers.getExisted(v.extraData?.commonExtraData))),
+                    commonExtraData : mergeCommonExtraData(actionArray.map(v => Twns.Helpers.getExisted(v.extraData?.commonExtraData))),
                     isAgree         : actionArray[0].extraData?.isAgree,
                 },
             }
@@ -177,7 +178,7 @@ namespace HrwModel {
         return actionArray.length
             ? {
                 extraData: {
-                    commonExtraData : mergeCommonExtraData(actionArray.map(v => Helpers.getExisted(v.extraData?.commonExtraData))),
+                    commonExtraData : mergeCommonExtraData(actionArray.map(v => Twns.Helpers.getExisted(v.extraData?.commonExtraData))),
                     warEventId      : actionArray[0].extraData?.warEventId,
                 },
             }
@@ -187,7 +188,7 @@ namespace HrwModel {
         return actionArray.length
             ? {
                 extraData: {
-                    commonExtraData     : mergeCommonExtraData(actionArray.map(v => Helpers.getExisted(v.extraData?.commonExtraData))),
+                    commonExtraData     : mergeCommonExtraData(actionArray.map(v => Twns.Helpers.getExisted(v.extraData?.commonExtraData))),
                     targetPlayerIndex   : actionArray[0].extraData?.targetPlayerIndex,
                 },
             }
@@ -206,7 +207,7 @@ namespace HrwModel {
         return actionArray.length
             ? {
                 extraData: {
-                    commonExtraData : mergeCommonExtraData(actionArray.map(v => Helpers.getExisted(v.extraData?.commonExtraData))),
+                    commonExtraData : mergeCommonExtraData(actionArray.map(v => Twns.Helpers.getExisted(v.extraData?.commonExtraData))),
                     isAgree         : actionArray[0].extraData?.isAgree,
                 },
             }
@@ -216,7 +217,7 @@ namespace HrwModel {
         return actionArray.length
             ? {
                 extraData: {
-                    commonExtraData : mergeCommonExtraData(actionArray.map(v => Helpers.getExisted(v.extraData?.commonExtraData))),
+                    commonExtraData : mergeCommonExtraData(actionArray.map(v => Twns.Helpers.getExisted(v.extraData?.commonExtraData))),
                     targetGridIndex : actionArray[0].extraData?.targetGridIndex,
                 },
             }
@@ -226,7 +227,7 @@ namespace HrwModel {
         return actionArray.length
             ? {
                 extraData: {
-                    commonExtraData : mergeCommonExtraData(actionArray.map(v => Helpers.getExisted(v.extraData?.commonExtraData))),
+                    commonExtraData : mergeCommonExtraData(actionArray.map(v => Twns.Helpers.getExisted(v.extraData?.commonExtraData))),
                     targetGridIndex : actionArray[0].extraData?.targetGridIndex,
                 },
             }
@@ -264,9 +265,9 @@ namespace HrwModel {
 
         return {
             extraData: {
-                commonExtraData             : mergeCommonExtraData(actionArray.map(v => Helpers.getExisted(v.extraData?.commonExtraData))),
+                commonExtraData             : mergeCommonExtraData(actionArray.map(v => Twns.Helpers.getExisted(v.extraData?.commonExtraData))),
                 isDropBlocked               : actionArray[0].extraData?.isDropBlocked,
-                droppingUnitAndPathArray    : Helpers.getNonNullElements(droppingUnitAndPathArrays.map(v => mergeMovingUnitAndPathArray(v))),
+                droppingUnitAndPathArray    : Twns.Helpers.getNonNullElements(droppingUnitAndPathArrays.map(v => mergeMovingUnitAndPathArray(v))),
             },
         };
     }
@@ -277,7 +278,7 @@ namespace HrwModel {
         return actionArray.length
             ? {
                 extraData: {
-                    commonExtraData     : mergeCommonExtraData(actionArray.map(v => Helpers.getExisted(v.extraData?.commonExtraData))),
+                    commonExtraData     : mergeCommonExtraData(actionArray.map(v => Twns.Helpers.getExisted(v.extraData?.commonExtraData))),
                     targetGridIndex     : actionArray[0].extraData?.targetGridIndex,
                     flareRadius         : actionArray[0].extraData?.flareRadius,
                 },
@@ -288,7 +289,7 @@ namespace HrwModel {
         return actionArray.length
             ? {
                 extraData: {
-                    commonExtraData     : mergeCommonExtraData(actionArray.map(v => Helpers.getExisted(v.extraData?.commonExtraData))),
+                    commonExtraData     : mergeCommonExtraData(actionArray.map(v => Twns.Helpers.getExisted(v.extraData?.commonExtraData))),
                     targetGridIndex     : actionArray[0].extraData?.targetGridIndex,
                 },
             }
@@ -310,7 +311,7 @@ namespace HrwModel {
         return actionArray.length
             ? {
                 extraData: {
-                    commonExtraData : mergeCommonExtraData(actionArray.map(v => Helpers.getExisted(v.extraData?.commonExtraData))),
+                    commonExtraData : mergeCommonExtraData(actionArray.map(v => Twns.Helpers.getExisted(v.extraData?.commonExtraData))),
                     skillDataArray  : actionArray[0].extraData?.skillDataArray,
                     skillType       : actionArray[0].extraData?.skillType,
                 },
@@ -330,13 +331,13 @@ namespace HrwModel {
         return actionArray.length
             ? {
                 extraData: {
-                    commonExtraData: mergeCommonExtraData(actionArray.map(v => Helpers.getExisted(v.extraData?.commonExtraData))),
+                    commonExtraData: mergeCommonExtraData(actionArray.map(v => Twns.Helpers.getExisted(v.extraData?.commonExtraData))),
                 },
             }
             : null;
     }
     function mergeCommonExtraData(dataArray: ICommonExtraDataForWarAction[]): ICommonExtraDataForWarAction {
-        let nextUnitId                              : Types.Undefinable<number>;
+        let nextUnitId                              : Twns.Types.Undefinable<number>;
         const destroyedUnitIdArray                  : number[] = [];
         const tileArrayAfterAction                  : WarSerialization.ISerialTile[] = [];
         const unitArrayAfterAction                  : WarSerialization.ISerialUnit[] = [];
@@ -363,29 +364,29 @@ namespace HrwModel {
             movingUnitAndPath                   : mergeMovingUnitAndPathArray(movingUnitAndPathArray),
         };
     }
-    function mergeDestroyedUnitIdArray(src: Types.Undefinable<number[]>, dst: number[]): void {
+    function mergeDestroyedUnitIdArray(src: Twns.Types.Undefinable<number[]>, dst: number[]): void {
         for (const id of src ?? []) {
             if (dst.indexOf(id) < 0) {
                 dst.push(id);
             }
         }
     }
-    function mergeTileArrayAfterAction(src: Types.Undefinable<WarSerialization.ISerialTile[]>, dst: WarSerialization.ISerialTile[]): void {
+    function mergeTileArrayAfterAction(src: Twns.Types.Undefinable<WarSerialization.ISerialTile[]>, dst: WarSerialization.ISerialTile[]): void {
         for (const tileData of src ?? []) {
-            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.HrwModel_MergeTileArrayAfterAction_00);
-            if (!dst.find(v => GridIndexHelpers.checkIsEqual(Helpers.getExisted(GridIndexHelpers.convertGridIndex(v.gridIndex), ClientErrorCode.HrwModel_MergeTileArrayAfterAction_01), gridIndex))) {
+            const gridIndex = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.HrwModel_MergeTileArrayAfterAction_00);
+            if (!dst.find(v => Twns.GridIndexHelpers.checkIsEqual(Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(v.gridIndex), ClientErrorCode.HrwModel_MergeTileArrayAfterAction_01), gridIndex))) {
                 dst.push(tileData);
             }
         }
     }
-    function mergeUnitArrayAfterAction(src: Types.Undefinable<WarSerialization.ISerialUnit[]>, dst: WarSerialization.ISerialUnit[]): void {
+    function mergeUnitArrayAfterAction(src: Twns.Types.Undefinable<WarSerialization.ISerialUnit[]>, dst: WarSerialization.ISerialUnit[]): void {
         for (const unitData of src ?? []) {
             if (!dst.find(v => v.unitId === unitData.unitId)) {
                 dst.push(unitData);
             }
         }
     }
-    function mergePlayerArrayAfterAction(src: Types.Undefinable<WarSerialization.ISerialPlayer[]>, dst: WarSerialization.ISerialPlayer[]): void {
+    function mergePlayerArrayAfterAction(src: Twns.Types.Undefinable<WarSerialization.ISerialPlayer[]>, dst: WarSerialization.ISerialPlayer[]): void {
         for (const playerData of src ?? []) {
             const existingPlayerData = dst.find(v => v.playerIndex === playerData.playerIndex);
             if (!existingPlayerData) {
@@ -397,7 +398,7 @@ namespace HrwModel {
             }
         }
     }
-    function mergeVisibilityArrayFromPathsAfterAction(src: Types.Undefinable<number[]>, dst: number[]): void {
+    function mergeVisibilityArrayFromPathsAfterAction(src: Twns.Types.Undefinable<number[]>, dst: number[]): void {
         for (const id of src ?? []) {
             if (dst.indexOf(id) < 0) {
                 dst.push(id);
@@ -427,8 +428,8 @@ namespace HrwModel {
             return array[0] ?? null;
         } else {
             array.sort((v1, v2) => {
-                const path1     = Helpers.getExisted(v1.path, ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_00);
-                const path2     = Helpers.getExisted(v2.path, ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_01);
+                const path1     = Twns.Helpers.getExisted(v1.path, ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_00);
+                const path2     = Twns.Helpers.getExisted(v2.path, ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_01);
                 const lastNode1 = path1[path1.length - 1];
                 const lastNode2 = path2[path2.length - 1];
                 if (lastNode1.isVisible) {
@@ -437,20 +438,20 @@ namespace HrwModel {
                     return -1;
                 }
 
-                const firstGridIndex1   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(path1[0].gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_02);
-                const firstGridIndex2   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(path2[0].gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_03);
-                const lastGridIndex1    = Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode1.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_04);
-                const lastGridIndex2    = Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode2.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_05);
-                if (GridIndexHelpers.checkIsAdjacent(firstGridIndex1, lastGridIndex2)) {
+                const firstGridIndex1   = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(path1[0].gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_02);
+                const firstGridIndex2   = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(path2[0].gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_03);
+                const lastGridIndex1    = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(lastNode1.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_04);
+                const lastGridIndex2    = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(lastNode2.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPathArray_05);
+                if (Twns.GridIndexHelpers.checkIsAdjacent(firstGridIndex1, lastGridIndex2)) {
                     return 1;
-                } else if (GridIndexHelpers.checkIsAdjacent(firstGridIndex2, lastGridIndex1)) {
+                } else if (Twns.GridIndexHelpers.checkIsAdjacent(firstGridIndex2, lastGridIndex1)) {
                     return -1;
                 } else {
                     // 无法判断路径顺序
                     return 1;
                 }
             });
-            const mergedPath: ProtoTypes.Structure.IGridIndexAndPathInfo[] = [];
+            const mergedPath: CommonProto.Structure.IGridIndexAndPathInfo[] = [];
             for (const data of array) {
                 for (const pathNode of data.path ?? []) {
                     mergedPath.push(pathNode);
@@ -479,13 +480,13 @@ namespace HrwModel {
         const length2 = path2.length;
         for (let index1 = 0; index1 < length1; ++index1) {
             const node1         = path1[index1];
-            const gridIndex1    = Helpers.getExisted(GridIndexHelpers.convertGridIndex(node1.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPath_00);
+            const gridIndex1    = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(node1.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPath_00);
             for (let index2 = 0; index2 < length2; ++index2) {
                 const node2         = path2[index2];
-                const gridIndex2    = Helpers.getExisted(GridIndexHelpers.convertGridIndex(node2.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPath_01);
+                const gridIndex2    = Twns.Helpers.getExisted(Twns.GridIndexHelpers.convertGridIndex(node2.gridIndex), ClientErrorCode.HrwModel_MergeMovingUnitAndPath_01);
 
-                if (GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2)) {
-                    const dstPath = Helpers.deepClone(path1);
+                if (Twns.GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2)) {
+                    const dstPath = Twns.Helpers.deepClone(path1);
                     const srcPath = path2;
                     for (let i = 0; ; ++i) {
                         const srcNode = srcPath[index2 + i];
@@ -496,7 +497,7 @@ namespace HrwModel {
                         const dstIndex  = index1 + i;
                         const dstNode   = dstPath[dstIndex];
                         if (dstNode == null) {
-                            dstPath[dstIndex] = Helpers.deepClone(srcNode);
+                            dstPath[dstIndex] = Twns.Helpers.deepClone(srcNode);
                         } else {
                             dstNode.isBlocked ||= srcNode.isBlocked;
                             dstNode.isVisible ||= srcNode.isVisible;
@@ -504,7 +505,7 @@ namespace HrwModel {
                     }
 
                     return {
-                        unit    : Helpers.deepClone(unit1),
+                        unit    : Twns.Helpers.deepClone(unit1),
                         path    : dstPath,
                     };
                 }

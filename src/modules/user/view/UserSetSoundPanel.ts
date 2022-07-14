@@ -5,19 +5,19 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserSetSoundPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+namespace Twns.User {
+    import NotifyType       = Notify.NotifyType;
+    import LangTextType     = Lang.LangTextType;
 
-    export type OpenData = void;
-    export class UserSetSoundPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserSetSoundPanel = void;
+    export class UserSetSoundPanel extends TwnsUiPanel.UiPanel<OpenDataForUserSetSoundPanel> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _group!                : eui.Group;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
@@ -41,6 +41,7 @@ namespace TwnsUserSetSoundPanel {
         private readonly _btnPrevBgm!           : TwnsUiButton.UiButton;
         private readonly _btnNextBgm!           : TwnsUiButton.UiButton;
 
+        private readonly _btnCoBgmSettings!     : TwnsUiButton.UiButton;
         private readonly _btnCancel!            : TwnsUiButton.UiButton;
         private readonly _btnDefault!           : TwnsUiButton.UiButton;
         private readonly _btnConfirm!           : TwnsUiButton.UiButton;
@@ -68,6 +69,7 @@ namespace TwnsUserSetSoundPanel {
                 { ui: this._btnPrevBgm,         callback: this._onTouchedBtnPrevBgm },
                 { ui: this._btnNextBgm,         callback: this._onTouchedBtnNextBgm },
 
+                { ui: this._btnCoBgmSettings,   callback: this._onTouchedBtnCoBgmSettings },
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
                 { ui: this._btnDefault,         callback: this._onTouchedBtnDefault },
                 { ui: this._btnConfirm,         callback: this._onTouchedBtnConfirm },
@@ -138,13 +140,17 @@ namespace TwnsUserSetSoundPanel {
             soundManager.setIsEffectMute(!soundManager.getIsEffectMute());
             this._updateGroupEffectMute();
         }
-        private _onTouchedBtnPrevBgm(): void {
-            SoundManager.playPreviousBgm();
+        private async _onTouchedBtnPrevBgm(): Promise<void> {
+            await SoundManager.playPreviousBgm();
             this._updateLabelBgmName();
         }
-        private _onTouchedBtnNextBgm(): void {
-            SoundManager.playNextBgm();
+        private async _onTouchedBtnNextBgm(): Promise<void> {
+            await SoundManager.playNextBgm();
             this._updateLabelBgmName();
+        }
+
+        private _onTouchedBtnCoBgmSettings(): void {
+            PanelHelpers.open(PanelHelpers.PanelDict.UserSetCoBgmSettingsPanel, void 0);
         }
         private _onTouchedBtnCancel(): void {
             const prevBgmVolume = this._prevBgmVolume;
@@ -187,6 +193,7 @@ namespace TwnsUserSetSoundPanel {
             this._updateGroupEffectMute();
             this._updateGroupBgmVolume();
             this._updateGroupEffectVolume();
+            this._updateBtnCoBgmSettings();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -220,8 +227,13 @@ namespace TwnsUserSetSoundPanel {
             this._imgEffectBar.width        = pos;
             this._labelEffectVolume.text    = `${Math.floor(volume * 100)}`;
         }
-        private _updateLabelBgmName(): void {
-            this._labelBgmName.text = Lang.getBgmName(SoundManager.getPlayingBgmCode()) || CommonConstants.ErrorTextForUndefined;
+
+        private _updateBtnCoBgmSettings(): void {
+            this._btnCoBgmSettings.visible = User.UserModel.getSelfUserId() != null;
+        }
+        private async _updateLabelBgmName(): Promise<void> {
+            const langTextType      = (await Config.ConfigManager.getLatestGameConfig()).getBgmSfxCfg(SoundManager.getPlayingBgmCode())?.lang;
+            this._labelBgmName.text = langTextType != null ? Lang.getText(langTextType) : `--`;
         }
 
         protected async _showOpenAnimation(): Promise<void> {

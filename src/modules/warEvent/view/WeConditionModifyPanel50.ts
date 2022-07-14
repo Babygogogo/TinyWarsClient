@@ -5,7 +5,7 @@
 // import Lang                         from "../../tools/lang/Lang";
 // import TwnsLangTextType             from "../../tools/lang/LangTextType";
 // import Notify                       from "../../tools/notify/Notify";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiImage                  from "../../tools/ui/UiImage";
@@ -16,18 +16,18 @@
 // import TwnsWeConditionTypeListPanel from "./WeConditionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeConditionModifyPanel50 {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
+namespace Twns.WarEvent {
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
-    export type OpenData = {
-        war         : TwnsBwWar.BwWar;
+    export type OpenDataForWeConditionModifyPanel50 = {
+        war         : BaseWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
-    export class WeConditionModifyPanel50 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeConditionModifyPanel50 extends TwnsUiPanel.UiPanel<OpenDataForWeConditionModifyPanel50> {
         private readonly _labelTitle!                       : TwnsUiLabel.UiLabel;
         private readonly _btnType!                          : TwnsUiButton.UiButton;
         private readonly _btnClose!                         : TwnsUiButton.UiButton;
@@ -73,7 +73,7 @@ namespace TwnsWeConditionModifyPanel50 {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.WeConditionTypeListPanel, {
                 fullData    : openData.fullData,
                 condition   : openData.condition,
                 war         : openData.war,
@@ -84,7 +84,8 @@ namespace TwnsWeConditionModifyPanel50 {
         }
         private _onTouchedBtnWeatherType(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseWeatherTypePanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseWeatherTypePanel, {
+                gameConfig              : this._getOpenData().war.getGameConfig(),
                 currentWeatherTypeArray : condition.weatherTypeArray ?? [],
                 callbackOnConfirm       : weatherTypeArray => {
                     condition.weatherTypeArray = weatherTypeArray;
@@ -126,22 +127,24 @@ namespace TwnsWeConditionModifyPanel50 {
         private _updateLabelDescAndLabelError(): void {
             const openData          = this._getOpenData();
             const condition         = openData.condition;
-            const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition, openData.war);
+            const war               = openData.war;
+            const errorTip          = WarHelpers.WarEventHelpers.getErrorTipForCondition(openData.fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = WarEventHelper.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarHelpers.WarEventHelpers.getDescForCondition(condition, war.getGameConfig()) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelWeatherType(): void {
             const weatherTypeArray      = this._getCondition().weatherTypeArray;
-            this._labelWeatherType.text = weatherTypeArray?.length ? weatherTypeArray.map(v => Lang.getWeatherName(v)).join(`, `) : Lang.getText(LangTextType.B0776);
+            const gameConfig            = this._getOpenData().war.getGameConfig();
+            this._labelWeatherType.text = weatherTypeArray?.length ? weatherTypeArray.map(v => Lang.getWeatherName(v, gameConfig)).join(`, `) : Lang.getText(LangTextType.B0776);
         }
         private _updateLabelHasFogCurrently(): void {
             const hasFogCurrently           = this._getCondition().hasFogCurrently;
             this._labelHasFogCurrently.text = hasFogCurrently != null ? Lang.getText(hasFogCurrently ? LangTextType.B0431 : LangTextType.B0432) : Lang.getText(LangTextType.B0776);
         }
 
-        private _getCondition(): ProtoTypes.WarEvent.IWecWeatherAndFog {
+        private _getCondition(): CommonProto.WarEvent.IWecWeatherAndFog {
             return Helpers.getExisted(this._getOpenData().condition.WecWeatherAndFog);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {

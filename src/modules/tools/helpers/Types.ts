@@ -3,70 +3,111 @@
 // import TwnsClientErrorCode  from "./ClientErrorCode";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace Types {
+namespace Twns.Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Config types.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export interface SystemCfg extends ProtoTypes.Config.ISystemCfg {
-        energyGrowthMultiplierArray: number[];
+    export interface SystemCfg extends CommonProto.Config.ISystemCfg {
+        energyGrowthMultiplierArray     : number[];
+        dialogueBackgroundMaxId         : number;
+        maxBanCount                     : number;
+        isLoadedUnitVisibleInFog        : number;
+        canDroppedUnitGetVisionOnStart  : number;
     }
-    export interface TileCategoryCfg extends ProtoTypes.Config.ITileCategoryCfg {
-        category: TileCategory;
+    export interface TileCategoryCfg extends CommonProto.Config.ITileCategoryCfg {
+        category    : number;
     }
-    export interface UnitCategoryCfg extends ProtoTypes.Config.IUnitCategoryCfg {
-        category: UnitCategory;
+    export interface UnitCategoryCfg extends CommonProto.Config.IUnitCategoryCfg {
+        category    : number;
     }
-    export interface TileTemplateCfg extends ProtoTypes.Config.ITileTemplateCfg {
-        version             : string;
-        type                : TileType;
+    export interface TileTemplateCfg extends CommonProto.Config.ITileTemplateCfg {
+        type                : number;
         defenseAmount       : number;
-        defenseUnitCategory : UnitCategory;
+        defenseUnitCategory : number;
         visionRange         : number;
+        lang                : number;
     }
-    export interface UnitTemplateCfg extends ProtoTypes.Config.IUnitTemplateCfg {
-        version                 : string;
-        type                    : UnitType;
+    export interface TileBaseCfg extends CommonProto.Config.ITileBaseCfg {
+        tileBaseType    : number;
+        shapesCount     : number;
+    }
+    export interface TileBaseSymmetryCfg extends CommonProto.Config.ITileBaseSymmetryCfg {
+        tileBaseType            : number;
+        shapeId                 : number;
+        symmetryShapeIds        : number[];
+    }
+    export interface TileObjectCfg extends CommonProto.Config.ITileObjectCfg {
+        tileObjectType          : number;
+        shapeIdAfterDestruction : number[];
+    }
+    export interface TileObjectSymmetryCfg extends CommonProto.Config.ITileObjectSymmetryCfg {
+        tileObjectType          : number;
+        shapeId                 : number;
+        symmetryShapeIds        : number[];
+    }
+    export interface TileDecorationCfg extends CommonProto.Config.ITileDecorationCfg {
+        tileDecorationType      : number;
+        shapesCount             : number;
+    }
+    export interface TileDecorationSymmetryCfg extends CommonProto.Config.ITileDecorationSymmetryCfg {
+        tileDecorationType      : number;
+        shapeId                 : number;
+        symmetryShapeIds        : number[];
+    }
+    export interface TileTypeMappingCfg extends CommonProto.Config.ITileTypeMappingCfg {
+        tileBaseType            : number;
+        tileObjectType          : number;
+        tileType                : number;
+    }
+    export interface UnitTemplateCfg extends CommonProto.Config.IUnitTemplateCfg {
+        type                    : number;
         maxHp                   : number;
-        armorType               : ArmorType;
+        armorType               : number;
         isAffectedByLuck        : number;
         moveRange               : number;
-        moveType                : MoveType;
+        moveType                : number;
         maxFuel                 : number;
         fuelConsumptionPerTurn  : number;
         productionCost          : number;
         visionRange             : number;
+        lang                    : number;
+        animParams              : number[];
     }
-    export interface DamageChartCfg extends ProtoTypes.Config.IDamageChartCfg {
-        attackerType: UnitType;
-        armorType   : ArmorType;
+    export interface DamageChartCfg extends CommonProto.Config.IDamageChartCfg {
+        attackerType: number;
+        armorType   : number;
         weaponType  : WeaponType;
     }
-    export interface MoveCostCfg extends ProtoTypes.Config.IMoveCostCfg {
-        tileType    : TileType;
-        moveType    : MoveType;
+    export interface MoveCostCfg extends CommonProto.Config.IMoveCostCfg {
+        tileType    : number;
+        moveType    : number;
     }
-    export interface UnitPromotionCfg extends ProtoTypes.Config.IUnitPromotionCfg {
+    export interface UnitPromotionCfg extends CommonProto.Config.IUnitPromotionCfg {
         promotion   : number;
         attackBonus : number;
         defenseBonus: number;
     }
-    export interface VisionBonusCfg extends ProtoTypes.Config.IVisionBonusCfg {
-        unitType    : UnitType;
-        tileType    : TileType;
+    export interface VisionBonusCfg extends CommonProto.Config.IVisionBonusCfg {
+        unitType    : number;
+        tileType    : number;
         visionBonus : number;
     }
-    export interface BuildableTileCfg extends ProtoTypes.Config.IBuildableTileCfg {
-        unitType        : UnitType;
-        srcBaseType     : TileBaseType;
-        srcObjectType   : TileObjectType;
-        dstBaseType     : TileBaseType;
-        dstObjectType   : TileObjectType;
+    export interface BuildableTileCfg extends CommonProto.Config.IBuildableTileCfg {
+        unitType        : number;
+        srcBaseType     : number;
+        srcObjectType   : number;
+        dstBaseType     : number;
+        dstObjectType   : number;
     }
-    export interface PlayerRankCfg extends ProtoTypes.Config.PlayerRankCfg {
+    export interface PlayerRankCfg extends CommonProto.Config.PlayerRankCfg {
         minScore    : number;
         rank        : number;
     }
-    export interface CoBasicCfg extends ProtoTypes.Config.ICoBasicCfg {
+    export interface CoCategoryCfg extends CommonProto.Config.ICoCategoryCfg {
+        categoryId          : number;
+        name                : string;
+    }
+    export interface CoBasicCfg extends CommonProto.Config.ICoBasicCfg {
         coId                : number;
         name                : string;
         tier                : number;
@@ -74,36 +115,58 @@ namespace Types {
         boardCostPercentage : number;
         maxLoadCount        : number;
     }
-    export interface CoSkillCfg extends ProtoTypes.Config.ICoSkillCfg {
+    export interface CoSkillCfg extends CommonProto.Config.ICoSkillCfg {
         skillId     : number;
         name        : string;
     }
-    export interface WeatherCfg extends ProtoTypes.Config.IWeatherCfg {
+    export interface WeatherCfg extends CommonProto.Config.IWeatherCfg {
         weatherType : number;
     }
-    export interface WeatherCategoryCfg extends ProtoTypes.Config.IWeatherCategoryCfg {
-        category: WeatherCategory;
+    export interface WeatherCategoryCfg extends CommonProto.Config.IWeatherCategoryCfg {
+        category    : number;
     }
-    export interface UserAvatarCfg extends ProtoTypes.Config.IUserAvatarCfg {
+    export interface UserAvatarCfg extends CommonProto.Config.IUserAvatarCfg {
         avatarId    : number;
     }
-    export interface FullConfig extends ProtoTypes.Config.FullConfig {
-        System          : SystemCfg;
-        TileCategory    : TileCategoryCfg[];
-        UnitCategory    : UnitCategoryCfg[];
-        TileTemplate    : TileTemplateCfg[];
-        UnitTemplate    : UnitTemplateCfg[];
-        DamageChart     : DamageChartCfg[];
-        MoveCost        : MoveCostCfg[];
-        UnitPromotion   : UnitPromotionCfg[];
-        VisionBonus     : VisionBonusCfg[];
-        BuildableTile   : BuildableTileCfg[];
-        PlayerRank      : PlayerRankCfg[];
-        CoBasic         : CoBasicCfg[];
-        CoSkill         : CoSkillCfg[];
-        Weather         : WeatherCfg[];
-        WeatherCategory : WeatherCategoryCfg[];
-        UserAvatar      : UserAvatarCfg[];
+    export interface BgmSfxCfg extends CommonProto.Config.IBgmSfxCfg {
+        code        : number;
+        filename    : string;
+    }
+    export interface MoveTypeCfg extends CommonProto.Config.IMoveTypeCfg {
+        moveType    : number;
+        lang        : number;
+    }
+    export interface MapWeaponCfg extends CommonProto.Config.IMapWeaponCfg {
+        mapWeaponType   : number;
+    }
+    export interface FullConfig extends CommonProto.Config.FullConfig {
+        System                  : SystemCfg;
+        TileCategory            : TileCategoryCfg[];
+        UnitCategory            : UnitCategoryCfg[];
+        TileTemplate            : TileTemplateCfg[];
+        TileBase                : TileBaseCfg[];
+        TileBaseSymmetry        : TileBaseSymmetryCfg[];
+        TileObject              : TileObjectCfg[];
+        TileObjectSymmetry      : TileObjectSymmetryCfg[];
+        TileDecoration          : TileDecorationCfg[];
+        TileDecorationSymmetry  : TileDecorationSymmetryCfg[];
+        TileTypeMapping         : TileTypeMappingCfg[];
+        UnitTemplate            : UnitTemplateCfg[];
+        DamageChart             : DamageChartCfg[];
+        MoveCost                : MoveCostCfg[];
+        UnitPromotion           : UnitPromotionCfg[];
+        VisionBonus             : VisionBonusCfg[];
+        BuildableTile           : BuildableTileCfg[];
+        PlayerRank              : PlayerRankCfg[];
+        CoCategory              : CoCategoryCfg[];
+        CoBasic                 : CoBasicCfg[];
+        CoSkill                 : CoSkillCfg[];
+        Weather                 : WeatherCfg[];
+        WeatherCategory         : WeatherCategoryCfg[];
+        UserAvatar              : UserAvatarCfg[];
+        BgmSfx                  : BgmSfxCfg[];
+        MoveType                : MoveTypeCfg[];
+        MapWeapon               : MapWeaponCfg[];
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -187,13 +250,14 @@ namespace Types {
         TrueVision      = 2,
     }
 
-    export interface WarMapUnitViewData extends ProtoTypes.WarSerialization.ISerialUnit {
+    export interface WarMapUnitViewData extends CommonProto.WarSerialization.ISerialUnit {
         skinId?             : number;
         hasLoadedUnit?      : boolean;
         coUsingSkillType?   : CoSkillType;
+        gameConfig          : Config.GameConfig;
     }
 
-    export interface WarMapTileViewData extends ProtoTypes.WarSerialization.ISerialTile {
+    export interface WarMapTileViewData extends CommonProto.WarSerialization.ISerialTile {
         skinId  : number | null;
     }
 
@@ -208,9 +272,11 @@ namespace Types {
 
     export type SpmWarSaveSlotData = {
         slotIndex   : number;
-        extraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
-        warData     : ProtoTypes.WarSerialization.ISerialWar;
+        extraData   : CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+        warData     : CommonProto.WarSerialization.ISerialWar;
     };
+
+    export type BaseWarRule = CommonProto.WarRule.IInstanceWarRule | CommonProto.WarRule.ITemplateWarRule;
 
     export type ReplayCheckpointInfo = {
         checkpointId: number;
@@ -219,11 +285,38 @@ namespace Types {
         playerIndex : number;
     };
 
+    export type McrRoomFilter = {
+        roomId?             : number | null;
+        mapName?            : string | null;
+        userNickname?       : string | null;
+        coName?             : string | null;
+        hasFog?             : boolean | null;
+        userIdInRoom?       : number | null;
+        userIdNotInRoom?    : number | null;
+    };
+    export type MfrRoomFilter = {
+        roomId?             : number | null;
+        userNickname?       : string | null;
+        coName?             : string | null;
+        hasFog?             : boolean | null;
+        userIdInRoom?       : number | null;
+        userIdNotInRoom?    : number | null;
+    };
+    export type CcrRoomFilter = {
+        roomId?             : number | null;
+        mapName?            : string | null;
+        userNickname?       : string | null;
+        coName?             : string | null;
+        hasFog?             : boolean | null;
+        userIdInRoom?       : number | null;
+        userIdNotInRoom?    : number | null;
+    };
+
     export type Undefinable<T> = T | null | undefined;
 
     export interface CustomError extends Error {
         isShown?    : boolean;
-        errorCode?  : TwnsClientErrorCode.ClientErrorCode;
+        errorCode?  : ClientErrorCode;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -269,28 +362,6 @@ namespace Types {
     }
 
     // eslint-disable-next-line no-shadow
-    export enum BgmCode {
-        None        = 0,
-        Lobby01,
-        MapEditor01,
-        Power00,
-        Co0000,
-        Co0001,
-        Co0002,
-        Co0003,
-        Co0004,
-        Co0005,
-        Co0006,
-        Co0007,
-        Co0008,
-        Co0009,
-        Co0010,
-        Co0011,
-        Co0042,
-        Co9999,
-    }
-
-    // eslint-disable-next-line no-shadow
     export enum ShortSfxCode {
         None,
         ButtonNeutral01,
@@ -300,17 +371,6 @@ namespace Types {
         CursorConfirm01,
         CursorMove01,
         Explode,
-    }
-
-    // eslint-disable-next-line no-shadow
-    export enum LongSfxCode {
-        None,
-        NavalMove,
-        CopterMove,
-        JetMove,
-        TireMove,
-        FootMove,
-        TankMove,
     }
 
     export const UiState = {
@@ -342,99 +402,11 @@ namespace Types {
     }
 
     // eslint-disable-next-line no-shadow
-    export enum MoveType {
-        Infantry,  /* 0 */            Mech,      /* 1 */            TireA,     /* 2 */            TireB,     /* 3 */
-        Tank,      /* 4 */            Air,       /* 5 */            Ship,      /* 6 */            Transport, /* 7 */
-    }
-
-    // eslint-disable-next-line no-shadow
     export enum TileThemeType {
         Clear,
         Sandstorm,
         Snowy,
         Rainy,
-    }
-
-    // eslint-disable-next-line no-shadow
-    export enum TileBaseType {
-        Empty,  /* 0 */            Plain,  /* 1 */            River,  /* 2 */            Sea,    /* 3 */
-        Beach,  /* 4 */
-    }
-
-    // eslint-disable-next-line no-shadow
-    export enum TileDecoratorType {
-        Empty,  /* 0 */             Shore,  /* 1 */
-    }
-
-    // eslint-disable-next-line no-shadow
-    export const enum TileObjectType {
-        Empty,          /* 0 */         Road,               /* 1 */         Bridge,         /* 2 */         Wood,           /* 3 */
-        Mountain,       /* 4 */         Wasteland,          /* 5 */         Ruins,          /* 6 */         Fire,           /* 7 */
-        Rough,          /* 8 */         Mist,               /* 9 */         Reef,           /* 10 */        Plasma,         /* 11 */
-        Meteor,         /* 12 */        Silo,               /* 13 */        EmptySilo,      /* 14 */        Headquarters,   /* 15 */
-        City,           /* 16 */        CommandTower,       /* 17 */        Radar,          /* 18 */        Factory,        /* 19 */
-        Airport,        /* 20 */        Seaport,            /* 21 */        TempAirport,    /* 22 */        TempSeaport,    /* 23 */
-        Pipe,           /* 24 */        Crystal,            /* 25 */        CustomCrystal,  /* 26 */        CannonUp,       /* 27 */
-        CannonDown,     /* 28 */        CannonLeft,         /* 29 */        CannonRight,    /* 30 */        CustomCannon,   /* 31 */
-        LaserTurret,    /* 32 */        CustomLaserTurret,  /* 33 */        PipeJoint,      /* 34 */
-    }
-
-    // eslint-disable-next-line no-shadow
-    export const enum TileType {
-        Plain,          /* 0 */         River,          /* 1 */         Sea,                /* 2 */         Beach,          /* 3 */
-        Road,           /* 4 */         BridgeOnPlain,  /* 5 */         BridgeOnRiver,      /* 6 */         BridgeOnBeach,  /* 7 */
-        BridgeOnSea,    /* 8 */         Wood,           /* 9 */         Mountain,           /* 10 */        Wasteland,      /* 11 */
-        Ruins,          /* 12 */        Fire,           /* 13 */        Rough,              /* 14 */        MistOnSea,      /* 15 */
-        Reef,           /* 16 */        Plasma,         /* 17 */        Pipe,               /* 18 */        Meteor,         /* 19 */
-        Silo,           /* 20 */        EmptySilo,      /* 21 */        Headquarters,       /* 22 */        City,           /* 23 */
-        CommandTower,   /* 24 */        Radar,          /* 25 */        Factory,            /* 26 */        Airport,        /* 27 */
-        Seaport,        /* 28 */        TempAirport,    /* 29 */        TempSeaport,        /* 30 */        MistOnPlain,    /* 31 */
-        MistOnRiver,    /* 32 */        MistOnBeach,    /* 33 */        Crystal,            /* 34 */        CustomCrystal,  /* 35 */
-        CannonUp,       /* 36 */        CannonDown,     /* 37 */        CannonLeft,         /* 38 */        CannonRight,    /* 39 */
-        CustomCannon,   /* 40 */        LaserTurret,    /* 41 */        CustomLaserTurret,  /* 42 */        PipeJoint,      /* 43 */
-    }
-
-    // eslint-disable-next-line no-shadow
-    export enum UnitType {
-        Infantry,        /* 0 */            Mech,            /* 1 */            Bike,            /* 2 */            Recon,           /* 3 */
-        Flare,           /* 4 */            AntiAir,         /* 5 */            Tank,            /* 6 */            MediumTank,      /* 7 */
-        WarTank,         /* 8 */            Artillery,       /* 9 */            AntiTank,        /* 10 */           Rockets,         /* 11 */
-        Missiles,        /* 12 */           Rig,             /* 13 */           Fighter,         /* 14 */           Bomber,          /* 15 */
-        Duster,          /* 16 */           BattleCopter,    /* 17 */           TransportCopter, /* 18 */           Seaplane,        /* 19 */
-        Battleship,      /* 20 */           Carrier,         /* 21 */           Submarine,       /* 22 */           Cruiser,         /* 23 */
-        Lander,          /* 24 */           Gunboat,         /* 25 */
-    }
-
-    // eslint-disable-next-line no-shadow
-    export enum UnitCategory {
-        None,          /* 0 */            All,               /* 1 */            Ground,        /* 2 */            Naval,         /* 3 */
-        Air,           /* 4 */            GroundOrNaval,     /* 5 */            GroundOrAir,   /* 6 */            Direct,        /* 7 */
-        Indirect,      /* 8 */            Foot,              /* 9 */            Infantry,      /* 10 */           Vehicle,       /* 11 */
-        DirectMachine, /* 12 */           Transport,         /* 13 */           LargeNaval,    /* 14 */           Copter,        /* 15 */
-        Tank,          /* 16 */           AirExceptSeaplane, /* 17 */
-    }
-
-    // eslint-disable-next-line no-shadow
-    export enum TileCategory {
-        None,                       /* 0 */         All,            /* 1 */         LoadableForSeaTransports,   /* 2 */     Destroyable,    /* 3 */
-        City,                       /* 4 */         PlainAndRuin,   /* 5 */         Road,                       /* 6 */     Buildings,      /* 7 */
-        DestroyableForDamageChart,  /* 8 */
-    }
-
-    // eslint-disable-next-line no-shadow
-    export const enum WeatherCategory {
-        None,       All,        Snowy,
-    }
-
-    // eslint-disable-next-line no-shadow
-    export enum ArmorType {
-        Infantry,        /* 0 */            Mech,            /* 1 */            Bike,            /* 2 */            Recon,           /* 3 */
-        Flare,           /* 4 */            AntiAir,         /* 5 */            Tank,            /* 6 */            MediumTank,      /* 7 */
-        WarTank,         /* 8 */            Artillery,       /* 9 */            AntiTank,        /* 10 */           Rockets,         /* 11 */
-        Missiles,        /* 12 */           Rig,             /* 13 */           Fighter,         /* 14 */           Bomber,          /* 15 */
-        Duster,          /* 16 */           BattleCopter,    /* 17 */           TransportCopter, /* 18 */           Seaplane,        /* 19 */
-        Battleship,      /* 20 */           Carrier,         /* 21 */           Submarine,       /* 22 */           Cruiser,         /* 23 */
-        Lander,          /* 24 */           Gunboat,         /* 25 */           Meteor,          /* 26 */
     }
 
     // eslint-disable-next-line no-shadow
@@ -479,14 +451,6 @@ namespace Types {
     export enum WeatherFogType {
         Fog         = 1,
         NoFog       = 2,
-    }
-
-    // eslint-disable-next-line no-shadow
-    export enum WeatherType {
-        Clear       = 1,
-        Sandstorm   = 2,
-        Snowy       = 3,
-        Rainy       = 4,
     }
 
     // eslint-disable-next-line no-shadow
@@ -580,6 +544,58 @@ namespace Types {
         LaunchSilo,
         ProduceUnit,
         Wait,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export const enum TileInfoType {
+        DefenseBonus,
+        Income,
+        Vision,
+        HideUnitCategory,
+        IsDefeatedOnCapture,
+        ProduceUnitCategory,
+        GlobalBonus,
+        RepairUnitCategory,
+        Hp,
+        CapturePoint,
+        BuildPoint,
+        IsHighlighted,
+
+        CrystalRadius,
+        CrystalPriority,
+        CrystalCanAffectSelf,
+        CrystalCanAffectAlly,
+        CrystalCanAffectEnemy,
+        CrystalDeltaFund,
+        CrystalDeltaEnergyPercentage,
+        CrystalDeltaHp,
+        CrystalDeltaFuelPercentage,
+        CrystalDeltaPrimaryAmmoPercentage,
+
+        CannonRangeForLeft,
+        CannonRangeForRight,
+        CannonRangeForUp,
+        CannonRangeForDown,
+        CannonPriority,
+        CannonMaxTargetCount,
+        CannonCanAffectSelf,
+        CannonCanAffectAlly,
+        CannonCanAffectEnemy,
+        CannonDeltaHp,
+        CannonDeltaFuelPercentage,
+        CannonDeltaPrimaryAmmoPercentage,
+
+        LaserTurretRangeForLeft,
+        LaserTurretRangeForRight,
+        LaserTurretRangeForUp,
+        LaserTurretRangeForDown,
+        LaserTurretPriority,
+        LaserTurretCanAffectSelf,
+        LaserTurretCanAffectAlly,
+        LaserTurretCanAffectEnemy,
+        LaserTurretDeltaHp,
+        LaserTurretDeltaFuelPercentage,
+        LaserTurretDeltaPrimaryAmmoPercentage,
     }
 
     // eslint-disable-next-line no-shadow
@@ -678,6 +694,7 @@ namespace Types {
         McrRoom         = 4,
         MfrRoom         = 5,
         CcrRoom         = 6,
+        MapReview       = 7,
     }
 
     // eslint-disable-next-line no-shadow
@@ -696,7 +713,9 @@ namespace Types {
     // eslint-disable-next-line no-shadow
     export enum PlayerRuleType {
         TeamIndex,
-        BannedCoIdArray,
+        BannedCoCategoryIdArray,
+        BannedUnitTypeArray,
+        CanActivateCoSkill,
         InitialFund,
         IncomeMultiplier,
         EnergyAddPctOnLoadCo,
@@ -722,35 +741,23 @@ namespace Types {
 
     // eslint-disable-next-line no-shadow
     export enum WarEventConditionType {
-        WecTurnIndexEqualTo,
-        WecTurnIndexGreaterThan,
-        WecTurnIndexLessThan,
-        WecTurnIndexRemainderEqualTo,
         WecTurnAndPlayer,
-
-        WecTurnPhaseEqualTo,
-
-        WecPlayerIndexInTurnEqualTo,
-        WecPlayerIndexInTurnGreaterThan,
-        WecPlayerIndexInTurnLessThan,
 
         WecWeatherAndFog,
 
-        WecEventCalledCountTotalEqualTo,
-        WecEventCalledCountTotalGreaterThan,
-        WecEventCalledCountTotalLessThan,
         WecEventCalledCount,
 
-        WecPlayerAliveStateEqualTo,
-        WecPlayerState,
+        WecPlayerPresence,
 
-        WecTilePlayerIndexEqualTo,
-        WecTileTypeEqualTo,
         WecTilePresence,
 
         WecUnitPresence,
 
         WecCustomCounter,
+
+        WecOngoingPersistentActionPresence,
+
+        WecManualActionStatistics,
     }
 
     // eslint-disable-next-line no-shadow
@@ -763,18 +770,17 @@ namespace Types {
         PlayBgm,
         SetForceFogCode,
         SetCustomCounter,
+        StopPersistentAction,
 
-        DeprecatedSetPlayerAliveState,
-        DeprecatedSetPlayerFund,
-        DeprecatedSetPlayerCoEnergy,
-        SetPlayerAliveState,
         SetPlayerState,
-        SetPlayerCoEnergy,
 
         SetUnitState,
 
         SetTileType,
         SetTileState,
+
+        PersistentShowText,
+        PersistentModifyPlayerAttribute,
     }
 
     // eslint-disable-next-line no-shadow
@@ -798,18 +804,18 @@ namespace Types {
 
     // eslint-disable-next-line no-shadow
     export enum WarBasicSettingsType {
-        MapName,
+        MapId,
         WarName,
         WarPassword,
         WarComment,
         WarRuleTitle,
         HasFog,
         Weather,
+        WarEvent,
         TimerType,
         TimerRegularParam,
-        TimerIncrementalParam1,
-        TimerIncrementalParam2,
-        TurnsLimit,
+        TimerIncrementalParams,
+        TurnsAndWarActionsLimit,
         SpmSaveSlotIndex,
         SpmSaveSlotComment,
     }

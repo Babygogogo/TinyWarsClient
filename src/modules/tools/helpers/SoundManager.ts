@@ -9,59 +9,20 @@
 // import Types                from "./Types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace SoundManager {
+namespace Twns.SoundManager {
     import SoundType            = Types.SoundType;
-    import BgmCode              = Types.BgmCode;
     import ShortSfxCode         = Types.ShortSfxCode;
-    import LongSfxCode          = Types.LongSfxCode;
-    import UnitType             = Types.UnitType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import LangTextType         = Lang.LangTextType;
 
     export const DEFAULT_MUTE   = false;
     export const DEFAULT_VOLUME = 1;
 
-    const AllBgmMinCode = BgmCode.Lobby01;
-    const AllBgmMaxCode = BgmCode.Co9999;
-    const CoBgmMinCode  = BgmCode.Co0001;
-    const CoBgmMaxCode  = BgmCode.Co9999;
-
-    type BgmParams = {
-        name    : string;
-        start   : number;
-        end     : number;
-    };
-    type LongSfxParams = {
-        name    : string;
-        start   : number;
-        end     : number;
-    };
     type ShortSfxParams = {
         name    : string;
     };
 
-    const _SOUND_PATH   = "resource/assets/sound/";
-    const _BGM_PARAMS   = new Map<BgmCode, BgmParams>([
-        [ BgmCode.Lobby01,      { name: "lobby01.mp3",      start: 16.07,   end: 58.07  } ],
-        [ BgmCode.MapEditor01,  { name: "mapEditor01.mp3",  start: 0.7,     end: 36     } ],
-        [ BgmCode.Power00,      { name: "power00.mp3",      start: 2.97,    end: 38     } ],
-        [ BgmCode.Co0000,       { name: "co0000.mp3",       start: 8.5,     end: 72.5   } ],
-        [ BgmCode.Co0001,       { name: "co0001.mp3",       start: 1.75,    end: 56.75  } ],
-        [ BgmCode.Co0002,       { name: "co0002.mp3",       start: 1,       end: 65     } ],
-        [ BgmCode.Co0003,       { name: "co0003.mp3",       start: 4.0,     end: 58.6   } ],
-        [ BgmCode.Co0004,       { name: "co0004.mp3",       start: 3.25,    end: 61.35  } ],
-        [ BgmCode.Co0005,       { name: "co0005.mp3",       start: 1.92,    end: 63     } ],
-        [ BgmCode.Co0006,       { name: "co0006.mp3",       start: 0.7,     end: 66     } ],
-        [ BgmCode.Co0007,       { name: "co0007.mp3",       start: 1.15,    end: 60     } ],
-        [ BgmCode.Co0008,       { name: "co0008.mp3",       start: 3.83,    end: 65     } ],
-        [ BgmCode.Co0009,       { name: "co0009.mp3",       start: 0.7,     end: 72     } ],
-        [ BgmCode.Co0010,       { name: "co0010.mp3",       start: 4.95,    end: 62     } ],
-        [ BgmCode.Co0011,       { name: "co0011.mp3",       start: 7.45,    end: 61.2   } ],
-        [ BgmCode.Co0042,       { name: "co0042.mp3",       start: 7.6,     end: 60.1   } ],
-        [ BgmCode.Co9999,       { name: "co9999.mp3",       start: 4.7,     end: 115.44 } ],
-        // [ BgmCode.War06,        { name: "war06.mp3",        start: 0.05,    end: 118.19 } ],
-    ]);
-    const _SHORT_SFX_PARAM = new Map<ShortSfxCode, ShortSfxParams>([
+    const _SOUND_PATH       = "resource/assets/sound/";
+    const _SHORT_SFX_PARAM  = new Map<ShortSfxCode, ShortSfxParams>([
         [ ShortSfxCode.ButtonNeutral01,     { name: "buttonNeutral01.mp3"   } ],
         [ ShortSfxCode.ButtonConfirm01,     { name: "buttonConfirm01.mp3"   } ],
         [ ShortSfxCode.ButtonCancel01,      { name: "buttonCancel01.mp3"    } ],
@@ -70,61 +31,25 @@ namespace SoundManager {
         [ ShortSfxCode.CursorMove01,        { name: "cursorMove01.mp3"      } ],
         [ ShortSfxCode.Explode,             { name: "explode.mp3"           } ],
     ]);
-    const _LONG_SFX_PARAMS = new Map<LongSfxCode, LongSfxParams>([
-        [ LongSfxCode.NavalMove,        { name: "navalMove.mp3",    start: 1.52,    end: 2.61                       } ], // 0.37
-        [ LongSfxCode.CopterMove,       { name: "copterMove.mp3",   start: 0.06,    end: 0.06 + (0.351 - 0.047) * 4 } ],
-        [ LongSfxCode.JetMove,          { name: "jetMove.mp3",      start: 1.518,   end: 1.518 + 0.192 * 1          } ],
-        [ LongSfxCode.TireMove,         { name: "tireMove.mp3",     start: 0.62,    end: 0.62 + 0.266 * 1           } ],
-        [ LongSfxCode.FootMove,         { name: "footMove.mp3",     start: 0.00,    end: 0.153                      } ],
-        [ LongSfxCode.TankMove,         { name: "tankMove.mp3",     start: 0.15,    end: 0.25                       } ],
-    ]);
-    const _UNIT_MOVE_SFX_CODES = new Map<UnitType, LongSfxCode>([
-        [ UnitType.Infantry,        LongSfxCode.FootMove    ],
-        [ UnitType.Mech,            LongSfxCode.FootMove    ],
-        [ UnitType.Bike,            LongSfxCode.TireMove    ],
-        [ UnitType.Recon,           LongSfxCode.TireMove    ],
-        [ UnitType.Flare,           LongSfxCode.TankMove    ],
-        [ UnitType.AntiAir,         LongSfxCode.TankMove    ],
-        [ UnitType.Tank,            LongSfxCode.TankMove    ],
-        [ UnitType.MediumTank,      LongSfxCode.TankMove    ],
-        [ UnitType.WarTank,         LongSfxCode.TankMove    ],
-        [ UnitType.Artillery,       LongSfxCode.TankMove    ],
-        [ UnitType.AntiTank,        LongSfxCode.TireMove    ],
-        [ UnitType.Rockets,         LongSfxCode.TireMove    ],
-        [ UnitType.Missiles,        LongSfxCode.TireMove    ],
-        [ UnitType.Rig,             LongSfxCode.TankMove    ],
-        [ UnitType.Fighter,         LongSfxCode.JetMove     ],
-        [ UnitType.Bomber,          LongSfxCode.JetMove     ],
-        [ UnitType.Duster,          LongSfxCode.CopterMove  ],
-        [ UnitType.BattleCopter,    LongSfxCode.CopterMove  ],
-        [ UnitType.TransportCopter, LongSfxCode.CopterMove  ],
-        [ UnitType.Seaplane,        LongSfxCode.JetMove     ],
-        [ UnitType.Battleship,      LongSfxCode.NavalMove   ],
-        [ UnitType.Carrier,         LongSfxCode.NavalMove   ],
-        [ UnitType.Submarine,       LongSfxCode.NavalMove   ],
-        [ UnitType.Cruiser,         LongSfxCode.NavalMove   ],
-        [ UnitType.Lander,          LongSfxCode.NavalMove   ],
-        [ UnitType.Gunboat,         LongSfxCode.NavalMove   ],
-    ]);
-    const _UNIT_MOVE_FADEOUT_TIME = 0.6;
+    const _UNIT_MOVE_FADEOUT_TIME   = 0.6;
 
     let _isInitialized              = false;
     let _audioContext               : AudioContext;
 
     let _bgmMute                    = DEFAULT_MUTE;
     let _bgmVolume                  = DEFAULT_VOLUME;    // 音量范围是0～1，1为最大音量
-    let _playingBgmCode             = BgmCode.None;
+    let _playingBgmCode             = CommonConstants.BgmSfxCode.None;
 
-    const _bgmBufferCache           = new Map<BgmCode, AudioBuffer>();
+    const _bgmBufferCache           = new Map<number, AudioBuffer>();
     let _bgmGain                    : GainNode;
     let _bgmSourceNode              : AudioBufferSourceNode | null = null;
 
     let _sfxMute                    = DEFAULT_MUTE;
     let _sfxVolume                  = DEFAULT_VOLUME;
-    let _playingLongSfxCode         = LongSfxCode.None;
+    let _playingLongSfxCode         = CommonConstants.BgmSfxCode.None;
     let _timeoutIdForStopLongSfx    : number | null = null;
 
-    const _longSfxBufferCache       = new Map<LongSfxCode, AudioBuffer>();
+    const _longSfxBufferCache       = new Map<number, AudioBuffer>();
     const _shortSfxBufferCache      = new Map<ShortSfxCode, AudioBuffer>();
     let _shortSfxGain               : GainNode;
     let _longSfxGain                : GainNode;
@@ -170,7 +95,7 @@ namespace SoundManager {
         _initEffectMute();
         _initEffectVolume();
 
-        playBgm(BgmCode.Lobby01);
+        // playBgm(CommonConstants.BgmSfxCode.Lobby);
     }
 
     export function resume(): void {
@@ -192,44 +117,45 @@ namespace SoundManager {
         _stopAllShortSfx();
     }
 
-    export function playPreviousBgm(): void {
-        const code = getPlayingBgmCode() - 1;
-        playBgm(code >= AllBgmMinCode ? code : AllBgmMaxCode);
-    }
-    export function playNextBgm(): void {
-        const code = getPlayingBgmCode() + 1;
-        playBgm(code <= AllBgmMaxCode ? code : AllBgmMinCode);
-    }
-    export function playRandomCoBgm(): void {
-        playBgm(Math.floor(Math.random() * (CoBgmMaxCode - CoBgmMinCode + 1)) + CoBgmMinCode);
-    }
-    export function playCoBgm(coId: number): void {
-        const bgmFileName = `co${Helpers.getNumText(Math.floor(coId / 10000), 4)}.mp3`;
-        for (const [bgmCode, param] of _BGM_PARAMS) {
-            if (param.name === bgmFileName) {
-                playBgm(bgmCode);
-                return;
-            }
+    export async function playPreviousBgm(): Promise<void> {
+        const bgmCodeArray  = (await Config.ConfigManager.getLatestGameConfig()).getAllBgmCodeArray();
+        const index         = bgmCodeArray.indexOf(getPlayingBgmCode());
+        if (index < 0) {
+            playBgm(CommonConstants.BgmSfxCode.Lobby);
+        } else {
+            const length = bgmCodeArray.length;
+            playBgm(bgmCodeArray[(index + length - 1) % length]);
         }
-
-        // playRandomCoBgm();
-        playBgm(BgmCode.Co0000);
     }
-    export function playCoBgmWithWar(war: TwnsBwWar.BwWar, force: boolean): void {
+    export async function playNextBgm(): Promise<void> {
+        const bgmCodeArray  = (await Config.ConfigManager.getLatestGameConfig()).getAllBgmCodeArray();
+        const index         = bgmCodeArray.indexOf(getPlayingBgmCode());
+        if (index < 0) {
+            playBgm(CommonConstants.BgmSfxCode.Lobby);
+        } else {
+            playBgm(bgmCodeArray[(index + 1) % bgmCodeArray.length]);
+        }
+    }
+    export function playCoBgm(coId: number, gameConfig: Config.GameConfig): void {
+        const coCategoryId  = gameConfig.getCoBasicCfg(coId)?.categoryId;
+        const bgmCodeArray  = (coCategoryId == null
+            ? null
+            : User.UserModel.getSelfSettings()?.coBgmSettings?.find(v => v.coCategoryId === coCategoryId)?.bgmCodeArray ?? gameConfig.getCoCategoryCfg(coCategoryId)?.bgmCodeArray) ?? [];
+        playBgm(bgmCodeArray[0] ?? CommonConstants.BgmSfxCode.CoEmpty);
+    }
+    export function playCoBgmWithWar(war: BaseWar.BwWar, force: boolean): void {
         const player = war.getPlayerInTurn();
         if ((player.checkIsNeutral()) && (!force)) {
             return;
         }
 
-        if (player.checkCoIsUsingActiveSkill()) {
-            playBgm(BgmCode.Power00);
-        } else {
-            playCoBgm(player.getCoId());
+        const gameConfig    = war.getGameConfig();
+        const bgmCodeArray  = gameConfig.getCoCategoryCfgByCoId(player.getCoId())?.bgmCodeArray ?? [];
+        switch (player.getCoUsingSkillType()) {
+            case Types.CoSkillType.Power        : playBgm(bgmCodeArray[1] ?? CommonConstants.BgmSfxCode.CoPower);   return;
+            case Types.CoSkillType.SuperPower   : playBgm(bgmCodeArray[2] ?? CommonConstants.BgmSfxCode.CoPower);   return;
+            default                             : playCoBgm(player.getCoId(), gameConfig);                          return;
         }
-    }
-
-    export function checkIsValidBgmCode(bgmCode: BgmCode): boolean {
-        return (bgmCode === BgmCode.None) || (_BGM_PARAMS.has(bgmCode));
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -281,14 +207,14 @@ namespace SoundManager {
         }
     }
 
-    function _setPlayingBgmCode(bgmCode: BgmCode): void {
+    function _setPlayingBgmCode(bgmCode: number): void {
         _playingBgmCode = bgmCode;
     }
-    export function getPlayingBgmCode(): BgmCode {
+    export function getPlayingBgmCode(): number {
         return _playingBgmCode;
     }
     /** 播放背景音乐，同时只能有一个在播放 */
-    export function playBgm(bgmCode: BgmCode, forcePlayFromBeginning = false): void {
+    export function playBgm(bgmCode: number, forcePlayFromBeginning = false): void {
         if (!_isInitialized) {
             return;
         }
@@ -304,14 +230,14 @@ namespace SoundManager {
             _playBgmForNormal(bgmCode);
         }
     }
-    async function _playBgmForNormal(bgmCode: BgmCode): Promise<void> {
-        const params        = Helpers.getExisted(_BGM_PARAMS.get(bgmCode), ClientErrorCode.SoundManager_PlayBgmForNormal_00);
+    async function _playBgmForNormal(bgmCode: number): Promise<void> {
+        const bgmCfg        = Helpers.getExisted((await Config.ConfigManager.getLatestGameConfig()).getBgmSfxCfg(bgmCode), ClientErrorCode.SoundManager_PlayBgmForNormal_00);
         const cacheDict     = _bgmBufferCache;
         const cachedBuffer  = cacheDict.get(bgmCode);
         if (cachedBuffer) {
-            _doPlayBgmForNormal(cachedBuffer, params);
+            _doPlayBgmForNormal(cachedBuffer, bgmCfg);
         } else {
-            const path          = getResourcePath(params.name, SoundType.Bgm);
+            const path          = getResourcePath(bgmCfg.filename, SoundType.Bgm);
             const audioBuffer   = await loadAudioBuffer(path).catch(err => {
                 // CompatibilityHelpers.showError(err); throw err;
                 Logger.error(`SoundManager._playBgmForNormal() loadAudioBuffer error: ${(err as Error).message}.`);
@@ -324,11 +250,11 @@ namespace SoundManager {
 
             cacheDict.set(bgmCode, audioBuffer);
             if (bgmCode === getPlayingBgmCode()) {
-                _doPlayBgmForNormal(audioBuffer, params);
+                _doPlayBgmForNormal(audioBuffer, bgmCfg);
             }
         }
     }
-    function _doPlayBgmForNormal(buffer: AudioBuffer, params: BgmParams): void {
+    function _doPlayBgmForNormal(buffer: AudioBuffer, params: Types.BgmSfxCfg): void {
         if (!buffer) {
             return;
         }
@@ -337,8 +263,8 @@ namespace SoundManager {
 
         _bgmSourceNode              = _audioContext.createBufferSource();
         _bgmSourceNode.buffer       = buffer;
-        _bgmSourceNode.loopStart    = params.start;
-        _bgmSourceNode.loopEnd      = params.end;
+        _bgmSourceNode.loopStart    = Helpers.getExisted(params.loopStart) / 10000;
+        _bgmSourceNode.loopEnd      = Helpers.getExisted(params.loopEnd) / 10000;
         _bgmSourceNode.loop         = true;
         _bgmSourceNode.connect(_bgmGain);
         _bgmSourceNode.start();
@@ -428,6 +354,7 @@ namespace SoundManager {
             _doPlayShortSfx(cachedBuffer);
         } else {
             const path          = getResourcePath(params.name, SoundType.Sfx);
+            const currentTime   = Date.now();
             const audioBuffer   = await loadAudioBuffer(path).catch(err => {
                 // CompatibilityHelpers.showError(err); throw err;
                 Logger.error(`SoundManager.playShortSfx() loadAudioBuffer error: ${(err as Error).message}`);
@@ -440,6 +367,11 @@ namespace SoundManager {
             }
 
             cacheDict.set(shortSfxCode, audioBuffer);
+            if (Date.now() - currentTime > 200) {
+                Logger.log(`SoundManager.playShortSfx() spent too much time on loading.`);
+                return;
+            }
+
             _doPlayShortSfx(audioBuffer);
         }
     }
@@ -487,7 +419,7 @@ namespace SoundManager {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // 长音效，同时只能有一个在播放
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function playLongSfxForMoveUnit(unitType: Types.UnitType): void {
+    export function playLongSfxForMoveUnit(unitType: number, gameConfig: Config.GameConfig): void {
         if (_timeoutIdForStopLongSfx != null) {
             egret.clearTimeout(_timeoutIdForStopLongSfx);
             _timeoutIdForStopLongSfx = null;
@@ -497,9 +429,9 @@ namespace SoundManager {
         }
 
         _updateLongSfxVolume();
-        playLongSfx(Helpers.getExisted(_UNIT_MOVE_SFX_CODES.get(unitType), ClientErrorCode.SoundManager_PlayLongSfxForMoveUnit_00));
+        playLongSfx(Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.moveSfx, ClientErrorCode.SoundManager_PlayLongSfxForMoveUnit_00), gameConfig);
     }
-    export function fadeoutLongSfxForMoveUnit(): void {
+    export function fadeoutLongSfxForMoveUnit(gameConfig: Config.GameConfig): void {
         const gain = _longSfxGain?.gain;
         if (gain == null) {
             return;
@@ -510,10 +442,10 @@ namespace SoundManager {
         gain.cancelScheduledValues(currentTime);
         gain.setValueAtTime(volume, currentTime);
         if (volume <= 0) {
-            playLongSfx(LongSfxCode.None);
+            playLongSfx(CommonConstants.BgmSfxCode.None, gameConfig);
         } else {
             gain.exponentialRampToValueAtTime(0.01, currentTime + _UNIT_MOVE_FADEOUT_TIME);
-            _timeoutIdForStopLongSfx = egret.setTimeout(() => playLongSfx(LongSfxCode.None), null, _UNIT_MOVE_FADEOUT_TIME * 1000);
+            _timeoutIdForStopLongSfx = egret.setTimeout(() => playLongSfx(CommonConstants.BgmSfxCode.None, gameConfig), null, _UNIT_MOVE_FADEOUT_TIME * 1000);
         }
     }
 
@@ -525,14 +457,14 @@ namespace SoundManager {
         }
     }
 
-    function _setPlayingLongSfxCode(longSfxCode: LongSfxCode): void {
+    function _setPlayingLongSfxCode(longSfxCode: number): void {
         _playingLongSfxCode = longSfxCode;
     }
-    export function getPlayingLongSfxCode(): LongSfxCode {
+    export function getPlayingLongSfxCode(): number {
         return _playingLongSfxCode;
     }
     /** 播放长音效，同时只能有一个在播放 */
-    function playLongSfx(longSfxCode: LongSfxCode, forcePlayFromBeginning = false): void {
+    function playLongSfx(longSfxCode: number, gameConfig: Config.GameConfig, forcePlayFromBeginning = false): void {
         if (!_isInitialized) {
             return;
         }
@@ -545,17 +477,17 @@ namespace SoundManager {
 
         if ((getPlayingLongSfxCode() !== longSfxCode) || (forcePlayFromBeginning)) {
             _setPlayingLongSfxCode(longSfxCode);
-            _playLongSfxForNormal(longSfxCode);
+            _playLongSfxForNormal(longSfxCode, gameConfig);
         }
     }
-    async function _playLongSfxForNormal(longSfxCode: LongSfxCode): Promise<void> {
-        const params        = Helpers.getExisted(_LONG_SFX_PARAMS.get(longSfxCode), ClientErrorCode.SoundManager_PlayLongSfxForNormal_00);
+    async function _playLongSfxForNormal(longSfxCode: number, gameConfig: Config.GameConfig): Promise<void> {
+        const params        = Helpers.getExisted(gameConfig.getBgmSfxCfg(longSfxCode), ClientErrorCode.SoundManager_PlayLongSfxForNormal_00);
         const cacheDict     = _longSfxBufferCache;
         const cachedBuffer  = cacheDict.get(longSfxCode);
         if (cachedBuffer) {
             _doPlayLongSfxForNormal(cachedBuffer, params);
         } else {
-            const path          = getResourcePath(params.name, SoundType.Sfx);
+            const path          = getResourcePath(params.filename, SoundType.Sfx);
             const audioBuffer   = await loadAudioBuffer(path).catch(err => {
                 // CompatibilityHelpers.showError(err); throw err;
                 Logger.error(`SoundManager._playLongSfxForNormal() loadAudioBuffer error: ${(err as Error).message}.`);
@@ -571,7 +503,7 @@ namespace SoundManager {
             _doPlayLongSfxForNormal(audioBuffer, params);
         }
     }
-    function _doPlayLongSfxForNormal(buffer: AudioBuffer, params: LongSfxParams): void {
+    function _doPlayLongSfxForNormal(buffer: AudioBuffer, cfg: Types.BgmSfxCfg): void {
         if (!buffer) {
             return;
         }
@@ -580,8 +512,8 @@ namespace SoundManager {
 
         _longSfxSourceNode              = _audioContext.createBufferSource();
         _longSfxSourceNode.buffer       = buffer;
-        _longSfxSourceNode.loopStart    = params.start;
-        _longSfxSourceNode.loopEnd      = params.end;
+        _longSfxSourceNode.loopStart    = Helpers.getExisted(cfg.loopStart) / 10000;
+        _longSfxSourceNode.loopEnd      = Helpers.getExisted(cfg.loopEnd) / 10000;
         _longSfxSourceNode.loop         = true;
         _longSfxSourceNode.connect(_longSfxGain);
         _longSfxSourceNode.start();

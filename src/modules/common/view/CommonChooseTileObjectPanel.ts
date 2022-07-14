@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
@@ -16,15 +16,16 @@
 // import TwnsMeTileSimpleView     from "./MeTileSimpleView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseTileObjectPanel {
-    import DataForDrawTileObject    = TwnsMeDrawer.DataForDrawTileObject;
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import DataForDrawTileObject    = MapEditor.DataForDrawTileObject;
+    import LangTextType             = Lang.LangTextType;
+    import NotifyType               = Notify.NotifyType;
 
-    export type OpenData = {
-        callback: (tileObjectType: Types.TileObjectType, shapeId: number, playerIndex: number) => void;
+    export type OpenDataForCommonChooseTileObjectPanel = {
+        gameConfig  : Config.GameConfig;
+        callback    : (tileObjectType: number, shapeId: number, playerIndex: number) => void;
     };
-    export class CommonChooseTileObjectPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChooseTileObjectPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseTileObjectPanel> {
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
@@ -64,18 +65,21 @@ namespace TwnsCommonChooseTileObjectPanel {
         }
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
-            const mapping = new Map<number, DataForDrawTileObject[]>();
-            for (const [objectType, cfg] of CommonConstants.TileObjectShapeConfigs) {
-                for (let playerIndex = cfg.minPlayerIndex; playerIndex <= cfg.maxPlayerIndex; ++playerIndex) {
+            const openData      = this._getOpenData();
+            const gameConfig    = openData.gameConfig;
+            const mapping       = new Map<number, DataForDrawTileObject[]>();
+            for (const cfg of gameConfig.getAllTileObjectCfgArray()) {
+                const playerIndexRange = Helpers.getExisted(cfg.playerIndexRange);
+                for (let playerIndex = playerIndexRange[0]; playerIndex <= playerIndexRange[1]; ++playerIndex) {
                     if (!mapping.has(playerIndex)) {
                         mapping.set(playerIndex, []);
                     }
 
                     const dataListForDrawTileObject = Helpers.getExisted(mapping.get(playerIndex));
-                    const shapesCount               = UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0 ? cfg.shapesCountForV0 : cfg.shapesCount;
+                    const shapesCount               = Helpers.getExisted(User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0 ? cfg.shapesCountForV0 : cfg.shapesCount);
                     for (let shapeId = 0; shapeId < shapesCount; ++shapeId) {
                         dataListForDrawTileObject.push({
-                            objectType,
+                            objectType  : cfg.tileObjectType,
                             playerIndex,
                             shapeId
                         });
@@ -83,12 +87,13 @@ namespace TwnsCommonChooseTileObjectPanel {
                 }
             }
 
-            const dataArray : DataForCategoryRenderer[] = [];
-            const callback  = this._getOpenData().callback;
+            const dataArray     : DataForCategoryRenderer[] = [];
+            const callback      = openData.callback;
             for (const [, dataListForDrawTileObject] of mapping) {
                 dataArray.push({
                     dataListForDrawTileObject,
                     callback,
+                    gameConfig,
                 });
             }
 
@@ -104,7 +109,8 @@ namespace TwnsCommonChooseTileObjectPanel {
 
     type DataForCategoryRenderer = {
         dataListForDrawTileObject   : DataForDrawTileObject[];
-        callback                    : (tileObjectType: Types.TileObjectType, shapeId: number, playerIndex: number) => void;
+        gameConfig                  : Config.GameConfig;
+        callback                    : (tileObjectType: number, shapeId: number, playerIndex: number) => void;
     };
     class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
         private readonly _labelCategory!    : TwnsUiLabel.UiLabel;
@@ -120,28 +126,30 @@ namespace TwnsCommonChooseTileObjectPanel {
             const dataListForDrawTileObject = data.dataListForDrawTileObject;
             this._labelCategory.text        = Lang.getPlayerForceName(dataListForDrawTileObject[0].playerIndex);
 
-            const dataListForTileObject : DataForTileObjectRenderer[] = [];
-            const callback              = data.callback;
+            const dataArray     : DataForTileObjectRenderer[] = [];
+            const callback      = data.callback;
             for (const dataForDrawTileObject of dataListForDrawTileObject) {
-                dataListForTileObject.push({
+                dataArray.push({
                     dataForDrawTileObject,
                     callback,
+                    gameConfig  : data.gameConfig,
                 });
             }
-            this._listTileObject.bindData(dataListForTileObject);
+            this._listTileObject.bindData(dataArray);
         }
     }
 
     type DataForTileObjectRenderer = {
+        gameConfig              : Config.GameConfig;
         dataForDrawTileObject   : DataForDrawTileObject;
-        callback                : (tileObjectType: Types.TileObjectType, shapeId: number, playerIndex: number) => void;
+        callback                : (tileObjectType: number, shapeId: number, playerIndex: number) => void;
     };
     class TileObjectRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileObjectRenderer> {
         private readonly _group!        : eui.Group;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _conTileView!  : eui.Group;
 
-        private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
+        private _tileView   = new MapEditor.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -163,8 +171,10 @@ namespace TwnsCommonChooseTileObjectPanel {
         protected _onDataChanged(): void {
             const data                  = this._getData();
             const dataForDrawTileObject = data.dataForDrawTileObject;
+            const gameConfig            = data.gameConfig;
             const tileObjectType        = dataForDrawTileObject.objectType;
-            this._labelName.text        = Lang.getTileName(ConfigManager.getTileType(Types.TileBaseType.Plain, tileObjectType)) || CommonConstants.ErrorTextForUndefined;
+            const langTextType          = gameConfig.getTileObjectCfg(tileObjectType)?.lang;
+            this._labelName.text        = langTextType == null ? CommonConstants.ErrorTextForUndefined : Lang.getText(langTextType);
             this._tileView.init({
                 tileObjectType,
                 tileObjectShapeId   : dataForDrawTileObject.shapeId,
@@ -173,6 +183,7 @@ namespace TwnsCommonChooseTileObjectPanel {
                 tileDecoratorType   : null,
                 tileDecoratorShapeId: null,
                 playerIndex         : dataForDrawTileObject.playerIndex,
+                gameConfig,
             });
             this._tileView.updateView();
         }
@@ -181,7 +192,7 @@ namespace TwnsCommonChooseTileObjectPanel {
             const data                  = this._getData();
             const dataForDrawTileObject = data.dataForDrawTileObject;
             data.callback(dataForDrawTileObject.objectType, dataForDrawTileObject.shapeId, dataForDrawTileObject.playerIndex);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonChooseTileObjectPanel);
+            PanelHelpers.close(PanelHelpers.PanelDict.CommonChooseTileObjectPanel);
         }
     }
 }

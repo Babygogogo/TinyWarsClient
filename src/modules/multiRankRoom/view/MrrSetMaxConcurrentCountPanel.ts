@@ -4,7 +4,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiButton         from "../../tools/ui/UiButton";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
@@ -13,14 +13,14 @@
 // import MrrProxy             from "../model/MrrProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMrrSetMaxConcurrentCountPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import MaxCount         = CommonConstants.RankMaxConcurrentCount;
-    import MinCount         = CommonConstants.RankMinConcurrentCount;
+namespace Twns.MultiRankRoom {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
+    import MaxCount         = Twns.CommonConstants.RankMaxConcurrentCount;
+    import MinCount         = Twns.CommonConstants.RankMinConcurrentCount;
 
-    export type OpenData = void;
-    export class MrrSetMaxConcurrentCountPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMrrSetMaxConcurrentCountPanel = void;
+    export class MrrSetMaxConcurrentCountPanel extends TwnsUiPanel.UiPanel<OpenDataForMrrSetMaxConcurrentCountPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -98,7 +98,7 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
             this._selectedCountForStd   = countForStd;
             this._updateGroupStd();
 
-            this._selectedCountForFog   = Math.min(this._selectedCountForFog ?? 0, CommonConstants.RankMaxConcurrentCount - countForStd);
+            this._selectedCountForFog   = Math.min(this._selectedCountForFog ?? 0, Twns.CommonConstants.RankMaxConcurrentCount - countForStd);
             this._updateGroupFog();
         }
         private _onTouchMoveGroupStd(e: egret.Event): void {
@@ -107,7 +107,7 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
             this._selectedCountForStd   = countForStd;
             this._updateGroupStd();
 
-            this._selectedCountForFog   = Math.min(this._selectedCountForFog ?? 0, CommonConstants.RankMaxConcurrentCount - countForStd);
+            this._selectedCountForFog   = Math.min(this._selectedCountForFog ?? 0, Twns.CommonConstants.RankMaxConcurrentCount - countForStd);
             this._updateGroupFog();
         }
         private _onTouchEndGroupStd(): void {
@@ -123,7 +123,7 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
             this._selectedCountForFog   = countForFog;
             this._updateGroupFog();
 
-            this._selectedCountForStd   = Math.min(this._selectedCountForStd ?? 0, CommonConstants.RankMaxConcurrentCount - countForFog);
+            this._selectedCountForStd   = Math.min(this._selectedCountForStd ?? 0, Twns.CommonConstants.RankMaxConcurrentCount - countForFog);
             this._updateGroupStd();
         }
         private _onTouchMoveGroupFog(e: egret.Event): void {
@@ -132,7 +132,7 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
             this._selectedCountForFog   = countForFog;
             this._updateGroupFog();
 
-            this._selectedCountForStd   = Math.min(this._selectedCountForStd ?? 0, CommonConstants.RankMaxConcurrentCount - countForFog);
+            this._selectedCountForStd   = Math.min(this._selectedCountForStd ?? 0, Twns.CommonConstants.RankMaxConcurrentCount - countForFog);
             this._updateGroupStd();
         }
         private _onTouchEndGroupFog(): void {
@@ -146,7 +146,7 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
             this.close();
         }
         private _onTouchedBtnConfirm(): void {
-            MrrProxy.reqMrrSetMaxConcurrentCount(Helpers.getExisted(this._selectedCountForStd), Helpers.getExisted(this._selectedCountForFog));
+            MultiRankRoom.MrrProxy.reqMrrSetMaxConcurrentCount(Twns.Helpers.getExisted(this._selectedCountForStd), Twns.Helpers.getExisted(this._selectedCountForFog));
 
             this.close();
         }
@@ -155,8 +155,8 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
         // Function for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _loadMaxCountAndUpdateView(): void {
-            this._selectedCountForStd = MrrModel.getMaxConcurrentCount(false);
-            this._selectedCountForFog = MrrModel.getMaxConcurrentCount(true);
+            this._selectedCountForStd = MultiRankRoom.MrrModel.getMaxConcurrentCount(false);
+            this._selectedCountForFog = MultiRankRoom.MrrModel.getMaxConcurrentCount(true);
             this._updateGroupStd();
             this._updateGroupFog();
         }
@@ -171,14 +171,14 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
         }
 
         private _updateGroupStd(): void {
-            const count                 = Helpers.getExisted(this._selectedCountForStd);
+            const count                 = Twns.Helpers.getExisted(this._selectedCountForStd);
             const pos                   = this._groupStd.width * (count - MinCount) / (MaxCount - MinCount);
             this._imgStdPoint.x         = pos;
             this._imgStdBar.width       = pos;
             this._labelStdCount.text    = `${count}`;
         }
         private _updateGroupFog(): void {
-            const count                 = Helpers.getExisted(this._selectedCountForFog);
+            const count                 = Twns.Helpers.getExisted(this._selectedCountForFog);
             const pos                   = this._groupFog.width * (count - MinCount) / (MaxCount - MinCount);
             this._imgFogPoint.x         = pos;
             this._imgFogBar.width       = pos;
@@ -186,32 +186,32 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { verticalCenter: 40, alpha: 0 },
                 endProps    : { verticalCenter: 0, alpha: 1 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { verticalCenter: 0, alpha: 1 },
                 endProps    : { verticalCenter: 40, alpha: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 }

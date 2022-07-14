@@ -6,7 +6,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiCoInfo             from "../../tools/ui/UiCoInfo";
 // import TwnsUiComponent          from "../../tools/ui/UiComponent";
@@ -16,14 +16,15 @@
 // import TwnsCommonHelpPanel      from "./CommonHelpPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonCoListPanel {
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.Common {
+    import LangTextType         = Twns.Lang.LangTextType;
+    import NotifyType           = Twns.Notify.NotifyType;
+    import GameConfig           = Twns.Config.GameConfig;
 
-    export type OpenData = {
-        war     : TwnsBwWar.BwWar;
+    export type OpenDataForCommonCoListPanel = {
+        war     : Twns.BaseWar.BwWar;
     };
-    export class CommonCoListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonCoListPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonCoListPanel> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
@@ -80,7 +81,7 @@ namespace TwnsCommonCoListPanel {
         }
 
         private _onTouchedBtnHelp(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+            Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0143),
                 content : Lang.getText(LangTextType.R0004),
             });
@@ -96,18 +97,18 @@ namespace TwnsCommonCoListPanel {
 
         private _initGroupCoNames(): void {
             const war               = this._getOpenData().war;
-            const configVersion     = war.getConfigVersion();
+            const gameConfig        = war.getGameConfig();
             const rendererArray     = this._renderersForCoNames;
             rendererArray.length    = 0;
 
             for (const player of war.getPlayerManager().getAllPlayers().sort((v1, v2) => v1.getPlayerIndex() - v2.getPlayerIndex())) {
-                if (player.getPlayerIndex() == CommonConstants.WarNeutralPlayerIndex) {
+                if (player.getPlayerIndex() == Twns.CommonConstants.PlayerIndex.Neutral) {
                     continue;
                 }
 
                 const renderer = new RendererForCoName();
                 renderer.setData({
-                    configVersion,
+                    gameConfig,
                     coId        : player.getCoId(),
                     energy      : player.getCoCurrentEnergy(),
                     playerIndex : player.getPlayerIndex(),
@@ -138,40 +139,40 @@ namespace TwnsCommonCoListPanel {
                 } else {
                     renderer.setIsSelected(true);
                     this._uiCoInfo.setCoData({
-                        configVersion   : this._getOpenData().war.getConfigVersion(),
-                        coId            : Helpers.getExisted(renderer.getCoId()),
+                        gameConfig   : this._getOpenData().war.getGameConfig(),
+                        coId            : Twns.Helpers.getExisted(renderer.getCoId()),
                     });
                 }
             }
         }
 
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: -40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: -40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -180,7 +181,7 @@ namespace TwnsCommonCoListPanel {
         private readonly _imgSelected!      : TwnsUiImage.UiImage;
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
 
-        private _configVersion  : string | null = null;
+        private _gameConfig     : GameConfig | null = null;
         private _coId           : number | null = null;
         private _energy         : number | null = null;
         private _playerIndex    : number | null = null;
@@ -196,13 +197,13 @@ namespace TwnsCommonCoListPanel {
             this._updateView();
         }
 
-        public setData({ configVersion, coId, energy, playerIndex }: {
-            configVersion   : string;
+        public setData({ gameConfig, coId, energy, playerIndex }: {
+            gameConfig      : GameConfig;
             coId            : number;
             energy          : number;
             playerIndex     : number;
         }): void {
-            this._configVersion = configVersion;
+            this._gameConfig    = gameConfig;
             this._coId          = coId;
             this._energy        = energy;
             this._playerIndex   = playerIndex;
@@ -228,7 +229,7 @@ namespace TwnsCommonCoListPanel {
             const isSelected            = !!this._isSelected;
             this._imgSelected.visible   = isSelected;
             this._imgUnselected.visible = !isSelected;
-            this._labelName.text        = `${ConfigManager.getCoBasicCfg(Helpers.getExisted(this._configVersion), Helpers.getExisted(this._coId))?.name || CommonConstants.ErrorTextForUndefined}(${this._energy})`;
+            this._labelName.text        = `${this._gameConfig?.getCoBasicCfg(Twns.Helpers.getExisted(this._coId))?.name || Twns.CommonConstants.ErrorTextForUndefined}(${this._energy})`;
         }
     }
 }

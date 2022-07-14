@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*"
+        xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
+        xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group width="800" horizontalCenter="0" height="250" verticalCenter="0">
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                             alpha="0.8" left="0" top="0" bottom="0" right="0" locked="true" />
+        <TwnsUiLabel:UiLabel id="_labelTitle" text="创建战局" bold="true" size="22" top="10" textColor="0xffffff"
+                             horizontalCenter="0" />
+        <e:Group x="0" y="0">
+            <TwnsUiButton:UiButton id="_btnType" label="切换类型" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                   width="120" top="0" left="0" locked="true" />
+            <e:layout>
+                <e:HorizontalLayout/>
+            </e:layout>
+        </e:Group>
+        <TwnsUiButton:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                               width="120" right="0" top="0" />
+        <e:Group y="40" left="10" right="10">
+            <TwnsUiLabel:UiLabel id="_labelDesc" text="创建战局" size="18" textColor="0xFFFFFF" y="0" width="780" x="274" />
+            <TwnsUiLabel:UiLabel id="_labelError" text="创建战局" size="18" textColor="0xFFFFFF" y="0" width="780" x="274" />
+            <e:layout>
+                <e:VerticalLayout horizontalAlign="center" />
+            </e:layout>
+        </e:Group>
+        <e:Group x="0" y="97">
+            <e:Group scaleX="1" scaleY="1" height="60" left="0" top="0">
+                <TwnsUiButton:UiButton id="_btnChinese" label="Unit Type"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="100" left="0"
+                                       top="0" />
+                <TwnsUiLabel:UiLabel id="_labelChinese" text="asdf\nasdf\nasdf" size="14" textColor="0xFFFFFF" x="110"
+                                     width="680" />
+            </e:Group>
+            <e:Group y="80" scaleX="1" scaleY="1" height="60" left="0">
+                <TwnsUiButton:UiButton id="_btnEnglish" label="Unit Type"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="100" left="0"
+                                       top="0" />
+                <TwnsUiLabel:UiLabel id="_labelEnglish" text="asdf\nasdf\nasdf" size="14" textColor="0xFFFFFF" x="110"
+                                     width="680" />
+            </e:Group>
+        </e:Group>
+    </e:Group>
+</e:Skin>

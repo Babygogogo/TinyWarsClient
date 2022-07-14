@@ -6,26 +6,26 @@
 // import TwnsRwFogMap         from "./RwFogMap";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsHrwField {
-    import BwField          = TwnsBwField.BwField;
-    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
+namespace Twns.HalfwayReplayWar {
+    import BwField          = Twns.BaseWar.BwField;
+    import BwUnitMap        = Twns.BaseWar.BwUnitMap;
 
     export class HrwField extends BwField {
-        private readonly _fogMap        = new TwnsHrwFogMap.HrwFogMap();
-        private readonly _tileMap       = new TwnsBwTileMap.BwTileMap();
+        private readonly _fogMap        = new Twns.HalfwayReplayWar.HrwFogMap();
+        private readonly _tileMap       = new Twns.BaseWar.BwTileMap();
         private readonly _unitMap       = new BwUnitMap();
-        private readonly _actionPlanner = new TwnsHrwActionPlanner.HrwActionPlanner();
+        private readonly _actionPlanner = new Twns.HalfwayReplayWar.HrwActionPlanner();
 
-        public getFogMap(): TwnsHrwFogMap.HrwFogMap {
+        public getFogMap(): Twns.HalfwayReplayWar.HrwFogMap {
             return this._fogMap;
         }
-        public getTileMap(): TwnsBwTileMap.BwTileMap {
+        public getTileMap(): Twns.BaseWar.BwTileMap {
             return this._tileMap;
         }
         public getUnitMap(): BwUnitMap {
             return this._unitMap;
         }
-        public getActionPlanner(): TwnsHrwActionPlanner.HrwActionPlanner {
+        public getActionPlanner(): Twns.HalfwayReplayWar.HrwActionPlanner {
             return this._actionPlanner;
         }
     }

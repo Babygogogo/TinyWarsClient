@@ -7,7 +7,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -18,12 +18,12 @@
 // import TwnsUserRegisterPanel    from "./UserRegisterPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserLoginPanel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import LangTextType     = TwnsLangTextType.LangTextType;
+namespace Twns.User {
+    import NotifyType       = Notify.NotifyType;
+    import LangTextType     = Lang.LangTextType;
 
-    export type OpenData = void;
-    export class UserLoginPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserLoginPanel = void;
+    export class UserLoginPanel extends TwnsUiPanel.UiPanel<OpenDataForUserLoginPanel> {
         private readonly _imgTitle!                 : TwnsUiImage.UiImage;
 
         private readonly _groupAccount!             : eui.Group;
@@ -46,8 +46,9 @@ namespace TwnsUserLoginPanel {
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgUserLogin,    callback: this._onMsgUserLogin },
+                { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgUserLogin,        callback: this._onMsgUserLogin },
+                { type: NotifyType.MsgUserLoginAsGuest, callback: this._onMsgUserLoginAsGuest },
             ]);
             this._setUiListenerArray([
                 { ui: this,                         callback: this._onTouchedSelf },
@@ -76,6 +77,9 @@ namespace TwnsUserLoginPanel {
             FloatText.show(Lang.getText(LangTextType.A0000));
             this._btnLogin.enabled = false;
         }
+        private _onMsgUserLoginAsGuest(): void {
+            this._onMsgUserLogin();
+        }
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
@@ -97,9 +101,9 @@ namespace TwnsUserLoginPanel {
                 } else {
                     LocalStorage.setAccount(account);
                     LocalStorage.setPassword(password);
-                    UserModel.setSelfAccount(account);
-                    UserModel.setSelfPassword(password);
-                    UserProxy.reqLogin(account, password, false);
+                    User.UserModel.setSelfAccount(account);
+                    User.UserModel.setSelfPassword(password);
+                    User.UserProxy.reqLogin(account, password, false);
                 }
             }
         }
@@ -107,7 +111,7 @@ namespace TwnsUserLoginPanel {
         private _onTouchedBtnRegister(): void {
             NoSleepManager.enable();
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserRegisterPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.UserRegisterPanel, void 0);
         }
 
         private _onTouchedBtnForgetPassword(): void {

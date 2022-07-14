@@ -14,21 +14,18 @@
 // import TwnsBwWar            from "../../baseWar/model/BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace WarRobot {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
+namespace Twns.WarHelpers.WarRobot {
+    import IWarActionContainer  = CommonProto.WarAction.IWarActionContainer;
     import WeaponType           = Types.WeaponType;
     import GridIndex            = Types.GridIndex;
     import MovableArea          = Types.MovableArea;
     import MovePathNode         = Types.MovePathNode;
-    import TileType             = Types.TileType;
-    import UnitType             = Types.UnitType;
     import UnitActionState      = Types.UnitActionState;
     import UnitAiMode           = Types.UnitAiMode;
     import CoSkillType          = Types.CoSkillType;
-    import BwUnit               = TwnsBwUnit.BwUnit;
-    import BwTile               = TwnsBwTile.BwTile;
-    import BwWar                = TwnsBwWar.BwWar;
+    import BwUnit               = BaseWar.BwUnit;
+    import BwTile               = BaseWar.BwTile;
+    import BwWar                = BaseWar.BwWar;
 
     type AttackInfo = {
         baseDamage      : number | null | undefined;
@@ -60,292 +57,12 @@ namespace WarRobot {
         globalOffenseBonuses    : Map<number, number>;
         globalDefenseBonuses    : Map<number, number>;
         luckValues              : Map<number, number>;
-        bestActionDict          : Map<BwUnit, IWarActionContainer>;
+        bestScoreAndActionDict  : Map<BwUnit, ScoreAndAction>;
         getCachedMoveCost       : (unit: BwUnit, tile: BwTile) => number | null;
         // getAndTickRandomInteger : () => number;
     };
 
     const _IS_NEED_VISIBILITY = true;
-    const _TILE_VALUE: { [tileType: number]: number } = {
-        [TileType.Headquarters] : 20, //50,
-        [TileType.Factory]      : 30, //75,
-        [TileType.Airport]      : 25, //60,
-        [TileType.Seaport]      : 25, //60,
-        [TileType.City]         : 20, //50,
-        [TileType.CommandTower] : 30, //75,
-        [TileType.Radar]        : 20, //50,
-        [TileType.TempSeaport]  : 10,
-        [TileType.TempAirport]  : 10,
-    };
-    const _PRODUCTION_CANDIDATES: { [tileType: number]: { [unitType: number]: number } } = {
-        [TileType.Factory]: {
-            [UnitType.Infantry]     : 500,
-            [UnitType.Mech]         : -200,
-            [UnitType.Bike]         : 520,
-            [UnitType.Recon]        : 100,
-            [UnitType.Flare]        : 100,
-            [UnitType.AntiAir]      : 300,
-            [UnitType.Tank]         : 650,
-            [UnitType.MediumTank]   : 600,
-            [UnitType.WarTank]      : 550,
-            [UnitType.Artillery]    : 400,
-            [UnitType.AntiTank]     : 350,
-            [UnitType.Rockets]      : 600,
-            [UnitType.Missiles]     : -9999,
-            [UnitType.Rig]          : -9999,
-        },
-        [TileType.Airport]: {
-            [UnitType.Fighter]          : 200,
-            [UnitType.Bomber]           : 200,
-            [UnitType.Duster]           : 400,
-            [UnitType.BattleCopter]     : 600,
-            [UnitType.TransportCopter]  : -9999,
-        },
-        [TileType.Seaport]: {
-            [UnitType.Battleship]   : 300,
-            [UnitType.Carrier]      : -9999,
-            [UnitType.Submarine]    : 300,
-            [UnitType.Cruiser]      : 300,
-            [UnitType.Lander]       : -9999,
-            [UnitType.Gunboat]      : 0,
-        },
-    };
-    const _DAMAGE_SCORE_SCALERS: { [attackerType: number]: { [defenderType: number]: number } } = {
-        [UnitType.Infantry]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Mech]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Bike]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Recon]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Flare]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.AntiAir]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Tank]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.MediumTank]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.WarTank]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Artillery]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.AntiTank]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Rockets]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Missiles]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Rig]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Fighter]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Bomber]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Duster]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.BattleCopter]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.TransportCopter]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Seaplane]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Battleship]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Carrier]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Submarine]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Cruiser]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Lander]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-        [UnitType.Gunboat]: {
-            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
-            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
-            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
-            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
-            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
-            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
-            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
-        },
-    };
     // const _DISTANCE_SCORE_SCALERS: { [tileType: number]: number } = {
     //     [TileType.Airport]      : 1.2,
     //     [TileType.City]         : 1.1,
@@ -379,11 +96,11 @@ namespace WarRobot {
             mapSize                 : war.getTileMap().getMapSize(),
             unitsInfoDict,
             unitValueRatio          : await getUnitValueRatio(war, unitsInfoDict, playerIndexInTurn),
-            visibleUnits            : WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, new Set([war.getPlayer(playerIndexInTurn).getTeamIndex()])),
+            visibleUnits            : WarHelpers.WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, new Set([war.getPlayer(playerIndexInTurn).getTeamIndex()])),
             globalOffenseBonuses    : await getGlobalOffenseBonuses(war),
             globalDefenseBonuses    : await getGlobalDefenseBonuses(war),
             luckValues              : await getLuckValues(war),
-            bestActionDict          : new Map(),
+            bestScoreAndActionDict  : new Map(),
             // getAndTickRandomInteger : () => {
             //     if (!isNeedSeedRandom) {
             //         return Math.floor(Math.random() * 256);
@@ -477,7 +194,7 @@ namespace WarRobot {
         const commonSettingManager  = war.getCommonSettingManager();
         for (const player of war.getPlayerManager().getAllPlayers()) {
             const playerIndex = player.getPlayerIndex();
-            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+            if (playerIndex === CommonConstants.PlayerIndex.Neutral) {
                 continue;
             }
 
@@ -487,7 +204,7 @@ namespace WarRobot {
 
         for (const tile of war.getTileMap().getAllTiles()) {
             const playerIndex = tile.getPlayerIndex();
-            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+            if (playerIndex === CommonConstants.PlayerIndex.Neutral) {
                 continue;
             }
 
@@ -507,13 +224,13 @@ namespace WarRobot {
         await Helpers.checkAndCallLater();
 
         const globalDefenseBonuses = new Map<number, number>();
-        for (let playerIndex = war.getPlayerManager().getTotalPlayersCount(false); playerIndex > CommonConstants.WarNeutralPlayerIndex; --playerIndex) {
+        for (let playerIndex = war.getPlayerManager().getTotalPlayersCount(false); playerIndex > CommonConstants.PlayerIndex.Neutral; --playerIndex) {
             globalDefenseBonuses.set(playerIndex, 0);
         }
 
         for (const tile of war.getTileMap().getAllTiles()) {
             const playerIndex = tile.getPlayerIndex();
-            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+            if (playerIndex === CommonConstants.PlayerIndex.Neutral) {
                 continue;
             }
 
@@ -534,7 +251,7 @@ namespace WarRobot {
 
         const luckValues            = new Map<number, number>();
         const commonSettingManager  = war.getCommonSettingManager();
-        for (let playerIndex = war.getPlayerManager().getTotalPlayersCount(false); playerIndex > CommonConstants.WarNeutralPlayerIndex; --playerIndex) {
+        for (let playerIndex = war.getPlayerManager().getTotalPlayersCount(false); playerIndex > CommonConstants.PlayerIndex.Neutral; --playerIndex) {
             const upperLimit = commonSettingManager.getSettingsLuckUpperLimit(playerIndex);
             const lowerLimit = commonSettingManager.getSettingsLuckLowerLimit(playerIndex);
             luckValues.set(playerIndex, (upperLimit + lowerLimit) / 2);
@@ -590,7 +307,7 @@ namespace WarRobot {
         const { war, mapSize }  = commonParams;
         const unitMap           = war.getUnitMap();
         const tileMap           = war.getTileMap();
-        return WarCommonHelpers.createMovableArea({
+        return WarHelpers.WarCommonHelpers.createMovableArea({
             origin          : unitGridIndex,
             maxMoveCost     : Math.min(moveRange, currentFuel),
             mapSize,
@@ -655,7 +372,7 @@ namespace WarRobot {
         const attackerCurrentFuel           = attacker.getCurrentFuel();
         const { war, mapSize }              = commonParams;
         const unitMap                       = war.getUnitMap();
-        const attackerNormalizedCurrentHp   = WarCommonHelpers.getNormalizedHp(attackerCurrentHp);
+        const attackerNormalizedCurrentHp   = WarHelpers.WarCommonHelpers.getNormalizedHp(attackerCurrentHp);
         const baseDamageWithAmmo            = attacker.getCfgBaseDamage(targetArmorType, attacker.checkHasPrimaryWeapon() ? WeaponType.Primary : WeaponType.Secondary);
         const baseDamageForCurrentAmmo      = attacker.getBaseDamage(targetArmorType);
         const loaderUnitId                  = attacker.getLoaderUnitId();
@@ -666,7 +383,7 @@ namespace WarRobot {
             if (repairInfo) {
                 return {
                     baseDamage  : baseDamageWithAmmo,
-                    normalizedHp: WarCommonHelpers.getNormalizedHp(attackerCurrentHp + repairInfo.hp),
+                    normalizedHp: WarHelpers.WarCommonHelpers.getNormalizedHp(attackerCurrentHp + repairInfo.hp),
                     fuel        : attackerMaxFuel,
                     luckValue,
                 };
@@ -714,7 +431,7 @@ namespace WarRobot {
                 if (repairInfo) {
                     return {
                         baseDamage  : baseDamageWithAmmo,
-                        normalizedHp: WarCommonHelpers.getNormalizedHp(attackerCurrentHp + repairInfo.hp),
+                        normalizedHp: WarHelpers.WarCommonHelpers.getNormalizedHp(attackerCurrentHp + repairInfo.hp),
                         fuel        : attackerMaxFuel,
                         luckValue,
                     };
@@ -777,7 +494,7 @@ namespace WarRobot {
             }
 
             await Helpers.checkAndCallLater();
-            const movableArea = WarCommonHelpers.createMovableArea({
+            const movableArea = WarHelpers.WarCommonHelpers.createMovableArea({
                 origin          : beginningGridIndex,
                 maxMoveCost     : Math.min(attackerFinalMoveRange, fuel),
                 mapSize,
@@ -796,7 +513,7 @@ namespace WarRobot {
             });
 
             await Helpers.checkAndCallLater();
-            const attackableArea = WarCommonHelpers.createAttackableAreaForUnit({
+            const attackableArea = WarHelpers.WarCommonHelpers.createAttackableAreaForUnit({
                 movableArea,
                 mapSize,
                 minAttackRange,
@@ -827,7 +544,7 @@ namespace WarRobot {
                     const damage            = Math.floor(
                         (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
                         * normalizedHp
-                        * WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit) + targetUnit.getPromotionDefenseBonus())
+                        * WarHelpers.WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit) + targetUnit.getPromotionDefenseBonus())
                         / CommonConstants.UnitHpNormalizer
                     );
                     if (!damageMap[x][y]) {
@@ -999,7 +716,7 @@ namespace WarRobot {
         const attackerTeamIndex = attackerUnit.getTeamIndex();
 
         await Helpers.checkAndCallLater();
-        const movableArea = WarCommonHelpers.createMovableArea({
+        const movableArea = WarHelpers.WarCommonHelpers.createMovableArea({
             origin          : gridIndex,
             maxMoveCost     : attackerUnit.getFinalMoveRange(),
             mapSize,
@@ -1007,18 +724,19 @@ namespace WarRobot {
                 if (!GridIndexHelpers.checkIsInsideMap(g, mapSize)) {
                     return null;
                 } else {
-                    const existingUnit = unitMap.getUnitOnMap(g);
-                    if ((existingUnit) && (existingUnit.getTeamIndex() != attackerTeamIndex)) {
-                        return null;
-                    } else {
-                        return commonParams.getCachedMoveCost(attackerUnit, tileMap.getTile(g));
-                    }
+                    // const existingUnit = unitMap.getUnitOnMap(g);
+                    // if ((existingUnit) && (existingUnit.getTeamIndex() != attackerTeamIndex)) {
+                    //     return null;
+                    // } else {
+                    //     return commonParams.getCachedMoveCost(attackerUnit, tileMap.getTile(g));
+                    // }
+                    return commonParams.getCachedMoveCost(attackerUnit, tileMap.getTile(g));
                 }
             },
         });
 
         await Helpers.checkAndCallLater();
-        const attackableArea = WarCommonHelpers.createAttackableAreaForUnit({
+        const attackableArea = WarHelpers.WarCommonHelpers.createAttackableAreaForUnit({
             movableArea,
             mapSize,
             minAttackRange  : attackerUnit.getMinAttackRange(),
@@ -1078,7 +796,7 @@ namespace WarRobot {
                 const damage                = Math.floor(
                     (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
                     * normalizedHp
-                    * WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit) + targetUnit.getPromotionDefenseBonus())
+                    * WarHelpers.WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit) + targetUnit.getPromotionDefenseBonus())
                     / CommonConstants.UnitHpNormalizer
                 );
                 const canDestroy    = damage >= targetUnit.getCurrentHp();
@@ -1355,28 +1073,21 @@ namespace WarRobot {
             }
         }
 
-        const unitTeamIndex = unit.getTeamIndex();
-        const tileTeamIndex = tile.getTeamIndex();
-        if (tileTeamIndex === unitTeamIndex) {
-            switch (tile.getType()) {
-                case TileType.Factory   : totalScore += -5000; break;
-                case TileType.Airport   : totalScore += -2000; break;
-                case TileType.Seaport   : totalScore += -1500; break;
-                default                 : break;
-            }
-        } else if (tileTeamIndex !== CommonConstants.WarNeutralTeamIndex) {
-            switch (tile.getType()) {
-                case TileType.Factory   : totalScore += 50; break;
-                case TileType.Airport   : totalScore += 20; break;
-                case TileType.Seaport   : totalScore += 15; break;
-                default                 : break;
+        const unitTeamIndex         = unit.getTeamIndex();
+        const tileTeamIndex         = tile.getTeamIndex();
+        const aiScoreArrayForStay   = tile.getTemplateCfg().aiScoreForStay;
+        if (aiScoreArrayForStay) {
+            if (tileTeamIndex === unitTeamIndex) {
+                totalScore += aiScoreArrayForStay[0] ?? 0;
+            } else if (tileTeamIndex !== CommonConstants.TeamIndex.Neutral) {
+                totalScore += aiScoreArrayForStay[1] ?? 0;
             }
         }
 
         await Helpers.checkAndCallLater();
 
         const moveType      = unit.getMoveType();
-        const movableArea   = WarCommonHelpers.createMovableArea({
+        const movableArea   = WarHelpers.WarCommonHelpers.createMovableArea({
             origin          : gridIndex,
             maxMoveCost     : Number.MAX_SAFE_INTEGER,
             mapSize,
@@ -1398,7 +1109,7 @@ namespace WarRobot {
             return 0;
         }
 
-        const discoveredUnits = WarVisibilityHelpers.getDiscoveredUnitsByPath({
+        const discoveredUnits = WarHelpers.WarVisibilityHelpers.getDiscoveredUnitsByPath({
             war             : commonParams.war,
             path            : movePath,
             movingUnit,
@@ -1478,7 +1189,7 @@ namespace WarRobot {
         }
 
         return (Math.min(normalizedMaxHp, rawNormalizedNewHp) >= currentCapturePoint)
-            ? (_TILE_VALUE[tile.getType()] ?? 0)
+            ? (tile.getTemplateCfg().aiScoreForCapture ?? 0)
             : 0;
     }
 
@@ -1486,7 +1197,7 @@ namespace WarRobot {
         commonParams            : CommonParams;
         focusUnit               : BwUnit;
         focusUnitGridIndex      : GridIndex;
-        battleDamageInfoArray   : ProtoTypes.Structure.IBattleDamageInfo[];
+        battleDamageInfoArray   : CommonProto.Structure.IBattleDamageInfo[];
     }): Promise<number> {
         await Helpers.checkAndCallLater();
 
@@ -1496,8 +1207,10 @@ namespace WarRobot {
         const tileMap                   = war.getTileMap();
         const unitHpDict                = new Map<BwUnit, number>();
         const tileHpDict                = new Map<BwTile, number>();
-        const scalerForSelfDamage       = Math.pow(1 / Math.max(1, unitValueRatio), 1) * 9999;
-        const scalerForEnemyDamage      = Math.pow(Math.max(1, unitValueRatio), 1) * 9999;
+        // const scalerForSelfDamage       = Math.pow(1 / Math.max(1, unitValueRatio), 1) * 9999;
+        // const scalerForEnemyDamage      = Math.pow(Math.max(1, unitValueRatio), 1) * 9999;
+        const scalerForSelfDamage       = Math.pow(1 / Math.max(1, unitValueRatio), 1);
+        const scalerForEnemyDamage      = Math.pow(Math.max(1, unitValueRatio), 1) * 3;
 
         let totalScore = 0;
         for (const battleDamageInfo of battleDamageInfoArray) {
@@ -1528,11 +1241,7 @@ namespace WarRobot {
 
                 const unitHp2               = Helpers.getExisted(unitHpDict.get(unit2), ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_04);
                 const unitTeamIndex2        = unit2.getTeamIndex();
-                const unitId1               = Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_05);
-                const unit1                 = Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_06);
-                const unitType1             = unit1.getUnitType();
                 const unitProductionCost2   = unit2.getProductionCfgCost();
-                const unitType2             = unit2.getUnitType();
                 const actualDamage          = Math.min(unitHp2, damage);
                 unitHpDict.set(unit2, unitHp2 - actualDamage);
 
@@ -1541,8 +1250,7 @@ namespace WarRobot {
                 let score               = (actualDamage + (isUnitDestroyed ? 30 : 0))
                     * unitProductionCost2 / 1000
                     * (isSelfDamaged ? scalerForSelfDamage : scalerForEnemyDamage)
-                    * (unit2.getHasLoadedCo() ? 2 : 1)
-                    * (_DAMAGE_SCORE_SCALERS[unitType1][unitType2] ?? 1);
+                    * (unit2.getHasLoadedCo() ? 2 : 1);
 
                 {
                     const unitOriginGridIndex2  = unit2.getGridIndex();
@@ -1555,14 +1263,10 @@ namespace WarRobot {
                             if ((captureAmount != null) && (capturePoint != null)) {
                                 score *= captureAmount >= capturePoint ? 2 : 1.1;
 
-                                const tileType2 = tile2.getType();
-                                if (tileType2 === TileType.Headquarters) {
+                                if (tile2.checkIsDefeatOnCapture()) {
                                     score *= 10000;
-                                } else if (
-                                    (tileType2 === TileType.Factory)    ||
-                                    (tileType2 === TileType.Airport)    ||
-                                    (tileType2 === TileType.Seaport)
-                                ) {
+                                }
+                                if (tile2.getCfgProduceUnitCategory()) {
                                     score *= 5;
                                 }
                             }
@@ -1605,7 +1309,7 @@ namespace WarRobot {
         const turnsCount = Math.ceil(currentCapturePoint / captureAmount);
         return turnsCount > 2
             ? 1
-            : (_TILE_VALUE[tile.getType()] ?? 0) / turnsCount;
+            : (tile.getTemplateCfg().aiScoreForCapture ?? 0) / turnsCount;
     }
 
     async function getScoreForActionUnitDive(unit: BwUnit): Promise<number> {
@@ -1614,17 +1318,17 @@ namespace WarRobot {
         return unit.checkIsFuelInShort() ? -10 : 10;
     }
 
-    async function getScoreForActionUnitDropUnit(unit: BwUnit, dropDestinations: ProtoTypes.Structure.IDropDestination[]): Promise<number> {
+    async function getScoreForActionUnitDropUnit(unit: BwUnit, dropDestinations: CommonProto.Structure.IDropDestination[]): Promise<number> {
         await Helpers.checkAndCallLater();
 
         return dropDestinations.length * 100;
     }
 
-    async function getScoreForActionUnitLaunchSilo(commonParams: CommonParams, unitValueMap: number[][], targetGridIndex: GridIndex): Promise<number> {
+    async function getScoreForActionUnitLaunchSilo(commonParams: CommonParams, unitValueMap: number[][], targetGridIndex: GridIndex, siloRadius: number): Promise<number> {
         await Helpers.checkAndCallLater();
 
         let score = 9999;
-        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize: commonParams.mapSize })) {
+        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: siloRadius, mapSize: commonParams.mapSize })) {
             score += unitValueMap[gridIndex.x][gridIndex.y] ?? 0;
         }
 
@@ -1669,11 +1373,27 @@ namespace WarRobot {
     async function getScoreForActionUnitLoadCo(unit: BwUnit): Promise<number> {
         await Helpers.checkAndCallLater();
 
-        if (unit.getUnitType() !== Types.UnitType.Tank) {
-            return -9999;
+        let totalScore      = unit.getCurrentHp() * 100;
+        const scoreArray    = unit.getGameConfig().getCoBasicCfg(unit.getPlayer().getCoId())?.aiBoardUnitTypeAndScore;
+        if (scoreArray == null) {
+            totalScore += -20000;
         } else {
-            return unit.getCurrentHp() * 100;
+            const unitType  = unit.getUnitType();
+            let hasFound    = false;
+            for (let i = 0; i < scoreArray.length; i += 2) {
+                if (scoreArray[i] === unitType) {
+                    hasFound    = true;
+                    totalScore  += scoreArray[i + 1] ?? -20000;
+                    break;
+                }
+            }
+
+            if (!hasFound) {
+                totalScore += -20000;
+            }
         }
+
+        return totalScore;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1683,33 +1403,23 @@ namespace WarRobot {
         return 999999999;
     }
 
-    async function getScoreForActionPlayerProduceUnit({ commonParams, producingGridIndex, producingUnitType, idleFactoriesCount, getMinTurnsCountForAttack }: {
+    async function getScoreForActionPlayerProduceUnit({ commonParams, producingGridIndex, producingUnitType, getMinTurnsCountForAttack }: {
         commonParams                : CommonParams;
         producingGridIndex          : GridIndex;
-        producingUnitType           : UnitType;
-        idleFactoriesCount          : number;
+        producingUnitType           : number;
         getMinTurnsCountForAttack   : (attackerUnit: BwUnit, targetGridIndex: GridIndex) => Promise<number | null>;
     }): Promise<number | null> {
         await Helpers.checkAndCallLater();
 
-        const war = commonParams.war;
-        if (((!_IS_NEED_VISIBILITY) || (!war.getFogMap().checkHasFogCurrently()))               &&
-            ((producingUnitType === UnitType.Flare) || (producingUnitType === UnitType.Recon))
-        ) {
-            return null;
-        }
-
-        if ((producingUnitType === UnitType.TransportCopter)    ||
-            (producingUnitType === UnitType.Rig)                ||
-            (producingUnitType === UnitType.Lander)
-        ) {
+        const war       = commonParams.war;
+        const tileMap   = war.getTileMap();
+        let score       = (war.getGameConfig().getUnitTemplateCfg(producingUnitType)?.aiProductionScore ?? [])[war.getFogMap().checkHasFogCurrently() ? 1 : 0];
+        if ((score == null) || (score <= -999999)) {
             return null;
         }
 
         const playerIndexInTurn = commonParams.playerIndexInTurn;
-        const tileMap           = war.getTileMap();
-        const tileType          = tileMap.getTile(producingGridIndex).getType();
-        const configVersion     = war.getConfigVersion();
+        const gameConfig        = war.getGameConfig();
         const player            = war.getPlayerManager().getPlayer(playerIndexInTurn);
         const producingUnit     = new BwUnit();
         producingUnit.init({
@@ -1717,7 +1427,7 @@ namespace WarRobot {
             unitType    : producingUnitType,
             gridIndex   : producingGridIndex,
             playerIndex : playerIndexInTurn,
-        }, configVersion);
+        }, gameConfig);
         producingUnit.startRunning(war);
 
         const productionCost    = producingUnit.getProductionFinalCost();
@@ -1726,15 +1436,6 @@ namespace WarRobot {
             return null;
         }
 
-        if (producingUnitType !== UnitType.Infantry) {
-            const unitCfg               = ConfigManager.getUnitTemplateCfg(configVersion, UnitType.Infantry);
-            const restFactoriesCount    = tileType === TileType.Factory ? idleFactoriesCount - 1 : idleFactoriesCount;
-            if (restFactoriesCount * unitCfg.productionCost > restFund) {
-                return null;
-            }
-        }
-
-        let score                           = Helpers.getExisted(_PRODUCTION_CANDIDATES[tileType][producingUnitType], ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_00);
         const producingTeamIndex            = producingUnit.getTeamIndex();
         const producingUnitCurrentHp        = producingUnit.getCurrentHp();
         const producingUnitMaxAttackRange   = producingUnit.getFinalMaxAttackRange();
@@ -1742,7 +1443,7 @@ namespace WarRobot {
         const mapSize                       = tileMap.getMapSize();
         const unitValueRatio                = commonParams.unitValueRatio;
         const getProducingUnitMovableArea   = Helpers.createLazyFunc(() => {
-            return WarCommonHelpers.createMovableArea({
+            return WarHelpers.WarCommonHelpers.createMovableArea({
                 origin          : producingGridIndex,
                 maxMoveCost     : Number.MAX_SAFE_INTEGER,
                 mapSize,
@@ -1787,9 +1488,10 @@ namespace WarRobot {
 
                     if (turnsCount != null) {
                         const damage    = Math.min(baseDamage, unitCurrentHp);
-                        canAttack       = true;
                         score           += damage * unit.getProductionCfgCost() / 1000 * Math.max(1, unitValueRatio) / turnsCount;
                     }
+
+                    canAttack = true;
                 }
             }
 
@@ -1798,7 +1500,7 @@ namespace WarRobot {
                 if (baseDamage != null) {
                     const turnsCount = await getMinTurnsCountForAttack(unit, producingGridIndex);
                     if (turnsCount != null) {
-                        const damage    = Math.min(baseDamage * WarCommonHelpers.getNormalizedHp(unitCurrentHp) / unit.getNormalizedMaxHp(), producingUnitCurrentHp);
+                        const damage    = Math.min(baseDamage * WarHelpers.WarCommonHelpers.getNormalizedHp(unitCurrentHp) / unit.getNormalizedMaxHp(), producingUnitCurrentHp);
                         score           += -damage * productionCost / 1000 / Math.max(1, unitValueRatio) / turnsCount;
                     }
                 }
@@ -1897,7 +1599,7 @@ namespace WarRobot {
             promiseArray.push((async () => {
                 await Helpers.checkAndCallLater();
 
-                const battleDamageInfoArray = WarDamageCalculator.getEstimatedBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
+                const battleDamageInfoArray = WarHelpers.WarDamageCalculator.getEstimatedBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
                 return {
                     score   : await getScoreForActionUnitAttack({
                         commonParams,
@@ -2013,7 +1715,7 @@ namespace WarRobot {
                 }
             });
 
-        const dropDestinations: ProtoTypes.Structure.IDropDestination[] = [];
+        const dropDestinations: CommonProto.Structure.IDropDestination[] = [];
         for (const loadedUnit of loadedUnitArray) {
             const index = targetTileArray.findIndex(v => commonParams.getCachedMoveCost(loadedUnit, v) != null);
             if (index >= 0) {
@@ -2058,24 +1760,26 @@ namespace WarRobot {
         const unitValueMap                              = Helpers.createEmptyMap<number>(mapWidth, mapHeight);
         const teamIndex                                 = unit.getTeamIndex();
         const unitMap                                   = war.getUnitMap();
-        for (let x = 0; x < mapWidth; ++x) {
+        const launchSiloParams                          = Helpers.getExisted(war.getGameConfig().getTileObjectCfg(tile.getObjectType())?.launchSiloParams, ClientErrorCode.SpwRobot_GetScoreAndActionUnitLaunchSilo_00);
+        const siloDamage                                = Helpers.getExisted(launchSiloParams[3], ClientErrorCode.SpwRobot_GetScoreAndActionUnitLaunchSilo_01);
+            for (let x = 0; x < mapWidth; ++x) {
             for (let y = 0; y < mapHeight; ++y) {
                 const targetUnit = unitMap.getUnitOnMap({ x, y });
                 if ((!targetUnit) || (targetUnit === unit)) {
                     unitValueMap[x][y] = 0;
                 } else {
-                    const value         = Math.min(CommonConstants.SiloDamage, targetUnit.getCurrentHp() - 1) * targetUnit.getProductionCfgCost();
+                    const value         = Math.min(siloDamage, targetUnit.getCurrentHp() - 1) * targetUnit.getProductionCfgCost();
                     unitValueMap[x][y]  = targetUnit.getTeamIndex() === teamIndex ? -value : value;
                 }
             }
         }
-        unitValueMap[gridIndex.x][gridIndex.y] = -Math.min(CommonConstants.SiloDamage, unit.getCurrentHp() - 1) * unit.getProductionCfgCost();
+        unitValueMap[gridIndex.x][gridIndex.y] = -Math.min(siloDamage, unit.getCurrentHp() - 1) * unit.getProductionCfgCost();
 
         let scoreAndGridIndex: { score: number, gridIndex: GridIndex } | null = null;
         for (let x = 0; x < mapWidth; ++x) {
             for (let y = 0; y < mapHeight; ++y) {
                 const newTargetGridIndex    : GridIndex = { x, y };
-                const newMaxScore           = await getScoreForActionUnitLaunchSilo(commonParams, unitValueMap, newTargetGridIndex);
+                const newMaxScore           = await getScoreForActionUnitLaunchSilo(commonParams, unitValueMap, newTargetGridIndex, launchSiloParams[2]);
                 if (scoreAndGridIndex == null) {
                     scoreAndGridIndex = {
                         score       : newMaxScore,
@@ -2138,6 +1842,49 @@ namespace WarRobot {
         }
 
         return getBestScoreAndAction(await Promise.all(promiseArray), commonParams);
+    }
+
+    async function getScoreAndActionUnitProduceUnit(commonParams: CommonParams, unit: BwUnit, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
+        await Helpers.checkAndCallLater();
+
+        if ((pathNodes.length !== 1) || (unit.getLoaderUnitId() != null)) {
+            return null;
+        }
+
+        const produceUnitType   = unit.getProduceUnitType();
+        const material          = unit.getCurrentProduceMaterial();
+        const maxLoadUnitsCount = unit.getMaxLoadUnitsCount();
+        const war               = commonParams.war;
+        const playerIndex       = commonParams.playerIndexInTurn;
+        if ((produceUnitType == null)                                                                                           ||
+            (material == null)                                                                                                  ||
+            (material <= 0)                                                                                                     ||
+            (maxLoadUnitsCount == null)                                                                                         ||
+            (unit.getLoadedUnitsCount() >= maxLoadUnitsCount)                                                                   ||
+            ((war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerIndex) ?? []).indexOf(produceUnitType) >= 0)   ||
+            (war.getWarEventManager().checkOngoingPersistentActionBannedUnitType(playerIndex, produceUnitType))
+        ) {
+            return null;
+        }
+
+        const score = (war.getGameConfig().getUnitTemplateCfg(produceUnitType)?.aiProductionScore ?? [])[war.getFogMap().checkHasFogCurrently() ? 1 : 0];
+        if ((score == null)                                             ||
+            (unit.getProduceUnitCost() > war.getPlayerInTurn().getFund())
+         ) {
+            return null;
+        }
+
+        return {
+            score   : score + 1,
+            action  : { WarActionUnitProduceUnit: {
+                path    : {
+                    nodes           : pathNodes,
+                    fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                    isBlocked       : false,
+                },
+                launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
+            }},
+        };
     }
 
     async function getScoreAndActionUnitSurface(unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
@@ -2205,12 +1952,12 @@ namespace WarRobot {
         const playerIndexInTurn = commonParams.playerIndexInTurn;
         const unitsInfo         = Helpers.getExisted(commonParams.unitsInfoDict.get(playerIndexInTurn), ClientErrorCode.SpwRobot_GetScoreAndActionUnitUseCoSkill_00);
         const player            = war.getPlayer(playerIndexInTurn);
-        const configVersion     = war.getConfigVersion();
         const idleUnitsCount    = unitsInfo.idleCountOnMap;
         const allUnitsCount     = unitsInfo.allCountOnMap;
+        const gameConfig        = war.getGameConfig();
 
         if (unit.checkCanUseCoSkill(CoSkillType.SuperPower)) {
-            const canResetState = player.getCoSkills(CoSkillType.SuperPower).map(v => ConfigManager.getCoSkillCfg(configVersion, v)).some(v => v.selfUnitActionState);
+            const canResetState = player.getCoSkills(CoSkillType.SuperPower).map(v => gameConfig.getCoSkillCfg(v)).some(v => v?.selfUnitActionState != null);
             if (((canResetState) && (idleUnitsCount > 0))                       ||
                 ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
             ) {
@@ -2232,7 +1979,7 @@ namespace WarRobot {
         }
 
         if (unit.checkCanUseCoSkill(Types.CoSkillType.Power)) {
-            const canResetState = player.getCoSkills(CoSkillType.Power).map(v => ConfigManager.getCoSkillCfg(configVersion, v)).some(v => v.selfUnitActionState);
+            const canResetState = player.getCoSkills(CoSkillType.Power).map(v => gameConfig.getCoSkillCfg(v)).some(v => v?.selfUnitActionState != null);
             if ((player.getCoCurrentEnergy() > Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetScoreAndActionUnitUseCoSkill_01) * 1.1)  ||
                 ((canResetState) && (idleUnitsCount > 0))                       ||
                 ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
@@ -2281,6 +2028,7 @@ namespace WarRobot {
             getScoreAndActionUnitDropUnit({ commonParams, unit, gridIndex, pathNodes }),
             getScoreAndActionUnitLaunchSilo(commonParams, unit, gridIndex, pathNodes),
             getScoreAndActionUnitLaunchFlare(commonParams, unit, gridIndex, pathNodes),
+            getScoreAndActionUnitProduceUnit(commonParams, unit, pathNodes),
             getScoreAndActionUnitSurface(unit, gridIndex, pathNodes),
             getScoreAndActionUnitWait(unit, pathNodes),
             getScoreAndActionUnitLoadCo(unit, pathNodes),
@@ -2327,11 +2075,20 @@ namespace WarRobot {
             return null;
         }
 
+        const bestScoreAndActionDict = commonParams.bestScoreAndActionDict;
+        {
+            const bestScoreAndAction = bestScoreAndActionDict.get(candidateUnit);
+            if (bestScoreAndAction) {
+                return bestScoreAndAction;
+            }
+        }
+
         const reachableArea             = await getReachableArea({ commonParams, unit: candidateUnit, passableGridIndex: null, blockedGridIndex: null });
         const damageMapForSurface       = await createDamageMap(commonParams, candidateUnit, false);
         const damageMapForDive          = candidateUnit.checkIsDiver() ? await createDamageMap(commonParams, candidateUnit, true) : null;
         const originGridIndex           = candidateUnit.getGridIndex();
         const scoreDictForThreatEnemy   = new Map<BwUnit, number>();
+        const canLaunchUnit             = (candidateUnit.checkCanLaunchLoadedUnit()) && (candidateUnit.getLoadedUnits().some(v => ((v.getActionState() === UnitActionState.Idle) && (v.checkCanAiDoAction()) && (v.getFinalMoveRange() > 0))));
         // const scoreMapForDistance       = await _createScoreMapForDistance(candidateUnit);
         const { width: mapWidth, height: mapHeight }    = commonParams.mapSize;
         const promiseArray                              : Promise<ScoreAndAction | null>[] = [];
@@ -2358,15 +2115,16 @@ namespace WarRobot {
                         }
                     }
 
-                    const pathNodes         = WarCommonHelpers.createShortestMovePath(reachableArea, gridIndex);
+                    const pathNodes         = WarHelpers.WarCommonHelpers.createShortestMovePath(reachableArea, gridIndex);
                     const scoreAndAction    = await getBestScoreAndActionForUnitAndPath(commonParams, candidateUnit, gridIndex, pathNodes);
                     if (scoreAndAction == null) {
                         return null;
                     }
 
-                    const action            = scoreAndAction.action;
-                    const scoreForMovePath  = await getScoreForMovePath(commonParams, candidateUnit, pathNodes);
-                    const scoreForPosition  = await getScoreForPosition({
+                    const action                = scoreAndAction.action;
+                    const scoreForLaunchUnit    = ((pathNodes.length === 1) && (canLaunchUnit)) ? -999 : 1;
+                    const scoreForMovePath      = await getScoreForMovePath(commonParams, candidateUnit, pathNodes);
+                    const scoreForPosition      = await getScoreForPosition({
                         commonParams,
                         unit                    : candidateUnit,
                         gridIndex,
@@ -2374,40 +2132,51 @@ namespace WarRobot {
                         scoreDictForThreatEnemy,
                     });
                     return {
-                        score   : scoreAndAction.score + scoreForMovePath + scoreForPosition,
+                        score   : scoreAndAction.score + scoreForLaunchUnit + scoreForMovePath + scoreForPosition,
                         action,
                     };
                 })());
             }
         }
 
-        return getBestScoreAndAction(await Promise.all(promiseArray), commonParams);
+        const bestScoreAndAction = getBestScoreAndAction(await Promise.all(promiseArray), commonParams);
+        if (bestScoreAndAction) {
+            bestScoreAndActionDict.set(candidateUnit, bestScoreAndAction);
+        }
+        return bestScoreAndAction;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The available action generators for production.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function getBestScoreAndActionPlayerProduceUnitWithGridIndex({ commonParams, gridIndex, idleFactoriesCount, getMinTurnsCountForAttack }: {
+    async function getBestScoreAndActionPlayerProduceUnitWithGridIndex({ commonParams, gridIndex, getMinTurnsCountForAttack }: {
         commonParams                : CommonParams;
         gridIndex                   : GridIndex;
-        idleFactoriesCount          : number;
         getMinTurnsCountForAttack   : (attackerUnit: BwUnit, targetGridIndex: GridIndex) => Promise<number | null>;
     }): Promise<ScoreAndAction | null> {
         await Helpers.checkAndCallLater();
 
         const war           = commonParams.war;
-        const unitCategory  = war.getTileMap().getTile(gridIndex).getProduceUnitCategoryForPlayer(commonParams.playerIndexInTurn);
+        const playerIndex   = commonParams.playerIndexInTurn;
+        const unitCategory  = war.getTileMap().getTile(gridIndex).getProduceUnitCategoryForPlayer(playerIndex);
         if (unitCategory == null) {
             return null;
         }
 
-        let bestScoreAndUnitType: { score: number, unitType: UnitType } | null = null;
-        for (const unitType of ConfigManager.getUnitTypesByCategory(war.getConfigVersion(), unitCategory)) {
+        const warEventManager       = war.getWarEventManager();
+        const bannedUnitTypeArray   = war.getCommonSettingManager().getSettingsBannedUnitTypeArray(playerIndex) ?? [];
+        let bestScoreAndUnitType    : { score: number, unitType: number } | null = null;
+        for (const unitType of war.getGameConfig().getUnitTypesByCategory(unitCategory) ?? []) {
+            if ((bannedUnitTypeArray.indexOf(unitType) >= 0)                                        ||
+                (warEventManager.checkOngoingPersistentActionBannedUnitType(playerIndex, unitType))
+            ) {
+                continue;
+            }
+
             const score = await getScoreForActionPlayerProduceUnit({
                 commonParams,
                 producingGridIndex          : gridIndex,
                 producingUnitType           : unitType,
-                idleFactoriesCount,
                 getMinTurnsCountForAttack,
             });
             if (score == null) {
@@ -2443,14 +2212,13 @@ namespace WarRobot {
         await Helpers.checkAndCallLater();
 
         const { war, playerIndexInTurn } = commonParams;
-        if (playerIndexInTurn === CommonConstants.WarNeutralPlayerIndex) {
+        if (playerIndexInTurn === CommonConstants.PlayerIndex.Neutral) {
             return null;
         }
 
         const idleBuildingPosList   : GridIndex[] = [];
         const unitMap               = war.getUnitMap();
         const tileMap               = war.getTileMap();
-        let idleFactoriesCount      = 0;
 
         for (const tile of war.getTileMap().getAllTiles()) {
             const gridIndex = tile.getGridIndex();
@@ -2458,9 +2226,6 @@ namespace WarRobot {
                 (tile.checkIsUnitProducerForPlayer(playerIndexInTurn))
             ) {
                 idleBuildingPosList.push(gridIndex);
-                if (tile.getType() === TileType.Factory) {
-                    ++idleFactoriesCount;
-                }
             }
         }
 
@@ -2480,7 +2245,7 @@ namespace WarRobot {
 
             if (!movableAreaDict.has(attackerUnit)) {
                 await Helpers.checkAndCallLater();
-                movableAreaDict.set(attackerUnit, WarCommonHelpers.createMovableArea({
+                movableAreaDict.set(attackerUnit, WarHelpers.WarCommonHelpers.createMovableArea({
                     origin          : attackerUnit.getGridIndex(),
                     maxMoveCost     : Number.MAX_SAFE_INTEGER,
                     mapSize,
@@ -2533,7 +2298,6 @@ namespace WarRobot {
             promiseArray.push(getBestScoreAndActionPlayerProduceUnitWithGridIndex({
                 commonParams,
                 gridIndex,
-                idleFactoriesCount,
                 getMinTurnsCountForAttack,
             }));
         }
@@ -2606,7 +2370,6 @@ namespace WarRobot {
     async function getActionForPhase1(commonParams: CommonParams): Promise<IWarActionContainer | null> {
         const war               = commonParams.war;
         const playerIndexInTurn = commonParams.playerIndexInTurn;
-        const configVersion     = war.getConfigVersion();
         const player            = war.getPlayer(playerIndexInTurn);
         const coType            = player.getCoType();
 
@@ -2614,8 +2377,9 @@ namespace WarRobot {
             const unitsInfo         = Helpers.getExisted(commonParams.unitsInfoDict.get(playerIndexInTurn), ClientErrorCode.SpwRobot_GetActionForPhase1_00);
             const allUnitsCount     = unitsInfo.allCountOnMap;
             const idleUnitsCount    = unitsInfo.idleCountOnMap;
+            const gameConfig        = war.getGameConfig();
             if (player.checkCanUseCoSkill(CoSkillType.SuperPower)) {
-                const canResetState = player.getCoSkills(CoSkillType.SuperPower).map(v => ConfigManager.getCoSkillCfg(configVersion, v)).some(v => v.selfUnitActionState);
+                const canResetState = player.getCoSkills(CoSkillType.SuperPower).map(v => gameConfig.getCoSkillCfg(v)).some(v => v?.selfUnitActionState != null);
                 if (((canResetState) && (idleUnitsCount > 0))                       ||
                     ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
                 ) {
@@ -2629,7 +2393,7 @@ namespace WarRobot {
                 }
 
             } else if (player.checkCanUseCoSkill(Types.CoSkillType.Power)) {
-                const canResetState = player.getCoSkills(CoSkillType.Power).map(v => ConfigManager.getCoSkillCfg(configVersion, v)).some(v => v.selfUnitActionState);
+                const canResetState = player.getCoSkills(CoSkillType.Power).map(v => gameConfig.getCoSkillCfg(v)).some(v => v?.selfUnitActionState != null);
                 if ((player.getCoCurrentEnergy() > Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetActionForPhase1_01) * 1.1)   ||
                     ((canResetState) && (idleUnitsCount > 0))                                                                                               ||
                     ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
@@ -2649,22 +2413,11 @@ namespace WarRobot {
         }
 
         if (coType === Types.CoType.Zoned) {
-            const bestActionDict = commonParams.bestActionDict;
             for (const unit of await getCandidateUnitsForPhase1(commonParams)) {
-                {
-                    const existingBestAction = bestActionDict.get(unit);
-                    if (existingBestAction) {
-                        return existingBestAction;
-                    }
-                }
-
                 const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
-                if (action == null) {
-                    continue;
+                if (action) {
+                    return action;
                 }
-
-                bestActionDict.set(unit, action);
-                return action;
             }
 
             return null;
@@ -3308,7 +3061,10 @@ namespace WarRobot {
     async function getActionForPhase11(commonParams: CommonParams): Promise<IWarActionContainer | null> {
         await Helpers.checkAndCallLater();
 
-        if (commonParams.war.getDrawVoteManager().getRemainingVotes() == null) {
+        const war = commonParams.war;
+        if ((war.getDrawVoteManager().getRemainingVotes() == null) ||
+            (war.getPlayerInTurn().getHasVotedForDraw())
+        ) {
             return null;
         } else {
             return {
@@ -3343,7 +3099,7 @@ namespace WarRobot {
     ];
     async function doGetNextAction(war: BwWar): Promise<IWarActionContainer> {
         const commonParams = await getCommonParams(war);
-        if (war.getPlayerIndexInTurn() === CommonConstants.WarNeutralPlayerIndex) {
+        if (war.getPlayerIndexInTurn() === CommonConstants.PlayerIndex.Neutral) {
             throw Helpers.newError(`Invalid playerIndexInTurn.`, ClientErrorCode.SpwRobot_DoGetNextAction_00);
         }
 

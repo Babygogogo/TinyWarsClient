@@ -4,14 +4,14 @@
 // import ProtoTypes   from "../../tools/proto/ProtoTypes";
 // import SpwModel     from "./SpwModel";
 
-namespace SpwLocalProxy {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.SinglePlayerWar.SpwLocalProxy {
     import GridIndex    = Types.GridIndex;
-    import UnitType     = Types.UnitType;
-    import IMovePath    = ProtoTypes.Structure.IMovePath;
-    import BwWar        = TwnsBwWar.BwWar;
+    import IMovePath    = CommonProto.Structure.IMovePath;
+    import BwWar        = BaseWar.BwWar;
 
     export function reqPlayerDeleteUnit(war: BwWar, gridIndex: GridIndex): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerDeleteUnit   : {
                 gridIndex,
@@ -20,7 +20,7 @@ namespace SpwLocalProxy {
     }
 
     export function reqPlayerEndTurn(war: BwWar): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerEndTurn  : {},
         });
@@ -29,10 +29,10 @@ namespace SpwLocalProxy {
     export function reqPlayerProduceUnit({ war, gridIndex, unitType, unitHp }: {
         war         : BwWar;
         gridIndex   : GridIndex;
-        unitType    : UnitType;
+        unitType    : number;
         unitHp      : number;
     }): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerProduceUnit  : {
                 gridIndex,
@@ -43,7 +43,7 @@ namespace SpwLocalProxy {
     }
 
     export function reqPlayerUseCoSkill(war: BwWar, skillType: Types.CoSkillType): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerUseCoSkill   : {
                 skillType,
@@ -52,7 +52,7 @@ namespace SpwLocalProxy {
     }
 
     export function reqPlayerVoteForDraw(war: BwWar, isAgree: boolean): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerVoteForDraw  : {
                 isAgree,
@@ -61,7 +61,7 @@ namespace SpwLocalProxy {
     }
 
     export function reqPlayerSurrender(war: BwWar): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerSurrender    : {
             },
@@ -74,7 +74,7 @@ namespace SpwLocalProxy {
         launchUnitId    : number | null;
         targetGridIndex : GridIndex;
     }): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitAttackUnit : {
                 path,
@@ -90,7 +90,7 @@ namespace SpwLocalProxy {
         launchUnitId    : number | null;
         targetGridIndex : GridIndex;
     }): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitAttackTile : {
                 path,
@@ -101,7 +101,7 @@ namespace SpwLocalProxy {
     }
 
     export function reqUnitBeLoaded(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitBeLoaded   : {
                 path,
@@ -111,7 +111,7 @@ namespace SpwLocalProxy {
     }
 
     export function reqUnitBuildTile(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitBuildTile  : {
                 path,
@@ -121,7 +121,7 @@ namespace SpwLocalProxy {
     }
 
     export function reqUnitCaptureTile(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitCaptureTile: {
                 path,
@@ -131,7 +131,7 @@ namespace SpwLocalProxy {
     }
 
     export function reqUnitDive(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitDive   : {
                 path,
@@ -146,7 +146,7 @@ namespace SpwLocalProxy {
         launchUnitId    : number | null;
         dropDestinations: Types.DropDestination[];
     }): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitDropUnit   : {
                 path,
@@ -157,7 +157,7 @@ namespace SpwLocalProxy {
     }
 
     export function reqUnitJoin(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitJoinUnit   : {
                 path,
@@ -172,7 +172,7 @@ namespace SpwLocalProxy {
         launchUnitId    : number | null;
         targetGridIndex : GridIndex;
     }): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitLaunchFlare    : {
                 path,
@@ -188,7 +188,7 @@ namespace SpwLocalProxy {
         launchUnitId    : number | null;
         targetGridIndex : GridIndex;
     }): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitLaunchSilo : {
                 path,
@@ -199,7 +199,7 @@ namespace SpwLocalProxy {
     }
 
     export function reqUnitLoadCo(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitLoadCo : {
                 path,
@@ -209,7 +209,7 @@ namespace SpwLocalProxy {
     }
 
     export function reqUnitProduceUnit(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitProduceUnit    : {
                 path,
@@ -219,7 +219,7 @@ namespace SpwLocalProxy {
     }
 
     export function reqUnitSupply(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitSupplyUnit : {
                 path,
@@ -229,7 +229,7 @@ namespace SpwLocalProxy {
     }
 
     export function reqUnitSurface(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitSurface    : {
                 path,
@@ -244,7 +244,7 @@ namespace SpwLocalProxy {
         path            : IMovePath;
         launchUnitId    : number | null;
     }): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitUseCoSkill : {
                 skillType,
@@ -255,7 +255,7 @@ namespace SpwLocalProxy {
     }
 
     export function reqUnitWait(war: BwWar, path: IMovePath, launchUnitId: number | null): void {
-        SpwModel.handlePlayerActionAndAutoActions(war, {
+        SinglePlayerWar.SpwModel.handlePlayerActionAndAutoActions(war, {
             actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitWait   : {
                 path,

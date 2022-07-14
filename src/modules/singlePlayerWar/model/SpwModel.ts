@@ -19,18 +19,17 @@
 // import TwnsSpwWar           from "./SpwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace SpwModel {
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import SpwWar                   = TwnsSpwWar.SpwWar;
-    import ScwWar                   = TwnsScwWar.ScwWar;
-    import SfwWar                   = TwnsSfwWar.SfwWar;
-    import SrwWar                   = TwnsSrwWar.SrwWar;
-    import SpwPlayerManager         = TwnsSpwPlayerManager.SpwPlayerManager;
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import WarSerialization         = ProtoTypes.WarSerialization;
-    import IWarActionContainer      = ProtoTypes.WarAction.IWarActionContainer;
-    import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
-    import BwWar                    = TwnsBwWar.BwWar;
+namespace Twns.SinglePlayerWar.SpwModel {
+    import SpwWar                   = SinglePlayerWar.SpwWar;
+    import ScwWar                   = SingleCustomWar.ScwWar;
+    import SfwWar                   = SingleFreeWar.SfwWar;
+    import SrwWar                   = SingleRankWar.SrwWar;
+    import SpwPlayerManager         = SinglePlayerWar.SpwPlayerManager;
+    import LangTextType             = Lang.LangTextType;
+    import WarSerialization         = CommonProto.WarSerialization;
+    import IWarActionContainer      = CommonProto.WarAction.IWarActionContainer;
+    import ISpmWarSaveSlotExtraData = CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+    import BwWar                    = BaseWar.BwWar;
 
     let _war: SpwWar | null = null;
 
@@ -51,8 +50,9 @@ namespace SpwModel {
             unloadWar();
         }
 
-        const war = createWarByWarData(warData);
-        await war.init(warData);
+        const data  = Helpers.deepClone(warData);
+        const war   = createWarByWarData(data);
+        war.init(data, await Config.ConfigManager.getGameConfig(Helpers.getExisted(data.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         war.setSaveSlotIndex(slotIndex);
         war.setSaveSlotExtraData(slotExtraData);
@@ -107,10 +107,18 @@ namespace SpwModel {
 
         if (war.checkIsHumanInTurn()) {
             _warsWithRobotRunning.delete(war);
+
+            if (war instanceof SpwWar) {
+                const retractManager = war.getRetractManager();
+                if (retractManager.getCanRetract()) {
+                    retractManager.addRetractState(ProtoManager.encodeAsSerialWar(war.serialize()));
+                }
+            }
+
             return;
         }
 
-        const robotAction = await WarRobot.getNextAction(war);
+        const robotAction = await WarHelpers.WarRobot.getNextAction(war);
         if (!war.getIsRunning()) {
             _warsWithRobotRunning.delete(war);
             return;
@@ -144,7 +152,7 @@ namespace SpwModel {
 
         const callback = () => FlowManager.gotoLobby();
         if (war.getDrawVoteManager().checkIsDraw()) {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                 title   : Lang.getText(LangTextType.B0088),
                 content : Lang.getText(LangTextType.A0030),
                 callback,
@@ -152,36 +160,36 @@ namespace SpwModel {
         } else {
             const humanPlayerArray = (war.getPlayerManager() as SpwPlayerManager).getHumanPlayers();
             if (humanPlayerArray.length <= 0) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0035),
                     callback,
                 });
             } else {
                 if (humanPlayerArray.every(v => v.getAliveState() === Types.PlayerAliveState.Dead)) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0023),
                         callback,
                     });
                 } else {
                     if (war instanceof SrwWar) {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                             title   : Lang.getText(LangTextType.B0088),
                             content : Lang.getFormattedText(LangTextType.F0127, war.calculateTotalScore()),
                             callback: () => {
                                 callback();
 
-                                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                                     content : Lang.getText(LangTextType.A0277),
                                     callback: () => {
-                                        SpmProxy.reqSpmValidateSrw(war);
+                                        SinglePlayerMode.SpmProxy.reqSpmValidateSrw(war);
                                     },
                                 });
                             },
                         });
                     } else {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                        PanelHelpers.open(PanelHelpers.PanelDict.CommonAlertPanel, {
                             title   : Lang.getText(LangTextType.B0088),
                             content : Lang.getText(LangTextType.A0022),
                             callback,
@@ -197,6 +205,36 @@ namespace SpwModel {
     async function checkAndHandleSystemActions(war: BwWar): Promise<boolean> {
         if ((war == null) || (war.getIsEnded())) {
             return false;
+        }
+
+        // Handle turns limit.
+        const playerManager     = war.getPlayerManager();
+        const playerInTurn      = playerManager.getPlayerInTurn();
+        const hasVotedForDraw   = playerInTurn.getHasVotedForDraw();
+        const turnPhaseCode     = war.getTurnPhaseCode();
+        const turnIndex         = war.getTurnManager().getTurnIndex();
+        if (war.checkIsExceedTurnsOrWarActionsLimit()) {
+            if (war.checkCanEnd()) {
+                await handleSystemEndWar(war);
+                await checkAndHandleSystemActions(war);
+                return true;
+            }
+
+            if (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn) {
+                await handleSystemBeginTurn(war);
+                await checkAndHandleSystemActions(war);
+                return true;
+            }
+
+            if (!hasVotedForDraw) {
+                await handleSystemVoteForDraw(war, true);
+                await checkAndHandleSystemActions(war);
+                return true;
+            } else {
+                await handleSystemEndTurn(war);
+                await checkAndHandleSystemActions(war);
+                return true;
+            }
         }
 
         // Handle war events.
@@ -215,8 +253,6 @@ namespace SpwModel {
         }
 
         // Handle the WaitBeginTurn phase.
-        const turnPhaseCode = war.getTurnPhaseCode();
-        const playerManager = war.getPlayerManager();
         if (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn) {
             await handleSystemBeginTurn(war);
             await checkAndHandleSystemActions(war);
@@ -225,25 +261,10 @@ namespace SpwModel {
 
         // Handle the dying players (destroy force).
         const playersCount = playerManager.getTotalPlayersCount(false);
-        for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
+        for (let playerIndex = CommonConstants.PlayerIndex.First; playerIndex <= playersCount; ++playerIndex) {
             const player = playerManager.getPlayer(playerIndex);
             if (player.getAliveState() === Types.PlayerAliveState.Dying) {
                 await handleSystemDestroyPlayerForce(war, playerIndex);
-                await checkAndHandleSystemActions(war);
-                return true;
-            }
-        }
-
-        // Handle turns limit.
-        const playerInTurn      = playerManager.getPlayerInTurn();
-        const hasVotedForDraw   = playerInTurn.getHasVotedForDraw();
-        if (war.getTurnManager().getTurnIndex() > war.getCommonSettingManager().getTurnsLimit()) {
-            if (!hasVotedForDraw) {
-                await handleSystemVoteForDraw(war, true);
-                await checkAndHandleSystemActions(war);
-                return true;
-            } else {
-                await handleSystemEndTurn(war);
                 await checkAndHandleSystemActions(war);
                 return true;
             }
@@ -256,7 +277,7 @@ namespace SpwModel {
                 throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_00);
             }
 
-            if (!playerInTurn.getHasTakenManualAction()) {
+            if (!war.getWarStatisticsManager().getManualActionsCount(turnIndex, playerInTurn.getPlayerIndex())) {
                 await handleSystemHandleBootPlayer(war);
                 await checkAndHandleSystemActions(war);
                 return true;
@@ -285,7 +306,8 @@ namespace SpwModel {
 
         // Handle system end turn.
         if ((playerInTurn.checkIsNeutral())                                 ||
-            (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead)
+            (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead)  ||
+            (playerInTurn.getIsSkipTurn())
         ) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
                 throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_01);
@@ -353,13 +375,13 @@ namespace SpwModel {
     }
 
     async function reviseAndExecute(war: BwWar, action: IWarActionContainer): Promise<void> {
-        const revisedAction = WarActionReviser.revise(war, action);
-        await WarActionExecutor.checkAndExecute(war, revisedAction, false);
+        const revisedAction = WarHelpers.WarActionReviser.revise(war, action);
+        await WarHelpers.WarActionExecutor.checkAndExecute(war, revisedAction, false);
 
         war.getExecutedActionManager().addExecutedAction(revisedAction);
     }
 
-    function createWarByWarData(warData: ProtoTypes.WarSerialization.ISerialWar): SpwWar {
+    function createWarByWarData(warData: CommonProto.WarSerialization.ISerialWar): SpwWar {
         if (warData.settingsForScw) {
             return new ScwWar();
         } else if (warData.settingsForSfw) {

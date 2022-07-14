@@ -4,7 +4,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
@@ -16,15 +16,15 @@
 // import ScrCreateModel           from "../model/ScrCreateModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSpmCreateSaveSlotsPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.SinglePlayerMode {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
 
-    export type OpenData = {
+    export type OpenDataForSpmCreateSaveSlotsPanel = {
         currentSlotIndex    : number;
         callback            : (slotIndex: number) => void;
     };
-    export class SpmCreateSaveSlotsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class SpmCreateSaveSlotsPanel extends TwnsUiPanel.UiPanel<OpenDataForSpmCreateSaveSlotsPanel> {
         private readonly _group!            : eui.Group;
         private readonly _labelPanelTitle!  : TwnsUiLabel.UiLabel;
         private readonly _srlSaveSlot!      : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
@@ -65,10 +65,10 @@ namespace TwnsSpmCreateSaveSlotsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this._srlSaveSlot.bindData(this._createDataForList());
+            this._srlSaveSlot.bindData(await this._createDataForList());
             this._listSaveSlot.selectedIndex = this._getOpenData().currentSlotIndex;
         }
 
@@ -77,14 +77,13 @@ namespace TwnsSpmCreateSaveSlotsPanel {
             this._btnCancel.label       = Lang.getText(LangTextType.B0154);
         }
 
-        private _createDataForList(): DataForSlotRenderer[] {
+        private async _createDataForList(): Promise<DataForSlotRenderer[]> {
             const dataList  : DataForSlotRenderer[] = [];
-            const slotDict  = SpmModel.getSlotDict();
             const callback  = this._getOpenData().callback;
-            for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
+            for (let slotIndex = 0; slotIndex < Twns.CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
-                    slotInfo    : slotDict.get(slotIndex) ?? null,
+                    slotInfo    : await Twns.SinglePlayerMode.SpmModel.getSlotFullData(slotIndex),
                     callback,
                 });
             }
@@ -95,7 +94,7 @@ namespace TwnsSpmCreateSaveSlotsPanel {
 
     type DataForSlotRenderer = {
         slotIndex   : number;
-        slotInfo    : Types.SpmWarSaveSlotData | null;
+        slotInfo    : Twns.Types.SpmWarSaveSlotData | null;
         callback    : (slotIndex: number) => void;
     };
     class SlotRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSlotRenderer> {
@@ -122,7 +121,7 @@ namespace TwnsSpmCreateSaveSlotsPanel {
         private _onTouchedImgBg(): void {
             const data = this._getData();
             data.callback(data.slotIndex);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.SpmCreateSaveSlotsPanel);
+            Twns.PanelHelpers.close(Twns.PanelHelpers.PanelDict.SpmCreateSaveSlotsPanel);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,16 +139,16 @@ namespace TwnsSpmCreateSaveSlotsPanel {
                 labelMapName.text   = `----`;
             } else {
                 const warData   = slotInfo.warData;
-                labelType.text  = Lang.getWarTypeName(WarCommonHelpers.getWarType(warData)) || CommonConstants.ErrorTextForUndefined;
+                labelType.text  = Lang.getWarTypeName(Twns.WarHelpers.WarCommonHelpers.getWarType(warData)) || Twns.CommonConstants.ErrorTextForUndefined;
 
                 const slotComment = slotInfo.extraData.slotComment;
                 if (slotComment) {
                     labelMapName.text = slotComment;
                 } else {
-                    const mapId         = WarCommonHelpers.getMapId(warData);
+                    const mapId         = Twns.WarHelpers.WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
+                        : (await Twns.WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) || Twns.CommonConstants.ErrorTextForUndefined);
                 }
             }
         }

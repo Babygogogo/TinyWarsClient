@@ -91,17 +91,6 @@
                             <TwnsUiImage:UiImage left="10" right="0" top="0" bottom="0" x="10" y="10"
                                                  source="uncompressedPentagon0003" visible.up="false"
                                                  scale9Grid="4,4,1,1" />
-                            <TwnsUiButton:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0"
-                                                   visible.down="false">
-                                <TwnsUiButton:skinName>
-                                    <e:Skin states="up,down,disabled">
-                                        <e:Image source="uncompressedColorTransparent0000" left="0" right="0" top="0"
-                                                 bottom="0" />
-                                        <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="22"
-                                                 bold="true" textColor="0x000000" />
-                                    </e:Skin>
-                                </TwnsUiButton:skinName>
-                            </TwnsUiButton:UiButton>
                             <TwnsUiLabel:UiLabel id="_labelName" text="地图名称" size="16" verticalCenter="0" x="20"
                                                  maxTextWidth="150" />
                             <TwnsUiImage:UiImage id="_imgPassword" x="0" source="commonIcon0000" verticalCenter="0" />

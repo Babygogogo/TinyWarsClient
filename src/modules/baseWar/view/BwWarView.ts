@@ -6,14 +6,14 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Notify                   from "../../tools/notify/Notify";
 // import NotifyData               from "../../tools/notify/NotifyData";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import TwnsUiZoomableComponent  from "../../tools/ui/UiZoomableComponent";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwWarView {
-    import NotifyType   = TwnsNotifyType.NotifyType;
-    import GridIndex    = Types.GridIndex;
-    import Point        = Types.Point;
+namespace Twns.BaseWar {
+    import NotifyType   = Twns.Notify.NotifyType;
+    import GridIndex    = Twns.Types.GridIndex;
+    import Point        = Twns.Types.Point;
 
     const CENTRAL_PADDING = 120;
 
@@ -36,20 +36,22 @@ namespace TwnsBwWarView {
     ]);
 
     export class BwWarView extends eui.Group {
-        private _fieldContainer     = new TwnsUiZoomableComponent.UiZoomableComponent();
-        private _weatherContainer   = new eui.Group();
-
-        private _padding = Helpers.getExisted(PADDINGS.get(PaddingType.Default));
+        private _fieldContainer         = new TwnsUiZoomableComponent.UiZoomableComponent();
+        private _weatherContainer       = new eui.Group();
+        private _labelPersistentText    = new TwnsUiLabel.UiLabel();
 
         private _isShowingVibration = false;
         private _vibrationMaxOffset = 4;
         private _vibrationTimeoutId : number | null = null;
 
-        private _notifyListeners: Notify.Listener[] = [
-            { type: NotifyType.BwFieldZoomed,  callback: this._onNotifyBwFieldZoomed },
-            { type: NotifyType.BwFieldDragged, callback: this._onNotifyBwFieldDragged },
+        private _war? : BwWar;
+
+        private _notifyListeners: Twns.Notify.Listener[] = [
+            { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            { type: NotifyType.BwFieldZoomed,   callback: this._onNotifyBwFieldZoomed },
+            { type: NotifyType.BwFieldDragged,  callback: this._onNotifyBwFieldDragged },
         ];
-        private _uiListeners: Types.UiListener[] = [
+        private _uiListeners: Twns.Types.UiListener[] = [
             { ui: this,     callback: this._onEnterFrame,   eventType: egret.Event.ENTER_FRAME },
         ];
 
@@ -69,14 +71,24 @@ namespace TwnsBwWarView {
             weatherContainer.touchThrough   = true;
             resetContainer(weatherContainer);
             this.addChild(weatherContainer);
+
+            {
+                const labelPersistentText               = this._labelPersistentText;
+                labelPersistentText.size                = 16;
+                labelPersistentText.stroke              = 2;
+                labelPersistentText.top                 = 60;
+                labelPersistentText.horizontalCenter    = 0;
+                labelPersistentText.textAlign           = egret.HorizontalAlign.CENTER;
+                this.addChild(labelPersistentText);
+            }
         }
 
-        public init(war: TwnsBwWar.BwWar): void {
-            const gridSize          = CommonConstants.GridSize;
+        public init(war: BaseWar.BwWar): void {
+            const gridSize          = Twns.CommonConstants.GridSize;
             const mapSize           = war.getTileMap().getMapSize();
             const fieldContainer    = this._fieldContainer;
             const padding           = getPadding(war);
-            this._padding           = padding;
+            this._war               = war;
             fieldContainer.setBoundarySpacings(padding.left, padding.right, padding.top, padding.bottom);
             fieldContainer.removeAllContents();
             fieldContainer.setContentWidth(mapSize.width * gridSize.width);
@@ -87,22 +99,24 @@ namespace TwnsBwWarView {
             this._weatherContainer.addChild(war.getWeatherManager().getView());
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        public fastInit(war: TwnsBwWar.BwWar): void {
+        public fastInit(war: BaseWar.BwWar): void {
             // nothing to do
         }
 
         public startRunningView(): void {
-            Notify.addEventListeners(this._notifyListeners, this);
+            Twns.Notify.addEventListeners(this._notifyListeners, this);
             for (const listener of this._uiListeners) {
-                listener.ui.addEventListener(Helpers.getExisted(listener.eventType), listener.callback, this);
+                listener.ui.addEventListener(Twns.Helpers.getExisted(listener.eventType), listener.callback, this);
             }
 
             this._fieldContainer.setMouseWheelListenerEnabled(true);
+
+            this.updatePersistentText();
         }
         public stopRunning(): void {
-            Notify.removeEventListeners(this._notifyListeners, this);
+            Twns.Notify.removeEventListeners(this._notifyListeners, this);
             for (const listener of this._uiListeners) {
-                listener.ui.removeEventListener(Helpers.getExisted(listener.eventType), listener.callback, this);
+                listener.ui.removeEventListener(Twns.Helpers.getExisted(listener.eventType), listener.callback, this);
             }
 
             this._fieldContainer.setMouseWheelListenerEnabled(false);
@@ -113,8 +127,8 @@ namespace TwnsBwWarView {
         }
 
         public tweenGridToCentralArea(gridIndex: GridIndex): void {
-            const stage             = StageManager.getStage();
-            const gridSize          = CommonConstants.GridSize;
+            const stage             = Twns.StageManager.getStage();
+            const gridSize          = Twns.CommonConstants.GridSize;
             const container         = this._fieldContainer;
             const contents          = container.getContents();
             const gridWidth         = gridSize.width;
@@ -129,12 +143,12 @@ namespace TwnsBwWarView {
             const currX             = currPoint.x;
             const currY             = currPoint.y;
             // const padding           = this._padding;
-            const newX              = Helpers.getValueInRange({
+            const newX              = Twns.Helpers.getValueInRange({
                 minValue    : CENTRAL_PADDING + currX - topLeftPoint.x,
                 maxValue    : stageWidth - CENTRAL_PADDING + currX - bottomRightPoint.x,
                 rawValue    : currX,
             });
-            const newY              = Helpers.getValueInRange({
+            const newY              = Twns.Helpers.getValueInRange({
                 minValue    : CENTRAL_PADDING + currY - topLeftPoint.y,
                 maxValue    : stageHeight - CENTRAL_PADDING + currY - bottomRightPoint.y,
                 rawValue    : currY,
@@ -143,7 +157,7 @@ namespace TwnsBwWarView {
             container.tweenContentToPoint(newPoint.x, newPoint.y, false);
         }
         public moveGridToCenter(gridIndex: GridIndex): void {
-            const stage = StageManager.getStage();
+            const stage = Twns.StageManager.getStage();
             this._moveGridToPoint(gridIndex, stage.stageWidth / 2, stage.stageHeight / 2);
         }
         private _moveGridToPoint(gridIndex: GridIndex, x: number, y: number): void {
@@ -153,7 +167,7 @@ namespace TwnsBwWarView {
             container.setContentY(point.y, false);
         }
         private _getRevisedContentPointForMoveGrid(gridIndex: GridIndex, x: number, y: number): Point {
-            const gridSize  = CommonConstants.GridSize;
+            const gridSize  = Twns.CommonConstants.GridSize;
             const container = this._fieldContainer;
             const contents  = container.getContents();
             const point1    = contents.localToGlobal(
@@ -198,15 +212,38 @@ namespace TwnsBwWarView {
             }
         }
 
+        public updatePersistentText(): void {
+            const war   = this._war;
+            const label = this._labelPersistentText;
+            if (!war?.getIsRunning()) {
+                label.text = ``;
+                return;
+            }
+
+            const warEventManager   = war.getWarEventManager();
+            const textArray         : string[] = [];
+            for (const actionId of warEventManager.getOngoingPersistentActionIdSet()) {
+                const action = warEventManager.getWarEventAction(actionId).WeaPersistentShowText;
+                if (action) {
+                    textArray.push(Lang.getLanguageText({ textArray: action.textArray }) ?? Twns.CommonConstants.ErrorTextForUndefined);
+                }
+            }
+            label.text = textArray.join(`\n`);
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(): void {
+            this.updatePersistentText();
+        }
+
         private _onNotifyBwFieldZoomed(e: egret.Event): void {
-            const data = e.data as NotifyData.BwFieldZoomed;
+            const data = e.data as Twns.Notify.NotifyData.BwFieldZoomed;
             this._fieldContainer.setZoomByTouches(data.current, data.previous);
         }
         private _onNotifyBwFieldDragged(e: egret.Event): void {
-            const data = e.data as NotifyData.BwFieldDragged;
+            const data = e.data as Twns.Notify.NotifyData.BwFieldDragged;
             this._fieldContainer.setDragByTouches(data.current, data.previous);
         }
 
@@ -222,13 +259,13 @@ namespace TwnsBwWarView {
         container.bottom    = 0;
     }
 
-    function getPadding(war: TwnsBwWar.BwWar): Padding {
-        if (war instanceof TwnsRwWar.RwWar) {
-            return Helpers.getExisted(PADDINGS.get(PaddingType.Replay));
-        } else if (war instanceof TwnsMeWar.MeWar) {
-            return Helpers.getExisted(PADDINGS.get(PaddingType.MapEditor));
+    function getPadding(war: BaseWar.BwWar): Padding {
+        if (war instanceof ReplayWar.RwWar) {
+            return Twns.Helpers.getExisted(PADDINGS.get(PaddingType.Replay));
+        } else if (war instanceof MapEditor.MeWar) {
+            return Twns.Helpers.getExisted(PADDINGS.get(PaddingType.MapEditor));
         } else {
-            return Helpers.getExisted(PADDINGS.get(PaddingType.Default));
+            return Twns.Helpers.getExisted(PADDINGS.get(PaddingType.Default));
         }
     }
 }

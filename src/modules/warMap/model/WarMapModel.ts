@@ -3,25 +3,27 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import Notify               from "../../tools/notify/Notify";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarMapProxy          from "./WarMapProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace WarMapModel {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import WarType              = Types.WarType;
-    import IMapRawData          = ProtoTypes.Map.IMapRawData;
-    import IMapBriefData        = ProtoTypes.Map.IMapBriefData;
-    import IMapEditorData       = ProtoTypes.Map.IMapEditorData;
+namespace Twns.WarMap.WarMapModel {
+    import IMapTag              = CommonProto.Map.IMapTag;
+    import IMapRawData          = CommonProto.Map.IMapRawData;
+    import IMapBriefData        = CommonProto.Map.IMapBriefData;
+    import IMapEditorData       = CommonProto.Map.IMapEditorData;
 
     let _reviewingMaps          : IMapEditorData[];
     const _enabledMapIdArray    : number[] = [];
+    const _mapTagAccessor       = Helpers.createCachedDataAccessor<null, IMapTag>({
+        reqData                 : () => WarMapProxy.reqMapGetMapTag(),
+    });
     const _rawDataAccessor      = Helpers.createCachedDataAccessor<number, IMapRawData>({
-        reqData                 : (mapId: number) => WarMapProxy.reqGetMapRawData(mapId),
+        reqData                 : (mapId: number) => WarMap.WarMapProxy.reqGetMapRawData(mapId),
     });
     const _briefDataGetter      = Helpers.createCachedDataAccessor<number, IMapBriefData>({
-        reqData                 : (mapId: number) => WarMapProxy.reqGetMapBriefData(mapId),
+        reqData                 : (mapId: number) => WarMap.WarMapProxy.reqGetMapBriefData(mapId),
     });
 
     export function init(): void {
@@ -36,6 +38,13 @@ namespace WarMapModel {
         return _enabledMapIdArray;
     }
 
+    export function setMapTag(mapTag: IMapTag): void {
+        _mapTagAccessor.setData(null, mapTag);
+    }
+    export function getMapTag(): Promise<IMapTag | null> {
+        return _mapTagAccessor.getData(null);
+    }
+
     export function setBriefData(mapId: number, data: IMapBriefData | null): void {
         _briefDataGetter.setData(mapId, data);
     }
@@ -43,7 +52,7 @@ namespace WarMapModel {
         return _briefDataGetter.getData(mapId);
     }
 
-    export async function updateOnSetMapName(data: ProtoTypes.NetMessage.MsgMmSetMapName.IS): Promise<void> {
+    export async function updateOnSetMapName(data: CommonProto.NetMessage.MsgMmSetMapName.IS): Promise<void> {
         const mapId         = Helpers.getExisted(data.mapId, ClientErrorCode.WarMapModel_UpdateOnSetMapName_00);
         const mapNameArray  = Helpers.getExisted(data.mapNameArray, ClientErrorCode.WarMapModel_UpdateOnSetMapName_01);
         const mapBriefData  = await getBriefData(mapId);
@@ -52,21 +61,29 @@ namespace WarMapModel {
         const mapRawData = await getRawData(mapId);
         (mapRawData) && (mapRawData.mapNameArray = mapNameArray);
     }
-    export async function updateOnAddWarRule(data: ProtoTypes.NetMessage.MsgMmAddWarRule.IS): Promise<void> {
-        const mapId     = Helpers.getExisted(data.mapId);
-        const warRule   = Helpers.getExisted(data.warRule);
-        Helpers.getExisted((await getRawData(mapId))?.warRuleArray).push(warRule);
+    export async function updateOnAddWarRule(data: CommonProto.NetMessage.MsgMmAddWarRule.IS): Promise<void> {
+        const mapId             = Helpers.getExisted(data.mapId);
+        const templateWarRule   = Helpers.getExisted(data.templateWarRule);
+        Helpers.getExisted((await getRawData(mapId))?.templateWarRuleArray).push(templateWarRule);
     }
-    export async function updateOnDeleteWarRule(data: ProtoTypes.NetMessage.MsgMmDeleteWarRule.IS): Promise<void> {
-        const mapId         = Helpers.getExisted(data.mapId);
-        const ruleId        = Helpers.getExisted(data.ruleId);
-        const warRuleArray  = Helpers.getExisted((await getRawData(mapId))?.warRuleArray);
-        const index         = warRuleArray.findIndex(v => v.ruleId === ruleId);
-        (index >= 0) && (warRuleArray.splice(index, 1));
+    export async function updateOnDeleteWarRule(data: CommonProto.NetMessage.MsgMmDeleteWarRule.IS): Promise<void> {
+        const mapId                 = Helpers.getExisted(data.mapId);
+        const ruleId                = Helpers.getExisted(data.ruleId);
+        const templateWarRuleArray  = Helpers.getExisted((await getRawData(mapId))?.templateWarRuleArray);
+        const index                 = templateWarRuleArray.findIndex(v => v.ruleId === ruleId);
+        (index >= 0) && (templateWarRuleArray.splice(index, 1));
     }
-    export async function updateOnSetWarRuleAvailability(data: ProtoTypes.NetMessage.MsgMmSetWarRuleAvailability.IS): Promise<void> {
-        const warRule               = Helpers.getExisted((await getRawData(Helpers.getExisted(data.mapId)))?.warRuleArray?.find(v => v.ruleId === data.ruleId));
-        warRule.ruleAvailability    = data.availability;
+    export async function updateOnMsgMmSetWarRuleName(data: CommonProto.NetMessage.MsgMmSetWarRuleName.IS): Promise<void> {
+        const ruleId            = Helpers.getExisted(data.ruleId);
+        const templateWarRule   = Helpers.getExisted((await getRawData(Helpers.getExisted(data.mapId)))?.templateWarRuleArray?.find(v => v.ruleId === ruleId));
+        (templateWarRule) && (templateWarRule.ruleNameArray = data.ruleNameArray);
+    }
+    export async function updateOnSetWarRuleAvailability(data: CommonProto.NetMessage.MsgMmSetWarRuleAvailability.IS): Promise<void> {
+        const templateWarRule               = Helpers.getExisted((await getRawData(Helpers.getExisted(data.mapId)))?.templateWarRuleArray?.find(v => v.ruleId === data.ruleId));
+        templateWarRule.ruleAvailability    = data.availability;
+    }
+    export async function updateOnMsgMmSetMapTagIdFlags(data: CommonProto.NetMessage.MsgMmSetMapTagIdFlags.IS): Promise<void> {
+        Helpers.getExisted(await getRawData(Helpers.getExisted(data.mapId))).mapTagIdFlags = data.mapTagIdFlags;
     }
 
     export async function getMapNameInCurrentLanguage(mapId: number): Promise<string | null> {

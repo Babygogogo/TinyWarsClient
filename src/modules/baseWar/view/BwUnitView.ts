@@ -11,8 +11,7 @@
 // import CommonConstants      from "../../tools/helpers/CommonConstants";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwUnitView {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+namespace Twns.BaseWar {
     import UnitAnimationType    = Types.UnitAnimationType;
     import GridIndex            = Types.GridIndex;
 
@@ -29,7 +28,7 @@ namespace TwnsBwUnitView {
         private _imgState   = new TwnsUiImage.UiImage();
         private _imgUnit    = new TwnsUiImage.UiImage();
 
-        private _unit                       : TwnsBwUnit.BwUnit | null = null;
+        private _unit                       : BaseWar.BwUnit | null = null;
         private _animationType              = UnitAnimationType.Stand;
         private _isDark                     = false;
         private _framesForStateAnimation    = [] as string[];
@@ -58,7 +57,7 @@ namespace TwnsBwUnitView {
             this.addChild(imgHp);
         }
 
-        public init(unit: TwnsBwUnit.BwUnit): BwUnitView {
+        public init(unit: BaseWar.BwUnit): BwUnitView {
             this._setUnit(unit);
 
             return this;
@@ -70,10 +69,10 @@ namespace TwnsBwUnitView {
             return this;
         }
 
-        private _setUnit(unit: TwnsBwUnit.BwUnit): void {
+        private _setUnit(unit: BaseWar.BwUnit): void {
             this._unit = unit;
         }
-        public getUnit(): TwnsBwUnit.BwUnit | null {
+        public getUnit(): BaseWar.BwUnit | null {
             return this._unit;
         }
 
@@ -92,8 +91,9 @@ namespace TwnsBwUnitView {
         }
         public tickUnitAnimationFrame(): void {
             const unit              = Helpers.getExisted(this.getUnit());
-            this._imgUnit.source    = CommonModel.getCachedUnitImageSource({
-                version     : UserModel.getSelfSettingsTextureVersion(),
+            this._imgUnit.source    = Common.CommonModel.getCachedUnitImageSource({
+                gameConfig  : unit.getGameConfig(),
+                version     : User.UserModel.getSelfSettingsTextureVersion(),
                 isDark      : this._isDark,
                 isMoving    : this._animationType === UnitAnimationType.Move,
                 tickCount   : Timer.getUnitAnimationTickCount(),
@@ -158,14 +158,15 @@ namespace TwnsBwUnitView {
             const war                   = unit.getWar();
             const playerIndex           = unit.getPlayerIndex();
             const unitType              = unit.getUnitType();
-            const watcherTeamIndexes    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const watcherTeamIndexes    = war.getPlayerManager().getWatcherTeamIndexesForSelf();
+            const gameConfig            = war.getGameConfig();
             const isAlwaysVisible       = watcherTeamIndexes.has(unit.getTeamIndex());
             const tween                 = egret.Tween.get(this);
             if (isAlwaysVisible) {
                 this.visible = true;
             }
             if ((path.length > 0) || (aiming)) {
-                SoundManager.playLongSfxForMoveUnit(unitType);
+                SoundManager.playLongSfxForMoveUnit(unitType, gameConfig);
             }
 
             for (let i = 1; i < path.length; ++i) {
@@ -182,7 +183,7 @@ namespace TwnsBwUnitView {
                     if (isDiving) {
                         tween.call(() => {
                             this.visible = (i === path.length - 1)
-                                && (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                                && (WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                     war,
                                     gridIndex,
                                     unitType,
@@ -193,7 +194,7 @@ namespace TwnsBwUnitView {
                         });
                     } else {
                         tween.call(() => {
-                            this.visible = (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            this.visible = (WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 gridIndex           : path[i - 1],
                                 unitType,
@@ -201,7 +202,7 @@ namespace TwnsBwUnitView {
                                 unitPlayerIndex     : playerIndex,
                                 observerTeamIndexes : watcherTeamIndexes,
                             }))
-                            || (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            || (WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 gridIndex,
                                 unitType,
@@ -222,7 +223,7 @@ namespace TwnsBwUnitView {
                     tween.call(() => {
                         this._setImgUnitFlippedX(playerIndex % 2 === 0);
                         if ((isBlocked)                                         &&
-                            (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            (WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 unitType,
                                 isDiving,
@@ -233,7 +234,7 @@ namespace TwnsBwUnitView {
                         ) {
                             war.getGridVisualEffect().showEffectBlock(endingGridIndex);
                         }
-                        SoundManager.fadeoutLongSfxForMoveUnit();
+                        SoundManager.fadeoutLongSfxForMoveUnit(gameConfig);
 
                         resolve();
                     });
@@ -250,7 +251,7 @@ namespace TwnsBwUnitView {
                         cursor.setIsVisible(true);
                         this._setImgUnitFlippedX(playerIndex % 2 === 0);
                         if ((isBlocked)                                         &&
-                            (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                            (WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 unitType,
                                 isDiving,
@@ -261,7 +262,7 @@ namespace TwnsBwUnitView {
                         ) {
                             war.getGridVisualEffect().showEffectBlock(endingGridIndex);
                         }
-                        SoundManager.fadeoutLongSfxForMoveUnit();
+                        SoundManager.fadeoutLongSfxForMoveUnit(gameConfig);
 
                         resolve();
                     });
@@ -269,7 +270,7 @@ namespace TwnsBwUnitView {
             });
         }
         public moveAlongExtraPath({ path, aiming, deleteViewAfterMoving }: {
-            path                    : ProtoTypes.Structure.IGridIndexAndPathInfo[];
+            path                    : CommonProto.Structure.IGridIndexAndPathInfo[];
             aiming                  : GridIndex | null;
             deleteViewAfterMoving   : boolean;
         }): Promise<void> {
@@ -283,8 +284,9 @@ namespace TwnsBwUnitView {
             const war           = unit.getWar();
             const unitType      = unit.getUnitType();
             const tween         = egret.Tween.get(this);
+            const gameConfig    = war.getGameConfig();
             if ((path.length > 0) || (aiming)) {
-                SoundManager.playLongSfxForMoveUnit(unitType);
+                SoundManager.playLongSfxForMoveUnit(unitType, gameConfig);
             }
 
             for (let i = 1; i < path.length; ++i) {
@@ -324,7 +326,7 @@ namespace TwnsBwUnitView {
                         }
                         (deleteViewAfterMoving) && (unitMapView.removeUnit(this));
 
-                        SoundManager.fadeoutLongSfxForMoveUnit();
+                        SoundManager.fadeoutLongSfxForMoveUnit(gameConfig);
 
                         resolve();
                     });
@@ -346,7 +348,7 @@ namespace TwnsBwUnitView {
                         }
                         (deleteViewAfterMoving) && (unitMapView.removeUnit(this));
 
-                        SoundManager.fadeoutLongSfxForMoveUnit();
+                        SoundManager.fadeoutLongSfxForMoveUnit(gameConfig);
 
                         resolve();
                     });
@@ -413,12 +415,14 @@ namespace TwnsBwUnitView {
             const war   = unit.getWar();
             if ((war) && (unit.getMaxLoadUnitsCount())) {
                 const strForSkinId = Helpers.getNumText(unit.getSkinId());
-                if (!war.getFogMap().checkHasFogCurrently()) {
+                if ((!war.getFogMap().checkHasFogCurrently())           ||
+                    (war.getGameConfig().checkIsLoadedUnitVisibleInFog())
+                ) {
                     if (unit.getLoadedUnitsCount() > 0) {
                         this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${strForSkinId}`);
                     }
                 } else {
-                    if (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(unit.getTeamIndex())) {
+                    if (!war.getPlayerManager().getWatcherTeamIndexesForSelf().has(unit.getTeamIndex())) {
                         this._getFramesForStateAnimation().push(`${this._getImageSourcePrefix(this._getIsDark())}_t99_s06_f${strForSkinId}`);
                     } else {
                         if (unit.getLoadedUnitsCount() > 0) {
@@ -440,7 +444,7 @@ namespace TwnsBwUnitView {
         }
 
         protected _getImageSourcePrefix(isDark: boolean): string {
-            return CommonModel.getUnitAndTileTexturePrefix() + (isDark ? `c07` : `c03`);
+            return Common.CommonModel.getUnitAndTileTexturePrefix() + (isDark ? `c07` : `c03`);
         }
     }
 }

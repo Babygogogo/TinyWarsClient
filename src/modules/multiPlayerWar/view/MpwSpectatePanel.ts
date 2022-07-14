@@ -12,7 +12,7 @@
 // import Lang                             from "../../tools/lang/Lang";
 // import TwnsLangTextType                 from "../../tools/lang/LangTextType";
 // import Notify                           from "../../tools/notify/Notify";
-// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import Twns.Notify                   from "../../tools/notify/NotifyType";
 // import ProtoTypes                       from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                     from "../../tools/ui/UiButton";
 // import TwnsUiImage                      from "../../tools/ui/UiImage";
@@ -23,12 +23,12 @@
 // import TwnsMpwWar                       from "../model/MpwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMpwSpectatePanel {
-    import LangTextType                 = TwnsLangTextType.LangTextType;
-    import NotifyType                   = TwnsNotifyType.NotifyType;
+namespace Twns.MultiPlayerWar {
+    import LangTextType                 = Twns.Lang.LangTextType;
+    import NotifyType                   = Twns.Notify.NotifyType;
 
-    export type OpenData = void;
-    export class MpwSpectatePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMpwSpectatePanel = void;
+    export class MpwSpectatePanel extends TwnsUiPanel.UiPanel<OpenDataForMpwSpectatePanel> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _group!                    : eui.Group;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
@@ -66,8 +66,8 @@ namespace TwnsMpwSpectatePanel {
             // nothing to do
         }
 
-        private _getWar(): TwnsMpwWar.MpwWar {
-            return Helpers.getExisted(MpwModel.getWar());
+        private _getWar(): MultiPlayerWar.MpwWar {
+            return Twns.Helpers.getExisted(MultiPlayerWar.MpwModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,8 +93,8 @@ namespace TwnsMpwSpectatePanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private async _onTouchedBtnMakeRequest(): Promise<void> {
             const war       = this._getWar();
-            const warId     = Helpers.getExisted(war.getWarId());
-            const info      = await WwModel.getWatchOutgoingInfo(warId);
+            const warId     = Twns.Helpers.getExisted(war.getWarId());
+            const info      = await WatchWar.WwModel.getWatchOutgoingInfo(warId);
             const userIdSet = new Set<number>();
             for (const userId of info?.ongoingDstUserIdArray ?? []) {
                 userIdSet.add(userId);
@@ -103,39 +103,39 @@ namespace TwnsMpwSpectatePanel {
                 userIdSet.add(userId);
             }
 
-            const selfUserId = Helpers.getExisted(UserModel.getSelfUserId());
+            const selfUserId = Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
             for (const [, player] of war.getPlayerManager().getAllPlayersDict()) {
                 const userId = player.getUserId();
                 if ((userId != null) && (userId !== selfUserId) && (!userIdSet.has(userId))) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.WwMakeRequestDetailPanel, {
+                    Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WwMakeRequestDetailPanel, {
                         warId,
                     });
                     return;
                 }
             }
 
-            FloatText.show(Lang.getText(LangTextType.A0299));
+            Twns.FloatText.show(Lang.getText(LangTextType.A0299));
         }
 
         private async _onTouchedBtnHandleRequest(): Promise<void> {
-            const warId = Helpers.getExisted(this._getWar().getWarId());
-            if ((await WwModel.getWatchIncomingInfo(warId))?.requestSrcUserIdArray?.length) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.WwHandleRequestDetailPanel, {
+            const warId = Twns.Helpers.getExisted(this._getWar().getWarId());
+            if ((await WatchWar.WwModel.getWatchIncomingInfo(warId))?.requestSrcUserIdArray?.length) {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WwHandleRequestDetailPanel, {
                     warId,
                 });
             } else {
-                FloatText.show(Lang.getText(LangTextType.A0300));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0300));
             }
         }
 
         private async _onTouchedBtnDeleteWatcher(): Promise<void> {
-            const warId = Helpers.getExisted(this._getWar().getWarId());
-            if ((await WwModel.getWatchIncomingInfo(warId))?.ongoingSrcUserIdArray?.length) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.WwDeleteWatcherDetailPanel, {
+            const warId = Twns.Helpers.getExisted(this._getWar().getWarId());
+            if ((await WatchWar.WwModel.getWatchIncomingInfo(warId))?.ongoingSrcUserIdArray?.length) {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.WwDeleteWatcherDetailPanel, {
                     warId,
                 });
             } else {
-                FloatText.show(Lang.getText(LangTextType.A0301));
+                Twns.FloatText.show(Lang.getText(LangTextType.A0301));
             }
         }
 
@@ -143,32 +143,32 @@ namespace TwnsMpwSpectatePanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected async _showOpenAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
-            Helpers.resetTween({
+            Twns.Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 1, verticalCenter: 0 },
                 endProps    : { alpha: 0, verticalCenter: 40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Twns.Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
 
         private _updateView(): void {
@@ -191,7 +191,7 @@ namespace TwnsMpwSpectatePanel {
         }
 
         private async _updateBtnHandleRequest(): Promise<void> {
-            const info = await WwModel.getWatchIncomingInfo(Helpers.getExisted(this._getWar().getWarId()));
+            const info = await WatchWar.WwModel.getWatchIncomingInfo(Twns.Helpers.getExisted(this._getWar().getWarId()));
             this._btnHandleRequest.setRedVisible(!!info?.requestSrcUserIdArray?.length);
         }
 
@@ -210,7 +210,7 @@ namespace TwnsMpwSpectatePanel {
         }
 
         private async _updateLabelIncomingRequest(): Promise<void> {
-            const info = await WwModel.getWatchIncomingInfo(Helpers.getExisted(this._getWar().getWarId()));
+            const info = await WatchWar.WwModel.getWatchIncomingInfo(Twns.Helpers.getExisted(this._getWar().getWarId()));
             this._labelIncomingRequest.text = `${info?.requestSrcUserIdArray?.length ?? 0}`;
         }
     }

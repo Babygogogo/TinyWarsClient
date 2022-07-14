@@ -5,7 +5,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
-// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import Twns.Notify           from "../../tools/notify/NotifyType";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton             from "../../tools/ui/UiButton";
 // import TwnsUiImage              from "../../tools/ui/UiImage";
@@ -17,14 +17,15 @@
 // import WwProxy                  from "../model/WwProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWwMakeRequestDetailPanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
+namespace Twns.WatchWar {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
+    import GameConfig       = Twns.Config.GameConfig;
 
-    export type OpenData = {
+    export type OpenDataForWwMakeRequestDetailPanel = {
         warId   : number;
     };
-    export class WwMakeRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WwMakeRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForWwMakeRequestDetailPanel> {
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelYes!         : TwnsUiLabel.UiLabel;
         private readonly _labelNo!          : TwnsUiLabel.UiLabel;
@@ -74,7 +75,7 @@ namespace TwnsWwMakeRequestDetailPanel {
 
         private async _onTouchedBtnConfirm(): Promise<void> {
             const warId = this._getOpenData().warId;
-            if (await WwModel.getWatchOutgoingInfo(warId) == null) {
+            if (await Twns.WatchWar.WwModel.getWatchOutgoingInfo(warId) == null) {
                 this.close();
                 return;
             }
@@ -89,10 +90,10 @@ namespace TwnsWwMakeRequestDetailPanel {
             if (userIds.length <= 0) {
                 this.close();
             } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                Twns.PanelHelpers.open(Twns.PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0083, userIds.length),
                     callback: () => {
-                        WwProxy.reqWatchMakeRequest(warId, userIds);
+                        Twns.WatchWar.WwProxy.reqWatchMakeRequest(warId, userIds);
                         this.close();
                     }
                 });
@@ -117,20 +118,21 @@ namespace TwnsWwMakeRequestDetailPanel {
 
         private async _generateDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
             const warId         = this._getOpenData().warId;
-            const outgoingInfo  = await WwModel.getWatchOutgoingInfo(warId);
+            const outgoingInfo  = await Twns.WatchWar.WwModel.getWatchOutgoingInfo(warId);
             if (outgoingInfo == null) {
                 return [];
             }
 
-            const configVersion = (await MpwModel.getWarSettings(warId))?.settingsForCommon?.configVersion;
+            const configVersion = (await Twns.MultiPlayerWar.MpwModel.getWarSettings(warId))?.settingsForCommon?.configVersion;
             if (configVersion == null) {
                 return [];
             }
 
-            const selfUserId            = Helpers.getExisted(UserModel.getSelfUserId());
+            const gameConfig            = await Twns.Config.ConfigManager.getGameConfig(configVersion);
+            const selfUserId            = Twns.Helpers.getExisted(Twns.User.UserModel.getSelfUserId());
             const ongoingDstUserIdArray = outgoingInfo.ongoingDstUserIdArray || [];
             const requestDstUserIdArray = outgoingInfo.requestDstUserIdArray || [];
-            const playerInfoList        = (await MpwModel.getWarProgressInfo(warId))?.playerInfoList || [];
+            const playerInfoList        = (await Twns.MultiPlayerWar.MpwModel.getWarProgressInfo(warId))?.playerInfoList || [];
 
             const dataList: DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playerInfoList.length; ++playerIndex) {
@@ -148,7 +150,7 @@ namespace TwnsWwMakeRequestDetailPanel {
                 const isWatching    = ongoingDstUserIdArray.indexOf(userId) >= 0;
                 dataList.push({
                     panel           : this,
-                    configVersion,
+                    gameConfig,
                     playerInfo,
                     isRequested,
                     isWatching,
@@ -162,8 +164,8 @@ namespace TwnsWwMakeRequestDetailPanel {
 
     type DataForPlayerRenderer = {
         panel           : WwMakeRequestDetailPanel;
-        configVersion   : string;
-        playerInfo      : ProtoTypes.Structure.IWarPlayerInfo;
+        gameConfig      : GameConfig;
+        playerInfo      : CommonProto.Structure.IWarPlayerInfo;
         isRequested     : boolean;
         isWatching      : boolean;
         isRequesting    : boolean;
@@ -181,8 +183,8 @@ namespace TwnsWwMakeRequestDetailPanel {
             const playerInfo        = data.playerInfo;
             const playerIndex       = playerInfo.playerIndex;
             const teamIndex         = playerInfo.teamIndex;
-            this._labelIndex.text   = playerIndex == null ? CommonConstants.ErrorTextForUndefined : Lang.getPlayerForceName(playerIndex);
-            this._labelTeam.text    = (teamIndex == null ? null : Lang.getPlayerTeamName(teamIndex)) || CommonConstants.ErrorTextForUndefined;
+            this._labelIndex.text   = playerIndex == null ? Twns.CommonConstants.ErrorTextForUndefined : Lang.getPlayerForceName(playerIndex);
+            this._labelTeam.text    = (teamIndex == null ? null : Lang.getPlayerTeamName(teamIndex)) || Twns.CommonConstants.ErrorTextForUndefined;
 
             if (!playerInfo.isAlive) {
                 this._imgAccept.visible     = false;
@@ -190,7 +192,7 @@ namespace TwnsWwMakeRequestDetailPanel {
                 this._labelState.visible    = true;
                 this._labelState.text       = `(${Lang.getText(LangTextType.B0056)})`;
             } else {
-                if (playerInfo.userId === UserModel.getSelfUserId()) {
+                if (playerInfo.userId === Twns.User.UserModel.getSelfUserId()) {
                     this._imgAccept.visible     = false;
                     this._imgDecline.visible    = false;
                     this._labelState.visible    = true;
@@ -218,11 +220,11 @@ namespace TwnsWwMakeRequestDetailPanel {
 
             const userId    = playerInfo.userId;
             const labelName = this._labelName;
-            const coName    = ConfigManager.getCoNameAndTierText(data.configVersion, Helpers.getExisted(playerInfo.coId));
+            const coName    = data.gameConfig.getCoNameAndTierText(Twns.Helpers.getExisted(playerInfo.coId));
             if (userId == null) {
                 labelName.text = `${Lang.getText(LangTextType.B0607)} ${coName}`;
             } else {
-                labelName.text = `${await UserModel.getUserNickname(userId)} ${coName}`;
+                labelName.text = `${await Twns.User.UserModel.getUserNickname(userId)} ${coName}`;
             }
         }
 

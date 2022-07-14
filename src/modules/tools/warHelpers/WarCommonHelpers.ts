@@ -15,21 +15,20 @@
 // import WarVisibilityHelpers from "./WarVisibilityHelpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace WarCommonHelpers {
+namespace Twns.WarHelpers.WarCommonHelpers {
     import GridIndex        = Types.GridIndex;
     import MovableArea      = Types.MovableArea;
     import AttackableArea   = Types.AttackableArea;
     import MapSize          = Types.MapSize;
     import MovePathNode     = Types.MovePathNode;
-    import UnitType         = Types.UnitType;
-    import TileType         = Types.TileType;
     import WarType          = Types.WarType;
     import Visibility       = Types.Visibility;
+    import LangTextType     = Lang.LangTextType;
     import CoSkillAreaType  = Types.CoSkillAreaType;
     import ISerialUnit      = WarSerialization.ISerialUnit;
     import ISerialWar       = WarSerialization.ISerialWar;
-    import WarSerialization = ProtoTypes.WarSerialization;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import WarSerialization = CommonProto.WarSerialization;
+    import GameConfig       = Config.GameConfig;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;
@@ -110,9 +109,9 @@ namespace WarCommonHelpers {
 
         return area;
     }
-    export function createAttackableAreaForTile(tile: TwnsBwTile.BwTile, mapSize: MapSize): AttackableArea {
+    export function createAttackableAreaForTile(tile: BaseWar.BwTile, mapSize: MapSize): AttackableArea {
         const area          : AttackableArea = [];
-        const tileType      = tile.getType();
+        const mapWeaponType = tile.getTemplateCfg().mapWeaponType;
         const tileGridIndex = tile.getGridIndex();
         const tileGridX     = tileGridIndex.x;
         const tileGridY     = tileGridIndex.y;
@@ -129,12 +128,12 @@ namespace WarCommonHelpers {
             }
         };
 
-        if ((tileType === TileType.Crystal) || (tileType === TileType.CustomCrystal)) {
+        if ((mapWeaponType === CommonConstants.MapWeaponType.Crystal) || (mapWeaponType === CommonConstants.MapWeaponType.CustomCrystal)) {
             for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: tileGridIndex, minDistance: 0, maxDistance: Helpers.getExisted(tile.getCustomCrystalData()?.radius), mapSize })) {
                 addGrid(gridIndex.x, gridIndex.y);
             }
 
-        } else if ((tileType === TileType.CustomCannon) || (tile.checkIsNormalCannon())) {
+        } else if ((mapWeaponType === CommonConstants.MapWeaponType.CustomCannon) || (tile.checkIsNormalCannon())) {
             const { rangeForDown, rangeForLeft, rangeForRight, rangeForUp } = Helpers.getExisted(tile.getCustomCannonData());
             if (rangeForDown) {
                 for (let deltaY = 1; deltaY <= rangeForDown; ++deltaY) {
@@ -197,7 +196,7 @@ namespace WarCommonHelpers {
                 }
             }
 
-        } else if ((tileType === TileType.LaserTurret) || (tileType === TileType.CustomLaserTurret)) {
+        } else if ((mapWeaponType === CommonConstants.MapWeaponType.LaserTurret) || (mapWeaponType === CommonConstants.MapWeaponType.CustomLaserTurret)) {
             const { rangeForDown, rangeForLeft, rangeForRight, rangeForUp } = Helpers.getExisted(tile.getCustomLaserTurretData());
             if (rangeForDown) {
                 for (let deltaY = 0; deltaY < rangeForDown; ++deltaY) {
@@ -238,7 +237,7 @@ namespace WarCommonHelpers {
 
         } else {
             // TODO: handle other tile types
-            throw Helpers.newError(`WarCommonHelpers.createAttackableAreaForTile() invalid tileType: ${tileType}`);
+            throw Helpers.newError(`WarCommonHelpers.createAttackableAreaForTile() invalid mapWeaponType: ${mapWeaponType}`);
         }
 
         return area;
@@ -265,8 +264,8 @@ namespace WarCommonHelpers {
     }
 
     export function getRevisedPath({ war, rawPath, launchUnitId }: {
-        war             : TwnsBwWar.BwWar;
-        rawPath         : Types.Undefinable<ProtoTypes.Structure.IMovePath>;
+        war             : BaseWar.BwWar;
+        rawPath         : Types.Undefinable<CommonProto.Structure.IMovePath>;
         launchUnitId    : Types.Undefinable<number>;
     }): Types.MovePath {
         if (rawPath == null) {
@@ -327,7 +326,7 @@ namespace WarCommonHelpers {
                 const unitType          = existingUnit.getUnitType();
                 const isDiving          = existingUnit.getIsDiving();
                 const unitPlayerIndex   = existingUnit.getPlayerIndex();
-                if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                if (WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     gridIndex,
                     unitType,
@@ -354,7 +353,7 @@ namespace WarCommonHelpers {
         };
     }
 
-    export function checkIsPathDestinationOccupiedByOtherVisibleUnit(war: TwnsBwWar.BwWar, rawPath: GridIndex[]): boolean {
+    export function checkIsPathDestinationOccupiedByOtherVisibleUnit(war: BaseWar.BwWar, rawPath: GridIndex[]): boolean {
         if (rawPath.length == 1) {
             return false;
         } else {
@@ -364,7 +363,7 @@ namespace WarCommonHelpers {
             if (unit == null) {
                 return false;
             } else {
-                return WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                return WarHelpers.WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                     war,
                     gridIndex           : destination,
                     unitType            : unit.getUnitType(),
@@ -376,7 +375,7 @@ namespace WarCommonHelpers {
         }
     }
 
-    export function createDistanceMap(tileMap: TwnsBwTileMap.BwTileMap, unit: TwnsBwUnit.BwUnit, destination: GridIndex): { distanceMap: (number | null)[][], maxDistance: number } {
+    export function createDistanceMap(tileMap: BaseWar.BwTileMap, unit: BaseWar.BwUnit, destination: GridIndex): { distanceMap: (number | null)[][], maxDistance: number } {
         const area          : MovableArea = [];
         const availableGrids: AvailableMovableGrid[] = [];
         _updateAvailableGrids({
@@ -420,7 +419,7 @@ namespace WarCommonHelpers {
         return { distanceMap, maxDistance};
     }
 
-    export function findNearestCapturableTile(tileMap: TwnsBwTileMap.BwTileMap, unitMap: TwnsBwUnitMap.BwUnitMap, unit: TwnsBwUnit.BwUnit): TwnsBwTile.BwTile | null {
+    export function findNearestCapturableTile(tileMap: BaseWar.BwTileMap, unitMap: BaseWar.BwUnitMap, unit: BaseWar.BwUnit): BaseWar.BwTile | null {
         const area          : MovableArea = [];
         const availableGrids: AvailableMovableGrid[] = [];
         _updateAvailableGrids({
@@ -632,7 +631,7 @@ namespace WarCommonHelpers {
      * You must call unitMap.addUnitOnMap() or unitMap.addUnitLoaded() after calling this function.
      */
     export function moveUnit({ war, pathNodes, launchUnitId, fuelConsumption }: {
-        war             : TwnsBwWar.BwWar;
+        war             : BaseWar.BwWar;
         pathNodes       : GridIndex[];
         launchUnitId    : Types.Undefinable<number>;
         fuelConsumption : number;
@@ -664,11 +663,11 @@ namespace WarCommonHelpers {
         }
     }
     export async function moveExtraUnit({ war, movingUnitAndPath, aiming, deleteViewAfterMoving }: {
-        war                     : TwnsBwWar.BwWar;
-        movingUnitAndPath       : Types.Undefinable<ProtoTypes.Structure.IMovingUnitAndPath>;
+        war                     : BaseWar.BwWar;
+        movingUnitAndPath       : Types.Undefinable<CommonProto.Structure.IMovingUnitAndPath>;
         aiming                  : GridIndex | null;
         deleteViewAfterMoving   : boolean;
-    }): Promise<TwnsBwUnitView.BwUnitView | null> {
+    }): Promise<BaseWar.BwUnitView | null> {
         if (movingUnitAndPath == null) {
             return null;
         }
@@ -688,8 +687,8 @@ namespace WarCommonHelpers {
         const movingUnitView    = unitMap.getUnitById(Helpers.getExisted(movingUnitData.unitId, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_01))?.getView();
         (movingUnitView) && (unitMapView.removeUnit(movingUnitView));
 
-        const virtualUnit = new TwnsBwUnit.BwUnit();
-        virtualUnit.init(movingUnitData, war.getConfigVersion());
+        const virtualUnit = new BaseWar.BwUnit();
+        virtualUnit.init(movingUnitData, war.getGameConfig());
         virtualUnit.startRunning(war);
         virtualUnit.startRunningView();
 
@@ -711,13 +710,13 @@ namespace WarCommonHelpers {
 
         return (newUnitData.currentHp ?? CommonConstants.UnitMaxHp) > (oldUnitData.currentHp ?? CommonConstants.UnitMaxHp);
     }
-    export function checkIsUnitSupplied(oldUnitData: ISerialUnit, newUnitData: ISerialUnit, configVersion: string): boolean {
+    export function checkIsUnitSupplied(oldUnitData: ISerialUnit, newUnitData: ISerialUnit, gameConfig: GameConfig): boolean {
         const unitType = newUnitData.unitType;
         if ((unitType == null) || (oldUnitData.unitType != newUnitData.unitType)) {
             return false;
         }
 
-        const unitCfg = Helpers.getExisted(ConfigManager.getUnitTemplateCfg(configVersion, unitType), ClientErrorCode.WarCommonHelpers_CheckIsUnitSupplied_00);
+        const unitCfg = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType), ClientErrorCode.WarCommonHelpers_CheckIsUnitSupplied_00);
         {
             const maxFuel = unitCfg.maxFuel;
             if ((newUnitData.currentFuel ?? maxFuel) > (oldUnitData.currentFuel ?? maxFuel)) {
@@ -833,8 +832,8 @@ namespace WarCommonHelpers {
      * @return the war view is vibrated or not
      */
     export function handleCommonExtraDataForWarActions({ war, commonExtraData, isFastExecute }: {
-        war                 : TwnsBwWar.BwWar;
-        commonExtraData     : ProtoTypes.Structure.ICommonExtraDataForWarAction;
+        war                 : BaseWar.BwWar;
+        commonExtraData     : CommonProto.Structure.ICommonExtraDataForWarAction;
         isFastExecute       : boolean;
     }): boolean {
         const playerIndexInTurn = war.getPlayerIndexInTurn();
@@ -845,11 +844,11 @@ namespace WarCommonHelpers {
             }
         }
 
-        const configVersion             = war.getConfigVersion();
+        const gameConfig                = war.getGameConfig();
         const playerArrayAfterAction    = commonExtraData.playerArrayAfterAction ?? [];
         for (const playerData of playerArrayAfterAction) {
             const player = war.getPlayer(Helpers.getExisted(playerData.playerIndex, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_00));
-            player.init(playerData, configVersion);
+            player.init(playerData, gameConfig);
             player.startRunning(war);
         }
 
@@ -886,31 +885,54 @@ namespace WarCommonHelpers {
                     unitMap.removeUnitOnMap(gridIndex, true);
 
                     if (!isFastExecute) {
-                        if ((destinationGridIndex == null)                                      ||
-                            (unit.getPlayerIndex() !== movingUnitPlayerIndex)                   ||
-                            (!GridIndexHelpers.checkIsEqual(destinationGridIndex, gridIndex))
-                        ) {
+                        // 这段代码会导致我方自杀式攻击时，在该部队的起点和终点分别出现一个爆炸特效（起点的是多余的）；在第三势力看来，如果进攻方从明处走到暗处进行自杀式攻击，也会在起点出现多余的爆炸特效
+                        // if ((destinationGridIndex == null)                                      ||
+                        //     (unit.getPlayerIndex() !== movingUnitPlayerIndex)                   ||
+                        //     (!GridIndexHelpers.checkIsEqual(destinationGridIndex, gridIndex))
+                        // ) {
+                        //     gridVisualEffect.showEffectExplosion(gridIndex);
+                        //     isShownExplosionEffect = true;
+                        // }
+                        // 暂时改成下面这段代码，不确定有没有问题
+                        if (unitId !== movingUnitId) {
                             gridVisualEffect.showEffectExplosion(gridIndex);
                             isShownExplosionEffect = true;
+                        } else {
+                            if (destinationGridIndex) {
+                                gridVisualEffect.showEffectExplosion(destinationGridIndex);
+                                isShownExplosionEffect = true;
+                            }
                         }
                     }
                 }
             }
         }
 
-        const tempRemovedUnits = new Map<number, TwnsBwUnit.BwUnit>();  // 此临时变量仅用于优化性能，在后续把部队加回来的过程中可以直接从这里取，而不必重新创建
-        if ((movingUnitId != null) && (movingUnit)) {
-            unitMap.removeUnitById(movingUnitId, true);
-            tempRemovedUnits.set(movingUnitId, movingUnit);
+        // 先把unitArrayAfterAction涉及的部队全部从地图上移除，然后再重新加回来，否则如果遇到有部队互相交换了位置之类的复杂情况就会报错（因为尝试把A移动到B所在位置时，B仍然占着位置，A就无法移动过去）
+        const tempRemovedUnits      = new Map<number, BaseWar.BwUnit>(); // 此临时变量仅用于优化性能，在后续把部队加回来的过程中可以直接从这里取，而不必重新创建
+        const tempRemovedLoadedUnits: BaseWar.BwUnit[] = [];
+        const hiddenUnitIdArray     = commonExtraData.hiddenUnitIdArray ?? [];
+        if (hiddenUnitIdArray.length) {
+            for (const unitId of hiddenUnitIdArray) {
+                unitMap.removeUnitById(unitId, true);
+            }
+        } else {
+            // 由于后端没有明确告诉前端哪些部队在动作过后消失，所以只能前端假定movingUnit和其搭载的部队会消失，在这里预先移除它们。若实际上没有消失，则unitArrayAfterAction会包含它们，从而可以重新加回来。
+            // 但实际上存在一种特殊情况，比如装载了部队的运输部队原地待机或装载co，那么由于被装载的部队没有发生变化，所以unitArrayAfterAction不会包含它们，导致动作执行完后，被装载的部队假性消失
+            // 等当前进行中的局全部结束后，就可以通过hiddenUnitIdArray来准确移除消失的部队，不用假定movingUnit消失，从而可以删掉这些代码
+            if ((movingUnitId != null) && (movingUnit)) {
+                unitMap.removeUnitById(movingUnitId, true);
+                tempRemovedUnits.set(movingUnitId, movingUnit);
 
-            for (const loadedUnit of unitMap.getUnitsLoadedByLoader(movingUnit, true)) {
-                const loadedUnitId = loadedUnit.getUnitId();
-                unitMap.removeUnitLoaded(loadedUnitId);
-                tempRemovedUnits.set(loadedUnitId, loadedUnit);
+                for (const loadedUnit of unitMap.getUnitsLoadedByLoader(movingUnit, true)) {
+                    const loadedUnitId = loadedUnit.getUnitId();
+                    unitMap.removeUnitLoaded(loadedUnitId);
+                    tempRemovedUnits.set(loadedUnitId, loadedUnit);
+                    tempRemovedLoadedUnits.push(loadedUnit);
+                }
             }
         }
         for (const unitData of unitArrayAfterAction) {
-            // 先把涉及的部队全部从地图上移除，然后再加回来，否则如果遇到有部队互相交换了位置之类的复杂情况就会报错（因为尝试把A移动到B所在位置时，B仍然占着位置，A就无法移动过去）
             const unitId    = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_05);
             const unit      = unitMap.getUnitById(unitId);
             if (unit) {
@@ -919,24 +941,25 @@ namespace WarCommonHelpers {
             }
         }
 
-        const updatedViewUnits = new Set<TwnsBwUnit.BwUnit>();
+        const updatedViewUnits = new Set<BaseWar.BwUnit>();
         for (const unitData of unitArrayAfterAction) {
             const unitId        = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_06);
-            // const existingUnit  = unitMap.getUnitById(unitId);
             const existingUnit  = tempRemovedUnits.get(unitId);
             if (existingUnit) {
-                // if (existingUnit.getLoaderUnitId() == null) {
-                //     unitMap.removeUnitOnMap(existingUnit.getGridIndex(), true);
-                // } else {
-                //     unitMap.removeUnitLoaded(unitId);
-                // }
-
                 const existingUnitData = existingUnit.serialize();
-                existingUnit.init(unitData, configVersion);
+                existingUnit.init(unitData, gameConfig);
                 if (existingUnit.getLoaderUnitId() == null) {
                     unitMap.setUnitOnMap(existingUnit);
                 } else {
                     unitMap.setUnitLoaded(existingUnit);
+
+                    if (!isFastExecute) {
+                        const loaderUnit = unitMap.getUnitOnMap(existingUnit.getGridIndex());
+                        if (loaderUnit) {
+                            loaderUnit.updateView();
+                            updatedViewUnits.add(loaderUnit);
+                        }
+                    }
                 }
                 existingUnit.startRunning(war);
                 existingUnit.startRunningView();
@@ -946,7 +969,7 @@ namespace WarCommonHelpers {
                     const gridIndex = existingUnit.getGridIndex();
                     if (checkIsUnitRepaired(existingUnitData, unitData)) {
                         gridVisualEffect.showEffectRepair(gridIndex);
-                    } else if (checkIsUnitSupplied(existingUnitData, unitData, configVersion)) {
+                    } else if (checkIsUnitSupplied(existingUnitData, unitData, gameConfig)) {
                         gridVisualEffect.showEffectSupply(gridIndex);
                     }
 
@@ -956,17 +979,43 @@ namespace WarCommonHelpers {
                 }
 
             } else {
-                const unit = new TwnsBwUnit.BwUnit();
-                unit.init(unitData, configVersion);
+                const unit = new BaseWar.BwUnit();
+                unit.init(unitData, gameConfig);
 
                 if (unit.getLoaderUnitId() == null) {
                     unitMap.setUnitOnMap(unit);
                 } else {
                     unitMap.setUnitLoaded(unit);
+
+                    if (!isFastExecute) {
+                        const loaderUnit = unitMap.getUnitOnMap(unit.getGridIndex());
+                        if (loaderUnit) {
+                            loaderUnit.updateView();
+                            updatedViewUnits.add(loaderUnit);
+                        }
+                    }
                 }
                 unit.startRunning(war);
                 unit.startRunningView();
                 updatedViewUnits.add(unit);
+            }
+        }
+        if (hiddenUnitIdArray.length) {
+            // nothing to do
+        } else {
+            // HACK：临时处理 类似装载了部队的运输船原地待机后被装载物假性消失的问题
+            // 等当前进行中的局全部结束后，就可以通过hiddenUnitIdArray完成相同逻辑，从而可以删掉这些代码
+            if ((movingUnitId != null) && (unitMap.getUnitById(movingUnitId) != null)) {
+                let hasAdd = false;
+                for (const loadedUnit of tempRemovedLoadedUnits) {
+                    if (unitMap.getUnitById(loadedUnit.getUnitId()) == null) {
+                        unitMap.setUnitLoaded(loadedUnit);
+                        hasAdd = true;
+                    }
+                }
+                if (hasAdd) {
+                    unitMap.getUnitById(movingUnitId)?.updateView();
+                }
             }
         }
 
@@ -975,7 +1024,7 @@ namespace WarCommonHelpers {
             const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_07);
             const tile              = tileMap.getTile(gridIndex);
             const hpBeforeAction    = tile.getCurrentHp();
-            tile.init(tileData, configVersion);
+            tile.init(tileData, gameConfig);
             tile.startRunning(war);
             tile.startRunningView();
 
@@ -992,9 +1041,11 @@ namespace WarCommonHelpers {
             }
         }
 
-        if ((!isFastExecute) && (playerArrayAfterAction.some(v => v.playerIndex === playerIndexInTurn))) {
+        if ((!isFastExecute) && (playerArrayAfterAction.length)) {
             for (const unit of unitMap.getAllUnitsOnMap()) {
-                if ((!updatedViewUnits.has(unit)) && (unit.getPlayerIndex() === playerIndexInTurn)) {
+                if ((!updatedViewUnits.has(unit))                                               &&
+                    (playerArrayAfterAction.some(v => v.playerIndex === unit.getPlayerIndex()))
+                ) {
                     unit.updateView();
                 }
             }
@@ -1009,7 +1060,7 @@ namespace WarCommonHelpers {
         }
     }
 
-    export function getAdjacentPlasmas(tileMap: TwnsBwTileMap.BwTileMap, origin: GridIndex): GridIndex[] {
+    export function getConnectedGridIndexArrayWithTileType(tileMap: BaseWar.BwTileMap, origin: GridIndex, tileType: number): GridIndex[] {
         const plasmas           = [origin];
         const mapSize           = tileMap.getMapSize();
         const mapHeight         = mapSize.height;
@@ -1018,7 +1069,7 @@ namespace WarCommonHelpers {
         let i = 0;
         while (i < plasmas.length) {
             for (const adjacentGridIndex of GridIndexHelpers.getAdjacentGrids(plasmas[i], mapSize)) {
-                if (tileMap.getTile(adjacentGridIndex).getType() === TileType.Plasma) {
+                if (tileMap.getTile(adjacentGridIndex).getType() === tileType) {
                     const searchIndex = getIndexOfGridIndex(mapHeight, adjacentGridIndex);
                     if (!searchedIndexes.has(searchIndex)) {
                         searchedIndexes.add(searchIndex);
@@ -1033,11 +1084,29 @@ namespace WarCommonHelpers {
         return plasmas;
     }
 
+    export function resetTileDataAsHasFog(tile: BaseWar.BwTile): void {
+        tile.setHasFog(true);
+
+        tile.deserialize({
+            gridIndex       : tile.getGridIndex(),
+            baseType        : tile.getBaseType(),
+            decoratorType   : tile.getDecorationType(),
+            objectType      : tile.getObjectType(),
+            playerIndex     : tile.getTemplateCfg().isAlwaysShowOwner ? tile.getPlayerIndex() : CommonConstants.PlayerIndex.Neutral,
+            baseShapeId     : tile.getBaseShapeId(),
+            decoratorShapeId: tile.getDecoratorShapeId(),
+            objectShapeId   : tile.getObjectShapeId(),
+            currentHp       : tile.getCurrentHp(),
+            locationFlags   : tile.getLocationFlags(),
+            isHighlighted   : tile.getIsHighlighted(),
+        }, tile.getGameConfig());
+    }
+
     function getIndexOfGridIndex(mapHeight: number, gridIndex: GridIndex): number {
         return gridIndex.x * mapHeight + gridIndex.y;
     }
 
-    export function getIdleBuildingGridIndex(war: TwnsBwWar.BwWar): Types.GridIndex | null {
+    export function getIdleBuildingGridIndex(war: BaseWar.BwWar): Types.GridIndex | null {
         const playerIndex               = war.getPlayerIndexInTurn();
         const field                     = war.getField();
         const tileMap                   = field.getTileMap();
@@ -1080,7 +1149,7 @@ namespace WarCommonHelpers {
 
         return null;
     }
-    export function getIdleUnitGridIndex(war: TwnsBwWar.BwWar): Types.GridIndex | null {
+    export function getIdleUnitGridIndex(war: BaseWar.BwWar): Types.GridIndex | null {
         const playerIndex               = war.getPlayerIndexInTurn();
         const field                     = war.getField();
         const unitMap                   = field.getUnitMap();
@@ -1149,8 +1218,8 @@ namespace WarCommonHelpers {
         }
     }
     export function getWarType(warData: ISerialWar): WarType {
-        const warRule   = warData.settingsForCommon?.warRule;
-        const hasFog    = warRule ? WarRuleHelpers.getHasFogByDefault(warRule) : null;
+        const instanceWarRule   = warData.settingsForCommon?.instanceWarRule;
+        const hasFog            = instanceWarRule ? WarHelpers.WarRuleHelpers.getHasFogByDefault(instanceWarRule) : null;
         if (hasFog == null) {
             return WarType.Undefined;
         }
@@ -1173,9 +1242,9 @@ namespace WarCommonHelpers {
             return WarType.Undefined;
         }
     }
-    export function getWarTypeByMpwWarSettings(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarSettings): WarType {
-        const warRule   = warInfo.settingsForCommon?.warRule;
-        const hasFog    = warRule ? WarRuleHelpers.getHasFogByDefault(warRule) : null;
+    export function getWarTypeByMpwWarSettings(warInfo: CommonProto.MultiPlayerWar.IMpwWarSettings): WarType {
+        const instanceWarRule   = warInfo.settingsForCommon?.instanceWarRule;
+        const hasFog            = instanceWarRule ? WarHelpers.WarRuleHelpers.getHasFogByDefault(instanceWarRule) : null;
         if (hasFog == null) {
             return WarType.Undefined;
         }
@@ -1205,14 +1274,14 @@ namespace WarCommonHelpers {
         const playerIndexSet = new Set<number>();
         for (const playerData of playerManagerData ? playerManagerData.players || [] : []) {
             const playerIndex = playerData.playerIndex;
-            if ((playerIndex != null) && (playerIndex >= CommonConstants.WarFirstPlayerIndex)) {
+            if ((playerIndex != null) && (playerIndex >= CommonConstants.PlayerIndex.First)) {
                 playerIndexSet.add(playerIndex);
             }
         }
         return playerIndexSet.size;
     }
 
-    export function getCoMaxEnergy(coConfig: ProtoTypes.Config.ICoBasicCfg): number {
+    export function getCoMaxEnergy(coConfig: CommonProto.Config.ICoBasicCfg): number {
         const expansionArray = coConfig.zoneExpansionEnergyList || [];
         return Math.max(
             expansionArray[expansionArray.length - 1] || 0,
@@ -1237,7 +1306,7 @@ namespace WarCommonHelpers {
     }
     export function getImageSourceForCoEyeFrame(skinId: number): string {
         switch (skinId) {
-            case CommonConstants.WarNeutralPlayerIndex  : return ``;
+            case CommonConstants.PlayerIndex.Neutral  : return ``;
             case 1                                      : return `uncompressedTriangle0001`;
             case 2                                      : return `uncompressedTriangle0002`;
             case 3                                      : return `uncompressedTriangle0003`;
@@ -1280,12 +1349,73 @@ namespace WarCommonHelpers {
         }
     }
 
+    export function getHintForEndTurn(war: BaseWar.BwWar): string {
+        const playerIndex   = war.getPlayerIndexInTurn();
+        const unitMap       = war.getUnitMap();
+        const hints         = new Array<string>();
+        {
+            let idleUnitsCount = 0;
+            for (const unit of unitMap.getAllUnitsOnMap()) {
+                if ((unit.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle)) {
+                    ++idleUnitsCount;
+                }
+            }
+            (idleUnitsCount) && (hints.push(Lang.getFormattedText(LangTextType.F0006, idleUnitsCount)));
+        }
+
+        {
+            const player            = war.getPlayer(playerIndex);
+            const idleBuildingsDict = new Map<number, GridIndex[]>();
+            const gameConfig        = war.getGameConfig();
+            const currentFund       = player.getFund();
+            for (const tile of war.getTileMap().getAllTiles()) {
+                const gridIndex = tile.getGridIndex();
+                if ((!tile.checkIsUnitProducerForPlayer(playerIndex)) || (unitMap.getUnitOnMap(gridIndex))) {
+                    continue;
+                }
+
+                const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex) ?? null;
+                const unitCategory      = Helpers.getExisted(skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory());
+                const minNormalizedHp   = skillCfg ? getNormalizedHp(skillCfg[3]) : getNormalizedHp(CommonConstants.UnitMaxHp);
+                for (const unitType of gameConfig.getUnitTypesByCategory(unitCategory) ?? []) {
+                    const costModifier  = player.getUnitCostModifier(gridIndex, false, unitType);
+                    const cfgCost       = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost);
+                    const minCost       = skillCfg
+                        ? Math.floor(cfgCost * costModifier * minNormalizedHp * skillCfg[5] / CommonConstants.UnitHpNormalizer / 100)
+                        : Math.floor(cfgCost * costModifier);
+                    if (minCost <= currentFund) {
+                        const tileType = tile.getType();
+                        if (!idleBuildingsDict.has(tileType)) {
+                            idleBuildingsDict.set(tileType, [gridIndex]);
+                        } else {
+                            Helpers.getExisted(idleBuildingsDict.get(tileType)).push(gridIndex);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            const textArrayForBuildings: string[] = [];
+            for (const [tileType, gridIndexArray] of idleBuildingsDict) {
+                textArrayForBuildings.push(Lang.getFormattedText(
+                    LangTextType.F0007, gridIndexArray.length,
+                    Lang.getTileName(tileType, gameConfig),
+                    gridIndexArray.map(v => `(${v.x}, ${v.y})`).join(`, `)),
+                );
+            }
+            (textArrayForBuildings.length) && (hints.push(textArrayForBuildings.join(`\n`)));
+        }
+
+        hints.push(Lang.getText(LangTextType.A0024));
+        return hints.join(`\n\n`);
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Other validators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function getErrorCodeForUnitDataIgnoringUnitId({ unitData, mapSize, playersCountUnneutral, configVersion }: {
-        unitData                : ProtoTypes.WarSerialization.ISerialUnit;
-        configVersion           : string;
+    export function getErrorCodeForUnitDataIgnoringUnitId({ unitData, mapSize, playersCountUnneutral, gameConfig }: {
+        unitData                : CommonProto.WarSerialization.ISerialUnit;
+        gameConfig              : GameConfig;
         mapSize                 : Types.Undefinable<Types.MapSize>;
         playersCountUnneutral   : Types.Undefinable<number>;
     }): ClientErrorCode {
@@ -1297,15 +1427,15 @@ namespace WarCommonHelpers {
             return ClientErrorCode.UnitDataValidation01;
         }
 
-        const unitType = unitData.unitType as UnitType;
+        const unitType = unitData.unitType;
         if (unitType == null) {
             return ClientErrorCode.UnitDataValidation02;
         }
 
         const playerIndex = unitData.playerIndex;
         if ((playerIndex == null)                               ||
-            (playerIndex < CommonConstants.WarFirstPlayerIndex) ||
-            (playerIndex > CommonConstants.WarMaxPlayerIndex)
+            (playerIndex < CommonConstants.PlayerIndex.First) ||
+            (playerIndex > CommonConstants.PlayerIndex.Max)
         ) {
             return ClientErrorCode.UnitDataValidation03;
         }
@@ -1313,7 +1443,7 @@ namespace WarCommonHelpers {
             return ClientErrorCode.UnitDataValidation04;
         }
 
-        const cfg = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
+        const cfg = gameConfig.getUnitTemplateCfg(unitType);
         if (cfg == null) {
             return ClientErrorCode.UnitDataValidation05;
         }
@@ -1351,7 +1481,7 @@ namespace WarCommonHelpers {
         }
 
         const currPromotion = unitData.currentPromotion;
-        const maxPromotion  = ConfigManager.getUnitMaxPromotion(configVersion);
+        const maxPromotion  = gameConfig.getUnitMaxPromotion();
         if ((currPromotion != null)                                 &&
             ((maxPromotion == null) || (currPromotion > maxPromotion))
         ) {

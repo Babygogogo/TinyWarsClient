@@ -3,10 +3,7 @@
 // import TwnsServerErrorCode  from "../helpers/ServerErrorCode";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsLangErrorText {
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import ServerErrorCode      = TwnsServerErrorCode.ServerErrorCode;
-
+namespace Twns.Lang {
     export const LangErrorText: { [errorCode: number]: string[] } = {
         [ServerErrorCode.NoError]: [
             "",
@@ -44,27 +41,35 @@ namespace TwnsLangErrorText {
             "账号或密码不正确，请检查后重试",
             "Incorrect account and/or password.",
         ],
-        [ServerErrorCode.MsgUserRegister0000]: [
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0000]: [
             "账号不符合要求，请检查后重试",
             "Invalid account.",
         ],
-        [ServerErrorCode.MsgUserRegister0001]: [
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0001]: [
             "该账号已被注册，请修改后再试",
             "The account has been registered.",
         ],
-        [ServerErrorCode.MsgUserRegister0002]: [
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0002]: [
             "您已处于登陆状态，不可注册账号",
             "You have logged in already.",
         ],
-        [ServerErrorCode.MsgUserRegister0003]: [
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0003]: [
             "密码不符合要求，请检查后重试",
             "Invalid password.",
         ],
-        [ServerErrorCode.MsgUserRegister0004]: [
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0004]: [
             "昵称不符合要求，请检查后重试",
             "Invalid nickname.",
         ],
-        [ServerErrorCode.MsgUserRegister0005]: [
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0005]: [
+            "该昵称已被使用，请修改后再试",
+            "The nickname has been used.",
+        ],
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0006]: [
+            "该账号已被注册，请修改后再试",
+            "The account has been registered.",
+        ],
+        [ServerErrorCode.ExeUserRegister_ExeWithSocket_0007]: [
             "该昵称已被使用，请修改后再试",
             "The nickname has been used.",
         ],
@@ -114,7 +119,7 @@ namespace TwnsLangErrorText {
         ],
         [ServerErrorCode.ExeChatAddMessage_ExeWithSocket_0005]: [
             `您说话太频繁了，请稍后再试`,
-            `You talk too often. Please retry later.`,
+            `Please wait a moment before sending another message.`,
         ],
         [ServerErrorCode.MsgMapGetRawData0001]: [
             "地图不存在，获取raw data失败。",
@@ -164,6 +169,10 @@ namespace TwnsLangErrorText {
             `观战请求已被接受`,
             `The request has already been accepted.`,
         ],
+        [ServerErrorCode.MsgMpwWatchHandleRequest_ExeWithSocket_0006]: [
+            `该观战请求不存在或已经失效`,
+            `The request doesn't exist or has expired.`,
+        ],
         [ServerErrorCode.ExeMfrCreateRoom_DoExecute_0018]: [
             `您已创建了许多未开始的房间，请删除部分后重试`,
             `You have created too many rooms simultaneously.`,
@@ -184,9 +193,57 @@ namespace TwnsLangErrorText {
             `此战局未有回放步骤数据（或数据已丢失），无法即时回放`,
             `Failed to replay this war because there is no data or some of the data has been lost.`,
         ],
-        [ServerErrorCode.MsgSpmCreateSrw0020]: [
+        [ServerErrorCode.ExeSpmCreateSrw_ExeWithSocket_0018]: [
             `各个玩家使用的势力颜色必须互不相同`,
             `Players can't use the same color.`,
+        ],
+        [ServerErrorCode.ActorMcrRoom_McrStartCreateWar_0006]: [
+            `尚有玩家未准备就绪`,
+            `Some players are not ready.`,
+        ],
+        [ServerErrorCode.ActorMcrRoom_McrStartExitRoom_0004]: [
+            `您是房间里的最后一位玩家，不能直接退出房间`,
+            `You are the last player in the room. You can't exit the room directly.`,
+        ],
+        [ServerErrorCode.ActorMcrRoom_McrStartJoinRoom_0017]: [
+            `房主已禁止您再次进入该房间`,
+            `You are disallowed to re-entry the room by the room owner.`,
+        ],
+        [ServerErrorCode.ActorMcrRoomCreator_McrStartCheckAndCreateRoom_0000]: [
+            `您已加入了许多未开战的房间，请退出部分房间后重试`,
+            `You have joined too many rooms, please exit some of them.`,
+        ],
+        [ServerErrorCode.ActorMcrRoomManager_McrStartSendJoinedRoomIdArray_0000]: [
+            `您的请求过于频繁，请稍后重试`,
+            `Your query requests are too frequent. Please retry later.`,
+        ],
+        [ServerErrorCode.ActorMcrRoomManager_McrStartSendJoinableRoomIdArray_0000]: [
+            `您的请求过于频繁，请稍后重试`,
+            `Your query requests are too frequent. Please retry later.`,
+        ],
+        [ServerErrorCode.ActorCcrRoom_CcrStartJoinRoom_0017]: [
+            `房主已禁止您再次进入该房间`,
+            `You are disallowed to re-entry the room by the room owner.`,
+        ],
+        [ServerErrorCode.ActorCcrRoomCreator_CcrStartCheckAndCreateRoom_0000]: [
+            `您已加入了许多未开战的房间，请退出部分房间后重试`,
+            `You have joined too many rooms, please exit some of them.`,
+        ],
+        [ServerErrorCode.ActorMfrRoom_MfrStartJoinRoom_0009]: [
+            `房主已禁止您再次进入该房间`,
+            `You are disallowed to re-entry the room by the room owner.`,
+        ],
+        [ServerErrorCode.ActorMfrRoomCreator_MfrStartCheckAndCreateRoom_0000]: [
+            `您已加入了许多未开战的房间，请退出部分房间后重试`,
+            `You have joined too many rooms, please exit some of them.`,
+        ],
+        [ServerErrorCode.ActorReplayManager_ReplayManagerSendFilteredReplayIdArray_0000]: [
+            `您的请求过于频繁，请稍后重试`,
+            `Your query requests are too frequent. Please retry later.`,
+        ],
+        [ServerErrorCode.UserGuestPrivilege_0000]: [
+            `游客无法进行此操作，请注册账号。`,
+            `Unavailable to guests. Please register. :)`,
         ],
         [ServerErrorCode.ServerDisconnect0001]: [
             `服务器维护中`,
@@ -197,11 +254,11 @@ namespace TwnsLangErrorText {
             `势力颜色不合法`,
             `The colors of the forces are invalid.`,
         ],
-        [ClientErrorCode.MapRawDataValidation04]: [
+        [ClientErrorCode.MeHelpers_GetErrorCodeForPlayersCountUnneutral_00]: [
             `势力数量不合法`,
             `The number of the forces is not valid.`,
         ],
-        [ClientErrorCode.MapRawDataValidation07]: [
+        [ClientErrorCode.MeHelpers_GetErrorCodeForPlayersCountUnneutral_03]: [
             `势力颜色不合法`,
             `The colors of the forces are invalid.`,
         ],
@@ -221,13 +278,25 @@ namespace TwnsLangErrorText {
             `存在未被任何规则使用的事件`,
             `There is a redundant event that is not used in any rules.`,
         ],
-        [ClientErrorCode.WarRuleValidation02]: [
+        [ClientErrorCode.WarEventFullDataValidation13]: [
+            `存在不合法的事件动作`,
+            `There is an invalid event action.`,
+        ],
+        [ClientErrorCode.MeHelpers_GetErrorCodeForMapRawData_04]: [
+            `存在未被任何规则使用的事件`,
+            `There is a redundant event that is not used in any rules.`,
+        ],
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForTemplateWarRule_02]: [
             `尚未设置预设规则的可用性`,
             `The availability of the preset rule has not been set.`,
         ],
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_00]: [
+            `势力规则的数量与实际存在的势力数量不相同，请检查预设规则`,
+            `The number of force rules is not the same as the number of forces. Please check the preset rules.`,
+        ],
         [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_02]: [
             `势力的队伍设置不合法`,
-            `The team settings is invalid.`,
+            `The team settings are invalid.`,
         ],
         [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_12]: [
             `不能禁用“无CO”`,
@@ -252,6 +321,10 @@ namespace TwnsLangErrorText {
         [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_23]: [
             `合作模式下，至少要有两个势力由真人玩家控制`,
             `There must be at least 2 human players in the Coop Mode.`,
+        ],
+        [ClientErrorCode.MeUtility_GetSevereErrorCodeForMapRawData_00]: [
+            `地图文件体积太大，无法保存`,
+            `This map is too large to be saved.`,
         ],
     };
 }

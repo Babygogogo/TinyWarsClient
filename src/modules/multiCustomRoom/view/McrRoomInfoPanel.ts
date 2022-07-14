@@ -15,7 +15,7 @@
 // import Types                                from "../../tools/helpers/Types";
 // import Lang                                 from "../../tools/lang/Lang";
 // import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import Notify                       from "../../tools/notify/NotifyType";
 // import ProtoTypes                           from "../../tools/proto/ProtoTypes";
 // import TwnsUiButton                         from "../../tools/ui/UiButton";
 // import TwnsUiImage                          from "../../tools/ui/UiImage";
@@ -32,19 +32,19 @@
 // import TwnsMcrMyRoomListPanel               from "./McrMyRoomListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMcrRoomInfoPanel {
-    import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
-    import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
-    import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
-    import LangTextType                             = TwnsLangTextType.LangTextType;
-    import NotifyType                               = TwnsNotifyType.NotifyType;
-    import NetMessage                               = ProtoTypes.NetMessage;
+namespace Twns.MultiCustomRoom {
+    import OpenDataForCommonWarAdvancedSettingsPage = Common.OpenDataForCommonWarAdvancedSettingsPage;
+    import OpenDataForCommonWarBasicSettingsPage    = Common.OpenDataForCommonWarBasicSettingsPage;
+    import OpenDataForCommonWarMapInfoPage          = Common.OpenDataForCommonMapInfoPage;
+    import OpenDataForCommonWarPlayerInfoPage       = Common.OpenDataForCommonWarPlayerInfoPage;
+    import LangTextType                             = Lang.LangTextType;
+    import NotifyType                               = Notify.NotifyType;
+    import NetMessage                               = CommonProto.NetMessage;
 
-    export type OpenData = {
+    export type OpenDataForMcrRoomInfoPanel = {
         roomId  : number;
     };
-    export class McrRoomInfoPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class McrRoomInfoPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrRoomInfoPanel> {
         private readonly _groupTab!                 : eui.Group;
         private readonly _tabSettings!              : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
 
@@ -103,22 +103,22 @@ namespace TwnsMcrRoomInfoPanel {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
-                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageClass   : Common.CommonWarMapInfoPage,
                     pageData    : await this._createDataForWarCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
+                    pageClass   : Common.CommonWarPlayerInfoPage,
                     pageData    : await this._createDataForWarCommonPlayerInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
-                    pageClass   : TwnsCommonWarBasicSettingsPage.CommonWarBasicSettingsPage,
+                    pageClass   : Common.CommonWarBasicSettingsPage,
                     pageData    : await this._createDataForCommonWarBasicSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
-                    pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
+                    pageClass   : Common.CommonWarAdvancedSettingsPage,
                     pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
@@ -140,22 +140,22 @@ namespace TwnsMcrRoomInfoPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMyRoomListPanel, void 0);
+            PanelHelpers.open(PanelHelpers.PanelDict.McrMyRoomListPanel, void 0);
         }
 
         private async _onTouchedBtnChooseCo(): Promise<void> {
             const roomId            = this._getOpenData().roomId;
-            const roomStaticInfo    = await McrModel.getRoomStaticInfo(roomId);
+            const roomStaticInfo    = await MultiCustomRoom.McrModel.getRoomStaticInfo(roomId);
             if (roomStaticInfo == null) {
                 return;
             }
 
-            const roomPlayerInfo = await McrModel.getRoomPlayerInfo(roomId);
+            const roomPlayerInfo = await MultiCustomRoom.McrModel.getRoomPlayerInfo(roomId);
             if (roomPlayerInfo == null) {
                 return;
             }
 
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = User.UserModel.getSelfUserId();
             const selfPlayerData    = roomPlayerInfo.playerDataList?.find(v => v.userId === selfUserId);
             if (selfPlayerData != null) {
                 if (selfPlayerData.isReady) {
@@ -163,16 +163,18 @@ namespace TwnsMcrRoomInfoPanel {
                 } else {
                     const settingsForCommon = Helpers.getExisted(roomStaticInfo.settingsForCommon);
                     const playerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                    const gameConfig        = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+                    PanelHelpers.open(PanelHelpers.PanelDict.CommonChooseSingleCoPanel, {
+                        gameConfig,
                         currentCoId         : selfPlayerData.coId ?? null,
-                        availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
-                            warRule         : Helpers.getExisted(settingsForCommon.warRule),
+                        availableCoIdArray  : WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({
+                            baseWarRule         : Helpers.getExisted(settingsForCommon.instanceWarRule),
                             playerIndex,
-                            configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+                            gameConfig,
                         }),
                         callbackOnConfirm   : (newCoId) => {
                             if (newCoId !== selfPlayerData.coId) {
-                                McrProxy.reqMcrSetSelfSettings({
+                                MultiCustomRoom.McrProxy.reqMcrSetSelfSettings({
                                     roomId,
                                     playerIndex,
                                     coId                : newCoId,
@@ -188,24 +190,24 @@ namespace TwnsMcrRoomInfoPanel {
         private _onTouchedBtnStartGame(): void {
             const roomId = this._getOpenData().roomId;
             if (roomId != null) {
-                McrProxy.reqMcrStartWar(roomId);
+                MultiCustomRoom.McrProxy.reqMcrStartWar(roomId);
             }
         }
 
         private _onTouchedBtnDeleteRoom(): void {
             const roomId = this._getOpenData().roomId;
             if (roomId != null) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0149),
                     callback: () => {
-                        McrProxy.reqMcrDeleteRoom(roomId);
+                        MultiCustomRoom.McrProxy.reqMcrDeleteRoom(roomId);
                     },
                 });
             }
         }
 
         private _onTouchedBtnChat(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {
+            PanelHelpers.open(PanelHelpers.PanelDict.ChatPanel, {
                 toMcrRoomId: this._getOpenData().roomId,
             });
         }
@@ -221,10 +223,10 @@ namespace TwnsMcrRoomInfoPanel {
                 return;
             }
 
-            const selfUserId = Helpers.getExisted(UserModel.getSelfUserId());
+            const selfUserId = Helpers.getExisted(User.UserModel.getSelfUserId());
             if (!data.roomPlayerInfo?.playerDataList?.some(v => v.userId === selfUserId)) {
                 this.close();
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMyRoomListPanel, void 0);
+                PanelHelpers.open(PanelHelpers.PanelDict.McrMyRoomListPanel, void 0);
             } else {
                 this._updateGroupButton();
                 this._updateBtnChooseCo();
@@ -241,7 +243,7 @@ namespace TwnsMcrRoomInfoPanel {
             if (data.roomStaticInfo == null) {
                 FloatText.show(Lang.getText(LangTextType.A0019));
                 this.close();
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMyRoomListPanel, void 0);
+                PanelHelpers.open(PanelHelpers.PanelDict.McrMyRoomListPanel, void 0);
             } else {
                 this._updateCommonWarMapInfoPage();
                 this._updateCommonWarBasicSettingsPage();
@@ -261,7 +263,7 @@ namespace TwnsMcrRoomInfoPanel {
                 }
 
                 this.close();
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMyRoomListPanel, void 0);
+                PanelHelpers.open(PanelHelpers.PanelDict.McrMyRoomListPanel, void 0);
             }
         }
 
@@ -270,9 +272,9 @@ namespace TwnsMcrRoomInfoPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private async _initSclPlayerIndex(): Promise<void> {
             const roomId                = this._getOpenData().roomId;
-            const playersCountUnneutral = Helpers.getExisted((await WarMapModel.getRawData(Helpers.getExisted((await McrModel.getRoomStaticInfo(roomId))?.settingsForMcw?.mapId)))?.playersCountUnneutral);
+            const playersCountUnneutral = Helpers.getExisted((await WarMap.WarMapModel.getRawData(Helpers.getExisted((await MultiCustomRoom.McrModel.getRoomStaticInfo(roomId))?.settingsForMcw?.mapId)))?.playersCountUnneutral);
             const dataArray             : DataForPlayerIndexRenderer[] = [];
-            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
+            for (let playerIndex = CommonConstants.PlayerIndex.First; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
                     roomId,
                     playerIndex,
@@ -323,34 +325,35 @@ namespace TwnsMcrRoomInfoPanel {
 
         private async _updateBtnChooseCo(): Promise<void> {
             const roomId            = this._getOpenData().roomId;
-            const roomPlayerInfo    = await McrModel.getRoomPlayerInfo(roomId);
+            const roomPlayerInfo    = await MultiCustomRoom.McrModel.getRoomPlayerInfo(roomId);
             if (roomPlayerInfo == null) {
                 return;
             }
 
-            const roomStaticInfo = await McrModel.getRoomStaticInfo(roomId);
+            const roomStaticInfo = await MultiCustomRoom.McrModel.getRoomStaticInfo(roomId);
             if (roomStaticInfo == null) {
                 return;
             }
 
-            const userId            = UserModel.getSelfUserId();
+            const userId            = User.UserModel.getSelfUserId();
             const selfPlayerData    = roomPlayerInfo.playerDataList?.find(v => v.userId === userId);
             if (selfPlayerData) {
-                this._btnChooseCo.label = ConfigManager.getCoBasicCfg(Helpers.getExisted(roomStaticInfo.settingsForCommon?.configVersion), Helpers.getExisted(selfPlayerData.coId)).name;
+                const gameConfig        = await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomStaticInfo.settingsForCommon?.configVersion));
+                this._btnChooseCo.label = gameConfig.getCoBasicCfg(Helpers.getExisted(selfPlayerData.coId))?.name ?? CommonConstants.ErrorTextForUndefined;
             }
         }
 
         private async _updateGroupButton(): Promise<void> {
             const roomId            = this._getOpenData().roomId;
-            const roomPlayerInfo    = await McrModel.getRoomPlayerInfo(roomId);
+            const roomPlayerInfo    = await MultiCustomRoom.McrModel.getRoomPlayerInfo(roomId);
             if (roomPlayerInfo == null) {
                 return;
             }
 
             const ownerInfo         = roomPlayerInfo.playerDataList?.find(v => v.playerIndex === roomPlayerInfo.ownerPlayerIndex);
-            const isSelfOwner       = (!!ownerInfo) && (ownerInfo.userId === UserModel.getSelfUserId());
+            const isSelfOwner       = (!!ownerInfo) && (ownerInfo.userId === User.UserModel.getSelfUserId());
             const btnStartGame      = this._btnStartGame;
-            btnStartGame.setRedVisible(await McrModel.checkCanStartGame(roomId));
+            btnStartGame.setRedVisible(await MultiCustomRoom.McrModel.checkCanStartGame(roomId));
 
             const groupButton = this._groupButton;
             groupButton.removeChildren();
@@ -449,22 +452,27 @@ namespace TwnsMcrRoomInfoPanel {
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private async _createDataForWarCommonMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const mapId = (await McrModel.getRoomStaticInfo(this._getOpenData().roomId))?.settingsForMcw?.mapId;
+            const roomInfo  = await MultiCustomRoom.McrModel.getRoomStaticInfo(this._getOpenData().roomId);
+            const mapId     = roomInfo?.settingsForMcw?.mapId;
             return mapId == null
-                ? {}
-                : { mapInfo : { mapId, }, };
+                ? null
+                : {
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
+                    hasFog      : roomInfo?.settingsForCommon?.instanceWarRule?.ruleForGlobalParams?.hasFogByDefault ?? null,
+                    mapInfo     : { mapId, },
+                };
         }
 
         private async _createDataForWarCommonPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
-            return await McrModel.createDataForCommonWarPlayerInfoPage(this._getOpenData().roomId);
+            return await MultiCustomRoom.McrModel.createDataForCommonWarPlayerInfoPage(this._getOpenData().roomId);
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            return await McrModel.createDataForCommonWarBasicSettingsPage(this._getOpenData().roomId, true);
+            return await MultiCustomRoom.McrModel.createDataForCommonWarBasicSettingsPage(this._getOpenData().roomId, true);
         }
 
         private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-            return await McrModel.createDataForCommonWarAdvancedSettingsPage(this._getOpenData().roomId);
+            return await MultiCustomRoom.McrModel.createDataForCommonWarAdvancedSettingsPage(this._getOpenData().roomId);
         }
     }
 
@@ -501,17 +509,17 @@ namespace TwnsMcrRoomInfoPanel {
         public async onItemTapEvent(): Promise<void> {
             const data              = this._getData();
             const roomId            = data.roomId;
-            const roomPlayerInfo    = await McrModel.getRoomPlayerInfo(roomId);
+            const roomPlayerInfo    = await MultiCustomRoom.McrModel.getRoomPlayerInfo(roomId);
             if (roomPlayerInfo == null) {
                 return;
             }
 
-            const roomStaticInfo = await McrModel.getRoomStaticInfo(roomId);
+            const roomStaticInfo = await MultiCustomRoom.McrModel.getRoomStaticInfo(roomId);
             if (roomStaticInfo == null) {
                 return;
             }
 
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = User.UserModel.getSelfUserId();
             const playerDataList    = Helpers.getExisted(roomPlayerInfo.playerDataList);
             const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
             if (selfPlayerData == null) {
@@ -532,16 +540,16 @@ namespace TwnsMcrRoomInfoPanel {
             } else {
                 const settingsForCommon     = Helpers.getExisted(roomStaticInfo.settingsForCommon);
                 const currCoId              = Helpers.getExisted(selfPlayerData.coId);
-                const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
-                    warRule         : Helpers.getExisted(settingsForCommon.warRule),
-                    playerIndex     : newPlayerIndex,
-                    configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+                const availableCoIdArray    = WarHelpers.WarRuleHelpers.getAvailableCoIdArrayWithBaseWarRule({
+                    baseWarRule         : Helpers.getExisted(settingsForCommon.instanceWarRule),
+                    playerIndex         : newPlayerIndex,
+                    gameConfig          : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
                 });
-                McrProxy.reqMcrSetSelfSettings({
+                MultiCustomRoom.McrProxy.reqMcrSetSelfSettings({
                     roomId,
                     playerIndex         : newPlayerIndex,
                     unitAndTileSkinId   : selfPlayerData.unitAndTileSkinId,
-                    coId                : availableCoIdArray.indexOf(currCoId) >= 0 ? currCoId : WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray),
+                    coId                : availableCoIdArray.indexOf(currCoId) >= 0 ? currCoId : WarHelpers.WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray),
                 });
             }
         }
@@ -549,7 +557,7 @@ namespace TwnsMcrRoomInfoPanel {
             this._updateLabelName();
         }
         private _onNotifyMsgMcrGetRoomPlayerInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomPlayerInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMcrGetRoomPlayerInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateState();
@@ -560,16 +568,16 @@ namespace TwnsMcrRoomInfoPanel {
             const data = this.data;
             if (data) {
                 const playerIndex       = data.playerIndex;
-                const warRule           = (await McrModel.getRoomStaticInfo(data.roomId))?.settingsForCommon?.warRule;
-                this._labelName.text    = warRule
-                    ? `P${playerIndex} (${Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(warRule, playerIndex))})`
+                const instanceWarRule   = (await MultiCustomRoom.McrModel.getRoomStaticInfo(data.roomId))?.settingsForCommon?.instanceWarRule;
+                this._labelName.text    = instanceWarRule
+                    ? `P${playerIndex} (${Lang.getPlayerTeamName(WarHelpers.WarRuleHelpers.getTeamIndex(instanceWarRule, playerIndex))})`
                     : `P${playerIndex} (${CommonConstants.ErrorTextForUndefined})`;
             }
         }
         private async _updateState(): Promise<void> {
             const data              = this._getData();
-            const roomInfo          = await McrModel.getRoomPlayerInfo(data.roomId);
-            const selfUserId        = UserModel.getSelfUserId();
+            const roomInfo          = await MultiCustomRoom.McrModel.getRoomPlayerInfo(data.roomId);
+            const selfUserId        = User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             this.currentState       = ((selfPlayerData) && (data.playerIndex === selfPlayerData.playerIndex)) ? `down` : `up`;
@@ -596,12 +604,12 @@ namespace TwnsMcrRoomInfoPanel {
         public async onItemTapEvent(): Promise<void> {
             const data      = this._getData();
             const roomId    = data.roomId;
-            const roomInfo  = await McrModel.getRoomPlayerInfo(roomId);
+            const roomInfo  = await MultiCustomRoom.McrModel.getRoomPlayerInfo(roomId);
             if (roomInfo == null) {
                 return;
             }
 
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = User.UserModel.getSelfUserId();
             const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
             const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
             if (selfPlayerData == null) {
@@ -620,7 +628,7 @@ namespace TwnsMcrRoomInfoPanel {
                     FloatText.show(Lang.getText(LangTextType.A0203));
                 }
             } else {
-                McrProxy.reqMcrSetSelfSettings({
+                MultiCustomRoom.McrProxy.reqMcrSetSelfSettings({
                     roomId,
                     playerIndex         : selfPlayerData.playerIndex,
                     unitAndTileSkinId   : newSkinId,
@@ -629,7 +637,7 @@ namespace TwnsMcrRoomInfoPanel {
             }
         }
         private _onNotifyMsgMcrGetRoomPlayerInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomPlayerInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMcrGetRoomPlayerInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateImgColor();
             }
@@ -639,11 +647,11 @@ namespace TwnsMcrRoomInfoPanel {
             const data = this.data;
             if (data) {
                 const skinId            = data.skinId;
-                const roomInfo          = data ? await McrModel.getRoomPlayerInfo(data.roomId) : null;
-                const selfUserId        = UserModel.getSelfUserId();
+                const roomInfo          = data ? await MultiCustomRoom.McrModel.getRoomPlayerInfo(data.roomId) : null;
+                const selfUserId        = User.UserModel.getSelfUserId();
                 const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
                 const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
-                this._imgColor.source   = WarCommonHelpers.getImageSourceForSkinId(skinId, (!!selfPlayerData) && (selfPlayerData.unitAndTileSkinId === skinId));
+                this._imgColor.source   = WarHelpers.WarCommonHelpers.getImageSourceForSkinId(skinId, (!!selfPlayerData) && (selfPlayerData.unitAndTileSkinId === skinId));
             }
         }
     }
@@ -673,26 +681,26 @@ namespace TwnsMcrRoomInfoPanel {
             const data              = this._getData();
             const isReady           = data.isReady;
             const roomId            = data.roomId;
-            const roomInfo          = await McrModel.getRoomPlayerInfo(roomId);
-            const selfUserId        = UserModel.getSelfUserId();
+            const roomInfo          = await MultiCustomRoom.McrModel.getRoomPlayerInfo(roomId);
+            const selfUserId        = User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             if ((selfPlayerData) && (selfPlayerData.isReady !== isReady)) {
-                McrProxy.reqMcrSetReady(roomId, isReady);
+                MultiCustomRoom.McrProxy.reqMcrSetReady(roomId, isReady);
             }
         }
         private _onNotifyLanguageChanged(): void {
             this._updateLabelName();
         }
         private _onNotifyMsgMcrGetRoomPlayerInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomPlayerInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMcrGetRoomPlayerInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateStateAndImgRed();
             }
         }
         private _onNotifyMsgMcrSetReady(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrSetReady.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMcrSetReady.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateStateAndImgRed();
@@ -704,9 +712,9 @@ namespace TwnsMcrRoomInfoPanel {
         }
         private async _updateStateAndImgRed(): Promise<void> {
             const data              = this._getData();
-            const roomInfo          = await McrModel.getRoomPlayerInfo(data.roomId);
+            const roomInfo          = await MultiCustomRoom.McrModel.getRoomPlayerInfo(data.roomId);
             const isReady           = data.isReady;
-            const selfUserId        = UserModel.getSelfUserId();
+            const selfUserId        = User.UserModel.getSelfUserId();
             const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             const isSelected        = (!!selfPlayerData) && (isReady === selfPlayerData.isReady);

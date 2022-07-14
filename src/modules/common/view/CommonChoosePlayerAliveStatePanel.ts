@@ -4,17 +4,17 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Twns.Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 // import MeModel              from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChoosePlayerAliveStatePanel {
-    import LangTextType     = TwnsLangTextType.LangTextType;
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import PlayerAliveState = Types.PlayerAliveState;
+namespace Twns.Common {
+    import LangTextType     = Twns.Lang.LangTextType;
+    import NotifyType       = Twns.Notify.NotifyType;
+    import PlayerAliveState = Twns.Types.PlayerAliveState;
 
     const AVAILABLE_STATES = [
         PlayerAliveState.Alive,
@@ -22,11 +22,11 @@ namespace TwnsCommonChoosePlayerAliveStatePanel {
         PlayerAliveState.Dead,
     ];
 
-    export type OpenData = {
+    export type OpenDataForCommonChoosePlayerAliveStatePanel = {
         currentAliveStateArray  : PlayerAliveState[];
         callbackOnConfirm       : (aliveStateArray: PlayerAliveState[]) => void;
     };
-    export class CommonChoosePlayerAliveStatePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChoosePlayerAliveStatePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChoosePlayerAliveStatePanel> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnSelectAll!     : TwnsUiButton.UiButton;
         private readonly _btnUnselectAll!   : TwnsUiButton.UiButton;
@@ -97,19 +97,19 @@ namespace TwnsCommonChoosePlayerAliveStatePanel {
             const aliveStateArray   = openData.currentAliveStateArray;
             const list              = this._listLocation;
             list.bindData(dataArray);
-            list.setSelectedIndexArray(Helpers.getNonNullElements(dataArray.map((v, i) => aliveStateArray.indexOf(v.aliveState) >= 0 ? i : null)));
+            list.setSelectedIndexArray(Twns.Helpers.getNonNullElements(dataArray.map((v, i) => aliveStateArray.indexOf(v.aliveState) >= 0 ? i : null)));
         }
     }
 
     type DataForAliveStateRenderer = {
-        aliveState  : Types.PlayerAliveState;
+        aliveState  : Twns.Types.PlayerAliveState;
     };
     class AliveStateRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForAliveStateRenderer> {
         private readonly _groupShow!    : eui.Group;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = Lang.getPlayerAliveStateName(this._getData().aliveState) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelName.text = Lang.getPlayerAliveStateName(this._getData().aliveState) ?? Twns.CommonConstants.ErrorTextForUndefined;
         }
     }
 }

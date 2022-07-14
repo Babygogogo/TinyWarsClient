@@ -1,7 +1,8 @@
 
 // import Types     from "./Types";
 
-namespace Logger {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.Logger {
     import LogLevel         = Types.LogLevel;
 
     const CONSOLE           = window.console;

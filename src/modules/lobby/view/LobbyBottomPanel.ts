@@ -5,7 +5,7 @@
 // import TwnsMeMapListPanel           from "../../mapEditor/view/MeMapListPanel";
 // import Helpers                      from "../../tools/helpers/Helpers";
 // import Types                        from "../../tools/helpers/Types";
-// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/NotifyType";
 // import TwnsUiButton                 from "../../tools/ui/UiButton";
 // import TwnsUiPanel                  from "../../tools/ui/UiPanel";
 // import UserModel                    from "../../user/model/UserModel";
@@ -14,11 +14,11 @@
 // import TwnsLobbyTopPanel            from "./LobbyTopPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsLobbyBottomPanel {
-    import NotifyType               = TwnsNotifyType.NotifyType;
+namespace Twns.Lobby {
+    import NotifyType   = Notify.NotifyType;
 
-    export type OpenData = void;
-    export class LobbyBottomPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForLobbyBottomPanel = void;
+    export class LobbyBottomPanel extends TwnsUiPanel.UiPanel<OpenDataForLobbyBottomPanel> {
         private readonly _groupBottom!  : eui.Group;
         private readonly _btnMyInfo!    : TwnsUiButton.UiButton;
         private readonly _btnChat!      : TwnsUiButton.UiButton;
@@ -51,33 +51,31 @@ namespace TwnsLobbyBottomPanel {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnMyInfo(): void {
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.UserOnlineUsersPanel);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.ChatPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, {
-                userId: Helpers.getExisted(UserModel.getSelfUserId()),
+            PanelHelpers.close(PanelHelpers.PanelDict.UserOnlineUsersPanel);
+            PanelHelpers.close(PanelHelpers.PanelDict.ChatPanel);
+            PanelHelpers.open(PanelHelpers.PanelDict.UserPanel, {
+                userId: Helpers.getExisted(User.UserModel.getSelfUserId()),
             });
         }
 
         private _onTouchedBtnChat(): void {
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.UserOnlineUsersPanel);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.UserPanel);
-            if (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.ChatPanel)) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: null });
+            PanelHelpers.close(PanelHelpers.PanelDict.UserOnlineUsersPanel);
+            PanelHelpers.close(PanelHelpers.PanelDict.UserPanel);
+            if (!PanelHelpers.getRunningPanel(PanelHelpers.PanelDict.ChatPanel)) {
+                PanelHelpers.open(PanelHelpers.PanelDict.ChatPanel, { toUserId: null });
             } else {
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.ChatPanel);
+                PanelHelpers.close(PanelHelpers.PanelDict.ChatPanel);
             }
         }
 
         private _onTouchedBtnMapEditor(): void {
             this.close();
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeMapListPanel, void 0);
+            PanelHelpers.close(PanelHelpers.PanelDict.LobbyTopPanel);
+            PanelHelpers.open(PanelHelpers.PanelDict.MeMapListPanel, void 0);
         }
 
         private _onTouchedBtnGameData(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageChartPanel, {
-                configVersion   : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
-            });
+            PanelHelpers.open(PanelHelpers.PanelDict.CommonGameChartPanel, void 0);
         }
 
         private _onMsgUserLogout(): void {
@@ -100,7 +98,7 @@ namespace TwnsLobbyBottomPanel {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateImgChatRed(): void {
-            this._btnChat.setRedVisible(ChatModel.checkHasUnreadMessage());
+            this._btnChat.setRedVisible(Chat.ChatModel.checkHasUnreadMessage());
         }
 
         protected async _showOpenAnimation(): Promise<void> {
@@ -133,7 +131,7 @@ namespace TwnsLobbyBottomPanel {
                 endProps    : { alpha: 1, top: 0 },
             });
 
-            await Helpers.wait(200 + CommonConstants.DefaultTweenTime);
+            await Helpers.wait(200 + Twns.CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Helpers.resetTween({
@@ -142,7 +140,7 @@ namespace TwnsLobbyBottomPanel {
                 endProps    : { alpha: 0, bottom: -40 },
             });
 
-            await Helpers.wait(CommonConstants.DefaultTweenTime);
+            await Helpers.wait(Twns.CommonConstants.DefaultTweenTime);
         }
     }
 }

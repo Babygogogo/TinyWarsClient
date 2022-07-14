@@ -1,6 +1,8 @@
 {
   "file": "v0_tileBase.png",
   "frames": { 
+    "tileBase_ver00_theme00_type00_state00_shape00_skin00_frame00": {"x":535,"y":619,"w":3,"h":3,"offX":0,"offY":0,"sourceW":24,"sourceH":24},
+    "tileBase_ver00_theme00_type00_state00_shape01_skin00_frame00": {"x":535,"y":619,"w":3,"h":3,"offX":0,"offY":0,"sourceW":24,"sourceH":24},
     "tileBase_ver00_theme00_type01_state00_shape00_skin00_frame00": {"x":3,"y":3,"w":24,"h":24},
     "tileBase_ver00_theme00_type01_state01_shape00_skin00_frame00": {"x":3,"y":31,"w":24,"h":24},
     "tileBase_ver00_theme00_type02_state00_shape00_skin00_frame00": {"x":3,"y":59,"w":24,"h":24},
@@ -1043,6 +1045,8 @@
     "tileBase_ver00_theme00_type04_state01_shape36_skin00_frame03": {"x":535,"y":591,"w":24,"h":24},
     "tileBase_ver00_theme00_type04_state01_shape36_skin00_frame04": {"x":535,"y":563,"w":24,"h":24},
     "tileBase_ver00_theme00_type04_state01_shape36_skin00_frame05": {"x":535,"y":535,"w":24,"h":24},
+    "tileBase_ver00_theme01_type00_state00_shape00_skin00_frame00": {"x":535,"y":619,"w":3,"h":3,"offX":0,"offY":0,"sourceW":24,"sourceH":24},
+    "tileBase_ver00_theme01_type00_state00_shape01_skin00_frame00": {"x":535,"y":619,"w":3,"h":3,"offX":0,"offY":0,"sourceW":24,"sourceH":24},
     "tileBase_ver00_theme01_type01_state00_shape00_skin00_frame00": {"x":3,"y":3,"w":24,"h":24},
     "tileBase_ver00_theme01_type01_state01_shape00_skin00_frame00": {"x":3,"y":31,"w":24,"h":24},
     "tileBase_ver00_theme01_type02_state00_shape00_skin00_frame00": {"x":3,"y":59,"w":24,"h":24},
@@ -2085,6 +2089,8 @@
     "tileBase_ver00_theme01_type04_state01_shape36_skin00_frame03": {"x":535,"y":591,"w":24,"h":24},
     "tileBase_ver00_theme01_type04_state01_shape36_skin00_frame04": {"x":535,"y":563,"w":24,"h":24},
     "tileBase_ver00_theme01_type04_state01_shape36_skin00_frame05": {"x":535,"y":535,"w":24,"h":24},
+    "tileBase_ver00_theme02_type00_state00_shape00_skin00_frame00": {"x":535,"y":619,"w":3,"h":3,"offX":0,"offY":0,"sourceW":24,"sourceH":24},
+    "tileBase_ver00_theme02_type00_state00_shape01_skin00_frame00": {"x":535,"y":619,"w":3,"h":3,"offX":0,"offY":0,"sourceW":24,"sourceH":24},
     "tileBase_ver00_theme02_type01_state00_shape00_skin00_frame00": {"x":3,"y":3,"w":24,"h":24},
     "tileBase_ver00_theme02_type01_state01_shape00_skin00_frame00": {"x":3,"y":31,"w":24,"h":24},
     "tileBase_ver00_theme02_type02_state00_shape00_skin00_frame00": {"x":3,"y":59,"w":24,"h":24},
@@ -3127,6 +3133,8 @@
     "tileBase_ver00_theme02_type04_state01_shape36_skin00_frame03": {"x":535,"y":591,"w":24,"h":24},
     "tileBase_ver00_theme02_type04_state01_shape36_skin00_frame04": {"x":535,"y":563,"w":24,"h":24},
     "tileBase_ver00_theme02_type04_state01_shape36_skin00_frame05": {"x":535,"y":535,"w":24,"h":24},
+    "tileBase_ver00_theme03_type00_state00_shape00_skin00_frame00": {"x":535,"y":619,"w":3,"h":3,"offX":0,"offY":0,"sourceW":24,"sourceH":24},
+    "tileBase_ver00_theme03_type00_state00_shape01_skin00_frame00": {"x":535,"y":619,"w":3,"h":3,"offX":0,"offY":0,"sourceW":24,"sourceH":24},
     "tileBase_ver00_theme03_type01_state00_shape00_skin00_frame00": {"x":3,"y":3,"w":24,"h":24},
     "tileBase_ver00_theme03_type01_state01_shape00_skin00_frame00": {"x":3,"y":31,"w":24,"h":24},
     "tileBase_ver00_theme03_type02_state00_shape00_skin00_frame00": {"x":3,"y":59,"w":24,"h":24},
@@ -4174,6 +4182,6 @@
     "app": "https://www.codeandweb.com/texturepacker",
     "exporter": "egret",
     "sheetsize": "562x1010",
-    "smartupdate": "$TexturePacker:SmartUpdate:b7da2eeee73fff5ddd03f69fb76f5008:1384e678b0e8c0053dd4df5ae2f959f2:a4f58c9b0998f222a1ff532a994588f8$"
+    "smartupdate": "$TexturePacker:SmartUpdate:7060fe550b4d957b676c3d71a70f93ef:189c341dc984a260e427c0ad003717f8:a4f58c9b0998f222a1ff532a994588f8$"
   }
 }

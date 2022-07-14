@@ -4,23 +4,24 @@
 // import Types                from "../../tools/helpers/Types";
 // import Lang                 from "../../tools/lang/Lang";
 // import TwnsLangTextType     from "../../tools/lang/LangTextType";
-// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify       from "../../tools/notify/NotifyType";
 // import TwnsUiImage          from "../../tools/ui/UiImage";
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 // import MeModel              from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseWeatherTypePanel {
-    import LangTextType = TwnsLangTextType.LangTextType;
-    import NotifyType   = TwnsNotifyType.NotifyType;
-    import WeatherType  = Types.WeatherType;
+namespace Twns.Common {
+    import LangTextType = Lang.LangTextType;
+    import NotifyType   = Notify.NotifyType;
+    import GameConfig   = Config.GameConfig;
 
-    export type OpenData = {
-        currentWeatherTypeArray : WeatherType[];
-        callbackOnConfirm       : (weatherTypeArray: WeatherType[]) => void;
+    export type OpenDataForCommonChooseWeatherTypePanel = {
+        gameConfig              : GameConfig;
+        currentWeatherTypeArray : number[];
+        callbackOnConfirm       : (weatherTypeArray: number[]) => void;
     };
-    export class CommonChooseWeatherTypePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChooseWeatherTypePanel extends TwnsUiPanel.UiPanel<OpenDataForCommonChooseWeatherTypePanel> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnSelectAll!     : TwnsUiButton.UiButton;
         private readonly _btnUnselectAll!   : TwnsUiButton.UiButton;
@@ -82,10 +83,14 @@ namespace TwnsCommonChooseWeatherTypePanel {
         }
 
         private _updateListLocation(): void {
-            const openData  = this._getOpenData();
-            const dataArray : DataForWeatherTypeRenderer[] = [];
-            for (const weatherType of ConfigManager.getWeatherTypesByCategory(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), Types.WeatherCategory.All)) {
-                dataArray.push({ weatherType });
+            const openData      = this._getOpenData();
+            const gameConfig    = openData.gameConfig;
+            const dataArray     : DataForWeatherTypeRenderer[] = [];
+            for (const weatherType of openData.gameConfig.getAvailableWeatherTypes()) {
+                dataArray.push({
+                    weatherType,
+                    gameConfig,
+                });
             }
 
             const weatherTypeArray  = openData.currentWeatherTypeArray;
@@ -96,14 +101,16 @@ namespace TwnsCommonChooseWeatherTypePanel {
     }
 
     type DataForWeatherTypeRenderer = {
-        weatherType : WeatherType;
+        gameConfig  : Config.GameConfig;
+        weatherType : number;
     };
     class WeatherTypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWeatherTypeRenderer> {
         private readonly _groupShow!    : eui.Group;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = Lang.getWeatherName(this._getData().weatherType);
+            const data              = this._getData();
+            this._labelName.text    = Lang.getWeatherName(data.weatherType, data.gameConfig) ?? CommonConstants.ErrorTextForUndefined;
         }
     }
 }
