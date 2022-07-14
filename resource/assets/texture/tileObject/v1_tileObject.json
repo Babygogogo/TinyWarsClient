@@ -1,5 +1,5 @@
 {
-  "file": "v1_tileObject.png",
+  "file": "v1_tileObject.webp",
   "frames": { 
     "tileObject_ver01_theme00_type00_state00_shape00_skin00_frame00": {"x":1848,"y":29,"w":3,"h":3,"offX":0,"offY":0,"sourceW":24,"sourceH":48},
     "tileObject_ver01_theme00_type00_state00_shape01_skin00_frame00": {"x":235,"y":166,"w":24,"h":23,"offX":0,"offY":25,"sourceW":24,"sourceH":48},
@@ -3142,6 +3142,6 @@
     "app": "https://www.codeandweb.com/texturepacker",
     "exporter": "egret",
     "sheetsize": "1863x254",
-    "smartupdate": "$TexturePacker:SmartUpdate:8fe704a61f93a6e5c6148dfdcc8377d4:fb27360ac515040a9e8232bf9aaafd98:053b374841662aa261b0a20e1f8bed02$"
+    "smartupdate": "$TexturePacker:SmartUpdate:c8361840d4ec4c2724fc01c2f09f4cc0:a6b4247b2035622f911824f41fc218bf:5bed4fc28518294ee78f121d7df81b5f$"
   }
 }
