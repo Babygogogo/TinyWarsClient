@@ -296,8 +296,9 @@ namespace Twns.User {
             const userId                        = this._getOpenData().userId;
             this._btnMyWarRoomRecord.visible    = userId === User.UserModel.getSelfUserId();
 
-            const rankScore                     = (await User.UserModel.getUserPublicInfo(userId))?.spmOverallRankScore ?? 0;
-            const rankIndex                     = (await Leaderboard.LeaderboardModel.getSpmOverallRankIndex(userId)) ?? 0;
+            const rankInfo                      = await Leaderboard.LeaderboardModel.getSpmOverallRankInfo(userId);
+            const rankScore                     = rankInfo?.score ?? 0;
+            const rankIndex                     = rankInfo?.rankIndex ?? 0;
             this._labelSpmRankScore.text        = rankScore > 0 ? Helpers.formatString(`%.2f`, rankScore) : `--`;
 
             const isRankValid                   = (rankIndex > 0) && (rankScore > 0);

@@ -26906,8 +26906,8 @@ declare namespace CommonProto {
             /** UserRankInfo mrwArray */
             mrwArray?: (CommonProto.User.UserRankInfo.IUserMrwRankInfo[]|null);
 
-            /** UserRankInfo spmOverallInfo */
-            spmOverallInfo?: (CommonProto.User.UserRankInfo.IUserSpmOverallRankInfo|null);
+            /** UserRankInfo deprecatedSpmOverallInfo */
+            deprecatedSpmOverallInfo?: (CommonProto.User.UserRankInfo.IDeprecatedUserSpmOverallRankInfo|null);
         }
 
         /** Represents a UserRankInfo. */
@@ -26922,8 +26922,8 @@ declare namespace CommonProto {
             /** UserRankInfo mrwArray. */
             public mrwArray: CommonProto.User.UserRankInfo.IUserMrwRankInfo[];
 
-            /** UserRankInfo spmOverallInfo. */
-            public spmOverallInfo?: (CommonProto.User.UserRankInfo.IUserSpmOverallRankInfo|null);
+            /** UserRankInfo deprecatedSpmOverallInfo. */
+            public deprecatedSpmOverallInfo?: (CommonProto.User.UserRankInfo.IDeprecatedUserSpmOverallRankInfo|null);
 
             /**
              * Creates a new UserRankInfo instance using the specified properties.
@@ -27112,91 +27112,91 @@ declare namespace CommonProto {
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a UserSpmOverallRankInfo. */
-            interface IUserSpmOverallRankInfo {
+            /** Properties of a DeprecatedUserSpmOverallRankInfo. */
+            interface IDeprecatedUserSpmOverallRankInfo {
 
-                /** UserSpmOverallRankInfo rankScore */
-                rankScore?: (number|null);
+                /** DeprecatedUserSpmOverallRankInfo deprecatedRankScore */
+                deprecatedRankScore?: (number|null);
             }
 
-            /** Represents a UserSpmOverallRankInfo. */
-            class UserSpmOverallRankInfo implements IUserSpmOverallRankInfo {
+            /** Represents a DeprecatedUserSpmOverallRankInfo. */
+            class DeprecatedUserSpmOverallRankInfo implements IDeprecatedUserSpmOverallRankInfo {
 
                 /**
-                 * Constructs a new UserSpmOverallRankInfo.
+                 * Constructs a new DeprecatedUserSpmOverallRankInfo.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: CommonProto.User.UserRankInfo.IUserSpmOverallRankInfo);
+                constructor(properties?: CommonProto.User.UserRankInfo.IDeprecatedUserSpmOverallRankInfo);
 
-                /** UserSpmOverallRankInfo rankScore. */
-                public rankScore: number;
+                /** DeprecatedUserSpmOverallRankInfo deprecatedRankScore. */
+                public deprecatedRankScore: number;
 
                 /**
-                 * Creates a new UserSpmOverallRankInfo instance using the specified properties.
+                 * Creates a new DeprecatedUserSpmOverallRankInfo instance using the specified properties.
                  * @param [properties] Properties to set
-                 * @returns UserSpmOverallRankInfo instance
+                 * @returns DeprecatedUserSpmOverallRankInfo instance
                  */
-                public static create(properties?: CommonProto.User.UserRankInfo.IUserSpmOverallRankInfo): CommonProto.User.UserRankInfo.UserSpmOverallRankInfo;
+                public static create(properties?: CommonProto.User.UserRankInfo.IDeprecatedUserSpmOverallRankInfo): CommonProto.User.UserRankInfo.DeprecatedUserSpmOverallRankInfo;
 
                 /**
-                 * Encodes the specified UserSpmOverallRankInfo message. Does not implicitly {@link CommonProto.User.UserRankInfo.UserSpmOverallRankInfo.verify|verify} messages.
-                 * @param message UserSpmOverallRankInfo message or plain object to encode
+                 * Encodes the specified DeprecatedUserSpmOverallRankInfo message. Does not implicitly {@link CommonProto.User.UserRankInfo.DeprecatedUserSpmOverallRankInfo.verify|verify} messages.
+                 * @param message DeprecatedUserSpmOverallRankInfo message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: CommonProto.User.UserRankInfo.IUserSpmOverallRankInfo, writer?: protobuf.Writer): protobuf.Writer;
+                public static encode(message: CommonProto.User.UserRankInfo.IDeprecatedUserSpmOverallRankInfo, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
-                 * Encodes the specified UserSpmOverallRankInfo message, length delimited. Does not implicitly {@link CommonProto.User.UserRankInfo.UserSpmOverallRankInfo.verify|verify} messages.
-                 * @param message UserSpmOverallRankInfo message or plain object to encode
+                 * Encodes the specified DeprecatedUserSpmOverallRankInfo message, length delimited. Does not implicitly {@link CommonProto.User.UserRankInfo.DeprecatedUserSpmOverallRankInfo.verify|verify} messages.
+                 * @param message DeprecatedUserSpmOverallRankInfo message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: CommonProto.User.UserRankInfo.IUserSpmOverallRankInfo, writer?: protobuf.Writer): protobuf.Writer;
+                public static encodeDelimited(message: CommonProto.User.UserRankInfo.IDeprecatedUserSpmOverallRankInfo, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
-                 * Decodes a UserSpmOverallRankInfo message from the specified reader or buffer.
+                 * Decodes a DeprecatedUserSpmOverallRankInfo message from the specified reader or buffer.
                  * @param reader Reader or buffer to decode from
                  * @param [length] Message length if known beforehand
-                 * @returns UserSpmOverallRankInfo
+                 * @returns DeprecatedUserSpmOverallRankInfo
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.User.UserRankInfo.UserSpmOverallRankInfo;
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.User.UserRankInfo.DeprecatedUserSpmOverallRankInfo;
 
                 /**
-                 * Decodes a UserSpmOverallRankInfo message from the specified reader or buffer, length delimited.
+                 * Decodes a DeprecatedUserSpmOverallRankInfo message from the specified reader or buffer, length delimited.
                  * @param reader Reader or buffer to decode from
-                 * @returns UserSpmOverallRankInfo
+                 * @returns DeprecatedUserSpmOverallRankInfo
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.User.UserRankInfo.UserSpmOverallRankInfo;
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.User.UserRankInfo.DeprecatedUserSpmOverallRankInfo;
 
                 /**
-                 * Verifies a UserSpmOverallRankInfo message.
+                 * Verifies a DeprecatedUserSpmOverallRankInfo message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a UserSpmOverallRankInfo message from a plain object. Also converts values to their respective internal types.
+                 * Creates a DeprecatedUserSpmOverallRankInfo message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns UserSpmOverallRankInfo
+                 * @returns DeprecatedUserSpmOverallRankInfo
                  */
-                public static fromObject(object: { [k: string]: any }): CommonProto.User.UserRankInfo.UserSpmOverallRankInfo;
+                public static fromObject(object: { [k: string]: any }): CommonProto.User.UserRankInfo.DeprecatedUserSpmOverallRankInfo;
 
                 /**
-                 * Creates a plain object from a UserSpmOverallRankInfo message. Also converts values to other types if specified.
-                 * @param message UserSpmOverallRankInfo
+                 * Creates a plain object from a DeprecatedUserSpmOverallRankInfo message. Also converts values to other types if specified.
+                 * @param message DeprecatedUserSpmOverallRankInfo
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: CommonProto.User.UserRankInfo.UserSpmOverallRankInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: CommonProto.User.UserRankInfo.DeprecatedUserSpmOverallRankInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this UserSpmOverallRankInfo to JSON.
+                 * Converts this DeprecatedUserSpmOverallRankInfo to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -28663,9 +28663,6 @@ declare namespace CommonProto {
 
             /** UserPublicInfo userWarHistory */
             userWarHistory?: (CommonProto.User.IUserWarHistory|null);
-
-            /** UserPublicInfo spmOverallRankScore */
-            spmOverallRankScore?: (number|null);
         }
 
         /** Represents a UserPublicInfo. */
@@ -28715,9 +28712,6 @@ declare namespace CommonProto {
 
             /** UserPublicInfo userWarHistory. */
             public userWarHistory?: (CommonProto.User.IUserWarHistory|null);
-
-            /** UserPublicInfo spmOverallRankScore. */
-            public spmOverallRankScore: number;
 
             /**
              * Creates a new UserPublicInfo instance using the specified properties.
@@ -29660,8 +29654,8 @@ declare namespace CommonProto {
             /** MessageContainer MsgLbSpmOverallGetTopDataArray */
             MsgLbSpmOverallGetTopDataArray?: (CommonProto.NetMessage.IMsgLbSpmOverallGetTopDataArray|null);
 
-            /** MessageContainer MsgLbSpmOverallGetRankIndex */
-            MsgLbSpmOverallGetRankIndex?: (CommonProto.NetMessage.IMsgLbSpmOverallGetRankIndex|null);
+            /** MessageContainer MsgLbSpmOverallGetRankInfo */
+            MsgLbSpmOverallGetRankInfo?: (CommonProto.NetMessage.IMsgLbSpmOverallGetRankInfo|null);
 
             /** MessageContainer MsgLbMrwGetRankIndex */
             MsgLbMrwGetRankIndex?: (CommonProto.NetMessage.IMsgLbMrwGetRankIndex|null);
@@ -30066,8 +30060,8 @@ declare namespace CommonProto {
             /** MessageContainer MsgLbSpmOverallGetTopDataArray. */
             public MsgLbSpmOverallGetTopDataArray?: (CommonProto.NetMessage.IMsgLbSpmOverallGetTopDataArray|null);
 
-            /** MessageContainer MsgLbSpmOverallGetRankIndex. */
-            public MsgLbSpmOverallGetRankIndex?: (CommonProto.NetMessage.IMsgLbSpmOverallGetRankIndex|null);
+            /** MessageContainer MsgLbSpmOverallGetRankInfo. */
+            public MsgLbSpmOverallGetRankInfo?: (CommonProto.NetMessage.IMsgLbSpmOverallGetRankInfo|null);
 
             /** MessageContainer MsgLbMrwGetRankIndex. */
             public MsgLbMrwGetRankIndex?: (CommonProto.NetMessage.IMsgLbMrwGetRankIndex|null);
@@ -67268,103 +67262,103 @@ declare namespace CommonProto {
             }
         }
 
-        /** Properties of a MsgLbSpmOverallGetRankIndex. */
-        interface IMsgLbSpmOverallGetRankIndex {
+        /** Properties of a MsgLbSpmOverallGetRankInfo. */
+        interface IMsgLbSpmOverallGetRankInfo {
 
-            /** MsgLbSpmOverallGetRankIndex c */
-            c?: (CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.IC|null);
+            /** MsgLbSpmOverallGetRankInfo c */
+            c?: (CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.IC|null);
 
-            /** MsgLbSpmOverallGetRankIndex s */
-            s?: (CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.IS|null);
+            /** MsgLbSpmOverallGetRankInfo s */
+            s?: (CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.IS|null);
         }
 
-        /** Represents a MsgLbSpmOverallGetRankIndex. */
-        class MsgLbSpmOverallGetRankIndex implements IMsgLbSpmOverallGetRankIndex {
+        /** Represents a MsgLbSpmOverallGetRankInfo. */
+        class MsgLbSpmOverallGetRankInfo implements IMsgLbSpmOverallGetRankInfo {
 
             /**
-             * Constructs a new MsgLbSpmOverallGetRankIndex.
+             * Constructs a new MsgLbSpmOverallGetRankInfo.
              * @param [properties] Properties to set
              */
-            constructor(properties?: CommonProto.NetMessage.IMsgLbSpmOverallGetRankIndex);
+            constructor(properties?: CommonProto.NetMessage.IMsgLbSpmOverallGetRankInfo);
 
-            /** MsgLbSpmOverallGetRankIndex c. */
-            public c?: (CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.IC|null);
+            /** MsgLbSpmOverallGetRankInfo c. */
+            public c?: (CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.IC|null);
 
-            /** MsgLbSpmOverallGetRankIndex s. */
-            public s?: (CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.IS|null);
+            /** MsgLbSpmOverallGetRankInfo s. */
+            public s?: (CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.IS|null);
 
             /**
-             * Creates a new MsgLbSpmOverallGetRankIndex instance using the specified properties.
+             * Creates a new MsgLbSpmOverallGetRankInfo instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns MsgLbSpmOverallGetRankIndex instance
+             * @returns MsgLbSpmOverallGetRankInfo instance
              */
-            public static create(properties?: CommonProto.NetMessage.IMsgLbSpmOverallGetRankIndex): CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex;
+            public static create(properties?: CommonProto.NetMessage.IMsgLbSpmOverallGetRankInfo): CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo;
 
             /**
-             * Encodes the specified MsgLbSpmOverallGetRankIndex message. Does not implicitly {@link CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.verify|verify} messages.
-             * @param message MsgLbSpmOverallGetRankIndex message or plain object to encode
+             * Encodes the specified MsgLbSpmOverallGetRankInfo message. Does not implicitly {@link CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.verify|verify} messages.
+             * @param message MsgLbSpmOverallGetRankInfo message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: CommonProto.NetMessage.IMsgLbSpmOverallGetRankIndex, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: CommonProto.NetMessage.IMsgLbSpmOverallGetRankInfo, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified MsgLbSpmOverallGetRankIndex message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.verify|verify} messages.
-             * @param message MsgLbSpmOverallGetRankIndex message or plain object to encode
+             * Encodes the specified MsgLbSpmOverallGetRankInfo message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.verify|verify} messages.
+             * @param message MsgLbSpmOverallGetRankInfo message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: CommonProto.NetMessage.IMsgLbSpmOverallGetRankIndex, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: CommonProto.NetMessage.IMsgLbSpmOverallGetRankInfo, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a MsgLbSpmOverallGetRankIndex message from the specified reader or buffer.
+             * Decodes a MsgLbSpmOverallGetRankInfo message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns MsgLbSpmOverallGetRankIndex
+             * @returns MsgLbSpmOverallGetRankInfo
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo;
 
             /**
-             * Decodes a MsgLbSpmOverallGetRankIndex message from the specified reader or buffer, length delimited.
+             * Decodes a MsgLbSpmOverallGetRankInfo message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns MsgLbSpmOverallGetRankIndex
+             * @returns MsgLbSpmOverallGetRankInfo
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo;
 
             /**
-             * Verifies a MsgLbSpmOverallGetRankIndex message.
+             * Verifies a MsgLbSpmOverallGetRankInfo message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a MsgLbSpmOverallGetRankIndex message from a plain object. Also converts values to their respective internal types.
+             * Creates a MsgLbSpmOverallGetRankInfo message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns MsgLbSpmOverallGetRankIndex
+             * @returns MsgLbSpmOverallGetRankInfo
              */
-            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex;
+            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo;
 
             /**
-             * Creates a plain object from a MsgLbSpmOverallGetRankIndex message. Also converts values to other types if specified.
-             * @param message MsgLbSpmOverallGetRankIndex
+             * Creates a plain object from a MsgLbSpmOverallGetRankInfo message. Also converts values to other types if specified.
+             * @param message MsgLbSpmOverallGetRankInfo
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this MsgLbSpmOverallGetRankIndex to JSON.
+             * Converts this MsgLbSpmOverallGetRankInfo to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        namespace MsgLbSpmOverallGetRankIndex {
+        namespace MsgLbSpmOverallGetRankInfo {
 
             /** Properties of a C. */
             interface IC {
@@ -67380,7 +67374,7 @@ declare namespace CommonProto {
                  * Constructs a new C.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.IC);
+                constructor(properties?: CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.IC);
 
                 /** C userId. */
                 public userId: number;
@@ -67390,23 +67384,23 @@ declare namespace CommonProto {
                  * @param [properties] Properties to set
                  * @returns C instance
                  */
-                public static create(properties?: CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.IC): CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.C;
+                public static create(properties?: CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.IC): CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.C;
 
                 /**
-                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.C.verify|verify} messages.
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.C.verify|verify} messages.
                  * @param message C message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.IC, writer?: protobuf.Writer): protobuf.Writer;
+                public static encode(message: CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
-                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.C.verify|verify} messages.
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.C.verify|verify} messages.
                  * @param message C message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.IC, writer?: protobuf.Writer): protobuf.Writer;
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
                  * Decodes a C message from the specified reader or buffer.
@@ -67416,7 +67410,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.C;
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.C;
 
                 /**
                  * Decodes a C message from the specified reader or buffer, length delimited.
@@ -67425,7 +67419,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.C;
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.C;
 
                 /**
                  * Verifies a C message.
@@ -67439,7 +67433,7 @@ declare namespace CommonProto {
                  * @param object Plain object
                  * @returns C
                  */
-                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.C;
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.C;
 
                 /**
                  * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -67447,7 +67441,7 @@ declare namespace CommonProto {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this C to JSON.
@@ -67467,6 +67461,9 @@ declare namespace CommonProto {
 
                 /** S rankIndex */
                 rankIndex?: (number|null);
+
+                /** S score */
+                score?: (number|null);
             }
 
             /** Represents a S. */
@@ -67476,7 +67473,7 @@ declare namespace CommonProto {
                  * Constructs a new S.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.IS);
+                constructor(properties?: CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.IS);
 
                 /** S errorCode. */
                 public errorCode: number;
@@ -67487,28 +67484,31 @@ declare namespace CommonProto {
                 /** S rankIndex. */
                 public rankIndex: number;
 
+                /** S score. */
+                public score: number;
+
                 /**
                  * Creates a new S instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns S instance
                  */
-                public static create(properties?: CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.IS): CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.S;
+                public static create(properties?: CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.IS): CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.S;
 
                 /**
-                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.S.verify|verify} messages.
+                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.S.verify|verify} messages.
                  * @param message S message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.IS, writer?: protobuf.Writer): protobuf.Writer;
+                public static encode(message: CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
-                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.S.verify|verify} messages.
+                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.S.verify|verify} messages.
                  * @param message S message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.IS, writer?: protobuf.Writer): protobuf.Writer;
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
                  * Decodes a S message from the specified reader or buffer.
@@ -67518,7 +67518,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.S;
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.S;
 
                 /**
                  * Decodes a S message from the specified reader or buffer, length delimited.
@@ -67527,7 +67527,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.S;
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.S;
 
                 /**
                  * Verifies a S message.
@@ -67541,7 +67541,7 @@ declare namespace CommonProto {
                  * @param object Plain object
                  * @returns S
                  */
-                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.S;
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.S;
 
                 /**
                  * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -67549,7 +67549,7 @@ declare namespace CommonProto {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: CommonProto.NetMessage.MsgLbSpmOverallGetRankIndex.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: CommonProto.NetMessage.MsgLbSpmOverallGetRankInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this S to JSON.

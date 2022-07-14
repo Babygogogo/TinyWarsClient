@@ -2450,6 +2450,17 @@ export const enum ServerErrorCode {
     ActorReplayInfo_ReplayInfoSendUserBriefInfo_0008,
     ActorReplayInfo_ReplayInfoSendUserBriefInfo_0009,
 
+    ActorLbSpmOverall_CalculateAllSpmOverallScoreInfo_0000,
+    ActorLbSpmOverall_CalculateAllSpmOverallScoreInfo_0001,
+    ActorLbSpmOverall_CalculateAllSpmOverallScoreInfo_0002,
+    ActorLbSpmOverall_CalculateAllSpmOverallScoreInfo_0003,
+    ActorLbSpmOverall_CalculateAllSpmOverallScoreInfo_0004,
+    ActorLbSpmOverall_CalculateAllSpmOverallScoreInfo_0005,
+    ActorLbSpmOverall_CalculateAllSpmOverallScoreInfo_0006,
+    ActorLbSpmOverall_CalculateAllSpmOverallScoreInfo_0007,
+    ActorLbSpmOverall_CalculateAllSpmOverallScoreInfo_0008,
+    ActorLbSpmOverall_CalculateAllSpmOverallScoreInfo_0009,
+
     NetManager_AddToUserSocket_0000,
     NetManager_AddToUserSocket_0001,
     NetManager_AddToUserSocket_0002,

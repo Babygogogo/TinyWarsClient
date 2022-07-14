@@ -4,11 +4,16 @@ namespace Twns.Leaderboard.LeaderboardModel {
     import WarType                  = Types.WarType;
     import ISpmOverallSingleData    = CommonProto.Leaderboard.LeaderboardSpmOverall.ISingleData;
 
+    type SpmOverallRankInfo = {
+        rankIndex   : number | null;
+        score       : number | null;
+    };
+
     const _spmOverallTopDataArrayAccessor = Helpers.createCachedDataAccessor<null, ISpmOverallSingleData[]>({
         reqData: () => Leaderboard.LeaderboardProxy.reqLbSpmOverallGetTopDataArray(),
     });
-    const _spmOverallRankIndexAccessor = Helpers.createCachedDataAccessor<number, number>({
-        reqData: (userId: number) => Leaderboard.LeaderboardProxy.reqLbSpmOverallGetRankIndex(userId),
+    const _spmOverallRankInfoAccessor = Helpers.createCachedDataAccessor<number, SpmOverallRankInfo>({
+        reqData: (userId: number) => Leaderboard.LeaderboardProxy.reqLbSpmOverallGetRankInfo(userId),
     });
     const _mrwStdRankIndexAccessor = Helpers.createCachedDataAccessor<number, number>({
         reqData: (userId: number) => LeaderboardProxy.reqLbMrwGetRankIndex(WarType.MrwStd, 2, userId),
@@ -24,11 +29,11 @@ namespace Twns.Leaderboard.LeaderboardModel {
         _spmOverallTopDataArrayAccessor.setData(null, dataArray);
     }
 
-    export function getSpmOverallRankIndex(userId: number): Promise<number | null> {
-        return _spmOverallRankIndexAccessor.getData(userId);
+    export function getSpmOverallRankInfo(userId: number): Promise<SpmOverallRankInfo | null> {
+        return _spmOverallRankInfoAccessor.getData(userId);
     }
-    export function setSpmOverallRankIndex(userId: number, data: number | null): void {
-        _spmOverallRankIndexAccessor.setData(userId, data);
+    export function setSpmOverallRankInfo(userId: number, data: SpmOverallRankInfo | null): void {
+        _spmOverallRankInfoAccessor.setData(userId, data);
     }
 
     export function getMrwRankIndex(warType: WarType, userId: number): Promise<number | null> {

@@ -323,7 +323,7 @@ namespace Twns.Notify {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         MsgLbSpmOverallGetTopDataArray,
-        MsgLbSpmOverallGetRankIndex,
+        MsgLbSpmOverallGetRankInfo,
         MsgLbMrwGetRankIndex,
     }
 }
