@@ -318,27 +318,25 @@ namespace Twns.SinglePlayerWar {
         }
 
         private _updateLabelEnergy(): void {
-            const war = this._getOpenData().war;
-            if ((war) && (war.getIsRunning())) {
-                const player            = war.getPlayerInTurn();
-                const skillType         = player.getCoUsingSkillType();
-                const labelCurrEnergy   = this._labelCurrEnergy;
-                const currentEnergy     = player.getCoCurrentEnergy();
-                if (skillType === Types.CoSkillType.Power) {
-                    labelCurrEnergy.text = `${currentEnergy}(P)`;
-                } else if (skillType === Types.CoSkillType.SuperPower) {
-                    labelCurrEnergy.text = `${currentEnergy}(SP)`;
-                } else {
-                    labelCurrEnergy.text = `${player.getCoCurrentEnergy()}`;
-                }
-
-                const powerEnergy           = player.getCoPowerEnergy();
-                const superPowerEnergy      = player.getCoSuperPowerEnergy();
-                this._labelPowerEnergy.text = `P:${powerEnergy == null ? `--` : powerEnergy} / ${superPowerEnergy == null ? `--` : superPowerEnergy}`;
-
-                const zoneEnergyText        = (player.getCoZoneExpansionEnergyList() || []).join(` / `);
-                this._labelZoneEnergy.text  = `Z:${zoneEnergyText.length ? zoneEnergyText : `--`}`;
+            const war               = this._getOpenData().war;
+            const player            = war.getPlayerInTurn();
+            const skillType         = player.getCoUsingSkillType();
+            const labelCurrEnergy   = this._labelCurrEnergy;
+            const currentEnergy     = player.getCoCurrentEnergy();
+            if (skillType === Types.CoSkillType.Power) {
+                labelCurrEnergy.text = `${currentEnergy}(P)`;
+            } else if (skillType === Types.CoSkillType.SuperPower) {
+                labelCurrEnergy.text = `${currentEnergy}(SP)`;
+            } else {
+                labelCurrEnergy.text = `${player.getCoCurrentEnergy()}`;
             }
+
+            const powerEnergy           = player.getCoPowerEnergy();
+            const superPowerEnergy      = player.getCoSuperPowerEnergy();
+            this._labelPowerEnergy.text = `P:${powerEnergy == null ? `--` : powerEnergy} / ${superPowerEnergy == null ? `--` : superPowerEnergy}`;
+
+            const zoneEnergyText        = (player.getCoZoneExpansionEnergyList() || []).join(` / `);
+            this._labelZoneEnergy.text  = `Z:${zoneEnergyText.length ? zoneEnergyText : `--`}`;
         }
 
         private _updateBtnChat(): void {

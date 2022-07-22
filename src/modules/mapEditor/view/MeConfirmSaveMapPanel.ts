@@ -136,18 +136,8 @@ namespace Twns.MapEditor {
                     },
                 });
             } else {
-                if (reviewingSlotIndex == null) {
-                    MapEditor.MeProxy.reqMeSubmitMap(slotIndex, mapRawData, false);
-                    this.close();
-                } else {
-                    PanelHelpers.open(PanelHelpers.PanelDict.CommonConfirmPanel, {
-                        content : Lang.getText(LangTextType.A0084),
-                        callback: () => {
-                            MapEditor.MeProxy.reqMeSubmitMap(slotIndex, mapRawData, false);
-                            this.close();
-                        },
-                    });
-                }
+                MapEditor.MeProxy.reqMeSubmitMap(slotIndex, mapRawData, false);
+                this.close();
             }
         }
 

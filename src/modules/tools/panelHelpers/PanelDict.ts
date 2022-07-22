@@ -603,7 +603,7 @@ namespace Twns.PanelHelpers {
 
             CommonChooseTileDecorationPanel: {
                 cls         : Common?.CommonChooseTileDecorationPanel,
-                skinName    : `resource/skins/common/CommonChooseTileDecoratorPanel.exml`,
+                skinName    : `resource/skins/common/CommonChooseTileDecorationPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
