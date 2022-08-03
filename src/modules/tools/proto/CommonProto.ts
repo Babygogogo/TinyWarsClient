@@ -38576,6 +38576,9 @@ declare namespace CommonProto {
         /** Properties of a MsgMapGetEnabledMapIdArray. */
         interface IMsgMapGetEnabledMapIdArray {
 
+            /** MsgMapGetEnabledMapIdArray c */
+            c?: (CommonProto.NetMessage.MsgMapGetEnabledMapIdArray.IC|null);
+
             /** MsgMapGetEnabledMapIdArray s */
             s?: (CommonProto.NetMessage.MsgMapGetEnabledMapIdArray.IS|null);
         }
@@ -38588,6 +38591,9 @@ declare namespace CommonProto {
              * @param [properties] Properties to set
              */
             constructor(properties?: CommonProto.NetMessage.IMsgMapGetEnabledMapIdArray);
+
+            /** MsgMapGetEnabledMapIdArray c. */
+            public c?: (CommonProto.NetMessage.MsgMapGetEnabledMapIdArray.IC|null);
 
             /** MsgMapGetEnabledMapIdArray s. */
             public s?: (CommonProto.NetMessage.MsgMapGetEnabledMapIdArray.IS|null);
@@ -38664,6 +38670,90 @@ declare namespace CommonProto {
         }
 
         namespace MsgMapGetEnabledMapIdArray {
+
+            /** Properties of a C. */
+            interface IC {
+            }
+
+            /** Represents a C. */
+            class C implements IC {
+
+                /**
+                 * Constructs a new C.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgMapGetEnabledMapIdArray.IC);
+
+                /**
+                 * Creates a new C instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns C instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgMapGetEnabledMapIdArray.IC): CommonProto.NetMessage.MsgMapGetEnabledMapIdArray.C;
+
+                /**
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgMapGetEnabledMapIdArray.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgMapGetEnabledMapIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgMapGetEnabledMapIdArray.C.verify|verify} messages.
+                 * @param message C message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgMapGetEnabledMapIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgMapGetEnabledMapIdArray.C;
+
+                /**
+                 * Decodes a C message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns C
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgMapGetEnabledMapIdArray.C;
+
+                /**
+                 * Verifies a C message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a C message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns C
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgMapGetEnabledMapIdArray.C;
+
+                /**
+                 * Creates a plain object from a C message. Also converts values to other types if specified.
+                 * @param message C
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgMapGetEnabledMapIdArray.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this C to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
 
             /** Properties of a S. */
             interface IS {
